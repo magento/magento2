@@ -3,20 +3,62 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Data\Test\Unit\Form\Element;
 
-class MultiselectTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\Data\Form\Element\Editablemultiselect;
+use Magento\Framework\Data\Form\Element\Multiselect;
+use Magento\Framework\DataObject;
+use Magento\Framework\Escaper;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\TestCase;
+use Magento\Framework\Math\Random;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+
+/**
+ * Test for the widget.
+ *
+ * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+ */
+class MultiselectTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Data\Form\Element\Multiselect
+     * @var Multiselect
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $testHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->_model = $testHelper->getObject(\Magento\Framework\Data\Form\Element\Editablemultiselect::class);
-        $this->_model->setForm(new \Magento\Framework\DataObject());
+        $testHelper = new ObjectManager($this);
+
+        $randomMock = $this->createMock(Random::class);
+        $randomMock->method('getRandomString')->willReturn('some-rando-string');
+        $secureRendererMock = $this->createMock(SecureHtmlRenderer::class);
+        $secureRendererMock->method('renderEventListenerAsTag')
+            ->willReturnCallback(
+                function (string $event, string $listener, string $selector): string {
+                    return "<script>document.querySelector('{$selector}').{$event} = () => { {$listener} };</script>";
+                }
+            );
+        $secureRendererMock->method('renderTag')
+            ->willReturnCallback(
+                function (string $tag, array $attrs, ?string $content): string {
+                    $attrs = new DataObject($attrs);
+
+                    return "<$tag {$attrs->serialize()}>$content</$tag>";
+                }
+            );
+        $escaper = new Escaper();
+        $this->_model = $testHelper->getObject(
+            Editablemultiselect::class,
+            [
+                '_escaper' => $escaper,
+                'random' => $randomMock,
+                'secureRenderer' => $secureRendererMock
+            ]
+        );
+        $this->_model->setForm(new DataObject());
     }
 
     /**
@@ -33,7 +75,7 @@ class MultiselectTest extends \PHPUnit\Framework\TestCase
         $this->_model->setName($fieldName);
         $this->_model->setId($fieldId);
         $elementHtml = $this->_model->getElementHtml();
-        $this->assertContains(
+        $this->assertStringContainsString(
             '<input type="hidden" id="' . $fieldId . '_hidden" name="' . $fieldName . '"',
             $elementHtml
         );
@@ -50,7 +92,7 @@ class MultiselectTest extends \PHPUnit\Framework\TestCase
         $this->_model->setDisabled(true);
         $this->_model->setName($fieldName);
         $elementHtml = $this->_model->getElementHtml();
-        $this->assertContains('<input type="hidden" name="' . $fieldName . '_disabled"', $elementHtml);
+        $this->assertStringContainsString('<input type="hidden" name="' . $fieldName . '_disabled"', $elementHtml);
     }
 
     /**
@@ -65,7 +107,7 @@ class MultiselectTest extends \PHPUnit\Framework\TestCase
         $this->_model->setDisabled(false);
         $this->_model->setName($fieldName);
         $elementHtml = $this->_model->getElementHtml();
-        $this->assertNotContains('<input type="hidden" name="' . $fieldName . '_disabled"', $elementHtml);
+        $this->assertStringNotContainsString('<input type="hidden" name="' . $fieldName . '_disabled"', $elementHtml);
     }
 
     /**
@@ -77,6 +119,6 @@ class MultiselectTest extends \PHPUnit\Framework\TestCase
     {
         $this->_model->setAfterElementJs('<script language="text/javascript">var website = "website1";</script>');
         $elementHtml = $this->_model->getAfterElementJs();
-        $this->assertContains('var website = "website1";', $elementHtml);
+        $this->assertStringContainsString('var website = "website1";', $elementHtml);
     }
 }

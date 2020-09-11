@@ -3,16 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Translation\Model\Json;
 
+use Magento\Framework\App\Area;
 use Magento\Framework\App\AreaList;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\TranslateInterface;
 use Magento\Framework\View\Asset\File\FallbackContext;
 use Magento\Framework\View\Asset\PreProcessor\Chain;
 use Magento\Framework\View\Asset\PreProcessorInterface;
 use Magento\Framework\View\DesignInterface;
+use Magento\Backend\App\Area\FrontNameResolver;
 use Magento\Translation\Model\Js\Config;
 use Magento\Translation\Model\Js\DataProviderInterface;
 
@@ -55,26 +57,27 @@ class PreProcessor implements PreProcessorInterface
      * @param DataProviderInterface $dataProvider
      * @param AreaList $areaList
      * @param TranslateInterface $translate
-     * @param DesignInterface|null $viewDesign
+     * @param DesignInterface $viewDesign
      */
     public function __construct(
         Config $config,
         DataProviderInterface $dataProvider,
         AreaList $areaList,
         TranslateInterface $translate,
-        DesignInterface $viewDesign = null
+        DesignInterface $viewDesign
     ) {
         $this->config = $config;
         $this->dataProvider = $dataProvider;
         $this->areaList = $areaList;
         $this->translate = $translate;
-        $this->viewDesign = $viewDesign ?? ObjectManager::getInstance()->get(DesignInterface::class);
+        $this->viewDesign = $viewDesign;
     }
 
     /**
      * Transform content and/or content type for the specified preprocessing chain object
      *
      * @param Chain $chain
+     *
      * @return void
      */
     public function process(Chain $chain)
@@ -83,7 +86,7 @@ class PreProcessor implements PreProcessorInterface
             $context = $chain->getAsset()->getContext();
 
             $themePath = '*/*';
-            $areaCode = \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE;
+            $areaCode = FrontNameResolver::AREA_CODE;
 
             if ($context instanceof FallbackContext) {
                 $themePath = $context->getThemePath();
@@ -92,8 +95,10 @@ class PreProcessor implements PreProcessorInterface
                 $this->viewDesign->setDesignTheme($themePath, $areaCode);
             }
 
-            $area = $this->areaList->getArea($areaCode);
-            $area->load(\Magento\Framework\App\Area::PART_TRANSLATE);
+            if ($areaCode !== FrontNameResolver::AREA_CODE) {
+                $area = $this->areaList->getArea($areaCode);
+                $area->load(Area::PART_TRANSLATE);
+            }
 
             $this->translate->setLocale($context->getLocale())->loadData($areaCode, true);
 
@@ -106,10 +111,11 @@ class PreProcessor implements PreProcessorInterface
      * Is provided path the path to translation dictionary
      *
      * @param string $path
+     *
      * @return bool
      */
     protected function isDictionaryPath($path)
     {
-        return (strpos($path, $this->config->getDictionaryFileName()) !== false);
+        return (strpos($path, (string) $this->config->getDictionaryFileName()) !== false);
     }
 }

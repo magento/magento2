@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertStorefrontShoppingCartSummaryItemsActionGroup">
+        <annotations>
+            <description>Goes to the Storefront Shopping Cart page. Validates that the provided Subtotal/Total are present and correct.</description>
+        </annotations>
+        <arguments>
+            <argument name="subtotal" type="string"/>
+            <argument name="total" type="string"/>
+        </arguments>
+        
+        <seeInCurrentUrl url="{{CheckoutCartPage.url}}" stepKey="assertUrl"/>
+        <waitForElementVisible selector="{{CheckoutCartSummarySection.subtotal}}" stepKey="waitForSubtotalVisible"/>
+        <see selector="{{CheckoutCartSummarySection.subtotal}}" userInput="{{subtotal}}" stepKey="assertSubtotal"/>
+        <waitForElementVisible selector="{{CheckoutCartSummarySection.total}}" stepKey="waitForTotalVisible"/>
+        <waitForElementVisible selector="{{CheckoutCartSummarySection.totalAmount(total)}}" stepKey="waitForTotalAmountVisible"/>
+        <see selector="{{CheckoutCartSummarySection.total}}" userInput="{{total}}" stepKey="assertTotal"/>
+        <seeElement  selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="seeProceedToCheckoutButton"/>
+    </actionGroup>
+</actionGroups>

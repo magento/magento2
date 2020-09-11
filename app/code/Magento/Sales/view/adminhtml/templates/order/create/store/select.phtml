@@ -4,10 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
+/* @var $block \Magento\Sales\Block\Adminhtml\Order\Create\Store\Select */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
-<?php /* @var $block \Magento\Sales\Block\Adminhtml\Order\Create\Store\Select */ ?>
 <div class="store-scope form-inline">
     <div class="admin__fieldset tree-store-scope">
         <?php $showHelpHint = 0; ?>
@@ -36,20 +35,30 @@
                     <?php if ($showGroup == false): ?>
                         <?php $showGroup = true; ?>
                         <div class="admin__field field-group_label">
-                            <label class="admin__field-label" for=""><span><?= $block->escapeHtml($_group->getName()) ?></span></label>
+                            <label class="admin__field-label" for="">
+                                <span><?= $block->escapeHtml($_group->getName()) ?></span>
+                            </label>
                             <div class="admin__field-control"></div>
                         </div>
                     <?php endif; ?>
 
                     <div class="admin__field field-store_label">
-                        <label class="admin__field-label" for=""><span><?= $block->escapeHtml($_group->getName()) ?></span></label>
+                        <label class="admin__field-label" for="">
+                            <span><?= $block->escapeHtml($_group->getName()) ?></span>
+                        </label>
                         <div class="admin__field-control">
                             <div class="nested">
                                 <div class="admin__field admin__field-option">
-                                    <input type="radio" id="store_<?= /* @escapeNotVerified */ $_store->getId() ?>" class="admin__control-radio" onclick="order.setStoreId('<?= /* @escapeNotVerified */ $_store->getId() ?>')"/>
-                                    <label class="admin__field-label" for="store_<?= /* @escapeNotVerified */ $_store->getId() ?>">
+                                    <input type="radio"
+                                           id="store_<?= (int) $_store->getId() ?>" class="admin__control-radio"/>
+                                    <label class="admin__field-label" for="store_<?= (int) $_store->getId() ?>">
                                         <?= $block->escapeHtml($_store->getName()) ?>
                                     </label>
+                                    <?= /* @noEscape*/ $secureRenderer->renderEventListenerAsTag(
+                                        'onclick',
+                                        "order.setStoreId('" .  (int)$_store->getId() . "')",
+                                        'input#store_' . (int)$_store->getId()
+                                    ) ?>
                                 </div>
                             </div>
                         </div>

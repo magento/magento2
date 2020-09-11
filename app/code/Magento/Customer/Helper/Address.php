@@ -81,7 +81,7 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * @var CustomerMetadataInterface
      *
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      */
     protected $_customerMetadataService;
 
@@ -407,7 +407,7 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
      * @return bool
      * @throws NoSuchEntityException
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @since 100.2.0
+     * @since 101.0.0
      */
     public function isAttributeVisible($code)
     {
@@ -415,25 +415,6 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
         if ($attributeMetadata) {
             return $attributeMetadata->isVisible();
         }
-        return false;
-    }
-
-    /**
-     * Retrieve attribute required
-     *
-     * @param string $code
-     * @return bool
-     * @throws NoSuchEntityException
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
-    public function isAttributeRequired($code)
-    {
-        $attributeMetadata = $this->_addressMetadataService->getAttributeMetadata($code);
-
-        if ($attributeMetadata) {
-            return $attributeMetadata->isRequired();
-        }
-
         return false;
     }
 }

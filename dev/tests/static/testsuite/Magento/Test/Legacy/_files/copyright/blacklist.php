@@ -8,5 +8,8 @@ return [
     '/pub\/opt\/magento\/var/',
     '/COPYING\.txt/',
     '/setup\/src\/Zend\/Mvc\/Controller\/LazyControllerAbstractFactory\.php/',
-    '/app\/code\/(?!Magento)[^\/]*/'
+    '/app\/code\/(?!Magento)[^\/]*/',
+    '#dev/tests/setup-integration/testsuite/Magento/Developer/_files/\S*\.xml$#',
+    '/lib\/internal\/Magento\/Framework\/File\/Test\/Unit\/_files\/blank.html$/',
+    '/dev\/tests\/integration\/testsuite\/Magento\/Ups\/_files\/ShipmentConfirmRequest.xml$/'
 ];

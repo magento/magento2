@@ -8,7 +8,11 @@ namespace Magento\Customer\Model;
 use Magento\Config\Model\Config\Source\Nooptreq as NooptreqSource;
 use Magento\Customer\Helper\Address as AddressHelper;
 use Magento\Framework\Escaper;
+use Magento\Store\Api\Data\StoreInterface;
 
+/**
+ * Customer Options.
+ */
 class Options
 {
     /**
@@ -38,7 +42,7 @@ class Options
     /**
      * Retrieve name prefix dropdown options
      *
-     * @param null $store
+     * @param null|string|bool|int|StoreInterface $store
      * @return array|bool
      */
     public function getNamePrefixOptions($store = null)
@@ -52,7 +56,7 @@ class Options
     /**
      * Retrieve name suffix dropdown options
      *
-     * @param null $store
+     * @param null|string|bool|int|StoreInterface $store
      * @return array|bool
      */
     public function getNameSuffixOptions($store = null)
@@ -64,11 +68,13 @@ class Options
     }
 
     /**
-     * @param $options
+     * Unserialize and clear name prefix or suffix options.
+     *
+     * @param string $options
      * @param bool $isOptional
      * @return array|bool
      *
-     * @deprecated
+     * @deprecated 101.0.4
      * @see prepareNamePrefixSuffixOptions()
      */
     protected function _prepareNamePrefixSuffixOptions($options, $isOptional = false)
@@ -78,6 +84,7 @@ class Options
 
     /**
      * Unserialize and clear name prefix or suffix options
+     *
      * If field is optional, add an empty first option.
      *
      * @param string $options
@@ -90,14 +97,15 @@ class Options
         if (empty($options)) {
             return false;
         }
+
         $result = [];
         $options = explode(';', $options);
         foreach ($options as $value) {
-            $value = $this->escaper->escapeHtml(trim($value));
-            $result[$value] = $value;
+            $result[] = $this->escaper->escapeHtml(trim($value)) ?: ' ';
         }
+
         if ($isOptional && trim(current($options))) {
-            $result = array_merge([' ' => ' '], $result);
+            $result = array_merge([' '], $result);
         }
 
         return $result;

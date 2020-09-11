@@ -4,9 +4,8 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
+/** @var $block \Magento\Catalog\Block\Product\View\Additional */
 ?>
-<?php foreach ($block->getChildHtmlList() as $_html): ?>
-    <?= /* @escapeNotVerified */ $_html ?>
+<?php foreach ($block->getChildHtmlList() as $_html) :?>
+    <?= /* @noEscape */ $_html ?>
 <?php endforeach; ?>

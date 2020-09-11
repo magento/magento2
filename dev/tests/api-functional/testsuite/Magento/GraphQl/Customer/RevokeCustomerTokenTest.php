@@ -36,16 +36,17 @@ QUERY;
         $customerToken = $customerTokenService->createCustomerAccessToken($userName, $password);
 
         $headerMap = ['Authorization' => 'Bearer ' . $customerToken];
-        $response = $this->graphQlQuery($query, [], '', $headerMap);
+        $response = $this->graphQlMutation($query, [], '', $headerMap);
         $this->assertTrue($response['revokeCustomerToken']['result']);
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage The current customer isn't authorized.
      */
     public function testRevokeCustomerTokenForGuestCustomer()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('The current customer isn\'t authorized.');
+
         $query = <<<QUERY
             mutation {
                 revokeCustomerToken {
@@ -53,6 +54,6 @@ QUERY;
                 }
             }
 QUERY;
-        $this->graphQlQuery($query, [], '');
+        $this->graphQlMutation($query, [], '');
     }
 }

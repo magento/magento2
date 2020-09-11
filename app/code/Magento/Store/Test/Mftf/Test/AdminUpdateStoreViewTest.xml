@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<!-- Test XML Example -->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+        <test name="AdminUpdateStoreViewTest">
+            <annotations>
+                <stories value="Update Store View"/>
+                <title value="Update Store View and Verify Backend and Frontend"/>
+                <description value="Test log in to Stores and Update Store View Test"/>
+                <testCaseId value="MC-14316"/>
+                <severity value="CRITICAL"/>
+                <group value="store"/>
+                <group value="mtf_migrated"/>
+            </annotations>
+            <before>
+                <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+                <!--Create custom store view-->
+                <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createNewStoreView">
+                    <argument name="StoreGroup" value="_defaultStoreGroup"/>
+                    <argument name="customStore" value="storeViewData"/>
+                </actionGroup>
+            </before>
+            <after>
+                <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreView">
+                    <argument name="customStore" value="storeViewData"/>
+                </actionGroup>
+                <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteUpdatedStoreView">
+                    <argument name="customStore" value="SecondStoreUnique"/>
+                </actionGroup>
+                <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            </after>
+
+            <!--Search created store view in grid-->
+            <actionGroup ref="AssertStoreViewInGridActionGroup" stepKey="searchCreatedStoreViewInGrid">
+                <argument name="storeViewName" value="{{storeViewData.name}}"/>
+            </actionGroup>
+            <click selector="{{AdminStoresGridSection.storeNameInFirstRow}}" stepKey="clickStoreViewFirstRowInGrid"/>
+            <waitForPageLoad stepKey="waitForAdminSystemStoreViewPageLoad"/>
+            <!--Update created store view as per requirements-->
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="updateStoreView">
+                <argument name="StoreGroup" value="_defaultStoreGroup"/>
+                <argument name="customStore" value="SecondStoreUnique"/>
+            </actionGroup>
+            <!--Save the updated Store view and verify AssertStoreViewSuccessSaveMessage-->
+            <actionGroup ref="AdminCreateStoreViewSaveActionGroup" stepKey="verifyAssertStoreViewSuccessSaveMessage">
+            </actionGroup>
+
+            <!--Search updated store view in grid and verify AssertStoreViewInGridMessage-->
+            <actionGroup ref="AssertStoreViewInGridActionGroup" stepKey="verifyUpdatedStoreViewInGrid">
+                <argument name="storeViewName" value="{{SecondStoreUnique.name}}"/>
+            </actionGroup>
+
+            <!--Go to store view form page and verify AssertStoreForm-->
+            <actionGroup ref="AssertStoreViewFormActionGroup" stepKey="verifyStoreViewForm">
+                <argument name="storeDropdown" value="{{_defaultStoreGroup.name}}"/>
+                <argument name="storeViewName" value="{{SecondStoreUnique.name}}"/>
+                <argument name="storeViewCode" value="{{SecondStoreUnique.code}}"/>
+                <argument name="status" value="Enabled"/>
+            </actionGroup>
+
+            <!--Go to store configuration page and verify AssertStoreBackend-->
+            <amOnPage url="{{AdminConfigPage.url}}" stepKey="goToConfigStoreConfigurationPage"/>
+            <waitForPageLoad stepKey="waitForSystemStoreConfigurationPageLoad" />
+            <click selector="{{AdminConfigSection.defaultConfigButton}}" stepKey="clickDefaultConfigButton"/>
+            <see selector="{{AdminConfigSection.defaultConfigDropdown}}" userInput="{{storeViewData.name}}" stepKey="seeAssertStoreViewInDefaultConfigDropdown"/>
+            <see selector="{{AdminConfigSection.defaultConfigDropdown}}" userInput="{{SecondStoreUnique.name}}" stepKey="seeAssertUpdateStoreViewInDefaultConfigDropdown"/>
+
+            <!--Go to storefront and verify AssertStoreFrontend-->
+            <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStorefrontPage"/>
+            <click selector="{{StorefrontHeaderSection.storeViewSwitcher}}" stepKey="selectStoreSwitcher"/>
+            <waitForPageLoad stepKey="waitForFirstStoreView"/>
+            <see selector="{{StorefrontHeaderSection.storeViewDropdown}}" userInput="{{storeViewData.name}}" stepKey="seeAssertStoreViewOnStorefront"/>
+            <see selector="{{StorefrontHeaderSection.storeViewDropdown}}" userInput="{{SecondStoreUnique.name}}" stepKey="seeAssertUpdatedStoreViewOnStorefront"/>
+        </test>
+</tests>

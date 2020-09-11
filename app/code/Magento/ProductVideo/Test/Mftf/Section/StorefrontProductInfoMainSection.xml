@@ -10,9 +10,9 @@
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="StorefrontProductInfoMainSection">
         <element name="productVideo" type="text" selector="//*[@class='product-video' and @data-type='{{videoType}}']" parameterized="true"/>
-        <element name="clickInVideo" type="video" selector="//*[@class='fotorama__stage__shaft']"/>
-        <element name="videoPausedMode" type="video" selector="//*[contains(@class, 'paused-mode')]"/>
-        <element name="videoPlayedMode" type="video" selector="//*[contains(@class,'playing-mode')]"/>
-        <element name="frameVideo" type="video" selector="widget2"/>
+        <element name="clickInVideo" type="button" selector="//*[@class='fotorama__stage__shaft']"/>
+        <element name="videoPausedMode" type="button" selector="//*[contains(@class, 'paused-mode')]"/>
+        <element name="videoPlayedMode" type="button" selector="//*[contains(@class,'playing-mode')]"/>
+        <element name="frameVideo" type="button" selector="widget2"/>
     </section>
 </sections>

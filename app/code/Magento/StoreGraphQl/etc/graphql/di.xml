@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\GraphQl\Controller\HttpRequestProcessor">
+        <arguments>
+            <argument name="graphQlHeaders" xsi:type="array">
+                <item name="Store" xsi:type="object">Magento\StoreGraphQl\Controller\HttpHeaderProcessor\StoreProcessor</item>
+            </argument>
+            <argument name="requestValidators" xsi:type="array">
+                <item name="storeValidator" xsi:type="object">Magento\StoreGraphQl\Controller\HttpRequestValidator\StoreValidator</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\GraphQl\Model\Query\ContextFactory">
+        <arguments>
+            <argument name="contextParametersProcessors" xsi:type="array">
+                <item name="add_store_info_to_context" xsi:type="object">Magento\StoreGraphQl\Model\Context\AddStoreInfoToContext</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\StoreGraphQl\Model\Resolver\Store\StoreConfigDataProvider">
+        <arguments>
+            <argument name="extendedConfigData" xsi:type="array">
+                <item name="use_store_in_url" xsi:type="string">web/url/use_store</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Mail\Template\TransportBuilder">
+        <plugin name="graphQlEmulateEmail" type="Magento\StoreGraphQl\Plugin\LocalizeEmail" />
+    </type>
+</config>

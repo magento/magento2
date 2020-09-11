@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontUpdateCustomerAddressBelgiumTest">
+        <annotations>
+            <stories value="Update Regions list for Belgium country"/>
+            <title value="Update customer address on storefront with Belgium address"/>
+            <description value="Update customer address on storefront with Belgium address and verify you can select a region"/>
+            <testCaseId value="MC-20234"/>
+            <severity value="AVERAGE"/>
+            <group value="customer"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="StorefrontOpenCustomerAccountCreatePageActionGroup" stepKey="openCreateAccountPage"/>
+            <actionGroup ref="StorefrontFillCustomerAccountCreationFormActionGroup" stepKey="fillCreateAccountForm">
+                <argument name="customer" value="CustomerEntityOne"/>
+            </actionGroup>
+            <actionGroup ref="StorefrontClickCreateAnAccountCustomerAccountCreationFormActionGroup" stepKey="submitCreateAccountForm"/>
+            <actionGroup ref="AssertMessageCustomerCreateAccountActionGroup" stepKey="seeSuccessMessage">
+                <argument name="messageType" value="success"/>
+                <argument name="message" value="Thank you for registering with Main Website Store."/>
+            </actionGroup>
+        </before>
+        <after>
+            <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteNewUser">
+                <argument name="email" value="{{CustomerEntityOne.email}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!--Update customer address Belgium in storefront-->
+        <actionGroup ref="EnterCustomerAddressInfoActionGroup" stepKey="enterAddress">
+            <argument name="Address" value="updateCustomerBelgiumAddress"/>
+        </actionGroup>
+        <!--Verify customer address save success message-->
+        <see selector="{{AdminCustomerMessagesSection.successMessage}}" userInput="You saved the address." stepKey="seeAssertCustomerAddressSuccessSaveMessage"/>
+
+        <!--Verify customer default billing address-->
+        <actionGroup ref="VerifyCustomerBillingAddressWithStateActionGroup" stepKey="verifyBillingAddress">
+            <argument name="address" value="updateCustomerBelgiumAddress"/>
+        </actionGroup>
+
+        <!--Verify customer default shipping address-->
+        <actionGroup ref="VerifyCustomerShippingAddressWithStateActionGroup" stepKey="verifyShippingAddress">
+            <argument name="address" value="updateCustomerBelgiumAddress"/>
+        </actionGroup>
+
+        <!-- Verify country Belgium can be saved without state as state not required -->
+        <actionGroup ref="StoreFrontClickEditDefaultShippingAddressActionGroup" stepKey="clickOnDefaultShippingAddress"/>
+        <selectOption selector="{{StorefrontCustomerAddressFormSection.country}}" userInput="Belgium" stepKey="selectCountry"/>
+        <selectOption selector="{{StorefrontCustomerAddressFormSection.state}}" userInput="Please select a region, state or province." stepKey="selectState"/>
+        <actionGroup ref="AdminSaveCustomerAddressActionGroup" stepKey="saveAddress"/>
+        <see selector="{{StorefrontCustomerAddressesSection.defaultShippingAddress}}" userInput="Belgium" stepKey="seeAssertCustomerDefaultShippingAddressCountry"/>
+
+    </test>
+</tests>

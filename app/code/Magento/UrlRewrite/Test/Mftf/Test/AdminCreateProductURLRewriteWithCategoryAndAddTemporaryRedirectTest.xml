@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateProductURLRewriteWithCategoryAndAddTemporaryRedirectTest">
+        <annotations>
+            <stories value="Create Product UrlRewrite"/>
+            <title value="Create product URL rewrite, add temporary redirect for product"/>
+            <description value="Login as admin, create product with category and UrlRewrite and add temporary redirect  "/>
+            <testCaseId value="MC-5338"/>
+            <severity value="CRITICAL"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+        </before>
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!--Filter and Select the created Product -->
+        <actionGroup ref="AdminSearchUrlRewriteProductBySkuActionGroup" stepKey="searchProduct">
+            <argument name="productSku" value="$$createSimpleProduct.sku$$"/>
+        </actionGroup>
+
+        <!-- Update the Store, RequestPath, RedirectType and Description -->
+        <actionGroup ref="AdminAddUrlRewriteForProductActionGroup" stepKey="addUrlRewrite">
+            <argument name="storeValue" value="Default Store View"/>
+            <argument name="requestPath" value="{{FirstLevelSubCat.name_lwr}}/{{_defaultProduct.urlKey}}.html"/>
+            <argument name="redirectTypeValue" value="Temporary (302)"/>
+            <argument name="description" value="End To End Test"/>
+        </actionGroup>
+
+        <!--Assert Product Redirect -->
+        <actionGroup ref="AdminSearchByRequestPathActionGroup" stepKey="searchByRequestPath">
+            <argument name="redirectPath" value="{{FirstLevelSubCat.name_lwr}}/{{_defaultProduct.urlKey}}.html" />
+            <argument name="redirectType" value="Temporary (302)" />
+            <argument name="targetPath" value="$$createSimpleProduct.name$$.html"/>
+        </actionGroup>
+
+        <!--Filter Product in product page and get the Product ID -->
+        <actionGroup ref="FilterAndSelectProductActionGroup" stepKey="filterProduct">
+            <argument name="productSku" value="$$createSimpleProduct.sku$$"/>
+        </actionGroup>
+        <grabFromCurrentUrl stepKey="productId" regex="#\/([0-9]*)?\/$#"/>
+
+        <!-- Assert Redirect path, Target Path and Redirect type in grid -->
+        <actionGroup ref="AdminSearchByRequestPathActionGroup" stepKey="searchByRequestPath1">
+            <argument name="redirectPath" value="$$createSimpleProduct.name$$.html" />
+            <argument name="redirectType" value="No" />
+            <argument name="targetPath" value="catalog/product/view/id/{$productId}"/>
+        </actionGroup>
+
+        <!-- Open Category Page and Get Category ID -->
+        <actionGroup ref="OpenCategoryFromCategoryTreeActionGroup" stepKey="getCategoryId">
+            <argument name="category" value="$$createCategory.name$$"/>
+        </actionGroup>
+        <grabFromCurrentUrl stepKey="categoryId" regex="#\/([0-9]*)?\/$#"/>
+
+        <!-- Assert Redirect path, Target Path and Redirect type in grid -->
+        <actionGroup ref="AdminSearchByRequestPathActionGroup" stepKey="searchByRequestPath2">
+            <argument name="redirectPath" value="$$createCategory.name$$.html" />
+            <argument name="redirectType" value="No" />
+            <argument name="targetPath" value="catalog/category/view/id/{$categoryId}"/>
+        </actionGroup>
+    </test>
+</tests>

@@ -4,9 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /** @var \Magento\Backend\Block\Cache\Permissions|null $permissions */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+
 $permissions = $block->getData('permissions');
 ?>
 <?php if ($permissions && $permissions->hasAccessToAdditionalActions()): ?>
@@ -16,25 +16,40 @@ $permissions = $block->getData('permissions');
         </h2>
         <?php if ($permissions->hasAccessToFlushCatalogImages()): ?>
             <p>
-                <button onclick="setLocation('<?= $block->escapeJs($block->getCleanImagesUrl()); ?>')" type="button">
+                <button id="flushCatalogImages" type="button">
                     <?= $block->escapeHtml(__('Flush Catalog Images Cache')); ?>
                 </button>
+                <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
+                    'onclick',
+                    'setLocation(\'' . $block->escapeJs($block->getCleanImagesUrl()) . '\')',
+                    'button#flushCatalogImages'
+                ) ?>
                 <span><?= $block->escapeHtml(__('Pregenerated product images files')); ?></span>
             </p>
         <?php endif; ?>
         <?php if ($permissions->hasAccessToFlushJsCss()): ?>
             <p>
-                <button onclick="setLocation('<?= $block->escapeJs($block->getCleanMediaUrl()); ?>')" type="button">
+                <button id="flushJsCss" type="button">
                     <?= $block->escapeHtml(__('Flush JavaScript/CSS Cache')); ?>
                 </button>
+                <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
+                    'onclick',
+                    'setLocation(\'' . $block->escapeJs($block->getCleanMediaUrl()) . '\')',
+                    'button#flushJsCss'
+                ) ?>
                 <span><?= $block->escapeHtml(__('Themes JavaScript and CSS files combined to one file')) ?></span>
             </p>
         <?php endif; ?>
         <?php if (!$block->isInProductionMode() && $permissions->hasAccessToFlushStaticFiles()): ?>
             <p>
-                <button onclick="setLocation('<?= $block->escapeJs($block->getCleanStaticFilesUrl()); ?>')" type="button">
+                <button id="flushStaticFiles" type="button">
                     <?= $block->escapeHtml(__('Flush Static Files Cache')); ?>
                 </button>
+                <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
+                    'onclick',
+                    'setLocation(\'' . $block->escapeJs($block->getCleanStaticFilesUrl()) . '\')',
+                    'button#flushStaticFiles'
+                ) ?>
                 <span><?= $block->escapeHtml(__('Preprocessed view files and static files')); ?></span>
             </p>
         <?php endif; ?>

@@ -19,7 +19,8 @@
             <img data-bind="attr: {
             'src': getIcons(getCardType()).url,
             'width': getIcons(getCardType()).width,
-            'height': getIcons(getCardType()).height
+            'height': getIcons(getCardType()).height,
+            'alt': getIcons(getCardType()).title
             }" class="payment-icon">
             <span translate="'ending'"></span>
             <span text="getMaskedCard()"></span>
@@ -48,7 +49,10 @@
                         type="submit"
                         data-bind="
                             click: placeOrder,
-                            attr: {title: $t('Place Order')}">
+                            attr: {title: $t('Place Order')},
+                            enable: isButtonActive()
+                        "
+                    disabled>
                     <span translate="'Place Order'"></span>
                 </button>
             </div>

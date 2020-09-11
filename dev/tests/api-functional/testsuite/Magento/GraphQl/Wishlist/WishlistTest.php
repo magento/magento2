@@ -31,7 +31,7 @@ class WishlistTest extends GraphQlAbstract
      */
     private $wishlistResource;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->customerTokenService = Bootstrap::getObjectManager()->get(CustomerTokenServiceInterface::class);
         $this->wishlistFactory = Bootstrap::getObjectManager()->get(WishlistFactory::class);
@@ -39,6 +39,7 @@ class WishlistTest extends GraphQlAbstract
     }
 
     /**
+     * @magentoConfigFixture default_store wishlist/general/active 1
      * @magentoApiDataFixture Magento/Wishlist/_files/wishlist.php
      */
     public function testGetCustomerWishlist(): void
@@ -91,6 +92,38 @@ QUERY;
 
         $this->assertEquals($wishlistItemProduct->getSku(), $response['wishlist']['items'][0]['product']['sku']);
         $this->assertEquals($wishlistItemProduct->getName(), $response['wishlist']['items'][0]['product']['name']);
+    }
+
+    /**
+     * @magentoConfigFixture default_store wishlist/general/active 1
+     */
+    public function testGetGuestWishlist()
+    {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('The current user cannot perform operations on wishlist');
+
+        $query =
+            <<<QUERY
+{
+  wishlist {
+    items_count
+    name
+    sharing_code
+    updated_at
+    items {
+      id
+      qty
+      description
+      added_at
+      product {
+        sku
+        name
+      }
+    }
+  }
+}
+QUERY;
+        $this->graphQlQuery($query);
     }
 
     /**

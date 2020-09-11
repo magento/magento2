@@ -45,7 +45,7 @@ class Collector implements CollectorInterface
      * @var PackageFactory
      */
     private $packageFactory;
-    
+
     /** @var \Magento\Framework\Module\Manager */
     private $moduleManager;
 

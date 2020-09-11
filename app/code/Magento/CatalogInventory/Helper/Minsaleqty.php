@@ -95,7 +95,7 @@ class Minsaleqty
             }
             return $this->serializer->serialize($data);
         } else {
-            return '';
+            return $value;
         }
     }
 

@@ -1,9 +1,10 @@
 <?php
-declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Block\Address;
 
 use Magento\Customer\Model\ResourceModel\Address\CollectionFactory as AddressCollectionFactory;
@@ -14,6 +15,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
  * Customer address grid
  *
  * @api
+ * @since 102.0.1
  */
 class Grid extends \Magento\Framework\View\Element\Template
 {
@@ -63,6 +65,7 @@ class Grid extends \Magento\Framework\View\Element\Template
      *
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 102.0.1
      */
     protected function _prepareLayout(): void
     {
@@ -74,6 +77,7 @@ class Grid extends \Magento\Framework\View\Element\Template
      * Generate and return "New Address" URL
      *
      * @return string
+     * @since 102.0.1
      */
     public function getAddAddressUrl(): string
     {
@@ -84,6 +88,7 @@ class Grid extends \Magento\Framework\View\Element\Template
      * Generate and return "Delete" URL
      *
      * @return string
+     * @since 102.0.1
      */
     public function getDeleteUrl(): string
     {
@@ -97,6 +102,7 @@ class Grid extends \Magento\Framework\View\Element\Template
      *
      * @param int $addressId
      * @return string
+     * @since 102.0.1
      */
     public function getAddressEditUrl($addressId): string
     {
@@ -111,6 +117,7 @@ class Grid extends \Magento\Framework\View\Element\Template
      * @return \Magento\Customer\Api\Data\AddressInterface[]
      * @throws \Magento\Framework\Exception\LocalizedException
      * @throws NoSuchEntityException
+     * @since 102.0.1
      */
     public function getAdditionalAddresses(): array
     {
@@ -131,6 +138,7 @@ class Grid extends \Magento\Framework\View\Element\Template
      * Return stored customer or get it from session
      *
      * @return \Magento\Customer\Api\Data\CustomerInterface
+     * @since 102.0.1
      */
     public function getCustomer(): \Magento\Customer\Api\Data\CustomerInterface
     {
@@ -147,6 +155,7 @@ class Grid extends \Magento\Framework\View\Element\Template
      *
      * @param \Magento\Customer\Api\Data\AddressInterface $address
      * @return string
+     * @since 102.0.1
      */
     public function getStreetAddress(\Magento\Customer\Api\Data\AddressInterface $address): string
     {
@@ -164,6 +173,7 @@ class Grid extends \Magento\Framework\View\Element\Template
      *
      * @param string $countryCode
      * @return string
+     * @since 102.0.1
      */
     public function getCountryByCode(string $countryCode): string
     {
@@ -236,8 +246,12 @@ class Grid extends \Magento\Framework\View\Element\Template
             }
             /** @var \Magento\Customer\Model\ResourceModel\Address\Collection $collection */
             $collection = $this->addressCollectionFactory->create();
-            $collection->setOrder('entity_id', 'desc')
-                ->setCustomerFilter([$this->getCustomer()->getId()]);
+            $collection->setOrder('entity_id', 'desc');
+            $collection->addFieldToFilter(
+                'entity_id',
+                ['nin' => [$this->getDefaultBilling(), $this->getDefaultShipping()]]
+            );
+            $collection->setCustomerFilter([$this->getCustomer()->getId()]);
             $this->addressCollection = $collection;
         }
         return $this->addressCollection;

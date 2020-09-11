@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCheckSubCategoryIsNotVisibleInNavigationMenuTest">
+        <annotations>
+            <stories value="Create category"/>
+            <title value="Active category is visible on navigation menu while subcategory is not visible on navigation menu, Include in Menu = Yes"/>
+            <description value="Login as admin and verify subcategory is not visible in navigation menu"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-13635"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <!--Login as Admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
+            <!--Create Parent Category -->
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+        </before>
+        <after>
+            <!--Delete created data-->
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!--Open Category Page-->
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openAdminCategoryIndexPage"/>
+        <!--Create subcategory under parent category -->
+        <actionGroup ref="NavigateToCreatedCategoryActionGroup" stepKey="openCreatedCategory">
+            <argument name="Category" value="$$createCategory$$"/>
+        </actionGroup>
+        <actionGroup ref="CreateCategoryActionGroup" stepKey="createSubcategory">
+            <argument name="categoryEntity" value="SimpleSubCategory"/>
+        </actionGroup>
+        <!-- Verify Parent Category is visible in navigation menu and Sub category is not visible in navigation menu -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="openHomepage"/>
+        <actionGroup ref="StorefrontAssertCategoryNameIsShownInMenuActionGroup" stepKey="seeCategoryOnStoreNavigationBar">
+            <argument name="categoryName" value="$$createCategory.name$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertCategoryNameIsNotShownInMenuActionGroup" stepKey="doNotSeeSubCategoryOnStoreNavigation">
+            <argument name="categoryName" value="{{SimpleSubCategory.name}}"/>
+        </actionGroup>
+    </test>
+</tests>

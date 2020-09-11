@@ -10,6 +10,8 @@ use Magento\Customer\Model\Address;
 use Magento\Customer\Model\AddressFactory;
 use Magento\Customer\Model\Customer;
 use Magento\Customer\Model\CustomerFactory;
+use Magento\Directory\Model\ResourceModel\Region\CollectionFactory as RegionCollectionFactory;
+use Magento\Framework\App\ObjectManager;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
@@ -33,22 +35,32 @@ class CustomerTemplateGenerator implements TemplateEntityGeneratorInterface
     private $storeManager;
 
     /**
+     * @var RegionCollectionFactory
+     */
+    private $regionsCollectionFactory;
+
+    /**
      * @param CustomerFactory $customerFactory
      * @param AddressFactory $addressFactory
      * @param StoreManagerInterface $storeManager
+     * @param RegionCollectionFactory|null $regionsCollectionFactory
      */
     public function __construct(
         CustomerFactory $customerFactory,
         AddressFactory $addressFactory,
-        StoreManagerInterface $storeManager
+        StoreManagerInterface $storeManager,
+        RegionCollectionFactory $regionsCollectionFactory = null
     ) {
         $this->customerFactory = $customerFactory;
         $this->addressFactory = $addressFactory;
         $this->storeManager = $storeManager;
+        $this->regionsCollectionFactory = $regionsCollectionFactory ?: ObjectManager::getInstance()->get(
+            RegionCollectionFactory::class
+        );
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function generateEntity()
     {
@@ -67,7 +79,7 @@ class CustomerTemplateGenerator implements TemplateEntityGeneratorInterface
      */
     private function getCustomerTemplate()
     {
-        $customerRandomizerNumber = crc32(mt_rand(1, PHP_INT_MAX));
+        $customerRandomizerNumber = crc32(random_int(1, PHP_INT_MAX));
 
         $now = new \DateTime();
 
@@ -100,6 +112,8 @@ class CustomerTemplateGenerator implements TemplateEntityGeneratorInterface
     }
 
     /**
+     * Get address template.
+     *
      * @param int $customerId
      * @return Address
      */
@@ -117,7 +131,7 @@ class CustomerTemplateGenerator implements TemplateEntityGeneratorInterface
                 'street' => 'Green str, 67',
                 'lastname' => 'Smith',
                 'firstname' => 'John',
-                'region_id' => 1,
+                'region_id' => $this->getFirstRegionId(),
                 'fax' => '04040404',
                 'middlename' => '',
                 'prefix' => '',
@@ -128,5 +142,19 @@ class CustomerTemplateGenerator implements TemplateEntityGeneratorInterface
                 'default_shipping_' => '1',
             ]
         ]);
+    }
+
+    /**
+     * Get first region id.
+     *
+     * @return mixed
+     */
+    private function getFirstRegionId()
+    {
+        $regionsCollection = $this->regionsCollectionFactory->create();
+        $regionsCollection->unshiftOrder('region_id', 'ASC');
+        $region = $regionsCollection->getFirstItem();
+
+        return $region->getRegionId();
     }
 }

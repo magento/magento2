@@ -6,7 +6,6 @@
 namespace Magento\Backup\Controller\Adminhtml;
 
 use Magento\Backend\App\Action;
-use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Backup\Helper\Data as Helper;
 use Magento\Framework\App\ObjectManager;
 
@@ -18,7 +17,7 @@ use Magento\Framework\App\ObjectManager;
  * @since 100.0.2
  * @SuppressWarnings(PHPMD.AllPurposeAction)
  */
-abstract class Index extends Action implements HttpGetActionInterface
+abstract class Index extends Action
 {
     /**
      * Authorization level of a basic admin session
@@ -88,6 +87,7 @@ abstract class Index extends Action implements HttpGetActionInterface
 
     /**
      * @inheritDoc
+     * @since 100.2.6
      */
     public function dispatch(\Magento\Framework\App\RequestInterface $request)
     {

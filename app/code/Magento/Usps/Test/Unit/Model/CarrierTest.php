@@ -3,12 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Usps\Test\Unit\Model;
 
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\DataObject;
 use Magento\Framework\HTTP\ZendClient;
 use Magento\Framework\HTTP\ZendClientFactory;
 use Magento\Framework\Locale\ResolverInterface;
@@ -27,12 +28,13 @@ use Magento\Shipping\Model\Simplexml\Element;
 use Magento\Shipping\Model\Simplexml\ElementFactory;
 use Magento\Usps\Helper\Data as DataHelper;
 use Magento\Usps\Model\Carrier;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CarrierTest extends \PHPUnit\Framework\TestCase
+class CarrierTest extends TestCase
 {
     /**
      * @var \Zend_Http_Response|MockObject
@@ -77,13 +79,13 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
 
         $this->scope = $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->scope->method('getValue')
             ->willReturnCallback([$this, 'scopeConfiggetValue']);
@@ -142,51 +144,6 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
     public function testGetCodeBool()
     {
         $this->assertFalse($this->carrier->getCode('test_code'));
-    }
-
-    public function testCollectRates()
-    {
-        $expectedRequest = '<?xml version="1.0" encoding="UTF-8"?><RateV4Request USERID="213MAGEN6752">'
-            . '<Revision>2</Revision><Package ID="0"><Service>ALL</Service><ZipOrigination/>'
-            . '<ZipDestination>90032</ZipDestination><Pounds>4</Pounds><Ounces>4.2512000000</Ounces>'
-            . '<Container>VARIABLE</Container><Size>REGULAR</Size><Machinable/></Package></RateV4Request>';
-        $expectedXml = new \SimpleXMLElement($expectedRequest);
-
-        $this->scope->method('isSetFlag')
-            ->willReturn(true);
-
-        $this->httpClient->expects(self::exactly(2))
-            ->method('setParameterGet')
-            ->withConsecutive(
-                ['API', 'RateV4'],
-                ['XML', self::equalTo($expectedXml->asXML())]
-            );
-
-        $this->httpResponse->method('getBody')
-            ->willReturn(file_get_contents(__DIR__ . '/_files/success_usps_response_rates.xml'));
-
-        $data = require __DIR__ . '/_files/rates_request_data.php';
-        $request = $this->objectManager->getObject(RateRequest::class, ['data' => $data[0]]);
-
-        self::assertNotEmpty($this->carrier->collectRates($request)->getAllRates());
-    }
-
-    public function testCollectRatesWithUnavailableService()
-    {
-        $expectedCount = 5;
-
-        $this->scope->expects($this->once())
-            ->method('isSetFlag')
-            ->willReturn(true);
-
-        $this->httpResponse->expects($this->once())
-            ->method('getBody')
-            ->willReturn(file_get_contents(__DIR__ . '/_files/response_rates.xml'));
-
-        $data = require __DIR__ . '/_files/rates_request_data.php';
-        $request = $this->objectManager->getObject(RateRequest::class, ['data' => $data[1]]);
-        $rates = $this->carrier->collectRates($request)->getAllRates();
-        $this->assertEquals($expectedCount, count($rates));
     }
 
     public function testReturnOfShipment()
@@ -250,7 +207,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
             'carriers/usps/mode' => 0,
         ];
 
-        return isset($pathMap[$path]) ? $pathMap[$path] : null;
+        return $pathMap[$path] ?? null;
     }
 
     /**
@@ -275,24 +232,6 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
 
         $request = new RateRequest();
         $this->assertSame($this->error, $this->carrier->collectRates($request));
-    }
-
-    public function testCollectRatesFail()
-    {
-        $this->scope->method('isSetFlag')
-            ->willReturn(true);
-        $this->scope->expects($this->atLeastOnce())
-            ->method('getValue')
-            ->willReturnMap(
-                [
-                    ['carriers/usps/userid' => 123],
-                    ['carriers/usps/container' => 11],
-                ]
-            );
-        $request = new RateRequest();
-        $request->setPackageWeight(1);
-
-        $this->assertNotEmpty($this->carrier->collectRates($request));
     }
 
     /**

@@ -14,5 +14,6 @@
         <element name="nthRow" type="block" selector="#setGrid_table tbody tr:nth-of-type({{var1}})" parameterized="true"/>
         <element name="AttributeSetName" type="text" selector="//td[contains(text(), '{{var1}}')]" parameterized="true"/>
         <element name="addAttributeSetBtn" type="button" selector="button.add-set" timeout="30"/>
+        <element name="resetFilter" type="button" selector="button[data-action='grid-filter-reset']" timeout="30"/>
     </section>
 </sections>

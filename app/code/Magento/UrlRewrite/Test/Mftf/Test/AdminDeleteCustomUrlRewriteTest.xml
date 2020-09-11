@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminDeleteCustomUrlRewriteTest">
+        <annotations>
+            <stories value="Delete custom URL rewrite"/>
+            <title value="Delete custom URL rewrite"/>
+            <description value="Test log in to URL rewrite and Delete custom URL rewrite"/>
+            <testCaseId value="MC-5350"/>
+            <severity value="CRITICAL"/>
+            <group value="urlRewrite"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+
+        <before>
+            <createData entity="defaultUrlRewrite" stepKey="urlRewrite" />
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!--Delete created custom url rewrite and verify AssertUrlRewriteDeletedMessage-->
+        <actionGroup ref="AdminDeleteUrlRewriteActionGroup" stepKey="deleteUrlRewrite">
+            <argument name="requestPath" value="$$urlRewrite.request_path$$"/>
+        </actionGroup>
+
+        <!--Search and verify AssertUrlRewriteNotInGrid-->
+        <actionGroup ref="AdminSearchDeletedUrlRewriteActionGroup" stepKey="searchDeletedUrlRewriteInGrid">
+            <argument name="requestPath" value="$$urlRewrite.request_path$$"/>
+        </actionGroup>
+
+        <!--Verify AssertPageByUrlRewriteIsNotFound-->
+        <actionGroup ref="AssertPageByUrlRewriteIsNotFoundActionGroup" stepKey="amOnPage">
+            <argument name="requestPath" value="$$urlRewrite.request_path$$"/>
+        </actionGroup>
+    </test>
+</tests>

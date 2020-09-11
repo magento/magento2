@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminOrdersReleaseInUnholdStatusTest">
+        <annotations>
+            <stories value="Mass Update Orders"/>
+            <title value="Release order in status On Hold"/>
+            <description value="Release order in status On Hold"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-16187"/>
+            <group value="sales"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+
+            <!-- Create Data -->
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="defaultSimpleProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+        </before>
+        <after>
+            <!-- Delete data -->
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!-- Create order -->
+        <actionGroup ref="CreateOrderActionGroup" stepKey="createFirstOrder">
+            <argument name="product" value="$$createProduct$$"/>
+            <argument name="customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <grabTextFrom selector="|Order # (\d+)|" stepKey="getOrderId"/>
+        <assertNotEmpty stepKey="assertOrderIdIsNotEmpty" after="getOrderId">
+			<actualResult type="const">$getOrderId</actualResult>
+        </assertNotEmpty>
+
+        <!-- Hold Order -->
+        <click selector="{{AdminOrderDetailsMainActionsSection.hold}}" stepKey="pushButtonHold"/>
+        <waitForPageLoad stepKey="waitForHold"/>
+        <see userInput="You put the order on hold." stepKey="seeHoldMessage"/>
+
+        <!-- Navigate to backend: Go to Sales > Orders -->
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="onOrderPage"/>
+        <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearFilters"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoading"/>
+
+        <!-- Select Mass Action according to dataset: Unhold -->
+        <actionGroup ref="AdminOrderActionOnGridActionGroup" stepKey="actionUnold">
+            <argument name="action" value="Unhold"/>
+            <argument name="orderId" value="$getOrderId"/>
+        </actionGroup>
+        <see userInput="1 order(s) have been released from on hold status." stepKey="assertOrderReleaseSuccessMessage"/>
+
+        <!--Assert order in orders grid -->
+        <actionGroup ref="AdminOrderFilterByOrderIdAndStatusActionGroup" stepKey="seeFirstOrder">
+            <argument name="orderId" value="{$getOrderId}"/>
+            <argument name="orderStatus" value="Pending"/>
+        </actionGroup>
+        <see userInput="{$getOrderId}" selector="{{AdminOrdersGridSection.gridCell('1','ID')}}" stepKey="assertOrderID"/>
+        <see userInput="Pending" selector="{{AdminOrdersGridSection.gridCell('1','Status')}}" stepKey="assertOrderStatus"/>
+    </test>
+</tests>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminShippingMethodsUpsSection">
+        <element name="carriersUpsTab" type="button" selector="#carriers_ups-head"/>
+        <element name="carriersUpsType" type="select" selector="#carriers_ups_type"/>
+        <element name="selectedUpsType" type="text" selector="#carriers_ups_type option[selected]"/>
+        <element name="carriersUPSActive" type="input" selector="#carriers_ups_active_inherit"/>
+        <element name="carriersUPSTypeSystem" type="input" selector="#carriers_ups_type_inherit"/>
+        <element name="carriersUPSAccountLive" type="input" selector="#carriers_ups_is_account_live_inherit"/>
+        <element name="carriersUPSGatewayXMLUrl" type="input" selector="#carriers_ups_gateway_xml_url_inherit"/>
+        <element name="carriersUPSModeXML" type="input" selector="#carriers_ups_mode_xml_inherit"/>
+        <element name="carriersUPSOriginShipment" type="input" selector="#carriers_ups_origin_shipment_inherit"/>
+        <element name="carriersUPSTitle" type="input" selector="#carriers_ups_title_inherit"/>
+        <element name="carriersUPSNegotiatedActive" type="input" selector="#carriers_ups_negotiated_active_inherit"/>
+        <element name="carriersUPSIncludeTaxes" type="input" selector="#carriers_ups_include_taxes_inherit"/>
+        <element name="carriersUPSShipmentRequestType" type="input" selector="#carriers_ups_shipment_requesttype_inherit"/>
+        <element name="carriersUPSContainer" type="input" selector="#carriers_ups_container_inherit"/>
+        <element name="carriersUPSDestType" type="input" selector="#carriers_ups_dest_type_inherit"/>
+        <element name="carriersUPSTrackingXmlUrl" type="input" selector="#carriers_ups_tracking_xml_url_inherit"/>
+        <element name="carriersUPSUnitOfMeasure" type="input" selector="#carriers_ups_unit_of_measure_inherit"/>
+        <element name="carriersUPSMaxPackageWeight" type="input" selector="#carriers_ups_max_package_weight_inherit"/>
+        <element name="carriersUPSPickup" type="input" selector="#carriers_ups_pickup_inherit"/>
+        <element name="carriersUPSMinPackageWeight" type="input" selector="#carriers_ups_min_package_weight_inherit"/>
+        <element name="carriersUPSHandlingType" type="input" selector="#carriers_ups_handling_type_inherit"/>
+        <element name="carriersUPSHandlingAction" type="input" selector="#carriers_ups_handling_action_inherit"/>
+        <element name="carriersUPSAllowedMethods" type="input" selector="#carriers_ups_allowed_methods_inherit"/>
+        <element name="carriersUPSFreeMethod" type="input" selector="#carriers_ups_free_method_inherit"/>
+        <element name="carriersUPSSpecificErrMsg" type="input" selector="#carriers_ups_specificerrmsg_inherit"/>
+        <element name="carriersUPSAllowSpecific" type="input" selector="#carriers_ups_sallowspecific_inherit"/>
+        <element name="carriersUPSSpecificCountry" type="input" selector="#carriers_ups_specificcountry"/>
+    </section>
+</sections>

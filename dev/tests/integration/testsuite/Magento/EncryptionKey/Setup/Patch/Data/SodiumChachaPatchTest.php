@@ -26,7 +26,7 @@ class SodiumChachaPatchTest extends \PHPUnit\Framework\TestCase
      */
     private $deployConfig;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->deployConfig = $this->objectManager->get(DeploymentConfig::class);
@@ -40,7 +40,10 @@ class SodiumChachaPatchTest extends \PHPUnit\Framework\TestCase
         $structureMock = $this->createMock(\Magento\Config\Model\Config\Structure\Proxy::class);
         $structureMock->expects($this->once())
             ->method('getFieldPathsByAttribute')
-            ->will($this->returnValue([$testPath]));
+            ->willReturn([$testPath]);
+        $structureMock->expects($this->once())
+            ->method('getFieldPaths')
+            ->willReturn([]);
 
         /** @var \Magento\Config\Model\ResourceModel\Config $configModel */
         $configModel = $this->objectManager->create(\Magento\Config\Model\ResourceModel\Config::class);

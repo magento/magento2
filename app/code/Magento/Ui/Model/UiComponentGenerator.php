@@ -32,7 +32,6 @@ class UiComponentGenerator
      * UiComponentGenerator constructor.
      * @param ContextFactory $contextFactory
      * @param UiComponentFactory $uiComponentFactory
-     * @param array $data
      */
     public function __construct(
         ContextFactory $contextFactory,
@@ -48,6 +47,7 @@ class UiComponentGenerator
      * @param string $name
      * @param \Magento\Framework\View\LayoutInterface $layout
      * @return UiComponentInterface
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function generateUiComponent($name, \Magento\Framework\View\LayoutInterface $layout)
     {

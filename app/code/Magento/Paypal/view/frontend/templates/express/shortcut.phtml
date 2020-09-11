@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
 /**
  * @var \Magento\Paypal\Block\Express\Shortcut $block
  */
@@ -37,7 +36,7 @@ if ($block->getIsInCatalogProduct()) {
            src="<?= $block->escapeUrl($block->getImageUrl()) ?>"
            alt="<?= $block->escapeHtml(__('Checkout with PayPal')) ?>"
            title="<?= $block->escapeHtml(__('Checkout with PayPal')) ?>"/>
-    <?php if ($block->getAdditionalLinkImage()): ?>
+    <?php if ($block->getAdditionalLinkImage()) : ?>
         <?php $linkImage = $block->getAdditionalLinkImage(); ?>
         <a href="<?= $block->escapeUrl($linkImage['href']) ?>">
             <img src="<?= $block->escapeHtml($linkImage['src']) ?>" />

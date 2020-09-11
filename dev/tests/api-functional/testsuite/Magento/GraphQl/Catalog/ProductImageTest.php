@@ -16,7 +16,7 @@ class ProductImageTest extends GraphQlAbstract
      */
     private $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
     }
@@ -36,12 +36,12 @@ class ProductImageTest extends GraphQlAbstract
             label
         }
     }
-  }    
+  }
 }
 QUERY;
         $response = $this->graphQlQuery($query);
 
-        self::assertContains('magento_image.jpg', $response['products']['items'][0]['image']['url']);
+        self::assertStringContainsString('magento_image.jpg', $response['products']['items'][0]['image']['url']);
         self::assertTrue($this->checkImageExists($response['products']['items'][0]['image']['url']));
         self::assertEquals('Image Alt Text', $response['products']['items'][0]['image']['label']);
     }
@@ -51,7 +51,6 @@ QUERY;
      */
     public function testProductWithoutBaseImage()
     {
-        $this->markTestIncomplete('https://github.com/magento/graphql-ce/issues/239');
         $productSku = 'simple';
         $query = <<<QUERY
 {
@@ -61,12 +60,25 @@ QUERY;
             url
             label
         }
+        small_image {
+            url
+            label
+        }
     }
-  }    
+  }
 }
 QUERY;
         $response = $this->graphQlQuery($query);
         self::assertEquals('Simple Product', $response['products']['items'][0]['image']['label']);
+        self::assertStringEndsWith(
+            'images/product/placeholder/image.jpg',
+            $response['products']['items'][0]['image']['url']
+        );
+        self::assertEquals('Simple Product', $response['products']['items'][0]['small_image']['label']);
+        self::assertStringEndsWith(
+            'images/product/placeholder/small_image.jpg',
+            $response['products']['items'][0]['small_image']['url']
+        );
     }
 
     /**
@@ -84,12 +96,12 @@ QUERY;
             label
         }
     }
-  }    
+  }
 }
 QUERY;
         $response = $this->graphQlQuery($query);
 
-        self::assertContains('magento_image.jpg', $response['products']['items'][0]['small_image']['url']);
+        self::assertStringContainsString('magento_image.jpg', $response['products']['items'][0]['small_image']['url']);
         self::assertTrue($this->checkImageExists($response['products']['items'][0]['small_image']['url']));
         self::assertEquals('Image Alt Text', $response['products']['items'][0]['small_image']['label']);
     }
@@ -109,12 +121,12 @@ QUERY;
             label
         }
     }
-  }    
+  }
 }
 QUERY;
         $response = $this->graphQlQuery($query);
 
-        self::assertContains('magento_image.jpg', $response['products']['items'][0]['thumbnail']['url']);
+        self::assertStringContainsString('magento_image.jpg', $response['products']['items'][0]['thumbnail']['url']);
         self::assertTrue($this->checkImageExists($response['products']['items'][0]['thumbnail']['url']));
         self::assertEquals('Image Alt Text', $response['products']['items'][0]['thumbnail']['label']);
     }
@@ -132,6 +144,6 @@ QUERY;
         curl_exec($connection);
         $responseStatus = curl_getinfo($connection, CURLINFO_HTTP_CODE);
 
-        return $responseStatus === 200 ? true : false;
+        return $responseStatus === 200;
     }
 }

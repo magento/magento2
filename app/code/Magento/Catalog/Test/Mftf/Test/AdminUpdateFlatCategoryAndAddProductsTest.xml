@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminUpdateFlatCategoryAndAddProductsTest">
+        <annotations>
+            <stories value="Update category"/>
+            <title value="Flat Catalog - Assign Simple Product to Category"/>
+            <description value="Login as admin, update flat category by adding a simple product"/>
+            <testCaseId value="MC-11012"/>
+            <severity value="CRITICAL"/>
+            <group value="Catalog"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
+            <!-- Create Simple Product -->
+            <createData entity="SimpleSubCategory" stepKey="category"/>
+            <!-- Create category -->
+            <createData entity="defaultSimpleProduct" stepKey="createSimpleProduct"/>
+            <!-- Create First StoreView  -->
+            <actionGroup ref="CreateStoreViewActionGroup" stepKey="createCustomStoreViewEn">
+                <argument name="storeView" value="customStoreEN"/>
+            </actionGroup>
+            <!-- Create Second StoreView -->
+            <actionGroup ref="CreateStoreViewActionGroup" stepKey="createCustomStoreViewFr">
+                <argument name="storeView" value="customStoreFR"/>
+            </actionGroup>
+            <!--Run full reindex and clear caches -->
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <!--Enable Flat Catalog Category -->
+            <magentoCLI stepKey="setFlatCatalogCategory" command="config:set catalog/frontend/flat_catalog_category 1"/>
+            <!--Open Index Management Page and Select Index mode "Update by Schedule" -->
+            <magentoCLI stepKey="setIndexerMode" command="indexer:set-mode" arguments="schedule" />
+            <!-- Run cron -->
+            <magentoCron stepKey="runAllCronJobs"/>
+        </before>
+        <after>
+            <magentoCLI stepKey="setFlatCatalogCategory" command="config:set catalog/frontend/flat_catalog_category 0 "/>
+            <magentoCLI stepKey="setIndexersMode" command="indexer:set-mode" arguments="realtime" />
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="indexerReindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreViewEn">
+                <argument name="customStore" value="customStoreEN"/>
+            </actionGroup>
+            <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreViewFr">
+                <argument name="customStore" value="customStoreFR"/>
+            </actionGroup>
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!-- Select Created Category-->
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexBeforeFlow">
+            <argument name="indices" value=""/>
+        </actionGroup>
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openAdminCategoryIndexPage"/>
+        <actionGroup ref="AdminExpandCategoryTreeActionGroup" stepKey="clickOnExpandTree"/>
+        <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(SimpleSubCategory.name)}}" stepKey="selectCreatedCategory"/>
+        <waitForPageLoad stepKey="waitForTheCategoryPageToLoaded"/>
+        <!--Add Products in Category-->
+        <scrollTo selector="{{AdminCategoryBasicFieldSection.productsInCategory}}" x="0" y="-80" stepKey="scrollToProductInCategory"/>
+        <click selector="{{AdminCategoryBasicFieldSection.productsInCategory}}" stepKey="clickOnProductInCategory"/>
+        <scrollToTopOfPage stepKey="scrollOnTopOfPage"/>
+        <conditionalClick selector="{{CatalogProductsSection.resetFilter}}" dependentSelector="{{CatalogProductsSection.resetFilter}}" visible="true" stepKey="clickOnResetFilter"/>
+        <waitForPageLoad stepKey="waitForProductsToLoad"/>
+        <fillField selector="{{AdminCategoryContentSection.productTableColumnName}}" userInput="$$createSimpleProduct.name$$"  stepKey="selectProduct"/>
+        <click selector="{{AdminCategoryContentSection.productSearch}}" stepKey="clickSearchButton"/>
+        <waitForPageLoad stepKey="waitFroPageToLoad1"/>
+        <scrollTo  selector="{{AdminCategoryContentSection.productTableRow}}"  stepKey="scrollToTableRow"/>
+        <click selector="{{AdminCategoryContentSection.productTableRow}}" stepKey="selectProductFromTableRow"/>
+        <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveSubCategory"/>
+        <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="seeSuccessMessage"/>
+        <!--Open Index Management Page and verify flat categoryIndex status-->
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+            <argument name="tags" value=""/>
+        </actionGroup>
+        <actionGroup ref="AdminOpenIndexManagementPageActionGroup" stepKey="openIndexManagementPage"/>
+        <see stepKey="seeCategoryIndexStatus"  selector="{{AdminIndexManagementSection.indexerStatus('Category Flat Data')}}" userInput="Ready"/>
+        <!--Verify Product In Store Front-->
+        <amOnPage url="$$createSimpleProduct.name$$.html" stepKey="goToStorefrontPage"/>
+        <waitForPageLoad stepKey="waitForPageToBeLoaded"/>
+        <!--Verify product and category is visible in First Store View -->
+        <click stepKey="selectStoreSwitcher" selector="{{StorefrontHeaderSection.storeViewSwitcher}}"/>
+        <click stepKey="selectFirstStoreView" selector="{{StorefrontHeaderSection.storeViewList(customStoreEN.name)}}"/>
+        <waitForPageLoad stepKey="waitForFirstStoreView"/>
+        <seeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName($$category.name$$)}}" stepKey="seeCategoryOnNavigation"/>
+        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{defaultSimpleProduct.name}}" stepKey="assertProductName"/>
+        <!--Verify product and category is visible in Second Store View -->
+        <click stepKey="selectStoreSwitcher1" selector="{{StorefrontHeaderSection.storeViewSwitcher}}"/>
+        <click stepKey="selectSecondStoreView" selector="{{StorefrontHeaderSection.storeViewList(customStoreFR.name)}}"/>
+        <waitForPageLoad stepKey="waitForSecondStoreView"/>
+        <seeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName($$category.name$$)}}" stepKey="seeCategoryOnNavigation1"/>
+        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{defaultSimpleProduct.name}}" stepKey="seeProductName"/>
+    </test>
+</tests>

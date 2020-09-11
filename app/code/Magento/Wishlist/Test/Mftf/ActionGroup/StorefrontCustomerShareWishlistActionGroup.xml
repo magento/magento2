@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontCustomerShareWishlistActionGroup" deprecated="Use StorefrontShareCustomerWishlistActionGroup">
+        <!-- Deprecated due to Hardcoded WishList Data Using. 18-19 lines -->
+        <annotations>
+            <description>Shares the Wish List from the Storefront Wish List page. PLEASE NOTE: The details for sharing are Hardcoded using 'Wishlist'.</description>
+        </annotations>
+
+        <click selector="{{StorefrontCustomerWishlistProductSection.productShareWishList}}" stepKey="clickMyWishListButton"/>
+        <fillField userInput="{{Wishlist.shareInfo_emails}}" selector="{{StorefrontCustomerWishlistShareSection.ProductShareWishlistEmail}}" stepKey="fillEmailsForShare"/>
+        <fillField userInput="{{Wishlist.shareInfo_message}}" selector="{{StorefrontCustomerWishlistShareSection.ProductShareWishlistTextMessage}}" stepKey="fillShareMessage"/>
+        <click selector="{{StorefrontCustomerWishlistShareSection.ProductShareWishlistButton}}" stepKey="sendWishlist"/>
+        <see selector="{{StorefrontCustomerWishlistProductSection.productSuccessShareMessage}}" userInput="Your wish list has been shared." stepKey="successMessage"/>
+    </actionGroup>
+</actionGroups>

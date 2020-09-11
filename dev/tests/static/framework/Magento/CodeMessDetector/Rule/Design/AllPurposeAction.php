@@ -27,6 +27,10 @@ class AllPurposeAction extends AbstractRule implements ClassAware
      */
     public function apply(AbstractNode $node)
     {
+        // Skip validation for Abstract Controllers
+        if ($node->isAbstract()) {
+            return;
+        }
         try {
             $impl = class_implements($node->getFullQualifiedName(), true);
         } catch (\Throwable $exception) {
@@ -34,7 +38,7 @@ class AllPurposeAction extends AbstractRule implements ClassAware
             return;
         }
 
-        if (in_array(ActionInterface::class, $impl, true)) {
+        if (is_array($impl) && in_array(ActionInterface::class, $impl, true)) {
             $methodsDefined = false;
             foreach ($impl as $i) {
                 if (preg_match('/\\\Http[a-z]+ActionInterface$/i', $i)) {

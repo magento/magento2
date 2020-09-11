@@ -9,7 +9,11 @@
     <body>
         <referenceContainer name="left">
             <block class="Magento\User\Block\Role\Edit" name="adminhtml.user.editroles">
-                <block class="Magento\User\Block\Role\Tab\Edit" name="adminhtml.user.tab.rolesedit"/>
+                <block class="Magento\User\Block\Role\Tab\Edit" name="adminhtml.user.tab.rolesedit">
+                    <arguments>
+                        <argument name="json_serializer" xsi:type="object">Magento\User\ViewModel\JsonSerializer</argument>
+                    </arguments>
+                </block>
                 <action method="addTabAfter">
                     <argument name="name" xsi:type="string">account</argument>
                     <argument name="block" xsi:type="string">adminhtml.user.tab.rolesedit</argument>

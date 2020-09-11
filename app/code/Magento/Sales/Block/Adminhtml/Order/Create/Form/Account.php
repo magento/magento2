@@ -6,10 +6,11 @@
 
 namespace Magento\Sales\Block\Adminhtml\Order\Create\Form;
 
+use Magento\Customer\Api\GroupManagementInterface;
 use Magento\Framework\Api\ExtensibleDataObjectConverter;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Data\Form\Element\AbstractElement;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
-use Magento\Store\Model\ScopeInterface;
 
 /**
  * Create order account form
@@ -39,7 +40,7 @@ class Account extends AbstractForm
      * @var \Magento\Framework\Api\ExtensibleDataObjectConverter
      */
     protected $_extensibleDataObjectConverter;
-
+    private const XML_PATH_EMAIL_REQUIRED_CREATE_ORDER = 'customer/create_account/email_required_create_order';
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Model\Session\Quote $sessionQuote
@@ -51,6 +52,7 @@ class Account extends AbstractForm
      * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
      * @param ExtensibleDataObjectConverter $extensibleDataObjectConverter
      * @param array $data
+     * @param GroupManagementInterface|null $groupManagement
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -63,11 +65,13 @@ class Account extends AbstractForm
         \Magento\Customer\Model\Metadata\FormFactory $metadataFormFactory,
         \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
         \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter,
-        array $data = []
+        array $data = [],
+        ?GroupManagementInterface $groupManagement = null
     ) {
         $this->_metadataFormFactory = $metadataFormFactory;
         $this->customerRepository = $customerRepository;
         $this->_extensibleDataObjectConverter = $extensibleDataObjectConverter;
+        $this->groupManagement = $groupManagement ?: ObjectManager::getInstance()->get(GroupManagementInterface::class);
         parent::__construct(
             $context,
             $sessionQuote,
@@ -78,6 +82,13 @@ class Account extends AbstractForm
             $data
         );
     }
+
+    /**
+     * Group Management
+     *
+     * @var GroupManagementInterface
+     */
+    private $groupManagement;
 
     /**
      * Return Header CSS Class
@@ -133,8 +144,7 @@ class Account extends AbstractForm
         $this->_addAttributesToForm($attributes, $fieldset);
 
         $this->_form->addFieldNameSuffix('order[account]');
-        $storeId = (int)$this->_sessionQuote->getStoreId();
-        $this->_form->setValues($this->extractValuesFromAttributes($attributes, $storeId));
+        $this->_form->setValues($this->extractValuesFromAttributes($attributes));
 
         return $this;
     }
@@ -149,7 +159,7 @@ class Account extends AbstractForm
     {
         switch ($element->getId()) {
             case 'email':
-                $element->setRequired(1);
+                $element->setRequired($this->isEmailRequiredToCreateOrder());
                 $element->setClass('validate-email admin__control-text');
                 break;
         }
@@ -165,8 +175,9 @@ class Account extends AbstractForm
     {
         try {
             $customer = $this->customerRepository->getById($this->getCustomerId());
+            // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
         } catch (\Exception $e) {
-            /** If customer does not exist do nothing. */
+            $data = [];
         }
         $data = isset($customer)
             ? $this->_extensibleDataObjectConverter->toFlatArray(
@@ -181,6 +192,10 @@ class Account extends AbstractForm
             }
         }
 
+        if (array_key_exists('group_id', $data) && empty($data['group_id'])) {
+            $data['group_id'] = $this->groupManagement->getDefaultGroup($this->getQuote()->getStoreId())->getId();
+        }
+
         if ($this->getQuote()->getCustomerEmail()) {
             $data['email'] = $this->getQuote()->getCustomerEmail();
         }
@@ -192,10 +207,9 @@ class Account extends AbstractForm
      * Extract the form values from attributes.
      *
      * @param array $attributes
-     * @param int $storeId
      * @return array
      */
-    private function extractValuesFromAttributes(array $attributes, int $storeId): array
+    private function extractValuesFromAttributes(array $attributes): array
     {
         $formValues = $this->getFormValues();
         foreach ($attributes as $code => $attribute) {
@@ -203,26 +217,21 @@ class Account extends AbstractForm
             if (isset($defaultValue) && !isset($formValues[$code])) {
                 $formValues[$code] = $defaultValue;
             }
-            if ($code === 'group_id' && empty($defaultValue)) {
-                $formValues[$code] = $this->getDefaultCustomerGroup($storeId);
-            }
         }
 
         return $formValues;
     }
 
     /**
-     * Gets default customer group.
+     * Retrieve email is required field for admin order creation
      *
-     * @param int $storeId
-     * @return string|null
+     * @return bool
      */
-    private function getDefaultCustomerGroup(int $storeId): ?string
+    private function isEmailRequiredToCreateOrder()
     {
         return $this->_scopeConfig->getValue(
-            'customer/create_account/default_group',
-            ScopeInterface::SCOPE_STORE,
-            $storeId
+            self::XML_PATH_EMAIL_REQUIRED_CREATE_ORDER,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
     }
 }

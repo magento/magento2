@@ -7,10 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\CustomerGraphQl\Model\Resolver;
 
-use Magento\CustomerGraphQl\Model\Customer\CheckCustomerAccount;
 use Magento\Framework\GraphQl\Config\Element\Field;
+use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 
 /**
@@ -19,24 +20,16 @@ use Magento\Integration\Api\CustomerTokenServiceInterface;
 class RevokeCustomerToken implements ResolverInterface
 {
     /**
-     * @var CheckCustomerAccount
-     */
-    private $checkCustomerAccount;
-
-    /**
      * @var CustomerTokenServiceInterface
      */
     private $customerTokenService;
 
     /**
-     * @param CheckCustomerAccount $checkCustomerAccount
      * @param CustomerTokenServiceInterface $customerTokenService
      */
     public function __construct(
-        CheckCustomerAccount $checkCustomerAccount,
         CustomerTokenServiceInterface $customerTokenService
     ) {
-        $this->checkCustomerAccount = $checkCustomerAccount;
         $this->customerTokenService = $customerTokenService;
     }
 
@@ -50,11 +43,11 @@ class RevokeCustomerToken implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        $currentUserId = $context->getUserId();
-        $currentUserType = $context->getUserType();
+        /** @var ContextInterface $context */
+        if (false === $context->getExtensionAttributes()->getIsCustomer()) {
+            throw new GraphQlAuthorizationException(__('The current customer isn\'t authorized.'));
+        }
 
-        $this->checkCustomerAccount->execute($currentUserId, $currentUserType);
-
-        return ['result' => $this->customerTokenService->revokeCustomerAccessToken((int)$currentUserId)];
+        return ['result' => $this->customerTokenService->revokeCustomerAccessToken($context->getUserId())];
     }
 }

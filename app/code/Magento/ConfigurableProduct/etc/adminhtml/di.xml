@@ -9,6 +9,7 @@
     <type name="Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper">
         <plugin name="configurable" type="Magento\ConfigurableProduct\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Configurable" sortOrder="50" />
         <plugin name="updateConfigurations" type="Magento\ConfigurableProduct\Controller\Adminhtml\Product\Initialization\Helper\Plugin\UpdateConfigurations" sortOrder="60" />
+        <plugin name="cleanConfigurationTmpImages" type="Magento\ConfigurableProduct\Plugin\Product\Initialization\CleanConfigurationTmpImages" sortOrder="999" />
     </type>
     <type name="Magento\Catalog\Controller\Adminhtml\Product\Builder">
         <plugin name="configurable" type="Magento\ConfigurableProduct\Controller\Adminhtml\Product\Builder\Plugin" sortOrder="50" />

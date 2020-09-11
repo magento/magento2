@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<!-- Test XML Example -->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminDeleteStoreViewTest">
+        <annotations>
+            <stories value="Delete Store View"/>
+            <title value="Delete Store View and Save Backup"/>
+            <description value="Test log in to Stores and Delete Store View"/>
+            <testCaseId value="MC-14303"/>
+            <severity value="CRITICAL"/>
+            <group value="store"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set system/backup/functionality_enabled 1" stepKey="setEnableBackupToYes"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!--Create custom store view-->
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createNewStoreView">
+                <argument name="StoreGroup" value="_defaultStoreGroup"/>
+                <argument name="customStore" value="storeViewData"/>
+            </actionGroup>
+        </before>
+        <after>
+            <magentoCLI command="config:set system/backup/functionality_enabled 0" stepKey="setEnableBackupToNo"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!--Delete custom store view and verify AssertStoreSuccessDeleteMessage And BackupMessage-->
+        <actionGroup ref="DeleteCustomStoreViewBackupEnabledYesActionGroup" stepKey="deleteCustomStoreView">
+            <argument name="storeViewName" value="{{storeViewData.name}}"/>
+        </actionGroup>
+
+        <!--Verify deleted store view not present in grid and verify AssertStoreNotInGrid Message-->
+        <actionGroup ref="AssertStoreViewNotInGridActionGroup" stepKey="verifyDeletedStoreViewNotInGrid">
+            <argument name="storeViewName" value="{{storeViewData.name}}"/>
+        </actionGroup>
+
+        <!--Go to backup index page and verify AssertBackupInGrid-->
+        <actionGroup ref="AdminBackupIndexPageOpenActionGroup" stepKey="navigateToBackupPage"/>
+        <see selector="{{AdminGridTableSection.backupNameColumn}}" userInput="{{WebSetupWizardBackup.name}}" stepKey="seeBackupInGrid"/>
+        <!--Delete database backup-->
+        <actionGroup ref="AdminBackupDeleteActionGroup" stepKey="deleteDatabaseBackup">
+            <argument name="backup" value="WebSetupWizardBackup"/>
+        </actionGroup>
+
+        <!--Go to storefront and verify AssertStoreNotOnFrontend-->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStorefrontPage"/>
+        <dontSee selector="{{StorefrontHeaderSection.storeViewList(storeViewData.name)}}" stepKey="dontSeeAssertStoreViewNameOnStorefront"/>
+    </test>
+</tests>

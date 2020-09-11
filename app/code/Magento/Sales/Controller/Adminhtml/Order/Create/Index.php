@@ -20,7 +20,7 @@ class Index extends \Magento\Sales\Controller\Adminhtml\Order\Create implements 
     public function execute()
     {
         $this->_initSession();
-
+        $this->_getOrderCreateModel()->initRuleData();
         /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
         $resultPage = $this->resultPageFactory->create();
         $resultPage->setActiveMenu('Magento_Sales::sales_order');

@@ -10,6 +10,7 @@ use Magento\Framework\ObjectManager\ConfigLoaderInterface;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 use Psr\Log\LoggerInterface;
+use Magento\Framework\Debug;
 
 /**
  * Entry point for retrieving static resources like JS, CSS, images by requested public path
@@ -123,22 +124,33 @@ class StaticResource implements \Magento\Framework\AppInterface
             )
         ) {
             $this->response->setHttpResponseCode(404);
-        } else {
-            $path = $this->request->get('resource');
-            $params = $this->parsePath($path);
-            $this->state->setAreaCode($params['area']);
-            $this->objectManager->configure($this->configLoader->load($params['area']));
-            $file = $params['file'];
-            unset($params['file']);
-            $asset = $this->assetRepo->createAsset($file, $params);
-            $this->response->setFilePath($asset->getSourceFile());
-            $this->publisher->publish($asset);
+            return $this->response;
         }
+
+        $path = $this->request->get('resource');
+        try {
+            $params = $this->parsePath($path);
+        } catch (\InvalidArgumentException $e) {
+            if ($appMode == \Magento\Framework\App\State::MODE_PRODUCTION) {
+                $this->response->setHttpResponseCode(404);
+                return $this->response;
+            }
+            throw $e;
+        }
+
+        $this->state->setAreaCode($params['area']);
+        $this->objectManager->configure($this->configLoader->load($params['area']));
+        $file = $params['file'];
+        unset($params['file']);
+        $asset = $this->assetRepo->createAsset($file, $params);
+        $this->response->setFilePath($asset->getSourceFile());
+        $this->publisher->publish($asset);
+
         return $this->response;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function catchException(Bootstrap $bootstrap, \Exception $exception)
     {
@@ -146,7 +158,15 @@ class StaticResource implements \Magento\Framework\AppInterface
         if ($bootstrap->isDeveloperMode()) {
             $this->response->setHttpResponseCode(404);
             $this->response->setHeader('Content-Type', 'text/plain');
-            $this->response->setBody($exception->getMessage() . "\n" . $exception->getTraceAsString());
+            $this->response->setBody(
+                $exception->getMessage() . "\n" .
+                Debug::trace(
+                    $exception->getTrace(),
+                    true,
+                    true,
+                    (bool)getenv('MAGE_DEBUG_SHOW_ARGS')
+                )
+            );
             $this->response->sendResponse();
         } else {
             require $this->getFilesystem()->getDirectoryRead(DirectoryList::PUB)->getAbsolutePath('errors/404.php');
@@ -206,7 +226,7 @@ class StaticResource implements \Magento\Framework\AppInterface
      * Retrieves LoggerInterface instance
      *
      * @return LoggerInterface
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      */
     private function getLogger()
     {

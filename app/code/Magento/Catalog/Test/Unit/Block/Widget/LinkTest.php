@@ -3,154 +3,239 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Block\Widget;
 
+use Exception;
+use Magento\Catalog\Block\Widget\Link;
+use Magento\Catalog\Model\ResourceModel\AbstractResource;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
+use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\Url;
+use Magento\Framework\Url\ModifierInterface;
+use Magento\Framework\View\Element\Template\Context;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 
-class LinkTest extends \PHPUnit\Framework\TestCase
+/**
+ * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+ * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class LinkTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Store\Model\StoreManagerInterface
+     * @var MockObject|StoreManagerInterface
      */
     protected $storeManager;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\UrlRewrite\Model\UrlFinderInterface
+     * @var MockObject|UrlFinderInterface
      */
     protected $urlFinder;
 
     /**
-     * @var \Magento\Catalog\Block\Widget\Link
+     * @var Link
      */
     protected $block;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\AbstractResource|\PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractResource|MockObject
      */
     protected $entityResource;
 
-    protected function setUp()
+    /**
+     * @inheritDoc
+     */
+    protected function setUp(): void
     {
-        $this->storeManager = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
-        $this->urlFinder = $this->createMock(\Magento\UrlRewrite\Model\UrlFinderInterface::class);
+        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->urlFinder = $this->getMockForAbstractClass(UrlFinderInterface::class);
 
-        $context = $this->createMock(\Magento\Framework\View\Element\Template\Context::class);
+        $context = $this->createMock(Context::class);
         $context->expects($this->any())
             ->method('getStoreManager')
-            ->will($this->returnValue($this->storeManager));
+            ->willReturn($this->storeManager);
 
         $this->entityResource =
-            $this->createMock(\Magento\Catalog\Model\ResourceModel\AbstractResource::class);
+            $this->createMock(AbstractResource::class);
 
-        $this->block = (new ObjectManager($this))->getObject(\Magento\Catalog\Block\Widget\Link::class, [
-            'context' => $context,
-            'urlFinder' => $this->urlFinder,
-            'entityResource' => $this->entityResource
-        ]);
+        $this->block = (new ObjectManager($this))->getObject(
+            Link::class,
+            [
+                'context' => $context,
+                'urlFinder' => $this->urlFinder,
+                'entityResource' => $this->entityResource
+            ]
+        );
     }
 
     /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Parameter id_path is not set.
+     * Tests getHref with wrong id_path
      */
     public function testGetHrefWithoutSetIdPath()
     {
+        $this->expectException('RuntimeException');
+        $this->expectExceptionMessage('Parameter id_path is not set.');
         $this->block->getHref();
     }
 
     /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Wrong id_path structure.
+     * Tests getHref with wrong id_path
      */
     public function testGetHrefIfSetWrongIdPath()
     {
+        $this->expectException('RuntimeException');
+        $this->expectExceptionMessage('Wrong id_path structure.');
         $this->block->setData('id_path', 'wrong_id_path');
         $this->block->getHref();
     }
 
+    /**
+     * Tests getHref with wrong store ID
+     */
     public function testGetHrefWithSetStoreId()
     {
+        $this->expectException('Exception');
         $this->block->setData('id_path', 'type/id');
         $this->block->setData('store_id', 'store_id');
-
         $this->storeManager->expects($this->once())
-            ->method('getStore')->with('store_id')
-            // interrupt test execution
-            ->will($this->throwException(new \Exception()));
-
-        try {
-            $this->block->getHref();
-        } catch (\Exception $e) {
-        }
+            ->method('getStore')
+            ->with('store_id')
+            ->willThrowException(new Exception());
+        $this->block->getHref();
     }
 
+    /**
+     * Tests getHref with not found URL
+     */
     public function testGetHrefIfRewriteIsNotFound()
     {
         $this->block->setData('id_path', 'entity_type/entity_id');
 
-        $store = $this->createPartialMock(\Magento\Store\Model\Store::class, ['getId', '__wakeUp']);
+        $store = $this->createPartialMock(Store::class, ['getId']);
         $store->expects($this->any())
             ->method('getId');
 
         $this->storeManager->expects($this->any())
             ->method('getStore')
-            ->will($this->returnValue($store));
+            ->willReturn($store);
 
         $this->urlFinder->expects($this->once())->method('findOneByData')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $this->assertFalse($this->block->getHref());
     }
 
     /**
-     * @param string $url
-     * @param string $separator
+     * Tests getHref whether it should include the store code or not
+     *
      * @dataProvider dataProviderForTestGetHrefWithoutUrlStoreSuffix
+     * @param string $path
+     * @param int|null $storeId
+     * @param bool $includeStoreCode
+     * @param string $expected
+     * @throws \ReflectionException
      */
-    public function testGetHrefWithoutUrlStoreSuffix($url, $separator)
-    {
-        $storeId = 15;
-        $storeCode = 'store-code';
-        $requestPath = 'request-path';
+    public function testStoreCodeShouldBeIncludedInURLOnlyIfItIsConfiguredSo(
+        string $path,
+        ?int $storeId,
+        bool $includeStoreCode,
+        string $expected
+    ) {
         $this->block->setData('id_path', 'entity_type/entity_id');
+        $this->block->setData('store_id', $storeId);
+        $objectManager = new ObjectManager($this);
 
-        $rewrite = $this->createMock(\Magento\UrlRewrite\Service\V1\Data\UrlRewrite::class);
-        $rewrite->expects($this->once())
-            ->method('getRequestPath')
-            ->will($this->returnValue($requestPath));
-
-        $store = $this->createPartialMock(
-            \Magento\Store\Model\Store::class,
-            ['getId', 'getUrl', 'getCode', '__wakeUp']
+        $rewrite = $this->createPartialMock(UrlRewrite::class, ['getRequestPath']);
+        $url = $this->createPartialMock(Url::class, ['setScope', 'getUrl']);
+        $urlModifier = $this->getMockForAbstractClass(ModifierInterface::class);
+        $config = $this->getMockForAbstractClass(ReinitableConfigInterface::class);
+        $store = $objectManager->getObject(
+            Store::class,
+            [
+                'storeManager' => $this->storeManager,
+                'url' => $url,
+                'config' => $config
+            ]
         );
-        $store->expects($this->once())
-            ->method('getId')
-            ->will($this->returnValue($storeId));
-        $store->expects($this->once())
+        $property = (new ReflectionClass(get_class($store)))->getProperty('urlModifier');
+        $property->setAccessible(true);
+        $property->setValue($store, $urlModifier);
+
+        $urlModifier->expects($this->any())
+            ->method('execute')
+            ->willReturnArgument(0);
+        $config->expects($this->any())
+            ->method('getValue')
+            ->willReturnMap(
+                [
+                    [Store::XML_PATH_USE_REWRITES, ReinitableConfigInterface::SCOPE_TYPE_DEFAULT, null, true],
+                    [
+                        Store::XML_PATH_STORE_IN_URL,
+                        ReinitableConfigInterface::SCOPE_TYPE_DEFAULT,
+                        null, $includeStoreCode
+                    ]
+                ]
+            );
+
+        $url->expects($this->any())
+            ->method('setScope')
+            ->willReturnSelf();
+
+        $url->expects($this->any())
             ->method('getUrl')
-            ->with('', ['_direct' => $requestPath])
-            ->will($this->returnValue($url));
-        $store->expects($this->once())
-            ->method('getCode')
-            ->will($this->returnValue($storeCode));
+            ->willReturnCallback(
+                function ($route, $params) use ($storeId) {
+                    $baseUrl = rtrim($this->storeManager->getStore($storeId)->getBaseUrl(), '/');
+                    return $baseUrl . '/' . ltrim($params['_direct'], '/');
+                }
+            );
 
-        $this->storeManager->expects($this->once())
+        $store->addData(['store_id' => 1, 'code' => 'french']);
+
+        $store2 = clone $store;
+        $store2->addData(['store_id' => 2, 'code' => 'german']);
+
+        $this->storeManager
+            ->expects($this->any())
             ->method('getStore')
-            ->will($this->returnValue($store));
+            ->willReturnMap(
+                [
+                    [null, $store],
+                    [1, $store],
+                    [2, $store2],
+                ]
+            );
 
-        $this->urlFinder->expects($this->once())->method('findOneByData')
-            ->with([
+        $this->urlFinder->expects($this->once())
+            ->method('findOneByData')
+            ->with(
+                [
                     UrlRewrite::ENTITY_ID => 'entity_id',
                     UrlRewrite::ENTITY_TYPE => 'entity_type',
-                    UrlRewrite::STORE_ID => $storeId,
-                ])
-            ->will($this->returnValue($rewrite));
+                    UrlRewrite::STORE_ID => $this->storeManager->getStore($storeId)->getStoreId(),
+                ]
+            )
+            ->willReturn($rewrite);
 
-        $this->assertEquals($url . $separator . '___store=' . $storeCode, $this->block->getHref());
+        $rewrite->expects($this->once())
+            ->method('getRequestPath')
+            ->willReturn($path);
+
+        $this->assertEquals($expected, $this->block->getHref());
     }
 
+    /**
+     * Tests getLabel with custom text
+     */
     public function testGetLabelWithCustomText()
     {
         $customText = 'Some text';
@@ -158,6 +243,9 @@ class LinkTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($customText, $this->block->getLabel());
     }
 
+    /**
+     * Tests getLabel without custom text
+     */
     public function testGetLabelWithoutCustomText()
     {
         $category = 'Some text';
@@ -166,9 +254,9 @@ class LinkTest extends \PHPUnit\Framework\TestCase
         $store = 1;
 
         $this->block->setData('id_path', $idPath);
-        $this->storeManager->expects($this->once())->method('getStore')->will($this->returnValue($store));
+        $this->storeManager->expects($this->once())->method('getStore')->willReturn($store);
         $this->entityResource->expects($this->once())->method('getAttributeRawValue')->with($id, 'name', $store)
-            ->will($this->returnValue($category));
+            ->willReturn($category);
         $this->assertEquals($category, $this->block->getLabel());
     }
 
@@ -178,33 +266,44 @@ class LinkTest extends \PHPUnit\Framework\TestCase
     public function dataProviderForTestGetHrefWithoutUrlStoreSuffix()
     {
         return [
-            ['url', '?'],
-            ['url?some_parameter', '&'],
+            ['/accessories.html', null, true, 'french/accessories.html'],
+            ['/accessories.html', null, false, '/accessories.html'],
+            ['/accessories.html', 1, true, 'french/accessories.html'],
+            ['/accessories.html', 1, false, '/accessories.html'],
+            ['/accessories.html', 2, true, 'german/accessories.html'],
+            ['/accessories.html', 2, false, '/accessories.html?___store=german'],
+            ['/accessories.html?___store=german', 2, false, '/accessories.html?___store=german'],
         ];
     }
 
+    /**
+     * Tests getHref with product entity and additional category id in the id_path
+     */
     public function testGetHrefWithForProductWithCategoryIdParameter()
     {
         $storeId = 15;
         $this->block->setData('id_path', ProductUrlRewriteGenerator::ENTITY_TYPE . '/entity_id/category_id');
 
-        $store = $this->createPartialMock(\Magento\Store\Model\Store::class, ['getId', '__wakeUp']);
+        $store = $this->createPartialMock(Store::class, ['getId']);
         $store->expects($this->any())
             ->method('getId')
-            ->will($this->returnValue($storeId));
+            ->willReturn($storeId);
 
         $this->storeManager->expects($this->any())
             ->method('getStore')
-            ->will($this->returnValue($store));
+            ->willReturn($store);
 
-        $this->urlFinder->expects($this->once())->method('findOneByData')
-            ->with([
-                UrlRewrite::ENTITY_ID => 'entity_id',
-                UrlRewrite::ENTITY_TYPE => ProductUrlRewriteGenerator::ENTITY_TYPE,
-                UrlRewrite::STORE_ID => $storeId,
-                UrlRewrite::METADATA => ['category_id' => 'category_id'],
-            ])
-            ->will($this->returnValue(false));
+        $this->urlFinder->expects($this->once())
+            ->method('findOneByData')
+            ->with(
+                [
+                    UrlRewrite::ENTITY_ID => 'entity_id',
+                    UrlRewrite::ENTITY_TYPE => ProductUrlRewriteGenerator::ENTITY_TYPE,
+                    UrlRewrite::STORE_ID => $storeId,
+                    UrlRewrite::METADATA => ['category_id' => 'category_id'],
+                ]
+            )
+            ->willReturn(false);
 
         $this->block->getHref();
     }

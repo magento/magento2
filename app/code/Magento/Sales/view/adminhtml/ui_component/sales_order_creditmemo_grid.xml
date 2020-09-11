@@ -92,7 +92,7 @@
         <column name="order_increment_id">
             <settings>
                 <filter>text</filter>
-                <label translate="true">Order</label>
+                <label translate="true">Order #</label>
             </settings>
         </column>
         <column name="order_created_at" class="Magento\Ui\Component\Listing\Columns\Date" component="Magento_Ui/js/grid/columns/date">

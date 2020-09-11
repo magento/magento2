@@ -5,14 +5,14 @@
  */
 namespace Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier;
 
+use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Catalog\Model\Product\Attribute\Backend\Sku;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
-use Magento\Ui\Component\Container;
-use Magento\Ui\Component\Form;
-use Magento\Ui\Component\DynamicRows;
-use Magento\Ui\Component\Modal;
 use Magento\Framework\UrlInterface;
-use Magento\Catalog\Model\Locator\LocatorInterface;
+use Magento\Ui\Component\Container;
+use Magento\Ui\Component\DynamicRows;
+use Magento\Ui\Component\Form;
+use Magento\Ui\Component\Modal;
 
 /**
  * Data provider for Configurable panel
@@ -90,7 +90,7 @@ class ConfigurablePanel extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function modifyData(array $data)
     {
@@ -98,7 +98,7 @@ class ConfigurablePanel extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function modifyMeta(array $meta)
@@ -167,6 +167,7 @@ class ConfigurablePanel extends AbstractModifier
                                         'imports' => [
                                             'visible' => '!ns = ${ $.ns }, index = '
                                                 . ConfigurablePanel::CONFIGURABLE_MATRIX . ':isEmpty',
+                                            '__disableTmpl' => ['visible' => false],
                                         ],
                                     ],
                                 ],
@@ -185,6 +186,7 @@ class ConfigurablePanel extends AbstractModifier
                                         'imports' => [
                                             'visible' => 'ns = ${ $.ns }, index = '
                                                 . ConfigurablePanel::CONFIGURABLE_MATRIX . ':isEmpty',
+                                            '__disableTmpl' => ['visible' => false],
                                         ],
                                     ],
                                 ],
@@ -197,7 +199,7 @@ class ConfigurablePanel extends AbstractModifier
                                         'autoRender' => false,
                                         'componentType' => 'insertListing',
                                         'component' => 'Magento_ConfigurableProduct/js'
-                                            .'/components/associated-product-insert-listing',
+                                            . '/components/associated-product-insert-listing',
                                         'dataScope' => $this->associatedListingPrefix
                                             . static::ASSOCIATED_PRODUCT_LISTING,
                                         'externalProvider' => $this->associatedListingPrefix
@@ -284,6 +286,7 @@ class ConfigurablePanel extends AbstractModifier
                         ),
                         'template' => 'ui/form/components/complex',
                         'createConfigurableButton' => 'ns = ${ $.ns }, index = create_configurable_products_button',
+                        '__disableTmpl' => ['createConfigurableButton' => false],
                     ],
                 ],
             ],
@@ -314,6 +317,7 @@ class ConfigurablePanel extends AbstractModifier
                                 'imports' => [
                                     'visible' => 'ns = ${ $.ns }, index = '
                                         . ConfigurablePanel::CONFIGURABLE_MATRIX . ':isShowAddProductButton',
+                                    '__disableTmpl' => ['visible' => false],
                                 ],
                             ],
                         ],
@@ -328,14 +332,12 @@ class ConfigurablePanel extends AbstractModifier
                                 'component' => 'Magento_Ui/js/form/components/button',
                                 'actions' => [
                                     [
-                                        'targetName' =>
-                                            $this->dataScopeName . '.configurableModal',
+                                        'targetName' => $this->dataScopeName . '.configurableModal',
                                         'actionName' => 'trigger',
                                         'params' => ['active', true],
                                     ],
                                     [
-                                        'targetName' =>
-                                            $this->dataScopeName . '.configurableModal',
+                                        'targetName' => $this->dataScopeName . '.configurableModal',
                                         'actionName' => 'openModal',
                                     ],
                                 ],
@@ -394,6 +396,11 @@ class ConfigurablePanel extends AbstractModifier
                             'insertDataFromGrid' => '${$.provider}:${$.dataProviderFromGrid}',
                             'insertDataFromWizard' => '${$.provider}:${$.dataProviderFromWizard}',
                             'changeDataFromGrid' => '${$.provider}:${$.dataProviderChangeFromGrid}',
+                            '__disableTmpl' => [
+                                'insertDataFromGrid' => false,
+                                'insertDataFromWizard' => false,
+                                'changeDataFromGrid' => false
+                            ],
                         ],
                         'sortOrder' => 20,
                         'columnsHeader' => false,
@@ -447,9 +454,14 @@ class ConfigurablePanel extends AbstractModifier
                                 'thumbnailUrl' => '${$.provider}:${$.parentScope}.thumbnail_image',
                                 'thumbnail' => '${$.provider}:${$.parentScope}.thumbnail',
                                 'smallImage' => '${$.provider}:${$.parentScope}.small_image',
+                                '__disableTmpl' => [
+                                    'thumbnailUrl' => false,
+                                    'thumbnail' => false,
+                                    'smallImage' => false
+                                ],
                             ],
                             'uploaderConfig' => [
-                                'url' => $this->urlBuilder->addSessionParam()->getUrl(
+                                'url' => $this->urlBuilder->getUrl(
                                     'catalog/product_gallery/upload'
                                 ),
                             ],
@@ -471,8 +483,7 @@ class ConfigurablePanel extends AbstractModifier
                         'sku',
                         __('SKU'),
                         [
-                            'validation' =>
-                                [
+                            'validation' => [
                                     'required-entry' => true,
                                     'max_text_length' => Sku::SKU_MAX_LENGTH,
                                 ],
@@ -485,7 +496,10 @@ class ConfigurablePanel extends AbstractModifier
                         'price',
                         __('Price'),
                         [
-                            'imports' => ['addbefore' => '${$.provider}:${$.parentScope}.price_currency'],
+                            'imports' => [
+                                'addbefore' => '${$.provider}:${$.parentScope}.price_currency',
+                                '__disableTmpl' => ['addbefore' => false],
+                            ],
                             'validation' => ['validate-zero-or-greater' => true]
                         ],
                         ['dataScope' => 'price_string']
@@ -567,7 +581,8 @@ class ConfigurablePanel extends AbstractModifier
             'fit' => true,
             'visibleIfCanEdit' => true,
             'imports' => [
-                'visible' => '${$.provider}:${$.parentScope}.canEdit'
+                'visible' => '${$.provider}:${$.parentScope}.canEdit',
+                '__disableTmpl' => ['visible' => false],
             ],
         ];
         $fieldText['arguments']['data']['config'] = [
@@ -577,8 +592,10 @@ class ConfigurablePanel extends AbstractModifier
             'dataType' => Form\Element\DataType\Text::NAME,
             'dataScope' => $name,
             'visibleIfCanEdit' => false,
+            'labelVisible' => false,
             'imports' => [
-                'visible' => '!${$.provider}:${$.parentScope}.canEdit'
+                'visible' => '!${$.provider}:${$.parentScope}.canEdit',
+                '__disableTmpl' => ['visible' => false],
             ],
         ];
         $fieldEdit['arguments']['data']['config'] = array_replace_recursive(
@@ -595,6 +612,7 @@ class ConfigurablePanel extends AbstractModifier
             'component' => 'Magento_Ui/js/form/components/group',
             'label' => $label,
             'dataScope' => '',
+            'showLabel' => false
         ];
         $container['children'] = [
             $name . '_edit' => $fieldEdit,

@@ -16,7 +16,8 @@ use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\DataObject;
 
 /**
- * Class OrderSender
+ * Sends order email to the customer.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class OrderSender extends Sender
@@ -55,10 +56,10 @@ class OrderSender extends Sender
      * @param OrderIdentity $identityContainer
      * @param Order\Email\SenderBuilderFactory $senderBuilderFactory
      * @param \Psr\Log\LoggerInterface $logger
+     * @param Renderer $addressRenderer
      * @param PaymentHelper $paymentHelper
      * @param OrderResource $orderResource
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $globalConfig
-     * @param Renderer $addressRenderer
      * @param ManagerInterface $eventManager
      */
     public function __construct(
@@ -97,7 +98,7 @@ class OrderSender extends Sender
      */
     public function send(Order $order, $forceSyncMode = false)
     {
-        $order->setSendEmail(true);
+        $order->setSendEmail($this->identityContainer->isEnabled());
 
         if (!$this->globalConfig->getValue('sales_email/general/async_sending') || $forceSyncMode) {
             if ($this->checkAndSend($order)) {
@@ -125,11 +126,19 @@ class OrderSender extends Sender
     {
         $transport = [
             'order' => $order,
+            'order_id' => $order->getId(),
             'billing' => $order->getBillingAddress(),
             'payment_html' => $this->getPaymentHtml($order),
             'store' => $order->getStore(),
             'formattedShippingAddress' => $this->getFormattedShippingAddress($order),
             'formattedBillingAddress' => $this->getFormattedBillingAddress($order),
+            'created_at_formatted' => $order->getCreatedAtFormatted(2),
+            'order_data' => [
+                'customer_name' => $order->getCustomerName(),
+                'is_not_virtual' => $order->getIsNotVirtual(),
+                'email_customer_note' => $order->getEmailCustomerNote(),
+                'frontend_status_label' => $order->getFrontendStatusLabel()
+            ]
         ];
         $transportObject = new DataObject($transport);
 

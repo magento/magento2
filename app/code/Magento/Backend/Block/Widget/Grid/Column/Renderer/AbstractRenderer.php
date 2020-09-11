@@ -9,6 +9,9 @@ use Magento\Backend\Block\Widget\Grid\Column;
 use Magento\Framework\DataObject;
 
 /**
+ * Produce html output using the given data source.
+ *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * Backend grid item abstract renderer
  * @api
  * @SuppressWarnings(PHPMD.NumberOfChildren)
@@ -28,6 +31,8 @@ abstract class AbstractRenderer extends \Magento\Backend\Block\AbstractBlock imp
     protected $_column;
 
     /**
+     * Set column for renderer.
+     *
      * @param Column $column
      * @return $this
      */
@@ -38,6 +43,8 @@ abstract class AbstractRenderer extends \Magento\Backend\Block\AbstractBlock imp
     }
 
     /**
+     * Returns row associated with the renderer.
+     *
      * @return Column
      */
     public function getColumn()
@@ -48,8 +55,8 @@ abstract class AbstractRenderer extends \Magento\Backend\Block\AbstractBlock imp
     /**
      * Renders grid column
      *
-     * @param   Object $row
-     * @return  string
+     * @param DataObject $row
+     * @return string
      */
     public function render(DataObject $row)
     {
@@ -58,7 +65,7 @@ abstract class AbstractRenderer extends \Magento\Backend\Block\AbstractBlock imp
             $result .= $this->getColumn()->getEditOnly() ? ''
                 : '<span class="admin__grid-control-value">' . $this->_getValue($row) . '</span>';
 
-            return $result . $this->_getInputValueElement($row) . '</div>' ;
+            return $result . $this->_getInputValueElement($row) . '</div>';
         }
         return $this->_getValue($row);
     }
@@ -66,7 +73,7 @@ abstract class AbstractRenderer extends \Magento\Backend\Block\AbstractBlock imp
     /**
      * Render column for export
      *
-     * @param Object $row
+     * @param DataObject $row
      * @return string
      */
     public function renderExport(DataObject $row)
@@ -75,7 +82,9 @@ abstract class AbstractRenderer extends \Magento\Backend\Block\AbstractBlock imp
     }
 
     /**
-     * @param Object $row
+     * Returns value of the row.
+     *
+     * @param DataObject $row
      * @return mixed
      */
     protected function _getValue(DataObject $row)
@@ -84,6 +93,7 @@ abstract class AbstractRenderer extends \Magento\Backend\Block\AbstractBlock imp
             if (is_string($getter)) {
                 return $row->{$getter}();
             } elseif (is_callable($getter)) {
+                //phpcs:ignore Magento2.Functions.DiscouragedFunction
                 return call_user_func($getter, $row);
             }
             return '';
@@ -92,7 +102,9 @@ abstract class AbstractRenderer extends \Magento\Backend\Block\AbstractBlock imp
     }
 
     /**
-     * @param Object $row
+     * Get pre-rendered input element.
+     *
+     * @param DataObject $row
      * @return string
      */
     public function _getInputValueElement(DataObject $row)
@@ -108,7 +120,9 @@ abstract class AbstractRenderer extends \Magento\Backend\Block\AbstractBlock imp
     }
 
     /**
-     * @param Object $row
+     * Get input value by row.
+     *
+     * @param DataObject $row
      * @return mixed
      */
     protected function _getInputValue(DataObject $row)
@@ -117,6 +131,8 @@ abstract class AbstractRenderer extends \Magento\Backend\Block\AbstractBlock imp
     }
 
     /**
+     * Renders header of the column,
+     *
      * @return string
      */
     public function renderHeader()
@@ -148,6 +164,8 @@ abstract class AbstractRenderer extends \Magento\Backend\Block\AbstractBlock imp
     }
 
     /**
+     * Render HTML properties.
+     *
      * @return string
      */
     public function renderProperty()
@@ -172,6 +190,8 @@ abstract class AbstractRenderer extends \Magento\Backend\Block\AbstractBlock imp
     }
 
     /**
+     * Returns HTML for CSS.
+     *
      * @return string
      */
     public function renderCss()

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="DefaultConfigForUPSTypeTest">
+        <annotations>
+            <features value="Ups"/>
+            <stories value="UPS configuration"/>
+            <title value="Default Configuration for UPS Type"/>
+            <stories value="UPS"/>
+            <description value="Default Configuration for UPS Type"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MAGETWO-99012"/>
+            <useCaseId value="MAGETWO-98947"/>
+            <group value="ups"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!--Collapse UPS tab and logout-->
+            <comment userInput="Collapse UPS tab and logout" stepKey="collapseTabAndLogout"/>
+            <click selector="{{AdminShippingMethodsUpsSection.carriersUpsTab}}" stepKey="collapseTab"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!-- Set shipping methods UPS type to default -->
+        <comment userInput="Set shipping methods UPS type to default" stepKey="setToDefaultShippingMethodsUpsType"/>
+        <createData entity="ShippingMethodsUpsTypeSetDefault" stepKey="setShippingMethodsUpsTypeToDefault"/>
+        <!-- Navigate to Stores -> Configuration -> Sales -> Shipping Methods Page -->
+        <comment userInput="Navigate to Stores -> Configuration -> Sales -> Shipping Methods Page" stepKey="goToAdminShippingMethodsPage"/>
+        <amOnPage url="{{AdminShippingMethodsConfigPage.url}}" stepKey="navigateToAdminShippingMethodsPage"/>
+        <waitForPageLoad stepKey="waitPageToLoad"/>
+        <!-- Expand 'UPS' tab -->
+        <comment userInput="Expand UPS tab" stepKey="expandUpsTab"/>
+        <conditionalClick selector="{{AdminShippingMethodsUpsSection.carriersUpsTab}}" dependentSelector="{{AdminShippingMethodsUpsSection.carriersUpsType}}" visible="false" stepKey="expandTab"/>
+        <waitForElementVisible selector="{{AdminShippingMethodsUpsSection.carriersUpsType}}" stepKey="waitTabToExpand"/>
+        <!-- Assert that selected UPS type by default is 'United Parcel Service XML' -->
+        <comment userInput="Check that selected UPS type by default is 'United Parcel Service XML'" stepKey="assertDefUpsType"/>
+        <grabTextFrom selector="{{AdminShippingMethodsUpsSection.selectedUpsType}}" stepKey="grabSelectedOptionText"/>
+        <assertEquals stepKey="assertDefaultUpsType">
+			<actualResult type="const">($grabSelectedOptionText)</actualResult>
+			<expectedResult type="string">United Parcel Service XML</expectedResult>
+        </assertEquals>
+    </test>
+</tests>

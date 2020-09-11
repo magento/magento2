@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="DeleteVirtualProductFromShoppingCartTest">
+        <annotations>
+            <features value="Checkout"/>
+            <stories value="Delete Products from Shopping Cart"/>
+            <title value="Delete virtual product from shopping cart test"/>
+            <description value="Delete virtual product from shopping cart"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-14691"/>
+            <group value="checkout"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <!-- Create virtual product -->
+            <createData entity="VirtualProduct" stepKey="createVirtualProduct">
+                <field key="price">50</field>
+            </createData>
+        </before>
+        <after>
+            <!-- Delete virtual product -->
+            <deleteData createDataKey="createVirtualProduct" stepKey="deleteVirtualProduct"/>
+        </after>
+
+        <!-- Add virtual product to the cart -->
+        <amOnPage url="{{StorefrontProductPage.url($$createVirtualProduct.custom_attributes[url_key]$$)}}" stepKey="navigateToProductPage"/>
+        <waitForPageLoad stepKey="waitForProductPageLoad"/>
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartVirtualProductFromStorefrontProductPage">
+            <argument name="productName" value="$$createVirtualProduct.name$$"/>
+        </actionGroup>
+
+        <!-- Remove product from cart -->
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToCart"/>
+        <actionGroup ref="DeleteProductFromShoppingCartActionGroup" stepKey="deleteProduct">
+            <argument name="productName" value="$$createVirtualProduct.name$$"/>
+        </actionGroup>
+    </test>
+</tests>

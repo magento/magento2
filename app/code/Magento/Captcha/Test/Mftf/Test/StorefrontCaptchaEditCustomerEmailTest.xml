@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCaptchaEditCustomerEmailTest">
+        <annotations>
+            <features value="Captcha"/>
+            <stories value="Customer Account Info Edit + Captcha"/>
+            <title value="Test for checking captcha on the customer account edit page."/>
+            <description value="Test for checking captcha on the customer account edit page and customer is locked."/>
+            <testCaseId value="MC-14013" />
+            <severity value="MAJOR"/>
+            <group value="captcha"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <!-- Setup CAPTCHA for testing -->
+            <magentoCLI command="config:set {{StorefrontCaptchaOnCustomerChangePasswordConfigData.path}} {{StorefrontCaptchaOnCustomerChangePasswordConfigData.value}}" stepKey="enableUserEditCaptcha"/>
+            <magentoCLI command="config:set {{StorefrontCustomerCaptchaLength3ConfigData.path}} {{StorefrontCustomerCaptchaLength3ConfigData.value}}" stepKey="setCaptchaLength" />
+            <magentoCLI command="config:set {{StorefrontCustomerCaptchaSymbols1ConfigData.path}} {{StorefrontCustomerCaptchaSymbols1ConfigData.value}}" stepKey="setCaptchaSymbols" />
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+
+            <createData entity="Simple_US_Customer" stepKey="customer"/>
+            <!-- Sign in as customer -->
+            <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefrontAccount">
+                <argument name="Customer" value="$$customer$$"/>
+            </actionGroup>
+        </before>
+        <after>
+            <!-- Revert Captcha forms configurations -->
+            <magentoCLI command="config:set {{StorefrontCaptchaOnCustomerLoginConfigData.path}} {{StorefrontCaptchaOnCustomerLoginConfigData.value}},{{StorefrontCaptchaOnCustomerForgotPasswordConfigData.value}}" stepKey="enableCaptchaOnDefaultForms" />
+            <magentoCLI command="config:set {{StorefrontCustomerCaptchaDefaultLengthConfigData.path}} {{StorefrontCustomerCaptchaDefaultLengthConfigData.value}}" stepKey="setDefaultCaptchaLength" />
+            <magentoCLI command="config:set {{StorefrontCustomerCaptchaDefaultSymbolsConfigData.path}} {{StorefrontCustomerCaptchaDefaultSymbolsConfigData.value}}" stepKey="setDefaultCaptchaSymbols" />
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+
+            <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
+        </after>
+
+        <!-- Open Customer edit page -->
+        <actionGroup ref="StorefrontOpenCustomerAccountInfoEditPageActionGroup" stepKey="goToCustomerEditPage" />
+
+        <!-- Update email with incorrect password 3 times. -->
+        <actionGroup ref="StorefrontCustomerChangeEmailActionGroup" stepKey="changeEmailFirstAttempt">
+            <argument name="email" value="$$customer.email$$" />
+            <argument name="password" value="{{Colorado_US_Customer.password}}" />
+        </actionGroup>
+
+        <actionGroup ref="AssertMessageCustomerChangeAccountInfoActionGroup" stepKey="assertAccountMessageFirstAttempt">
+            <argument name="message" value="The password doesn't match this account. Verify the password and try again." />
+            <argument name="messageType" value="error" />
+        </actionGroup>
+
+        <actionGroup ref="StorefrontCustomerChangeEmailActionGroup" stepKey="changeEmailSecondAttempt">
+            <argument name="email" value="$$customer.email$$" />
+            <argument name="password" value="{{Colorado_US_Customer.password}}" />
+        </actionGroup>
+
+        <actionGroup ref="AssertMessageCustomerChangeAccountInfoActionGroup" stepKey="assertAccountMessageSecondAttempt">
+            <argument name="message" value="The password doesn't match this account. Verify the password and try again." />
+            <argument name="messageType" value="error" />
+        </actionGroup>
+
+        <actionGroup ref="StorefrontCustomerChangeEmailActionGroup" stepKey="changeEmailThirdAttempt">
+            <argument name="email" value="$$customer.email$$" />
+            <argument name="password" value="{{Colorado_US_Customer.password}}" />
+        </actionGroup>
+
+        <actionGroup ref="AssertMessageCustomerChangeAccountInfoActionGroup" stepKey="assertAccountMessageThirdAttempt">
+            <argument name="message" value="The password doesn't match this account. Verify the password and try again." />
+            <argument name="messageType" value="error" />
+        </actionGroup>
+
+        <!-- Check captcha visibility after incorrect password submit form -->
+        <actionGroup ref="AssertCaptchaVisibleOnCustomerAccountInfoActionGroup" stepKey="assertCaptchaVisible" />
+
+        <!-- Try to submit form with incorrect captcha -->
+        <actionGroup ref="StorefrontCustomerChangeEmailWithCaptchaActionGroup" stepKey="changeEmailWithIncorrectCaptcha">
+            <argument name="email" value="$$customer.email$$" />
+            <argument name="password" value="{{Colorado_US_Customer.password}}" />
+            <argument name="captcha" value="{{WrongCaptcha.value}}" />
+        </actionGroup>
+
+        <actionGroup ref="AssertMessageCustomerChangeAccountInfoActionGroup" stepKey="assertAccountMessageAfterIncorrectCaptcha">
+            <argument name="message" value="Incorrect CAPTCHA" />
+            <argument name="messageType" value="error" />
+        </actionGroup>
+
+        <!-- Update customer email correct password and CAPTCHA -->
+        <actionGroup ref="StorefrontCustomerChangeEmailWithCaptchaActionGroup" stepKey="changeEmailCorrectAttempt">
+            <argument name="email" value="$$customer.email$$" />
+            <argument name="password" value="$$customer.password$$" />
+            <argument name="captcha" value="{{PreconfiguredCaptcha.value}}" />
+        </actionGroup>
+        <actionGroup ref="AssertMessageCustomerChangeAccountInfoActionGroup" stepKey="assertAccountMessageCorrectAttempt" />
+    </test>
+</tests>

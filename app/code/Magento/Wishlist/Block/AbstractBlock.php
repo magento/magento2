@@ -228,10 +228,10 @@ abstract class AbstractBlock extends \Magento\Catalog\Block\Product\AbstractProd
     }
 
     /**
-     * Retrieve formated Date
+     * Retrieve formatted Date
      *
      * @param string $date
-     * @deprecated
+     * @deprecated 101.1.1
      * @return string
      */
     public function getFormatedDate($date)

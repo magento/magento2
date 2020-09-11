@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminDeleteCustomerTest">
+        <annotations>
+            <stories value="Delete customer"/>
+            <title value="DeleteCustomerBackendEntityTestVariation1"/>
+            <description value="Login as admin and delete the customer"/>
+            <severity value="BLOCKER"/>
+            <testCaseId value="MC-14587"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+
+        <before>
+            <!-- Create Customer -->
+            <createData entity="CustomerEntityOne" stepKey="createCustomer"/>
+            <!-- Login as admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!-- Delete created customer -->
+        <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteCustomer">
+            <argument name="email" value="$$createCustomer.email$$"/>
+        </actionGroup>
+        <seeElement selector="{{CustomersPageSection.deletedSuccessMessage}}" stepKey="seeSuccessMessage"/>
+        <waitForPageLoad stepKey="waitForCustomerGridPageToLoad"/>
+
+        <!--Assert Customer is not in Grid -->
+        <click selector="{{AdminCustomerFiltersSection.filtersButton}}" stepKey="clickFilterButton"/>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="cleanFiltersIfTheySet"/>
+        <waitForPageLoad stepKey="waitForClearFilters1"/>
+        <fillField selector="{{AdminCustomerFiltersSection.emailInput}}" userInput="$$createCustomer.email$$" stepKey="filterEmail"/>
+        <click selector="{{AdminCustomerFiltersSection.apply}}" stepKey="applyFilter"/>
+        <waitForPageLoad stepKey="waitForPageToLoad"/>
+        <see selector="{{AdminCustomerGridSection.customerGrid}}" userInput="We couldn't find any records." stepKey="seeEmptyRecordMessage"/>
+    </test>
+</tests>

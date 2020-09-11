@@ -258,7 +258,7 @@
     <exportButton class="Magento\Ui\Component\ExportButton" component="Magento_Ui/js/grid/export" displayArea="dataGridActions">
         <settings>
             <options>
-                <option name="cvs" xsi:type="array">
+                <option name="csv" xsi:type="array">
                     <item name="value" xsi:type="string">csv</item>
                     <item name="label" xsi:type="string" translate="true">CSV</item>
                     <item name="url" xsi:type="string">mui/export/gridToCsv</item>

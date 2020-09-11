@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertAttributeDeletionErrorMessageActionGroup">
+        <annotations>
+            <description>Validates that the Error Message is present and correct on the Backend Admin Attribute Sets creation/edit page when you try to delete an Attribute Set assigned to a Configurable Product. PLEASE NOTE: The Error Message is hardcoded.</description>
+        </annotations>
+
+        <waitForElementVisible selector="{{AdminProductMessagesSection.errorMessage}}" stepKey="waitForErrorMessage"/>
+        <see selector="{{AdminProductMessagesSection.errorMessage}}" userInput="This attribute is used in configurable products." stepKey="deleteProductAttributeFailureMessage"/>
+    </actionGroup>
+</actionGroups>

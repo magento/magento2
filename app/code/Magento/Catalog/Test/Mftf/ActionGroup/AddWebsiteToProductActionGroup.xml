@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AddWebsiteToProductActionGroup">
+        <annotations>
+            <description>Adds the provided Website to a Product on the Admin Product creation/edit page. Clicks on Save. Validates that the Success Message is present and correct.</description>
+        </annotations>
+        <arguments>
+            <argument name="website" type="string"/>
+        </arguments>
+        
+        <scrollTo selector="{{ProductInWebsitesSection.sectionHeader}}" stepKey="scrollToProductInWebsiteSectionHeader"/>
+        <click selector="{{ProductInWebsitesSection.sectionHeader}}" stepKey="clickProductInWebsiteSectionHeader"/>
+        <checkOption selector="{{ProductInWebsitesSection.website(website)}}" stepKey="checkWebsite"/>
+        <scrollToTopOfPage stepKey="scrollToTopOfAdminProductFormSection"/>
+        <click selector="{{AdminProductFormSection.save}}" stepKey="clickSaveButton"/>
+        <waitForPageLoad stepKey="waitForSimpleProductSaved"/>
+        <see selector="{{AdminProductFormSection.successMessage}}" userInput="You saved the product." stepKey="seeAssertProductSaveSuccessMessage"/>
+    </actionGroup>
+</actionGroups>

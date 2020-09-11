@@ -39,6 +39,7 @@
         <catalog_price_rules>20</catalog_price_rules> <!-- Number of catalog price rules -->
         <cart_price_rules>20</cart_price_rules> <!-- Number of cart price rules -->
         <cart_price_rules_floor>2</cart_price_rules_floor>
+        <coupon_codes>20</coupon_codes> <!-- Number of coupon codes -->
 
         <product_attribute_sets>30</product_attribute_sets> <!-- Number of product attribute sets -->
         <product_attribute_sets_attributes>10</product_attribute_sets_attributes> <!-- Number of attributes per set -->

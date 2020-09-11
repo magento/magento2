@@ -1,0 +1,210 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+declare(strict_types=1);
+
+namespace Magento\Paypal\Controller\Express;
+
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Paypal\Model\Express\Checkout;
+use Magento\Paypal\Model\Config;
+use Magento\Framework\App\Action\Context;
+use Magento\Customer\Model\Session as CustomerSession;
+use Magento\Checkout\Model\Session as CheckoutSession;
+use Magento\Sales\Model\OrderFactory;
+use Magento\Paypal\Model\Express\Checkout\Factory as CheckoutFactory;
+use Magento\Framework\Session\Generic as PayPalSession;
+use Magento\Framework\Url\Helper\Data as UrlHelper;
+use Magento\Customer\Model\Url as CustomerUrl;
+use Magento\Customer\Model\ResourceModel\CustomerRepository;
+use Magento\Quote\Api\CartRepositoryInterface;
+use Magento\Quote\Api\GuestCartRepositoryInterface;
+use Psr\Log\LoggerInterface;
+
+/**
+ * Retrieve paypal token
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class GetTokenData extends AbstractExpress implements HttpGetActionInterface
+{
+    /**
+     * Config mode type
+     *
+     * @var string
+     */
+    protected $_configType = Config::class;
+
+    /**
+     * Config method type
+     *
+     * @var string
+     */
+    protected $_configMethod = Config::METHOD_WPP_EXPRESS;
+
+    /**
+     * Checkout mode type
+     *
+     * @var string
+     */
+    protected $_checkoutType = Checkout::class;
+
+    /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    private $logger;
+
+    /**
+     * @var CustomerRepository
+     */
+    private $customerRepository;
+
+    /**
+     * @var CartRepositoryInterface
+     */
+    private $cartRepository;
+
+    /**
+     * @var GuestCartRepositoryInterface
+     */
+    private $guestCartRepository;
+
+    /**
+     * @param Context $context
+     * @param CustomerSession $customerSession
+     * @param CheckoutSession $checkoutSession
+     * @param OrderFactory $orderFactory
+     * @param CheckoutFactory $checkoutFactory
+     * @param PayPalSession $paypalSession
+     * @param UrlHelper $urlHelper
+     * @param CustomerUrl $customerUrl
+     * @param LoggerInterface $logger
+     * @param CustomerRepository $customerRepository
+     * @param CartRepositoryInterface $cartRepository
+     * @param GuestCartRepositoryInterface $guestCartRepository
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     */
+    public function __construct(
+        Context $context,
+        CustomerSession $customerSession,
+        CheckoutSession $checkoutSession,
+        OrderFactory $orderFactory,
+        CheckoutFactory $checkoutFactory,
+        PayPalSession $paypalSession,
+        UrlHelper $urlHelper,
+        CustomerUrl $customerUrl,
+        LoggerInterface $logger,
+        CustomerRepository $customerRepository,
+        CartRepositoryInterface $cartRepository,
+        GuestCartRepositoryInterface $guestCartRepository
+    ) {
+        parent::__construct(
+            $context,
+            $customerSession,
+            $checkoutSession,
+            $orderFactory,
+            $checkoutFactory,
+            $paypalSession,
+            $urlHelper,
+            $customerUrl
+        );
+
+        $this->logger = $logger;
+        $this->customerRepository = $customerRepository;
+        $this->cartRepository = $cartRepository;
+        $this->guestCartRepository = $guestCartRepository;
+    }
+
+    /**
+     * Get token data
+     *
+     * @return ResultInterface
+     */
+    public function execute(): ResultInterface
+    {
+        $controllerResult = $this->resultFactory->create(ResultFactory::TYPE_JSON);
+        $responseContent = [
+            'success' => true,
+            'error_message' => '',
+        ];
+
+        try {
+            $token = $this->getToken();
+            if ($token === null) {
+                $token = false;
+            }
+            $this->_initToken($token);
+
+            $responseContent['token'] = $token;
+        } catch (LocalizedException $exception) {
+            $this->logger->critical($exception);
+
+            $responseContent['success'] = false;
+            $responseContent['error_message'] = $exception->getMessage();
+        } catch (\Exception $exception) {
+            $this->logger->critical($exception);
+
+            $responseContent['success'] = false;
+            $responseContent['error_message'] = __('Sorry, but something went wrong');
+        }
+
+        if (!$responseContent['success']) {
+            $this->messageManager->addErrorMessage($responseContent['error_message']);
+        }
+
+        return $controllerResult->setData($responseContent);
+    }
+
+    /**
+     * Get paypal token
+     *
+     * @return string|null
+     * @throws LocalizedException
+     */
+    private function getToken(): ?string
+    {
+        $quoteId = $this->getRequest()->getParam('quote_id');
+        $customerId = $this->getRequest()->getParam('customer_id') ?: $this->_customerSession->getId();
+        $hasButton = (bool)$this->getRequest()->getParam(Checkout::PAYMENT_INFO_BUTTON);
+
+        if ($quoteId) {
+            $quote = $customerId ? $this->cartRepository->get($quoteId) : $this->guestCartRepository->get($quoteId);
+        } else {
+            $quote = $this->_getQuote();
+        }
+
+        $this->_initCheckout($quote);
+
+        if ($quote->getIsMultiShipping()) {
+            $quote->setIsMultiShipping(0);
+            $quote->removeAllAddresses();
+        }
+
+        if ($customerId) {
+            $customerData = $this->customerRepository->getById((int)$customerId);
+
+            $this->_checkout->setCustomerWithAddressChange(
+                $customerData,
+                $quote->getBillingAddress(),
+                $quote->getShippingAddress()
+            );
+        }
+
+        // giropay urls
+        $this->_checkout->prepareGiropayUrls(
+            $this->_url->getUrl('checkout/onepage/success'),
+            $this->_url->getUrl('paypal/express/cancel'),
+            $this->_url->getUrl('checkout/onepage/success')
+        );
+
+        return $this->_checkout->start(
+            $this->_url->getUrl('*/*/return'),
+            $this->_url->getUrl('*/*/cancel'),
+            $hasButton
+        );
+    }
+}

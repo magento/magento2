@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontVerifyNoXssInjectionOnUpdateCustomerInformationAddAddressTest">
+        <annotations>
+            <stories value="Update Customer Address"/>
+            <title value="[Security] Verify No XSS Injection on Update Customer Information Add Address"/>
+            <description value="Test log in to Storefront and Verify No XSS Injection on Update Customer Information Add Address"/>
+            <testCaseId value="MC-10910"/>
+            <severity value="CRITICAL"/>
+            <group value="customer"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="StorefrontOpenCustomerAccountCreatePageActionGroup" stepKey="openCreateAccountPage"/>
+            <actionGroup ref="StorefrontFillCustomerAccountCreationFormActionGroup" stepKey="fillCreateAccountForm">
+                <argument name="customer" value="Colorado_US_Customer"/>
+            </actionGroup>
+            <actionGroup ref="StorefrontClickCreateAnAccountCustomerAccountCreationFormActionGroup" stepKey="submitCreateAccountForm"/>
+            <actionGroup ref="AssertMessageCustomerCreateAccountActionGroup" stepKey="seeSuccessMessage">
+                <argument name="messageType" value="success"/>
+                <argument name="message" value="Thank you for registering with Main Website Store."/>
+            </actionGroup>
+        </before>
+        <after>
+            <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteNewUser">
+                <argument name="email" value="{{Colorado_US_Customer.email}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!--Update customer address in storefront-->
+        <actionGroup ref="EnterCustomerAddressInfoActionGroup" stepKey="enterAddress">
+            <argument name="Address" value="updateCustomerNoXSSInjection"/>
+        </actionGroup>
+        <!--Verify customer address save success message-->
+        <see selector="{{AdminCustomerMessagesSection.successMessage}}" userInput="You saved the address." stepKey="seeAssertCustomerAddressSuccessSaveMessage"/>
+
+        <!--Verify customer default billing address-->
+        <actionGroup ref="VerifyCustomerBillingAddressWithStateActionGroup" stepKey="verifyBillingAddress">
+            <argument name="address" value="updateCustomerNoXSSInjection"/>
+        </actionGroup>
+
+        <!--Verify customer default shipping address-->
+        <actionGroup ref="VerifyCustomerShippingAddressWithStateActionGroup" stepKey="verifyShippingAddress">
+            <argument name="address" value="updateCustomerNoXSSInjection"/>
+        </actionGroup>
+
+        <!--Verify customer name on frontend-->
+        <actionGroup ref="VerifyCustomerNameOnFrontendActionGroup" stepKey="verifyVerifyCustomerName">
+            <argument name="customer" value="Colorado_US_Customer"/>
+        </actionGroup>
+    </test>
+</tests>

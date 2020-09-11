@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/queue.xsd">
+    <broker topic="import_export.export" exchange="magento-db" type="db">
+        <queue name="export" consumer="exportProcessor" consumerInstance="Magento\Framework\MessageQueue\Consumer" handler="Magento\ImportExport\Model\Export\Consumer::process"/>
+    </broker>
+</config>

@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework\Convert;
 
+use Magento\Framework\Escaper;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Filesystem\File\WriteInterface;
 
 /**
@@ -12,6 +14,11 @@ use Magento\Framework\Filesystem\File\WriteInterface;
  */
 class Excel
 {
+    /**
+     * @var Escaper
+     */
+    private $escaper;
+
     /**
      * \ArrayIterator Object
      *
@@ -45,15 +52,23 @@ class Excel
      *
      * @param \Iterator $iterator
      * @param array $rowCallback
+     * @param Escaper|null $escaper
      */
-    public function __construct(\Iterator $iterator, $rowCallback = [])
-    {
+    public function __construct(
+        \Iterator $iterator,
+        $rowCallback = [],
+        Escaper $escaper = null
+    ) {
         $this->_iterator = $iterator;
         $this->_rowCallback = $rowCallback;
+        $this->escaper = $escaper ?? ObjectManager::getInstance()->get(
+            Escaper::class
+        );
     }
 
     /**
      * Retrieve Excel XML Document Header XML Fragment
+     *
      * Append data header if it is available
      *
      * @param string $sheetName
@@ -65,7 +80,7 @@ class Excel
             $sheetName = 'Sheet 1';
         }
 
-        $sheetName = htmlspecialchars($sheetName);
+        $sheetName = $this->escaper->escapeHtml($sheetName);
 
         $xmlHeader = '<' .
             '?xml version="1.0"?' .
@@ -98,6 +113,7 @@ class Excel
 
     /**
      * Retrieve Excel XML Document Footer XML Fragment
+     *
      * Append data footer if it is available
      *
      * @return string
@@ -133,7 +149,7 @@ class Excel
         $xmlData[] = '<Row>';
 
         foreach ($row as $value) {
-            $value = htmlspecialchars($value);
+            $value = $this->escaper->escapeHtml($value);
             $dataType = is_numeric($value) && $value[0] !== '+' && $value[0] !== '0' ? 'Number' : 'String';
 
             /**

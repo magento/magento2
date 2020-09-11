@@ -12,7 +12,7 @@
             <block class="Magento\Backend\Block\Widget\Grid" name="adminhtml.report.search.grid" as="grid">
                 <arguments>
                     <argument name="id" xsi:type="string">searchReportGrid</argument>
-                    <argument name="dataSource" xsi:type="object">Magento\Search\Model\ResourceModel\Query\Collection</argument>
+                    <argument name="dataSource" xsi:type="object" shared="false">Magento\Search\Model\ResourceModel\Query\Collection</argument>
                     <argument name="default_sort" xsi:type="string">query_id</argument>
                     <argument name="default_dir" xsi:type="string">DESC</argument>
                 </arguments>

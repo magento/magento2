@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontEnterProductQuantityAndAddToTheCartActionGroup">
+        <annotations>
+            <description>Fills in the provided Product Quantity on a Storefront Bundled product page. Clicks on Add to Cart.</description>
+        </annotations>
+        <arguments>
+            <argument name="quantity" type="string"/>
+        </arguments>
+        
+        <clearField selector="{{StorefrontBundleProductActionSection.quantityField}}" stepKey="clearTheQuantityField"/>
+        <fillField selector="{{StorefrontBundleProductActionSection.quantityField}}" userInput="{{quantity}}" stepKey="fillTheProductQuantity"/>
+        <click selector="{{StorefrontBundleProductActionSection.addToCartButton}}" stepKey="clickOnAddToButton"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
+    </actionGroup>
+</actionGroups>

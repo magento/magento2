@@ -25,6 +25,8 @@ $attributeData = [
     'is_static' => 1,
     'attribute_set_id' => $defaultSetId,
     'attribute_group_id' => $attributeGroupId,
+    'frontend_input' => 'weee',
+    'frontend_label' => 'fixed product tax',
 ];
 
 /** @var \Magento\Catalog\Model\Entity\Attribute $attribute */

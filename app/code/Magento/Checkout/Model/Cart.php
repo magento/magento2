@@ -16,9 +16,12 @@ use Magento\Framework\Exception\NoSuchEntityException;
  * Shopping cart model
  *
  * @api
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @deprecated 100.1.0 Use \Magento\Quote\Model\Quote instead
  * @see \Magento\Quote\Api\Data\CartInterface
+ * @since 100.0.2
  */
 class Cart extends DataObject implements CartInterface
 {
@@ -271,6 +274,10 @@ class Cart extends DataObject implements CartInterface
                  * with the same id may have different sets of order attributes.
                  */
                 $product = $this->productRepository->getById($orderItem->getProductId(), false, $storeId, true);
+                if ($orderItem->getOrderId() !== null) {
+                    //reorder existing order
+                    $product->setSkipCheckRequiredOption(true);
+                }
             } catch (NoSuchEntityException $e) {
                 return $this;
             }
@@ -281,7 +288,14 @@ class Cart extends DataObject implements CartInterface
             } else {
                 $info->setQty(1);
             }
-
+            $productOptions = $orderItem->getProductOptions();
+            if ($productOptions !== null && !empty($productOptions['options'])) {
+                $formattedOptions = [];
+                foreach ($productOptions['options'] as $option) {
+                    $formattedOptions[$option['option_id']] = $option['option_value'];
+                }
+                $info->setData('options', $formattedOptions);
+            }
             $this->addProduct($product, $info);
         }
         return $this;
@@ -290,8 +304,8 @@ class Cart extends DataObject implements CartInterface
     /**
      * Get product object based on requested product information
      *
-     * @param   Product|int|string $productInfo
-     * @return  Product
+     * @param Product|int|string $productInfo
+     * @return Product
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _getProduct($productInfo)
@@ -331,8 +345,8 @@ class Cart extends DataObject implements CartInterface
     /**
      * Get request for product add to cart procedure
      *
-     * @param   \Magento\Framework\DataObject|int|array $requestInfo
-     * @return  \Magento\Framework\DataObject
+     * @param \Magento\Framework\DataObject|int|array $requestInfo
+     * @return \Magento\Framework\DataObject
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _getProductRequest($requestInfo)
@@ -365,20 +379,10 @@ class Cart extends DataObject implements CartInterface
     public function addProduct($productInfo, $requestInfo = null)
     {
         $product = $this->_getProduct($productInfo);
-        $request = $this->_getProductRequest($requestInfo);
         $productId = $product->getId();
 
         if ($productId) {
-            $stockItem = $this->stockRegistry->getStockItem($productId, $product->getStore()->getWebsiteId());
-            $minimumQty = $stockItem->getMinSaleQty();
-            //If product quantity is not specified in request and there is set minimal qty for it
-            if ($minimumQty
-                && $minimumQty > 0
-                && !$request->getQty()
-            ) {
-                $request->setQty($minimumQty);
-            }
-
+            $request = $this->getQtyRequest($product, $requestInfo);
             try {
                 $this->_eventManager->dispatch(
                     'checkout_cart_product_add_before',
@@ -438,8 +442,9 @@ class Cart extends DataObject implements CartInterface
                 }
                 $product = $this->_getProduct($productId);
                 if ($product->getId() && $product->isVisibleInCatalog()) {
+                    $request = $this->getQtyRequest($product);
                     try {
-                        $this->getQuote()->addProduct($product);
+                        $this->getQuote()->addProduct($product, $request);
                     } catch (\Exception $e) {
                         $allAdded = false;
                     }
@@ -761,5 +766,28 @@ class Cart extends DataObject implements CartInterface
                 ->get(\Magento\Checkout\Model\Cart\RequestInfoFilterInterface::class);
         }
         return $this->requestInfoFilter;
+    }
+
+    /**
+     * Get request quantity
+     *
+     * @param Product $product
+     * @param \Magento\Framework\DataObject|int|array $request
+     * @return int|DataObject
+     */
+    private function getQtyRequest($product, $request = 0)
+    {
+        $request = $this->_getProductRequest($request);
+        $stockItem = $this->stockRegistry->getStockItem($product->getId(), $product->getStore()->getWebsiteId());
+        $minimumQty = $stockItem->getMinSaleQty();
+        //If product quantity is not specified in request and there is set minimal qty for it
+        if ($minimumQty
+            && $minimumQty > 0
+            && !$request->getQty()
+        ) {
+            $request->setQty($minimumQty);
+        }
+
+        return $request;
     }
 }

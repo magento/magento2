@@ -108,7 +108,7 @@ class Collection
         }
 
         $linkCollection->getSelect()
-            ->where($field . ' IN (?)', $this->parentIds);
+            ->where($field . ' IN (?)', $this->parentIds, \Zend_Db::INT_TYPE);
 
         /** @var Selection $link */
         foreach ($linkCollection as $link) {
@@ -117,7 +117,8 @@ class Collection
                 'price' => $link->getSelectionPriceValue(),
                 'position' => $link->getPosition(),
                 'id' => $link->getSelectionId(),
-                'qty' => (int)$link->getSelectionQty(),
+                'qty' => (float)$link->getSelectionQty(),
+                'quantity' => (float)$link->getSelectionQty(),
                 'is_default' => (bool)$link->getIsDefault(),
                 'price_type' => $this->enumLookup->getEnumValueFromField(
                     'PriceTypeEnum',

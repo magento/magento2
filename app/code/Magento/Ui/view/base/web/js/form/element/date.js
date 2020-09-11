@@ -108,24 +108,31 @@ define([
         },
 
         /**
+         * @inheritdoc
+         */
+        getPreview: function () {
+            return this.shiftedValue();
+        },
+
+        /**
          * Prepares and sets date/time value that will be displayed
          * in the input field.
          *
          * @param {String} value
          */
         onValueChange: function (value) {
-            var dateFormat,
-                shiftedValue;
+            var shiftedValue;
 
             if (value) {
                 if (this.options.showsTime) {
                     shiftedValue = moment.tz(value, 'UTC').tz(this.storeTimeZone);
                 } else {
-                    dateFormat = this.shiftedValue() ? this.outputDateFormat : this.inputDateFormat;
-
-                    shiftedValue = moment(value, dateFormat);
+                    shiftedValue = moment(value, this.outputDateFormat);
                 }
 
+                if (!shiftedValue.isValid()) {
+                    shiftedValue = moment(value, this.inputDateFormat);
+                }
                 shiftedValue = shiftedValue.format(this.pickerDateTimeFormat);
             } else {
                 shiftedValue = '';

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminOpenConfigNavItemActionGroup">
+        <annotations>
+            <description>Clicks on config nav item selected by passed argument.</description>
+        </annotations>
+        <arguments>
+            <argument name="navItem" type="string"/>
+        </arguments>
+
+        <scrollTo stepKey="scrollToNavItem" selector="{{AdminConfigSection.navItemByTitle(navItem)}}" x="0" y="-80"/>
+        <click selector="{{AdminConfigSection.navItemByTitle(navItem)}}" stepKey="openNavItem" />
+        <waitForElement selector="{{AdminConfigSection.activeNavItemByTitle(navItem)}}" stepKey="waitActiveNavItem" />
+        <waitForPageLoad stepKey="waitForPageLoad" />
+    </actionGroup>
+</actionGroups>

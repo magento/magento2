@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCancelTheCreatedOrderWithCheckMoneyOrderPaymentMethodTest">
+        <annotations>
+            <group value="Sales"/>
+            <stories value="Cancel Created Order"/>
+            <title value="Cancel the created order with check/money order payment method"/>
+            <description value=" Create an order with check/money order payment method and cancel the order"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-16066"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!-- Set default flat rate shipping method settings -->
+            <comment userInput="Set default flat rate shipping method settings" stepKey="setDefaultFlatRateShippingMethodComment"/>
+            <createData entity="FlatRateShippingMethodDefault" stepKey="setDefaultFlatRateShippingMethod"/>
+            <!-- Create simple customer -->
+            <comment userInput="Create simple customer" stepKey="createSimpleCustomerComment"/>
+            <createData entity="Simple_US_Customer_CA" stepKey="simpleCustomer"/>
+            <!-- Create the category -->
+            <comment userInput="Create the category" stepKey="createCategoryComment"/>
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <!-- Create Virtual Product -->
+            <comment userInput="Create Virtual Product" stepKey="createVirtualProductComment"/>
+            <createData entity="VirtualProductPrice10Qty1" stepKey="virtualProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <!-- Create Simple Product -->
+            <comment userInput="Create Simple Product" stepKey="createSimpleProductComment"/>
+            <createData entity="SimpleProductPrice10Qty1" stepKey="simpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <!-- Create Bundle product -->
+            <comment userInput="Create Bundle Product" stepKey="createBundleProductComment"/>
+            <createData entity="SimpleProduct2Price10Qty1" stepKey="simpleProduct1"/>
+            <createData entity="BundleProductPriceViewRange" stepKey="createBundleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="DropDownBundleOption" stepKey="createBundleOption1_1">
+                <requiredEntity createDataKey="createBundleProduct"/>
+                <field key="required">True</field>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="linkOptionToProduct">
+                <requiredEntity createDataKey="createBundleProduct"/>
+                <requiredEntity createDataKey="createBundleOption1_1"/>
+                <requiredEntity createDataKey="simpleProduct1"/>
+            </createData>
+            <!-- Create configurable product and add it to the category -->
+            <comment userInput="Create configurable product and add it to the category" stepKey="createConfigProductComment"/>
+            <createData entity="ConfigurableProductPrice10Qty1" stepKey="createConfigProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <!-- Create an attribute with two options to be used in the first child product -->
+            <comment userInput="Create an attribute with two options to be used in the first child product" stepKey="createOptionsOfTheFirstChildProductComment"/>
+            <createData entity="productAttributeWithTwoOptions" stepKey="createConfigProductAttribute"/>
+            <createData entity="productAttributeOption1" stepKey="createConfigProductAttributeOption1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <!-- Add the attribute we just created to default attribute set -->
+            <comment userInput="Add the attribute we just created to default attribute set" stepKey="addAttributeToDefaultAttrSetComment"/>
+            <createData entity="AddToDefaultSet" stepKey="createConfigAddToAttributeSet">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <!-- Get the option of the attribute we created -->
+            <comment userInput="Get the option of the attribute we created" stepKey="getAttributeOptionComment"/>
+            <getData entity="ProductAttributeOptionGetter" index="1" stepKey="getConfigAttributeOption1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+            <!-- Create a simple product and give it the attribute with option -->
+            <comment userInput="Create a simple product and give it the attribute with option" stepKey="createSimpleProductWithOptionsComment"/>
+            <createData entity="SimpleProduct3Price10Qty1" stepKey="createConfigChildProduct1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption1"/>
+            </createData>
+            <!-- Create the configurable product -->
+            <comment userInput="Create the configurable product" stepKey="createConfigurableProductComment"/>
+            <createData entity="ConfigurableProductTwoOptions" stepKey="createConfigProductOption">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption1"/>
+            </createData>
+            <!-- Add simple product to the configurable product -->
+            <comment userInput="Add simple product to the configurable product" stepKey="addSimpleProductToConfigurableComment"/>
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild1">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigChildProduct1"/>
+            </createData>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
+        </before>
+        <after>
+            <deleteData createDataKey="simpleCustomer" stepKey="deleteSimpleCustomer"/>
+            <deleteData createDataKey="simpleProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="virtualProduct" stepKey="deleteVirtualProduct"/>
+            <deleteData createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
+            <deleteData createDataKey="createBundleProduct" stepKey="deleteBundleProduct"/>
+            <deleteData createDataKey="createConfigChildProduct1" stepKey="deleteConfigChildProduct"/>
+            <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigurableProduct"/>
+            <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteProductAttribute"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+        </after>
+        <!-- Create new customer order -->
+        <comment userInput="Create new customer order" stepKey="createNewCustomerOrderComment"/>
+        <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer">
+            <argument name="customer" value="$$simpleCustomer$$"/>
+        </actionGroup>
+        <!-- Add bundle product to order and check product price in grid -->
+        <comment userInput="Add bundle product to order and check product price in grid" stepKey="addBundleProductToOrderComment"/>
+        <actionGroup ref="AddBundleProductToOrderActionGroup" stepKey="addBundleProductToOrder">
+            <argument name="product" value="$$createBundleProduct$$"/>
+            <argument name="quantity" value="1"/>
+        </actionGroup>
+        <!-- Add configurable product to order -->
+        <comment userInput="Add configurable product to order" stepKey="addConfigurableProductToOrderComment"/>
+        <actionGroup ref="NewAddConfigurableProductToOrderActionGroup" stepKey="addConfigurableProductToOrder">
+            <argument name="product" value="$$createConfigProduct$$"/>
+            <argument name="attribute" value="$$createConfigProductAttribute$$"/>
+            <argument name="option" value="$$getConfigAttributeOption1$$"/>
+        </actionGroup>
+        <!-- Add Simple product to order -->
+        <comment userInput="Add Simple product to order" stepKey="addSimpleProductToOrderComment"/>
+        <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addSimpleProductToTheOrder">
+            <argument name="product" value="$$simpleProduct$$"/>
+        </actionGroup>
+        <!-- Add Virtual product to order -->
+        <comment userInput="Add Virtual product to order" stepKey="addVirtualProductToOrderComment"/>
+        <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addVirtualProductToTheOrder">
+            <argument name="product" value="$$virtualProduct$$"/>
+        </actionGroup>
+        <!-- Select FlatRate shipping method -->
+        <comment userInput="Select FlatRate shipping method" stepKey="selectFlatRateShippingMethodComment"/>
+        <actionGroup ref="AdminSelectFlatRateShippingMethodActionGroup" stepKey="selectFlatRateShippingMethod"/>
+        <!-- Submit order -->
+        <comment userInput="Submit order" stepKey="submitOrderComment"/>
+        <actionGroup ref="AdminOrderClickSubmitOrderActionGroup" stepKey="submitOrder" />
+        <!-- Verify order information -->
+        <comment userInput="Verify order information" stepKey="verifyOrderInformationComment"/>
+        <actionGroup ref="VerifyCreatedOrderInformationActionGroup" stepKey="verifyCreatedOrderInformation"/>
+        <grabTextFrom selector="|Order # (\d+)|" stepKey="orderId"/>
+        <!-- Cancel the Order -->
+        <comment userInput="Cancel the Order" stepKey="cancelTheOrder"/>
+        <actionGroup ref="CancelPendingOrderActionGroup" stepKey="cancelPendingOrder"/>
+        <!-- Assert Simple Product Quantity in backend after order Canceled -->
+        <comment userInput="Assert Simple Product Quantity in backend after order Canceled" stepKey="assertSimpleProductQuantityAfterOrderCanceledComment"/>
+        <actionGroup ref="FilterAndSelectProductActionGroup" stepKey="filterAndSelectTheProduct">
+            <argument name="productSku" value="$$simpleProduct.sku$$"/>
+        </actionGroup>
+        <waitForElementVisible selector="{{AdminProductFormSection.productName}}" stepKey="waitForProductDetailsToLoad"/>
+        <seeInField selector="{{AdminProductFormSection.productName}}" userInput="$$simpleProduct.name$$" stepKey="seeProductName"/>
+        <seeInField selector="{{AdminProductFormSection.productQuantity}}" userInput="1" stepKey="seeProductQuantity"/>
+        <seeInField selector="{{AdminProductFormSection.productStockStatus}}" userInput="In Stock" stepKey="seeProductStockStatus"/>
+        <!-- Assert Simple Product Stock Status in frontend after order canceled -->
+        <comment userInput="Assert Simple Product Stock Status in frontend after order Canceled" stepKey="assertSimpleProductStockStatusComment"/>
+        <actionGroup ref="StorefrontCheckProductStockStatus" stepKey="checkProductQtyOfSimpleProduct">
+            <argument name="productUrlKey" value="$$simpleProduct.custom_attributes[url_key]$$"/>
+            <argument name="productName" value="$$simpleProduct.name$$"/>
+        </actionGroup>
+        <!-- Assert Virtual Product Quantity in backend after order canceled -->
+        <comment userInput="Assert Virtual Product Quantity in backend after order canceled" stepKey="assertVirtualProductQuantityAfterOrderCanceledComment"/>
+        <actionGroup ref="FilterAndSelectProductActionGroup" stepKey="filterAndSelectTheVirtualProduct">
+            <argument name="productSku" value="$$virtualProduct.sku$$"/>
+        </actionGroup>
+        <waitForElementVisible selector="{{AdminProductFormSection.productName}}" stepKey="waitForProductDetailsToLoad1"/>
+        <seeInField selector="{{AdminProductFormSection.productName}}" userInput="$$virtualProduct.name$$" stepKey="seeVirtualProductName"/>
+        <seeInField selector="{{AdminProductFormSection.productQuantity}}" userInput="1" stepKey="seeVirtualProductQuantity"/>
+        <seeInField selector="{{AdminProductFormSection.productStockStatus}}" userInput="In Stock" stepKey="seeVirtualProductStockStatus"/>
+        <!-- Assert Virtual Product Stock Status in frontend after order canceled -->
+        <comment userInput="Assert Virtual Product Stock Status in frontend after order Canceled" stepKey="assertVirtualProductStockStatusComment"/>
+        <actionGroup ref="StorefrontCheckProductStockStatus" stepKey="checkProductQtyOfVirtualProduct">
+            <argument name="productUrlKey" value="$$virtualProduct.custom_attributes[url_key]$$"/>
+            <argument name="productName" value="$$virtualProduct.name$$"/>
+        </actionGroup>
+        <!-- Assert Bundle Product Quantity in backend after order canceled -->
+        <comment userInput="Assert Bundle Product Quantity in backend after order canceled" stepKey="assertBundleProductQuantityAfterOrderCanceledComment"/>
+        <actionGroup ref="FilterAndSelectProductActionGroup" stepKey="filterAndSelectTheBundleProduct">
+            <argument name="productSku" value="$$simpleProduct1.sku$$"/>
+        </actionGroup>
+        <waitForElementVisible selector="{{AdminProductFormSection.productName}}" stepKey="waitForProductDetailsToLoad2"/>
+        <seeInField selector="{{AdminProductFormSection.productName}}" userInput="$$simpleProduct1.name$$" stepKey="seeBundleProductName"/>
+        <seeInField selector="{{AdminProductFormSection.productQuantity}}" userInput="1" stepKey="seeBundleProductQuantity"/>
+        <seeInField selector="{{AdminProductFormSection.productStockStatus}}" userInput="In Stock" stepKey="seeBundleProductStockStatus"/>
+        <!-- Assert Bundle Product Stock Status in frontend after order canceled -->
+        <comment userInput="Assert Bundle Product Stock Status in frontend after order Canceled" stepKey="assertBundleProductStockStatusComment"/>
+        <actionGroup ref="StorefrontCheckProductStockStatus" stepKey="checkProductQtyOfBundleProduct">
+            <argument name="productUrlKey" value="$$createBundleProduct.custom_attributes[url_key]$$"/>
+            <argument name="productName" value="$$createBundleProduct.name$$"/>
+        </actionGroup>
+        <!-- Assert Configurable Product Quantity in backend after order canceled -->
+        <comment userInput="Assert Configurable Product quantity in backend after order canceled" stepKey="assertConfigurableProductQuantityAfterOrderCanceledComment"/>
+        <actionGroup ref="FilterAndSelectProductActionGroup" stepKey="filterAndSelectTheConfigProduct">
+            <argument name="productSku" value="$$createConfigChildProduct1.sku$$"/>
+        </actionGroup>
+        <waitForElementVisible selector="{{AdminProductFormSection.productName}}" stepKey="waitForProductDetailsToLoad3"/>
+        <seeInField selector="{{AdminProductFormSection.productName}}" userInput="$$createConfigChildProduct1.name$$" stepKey="seeConfigProductName"/>
+        <seeInField selector="{{AdminProductFormSection.productQuantity}}" userInput="1" stepKey="seeConfigProductQuantity"/>
+        <seeInField selector="{{AdminProductFormSection.productStockStatus}}" userInput="In Stock" stepKey="seeConfigProductStockStatus"/>
+        <!-- Assert Configurable Product Stock Status in frontend after order canceled -->
+        <comment userInput="Assert Configurable Product Stock Status in frontend after order Canceled" stepKey="assertConfigurableProductStockStatusComment"/>
+        <actionGroup ref="StorefrontCheckProductStockStatus" stepKey="checkProductQtyOfConfigProductInFrontend">
+            <argument name="productUrlKey" value="$$createConfigProduct.custom_attributes[url_key]$$"/>
+            <argument name="productName" value="$$createConfigProduct.name$$"/>
+        </actionGroup>
+        <!-- Open Order Index Page -->
+        <comment userInput="Open Order Index Page" stepKey="openOrderIndexPageComemnt"/>
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="goToOrders"/>
+        <!-- Filter order using orderId -->
+        <comment userInput="Filter order using orderId" stepKey="filterOrderUsingOrderIdComment"/>
+        <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderGridById">
+            <argument name="orderId" value="$orderId"/>
+        </actionGroup>
+        <see selector="{{AdminOrdersGridSection.firstRow}}" userInput="$orderId" stepKey="seeOrderIdInGrid"/>
+        <see selector="{{AdminOrdersGridSection.firstRow}}" userInput="Canceled" stepKey="seeStatusInGrid"/>
+        <!-- Log in to Storefront as Customer  -->
+        <comment userInput="Log in to Storefront as Customer" stepKey="logInAsCustomerComment"/>
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="signUp">
+            <argument name="Customer" value="$$simpleCustomer$$"/>
+        </actionGroup>
+        <!-- Assert Order status in frontend order grid -->
+        <comment userInput="Assert Order status in frontend order grid " stepKey="assertOrderStatusInFrontendComment"/>
+        <click selector="{{StorefrontCustomerSidebarSection.sidebarCurrentTab('My Orders')}}" stepKey="clickOnMyOrders"/>
+        <waitForPageLoad stepKey="waitForOrderDetailsToLoad"/>
+        <seeElement selector="{{StorefrontCustomerOrderViewSection.orderStatusInGrid('$orderId', 'Canceled')}}" stepKey="seeOrderStatusInGrid"/>
+    </test>
+</tests>

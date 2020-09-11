@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontDeleteSimpleProductFromMiniShoppingCartTest">
+        <annotations>
+            <stories value="DeleteSimpleProduct"/>
+            <title value="Storefront Delete Simple Product From Mini Shopping Cart Test"/>
+            <description value="Test log in to Shopping Cart and Delete Simple Product From Mini Shopping Cart Test"/>
+            <testCaseId value="MC-14686"/>
+            <severity value="CRITICAL"/>
+            <group value="Shopping Cart"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+            <!--Create  simple product-->
+            <createData entity="SimpleProduct2" stepKey="simpleProduct">
+                <field key="price">10.00</field>
+            </createData>
+        </before>
+        <after>
+            <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!-- Add Simple Product to the cart -->
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProductToCart">
+            <argument name="product" value="$$simpleProduct$$"/>
+        </actionGroup>
+
+        <!-- Assert Product in Mini Cart -->
+        <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="clickOnMiniCart"/>
+        <actionGroup ref="AssertStorefrontMiniCartItemsActionGroup" stepKey="assertSimpleProduct3MiniCart">
+            <argument name="productName" value="$$simpleProduct.name$$"/>
+            <argument name="productPrice" value="$10.00"/>
+            <argument name="cartSubtotal" value="$10.00" />
+            <argument name="qty" value="1"/>
+        </actionGroup>
+
+        <!-- Select Mini Cart and select 'View And Edit Cart' -->
+        <actionGroup ref="AssertOneProductNameInMiniCartActionGroup" stepKey="seeProductInMiniCart">
+            <argument name="productName" value="$$simpleProduct.name$$"/>
+        </actionGroup>
+
+        <!--Remove an item from the cart using minicart-->
+        <actionGroup ref="RemoveProductFromMiniCartActionGroup" stepKey="removeProductFromMiniCart">
+            <argument name="productName" value="$$simpleProduct.name$$"/>
+        </actionGroup>
+        <reloadPage stepKey="reloadPage"/>
+
+        <!--Check the minicart is empty and verify AssertProductAbsentInMiniShoppingCart-->
+        <actionGroup ref="AssertMiniCartEmptyActionGroup" stepKey="miniCartEnpty"/>
+        <dontSee selector="{{StorefrontMinicartSection.productLinkByName($$simpleProduct.name$$)}}" stepKey="verifyAssertProductAbsentInMiniShoppingCart"/>
+    </test>
+</tests>

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontSwatchAttributesDisplayInWidgetCMSTest">
+        <annotations>
+            <features value="ConfigurableProduct"/>
+            <stories value="Swatches"/>
+            <title value="Swatch Attribute is not displayed in the Widget CMS"/>
+            <description value="Swatch Attribute is not displayed in the Widget CMS"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MAGETWO-96469"/>
+            <useCaseId value="MAGETWO-96406"/>
+            <group value="ConfigurableProduct"/>
+            <skip>
+                <issueId value="MQE-1424" />
+            </skip>
+        </annotations>
+
+        <before>
+            <magentoCLI command="config:set cms/wysiwyg/enabled disabled" stepKey="disableWYSIWYG"/>
+            <createData entity="NewRootCategory" stepKey="createRootCategory"/>
+        </before>
+
+        <after>
+            <!--delete created configurable product-->
+            <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct">
+                <argument name="product" value="BaseConfigurableProduct"/>
+            </actionGroup>
+            <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="visitAdminProductPage"/>
+            <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFiltersInitial"/>
+            <actionGroup ref="AdminDeleteProductAttributeByLabelActionGroup" stepKey="deleteAttribute">
+                <argument name="productAttributeLabel" value="{{visualSwatchAttribute.default_label}}"/>
+            </actionGroup>
+            <!--delete root category-->
+            <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="navigateToCategoryPage"/>
+            <click selector="{{AdminCategorySidebarTreeSection.categoryInTree('$$createRootCategory.name$$')}}" stepKey="clickOnDefaultRootCategory"/>
+            <waitForPageLoad stepKey="waitForPageDefaultCategoryEditLoad" />
+            <seeElement selector="{{AdminCategoryMainActionsSection.DeleteButton}}" stepKey="assertDeleteButtonIsPresent1"/>
+            <click selector="{{AdminCategoryMainActionsSection.DeleteButton}}" stepKey="DeleteDefaultRootCategory"/>
+            <waitForElementVisible selector="{{AdminCategoryModalSection.ok}}" stepKey="waitForModalDeleteDefaultRootCategory" />
+            <click selector="{{AdminCategoryModalSection.ok}}" stepKey="acceptModal1"/>
+            <waitForElementVisible selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="waitForPageReloadAfterDeleteDefaultCategory"/>
+            <magentoCLI command="config:set cms/wysiwyg/enabled enabled" stepKey="enableWYSIWYG"/>
+            <!--logout-->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+        <!--Login-->
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdmin"/>
+         <!--Create a configurable swatch product via the UI -->
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="goToProductIndex"/>
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateProductPage">
+            <argument name="product" value="BaseConfigurableProduct"/>
+        </actionGroup>
+        <actionGroup ref="FillMainProductFormActionGroup" stepKey="fillProductForm">
+            <argument name="product" value="BaseConfigurableProduct"/>
+        </actionGroup>
+        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$createRootCategory.name$$]" stepKey="searchAndSelectCategory"/>
+        <!--Add swatch attribute to configurable product-->
+        <actionGroup ref="AddVisualSwatchToProductWithStorefrontConfigActionGroup" stepKey="addSwatchToProduct"/>
+
+        <!--Create CMS page-->
+        <actionGroup ref="CreateNewPageWithWidget" stepKey="createCMSPageWithWidget">
+            <argument name="category" value="$$createRootCategory.name$$"/>
+            <argument name="condition" value="Category"/>
+            <argument name="widgetType" value="Catalog Products List"/>
+        </actionGroup>
+        <click selector="{{CmsNewPagePageSeoSection.header}}" stepKey="clickToExpandSEOSection"/>
+        <scrollTo selector="{{CmsNewPagePageSeoSection.urlKey}}" stepKey="scrollToUrlKey"/>
+        <grabValueFrom selector="{{CmsNewPagePageSeoSection.urlKey}}"  stepKey="grabTextFromUrlKey"/>
+        <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+
+        <!--Open Storefront page for the new created page-->
+        <amOnPage url="{{StorefrontHomePage.url}}$grabTextFromUrlKey" stepKey="gotToCreatedCmsPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <seeElement selector="{{StorefrontProductInfoMainSection.productSwatch(visualSwatchOption1.default_label)}}" stepKey="assertAddedWidgetS"/>
+        <seeElement selector="{{StorefrontProductInfoMainSection.productSwatch(visualSwatchOption2.default_label)}}" stepKey="assertAddedWidgetM"/>
+
+        <!--Login to delete CMS page-->
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        <actionGroup ref="DeletePageByUrlKeyActionGroup" stepKey="deletePage">
+            <argument name="UrlKey" value="$grabTextFromUrlKey"/>
+        </actionGroup>
+    </test>
+</tests>

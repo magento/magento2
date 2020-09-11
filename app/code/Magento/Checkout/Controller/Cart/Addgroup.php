@@ -4,17 +4,21 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Checkout\Controller\Cart;
 
 use Magento\Checkout\Model\Cart as CustomerCart;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Escaper;
 use Magento\Framework\App\ObjectManager;
 use Magento\Sales\Model\Order\Item;
 
 /**
+ * Add grouped items controller.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Addgroup extends \Magento\Checkout\Controller\Cart
+class Addgroup extends \Magento\Checkout\Controller\Cart implements HttpPostActionInterface
 {
     /**
      * @var Escaper
@@ -44,6 +48,8 @@ class Addgroup extends \Magento\Checkout\Controller\Cart
     }
 
     /**
+     * Add items in group.
+     *
      * @return \Magento\Framework\Controller\Result\Redirect
      */
     public function execute()
@@ -74,6 +80,8 @@ class Addgroup extends \Magento\Checkout\Controller\Cart
                 }
             }
             $this->cart->save();
+        } else {
+            $this->messageManager->addErrorMessage(__('Please select at least one product to add to cart'));
         }
         return $this->_goBack();
     }
@@ -96,13 +104,25 @@ class Addgroup extends \Magento\Checkout\Controller\Cart
             if ($orderCustomerId == $currentCustomerId) {
                 $this->cart->addOrderItem($item, 1);
                 if (!$this->cart->getQuote()->getHasError()) {
-                    $message = __(
-                        'You added %1 to your shopping cart.',
-                        $this->escaper->escapeHtml($item->getName())
+                    $this->messageManager->addComplexSuccessMessage(
+                        'addCartSuccessMessage',
+                        [
+                            'product_name' => $item->getName(),
+                            'cart_url' => $this->getCartUrl()
+                        ]
                     );
-                    $this->messageManager->addSuccessMessage($message);
                 }
             }
         }
+    }
+
+    /**
+     * Returns cart url
+     *
+     * @return string
+     */
+    private function getCartUrl()
+    {
+        return $this->_url->getUrl('checkout/cart', ['_secure' => true]);
     }
 }

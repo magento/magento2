@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="CatalogSelectCustomerGroupActionGroup">
+        <annotations>
+            <description>DEPRECATED. Please use AdminCatalogPriceRuleSelectCustomerGroupsActionGroup instead. Selects the provided Customer Group Name on the Admin Catalog Price Rule creation/edit page.</description>
+        </annotations>
+        <arguments>
+            <argument name="customerGroupName" defaultValue="NOT LOGGED IN" type="string"/>
+        </arguments>
+
+        <selectOption selector="{{AdminNewCatalogPriceRule.customerGroups}}" userInput="{{customerGroupName}}" stepKey="selectCustomerGroup"/>
+    </actionGroup>
+</actionGroups>

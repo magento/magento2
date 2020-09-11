@@ -13,6 +13,15 @@
             <resource ref="Magento_Test1::resource1"/>
         </resources>
     </route>
+    <route url="/V1/testmodule1" method="GET" soapOperation="itemDefault">
+        <service class="Magento\TestModule1\Service\V1\AllSoapAndRestInterface" method="item"/>
+        <resources>
+            <resource ref="Magento_Test1::default"/>
+        </resources>
+        <data>
+            <parameter name="id" force="true">null</parameter>
+        </data>
+    </route>
     <route url="/V2/testmodule1/:id" method="GET">
         <service class="Magento\TestModule1\Service\V2\AllSoapAndRestInterface" method="item"/>
         <resources>

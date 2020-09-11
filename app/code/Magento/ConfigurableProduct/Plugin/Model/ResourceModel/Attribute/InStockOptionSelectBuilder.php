@@ -5,6 +5,7 @@
  */
 namespace Magento\ConfigurableProduct\Plugin\Model\ResourceModel\Attribute;
 
+use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\CatalogInventory\Model\ResourceModel\Stock\Status;
 use Magento\ConfigurableProduct\Model\ResourceModel\Attribute\OptionSelectBuilderInterface;
 use Magento\Framework\DB\Select;
@@ -20,13 +21,21 @@ class InStockOptionSelectBuilder
      * @var Status
      */
     private $stockStatusResource;
-    
+    /**
+     * @var StockConfigurationInterface
+     */
+    private $stockConfig;
+
     /**
      * @param Status $stockStatusResource
+     * @param StockConfigurationInterface $stockConfig
      */
-    public function __construct(Status $stockStatusResource)
-    {
+    public function __construct(
+        Status $stockStatusResource,
+        StockConfigurationInterface $stockConfig
+    ) {
         $this->stockStatusResource = $stockStatusResource;
+        $this->stockConfig = $stockConfig;
     }
 
     /**
@@ -40,14 +49,16 @@ class InStockOptionSelectBuilder
      */
     public function afterGetSelect(OptionSelectBuilderInterface $subject, Select $select)
     {
-        $select->joinInner(
-            ['stock' => $this->stockStatusResource->getMainTable()],
-            'stock.product_id = entity.entity_id',
-            []
-        )->where(
-            'stock.stock_status = ?',
-            \Magento\CatalogInventory\Model\Stock\Status::STATUS_IN_STOCK
-        );
+        if (!$this->stockConfig->isShowOutOfStock()) {
+            $select->joinInner(
+                ['stock' => $this->stockStatusResource->getMainTable()],
+                'stock.product_id = entity.entity_id',
+                []
+            )->where(
+                'stock.stock_status = ?',
+                \Magento\CatalogInventory\Model\Stock\Status::STATUS_IN_STOCK
+            );
+        }
         
         return $select;
     }

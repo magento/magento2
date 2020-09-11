@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminExportAttributeSection">
+        <element name="filterByAttributeCode" type="input" selector="#export_filter_grid_filter_attribute_code"/>
+        <element name="resetFilter" type="button" selector="button[data-action='grid-filter-reset']" timeout="30"/>
+        <element name="search" type="button" selector="button[data-action=grid-filter-apply]" timeout="30"/>
+        <element name="chooseAttribute" type="checkbox" selector="//*[@name='export_filter[{{var}}]']/ancestor::tr//input[@type='checkbox']" parameterized="true"/>
+        <element name="fillFilter" type="input" selector="//*[@name='export_filter[{{var}}]']/ancestor::tr//input[@type='text']" parameterized="true"/>
+        <element name="continueBtn" type="button" selector="//*[@id='export_filter_container']/button" timeout="30"/>
+        <element name="selectByIndex" type="button" selector="//tr[@data-repeat-index='{{var}}']//button" parameterized="true" timeout="30"/>
+        <element name="download" type="button" selector="//tr[@data-repeat-index='{{var}}']//a[text()='Download']" parameterized="true" timeout="30"/>
+        <element name="delete" type="button" selector="//tr[@data-repeat-index='{{var}}']//a[text()='Delete']" parameterized="true" timeout="30"/>
+        <element name="exportFileNameByPosition" type="text" selector="[data-role='grid'] tr[data-repeat-index='{{position}}'] div.data-grid-cell-content" parameterized="true"/>
+        <element name="fileName" type="text" selector="//div[@class='data-grid-cell-content'][text()='{{fileName}}']" parameterized="true"/>
+        <element name="selectByFileName" type="button" selector="//div[@class='data-grid-cell-content'][text()='{{fileName}}']/../..//button[@class='action-select']" parameterized="true"/>
+        <element name="downloadByFileName" type="button" selector="//div[@class='data-grid-cell-content'][text()='{{fileName}}']/../..//a[text()='Download']" parameterized="true" timeout="30"/>
+        <element name="deleteByFileName" type="button" selector="//div[@class='data-grid-cell-content'][text()='{{fileName}}']/../..//a[text()='Delete']" parameterized="true" timeout="30"/>
+    </section>
+</sections>

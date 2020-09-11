@@ -206,12 +206,15 @@ class WhitelistGenerator
             foreach ($tableData[$elementType] as $tableElementData) {
                 if ($tableElementData['type'] === 'foreign') {
                     $referenceTable = $schema->getTableByName($tableElementData['referenceTable']);
-                    $constraintName = $this->elementNameResolver->getFullFKName(
-                        $table,
-                        $table->getColumnByName($tableElementData['column']),
-                        $referenceTable,
-                        $referenceTable->getColumnByName($tableElementData['referenceColumn'])
-                    );
+                    $column = $table->getColumnByName($tableElementData['column']);
+                    $referenceColumn = $referenceTable->getColumnByName($tableElementData['referenceColumn']);
+                    $constraintName = ($column !== false && $referenceColumn !== false) ?
+                        $this->elementNameResolver->getFullFKName(
+                            $table,
+                            $column,
+                            $referenceTable,
+                            $referenceColumn
+                        ) : null;
                 } else {
                     $constraintName = $this->elementNameResolver->getFullIndexName(
                         $table,
@@ -219,7 +222,9 @@ class WhitelistGenerator
                         $tableElementData['type']
                     );
                 }
-                $declaredStructure[$elementType][$constraintName] = true;
+                if ($constraintName) {
+                    $declaredStructure[$elementType][$constraintName] = true;
+                }
             }
         }
 

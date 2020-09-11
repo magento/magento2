@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Eav\Model;
 
 use Magento\Framework\App\RequestInterface;
@@ -10,6 +11,7 @@ use Magento\Framework\App\RequestInterface;
 /**
  * EAV Entity Form Model
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -274,8 +276,8 @@ abstract class Form
     /**
      * Return current form code
      *
-     * @throws \Magento\Framework\Exception\LocalizedException
      * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getFormCode()
     {
@@ -286,7 +288,8 @@ abstract class Form
     }
 
     /**
-     * Return entity type instance
+     * Return entity type instance.
+     *
      * Return EAV entity type if entity type is not defined
      *
      * @return \Magento\Eav\Model\Entity\Type
@@ -302,8 +305,8 @@ abstract class Form
     /**
      * Return current entity instance
      *
-     * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Magento\Framework\Model\AbstractModel
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getEntity()
     {
@@ -323,6 +326,8 @@ abstract class Form
         if ($this->_attributes === null) {
             $this->_attributes = [];
             $this->_userAttributes = [];
+            $this->_systemAttributes = [];
+            $this->_allowedAttributes = [];
             /** @var $attribute \Magento\Eav\Model\Attribute */
             foreach ($this->_getFilteredFormAttributeCollection() as $attribute) {
                 $this->_attributes[$attribute->getAttributeCode()] = $attribute;
@@ -482,11 +487,11 @@ abstract class Form
     {
         $validator = $this->_getValidator($data);
         if (!$validator->isValid($this->getEntity())) {
-            $messages = [];
+            $messages = [[]];
             foreach ($validator->getMessages() as $errorMessages) {
-                $messages = array_merge($messages, (array)$errorMessages);
+                $messages[] = (array)$errorMessages;
             }
-            return $messages;
+            return array_merge(...$messages);
         }
         return true;
     }

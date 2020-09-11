@@ -12,8 +12,20 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Escaper;
+use Magento\Framework\Json\Helper\Data as JsonHelper;
+
+/**
+ * Class for Product Edit.
+ */
 class Edit extends \Magento\Backend\Block\Widget
 {
+    /**
+     * @var Escaper
+     */
+    private $escaper;
+
     /**
      * @var string
      */
@@ -47,7 +59,9 @@ class Edit extends \Magento\Backend\Block\Widget
      * @param \Magento\Eav\Model\Entity\Attribute\SetFactory $attributeSetFactory
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Catalog\Helper\Product $productHelper
+     * @param Escaper $escaper
      * @param array $data
+     * @param JsonHelper|null $jsonHelper
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -55,16 +69,22 @@ class Edit extends \Magento\Backend\Block\Widget
         \Magento\Eav\Model\Entity\Attribute\SetFactory $attributeSetFactory,
         \Magento\Framework\Registry $registry,
         \Magento\Catalog\Helper\Product $productHelper,
-        array $data = []
+        Escaper $escaper,
+        array $data = [],
+        ?JsonHelper $jsonHelper = null
     ) {
         $this->_productHelper = $productHelper;
         $this->_attributeSetFactory = $attributeSetFactory;
         $this->_coreRegistry = $registry;
         $this->jsonEncoder = $jsonEncoder;
+        $this->escaper = $escaper;
+        $data['jsonHelper'] = $jsonHelper ?? ObjectManager::getInstance()->get(JsonHelper::class);
         parent::__construct($context, $data);
     }
 
     /**
+     * Edit Product constructor
+     *
      * @return void
      */
     protected function _construct()
@@ -144,6 +164,8 @@ class Edit extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Retrieve back button html
+     *
      * @return string
      */
     public function getBackButtonHtml()
@@ -152,6 +174,8 @@ class Edit extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Retrieve cancel button html
+     *
      * @return string
      */
     public function getCancelButtonHtml()
@@ -160,6 +184,8 @@ class Edit extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Retrieve save button html
+     *
      * @return string
      */
     public function getSaveButtonHtml()
@@ -168,6 +194,8 @@ class Edit extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Retrieve save and edit button html
+     *
      * @return string
      */
     public function getSaveAndEditButtonHtml()
@@ -176,6 +204,8 @@ class Edit extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Retrieve delete button html
+     *
      * @return string
      */
     public function getDeleteButtonHtml()
@@ -194,6 +224,8 @@ class Edit extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Retrieve validation url
+     *
      * @return string
      */
     public function getValidationUrl()
@@ -202,6 +234,8 @@ class Edit extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Retrieve save url
+     *
      * @return string
      */
     public function getSaveUrl()
@@ -210,6 +244,8 @@ class Edit extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Retrieve save and continue url
+     *
      * @return string
      */
     public function getSaveAndContinueUrl()
@@ -221,6 +257,8 @@ class Edit extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Retrieve product id
+     *
      * @return mixed
      */
     public function getProductId()
@@ -229,6 +267,8 @@ class Edit extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Retrieve product set id
+     *
      * @return mixed
      */
     public function getProductSetId()
@@ -241,6 +281,8 @@ class Edit extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Retrieve duplicate url
+     *
      * @return string
      */
     public function getDuplicateUrl()
@@ -249,7 +291,9 @@ class Edit extends \Magento\Backend\Block\Widget
     }
 
     /**
-     * @deprecated 101.1.0
+     * Retrieve product header
+     *
+     * @deprecated 102.0.0
      * @return string
      */
     public function getHeader()
@@ -263,6 +307,8 @@ class Edit extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Get product attribute set name
+     *
      * @return string
      */
     public function getAttributeSetName()
@@ -275,11 +321,14 @@ class Edit extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Retrieve id of selected tab
+     *
      * @return string
      */
     public function getSelectedTabId()
     {
-        return addslashes(htmlspecialchars($this->getRequest()->getParam('tab')));
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
+        return addslashes($this->escaper->escapeHtml($this->getRequest()->getParam('tab')));
     }
 
     /**

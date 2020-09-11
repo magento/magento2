@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminVerifyCustomerAddressStateContainValuesOnceTest">
+        <annotations>
+            <features value="Customer"/>
+            <stories value="Update Customer Address"/>
+            <title value="State/Province dropdown contain values once"/>
+            <description value="When editing a customer in the backend from the Magento Admin Panel the State/Province should only be listed once"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MAGETWO-99461"/>
+            <useCaseId value="MAGETWO-99302"/>
+            <group value="customer"/>
+        </annotations>
+        <before>
+            <createData entity="Simple_US_Customer_Multiple_Addresses" stepKey="firstCustomer"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+        </before>
+        <after>
+            <deleteData createDataKey="firstCustomer" stepKey="deleteFirstCustomer"/>
+            <actionGroup ref="AdminDeleteCustomerActionGroup" stepKey="deleteSecondCustomer">
+                <argument name="customerEmail" value="Simple_US_Customer.email"/>
+            </actionGroup>
+            <actionGroup ref="AdminClearCustomersFiltersActionGroup" stepKey="clearFilters"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!-- Go to Customers > All Customers.-->
+        <amOnPage url="{{AdminCustomerPage.url}}" stepKey="openCustomersGridPage"/>
+
+        <!--Select created customer, Click Edit mode-->
+        <actionGroup ref="OpenEditCustomerFromAdminActionGroup" stepKey="openEditCustomerPageWithAddresses">
+            <argument name="customer" value="$$firstCustomer$$"/>
+        </actionGroup>
+
+        <!--Select Addresses tab-->
+        <click selector="{{AdminEditCustomerInformationSection.addresses}}" stepKey="openAddressesTabOfFirstCustomer"/>
+        <waitForPageLoad stepKey="waitForAddressesOfFirstCustomer"/>
+
+        <!--Click on Edit link for Default Billing Address-->
+        <click selector="{{AdminCustomerAddressesDefaultBillingSection.editButton}}" stepKey="clickEditDefaultBillingAddress"/>
+        <waitForPageLoad stepKey="waitForCustomerAddressAddUpdateFormLoad"/>
+
+        <!--Check that State/Province drop down contain all values once-->
+        <seeNumberOfElements userInput="1" selector="{{AdminCustomerAddressesSection.regionId(US_Address_NY.state)}}" stepKey="seeOnlyOneRegionInSelectStateForFirstCustomer"/>
+
+        <!--Go to Customers > All customers, Click Add new Customers, fill all necessary fields, Save-->
+        <actionGroup ref="AdminCreateCustomerWithWebSiteAndGroupActionGroup" stepKey="createSimpleUSCustomerWithoutAddress"/>
+
+        <!--Select new created customer, Click Edit mode-->
+        <actionGroup ref="OpenEditCustomerFromAdminActionGroup" stepKey="openEditCustomerPageWithoutAddresses">
+            <argument name="customer" value="Simple_US_Customer"/>
+        </actionGroup>
+
+        <!--Select Addresses tab, Click on  create new addresses btn-->
+        <click selector="{{AdminEditCustomerInformationSection.addresses}}" stepKey="openAddressesTabOfSecondCustomer"/>
+        <waitForPageLoad stepKey="waitForAddressesOfSecondCustomer"/>
+        <click selector="{{AdminCustomerAddressesSection.addNewAddress}}" stepKey="clickAddNewAddressButton"/>
+        <waitForPageLoad stepKey="waitForAddUpdateCustomerAddressForm"/>
+
+        <!--Select Country = United States and check that State/Province drop down contain all values once-->
+        <click selector="{{AdminCustomerAddressesSection.country}}" stepKey="clickCountryToOpenListOfCountries"/>
+        <click selector="{{AdminCustomerAddressesSection.countryId(US_Address_NY.country_id)}}" stepKey="fillCountry"/>
+        <seeNumberOfElements userInput="1" selector="{{AdminCustomerAddressesSection.regionId(US_Address_NY.state)}}" stepKey="seeOnlyOneRegionInSelectStateForSecondCustomer"/>
+    </test>
+</tests>

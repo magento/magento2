@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminDeleteProductsImageInCaseOfMultipleStoresTest">
+        <annotations>
+            <stories value="MultipleStores"/>
+            <features value="Catalog"/>
+            <title value="Delete products image in case of multiple stores"/>
+            <description value="Delete products image in case of multiple stores"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-11466"/>
+            <useCaseId value="MC-15391"/>
+            <group value="Catalog"/>
+        </annotations>
+        <before>
+            <!--Login as admin-->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!--Create new website, store and store view-->
+            <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createWebsite">
+                <argument name="newWebsiteName" value="{{NewWebSiteData.name}}"/>
+                <argument name="websiteCode" value="{{NewWebSiteData.code}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="createNewStore">
+                <argument name="website" value="{{NewWebSiteData.name}}"/>
+                <argument name="storeGroupName" value="{{NewStoreData.name}}"/>
+                <argument name="storeGroupCode" value="{{NewStoreData.code}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createCustomStoreView">
+                <argument name="StoreGroup" value="NewStoreData"/>
+                <argument name="customStore" value="NewStoreViewData"/>
+            </actionGroup>
+            <!--Create Product-->
+            <createData entity="SimpleProduct2" stepKey="createProduct"/>
+            <createData entity="SubCategory" stepKey="createSubCategory"/>
+            <createData entity="NewRootCategory" stepKey="createRootCategory"/>
+            <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="visitAdminProductPage">
+                <argument name="productId" value="$$createProduct.id$$"/>
+            </actionGroup>
+            <waitForPageLoad stepKey="waitForProductPageLoad0"/>
+            <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="['Default Category', $$createRootCategory.name$$, $$createSubCategory.name$$]" stepKey="fillCategory"/>
+            <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
+            <!--Add images to the product-->
+            <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="visitAdminProductPage2">
+                <argument name="productId" value="$$createProduct.id$$"/>
+            </actionGroup>
+            <waitForPageLoad stepKey="waitForProductPageLoad1"/>
+            <actionGroup ref="AddProductImageActionGroup" stepKey="addImageToProduct">
+                <argument name="image" value="ProductImage"/>
+            </actionGroup>
+            <actionGroup ref="AddProductImageActionGroup" stepKey="addImage1ToProduct">
+                <argument name="image" value="TestImageNew"/>
+            </actionGroup>
+            <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct1"/>
+            <!--Enable config to view created store view on store front-->
+            <createData entity="EnableWebUrlOptionsConfig" stepKey="enableWebUrlOptionsConfig"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite">
+                <argument name="websiteName" value="{{NewWebSiteData.name}}"/>
+            </actionGroup>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
+            <deleteData createDataKey="createSubCategory" stepKey="deleteSubCategory"/>
+            <deleteData createDataKey="createRootCategory" stepKey="deleteRootCategory"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <createData entity="DefaultWebUrlOptionsConfig" stepKey="defaultWebUrlOptionsConfig"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!--Grab new store view code-->
+        <actionGroup ref="AdminSystemStoreOpenPageActionGroup" stepKey="navigateToNewWebsitePage"/>
+        <fillField userInput="{{NewWebSiteData.name}}" selector="{{AdminStoresGridSection.websiteFilterTextField}}" stepKey="fillSearchWebsiteField"/>
+        <click selector="{{AdminStoresGridSection.searchButton}}" stepKey="clickSearchButton"/>
+        <click selector="{{AdminStoresGridSection.storeNameInFirstRow}}" stepKey="clickFirstRow"/>
+        <grabValueFrom selector="{{AdminNewStoreSection.storeCodeTextField}}" stepKey="grabStoreViewCode"/>
+        <click selector="{{AdminNewStoreViewActionsSection.backButton}}" stepKey="clickBack"/>
+        <click selector="{{AdminStoresGridSection.resetButton}}" stepKey="clickResetButton"/>
+        <waitForPageLoad stepKey="waitForStorePageLoad"/>
+        <!--Open product page on admin-->
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openProductEditPage">
+            <argument name="productId" value="$$createProduct.id$$"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForProductPageLoad2"/>
+        <!--Enable the newly created website and save the product-->
+        <actionGroup ref="SelectProductInWebsitesActionGroup" stepKey="selectWebsiteInProduct2">
+            <argument name="website" value="{{NewWebSiteData.name}}"/>
+        </actionGroup>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct2"/>
+        <!--Reindex and flush cache-->
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+            <argument name="tags" value=""/>
+        </actionGroup>
+        <!--Switch to 'Default Store View' scope and open product page-->
+        <actionGroup ref="SwitchToTheNewStoreViewActionGroup" stepKey="SwitchDefaultStoreView">
+            <argument name="storeViewName" value="'Default Store View'"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForProductPageLoad3"/>
+        <!--Assign all roles to first image on default store view-->
+        <actionGroup ref="AdminAssignImageRolesIfUnassignedActionGroup" stepKey="assignAllRolesToFirstImage">
+            <argument name="image" value="ProductImage"/>
+        </actionGroup>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct3"/>
+        <!--Switch to newly created Store View scope and open product page-->
+        <actionGroup ref="SwitchToTheNewStoreViewActionGroup" stepKey="SwitchNewStoreView">
+            <argument name="storeViewName" value="{{NewStoreViewData.name}}"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForProductPageLoad4"/>
+        <!--Assign all roles to first image on new store view-->
+        <actionGroup ref="AdminAssignImageRolesIfUnassignedActionGroup" stepKey="assignAllRolesToFirstImage2">
+            <argument name="image" value="ProductImage"/>
+        </actionGroup>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct4"/>
+        <!--Switch to 'All Store Views' scope and open product page-->
+        <actionGroup ref="SwitchToTheNewStoreViewActionGroup" stepKey="SwitchAllStoreView">
+            <argument name="storeViewName" value="'All Store Views'"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForProductPageLoad5"/>
+        <!--Remove product image and save-->
+        <actionGroup ref="RemoveProductImageByNameActionGroup" stepKey="removeProductImage">
+            <argument name="image" value="ProductImage"/>
+        </actionGroup>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct5"/>
+        <!--Assert notification and success messages-->
+        <see selector="{{StorefrontMessagesSection.success}}" userInput="{{ProductFormMessages.save_success}}" stepKey="seeSuccessMessage"/>
+        <see selector="{{StorefrontMessagesSection.noticeMessage}}" userInput="{{ProductFormMessages.remove_image_notice}}" stepKey="seeNotification"/>
+        <!--Reopen image tab and see the image is not deleted-->
+        <conditionalClick selector="{{AdminProductImagesSection.productImagesToggle}}" dependentSelector="{{AdminProductImagesSection.imageUploadButton}}" visible="false" stepKey="openProductImagesTab"/>
+        <waitForPageLoad stepKey="waitForImagesLoad"/>
+        <seeElement selector="{{AdminProductImagesSection.imageFile(ProductImage.fileName)}}" stepKey="seeImageIsNotDeleted"/>
+        <!--Switch to newly created Store View scope and open product page-->
+        <actionGroup ref="SwitchToTheNewStoreViewActionGroup" stepKey="SwitchNewStoreView2">
+            <argument name="storeViewName" value="{{NewStoreViewData.name}}"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForProductPageLoad6"/>
+        <!--Assign all roles to second image on default store view-->
+        <actionGroup ref="AdminAssignImageRolesIfUnassignedActionGroup" stepKey="assignAllRolesToSecondImage">
+            <argument name="image" value="TestImageNew"/>
+        </actionGroup>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct6"/>
+        <!--Switch to 'All Store Views' scope and open product page-->
+        <actionGroup ref="SwitchToTheNewStoreViewActionGroup" stepKey="SwitchAllStoreView2">
+            <argument name="storeViewName" value="'All Store Views'"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForProductPageLoad7"/>
+        <!--Remove product image and save-->
+        <actionGroup ref="RemoveProductImageByNameActionGroup" stepKey="removeProductFirstImage">
+            <argument name="image" value="ProductImage"/>
+        </actionGroup>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct7"/>
+        <!--Assert notification and success messages-->
+        <see selector="{{StorefrontMessagesSection.success}}" userInput="{{ProductFormMessages.save_success}}" stepKey="seeSuccessMessage2"/>
+        <see selector="{{StorefrontMessagesSection.noticeMessage}}" userInput="{{ProductFormMessages.remove_image_notice}}" stepKey="seeNotification2"/>
+        <!--Reopen image tab and see the image is not deleted-->
+        <conditionalClick selector="{{AdminProductImagesSection.productImagesToggle}}" dependentSelector="{{AdminProductImagesSection.imageUploadButton}}" visible="false" stepKey="openProductImagesTab2"/>
+        <waitForPageLoad stepKey="waitForImagesLoad2"/>
+        <seeElement selector="{{AdminProductImagesSection.imageFile(ProductImage.fileName)}}" stepKey="seeImageIsNotDeleted2"/>
+        <!--Switch to newly created Store View scope and open product page-->
+        <actionGroup ref="SwitchToTheNewStoreViewActionGroup" stepKey="SwitchNewStoreView3">
+            <argument name="storeViewName" value="{{NewStoreViewData.name}}"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForProductPageLoad8"/>
+        <!--Remove second image and save-->
+        <actionGroup ref="RemoveProductImageByNameActionGroup" stepKey="removeProductSecondImage">
+            <argument name="image" value="TestImageNew"/>
+        </actionGroup>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct8"/>
+        <!--Assert success messages-->
+        <see selector="{{StorefrontMessagesSection.success}}" userInput="{{ProductFormMessages.save_success}}" stepKey="seeSuccessMessage3"/>
+        <!--Reopen image tab and see the image is deleted-->
+        <conditionalClick selector="{{AdminProductImagesSection.productImagesToggle}}" dependentSelector="{{AdminProductImagesSection.imageUploadButton}}" visible="false" stepKey="openProductImagesTab3"/>
+        <waitForPageLoad stepKey="waitForImagesLoad3"/>
+        <dontSeeElement selector="{{AdminProductImagesSection.imageFile(TestImageNew.fileName)}}" stepKey="seeImageIsDeleted"/>
+        <!--Open Storefront on Default store view and assert image existence-->
+        <amOnPage url="{{StorefrontCategoryPage.url($$createSubCategory.name$$)}}" stepKey="navigateToCategoryPage"/>
+        <waitForPageLoad stepKey="waitForCategoryPageLoad0"/>
+        <grabAttributeFrom userInput="src" selector="{{StorefrontCategoryMainSection.mediaDescription($$createProduct.name$$)}}" stepKey="grabAttributeFromImage"/>
+        <assertStringContainsString stepKey="assertProductImageAbsence">
+			<actualResult type="const">$grabAttributeFromImage</actualResult>
+			<expectedResult type="string">{{ProductImage.filename}}</expectedResult>
+        </assertStringContainsString>
+        <!--Open Storefront on newly created store view and assert image absence-->
+        <amOnPage url="$grabStoreViewCode" stepKey="navigateToHomePageOfSpecificStore"/>
+        <waitForPageLoad stepKey="waitForHomePageLoad"/>
+        <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createSubCategory.name$$)}}" stepKey="clickCategory"/>
+        <waitForPageLoad stepKey="waitForCategoryPageLoad1"/>
+        <grabAttributeFrom userInput="src" selector="{{StorefrontCategoryMainSection.mediaDescription($$createProduct.name$$)}}" stepKey="grabAttributeFromImage2"/>
+        <assertStringContainsString stepKey="assertProductImageAbsence2">
+			<actualResult type="const">$grabAttributeFromImage2</actualResult>
+			<expectedResult type="string">small_image</expectedResult>
+        </assertStringContainsString>
+    </test>
+</tests>

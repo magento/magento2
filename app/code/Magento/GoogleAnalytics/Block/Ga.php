@@ -75,7 +75,8 @@ class Ga extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * Render regular page tracking javascript code
+     * Render regular page tracking javascript code.
+     *
      * The custom "page name" may be set from layout or somewhere else. It must start from slash.
      *
      * @param string $accountId

@@ -4,22 +4,29 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
+/** @var \Magento\ImportExport\Block\Adminhtml\Form\After $block */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
-<fieldset class="admin__fieldset" id="export_filter_container" style="display:none;">
+<fieldset class="admin__fieldset" id="export_filter_container">
     <legend class="admin__legend">
-        <span><?= /* @escapeNotVerified */ __('Entity Attributes') ?></span>
+        <span><?= $block->escapeHtml(__('Entity Attributes')) ?></span>
     </legend>
     <br />
-    <form id="export_filter_form" action="<?= /* @escapeNotVerified */ $block->getUrl('*/*/export') ?>" method="post">
-        <input name="form_key" type="hidden" value="<?= /* @escapeNotVerified */ $block->getFormKey() ?>" />
+    <form id="export_filter_form" action="<?= $block->escapeUrl($block->getUrl('*/*/export')) ?>" method="post">
+        <input name="form_key" type="hidden" value="<?= /* @noEscape */ $block->getFormKey() ?>" />
         <div id="export_filter_grid_container"><!-- --></div>
     </form>
-    <button class="action- scalable" type="button" onclick="getFile();"><span><?php
-        /* @escapeNotVerified */ echo __('Continue')
-    ?></span></button>
+    <button class="action- scalable" type="button">
+        <span><?= $block->escapeHtml(__('Continue')) ?></span>
+    </button>
 </fieldset>
-<script>
+<?= /* @noEscape */ $secureRenderer->renderStyleAsTag("display:none;", 'fieldset#export_filter_container') ?>
+<?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
+    'onclick',
+    "getFile();",
+    'fieldset#export_filter_container button'
+) ?>
+<?php $scriptString = <<<script
 require(['prototype'], function(){
 
 //<![CDATA[
@@ -27,4 +34,6 @@ require(['prototype'], function(){
 //]]>
 
 });
-</script>
+script;
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>

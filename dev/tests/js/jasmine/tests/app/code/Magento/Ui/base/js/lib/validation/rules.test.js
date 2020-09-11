@@ -58,8 +58,32 @@ define([
                 expect(rules['validate-number'].handler(value)).toBe(true);
             });
 
+            it('Check on float without leading zero', function () {
+                var value = '.50';
+
+                expect(rules['validate-number'].handler(value)).toBe(true);
+            });
+
             it('Check on formatted float', function () {
                 var value = '1,000,000.50';
+
+                expect(rules['validate-number'].handler(value)).toBe(true);
+            });
+
+            it('Check on space', function () {
+                var value = '10 000';
+
+                expect(rules['validate-number'].handler(value)).toBe(true);
+            });
+
+            it('Check on formatted float (For International price)', function () {
+                var value = '10.000,00';
+
+                expect(rules['validate-number'].handler(value)).toBe(true);
+            });
+
+            it('Check on formatted float (For International price)', function () {
+                var value = '10\'000.00';
 
                 expect(rules['validate-number'].handler(value)).toBe(true);
             });

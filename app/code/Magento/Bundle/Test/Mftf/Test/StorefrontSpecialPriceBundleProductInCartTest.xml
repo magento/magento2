@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+        <test name="StorefrontSpecialPriceBundleProductInCartTest">
+            <annotations>
+                <features value="Bundle"/>
+                <stories value="Add bundle product to cart on storefront"/>
+                <title value="Customer should not be able to add a Bundle Product to the cart when added a special price for associated products"/>
+                <description value="Customer should not be able to add a Bundle Product to the cart when added a special price for associated products"/>
+                <severity value="BLOCKER"/>
+                <testCaseId value="MC-19134"/>
+                <useCaseId value="MC-18963"/>
+                <group value="bundle"/>
+            </annotations>
+            <before>
+                <!-- Create the Simple product with Special price -->
+                <createData entity="SimpleProduct2" stepKey="simpleProduct"/>
+                <createData entity="specialProductPrice2" stepKey="specialPriceToSimpleProduct">
+                    <requiredEntity createDataKey="simpleProduct"/>
+                </createData>
+                <!-- Create the bundle product -->
+                <createData entity="ApiBundleProduct" stepKey="bundleProduct"/>
+                <createData entity="RadioButtonsOption" stepKey="bundleOption">
+                    <requiredEntity createDataKey="bundleProduct"/>
+                    <field key="required">true</field>
+                </createData>
+                <createData entity="ApiBundleLink" stepKey="linkOptionToProduct">
+                    <requiredEntity createDataKey="bundleProduct"/>
+                    <requiredEntity createDataKey="bundleOption"/>
+                    <requiredEntity createDataKey="simpleProduct"/>
+                </createData>
+                <!-- Run reindex stock status -->
+                <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                    <argument name="indices" value="cataloginventory_stock"/>
+                </actionGroup>
+            </before>
+            <after>
+                <deleteData createDataKey="bundleProduct" stepKey="deleteBundleProduct"/>
+                <deleteData createDataKey="simpleProduct" stepKey="deleteSimpleProduct"/>
+            </after>
+            <!-- Go to storefront BundleProduct -->
+            <amOnPage url="{{StorefrontProductPage.url($$bundleProduct.custom_attributes[url_key]$$)}}" stepKey="goToStorefront"/>
+            <actionGroup ref="StorefrontAddBundleProductFromProductToCartActionGroup" stepKey="addProductToCartFirstTime">
+                <argument name="productName" value="$$bundleProduct.name$$"/>
+            </actionGroup>
+            <actionGroup ref="StorefrontAddBundleProductFromProductToCartActionGroup" stepKey="addProductToCartSecondTime">
+                <argument name="productName" value="$$bundleProduct.name$$"/>
+            </actionGroup>
+            <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="openMiniCart"/>
+            <actionGroup ref="AssertStorefrontMiniCartSubtotalActionGroup" stepKey="assertSubtotal">
+                <argument name="subtotal" value="$111.10"/>
+            </actionGroup>
+        </test>
+</tests>

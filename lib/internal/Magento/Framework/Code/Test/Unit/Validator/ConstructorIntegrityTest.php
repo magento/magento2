@@ -5,6 +5,11 @@
  */
 namespace Magento\Framework\Code\Test\Unit\Validator;
 
+use PHPUnit\Framework\TestCase;
+use Magento\Framework\Code\Validator\ConstructorIntegrity;
+use Magento\SomeModule\Model\One\Test;
+use Magento\Framework\Exception\ValidatorException;
+
 require_once __DIR__ . '/../_files/app/code/Magento/SomeModule/Model/Three/Test.php';
 require_once __DIR__ . '/../_files/app/code/Magento/SomeModule/Model/Two/Test.php';
 require_once __DIR__ . '/../_files/app/code/Magento/SomeModule/Model/One/Test.php';
@@ -12,38 +17,38 @@ require_once __DIR__ . '/../_files/app/code/Magento/SomeModule/Model/Four/Test.p
 require_once __DIR__ . '/../_files/app/code/Magento/SomeModule/Model/Five/Test.php';
 require_once __DIR__ . '/../_files/app/code/Magento/SomeModule/Model/Six/Test.php';
 require_once __DIR__ . '/_files/ClassesForConstructorIntegrity.php';
-class ConstructorIntegrityTest extends \PHPUnit\Framework\TestCase
+class ConstructorIntegrityTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Code\Validator\ConstructorIntegrity
+     * @var ConstructorIntegrity
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->_model = new \Magento\Framework\Code\Validator\ConstructorIntegrity();
+        $this->_model = new ConstructorIntegrity();
     }
 
     public function testValidateIfParentClassExist()
     {
-        $this->assertEquals(true, $this->_model->validate(\Magento\SomeModule\Model\One\Test::class));
+        $this->assertTrue($this->_model->validate(Test::class));
     }
 
     public function testValidateIfClassHasParentConstructCall()
     {
-        $this->assertEquals(true, $this->_model->validate(\Magento\SomeModule\Model\Two\Test::class));
+        $this->assertTrue($this->_model->validate(\Magento\SomeModule\Model\Two\Test::class));
     }
 
     public function testValidateIfClassHasArgumentsQtyEqualToParentClass()
     {
-        $this->assertEquals(true, $this->_model->validate(\Magento\SomeModule\Model\Three\Test::class));
+        $this->assertTrue($this->_model->validate(\Magento\SomeModule\Model\Three\Test::class));
     }
 
     public function testValidateIfClassHasExtraArgumentInTheParentConstructor()
     {
         $fileName = realpath(__DIR__ . '/../_files/app/code/Magento/SomeModule/Model/Four/Test.php');
         $fileName = str_replace('\\', '/', $fileName);
-        $this->expectException(\Magento\Framework\Exception\ValidatorException::class);
+        $this->expectException(ValidatorException::class);
         $this->expectExceptionMessage('Extra parameters passed to parent construct: $factory. File: ' . $fileName);
         $this->_model->validate(\Magento\SomeModule\Model\Four\Test::class);
     }
@@ -52,7 +57,7 @@ class ConstructorIntegrityTest extends \PHPUnit\Framework\TestCase
     {
         $fileName = realpath(__DIR__ . '/../_files/app/code/Magento/SomeModule/Model/Five/Test.php');
         $fileName = str_replace('\\', '/', $fileName);
-        $this->expectException(\Magento\Framework\Exception\ValidatorException::class);
+        $this->expectException(ValidatorException::class);
         $this->expectExceptionMessage(
             'Missed required argument factory in parent::__construct call. File: ' . $fileName
         );
@@ -63,7 +68,7 @@ class ConstructorIntegrityTest extends \PHPUnit\Framework\TestCase
     {
         $fileName = realpath(__DIR__ . '/../_files/app/code/Magento/SomeModule/Model/Six/Test.php');
         $fileName = str_replace('\\', '/', $fileName);
-        $this->expectException(\Magento\Framework\Exception\ValidatorException::class);
+        $this->expectException(ValidatorException::class);
         $this->expectExceptionMessage(
             'Incompatible argument type: Required type: \Magento\SomeModule\Model\Proxy. ' .
             'Actual type: \Magento\SomeModule\Model\ElementFactory; File: ' .
@@ -77,7 +82,7 @@ class ConstructorIntegrityTest extends \PHPUnit\Framework\TestCase
     {
         $fileName = realpath(__DIR__) . '/_files/ClassesForConstructorIntegrity.php';
         $fileName = str_replace('\\', '/', $fileName);
-        $this->expectException(\Magento\Framework\Exception\ValidatorException::class);
+        $this->expectException(ValidatorException::class);
         $this->expectExceptionMessage(
             'Incompatible argument type: Required type: \Context. ' .
             'Actual type: \ClassA; File: ' .
@@ -91,7 +96,7 @@ class ConstructorIntegrityTest extends \PHPUnit\Framework\TestCase
     {
         $fileName = realpath(__DIR__) . '/_files/ClassesForConstructorIntegrity.php';
         $fileName = str_replace('\\', '/', $fileName);
-        $this->expectException(\Magento\Framework\Exception\ValidatorException::class);
+        $this->expectException(ValidatorException::class);
         $this->expectExceptionMessage(
             'Incompatible argument type: Required type: array. ' . 'Actual type: \ClassB; File: ' . PHP_EOL . $fileName
         );

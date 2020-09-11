@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminLockAdminUserWhenCreatingNewRoleTest">
+        <annotations>
+            <features value="Security"/>
+            <stories value="Runs Lock admin user when creating new admin role test."/>
+            <title value="Lock admin user when creating new admin role"/>
+            <description value="Runs Lock admin user when creating new admin role test."/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-14384" />
+            <group value="security"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <!-- Log in to Admin Panel -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!-- Unlock Admin user -->
+            <magentoCLI command="admin:user:unlock {{_ENV.MAGENTO_ADMIN_USERNAME}}" stepKey="unlockAdminUser"/>
+        </after>
+        <!-- Perform add new role 6 specified number of times. -->
+        <actionGroup ref="AdminOpenCreateRolePageActionGroup" stepKey="openCreateRolePage"/>
+
+        <actionGroup ref="AdminFillUserRoleFormActionGroup" stepKey="fillFieldFirstAttempt">
+            <argument name="role" value="roleAdministrator" />
+            <argument name="currentAdminPassword" value="{{_ENV.MAGENTO_ADMIN_PASSWORD}}INVALID" />
+        </actionGroup>
+        <actionGroup ref="AdminClickSaveButtonOnUserRoleFormActionGroup" stepKey="saveRoleFirstAttempt"/>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="checkFirstSaveRoleError">
+            <argument name="message" value="The password entered for the current user is invalid. Verify the password and try again." />
+            <argument name="messageType" value="error" />
+        </actionGroup>
+
+        <actionGroup ref="AdminFillUserRoleFormActionGroup" stepKey="fillFieldSecondAttempt">
+            <argument name="role" value="roleAdministrator" />
+            <argument name="currentAdminPassword" value="{{_ENV.MAGENTO_ADMIN_PASSWORD}}INVALID" />
+        </actionGroup>
+        <actionGroup ref="AdminClickSaveButtonOnUserRoleFormActionGroup" stepKey="saveRoleSecondAttempt"/>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="checkSecondSaveRoleError">
+            <argument name="message" value="The password entered for the current user is invalid. Verify the password and try again." />
+            <argument name="messageType" value="error" />
+        </actionGroup>
+
+        <actionGroup ref="AdminFillUserRoleFormActionGroup" stepKey="fillFieldThirdAttempt">
+            <argument name="role" value="roleAdministrator" />
+            <argument name="currentAdminPassword" value="{{_ENV.MAGENTO_ADMIN_PASSWORD}}INVALID" />
+        </actionGroup>
+        <actionGroup ref="AdminClickSaveButtonOnUserRoleFormActionGroup" stepKey="saveRoleThirdAttempt"/>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="checkThirdSaveRoleError">
+            <argument name="message" value="The password entered for the current user is invalid. Verify the password and try again." />
+            <argument name="messageType" value="error" />
+        </actionGroup>
+
+        <actionGroup ref="AdminFillUserRoleFormActionGroup" stepKey="fillFieldFourthAttempt">
+            <argument name="role" value="roleAdministrator" />
+            <argument name="currentAdminPassword" value="{{_ENV.MAGENTO_ADMIN_PASSWORD}}INVALID" />
+        </actionGroup>
+        <actionGroup ref="AdminClickSaveButtonOnUserRoleFormActionGroup" stepKey="saveRoleFourthAttempt"/>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="checkFourthSaveRoleError">
+            <argument name="message" value="The password entered for the current user is invalid. Verify the password and try again." />
+            <argument name="messageType" value="error" />
+        </actionGroup>
+
+        <actionGroup ref="AdminFillUserRoleFormActionGroup" stepKey="fillFieldFifthAttempt">
+            <argument name="role" value="roleAdministrator" />
+            <argument name="currentAdminPassword" value="{{_ENV.MAGENTO_ADMIN_PASSWORD}}INVALID" />
+        </actionGroup>
+        <actionGroup ref="AdminClickSaveButtonOnUserRoleFormActionGroup" stepKey="saveRoleFifthAttempt"/>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="checkFifthSaveRoleError">
+            <argument name="message" value="The password entered for the current user is invalid. Verify the password and try again." />
+            <argument name="messageType" value="error" />
+        </actionGroup>
+
+        <actionGroup ref="AdminFillUserRoleFormActionGroup" stepKey="fillFieldSixthAttempt">
+            <argument name="role" value="roleAdministrator" />
+            <argument name="currentAdminPassword" value="{{_ENV.MAGENTO_ADMIN_PASSWORD}}INVALID" />
+        </actionGroup>
+        <actionGroup ref="AdminClickSaveButtonOnUserRoleFormActionGroup" stepKey="saveRoleSixthAttempt"/>
+        <actionGroup ref="AssertMessageOnAdminLoginActionGroup" stepKey="checkFifthError">
+            <argument name="message" value="Your account is temporarily disabled. Please try again later."/>
+        </actionGroup>
+
+        <!-- Try to login as admin and check error message -->
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsLockedAdmin"/>
+        <actionGroup ref="AssertMessageOnAdminLoginActionGroup" stepKey="checkLoginMessage"/>
+    </test>
+</tests>

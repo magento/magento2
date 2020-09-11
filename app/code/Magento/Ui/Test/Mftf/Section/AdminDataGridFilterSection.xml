@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminDataGridFilterSection">
+        <element name="filterForm" type="block" selector="[data-part='filter-form']" />
+        <element name="filterExpand" type="button" selector="//div[@class='admin__data-grid-header'][(not(ancestor::*[@class='sticky-header']) and not(contains(@style,'visibility: hidden'))) or (ancestor::*[@class='sticky-header' and not(contains(@style,'display: none'))])]//button[@data-action='grid-filter-expand']" />
+        <element name="inputFieldByNameAttr" type="input" selector="//*[@data-part='filter-form']//input[@name='{{inputNameAttr}}']" parameterized="true" />
+        <element name="inputFieldByNameAttrInGrid" type="input" selector="//*[@data-role='filter-form']//input[@name='{{inputNameAttr}}']" parameterized="true"/>
+        <element name="selectByNameAttrInGrid" type="input" selector="//*[@data-role='filter-form']//select[@name='{{inputNameAttr}}']" parameterized="true"/>
+        <element name="filterSelectFieldByName" type="select" selector="//*[@data-part='filter-form']//select[@name='{{fieldName}}']" parameterized="true"/>
+        <element name="apply" type="button" selector="//*[@data-part='filter-form']//button[@data-action='grid-filter-apply']" />
+        <element name="clear" type="button" selector=".admin__data-grid-header [data-action='grid-filter-reset']" />
+    </section>
+</sections>

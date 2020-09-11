@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <dev>
+            <js>
+                <minify_exclude>
+                    <cardinal_commerce>/v1/songbird</cardinal_commerce>
+                </minify_exclude>
+            </js>
+        </dev>
+        <three_d_secure>
+            <cardinal>
+                <environment>production</environment>
+                <api_key backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+                <org_unit_id backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+                <api_identifier backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+                <debug>0</debug>
+            </cardinal>
+        </three_d_secure>
+    </default>
+</config>

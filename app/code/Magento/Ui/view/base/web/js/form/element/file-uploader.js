@@ -16,7 +16,8 @@ define([
     'Magento_Ui/js/form/element/abstract',
     'mage/backend/notification',
     'mage/translate',
-    'jquery/file-uploader'
+    'jquery/file-uploader',
+    'mage/adminhtml/tools'
 ], function ($, _, utils, uiAlert, validator, Element, notification, $t) {
     'use strict';
 
@@ -348,6 +349,12 @@ define([
                 allowed  = this.isFileAllowed(file),
                 target   = $(e.target);
 
+            if (this.disabled()) {
+                this.notifyError($t('The file upload field is disabled.'));
+
+                return;
+            }
+
             if (allowed.passed) {
                 target.on('fileuploadsend', function (event, postData) {
                     postData.data.append('param_name', this.paramName);
@@ -428,9 +435,10 @@ define([
                          * @param {String} constructedMessage
                          */
                         insertMethod: function (constructedMessage) {
-                            var errorMsgBodyHtml = '<strong>%s</strong> %s.<br>'
-                                .replace('%s', error.filename)
-                                .replace('%s', $t('was not uploaded'));
+                            var escapedFileName = $('<div>').text(error.filename).html(),
+                                errorMsgBodyHtml = '<strong>%s</strong> %s.<br>'
+                                    .replace('%s', escapedFileName)
+                                    .replace('%s', $t('was not uploaded'));
 
                             // html is escaped in message body for notification widget; prepend unescaped html here
                             constructedMessage = constructedMessage.replace('%s', errorMsgBodyHtml);

@@ -28,7 +28,7 @@ class AccessList extends Varnish
             throw new LocalizedException(
                 new Phrase(
                     'Access List value "%1" is not valid. '
-                    .'Please use only IP addresses and host names.',
+                    . 'Please use only IP addresses and host names.',
                     [$value]
                 )
             );

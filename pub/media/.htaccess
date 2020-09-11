@@ -23,12 +23,15 @@ SetHandler default-handler
     Options +FollowSymLinks
     RewriteEngine on
 
+    ## you can put here your pub/media folder path relative to web root
+    #RewriteBase /magento/pub/media/
+
 ############################################
 ## never rewrite for existing files
     RewriteCond %{REQUEST_FILENAME} !-f
 
 ############################################
-## rewrite everything else to index.php
+## rewrite everything else to get.php
 
     RewriteRule .* ../get.php [L]
 </IfModule>

@@ -135,6 +135,13 @@
     .products-grid.wishlist {
         .product {
             &-item {
+                margin-left: 2%;
+                width: calc(~'(100% - 4%) / 3');
+
+                &:nth-child(3n + 1) {
+                    margin-left: 0;
+                }
+
                 &-photo {
                     display: block;
                     margin-bottom: @indent__s;
@@ -182,6 +189,30 @@
             }
         }
     }
+    .products-grid.wishlist {
+        .product-item-actions {
+            .action {
+                &.edit,
+                &.delete {
+                    .lib-icon-font(
+                    @icon-edit,
+                    @_icon-font-size: 18px,
+                    @_icon-font-line-height: 20px,
+                    @_icon-font-text-hide: true,
+                    @_icon-font-color: @minicart-icons-color,
+                    @_icon-font-color-hover: @primary__color,
+                    @_icon-font-color-active: @minicart-icons-color
+                    );
+                }
+
+                &.delete {
+                    .lib-icon-font-symbol(
+                    @_icon-font-content: @icon-trash
+                    );
+                }
+            }
+        }
+    }
 }
 
 //
@@ -192,6 +223,8 @@
     .products-grid.wishlist {
         .product-item {
             border-bottom: 1px solid @secondary__color;
+            margin: 0;
+            width: 100%;
 
             &:first-child {
                 border-top: 1px solid @secondary__color;
@@ -228,14 +261,6 @@
 
                         &:last-child {
                             margin-right: 0;
-                        }
-
-                        &.edit {
-                            float: left;
-                        }
-
-                        &.delete {
-                            float: right;
                         }
 
                         &.edit,
@@ -379,9 +404,7 @@
             width: auto;
         }
     }
-}
 
-.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
     .wishlist-index-index {
         .product-item-inner {
             @_shadow: 3px 4px 4px 0 rgba(0, 0, 0, .3);

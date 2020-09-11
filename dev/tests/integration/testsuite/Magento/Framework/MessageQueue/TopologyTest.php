@@ -5,6 +5,9 @@
  */
 namespace Magento\Framework\MessageQueue;
 
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\MessageQueue\PreconditionFailedException;
+
 /**
  * @see dev/tests/integration/_files/Magento/TestModuleMessageQueueConfiguration
  * @see dev/tests/integration/_files/Magento/TestModuleMessageQueueConfigOverride
@@ -23,9 +26,14 @@ class TopologyTest extends \PHPUnit\Framework\TestCase
      */
     private $helper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->helper = new \Magento\TestFramework\Helper\Amqp();
+        $this->helper = Bootstrap::getObjectManager()->create(\Magento\TestFramework\Helper\Amqp::class);
+
+        if (!$this->helper->isAvailable()) {
+            $this->fail('This test relies on RabbitMQ Management Plugin.');
+        }
+
         $this->declaredExchanges = $this->helper->getExchanges();
     }
 
@@ -39,6 +47,7 @@ class TopologyTest extends \PHPUnit\Framework\TestCase
         $name = $expectedConfig['name'];
         $this->assertArrayHasKey($name, $this->declaredExchanges);
         unset($this->declaredExchanges[$name]['message_stats']);
+        unset($this->declaredExchanges[$name]['user_who_performed_action']);
         $this->assertEquals(
             $expectedConfig,
             $this->declaredExchanges[$name],

@@ -19,6 +19,8 @@
             <argument name="readers" xsi:type="array">
                 <item name="productDynamicAttributeReader" xsi:type="object">Magento\CatalogGraphQl\Model\Config\AttributeReader</item>
                 <item name="categoryDynamicAttributeReader" xsi:type="object">Magento\CatalogGraphQl\Model\Config\CategoryAttributeReader</item>
+                <item name="productSortDynamicAttributeReader" xsi:type="object">Magento\CatalogGraphQl\Model\Config\SortAttributeReader</item>
+                <item name="productFilterDynamicAttributeReader" xsi:type="object">Magento\CatalogGraphQl\Model\Config\FilterAttributeReader</item>
             </argument>
         </arguments>
     </virtualType>
@@ -34,6 +36,7 @@
         <arguments>
             <argument name="attributesInstances" xsi:type="array">
                 <item name="products" xsi:type="object">Magento\CatalogGraphQl\Model\Resolver\Products\FilterArgument\ProductEntityAttributesForAst</item>
+                <item name="categoryList" xsi:type="object">Magento\CatalogGraphQl\Model\Category\CategoryFilterAttributesForAst</item>
             </argument>
         </arguments>
     </type>
@@ -46,12 +49,39 @@
                 <item name="search" xsi:type="object">Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\CollectionProcessor\SearchCriteriaProcessor</item>
                 <item name="stock" xsi:type="object">Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\CollectionProcessor\StockProcessor</item>
                 <item name="visibility" xsi:type="object">Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\CollectionProcessor\VisibilityStatusProcessor</item>
+                <item name="mediaGallery" xsi:type="object">Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\CollectionProcessor\MediaGalleryProcessor</item>
             </argument>
         </arguments>
     </type>
     <type name="Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\CollectionProcessor\SearchCriteriaProcessor">
         <arguments>
             <argument name="searchCriteriaApplier" xsi:type="object">Magento\Catalog\Model\Api\SearchCriteria\ProductCollectionProcessor</argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\CatalogGraphQl\Plugin\Search\Request\ConfigReader">
+        <arguments>
+            <argument name="exactMatchAttributes" xsi:type="array">
+                <item name="sku" xsi:type="string">sku</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\Framework\Search\Request\Config\FilesystemReader">
+        <plugin name="productAttributesDynamicFields"  type="Magento\CatalogGraphQl\Plugin\Search\Request\ConfigReader" />
+    </type>
+
+    <preference type="\Magento\CatalogGraphQl\Model\Resolver\Product\Price\Provider" for="\Magento\CatalogGraphQl\Model\Resolver\Product\Price\ProviderInterface"/>
+
+    <preference type="Magento\CatalogGraphQl\Model\Resolver\Products\Query\Search" for="Magento\CatalogGraphQl\Model\Resolver\Products\Query\ProductQueryInterface"/>
+
+    <type name="\Magento\CatalogGraphQl\Model\Resolver\Product\BatchProductLinks">
+        <arguments>
+            <argument name="linkTypes" xsi:type="array">
+                <item name="related" xsi:type="string">related</item>
+                <item name="upsell" xsi:type="string">upsell</item>
+                <item name="crosssell" xsi:type="string">crosssell</item>
+            </argument>
         </arguments>
     </type>
 </config>

@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /** @var $block \Magento\Eav\Block\Adminhtml\Attribute\Edit\Options\Options */
 
 $stores = $block->getStoresSortedBySortOrder();
@@ -23,8 +21,8 @@ $stores = $block->getStoresSortedBySortOrder();
                         <span><?= $block->escapeHtml(__('Is Default')) ?></span>
                     </th>
                     <?php
-                    foreach ($stores as $_store): ?>
-                        <th<?php if ($_store->getId() == \Magento\Store\Model\Store::DEFAULT_STORE_ID): ?> class="_required"<?php endif; ?>>
+                    foreach ($stores as $_store) :?>
+                        <th<?php if ($_store->getId() == \Magento\Store\Model\Store::DEFAULT_STORE_ID) :?> class="_required"<?php endif; ?>>
                             <span><?= $block->escapeHtml(__($_store->getName())) ?></span>
                         </th>
                     <?php endforeach;
@@ -43,7 +41,7 @@ $stores = $block->getStoresSortedBySortOrder();
             </tr>
             <tr>
                 <th colspan="<?= (int) $storetotal ?>" class="col-actions-add">
-                    <?php if (!$block->getReadOnly() && !$block->canManageOptionDefaultOnly()):?>
+                    <?php if (!$block->getReadOnly() && !$block->canManageOptionDefaultOnly()) :?>
                         <button id="add_new_option_button" data-action="add_new_row"
                                 title="<?= $block->escapeHtml(__('Add Option')) ?>"
                                 type="button" class="action- scalable add">
@@ -59,22 +57,22 @@ $stores = $block->getStoresSortedBySortOrder();
     <script id="row-template" type="text/x-magento-template">
         <tr <% if (data.rowClasses) { %>class="<%- data.rowClasses %>"<% } %>>
             <td class="col-draggable">
-                <?php if (!$block->getReadOnly() && !$block->canManageOptionDefaultOnly()): ?>
+                <?php if (!$block->getReadOnly() && !$block->canManageOptionDefaultOnly()) :?>
                     <div data-role="draggable-handle" class="draggable-handle"
                          title="<?= $block->escapeHtml(__('Sort Option')) ?>">
                     </div>
                 <?php endif; ?>
-                <input data-role="order" type="hidden" name="option[order][<%- data.id %>]"  value="<%- data.sort_order %>" <?php if ($block->getReadOnly() || $block->canManageOptionDefaultOnly()): ?> disabled="disabled"<?php endif; ?>/>
+                <input data-role="order" type="hidden" name="option[order][<%- data.id %>]"  value="<%- data.sort_order %>" <?php if ($block->getReadOnly() || $block->canManageOptionDefaultOnly()) :?> disabled="disabled"<?php endif; ?>/>
             </td>
             <td class="col-default control-table-actions-cell">
-                <input class="input-radio" type="<%- data.intype %>" name="default[]" value="<%- data.id %>" <%- data.checked %><?php if ($block->getReadOnly()):?>disabled="disabled"<?php endif;?>/>
+                <input class="input-radio" type="<%- data.intype %>" name="default[]" value="<%- data.id %>" <%- data.checked %><?php if ($block->getReadOnly()) :?>disabled="disabled"<?php endif;?>/>
             </td>
-            <?php foreach ($stores as $_store): ?>
-            <td class="col-<%- data.id %>"><input name="option[value][<%- data.id %>][<?= (int) $_store->getId() ?>]" value="<%- data.store<?= /* @noEscape */ (int) $_store->getId() ?> %>" class="input-text<?php if ($_store->getId() == \Magento\Store\Model\Store::DEFAULT_STORE_ID): ?> required-option required-unique<?php endif; ?>" type="text" <?php if ($block->getReadOnly() || $block->canManageOptionDefaultOnly()):?> disabled="disabled"<?php endif;?>/></td>
+            <?php foreach ($stores as $_store) :?>
+            <td class="col-<%- data.id %>"><input name="option[value][<%- data.id %>][<?= (int) $_store->getId() ?>]" value="<%- data.store<?= /* @noEscape */ (int) $_store->getId() ?> %>" class="input-text<?php if ($_store->getId() == \Magento\Store\Model\Store::DEFAULT_STORE_ID) :?> required-option required-unique<?php endif; ?>" type="text" <?php if ($block->getReadOnly() || $block->canManageOptionDefaultOnly()) :?> disabled="disabled"<?php endif;?>/></td>
             <?php endforeach; ?>
             <td id="delete_button_container_<%- data.id %>" class="col-delete">
                 <input type="hidden" class="delete-flag" name="option[delete][<%- data.id %>]" value="" />
-                <?php if (!$block->getReadOnly() && !$block->canManageOptionDefaultOnly()):?>
+                <?php if (!$block->getReadOnly() && !$block->canManageOptionDefaultOnly()) :?>
                     <button id="delete_button_<%- data.id %>" title="<?= $block->escapeHtml(__('Delete')) ?>" type="button"
                         class="action- scalable delete delete-option"
                         >
@@ -86,9 +84,9 @@ $stores = $block->getStoresSortedBySortOrder();
     </script>
     <?php
     $values = [];
-    foreach($block->getOptionValues() as $value) {
+    foreach ($block->getOptionValues() as $value) {
         $value = $value->getData();
-        $values[] = is_array($value) ? array_map(function($str) {
+        $values[] = is_array($value) ? array_map(function ($str) {
             return htmlspecialchars_decode($str, ENT_QUOTES);
         }, $value) : $value;
     }

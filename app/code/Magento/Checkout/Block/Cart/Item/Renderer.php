@@ -24,6 +24,7 @@ use Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface;
  * @method \Magento\Checkout\Block\Cart\Item\Renderer setDeleteUrl(string)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @since 100.0.2
  */
 class Renderer extends \Magento\Framework\View\Element\Template implements
     \Magento\Framework\DataObject\IdentityInterface
@@ -185,6 +186,8 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
     }
 
     /**
+     * Override product url.
+     *
      * @param string $productUrl
      * @return $this
      * @codeCoverageIgnore
@@ -313,11 +316,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
     }
 
     /**
-     * Retrieve item messages
-     * Return array with keys
-     *
-     * text => the message text
-     * type => type of a message
+     * Retrieve item messages, return array with keys, text => the message text, type => type of a message
      *
      * @return array
      */
@@ -472,6 +471,8 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
     }
 
     /**
+     * Get price renderer.
+     *
      * @return \Magento\Framework\Pricing\Render
      * @codeCoverageIgnore
      */

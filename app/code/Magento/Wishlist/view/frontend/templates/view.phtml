@@ -4,12 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /** @var \Magento\Wishlist\Block\Customer\Wishlist $block */
 ?>
 
-<?php if ($this->helper('Magento\Wishlist\Helper\Data')->isAllow()) : ?>
+<?php if ($this->helper(\Magento\Wishlist\Helper\Data::class)->isAllow()) : ?>
     <div class="toolbar wishlist-toolbar"><?= $block->getChildHtml('wishlist_item_pager'); ?></div>
     <?= ($block->getChildHtml('wishlist.rss.link')) ?>
     <form class="form-wishlist-items" id="wishlist-view-form"
@@ -19,11 +17,11 @@
           "commentString":""},
           "validation": {}}' action="<?= $block->escapeUrl($block->getUrl('wishlist/index/update', ['wishlist_id' => $block->getWishlistInstance()->getId()])) ?>" method="post">
         <?= $block->getChildHtml('top') ?>
-        <?php if ($block->hasWishlistItems()): ?>
+        <?php if ($block->hasWishlistItems()) : ?>
             <?= $block->getBlockHtml('formkey') ?>
             <?php $block->getChildBlock('items')->setItems($block->getWishlistItems()); ?>
             <?= $block->getChildHtml('items') ?>
-        <?php else: ?>
+        <?php else : ?>
             <div class="message info empty"><span><?= $block->escapeHtml(__('You have no items in your wish list.')) ?></span></div>
         <?php endif ?>
         <?= $block->getChildHtml('bottom') ?>

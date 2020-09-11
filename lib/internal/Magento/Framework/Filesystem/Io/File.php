@@ -3,10 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\Filesystem\Io;
+
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Phrase;
 
 /**
  * Filesystem client
+ *
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class File extends AbstractIo
@@ -186,7 +191,7 @@ class File extends AbstractIo
          * Security enhancement for CSV data processing by Excel-like applications.
          * @see https://bugzilla.mozilla.org/show_bug.cgi?id=1054702
          *
-         * @var $value string|\Magento\Framework\Phrase
+         * @var $value string|Phrase
          */
         foreach ($row as $key => $value) {
             if (!is_string($value)) {
@@ -201,6 +206,7 @@ class File extends AbstractIo
 
     /**
      * Close an open file pointer
+     *
      * Set chmod on a file
      *
      * @return bool
@@ -328,6 +334,7 @@ class File extends AbstractIo
 
     /**
      * Delete a directory recursively
+     *
      * @param string $dir
      * @param bool $recursive
      * @return bool
@@ -405,8 +412,8 @@ class File extends AbstractIo
      *
      * @param string $dir
      * @return true
-     * @throws \Exception
      * @SuppressWarnings(PHPMD.ShortMethodName)
+     * @throws LocalizedException
      */
     public function cd($dir)
     {
@@ -415,7 +422,9 @@ class File extends AbstractIo
             $this->_cwd = realpath($dir);
             return true;
         } else {
-            throw new \Exception('Unable to list current working directory.');
+            throw new LocalizedException(
+                new Phrase('Unable to list current working directory.')
+            );
         }
     }
 
@@ -479,7 +488,7 @@ class File extends AbstractIo
         } else {
             $result = @file_put_contents($filename, $src);
         }
-        if ($mode !== null && $result) {
+        if ($mode !== null && $result !== false) {
             @chmod($filename, $mode);
         }
         $this->_iwd();
@@ -553,7 +562,7 @@ class File extends AbstractIo
      * @param string $folder
      * @param int $mode
      * @return true
-     * @throws \Exception
+     * @throws LocalizedException
      */
     public function checkAndCreateFolder($folder, $mode = 0777)
     {
@@ -564,7 +573,9 @@ class File extends AbstractIo
             $this->checkAndCreateFolder(dirname($folder), $mode);
         }
         if (!is_dir($folder) && !$this->mkdir($folder, $mode)) {
-            throw new \Exception("Unable to create directory '{$folder}'. Access forbidden.");
+            throw new LocalizedException(
+                new Phrase("Unable to create directory '{$folder}'. Access forbidden.")
+            );
         }
         return true;
     }
@@ -672,7 +683,7 @@ class File extends AbstractIo
      *
      * @param string|null $grep
      * @return array
-     * @throws \Exception
+     * @throws LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.ShortMethodName)
      */
@@ -685,7 +696,9 @@ class File extends AbstractIo
         } elseif (is_dir($this->_iwd)) {
             $dir = $this->_iwd;
         } else {
-            throw new \Exception('Unable to list current working directory.');
+            throw new LocalizedException(
+                new Phrase('Unable to list current working directory.')
+            );
         }
 
         $list = [];
@@ -742,7 +755,9 @@ class File extends AbstractIo
             }
             closedir($dirHandler);
         } else {
-            throw new \Exception('Unable to list current working directory. Access forbidden.');
+            throw new LocalizedException(
+                new Phrase('Unable to list current working directory. Access forbidden.')
+            );
         }
 
         return $list;

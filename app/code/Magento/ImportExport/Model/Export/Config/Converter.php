@@ -8,6 +8,9 @@ namespace Magento\ImportExport\Model\Export\Config;
 use Magento\Framework\Module\Manager;
 use Magento\Framework\App\Utility\Classes;
 
+/**
+ * Converter.
+ */
 class Converter implements \Magento\Framework\Config\ConverterInterface
 {
     /**

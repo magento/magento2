@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="CheckoutCartMessageSection">
+        <element name="successMessage" type="text" selector=".message.message-success.success>div" />
+        <element name="errorMessage" type="text" selector=".message-error.error.message>div" />
+        <element name="emptyCartMessage" type="text" selector=".cart-empty>p"/>
+        <element name="errorMessageText" type="text" selector="//div[contains(@class, 'message-error')]/div[text()='{{var}}']" parameterized="true"/>
+    </section>
+</sections>

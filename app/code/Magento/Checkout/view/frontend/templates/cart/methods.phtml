@@ -4,20 +4,18 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 ?>
 <?php
 /** @var $block \Magento\Checkout\Block\Cart */
 ?>
-<?php if (!$block->hasError()): ?>
-<?php $methods = $block->getMethods('methods') ?: $block->getMethods('top_methods') ?>
-<ul class="checkout methods items checkout-methods-items">
-<?php foreach ($methods as $method): ?>
-    <?php $methodHtml = $block->getMethodHtml($method); ?>
-    <?php if (trim($methodHtml) !== ''): ?>
-    <li class="item"><?= /* @escapeNotVerified */ $methodHtml ?></li>
-    <?php endif; ?>
-<?php endforeach; ?>
-</ul>
+<?php if (!$block->hasError()) :?>
+    <?php $methods = $block->getMethods('methods') ?: $block->getMethods('top_methods') ?>
+    <ul class="checkout methods items checkout-methods-items">
+        <?php foreach ($methods as $method) :?>
+            <?php $methodHtml = $block->getMethodHtml($method); ?>
+            <?php if (trim($methodHtml) !== '') :?>
+                <li class="item"><?= /* @noEscape */ $methodHtml ?></li>
+            <?php endif; ?>
+        <?php endforeach; ?>
+    </ul>
 <?php endif; ?>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateCustomerRetailerWithoutAddressTest">
+        <annotations>
+            <stories value="Create customer"/>
+            <title value="Create customer, retailer without address"/>
+            <description value="Login as admin and create customer retailer without address"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-5310"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
+        </before>
+        <after>
+            <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteCustomer">
+                <argument name="email" value="{{CustomerEntityOne.email}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!--Filter the customer From grid-->
+        <actionGroup ref="AdminNavigateNewCustomerActionGroup" stepKey="navigateToNewCustomerPage"/>
+        <selectOption selector="{{AdminCustomerAccountInformationSection.group}}" userInput="Retailer" stepKey="fillCustomerGroup"/>
+        <fillField userInput="{{CustomerEntityOne.firstname}}" selector="{{AdminCustomerAccountInformationSection.firstName}}" stepKey="fillFirstName"/>
+        <fillField userInput="{{CustomerEntityOne.lastname}}" selector="{{AdminCustomerAccountInformationSection.lastName}}" stepKey="fillLastName"/>
+        <fillField userInput="{{CustomerEntityOne.email}}" selector="{{AdminCustomerAccountInformationSection.email}}" stepKey="fillEmail"/>
+        <click selector="{{AdminCustomerMainActionsSection.saveButton}}" stepKey="saveCustomer"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
+        <seeElement selector="{{AdminCustomerMessagesSection.successMessage}}" stepKey="assertSuccessMessage"/>
+        <reloadPage stepKey="reloadPage"/>
+
+        <!--Verify Customer in grid -->
+        <actionGroup ref="AdminFilterCustomerByEmail" stepKey="filterTheCustomerByEmail1">
+            <argument name="email" value="{{CustomerEntityOne.email}}"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForCustomerPageToLoad"/>
+        <see selector="{{AdminCustomerGridSection.customerGrid}}" userInput="Retailer" stepKey="assertGroup"/>
+        <see userInput="{{CustomerEntityOne.firstname}}" selector="{{AdminCustomerGridSection.customerGrid}}" stepKey="assertFirstName"/>
+        <see userInput="{{CustomerEntityOne.lastname}}" selector="{{AdminCustomerGridSection.customerGrid}}" stepKey="assertLastName"/>
+        <see userInput="{{CustomerEntityOne.email}}" selector="{{AdminCustomerGridSection.customerGrid}}" stepKey="assertEmail"/>
+
+        <!--Assert Customer Form -->
+        <actionGroup ref="AdminClickFirstRowEditLinkOnCustomerGridActionGroup" stepKey="clickOnEditButton1"/>
+        <click selector="{{AdminCustomerAccountInformationSection.accountInformationButton}}" stepKey="clickOnAccountInformation"/>
+        <waitForPageLoad stepKey="waitForCustomerInformationPageToLoad"/>
+        <see selector="{{AdminCustomerAccountInformationSection.groupIdValue}}" userInput="Retailer" stepKey="seeCustomerGroup1"/>
+        <seeInField selector="{{AdminCustomerAccountInformationSection.firstName}}" userInput="{{CustomerEntityOne.firstname}}" stepKey="seeCustomerFirstName"/>
+        <seeInField selector="{{AdminCustomerAccountInformationSection.lastName}}" userInput="{{CustomerEntityOne.lastname}}" stepKey="seeCustomerLastName"/>
+        <seeInField selector="{{AdminCustomerAccountInformationSection.email}}" userInput="{{CustomerEntityOne.email}}" stepKey="seeCustomerEmail"/>
+    </test>
+</tests>

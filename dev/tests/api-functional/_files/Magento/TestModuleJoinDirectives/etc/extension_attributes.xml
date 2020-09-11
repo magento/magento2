@@ -31,4 +31,16 @@
             </join>
         </attribute>
     </extension_attributes>
+    <extension_attributes for="Magento\Sales\Api\Data\OrderInterface">
+        <attribute code="orderApiTestAttribute" type="Magento\User\Api\Data\UserInterface">
+            <join reference_table="admin_user"
+                  join_on_field="store_id"
+                  reference_field="user_id"
+            >
+                <field>firstname</field>
+                <field>lastname</field>
+                <field>email</field>
+            </join>
+        </attribute>
+    </extension_attributes>
 </config>

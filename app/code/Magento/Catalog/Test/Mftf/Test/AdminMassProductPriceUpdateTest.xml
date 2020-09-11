@@ -10,7 +10,7 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminMassProductPriceUpdateTest">
         <annotations>
-            <stories value="Mass product update "/>
+            <stories value="Mass product update"/>
             <features value="Catalog"/>
             <title value="Mass update simple product price"/>
             <description value="Login as admin and update mass product price"/>
@@ -19,27 +19,31 @@
             <group value="mtf_migrated"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
             <createData entity="defaultSimpleProduct" stepKey="simpleProduct1"/>
             <createData entity="defaultSimpleProduct" stepKey="simpleProduct2"/>
         </before>
         <after>
-            <deleteData  createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
-            <deleteData  createDataKey="simpleProduct2" stepKey="deleteSimpleProduct2"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <deleteData createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
+            <deleteData createDataKey="simpleProduct2" stepKey="deleteSimpleProduct2"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
+
         <!--Open Product Index Page-->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
-        <waitForPageLoad stepKey="waitForProductIndexPageToLoad"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
+
         <!--Search products using keyword -->
-        <actionGroup ref="searchProductGridByKeyword2" stepKey="searchByKeyword">
+        <actionGroup ref="SearchProductGridByKeyword2ActionGroup" stepKey="searchByKeyword">
             <argument name="keyword" value="Testp"/>
         </actionGroup>
+
         <!--Sort Products by ID in descending order-->
-        <actionGroup ref="sortProductsByIdDescending" stepKey="sortProductsByIdDescending"/>
+        <actionGroup ref="SortProductsByIdDescendingActionGroup" stepKey="sortProductsByIdDescending"/>
+
         <!--Select products-->
         <checkOption selector="{{AdminProductGridSection.productRowCheckboxBySku($$simpleProduct1.sku$$)}}" stepKey="selectFirstProduct"/>
         <checkOption selector="{{AdminProductGridSection.productRowCheckboxBySku($$simpleProduct2.sku$$)}}" stepKey="selectSecondProduct"/>
+
         <!-- Update product price-->
         <click selector="{{AdminProductGridSection.bulkActionDropdown}}" stepKey="clickDropdown"/>
         <click selector="{{AdminProductGridSection.bulkActionOption('Update attributes')}}" stepKey="clickChangeStatus"/>
@@ -49,7 +53,16 @@
         <fillField stepKey="fillPrice" selector="{{AdminEditProductAttributesSection.AttributePrice}}" userInput="90.99"/>
         <click stepKey="clickOnSaveButton" selector="{{AdminEditProductAttributesSection.Save}}"/>
         <waitForPageLoad stepKey="waitForUpdatedProductToSave" />
-        <see selector="{{AdminProductMessagesSection.successMessage}}" userInput="A total of 2 record(s) were updated." stepKey="seeAttributeUpateSuccessMsg"/>
+        <see selector="{{AdminProductMessagesSection.successMessage}}" userInput="Message is added to queue" stepKey="seeAttributeUpateSuccessMsg"/>
+
+        <!-- Start message queue -->
+        <actionGroup ref="CliConsumerStartActionGroup" stepKey="startMessageQueueConsumer">
+            <argument name="consumerName" value="{{AdminProductAttributeUpdateConsumerData.consumerName}}"/>
+            <argument name="maxMessages" value="{{AdminProductAttributeUpdateConsumerData.messageLimit}}"/>
+        </actionGroup>
+        <!-- Run cron -->
+        <magentoCLI command="cron:run --group=index" stepKey="runCron"/>
+
         <!--Verify product name, sku and updated price-->
         <click stepKey="openFirstProduct" selector="{{AdminProductGridSection.productRowBySku($$simpleProduct1.sku$$)}}"/>
         <waitForPageLoad stepKey="waitForFirstProductToLoad"/>

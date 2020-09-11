@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminSwitchToAllStoreViewActionGroup" extends="AdminSwitchStoreViewActionGroup">
+        <annotations>
+            <description>EXTENDS: AdminSwitchStoreViewActionGroup. Clicks on the 'All Store Views' drop down menu. Validates that the 'All Store Views' options is present and correct.</description>
+        </annotations>
+
+        <click selector="{{AdminMainActionsSection.allStoreViews}}" stepKey="clickStoreViewByName" after="waitForStoreViewsAreVisible"/>
+        <see selector="{{AdminMainActionsSection.storeSwitcher}}" userInput="All Store Views" stepKey="seeNewStoreViewName" after="waitForStoreViewSwitched"/>
+    </actionGroup>
+</actionGroups>

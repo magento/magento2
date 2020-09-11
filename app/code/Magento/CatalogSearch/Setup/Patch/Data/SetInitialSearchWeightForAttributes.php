@@ -6,15 +6,14 @@
 
 namespace Magento\CatalogSearch\Setup\Patch\Data;
 
+use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\Framework\App\State;
+use Magento\Framework\Indexer\IndexerInterfaceFactory;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Framework\Setup\Patch\PatchVersionInterface;
-use Magento\Framework\Indexer\IndexerInterfaceFactory;
-use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 
 /**
- * @deprecated
- * @see \Magento\ElasticSearch
+ * This patch sets up search weight for the product's system attributes, reindex required after patch applying.
  */
 class SetInitialSearchWeightForAttributes implements DataPatchInterface, PatchVersionInterface
 {
@@ -50,7 +49,7 @@ class SetInitialSearchWeightForAttributes implements DataPatchInterface, PatchVe
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function apply()
     {
@@ -60,13 +59,16 @@ class SetInitialSearchWeightForAttributes implements DataPatchInterface, PatchVe
         $this->state->emulateAreaCode(
             \Magento\Framework\App\Area::AREA_CRONTAB,
             function () use ($indexer) {
-                $indexer->reindexAll();
+                $indexer->getState()
+                    ->setStatus(\Magento\Framework\Indexer\StateInterface::STATUS_INVALID)
+                    ->save();
             }
         );
+        return $this;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getDependencies()
     {
@@ -74,7 +76,7 @@ class SetInitialSearchWeightForAttributes implements DataPatchInterface, PatchVe
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getVersion()
     {
@@ -82,7 +84,7 @@ class SetInitialSearchWeightForAttributes implements DataPatchInterface, PatchVe
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAliases()
     {

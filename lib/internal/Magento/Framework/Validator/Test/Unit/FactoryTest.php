@@ -3,127 +3,110 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Validator\Test\Unit;
+
+use Magento\Framework\Cache\FrontendInterface;
+use Magento\Framework\Config\FileIterator;
+use Magento\Framework\Module\Dir\Reader;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\Translate\Adapter;
+use Magento\Framework\Translate\AdapterInterface;
+use Magento\Framework\Validator;
+use Magento\Framework\Validator\AbstractValidator;
+use Magento\Framework\Validator\Builder;
+use Magento\Framework\Validator\Config;
+use Magento\Framework\Validator\Factory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class FactoryTest extends \PHPUnit\Framework\TestCase
+class FactoryTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface|MockObject
      */
     private $objectManagerMock;
 
     /**
-     * @var \Magento\Framework\Module\Dir\Reader|\PHPUnit_Framework_MockObject_MockObject
+     * @var Reader|MockObject
      */
     private $readerMock;
 
     /**
-     * @var \Magento\Framework\Validator\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|MockObject
      */
     private $validatorConfigMock;
 
     /**
-     * @var \Magento\Framework\Cache\FrontendInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $cacheMock;
-
-    /**
-     * @var \Magento\Framework\Serialize\SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $serializerMock;
-
-    /**
-     * @var \Magento\Framework\Config\FileIteratorFactory|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $fileIteratorFactoryMock;
-
-    /**
-     * @var \Magento\Framework\Config\FileIterator|\PHPUnit_Framework_MockObject_MockObject
+     * @var FileIterator|MockObject
      */
     private $fileIteratorMock;
 
     /**
-     * @var \Magento\Framework\Translate\AdapterInterface
+     * @var AdapterInterface
      */
     private $defaultTranslator;
 
     /**
-     * @var \Magento\Framework\Validator\Factory
+     * @var Factory
      */
     private $factory;
-
-    /**
-     * @var string
-     */
-    private $jsonString = '["\/tmp\/moduleOne\/etc\/validation.xml"]';
 
     /**
      * @var array
      */
     private $data = ['/tmp/moduleOne/etc/validation.xml'];
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->defaultTranslator = \Magento\Framework\Validator\AbstractValidator::getDefaultTranslator();
+        $this->defaultTranslator = AbstractValidator::getDefaultTranslator();
 
-        $this->objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $this->validatorConfigMock = $this->createPartialMock(
-            \Magento\Framework\Validator\Config::class,
+            Config::class,
             ['createValidatorBuilder', 'createValidator']
         );
-        $translateAdapterMock = $this->createMock(\Magento\Framework\Translate\Adapter::class);
+        $translateAdapterMock = $this->createMock(Adapter::class);
         $this->objectManagerMock->expects($this->at(0))
             ->method('create')
-            ->with(\Magento\Framework\Translate\Adapter::class)
+            ->with(Adapter::class)
             ->willReturn($translateAdapterMock);
-        $this->fileIteratorMock = $this->createMock(\Magento\Framework\Config\FileIterator::class);
+        $this->fileIteratorMock = $this->createMock(FileIterator::class);
         $this->objectManagerMock->expects($this->at(1))
             ->method('create')
             ->with(
-                \Magento\Framework\Validator\Config::class,
+                Config::class,
                 ['configFiles' => $this->fileIteratorMock]
             )
             ->willReturn($this->validatorConfigMock);
         $this->readerMock = $this->createPartialMock(
-            \Magento\Framework\Module\Dir\Reader::class,
+            Reader::class,
             ['getConfigurationFiles']
         );
-        $this->cacheMock = $this->createMock(\Magento\Framework\Cache\FrontendInterface::class);
+        $this->cacheMock = $this->getMockForAbstractClass(FrontendInterface::class);
 
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
 
         $this->factory = $objectManager->getObject(
-            \Magento\Framework\Validator\Factory::class,
+            Factory::class,
             [
                 'objectManager' => $this->objectManagerMock,
-                'moduleReader' => $this->readerMock,
-                'cache' => $this->cacheMock
+                'moduleReader' => $this->readerMock
             ]
-        );
-
-        $this->serializerMock = $this->createMock(\Magento\Framework\Serialize\SerializerInterface::class);
-        $this->fileIteratorFactoryMock = $this->createMock(\Magento\Framework\Config\FileIteratorFactory::class);
-        $objectManager->setBackwardCompatibleProperty(
-            $this->factory,
-            'serializer',
-            $this->serializerMock
-        );
-        $objectManager->setBackwardCompatibleProperty(
-            $this->factory,
-            'fileIteratorFactory',
-            $this->fileIteratorFactoryMock
         );
     }
 
     /**
      * Restore default translator
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
-        \Magento\Framework\Validator\AbstractValidator::setDefaultTranslator($this->defaultTranslator);
+        AbstractValidator::setDefaultTranslator($this->defaultTranslator);
         unset($this->defaultTranslator);
     }
 
@@ -136,55 +119,15 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->data);
         $actualConfig = $this->factory->getValidatorConfig();
         $this->assertInstanceOf(
-            \Magento\Framework\Validator\Config::class,
+            Config::class,
             $actualConfig,
             'Object of incorrect type was created'
         );
         $this->assertInstanceOf(
-            \Magento\Framework\Translate\Adapter::class,
-            \Magento\Framework\Validator\AbstractValidator::getDefaultTranslator(),
+            Adapter::class,
+            AbstractValidator::getDefaultTranslator(),
             'Default validator translate adapter was not set correctly'
         );
-    }
-
-    public function testGetValidatorConfigCacheNotExist()
-    {
-        $this->cacheMock->expects($this->once())
-            ->method('load')
-            ->willReturn(false);
-        $this->readerMock->expects($this->once())
-            ->method('getConfigurationFiles')
-            ->willReturn($this->fileIteratorMock);
-        $this->fileIteratorMock->method('toArray')
-            ->willReturn($this->data);
-        $this->cacheMock->expects($this->once())
-            ->method('save')
-            ->with($this->jsonString);
-        $this->serializerMock->expects($this->once())
-            ->method('serialize')
-            ->with($this->data)
-            ->willReturn($this->jsonString);
-        $this->factory->getValidatorConfig();
-        $this->factory->getValidatorConfig();
-    }
-
-    public function testGetValidatorConfigCacheExist()
-    {
-        $this->cacheMock->expects($this->once())
-            ->method('load')
-            ->willReturn($this->jsonString);
-        $this->readerMock->expects($this->never())
-            ->method('getConfigurationFiles');
-        $this->cacheMock->expects($this->never())
-            ->method('save');
-        $this->serializerMock->expects($this->once())
-            ->method('unserialize')
-            ->with($this->jsonString)
-            ->willReturn($this->data);
-        $this->fileIteratorFactoryMock->method('create')
-            ->willReturn($this->fileIteratorMock);
-        $this->factory->getValidatorConfig();
-        $this->factory->getValidatorConfig();
     }
 
     public function testCreateValidatorBuilder()
@@ -194,13 +137,13 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->fileIteratorMock);
         $this->fileIteratorMock->method('toArray')
             ->willReturn($this->data);
-        $builderMock = $this->createMock(\Magento\Framework\Validator\Builder::class);
+        $builderMock = $this->createMock(Builder::class);
         $this->validatorConfigMock->expects($this->once())
             ->method('createValidatorBuilder')
             ->with('test', 'class', [])
             ->willReturn($builderMock);
         $this->assertInstanceOf(
-            \Magento\Framework\Validator\Builder::class,
+            Builder::class,
             $this->factory->createValidatorBuilder('test', 'class', [])
         );
     }
@@ -212,13 +155,13 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->fileIteratorMock);
         $this->fileIteratorMock->method('toArray')
             ->willReturn($this->data);
-        $validatorMock = $this->createMock(\Magento\Framework\Validator::class);
+        $validatorMock = $this->createMock(Validator::class);
         $this->validatorConfigMock->expects($this->once())
             ->method('createValidator')
             ->with('test', 'class', [])
             ->willReturn($validatorMock);
         $this->assertInstanceOf(
-            \Magento\Framework\Validator::class,
+            Validator::class,
             $this->factory->createValidator('test', 'class', [])
         );
     }

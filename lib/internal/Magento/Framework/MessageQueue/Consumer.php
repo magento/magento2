@@ -38,7 +38,7 @@ class Consumer implements ConsumerInterface
     private $messageEncoder;
 
     /**
-     * @var CallbackInvoker
+     * @var CallbackInvokerInterface
      */
     private $invoker;
 
@@ -80,7 +80,7 @@ class Consumer implements ConsumerInterface
     /**
      * Initialize dependencies.
      *
-     * @param CallbackInvoker $invoker
+     * @param CallbackInvokerInterface $invoker
      * @param MessageEncoder $messageEncoder
      * @param ResourceConnection $resource
      * @param ConsumerConfigurationInterface $configuration
@@ -89,7 +89,7 @@ class Consumer implements ConsumerInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
-        CallbackInvoker $invoker,
+        CallbackInvokerInterface $invoker,
         MessageEncoder $messageEncoder,
         ResourceConnection $resource,
         ConsumerConfigurationInterface $configuration,
@@ -103,16 +103,23 @@ class Consumer implements ConsumerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function process($maxNumberOfMessages = null)
     {
         $queue = $this->configuration->getQueue();
-
+        $maxIdleTime = $this->configuration->getMaxIdleTime();
+        $sleep = $this->configuration->getSleep();
         if (!isset($maxNumberOfMessages)) {
             $queue->subscribe($this->getTransactionCallback($queue));
         } else {
-            $this->invoker->invoke($queue, $maxNumberOfMessages, $this->getTransactionCallback($queue));
+            $this->invoker->invoke(
+                $queue,
+                $maxNumberOfMessages,
+                $this->getTransactionCallback($queue),
+                $maxIdleTime,
+                $sleep
+            );
         }
     }
 
@@ -240,7 +247,7 @@ class Consumer implements ConsumerInterface
      *
      * @return ConsumerConfig
      *
-     * @deprecated 100.2.0
+     * @deprecated 103.0.0
      */
     private function getConsumerConfig()
     {
@@ -255,7 +262,7 @@ class Consumer implements ConsumerInterface
      *
      * @return CommunicationConfig
      *
-     * @deprecated 100.2.0
+     * @deprecated 103.0.0
      */
     private function getCommunicationConfig()
     {
@@ -271,7 +278,7 @@ class Consumer implements ConsumerInterface
      *
      * @return QueueRepository
      *
-     * @deprecated 100.2.0
+     * @deprecated 103.0.0
      */
     private function getQueueRepository()
     {
@@ -286,7 +293,7 @@ class Consumer implements ConsumerInterface
      *
      * @return MessageController
      *
-     * @deprecated 100.1.0
+     * @deprecated 103.0.0
      */
     private function getMessageController()
     {
@@ -302,7 +309,7 @@ class Consumer implements ConsumerInterface
      *
      * @return MessageValidator
      *
-     * @deprecated 100.2.0
+     * @deprecated 103.0.0
      */
     private function getMessageValidator()
     {
@@ -318,7 +325,7 @@ class Consumer implements ConsumerInterface
      *
      * @return EnvelopeFactory
      *
-     * @deprecated 100.2.0
+     * @deprecated 103.0.0
      */
     private function getEnvelopeFactory()
     {

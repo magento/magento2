@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateInactiveCatalogPriceRuleTest">
+        <annotations>
+            <stories value="Create Catalog Price Rule"/>
+            <title value="Create Inactive Catalog Price Rule"/>
+            <description value="Login as admin and create inactive catalog price Rule"/>
+            <testCaseId value="MC-13977"/>
+            <severity value="CRITICAL"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminSearchCatalogRuleInGridActionGroup" stepKey="searchCreatedCatalogRule">
+                <argument name="catalogRuleName" value="{{InactiveCatalogRule.name}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminSelectCatalogRuleFromGridActionGroup" stepKey="selectCreatedCatalogRule">
+                <argument name="catalogRuleName" value="{{InactiveCatalogRule.name}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminDeleteCatalogRuleActionGroup" stepKey="deleteTheCatalogRule"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!--  Create Inactive Catalog Price Rule -->
+        <actionGroup ref="AdminCreateNewCatalogPriceRuleActionGroup" stepKey="createCatalogPriceRule">
+            <argument name="catalogRule" value="InactiveCatalogRule"/>
+            <argument name="customerGroup" value="General"/>
+        </actionGroup>
+
+        <!-- Save and Apply Rules -->
+        <actionGroup ref="AdminSaveAndApplyRulesActionGroup" stepKey="saveAndApplyRules"/>
+
+        <!-- Search Catalog Rule in Grid -->
+        <actionGroup ref="AdminSearchCatalogRuleInGridActionGroup" stepKey="searchAndSelectCreatedCatalogRule">
+            <argument name="catalogRuleName" value="{{InactiveCatalogRule.name}}"/>
+        </actionGroup>
+
+        <!--Select Catalog Rule in Grid -->
+        <actionGroup ref="AdminSelectCatalogRuleFromGridActionGroup" stepKey="selectCreatedCatalogRule">
+            <argument name="catalogRuleName" value="{{InactiveCatalogRule.name}}"/>
+        </actionGroup>
+        <grabFromCurrentUrl stepKey="catalogRuleId" regex="#\/([0-9]*)?\/$#"/>
+
+        <!-- Assert catalog Price Rule Form -->
+        <actionGroup ref="AssertCatalogPriceRuleFormActionGroup" stepKey="assertCatalogRuleForm">
+            <argument name="catalogRule" value="InactiveCatalogRule"/>
+            <argument name="status" value="Inactive"/>
+            <argument name="websites" value="Main Website"/>
+            <argument name="customerGroup" value="General"/>
+        </actionGroup>
+        <dontSeeCheckboxIsChecked selector="{{AdminCategoryBasicFieldSection.enableCategoryLabel}}"  stepKey="verifyInactiveRule"/>
+
+        <!-- Search Catalog Rule in Grid -->
+        <actionGroup ref="AdminSearchCatalogRuleInGridActionGroup" stepKey="searchCreatedCatalogRule">
+            <argument name="catalogRuleName" value="{{InactiveCatalogRule.name}}"/>
+        </actionGroup>
+
+        <!-- Assert Catalog Rule In Grid -->
+        <actionGroup ref="AssertCatalogRuleInGridActionGroup" stepKey="assertCatalogRuleInGrid">
+            <argument name="catalogRuleName" value="{{InactiveCatalogRule.name}}"/>
+            <argument name="status" value="Inactive"/>
+            <argument name="websites" value="Main Website"/>
+            <argument name="catalogRuleId" value="$catalogRuleId"/>
+        </actionGroup>
+    </test>
+</tests>

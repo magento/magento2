@@ -1,7 +1,5 @@
 <?php
 /**
- * Category data interface
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -9,6 +7,8 @@
 namespace Magento\Catalog\Api\Data;
 
 /**
+ * Category data interface.
+ *
  * @api
  * @since 100.0.2
  */
@@ -46,11 +46,15 @@ interface CategoryInterface extends \Magento\Framework\Api\CustomAttributesDataI
     /**#@-*/
 
     /**
+     * Retrieve category id.
+     *
      * @return int|null
      */
     public function getId();
 
     /**
+     * Set category id.
+     *
      * @param int $id
      * @return $this
      */
@@ -74,7 +78,7 @@ interface CategoryInterface extends \Magento\Framework\Api\CustomAttributesDataI
     /**
      * Get category name
      *
-     * @return string
+     * @return string|null
      */
     public function getName();
 
@@ -132,60 +136,82 @@ interface CategoryInterface extends \Magento\Framework\Api\CustomAttributesDataI
     public function setLevel($level);
 
     /**
+     * Retrieve children ids comma separated.
+     *
      * @return string|null
      */
     public function getChildren();
 
     /**
+     * Retrieve category creation date and time.
+     *
      * @return string|null
      */
     public function getCreatedAt();
 
     /**
+     * Set category creation date and time.
+     *
      * @param string $createdAt
      * @return $this
      */
     public function setCreatedAt($createdAt);
 
     /**
+     * Retrieve category last update date and time.
+     *
      * @return string|null
      */
     public function getUpdatedAt();
 
     /**
+     * Set category last update date and time.
+     *
      * @param string $updatedAt
      * @return $this
      */
     public function setUpdatedAt($updatedAt);
 
     /**
+     * Retrieve category full path.
+     *
      * @return string|null
      */
     public function getPath();
 
     /**
+     * Set category full path.
+     *
      * @param string $path
      * @return $this
      */
     public function setPath($path);
 
     /**
+     * Retrieve available sort by for category.
+     *
      * @return string[]|null
      */
     public function getAvailableSortBy();
 
     /**
+     * Set available sort by for category.
+     *
      * @param string[]|string $availableSortBy
      * @return $this
      */
     public function setAvailableSortBy($availableSortBy);
 
     /**
+     * Get category is included in menu.
+     *
      * @return bool|null
      */
     public function getIncludeInMenu();
 
     /**
+     * Set category is included in menu.
+     *
      * @param bool $includeInMenu
      * @return $this
      */

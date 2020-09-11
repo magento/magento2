@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="AdminGeneralSetStoreNameConfigData">
+        <data key="path">general/store_information/name</data>
+        <data key="value">New Store Information</data>
+    </entity>
+    <entity name="AdminGeneralSetStorePhoneConfigData">
+        <data key="path">general/store_information/phone</data>
+    </entity>
+    <entity name="AdminGeneralSetCountryConfigData">
+        <data key="path">general/store_information/country_id</data>
+    </entity>
+    <entity name="AdminGeneralSetCityConfigData">
+        <data key="path">general/store_information/city</data>
+    </entity>
+    <entity name="AdminGeneralSetPostcodeConfigData">
+        <data key="path">general/store_information/postcode</data>
+    </entity>
+    <entity name="AdminGeneralSetStreetAddressConfigData">
+        <data key="path">general/store_information/street_line1</data>
+    </entity>
+    <entity name="AdminGeneralSetStreetAddress2ConfigData">
+        <data key="path">general/store_information/street_line2</data>
+    </entity>
+    <entity name="AdminGeneralSetStateConfigData">
+        <data key="path">general/store_information/region_id</data>
+    </entity>
+    <entity name="AdminGeneralSetStoreHoursConfigData">
+        <data key="path">general/store_information/hours</data>
+        <data key="value">8AM-8PM</data>
+    </entity>
+</entities>

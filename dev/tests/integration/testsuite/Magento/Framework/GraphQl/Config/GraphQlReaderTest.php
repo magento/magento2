@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Framework\GraphQl\Config;
 
 use Magento\Framework\App\Cache;
+use Magento\Framework\App\Request\Http;
 use Magento\Framework\GraphQl\Config;
 use Magento\Framework\GraphQl\Schema\SchemaGenerator;
 use Magento\Framework\ObjectManagerInterface;
@@ -34,7 +35,10 @@ class GraphQlReaderTest extends \PHPUnit\Framework\TestCase
     /** @var  SerializerInterface */
     private $jsonSerializer;
 
-    protected function setUp()
+    /**
+     * @inheritdoc
+     */
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var Cache $cache */
@@ -43,20 +47,24 @@ class GraphQlReaderTest extends \PHPUnit\Framework\TestCase
         $fileResolverMock = $this->getMockBuilder(
             \Magento\Framework\Config\FileResolverInterface::class
         )->disableOriginalConstructor()->getMock();
+        $filePath1 = __DIR__ . '/../_files/schemaA.graphqls';
+        $filePath2 = __DIR__ . '/../_files/schemaB.graphqls';
         $fileList = [
-            file_get_contents(__DIR__ . '/../_files/schemaA.graphqls'),
-            file_get_contents(__DIR__ . '/../_files/schemaB.graphqls')
+            $filePath1 => file_get_contents($filePath1),
+            $filePath2 => file_get_contents($filePath2)
         ];
-        $fileResolverMock->expects($this->any())->method('get')->will($this->returnValue($fileList));
+        $fileResolverMock->expects($this->any())->method('get')->willReturn($fileList);
         $graphQlReader = $this->objectManager->create(
             \Magento\Framework\GraphQlSchemaStitching\GraphQlReader::class,
             ['fileResolver' => $fileResolverMock]
         );
         $reader = $this->objectManager->create(
+            // phpstan:ignore
             \Magento\Framework\GraphQlSchemaStitching\Reader::class,
             ['readers' => ['graphql_reader' => $graphQlReader]]
         );
         $data = $this->objectManager->create(
+            // phpstan:ignore
             \Magento\Framework\GraphQl\Config\Data ::class,
             ['reader' => $reader]
         );
@@ -175,12 +183,14 @@ QUERY;
             'operationName' => 'IntrospectionQuery'
         ];
         /** @var Http $request */
-        $request = $this->objectManager->get(\Magento\Framework\App\Request\Http::class);
+        $request = $this->objectManager->get(Http::class);
         $request->setPathInfo('/graphql');
+        $request->setMethod('POST');
         $request->setContent(json_encode($postData));
-        $headers = $this->objectManager->create(\Zend\Http\Headers::class)
+        $headers = $this->objectManager->create(\Laminas\Http\Headers::class)
             ->addHeaders(['Content-Type' => 'application/json']);
         $request->setHeaders($headers);
+
         $response = $this->graphQlController->dispatch($request);
         $output = $this->jsonSerializer->unserialize($response->getContent());
         $expectedOutput = require __DIR__ . '/../_files/schema_response_sdl_description.php';
@@ -194,11 +204,14 @@ QUERY;
             $sortFields = ['inputFields', 'fields'];
             foreach ($sortFields as $sortField) {
                 isset($searchTerm[$sortField]) && is_array($searchTerm[$sortField])
-                    ? usort($searchTerm[$sortField], function ($a, $b) {
-                        $cmpField = 'name';
-                        return isset($a[$cmpField]) && isset($b[$cmpField])
+                    ? usort(
+                        $searchTerm[$sortField],
+                        function ($a, $b) {
+                            $cmpField = 'name';
+                            return isset($a[$cmpField]) && isset($b[$cmpField])
                             ? strcmp($a[$cmpField], $b[$cmpField]) : 0;
-                    }) : null;
+                        }
+                    ) : null;
             }
 
             $this->assertTrue(
@@ -207,32 +220,26 @@ QUERY;
             );
         }
         //Checks to make sure that the given description exists in the expectedOutput array
-        $this->assertTrue(
-            array_key_exists(
-                array_search(
-                    'Comment for empty PhysicalProductInterface',
-                    array_column($expectedOutput, 'description')
-                ),
-                $expectedOutput
-            )
+        $this->assertArrayHasKey(
+            array_search(
+                'Comment for empty PhysicalProductInterface',
+                array_column($expectedOutput, 'description')
+            ),
+            $expectedOutput
         );
-        $this->assertTrue(
-            array_key_exists(
-                array_search(
-                    'Comment for empty Enum',
-                    array_column($expectedOutput, 'description')
-                ),
-                $expectedOutput
-            )
+        $this->assertArrayHasKey(
+            array_search(
+                'Comment for empty Enum',
+                array_column($expectedOutput, 'description')
+            ),
+            $expectedOutput
         );
-        $this->assertTrue(
-            array_key_exists(
-                array_search(
-                    'Comment for SearchResultPageInfo',
-                    array_column($expectedOutput, 'description')
-                ),
-                $expectedOutput
-            )
+        $this->assertArrayHasKey(
+            array_search(
+                'Comment for SearchResultPageInfo',
+                array_column($expectedOutput, 'description')
+            ),
+            $expectedOutput
         );
     }
 }

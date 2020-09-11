@@ -5,6 +5,8 @@
  */
 namespace Magento\NewRelicReporting\Model;
 
+use Exception;
+
 /**
  * Wrapper for New Relic functions
  *
@@ -21,7 +23,7 @@ class NewRelicWrapper
      */
     public function addCustomParameter($param, $value)
     {
-        if (extension_loaded('newrelic')) {
+        if ($this->isExtensionInstalled()) {
             newrelic_add_custom_parameter($param, $value);
             return true;
         }
@@ -31,12 +33,12 @@ class NewRelicWrapper
     /**
      * Wrapper for 'newrelic_notice_error' function
      *
-     * @param  \Exception $exception
+     * @param  Exception $exception
      * @return void
      */
-    public function reportError($exception)
+    public function reportError(Exception $exception)
     {
-        if (extension_loaded('newrelic')) {
+        if ($this->isExtensionInstalled()) {
             newrelic_notice_error($exception->getMessage(), $exception);
         }
     }
@@ -49,8 +51,34 @@ class NewRelicWrapper
      */
     public function setAppName(string $appName)
     {
-        if (extension_loaded('newrelic')) {
+        if ($this->isExtensionInstalled()) {
             newrelic_set_appname($appName);
+        }
+    }
+
+    /**
+     * Wrapper for 'newrelic_name_transaction'
+     *
+     * @param string $transactionName
+     * @return void
+     */
+    public function setTransactionName(string $transactionName): void
+    {
+        if ($this->isExtensionInstalled()) {
+            newrelic_name_transaction($transactionName);
+        }
+    }
+
+    /**
+     * Wrapper for 'newrelic_end_transaction'
+     *
+     * @param bool $ignore
+     * @return void
+     */
+    public function endTransaction($ignore = false)
+    {
+        if ($this->isExtensionInstalled()) {
+            newrelic_end_transaction($ignore);
         }
     }
 

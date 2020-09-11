@@ -12,6 +12,7 @@ use Magento\Framework\App\ObjectManager;
 /**
  * Abstract Rule product condition data model
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
@@ -95,8 +96,8 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
      * @param \Magento\Catalog\Model\ResourceModel\Product $productResource
      * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection $attrSetCollection
      * @param \Magento\Framework\Locale\FormatInterface $localeFormat
-     * @param ProductCategoryList|null $categoryList
      * @param array $data
+     * @param ProductCategoryList|null $categoryList
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -514,6 +515,10 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
             ) ? $this->_localeFormat->getNumber(
                 $arr['is_value_parsed']
             ) : false;
+        } elseif (!empty($arr['operator']) && $arr['operator'] == '()') {
+            if (isset($arr['value'])) {
+                $arr['value'] = preg_replace('/\s*,\s*/', ',', $arr['value']);
+            }
         }
 
         return parent::loadArray($arr);
@@ -621,6 +626,8 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
             $mappedSqlField = $this->getEavAttributeTableAlias() . '.value';
         } elseif ($this->getAttribute() == 'category_ids') {
             $mappedSqlField = 'e.entity_id';
+        } elseif ($this->getAttribute() == 'attribute_set_id') {
+            $mappedSqlField = 'e.attribute_set_id';
         } else {
             $mappedSqlField = parent::getMappedSqlField();
         }
@@ -655,19 +662,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
      */
     protected function _getAvailableInCategories($productId)
     {
-        return $this->_productResource->getConnection()
-            ->fetchCol(
-                $this->_productResource->getConnection()
-                    ->select()
-                    ->distinct()
-                    ->from(
-                        $this->_productResource->getTable('catalog_category_product'),
-                        ['category_id']
-                    )->where(
-                        'product_id = ?',
-                        $productId
-                    )
-            );
+        return $this->productCategoryList->getCategoryIds($productId);
     }
 
     /**
@@ -695,6 +690,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
 
     /**
      * Correct '==' and '!=' operators
+     *
      * Categories can't be equal because product is included categories selected by administrator and in their parents
      *
      * @return string

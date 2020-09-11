@@ -10,12 +10,15 @@ namespace Magento\Framework\GraphQlSchemaStitching\GraphQlReader\Reader;
 use Magento\Framework\GraphQlSchemaStitching\GraphQlReader\TypeMetaReaderInterface;
 use Magento\Framework\GraphQlSchemaStitching\GraphQlReader\MetaReader\FieldMetaReader;
 use Magento\Framework\GraphQlSchemaStitching\GraphQlReader\MetaReader\DocReader;
+use Magento\Framework\GraphQlSchemaStitching\GraphQlReader\MetaReader\CacheAnnotationReader;
 
 /**
  * Composite configuration reader to handle the interface object type meta
  */
 class InterfaceType implements TypeMetaReaderInterface
 {
+    public const GRAPHQL_INTERFACE = 'graphql_interface';
+
     /**
      * @var FieldMetaReader
      */
@@ -27,17 +30,28 @@ class InterfaceType implements TypeMetaReaderInterface
     private $docReader;
 
     /**
+     * @var CacheAnnotationReader
+     */
+    private $cacheAnnotationReader;
+
+    /**
      * @param FieldMetaReader $fieldMetaReader
      * @param DocReader $docReader
+     * @param CacheAnnotationReader|null $cacheAnnotationReader
      */
-    public function __construct(FieldMetaReader $fieldMetaReader, DocReader $docReader)
-    {
+    public function __construct(
+        FieldMetaReader $fieldMetaReader,
+        DocReader $docReader,
+        CacheAnnotationReader $cacheAnnotationReader = null
+    ) {
         $this->fieldMetaReader = $fieldMetaReader;
         $this->docReader = $docReader;
+        $this->cacheAnnotationReader = $cacheAnnotationReader ?? \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(CacheAnnotationReader::class);
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function read(\GraphQL\Type\Definition\Type $typeMeta) : array
     {
@@ -45,7 +59,7 @@ class InterfaceType implements TypeMetaReaderInterface
             $typeName = $typeMeta->name;
             $result = [
                 'name' => $typeName,
-                'type' => 'graphql_interface',
+                'type' => self::GRAPHQL_INTERFACE,
                 'fields' => []
             ];
 
@@ -61,6 +75,10 @@ class InterfaceType implements TypeMetaReaderInterface
 
             if ($this->docReader->read($typeMeta->astNode->directives)) {
                 $result['description'] = $this->docReader->read($typeMeta->astNode->directives);
+            }
+
+            if ($this->docReader->read($typeMeta->astNode->directives)) {
+                $result['cache'] = $this->cacheAnnotationReader->read($typeMeta->astNode->directives);
             }
 
             return $result;

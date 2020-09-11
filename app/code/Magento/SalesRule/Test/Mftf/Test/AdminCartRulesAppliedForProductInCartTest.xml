@@ -21,53 +21,58 @@
         </annotations>
 
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
-
             <!--Create category and product-->
             <createData entity="_defaultCategory" stepKey="defaultCategory"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct">
                 <field key="price">200</field>
                 <field key="quantity">500</field>
             </createData>
+
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
+
         <after>
             <!--Delete created data-->
             <deleteData createDataKey="defaultCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="simpleProduct" stepKey="deleteSimpleProduct"/>
 
-            <actionGroup stepKey="deleteProduct1" ref="deleteProductBySku">
+            <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteBundleProduct">
                 <argument name="sku" value="{{BundleProduct.sku}}"/>
             </actionGroup>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilters"/>
+
             <actionGroup ref="DeleteCartPriceRuleByName" stepKey="deleteCartPriceRule">
                 <argument name="ruleName" value="{{PriceRuleWithCondition.name}}"/>
             </actionGroup>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilters1"/>
 
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Start creating a bundle product-->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToProductList"/>
-        <waitForPageLoad stepKey="waitForProductList"/>
-        <actionGroup ref="goToCreateProductPage" stepKey="goToCreateProduct">
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="goToProductList"/>
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateProduct">
             <argument name="product" value="BundleProduct"/>
         </actionGroup>
-        <actionGroup ref="fillProductNameAndSkuInProductForm" stepKey="fillNameAndSku">
+        <actionGroup ref="FillProductNameAndSkuInProductFormActionGroup" stepKey="fillNameAndSku">
             <argument name="product" value="BundleProduct"/>
         </actionGroup>
         <pressKey selector="{{AdminProductFormSection.productSku}}" parameterArray="[\Facebook\WebDriver\WebDriverKeys::ENTER]" stepKey="enter"/>
 
         <!--Off dynamic price and set value-->
+        <scrollToTopOfPage stepKey="scrollToTopOfThePageToSeePriceTypeElement"/>
         <click  selector="{{AdminProductFormBundleSection.dynamicPrice}}" stepKey="offDynamicPrice"/>
         <fillField selector="{{AdminProductFormBundleSection.priceField}}" userInput="0" stepKey="setProductPrice"/>
 
         <!-- Add category to product -->
         <click selector="{{AdminProductFormBundleSection.categoriesDropDown}}" stepKey="dropDownCategories"/>
         <fillField selector="{{AdminProductFormBundleSection.searchForCategory}}" userInput="$$defaultCategory.name$$" stepKey="searchForCategory"/>
+        <waitForElementVisible selector="{{AdminProductFormBundleSection.selectCategory}}" stepKey="waitForElementLoaded"/>
         <click selector="{{AdminProductFormBundleSection.selectCategory}}" stepKey="selectCategory"/>
         <click selector="{{AdminProductFormBundleSection.categoriesLabel}}" stepKey="clickOnCategoriesLabelToCloseOptions"/>
 
         <!-- Add option, a "Radio Buttons" type option, with one product and set fixed price 200-->
-        <actionGroup ref="addBundleOptionWithOneProduct" stepKey="addBundleOptionWithOneProduct">
+        <actionGroup ref="AddBundleOptionWithOneProductActionGroup" stepKey="addBundleOptionWithOneProduct">
             <argument name="x" value="0"/>
             <argument name="n" value="1"/>
             <argument name="prodOneSku" value="$$simpleProduct.sku$$"/>
@@ -77,10 +82,10 @@
         </actionGroup>
         <selectOption selector="{{AdminProductFormBundleSection.bundlePriceType}}" userInput="Fixed" stepKey="selectPriceType"/>
         <fillField selector="{{AdminProductFormBundleSection.bundlePriceValue}}" userInput="200" stepKey="fillPriceValue"/>
-        <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
 
         <!--Create cart price rule-->
-        <actionGroup ref="AdminCreateCartPriceRuleWithConditions" stepKey="createRule">
+        <actionGroup ref="AdminCreateCartPriceRuleWithConditionsActionGroup" stepKey="createRule">
             <argument name="ruleName" value="PriceRuleWithCondition"/>
             <argument name="condition1" value="Products subselection"/>
             <argument name="condition2" value="Category"/>
@@ -92,7 +97,8 @@
         </actionGroup>
 
         <!--Go to Storefront and add product to cart and checkout from cart-->
-        <amOnPage url="/$$simpleProduct.name$$.html" stepKey="GoToProduct"/>
+        <amOnPage url="{{StorefrontProductPage.url($$simpleProduct.custom_attributes[url_key]$$)}}" stepKey="goToProductPage"/>
+        <waitForPageLoad stepKey="waitForProductPage" />
         <fillField selector="{{StorefrontProductActionSection.quantity}}" userInput="2" stepKey="setQuantity"/>
         <actionGroup ref="StorefrontAddToCartCustomOptionsProductPageActionGroup" stepKey="AddProductToCard">
             <argument name="productName" value="$$simpleProduct.name$$"/>

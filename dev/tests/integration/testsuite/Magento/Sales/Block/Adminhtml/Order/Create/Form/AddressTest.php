@@ -21,7 +21,7 @@ use Magento\Store\Api\WebsiteRepositoryInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\Xpath;
 use Magento\TestFramework\ObjectManager;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -47,7 +47,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
 
@@ -122,6 +122,10 @@ class AddressTest extends \PHPUnit\Framework\TestCase
                 'postcode' => '90230',
                 'telephone' => '3468676',
                 'vat_id' => false,
+                'prefix' => false,
+                'middlename' => false,
+                'suffix' => false,
+                'fax' => false
             ],
             $addresses[1]->getId() => [
                 'telephone' => '845454465',
@@ -135,6 +139,10 @@ class AddressTest extends \PHPUnit\Framework\TestCase
                 'region' => false,
                 'region_id' => 0,
                 'vat_id' => false,
+                'prefix' => false,
+                'middlename' => false,
+                'suffix' => false,
+                'fax' => false
             ]
         ];
 

@@ -4,12 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /** @var $block \Magento\Sales\Block\Order\Info\Buttons\Rss */
 ?>
-<?php if ($block->isRssAllowed() && $block->getLink()): ?>
-<a href="<?= /* @escapeNotVerified */ $block->getLink() ?>" class="action rss">
-    <span><?= /* @escapeNotVerified */ $block->getLabel() ?></span>
-</a>
+<?php if ($block->isRssAllowed() && $block->getLink()) : ?>
+    <a href="<?= $block->escapeHtmlAttr($block->getLink()) ?>" class="action rss">
+        <span><?= $block->escapeHtml($block->getLabel()) ?></span>
+    </a>
 <?php endif; ?>

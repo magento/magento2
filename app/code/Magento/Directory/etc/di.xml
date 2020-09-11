@@ -35,6 +35,7 @@
                 <item name="DE" xsi:type="string">DE</item>
                 <item name="AT" xsi:type="string">AT</item>
                 <item name="FI" xsi:type="string">FI</item>
+                <item name="BE" xsi:type="string">BE</item>
             </argument>
         </arguments>
     </type>

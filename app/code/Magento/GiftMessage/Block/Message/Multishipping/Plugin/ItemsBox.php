@@ -43,6 +43,15 @@ class ItemsBox
      */
     public function afterGetItemsBoxTextAfter(ShippingBlock $subject, $itemsBoxText, DataObject $addressEntity)
     {
+        if ($addressEntity->getGiftMessageId() === null) {
+            $addressEntity->setGiftMessageId($addressEntity->getQuote()->getGiftMessageId());
+        }
+        foreach ($addressEntity->getAllItems() as $item) {
+            if ($item->getGiftMessageId() === null) {
+                $item->setGiftMessageId($item->getQuoteItem()->getGiftMessageId());
+            }
+        }
+
         return $itemsBoxText . $this->helper->getInline('multishipping_address', $addressEntity);
     }
 }

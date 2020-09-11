@@ -5,11 +5,17 @@
  */
 declare(strict_types=1);
 
-require __DIR__ . '/address_list.php';
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
+
+Resolver::getInstance()->requireDataFixture('Magento/Sales/_files/address_list.php');
 
 \Magento\TestFramework\Helper\Bootstrap::getInstance()->loadArea(\Magento\Framework\App\Area::AREA_FRONTEND);
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+/** @var ProductRepositoryInterface $productRepository */
+$productRepository = $objectManager->get(ProductRepositoryInterface::class);
+
 /** @var \Magento\Catalog\Model\Product $product */
 $product = $objectManager->create(\Magento\Catalog\Model\Product::class);
 $product->setTypeId('simple')
@@ -29,11 +35,20 @@ $product->setTypeId('simple')
             'is_in_stock' => 1,
         ]
     )->save();
-
-$productRepository = $objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
 $product = $productRepository->get('simple-product-guest-quote');
 
-$addressData = reset($addresses);
+$addressData = [
+    'telephone' => 3234676,
+    'postcode' => 47676,
+    'country_id' => 'US',
+    'city' => 'CityX',
+    'street' => ['Black str, 48'],
+    'lastname' => 'Smith',
+    'firstname' => 'John',
+    'address_type' => 'shipping',
+    'email' => 'some_email@mail.com',
+    'region_id' => 1,
+];
 
 $billingAddress = $objectManager->create(
     \Magento\Quote\Model\Quote\Address::class,

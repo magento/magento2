@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="VerifyCategoryProductAndProductCategoryPartialReindexTest" deprecated="Use StorefrontVerifyCategoryProductAndProductCategoryPartialReindexTest instead.">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Product Categories Indexer"/>
+            <title value="DEPRECATED. Verify Category Product and Product Category partial reindex"/>
+            <description value="Verify that Merchant Developer can use console commands to perform partial reindex for Category Products, Product Categories, and Catalog Search"/>
+            <severity value="BLOCKER"/>
+            <testCaseId value="MC-11386"/>
+            <group value="catalog"/>
+            <group value="indexer"/>
+            <skip>
+                <issueId value="DEPRECATED">Use StorefrontVerifyCategoryProductAndProductCategoryPartialReindexTest instead.</issueId>
+            </skip>
+        </annotations>
+        <before>
+            <!-- Change "Category Products" and "Product Categories" indexers to "Update by Schedule" mode -->
+            <magentoCLI command="indexer:set-mode" arguments="schedule catalog_category_product catalog_product_category" stepKey="setIndexerMode"/>
+
+            <!-- Create categories K, L, M, N with different nesting in the tree and Anchor = Yes/No-->
+            <!-- Category K is an anchor category -->
+            <createData entity="_defaultCategory" stepKey="categoryK"/>
+            <!-- Category L is a non-anchor subcategory of category K -->
+            <createData entity="SubCategoryNonAnchor" stepKey="categoryL">
+                <requiredEntity createDataKey="categoryK"/>
+            </createData>
+            <!-- Category M is a subcategory of category L -->
+            <createData entity="SubCategoryWithParent" stepKey="categoryM">
+                <requiredEntity createDataKey="categoryL"/>
+            </createData>
+            <!-- Category N is a subcategory of category K -->
+            <createData entity="SubCategoryWithParent" stepKey="categoryN">
+                <requiredEntity createDataKey="categoryK"/>
+            </createData>
+
+            <!-- Create different Products with different settings, assign to categories: -->
+            <!-- Product A in 0 categories, i.e. not assigned to any category -->
+            <createData entity="SimpleProduct2" stepKey="productA"/>
+            <!-- Product B in 1 category M -->
+            <createData entity="SimpleProduct3" stepKey="productB">
+                <requiredEntity createDataKey="categoryM"/>
+            </createData>
+            <!-- Product C in 2 categories M and N -->
+            <createData entity="SimpleProduct2" stepKey="productC"/>
+
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+            <actionGroup ref="AdminAssignProductToCategoryActionGroup" stepKey="assignCategoryNAndMToProductC">
+                <argument name="productId" value="$$productC.id$$"/>
+                <argument name="categoryName" value="$$categoryN.name$$, $$categoryM.name$$"/>
+            </actionGroup>
+
+            <wait stepKey="waitBeforeRunCronIndex" time="60"/>
+            <magentoCLI stepKey="runCronIndex" command="cron:run --group=index"/>
+            <wait stepKey="waitAfterRunCronIndex" time="120"/>
+        </before>
+        <after>
+            <!-- Change "Category Products" and "Product Categories" indexers to "Update on Save" mode -->
+            <magentoCLI command="indexer:set-mode" arguments="realtime" stepKey="setRealtimeMode"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+
+            <!-- Delete data -->
+            <deleteData createDataKey="productA" stepKey="deleteProductA"/>
+            <deleteData createDataKey="productB" stepKey="deleteProductB"/>
+            <deleteData createDataKey="productC" stepKey="deleteProductC"/>
+            <deleteData createDataKey="categoryN" stepKey="deleteCategoryN"/>
+            <deleteData createDataKey="categoryM" stepKey="deleteCategoryM"/>
+            <deleteData createDataKey="categoryL" stepKey="deleteCategoryL"/>
+            <deleteData createDataKey="categoryK" stepKey="deleteCategoryK"/>
+
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!-- Open categories K, L, M, N on Storefront -->
+        <!-- Category K contains only Products B & C -->
+        <amOnPage url="{{StorefrontCategoryPage.url($$categoryK.custom_attributes[url_key]$$)}}" stepKey="onCategoryK"/>
+        <see userInput="$$productB.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeProductBOnCategoryK"/>
+        <see userInput="$$productC.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeProductCOnCategoryK"/>
+
+        <!-- Category L contains no Products -->
+        <amOnPage url="{{StorefrontCategoryPage.url($$categoryK.custom_attributes[url_key]$$/$$categoryL.custom_attributes[url_key]$$)}}" stepKey="onCategoryL"/>
+        <see userInput="We can't find products matching the selection." selector="{{StorefrontCategoryMainSection.emptyProductMessage}}" stepKey="seeMessage"/>
+        <dontSeeElement selector="{{StorefrontCategoryMainSection.productName}}" stepKey="dontseeProducts"/>
+
+        <!-- Category M contains only Products B & C -->
+        <amOnPage url="{{StorefrontCategoryPage.url($$categoryK.custom_attributes[url_key]$$/$$categoryL.custom_attributes[url_key]$$/$$categoryM.custom_attributes[url_key]$$)}}" stepKey="onCategoryM"/>
+        <see userInput="$$productB.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeProductBOnCategoryM"/>
+        <see userInput="$$productC.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeProductCOnCategoryM"/>
+
+        <!-- Category N contains only Product C -->
+        <amOnPage url="{{StorefrontCategoryPage.url($$categoryK.custom_attributes[url_key]$$/$$categoryN.custom_attributes[url_key]$$)}}" stepKey="onCategoryN"/>
+        <see userInput="$$productC.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeProductCOnCategoryN"/>
+
+        <!-- Open Products A, B, C to edit. Assign/unassign categories to/from them. Save changes -->
+        <!--  Assign category K to Product A -->
+        <actionGroup ref="AdminAssignProductToCategoryActionGroup" stepKey="assignCategoryK">
+            <argument name="productId" value="$$productA.id$$"/>
+            <argument name="categoryName" value="$$categoryK.name$$"/>
+        </actionGroup>
+
+        <wait stepKey="waitAfterAssignCategoryK" time="60"/>
+
+        <!--  Unassign category M from Product B -->
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="amOnEditCategoryPageB">
+            <argument name="productId" value="$$productB.id$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminUnassignCategoryOnProductAndSaveActionGroup" stepKey="unassignCategoryM">
+            <argument name="categoryName" value="$$categoryM.name$$"/>
+        </actionGroup>
+
+        <!--  Assign category L to Product C -->
+        <actionGroup ref="AdminAssignProductToCategoryActionGroup" stepKey="assignCategoryNAndM">
+            <argument name="productId" value="$$productC.id$$"/>
+            <argument name="categoryName" value="$$categoryL.name$$"/>
+        </actionGroup>
+
+        <!-- "One or more indexers are invalid. Make sure your Magento cron job is running." global warning message appears -->
+        <click selector="{{AdminSystemMessagesSection.systemMessagesDropdown}}" stepKey="openMessageSection"/>
+        <see userInput="One or more indexers are invalid. Make sure your Magento cron job is running." selector="{{AdminSystemMessagesSection.warning}}" stepKey="seeWarningMessage"/>
+
+        <!-- Open categories K, L, M, N on Storefront in order to make sure that new assigments are not applied yet -->
+        <!-- Category K contains only Products B & C -->
+        <amOnPage url="{{StorefrontCategoryPage.url($$categoryK.custom_attributes[url_key]$$)}}" stepKey="amOnCategoryK"/>
+        <see userInput="$$productB.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeProductBCategoryK"/>
+        <see userInput="$$productC.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeProductCCategoryK"/>
+
+        <!-- Category L contains no Products -->
+        <amOnPage url="{{StorefrontCategoryPage.url($$categoryK.custom_attributes[url_key]$$/$$categoryL.custom_attributes[url_key]$$)}}" stepKey="amOnCategoryL"/>
+        <see userInput="We can't find products matching the selection." selector="{{StorefrontCategoryMainSection.emptyProductMessage}}" stepKey="seeEmptyMessage"/>
+        <dontSeeElement selector="{{StorefrontCategoryMainSection.productName}}" stepKey="dontseeProduct"/>
+
+        <!-- Category M contains only Products B & C -->
+        <amOnPage url="{{StorefrontCategoryPage.url($$categoryK.custom_attributes[url_key]$$/$$categoryL.custom_attributes[url_key]$$/$$categoryM.custom_attributes[url_key]$$)}}" stepKey="amOnCategoryM"/>
+        <see userInput="$$productB.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeProductBCategoryM"/>
+        <see userInput="$$productC.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeProductCCategoryM"/>
+
+        <!-- Category N contains only Product C -->
+        <amOnPage url="{{StorefrontCategoryPage.url($$categoryK.custom_attributes[url_key]$$/$$categoryN.custom_attributes[url_key]$$)}}" stepKey="amOnCategoryN"/>
+        <see userInput="$$productC.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeProductInCategoryN"/>
+
+        <!-- Run cron -->
+        <wait stepKey="waitBeforeRunMagentoCron" time="60"/>
+        <magentoCLI stepKey="runMagentoCron" command="cron:run --group=index"/>
+
+        <wait stepKey="waitAfterRunMagentoCron" time="90"/>
+
+        <!-- Open categories K, L, M, N on Storefront in order to make sure that new assigments are applied -->
+        <!-- Category K contains only Products A, C -->
+        <amOnPage url="{{StorefrontCategoryPage.url($$categoryK.custom_attributes[url_key]$$)}}" stepKey="storefrontCategoryK"/>
+        <see userInput="$$productA.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeProductAOnCategoryK"/>
+        <see userInput="$$productC.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeCategoryKWithProductC"/>
+
+        <!-- Category L contains only Product C -->
+        <amOnPage url="{{StorefrontCategoryPage.url($$categoryK.custom_attributes[url_key]$$/$$categoryL.custom_attributes[url_key]$$)}}" stepKey="storefrontCategoryL"/>
+        <see userInput="$$productC.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeCategoryLWithProductC"/>
+
+        <!-- Category M contains only Product C -->
+        <amOnPage url="{{StorefrontCategoryPage.url($$categoryK.custom_attributes[url_key]$$/$$categoryL.custom_attributes[url_key]$$/$$categoryM.custom_attributes[url_key]$$)}}" stepKey="storefrontCategoryM"/>
+        <waitForPageLoad stepKey="waitForStorefrontCategoryM"/>
+        <see userInput="$$productC.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeCategoryMAndProductC"/>
+
+        <!-- Category N contains only Product C -->
+        <amOnPage url="{{StorefrontCategoryPage.url($$categoryK.custom_attributes[url_key]$$/$$categoryN.custom_attributes[url_key]$$)}}" stepKey="storefrontCategoryN"/>
+        <see userInput="$$productC.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeProductCAndCategoryN"/>
+
+        <!-- Open categories K, L, N to edit. Assign/unassign Products to/from them. Save changes -->
+
+        <!-- Remove Product A assignment for category K -->
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="amOnEditProductPageA">
+            <argument name="productId" value="$$productA.id$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminUnassignCategoryOnProductAndSaveActionGroup" stepKey="unassignCategoryK">
+            <argument name="categoryName" value="$$categoryK.name$$"/>
+        </actionGroup>
+
+        <!-- Remove Product C assignment for category L -->
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="amOnEditProductPageC">
+            <argument name="productId" value="$$productC.id$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminUnassignCategoryOnProductAndSaveActionGroup" stepKey="unassignCategoryL">
+            <argument name="categoryName" value="$$categoryL.name$$"/>
+        </actionGroup>
+
+        <!-- Add Product B assignment for category N -->
+        <actionGroup ref="AdminAssignProductToCategoryActionGroup" stepKey="assignCategoryN">
+            <argument name="productId" value="$$productB.id$$"/>
+            <argument name="categoryName" value="$$categoryN.name$$"/>
+        </actionGroup>
+
+        <!-- Open categories K, L, M, N on Storefront in order to make sure that new assigments are not applied yet -->
+        <!-- Category K contains only Products A, C -->
+        <amOnPage url="{{StorefrontCategoryPage.url($$categoryK.custom_attributes[url_key]$$)}}" stepKey="onStorefrontCategoryK"/>
+        <see userInput="$$productA.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeProductAWithCategoryK"/>
+        <see userInput="$$productC.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeProductC"/>
+
+        <!-- Category L contains only Product C -->
+        <amOnPage url="{{StorefrontCategoryPage.url($$categoryK.custom_attributes[url_key]$$/$$categoryL.custom_attributes[url_key]$$)}}" stepKey="onStorefrontCategoryL"/>
+        <see userInput="$$productC.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeCategoryLAndProductC"/>
+
+        <!-- Category M contains only Product C -->
+        <amOnPage url="{{StorefrontCategoryPage.url($$categoryK.custom_attributes[url_key]$$/$$categoryL.custom_attributes[url_key]$$/$$categoryM.custom_attributes[url_key]$$)}}" stepKey="onStorefrontCategoryM"/>
+        <see userInput="$$productC.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeCategoryMWithProductC"/>
+
+        <!-- Category N contains only Product C -->
+        <amOnPage url="{{StorefrontCategoryPage.url($$categoryK.custom_attributes[url_key]$$/$$categoryN.custom_attributes[url_key]$$)}}" stepKey="onStorefrontCategoryN"/>
+        <see userInput="$$productC.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="productCOnCategoryN"/>
+
+        <!-- Run Cron once to reindex product changes -->
+        <wait stepKey="waitBeforeRunCronIndexAfterProductAssignToCategory" time="60"/>
+        <magentoCLI stepKey="runCronIndexAfterProductAssignToCategory" command="cron:run --group=index"/>
+
+        <wait stepKey="waitAfterRunCronIndexAfterProductAssignToCategory" time="90"/>
+
+        <!-- Open categories K, L, M, N on Storefront in order to make sure that new assigments are applied -->
+
+        <!-- Category K contains only Products B & C -->
+        <amOnPage url="{{StorefrontCategoryPage.url($$categoryK.custom_attributes[url_key]$$)}}" stepKey="onFrontendCategoryK"/>
+        <see userInput="$$productB.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="productBOnCategoryK"/>
+        <see userInput="$$productC.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="productCOnCategoryK"/>
+
+        <!-- Category L contains no Products -->
+        <amOnPage url="{{StorefrontCategoryPage.url($$categoryK.custom_attributes[url_key]$$/$$categoryL.custom_attributes[url_key]$$)}}" stepKey="onFrontendCategoryL"/>
+        <see userInput="We can't find products matching the selection." selector="{{StorefrontCategoryMainSection.emptyProductMessage}}" stepKey="noProductsMessage"/>
+        <dontSeeElement selector="{{StorefrontCategoryMainSection.productName}}" stepKey="dontSeeProductsOnCategoryL"/>
+
+        <!-- Category M contains only Product C -->
+        <amOnPage url="{{StorefrontCategoryPage.url($$categoryK.custom_attributes[url_key]$$/$$categoryL.custom_attributes[url_key]$$/$$categoryM.custom_attributes[url_key]$$)}}" stepKey="onFrontendCategoryM"/>
+        <see userInput="$$productC.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeCategoryMPageAndProductC"/>
+
+        <!-- Category N contains only Products B and C -->
+        <amOnPage url="{{StorefrontCategoryPage.url($$categoryK.custom_attributes[url_key]$$/$$categoryN.custom_attributes[url_key]$$)}}" stepKey="onFrontendCategoryN"/>
+        <see userInput="$$productB.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeProductBAndCategoryN"/>
+        <see userInput="$$productC.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeProductCCategoryN"/>
+    </test>
+</tests>

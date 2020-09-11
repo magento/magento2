@@ -12,6 +12,5 @@
         <element name="customerGrid" type="text" selector="table[data-role='grid']"/>
         <element name="firstRowSelectActionLink" type="text" selector="tr[data-repeat-index='0'] .action-select" timeout="30"/>
         <element name="firstRowEditActionLink" type="text" selector="tr[data-repeat-index='0'] [data-action='item-edit']" timeout="30"/>
-
     </section>
 </sections>

@@ -10,77 +10,51 @@ namespace Magento\GroupedCatalogInventory\Plugin;
 
 use Magento\Catalog\Model\Product;
 use Magento\CatalogInventory\Api\Data\StockStatusInterface;
-use Magento\CatalogInventory\Api\StockStatusCriteriaInterfaceFactory;
-use Magento\CatalogInventory\Api\StockStatusRepositoryInterface;
 use Magento\GroupedProduct\Model\Product\Type\Grouped;
+use Magento\CatalogInventory\Api\StockRegistryInterface;
+use Magento\Framework\DataObject;
 
 /**
- * Removes out of stock products from cart candidates when appropriate
+ * Removes out of stock products from cart candidates when appropriate.
  */
 class OutOfStockFilter
 {
     /**
-     * @var StockStatusRepositoryInterface
+     * @var StockRegistryInterface
      */
-    private $stockStatusRepository;
+    private $stockRegistry;
 
     /**
-     * @var StockStatusCriteriaInterfaceFactory
+     * @param StockRegistryInterface $stockRegistry
      */
-    private $criteriaInterfaceFactory;
-
-    /**
-     * @param StockStatusRepositoryInterface $stockStatusRepository
-     * @param StockStatusCriteriaInterfaceFactory $criteriaInterfaceFactory
-     */
-    public function __construct(
-        StockStatusRepositoryInterface $stockStatusRepository,
-        StockStatusCriteriaInterfaceFactory $criteriaInterfaceFactory
-    ) {
-        $this->stockStatusRepository = $stockStatusRepository;
-        $this->criteriaInterfaceFactory = $criteriaInterfaceFactory;
+    public function __construct(StockRegistryInterface $stockRegistry)
+    {
+        $this->stockRegistry = $stockRegistry;
     }
 
     /**
-     * Removes out of stock products for requests that don't specify the super group
+     * Removes out of stock products for requests that don't specify the super group.
      *
      * @param Grouped $subject
      * @param array|string $result
-     * @param \Magento\Framework\DataObject $buyRequest
+     * @param DataObject $buyRequest
      * @return string|array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterPrepareForCartAdvanced(
-        Grouped $subject,
-        $result,
-        \Magento\Framework\DataObject $buyRequest
-    ) {
+    public function afterPrepareForCartAdvanced(Grouped $subject, $result, DataObject $buyRequest)
+    {
         if (!is_array($result) && $result instanceof Product) {
             $result = [$result];
         }
 
         // Only remove out-of-stock products if no quantities were specified
         if (is_array($result) && !empty($result) && !$buyRequest->getData('super_group')) {
-            $productIds = [];
-            $productIdMap = [];
-
             foreach ($result as $index => $cartItem) {
-                $productIds[] = $cartItem->getId();
-                $productIdMap[$cartItem->getId()] = $index;
-            }
-
-            $criteria = $this->criteriaInterfaceFactory->create();
-            $criteria->setProductsFilter($productIds);
-
-            $stockStatusCollection = $this->stockStatusRepository->getList($criteria);
-            foreach ($stockStatusCollection->getItems() as $status) {
-                /** @var $status StockStatusInterface */
-                if ($status->getStockStatus() == StockStatusInterface::STATUS_OUT_OF_STOCK) {
-                    unset($result[$productIdMap[$status->getProductId()]]);
+                $productStockStatus = $this->stockRegistry->getProductStockStatus($cartItem->getId());
+                if ($productStockStatus == StockStatusInterface::STATUS_OUT_OF_STOCK) {
+                    unset($result[$index]);
                 }
             }
-
-            unset($productIdMap);
         }
 
         return $result;

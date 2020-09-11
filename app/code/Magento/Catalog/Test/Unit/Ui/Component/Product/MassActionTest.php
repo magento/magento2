@@ -11,11 +11,17 @@ use Magento\Catalog\Ui\Component\Product\MassAction;
 use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use Magento\Framework\View\Element\UiComponent\Processor;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class MassActionTest extends \PHPUnit\Framework\TestCase
+/**
+ * MassAction test for Component Product
+ */
+class MassActionTest extends TestCase
 {
     /**
-     * @var ContextInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ContextInterface|MockObject
      */
     private $contextMock;
 
@@ -25,7 +31,7 @@ class MassActionTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * @var AuthorizationInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AuthorizationInterface|MockObject
      */
     private $authorizationMock;
 
@@ -34,7 +40,7 @@ class MassActionTest extends \PHPUnit\Framework\TestCase
      */
     private $massAction;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
 
@@ -55,7 +61,7 @@ class MassActionTest extends \PHPUnit\Framework\TestCase
 
     public function testGetComponentName()
     {
-        $this->assertTrue($this->massAction->getComponentName() === MassAction::NAME);
+        $this->assertSame(MassAction::NAME, $this->massAction->getComponentName());
     }
 
     /**
@@ -68,7 +74,7 @@ class MassActionTest extends \PHPUnit\Framework\TestCase
      */
     public function testPrepare($componentName, $componentData, $isAllowed = true, $expectActionConfig = true)
     {
-        $processor = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\Processor::class)
+        $processor = $this->getMockBuilder(Processor::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->contextMock->expects($this->atLeastOnce())->method('getProcessor')->willReturn($processor);
@@ -103,7 +109,8 @@ class MassActionTest extends \PHPUnit\Framework\TestCase
                 [
                     'type' => 'first_action',
                     'label' => 'First Action',
-                    'url' => '/module/controller/firstAction'
+                    'url' => '/module/controller/firstAction',
+                    '__disableTmpl' => true
                 ],
             ],
             [
@@ -122,7 +129,8 @@ class MassActionTest extends \PHPUnit\Framework\TestCase
                             'label' => 'Second Sub Action 2',
                             'url' => '/module/controller/secondSubAction2'
                         ],
-                    ]
+                    ],
+                    '__disableTmpl' => true
                 ],
             ],
             [
@@ -141,7 +149,8 @@ class MassActionTest extends \PHPUnit\Framework\TestCase
                             'label' => 'Second Sub Action 2',
                             'url' => '/module/controller/disable'
                         ],
-                    ]
+                    ],
+                    '__disableTmpl' => true
                 ],
             ],
             [
@@ -160,7 +169,8 @@ class MassActionTest extends \PHPUnit\Framework\TestCase
                             'label' => 'Second Sub Action 2',
                             'url' => '/module/controller/disable'
                         ],
-                    ]
+                    ],
+                    '__disableTmpl' => true
                 ],
                 false,
                 false
@@ -170,7 +180,8 @@ class MassActionTest extends \PHPUnit\Framework\TestCase
                 [
                     'type' => 'delete',
                     'label' => 'First Action',
-                    'url' => '/module/controller/delete'
+                    'url' => '/module/controller/delete',
+                    '__disableTmpl' => true
                 ],
             ],
             [
@@ -178,7 +189,8 @@ class MassActionTest extends \PHPUnit\Framework\TestCase
                 [
                     'type' => 'delete',
                     'label' => 'First Action',
-                    'url' => '/module/controller/delete'
+                    'url' => '/module/controller/delete',
+                    '__disableTmpl' => true
                 ],
                 false,
                 false
@@ -188,7 +200,8 @@ class MassActionTest extends \PHPUnit\Framework\TestCase
                 [
                     'type' => 'delete',
                     'label' => 'First Action',
-                    'url' => '/module/controller/attributes'
+                    'url' => '/module/controller/attributes',
+                    '__disableTmpl' => true
                 ],
             ],
             [
@@ -196,7 +209,8 @@ class MassActionTest extends \PHPUnit\Framework\TestCase
                 [
                     'type' => 'delete',
                     'label' => 'First Action',
-                    'url' => '/module/controller/attributes'
+                    'url' => '/module/controller/attributes',
+                    '__disableTmpl' => true
                 ],
                 false,
                 false
@@ -228,7 +242,7 @@ class MassActionTest extends \PHPUnit\Framework\TestCase
     public function isActionAllowedDataProvider()
     {
         return [
-            'other' => [true, 'other', 0,],
+            'other' => [true, 'other', 0],
             'delete-allowed' => [true, 'delete', 1, 'Magento_Catalog::products'],
             'delete-not-allowed' => [false, 'delete', 1, 'Magento_Catalog::products', false],
             'status-allowed' => [true, 'status', 1, 'Magento_Catalog::products'],

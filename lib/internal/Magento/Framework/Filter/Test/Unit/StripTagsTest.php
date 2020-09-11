@@ -3,17 +3,22 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Filter\Test\Unit;
 
-class StripTagsTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\Escaper;
+use Magento\Framework\Filter\StripTags;
+use PHPUnit\Framework\TestCase;
+
+class StripTagsTest extends TestCase
 {
     /**
      * @covers \Magento\Framework\Filter\StripTags::filter
      */
     public function testStripTags()
     {
-        $escaper = $this->createMock(\Magento\Framework\Escaper::class);
-        $stripTags = new \Magento\Framework\Filter\StripTags($escaper);
+        $stripTags = new StripTags(new Escaper());
         $this->assertEquals('three', $stripTags->filter('<two>three</two>'));
     }
 }

@@ -3,9 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
 <?php
 /**
@@ -13,12 +10,15 @@
  * @see \Magento\Sales\Block\Order\Comments
  */
 ?>
-<?php if ($block->hasComments()):?>
+<?php if ($block->hasComments()) : ?>
     <div class="order additional details comments">
-        <h3 class="subtitle"><?= /* @escapeNotVerified */ $block->getTitle() ?></h3>
+        <h3 class="subtitle"><?= $block->escapeHtml($block->getTitle()) ?></h3>
         <dl class="order comments">
-            <?php foreach ($block->getComments() as $_commentItem): ?>
-                <dt class="comment date"><?= /* @escapeNotVerified */ $block->formatDate($_commentItem->getCreatedAt(), \IntlDateFormatter::MEDIUM, true) ?></dt>
+            <?php foreach ($block->getComments() as $_commentItem) : ?>
+                <dt class="comment date">
+                    <?= /* @noEscape */
+                    $block->formatDate($_commentItem->getCreatedAt(), \IntlDateFormatter::MEDIUM, true) ?>
+                </dt>
                 <dd class="comment text"><?= $block->escapeHtml($_commentItem->getComment()) ?></dd>
             <?php endforeach; ?>
         </dl>

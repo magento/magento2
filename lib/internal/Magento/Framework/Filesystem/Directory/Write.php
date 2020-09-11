@@ -53,9 +53,7 @@ class Write extends Read implements WriteInterface
     protected function assertWritable($path)
     {
         if ($this->isWritable($path) === false) {
-            $path = (!$this->driver->isFile($path))
-                ? $this->getAbsolutePath($this->path, $path)
-                : $this->getAbsolutePath($path);
+            $path = $this->getAbsolutePath($path);
             throw new FileSystemException(new \Magento\Framework\Phrase('The path "%1" is not writable.', [$path]));
         }
     }
@@ -69,8 +67,8 @@ class Write extends Read implements WriteInterface
      */
     protected function assertIsFile($path)
     {
-        clearstatcache();
         $absolutePath = $this->driver->getAbsolutePath($this->path, $path);
+        clearstatcache(true, $absolutePath);
         if (!$this->driver->isFile($absolutePath)) {
             throw new FileSystemException(
                 new \Magento\Framework\Phrase('The "%1" file doesn\'t exist.', [$absolutePath])

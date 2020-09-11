@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateInactiveInMenuFlatCategoryTest">
+        <annotations>
+            <stories value="Create category"/>
+            <title value="Flat Catalog - Exclude Category from Navigation Menu"/>
+            <description value="Login as admin and create inactive Include In Menu flat category and verify category is not displayed in Navigation Menu"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-11008"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <!--Login as admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
+            <!--Create category-->
+            <createData entity="SimpleSubCategory" stepKey="category"/>
+            <!-- Create First StoreView  -->
+            <actionGroup ref="CreateStoreViewActionGroup" stepKey="createCustomStoreViewEn">
+                <argument name="storeView" value="customStoreEN"/>
+            </actionGroup>
+            <!-- Create Second StoreView -->
+            <actionGroup ref="CreateStoreViewActionGroup" stepKey="createCustomStoreViewFr">
+                <argument name="storeView" value="customStoreFR"/>
+            </actionGroup>
+            <!--Run full reindex and clear caches -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
+            <!--Enable Flat Catalog Category -->
+            <magentoCLI stepKey="setFlatCatalogCategory" command="config:set catalog/frontend/flat_catalog_category 1"/>
+            <!--Open Index Management Page and Select Index mode "Update by Schedule" -->
+            <magentoCLI stepKey="setIndexerMode" command="indexer:set-mode" arguments="schedule" />
+            <!-- Run cron -->
+            <magentoCron stepKey="runIndexCronJobs" groups="index"/>
+        </before>
+        <after>
+            <magentoCLI stepKey="setFlatCatalogCategory" command="config:set catalog/frontend/flat_catalog_category 0 "/>
+            <magentoCLI stepKey="setIndexerMode" command="indexer:set-mode" arguments="realtime" />
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="indexerReindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreViewEn">
+                <argument name="customStore" value="customStoreEN"/>
+            </actionGroup>
+            <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreViewFr">
+                <argument name="customStore" value="customStoreFR"/>
+            </actionGroup>
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!-- Select created category and disable Include In Menu option-->
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openAdminCategoryIndexPage"/>
+        <actionGroup ref="AdminExpandCategoryTreeActionGroup" stepKey="clickOnExpandTree"/>
+        <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(SimpleSubCategory.name)}}" stepKey="selectCreatedCategory"/>
+        <waitForPageLoad stepKey="waitForCategoryPageToLoad"/>
+        <click selector="{{AdminCategoryBasicFieldSection.includeInMenuLabel}}" stepKey="disableIcludeInMenuOption"/>
+        <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveSubCategory"/>
+        <!--Verify category is saved and Include In Menu Option is disabled in Category Page -->
+        <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="seeSuccessMessage"/>
+        <see selector="{{AdminCategoryContentSection.categoryPageTitle}}" userInput="{{SimpleSubCategory.name}}" stepKey="seeUpdatedCategoryTitle"/>
+        <dontSeeCheckboxIsChecked selector="{{AdminCategoryBasicFieldSection.includeInMenuLabel}}"  stepKey="verifyInactiveIncludeInMenu"/>
+        <!--Run full reindex and clear caches -->
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+            <argument name="tags" value=""/>
+        </actionGroup>
+        <actionGroup ref="AdminOpenIndexManagementPageActionGroup" stepKey="openIndexManagementPage"/>
+        <see stepKey="seeIndexStatus"  selector="{{AdminIndexManagementSection.indexerStatus('Category Flat Data')}}" userInput="Ready"/>
+        <!--Verify Category In Store Front-->
+        <amOnPage url="/$$category.name$$.html"  stepKey="openCategoryPage1"/>
+        <waitForPageLoad stepKey="waitForCategoryStoreFrontPageToLoad"/>
+        <!--Verify category is not displayed in navigation menu in First Store View -->
+        <click stepKey="selectStoreSwitcher" selector="{{StorefrontHeaderSection.storeViewSwitcher}}"/>
+        <click stepKey="selectForstStoreView" selector="{{StorefrontHeaderSection.storeViewList(customStoreEN.name)}}"/>
+        <waitForPageLoad stepKey="waitForFirstStoreView"/>
+        <dontSeeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName($$category.name$$)}}" stepKey="seeCategoryOnNavigation"/>
+        <!--Verify category is not displayed in navigation menu in Second Store View -->
+        <click stepKey="selectStoreSwitcher1" selector="{{StorefrontHeaderSection.storeViewSwitcher}}"/>
+        <click stepKey="selectSecondStoreView" selector="{{StorefrontHeaderSection.storeViewList(customStoreFR.name)}}"/>
+        <waitForPageLoad stepKey="waitForSecondstoreView"/>
+        <dontSeeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName($$category.name$$)}}" stepKey="seeCategoryOnNavigation1"/>
+    </test>
+</tests>

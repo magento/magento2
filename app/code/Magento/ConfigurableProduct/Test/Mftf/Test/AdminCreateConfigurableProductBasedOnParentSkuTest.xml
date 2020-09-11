@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateConfigurableProductBasedOnParentSkuTest">
+        <annotations>
+            <features value="ConfigurableProduct"/>
+            <stories value="Create configurable product"/>
+            <title value="Configurable product variation's sku should be based on parent SKU"/>
+            <description value="Admin should be able to create configurable product with two new options based on parent SKU, without assigned to category and attribute set"/>
+            <testCaseId value="MC-13689"/>
+            <severity value="CRITICAL"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!-- Delete configurable product with children products -->
+            <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteProducts">
+                <argument name="sku" value="{{ApiConfigurableProduct.sku}}"/>
+            </actionGroup>
+
+            <!-- Delete product attribute -->
+            <actionGroup ref="AdminDeleteProductAttributeByLabelActionGroup" stepKey="deleteProductAttribute">
+                <argument name="productAttributeLabel" value="{{colorProductAttribute.default_label}}"/>
+            </actionGroup>
+
+            <!-- Log out -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!-- Create configurable product -->
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="amOnProductGridPage"/>
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="createConfigurableProduct">
+            <argument name="product" value="ApiConfigurableProduct"/>
+        </actionGroup>
+
+        <!-- Fill configurable product values -->
+        <actionGroup ref="FillMainProductFormActionGroup" stepKey="fillConfigurableProductValues">
+            <argument name="product" value="ApiConfigurableProduct"/>
+        </actionGroup>
+
+        <!--Create product configurations-->
+        <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="clickCreateConfigurations" after="fillConfigurableProductValues"/>
+        <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.createNewAttribute}}" time="30" stepKey="waitForConfigurationModalOpen" after="clickCreateConfigurations"/>
+
+        <!--Create new attribute with two option -->
+        <actionGroup ref="AddNewProductConfigurationAttributeActionGroup" stepKey="createProductConfigurationAttribute">
+            <argument name="attribute" value="colorProductAttribute"/>
+            <argument name="firstOption" value="colorConfigurableProductAttribute1"/>
+            <argument name="secondOption" value="colorConfigurableProductAttribute2"/>
+        </actionGroup>
+
+        <!-- Change product configurations except sku -->
+        <actionGroup ref="ChangeProductConfigurationsInGridExceptSkuActionGroup" stepKey="changeProductConfigurationsInGridExceptSku">
+            <argument name="firstOption" value="colorConfigurableProductAttribute1"/>
+            <argument name="secondOption" value="colorConfigurableProductAttribute2"/>
+        </actionGroup>
+
+        <!-- Save product -->
+        <actionGroup ref="SaveConfigurableProductAddToCurrentAttributeSetActionGroup" stepKey="saveProduct"/>
+
+        <!-- Assert child products generated sku in grid -->
+        <actionGroup ref="AdminProductCatalogPageOpenActionGroup" stepKey="openProductCatalogPage"/>
+        <actionGroup ref="FilterProductGridByName2ActionGroup" stepKey="filterFirstProductByNameInGrid">
+            <argument name="name" value="{{colorConfigurableProductAttribute1.name}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminProductGridCellActionGroup" stepKey="seeFirstProductSkuInGrid">
+            <argument name="row" value="1"/>
+            <argument name="column" value="SKU"/>
+            <argument name="value" value="{{ApiConfigurableProduct.sku}}-{{colorConfigurableProductAttribute1.name}}"/>
+        </actionGroup>
+        <actionGroup ref="FilterProductGridByName2ActionGroup" stepKey="filterSecondProductByNameInGrid">
+            <argument name="name" value="{{colorConfigurableProductAttribute2.name}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminProductGridCellActionGroup" stepKey="seeSecondProductSkuInGrid">
+            <argument name="row" value="1"/>
+            <argument name="column" value="SKU"/>
+            <argument name="value" value="{{ApiConfigurableProduct.sku}}-{{colorConfigurableProductAttribute2.name}}"/>
+        </actionGroup>
+    </test>
+</tests>

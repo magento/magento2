@@ -8,5 +8,6 @@
 <pages xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/PageObject.xsd">
     <page name="AdminCatalogSearchConfigurationPage" url="admin/system_config/edit/section/catalog/" area="admin" module="Magento_Config">
         <section name="AdminCatalogSearchConfigurationSection"/>
+        <section name="AdminCatalogSearchEngineConfigurationSection"/>
     </page>
 </pages>

@@ -1,15 +1,19 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Router;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\State;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\Serialize\Serializer\Serialize;
 use Magento\Framework\Module\Dir\Reader as ModuleReader;
 
+/**
+ * Class to retrieve action class.
+ */
 class ActionList
 {
     /**
@@ -68,12 +72,26 @@ class ActionList
         $this->reservedWords = array_merge($reservedWords, $this->reservedWords);
         $this->actionInterface = $actionInterface;
         $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()->get(Serialize::class);
-        $data = $cache->load($cacheKey);
-        if (!$data) {
-            $this->actions = $moduleReader->getActionFiles();
-            $cache->save($this->serializer->serialize($this->actions), $cacheKey);
+        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        $state = $objectManager->get(State::class);
+
+        if ($state->getMode() === State::MODE_PRODUCTION) {
+            $directoryList = $objectManager->get(DirectoryList::class);
+            $file = $directoryList->getPath(DirectoryList::GENERATED_METADATA) . '/' . $cacheKey . '.' . 'php';
+
+            if (file_exists($file)) {
+                $this->actions = (include $file) ?? $moduleReader->getActionFiles();
+            } else {
+                $this->actions = $moduleReader->getActionFiles();
+            }
         } else {
-            $this->actions = $this->serializer->unserialize($data);
+            $data = $cache->load($cacheKey);
+            if (!$data) {
+                $this->actions = $moduleReader->getActionFiles();
+                $cache->save($this->serializer->serialize($this->actions), $cacheKey);
+            } else {
+                $this->actions = $this->serializer->unserialize($data);
+            }
         }
     }
 
@@ -91,6 +109,7 @@ class ActionList
         if ($area) {
             $area = '\\' . $area;
         }
+        $namespace = strtolower($namespace);
         if (strpos($namespace, self::NOT_ALLOWED_IN_NAMESPACE_PATH) !== false) {
             return null;
         }

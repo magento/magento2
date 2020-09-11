@@ -94,7 +94,7 @@ abstract class AbstractTokenizer
      */
     public function setString($value)
     {
-        $this->_string = urldecode($value);
+        $this->_string = rawurldecode($value);
         $this->reset();
     }
 

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontVerifySearchSuggestionByProductShortDescriptionTest">
+        <annotations>
+            <stories value="Search Term"/>
+            <title value="Create search query using product short description and verify search suggestions"/>
+            <description value="Storefront search by product short description, generate search query and verify dropdown product search suggestions"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-14766"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+
+        <before>
+            <!-- Login as admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+
+            <!-- Create product with short description -->
+            <createData entity="ApiProductWithDescription" stepKey="product"/>
+
+            <!-- Perform reindex and flush cache -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
+        </before>
+        <after>
+
+             <!--Delete create product -->
+            <deleteData createDataKey="product"  stepKey="deleteProduct"/>
+
+             <!--Go to the catalog search term page -->
+            <actionGroup ref="AdminOpenCatalogSearchTermIndexPageActionGroup" stepKey="openAdminCatalogSearchTermIndexPage"/>
+
+            <!--Filter the search term -->
+            <actionGroup ref="AdminSearchTermFilterBySearchQueryActionGroup" stepKey="filterByThirdSearchQuery">
+                <argument name="searchQuery" value="{{ApiProductShortDescription.value}}"/>
+            </actionGroup>
+
+            <!-- Delete created below search terms -->
+            <actionGroup ref="AdminDeleteSearchTermActionGroup" stepKey="deleteSearchTerms"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!-- Go to storefront home page -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="openStoreFrontHomePage"/>
+
+         <!--Storefront quick search by  product name -->
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchByProductName">
+            <argument name="phrase" value="{{ApiProductShortDescription.value}}"/>
+        </actionGroup>
+
+        <!--Verify search suggestions and select the suggestion from dropdown options -->
+        <actionGroup ref="StoreFrontSelectDropDownSearchSuggestionActionGroup" stepKey="seeDropDownSearchSuggestion">
+            <argument name="searchQuery" value="{{ApiProductShortDescription.value}}"/>
+        </actionGroup>
+
+        <!-- Assert Product storefront main page -->
+        <actionGroup ref="StorefrontAssertProductNameOnProductMainPageActionGroup" stepKey="seeProductName">
+            <argument name="productName" value="$$product.name$$"/>
+        </actionGroup>
+    </test>
+</tests>

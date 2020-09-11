@@ -157,6 +157,7 @@ class Config
      *
      * @param string|null $code
      * @return string|null
+     * @since 102.0.1
      */
     public function getStatusFrontendLabel(?string $code): ?string
     {
@@ -181,7 +182,7 @@ class Config
     /**
      * State label getter
      *
-     * @param   string $state
+     * @param string $state
      * @return \Magento\Framework\Phrase|string
      */
     public function getStateLabel($state)
@@ -213,7 +214,7 @@ class Config
     {
         $states = [];
         foreach ($this->_getCollection() as $item) {
-            if ($item->getState()) {
+            if ($item->getState() && $item->getIsDefault()) {
                 $states[$item->getState()] = __($item->getData('label'));
             }
         }
@@ -307,7 +308,7 @@ class Config
      * @param string $state
      * @param string $status
      * @return \Magento\Framework\Phrase|string
-     * @since 100.2.0
+     * @since 101.0.0
      */
     public function getStateLabelByStateAndStatus($state, $status)
     {

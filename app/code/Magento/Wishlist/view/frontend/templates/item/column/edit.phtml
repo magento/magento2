@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /** @var \Magento\Wishlist\Block\Customer\Wishlist\Item\Column\Edit $block */
 
 /** @var \Magento\Wishlist\Model\Item $item */
@@ -13,7 +11,7 @@ $item = $block->getItem();
 $product = $item->getProduct();
 ?>
 
-<?php if ($product->isVisibleInSiteVisibility()): ?>
+<?php if ($product->isVisibleInSiteVisibility()) : ?>
     <a class="action edit" href="<?= $block->escapeUrl($block->getItemConfigureUrl($item)) ?>">
         <span><?= $block->escapeHtml(__('Edit')) ?></span>
     </a>

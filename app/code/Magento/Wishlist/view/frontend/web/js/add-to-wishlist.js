@@ -5,7 +5,7 @@
 
 define([
     'jquery',
-    'jquery/ui'
+    'jquery-ui-modules/widget'
 ], function ($) {
     'use strict';
 
@@ -16,7 +16,8 @@ define([
             groupedInfo: '#super-product-table input',
             downloadableInfo: '#downloadable-links-list input',
             customOptionsInfo: '.product-custom-option',
-            qtyInfo: '#qty'
+            qtyInfo: '#qty',
+            actionElement: '[data-action="add-to-wishlist"]'
         },
 
         /** @inheritdoc */
@@ -30,8 +31,10 @@ define([
         _bind: function () {
             var options = this.options,
                 dataUpdateFunc = '_updateWishlistData',
+                validateProductQty = '_validateWishlistQty',
                 changeCustomOption = 'change ' + options.customOptionsInfo,
                 changeQty = 'change ' + options.qtyInfo,
+                updateWishlist = 'click ' + options.actionElement,
                 events = {},
                 key;
 
@@ -45,6 +48,7 @@ define([
 
             events[changeCustomOption] = dataUpdateFunc;
             events[changeQty] = dataUpdateFunc;
+            events[updateWishlist] = validateProductQty;
 
             for (key in options.productType) {
                 if (options.productType.hasOwnProperty(key) && options.productType[key] + 'Info' in options) {
@@ -63,6 +67,12 @@ define([
                 isFileUploaded = false,
                 self = this;
 
+            if (event.handleObj.selector == this.options.qtyInfo) { //eslint-disable-line eqeqeq
+                this._updateAddToWishlistButton({});
+                event.stopPropagation();
+
+                return;
+            }
             $(event.handleObj.selector).each(function (index, element) {
                 if ($(element).is('input[type=text]') ||
                     $(element).is('input[type=email]') ||
@@ -73,7 +83,9 @@ define([
                     $(element).is('textarea') ||
                     $('#' + element.id + ' option:selected').length
                 ) {
-                    dataToAdd = $.extend({}, dataToAdd, self._getElementData(element));
+                    if ($(element).data('selector') || $(element).attr('name')) {
+                        dataToAdd = $.extend({}, dataToAdd, self._getElementData(element));
+                    }
 
                     return;
                 }
@@ -83,7 +95,9 @@ define([
                 }
             });
 
-            this.bindFormSubmit(isFileUploaded);
+            if (isFileUploaded) {
+                this.bindFormSubmit();
+            }
             this._updateAddToWishlistButton(dataToAdd);
             event.stopPropagation();
         },
@@ -181,46 +195,52 @@ define([
 
         /**
          * Bind form submit.
-         *
-         * @param {Boolean} isFileUploaded
          */
-        bindFormSubmit: function (isFileUploaded) {
+        bindFormSubmit: function () {
             var self = this;
 
             $('[data-action="add-to-wishlist"]').on('click', function (event) {
                 var element, params, form, action;
 
-                if (!$($(self.options.qtyInfo).closest('form')).valid()) {
-                    event.stopPropagation();
-                    event.preventDefault();
+                event.stopPropagation();
+                event.preventDefault();
 
-                    return;
+                element = $('input[type=file]' + self.options.customOptionsInfo);
+                params = $(event.currentTarget).data('post');
+                form = $(element).closest('form');
+                action = params.action;
+
+                if (params.data.id) {
+                    $('<input>', {
+                        type: 'hidden',
+                        name: 'id',
+                        value: params.data.id
+                    }).appendTo(form);
                 }
 
-                if (isFileUploaded) {
-
-                    element = $('input[type=file]' + self.options.customOptionsInfo);
-                    params = $(event.currentTarget).data('post');
-                    form = $(element).closest('form');
-                    action = params.action;
-
-                    if (params.data.id) {
-                        $('<input>', {
-                            type: 'hidden',
-                            name: 'id',
-                            value: params.data.id
-                        }).appendTo(form);
-                    }
-
-                    if (params.data.uenc) {
-                        action += 'uenc/' + params.data.uenc;
-                    }
-
-                    $(form).attr('action', action).submit();
-                    event.stopPropagation();
-                    event.preventDefault();
+                if (params.data.uenc) {
+                    action += 'uenc/' + params.data.uenc;
                 }
+
+                $(form).attr('action', action).submit();
             });
+        },
+
+        /**
+         * Validate product quantity before updating Wish List
+         *
+         * @param {jQuery.Event} event
+         * @private
+         */
+        _validateWishlistQty: function (event) {
+            var element = $(this.options.qtyInfo);
+
+            if (!(element.validation() && element.validation('isValid'))) {
+                event.preventDefault();
+                event.stopPropagation();
+
+                return;
+            }
         }
     });
 

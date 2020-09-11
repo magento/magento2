@@ -10,5 +10,6 @@
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminEditCustomerOrdersSection">
         <element name="orderGrid" type="text" selector="#customer_orders_grid_table"/>
+        <element name="orderIdInGrid" type="text" selector="//td[contains(., '{{orderId}}')]" parameterized="true"/>
     </section>
 </sections>

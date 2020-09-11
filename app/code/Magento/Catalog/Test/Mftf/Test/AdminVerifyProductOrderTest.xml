@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminVerifyProductOrderTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Verify Product Order"/>
+            <title value="Admin should see product types in specified order"/>
+            <description value="Product Type Order should be Simple -> Configurable -> Grouped -> Virtual -> Bundle -> Downloadable -> EE"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-14207"/>
+            <group value="mtf_migrated"/>
+            <group value="product"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin1"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <actionGroup ref="GoToProductCatalogPageActionGroup" stepKey="goToProductCatalogPage"/>
+        <actionGroup ref="VerifyProductTypeOrder" stepKey="verifyProductTypeOrder"/>
+    </test>
+</tests>

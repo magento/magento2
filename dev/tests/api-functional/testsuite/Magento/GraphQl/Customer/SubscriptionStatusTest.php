@@ -7,11 +7,16 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Customer;
 
+use Exception;
+use Magento\Framework\Exception\AuthenticationException;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\Newsletter\Model\SubscriberFactory;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
+/**
+ * Tests for subscription status
+ */
 class SubscriptionStatusTest extends GraphQlAbstract
 {
     /**
@@ -24,7 +29,7 @@ class SubscriptionStatusTest extends GraphQlAbstract
      */
     private $subscriberFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -47,16 +52,17 @@ query {
     }
 }
 QUERY;
-        $response = $this->graphQlQuery($query, [], '', $this->getCustomerAuthHeaders($currentEmail, $currentPassword));
+        $response = $this->graphQlQuery($query, [], '', $this->getHeaderMap($currentEmail, $currentPassword));
         $this->assertFalse($response['customer']['is_subscribed']);
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage The current customer isn't authorized.
      */
     public function testGetSubscriptionStatusIfUserIsNotAuthorizedTest()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('The current customer isn\'t authorized.');
+
         $query = <<<QUERY
 query {
     customer {
@@ -70,7 +76,7 @@ QUERY;
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      */
-    public function testChangeSubscriptionStatusTest()
+    public function testSubscribeCustomer()
     {
         $currentEmail = 'customer@example.com';
         $currentPassword = 'password';
@@ -88,16 +94,22 @@ mutation {
     }
 }
 QUERY;
-        $response = $this->graphQlQuery($query, [], '', $this->getCustomerAuthHeaders($currentEmail, $currentPassword));
+        $response = $this->graphQlMutation(
+            $query,
+            [],
+            '',
+            $this->getHeaderMap($currentEmail, $currentPassword)
+        );
         $this->assertTrue($response['updateCustomer']['customer']['is_subscribed']);
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage The current customer isn't authorized.
      */
     public function testChangeSubscriptionStatuIfUserIsNotAuthorizedTest()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('The current customer isn\'t authorized.');
+
         $query = <<<QUERY
 mutation {
     updateCustomer(
@@ -111,21 +123,48 @@ mutation {
     }
 }
 QUERY;
-        $this->graphQlQuery($query);
+        $this->graphQlMutation($query);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Newsletter/_files/subscribers.php
+     */
+    public function testUnsubscribeCustomer()
+    {
+        $currentEmail = 'customer@example.com';
+        $currentPassword = 'password';
+
+        $query = <<<QUERY
+mutation {
+    updateCustomer(
+        input: {
+            is_subscribed: false
+        }
+    ) {
+        customer {
+            is_subscribed
+        }
+    }
+}
+QUERY;
+        $response = $this->graphQlMutation($query, [], '', $this->getHeaderMap($currentEmail, $currentPassword));
+        $this->assertFalse($response['updateCustomer']['customer']['is_subscribed']);
     }
 
     /**
      * @param string $email
      * @param string $password
+     *
      * @return array
+     * @throws AuthenticationException
      */
-    private function getCustomerAuthHeaders(string $email, string $password): array
+    private function getHeaderMap(string $email, string $password): array
     {
         $customerToken = $this->customerTokenService->createCustomerAccessToken($email, $password);
         return ['Authorization' => 'Bearer ' . $customerToken];
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
 

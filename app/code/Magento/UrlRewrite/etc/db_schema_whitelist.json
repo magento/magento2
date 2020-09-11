@@ -14,7 +14,8 @@
         },
         "index": {
             "URL_REWRITE_TARGET_PATH": true,
-            "URL_REWRITE_STORE_ID_ENTITY_ID": true
+            "URL_REWRITE_STORE_ID_ENTITY_ID": true,
+            "URL_REWRITE_ENTITY_ID": true
         },
         "constraint": {
             "PRIMARY": true,

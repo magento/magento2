@@ -8,6 +8,6 @@
     <button
         <?php $block->getUiId(); ?>
         class="action-login action-primary">
-        <span><?= /* @escapeNotVerified */ __('Sign in') ?></span>
+        <span><?= $block->escapeHtml(__('Sign in')) ?></span>
     </button>
 </div>

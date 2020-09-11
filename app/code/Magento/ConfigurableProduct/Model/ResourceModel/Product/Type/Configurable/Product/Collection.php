@@ -8,10 +8,11 @@
 namespace Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product;
 
 /**
- * Class Collection
+ * Collection of configurable product variation
  *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @since 100.0.2
  */
 class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
@@ -26,7 +27,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     /**
      * @var \Magento\Catalog\Model\Product[]
      */
-    private $products;
+    private $products = [];
 
     /**
      * Assign link table name
@@ -73,6 +74,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * Add parent ids to `in` filter before load.
      *
      * @return $this
+     * @since 100.3.0
      */
     protected function _renderFilters()
     {
@@ -83,7 +85,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             $parentIds[] = $product->getData($metadata->getLinkField());
         }
 
-        $this->getSelect()->where('link_table.parent_id in (?)', $parentIds);
+        $this->getSelect()->where('link_table.parent_id in (?)', $parentIds, \Zend_Db::INT_TYPE);
 
         return $this;
     }

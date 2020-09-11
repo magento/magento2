@@ -10,6 +10,7 @@ namespace Magento\Bundle\Model\Product;
  * @codingStandardsIgnoreStart
  * @magentoDataFixtureBeforeTransaction Magento/Bundle/_files/PriceCalculator/dynamic_bundle_product_with_catalog_rule.php
  * @codingStandardsIgnoreEnd
+ * @magentoDbIsolation enabled
  * @magentoAppArea frontend
  */
 class DynamicBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstract

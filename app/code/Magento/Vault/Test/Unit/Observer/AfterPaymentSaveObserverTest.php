@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Vault\Test\Unit\Observer;
 
 use Magento\Framework\App\DeploymentConfig;
@@ -10,15 +12,19 @@ use Magento\Framework\Encryption\Encryptor;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Math\Random;
 use Magento\Sales\Api\Data\OrderPaymentExtension;
-use Magento\Sales\Api\Data\OrderPaymentExtensionFactory;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Vault\Model\PaymentToken;
 use Magento\Vault\Model\PaymentTokenManagement;
+use Magento\Vault\Model\Ui\VaultConfigProvider;
 use Magento\Vault\Observer\AfterPaymentSaveObserver;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class AfterPaymentSaveObserverTest extends \PHPUnit\Framework\TestCase
+/**
+ * Test for payment observer.
+ */
+class AfterPaymentSaveObserverTest extends TestCase
 {
     /**
      * @var \Magento\Framework\Event\Observer|MockObject
@@ -26,27 +32,27 @@ class AfterPaymentSaveObserverTest extends \PHPUnit\Framework\TestCase
     protected $eventObserverArgMock;
 
     /**
-     * @var \Magento\Vault\Observer\AfterPaymentSaveObserver
+     * @var AfterPaymentSaveObserver
      */
     protected $observer;
 
     /**
-     * @var \Magento\Framework\Encryption\Encryptor
+     * @var Encryptor
      */
     protected $encryptorModel;
 
     /**
-     * @var \Magento\Sales\Api\Data\OrderPaymentExtension|MockObject paymentExtension
+     * @var OrderPaymentExtension|MockObject paymentExtension
      */
     protected $paymentExtension;
 
     /**
-     * @var \Magento\Vault\Model\PaymentTokenManagement|MockObject paymentTokenManagementMock
+     * @var PaymentTokenManagement|MockObject paymentTokenManagementMock
      */
     protected $paymentTokenManagementMock;
 
     /**
-     * @var \Magento\Vault\Model\PaymentToken|MockObject paymentTokenMock
+     * @var PaymentToken|MockObject paymentTokenMock
      */
     protected $paymentTokenMock;
 
@@ -61,14 +67,18 @@ class AfterPaymentSaveObserverTest extends \PHPUnit\Framework\TestCase
     protected $salesOrderPaymentMock;
 
     /**
-     * @return void
+     * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         /** @var Random|MockObject $encryptorRandomGenerator */
         $encryptorRandomGenerator = $this->createMock(Random::class);
         /** @var DeploymentConfig|MockObject $deploymentConfigMock */
         $deploymentConfigMock = $this->createMock(DeploymentConfig::class);
+        $deploymentConfigMock->expects($this->any())
+            ->method('get')
+            ->with(Encryptor::PARAM_CRYPT_KEY)
+            ->willReturn('g9mY9KLrcuAVJfsmVUSRkKFLDdUPVkaZ');
         $this->encryptorModel = new Encryptor($encryptorRandomGenerator, $deploymentConfigMock);
 
         $this->paymentExtension = $this->getMockBuilder(OrderPaymentExtension::class)
@@ -93,7 +103,7 @@ class AfterPaymentSaveObserverTest extends \PHPUnit\Framework\TestCase
 
         // Sales Order Payment Model
         $this->salesOrderPaymentMock = $this->getMockBuilder(Payment::class)
-            ->setMethods(null)
+            ->setMethods(['getAdditionalInformation'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->salesOrderPaymentMock->setOrder($this->salesOrderMock);
@@ -117,14 +127,17 @@ class AfterPaymentSaveObserverTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Case when payment successfully made.
+     *
      * @param int $customerId
      * @param string $createdAt
      * @param string $token
      * @param bool $isActive
      * @param string $method
+     * @param array $additionalInfo
      * @dataProvider positiveCaseDataProvider
      */
-    public function testPositiveCase($customerId, $createdAt, $token, $isActive, $method)
+    public function testPositiveCase($customerId, $createdAt, $token, $isActive, $method, $additionalInfo)
     {
         $this->paymentTokenMock->setGatewayToken($token);
         $this->paymentTokenMock->setCustomerId($customerId);
@@ -135,6 +148,8 @@ class AfterPaymentSaveObserverTest extends \PHPUnit\Framework\TestCase
         $this->paymentExtension->expects($this->exactly(2))
             ->method('getVaultPaymentToken')
             ->willReturn($this->paymentTokenMock);
+
+        $this->salesOrderPaymentMock->method('getAdditionalInformation')->willReturn($additionalInfo);
 
         if (!empty($token)) {
             $this->paymentTokenManagementMock->expects($this->once())
@@ -158,9 +173,15 @@ class AfterPaymentSaveObserverTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($token, $paymentToken->getGatewayToken());
         static::assertEquals($isActive, $paymentToken->getIsActive());
         static::assertEquals($createdAt, $paymentToken->getCreatedAt());
+        static::assertEquals(
+            $additionalInfo[VaultConfigProvider::IS_ACTIVE_CODE] ?? false,
+            $paymentToken->getIsVisible()
+        );
     }
 
     /**
+     * Data for positiveCase test.
+     *
      * @return array
      */
     public function positiveCaseDataProvider()
@@ -171,14 +192,32 @@ class AfterPaymentSaveObserverTest extends \PHPUnit\Framework\TestCase
                 '10\20\2015',
                 'asdfg',
                 true,
-                'paypal'
+                'paypal',
+                [],
+            ],
+            [
+                1,
+                '10\20\2015',
+                'asdfg',
+                true,
+                'paypal',
+                [VaultConfigProvider::IS_ACTIVE_CODE => true],
+            ],
+            [
+                1,
+                '10\20\2015',
+                'asdfg',
+                true,
+                'paypal',
+                [VaultConfigProvider::IS_ACTIVE_CODE => false],
             ],
             [
                 null,
                 null,
                 null,
                 false,
-                null
+                null,
+                [],
             ],
         ];
     }

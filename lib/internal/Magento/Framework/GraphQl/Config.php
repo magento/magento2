@@ -62,13 +62,9 @@ class Config implements ConfigInterface
         $fieldsInQuery = $this->queryFields->getFieldsUsedInQuery();
         if (isset($data['fields'])) {
             if (!empty($fieldsInQuery)) {
-                foreach (array_keys($data['fields']) as $fieldName) {
-                    if (!isset($fieldsInQuery[$fieldName])) {
-                        unset($data['fields'][$fieldName]);
-                    }
-                }
+                $data['fieldsInQuery'] = array_intersect_key($data['fields'], $fieldsInQuery);
+                ksort($data['fieldsInQuery']);
             }
-
             ksort($data['fields']);
         }
 

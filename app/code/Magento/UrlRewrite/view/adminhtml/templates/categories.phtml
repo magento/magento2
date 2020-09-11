@@ -4,28 +4,25 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /** @var \Magento\UrlRewrite\Block\Catalog\Category\Tree $block */
 ?>
     <fieldset class="admin__fieldset" data-ui-id="category-selector">
         <legend class="admin__legend"><span><?= $block->escapeHtml(__('Select Category')) ?></span></legend>
         <div class="content content-category-tree">
             <input type="hidden" name="categories" id="product_categories" value=""/>
-            <?php if ($block->getRoot()): ?>
+            <?php if ($block->getRoot()) : ?>
                 <div class="jstree-default"></div>
             <?php endif; ?>
         </div>
     </fieldset>
-<?php if ($block->getRoot()): ?>
+<?php if ($block->getRoot()) : ?>
     <script type="text/x-magento-init">
     {
         ".jstree-default": {
             "categoryTree": {
-                "data": <?php /* @noEscape */
-        echo $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($block->getTreeArray()); ?>,
-                "url": "<?php /* @noEscape */
-        echo $block->escapeUrl($block->getLoadTreeUrl()); ?>"
+                "data": <?= /* @noEscape */
+                $this->helper(\Magento\Framework\Json\Helper\Data::class)->jsonEncode($block->getTreeArray()); ?>,
+                "url": "<?= $block->escapeJs($block->escapeUrl($block->getLoadTreeUrl())); ?>"
             }
         }
     }

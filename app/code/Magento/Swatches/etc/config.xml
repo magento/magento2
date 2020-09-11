@@ -11,6 +11,7 @@
             <frontend>
                 <swatches_per_product>16</swatches_per_product>
                 <show_swatches_in_product_list>1</show_swatches_in_product_list>
+                <show_swatch_tooltip>1</show_swatch_tooltip>
             </frontend>
         </catalog>
         <general>
@@ -21,10 +22,5 @@
                 </input_types>
             </validator_data>
         </general>
-        <design>
-            <watermark>
-                <swatch_image_position>stretch</swatch_image_position>
-            </watermark>
-        </design>
     </default>
 </config>

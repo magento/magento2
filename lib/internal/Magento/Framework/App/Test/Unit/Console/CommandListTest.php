@@ -3,25 +3,33 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\App\Test\Unit\Console;
 
 use Magento\Framework\Console\CommandList;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Command\Command;
 
-class CommandListTest extends \PHPUnit\Framework\TestCase
+/**
+ * Test for
+ *
+ * @see Magento\Framework\Console\CommandList
+ */
+class CommandListTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Console\CommandList
+     * @var MockObject|CommandList
      */
     private $commandList;
 
     /**
-     * @var Symfony\Component\Console\Command\Command
+     * @var Command
      */
     private $testCommand;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->testCommand = new Command('Test');
         $commands = [
@@ -35,6 +43,6 @@ class CommandListTest extends \PHPUnit\Framework\TestCase
     {
         $commands = $this->commandList->getCommands();
         $this->assertSame([$this->testCommand], $commands);
-        $this->assertEquals(1, count($commands));
+        $this->assertCount(1, $commands);
     }
 }

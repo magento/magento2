@@ -30,6 +30,12 @@
                                                                             <item name="component" xsi:type="string">Magento_SalesRule/js/view/payment/discount-messages</item>
                                                                             <item name="displayArea" xsi:type="string">messages</item>
                                                                         </item>
+                                                                        <item name="captcha" xsi:type="array">
+                                                                            <item name="component" xsi:type="string">Magento_SalesRule/js/view/payment/captcha</item>
+                                                                            <item name="displayArea" xsi:type="string">captcha</item>
+                                                                            <item name="formId" xsi:type="string">sales_rule_coupon_request</item>
+                                                                            <item name="configSource" xsi:type="string">checkoutConfig</item>
+                                                                        </item>
                                                                     </item>
                                                                 </item>
                                                             </item>

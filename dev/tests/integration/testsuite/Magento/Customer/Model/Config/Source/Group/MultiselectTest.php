@@ -23,6 +23,7 @@ class MultiselectTest extends \PHPUnit\Framework\TestCase
         $optionsToCompare = [];
         foreach ($options as $option) {
             if (is_array($option['value'])) {
+                // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                 $optionsToCompare = array_merge($optionsToCompare, $option['value']);
             } else {
                 $optionsToCompare[] = $option;
@@ -30,14 +31,28 @@ class MultiselectTest extends \PHPUnit\Framework\TestCase
         }
         sort($optionsToCompare);
         foreach ($optionsToCompare as $item) {
-            $this->assertContains(
-                $item,
-                [
-                    ['value' => 1, 'label' => 'Default (General)'],
-                    ['value' => 1, 'label' => 'General'],
-                    ['value' => 2, 'label' => 'Wholesale'],
-                    ['value' => 3, 'label' => 'Retailer'],
-                ]
+            $this->assertTrue(
+                in_array(
+                    $item,
+                    [
+                        [
+                            'value' => 1,
+                            'label' => 'Default (General)',
+                        ],
+                        [
+                            'value' => 1,
+                            'label' => 'General',
+                        ],
+                        [
+                            'value' => 2,
+                            'label' => 'Wholesale',
+                        ],
+                        [
+                            'value' => 3,
+                            'label' => 'Retailer',
+                        ],
+                    ]
+                )
             );
         }
     }

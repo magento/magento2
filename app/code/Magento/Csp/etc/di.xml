@@ -1,0 +1,103 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\Csp\Api\CspRendererInterface" type="Magento\Csp\Model\CspRenderer" />
+    <type name="Magento\Csp\Model\PolicyRendererPool">
+        <arguments>
+            <argument name="renderers" xsi:type="array">
+                <item name="header" xsi:type="object">Magento\Csp\Model\Policy\Renderer\SimplePolicyHeaderRenderer</item>
+            </argument>
+        </arguments>
+    </type>
+    <preference for="Magento\Csp\Api\PolicyCollectorInterface" type="Magento\Csp\Model\CompositePolicyCollector" />
+    <type name="Magento\Csp\Model\CompositePolicyCollector">
+        <arguments>
+            <argument name="collectors" xsi:type="array">
+                <item name="config" xsi:type="object" sortOrder="1">Magento\Csp\Model\Collector\ConfigCollector\Proxy</item>
+                <item name="whitelist" xsi:type="object" sortOrder="2">Magento\Csp\Model\Collector\CspWhitelistXmlCollector\Proxy</item>
+                <item name="controller" xsi:type="object" sortOrder="100">Magento\Csp\Model\Collector\ControllerCollector\Proxy</item>
+                <item name="dynamic" xsi:type="object" sortOrder="3">Magento\Csp\Model\Collector\DynamicCollector\Proxy</item>
+            </argument>
+            <argument name="mergers" xsi:type="array">
+                <item name="fetch" xsi:type="object">Magento\Csp\Model\Collector\FetchPolicyMerger</item>
+                <item name="flag" xsi:type="object">Magento\Csp\Model\Collector\FlagPolicyMerger</item>
+                <item name="plugins" xsi:type="object">Magento\Csp\Model\Collector\PluginTypesPolicyMerger</item>
+                <item name="sandbox" xsi:type="object">Magento\Csp\Model\Collector\SandboxPolicyMerger</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Csp\Model\Collector\Config\PolicyReaderPool">
+        <arguments>
+            <argument name="readers" xsi:type="array">
+                <item name="fetch" xsi:type="object">Magento\Csp\Model\Collector\Config\FetchPolicyReader</item>
+                <item name="plugin_types" xsi:type="object">Magento\Csp\Model\Collector\Config\PluginTypesPolicyReader</item>
+                <item name="sandbox" xsi:type="object">Magento\Csp\Model\Collector\Config\SandboxPolicyReader</item>
+                <item name="flag" xsi:type="object">Magento\Csp\Model\Collector\Config\FlagPolicyReader</item>
+            </argument>
+        </arguments>
+    </type>
+    <preference for="Magento\Csp\Api\ModeConfigManagerInterface" type="Magento\Csp\Model\Mode\ConfigManager" />
+    <type name="Magento\Csp\Model\Collector\CspWhitelistXml\Reader">
+        <arguments>
+            <argument name="converter" xsi:type="object">Magento\Csp\Model\Collector\CspWhitelistXml\Converter</argument>
+            <argument name="schemaLocator" xsi:type="object">Magento\Csp\Model\Collector\CspWhitelistXml\SchemaLocator</argument>
+            <argument name="fileName" xsi:type="string">csp_whitelist.xml</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Csp\Model\Collector\CspWhitelistXmlCollector">
+        <arguments>
+            <argument name="configReader" xsi:type="object">Magento\Csp\Model\Collector\CspWhitelistXml\Data</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Csp\Model\Collector\CspWhitelistXml\Data">
+        <arguments>
+            <argument name="reader" xsi:type="object">Magento\Csp\Model\Collector\CspWhitelistXml\Reader\Proxy</argument>
+        </arguments>
+    </type>
+    <preference for="Magento\Csp\Api\InlineUtilInterface" type="Magento\Csp\Helper\InlineUtil" />
+    <type name="Magento\Csp\Plugin\TemplateRenderingPlugin">
+        <arguments>
+            <argument name="util" xsi:type="object">Magento\Csp\Api\InlineUtilInterface\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\View\TemplateEngine\Php">
+        <arguments>
+            <argument name="blockVariables" xsi:type="array">
+                <item name="csp" xsi:type="object">Magento\Csp\Api\InlineUtilInterface\Proxy</item>
+                <item name="secureRenderer" xsi:type="object">Magento\Framework\View\Helper\SecureHtmlRenderer\Proxy</item>
+                <item name="escaper" xsi:type="object">Magento\Framework\Escaper</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\App\RouterInterface">
+        <plugin name="csp_aware_plugin" type="Magento\Csp\Plugin\CspAwareControllerPlugin" />
+    </type>
+    <type name="Magento\Framework\View\Helper\SecureHtmlRenderer">
+        <arguments>
+            <argument name="processors" xsi:type="array">
+                <item name="csp" xsi:type="object">Magento\Csp\Helper\InlineUtil\Proxy</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Csp\Observer\Render">
+        <arguments>
+            <argument name="cspRenderer" xsi:type="object">Magento\Csp\Api\CspRendererInterface</argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\Csp\Model\BlockCache">
+        <arguments>
+            <argument name="cache" xsi:type="object">configured_block_cache</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\View\Element\Context">
+        <arguments>
+            <argument name="cache" xsi:type="object">Magento\Csp\Model\BlockCache</argument>
+        </arguments>
+    </type>
+</config>

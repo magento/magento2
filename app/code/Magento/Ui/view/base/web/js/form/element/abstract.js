@@ -296,7 +296,7 @@ define([
                 this.validation[rule] = options;
             }
 
-            changed = utils.compare(rules, this.validation).equal;
+            changed = !utils.compare(rules, this.validation).equal;
 
             if (changed) {
                 this.required(!!rules['required-entry']);

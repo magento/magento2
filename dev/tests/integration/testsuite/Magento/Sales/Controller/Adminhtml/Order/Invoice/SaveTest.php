@@ -28,7 +28,7 @@ class SaveTest extends AbstractInvoiceControllerTest
      */
     public function testSendEmailOnInvoiceSave(): void
     {
-        $order = $this->prepareRequest(['invoice' => ['send_email' => true]]);
+        $order = $this->prepareRequest();
         $this->dispatch('backend/sales/order_invoice/save');
 
         $this->assertSessionMessages(
@@ -51,7 +51,7 @@ class SaveTest extends AbstractInvoiceControllerTest
         );
 
         $this->assertEquals($message->getSubject(), $subject);
-        $this->assertThat($message->getRawMessage(), $messageConstraint);
+        $this->assertThat($message->getBody()->getParts()[0]->getRawContent(), $messageConstraint);
     }
 
     /**
@@ -72,6 +72,21 @@ class SaveTest extends AbstractInvoiceControllerTest
         $this->prepareRequest();
 
         parent::testAclNoAccess();
+    }
+
+    /**
+     * Checks that order protect code is not changing after invoice submitting
+     *
+     * @return void
+     */
+    public function testOrderProtectCodePreserveAfterInvoiceSave(): void
+    {
+        $order = $this->prepareRequest();
+        $protectCode = $order->getProtectCode();
+        $this->dispatch($this->uri);
+        $invoicedOrder = $this->getOrder('100000001');
+
+        $this->assertEquals($protectCode, $invoicedOrder->getProtectCode());
     }
 
     /**

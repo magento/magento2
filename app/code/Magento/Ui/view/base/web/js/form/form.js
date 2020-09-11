@@ -339,6 +339,7 @@ define([
          */
         reset: function () {
             this.source.trigger('data.reset');
+            $('[data-bind*=datepicker]').val('');
         },
 
         /**

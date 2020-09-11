@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="ShippingQuotePersistedForGuestTest">
+        <annotations>
+            <features value="Persistent"/>
+            <stories value="Guest checkout"/>
+            <title value="Estimate Shipping and Tax block sections on shipping cart saving correctly for Guest."/>
+            <description value="Verify that 'Estimate Shipping and Tax' block sections on shipping cart saving correctly for Guest after switching to another page. And check that the shopping cart is cleared after reset persistent cookie."/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MAGETWO-99025"/>
+            <useCaseId value="MAGETWO-98620"/>
+            <group value="persistent"/>
+        </annotations>
+        <before>
+            <!--Enabled The Persistent Shopping Cart feature -->
+            <createData entity="PersistentConfigEnabled" stepKey="enablePersistent"/>
+            <createData entity="PersistentLogoutClearDisable" stepKey="persistentLogoutClearDisable"/>
+            <!--Create simple product-->
+            <createData entity="SimpleProduct2" stepKey="createProduct">
+                <field key="price">150</field>
+            </createData>
+            <!--Create customer-->
+            <createData entity="Simple_US_Customer" stepKey="createCustomer">
+                <field key="firstname">John1</field>
+                <field key="lastname">Doe1</field>
+            </createData>
+        </before>
+        <after>
+            <!--Revert persistent configuration to default-->
+            <createData entity="PersistentConfigDefault" stepKey="setDefaultPersistentState"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!--Step 1: Login as a Customer with remember me checked-->
+        <actionGroup ref="CustomerLoginOnStorefrontWithRememberMeCheckedActionGroup" stepKey="loginToStorefrontAccountWithRememberMeChecked">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <!--Step 2: Open the Product Page and add the product to shopping cart-->
+        <amOnPage url="{{StorefrontProductPage.url($$createProduct.custom_attributes[url_key]$$)}}" stepKey="navigateToProductPageAsLoggedUser"/>
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addProductToCartAsLoggedUser">
+            <argument name="productName" value="$$createProduct.name$$"/>
+        </actionGroup>
+        <!--Step 3: Log out, reset persistent cookie and go to homepage-->
+        <amOnPage url="{{StorefrontCustomerSignOutPage.url}}" stepKey="signOut"/>
+        <waitForLoadingMaskToDisappear stepKey="waitSignOutPage"/>
+        <resetCookie userInput="persistent_shopping_cart" stepKey="resetPersistentCookie"/>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="amOnHomePageAfterResetPersistentCookie"/>
+        <!--Step 4: Add the product to shopping cart and open cart-->
+        <amOnPage url="{{StorefrontProductPage.url($$createProduct.custom_attributes[url_key]$$)}}" stepKey="navigateToProductPageAsGuestUser"/>
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addProductToCartAsGuestUser">
+            <argument name="productName" value="$$createProduct.name$$"/>
+        </actionGroup>
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="goToShoppingCartBeforeChangeShippingAndTaxSection"/>
+        <!--Step 5: Open Estimate Shipping and Tax block and fill the sections-->
+        <conditionalClick  selector="{{CheckoutCartSummarySection.estimateShippingAndTax}}" dependentSelector="{{CheckoutCartSummarySection.country}}" visible="false" stepKey="expandEstimateShippingAndTax" />
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask"/>
+        <selectOption selector="{{CheckoutCartSummarySection.country}}" userInput="{{US_Address_CA.country}}" stepKey="selectUSCountry"/>
+        <selectOption selector="{{CheckoutCartSummarySection.stateProvince}}" userInput="{{US_Address_CA.state}}" stepKey="selectCaliforniaRegion"/>
+        <fillField selector="{{CheckoutCartSummarySection.postcode}}" userInput="{{US_Address_CA.postcode}}" stepKey="inputPostCode"/>
+        <!--Step 6: Go to Homepage-->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomePageAfterChangingShippingAndTaxSection"/>
+        <!--Step 7: Go to shopping cart and check "Estimate Shipping and Tax" fields values are saved-->
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" after="goToHomePageAfterChangingShippingAndTaxSection" stepKey="goToShoppingCartAfterChangingShippingAndTaxSection"/>
+        <conditionalClick  selector="{{CheckoutCartSummarySection.estimateShippingAndTax}}" dependentSelector="{{CheckoutCartSummarySection.country}}" visible="false" stepKey="expandEstimateShippingAndTaxAfterChanging" />
+        <seeOptionIsSelected selector="{{CheckoutCartSummarySection.country}}" userInput="{{US_Address_CA.country}}" stepKey="checkCustomerCountry" />
+        <seeOptionIsSelected selector="{{CheckoutCartSummarySection.stateProvince}}" userInput="{{US_Address_CA.state}}" stepKey="checkCustomerRegion" />
+        <grabValueFrom  selector="{{CheckoutCartSummarySection.postcode}}" stepKey="grabTextPostCode"/>
+        <assertEquals  message="Customer postcode is invalid" stepKey="checkCustomerPostcode">
+            <expectedResult type="string">{{US_Address_CA.postcode}}</expectedResult>
+            <actualResult type="variable">grabTextPostCode</actualResult>
+        </assertEquals>
+    </test>
+</tests>

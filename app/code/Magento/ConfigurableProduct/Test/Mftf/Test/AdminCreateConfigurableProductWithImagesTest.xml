@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateConfigurableProductWithImagesTest">
+        <annotations>
+            <features value="ConfigurableProduct"/>
+            <stories value="Create configurable product"/>
+            <title value="Create configurable product with images"/>
+            <description value="Admin should be able to create configurable product with images"/>
+            <testCaseId value="MC-13713"/>
+            <severity value="CRITICAL"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <!-- Create first attribute with 2 options -->
+            <createData entity="productAttributeWithTwoOptionsNotVisible" stepKey="createFirstConfigProductAttribute"/>
+            <createData entity="productAttributeOption1" stepKey="createConfigProductAttributeOptionOne">
+                <requiredEntity createDataKey="createFirstConfigProductAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption2" stepKey="createConfigProductAttributeOptionTwo">
+                <requiredEntity createDataKey="createFirstConfigProductAttribute"/>
+            </createData>
+
+            <!-- Create second attribute with 2 options -->
+            <createData entity="productAttributeWithTwoOptions" stepKey="createSecondConfigProductAttribute"/>
+            <createData entity="productAttributeOption3" stepKey="createConfigProductAttributeOptionThree">
+                <requiredEntity createDataKey="createSecondConfigProductAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption4" stepKey="createConfigProductAttributeOptionFour">
+                <requiredEntity createDataKey="createSecondConfigProductAttribute"/>
+            </createData>
+
+            <createData entity="AddToDefaultSet" stepKey="createConfigAddToAttributeSet">
+                <requiredEntity createDataKey="createFirstConfigProductAttribute"/>
+                <requiredEntity createDataKey="createSecondConfigProductAttribute"/>
+            </createData>
+
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!-- Delete configurable product -->
+            <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct">
+                <argument name="product" value="ApiConfigurableProduct"/>
+            </actionGroup>
+
+            <!-- Delete created data -->
+            <deleteData createDataKey="createFirstConfigProductAttribute" stepKey="deleteFirstConfigProductAttribute"/>
+            <deleteData createDataKey="createSecondConfigProductAttribute" stepKey="deleteSecondConfigProductAttribute"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+
+            <!-- Log out -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+        </after>
+
+        <!--Create configurable product -->
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="amOnProductGridPage"/>
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="createConfigurableProduct">
+            <argument name="product" value="ApiConfigurableProduct"/>
+        </actionGroup>
+
+        <!-- Fill configurable product values -->
+        <actionGroup ref="FillMainProductFormActionGroup" stepKey="fillConfigurableProductValues">
+            <argument name="product" value="ApiConfigurableProduct"/>
+        </actionGroup>
+
+        <!-- Add configurable product to category -->
+        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$createCategory.name$$]" stepKey="fillCategory" after="fillConfigurableProductValues"/>
+
+        <!-- Add image to product -->
+        <actionGroup ref="AddProductImageActionGroup" stepKey="addImageForProduct">
+            <argument name="image" value="MagentoLogo"/>
+        </actionGroup>
+
+        <!-- Create product configurations -->
+        <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="clickCreateConfigurations" after="addImageForProduct"/>
+        <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.createNewAttribute}}" time="30" stepKey="waitForConfigurationModalOpen" after="clickCreateConfigurations"/>
+
+         <!-- Show 100 attributes per page -->
+        <actionGroup ref="AdminDataGridSelectPerPageActionGroup" stepKey="selectNumberOfAttributesPerPage">
+            <argument name="perPage" value="100"/>
+        </actionGroup>
+
+        <!--Add attributes and select all options -->
+        <click selector="{{AdminCreateProductConfigurationsPanel.attributeRowByAttributeCode($$createFirstConfigProductAttribute.attribute_code$$)}}" stepKey="clickOnFirstAttributeCheckbox"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.attributeRowByAttributeCode($$createSecondConfigProductAttribute.attribute_code$$)}}" stepKey="clickOnSecondAttributeCheckbox"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton1"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.selectAllByAttribute($$createFirstConfigProductAttribute.default_frontend_label$$)}}" stepKey="clickOnSelectAllInFirstAttribute"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.selectAllByAttribute($$createSecondConfigProductAttribute.default_frontend_label$$)}}" stepKey="clickOnSelectAllInSecondAttribute"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton2"/>
+
+        <!-- Add images to first product attribute options -->
+        <actionGroup ref="AddUniqueImageToConfigurableProductOptionActionGroup" stepKey="addImageToConfigurableProductOptionOne">
+            <argument name="image" value="MagentoLogo"/>
+            <argument name="frontend_label" value="$$createFirstConfigProductAttribute.default_frontend_label$$"/>
+            <argument name="label" value="$$createConfigProductAttributeOptionOne.option[store_labels][1][label]$$"/>
+        </actionGroup>
+        <actionGroup ref="AddUniqueImageToConfigurableProductOptionActionGroup" stepKey="addImageToConfigurableProductOptionTwo">
+            <argument name="image" value="TestImageNew"/>
+            <argument name="frontend_label" value="$$createFirstConfigProductAttribute.default_frontend_label$$"/>
+            <argument name="label" value="$$createConfigProductAttributeOptionTwo.option[store_labels][1][label]$$"/>
+        </actionGroup>
+
+        <!-- Add price to second product attribute options -->
+        <actionGroup ref="AddUniquePriceToConfigurableProductOptionActionGroup" stepKey="addPriceToConfigurableProductOptionThree">
+            <argument name="frontend_label" value="$$createSecondConfigProductAttribute.default_frontend_label$$"/>
+            <argument name="label" value="$$createConfigProductAttributeOptionThree.option[store_labels][1][label]$$"/>
+            <argument name="price" value="{{virtualProductWithRequiredFields.price}}"/>
+        </actionGroup>
+        <actionGroup ref="AddUniquePriceToConfigurableProductOptionActionGroup" stepKey="addPriceToConfigurableProductOptionFour">
+            <argument name="frontend_label" value="$$createSecondConfigProductAttribute.default_frontend_label$$"/>
+            <argument name="label" value="$$createConfigProductAttributeOptionFour.option[store_labels][1][label]$$"/>
+            <argument name="price" value="{{virtualProductWithRequiredFields.price}}"/>
+        </actionGroup>
+
+        <!-- Add quantity to product attribute options -->
+        <click selector="{{AdminCreateProductConfigurationsPanel.applySingleQuantityToEachSkus}}" stepKey="clickOnApplySingleQuantityToEachSku"/>
+        <fillField selector="{{AdminCreateProductConfigurationsPanel.quantity}}" userInput="100" stepKey="enterAttributeQuantity"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton3"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton4"/>
+
+        <!-- Save product -->
+        <actionGroup ref="SaveConfigurableProductAddToCurrentAttributeSetActionGroup" stepKey="saveProduct"/>
+
+        <!--Run re-index task-->
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
+
+        <!-- Assert configurable product in category -->
+        <amOnPage url="$$createCategory.name$$.html" stepKey="amOnCategoryPage"/>
+        <waitForPageLoad stepKey="waitForCategoryPageLoad"/>
+        <actionGroup ref="StorefrontCheckCategoryConfigurableProductActionGroup" stepKey="assertConfigurableProductInCategory">
+            <argument name="product" value="ApiConfigurableProduct"/>
+            <argument name="optionProduct" value="virtualProductWithRequiredFields"/>
+        </actionGroup>
+
+        <!-- Assert product image in storefront product page -->
+        <amOnPage url="{{ApiConfigurableProduct.urlKey}}.html" stepKey="amOnProductPage"/>
+        <actionGroup ref="AssertProductImageStorefrontProductPageActionGroup" stepKey="assertProductImageStorefrontProductPage">
+            <argument name="product" value="ApiConfigurableProduct"/>
+            <argument name="image" value="MagentoLogo"/>
+        </actionGroup>
+
+        <!-- Assert product options images in storefront product page -->
+        <actionGroup ref="AssertOptionImageInStorefrontProductPageActionGroup" stepKey="assertFirstOptionImageInStorefrontProductPage">
+            <argument name="product" value="ApiConfigurableProduct"/>
+            <argument name="label" value="$$createConfigProductAttributeOptionOne.option[store_labels][1][label]$$"/>
+            <argument name="image" value="MagentoLogo"/>
+        </actionGroup>
+        <actionGroup ref="AssertOptionImageInStorefrontProductPageActionGroup" stepKey="assertSecondOptionImageInStorefrontProductPage">
+            <argument name="product" value="ApiConfigurableProduct"/>
+            <argument name="label" value="$$createConfigProductAttributeOptionTwo.option[store_labels][1][label]$$"/>
+            <argument name="image" value="TestImageNew"/>
+        </actionGroup>
+    </test>
+</tests>

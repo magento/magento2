@@ -15,6 +15,7 @@ use Magento\Framework\App\ObjectManager;
  *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @since 100.0.2
  */
 class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
@@ -145,7 +146,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     }
 
     /**
-     * Set store id for each collection item when collection was loaded
+     * Set store id for each collection item when collection was loaded.
+     * phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
      *
      * @return $this
      */
@@ -213,7 +215,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     public function setOptionIdsFilter($optionIds)
     {
         if (!empty($optionIds)) {
-            $this->getSelect()->where('selection.option_id IN (?)', $optionIds);
+            $this->getSelect()->where('selection.option_id IN (?)', $optionIds, \Zend_Db::INT_TYPE);
         }
         return $this;
     }
@@ -227,7 +229,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     public function setSelectionIdsFilter($selectionIds)
     {
         if (!empty($selectionIds)) {
-            $this->getSelect()->where('selection.selection_id IN (?)', $selectionIds);
+            $this->getSelect()->where('selection.selection_id IN (?)', $selectionIds, \Zend_Db::INT_TYPE);
         }
         return $this;
     }

@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminCreateCartPriceRuleRuleInfoSectionActionGroup">
+        <annotations>
+            <description>Goes to the Admin Cart Price Rule grid page. Clicks on Add New Rule. Fills in the provided Rule details.</description>
+        </annotations>
+        <arguments>
+            <argument name="ruleName" type="entity"/>
+        </arguments>
+
+        <amOnPage url="{{AdminCartPriceRulesPage.url}}" stepKey="amOnCartPriceList"/>
+        <waitForPageLoad stepKey="waitForPriceList"/>
+        <click selector="{{AdminCartPriceRulesSection.addNewRuleButton}}" stepKey="clickAddNewRule"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.ruleName}}" userInput="{{ruleName.name}}" stepKey="fillRuleName"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.description}}" userInput="{{ruleName.description}}" stepKey="fillDescription"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.websites}}" userInput="{{ruleName.websites}}" stepKey="selectWebsites"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.customerGroups}}" parameterArray="[{{ruleName.customerGroups}}]" stepKey="selectCustomerGroup"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.coupon}}" userInput="{{ruleName.coupon_type}}" stepKey="selectCouponType"/>
+        <waitForElementVisible selector="{{AdminCartPriceRulesFormSection.couponCode}}" stepKey="waitForElementVisible"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.couponCode}}" userInput="{{ruleName.coupon_code}}" stepKey="fillCouponCode"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.userPerCoupon}}" userInput="{{ruleName.uses_per_coupon}}" stepKey="fillUsesPerCoupon"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.userPerCustomer}}" userInput="{{ruleName.uses_per_customer}}" stepKey="fillUsesPerCustomer"/>
+        <generateDate date="+1 minute" format="m/d/Y" stepKey="startDateTime"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.fromDate}}" userInput="{$startDateTime}" stepKey="fillStartDate"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.priority}}" userInput="{{ruleName.sort_order}}" stepKey="fillPriority"/>
+        <conditionalClick selector="{{AdminCartPriceRulesFormSection.publicInRSSFeed}}" dependentSelector="{{AdminCartPriceRulesFormSection.publicInRSSFeed}}" visible="false" stepKey="clickOnlyIfRSSIsDisabled"/>
+    </actionGroup>
+</actionGroups>

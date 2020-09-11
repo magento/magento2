@@ -61,6 +61,8 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
     }
 
     /**
+     * Add error via code and level
+     *
      * @param string $errorCode
      * @param string $errorLevel
      * @param int|null $rowNumber
@@ -96,6 +98,8 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
     }
 
     /**
+     * Add row to be skipped during import
+     *
      * @param int $rowNumber
      * @return $this
      */
@@ -110,6 +114,8 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
     }
 
     /**
+     * Add specific row to invalid list via row number
+     *
      * @param int $rowNumber
      * @return $this
      */
@@ -126,6 +132,8 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
     }
 
     /**
+     * Add error message template
+     *
      * @param string $code
      * @param string $template
      * @return $this
@@ -138,6 +146,8 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
     }
 
     /**
+     * Check if row is invalid by row number
+     *
      * @param int $rowNumber
      * @return bool
      */
@@ -147,6 +157,8 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
     }
 
     /**
+     * Get number of invalid rows
+     *
      * @return int
      */
     public function getInvalidRowsCount()
@@ -155,6 +167,8 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
     }
 
     /**
+     * Initialize validation strategy
+     *
      * @param string $validationStrategy
      * @param int $allowedErrorCount
      * @return $this
@@ -178,6 +192,8 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
     }
 
     /**
+     * Check if import has to be terminated
+     *
      * @return bool
      */
     public function hasToBeTerminated()
@@ -186,15 +202,17 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
     }
 
     /**
+     * Check if error limit has been exceeded
+     *
      * @return bool
      */
     public function isErrorLimitExceeded()
     {
         $isExceeded = false;
-        $errorsCount = $this->getErrorsCount([ProcessingError::ERROR_LEVEL_NOT_CRITICAL]);
+        $errorsCount = $this->getErrorsCount();
         if ($errorsCount > 0
             && $this->validationStrategy == self::VALIDATION_STRATEGY_STOP_ON_ERROR
-            && $errorsCount >= $this->allowedErrorsCount
+            && $errorsCount > $this->allowedErrorsCount
         ) {
             $isExceeded = true;
         }
@@ -203,6 +221,8 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
     }
 
     /**
+     * Check if import has a fatal error
+     *
      * @return bool
      */
     public function hasFatalExceptions()
@@ -211,39 +231,41 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
     }
 
     /**
+     * Get all errors from an import process
+     *
      * @return ProcessingError[]
      */
     public function getAllErrors()
     {
-        $result = [];
-        if (empty($this->items)) {
-            return $result;
+        if (empty($this->items) || empty($this->items['rows'])) {
+            return [];
         }
 
-        foreach (array_values($this->items['rows']) as $errors) {
-            $result = array_merge($result, $errors);
-        }
-
-        return $result;
+        $errors = array_values($this->items['rows']);
+        return array_merge(...$errors);
     }
 
     /**
+     * Get a specific set of errors via codes
+     *
      * @param string[] $codes
      * @return ProcessingError[]
      */
     public function getErrorsByCode(array $codes)
     {
-        $result = [];
+        $result = [[]];
         foreach ($codes as $code) {
             if (isset($this->items['codes'][$code])) {
-                $result = array_merge($result, $this->items['codes'][$code]);
+                $result[] = $this->items['codes'][$code];
             }
         }
 
-        return $result;
+        return array_merge(...$result);
     }
 
     /**
+     * Get an error via row number
+     *
      * @param int $rowNumber
      * @return ProcessingError[]
      */
@@ -258,6 +280,8 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
     }
 
     /**
+     * Get a set rows via a set of error codes
+     *
      * @param array $errorCode
      * @param array $excludedCodes
      * @param bool $replaceCodeWithMessage
@@ -292,6 +316,8 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
     }
 
     /**
+     * Get the max allowed error count
+     *
      * @return int
      */
     public function getAllowedErrorsCount()
@@ -300,6 +326,8 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
     }
 
     /**
+     * Get current error count
+     *
      * @param string[] $errorLevels
      * @return int
      */
@@ -318,6 +346,8 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
     }
 
     /**
+     * Clear the error aggregator
+     *
      * @return $this
      */
     public function clear()
@@ -331,6 +361,8 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
     }
 
     /**
+     * Check if an error has already been added to the aggregator
+     *
      * @param int $rowNum
      * @param string $errorCode
      * @param string $columnName
@@ -348,6 +380,8 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
     }
 
     /**
+     * Build an error message via code, message and column name
+     *
      * @param string $errorCode
      * @param string $errorMessage
      * @param string $columnName
@@ -369,6 +403,8 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
     }
 
     /**
+     * Process the error statistics for a given error level
+     *
      * @param string $errorLevel
      * @return $this
      */

@@ -14,7 +14,7 @@ use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Ui\Component\Listing\Columns\Column;
 
 /**
- * Class ViewAction
+ * Class ViewAction for Listing Column
  */
 class ViewAction extends Column
 {
@@ -65,7 +65,7 @@ class ViewAction extends Column
                                     $urlEntityParamName => $item[$indexField]
                                 ]
                             ),
-                            'label' => __('View')
+                            'label' => __('View'),
                         ]
                     ];
                 }

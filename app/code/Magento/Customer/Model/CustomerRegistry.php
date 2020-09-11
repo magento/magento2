@@ -101,8 +101,10 @@ class CustomerRegistry
     public function retrieveByEmail($customerEmail, $websiteId = null)
     {
         if ($websiteId === null) {
-            $websiteId = $this->storeManager->getStore()->getWebsiteId();
+            $websiteId = $this->storeManager->getStore()->getWebsiteId()
+                ?: $this->storeManager->getDefaultStoreView()->getWebsiteId();
         }
+
         $emailKey = $this->getEmailKey($customerEmail, $websiteId);
         if (isset($this->customerRegistryByEmail[$emailKey])) {
             return $this->customerRegistryByEmail[$emailKey];
@@ -195,7 +197,7 @@ class CustomerRegistry
             $websiteId = $this->storeManager->getStore()->getWebsiteId();
         }
         $emailKey = $this->getEmailKey($customerEmail, $websiteId);
-        if ($emailKey) {
+        if (isset($this->customerRegistryByEmail[$emailKey])) {
             /** @var Customer $customer */
             $customer = $this->customerRegistryByEmail[$emailKey];
             unset($this->customerRegistryByEmail[$emailKey]);

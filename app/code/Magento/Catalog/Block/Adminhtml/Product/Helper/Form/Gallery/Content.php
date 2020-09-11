@@ -15,13 +15,17 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Gallery;
 
 use Magento\Framework\App\ObjectManager;
 use Magento\Backend\Block\Media\Uploader;
+use Magento\Framework\Json\Helper\Data as JsonHelper;
 use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Backend\Block\DataProviders\ImageUploadConfig as ImageUploadConfigDataProvider;
+use Magento\MediaStorage\Helper\File\Storage\Database;
 
 /**
  * Block for gallery content.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Content extends \Magento\Backend\Block\Widget
 {
@@ -51,24 +55,36 @@ class Content extends \Magento\Backend\Block\Widget
     private $imageUploadConfigDataProvider;
 
     /**
+     * @var Database
+     */
+    private $fileStorageDatabase;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Catalog\Model\Product\Media\Config $mediaConfig
      * @param array $data
      * @param ImageUploadConfigDataProvider $imageUploadConfigDataProvider
+     * @param Database $fileStorageDatabase
+     * @param JsonHelper|null $jsonHelper
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\Json\EncoderInterface $jsonEncoder,
         \Magento\Catalog\Model\Product\Media\Config $mediaConfig,
         array $data = [],
-        ImageUploadConfigDataProvider $imageUploadConfigDataProvider = null
+        ImageUploadConfigDataProvider $imageUploadConfigDataProvider = null,
+        Database $fileStorageDatabase = null,
+        ?JsonHelper $jsonHelper = null
     ) {
         $this->_jsonEncoder = $jsonEncoder;
         $this->_mediaConfig = $mediaConfig;
+        $data['jsonHelper'] = $jsonHelper ?? ObjectManager::getInstance()->get(JsonHelper::class);
         parent::__construct($context, $data);
         $this->imageUploadConfigDataProvider = $imageUploadConfigDataProvider
             ?: ObjectManager::getInstance()->get(ImageUploadConfigDataProvider::class);
+        $this->fileStorageDatabase = $fileStorageDatabase
+            ?: ObjectManager::getInstance()->get(Database::class);
     }
 
     /**
@@ -85,7 +101,7 @@ class Content extends \Magento\Backend\Block\Widget
         );
 
         $this->getUploader()->getConfig()->setUrl(
-            $this->_urlBuilder->addSessionParam()->getUrl('catalog/product_gallery/upload')
+            $this->_urlBuilder->getUrl('catalog/product_gallery/upload')
         )->setFileField(
             'image'
         )->setFilters(
@@ -164,6 +180,13 @@ class Content extends \Magento\Backend\Block\Widget
             $images = $this->sortImagesByPosition($value['images']);
             foreach ($images as &$image) {
                 $image['url'] = $this->_mediaConfig->getMediaUrl($image['file']);
+                if ($this->fileStorageDatabase->checkDbUsage() &&
+                    !$mediaDir->isFile($this->_mediaConfig->getMediaPath($image['file']))
+                ) {
+                    $this->fileStorageDatabase->saveFileToFilesystem(
+                        $this->_mediaConfig->getMediaPath($image['file'])
+                    );
+                }
                 try {
                     $fileHandler = $mediaDir->stat($this->_mediaConfig->getMediaPath($image['file']));
                     $image['size'] = $fileHandler['size'];
@@ -187,9 +210,12 @@ class Content extends \Magento\Backend\Block\Widget
     private function sortImagesByPosition($images)
     {
         if (is_array($images)) {
-            usort($images, function ($imageA, $imageB) {
-                return ($imageA['position'] < $imageB['position']) ? -1 : 1;
-            });
+            usort(
+                $images,
+                function ($imageA, $imageB) {
+                    return ($imageA['position'] < $imageB['position']) ? -1 : 1;
+                }
+            );
         }
         return $images;
     }

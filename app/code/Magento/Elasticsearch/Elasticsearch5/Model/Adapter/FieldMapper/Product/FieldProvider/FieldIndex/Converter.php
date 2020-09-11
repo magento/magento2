@@ -20,12 +20,18 @@ class Converter implements ConverterInterface
     private const ES_NO_INDEX = false;
 
     /**
+     * Text flags for Elasticsearch no analyze index value
+     */
+    private const ES_NO_ANALYZE = false;
+
+    /**
      * Mapping between internal data types and elastic service.
      *
      * @var array
      */
     private $mapping = [
-        'no_index' => self::ES_NO_INDEX,
+        ConverterInterface::INTERNAL_NO_INDEX_VALUE => self::ES_NO_INDEX,
+        ConverterInterface::INTERNAL_NO_ANALYZE_VALUE => self::ES_NO_ANALYZE,
     ];
 
     /**

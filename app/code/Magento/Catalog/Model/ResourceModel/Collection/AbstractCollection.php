@@ -7,6 +7,7 @@ namespace Magento\Catalog\Model\ResourceModel\Collection;
 
 /**
  * Catalog EAV collection resource abstract model
+ *
  * Implement using different stores for retrieve attribute values
  *
  * @api
@@ -42,7 +43,6 @@ class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCo
      * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
-     *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -170,10 +170,12 @@ class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCo
                 ['e.entity_id']
             )->where(
                 "e.entity_id IN (?)",
-                array_keys($this->_itemsById)
+                array_keys($this->_itemsById),
+                \Zend_Db::INT_TYPE
             )->where(
                 't_d.attribute_id IN (?)',
-                $attributeIds
+                $attributeIds,
+                \Zend_Db::INT_TYPE
             )->joinLeft(
                 ['t_s' => $table],
                 implode(' AND ', $joinCondition),
@@ -192,10 +194,12 @@ class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCo
                 ['e.entity_id']
             )->where(
                 "e.entity_id IN (?)",
-                array_keys($this->_itemsById)
+                array_keys($this->_itemsById),
+                \Zend_Db::INT_TYPE
             )->where(
                 'attribute_id IN (?)',
-                $attributeIds
+                $attributeIds,
+                \Zend_Db::INT_TYPE
             )->where(
                 'store_id = ?',
                 $this->getDefaultStoreId()
@@ -205,10 +209,7 @@ class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCo
     }
 
     /**
-     * @param \Magento\Framework\DB\Select $select
-     * @param string $table
-     * @param string $type
-     * @return \Magento\Framework\DB\Select
+     * @inheritdoc
      */
     protected function _addLoadAttributesSelectValues($select, $table, $type)
     {

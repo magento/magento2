@@ -3,10 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 /**
  * @var \Magento\Ui\Component\Layout\Tabs\Nav $block
  */
 ?>
-<div data-bind="scope: '<?= /* @escapeNotVerified */ $block->getDataScope() ?>.sections' " class="ui-tabs">
+<div data-bind="scope: '<?= $block->escapeHtmlAttr($block->getDataScope()) ?>.sections' " class="ui-tabs">
     <!-- ko template: getTemplate() --><!-- /ko -->
 </div>

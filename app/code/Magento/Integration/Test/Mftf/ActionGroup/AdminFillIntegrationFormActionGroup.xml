@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminFillIntegrationFormActionGroup">
+        <arguments>
+            <argument name="integration" type="entity" />
+            <argument name="currentAdminPassword" type="string" defaultValue="{{_ENV.MAGENTO_ADMIN_PASSWORD}}" />
+        </arguments>
+
+        <fillField selector="{{AdminNewIntegrationFormSection.integrationName}}" userInput="{{integration.name}}" stepKey="fillIntegrationName"/>
+        <fillField selector="{{AdminNewIntegrationFormSection.currentPassword}}" userInput="{{currentAdminPassword}}" stepKey="fillCurrentUserPassword"/>
+
+        <click selector="{{AdminNewIntegrationFormSection.apiTab}}" stepKey="clickToOpenApiTab"/>
+        <waitForPageLoad stepKey="waitForApiTab" />
+
+        <selectOption userInput="{{integration.resourceAccess}}" selector="{{AdminNewIntegrationFormSection.resourceAccess}}" stepKey="selectResourceAccess" />
+        <!--TODO waiting for custom action functionality with MQE-1964 -->
+        <!--<performOn stepKey="checkNeededResources" selector="{{AdminNewIntegrationFormSection.resourceTree}}" function="function($I,$apiResources={{integration.resources}}){foreach($apiResources as $apiResource){$I->conditionalClick('//li[@data-id=\'' . $apiResource . '\']//*[@class=\'jstree-checkbox\']','//li[@data-id=\'' . $apiResource . '\' and contains(@class, \'jstree-checked\')]',false);}}" />-->
+    </actionGroup>
+</actionGroups>

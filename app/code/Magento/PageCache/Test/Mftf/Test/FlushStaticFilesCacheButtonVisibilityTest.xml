@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="FlushStaticFilesCacheButtonVisibilityTest">
+        <annotations>
+            <features value="PageCache"/>
+            <stories value="Page Cache"/>
+            <title value="Check visibility of flush static files cache button"/>
+            <description value="Flush Static Files Cache button visibility"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-15454"/>
+            <group value="production_mode_only"/>
+            <group value="pagecache"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <!-- Log in to Admin Panel -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+
+        <!-- Open Cache Management page -->
+        <amOnPage url="{{AdminCacheManagementPage.url}}" stepKey="amOnPageCacheManagement"/>
+        <waitForPageLoad stepKey="waitForPageCacheManagementLoad"/>
+
+        <!-- Check 'Flush Static Files Cache' not visible in production mode. -->
+        <dontSee selector="{{AdminCacheManagementSection.additionalCacheButton('Flush Static Files Cache')}}" stepKey="dontSeeFlushStaticFilesButton" />
+    </test>
+</tests>

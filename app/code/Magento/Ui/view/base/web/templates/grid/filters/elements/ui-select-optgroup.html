@@ -19,7 +19,7 @@
                 css: {
                     _selected: $parent.root.isSelected(option.value),
                     _hover: $parent.root.isHovered(option, $element),
-                    _expended: $parent.root.getLevelVisibility($data),
+                    _expended: $parent.root.getLevelVisibility($data) || $data.visible,
                     _unclickable: $parent.root.isLabelDecoration($data),
                     _last: $parent.root.addLastElement($data),
                     '_with-checkbox': $parent.root.showCheckbox

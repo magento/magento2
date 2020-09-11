@@ -20,6 +20,8 @@
     <xs:include schemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/types/texts/longtext.xsd" />
     <xs:include schemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/types/texts/mediumtext.xsd" />
     <xs:include schemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/types/texts/varchar.xsd" />
+    <xs:include schemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/types/texts/char.xsd" />
+    <xs:include schemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/types/texts/json.xsd" />
     <xs:include schemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/types/binaries/blob.xsd" />
     <xs:include schemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/types/binaries/mediumblob.xsd" />
     <xs:include schemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/types/binaries/longblob.xsd" />
@@ -84,6 +86,7 @@
             <xs:element name="constraint" />
             <xs:element name="index" type="index" />
         </xs:choice>
+        <xs:attributeGroup ref="basicOperations" />
         <xs:attribute name="name" type="xs:string" use="required" />
         <xs:attribute name="resource" type="resourceType" />
         <xs:attribute name="engine" type="engineType" />

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminUpdateSimpleProductNameToVerifyDataOverridingOnStoreViewLevelTest">
+        <annotations>
+            <stories value="Update Simple Product"/>
+            <title value="Update Simple Product Name to Verify Data Overriding on Store View Level"/>
+            <description value="Test log in to Update Simple Product and Update Simple Product Name to Verify Data Overriding on Store View Level"/>
+            <testCaseId value="MC-10821"/>
+            <severity value="CRITICAL"/>
+            <group value="catalog"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="CreateStoreViewActionGroup" stepKey="createCustomStoreViewFr">
+                <argument name="storeView" value="customStoreFR"/>
+            </actionGroup>
+            <createData entity="SimpleSubCategory" stepKey="initialCategoryEntity"/>
+            <createData entity="defaultSimpleProduct" stepKey="initialSimpleProduct">
+                <requiredEntity createDataKey="initialCategoryEntity"/>
+            </createData>
+            <createData entity="SimpleSubCategory" stepKey="categoryEntity"/>
+        </before>
+        <after>
+            <deleteData stepKey="deleteSimpleSubCategory" createDataKey="initialCategoryEntity"/>
+            <deleteData stepKey="deleteSimpleSubCategory2" createDataKey="categoryEntity"/>
+            <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteCreatedProduct">
+                <argument name="sku" value="{{defaultSimpleProduct.sku}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreView">
+                <argument name="customStore" value="customStoreFR"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!-- Search default simple product in grid -->
+        <actionGroup ref="AdminProductCatalogPageOpenActionGroup" stepKey="openProductCatalogPage"/>
+        <actionGroup ref="FilterProductGridBySku2ActionGroup" stepKey="filterProductGrid">
+            <argument name="sku" value="$$initialSimpleProduct.sku$$"/>
+        </actionGroup>
+        <click selector="{{AdminProductGridFilterSection.nthRow('1')}}" stepKey="clickFirstRowToOpenDefaultSimpleProduct"/>
+        <waitForPageLoad stepKey="waitUntilProductIsOpened"/>
+
+        <!-- Assign simple product to created store view -->
+        <click selector="{{AdminCategoryMainActionsSection.CategoryStoreViewDropdownToggle}}" stepKey="clickCategoryStoreViewDropdownToggle"/>
+        <waitForPageLoad stepKey="waitForStoreViewDropdown"/>
+        <waitForElementVisible selector="{{AdminCategoryMainActionsSection.CategoryStoreViewOption(customStoreFR.name)}}" stepKey="waitForStoreViewOption"/>
+        <click selector="{{AdminCategoryMainActionsSection.CategoryStoreViewOption(customStoreFR.name)}}" stepKey="selectCategoryStoreViewOption"/>
+        <waitForPageLoad stepKey="waitForAcceptModal"/>
+        <waitForElementVisible selector="{{AdminProductFormChangeStoreSection.acceptButton}}" stepKey="waitForAcceptButton"/>
+        <click selector="{{AdminProductFormChangeStoreSection.acceptButton}}" stepKey="clickAcceptButton"/>
+        <waitForPageLoad stepKey="waitForThePageToLoad"/>
+        <waitForElementNotVisible selector="{{AdminProductFormChangeStoreSection.acceptButton}}" stepKey="waitForAcceptButtonGone"/>
+        <uncheckOption selector="{{AdminProductFormSection.productNameUseDefault}}" stepKey="uncheckProductStatus"/>
+
+        <!-- Update default simple product with name -->
+        <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{simpleProductDataOverriding.name}}" stepKey="fillSimpleProductName"/>
+        <actionGroup ref="AdminProductFormSaveButtonClickActionGroup" stepKey="clickButtonSave"/>
+
+        <!-- Verify customer see success message -->
+        <see selector="{{AdminProductFormSection.successMessage}}" userInput="You saved the product." stepKey="seeAssertSimpleProductSaveSuccessMessage"/>
+
+        <!--Verify customer see default simple product name on magento storefront page -->
+        <amOnPage url="{{StorefrontProductPage.url($$initialSimpleProduct.custom_attributes[url_key]$$)}}" stepKey="goToMagentoStorefrontPage"/>
+        <waitForPageLoad stepKey="waitForStoreFrontProductPageLoad"/>
+        <fillField selector="{{StorefrontQuickSearchResultsSection.searchTextBox}}" userInput="$$initialSimpleProduct.sku$$" stepKey="fillDefaultSimpleProductSkuInSearchTextBox"/>
+        <waitForPageLoad stepKey="waitForSearchTextBox"/>
+        <click selector="{{StorefrontQuickSearchResultsSection.searchTextBoxButton}}" stepKey="clickSearchTextBoxButton"/>
+        <waitForPageLoad stepKey="waitForSearch"/>
+        <see selector="{{StorefrontQuickSearchResultsSection.productLink}}" userInput="$$initialSimpleProduct.name$$" stepKey="seeDefaultProductName"/>
+
+        <!--Verify customer see simple product with updated name on magento storefront page under store view section -->
+        <click selector="{{StorefrontHeaderSection.storeViewSwitcher}}" stepKey="clickStoreViewSwitcher"/>
+        <waitForPageLoad stepKey="waitForStoreSwitcherLoad"/>
+        <click selector="{{StorefrontHeaderSection.storeView(customStoreFR.name)}}" stepKey="clickStoreViewOption"/>
+        <fillField selector="{{StorefrontQuickSearchResultsSection.searchTextBox}}" userInput="$$initialSimpleProduct.sku$$" stepKey="fillDefaultSimpleProductSkuInSearch"/>
+        <waitForPageLoad stepKey="waitForSearchTextBoxLoad"/>
+        <click selector="{{StorefrontQuickSearchResultsSection.searchTextBoxButton}}" stepKey="clickSearchTextButton"/>
+        <waitForPageLoad stepKey="waitForTextSearchLoad"/>
+        <see selector="{{StorefrontQuickSearchResultsSection.productLink}}" userInput="{{simpleProductDataOverriding.name}}" stepKey="seeUpdatedSimpleProductName"/>
+    </test>
+</tests>

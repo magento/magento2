@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminCatalogSearchTermNewSection">
+        <element name="searchQuery" type="text" selector="#query_text"/>
+        <element name="store" type="text" selector="#store_id"/>
+        <element name="numberOfResults" type="button" selector="#num_results"/>
+        <element name="numberOfUses" type="button" selector="#popularity"/>
+        <element name="redirectUrl" type="text" selector="//div[@class='admin__field-control control']/input[@id='redirect']"/>
+        <element name="displayInSuggestedTerm" type="select" selector="//select[@name='display_in_terms']"/>
+        <element name="saveSearchButton" type="button" selector="//button[@id='save']/span[@class='ui-button-text']" timeout="30"/>
+    </section>
+</sections>

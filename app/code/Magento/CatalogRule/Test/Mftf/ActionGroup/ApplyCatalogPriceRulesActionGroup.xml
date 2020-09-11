@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="ApplyCatalogPriceRulesActionGroup">
+        <annotations>
+            <description>Goes to the Catalog Price Rule grid page. Clicks on Apply Rules. Validates that the Success Message is present and correct.</description>
+        </annotations>
+
+        <amOnPage stepKey="goToPriceRulePage" url="{{CatalogRulePage.url}}"/>
+        <waitForPageLoad stepKey="waitForPriceRulePage"/>
+        <click stepKey="applyRules" selector="{{AdminCatalogPriceRuleGrid.applyRules}}"/>
+        <see stepKey="assertSuccess" selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="Updated rules applied."/>
+    </actionGroup>
+</actionGroups>

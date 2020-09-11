@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateCustomCategoryUrlRewriteAndAddPermanentRedirectTest">
+        <annotations>
+            <stories value="Create custom URL rewrite"/>
+            <title value="Create custom URL rewrite, permanent"/>
+            <description value="Login as Admin and create custom UrlRewrite and add redirect type permenent"/>
+            <testCaseId value="MC-5343"/>
+            <severity value="BLOCKER"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+
+        <before>
+            <createData entity="SimpleSubCategory" stepKey="category"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+        </before>
+        <after>
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>
+            <actionGroup ref="AdminDeleteUrlRewriteActionGroup" stepKey="deleteCustomUrlRewrite">
+                <argument name="requestPath" value="{{FirstLevelSubCat.name}}.html"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!-- Open Category Page and Get Category ID -->
+        <actionGroup ref="OpenCategoryFromCategoryTreeActionGroup" stepKey="getCategoryId">
+            <argument name="category"  value="$$category.name$$"/>
+        </actionGroup>
+        <grabFromCurrentUrl stepKey="categoryId" regex="#\/([0-9]*)?\/$#"/>
+
+        <!-- Open UrlRewrite Edit page and update the fields and fill the created category Target Path  -->
+        <actionGroup ref="AdminAddCustomUrlRewriteActionGroup" stepKey="addCustomUrlRewrite">
+            <argument name="customUrlRewriteValue" value="Custom"/>
+            <argument name="storeValue" value="Default Store View"/>
+            <argument name="requestPath" value="{{FirstLevelSubCat.name}}.html"/>
+            <argument name="redirectTypeValue" value="Permanent (301)"/>
+            <argument name="targetPath" value="catalog/category/view/id/{$categoryId}"/>
+            <argument name="description" value="End To End Test"/>
+        </actionGroup>
+
+        <!-- Assert updated category Url Rewrite in grid -->
+        <actionGroup ref="AdminSearchByRequestPathActionGroup" stepKey="searchByCategoryRequestPath">
+            <argument name="redirectPath" value="$$category.name$$.html" />
+            <argument name="redirectType" value="No" />
+            <argument name="targetPath" value="catalog/category/view/id/{$categoryId}"/>
+        </actionGroup>
+
+        <!--Assert initial category Url Rewrite in grid -->
+        <actionGroup ref="AdminSearchByRequestPathActionGroup" stepKey="searchByNewRequestPath">
+            <argument name="redirectPath" value="{{FirstLevelSubCat.name}}.html" />
+            <argument name="redirectType" value="Permanent (301)" />
+            <argument name="targetPath" value="catalog/category/view/id/{$categoryId}"/>
+        </actionGroup>
+
+        <!-- Assert updated Category redirect in Store Front -->
+        <actionGroup ref="AssertStorefrontUrlRewriteRedirectActionGroup" stepKey="verifyCategoryInStoreFront">
+            <argument name="category" value="$$category.name$$"/>
+            <argument name="newRequestPath" value="{{FirstLevelSubCat.name}}.html"/>
+        </actionGroup>
+
+        <!-- Assert initial Category redirect in Store Front -->
+        <actionGroup ref="AssertStorefrontUrlRewriteRedirectActionGroup" stepKey="verifyCategoryInStoreFront1">
+            <argument name="category" value="$$category.name$$"/>
+            <argument name="newRequestPath" value="catalog/category/view/id/{$categoryId}"/>
+        </actionGroup>
+    </test>
+</tests>

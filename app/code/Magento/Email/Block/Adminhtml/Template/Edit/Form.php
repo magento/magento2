@@ -9,6 +9,14 @@
  */
 namespace Magento\Email\Block\Adminhtml\Template\Edit;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+
+/**
+ * Adminhtml email template edit form block
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**
@@ -27,6 +35,11 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     private $serializer;
 
     /**
+     * @var SecureHtmlRenderer
+     */
+    protected $secureRenderer;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Data\FormFactory $formFactory
@@ -34,6 +47,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\Variable\Model\Source\Variables $variables
      * @param array $data
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
+     * @param SecureHtmlRenderer|null $secureRenderer
      * @throws \RuntimeException
      */
     public function __construct(
@@ -43,18 +57,21 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         \Magento\Variable\Model\VariableFactory $variableFactory,
         \Magento\Variable\Model\Source\Variables $variables,
         array $data = [],
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null,
+        ?SecureHtmlRenderer $secureRenderer = null
     ) {
         $this->_variableFactory = $variableFactory;
         $this->_variables = $variables;
         $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\Framework\Serialize\Serializer\Json::class);
+        $this->secureRenderer = $secureRenderer ?? ObjectManager::getInstance()->get(SecureHtmlRenderer::class);
         parent::__construct($context, $registry, $formFactory, $data);
     }
 
     /**
      * Prepare layout.
-     * Add files to use dialog windows
+     *
+     * Add files to use dialog windows.
      *
      * @return $this
      */
@@ -89,11 +106,16 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             [
                 'label' => __('Currently Used For'),
                 'container_id' => 'currently_used_for',
-                'after_element_html' => '<script>require(["prototype"], function () {' .
-                (!$this->getEmailTemplate()->getSystemConfigPathsWhereCurrentlyUsed() ? '$(\'' .
-                'currently_used_for' .
-                '\').hide(); ' : '') .
-                '});</script>'
+                'after_element_html' => $this->secureRenderer->renderTag(
+                    'script',
+                    [],
+                    'require(["prototype"], function () {' .
+                    (!$this->getEmailTemplate()->getSystemConfigPathsWhereCurrentlyUsed() ? '$(\'' .
+                    'currently_used_for' .
+                    '\').hide(); ' : '') .
+                    '});',
+                    false
+                ),
             ]
         );
 
@@ -191,7 +213,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         }
         $template = $this->getEmailTemplate();
         if ($template->getId() && ($templateVariables = $template->getVariablesOptionArray(true))) {
-            $variables = array_merge_recursive($variables, $templateVariables);
+            $variables = array_merge_recursive($variables, [$templateVariables]);
         }
         return $variables;
     }

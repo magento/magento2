@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Model\Order\Pdf\Items\Shipment;
 
 /**
@@ -65,14 +67,21 @@ class DefaultShipment extends \Magento\Sales\Model\Order\Pdf\Items\AbstractItems
         $lines = [];
 
         // draw Product name
-        $lines[0] = [['text' => $this->string->split($item->getName(), 60, true, true), 'feed' => 100]];
+        $lines[0] = [
+            [
+                // phpcs:ignore Magento2.Functions.DiscouragedFunction
+                'text' => $this->string->split(html_entity_decode($item->getName()), 60, true, true),
+                'feed' => 100
+            ]
+        ];
 
         // draw QTY
         $lines[0][] = ['text' => $item->getQty() * 1, 'feed' => 35];
 
         // draw SKU
         $lines[0][] = [
-            'text' => $this->string->split($this->getSku($item), 25),
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
+            'text' => $this->string->split(html_entity_decode($this->getSku($item)), 25),
             'feed' => 565,
             'align' => 'right',
         ];

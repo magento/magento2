@@ -823,7 +823,7 @@ class Config extends AbstractConfig
         if ($countryCode === null) {
             return $countryMethods;
         }
-        return isset($countryMethods[$countryCode]) ? $countryMethods[$countryCode] : $countryMethods['other'];
+        return $countryMethods[$countryCode] ?? $countryMethods['other'];
     }
 
     /**
@@ -1330,6 +1330,7 @@ class Config extends AbstractConfig
      * @param string $code
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * phpcs:disable Magento2.Functions.StaticFunction
      */
     public static function getIsCreditCardMethod($code)
     {
@@ -1511,6 +1512,10 @@ class Config extends AbstractConfig
             case 'allow_ba_signup':
             case 'in_context':
             case 'merchant_id':
+            case 'client_id':
+            case 'sandbox_client_id':
+            case 'supported_locales':
+            case 'smart_buttons_supported_locales':
                 return "payment/{$this->_methodCode}/{$fieldName}";
             default:
                 return $this->_mapMethodFieldset($fieldName);
@@ -1635,6 +1640,7 @@ class Config extends AbstractConfig
      *
      * @param string $fieldName
      * @return string|null
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _mapGenericStyleFieldset($fieldName)
     {
@@ -1645,9 +1651,10 @@ class Config extends AbstractConfig
             case 'paypal_hdrbackcolor':
             case 'paypal_hdrbordercolor':
             case 'paypal_payflowcolor':
+            case 'disable_funding_options':
                 return "paypal/style/{$fieldName}";
             default:
-                return null;
+                return $this->mapButtonStyles($fieldName);
         }
     }
 
@@ -1692,6 +1699,36 @@ class Config extends AbstractConfig
             case 'debug':
             case 'verify_peer':
                 return "payment/{$this->_methodCode}/{$fieldName}";
+            default:
+                return null;
+        }
+    }
+
+    /**
+     * Map PayPal button style config fields
+     *
+     * @param string $fieldName
+     * @return null|string
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
+    private function mapButtonStyles(string $fieldName)
+    {
+        $page = substr($fieldName, 0, (int)strpos($fieldName, '_page_button_'));
+
+        if (!$page) {
+            return null;
+        }
+
+        switch ($fieldName) {
+            case "{$page}_page_button_customize":
+            case "{$page}_page_button_layout":
+            case "{$page}_page_button_size":
+            case "{$page}_page_button_color":
+            case "{$page}_page_button_shape":
+            case "{$page}_page_button_label":
+            case "{$page}_page_button_mx_installment_period":
+            case "{$page}_page_button_br_installment_period":
+                return "paypal/style/{$fieldName}";
             default:
                 return null;
         }

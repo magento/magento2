@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminGlobalSearchOnProductPageTest">
+        <annotations>
+            <features value="Search"/>
+            <stories value="Backend global search"/>
+            <title value="Admin global search on product page test"/>
+            <description value="Admin search displays settings and content items"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-6421"/>
+            <group value="Search"/>
+        </annotations>
+        <before>
+            <!-- Login as admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!-- Delete product -->
+            <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteProduct">
+                <argument name="sku" value="{{SimpleProduct.sku}}"/>
+            </actionGroup>
+
+            <!-- Delete category -->
+            <actionGroup ref="DeleteCategoryActionGroup" stepKey="deleteCreatedNewRootCategory">
+                <argument name="categoryEntity" value="_defaultCategory"/>
+            </actionGroup>
+
+            <!-- Logout -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!-- Create Simple Product -->
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="adminProductIndexPageAdd"/>
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateProductPage">
+            <argument name="product" value="SimpleProduct"/>
+        </actionGroup>
+        <actionGroup ref="FillMainProductFormActionGroup" stepKey="fillProductForm">
+            <argument name="product" value="SimpleProduct"/>
+        </actionGroup>
+
+        <!-- Create new category for product -->
+        <actionGroup ref="FillNewProductCategoryActionGroup" stepKey="FillNewProductCategory">
+            <argument name="categoryName" value="{{_defaultCategory.name}}"/>
+        </actionGroup>
+
+        <!-- Save product form -->
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductForm"/>
+
+        <!-- Click on the magnifying glass to start searching -->
+        <click selector="{{AdminGlobalSearchSection.globalSearch}}" stepKey="clickSearchBtn"/>
+        <waitForElementVisible selector="{{AdminGlobalSearchSection.globalSearchActive}}" stepKey="waitForSearchInputVisible"/>
+
+        <!-- The search input is expanded and active -->
+        <seeElement selector="{{AdminGlobalSearchSection.globalSearchActive}}" stepKey="seeActiveSearch"/>
+    </test>
+</tests>

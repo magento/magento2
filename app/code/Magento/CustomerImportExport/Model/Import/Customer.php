@@ -3,12 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CustomerImportExport\Model\Import;
 
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\ImportExport\Model\Import;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 use Magento\ImportExport\Model\Import\AbstractSource;
+use Magento\Customer\Model\Indexer\Processor;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Customer entity import
@@ -21,7 +25,7 @@ use Magento\ImportExport\Model\Import\AbstractSource;
 class Customer extends AbstractCustomer
 {
     /**
-     * Attribute collection name
+     * Collection name attribute
      */
     const ATTRIBUTE_COLLECTION_NAME = \Magento\Customer\Model\ResourceModel\Attribute\Collection::class;
 
@@ -167,6 +171,11 @@ class Customer extends AbstractCustomer
     ];
 
     /**
+     * @var Processor
+     */
+    private $indexerProcessor;
+
+    /**
      * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\ImportExport\Model\ImportFactory $importFactory
@@ -180,6 +189,7 @@ class Customer extends AbstractCustomer
      * @param \Magento\Customer\Model\ResourceModel\Attribute\CollectionFactory $attrCollectionFactory
      * @param \Magento\Customer\Model\CustomerFactory $customerFactory
      * @param array $data
+     * @param Processor $indexerProcessor
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -195,7 +205,8 @@ class Customer extends AbstractCustomer
         \Magento\CustomerImportExport\Model\ResourceModel\Import\Customer\StorageFactory $storageFactory,
         \Magento\Customer\Model\ResourceModel\Attribute\CollectionFactory $attrCollectionFactory,
         \Magento\Customer\Model\CustomerFactory $customerFactory,
-        array $data = []
+        array $data = [],
+        ?Processor $indexerProcessor = null
     ) {
         $this->_resourceHelper = $resourceHelper;
 
@@ -252,6 +263,7 @@ class Customer extends AbstractCustomer
         /** @var $customerResource \Magento\Customer\Model\ResourceModel\Customer */
         $customerResource = $this->_customerModel->getResource();
         $this->_entityTable = $customerResource->getEntityTable();
+        $this->indexerProcessor = $indexerProcessor ?: ObjectManager::getInstance()->get(Processor::class);
     }
 
     /**
@@ -288,9 +300,12 @@ class Customer extends AbstractCustomer
     {
         $firstCustomer = reset($entitiesToUpdate);
         $columnsToUpdate = array_keys($firstCustomer);
-        $customerFieldsToUpdate = array_filter($this->customerFields, function ($field) use ($columnsToUpdate) {
-            return in_array($field, $columnsToUpdate);
-        });
+        $customerFieldsToUpdate = array_filter(
+            $this->customerFields,
+            function ($field) use ($columnsToUpdate) {
+                return in_array($field, $columnsToUpdate);
+            }
+        );
         return $customerFieldsToUpdate;
     }
 
@@ -352,6 +367,7 @@ class Customer extends AbstractCustomer
      * @param array|AbstractSource $rows
      *
      * @return void
+     * @since 100.2.3
      */
     public function prepareCustomerData($rows): void
     {
@@ -372,6 +388,7 @@ class Customer extends AbstractCustomer
 
     /**
      * @inheritDoc
+     * @since 100.2.3
      */
     public function validateData()
     {
@@ -403,7 +420,7 @@ class Customer extends AbstractCustomer
             $createdAt = (new \DateTime())->setTimestamp(strtotime($rowData['created_at']));
         }
 
-        $emailInLowercase = strtolower($rowData[self::COLUMN_EMAIL]);
+        $emailInLowercase = strtolower(trim($rowData[self::COLUMN_EMAIL]));
         $newCustomer = false;
         $entityId = $this->_getCustomerId($emailInLowercase, $rowData[self::COLUMN_WEBSITE]);
         if (!$entityId) {
@@ -423,6 +440,9 @@ class Customer extends AbstractCustomer
             $attributeParameters = $this->_attributes[$attributeCode];
             if (in_array($attributeParameters['type'], ['select', 'boolean'])) {
                 $value = $this->getSelectAttrIdByValue($attributeParameters, $value);
+                if ($attributeCode === CustomerInterface::GENDER && $value === 0) {
+                    $value = null;
+                }
             } elseif ('multiselect' == $attributeParameters['type']) {
                 $ids = [];
                 foreach (explode($multiSeparator, mb_strtolower($value)) as $subValue) {
@@ -470,6 +490,8 @@ class Customer extends AbstractCustomer
             $entityRow['updated_at'] = $now->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT);
             if (!empty($rowData[self::COLUMN_STORE])) {
                 $entityRow['store_id'] = $this->_storeCodeToId[$rowData[self::COLUMN_STORE]];
+            } else {
+                $entityRow['store_id'] = $this->getCustomerStoreId($emailInLowercase, $rowData[self::COLUMN_WEBSITE]);
             }
             $entitiesToUpdate[] = $entityRow;
         }
@@ -492,8 +514,8 @@ class Customer extends AbstractCustomer
     {
         while ($bunch = $this->_dataSourceModel->getNextBunch()) {
             $this->prepareCustomerData($bunch);
-            $entitiesToCreate = [];
-            $entitiesToUpdate = [];
+            $entitiesToCreate = [[]];
+            $entitiesToUpdate = [[]];
             $entitiesToDelete = [];
             $attributesToSave = [];
 
@@ -513,19 +535,23 @@ class Customer extends AbstractCustomer
                     );
                 } elseif ($this->getBehavior($rowData) == \Magento\ImportExport\Model\Import::BEHAVIOR_ADD_UPDATE) {
                     $processedData = $this->_prepareDataForUpdate($rowData);
-                    $entitiesToCreate = array_merge($entitiesToCreate, $processedData[self::ENTITIES_TO_CREATE_KEY]);
-                    $entitiesToUpdate = array_merge($entitiesToUpdate, $processedData[self::ENTITIES_TO_UPDATE_KEY]);
+
+                    $entitiesToCreate[] = $processedData[self::ENTITIES_TO_CREATE_KEY];
+                    $entitiesToUpdate[] = $processedData[self::ENTITIES_TO_UPDATE_KEY];
+
                     foreach ($processedData[self::ATTRIBUTES_TO_SAVE_KEY] as $tableName => $customerAttributes) {
                         if (!isset($attributesToSave[$tableName])) {
                             $attributesToSave[$tableName] = [];
                         }
-                        $attributesToSave[$tableName] = array_diff_key(
-                            $attributesToSave[$tableName],
-                            $customerAttributes
-                        ) + $customerAttributes;
+                        $attributes = array_diff_key($attributesToSave[$tableName], $customerAttributes);
+                        $attributesToSave[$tableName] =  $attributes + $customerAttributes;
                     }
                 }
             }
+
+            $entitiesToCreate = array_merge(...$entitiesToCreate);
+            $entitiesToUpdate = array_merge(...$entitiesToUpdate);
+
             $this->updateItemsCounterStats($entitiesToCreate, $entitiesToUpdate, $entitiesToDelete);
             /**
              * Save prepared data
@@ -540,7 +566,7 @@ class Customer extends AbstractCustomer
                 $this->_deleteCustomerEntities($entitiesToDelete);
             }
         }
-
+        $this->indexerProcessor->markIndexerAsInvalid();
         return true;
     }
 
@@ -578,13 +604,9 @@ class Customer extends AbstractCustomer
                 $this->addRowError(self::ERROR_INVALID_STORE, $rowNumber);
             }
             // check password
-            if (isset(
-                $rowData['password']
-            ) && strlen(
-                $rowData['password']
-            ) && $this->string->strlen(
-                $rowData['password']
-            ) < self::MIN_PASSWORD_LENGTH
+            if (isset($rowData['password'])
+                && strlen($rowData['password'])
+                && $this->string->strlen($rowData['password']) < self::MIN_PASSWORD_LENGTH
             ) {
                 $this->addRowError(self::ERROR_PASSWORD_LENGTH, $rowNumber);
             }
@@ -598,14 +620,18 @@ class Customer extends AbstractCustomer
                 $isFieldNotSetAndCustomerDoesNotExist =
                     !isset($rowData[$attributeCode]) && !$this->_getCustomerId($email, $website);
                 $isFieldSetAndTrimmedValueIsEmpty
-                    = isset($rowData[$attributeCode]) && '' === trim($rowData[$attributeCode]);
+                    = isset($rowData[$attributeCode]) && '' === trim((string)$rowData[$attributeCode]);
 
                 if ($isFieldRequired && ($isFieldNotSetAndCustomerDoesNotExist || $isFieldSetAndTrimmedValueIsEmpty)) {
                     $this->addRowError(self::ERROR_VALUE_IS_REQUIRED, $rowNumber, $attributeCode);
                     continue;
                 }
 
-                if (isset($rowData[$attributeCode]) && strlen($rowData[$attributeCode])) {
+                if (isset($rowData[$attributeCode]) && strlen((string)$rowData[$attributeCode])) {
+                    if ($attributeParams['type'] == 'select') {
+                        continue;
+                    }
+
                     $this->isAttributeValid(
                         $attributeCode,
                         $attributeParams,
@@ -657,5 +683,23 @@ class Customer extends AbstractCustomer
                 $this->customerFields
             )
         );
+    }
+
+    /**
+     * Get customer store ID by email and website ID.
+     *
+     * @param string $email
+     * @param string $websiteCode
+     * @return bool|int
+     */
+    private function getCustomerStoreId(string $email, string $websiteCode)
+    {
+        $websiteId = (int) $this->getWebsiteId($websiteCode);
+        $storeId = $this->getCustomerStorage()->getCustomerStoreId($email, $websiteId);
+        if ($storeId === null || $storeId === false) {
+            $defaultStore = $this->_storeManager->getWebsite($websiteId)->getDefaultStore();
+            $storeId = $defaultStore ? $defaultStore->getId() : \Magento\Store\Model\Store::DEFAULT_STORE_ID;
+        }
+        return $storeId;
     }
 }

@@ -10,6 +10,8 @@
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="CurrencySetupSection">
         <element name="allowCurrencies" type="select" selector="#currency_options_allow"/>
+        <element name="baseCurrency" type="select" selector="#currency_options_base"/>
+        <element name="baseCurrencyUseDefault" type="checkbox" selector="#currency_options_base_inherit"/>
         <element name="currencyOptions" type="select" selector="#currency_options-head"/>
     </section>
 </sections>

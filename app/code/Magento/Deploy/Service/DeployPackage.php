@@ -107,6 +107,8 @@ class DeployPackage
     }
 
     /**
+     * Execute package deploy procedure when area already emulated
+     *
      * @param Package $package
      * @param array $options
      * @param bool $skipLogging
@@ -132,11 +134,14 @@ class DeployPackage
             } catch (ContentProcessorException $exception) {
                 $errorMessage = __('Compilation from source: ')
                     . $file->getSourcePath()
-                    . PHP_EOL . $exception->getMessage();
+                    . PHP_EOL . $exception->getMessage() . PHP_EOL;
                 $this->errorsCount++;
                 $this->logger->critical($errorMessage);
+                $package->deleteFile($file->getFileId());
             } catch (\Exception $exception) {
-                $this->logger->critical($exception->getTraceAsString());
+                $this->logger->critical(
+                    'Compilation from source ' . $file->getSourcePath() . ' failed' . PHP_EOL . (string)$exception
+                );
                 $this->errorsCount++;
             }
         }
@@ -219,7 +224,9 @@ class DeployPackage
     private function checkFileSkip($filePath, array $options)
     {
         if ($filePath !== '.') {
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             $ext = strtolower(pathinfo($filePath, PATHINFO_EXTENSION));
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             $basename = pathinfo($filePath, PATHINFO_BASENAME);
             if ($ext === 'less' && strpos($basename, '_') === 0) {
                 return true;
@@ -242,23 +249,6 @@ class DeployPackage
      */
     private function register(Package $package, PackageFile $file = null, $skipLogging = false)
     {
-        $logMessage = '.';
-        if ($file) {
-            $logMessage = "Processing file '{$file->getSourcePath()}'";
-            if ($file->getArea()) {
-                $logMessage .= "  for area '{$file->getArea()}'";
-            }
-            if ($file->getTheme()) {
-                $logMessage .= ", theme '{$file->getTheme()}'";
-            }
-            if ($file->getLocale()) {
-                $logMessage .= ", locale '{$file->getLocale()}'";
-            }
-            if ($file->getModule()) {
-                $logMessage .= "module '{$file->getModule()}'";
-            }
-        }
-
         $info = [
             'count' => $this->count,
             'last' => $file ? $file->getSourcePath() : ''
@@ -266,6 +256,23 @@ class DeployPackage
         $this->deployStaticFile->writeTmpFile('info.json', $package->getPath(), json_encode($info));
 
         if (!$skipLogging) {
+            $logMessage = '.';
+            if ($file) {
+                $logMessage = "Processing file '{$file->getSourcePath()}'";
+                if ($file->getArea()) {
+                    $logMessage .= "  for area '{$file->getArea()}'";
+                }
+                if ($file->getTheme()) {
+                    $logMessage .= ", theme '{$file->getTheme()}'";
+                }
+                if ($file->getLocale()) {
+                    $logMessage .= ", locale '{$file->getLocale()}'";
+                }
+                if ($file->getModule()) {
+                    $logMessage .= "module '{$file->getModule()}'";
+                }
+            }
+
             $this->logger->info($logMessage);
         }
     }

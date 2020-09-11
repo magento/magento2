@@ -13,7 +13,7 @@ use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Ui\Component\Container;
 
 /**
- * Class Attributes
+ * Class for Product Modifier Attributes
  *
  * @api
  * @since 101.0.0
@@ -67,7 +67,8 @@ class Attributes extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @since 101.0.0
      */
     public function modifyData(array $data)
@@ -76,6 +77,8 @@ class Attributes extends AbstractModifier
     }
 
     /**
+     * Check if can add attributes on product form.
+     *
      * @return boolean
      */
     private function canAddAttributes()
@@ -89,7 +92,8 @@ class Attributes extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @since 101.0.0
      */
     public function modifyMeta(array $meta)
@@ -111,6 +115,8 @@ class Attributes extends AbstractModifier
     }
 
     /**
+     * Modify meta customize attribute modal.
+     *
      * @param array $meta
      * @return array
      */
@@ -132,6 +138,7 @@ class Attributes extends AbstractModifier
                         'actions' => [
                             [
                                 'targetName' => '${ $.name }',
+                                '__disableTmpl' => ['targetName' => false],
                                 'actionName' => 'actionCancel'
                             ]
                         ]
@@ -142,6 +149,7 @@ class Attributes extends AbstractModifier
                         'actions' => [
                             [
                                 'targetName' => '${ $.name }.product_attributes_grid',
+                                '__disableTmpl' => ['targetName' => false],
                                 'actionName' => 'save'
                             ],
                             [
@@ -207,6 +215,8 @@ class Attributes extends AbstractModifier
     }
 
     /**
+     * Modify meta to customize create attribute modal.
+     *
      * @param array $meta
      * @return array
      */
@@ -263,6 +273,7 @@ class Attributes extends AbstractModifier
                                 'externalProvider' => 'product_attribute_add_form'
                                     . '.product_attribute_add_form_data_source',
                                 'toolbarContainer' => '${ $.parentName }',
+                                '__disableTmpl' => ['toolbarContainer' => false],
                                 'formSubmitType' => 'ajax',
                                 'saveUrl' => $this->urlBuilder->getUrl('catalog/product_attribute/save', $params),
                                 'validateUrl' => $this->urlBuilder->getUrl(
@@ -273,11 +284,17 @@ class Attributes extends AbstractModifier
                                 'productType' => $this->locator->getProduct()->getTypeId(),
                                 'imports' => [
                                     'attributeSetId' => '${ $.provider }:data.product.attribute_set_id',
+                                    '__disableTmpl' => ['attributeSetId' => false],
                                 ],
                                 'exports' => [
                                     'saveUrl' => '${ $.externalProvider }:client.urls.save',
                                     'validateUrl' => '${ $.externalProvider }:client.urls.beforeSave',
                                     'attributeSetId' => '${ $.externalProvider }:params.set',
+                                    '__disableTmpl' => [
+                                        'saveUrl' => false,
+                                        'validateUrl' => false,
+                                        'attributeSetId' => false
+                                    ],
                                 ]
                             ]
                         ]
@@ -289,6 +306,8 @@ class Attributes extends AbstractModifier
     }
 
     /**
+     * Modify meta to customize attribute grid.
+     *
      * @param array $meta
      * @return array
      */
@@ -309,8 +328,9 @@ class Attributes extends AbstractModifier
                         'immediateUpdateBySelection' => true,
                         'behaviourType' => 'edit',
                         'externalFilterMode' => true,
-                        'dataLinks' => ['imports' => false, 'exports' => true],
+                        'dataLinks' => ['imports' => false, 'exports' => false],
                         'formProvider' => 'ns = ${ $.namespace }, index = product_form',
+                        '__disableTmpl' => ['selectionsProvider' => false, 'formProvider' => false],
                         'groupCode' => static::GROUP_CODE,
                         'groupName' => static::GROUP_NAME,
                         'groupSortOrder' => static::GROUP_SORT_ORDER,
@@ -320,10 +340,12 @@ class Attributes extends AbstractModifier
                         'productType' => $this->locator->getProduct()->getTypeId(),
                         'loading' => false,
                         'imports' => [
-                            'attributeSetId' => '${ $.provider }:data.product.attribute_set_id'
+                            'attributeSetId' => '${ $.provider }:data.product.attribute_set_id',
+                            '__disableTmpl' => ['attributeSetId' => false],
                         ],
                         'exports' => [
-                            'attributeSetId' => '${ $.externalProvider }:params.template_id'
+                            'attributeSetId' => '${ $.externalProvider }:params.template_id',
+                            '__disableTmpl' => ['attributeSetId' => false],
                         ]
                     ],
                 ],

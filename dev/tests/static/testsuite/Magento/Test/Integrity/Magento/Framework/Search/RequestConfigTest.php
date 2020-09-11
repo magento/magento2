@@ -12,7 +12,7 @@ class RequestConfigTest extends \Magento\TestFramework\Integrity\AbstractConfig
     /** @var \Magento\Framework\Config\Dom\UrnResolver */
     protected $urnResolver;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
     }
@@ -102,8 +102,7 @@ Element 'filter': The attribute 'field' is required but missing.
 Element 'metric', attribute 'type': [facet 'enumeration'] " .
                 "The value 'sumasdasd' is not an element of the set {'sum', 'count', 'min', 'max', 'avg'}.
 Element 'metric', attribute 'type': 'sumasdasd' is not a valid value of the local atomic type.
-Element 'bucket': Missing child element(s). Expected is one of ( metrics, ranges ).
-Element 'request': Missing child element(s). Expected is ( from )."
+Element 'bucket': Missing child element(s). Expected is one of ( metrics, ranges )."
             )
         );
         parent::testFileSchemaUsingInvalidXml($expectedErrors);

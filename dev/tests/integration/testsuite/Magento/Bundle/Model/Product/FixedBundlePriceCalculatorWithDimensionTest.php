@@ -13,7 +13,6 @@ use \Magento\Bundle\Api\Data\LinkInterface;
  * @magentoDbIsolation disabled
  * @magentoIndexerDimensionMode catalog_product_price website_and_customer_group
  * @group indexer_dimension
- * @magentoAppArea frontend
  */
 class FixedBundlePriceCalculatorWithDimensionTest extends BundlePriceAbstract
 {
