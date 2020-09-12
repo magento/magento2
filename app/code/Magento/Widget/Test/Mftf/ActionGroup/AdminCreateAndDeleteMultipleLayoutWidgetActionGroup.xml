@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminCreateAndDeleteMultipleLayoutWidgetActionGroup">
+        <annotations>
+            <description>Goes to the Admin Widget creation page. Add and delete multiple layouts</description>
+        </annotations>
+        <arguments>
+            <argument name="widget"/>
+        </arguments>
+        <amOnPage url="{{AdminNewWidgetPage.url}}" stepKey="amOnAdminNewWidgetPage"/>
+        <selectOption selector="{{AdminNewWidgetSection.widgetType}}" userInput="{{widget.type}}" stepKey="setWidgetType"/>
+        <selectOption selector="{{AdminNewWidgetSection.widgetDesignTheme}}" userInput="{{widget.design_theme}}" stepKey="setWidgetDesignTheme"/>
+        <click selector="{{AdminNewWidgetSection.continue}}" stepKey="clickContinue"/>
+        <fillField selector="{{AdminNewWidgetSection.widgetTitle}}" userInput="{{widget.name}}" stepKey="fillTitle"/>
+        <selectOption selector="{{AdminNewWidgetSection.widgetStoreIds}}" userInput="{{widget.store_ids[0]}}" stepKey="setWidgetStoreIds"/>
+        <click selector="{{AdminNewWidgetSection.addLayoutUpdate}}" stepKey="clickAddLayoutUpdate"/>
+        <waitForAjaxLoad stepKey="waitForLoad"/>
+        <click selector="{{AdminNewWidgetSection.addLayoutUpdate}}" stepKey="clickAddLayoutUpdate2"/>
+        <waitForAjaxLoad stepKey="waitForLoad2"/>
+        <click selector="{{AdminNewWidgetSection.addLayoutUpdate}}" stepKey="clickAddLayoutUpdate3"/>
+        <waitForAjaxLoad stepKey="waitForLoad3"/>
+        <seeNumberOfElements userInput="3" selector="{{AdminNewWidgetSection.CountDeleteButtons}}" stepKey="seeThreeDeleteButtons"/>
+        <click selector="{{AdminNewWidgetSection.deleteActionThird}}" stepKey="clickThirdDeleteButton"/>
+        <seeNumberOfElements userInput="2" selector="{{AdminNewWidgetSection.CountDeleteButtons}}" stepKey="seeTwoDeleteButtons"/>
+        <click selector="{{AdminNewWidgetSection.deleteActionSecond}}" stepKey="clickSecondDeleteButton"/>
+        <seeNumberOfElements userInput="1" selector="{{AdminNewWidgetSection.CountDeleteButtons}}" stepKey="seeOneDeleteButtons"/>
+        <click selector="{{AdminNewWidgetSection.deleteActionFirst}}" stepKey="clickFirstDeleteButton"/>
+        <seeNumberOfElements userInput="0" selector="{{AdminNewWidgetSection.CountDeleteButtons}}" stepKey="seeZeroDeleteButtons"/>
+    </actionGroup>
+</actionGroups>
