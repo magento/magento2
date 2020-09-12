@@ -112,19 +112,19 @@ class SecureHtmlRenderer
                 {$attributeJavascript};
             }
             var {$elementName}Array = document.querySelectorAll("{$elementSelector}");
-
-            {$elementName}Array.forEach(function(element){
-                if (element) {
-                    element.{$eventName} = function (event) {
-                        var targetElement = element;
-                        if (event && event.target) {
-                            targetElement = event.target;
+            if({$elementName}Array.lenght !== 'undefined'){
+                {$elementName}Array.forEach(function(element){
+                    if (element) {
+                        element.{$eventName} = function (event) {
+                            var targetElement = element;
+                            if (event && event.target) {
+                                targetElement = event.target;
+                            }
+                            {$listenerFunction}.apply(targetElement);
                         }
-                        {$listenerFunction}.apply(targetElement);
                     }
-                }
-            });
-
+                });
+            }
             
 script;
 
