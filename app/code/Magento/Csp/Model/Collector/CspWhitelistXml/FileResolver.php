@@ -61,7 +61,7 @@ class FileResolver implements FileResolverInterface
         CustomizationInterfaceFactory $customizationFactory,
         Filesystem $filesystem,
         CompositeFileIteratorFactory $iteratorFactory
-    )  {
+    ) {
         $this->moduleFileResolver = $moduleFileResolver;
         $this->theme = $design->getDesignTheme();
         $this->themeInfoFactory = $customizationFactory;
