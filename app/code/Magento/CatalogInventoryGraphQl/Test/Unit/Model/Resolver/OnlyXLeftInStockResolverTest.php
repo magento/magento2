@@ -169,7 +169,7 @@ class OnlyXLeftInStockResolverTest extends TestCase
         $this->scopeConfigMock->method('getValue')->willReturn($thresholdQty);
 
         $this->assertEquals(
-            null,
+            0,
             $this->resolver->resolve(
                 $this->fieldMock,
                 $this->contextMock,
