@@ -400,6 +400,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
      * @magentoConfigFixture default_store carriers/dhl/id some ID
      * @magentoConfigFixture default_store carriers/dhl/password some password
      * @magentoConfigFixture default_store carriers/dhl/content_type N
+     * @magentoConfigFixture default_store carriers/dhl/include_tax 1
      * @magentoConfigFixture default_store carriers/dhl/nondoc_methods 1,3,4,8,P,Q,E,F,H,J,M,V,Y
      * @magentoConfigFixture default_store carriers/dhl/showmethod' => 1,
      * @magentoConfigFixture default_store carriers/dhl/title DHL Title
@@ -445,6 +446,57 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
         self::assertStringContainsString('<Height>0.63</Height>', $requestXml);
         self::assertStringContainsString('<Width>0.63</Width>', $requestXml);
         self::assertStringContainsString('<Depth>0.63</Depth>', $requestXml);
+    }
+
+    /**
+     * Tests that valid rates are returned when sending a quotes request with include_tax set to false.
+     *
+     * @magentoConfigFixture default_store carriers/dhl/active 1
+     * @magentoConfigFixture default_store carriers/dhl/id testid
+     * @magentoConfigFixture default_store carriers/dhl/password testpassword
+     * @magentoConfigFixture default_store carriers/dhl/account testaccount
+     * @magentoConfigFixture default_store carriers/dhl/handling_fee 0
+     * @magentoConfigFixture default_store carriers/dhl/free_method_nondoc
+     * @magentoConfigFixture default_store carriers/dhl/free_shipping_enable 0
+     * @magentoConfigFixture default_store carriers/dhl/specificcountry
+     * @magentoConfigFixture default_store carriers/dhl/showmethod 1
+     * @magentoConfigFixture default_store carriers/dhl/debug 0
+     * @magentoConfigFixture default_store carriers/dhl/title DHL Title
+     * @magentoConfigFixture default_store carriers/dhl/sandbox_mode 1
+     * @magentoConfigFixture default_store carriers/dhl/include_tax 0
+     * @magentoConfigFixture default_store shipping/origin/country_id GB
+     * @magentoConfigFixture default_store shipping/origin/region_id
+     * @magentoConfigFixture default_store currency/options/base GBP
+     * @magentoConfigFixture default/currency/options/base GBP
+     */
+    public function testCollectRatesRemovingTax()
+    {
+        $requestData = $this->getRequestData('notax');
+        //phpcs:disable Magento2.Functions.DiscouragedFunction
+        $response = new Response(
+            200,
+            [],
+            file_get_contents(__DIR__ . '/../_files/dhl_quote_withtax_response.xml')
+        );
+        //phpcs:enable Magento2.Functions.DiscouragedFunction
+        $this->httpClient->nextResponses(array_fill(0, Carrier::UNAVAILABLE_DATE_LOOK_FORWARD + 1, $response));
+        /** @var RateRequest $request */
+        $request = Bootstrap::getObjectManager()->create(RateRequest::class, $requestData);
+        $expectedRates = [
+            ['carrier' => 'dhl', 'carrier_title' => 'DHL Title', 'cost' => 13.64, 'method' => '1', 'price' => 13.64],
+            ['carrier' => 'dhl', 'carrier_title' => 'DHL Title', 'cost' => 24.19, 'method' => 'C', 'price' => 24.19],
+            ['carrier' => 'dhl', 'carrier_title' => 'DHL Title', 'cost' => 7.75, 'method' => 'N', 'price' => 7.75],
+            ['carrier' => 'dhl', 'carrier_title' => 'DHL Title', 'cost' => 11.63, 'method' => '7', 'price' => 11.63]
+        ];
+
+        $actualRates = $this->dhlCarrier->collectRates($request)->getAllRates();
+
+        self::assertEquals(count($expectedRates), count($actualRates));
+        foreach ($actualRates as $i => $actualRate) {
+            $actualRate = $actualRate->getData();
+            unset($actualRate['method_title']);
+            self::assertEquals($expectedRates[$i], $actualRate);
+        }
     }
 
     /**
@@ -513,50 +565,64 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    private function getRequestData(): array
+    private function getRequestData($key = 'default'): array
     {
-        return [
-            'data' => [
-                'dest_country_id' => 'DE',
-                'dest_region_id' => '82',
-                'dest_region_code' => 'BER',
-                'dest_street' => 'Turmstraße 17',
-                'dest_city' => 'Berlin',
-                'dest_postcode' => '10559',
-                'dest_postal' => '10559',
-                'package_value' => '5',
-                'package_value_with_discount' => '5',
-                'package_weight' => '8.2657',
-                'package_qty' => '1',
-                'package_physical_value' => '5',
-                'free_method_weight' => '5',
-                'store_id' => '1',
-                'website_id' => '1',
-                'free_shipping' => '0',
-                'limit_carrier' => null,
-                'base_subtotal_incl_tax' => '5',
-                'orig_country_id' => 'US',
-                'orig_region_id' => '12',
-                'orig_city' => 'Fremont',
-                'orig_postcode' => '94538',
-                'dhl_id' => 'MAGEN_8501',
-                'dhl_password' => 'QR2GO1U74X',
-                'dhl_account' => '799909537',
-                'dhl_shipping_intl_key' => '54233F2B2C4E5C4B4C5E5A59565530554B405641475D5659',
-                'girth' => null,
-                'height' => null,
-                'length' => null,
-                'width' => null,
-                'weight' => 1,
-                'dhl_shipment_type' => 'P',
-                'dhl_duitable' => 0,
-                'dhl_duty_payment_type' => 'R',
-                'dhl_content_desc' => 'Big Box',
-                'limit_method' => 'IE',
-                'ship_date' => '2014-01-09',
-                'action' => 'RateEstimate',
-                'all_items' => [],
+        $requestData = [
+            'default' => [
+                'data' => [
+                    'dest_country_id' => 'DE',
+                    'dest_region_id' => '82',
+                    'dest_region_code' => 'BER',
+                    'dest_street' => 'Turmstraße 17',
+                    'dest_city' => 'Berlin',
+                    'dest_postcode' => '10559',
+                    'dest_postal' => '10559',
+                    'package_value' => '5',
+                    'package_value_with_discount' => '5',
+                    'package_weight' => '8.2657',
+                    'package_qty' => '1',
+                    'package_physical_value' => '5',
+                    'free_method_weight' => '5',
+                    'store_id' => '1',
+                    'website_id' => '1',
+                    'free_shipping' => '0',
+                    'limit_carrier' => null,
+                    'base_subtotal_incl_tax' => '5',
+                    'orig_country_id' => 'US',
+                    'orig_region_id' => '12',
+                    'orig_city' => 'Fremont',
+                    'orig_postcode' => '94538',
+                    'dhl_id' => 'MAGEN_8501',
+                    'dhl_password' => 'QR2GO1U74X',
+                    'dhl_account' => '799909537',
+                    'dhl_shipping_intl_key' => '54233F2B2C4E5C4B4C5E5A59565530554B405641475D5659',
+                    'girth' => null,
+                    'height' => null,
+                    'length' => null,
+                    'width' => null,
+                    'weight' => 1,
+                    'dhl_shipment_type' => 'P',
+                    'dhl_duitable' => 0,
+                    'dhl_duty_payment_type' => 'R',
+                    'dhl_content_desc' => 'Big Box',
+                    'limit_method' => 'IE',
+                    'ship_date' => '2014-01-09',
+                    'action' => 'RateEstimate',
+                    'all_items' => [],
+                ]
+            ],
+            'notax' => [
+                'data' => [
+                    'orig_country_id' => 'GB',
+                    'orig_postcode' => 'DT3 5AA',
+                    'dest_country_id' => 'GB',
+                    'dest_postcode' => 'DT3 5AB',
+                    'package_weight' => '1.5',
+                    'all_items' => [],
+                ]
             ]
         ];
+
+        return $requestData[$key];
     }
 }

@@ -369,6 +369,11 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
             return $this->getErrorMessage();
         }
 
+        // Ensure any existing rates are cleared
+        if (!empty($this->_rates)) {
+            unset($this->_rates);
+        }
+
         $requestDhl = clone $request;
         $this->setStore($requestDhl->getStoreId());
         $origCompanyName = $this->_getDefaultValue(
@@ -1260,6 +1265,9 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
             // DHL product code, e.g. '3', 'A', 'Q', etc.
             $dhlProduct = (string)$shipmentDetails->GlobalProductCode;
             $totalEstimate = (float)(string)$shipmentDetails->ShippingCharge;
+            if (!$this->getConfigData('include_tax') && isset($shipmentDetails->TotalTaxAmount)) {
+                $totalEstimate -= (float)(string)$shipmentDetails->TotalTaxAmount;
+            }
             $currencyCode = (string)$shipmentDetails->CurrencyCode;
             $baseCurrencyCode = $this->_storeManager->getWebsite($this->_request->getWebsiteId())
                 ->getBaseCurrencyCode();
