@@ -1253,6 +1253,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      * @param \SimpleXMLElement $shipmentDetails
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _addRate(\SimpleXMLElement $shipmentDetails)
     {
