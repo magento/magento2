@@ -67,7 +67,11 @@
         <actionGroup ref="FilterProductGridByNameActionGroup" stepKey="searchForProduct">
             <argument name="product" value="_defaultProduct"/>
         </actionGroup>
-        <see selector="{{AdminProductGridSection.productGridCell('2', 'Type')}}" userInput="Configurable Product" stepKey="seeProductTypeInGrid"/>
+        <actionGroup ref="AssertAdminProductGridCellActionGroup" stepKey="seeProductTypeInGrid">
+            <argument name="row" value="2"/>
+            <argument name="column" value="Type"/>
+            <argument name="value" value="Configurable Product"/>
+        </actionGroup>
         <actionGroup ref="AssertProductInStorefrontProductPageActionGroup" stepKey="assertProductInStorefrontProductPage">
             <argument name="product" value="_defaultProduct"/>
         </actionGroup>

@@ -36,7 +36,7 @@ class SetPaymentMethodAsPayflowLinkTest extends TestCase
     /** @var ObjectManager */
     private $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->json = $this->objectManager->get(SerializerInterface::class);
