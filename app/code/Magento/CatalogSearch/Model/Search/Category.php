@@ -31,11 +31,6 @@ class Category extends DataObject
     private $categoryRepository;
 
     /**
-     * @var SearchCriteriaBuilder
-     */
-    private $searchCriteriaBuilder;
-
-    /**
      * @var FilterBuilder
      */
     private $filterBuilder;
@@ -53,7 +48,6 @@ class Category extends DataObject
     /**
      * @param Data $adminhtmlData
      * @param CategoryListInterface $categoryRepository
-     * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param SearchCriteriaBuilderFactory $searchCriteriaBuilderFactory
      * @param FilterBuilder $filterBuilder
      * @param StringUtils $string
@@ -61,14 +55,12 @@ class Category extends DataObject
     public function __construct(
         Data $adminhtmlData,
         CategoryListInterface $categoryRepository,
-        SearchCriteriaBuilder $searchCriteriaBuilder,
         SearchCriteriaBuilderFactory $searchCriteriaBuilderFactory,
         FilterBuilder $filterBuilder,
         StringUtils $string
     ) {
         $this->adminhtmlData = $adminhtmlData;
         $this->categoryRepository = $categoryRepository;
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->searchCriteriaBuilderFactory = $searchCriteriaBuilderFactory;
         $this->filterBuilder = $filterBuilder;
         $this->string = $string;
@@ -107,7 +99,7 @@ class Category extends DataObject
         foreach ($searchResults->getItems() as $category) {
             $description = $category->getDescription() ? strip_tags($category->getDescription()) : '';
             $result[] = [
-                'id' => 'category/1/' . $category->getId(),
+                'id' => sprintf('category/1/%d', $category->getId()),
                 'type' => __('Category'),
                 'name' => $category->getName(),
                 'description' => $this->string->substr($description, 0, 30),
