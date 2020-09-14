@@ -23,6 +23,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Driver\File;
 use Magento\Framework\Intl\DateTimeFactory;
 use Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor;
 use Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface;
@@ -767,6 +768,11 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     private $linkProcessor;
 
     /**
+     * @var File
+     */
+    private $fileDriver;
+
+    /**
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param \Magento\ImportExport\Helper\Data $importExportData
      * @param \Magento\ImportExport\Model\ResourceModel\Import\Data $importData
@@ -814,6 +820,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param StatusProcessor|null $statusProcessor
      * @param StockProcessor|null $stockProcessor
      * @param LinkProcessor|null $linkProcessor
+     * @param File|null $fileDriver
      * @throws LocalizedException
      * @throws \Magento\Framework\Exception\FileSystemException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -866,7 +873,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         ProductRepositoryInterface $productRepository = null,
         StatusProcessor $statusProcessor = null,
         StockProcessor $stockProcessor = null,
-        LinkProcessor $linkProcessor = null
+        LinkProcessor $linkProcessor = null,
+        ?File $fileDriver = null
     ) {
         $this->_eventManager = $eventManager;
         $this->stockRegistry = $stockRegistry;
@@ -930,6 +938,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         $this->dateTimeFactory = $dateTimeFactory ?? ObjectManager::getInstance()->get(DateTimeFactory::class);
         $this->productRepository = $productRepository ?? ObjectManager::getInstance()
                 ->get(ProductRepositoryInterface::class);
+        $this->fileDriver = $fileDriver ?: ObjectManager::getInstance()->get(File::class);
     }
 
     /**
@@ -1148,6 +1157,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * Save products data.
      *
      * @return $this
+     * @throws LocalizedException
      */
     protected function _saveProductsData()
     {
@@ -1155,7 +1165,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         foreach ($this->_productTypeModels as $productTypeModel) {
             $productTypeModel->saveData();
         }
-        $this->_saveLinks();
+        $this->linkProcessor->saveLinks($this, $this->_dataSourceModel, $this->getProductEntityLinkField());
         $this->_saveStockItem();
         if ($this->_replaceFlag) {
             $this->getOptionEntity()->clearProductsSkuToId();
@@ -1563,15 +1573,13 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $this->categoriesCache = [];
             $tierPrices = [];
             $mediaGallery = [];
-            $uploadedFiles = [];
-            $galleryItemsToRemove = [];
             $labelsForUpdate = [];
             $imagesForChangeVisibility = [];
             $uploadedImages = [];
             $previousType = null;
             $prevAttributeSet = null;
 
-            $importDir = $this->_mediaDirectory->getAbsolutePath($this->getImportDir());
+            $importDir = $this->_mediaDirectory->getAbsolutePath($this->getUploader()->getTmpDir());
             $existingImages = $this->getExistingImages($bunch);
             $this->addImageHashes($existingImages);
 
@@ -1721,11 +1729,12 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 foreach (array_keys($imageHiddenStates) as $image) {
                     //Mark image as uploaded if it exists
                     if (array_key_exists($image, $rowExistingImages)) {
-                        $rowImages[self::COL_MEDIA_IMAGE][] = $image;
                         $uploadedImages[$image] = $image;
                     }
-
-                    if (empty($rowImages)) {
+                    //Add image to hide to images list if it does not exist
+                    if (empty($rowImages[self::COL_MEDIA_IMAGE])
+                        || !in_array($image, $rowImages[self::COL_MEDIA_IMAGE])
+                    ) {
                         $rowImages[self::COL_MEDIA_IMAGE][] = $image;
                     }
                 }
@@ -1743,8 +1752,11 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                         $hash = '';
                         if (filter_var($columnImage, FILTER_VALIDATE_URL) === false) {
                             $filename = $importDir . DIRECTORY_SEPARATOR . $columnImage;
-                            if (file_exists($filename)) {
-                                $hash = hash_file('sha256', $importDir . DIRECTORY_SEPARATOR . $columnImage);
+                            if ($this->fileDriver->isExists($filename)) {
+                                $hash = hash_file(
+                                    'sha256',
+                                    $importDir . DIRECTORY_SEPARATOR . $columnImage
+                                );
                             }
                         } else {
                             $hash = hash_file('sha256', $columnImage);
@@ -1760,11 +1772,11 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                                     if ($exists) {
                                         return $exists;
                                     }
-                                    if (isset($file['hash']) &&
-                                        !empty($file['hash']) &&
-                                        $file['hash'] === $hash) {
+
+                                    if (isset($file['hash']) && $file['hash'] === $hash) {
                                         return $file['value'];
                                     }
+
                                     return $exists;
                                 },
                                 ''
@@ -1773,33 +1785,27 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
                         if ($imageAlreadyExists) {
                             $uploadedFile = $imageAlreadyExists;
-                        } else {
-                            if (!isset($uploadedImages[$columnImage])) {
-                                $uploadedFile = $this->uploadMediaFiles($columnImage);
-                                $uploadedFile = $uploadedFile ?: $this->getSystemFile($columnImage);
-                                if ($uploadedFile) {
-                                    $uploadedImages[$columnImage] = $uploadedFile;
-                                } else {
-                                    unset($rowData[$column]);
-                                    $this->addRowError(
-                                        ValidatorInterface::ERROR_MEDIA_URL_NOT_ACCESSIBLE,
-                                        $rowNum,
-                                        null,
-                                        null,
-                                        ProcessingError::ERROR_LEVEL_NOT_CRITICAL
-                                    );
-                                }
+                        } elseif (!isset($uploadedImages[$columnImage])) {
+                            $uploadedFile = $this->uploadMediaFiles($columnImage);
+                            $uploadedFile = $uploadedFile ?: $this->getSystemFile($columnImage);
+                            if ($uploadedFile) {
+                                $uploadedImages[$columnImage] = $uploadedFile;
                             } else {
-                                $uploadedFile = $uploadedImages[$columnImage];
+                                unset($rowData[$column]);
+                                $this->addRowError(
+                                    ValidatorInterface::ERROR_MEDIA_URL_NOT_ACCESSIBLE,
+                                    $rowNum,
+                                    null,
+                                    null,
+                                    ProcessingError::ERROR_LEVEL_NOT_CRITICAL
+                                );
                             }
+                        } else {
+                            $uploadedFile = $uploadedImages[$columnImage];
                         }
 
                         if ($uploadedFile && $column !== self::COL_MEDIA_IMAGE) {
                             $rowData[$column] = $uploadedFile;
-                        }
-
-                        if ($uploadedFile) {
-                            $uploadedFiles[] = $uploadedFile;
                         }
 
                         if (!$uploadedFile || isset($mediaGallery[$storeId][$rowSku][$uploadedFile])) {
@@ -1823,8 +1829,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                             }
 
                             if (isset($rowLabels[$column][$columnImageKey])
-                                && $rowLabels[$column][$columnImageKey] !=
-                                $currentFileData['label']
+                                && $rowLabels[$column][$columnImageKey] !== $currentFileData['label']
                             ) {
                                 $labelsForUpdate[] = [
                                     'label' => $rowLabels[$column][$columnImageKey],
@@ -1833,7 +1838,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                                 ];
                             }
                         } else {
-                            if ($column == self::COL_MEDIA_IMAGE) {
+                            if ($column === self::COL_MEDIA_IMAGE) {
                                 $rowData[$column][] = $uploadedFile;
                             }
                             $mediaGallery[$storeId][$rowSku][$uploadedFile] = [
@@ -1848,14 +1853,6 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                             ];
                         }
                     }
-                }
-
-                // 5.1 Items to remove phase
-                if (!empty($rowExistingImages)) {
-                    $galleryItemsToRemove[] = \array_diff(
-                        \array_keys($rowExistingImages),
-                        $uploadedFiles
-                    );
                 }
 
                 // 6. Attributes phase
@@ -1968,8 +1965,6 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 $tierPrices
             )->_saveMediaGallery(
                 $mediaGallery
-            )->_removeOldMediaGalleryItems(
-                $galleryItemsToRemove
             )->_saveProductAttributes(
                 $attributes
             )->updateMediaGalleryVisibility(
@@ -1988,28 +1983,30 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     }
     //phpcs:enable Generic.Metrics.NestingLevel
 
+    // phpcs:enable
+
     /**
      * Generate hashes for existing images for comparison with newly uploaded images.
      *
      * @param array $images
+     * @return void
      */
-    public function addImageHashes(&$images)
+    private function addImageHashes(array &$images): void
     {
         $productMediaPath = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA)
-            ->getAbsolutePath('/catalog/product');
+            ->getAbsolutePath(DS . 'catalog' . DS . 'product');
 
         foreach ($images as $storeId => $skus) {
             foreach ($skus as $sku => $files) {
                 foreach ($files as $path => $file) {
-                    if (file_exists($productMediaPath . $file['value'])) {
-                        $images[$storeId][$sku][$path]['hash'] = hash_file('sha256', $productMediaPath . $file['value']);
+                    if ($this->fileDriver->isExists($productMediaPath . $file['value'])) {
+                        $fileName = $productMediaPath . $file['value'];
+                        $images[$storeId][$sku][$path]['hash'] = hash_file('sha256', $fileName);
                     }
                 }
             }
         }
     }
-
-    // phpcs:enable
 
     /**
      * Clears entries from Image Set and Row Data marked as no_selection
@@ -2172,17 +2169,14 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      *
      * @return string
      */
-    protected function getImportDir()
+    private function getImportDir(): string
     {
         $dirConfig = DirectoryList::getDefaultConfig();
         $dirAddon = $dirConfig[DirectoryList::MEDIA][DirectoryList::PATH];
 
-        if (!empty($this->_parameters[Import::FIELD_NAME_IMG_FILE_DIR])) {
-            $tmpPath = $this->_parameters[Import::FIELD_NAME_IMG_FILE_DIR];
-        } else {
-            $tmpPath = $dirAddon . '/' . $this->_mediaDirectory->getRelativePath('import');
-        }
-        return $tmpPath;
+        return empty($this->_parameters[Import::FIELD_NAME_IMG_FILE_DIR])
+            ? $dirAddon . DS . $this->_mediaDirectory->getRelativePath('import')
+            : $this->_parameters[Import::FIELD_NAME_IMG_FILE_DIR];
     }
 
     /**
@@ -2282,28 +2276,6 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             return $this;
         }
         $this->mediaProcessor->saveMediaGallery($mediaGalleryData);
-
-        return $this;
-    }
-
-    /**
-     * Remove old media gallery items.
-     *
-     * @param array $itemsToRemove
-     * @return $this
-     */
-    protected function _removeOldMediaGalleryItems(array $itemsToRemove)
-    {
-        if (empty($itemsToRemove)) {
-            return $this;
-        }
-
-        $itemsToRemove = array_merge(...$itemsToRemove);
-        if (empty($itemsToRemove)) {
-            return $this;
-        }
-
-        $this->mediaProcessor->removeOldMediaItems($itemsToRemove);
 
         return $this;
     }

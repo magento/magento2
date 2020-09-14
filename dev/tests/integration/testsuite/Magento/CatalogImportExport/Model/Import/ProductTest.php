@@ -34,6 +34,7 @@ use Magento\ImportExport\Model\Import\Source\Csv;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap as BootstrapHelper;
+use Magento\TestFramework\Indexer\TestCase;
 use Magento\UrlRewrite\Model\ResourceModel\UrlRewriteCollection;
 use Psr\Log\LoggerInterface;
 
@@ -50,8 +51,10 @@ use Psr\Log\LoggerInterface;
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * phpcs:disable Generic.PHP.NoSilencedErrors, Generic.Metrics.NestingLevel, Magento2.Functions.StaticFunction
  */
-class ProductTest extends \Magento\TestFramework\Indexer\TestCase
+class ProductTest extends TestCase
 {
+    private const LONG_FILE_NAME_IMAGE = 'magento_long_image_name_magento_long_image_name_magento_long_image_name.jpg';
+
     /**
      * @var \Magento\CatalogImportExport\Model\Import\Product
      */
@@ -602,7 +605,6 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
     /**
      * @param string $productSku
      * @return array ['optionId' => ['optionValueId' => 'optionValueTitle', ...], ...]
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     private function getCustomOptionValues($productSku)
     {
@@ -1030,13 +1032,12 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
             )
         );
 
-        $this->importDataForMediaTest('import_media_additional_images.csv');
+        $this->importDataForMediaTest('import_media_additional_long_name_image.csv');
         $product->cleanModelCache();
         $product = $this->getProductBySku('simple_new');
         $items = array_values($product->getMediaGalleryImages()->getItems());
-        $images[] = ['file' => '/m/a/magento_additional_image_three.jpg', 'label' => ''];
-        $images[] = ['file' => '/m/a/magento_additional_image_four.jpg', 'label' => ''];
-        $this->assertCount(7, $items);
+        $images[] = ['file' => '/m/a/' . self::LONG_FILE_NAME_IMAGE, 'label' => ''];
+        $this->assertCount(6, $items);
         $this->assertEquals(
             $images,
             array_map(
@@ -1049,33 +1050,20 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
     }
 
     /**
-     * Test that product import with images works properly
+     * Test import twice and check that image will not be duplicate
      *
      * @magentoDataFixture mediaImportImageFixture
-     * @magentoAppIsolation enabled
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @return void
      */
-    public function testSaveMediaImageDuplicateImages()
+    public function testSaveMediaImageDuplicateImages(): void
     {
-        // Will check that existing product update works
-        // New unique images as per MD5 should be added, images not mentioned in the import should be removed
-        $this->importDataForMediaTest('import_media_update_images.csv');
+        $this->importDataForMediaTest('import_media.csv');
+        $imagesCount = count($this->getProductBySku('simple_new')->getMediaGalleryImages()->getItems());
 
-        $product = $this->getProductBySku('simple_new');
+        // import the same file again
+        $this->importDataForMediaTest('import_media.csv');
 
-        $gallery = $product->getMediaGalleryImages();
-        $this->assertEquals('/m/a/magento_image.jpg', $product->getData('image'));
-
-        // small_image should be skipped from update as it is a duplicate (md5 is the same)
-        $this->assertEquals('/m/a/magento_small_image.jpg', $product->getData('small_image'));
-        $this->assertEquals('/m/a/magento_thumbnail.jpg', $product->getData('thumbnail'));
-        $this->assertEquals('/m/a/magento_image.jpg', $product->getData('swatch_image'));
-
-        $gallery = $product->getMediaGalleryImages();
-        $this->assertInstanceOf(\Magento\Framework\Data\Collection::class, $gallery);
-
-        $items = $gallery->getItems();
-        $this->assertCount(4, $items);
+        $this->assertCount($imagesCount, $this->getProductBySku('simple_new')->getMediaGalleryImages()->getItems());
     }
 
     /**
@@ -1119,6 +1107,10 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
             [
                 'source' => __DIR__ . '/../../../../Magento/Catalog/_files/magento_thumbnail.jpg',
                 'dest' => $dirPath . '/magento_thumbnail.jpg',
+            ],
+            [
+                'source' => __DIR__ . '/../../../../Magento/Catalog/_files/' . self::LONG_FILE_NAME_IMAGE,
+                'dest' => $dirPath . '/' . self::LONG_FILE_NAME_IMAGE,
             ],
             [
                 'source' => __DIR__ . '/_files/magento_additional_image_one.jpg',

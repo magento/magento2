@@ -104,7 +104,6 @@ class MediaGalleryProcessor
      *
      * @param array $mediaGalleryData
      * @return void
-     * @throws \Exception
      */
     public function saveMediaGallery(array $mediaGalleryData)
     {
@@ -271,7 +270,6 @@ class MediaGalleryProcessor
      *
      * @param array $labels
      * @return void
-     * @throws \Exception
      */
     public function updateMediaGalleryLabels(array $labels)
     {
@@ -283,7 +281,6 @@ class MediaGalleryProcessor
      *
      * @param array $images
      * @return void
-     * @throws \Exception
      */
     public function updateMediaGalleryVisibility(array $images)
     {
@@ -296,7 +293,6 @@ class MediaGalleryProcessor
      * @param array $data
      * @param string $field
      * @return void
-     * @throws \Exception
      */
     private function updateMediaGalleryField(array $data, $field)
     {
@@ -341,7 +337,6 @@ class MediaGalleryProcessor
      *
      * @param array $bunch
      * @return array
-     * @throws \Exception
      */
     public function getExistingImages(array $bunch)
     {
@@ -452,24 +447,9 @@ class MediaGalleryProcessor
     }
 
     /**
-     * Remove old media gallery items.
-     *
-     * @param array $oldMediaValues
-     * @return void
-     */
-    public function removeOldMediaItems(array $oldMediaValues)
-    {
-        $this->connection->delete(
-            $this->mediaGalleryTableName,
-            $this->connection->quoteInto('value IN (?)', $oldMediaValues)
-        );
-    }
-
-    /**
      * Get product entity link field.
      *
      * @return string
-     * @throws \Exception
      */
     private function getProductEntityLinkField()
     {
