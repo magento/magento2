@@ -668,7 +668,7 @@ define([
          * @returns {Object} Chainable
          */
         toggleListVisible: function () {
-            this.listVisible(!this.listVisible());
+            this.listVisible(!this.disabled() && !this.listVisible());
 
             return this;
         },

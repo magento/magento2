@@ -9,6 +9,9 @@
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminMediaGalleryCmsUiUsedInPagesFilterTest">
         <annotations>
+            <skip>
+                <issueId value="https://github.com/magento/adobe-stock-integration/issues/1825"/>
+            </skip>
             <features value="AdminMediaGalleryUsedInPagesFilter"/>
             <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/1168"/>
             <title value="Used in pages filter"/>
@@ -21,14 +24,14 @@
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
         </before>
-       
+
         <actionGroup ref="AdminOpenCreateNewCMSPageActionGroup" stepKey="navigateToCreateNewPage"/>
         <actionGroup ref="FillOutCustomCMSPageContentActionGroup" stepKey="fillBasicPageDataForPageWithDefaultStore">
             <argument name="title" value="Unique page title MediaGalleryUi"/>
             <argument name="content" value="MediaGalleryUI content"/>
             <argument name="identifier" value="test-page-1"/>
         </actionGroup>
-        
+
         <actionGroup ref="AdminOpenMediaGalleryFromPageNoEditorActionGroup" stepKey="openMediaGalleryForPage"/>
         <waitForPageLoad stepKey="waitForPageLoad" />
         <actionGroup ref="AdminEnhancedMediaGalleryUploadImageActionGroup" stepKey="uploadImage">
@@ -39,7 +42,7 @@
         </actionGroup>
         <actionGroup ref="AdminMediaGalleryClickAddSelectedActionGroup" stepKey="clickAddSelectedContentImage"/>
         <click selector="{{CmsNewPagePageActionsSection.saveAndContinueEdit}}" stepKey="savePage"/>
-        
+
         <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openStandaloneMediaGallery"/>
         <actionGroup ref="AdminEnhancedMediaGalleryExpandFilterActionGroup" stepKey="expandFilters"/>
         <actionGroup ref="AdminEnhancedMediaGallerySelectUsedInFilterActionGroup" stepKey="setUsedInFilter">
@@ -56,8 +59,9 @@
                 <argument name="imageName" value="{{ImageMetadata.title}}"/>
         </actionGroup>
         <actionGroup ref="AdminEnhancedMediaGalleryClickDeleteImagesButtonActionGroup" stepKey="clikDeleteSelectedButton"/>
-          
+
         <actionGroup ref="AdminNavigateToPageGridActionGroup" stepKey="navigateToCmsPageGrid"/>
+        <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearGridFilters"/>
         <actionGroup ref="AdminSearchCmsPageInGridByUrlKeyActionGroup" stepKey="findCreatedCmsPage">
             <argument name="urlKey" value="test-page-1"/>
         </actionGroup>

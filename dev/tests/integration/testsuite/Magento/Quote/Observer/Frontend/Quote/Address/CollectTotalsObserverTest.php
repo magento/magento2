@@ -143,7 +143,7 @@ class CollectTotalsObserverTest extends TestCase
         );
         $this->model->execute($eventObserver);
 
-        $this->assertEquals(1, $quote->getCustomer()->getGroupId());
+        $this->assertEquals(2, $quote->getCustomer()->getGroupId());
     }
 
     /**
