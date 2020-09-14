@@ -37,9 +37,8 @@
         <actionGroup ref="AdminSaveCategoryFormActionGroup" stepKey="saveCategoryForm"/>
         <actionGroup ref="AdminOpenMediaGalleryFromCategoryImageUploaderActionGroup" stepKey="openMediaGalleryFromImageUploader"/>
         <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilter"/>
-        <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectCatalogFolder">
-            <argument name="name" value="catalog"/>
-        </actionGroup>
+        <conditionalClick selector="{{AdminMediaGalleryFolderSection.folderArrow(catalog)}}"
+                          dependentSelector="{{AdminMediaGalleryFolderSection.checkIfFolderArrowExpand(catalog)}}" stepKey="clickArrowIfClosed" visible="true"/>
         <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectCategoryFolder">
             <argument name="name" value="category"/>
         </actionGroup>
