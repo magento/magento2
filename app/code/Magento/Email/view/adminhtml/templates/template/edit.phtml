@@ -135,7 +135,7 @@ require([
                 content: "{$block->escapeJs(__('Are you sure you want to strip tags?'))}",
                 actions: {
                     confirm: function () {
-                        this.unconvertedText = $('template_text').value;
+                        self.unconvertedText = $('template_text').value;
                         $('convert_button').hide();
                         $('template_text').value =  $('template_text').value.stripScripts().replace(
                             new RegExp('<style[^>]*>[\\S\\s]*?</style>', 'img'), ''

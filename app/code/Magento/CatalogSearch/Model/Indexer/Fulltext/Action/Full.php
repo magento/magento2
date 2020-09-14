@@ -317,7 +317,7 @@ class Full
             ->select()
             ->from(['relation' => $this->getTable('catalog_product_relation')], [])
             ->distinct(true)
-            ->where('child_id IN (?)', $entityIds)
+            ->where('child_id IN (?)', $entityIds, \Zend_Db::INT_TYPE)
             ->join(
                 ['cpe' => $this->getTable('catalog_product_entity')],
                 'relation.parent_id = cpe.' . $linkField,
