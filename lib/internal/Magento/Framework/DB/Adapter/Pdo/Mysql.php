@@ -2776,7 +2776,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
                 if (in_array(strtolower($indexType), ['primary', 'unique'])) {
                     $match = [];
                     // phpstan:ignore
-                    if (preg_match('#SQLSTATE\[23000\]: [^:]+: 1062[^\']+\'([\d-\.]+)\'#', $e->getMessage(), $match)) {
+                    if (preg_match('#SQLSTATE\[23000\]: [^:]+: 1062[^\']+\'([\d.-]+)\'#', $e->getMessage(), $match)) {
                         $ids = explode('-', $match[1]);
                         $this->_removeDuplicateEntry($tableName, $fields, $ids);
                         continue;
@@ -2788,6 +2788,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
 
         $this->resetDdlCache($tableName, $schemaName);
 
+        // @phpstan-ignore-next-line
         return $result;
     }
 

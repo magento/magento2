@@ -2,6 +2,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+/* eslint-disable no-undef */
 define([
     'jquery',
     'Magento_Ui/js/grid/columns/column',
@@ -32,7 +33,8 @@ define([
             listens: {
                 '${ $.provider }:params.filters': 'hide',
                 '${ $.provider }:params.search': 'hide',
-                '${ $.provider }:params.paging': 'hide'
+                '${ $.provider }:params.paging': 'hide',
+                '${ $.provider }:data.items': 'updateDisplayedRecord'
             },
             exports: {
                 height: '${ $.parentName }.thumbnail_url:previewHeight'
@@ -47,6 +49,25 @@ define([
         initialize: function () {
             this._super();
             $(document).on('keydown', this.handleKeyDown.bind(this));
+
+            this.lastOpenedImage.subscribe(function (newValue) {
+
+                if (newValue === false && _.isNull(this.visibleRecord())) {
+                    return;
+                }
+
+                if (newValue === this.visibleRecord()) {
+                    return;
+                }
+
+                if (newValue === false) {
+                    this.hide();
+
+                    return;
+                }
+
+                this.show(this.masonry().rows()[newValue]);
+            }.bind(this));
 
             return this;
         },
@@ -128,8 +149,6 @@ define([
          * @param {Object} record
          */
         show: function (record) {
-            var img;
-
             if (record._rowIndex === this.visibleRecord()) {
                 this.hide();
 
@@ -141,9 +160,21 @@ define([
             this._selectRow(record.rowNumber || null);
             this.visibleRecord(record._rowIndex);
 
-            img = $(this.previewImageSelector + ' img');
+            this.lastOpenedImage(record._rowIndex);
+            this.updateImageData();
+        },
 
-            if (img.get(0).complete) {
+        /**
+         * Update image data when image preview is opened
+         */
+        updateImageData: function () {
+            var img = $(this.previewImageSelector + ' img');
+
+            if (!img.get(0)) {
+                setTimeout(function () {
+                    this.updateImageData();
+                }.bind(this), 100);
+            } else if (img.get(0).complete) {
                 this.updateHeight();
                 this.scrollToPreview();
             } else {
@@ -152,8 +183,17 @@ define([
                     this.scrollToPreview();
                 }.bind(this));
             }
+        },
 
-            this.lastOpenedImage(record._rowIndex);
+        /**
+         * Update preview displayed record data from the new items data if the preview is expanded
+         *
+         * @param {Array} items
+         */
+        updateDisplayedRecord: function (items) {
+            if (!_.isNull(this.visibleRecord())) {
+                this.displayedRecord(items[this.visibleRecord()]);
+            }
         },
 
         /**
