@@ -5,14 +5,17 @@
  */
 declare(strict_types=1);
 
+/**
+ * Test for full test filter
+ */
 namespace Magento\Framework\View\Test\Unit\Element\UiComponent\DataProvider;
 
 use Magento\Framework\Api\Filter;
 use Magento\Framework\Data\Collection\AbstractDb as CollectionAbstractDb;
-use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
 use Magento\Framework\Data\Collection\EntityFactory;
 use Magento\Framework\Data\Collection\EntityFactoryInterface;
+use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Adapter\Pdo\Mysql;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb as ResourceModelAbstractDb;
@@ -23,7 +26,6 @@ use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
 /**
- * Test for \Magento\Framework\View\Element\UiComponent\DataProvider\FulltextFilter.
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class FulltextFilterTest extends TestCase
@@ -31,22 +33,22 @@ class FulltextFilterTest extends TestCase
     /**
      * @var FulltextFilter
      */
-    private $fulltextFilter;
+    protected $fulltextFilter;
 
     /**
      * @var EntityFactoryInterface|MockObject
      */
-    private $entityFactoryMock;
+    protected $entityFactoryMock;
 
     /**
      * @var LoggerInterface|MockObject
      */
-    private $loggerMock;
+    protected $loggerMock;
 
     /**
      * @var FetchStrategyInterface|MockObject
      */
-    private $fetchStrategyMock;
+    protected $fetchStrategyMock;
 
     /**
      * @var AdapterInterface|MockObject
@@ -56,21 +58,18 @@ class FulltextFilterTest extends TestCase
     /**
      * @var Select|MockObject
      */
-    private $selectMock;
+    protected $selectMock;
 
     /**
      * @var CollectionAbstractDb|MockObject
      */
-    private $collectionAbstractDbMock;
+    protected $collectionAbstractDbMock;
 
     /**
      * @var ResourceModelAbstractDb|MockObject
      */
-    private $resourceModelAbstractDb;
+    protected $resourceModelAbstractDb;
 
-    /**
-     * @inheritdoc
-     */
     protected function setUp(): void
     {
         $this->entityFactoryMock = $this->createMock(EntityFactory::class);
@@ -80,32 +79,24 @@ class FulltextFilterTest extends TestCase
         $this->connectionMock = $this->createPartialMock(Mysql::class, ['select', 'getIndexList']);
         $this->selectMock = $this->createPartialMock(Select::class, ['getPart', 'where']);
 
+        $this->resourceModelAbstractDb = $this->getMockBuilder(ResourceModelAbstractDb::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
         $this->collectionAbstractDbMock = $this->getMockBuilder(CollectionAbstractDb::class)
-            ->addMethods(['getMainTable'])
-            ->onlyMethods(['getConnection', 'getSelect'])
+            ->setMethods(['getConnection', 'getSelect', 'getMainTable'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
         $this->fulltextFilter = new FulltextFilter();
     }
 
-    /**
-     * Test apply filter
-     *
-     * @param string $searchable
-     * @param string $expectedSearchable
-     * @dataProvider searchValuesDataProvider
-     *
-     * @return void
-     */
-    public function testApply(string $searchable, string $expectedSearchable): void
+    public function testApply()
     {
         $filter = new Filter();
-        $filter->setValue($searchable);
-        $columns = ['col1', 'col2'];
-        $whereCondition = 'MATCH(' . implode(',', $columns) . ') AGAINST(?)';
+        $filter->setValue('test');
 
-        $this->collectionAbstractDbMock->expects($this->once())
+        $this->collectionAbstractDbMock->expects($this->any())
             ->method('getMainTable')
             ->willReturn('testTable');
 
@@ -113,9 +104,12 @@ class FulltextFilterTest extends TestCase
             ->method('getConnection')
             ->willReturn($this->connectionMock);
 
+        $this->connectionMock->expects($this->any())
+            ->method('select')
+            ->willReturn($this->selectMock);
         $this->connectionMock->expects($this->once())
             ->method('getIndexList')
-            ->willReturn([['INDEX_TYPE' => 'FULLTEXT', 'COLUMNS_LIST' => $columns]]);
+            ->willReturn([['INDEX_TYPE' => 'FULLTEXT', 'COLUMNS_LIST' => ['col1', 'col2']]]);
 
         $this->selectMock->expects($this->once())
             ->method('getPart')
@@ -128,35 +122,10 @@ class FulltextFilterTest extends TestCase
             ->method('getSelect')
             ->willReturn($this->selectMock);
 
-        $this->selectMock->expects($this->once())
-            ->method('where')
-            ->with($whereCondition, $expectedSearchable);
-
         $this->fulltextFilter->apply($this->collectionAbstractDbMock, $filter);
     }
 
-    /**
-     * Data provider for testApply()
-     *
-     * @return array
-     */
-    public function searchValuesDataProvider(): array
-    {
-        return [
-            ['text', 'text'],
-            ['"text"', '"text"'],
-            ['"text@', '"text\_'],
-            ['user_1+test@example.com', 'user_1 test\_example\_com'],
-            ['"user_1+test@example.com"', '"user_1+test@example.com"'],
-        ];
-    }
-
-    /**
-     * Apply with wrong collection type
-     *
-     * @return void
-     */
-    public function testApplyWrongCollectionType(): void
+    public function testApplyWrongCollectionType()
     {
         $this->expectException('InvalidArgumentException');
         /** @var MviewCollection $mviewCollection */
@@ -165,7 +134,6 @@ class FulltextFilterTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->expectException(\InvalidArgumentException::class);
         $this->fulltextFilter->apply($mviewCollection, new Filter());
     }
 }

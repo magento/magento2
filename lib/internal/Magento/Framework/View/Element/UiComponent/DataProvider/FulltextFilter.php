@@ -82,17 +82,6 @@ class FulltextFilter implements FilterApplierInterface
     }
 
     /**
-     * Returns searchable value
-     *
-     * @param string $value
-     * @return string
-     */
-    private function getSearchableValue(string $value): string
-    {
-        return preg_match('/".*"/', $value) ? $value : $this->escapeAgainstValue($value);
-    }
-
-    /**
      * Apply fulltext filters
      *
      * @param Collection $collection
@@ -116,7 +105,7 @@ class FulltextFilter implements FilterApplierInterface
         $collection->getSelect()
             ->where(
                 'MATCH(' . implode(',', $columns) . ') AGAINST(?)',
-                $this->getSearchableValue($filter->getValue())
+                $this->escapeAgainstValue($filter->getValue())
             );
     }
 }
