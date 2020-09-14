@@ -19,6 +19,8 @@ use Psr\Log\LoggerInterface as Logger;
  */
 class Collection extends SearchResult
 {
+    private const EXACT_SEARCH_PATTERN = '/^".*"$/';
+
     /**
      * @var ResolverInterface
      */
@@ -104,8 +106,9 @@ class Collection extends SearchResult
                 : 'main_table.' . $field;
             $condition = $this->_getConditionSql(
                 $this->getConnection()->quoteIdentifier($field),
-                ['like' => "%$value%"]
+                $this->getCondition($value)
             );
+
             $whereCondition .= ($key === 0 ? '' : ' OR ') . $condition;
         }
 
@@ -175,5 +178,18 @@ class Collection extends SearchResult
             $connection->quoteIdentifier('rnt.name'),
             $defaultNameExpr
         );
+    }
+
+    /**
+     * Returns condition array data
+     *
+     * @param string $value
+     * @return string[]
+     */
+    private function getCondition(string $value): array
+    {
+        return preg_match(self::EXACT_SEARCH_PATTERN, $value)
+            ? ['eq' => trim($value, '"')]
+            : ['like' => "%$value%"];
     }
 }

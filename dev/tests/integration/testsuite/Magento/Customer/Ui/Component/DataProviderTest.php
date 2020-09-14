@@ -22,6 +22,15 @@ use PHPUnit\Framework\TestCase;
 class DataProviderTest extends TestCase
 {
     /**
+     * @var array
+     */
+    private $dataProviderParams = [
+        'name' => 'customer_listing_data_source',
+        'requestFieldName' => 'id',
+        'primaryFieldName' => 'entity_id',
+    ];
+
+    /**
      * @var ResolverInterface|MockObject
      */
     private $localeResolverMock;
@@ -37,6 +46,7 @@ class DataProviderTest extends TestCase
     protected function setUp(): void
     {
         $this->initLocaleResolverMock();
+        $this->dataProvider = Bootstrap::getObjectManager()->create(DataProvider::class, $this->dataProviderParams);
     }
 
     /**
@@ -49,23 +59,12 @@ class DataProviderTest extends TestCase
      * @dataProvider getDataByRegionDataProvider
      * @magentoDbIsolation disabled
      */
-    public function testGetDataByRegion(array $filterData)
+    public function testGetDataByRegion(array $filterData): void
     {
         $locale = 'JA_jp';
         $this->localeResolverMock->method('getLocale')->willReturn($locale);
-        $this->dataProvider = Bootstrap::getObjectManager()->create(
-            DataProvider::class,
-            [
-                'name' => 'customer_listing_data_source',
-                'requestFieldName' => 'id',
-                'primaryFieldName' => 'entity_id',
-            ]
-        );
 
-        $filter = Bootstrap::getObjectManager()->create(
-            Filter::class,
-            ['data' => $filterData]
-        );
+        $filter = Bootstrap::getObjectManager()->create(Filter::class, ['data' => $filterData]);
         $this->dataProvider->addFilter($filter);
         $data = $this->dataProvider->getData();
         $this->assertEquals(1, $data['totalRecords']);
@@ -81,6 +80,41 @@ class DataProviderTest extends TestCase
         return [
             [['condition_type' => 'fulltext', 'field' => 'fulltext', 'value' => 'アラバマ']],
             [['condition_type' => 'regular', 'field' => 'billing_region', 'value' => 'アラバマ']],
+        ];
+    }
+
+    /**
+     * Test exact search by email
+     *
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @dataProvider exactSearchByEmailDataProvider
+     * @magentoDbIsolation disabled
+     *
+     * @param string $searchEmail
+     * @param int $expectedCount
+     * @return void
+     */
+    public function testGetCustomersByEmail(string $searchEmail, int $expectedCount): void
+    {
+        $filter = Bootstrap::getObjectManager()->create(
+            Filter::class,
+            ['data' => ['condition_type' => 'fulltext', 'field' => 'fulltext', 'value' => $searchEmail]]
+        );
+        $this->dataProvider->addFilter($filter);
+        $data = $this->dataProvider->getData();
+
+        $this->assertCount($expectedCount, $data['items']);
+    }
+
+    /**
+     * @return array
+     */
+    public function exactSearchByEmailDataProvider(): array
+    {
+        return [
+            'exact search' => ['"customer@example.com"', 1],
+            'double quote not in the end' => ['"customer@example.co"m', 0],
+            'double quote not in the start' => ['c"ustomer@example.com"', 0],
         ];
     }
 
