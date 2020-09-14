@@ -37,19 +37,14 @@ class Keyword implements CustomFilterInterface
     public function apply(Filter $filter, AbstractDb $collection): bool
     {
         $value = $filter->getValue();
-        if (!is_array($value)) {
-            $keywordValues = explode(',', $value);
-        }
 
-        foreach ($keywordValues as $keywordValue) {
-            $collection->addFieldToFilter(
-                [self::TABLE_ALIAS . '.title', self::TABLE_ALIAS . '.id'],
-                [
-                    ['like' => sprintf('%%%s%%', trim($keywordValue))],
-                    ['in' => $this->getAssetIdsByKeyword(trim($keywordValue))]
-                ]
-            );
-        }
+        $collection->addFieldToFilter(
+            [self::TABLE_ALIAS . '.title', self::TABLE_ALIAS . '.id'],
+            [
+                ['like' => sprintf('%%%s%%', $value)],
+                ['in' => $this->getAssetIdsByKeyword($value)]
+            ]
+        );
 
         return true;
     }
@@ -62,6 +57,7 @@ class Keyword implements CustomFilterInterface
      */
     private function getAssetIdsByKeyword(string $value): array
     {
+        $keywordValues = $this->splitRequestString($value);
         $connection = $this->connection->getConnection();
 
         return $connection->fetchAssoc(
@@ -71,8 +67,8 @@ class Keyword implements CustomFilterInterface
                         ['asset_keywords_table' => $this->connection->getTableName(self::TABLE_ASSET_KEYWORD)],
                         ['id']
                     )->where(
-                        'keyword = ?',
-                        $value
+                        'keyword in (?)',
+                        $keywordValues
                     )->joinInner(
                         ['keywords_table' => $this->connection->getTableName(self::TABLE_KEYWORDS)],
                         'keywords_table.keyword_id = asset_keywords_table.id',
@@ -81,5 +77,21 @@ class Keyword implements CustomFilterInterface
                 ['asset_id']
             )
         );
+    }
+
+    /**
+     * Split the request string
+     *
+     * @param string $value
+     * @return array
+     */
+    private function splitRequestString(string $value): array
+    {
+        $keywordValues = [];
+        if (!is_array($value)) {
+            $keywordValues = explode(',', $value);
+        }
+
+        return $keywordValues;
     }
 }

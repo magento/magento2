@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminEnhancedMediaGallerySearchByMultipleKeywordsTest">
+        <annotations>
+            <features value="MediaGallery"/>
+            <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/1392"/>
+            <title value="User filter images by their keywords in Standalone Media Gallery"/>
+            <stories value="User filter images by their keywords in Standalone Media Gallery"/>
+            <testCaseId value="https://studio.cucumber.io/projects/131313/test-plan/folders/1337102/scenarios/4503803"/>
+            <description value="User checks search by multiple keywords returns related images"/>
+            <severity value="CRITICAL"/>
+            <group value="media_gallery_ui"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openMediaGallery"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminAdobeStockMediaGalleryClearFiltersActionGroup" stepKey="clearFilters"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
+            <actionGroup ref="AdminEnhancedMediaGalleryImageDeleteActionGroup" stepKey="deleteImage"/>
+        </after>
+        <actionGroup ref="AdminEnhancedMediaGalleryUploadImageActionGroup" stepKey="uploadImage">
+            <argument name="image" value="ImageUpload3"/>
+        </actionGroup>
+        <actionGroup ref="AdminAdobeStockMediaGallerySearchByKeywordActionGroup" stepKey="searchImage">
+            <argument name="keyword" value="{{ImageMetadata.fileName}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertImageInStandaloneMediaGalleryActionGroup" stepKey="assertImageIsAvailableInStandaloneGridUsingImageName">
+            <argument name="imageName" value="{{ImageMetadata.file}}"/>
+        </actionGroup>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
+        <actionGroup ref="AdminAdobeStockMediaGallerySearchByKeywordActionGroup" stepKey="searchImageByKeyword">
+            <argument name="keyword" value="{{ImageMetadata.keywords}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertImageInStandaloneMediaGalleryActionGroup" stepKey="assertImageIsAvailableInStandaloneGridUsingKeyword">
+            <argument name="imageName" value="{{ImageMetadata.file}}"/>
+        </actionGroup>
+    </test>
+</tests>
