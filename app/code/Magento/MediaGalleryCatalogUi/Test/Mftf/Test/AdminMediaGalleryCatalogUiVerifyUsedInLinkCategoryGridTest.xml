@@ -9,6 +9,9 @@
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminMediaGalleryCatalogUiVerifyUsedInLinkCategoryGridTest">
         <annotations>
+            <skip>
+                <issueId value="https://github.com/magento/adobe-stock-integration/issues/1794"/>
+            </skip>
             <features value="AdminMediaGalleryCategoryGrid"/>
             <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/1503"/>
             <title value="User can open each entity the asset is associated with in a separate tab to manage association"/>
@@ -55,9 +58,18 @@
         <actionGroup ref="AssertAdminMediaGalleryAssetFilterPlaceHolderActionGroup" stepKey="assertFilterApplied">
             <argument name="filterPlaceholder" value="{{UpdatedImageDetails.title}}"/>
         </actionGroup>
-        <actionGroup ref="AdminMediaGalleryAssertCategoryNameInCategoryGridActionGroup" stepKey="assertCategoryInGrid">
-            <argument name="categoryName" value="$$category.name$$"/>
+        <actionGroup ref="AssertAdminCategoryGridPageNumberOfRecordsActionGroup" stepKey="assertOneRecordInGrid">
+            <argument name="numberOfRecords" value="1 records found"/>
         </actionGroup>
+        <actionGroup ref="AssertAdminCategoryGridPageImageColumnActionGroup" stepKey="assertCategoryGridPageImageColumn">
+            <argument name="file" value="{{UpdatedImageDetails.file}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminCategoryGridPageDetailsActionGroup" stepKey="assertCategoryInGrid">
+            <argument name="category" value="$$category$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminCategoryGridPageProductsInMenuEnabledColumnsActionGroup" stepKey="assertCategoryGridPageProductsInMenuEnabledColumns"/>
+
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="firstResetAdminDataGridToDefaultView"/>
 
         <actionGroup ref="AdminEnhancedMediaGalleryCategoryGridExpandFilterActionGroup" stepKey="expandFilters"/>
         <actionGroup ref="AdminEnhancedMediaGallerySelectUsedInFilterActionGroup" stepKey="setAssetFilter">
@@ -68,6 +80,7 @@
         <actionGroup ref="AssertAdminMediaGalleryAssetFilterPlaceHolderActionGroup" stepKey="assertFilterAppliedAfterUrlFilterApplier">
             <argument name="filterPlaceholder" value="{{UpdatedImageDetails.title}}"/>
         </actionGroup>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
 
         <deleteData createDataKey="category" stepKey="deleteCategory"/>
         <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openMediaGallery"/>
