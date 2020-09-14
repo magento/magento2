@@ -5,12 +5,11 @@
   * See COPYING.txt for license details.
   */
 -->
+
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminOpenCmsBlockActionGroup">
-        <arguments>
-            <argument name="block_id" type="string"/>
-        </arguments>
-        <amOnPage url="{{AdminEditBlockPage.url(block_id)}}" stepKey="openEditCmsBlock"/>
+    <actionGroup name="AdminNavigateToCurrencyRatesOptionActionGroup">
+        <click selector="{{AdminCurrencyRatesSection.options}}" stepKey="clickOptionsButton"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
     </actionGroup>
 </actionGroups>
