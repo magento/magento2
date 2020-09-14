@@ -333,7 +333,8 @@ define([
          * @param {Object} data - File data that will be uploaded.
          */
         onFilesChoosed: function (event, data) {
-            // no option exists in file uploader for restricting upload chains to single files; this enforces that policy
+            // no option exists in file uploader for restricting upload chains to single files
+            // this enforces that policy
             if (!this.isMultipleFiles) {
                 data.files.splice(1);
             }
