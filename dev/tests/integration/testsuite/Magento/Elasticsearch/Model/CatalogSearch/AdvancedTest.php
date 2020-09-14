@@ -7,9 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\Elasticsearch\Model\CatalogSearch;
 
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\CatalogSearch\Model\Advanced;
 use Magento\Catalog\Model\Product\Visibility;
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Registry;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
@@ -19,14 +22,24 @@ use PHPUnit\Framework\TestCase;
 class AdvancedTest extends TestCase
 {
     /**
+     * @var ObjectManagerInterface
+     */
+    private $objectManager;
+
+    /**
+     * @var Registry
+     */
+    private $registry;
+
+    /**
      * @var Visibility
      */
     private $productVisibility;
 
     /**
-     * @var Advanced
+     * @var ProductRepositoryInterface
      */
-    private $advancedSearch;
+    private $productRepository;
 
     /**
      * @inheritDoc
@@ -35,9 +48,10 @@ class AdvancedTest extends TestCase
     {
         parent::setUp();
 
-        $objectManager = Bootstrap::getObjectManager();
-        $this->productVisibility = $objectManager->get(Visibility::class);
-        $this->advancedSearch = $objectManager->get(Advanced::class);
+        $this->objectManager = Bootstrap::getObjectManager();
+        $this->registry = $this->objectManager->get(Registry::class);
+        $this->productVisibility = $this->objectManager->get(Visibility::class);
+        $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
     }
 
     /**
@@ -50,17 +64,38 @@ class AdvancedTest extends TestCase
      */
     public function testAddFilters(): void
     {
-        $searchName = 'Configurable';
+        $this->assertResultsAfterRequest(1);
 
-        $this->advancedSearch->addFilters(['name' => $searchName]);
+        /** @var ProductInterface $configurableProductOption */
+        $configurableProductOption = $this->productRepository->get('Simple option 1');
+        $configurableProductOption->setVisibility(Visibility::VISIBILITY_IN_SEARCH);
+        $this->productRepository->save($configurableProductOption);
+
+        $this->registry->unregister('advanced_search_conditions');
+        $this->assertResultsAfterRequest(2);
+    }
+
+    /**
+     * Do Elasticsearch query and assert results.
+     *
+     * @param int $count
+     * @return void
+     */
+    private function assertResultsAfterRequest(int $count): void
+    {
+        /** @var Advanced $advancedSearch */
+        $advancedSearch = $this->objectManager->create(Advanced::class);
+        $advancedSearch->addFilters(['name' => 'Configurable']);
+
         /** @var ProductInterface[] $itemsResult */
-        $itemsResult = $this->advancedSearch->getProductCollection()
+        $itemsResult = $advancedSearch->getProductCollection()
             ->addAttributeToSelect(ProductInterface::VISIBILITY)
             ->getItems();
-        $this->assertCount(1, $itemsResult);
 
-        $product = array_shift($itemsResult);
-        $this->assertStringContainsString($searchName, $product->getName());
-        $this->assertContains((int)$product->getVisibility(), $this->productVisibility->getVisibleInSearchIds());
+        $this->assertCount($count, $itemsResult);
+        foreach ($itemsResult as $product) {
+            $this->assertStringContainsString('Configurable', $product->getName());
+            $this->assertContains((int)$product->getVisibility(), $this->productVisibility->getVisibleInSearchIds());
+        }
     }
 }
