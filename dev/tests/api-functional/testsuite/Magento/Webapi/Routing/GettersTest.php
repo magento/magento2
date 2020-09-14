@@ -24,7 +24,7 @@ class GettersTest extends \Magento\Webapi\Routing\BaseService
      */
     protected $_soapService = 'testModule5AllSoapAndRest';
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_version = 'V1';
         $this->_soapService = "testModule5AllSoapAndRest{$this->_version}";

@@ -54,6 +54,9 @@
                 <time_format>12h</time_format>
                 <forbidden_extensions>php,exe</forbidden_extensions>
             </custom_options>
+            <layered_navigation>
+                <display_category>1</display_category>
+            </layered_navigation>
         </catalog>
         <indexer>
             <catalog_product_price>
@@ -80,11 +83,6 @@
                 <thumbnail_position>stretch</thumbnail_position>
             </watermark>
         </design>
-        <web>
-            <url>
-                <catalog_media_url_format>hash</catalog_media_url_format>
-            </url>
-        </web>
         <general>
             <validator_data>
                 <input_types>

@@ -4,8 +4,19 @@
  * See COPYING.txt for license details.
  */
 
-require __DIR__ . '/../../../Magento/Downloadable/_files/product_downloadable.php';
-require __DIR__ . '/active_quote.php';
+use Magento\Quote\Model\QuoteFactory;
+use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
+
+Resolver::getInstance()->requireDataFixture('Magento/Downloadable/_files/product_downloadable.php');
+Resolver::getInstance()->requireDataFixture('Magento/Checkout/_files/active_quote.php');
+/** @var QuoteFactory $quoteFactory */
+$quoteFactory = Bootstrap::getObjectManager()->get(QuoteFactory::class);
+/** @var QuoteResource $quoteResource */
+$quoteResource = Bootstrap::getObjectManager()->get(QuoteResource::class);
+$quote = $quoteFactory->create();
+$quoteResource->load($quote, 'test_order_1', 'reserved_order_id');
 
 /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
 $productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()

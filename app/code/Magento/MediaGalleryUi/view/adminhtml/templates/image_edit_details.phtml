@@ -1,0 +1,97 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+use Magento\Backend\Block\Template;
+
+// phpcs:disable Magento2.Files.LineLength, Generic.Files.LineLength
+/** @var Template $block */
+/** @var \Magento\Framework\Escaper $escaper */
+?>
+
+<div class="media-gallery-edit-image-details-modal"
+     data-bind="mageInit: {
+        'Magento_Ui/js/modal/modal': {
+            type: 'slide',
+            buttons: [],
+            modalClass: 'media-gallery-edit-image-details',
+            title: '<?= $escaper->escapeHtmlAttr(__('Edit Image')); ?>'
+        }
+     }">
+    <div class="page-main-actions">
+        <div class="page-actions">
+            <div class="page-actions-inner">
+                <div class="page-action-buttons" id="media-gallery-edit-image-actions"
+                     data-bind="scope: 'mediaGalleryImageEditActions'">
+                    <!-- ko template: getTemplate() --><!-- /ko -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="media-gallery-image-edit-details-messages" data-bind="scope: 'mediaGalleryEditDetailsMessages'">
+        <!-- ko template: getTemplate() --><!-- /ko -->
+    </div>
+    <form data-bind="mageInit:{'validation':{}}" id="image-edit-details-form" method="post" enctype="multipart/form-data">
+        <div id="media-gallery-image-edit-details" data-bind="scope: 'mediaGalleryEditDetails'">
+            <!-- ko template: getTemplate() --><!-- /ko -->
+        </div>
+    </form>
+</div>
+
+<script type="text/x-magento-init">
+    {
+        "#media-gallery-image-edit-details": {
+            "Magento_Ui/js/core/app": {
+                "components": {
+                    "mediaGalleryEditDetails": {
+                        "component": "Magento_MediaGalleryUi/js/image/image-edit",
+                        "imageEditDetailsUrl": "<?= $escaper->escapeJs($block->getData('imageEditDetailsUrl')); ?>",
+                        "saveDetailsUrl": "<?= $escaper->escapeJs($block->getData('saveDetailsUrl')); ?>",
+                        "mediaGridMessages": "standalone_media_gallery_listing.standalone_media_gallery_listing.messages"
+                    }
+                }
+            },
+            "Magento_MediaGalleryUi/js/validation/validate-image-title": {},
+            "Magento_MediaGalleryUi/js/validation/validate-image-description": {},
+            "Magento_MediaGalleryUi/js/validation/validate-image-keyword": {}
+        },
+        "#media-gallery-image-edit-details-messages": {
+            "Magento_Ui/js/core/app": {
+                "components": {
+                    "mediaGalleryEditDetailsMessages": {
+                        "component": "Magento_MediaGalleryUi/js/grid/messages"
+                    }
+                }
+            }
+        },
+        "#media-gallery-edit-image-actions": {
+            "Magento_Ui/js/core/app": {
+                "components": {
+                    "mediaGalleryImageEditActions": {
+                        "component": "Magento_MediaGalleryUi/js/image/image-actions",
+                        "modalSelector": ".media-gallery-edit-image-details-modal",
+                        "modalWindowSelector": ".media-gallery-edit-image-details",
+                        "mediaGalleryEditDetailsName": "mediaGalleryEditDetails",
+                        "imageModelName" : "media_gallery_listing.media_gallery_listing.media_gallery_columns.thumbnail_url",
+                        "actionsList": [
+                            {
+                                "title": "<?= $escaper->escapeJs(__('Cancel')); ?>",
+                                "handler": "closeModal",
+                                "name": "cancel",
+                                "classes": "action-default scalable cancel action-quaternary"
+                            },
+                            {
+                                "title": "<?= $escaper->escapeJs(__('Save')); ?>",
+                                "handler": "saveImageDetailsAction",
+                                "name": "save",
+                                "classes": "action-default scalable save action-quaternary"
+                            }
+                        ]
+                    }
+                }
+            }
+        }
+    }
+</script>
