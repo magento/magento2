@@ -36,7 +36,7 @@ class OnInsert extends Action implements HttpPostActionInterface
     /**
      * @param Context $context
      * @param JsonFactory $resultJsonFactory
-     * @param GetInsertImageDataInterface|null $getInsertImageContent
+     * @param GetInsertImageDataInterface|null $getInsertImageData
      */
     public function __construct(
         Context $context,

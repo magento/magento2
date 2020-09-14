@@ -9,11 +9,11 @@ declare(strict_types=1);
 namespace Magento\MediaGalleryUi\Model;
 
 use Magento\Cms\Model\Wysiwyg\Images\GetInsertImageContent;
-use Magento\Framework\Api\ExtensionAttributesInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\File\Mime;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
+use Magento\MediaGalleryUiApi\Api\GetInsertImageDataExtensionInterface;
 use Magento\MediaGalleryUiApi\Api\GetInsertImageDataInterface;
 
 /**
@@ -21,6 +21,9 @@ use Magento\MediaGalleryUiApi\Api\GetInsertImageDataInterface;
  */
 class GetInsertImageData implements GetInsertImageDataInterface
 {
+    /**
+     * @var GetInsertImageDataExtensionInterface
+     */
     private $extensionAttributes;
 
     /**
@@ -120,9 +123,9 @@ class GetInsertImageData implements GetInsertImageDataInterface
     /**
      * Get extension attributes
      *
-     * @return ExtensionAttributesInterface|null
+     * @return GetInsertImageDataExtensionInterface|null
      */
-    public function getExtensionAttributes(): ?ExtensionAttributesInterface
+    public function getExtensionAttributes(): ?GetInsertImageDataExtensionInterface
     {
         return $this->extensionAttributes;
     }
@@ -130,10 +133,10 @@ class GetInsertImageData implements GetInsertImageDataInterface
     /**
      * Set extension attributes
      *
-     * @param ExtensionAttributesInterface|null $extensionAttributes
+     * @param GetInsertImageDataExtensionInterface|null $extensionAttributes
      * @return void
      */
-    public function setExtensionAttributes(?ExtensionAttributesInterface $extensionAttributes): void
+    public function setExtensionAttributes(?GetInsertImageDataExtensionInterface $extensionAttributes): void
     {
         $this->extensionAttributes = $extensionAttributes;
     }
