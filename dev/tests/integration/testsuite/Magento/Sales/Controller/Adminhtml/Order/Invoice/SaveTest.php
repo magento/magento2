@@ -189,11 +189,12 @@ class SaveTest extends AbstractInvoiceControllerTest
         $order = $this->getOrder('100000001');
         $post = $this->hydratePost([$order->getItemsCollection()->getFirstItem()->getId() => '1']);
         $this->prepareRequest($post, ['order_id' => $order->getEntityId()]);
-        $this->dispatch('backend/sales/order_invoice/save');
+        $this->dispatch($this->uri);
         $this->assertSessionMessages($this->containsEqual((string)__('The invoice has been created.')));
         $orderItems = $this->getOrderItemsQtyInvoiced((int)$order->getEntityId());
         $this->assertCount(2, $orderItems);
-        $this->assertEquals($orderItems[0]['qty_invoiced'], $orderItems[1]['qty_invoiced']);
+        $this->assertEquals(1, (int)$orderItems[0]);
+        $this->assertEquals($orderItems[0], $orderItems[1]);
     }
 
     /**
@@ -209,7 +210,7 @@ class SaveTest extends AbstractInvoiceControllerTest
             ->from($this->orderItemResource->getMainTable(), OrderItemInterface::QTY_INVOICED)
             ->where(OrderItemInterface::ORDER_ID . ' = ?', $orderId);
 
-        return $connection->fetchAll($select);
+        return $connection->fetchCol($select);
     }
 
     /**
