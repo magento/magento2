@@ -43,7 +43,7 @@ class PopupDeliveryDateTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->trackingStatusMock = $this->getStatusMock();
         $this->subjectMock = $this->getPopupMock();

@@ -7,8 +7,6 @@ namespace Magento\Framework\Code\Reader;
 
 /**
  * Class ClassReader
- *
- * @package Magento\Framework\Code\Reader
  */
 class ClassReader implements ClassReaderInterface
 {
@@ -39,7 +37,11 @@ class ClassReader implements ClassReaderInterface
                         $parameter->isVariadic(),
                     ];
                 } catch (\ReflectionException $e) {
-                    $message = $e->getMessage();
+                    $message = sprintf(
+                        'Impossible to process constructor argument %s of %s class',
+                        $parameter->__toString(),
+                        $className
+                    );
                     throw new \ReflectionException($message, 0, $e);
                 }
             }

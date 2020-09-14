@@ -208,6 +208,7 @@ class Config extends \Magento\Framework\DataObject
             );
 
             $groupChangedPaths = $this->getChangedPaths($sectionId, $groupId, $groupData, $oldConfig, $extraOldGroups);
+            // phpcs:ignore Magento2.Performance.ForeachArrayMerge
             $changedPaths = \array_merge($changedPaths, $groupChangedPaths);
         }
 
@@ -370,6 +371,7 @@ class Config extends \Magento\Framework\DataObject
                     $oldConfig,
                     $extraOldGroups
                 );
+                // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                 $changedPaths = \array_merge($changedPaths, $subGroupChangedPaths);
             }
         }
@@ -435,11 +437,11 @@ class Config extends \Magento\Framework\DataObject
                 if (!isset($fieldData['value'])) {
                     $fieldData['value'] = null;
                 }
-                
+
                 if ($field->getType() == 'multiline' && is_array($fieldData['value'])) {
                     $fieldData['value'] = trim(implode(PHP_EOL, $fieldData['value']));
                 }
-                
+
                 $data = [
                     'field' => $fieldId,
                     'groups' => $groups,
@@ -453,7 +455,7 @@ class Config extends \Magento\Framework\DataObject
                 $backendModel->addData($data);
                 $this->_checkSingleStoreMode($field, $backendModel);
 
-                $path = $this->getFieldPath($field, $fieldId, $extraOldGroups, $oldConfig);
+                $path = $this->getFieldPath($field, $fieldId, $oldConfig, $extraOldGroups);
                 $backendModel->setPath($path)->setValue($fieldData['value']);
 
                 $inherit = !empty($fieldData['inherit']);

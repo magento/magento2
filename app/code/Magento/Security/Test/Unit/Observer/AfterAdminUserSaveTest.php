@@ -7,71 +7,88 @@ declare(strict_types=1);
 
 namespace Magento\Security\Test\Unit\Observer;
 
+use Magento\Framework\Event;
+use Magento\Framework\Event\Observer;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Security\Model\ResourceModel\UserExpiration;
+use Magento\Security\Model\UserExpirationFactory;
+use Magento\Security\Observer\AfterAdminUserSave;
+use Magento\User\Model\User;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
 /**
  * Test class for \Magento\Security\Observer\AfterAdminUserSave
  */
-class AfterAdminUserSaveTest extends \PHPUnit\Framework\TestCase
+class AfterAdminUserSaveTest extends TestCase
 {
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Security\Model\UserExpirationFactory
+     * @var MockObject|UserExpirationFactory
      */
     private $userExpirationFactoryMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Security\Model\ResourceModel\UserExpiration
+     * @var MockObject|UserExpiration
      */
     private $userExpirationResourceMock;
 
     /**
-     * @var \Magento\Security\Observer\AfterAdminUserSave
+     * @var AfterAdminUserSave
      */
     private $observer;
 
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
     private $objectManager;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Event\Observer
+     * @var MockObject|Observer
      */
     private $eventObserverMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Event
+     * @var MockObject|Event
      */
     private $eventMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\User\Model\User
+     * @var MockObject|User
      */
     private $userMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Security\Model\UserExpiration
+     * @var MockObject|\Magento\Security\Model\UserExpiration
      */
     private $userExpirationMock;
 
-    public function setUp()
+    protected function setUp(): void
     {
-        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->objectManager = new ObjectManager($this);
 
-        $this->userExpirationFactoryMock = $this->createMock(\Magento\Security\Model\UserExpirationFactory::class);
+        $this->userExpirationFactoryMock = $this->createMock(UserExpirationFactory::class);
         $this->userExpirationResourceMock = $this->createPartialMock(
-            \Magento\Security\Model\ResourceModel\UserExpiration::class,
+            UserExpiration::class,
             ['load', 'save', 'delete']
         );
         $this->observer = $this->objectManager->getObject(
-            \Magento\Security\Observer\AfterAdminUserSave::class,
+            AfterAdminUserSave::class,
             [
                 'userExpirationFactory' => $this->userExpirationFactoryMock,
                 'userExpirationResource' => $this->userExpirationResourceMock,
             ]
         );
-        $this->eventObserverMock = $this->createPartialMock(\Magento\Framework\Event\Observer::class, ['getEvent']);
-        $this->eventMock = $this->createPartialMock(\Magento\Framework\Event::class, ['getObject']);
-        $this->userMock = $this->createPartialMock(\Magento\User\Model\User::class, ['getId', 'getExpiresAt']);
+        $this->eventObserverMock = $this->createPartialMock(Observer::class, ['getEvent']);
+        $this->eventMock = $this->getMockBuilder(Event::class)
+            ->addMethods(['getObject'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->userMock = $this->getMockBuilder(User::class)
+            ->addMethods(['getExpiresAt'])
+            ->onlyMethods(['getId'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->userExpirationMock = $this->createPartialMock(
             \Magento\Security\Model\UserExpiration::class,
             ['getId', 'getExpiresAt', 'setId', 'setExpiresAt']

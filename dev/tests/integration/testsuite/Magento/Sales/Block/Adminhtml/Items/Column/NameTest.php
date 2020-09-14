@@ -17,7 +17,7 @@ class NameTest extends \PHPUnit\Framework\TestCase
      */
     private $block;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var $layout \Magento\Framework\View\Layout */

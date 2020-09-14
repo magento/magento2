@@ -988,7 +988,7 @@ class File implements DriverInterface
      */
     public function getRealPathSafety($path)
     {
-        if (strpos($path, DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR) === false) {
+        if (strpos($path, DIRECTORY_SEPARATOR . '.') === false) {
             return $path;
         }
 
@@ -999,6 +999,9 @@ class File implements DriverInterface
             $path
         );
         $pathParts = explode(DIRECTORY_SEPARATOR, $path);
+        if (end($pathParts) == '.') {
+            $pathParts[count($pathParts) - 1] = '';
+        }
         $realPath = [];
         foreach ($pathParts as $pathPart) {
             if ($pathPart == '.') {

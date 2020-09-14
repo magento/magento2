@@ -3,75 +3,94 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Cms\Test\Unit\Controller\Adminhtml\Block;
+
+use Magento\Backend\App\Action\Context;
+use Magento\Backend\Model\View\Result\Page;
+use Magento\Backend\Model\View\Result\Redirect;
+use Magento\Backend\Model\View\Result\RedirectFactory;
+use Magento\Cms\Controller\Adminhtml\Block\Edit;
+use Magento\Cms\Model\Block;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Message\ManagerInterface;
+use Magento\Framework\Phrase;
+use Magento\Framework\Registry;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Page\Config;
+use Magento\Framework\View\Page\Title;
+use Magento\Framework\View\Result\PageFactory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class EditTest extends \PHPUnit\Framework\TestCase
+class EditTest extends TestCase
 {
     /**
-     * @var \Magento\Cms\Controller\Adminhtml\Block\Edit
+     * @var Edit
      */
     protected $editController;
 
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
     protected $objectManager;
 
     /**
-     * @var \Magento\Backend\App\Action\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|MockObject
      */
     protected $contextMock;
 
     /**
-     * @var \Magento\Backend\Model\View\Result\RedirectFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var RedirectFactory|MockObject
      */
     protected $resultRedirectFactoryMock;
 
     /**
-     * @var \Magento\Backend\Model\View\Result\Redirect|\PHPUnit_Framework_MockObject_MockObject
+     * @var Redirect|MockObject
      */
     protected $resultRedirectMock;
 
     /**
-     * @var \Magento\Framework\Message\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ManagerInterface|MockObject
      */
     protected $messageManagerMock;
 
     /**
-     * @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var RequestInterface|MockObject
      */
     protected $requestMock;
 
     /**
-     * @var \Magento\Cms\Model\Block|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Cms\Model\Block|MockObject
      */
     protected $blockMock;
 
     /**
-     * @var \Magento\Framework\ObjectManager\ObjectManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManager\ObjectManager|MockObject
      */
     protected $objectManagerMock;
 
     /**
-     * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @var Registry|MockObject
      */
     protected $coreRegistryMock;
 
     /**
-     * @var \Magento\Framework\View\Result\PageFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var PageFactory|MockObject
      */
     protected $resultPageFactoryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->messageManagerMock = $this->createMock(\Magento\Framework\Message\ManagerInterface::class);
-        $this->coreRegistryMock = $this->createMock(\Magento\Framework\Registry::class);
+        $this->objectManager = new ObjectManager($this);
+        $this->messageManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
+        $this->coreRegistryMock = $this->createMock(Registry::class);
 
-        $this->blockMock = $this->getMockBuilder(\Magento\Cms\Model\Block::class)
+        $this->blockMock = $this->getMockBuilder(Block::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -81,21 +100,22 @@ class EditTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->objectManagerMock->expects($this->once())
             ->method('create')
-            ->with(\Magento\Cms\Model\Block::class)
+            ->with(Block::class)
             ->willReturn($this->blockMock);
 
-        $this->resultRedirectMock = $this->getMockBuilder(\Magento\Backend\Model\View\Result\Redirect::class)
+        $this->resultRedirectMock = $this->getMockBuilder(Redirect::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->resultRedirectFactoryMock = $this->getMockBuilder(
-            \Magento\Backend\Model\View\Result\RedirectFactory::class
-        )->disableOriginalConstructor()->getMock();
+            RedirectFactory::class
+        )->disableOriginalConstructor()
+            ->getMock();
 
-        $this->resultPageFactoryMock = $this->createMock(\Magento\Framework\View\Result\PageFactory::class);
+        $this->resultPageFactoryMock = $this->createMock(PageFactory::class);
 
         $this->requestMock = $this->getMockForAbstractClass(
-            \Magento\Framework\App\RequestInterface::class,
+            RequestInterface::class,
             [],
             '',
             false,
@@ -104,7 +124,7 @@ class EditTest extends \PHPUnit\Framework\TestCase
             []
         );
 
-        $this->contextMock = $this->createMock(\Magento\Backend\App\Action\Context::class);
+        $this->contextMock = $this->createMock(Context::class);
         $this->contextMock->expects($this->once())->method('getRequest')->willReturn($this->requestMock);
         $this->contextMock->expects($this->once())->method('getObjectManager')->willReturn($this->objectManagerMock);
         $this->contextMock->expects($this->once())->method('getMessageManager')->willReturn($this->messageManagerMock);
@@ -113,7 +133,7 @@ class EditTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->resultRedirectFactoryMock);
 
         $this->editController = $this->objectManager->getObject(
-            \Magento\Cms\Controller\Adminhtml\Block\Edit::class,
+            Edit::class,
             [
                 'context' => $this->contextMock,
                 'coreRegistry' => $this->coreRegistryMock,
@@ -181,16 +201,16 @@ class EditTest extends \PHPUnit\Framework\TestCase
             ->method('register')
             ->with('cms_block', $this->blockMock);
 
-        $resultPageMock = $this->createMock(\Magento\Backend\Model\View\Result\Page::class);
+        $resultPageMock = $this->createMock(Page::class);
 
         $this->resultPageFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($resultPageMock);
 
-        $titleMock = $this->createMock(\Magento\Framework\View\Page\Title::class);
+        $titleMock = $this->createMock(Title::class);
         $titleMock->expects($this->at(0))->method('prepend')->with(__('Blocks'));
         $titleMock->expects($this->at(1))->method('prepend')->with($this->getTitle());
-        $pageConfigMock = $this->createMock(\Magento\Framework\View\Page\Config::class);
+        $pageConfigMock = $this->createMock(Config::class);
         $pageConfigMock->expects($this->exactly(2))->method('getTitle')->willReturn($titleMock);
 
         $resultPageMock->expects($this->once())
@@ -211,7 +231,7 @@ class EditTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \Magento\Framework\Phrase|string
+     * @return Phrase|string
      */
     protected function getTitle()
     {
