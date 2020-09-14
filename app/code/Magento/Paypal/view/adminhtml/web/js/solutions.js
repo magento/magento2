@@ -26,7 +26,7 @@ define([
             /**
              * The selector element responsible for configuration of payment method (CSS class)
              */
-            buttonConfiguration: '.button.action-configure'
+            buttonConfiguration: 'div[class*="paypal"] .button.action-configure'
         },
 
         /**
