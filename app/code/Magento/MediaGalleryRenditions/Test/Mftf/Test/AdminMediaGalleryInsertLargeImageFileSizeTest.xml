@@ -14,8 +14,9 @@
             <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/1806"/>
             <title value="Admin user should see correct image file size after rendition"/>
             <testCaseId value="https://studio.cucumber.io/projects/131313/test-plan/folders/1507933/scenarios/5200023"/>
+            <stories value="User inserts image rendition to the content"/>
             <description value="Admin user should see correct image file size after rendition"/>
-            <severity value="MAJOR"/>
+            <severity value="AVERAGE"/>
             <group value="media_gallery_ui"/>
         </annotations>
         <before>
@@ -31,7 +32,7 @@
             <actionGroup ref="AdminOpenMediaGalleryFromCategoryImageUploaderActionGroup" stepKey="openMediaGalleryForDelete"/>
             <actionGroup ref="AdminEnhancedMediaGalleryEnableMassActionModeActionGroup" stepKey="enableMassActionToDeleteImages"/>
             <actionGroup ref="AdminEnhancedMediaGallerySelectImageForMassActionActionGroup" stepKey="selectSecondImageToDelete">
-                <argument name="imageName" value="{{LargeImage.title}}"/>
+                <argument name="imageName" value="{{ImageUpload.fileName}}"/>
             </actionGroup>
             <actionGroup ref="AdminEnhancedMediaGalleryClickDeleteImagesButtonActionGroup" stepKey="clickDeleteSelectedButton"/>
             <actionGroup ref="AdminEnhancedMediaGalleryConfirmDeleteImagesActionGroup" stepKey="deleteImages"/>
@@ -45,15 +46,14 @@
         <actionGroup ref="AdminEditCategoryInGridPageActionGroup" stepKey="editCategoryItem">
             <argument name="categoryName" value="$category.name$"/>
         </actionGroup>
-        <actionGroup ref="AdminSaveCategoryFormActionGroup" stepKey="saveCategoryForm"/>
 
         <!-- Add image to category from gallery -->
         <actionGroup ref="AdminOpenMediaGalleryFromCategoryImageUploaderActionGroup" stepKey="openMediaGallery"/>
         <actionGroup ref="AdminEnhancedMediaGalleryUploadImageActionGroup" stepKey="addCategoryImage">
-            <argument name="image" value="LargeImage"/>
+            <argument name="image" value="ImageUpload"/>
         </actionGroup>
         <actionGroup ref="AdminMediaGalleryClickImageInGridActionGroup" stepKey="selectImage">
-            <argument name="imageName" value="{{LargeImage.title}}"/>
+            <argument name="imageName" value="{{ImageUpload.fileName}}"/>
         </actionGroup>
         <actionGroup ref="AdminMediaGalleryClickAddSelectedActionGroup" stepKey="addSelected"/>
 

@@ -10,11 +10,6 @@ namespace Magento\Cms\Model\Wysiwyg\Images;
 
 use Magento\Catalog\Helper\Data as CatalogHelper;
 use Magento\Cms\Helper\Wysiwyg\Images as ImagesHelper;
-use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\File\Mime;
-use Magento\Framework\Filesystem;
-use Magento\Framework\Filesystem\Directory\ReadInterface;
-use Magento\Framework\Filesystem\File\WriteInterface;
 
 class GetInsertImageContent
 {

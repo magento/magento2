@@ -47,11 +47,11 @@ define([
                 showLoader: true
             }).done($.proxy(function (data) {
                 if (targetElement.is('textarea')) {
-                    this.insertAtCursor(targetElement.get(0), data.path);
+                    this.insertAtCursor(targetElement.get(0), data.content);
                     targetElement.focus();
                     $(targetElement).change();
                 } else {
-                    targetElement.val(data.path)
+                    targetElement.val(data.content)
                         .data('size', data.size)
                         .data('mime-type', data.type)
                         .trigger('change');

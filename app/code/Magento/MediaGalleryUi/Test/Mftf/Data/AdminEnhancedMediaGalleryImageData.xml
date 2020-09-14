@@ -40,13 +40,4 @@
         <data key="extension">jpg</data>
         <data key="keywords">magento, mediagallerymetadata</data>
     </entity>
-    <entity name="LargeImage" type="image">
-        <data key="title">magento</data>
-        <data key="description">Description of the large magento image</data>
-        <data key="file">magento.jpg</data>
-        <data key="value">magento.jpg</data>
-        <data key="fileName">magento</data>
-        <data key="extension">jpg</data>
-        <data key="keywords">magento, mediagallerymetadata</data>
-    </entity>
 </entities>
