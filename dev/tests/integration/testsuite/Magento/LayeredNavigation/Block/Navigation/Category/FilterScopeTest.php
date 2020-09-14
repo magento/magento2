@@ -40,7 +40,7 @@ class FilterScopeTest extends AbstractFiltersTest
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->storeManager = $this->objectManager->get(StoreManagerInterface::class);

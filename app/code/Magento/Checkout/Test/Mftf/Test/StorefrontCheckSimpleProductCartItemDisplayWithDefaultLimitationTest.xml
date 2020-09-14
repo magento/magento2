@@ -54,7 +54,9 @@
             <createData entity="SimpleProduct2" stepKey="simpleProduct11">
                 <field key="price">110.00</field>
             </createData>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
         </before>
         <after>
             <deleteData createDataKey="simpleProduct1" stepKey="deleteProduct1"/>

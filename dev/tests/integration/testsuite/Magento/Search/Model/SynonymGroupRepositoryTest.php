@@ -17,7 +17,7 @@ class SynonymGroupRepositoryTest extends \PHPUnit\Framework\TestCase
      */
     private $objectManager;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->model = $this->objectManager->get(\Magento\Search\Model\SynonymGroupRepository::class);
@@ -39,11 +39,12 @@ class SynonymGroupRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Search\Model\Synonym\MergeConflictException
-     * @expectedExceptionMessage (a,b,c), (d,e,f)
      */
     public function testSaveCreateMergeConflict()
     {
+        $this->expectException(\Magento\Search\Model\Synonym\MergeConflictException::class);
+        $this->expectExceptionMessage('(a,b,c), (d,e,f)');
+
         /** @var \Magento\Search\Api\Data\SynonymGroupInterface $synonymGroup */
         $synonymGroup = $this->objectManager->create(\Magento\Search\Api\Data\SynonymGroupInterface::class);
         $synonymGroup->setSynonymGroup('a,b,c');
@@ -95,11 +96,12 @@ class SynonymGroupRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Search\Model\Synonym\MergeConflictException
-     * @expectedExceptionMessage (d,e,f)
      */
     public function testSaveUpdateMergeConflict()
     {
+        $this->expectException(\Magento\Search\Model\Synonym\MergeConflictException::class);
+        $this->expectExceptionMessage('(d,e,f)');
+
         /** @var \Magento\Search\Api\Data\SynonymGroupInterface $synonymGroup */
         $synonymGroup = $this->objectManager->create(\Magento\Search\Api\Data\SynonymGroupInterface::class);
         $synonymGroup->setSynonymGroup('a,b,c');
@@ -170,11 +172,11 @@ class SynonymGroupRepositoryTest extends \PHPUnit\Framework\TestCase
         // merged rows should be deleted
         $synonymGroupModel = $this->objectManager->create(\Magento\Search\Model\SynonymGroup::class);
         $synonymGroupModel->load($id1);
-        $this->assertEquals(null, $synonymGroupModel->getSynonyms());
+        $this->assertNull($synonymGroupModel->getSynonyms());
 
         $synonymGroupModel = $this->objectManager->create(\Magento\Search\Model\SynonymGroup::class);
         $synonymGroupModel->load($id2);
-        $this->assertEquals(null, $synonymGroupModel->getSynonyms());
+        $this->assertNull($synonymGroupModel->getSynonyms());
     }
 
     public function testSaveUpdateMerge()
@@ -231,11 +233,11 @@ class SynonymGroupRepositoryTest extends \PHPUnit\Framework\TestCase
         // merged rows are deleted
         $synonymGroupModel = $this->objectManager->create(\Magento\Search\Model\SynonymGroup::class);
         $synonymGroupModel->load($id2);
-        $this->assertEquals(null, $synonymGroupModel->getSynonyms());
+        $this->assertNull($synonymGroupModel->getSynonyms());
 
         $synonymGroupModel = $this->objectManager->create(\Magento\Search\Model\SynonymGroup::class);
         $synonymGroupModel->load($id3);
-        $this->assertEquals(null, $synonymGroupModel->getSynonyms());
+        $this->assertNull($synonymGroupModel->getSynonyms());
     }
 
     public function testDelete()

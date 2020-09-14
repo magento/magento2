@@ -22,7 +22,7 @@ class ConfigTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
     public function testEditAction()
     {
         $this->dispatch('backend/admin/system_config/edit');
-        $this->assertContains('<div id="system_config_tabs"', $this->getResponse()->getBody());
+        $this->assertStringContainsString('<div id="system_config_tabs"', $this->getResponse()->getBody());
     }
 
     /**

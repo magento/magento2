@@ -24,15 +24,7 @@ class SectionConfigConverter implements \Magento\Framework\Config\ConverterInter
         foreach ($source->getElementsByTagName('action') as $action) {
             $actionName = strtolower($action->getAttribute('name'));
             foreach ($action->getElementsByTagName('section') as $section) {
-                $sectionName = strtolower($section->getAttribute('name'));
-
-                if ($sectionName === self::INVALIDATE_ALL_SECTIONS_MARKER) {
-                    $sections[$actionName] = [];
-                    $sections[$actionName][] = self::INVALIDATE_ALL_SECTIONS_MARKER;
-                    break;
-                } else {
-                    $sections[$actionName][] = $sectionName;
-                }
+                $sections[$actionName][] = strtolower($section->getAttribute('name'));
             }
             if (!isset($sections[$actionName])) {
                 $sections[$actionName][] = self::INVALIDATE_ALL_SECTIONS_MARKER;

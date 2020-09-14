@@ -19,7 +19,7 @@ use Magento\TestFramework\TestCase\AbstractController;
 /**
  * Test sending wish list.
  *
- * @magentoDbIsolation enabled
+ * @magentoDbIsolation disabled
  * @magentoAppArea frontend
  * @magentoDataFixture Magento/Wishlist/_files/wishlist.php
  */
@@ -40,7 +40,7 @@ class SendTest extends AbstractController
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -54,7 +54,7 @@ class SendTest extends AbstractController
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->customerSession->setCustomerId(null);
 
@@ -77,8 +77,8 @@ class SendTest extends AbstractController
         );
         $this->assertNotNull($this->transportBuilder->getSentMessage());
         $messageContent = $this->transportBuilder->getSentMessage()->getBody()->getParts()[0]->getRawContent();
-        $this->assertContains($shareMessage, $messageContent);
-        $this->assertContains(
+        $this->assertStringContainsString($shareMessage, $messageContent);
+        $this->assertStringContainsString(
             sprintf(
                 '%s wants to share this Wish List',
                 $this->customerNameGeneration->getCustomerName($this->customerSession->getCustomerDataObject())

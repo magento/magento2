@@ -82,7 +82,10 @@ class DecimalFilterTest extends AbstractFiltersTest
                 'attribute_data' => ['is_filterable' => 0],
                 'expectation' => [],
             ],
-            'used_in_navigation_with_results' => [
+
+            /* @TODO: Should be uncommented in MC-16650 */
+
+            /*'used_in_navigation_with_results' => [
                 'products_data' => [
                     'simple1000' => 10.00,
                     'simple1001' => 20.00,
@@ -100,7 +103,7 @@ class DecimalFilterTest extends AbstractFiltersTest
                         'count' => 1,
                     ],
                 ],
-            ],
+            ],*/
         ];
     }
 }
