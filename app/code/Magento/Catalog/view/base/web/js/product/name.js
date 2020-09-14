@@ -6,11 +6,15 @@
 define([
     'Magento_Ui/js/grid/columns/column',
     'Magento_Catalog/js/product/list/column-status-validator',
-    'prototype'
-], function (Column, columnStatusValidator) {
+    'escaper'
+], function (Column, columnStatusValidator, escaper) {
     'use strict';
 
     return Column.extend({
+        defaults: {
+            allowedTags: ['div', 'span', 'b', 'strong', 'i', 'em', 'u', 'a']
+        },
+
         /**
          * Depends on this option, product name can be shown or hide. Depends on  backend configuration
          *
@@ -23,11 +27,11 @@ define([
         /**
          * Name column.
          *
-         * @param {Object} row
+         * @param {String} name
          * @returns {String}
          */
-        getNameUnsanitizedHtml: function (row) {
-            return row.name;
+        getNameUnsanitizedHtml: function (name) {
+            return escaper.escapeHtml(name, this.allowedTags);
         }
     });
 });
