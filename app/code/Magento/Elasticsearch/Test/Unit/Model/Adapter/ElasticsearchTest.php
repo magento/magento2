@@ -174,7 +174,14 @@ class ElasticsearchTest extends TestCase
             ->method('getAllAttributesTypes')
             ->willReturn(
                 [
-                    'name' => 'string',
+                    'name' => [
+                        'type' => 'string',
+                        'fields' => [
+                            'keyword' => [
+                                'type' => "keyword",
+                            ],
+                        ],
+                    ],
                 ]
             );
         $this->clientConfig->expects($this->any())
@@ -562,6 +569,28 @@ class ElasticsearchTest extends TestCase
             ->with([$attributeCode => ['type' => 'text']], $indexName, 'product');
 
         $this->model->updateIndexMapping($storeId, $mappedIndexerId, $attributeCode);
+    }
+
+    /**
+     * Test for get mapping total fields limit
+     *
+     * @return void
+     */
+    public function testGetMappingTotalFieldsLimit(): void
+    {
+        $settings = [
+            'index' => [
+                    'mapping' => [
+                        'total_fields' => [
+                            'limit'  => 1002
+                        ]
+                    ]
+            ]
+        ];
+        $this->client->expects($this->at(1))
+            ->method('createIndex')
+            ->with(null, ['settings' => $settings]);
+        $this->model->cleanIndex(1, 'product');
     }
 
     /**

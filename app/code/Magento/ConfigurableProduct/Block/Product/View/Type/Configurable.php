@@ -291,6 +291,11 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
             $priceInfo = $product->getPriceInfo();
 
             $prices[$product->getId()] = [
+                'baseOldPrice' => [
+                    'amount' => $this->localeFormat->getNumber(
+                        $priceInfo->getPrice('regular_price')->getAmount()->getBaseAmount()
+                    ),
+                ],
                 'oldPrice' => [
                     'amount' => $this->localeFormat->getNumber(
                         $priceInfo->getPrice('regular_price')->getAmount()->getValue()
