@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminDeleteCustomerInGridActionGroup" extends="AdminDeleteCustomerActionGroup">
+        <arguments>
+            <argument name="customerEmail"/>
+        </arguments>
+
+        <remove keyForRemoval="openFilters"/>
+        <remove keyForRemoval="fillEmail"/>
+        <remove keyForRemoval="clickApplyFilters"/>
+        <remove keyForRemoval="chooseCustomer"/>
+        <click selector="{{AdminDataGridHeaderSection.filters}}" after="waitForFiltersClear" stepKey="openFiltersSection"/>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="AdminDataGridHeaderSection.clearFilters" visible="true" after="openFiltersSection" stepKey="clearFiltersIfTheyAreSet"/>
+        <fillField userInput="{{customerEmail}}" selector="{{AdminCustomerFiltersSection.emailInput}}" after="clearFiltersIfTheyAreSet" stepKey="fillEmailFilterField"/>
+        <click selector="{{AdminCustomerFiltersSection.apply}}" after="fillEmailFilterField" stepKey="applyEmailFilter"/>
+        <waitForElementVisible selector="{{AdminCustomerGridMainActionsSection.customerCheckbox(customerEmail)}}" after="applyEmailFilter" stepKey="waitForAppliedFilterLoad"/>
+        <click selector="{{AdminCustomerGridMainActionsSection.customerCheckbox(customerEmail)}}" after="waitForAppliedFilterLoad" stepKey="chooseCustomer"/>
+    </actionGroup>
+</actionGroups>

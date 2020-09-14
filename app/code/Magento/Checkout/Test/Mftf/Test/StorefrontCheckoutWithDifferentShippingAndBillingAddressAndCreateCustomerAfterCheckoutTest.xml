@@ -7,17 +7,14 @@
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="StorefrontCheckoutWithDifferentShippingAndBillingAddressAndRegisterCustomerAfterCheckoutTest" deprecated="Use StorefrontCheckoutWithDifferentShippingAndBillingAddressAndCreateCustomerAfterCheckoutTest instead">
+    <test name="StorefrontCheckoutWithDifferentShippingAndBillingAddressAndCreateCustomerAfterCheckoutTest">
         <annotations>
             <stories value="Checkout"/>
-            <title value="DEPRECATED. Verify UK customer checkout with different billing and shipping address and register customer after checkout"/>
+            <title value="Verify UK customer checkout with different billing and shipping address and register customer after checkout"/>
             <description value="Checkout as UK customer with different shipping/billing address and register checkout method"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14712"/>
             <group value="mtf_migrated"/>
-            <skip>
-                <issueId value="DEPRECATED">Use StorefrontCheckoutWithDifferentShippingAndBillingAddressAndCreateCustomerAfterCheckoutTest instead</issueId>
-            </skip>
         </annotations>
 
         <before>
@@ -31,7 +28,7 @@
             <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="openHomePage"/>
             <actionGroup ref="StorefrontSignOutActionGroup" stepKey="customerLogout"/>
             <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
-            <actionGroup ref="AdminDeleteCustomerActionGroup" stepKey="deleteCustomer">
+            <actionGroup ref="AdminDeleteCustomerInGridActionGroup" stepKey="deleteCustomer">
                 <argument name="customerEmail" value="UKCustomer.email"/>
             </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
@@ -43,32 +40,32 @@
         </actionGroup>
 
         <!--Add product to the cart -->
-        <actionGroup ref="StorefrontAddProductToCartWithQtyActionGroup" stepKey="addProductToTheCart">
+        <actionGroup ref="StorefrontAddProductToCartWithQtyActionGroup" stepKey="addSimpleProductToCart">
             <argument name="productQty" value="1"/>
         </actionGroup>
 
         <!--Open View and edit -->
-        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="clickMiniCart"/>
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="openCartFromMiniCart"/>
 
         <!-- Fill the Estimate Shipping and Tax section -->
-        <actionGroup ref="CheckoutFillEstimateShippingAndTaxActionGroup" stepKey="fillEstimateShippingAndTaxFields"/>
+        <actionGroup ref="CartFillEstimateShippingAndTaxActionGroup" stepKey="fillEstimateShippingAndTaxFields"/>
         <click selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="goToCheckout"/>
         <waitForPageLoad stepKey="waitForPageToLoad"/>
 
         <!-- Fill the guest form -->
-        <actionGroup ref="FillGuestCheckoutShippingAddressFormActionGroup" stepKey="fillGuestForm">
-                <argument name="customer" value="UKCustomer"/>
-                <argument name="customerAddress" value="updateCustomerUKAddress"/>
+        <actionGroup ref="FillGuestCheckoutShippingAddressFormActionGroup" stepKey="fillGuestShippingAddress">
+            <argument name="customer" value="UKCustomer"/>
+            <argument name="customerAddress" value="updateCustomerUKAddress"/>
         </actionGroup>
-        <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickOnNextButton"/>
-        <waitForElementVisible selector="{{CheckoutPaymentSection.billingAddressNotSameCheckbox}}" stepKey="waitForElementToBeVisible"/>
+        <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="goToBillingStep"/>
+        <waitForElementVisible selector="{{CheckoutPaymentSection.billingAddressNotSameCheckbox}}" stepKey="waitForSameBillingAndShippingAddressCheckboxVisible"/>
         <uncheckOption selector="{{CheckoutPaymentSection.billingAddressNotSameCheckbox}}" stepKey="uncheckSameBillingAndShippingAddress"/>
-        <conditionalClick selector="{{CheckoutShippingSection.editAddressButton}}" dependentSelector="{{CheckoutShippingSection.editAddressButton}}" visible="true" stepKey="clickEditButton"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask"/>
+        <conditionalClick selector="{{CheckoutShippingSection.editAddressButton}}" dependentSelector="{{CheckoutShippingSection.editAddressButton}}" visible="true" stepKey="clickEditBillingAddressButton"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForBillingAddressFormLoad"/>
 
         <!-- Fill Billing Address -->
-        <actionGroup ref="StorefrontFillBillingAddressActionGroup" stepKey="fillBillingAddress"/>
-        <click selector="{{CheckoutPaymentSection.update}}" stepKey="clickOnUpdateButton"/>
+        <actionGroup ref="StorefrontFillBillingAddressActionGroup" stepKey="fillBillingAddressForm"/>
+        <click selector="{{CheckoutPaymentSection.update}}" stepKey="clickOnUpdateBillingAddressButton"/>
 
         <!--Place order -->
         <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickOnPlaceOrder"/>
@@ -79,14 +76,14 @@
         <actionGroup ref="StorefrontRegisterCustomerAfterCheckoutActionGroup" stepKey="registerCustomer"/>
 
         <!-- Open Order Index Page -->
-        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="goToOrders"/>
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="goToOrdersGrid"/>
 
         <!-- Filter Order using orderId and assert order-->
         <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderGridById">
             <argument name="orderId" value="$orderId"/>
         </actionGroup>
 
-        <click selector="{{AdminOrdersGridSection.viewLink('$orderId')}}" stepKey="clickOnViewLink"/>
+        <click selector="{{AdminOrdersGridSection.viewLink('$orderId')}}" stepKey="openOrderPage"/>
         <waitForPageLoad stepKey="waitForOrderPageToLoad"/>
 
         <!-- Assert Grand Total -->
