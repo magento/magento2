@@ -37,16 +37,14 @@
         </after>
 
         <!--Set timezone for default config-->
-        <amOnPage url="{{GeneralConfigurationPage.url}}" stepKey="goToGeneralConfig"/>
-        <waitForPageLoad stepKey="waitForConfigPage"/>
+        <actionGroup ref="AdminOpenGeneralConfigurationPageActionGroup" stepKey="goToGeneralConfig"/>
         <conditionalClick selector="{{LocaleOptionsSection.sectionHeader}}" dependentSelector="{{LocaleOptionsSection.timezone}}" visible="false" stepKey="openLocaleSection"/>
         <grabValueFrom selector="{{LocaleOptionsSection.timezone}}" stepKey="originalTimezone"/>
         <selectOption selector="{{LocaleOptionsSection.timezone}}" userInput="Central European Standard Time (Europe/Paris)" stepKey="setTimezone"/>
         <click selector="{{AdminMainActionsSection.save}}" stepKey="saveConfig"/>
 
         <!--Set timezone for Main Website-->
-        <amOnPage url="{{GeneralConfigurationPage.url}}" stepKey="goToGeneralConfig1"/>
-        <waitForPageLoad stepKey="waitForConfigPage1"/>
+        <actionGroup ref="AdminOpenGeneralConfigurationPageActionGroup" stepKey="goToGeneralConfig1"/>
         <actionGroup ref="AdminSwitchWebsiteActionGroup" stepKey="AdminSwitchStoreViewActionGroup">
             <argument name="website" value="_defaultWebsite"/>
         </actionGroup>
@@ -80,15 +78,13 @@
         </assertEquals>
 
         <!--Reset timezone-->
-        <amOnPage url="{{GeneralConfigurationPage.url}}" stepKey="goToGeneralConfigReset"/>
-        <waitForPageLoad stepKey="waitForConfigPageReset"/>
+        <actionGroup ref="AdminOpenGeneralConfigurationPageActionGroup" stepKey="goToGeneralConfigReset"/>
         <conditionalClick selector="{{LocaleOptionsSection.sectionHeader}}" dependentSelector="{{LocaleOptionsSection.timezone}}" visible="false" stepKey="openLocaleSectionReset"/>
         <selectOption selector="{{LocaleOptionsSection.timezone}}" userInput="$originalTimezone" stepKey="resetTimezone"/>
         <click selector="{{AdminMainActionsSection.save}}" stepKey="saveConfigReset"/>
 
         <!--Reset timezone-->
-        <amOnPage url="{{GeneralConfigurationPage.url}}" stepKey="goToGeneralConfigReset1"/>
-        <waitForPageLoad stepKey="waitForConfigPageReset1"/>
+        <actionGroup ref="AdminOpenGeneralConfigurationPageActionGroup" stepKey="goToGeneralConfigReset1"/>
         <actionGroup ref="AdminSwitchWebsiteActionGroup" stepKey="AdminSwitchStoreViewActionGroup1">
             <argument name="website" value="_defaultWebsite"/>
         </actionGroup>

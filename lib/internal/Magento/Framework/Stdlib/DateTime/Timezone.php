@@ -319,7 +319,7 @@ class Timezone implements TimezoneInterface
                 throw new LocalizedException(
                     new Phrase(
                         'The DateTime object timezone needs to be the same as the "%1" timezone in config.',
-                        $this->getConfigTimezone()
+                        [$this->getConfigTimezone()]
                     )
                 );
             }

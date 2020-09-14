@@ -115,8 +115,7 @@
             <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
         <!-- Create three configurable products with options -->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductGridPage"/>
-        <waitForPageLoad time="30" stepKey="wait1"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="amOnProductGridPage"/>
         <!-- Edit created first product as configurable product with options -->
         <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterGridByFirstProduct">
             <argument name="product" value="$$createFirstConfigurableProduct$$"/>
