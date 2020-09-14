@@ -67,11 +67,9 @@ class UpdateProductsFromWishlistTest extends GraphQlAbstract
     public function testUnauthorizedWishlistItemUpdate()
     {
         $wishlist = $this->getWishlist();
-        $wishlistId = $wishlist['customer']['wishlist']['id'];
         $wishlistItem = $wishlist['customer']['wishlist']['items'][0];
         $wishlist2 = $this->getWishlist('customer_two@example.com');
         $wishlist2Id = $wishlist2['customer']['wishlist']['id'];
-        $wishlistItem2 = $wishlist['customer']['wishlist']['items'][0];
         $qty = 2;
         $updateWishlistQuery = $this->getQueryWithNoDescription((int) $wishlist2Id, (int) $wishlistItem['id'], $qty);
         $response = $this->graphQlMutation(
@@ -84,7 +82,7 @@ class UpdateProductsFromWishlistTest extends GraphQlAbstract
         self::assertNotEmpty($response['updateProductsInWishlist']['wishlist']['items'], 'empty wish list items');
         self::assertCount(1, $response['updateProductsInWishlist']['wishlist']['items']);
         self::assertEquals(
-            'The wishlist item with ID "'.$wishlistItem2['id'].'" does not belong to the wishlist',
+            'The wishlist item with ID "'.$wishlistItem['id'].'" does not belong to the wishlist',
             $response['updateProductsInWishlist']['user_errors'][0]['message']
         );
     }

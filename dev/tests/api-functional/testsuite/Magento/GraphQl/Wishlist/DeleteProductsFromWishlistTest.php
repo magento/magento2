@@ -67,7 +67,6 @@ class DeleteProductsFromWishlistTest extends GraphQlAbstract
         $wishlistItem = $wishlist['customer']['wishlist']['items'][0];
         $wishlist2 = $this->getWishlist('customer_two@example.com');
         $wishlist2Id = $wishlist2['customer']['wishlist']['id'];
-        $wishlistItem2 = $wishlist['customer']['wishlist']['items'][0];
         $query = $this->getQuery((int) $wishlist2Id, (int) $wishlistItem['id']);
         $response = $this->graphQlMutation(
             $query,
@@ -79,7 +78,7 @@ class DeleteProductsFromWishlistTest extends GraphQlAbstract
         self::assertNotEmpty($response['removeProductsFromWishlist']['wishlist']['items'], 'empty wish list items');
         self::assertCount(1, $response['removeProductsFromWishlist']['wishlist']['items']);
         self::assertEquals(
-            'The wishlist item with ID "'.$wishlistItem2['id'].'" does not belong to the wishlist',
+            'The wishlist item with ID "'.$wishlistItem['id'].'" does not belong to the wishlist',
             $response['removeProductsFromWishlist']['user_errors'][0]['message']
         );
     }
