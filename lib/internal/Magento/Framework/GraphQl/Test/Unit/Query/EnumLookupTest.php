@@ -81,9 +81,6 @@ class EnumLookupTest extends TestCase
      */
     private $values = [];
 
-    /**
-     * @inheritDoc
-     */
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
@@ -114,16 +111,11 @@ class EnumLookupTest extends TestCase
             )
             ->getMock();
 
-        $this->enumDataMapperMock = $this->getMockForAbstractClass(DataMapperInterface::class);
-
-        $this->configDataMock = $this->getMockBuilder(DataInterface::class)
-            ->getMock();
-        $this->configElementFactoryMock = $this->getMockBuilder(ConfigElementFactoryInterface::class)
-            ->getMock();
-        $this->queryFieldsMock = $this->getMockBuilder(QueryFields::class)
-            ->getMock();
-
-        $this->typeConfigMock = $this->getMockForAbstractClass(ConfigInterface::class);
+        $this->enumDataMapperMock = $this->createMock(DataMapperInterface::class);
+        $this->configDataMock = $this->createMock(DataInterface::class);
+        $this->configElementFactoryMock = $this->createMock(ConfigElementFactoryInterface::class);
+        $this->queryFieldsMock = $this->createMock(QueryFields::class);
+        $this->typeConfigMock = $this->createMock(ConfigInterface::class);
 
         $this->enumLookup = $this->objectManager->getObject(
             EnumLookup::class,
