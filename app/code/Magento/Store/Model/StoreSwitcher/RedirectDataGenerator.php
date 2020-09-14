@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Store\Model\StoreSwitcher;
 
 use Magento\Framework\Encryption\Encryptor;
+use Psr\Log\LoggerInterface;
 
 /**
  * Store switcher redirect data collector
@@ -30,23 +31,30 @@ class RedirectDataGenerator
      * @var Encryptor
      */
     private $encryptor;
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
 
     /**
      * @param Encryptor $encryptor
      * @param RedirectDataPreprocessorInterface $preprocessor
      * @param RedirectDataSerializerInterface $serializer
      * @param RedirectDataInterfaceFactory $dataFactory
+     * @param LoggerInterface $logger
      */
     public function __construct(
         Encryptor $encryptor,
         RedirectDataPreprocessorInterface $preprocessor,
         RedirectDataSerializerInterface $serializer,
-        RedirectDataInterfaceFactory $dataFactory
+        RedirectDataInterfaceFactory $dataFactory,
+        LoggerInterface $logger
     ) {
         $this->preprocessor = $preprocessor;
         $this->serializer = $serializer;
         $this->dataFactory = $dataFactory;
         $this->encryptor = $encryptor;
+        $this->logger = $logger;
     }
 
     /**
@@ -58,7 +66,12 @@ class RedirectDataGenerator
     public function generate(ContextInterface $context): RedirectDataInterface
     {
         $data = $this->preprocessor->process($context, []);
-        $dataStr = $this->serializer->serialize($data);
+        try {
+            $dataStr = $this->serializer->serialize($data);
+        } catch (\Throwable $exception) {
+            $this->logger->error($exception);
+            $dataStr = '';
+        }
         $timestamp = time();
         $token = implode(
             ',',

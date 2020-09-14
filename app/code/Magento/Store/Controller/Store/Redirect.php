@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Store\Controller\Store;
 
+use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Action\HttpGetActionInterface;
@@ -59,6 +60,10 @@ class Redirect extends Action implements HttpGetActionInterface, HttpPostActionI
      * @var ContextInterfaceFactory|null
      */
     private $contextFactory;
+    /**
+     * @var UserContextInterface|null
+     */
+    private $userContext;
 
     /**
      * @param Context $context
@@ -70,7 +75,9 @@ class Redirect extends Action implements HttpGetActionInterface, HttpPostActionI
      * @param StoreManagerInterface|null $storeManager
      * @param RedirectDataGenerator|null $redirectDataGenerator
      * @param ContextInterfaceFactory|null $contextFactory
+     * @param UserContextInterface|null $userContext
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         Context $context,
@@ -81,7 +88,8 @@ class Redirect extends Action implements HttpGetActionInterface, HttpPostActionI
         HashGenerator $hashGenerator,
         StoreManagerInterface $storeManager = null,
         ?RedirectDataGenerator $redirectDataGenerator = null,
-        ?ContextInterfaceFactory $contextFactory = null
+        ?ContextInterfaceFactory $contextFactory = null,
+        ?UserContextInterface $userContext = null
     ) {
         parent::__construct($context);
         $this->storeRepository = $storeRepository;
@@ -92,6 +100,8 @@ class Redirect extends Action implements HttpGetActionInterface, HttpPostActionI
             ?: ObjectManager::getInstance()->get(RedirectDataGenerator::class);
         $this->contextFactory = $contextFactory
             ?: ObjectManager::getInstance()->get(ContextInterfaceFactory::class);
+        $this->userContext = $userContext
+            ?: ObjectManager::getInstance()->get(UserContextInterface::class);
     }
 
     /**
@@ -122,7 +132,10 @@ class Redirect extends Action implements HttpGetActionInterface, HttpPostActionI
                     [
                         'fromStore' => $fromStore,
                         'targetStore' => $targetStore,
-                        'redirectUrl' => $this->_redirect->getRedirectUrl()
+                        'redirectUrl' => $this->_redirect->getRedirectUrl(),
+                        'customerId' => $this->userContext->getUserType() === UserContextInterface::USER_TYPE_CUSTOMER ?
+                            (int) $this->userContext->getUserId()
+                            : null
                     ]
                 )
             );

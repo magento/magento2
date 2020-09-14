@@ -7,11 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\Store\Model\StoreSwitcher;
 
+use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreSwitcherInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Process one time token and build redirect url
@@ -49,6 +51,14 @@ class HashProcessor implements StoreSwitcherInterface
      * @var RedirectDataValidator
      */
     private $dataValidator;
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+    /**
+     * @var UserContextInterface
+     */
+    private $userContext;
 
     /**
      * @param RequestInterface $request
@@ -58,6 +68,8 @@ class HashProcessor implements StoreSwitcherInterface
      * @param ContextInterfaceFactory $contextFactory
      * @param RedirectDataInterfaceFactory $dataFactory
      * @param RedirectDataValidator $dataValidator
+     * @param LoggerInterface $logger
+     * @param UserContextInterface $userContext
      */
     public function __construct(
         RequestInterface $request,
@@ -66,7 +78,9 @@ class HashProcessor implements StoreSwitcherInterface
         ManagerInterface $messageManager,
         ContextInterfaceFactory $contextFactory,
         RedirectDataInterfaceFactory $dataFactory,
-        RedirectDataValidator $dataValidator
+        RedirectDataValidator $dataValidator,
+        LoggerInterface $logger,
+        UserContextInterface $userContext
     ) {
         $this->request = $request;
         $this->postprocessor = $postprocessor;
@@ -75,6 +89,8 @@ class HashProcessor implements StoreSwitcherInterface
         $this->contextFactory = $contextFactory;
         $this->dataFactory = $dataFactory;
         $this->dataValidator = $dataValidator;
+        $this->logger = $logger;
+        $this->userContext = $userContext;
     }
 
     /**
@@ -91,11 +107,15 @@ class HashProcessor implements StoreSwitcherInterface
         $timestamp = (int) $this->request->getParam('time_stamp');
         $signature = (string) $this->request->getParam('signature');
         $data = (string) $this->request->getParam('data');
+        $customerId = $this->userContext->getUserType() === UserContextInterface::USER_TYPE_CUSTOMER ?
+            (int) $this->userContext->getUserId()
+            : null;
         $context = $this->contextFactory->create(
             [
                 'fromStore' => $fromStore,
                 'targetStore' => $targetStore,
-                'redirectUrl' => $redirectUrl
+                'redirectUrl' => $redirectUrl,
+                'customerId' => $customerId
             ]
         );
         $redirectDataObject = $this->dataFactory->create(
@@ -116,6 +136,11 @@ class HashProcessor implements StoreSwitcherInterface
             }
         } catch (LocalizedException $exception) {
             $this->messageManager->addErrorMessage($exception->getMessage());
+        } catch (\Throwable $exception) {
+            $this->logger->error($exception);
+            $this->messageManager->addErrorMessage(
+                __('Something went wrong while switching to the store.')
+            );
         }
 
         return $redirectUrl;
