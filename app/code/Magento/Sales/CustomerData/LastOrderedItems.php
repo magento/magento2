@@ -138,7 +138,7 @@ class LastOrderedItems implements SectionSourceInterface
                     $this->logger->critical($noEntityException);
                     continue;
                 }
-                if (isset($product) && in_array($website, $product->getWebsiteIds())) {
+                if (in_array($website, $product->getWebsiteIds())) {
                     $url = $product->isVisibleInSiteVisibility() ? $product->getProductUrl() : null;
                     $items[] = [
                         'id' => $item->getId(),
@@ -188,7 +188,7 @@ class LastOrderedItems implements SectionSourceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getSectionData()
     {
