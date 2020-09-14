@@ -67,8 +67,7 @@
         <scrollTo  selector="{{AdminCategoryContentSection.sectionHeader}}" x="0" y="-80" stepKey="scrollToContent"/>
         <click selector="{{AdminCategoryContentSection.sectionHeader}}"  stepKey="selectContent"/>
         <fillField selector="{{AdminCategoryContentSection.description}}"  userInput="Updated category Description Fields" stepKey="fillUpdatedDescription"/>
-        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveSubCategory"/>
-        <waitForPageLoad stepKey="waitForSecondCategoryToSave"/>
+        <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveSubCategory"/>
         <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="seeSuccessMessage"/>
         <!--Run full reindex and clear caches -->
         <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
@@ -77,9 +76,7 @@
         <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
             <argument name="tags" value=""/>
         </actionGroup>
-        <!--Open Index Management Page -->
-        <amOnPage url="{{AdminIndexManagementPage.url}}" stepKey="openIndexManagementPage"/>
-        <waitForPageLoad stepKey="waitForIndexPageToLoad"/>
+        <actionGroup ref="AdminOpenIndexManagementPageActionGroup" stepKey="openIndexManagementPage"/>
         <see stepKey="seeIndexStatus"  selector="{{AdminIndexManagementSection.indexerStatus('Category Flat Data')}}" userInput="READY"/>
         <!--Verify Category In Store Front-->
         <amOnPage url="{{SimpleSubCategory.name}}.html" stepKey="goToStorefrontPage"/>

@@ -78,7 +78,7 @@ class CreateByPaths implements CreateDirectoriesByPathsInterface
         if (!empty($failedPaths)) {
             throw new CouldNotSaveException(
                 __(
-                    'Could not save directories: %paths',
+                    'Could not create directories: %paths',
                     [
                         'paths' => implode(' ,', $failedPaths)
                     ]

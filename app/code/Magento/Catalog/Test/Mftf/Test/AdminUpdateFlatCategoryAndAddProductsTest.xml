@@ -80,8 +80,7 @@
         <waitForPageLoad stepKey="waitFroPageToLoad1"/>
         <scrollTo  selector="{{AdminCategoryContentSection.productTableRow}}"  stepKey="scrollToTableRow"/>
         <click selector="{{AdminCategoryContentSection.productTableRow}}" stepKey="selectProductFromTableRow"/>
-        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveSubCategory"/>
-        <waitForPageLoad stepKey="waitForSecondCategoryToSave"/>
+        <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveSubCategory"/>
         <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="seeSuccessMessage"/>
         <!--Open Index Management Page and verify flat categoryIndex status-->
         <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
@@ -90,9 +89,7 @@
         <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
             <argument name="tags" value=""/>
         </actionGroup>
-        <!--Open Index Management Page -->
-        <amOnPage url="{{AdminIndexManagementPage.url}}" stepKey="openIndexManagementPage"/>
-        <waitForPageLoad stepKey="waitForIndexPageToLoad"/>
+        <actionGroup ref="AdminOpenIndexManagementPageActionGroup" stepKey="openIndexManagementPage"/>
         <see stepKey="seeCategoryIndexStatus"  selector="{{AdminIndexManagementSection.indexerStatus('Category Flat Data')}}" userInput="Ready"/>
         <!--Verify Product In Store Front-->
         <amOnPage url="$$createSimpleProduct.name$$.html" stepKey="goToStorefrontPage"/>

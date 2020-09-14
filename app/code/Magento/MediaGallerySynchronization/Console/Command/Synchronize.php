@@ -7,8 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\MediaGallerySynchronization\Console\Command;
 
-use Magento\Framework\App\Area;
-use Magento\Framework\App\State;
 use Magento\Framework\Console\Cli;
 use Magento\MediaGallerySynchronizationApi\Api\SynchronizeInterface;
 use Symfony\Component\Console\Command\Command;
@@ -26,20 +24,12 @@ class Synchronize extends Command
     private $synchronizeAssets;
 
     /**
-     * @var State $state
-     */
-    private $state;
-
-    /**
      * @param SynchronizeInterface $synchronizeAssets
-     * @param State $state
      */
     public function __construct(
-        SynchronizeInterface $synchronizeAssets,
-        State $state
+        SynchronizeInterface $synchronizeAssets
     ) {
         $this->synchronizeAssets = $synchronizeAssets;
-        $this->state = $state;
         parent::__construct();
     }
 
@@ -60,10 +50,11 @@ class Synchronize extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $output->writeln('Synchronizing assets information from media storage to database...');
-        $this->state->emulateAreaCode(Area::AREA_ADMINHTML, function () {
-            $this->synchronizeAssets->execute();
-        });
+
+        $this->synchronizeAssets->execute();
+
         $output->writeln('Completed assets synchronization.');
+
         return Cli::RETURN_SUCCESS;
     }
 }
