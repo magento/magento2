@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
+
 namespace Magento\MediaGalleryUi\Controller\Adminhtml\Image;
 
 use Magento\Backend\App\Action;
@@ -56,15 +58,17 @@ class OnInsert extends Action implements HttpPostActionInterface
     public function execute()
     {
         $data = $this->getRequest()->getParams();
-        $content = $this->getInsertImageData->getImageContent(
+        $insertImageData = $this->getInsertImageData->execute(
             $data['filename'],
-            $data['force_static_path'],
-            $data['as_is'],
+            (bool)$data['force_static_path'],
+            (bool)$data['as_is'],
             isset($data['store']) ? (int)$data['store'] : null
         );
 
-        $size = $data['force_static_path'] ? $this->getInsertImageData->getFileSize($content) : 0;
-        $type = $data['force_static_path'] ? $this->getInsertImageData->getMimeType($content) : '';
-        return $this->resultJsonFactory->create()->setData(['content' => $content, 'size' => $size, 'type' => $type]);
+        return $this->resultJsonFactory->create()->setData([
+            'content' => $insertImageData->getContent(),
+            'size' => $insertImageData->getSize(),
+            'type' => $insertImageData->getType(),
+        ]);
     }
 }
