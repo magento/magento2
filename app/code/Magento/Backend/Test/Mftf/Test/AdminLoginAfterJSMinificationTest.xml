@@ -31,8 +31,8 @@
             <magentoCLI command="config:set {{MinifyJavaScriptFilesDisableConfigData.path}} {{MinifyJavaScriptFilesDisableConfigData.value}}" stepKey="disableJsMinification"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
-        <see userInput="Dashboard" selector="{{AdminHeaderSection.pageTitle}}" stepKey="seeDashboardTitle"/>
         <waitForPageLoad stepKey="waitForPageLoadOnDashboard"/>
+        <see userInput="Dashboard" selector="{{AdminHeaderSection.pageTitle}}" stepKey="seeDashboardTitle"/>
         <actionGroup ref="AssertAdminSuccessLoginActionGroup" stepKey="loggedInSuccessfully"/>
         <actionGroup ref="AssertAdminPageIsNot404ActionGroup" stepKey="dontSee404Page"/>
     </test>
