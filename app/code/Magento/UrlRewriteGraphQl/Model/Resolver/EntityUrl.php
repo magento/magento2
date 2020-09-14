@@ -64,6 +64,7 @@ class EntityUrl implements ResolverInterface
 
         $storeId = (int)$context->getExtensionAttributes()->getStore()->getId();
         $result = null;
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         $url = parse_url($args['url'], PHP_URL_PATH);
         if (substr($url, 0, 1) === '/' && $url !== '/') {
             $url = ltrim($url, '/');
