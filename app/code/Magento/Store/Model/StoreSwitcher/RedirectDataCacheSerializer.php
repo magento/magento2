@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Store\Model\StoreSwitcher;
 
-use http\Exception\InvalidArgumentException;
+use InvalidArgumentException;
 use Magento\Framework\App\CacheInterface;
 use Magento\Framework\Math\Random;
 use Magento\Framework\Serialize\Serializer\Json;
