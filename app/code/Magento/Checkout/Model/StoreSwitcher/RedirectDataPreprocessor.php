@@ -9,7 +9,6 @@ namespace Magento\Checkout\Model\StoreSwitcher;
 
 use Magento\Checkout\Model\Session as CheckoutSession;
 use Magento\Customer\Model\Session as CustomerSession;
-use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Store\Model\StoreSwitcher\ContextInterface;
 use Magento\Store\Model\StoreSwitcher\RedirectDataPreprocessorInterface;
 
@@ -21,11 +20,6 @@ use Magento\Store\Model\StoreSwitcher\RedirectDataPreprocessorInterface;
 class RedirectDataPreprocessor implements RedirectDataPreprocessorInterface
 {
     /**
-     * @var CartRepositoryInterface
-     */
-    private $quoteRepository;
-
-    /**
      * @var CustomerSession
      */
     private $customerSession;
@@ -36,16 +30,13 @@ class RedirectDataPreprocessor implements RedirectDataPreprocessorInterface
     private $checkoutSession;
 
     /**
-     * @param CartRepositoryInterface $quoteRepository
      * @param CustomerSession $customerSession
      * @param CheckoutSession $checkoutSession
      */
     public function __construct(
-        CartRepositoryInterface $quoteRepository,
         CustomerSession $customerSession,
         CheckoutSession $checkoutSession
     ) {
-        $this->quoteRepository = $quoteRepository;
         $this->customerSession = $customerSession;
         $this->checkoutSession = $checkoutSession;
     }

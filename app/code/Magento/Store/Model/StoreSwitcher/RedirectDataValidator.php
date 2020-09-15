@@ -14,7 +14,7 @@ use Magento\Framework\Encryption\Encryptor;
  */
 class RedirectDataValidator
 {
-    const TIMEOUT = 5;
+    private const TIMEOUT = 5;
     /**
      * @var Encryptor
      */

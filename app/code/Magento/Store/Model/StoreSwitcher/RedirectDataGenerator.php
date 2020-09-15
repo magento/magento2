@@ -22,7 +22,7 @@ class RedirectDataGenerator
     /**
      * @var RedirectDataSerializerInterface
      */
-    private $serializer;
+    private $dataSerializer;
     /**
      * @var RedirectDataInterfaceFactory
      */
@@ -39,19 +39,19 @@ class RedirectDataGenerator
     /**
      * @param Encryptor $encryptor
      * @param RedirectDataPreprocessorInterface $preprocessor
-     * @param RedirectDataSerializerInterface $serializer
+     * @param RedirectDataSerializerInterface $dataSerializer
      * @param RedirectDataInterfaceFactory $dataFactory
      * @param LoggerInterface $logger
      */
     public function __construct(
         Encryptor $encryptor,
         RedirectDataPreprocessorInterface $preprocessor,
-        RedirectDataSerializerInterface $serializer,
+        RedirectDataSerializerInterface $dataSerializer,
         RedirectDataInterfaceFactory $dataFactory,
         LoggerInterface $logger
     ) {
         $this->preprocessor = $preprocessor;
-        $this->serializer = $serializer;
+        $this->dataSerializer = $dataSerializer;
         $this->dataFactory = $dataFactory;
         $this->encryptor = $encryptor;
         $this->logger = $logger;
@@ -67,7 +67,7 @@ class RedirectDataGenerator
     {
         $data = $this->preprocessor->process($context, []);
         try {
-            $dataStr = $this->serializer->serialize($data);
+            $dataStr = $this->dataSerializer->serialize($data);
         } catch (\Throwable $exception) {
             $this->logger->error($exception);
             $dataStr = '';

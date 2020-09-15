@@ -107,8 +107,9 @@ class HashProcessor implements StoreSwitcherInterface
         $timestamp = (int) $this->request->getParam('time_stamp');
         $signature = (string) $this->request->getParam('signature');
         $data = (string) $this->request->getParam('data');
-        $customerId = $this->userContext->getUserType() === UserContextInterface::USER_TYPE_CUSTOMER ?
-            (int) $this->userContext->getUserId()
+        $customerId = $this->userContext->getUserType() === UserContextInterface::USER_TYPE_CUSTOMER
+        && $this->userContext->getUserId()
+            ? (int) $this->userContext->getUserId()
             : null;
         $context = $this->contextFactory->create(
             [

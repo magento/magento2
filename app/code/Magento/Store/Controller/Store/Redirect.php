@@ -127,15 +127,17 @@ class Redirect extends Action implements HttpGetActionInterface, HttpPostActionI
             $targetStore = $this->storeRepository->get($targetStoreCode);
             $this->storeManager->setCurrentStore($targetStore);
             $encodedUrl = $this->_request->getParam(ActionInterface::PARAM_NAME_URL_ENCODED);
+            $customerId = $this->userContext->getUserType() === UserContextInterface::USER_TYPE_CUSTOMER
+            && $this->userContext->getUserId()
+                ? (int) $this->userContext->getUserId()
+                : null;
             $redirectData = $this->redirectDataGenerator->generate(
                 $this->contextFactory->create(
                     [
                         'fromStore' => $fromStore,
                         'targetStore' => $targetStore,
                         'redirectUrl' => $this->_redirect->getRedirectUrl(),
-                        'customerId' => $this->userContext->getUserType() === UserContextInterface::USER_TYPE_CUSTOMER ?
-                            (int) $this->userContext->getUserId()
-                            : null
+                        'customerId' => $customerId
                     ]
                 )
             );
