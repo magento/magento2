@@ -24,54 +24,34 @@
         <after>
             <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openStandaloneMediaGalleryPage"/>
             <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
-            <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectFirstFolderForDelete">
-                <argument name="name" value="firstFolder"/>
+            <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectParentFolderForDelete">
+                <argument name="name" value="parentFolder"/>
             </actionGroup>
-            <actionGroup ref="AdminMediaGalleryFolderDeleteActionGroup" stepKey="deleteFirstFolder"/>
-            <actionGroup ref="AdminMediaGalleryAssertFolderDoesNotExistActionGroup" stepKey="assertFirstFolderWasDeleted">
-                <argument name="name" value="firstFolder"/>
-            </actionGroup>
-            <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear"/>
-            <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectSecondFolderForDelete">
-                <argument name="name" value="secondFolder"/>
-            </actionGroup>
-            <actionGroup ref="AdminMediaGalleryFolderDeleteActionGroup" stepKey="deleteSecondFolder"/>
-            <actionGroup ref="AdminMediaGalleryAssertFolderDoesNotExistActionGroup" stepKey="assertSecondFolderWasDeleted">
-                <argument name="name" value="secondFolder"/>
+            <actionGroup ref="AdminMediaGalleryFolderDeleteActionGroup" stepKey="deleteParentFolder"/>
+            <actionGroup ref="AdminMediaGalleryAssertFolderDoesNotExistActionGroup" stepKey="assertParentFolderWasDeleted">
+                <argument name="name" value="parentFolder"/>
             </actionGroup>
         </after>
         <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openStandaloneMediaGalleryPage"/>
-        <actionGroup ref="AdminMediaGalleryOpenNewFolderFormActionGroup" stepKey="openFirstNewFolderForm"/>
-        <actionGroup ref="AdminMediaGalleryCreateNewFolderActionGroup" stepKey="createFirstNewFolder">
-            <argument name="name" value="firstFolder"/>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
+        <actionGroup ref="AdminMediaGalleryOpenNewFolderFormActionGroup" stepKey="openParentFolderForm"/>
+        <actionGroup ref="AdminMediaGalleryCreateNewFolderActionGroup" stepKey="createParentFolder">
+            <argument name="name" value="parentFolder"/>
         </actionGroup>
-        <actionGroup ref="AdminMediaGalleryAssertFolderNameActionGroup" stepKey="assertFirstNewFolderCreated">
-            <argument name="name" value="firstFolder"/>
+        <actionGroup ref="AdminMediaGalleryAssertFolderNameActionGroup" stepKey="assertParentFolderCreated">
+            <argument name="name" value="parentFolder"/>
         </actionGroup>
-
+        <waitForPageLoad stepKey="waitForGridToLoadAfterParentFolderCreated"/>
         <actionGroup ref="AdminEnhancedMediaGalleryUploadImageActionGroup" stepKey="uploadImage">
             <argument name="image" value="ImageUpload"/>
         </actionGroup>
         <actionGroup ref="AdminEnhancedMediaGalleryUploadImageActionGroup" stepKey="uploadSecondImage">
             <argument name="image" value="ImageUpload_1"/>
         </actionGroup>
-
-        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
-        <waitForPageLoad stepKey="waitForGridToLoad"/>
-        <actionGroup ref="AdminMediaGalleryOpenNewFolderFormActionGroup" stepKey="openSecondNewFolderForm"/>
-        <actionGroup ref="AdminMediaGalleryCreateNewFolderActionGroup" stepKey="createSecondNewFolder">
-            <argument name="name" value="secondFolder"/>
-        </actionGroup>
-        <actionGroup ref="AdminMediaGalleryAssertFolderNameActionGroup" stepKey="assertSecondNewFolderCreated">
-            <argument name="name" value="secondFolder"/>
-        </actionGroup>
         <actionGroup ref="AdminEnhancedMediaGalleryUploadImageActionGroup" stepKey="uploadThirdImage">
             <argument name="image" value="ImageUpload1"/>
         </actionGroup>
-
-        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="secondResetAdminDataGridToDefaultView"/>
-        <waitForPageLoad stepKey="secondWaitForGridToLoad"/>
-
+        <waitForPageLoad stepKey="waitForGridToLoad"/>
         <actionGroup ref="AdminEnhancedMediaGalleryClickSortActionGroup" stepKey="sortByOldestFirst">
             <argument name="sortName" value="oldest_first"/>
         </actionGroup>
