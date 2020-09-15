@@ -9,6 +9,7 @@ use Magento\Catalog\Model\Config;
 use Magento\Catalog\Model\Product\Visibility;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\CatalogSearch\Model\Advanced\ProductCollectionPrepareStrategyInterface;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Strategy interface for preparing product collection.
@@ -27,14 +28,15 @@ class ProductCollectionPrepareStrategy implements ProductCollectionPrepareStrate
 
     /**
      * @param Config $catalogConfig
-     * @param Visibility $catalogProductVisibility
+     * @param Visibility|null $catalogProductVisibility
      */
     public function __construct(
         Config $catalogConfig,
-        Visibility $catalogProductVisibility
+        Visibility $catalogProductVisibility = null
     ) {
         $this->catalogConfig = $catalogConfig;
-        $this->catalogProductVisibility = $catalogProductVisibility;
+        $this->catalogProductVisibility = $catalogProductVisibility
+            ?? ObjectManager::getInstance()->get(Visibility::class);;
     }
 
     /**
