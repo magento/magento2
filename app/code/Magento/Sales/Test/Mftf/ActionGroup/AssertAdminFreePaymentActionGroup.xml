@@ -12,6 +12,7 @@
             <description>Checks the free payment on the Admin Create Order page.</description>
         </annotations>
         <click selector="{{AdminOrderFormPaymentSection.linkPaymentOptions}}" stepKey="clickPaymentMethods"/>
+        <waitForAjaxLoad stepKey="waitForPaymentBlockLoad"/>
         <see selector="{{AdminOrderFormPaymentSection.freePaymentLabel}}" userInput="No Payment Information Required" stepKey="checkFreeShipping"/>
     </actionGroup>
 </actionGroups>
