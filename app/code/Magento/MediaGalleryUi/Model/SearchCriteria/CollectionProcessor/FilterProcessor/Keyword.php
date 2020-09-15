@@ -57,23 +57,28 @@ class Keyword implements CustomFilterInterface
      */
     private function getAssetIdsByKeyword(string $value): array
     {
-        $keywordValues = $this->splitRequestString($value);
         $connection = $this->connection->getConnection();
+
+        $select = $connection->select();
+        $select->from(
+            ['asset_keywords_table' => $this->connection->getTableName(self::TABLE_ASSET_KEYWORD)],
+            ['id']
+        );
+        foreach ($this->splitRequestString($value) as $keyword) {
+            $select->orWhere(
+                'keyword LIKE ?',
+                '%' . $keyword . '%'
+            );
+        }
+        $select->joinInner(
+            ['keywords_table' => $this->connection->getTableName(self::TABLE_KEYWORDS)],
+            'keywords_table.keyword_id = asset_keywords_table.id',
+            ['asset_id']
+        );
 
         return $connection->fetchAssoc(
             $connection->select()->from(
-                $connection->select()
-                    ->from(
-                        ['asset_keywords_table' => $this->connection->getTableName(self::TABLE_ASSET_KEYWORD)],
-                        ['id']
-                    )->where(
-                        'keyword in (?)',
-                        $keywordValues
-                    )->joinInner(
-                        ['keywords_table' => $this->connection->getTableName(self::TABLE_KEYWORDS)],
-                        'keywords_table.keyword_id = asset_keywords_table.id',
-                        ['asset_id']
-                    ),
+                $select,
                 ['asset_id']
             )
         );
@@ -85,11 +90,14 @@ class Keyword implements CustomFilterInterface
      * @param string $value
      * @return array
      */
-    private function splitRequestString(string $value): array
+    public function splitRequestString(string $value): array
     {
+        $escapedKeywords = preg_replace('/[^A-Za-z0-9\_\.\,\-]/', ',', $value);
+        $formattedKeywords = preg_replace('/,+/', ',', $escapedKeywords);
+
         $keywordValues = [];
         if (!is_array($value)) {
-            $keywordValues = explode(',', $value);
+            $keywordValues = explode(',', $formattedKeywords);
         }
 
         return $keywordValues;
