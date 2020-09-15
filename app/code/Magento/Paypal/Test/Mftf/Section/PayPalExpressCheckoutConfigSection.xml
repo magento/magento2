@@ -64,5 +64,6 @@
         <element name="PayPalSubmitBtn" type="text" selector="#payment-submit-btn"/>
         <element name="nextButton" type="button" selector="#btnNext"/>
         <element name="continueButton" type="button" selector=".continueButton"/>
+        <element name="acceptCookies" type="button" selector=".ccpaCookieBanner_buttonGroup #acceptAllButton" timeout="10"/>
     </section>
 </sections>
