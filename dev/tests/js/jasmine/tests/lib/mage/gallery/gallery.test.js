@@ -131,7 +131,7 @@ define([
             originSpy = $.fn.data;
             jqueryDataMock = {
                 setOptions: jasmine.createSpy().and.returnValue(true),
-                updateOptions: jasmine.createSpy().and.returnValue(true),
+                updateOptions: jasmine.createSpy().and.returnValue(true)
             };
             spyOn($.fn, 'data').and.callFake(function () {
                 return jqueryDataMock;
