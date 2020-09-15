@@ -59,7 +59,11 @@ $randomHelper = $block->getData('randomHelper');
             ?>
 
             <?php foreach ($rates as $rate): ?>
-                <tr id="rate-<?= /* @noEscape */ $rate->getId() ?>"
+                <?php
+                    $rateCode = strtolower($rate['code']);
+                    $rateId = str_replace(' ', '-', $rateCode);
+                ?>
+                <tr id="rate-<?= /* @noEscape */ $rateId ?>"
                     class="summary-details<?= ($isTop ? ' summary-details-first' : '') ?>">
                     <?php if ($rate['percent'] !== null): ?>
                         <td class="admin__total-mark">
@@ -74,7 +78,7 @@ $randomHelper = $block->getData('randomHelper');
                         </td>
                     <?php endif; ?>
                 </tr>
-                <?= /* @noEscape */ $secureRenderer->renderStyleAsTag("display:none;", 'tr#rate-' . $rate->getId()) ?>
+                <?= /* @noEscape */ $secureRenderer->renderStyleAsTag("display:none;", 'tr#rate-' . $rateId) ?>
                 <?php
                 $isFirst = 0;
                 $isTop = 0;
