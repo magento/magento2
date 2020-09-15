@@ -87,7 +87,9 @@ class FileResolver implements FileResolverInterface
                 }
                 $theme = $theme->getParentTheme();
             }
-            $configs = $this->iteratorFactory->create(['paths' => $files, 'existingIterator' => $configs]);
+            $configs = $this->iteratorFactory->create(
+                ['paths' => array_reverse($files), 'existingIterator' => $configs]
+            );
         }
 
         return $configs;
