@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-namespace Magento\MediaGalleryUiApi\Api\Data;
+namespace Magento\MediaGalleryUi\Model;
 
 use Magento\Framework\Api\ExtensibleDataInterface;
 
@@ -39,17 +39,17 @@ interface InsertImageDataInterface extends ExtensibleDataInterface
     /**
      * Get extension attributes
      *
-     * @return \Magento\MediaGalleryUiApi\Api\InsertImageDataExtensionInterface|null
+     * @return \Magento\MediaGalleryUi\Model\InsertImageDataExtensionInterface|null
      */
-    public function getExtensionAttributes(): ?\Magento\MediaGalleryUiApi\Api\InsertImageDataExtensionInterface;
+    public function getExtensionAttributes(): ?\Magento\MediaGalleryUi\Model\InsertImageDataExtensionInterface;
 
     /**
      * Set extension attributes
      *
-     * @param \Magento\MediaGalleryUiApi\Api\InsertImageDataExtensionInterface|null $extensionAttributes
+     * @param \Magento\MediaGalleryUi\Model\InsertImageDataExtensionInterface $extensionAttributes
      * @return void
      */
     public function setExtensionAttributes(
-        ?\Magento\MediaGalleryUiApi\Api\InsertImageDataExtensionInterface $extensionAttributes
+        \Magento\MediaGalleryUi\Model\InsertImageDataExtensionInterface $extensionAttributes
     ): void;
 }

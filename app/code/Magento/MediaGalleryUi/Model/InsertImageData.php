@@ -8,8 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\MediaGalleryUi\Model;
 
-use Magento\MediaGalleryUiApi\Api\Data\InsertImageDataInterface;
-use Magento\MediaGalleryUiApi\Api\InsertImageDataExtensionInterface;
+use Magento\MediaGalleryUi\Model\InsertImageDataExtensionInterface;
 
 /**
  * Class responsible to provide insert image details
@@ -83,7 +82,7 @@ class InsertImageData implements InsertImageDataInterface
     /**
      * Get extension attributes
      *
-     * @return ?\Magento\MediaGalleryUiApi\Api\InsertImageDataExtensionInterface;|null
+     * @return \Magento\MediaGalleryUi\Model\InsertImageDataExtensionInterface|null
      */
     public function getExtensionAttributes(): ?InsertImageDataExtensionInterface
     {
@@ -93,10 +92,10 @@ class InsertImageData implements InsertImageDataInterface
     /**
      * Set extension attributes
      *
-     * @param ?\Magento\MediaGalleryUiApi\Api\InsertImageDataExtensionInterface;|null $extensionAttributes
+     * @param \Magento\MediaGalleryUi\Model\InsertImageDataExtensionInterface $extensionAttributes
      * @return void
      */
-    public function setExtensionAttributes(?InsertImageDataExtensionInterface $extensionAttributes): void
+    public function setExtensionAttributes(InsertImageDataExtensionInterface $extensionAttributes): void
     {
         $this->extensionAttributes = $extensionAttributes;
     }

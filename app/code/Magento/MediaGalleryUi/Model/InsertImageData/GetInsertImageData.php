@@ -14,10 +14,9 @@ use Magento\Framework\File\Mime;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\MediaGalleryUi\Model\InsertImageDataFactory;
-use Magento\MediaGalleryUiApi\Api\Data\InsertImageDataInterface;
-use Magento\MediaGalleryUiApi\Api\GetInsertImageDataInterface;
+use Magento\MediaGalleryUi\Model\InsertImageDataInterface;
 
-class GetInsertImageData implements GetInsertImageDataInterface
+class GetInsertImageData
 {
     /**
      * @var ReadInterface
@@ -115,9 +114,9 @@ class GetInsertImageData implements GetInsertImageDataInterface
      */
     public function getType(string $path): string
     {
-        $absoluteFilePath = $this->getPubDirectory()->getAbsolutePath($path);
+        $fileExist = $this->getPubDirectory()->isExist($path);
 
-        return $this->getPubDirectory()->isExist($path) ? $this->mime->getMimeType($absoluteFilePath) : '';
+        return $fileExist ? $this->mime->getMimeType($this->getPubDirectory()->getAbsolutePath($path)) : '';
     }
 
     /**

@@ -13,7 +13,7 @@ use Magento\Backend\App\Action\Context;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\Controller\ResultInterface;
-use Magento\MediaGalleryUiApi\Api\GetInsertImageDataInterface;
+use Magento\MediaGalleryUi\Model\InsertImageData\GetInsertImageData;
 
 /**
  * OnInsert action returns on insert image details
@@ -31,19 +31,19 @@ class OnInsert extends Action implements HttpPostActionInterface
     private $resultJsonFactory;
 
     /**
-     * @var GetInsertImageDataInterface
+     * @var GetInsertImageData
      */
     private $getInsertImageData;
 
     /**
      * @param Context $context
      * @param JsonFactory $resultJsonFactory
-     * @param GetInsertImageDataInterface|null $getInsertImageData
+     * @param GetInsertImageData $getInsertImageData
      */
     public function __construct(
         Context $context,
         JsonFactory $resultJsonFactory,
-        GetInsertImageDataInterface $getInsertImageData
+        GetInsertImageData $getInsertImageData
     ) {
         parent::__construct($context);
         $this->resultJsonFactory = $resultJsonFactory;
