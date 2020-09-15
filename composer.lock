@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "197f0388c574f9d40555a95634e439e0",
+    "content-hash": "a03edc1c8ee05f82886eebd6ed288df8",
     "packages": [
         {
             "name": "colinmollenhour/cache-backend-file",
@@ -8119,12 +8119,6 @@
                 "s3",
                 "sftp",
                 "storage"
-            ],
-            "funding": [
-                {
-                    "url": "https://offset.earth/frankdejonge",
-                    "type": "other"
-                }
             ],
             "time": "2020-05-18T15:13:39+00:00"
         },

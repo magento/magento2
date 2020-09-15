@@ -32,7 +32,6 @@
         <amOnPage url="{{AdminDashboardPage.url}}" stepKey="amOnDashboardPage"/>
         <waitForPageLoad stepKey="waitForDashboardPageLoad"/>
         <click selector="{{AdminAdvancedReportingSection.goToAdvancedReporting}}" stepKey="clickGoToAdvancedReporting"/>
-        <switchToNextTab stepKey="switchToNewTab"/>
-        <seeInCurrentUrl url="advancedreporting.rjmetrics.com/report" stepKey="seeAssertAdvancedReportingPageUrl"/>
+        <actionGroup ref="AssertAdminAdvancedReportingPageUrlActionGroup" stepKey="assertAdvancedReportingPageUrl"/>
     </test>
 </tests>
