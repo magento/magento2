@@ -78,13 +78,13 @@ define(
                     }
 
                     if (!quote.isVirtual()) {
-                            checkoutProvider.on('shippingAddress', function (shippingAddressData) {
-                                if (quote.shippingAddress().countryId !== shippingAddressData.country_id ||
-                                    (shippingAddressData.postcode || shippingAddressData.region_id)
-                                ) {
-                                    checkoutData.setShippingAddressFromData(shippingAddressData);
-                                }
-                            });
+                        checkoutProvider.on('shippingAddress', function (shippingAddressData) {
+                            if (quote.shippingAddress().countryId !== shippingAddressData.country_id ||
+                                (shippingAddressData.postcode || shippingAddressData.region_id)
+                            ) {
+                                checkoutData.setShippingAddressFromData(shippingAddressData);
+                            }
+                        });
                     } else {
                         checkoutProvider.on('shippingAddress', function (shippingAddressData) {
                             checkoutData.setBillingAddressFromData(shippingAddressData);
