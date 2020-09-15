@@ -5,6 +5,7 @@
  */
 namespace Magento\Sales\Block\Adminhtml\Order\View\Tab;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\AuthorizationInterface;
 
 /**
@@ -27,23 +28,23 @@ class Shipments extends \Magento\Framework\View\Element\Text\ListText implements
      * @var AuthorizationInterface
      */
     private $authorization;
-    
+
     /**
      * Collection factory
      *
      * @param \Magento\Framework\View\Element\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
-     * @param AuthorizationInterface $authorization
      * @param array $data
+     * @param AuthorizationInterface|null $authorization
      */
     public function __construct(
         \Magento\Framework\View\Element\Context $context,
         \Magento\Framework\Registry $coreRegistry,
-        AuthorizationInterface $authorization,
-        array $data = []
+        array $data = [],
+        ?AuthorizationInterface $authorization = null
     ) {
         $this->_coreRegistry = $coreRegistry;
-        $this->authorization = $authorization;
+        $this->authorization = $authorization ?? ObjectManager::getInstance()->get(AuthorizationInterface::class);
         parent::__construct($context, $data);
     }
 
