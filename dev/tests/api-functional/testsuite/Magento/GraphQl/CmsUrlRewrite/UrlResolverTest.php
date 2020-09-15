@@ -70,8 +70,9 @@ class UrlResolverTest extends GraphQlAbstract
         $page->load('page100');
         $cmsPageId = $page->getId();
         $requestPath = $page->getIdentifier();
+        $requestPath .= '?key=value';
 
-        $query = $this->createQuery($requestPath . '?key=value');
+        $query = $this->createQuery($requestPath);
         $response = $this->graphQlQuery($query);
         $this->assertNotEmpty($response['urlResolver']);
         $this->assertEquals($cmsPageId, $response['urlResolver']['id']);
