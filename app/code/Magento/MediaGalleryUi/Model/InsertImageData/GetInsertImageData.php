@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\MediaGalleryUi\Model\InsertImageData;
 
+use Magento\Cms\Helper\Wysiwyg\Images;
 use Magento\Cms\Model\Wysiwyg\Images\GetInsertImageContent;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\File\Mime;
@@ -21,7 +22,7 @@ class GetInsertImageData
     /**
      * @var ReadInterface
      */
-    private $pubDirectory;
+    private $mediaDirectory;
 
     /**
      * @var Filesystem
@@ -44,23 +45,31 @@ class GetInsertImageData
     private $mime;
 
     /**
+     * @var Images
+     */
+    private $imagesHelper;
+
+    /**
      * GetInsertImageData constructor.
      *
      * @param GetInsertImageContent $getInsertImageContent
      * @param Filesystem $fileSystem
      * @param Mime $mime
      * @param InsertImageDataFactory $insertImageDataFactory
+     * @param Images $imagesHelper
      */
     public function __construct(
         GetInsertImageContent $getInsertImageContent,
         Filesystem $fileSystem,
         Mime $mime,
-        InsertImageDataFactory $insertImageDataFactory
+        InsertImageDataFactory $insertImageDataFactory,
+        Images $imagesHelper
     ) {
         $this->getInsertImageContent = $getInsertImageContent;
         $this->filesystem = $fileSystem;
         $this->mime = $mime;
         $this->insertImageDataFactory = $insertImageDataFactory;
+        $this->imagesHelper = $imagesHelper;
     }
 
     /**
@@ -84,8 +93,9 @@ class GetInsertImageData
             $renderAsTag,
             $storeId
         );
-        $size = $forceStaticPath ? $this->getSize($content) : 0;
-        $type = $forceStaticPath ? $this->getType($content) : '';
+        $relativePath = $this->getImageRelativePath($content);
+        $size = $forceStaticPath ? $this->getSize($relativePath) : 0;
+        $type = $forceStaticPath ? $this->getType($relativePath) : '';
         return $this->insertImageDataFactory->create([
             'content' => $content,
             'size' => $size,
@@ -101,7 +111,7 @@ class GetInsertImageData
      */
     private function getSize(string $path): int
     {
-        $directory = $this->getPubDirectory();
+        $directory = $this->getMediaDirectory();
 
         return $directory->isExist($path) ? $directory->stat($path)['size'] : 0;
     }
@@ -114,9 +124,9 @@ class GetInsertImageData
      */
     public function getType(string $path): string
     {
-        $fileExist = $this->getPubDirectory()->isExist($path);
+        $fileExist = $this->getMediaDirectory()->isExist($path);
 
-        return $fileExist ? $this->mime->getMimeType($this->getPubDirectory()->getAbsolutePath($path)) : '';
+        return $fileExist ? $this->mime->getMimeType($this->getMediaDirectory()->getAbsolutePath($path)) : '';
     }
 
     /**
@@ -124,11 +134,24 @@ class GetInsertImageData
      *
      * @return ReadInterface
      */
-    private function getPubDirectory(): ReadInterface
+    private function getMediaDirectory(): ReadInterface
     {
-        if ($this->pubDirectory === null) {
-            $this->pubDirectory = $this->filesystem->getDirectoryRead(DirectoryList::PUB);
+        if ($this->mediaDirectory === null) {
+            $this->mediaDirectory = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA);
         }
-        return $this->pubDirectory;
+
+        return $this->mediaDirectory;
+    }
+
+    /**
+     * Retrieves image relative path
+     *
+     * @param string $content
+     * @return string
+     */
+    private function getImageRelativePath(string $content): string
+    {
+        $mediaPath = parse_url($this->imagesHelper->getCurrentUrl(), PHP_URL_PATH);
+        return substr($content, strlen($mediaPath));
     }
 }
