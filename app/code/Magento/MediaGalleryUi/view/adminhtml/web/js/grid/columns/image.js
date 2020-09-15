@@ -18,7 +18,9 @@ define([
             deleteImageUrl: 'media_gallery/image/delete',
             addSelectedBtnSelector: '#add_selected',
             deleteSelectedBtnSelector: '#delete_selected',
+            gridSelector: '[data-id="media-gallery-masonry-grid"]',
             selected: null,
+            allowedActions: [],
             fields: {
                 id: 'id',
                 url: 'url',
@@ -41,7 +43,8 @@ define([
                 {
                     component: 'Magento_MediaGalleryUi/js/grid/columns/image/actions',
                     name: '${ $.name }_actions',
-                    imageModelName: '${ $.name }'
+                    imageModelName: '${ $.name }',
+                    allowedActions: '${ $.allowedActions }'
                 }
             ]
         },
@@ -224,8 +227,15 @@ define([
         toggleAddSelectedButton: function () {
             if (this.selected() === null) {
                 this.hideAddSelectedAndDeleteButon();
-            } else {
+
+                return;
+            }
+
+            if (this.allowedActions.includes('insert')) {
                 $(this.addSelectedBtnSelector).removeClass('no-display');
+            }
+
+            if (this.allowedActions.includes('delete')) {
                 $(this.deleteSelectedBtnSelector).removeClass('no-display');
             }
         },
@@ -272,6 +282,7 @@ define([
          */
         addMessage: function (code, message) {
             this.messages().add(code, message);
+            this.closeContextMenu();
             this.scrollToMessageContent();
             this.messages().scheduleCleanup();
         },
@@ -287,6 +298,13 @@ define([
                 !this.massaction().massActionMode()) {
                 this.deselectImage();
             }
+        },
+
+        /**
+         * Action to close the context menu in media gallery.
+         */
+        closeContextMenu: function () {
+            $(this.gridSelector).click();
         },
 
         /**
