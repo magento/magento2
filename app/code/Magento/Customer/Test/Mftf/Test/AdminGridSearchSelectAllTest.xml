@@ -12,7 +12,7 @@
             <stories value="Selection should be removed during search."/>
             <title value="Selection should be removed during search."/>
             <description value="Empty selected before and after search, like it works for filter"/>
-            <testCaseId value=""/>
+            <testCaseId value="MC-37659"/>
             <severity value="CRITICAL"/>
             <group value="uI"/>
         </annotations>
