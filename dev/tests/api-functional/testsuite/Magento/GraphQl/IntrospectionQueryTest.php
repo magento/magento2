@@ -57,6 +57,124 @@ QUERY;
     }
 
     /**
+     * Tests that Introspection is allowed by default
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function testIntrospectionQueryWithOnlySchema()
+    {
+        $query
+            = <<<QUERY
+ {
+  __schema {
+    queryType { name }
+    types{
+      ...FullType
+    }
+    }
+  }
+fragment FullType on __Type{
+  name
+  kind
+  fields(includeDeprecated:true){
+    name
+    args{
+      ...InputValue
+    }
+         }
+    }
+    
+fragment TypeRef on __Type {
+  kind
+  name
+  ofType{
+    kind
+    name
+  }
+}
+fragment InputValue on __InputValue {
+  name
+  description
+  type { ...TypeRef }
+  defaultValue
+}
+QUERY;
+        $this->assertArrayHasKey('__schema', $this->graphQlQuery($query));
+        $response = $this->graphQlQuery($query);
+
+        $query
+            = <<<QUERY
+query IntrospectionQuery {
+  __schema {
+    queryType { name }
+    types{
+      ...FullType
+    }
+    }
+  }
+fragment FullType on __Type{
+  name
+  kind
+  fields(includeDeprecated:true){
+    name
+    args{
+      ...InputValue
+    }
+         }
+    }
+    
+fragment TypeRef on __Type {
+  kind
+  name
+  ofType{
+    kind
+    name
+  }
+}
+fragment InputValue on __InputValue {
+  name
+  description
+  type { ...TypeRef }
+  defaultValue
+}
+QUERY;
+        $this->assertArrayHasKey('__schema', $this->graphQlQuery($query));
+        $responseFields = $this->graphQlQuery($query);
+        $this->assertResponseFields($response, $responseFields);
+        $this->assertEquals($responseFields, $response);
+    }
+
+    /**
+     * Tests that Introspection is allowed by default
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function testIntrospectionQueryWithOnlyType()
+    {
+        $query
+            = <<<QUERY
+{
+  __type(name:"Query")
+    {
+    name
+      kind
+    fields(includeDeprecated:true){
+      name
+      type{
+        kind
+        name
+      }
+      description
+      isDeprecated
+      deprecationReason
+    }
+  }
+} 
+QUERY;
+        $this->assertArrayHasKey('__type', $this->graphQlQuery($query));
+        $response = $this->graphQlQuery($query);
+        $this->assertNotEmpty($response['__type']['fields']);
+    }
+
+    /**
      * Tests that Introspection Query with deprecated annotations on enum values, fields are read.
      */
     public function testIntrospectionQueryWithDeprecatedAnnotationOnEnumAndFieldValues()

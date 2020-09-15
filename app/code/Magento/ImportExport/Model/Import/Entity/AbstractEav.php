@@ -10,8 +10,8 @@ use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorI
 /**
  * Import EAV entity abstract model
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
  */
@@ -19,6 +19,8 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Import\AbstractEn
 {
     /**
      * Attribute collection name
+     *
+     * Name of collection class
      */
     const ATTRIBUTE_COLLECTION_NAME = \Magento\Framework\Data\Collection::class;
 
@@ -129,7 +131,7 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Import\AbstractEn
     public function getWebsiteId($websiteCode)
     {
         if (isset($this->_websiteCodeToId[$websiteCode])) {
-            return $this->_websiteCodeToId[$websiteCode];
+            return (int) $this->_websiteCodeToId[$websiteCode];
         }
 
         return false;
@@ -232,6 +234,7 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Import\AbstractEn
                         }
                     }
                 }
+                // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
             } catch (\Exception $e) {
                 // ignore exceptions connected with source models
             }

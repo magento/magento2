@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<operations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataOperation.xsd">
+    <operation name="CatalogSearchConfigDefault" dataType="catalog_search_config_def" type="create" auth="adminFormKey" url="/admin/system_config/save/section/catalog/" method="POST">
+        <object key="groups" dataType="catalog_search_config_def">
+            <object key="search" dataType="catalog_search_config_def">
+                <object key="fields" dataType="catalog_search_config_def">
+                    <object key="min_query_length" dataType="enable">
+                        <field key="inherit">boolean</field>
+                    </object>
+                </object>
+            </object>
+        </object>
+    </operation>
+    <operation name="CatalogSearchConfigQueryLength" dataType="catalog_search_config_query_length" type="create" auth="adminFormKey" url="/admin/system_config/save/section/catalog/" method="POST">
+        <object key="groups" dataType="catalog_search_config_query_length">
+            <object key="search" dataType="catalog_search_config_query_length">
+                <object key="fields" dataType="catalog_search_config_query_length">
+                    <object key="min_query_length" dataType="number">
+                        <field key="value">integer</field>
+                    </object>
+                </object>
+            </object>
+        </object>
+    </operation>
+    <operation name="CatalogSearchEngineDefault" dataType="catalog_search_engine_default" type="create" auth="adminFormKey" url="/admin/system_config/save/section/catalog/" method="POST">
+        <object key="groups" dataType="catalog_search_engine_default">
+            <object key="search" dataType="catalog_search_engine_default">
+                <object key="fields" dataType="catalog_search_engine_default">
+                    <object key="engine" dataType="enable">
+                        <field key="inherit">boolean</field>
+                    </object>
+                </object>
+            </object>
+        </object>
+    </operation>
+</operations>

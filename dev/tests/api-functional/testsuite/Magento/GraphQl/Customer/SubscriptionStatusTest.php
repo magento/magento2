@@ -29,7 +29,7 @@ class SubscriptionStatusTest extends GraphQlAbstract
      */
     private $subscriberFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -57,11 +57,12 @@ QUERY;
     }
 
     /**
-     * @expectedException Exception
-     * @expectedExceptionMessage The current customer isn't authorized.
      */
     public function testGetSubscriptionStatusIfUserIsNotAuthorizedTest()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('The current customer isn\'t authorized.');
+
         $query = <<<QUERY
 query {
     customer {
@@ -103,11 +104,12 @@ QUERY;
     }
 
     /**
-     * @expectedException Exception
-     * @expectedExceptionMessage The current customer isn't authorized.
      */
     public function testChangeSubscriptionStatuIfUserIsNotAuthorizedTest()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('The current customer isn\'t authorized.');
+
         $query = <<<QUERY
 mutation {
     updateCustomer(
@@ -162,7 +164,7 @@ QUERY;
         return ['Authorization' => 'Bearer ' . $customerToken];
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
 

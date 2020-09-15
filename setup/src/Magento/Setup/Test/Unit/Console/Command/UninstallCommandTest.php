@@ -3,42 +3,47 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Console\Command;
 
-use Magento\Setup\Model\InstallerFactory;
 use Magento\Setup\Console\Command\UninstallCommand;
-use Symfony\Component\Console\Tester\CommandTester;
 use Magento\Setup\Model\Installer;
+use Magento\Setup\Model\InstallerFactory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Symfony\Component\Console\Helper\HelperSet;
+use Symfony\Component\Console\Helper\QuestionHelper;
+use Symfony\Component\Console\Tester\CommandTester;
 
-class UninstallCommandTest extends \PHPUnit\Framework\TestCase
+class UninstallCommandTest extends TestCase
 {
     /**
-     * @var InstallerFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var InstallerFactory|MockObject
      */
     private $installerFactory;
 
     /**
-     * @var Installer|\PHPUnit_Framework_MockObject_MockObject
+     * @var Installer|MockObject
      */
     private $installer;
 
     /**
-     * @var UninstallCommand|\PHPUnit_Framework_MockObject_MockObject
+     * @var UninstallCommand|MockObject
      */
     private $command;
 
-    public function setUp()
+    protected function setUp(): void
     {
-        $this->installerFactory = $this->createMock(\Magento\Setup\Model\InstallerFactory::class);
-        $this->installer = $this->createMock(\Magento\Setup\Model\Installer::class);
+        $this->installerFactory = $this->createMock(InstallerFactory::class);
+        $this->installer = $this->createMock(Installer::class);
         $this->command = new UninstallCommand($this->installerFactory);
     }
 
     public function testExecuteInteractionYes()
     {
         $this->installer->expects($this->once())->method('uninstall');
-        $this->installerFactory->expects($this->once())->method('create')->will($this->returnValue($this->installer));
+        $this->installerFactory->expects($this->once())->method('create')->willReturn($this->installer);
 
         $this->checkInteraction(true);
     }
@@ -56,19 +61,19 @@ class UninstallCommandTest extends \PHPUnit\Framework\TestCase
      */
     public function checkInteraction($answer)
     {
-        $question = $this->createMock(\Symfony\Component\Console\Helper\QuestionHelper::class);
+        $question = $this->createMock(QuestionHelper::class);
         $question
             ->expects($this->once())
             ->method('ask')
-            ->will($this->returnValue($answer));
+            ->willReturn($answer);
 
-        /** @var \Symfony\Component\Console\Helper\HelperSet|\PHPUnit_Framework_MockObject_MockObject $helperSet */
-        $helperSet = $this->createMock(\Symfony\Component\Console\Helper\HelperSet::class);
+        /** @var HelperSet|MockObject $helperSet */
+        $helperSet = $this->createMock(HelperSet::class);
         $helperSet
             ->expects($this->once())
             ->method('get')
             ->with('question')
-            ->will($this->returnValue($question));
+            ->willReturn($question);
         $this->command->setHelperSet($helperSet);
 
         $tester = new CommandTester($this->command);

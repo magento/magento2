@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="QuickSearchTwoProductsWithSameWeightTest">
+        <annotations>
+            <stories value="Search Product on Storefront"/>
+            <title value="Quick Search should sort products with the same weight appropriately"/>
+            <description value="Use Quick Search to find a two products with the same weight"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-14796"/>
+            <group value="CatalogSearch"/>
+            <group value="SearchEngineElasticsearch"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="productAlphabeticalA" stepKey="product1">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="productAlphabeticalB" stepKey="product2">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin1"/>
+
+            <!-- Create and Assign Attribute to product1-->
+            <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProduct1">
+                <argument name="productId" value="$product1.id$"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateAttributeWithSearchWeightActionGroup" stepKey="createProduct1Attribute">
+                <argument name="attributeType" value="Text Field"/>
+                <argument name="attributeName" value="$product1.name$"/>
+                <argument name="attributeSetName" value="$product1.name$"/>
+                <argument name="weight" value="1"/>
+                <argument name="defaultValue" value="{{_defaultProduct.name}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminProductPageSelectAttributeSetActionGroup" stepKey="selectAttributeSet1">
+                <argument name="attributeSetName" value="$product1.name$"/>
+            </actionGroup>
+            <!--fill in default-->
+            <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct1a"/>
+            <actionGroup ref="AdminProductPageFillTextAttributeValueByNameActionGroup" stepKey="fillDefault1">
+                <argument name="attributeName" value="$product1.name$"/>
+                <argument name="value" value="{{_defaultProduct.name}}"/>
+            </actionGroup>
+            <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct1b"/>
+            <!-- Create and Assign Attribute to product2-->
+            <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProduct2">
+                <argument name="productId" value="$product2.id$"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateAttributeWithSearchWeightActionGroup" stepKey="createProduct2Attribute">
+                <argument name="attributeType" value="Text Field"/>
+                <argument name="attributeName" value="$product2.name$"/>
+                <argument name="attributeSetName" value="$product2.name$"/>
+                <argument name="weight" value="1"/>
+                <argument name="defaultValue" value="{{_defaultProduct.name}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminProductPageSelectAttributeSetActionGroup" stepKey="selectAttributeSet2">
+                <argument name="attributeSetName" value="$product2.name$"/>
+            </actionGroup>
+            <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct2a"/>
+            <!--fill in default-->
+            <actionGroup ref="AdminProductPageFillTextAttributeValueByNameActionGroup" stepKey="fillDefault2">
+                <argument name="attributeName" value="$product2.name$"/>
+                <argument name="value" value="{{_defaultProduct.name}}"/>
+            </actionGroup>
+            <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct2b"/>
+        </before>
+        <after>
+            <deleteData stepKey="deleteProduct1" createDataKey="product1"/>
+            <deleteData stepKey="deleteProduct2" createDataKey="product2"/>
+            <deleteData stepKey="deleteCategory" createDataKey="createCategory"/>
+
+        </after>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToFrontPage"/>
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="searchStorefront">
+            <argument name="phrase" value="{{_defaultProduct.name}}"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontQuickSearchCheckProductNameInGridActionGroup" stepKey="assertProduct1Position">
+            <argument name="productName" value="$product1.name$"/>
+            <argument name="index" value="1"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontQuickSearchCheckProductNameInGridActionGroup" stepKey="assertProduct2Position">
+            <argument name="productName" value="$product2.name$"/>
+            <argument name="index" value="2"/>
+        </actionGroup>
+    </test>
+</tests>

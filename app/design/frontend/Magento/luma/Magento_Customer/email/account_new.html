@@ -4,17 +4,19 @@
  * See COPYING.txt for license details.
  */
 -->
-<!--@subject {{trans "Welcome to %store_name" store_name=$store.getFrontendName()}} @-->
+<!--@subject {{trans "Welcome to %store_name" store_name=$store.frontend_name}} @-->
 <!--@vars {
-"var this.getUrl($store, 'customer/account/')":"Customer Account URL",
+"var store.frontend_name":"Store Name",
+"var this.getUrl($store,'customer/account/',[_nosid:1])":"Customer Account URL",
 "var customer.email":"Customer Email",
-"var customer.name":"Customer Name"
+"var customer.name":"Customer Name",
+"var this.getUrl($store,'customer/account/createPassword/',[_query:[id:$customer.id,token:$customer.rp_token],_nosid:1])":"Password Reset URL"
 } @-->
 
 {{template config_path="design/email/header_template"}}
 
 <p class="greeting">{{trans "%name," name=$customer.name}}</p>
-<p>{{trans "Welcome to %store_name." store_name=$store.getFrontendName()}}</p>
+<p>{{trans "Welcome to %store_name." store_name=$store.frontend_name}}</p>
 <p>
     {{trans
         'To sign in to our site, use these credentials during checkout or on the <a href="%customer_url">My Account</a> page:'

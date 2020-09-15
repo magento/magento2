@@ -28,10 +28,10 @@
 
     .nav-toggle {
         .lib-icon-font(
-        @icon-menu,
-        @_icon-font-size: 28px,
-        @_icon-font-color: @header-icons-color,
-        @_icon-font-color-hover: @header-icons-color-hover
+            @icon-menu,
+            @_icon-font-size: 28px,
+            @_icon-font-color: @header-icons-color,
+            @_icon-font-color-hover: @header-icons-color-hover
         );
         .lib-icon-text-hide();
         cursor: pointer;
@@ -54,13 +54,13 @@
 
         .parent {
             .level-top {
-                position: relative;
                 .lib-icon-font(
-                @_icon-font-content: @icon-down,
-                @_icon-font-size: 42px,
-                @_icon-font-position: after,
-                @_icon-font-display: block
+                    @_icon-font-content: @icon-down,
+                    @_icon-font-size: 42px,
+                    @_icon-font-position: after,
+                    @_icon-font-display: block
                 );
+                position: relative;
 
                 &:after {
                     position: absolute;
@@ -70,8 +70,8 @@
 
                 &.ui-state-active {
                     .lib-icon-font-symbol(
-                    @_icon-font-content: @icon-up,
-                    @_icon-font-position: after
+                        @_icon-font-content: @icon-up,
+                        @_icon-font-position: after
                     );
                 }
             }
@@ -82,12 +82,10 @@
         -webkit-overflow-scrolling: touch;
         .lib-css(transition, left .3s, 1);
         height: 100%;
-        left: -80%;
         left: calc(~'-1 * (100% - @{active-nav-indent})');
         overflow: auto;
         position: fixed;
         top: 0;
-        width: 80%;
         width: calc(~'100% - @{active-nav-indent}');
 
         .switcher {
@@ -109,13 +107,13 @@
 
         .switcher-trigger {
             strong {
-                position: relative;
                 .lib-icon-font(
-                @_icon-font-content: @icon-down,
-                @_icon-font-size: 42px,
-                @_icon-font-position: after,
-                @_icon-font-display: block
+                    @_icon-font-content: @icon-down,
+                    @_icon-font-size: 42px,
+                    @_icon-font-position: after,
+                    @_icon-font-display: block
                 );
+                position: relative;
 
                 &:after {
                     position: absolute;
@@ -126,23 +124,26 @@
 
             &.active strong {
                 .lib-icon-font-symbol(
-                @_icon-font-content: @icon-up,
-                @_icon-font-position: after
+                    @_icon-font-content: @icon-up,
+                    @_icon-font-position: after
                 );
             }
         }
+
         .switcher-dropdown {
             .lib-list-reset-styles();
             display: none;
             padding: @indent__s 0;
         }
+
         .switcher-options {
             &.active {
                 .switcher-dropdown {
                     display: block;
                 }
             }
-        } 
+        }
+
         .header.links {
             .lib-list-reset-styles();
             border-bottom: 1px solid @color-gray82;
@@ -154,7 +155,7 @@
                 &.greet.welcome {
                     border-top: 1px solid @color-gray82;
                     font-weight: @font-weight__bold;
-                    padding: .8rem @indent__base;
+                    padding: .8rem @submenu__padding-left;
                 }
 
                 > a {
@@ -168,7 +169,7 @@
                 .lib-css(text-decoration, @navigation-level0-item__text-decoration);
                 display: block;
                 font-weight: @font-weight__bold;
-                padding: .8rem @indent__base;
+                padding: .8rem @submenu__padding-left;
             }
 
             .header.links {
@@ -200,13 +201,11 @@
 
     .nav-open {
         .page-wrapper {
-            left: 80%;
             left: calc(~'100% - @{active-nav-indent}');
         }
 
         .nav-sections {
             @_shadow: 0 0 5px 0 rgba(50, 50, 50, .75);
-
             .lib-css(box-shadow, @_shadow, 1);
             left: 0;
             z-index: 99;
@@ -291,10 +290,6 @@
 
     .nav-sections-item-title {
         display: none;
-    }
-
-    .nav-sections-item-content {
-        display: block !important;
     }
 
     .nav-sections-item-content > * {

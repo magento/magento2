@@ -83,6 +83,10 @@ define([
                         component: 'Magento_Ui/js/grid/filters/range',
                         rangeType: 'date'
                     },
+                    datetimeRange: {
+                        component: 'Magento_Ui/js/grid/filters/range',
+                        rangeType: 'datetime'
+                    },
                     textRange: {
                         component: 'Magento_Ui/js/grid/filters/range',
                         rangeType: 'text'
@@ -196,6 +200,7 @@ define([
          * @returns {Filters} Chainable.
          */
         apply: function () {
+            $('body').notification('clear');
             this.set('applied', removeEmpty(this.filters));
 
             return this;

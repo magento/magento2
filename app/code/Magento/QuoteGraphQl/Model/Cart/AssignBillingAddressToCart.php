@@ -39,17 +39,17 @@ class AssignBillingAddressToCart
      *
      * @param CartInterface $cart
      * @param AddressInterface $billingAddress
-     * @param bool $useForShipping
+     * @param bool $sameAsShipping
      * @throws GraphQlInputException
      * @throws GraphQlNoSuchEntityException
      */
     public function execute(
         CartInterface $cart,
         AddressInterface $billingAddress,
-        bool $useForShipping
+        bool $sameAsShipping
     ): void {
         try {
-            $this->billingAddressManagement->assign($cart->getId(), $billingAddress, $useForShipping);
+            $this->billingAddressManagement->assign($cart->getId(), $billingAddress, $sameAsShipping);
         } catch (NoSuchEntityException $e) {
             throw new GraphQlNoSuchEntityException(__($e->getMessage()), $e);
         } catch (InputException $e) {

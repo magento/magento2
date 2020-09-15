@@ -21,34 +21,32 @@
         <before>
             <!-- Login as admin -->
             <createData entity="SimpleTwo" stepKey="simpleProduct"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
 
         <after>
             <!-- Delete the created category -->
-            <actionGroup ref="DeleteMostRecentCategory" stepKey="getRidOfCreatedCategory"/>
-            <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="DeleteMostRecentCategoryActionGroup" stepKey="getRidOfCreatedCategory"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
             <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
         </after>
 
         <!-- Find the product that we just created using the product grid and go to its page-->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPage"/>
-        <waitForPageLoad stepKey="waitForAdminProductGridLoad"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="visitAdminProductPage"/>
         <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFiltersInitial"/>
-        <actionGroup ref="filterProductGridBySku" stepKey="findCreatedProduct">
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="findCreatedProduct">
             <argument name="product" value="SimpleTwo"/>
         </actionGroup>
         <waitForPageLoad stepKey="waitForFiltersToBeApplied"/>
-        <click selector="{{AdminProductGridSection.firstRow}}" stepKey="clickOnProductPage"/>
-        <waitForPageLoad stepKey="waitForProductPageLoad"/>
+        <actionGroup ref="AdminProductGridSectionClickFirstRowActionGroup" stepKey="clickOnProductPage"/>
 
         <!-- Fill out the form for the new category -->
-        <actionGroup ref="FillNewProductCategory" stepKey="FillNewProductCategory">
+        <actionGroup ref="FillNewProductCategoryActionGroup" stepKey="FillNewProductCategory">
             <argument name="categoryName" value="{{_defaultCategory.name}}"/>
         </actionGroup>
 
         <!-- Check that category was created -->
-        <actionGroup ref="CategoryPresent" stepKey="checkIfCategoryPresent">
+        <actionGroup ref="CategoryPresentActionGroup" stepKey="checkIfCategoryPresent">
             <argument name="categoryName" value="{{_defaultCategory.name}}"/>
         </actionGroup>
 

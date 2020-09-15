@@ -3,9 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\ObjectManager\Test\Unit\Factory;
 
+use Magento\Framework\Exception\RuntimeException;
 use Magento\Framework\ObjectManager\ConfigInterface;
 use Magento\Framework\ObjectManager\DefinitionInterface;
 use Magento\Framework\ObjectManager\Factory\Compiled;
@@ -14,19 +16,23 @@ use Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\Compiled\Dependenc
 use Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\Compiled\SimpleClassTesting;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
+ * Test for \Magento\Framework\ObjectManager\Factory\Compiled.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CompiledTest extends \PHPUnit\Framework\TestCase
+class CompiledTest extends TestCase
 {
-    /** @var ObjectManagerInterface | \PHPUnit_Framework_MockObject_MockObject */
+    /** @var ObjectManagerInterface|MockObject */
     protected $objectManagerMock;
 
-    /** @var ConfigInterface | \PHPUnit_Framework_MockObject_MockObject */
+    /** @var ConfigInterface|MockObject */
     protected $config;
 
-    /** @var DefinitionInterface | \PHPUnit_Framework_MockObject_MockObject */
+    /** @var DefinitionInterface|MockObject */
     private $definitionsMock;
 
     /** @var Compiled */
@@ -41,22 +47,23 @@ class CompiledTest extends \PHPUnit\Framework\TestCase
     /**
      * Setup tests
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
             ->setMethods([])
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->config = $this->getMockBuilder(ConfigInterface::class)
             ->setMethods([])
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->sharedInstances = [];
         $this->factory = new Compiled($this->config, $this->sharedInstances, []);
         $this->factory->setObjectManager($this->objectManagerMock);
 
-        $this->definitionsMock = $this->getMockBuilder(DefinitionInterface::class)->getMock();
+        $this->definitionsMock = $this->getMockBuilder(DefinitionInterface::class)
+            ->getMock();
         $this->objectManager->setBackwardCompatibleProperty($this->factory, 'definitions', $this->definitionsMock);
     }
 
@@ -110,6 +117,27 @@ class CompiledTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(['default_value1', 'default_value2'], $result->getValueArray());
         $this->assertEquals('GLOBAL_ARGUMENT', $result->getGlobalValue());
         $this->assertNull($result->getNullValue());
+    }
+
+    /**
+     * Create class with exception
+     *
+     * @return void
+     */
+    public function testCreateSimpleWithException(): void
+    {
+        $requestedType = 'requestedType';
+        $className = SimpleClassTesting::class;
+
+        $this->config->expects($this->atLeastOnce())
+            ->method('getInstanceType')
+            ->willReturn($className);
+
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage(
+            'Type Error occurred when creating object: ' . $className . ', Too few arguments to function ' . $className
+        );
+        $this->factory->create($requestedType, []);
     }
 
     /**
@@ -214,7 +242,7 @@ class CompiledTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf($nonSharedType, $result->getNonSharedDependency());
         $this->assertEquals('value', $result->getValue());
         $this->assertEquals(['default_value1', 'default_value2'], $result->getValueArray());
-        $this->assertEquals(null, $result->getGlobalValue());
+        $this->assertSame('', $result->getGlobalValue());
         $this->assertNull($result->getNullValue());
     }
 
@@ -316,50 +344,50 @@ class CompiledTest extends \PHPUnit\Framework\TestCase
     {
         return [
             0 => [
-                    0 => 'nonSharedDependency',
-                    1 => DependencyTesting::class,
-                    2 => true,
-                    3 => null,
-                    4 => false,
-                ],
+                0 => 'nonSharedDependency',
+                1 => DependencyTesting::class,
+                2 => true,
+                3 => null,
+                4 => false,
+            ],
             1 => [
-                    0 => 'sharedDependency',
-                    1 => DependencySharedTesting::class,
-                    2 => true,
-                    3 => null,
-                    4 => false,
-                ],
+                0 => 'sharedDependency',
+                1 => DependencySharedTesting::class,
+                2 => true,
+                3 => null,
+                4 => false,
+            ],
             2 => [
-                    0 => 'value',
-                    1 => null,
-                    2 => false,
-                    3 => 'value',
-                    4 => false,
-                ],
+                0 => 'value',
+                1 => null,
+                2 => false,
+                3 => 'value',
+                4 => false,
+            ],
             3 => [
-                    0 => 'valueArray',
-                    1 => null,
-                    2 => false,
-                    3 => [
-                            0 => 'default_value1',
-                            1 => 'default_value2',
-                        ],
-                    4 => false,
+                0 => 'valueArray',
+                1 => null,
+                2 => false,
+                3 => [
+                    0 => 'default_value1',
+                    1 => 'default_value2',
                 ],
+                4 => false,
+            ],
             4 => [
-                    0 => 'globalValue',
-                    1 => null,
-                    2 => false,
-                    3 => '',
-                    4 => false,
-                ],
+                0 => 'globalValue',
+                1 => null,
+                2 => false,
+                3 => '',
+                4 => false,
+            ],
             5 => [
-                    0 => 'nullValue',
-                    1 => null,
-                    2 => false,
-                    3 => null,
-                    4 => false,
-                ],
+                0 => 'nullValue',
+                1 => null,
+                2 => false,
+                3 => null,
+                4 => false,
+            ],
         ];
     }
 }

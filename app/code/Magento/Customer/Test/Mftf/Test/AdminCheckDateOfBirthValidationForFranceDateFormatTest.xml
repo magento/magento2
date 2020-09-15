@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCheckDateOfBirthValidationForFranceDateFormatTest">
+        <annotations>
+            <features value="Customer"/>
+            <stories value="Checks 'Date of Birth' field validation for the France date format value"/>
+            <title value="Checks 'Date of Birth' field validation for the France date format value"/>
+            <description value="Checks 'Date of Birth' field validation for the France date format value"/>
+            <severity value="MAJOR"/>
+            <group value="customer"/>
+            <group value="ui"/>
+        </annotations>
+        <before>
+            <magentoCLI command="setup:static-content:deploy fr_FR" stepKey="deployStaticContentWithFrenchLocale"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="SetAdminAccountActionGroup" stepKey="setAdminInterfaceLocaleToFrance">
+                <argument name="InterfaceLocaleByValue" value="fr_FR"/>
+            </actionGroup>
+        </before>
+
+        <after>
+            <actionGroup ref="SetAdminAccountActionGroup" stepKey="setAdminInterfaceLocaleToDefaultValue">
+                <argument name="InterfaceLocaleByValue" value="en_US"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <actionGroup ref="AdminNavigateNewCustomerActionGroup" stepKey="navigateToNewCustomerPage"/>
+        <actionGroup ref="AssertAdminCustomerDateOfBirthValidationMessageActionGroup" stepKey="assertDateOfBirthValidationMessage"/>
+    </test>
+</tests>

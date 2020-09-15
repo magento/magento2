@@ -27,6 +27,7 @@
                 <disable>0</disable>
                 <host>localhost</host>
                 <port>25</port>
+                <set_return_path>0</set_return_path>
             </smtp>
         </system>
         <trans_email>

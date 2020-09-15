@@ -20,6 +20,7 @@ use Magento\Framework\Phrase;
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * phpcs:disable Magento2.Classes.AbstractApi
  * @api
+ * @since 100.0.2
  */
 abstract class AbstractDb extends AbstractResource
 {
@@ -157,9 +158,6 @@ abstract class AbstractDb extends AbstractResource
      * Provide variables to serialize
      *
      * @return array
-     *
-     * @SuppressWarnings(PHPMD.SerializationAware)
-     * @deprecated Do not use PHP serialization.
      */
     public function __sleep()
     {
@@ -172,9 +170,6 @@ abstract class AbstractDb extends AbstractResource
      * Restore global dependencies
      *
      * @return void
-     *
-     * @SuppressWarnings(PHPMD.SerializationAware)
-     * @deprecated Do not use PHP serialization.
      */
     public function __wakeup()
     {
@@ -368,7 +363,7 @@ abstract class AbstractDb extends AbstractResource
         $object->afterLoad();
         $object->setOrigData();
         $object->setHasDataChanges(false);
-        
+
         return $this;
     }
 

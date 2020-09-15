@@ -383,6 +383,21 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
     }
 
     /**
+     * List of all available layout handles.
+     *
+     * @return string[]
+     */
+    public function getAvailableHandles(): array
+    {
+        $handles = [];
+        $nodes = $this->getFileLayoutUpdatesXml()->xpath('/layouts/handle[@id]');
+        foreach ($nodes as $node) {
+            $handles[] = (string)$node->attributes()->id;
+        }
+        return $handles;
+    }
+
+    /**
      * Retrieve all design abstractions that exist in the system.
      *
      * Result format:

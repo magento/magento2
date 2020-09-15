@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontFreeShippingDisplayWithInclTaxOptionTest">
+        <annotations>
+            <features value="Shipping"/>
+            <stories value="Offline Shipping Methods"/>
+            <title value="Free Shipping Minimum Order Amount Excluding/Including Tax options"/>
+            <description value="Free Shipping Minimum Order Amount Excluding/Including Tax options"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="MC-20613"/>
+            <useCaseId value="MC-18457"/>
+            <group value="shipping"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleProduct2" stepKey="createSimpleProduct">
+                <field key="price">100.00</field>
+            </createData>
+            <!-- Enable free shipping method -->
+            <createData entity="FreeShippinMethodConfig" stepKey="enableFreeShippingMethod"/>
+            <createData entity="setFreeShippingSubtotal" stepKey="setFreeShippingSubtotal"/>
+            <createData entity="SetTaxIncluding" stepKey="setTaxIncluding"/>
+            <!--  Tax configuration (Store>Configuration; Sales>Tax) -->
+            <createData entity="Tax_Config_CA" stepKey="configureTaxForCA"/>
+            <createData entity="defaultTaxRule" stepKey="createTaxRule"/>
+        </before>
+        <after>
+            <!-- Disable free shipping method -->
+            <createData entity="FreeShippinMethodDefault" stepKey="disableFreeShippingMethod"/>
+            <createData entity="setFreeShippingSubtotalToDefault" stepKey="setFreeShippingSubtotalToDefault"/>
+            <createData entity="SetTaxIncludingToDefault" stepKey="setTaxIncludingToDefault"/>
+            <deleteData createDataKey="createTaxRule" stepKey="deleteTaxRule"/>
+            <createData entity="DefaultTaxConfig" stepKey="resetTaxConfiguration"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+        </after>
+        <!-- Add simple product to cart -->
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProductToCart">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+        </actionGroup>
+        <!-- Assert that taxes are applied correctly for CA -->
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToCheckout"/>
+        <waitForElementVisible selector="{{CheckoutPaymentSection.tax}}" stepKey="waitForOverviewVisible"/>
+        <waitForElement time="30" selector="{{CheckoutCartSummarySection.estimateShippingAndTaxForm}}" stepKey="waitForEstimateShippingAndTaxForm"/>
+        <waitForElement time="30" selector="{{CheckoutCartSummarySection.shippingMethodForm}}" stepKey="waitForShippingMethodForm"/>
+        <conditionalClick  selector="{{CheckoutCartSummarySection.estimateShippingAndTax}}" dependentSelector="{{CheckoutCartSummarySection.country}}" visible="false" stepKey="expandEstimateShippingandTax" />
+        <selectOption selector="{{CheckoutCartSummarySection.country}}" userInput="United States" stepKey="selectUSCountry"/>
+        <waitForPageLoad stepKey="waitForSelectCountry"/>
+        <selectOption selector="{{CheckoutCartSummarySection.stateProvince}}" userInput="California" stepKey="selectCaliforniaRegion"/>
+        <waitForPageLoad stepKey="waitForSelectRegion"/>
+        <see selector="{{CheckoutPaymentSection.tax}}" userInput="$8.25"  stepKey="seeTaxForCA"/>
+        <!-- See available Free Shipping option -->
+        <actionGroup ref="StorefrontAssertShippingMethodPresentInCartActionGroup" stepKey="assertShippingMethodLabel">
+            <argument name="shippingMethod" value="{{freeTitleDefault.value}}"/>
+        </actionGroup>
+        <!-- Change State to New York -->
+        <selectOption selector="{{CheckoutCartSummarySection.stateProvince}}" userInput="{{US_Address_NY.state}}" stepKey="selectAnotherState"/>
+        <waitForPageLoad stepKey="waitForShippingMethodLoad"/>
+        <dontSee selector="{{CheckoutCartSummarySection.shippingMethodLabel}}" userInput="{{freeTitleDefault.value}}" stepKey="assertShippingMethodIsNotPresentInCart"/>
+    </test>
+</tests>

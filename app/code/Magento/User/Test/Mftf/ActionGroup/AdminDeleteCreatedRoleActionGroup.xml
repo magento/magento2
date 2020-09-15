@@ -21,7 +21,4 @@
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <see stepKey="seeSuccessMessage" userInput="You deleted the role."/>
     </actionGroup>
-    <actionGroup name="AdminDeleteRoleByRoleNameActionGroup" extends="AdminDeleteCreatedRoleActionGroup">
-        <click stepKey="clickToAddNewRole" selector="{{AdminDeleteRoleSection.role(role.rolename)}}"/>
-    </actionGroup>
 </actionGroups>

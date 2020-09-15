@@ -14,7 +14,7 @@ use Magento\Sales\Model\Order\Email\Sender\OrderSender;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class SubmitObserver
+ * Class responsive for sending order and invoice emails when it's created through storefront.
  */
 class SubmitObserver implements ObserverInterface
 {
@@ -49,7 +49,7 @@ class SubmitObserver implements ObserverInterface
     }
 
     /**
-     * Sends emails to customer.
+     * Send order and invoice email.
      *
      * @param Observer $observer
      *

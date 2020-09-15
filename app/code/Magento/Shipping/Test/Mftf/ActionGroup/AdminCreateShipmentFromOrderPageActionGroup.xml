@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+         <!--Create Shipment With Tracking Number-->
+            <actionGroup name="AdminCreateShipmentFromOrderPage">
+                <arguments>
+                    <argument name="Title" defaultValue="" type="string"/>
+                    <argument name="Number" defaultValue="" type="string"/>
+                    <argument name="Comment" defaultValue="" type="string"/>
+                    <argument name="Qty" defaultValue="" type="string"/>
+                </arguments>
+
+                <click stepKey="clickShipButton" selector="{{AdminOrderDetailsMainActionsSection.ship}}"/>
+                <click stepKey="clickAddTrackingNumber" selector="{{AdminShipmentPaymentShippingSection.AddTrackingNumber}}"/>
+                <fillField stepKey="fillTitle" userInput="{{Title}}" selector="{{AdminShipmentPaymentShippingSection.Title('1')}}"/>
+                <fillField stepKey="fillNumber" userInput="{{Number}}" selector="{{AdminShipmentPaymentShippingSection.Number('1')}}"/>
+                <fillField stepKey="fillQty" userInput="{{Qty}}" selector="{{AdminShipmentItemsSection.itemQtyToShip('1')}}"/>
+                <fillField stepKey="fillComment" userInput="{{Comment}}" selector="{{AdminShipmentTotalSection.CommentText}}"/>
+                <click stepKey="clickSubmitButton" selector="{{AdminShipmentMainActionsSection.submitShipment}}"/>
+                <see userInput="The shipment has been created." stepKey="seeSuccessMessage"/>
+            </actionGroup>
+</actionGroups>

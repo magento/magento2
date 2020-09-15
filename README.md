@@ -1,7 +1,21 @@
-[![Open Source Helpers](https://www.codetriage.com/magento/magento2/badges/users.svg)](https://www.codetriage.com/magento/magento2)
-[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/magento/magento2?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
-[![Crowdin](https://d322cqt584bo4o.cloudfront.net/magento-2/localized.svg)](https://crowdin.com/project/magento-2)
-<h2>Welcome</h2>
+<p align="center">
+    <a href="https://magento.com">
+        <img src="https://static.magento.com/sites/all/themes/magento/logo.svg" width="300px" alt="Magento Commerce" />
+    </a>
+    <br />
+    <br />
+    <a href="https://www.codetriage.com/magento/magento2">
+        <img src="https://www.codetriage.com/magento/magento2/badges/users.svg" alt="Open Source Helpers" />
+    </a>
+    <a href="https://gitter.im/magento/magento2?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge">
+        <img src="https://badges.gitter.im/Join%20Chat.svg" alt="Gitter" />
+    </a>
+    <a href="https://crowdin.com/project/magento-2">
+        <img src="https://d322cqt584bo4o.cloudfront.net/magento-2/localized.svg" alt="Crowdin" />
+    </a>
+</p>
+
+## Welcome
 Welcome to Magento 2 installation! We're glad you chose to install Magento 2, a cutting-edge, feature-rich eCommerce solution that gets results.
 
 ## Magento System Requirements
@@ -30,7 +44,7 @@ To suggest documentation improvements, click [here][4].
 [4]: https://devdocs.magento.com
 
 <h3>Community Maintainers</h3>
-The members of this team have been recognized for their outstanding commitment to maintaining and improving Magento. Magento has granted them permission to accept, merge, and reject pull requests, as well as review issues, and thanks these Community Maintainers for their valuable contributions.
+The members of this team have been recognized for their outstanding commitment to maintaining and improving Magento. Magento has granted them permission to accept, merge, and reject pull requests, as well as review issues, and thanks to these Community Maintainers for their valuable contributions.
 
 <a href="https://magento.com/magento-contributors#maintainers">
     <img src="https://raw.githubusercontent.com/wiki/magento/magento2/images/maintainers.png"/>

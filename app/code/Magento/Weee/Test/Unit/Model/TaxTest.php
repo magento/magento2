@@ -1,144 +1,179 @@
 <?php
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Weee\Test\Unit\Model;
 
+use Magento\Catalog\Model\Product;
+use Magento\Customer\Api\AccountManagementInterface;
+use Magento\Customer\Model\Session;
+use Magento\Eav\Model\Entity\Attribute;
+use Magento\Eav\Model\Entity\AttributeFactory;
+use Magento\Framework\Data\Collection\AbstractDb;
+use Magento\Framework\DataObject;
+use Magento\Framework\Model\Context;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Framework\Registry;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Store\Model\Group;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Store\Model\Website;
+use Magento\Tax\Helper\Data;
+use Magento\Tax\Model\Calculation;
+use Magento\Tax\Model\CalculationFactory;
+use Magento\Weee\Model\Config;
+use Magento\Weee\Model\Tax;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
 /**
- * Class TaxTest
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class TaxTest extends \PHPUnit\Framework\TestCase
+class TaxTest extends TestCase
 {
     /**
-     * @var \Magento\Weee\Model\Tax
+     * @var Tax
      */
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $context;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $registry;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $attributeFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $storeManager;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $calculationFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $customerSession;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $accountManagement;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $taxData;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $resource;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $weeeConfig;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $priceCurrency;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $resourceCollection;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $data;
 
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
     protected $objectManager;
 
     /**
      * Setup the test
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->objectManager = new ObjectManager($this);
 
-        $className = \Magento\Framework\Model\Context::class;
-        $this->context = $this->createMock($className);
+        $this->context = $this->createMock(Context::class);
+        $this->registry = $this->createMock(Registry::class);
 
-        $className = \Magento\Framework\Registry::class;
-        $this->registry = $this->createMock($className);
+        $this->attributeFactory = $this->getMockBuilder(AttributeFactory::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['create'])
+            ->getMock();
 
-        $className = \Magento\Eav\Model\Entity\AttributeFactory::class;
-        $this->attributeFactory = $this->createPartialMock($className, ['create']);
+        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
 
-        $className = \Magento\Store\Model\StoreManagerInterface::class;
-        $this->storeManager = $this->createMock($className);
+        $this->calculationFactory = $this->getMockBuilder(CalculationFactory::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['create'])
+            ->getMock();
 
-        $className = \Magento\Tax\Model\CalculationFactory::class;
-        $this->calculationFactory = $this->createPartialMock($className, ['create']);
+        $this->customerSession = $this->getMockBuilder(Session::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(
+                [
+                    'getCustomerId',
+                ]
+            )
+            ->addMethods(
+                [
 
-        $className = \Magento\Customer\Model\Session::class;
-        $this->customerSession = $this->createPartialMock(
-            $className,
-            ['getCustomerId', 'getDefaultTaxShippingAddress', 'getDefaultTaxBillingAddress', 'getCustomerTaxClassId']
-        );
+                    'getDefaultTaxShippingAddress',
+                    'getDefaultTaxBillingAddress',
+                    'getCustomerTaxClassId'
+                ]
+            )
+            ->getMock();
         $this->customerSession->expects($this->any())->method('getCustomerId')->willReturn(null);
         $this->customerSession->expects($this->any())->method('getDefaultTaxShippingAddress')->willReturn(null);
         $this->customerSession->expects($this->any())->method('getDefaultTaxBillingAddress')->willReturn(null);
         $this->customerSession->expects($this->any())->method('getCustomerTaxClassId')->willReturn(null);
 
-        $className = \Magento\Customer\Api\AccountManagementInterface::class;
+        $className = AccountManagementInterface::class;
         $this->accountManagement = $this->createMock($className);
 
-        $className = \Magento\Tax\Helper\Data::class;
+        $className = Data::class;
         $this->taxData = $this->createMock($className);
 
         $className = \Magento\Weee\Model\ResourceModel\Tax::class;
         $this->resource = $this->createMock($className);
 
-        $className = \Magento\Weee\Model\Config::class;
+        $className = Config::class;
         $this->weeeConfig = $this->createMock($className);
 
-        $className = \Magento\Framework\Pricing\PriceCurrencyInterface::class;
+        $className = PriceCurrencyInterface::class;
         $this->priceCurrency = $this->createMock($className);
 
-        $className = \Magento\Framework\Data\Collection\AbstractDb::class;
+        $className = AbstractDb::class;
         $this->resourceCollection = $this->createMock($className);
 
         $this->model = $this->objectManager->getObject(
-            \Magento\Weee\Model\Tax::class,
+            Tax::class,
             [
                 'context' => $this->context,
                 'registry' => $this->registry,
@@ -168,15 +203,15 @@ class TaxTest extends \PHPUnit\Framework\TestCase
         $websitePassed,
         string $expectedFptLabel
     ): void {
-        $product = $this->createMock(\Magento\Catalog\Model\Product::class);
-        $website = $this->createMock(\Magento\Store\Model\Website::class);
-        $store = $this->createMock(\Magento\Store\Model\Store::class);
-        $group = $this->createMock(\Magento\Store\Model\Group::class);
+        $product = $this->createMock(Product::class);
+        $website = $this->createMock(Website::class);
+        $store = $this->createMock(Store::class);
+        $group = $this->createMock(Group::class);
 
-        $attribute = $this->createMock(\Magento\Eav\Model\Entity\Attribute::class);
-        $calculation = $this->createMock(\Magento\Tax\Model\Calculation::class);
+        $attribute = $this->createMock(Attribute::class);
+        $calculation = $this->createMock(Calculation::class);
 
-        $obj = new \Magento\Framework\DataObject(['country' => 'US', 'region' => 'TX']);
+        $obj = new DataObject(['country' => 'US', 'region' => 'TX']);
         $calculation->expects($this->once())
             ->method('getRateRequest')
             ->willReturn($obj);
@@ -252,7 +287,7 @@ class TaxTest extends \PHPUnit\Framework\TestCase
             ]);
 
         $result = $this->model->getProductWeeeAttributes($product, null, null, $websitePassed, true);
-        $this->assertTrue(is_array($result));
+        $this->assertIsArray($result);
         $this->assertArrayHasKey(0, $result);
         $obj = $result[0];
         $this->assertEquals(1, $obj->getAmount());
@@ -270,19 +305,19 @@ class TaxTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetWeeeAmountExclTax($productTypeId, $productPriceType)
     {
-        $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+        $product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
             ->setMethods(['getTypeId', 'getPriceType'])
             ->getMock();
         $product->expects($this->any())->method('getTypeId')->willReturn($productTypeId);
         $product->expects($this->any())->method('getPriceType')->willReturn($productPriceType);
-        $weeeDataHelper = $this->getMockBuilder(\Magento\Framework\DataObject::class)
+        $weeeDataHelper = $this->getMockBuilder(DataObject::class)
             ->disableOriginalConstructor()
             ->setMethods(['getAmountExclTax'])
             ->getMock();
         $weeeDataHelper->expects($this->at(0))->method('getAmountExclTax')->willReturn(10);
         $weeeDataHelper->expects($this->at(1))->method('getAmountExclTax')->willReturn(30);
-        $tax = $this->getMockBuilder(\Magento\Weee\Model\Tax::class)
+        $tax = $this->getMockBuilder(Tax::class)
             ->disableOriginalConstructor()
             ->setMethods(['getProductWeeeAttributes'])
             ->getMock();
@@ -296,16 +331,16 @@ class TaxTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetWeeeAmountExclTaxForDynamicBundleProduct()
     {
-        $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+        $product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
             ->setMethods(['getTypeId', 'getPriceType'])
             ->getMock();
         $product->expects($this->once())->method('getTypeId')->willReturn('bundle');
         $product->expects($this->once())->method('getPriceType')->willReturn(0);
-        $weeeDataHelper = $this->getMockBuilder(\Magento\Framework\DataObject::class)
+        $weeeDataHelper = $this->getMockBuilder(DataObject::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $tax = $this->getMockBuilder(\Magento\Weee\Model\Tax::class)
+        $tax = $this->getMockBuilder(Tax::class)
             ->disableOriginalConstructor()
             ->setMethods(['getProductWeeeAttributes'])
             ->getMock();

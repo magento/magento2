@@ -20,7 +20,7 @@ $product->isObjectNew(true);
 $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
     ->setAttributeSetId($product->getDefaultAttributeSetId())
     ->setWebsiteIds([1])
-    ->setName('Simple Product')
+    ->setName('Simple Product Out Of Stock')
     ->setSku('simple-out-of-stock')
     ->setPrice(10)
     ->setWeight(1)

@@ -51,4 +51,14 @@
         <data key="label">5</data>
         <data key="value">5</data>
     </entity>
+    <entity name="CustomerAccountShareWebsiteConfigData">
+        <data key="path">customer/account_share/scope</data>
+        <data key="label">Per Website</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="CustomerAccountShareGlobalConfigData">
+        <data key="path">customer/account_share/scope</data>
+        <data key="label">Global</data>
+        <data key="value">0</data>
+    </entity>
 </entities>

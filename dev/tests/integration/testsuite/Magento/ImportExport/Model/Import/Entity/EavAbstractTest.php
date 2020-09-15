@@ -14,14 +14,14 @@ class EavAbstractTest extends \PHPUnit\Framework\TestCase
     /**
      * Model object which used for tests
      *
-     * @var \Magento\ImportExport\Model\Import\Entity\AbstractEav|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\ImportExport\Model\Import\Entity\AbstractEav|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_model;
 
     /**
      * Create all necessary data for tests
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->_model = $this->getMockForAbstractClass(

@@ -48,7 +48,7 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritDoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
         Bootstrap::getInstance()->loadArea(Area::AREA_FRONTEND);
         $this->_objectManager = Bootstrap::getObjectManager();
@@ -69,9 +69,9 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
     public function testProcess()
     {
         $this->observer->process();
-        $this->assertContains(
+        $this->assertStringContainsString(
             'John Smith,',
-            $this->transportBuilder->getSentMessage()->getRawMessage()
+            $this->transportBuilder->getSentMessage()->getBody()->getParts()[0]->getRawContent()
         );
     }
 
@@ -117,9 +117,10 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
 
         // dispatch process() method and check sent message
         $this->observer->process();
-        $message = $this->transportBuilder->getSentMessage()->getRawMessage();
+        $message = $this->transportBuilder->getSentMessage();
+        $messageContent = $message->getBody()->getParts()[0]->getRawContent();
         $expectedText = array_shift($translation);
-        $this->assertContains('/frontend/Magento/luma/pt_BR/', $message);
-        $this->assertContains(substr($expectedText, 0, 50), $message);
+        $this->assertStringContainsString('/frontend/Magento/luma/pt_BR/', $messageContent);
+        $this->assertStringContainsString(substr($expectedText, 0, 50), $messageContent);
     }
 }

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="ResetSearchEngineConfigurationActionGroup">
+        <annotations>
+            <description>Goes to the 'Configuration' page for 'Catalog'. Sets the 'Search Engine' to 'mysql'. Clicks on the Save button. PLEASE NOTE: The value is Hardcoded.</description>
+        </annotations>
+
+        <amOnPage url="{{AdminCatalogSearchConfigurationPage.url}}" stepKey="resetSearchEngine"/>
+        <waitForPageLoad stepKey="waitForConfigPage2"/>
+        <scrollTo selector="{{AdminCatalogSearchConfigurationSection.catalogSearchTab}}" stepKey="scrollToCatalogSearchTab2"/>
+        <conditionalClick selector="{{AdminCatalogSearchConfigurationSection.catalogSearchTab}}" dependentSelector="{{AdminCatalogSearchConfigurationSection.checkIfCatalogSearchTabExpand}}" visible="true" stepKey="expandCatalogSearchTab2"/>
+        <waitForElementVisible selector="{{AdminCatalogSearchConfigurationSection.searchEngine}}" stepKey="waitForDropdownToBeVisible2"/>
+        <selectOption selector="{{AdminCatalogSearchConfigurationSection.searchEngine}}" userInput="mysql" stepKey="chooseMySQL"/>
+        <checkOption selector="{{AdminCatalogSearchConfigurationSection.searchEngineDefaultSystemValue}}" stepKey="checkUseSystemValue"/>
+        <click selector="{{ContentManagementSection.Save}}" stepKey="saveConfiguration2"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You saved the configuration." stepKey="seeConfigurationSuccessMessage2"/>
+    </actionGroup>
+</actionGroups>
