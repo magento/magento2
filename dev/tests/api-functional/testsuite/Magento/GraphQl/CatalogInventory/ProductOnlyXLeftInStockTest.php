@@ -63,4 +63,29 @@ QUERY;
         $this->assertArrayHasKey('only_x_left_in_stock', $response['products']['items'][0]);
         $this->assertEquals(100, $response['products']['items'][0]['only_x_left_in_stock']);
     }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple_out_of_stock.php
+     * @magentoConfigFixture default_store cataloginventory/options/show_out_of_stock 1
+     */
+    public function testQueryProductOnlyXLeftInStockOutstock()
+    {
+        $productSku = 'simple-out-of-stock';
+
+        $query = <<<QUERY
+        {
+            products(filter: {sku: {eq: "{$productSku}"}})
+            {
+                items {
+                    only_x_left_in_stock            
+                }
+            }
+        }
+QUERY;
+        $response = $this->graphQlQuery($query);
+
+        $this->assertArrayHasKey(0, $response['products']['items']);
+        $this->assertArrayHasKey('only_x_left_in_stock', $response['products']['items'][0]);
+        $this->assertEquals(0, $response['products']['items'][0]['only_x_left_in_stock']);
+    }
 }
