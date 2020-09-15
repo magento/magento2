@@ -5,12 +5,15 @@
   * See COPYING.txt for license details.
   */
 -->
+
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminOpenCmsBlockActionGroup">
+    <actionGroup name="AdminMediaGalleryFolderSelectByFullPathActionGroup">
         <arguments>
-            <argument name="block_id" type="string"/>
+            <argument name="path" type="string"/>
         </arguments>
-        <amOnPage url="{{AdminEditBlockPage.url(block_id)}}" stepKey="openEditCmsBlock"/>
+        <wait time="2" stepKey="waitBeforeClickOnFolder"/>
+        <click selector="//li[@id='{{path}}']" stepKey="selectSubFolder" after="waitBeforeClickOnFolder"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForFolderContents"/>
     </actionGroup>
 </actionGroups>
