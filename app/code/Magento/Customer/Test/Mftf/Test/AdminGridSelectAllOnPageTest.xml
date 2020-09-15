@@ -12,7 +12,7 @@
             <stories value="Toggle select page."/>
             <title value="Toggle select page."/>
             <description value="Empty selected before and after search, like it works for filter"/>
-            <testCaseId value=""/>
+            <testCaseId value="MC-37660"/>
             <severity value="CRITICAL"/>
             <group value="uI"/>
         </annotations>
