@@ -535,4 +535,15 @@ class StorageTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals($result, $this->imagesStorage->uploadFile($targetPath, $type));
     }
+
+    /**
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     */
+    public function testUploadFileWithExcessivePath()
+    {
+        $path = 'target/path';
+        $targetPath = self::STORAGE_ROOT_DIR .str_repeat('a', 255) . $path;
+        $type = 'image';
+        $this->imagesStorage->uploadFile($targetPath, $type);
+    }
 }
