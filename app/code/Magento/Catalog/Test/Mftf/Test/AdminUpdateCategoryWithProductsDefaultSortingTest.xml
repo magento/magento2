@@ -38,6 +38,7 @@
         <!--Update Product Display Setting-->
         <waitForElementVisible selector="{{AdminCategoryDisplaySettingsSection.settingsHeader}}" stepKey="waitForDisplaySettingsSection"/>
         <conditionalClick selector="{{AdminCategoryDisplaySettingsSection.settingsHeader}}" dependentSelector="{{AdminCategoryDisplaySettingsSection.displayMode}}" visible="false" stepKey="openDisplaySettingsSection"/>
+        <waitForElementVisible selector="{{CategoryDisplaySettingsSection.productListCheckBox}}" stepKey="waitForAvailableProductListCheckbox"/>
         <click selector="{{CategoryDisplaySettingsSection.productListCheckBox}}" stepKey="enableTheAvailableProductList"/>
         <selectOption selector="{{CategoryDisplaySettingsSection.productList}}" parameterArray="['Product Name', 'Price']" stepKey="selectPrice"/>
         <waitForElementVisible selector="{{CategoryDisplaySettingsSection.defaultProductLisCheckBox}}" stepKey="waitForDefaultProductList"/>
@@ -54,9 +55,7 @@
         <see selector="{{AdminCategoryContentSection.categoryPageTitle}}" userInput="{{_defaultCategory.name}}" stepKey="seeCategoryNamePageTitle" />
 
         <!--Verify Category in store front page-->
-        <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="openStorefrontCategoryPage">
-            <argument name="categoryName" value="$createCategory.name$"/>
-        </actionGroup>
+        <amOnPage url="{{StorefrontCategoryPage.url($createCategory.custom_attributes[url_key]$)}}" stepKey="openStorefrontCategoryPage"/>
 
         <!--Verify Product in Category-->
         <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="assertSimpleProductOnCategoryPage">
