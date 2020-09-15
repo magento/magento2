@@ -22,18 +22,21 @@
         <before>
             <createData entity="SimpleSubCategory" stepKey="category"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
-            <!-- Prepare configuration -->
-            <magentoCLI command="config:set system/media_gallery_renditions/width 50" stepKey="prepareWidth"/>
-            <magentoCLI command="config:set system/media_gallery_renditions/height 50" stepKey="prepareHeight"/>
         </before>
         <after>
-            <!-- Restore configuration -->
-            <magentoCLI command="config:set system/media_gallery_renditions/width 1000" stepKey="restoreWidth"/>
-            <magentoCLI command="config:set system/media_gallery_renditions/height 1000" stepKey="restoreHeight"/>
             <!-- Delete uploaded image -->
-            <actionGroup ref="AdminOpenMediaGalleryFromCategoryImageUploaderActionGroup" stepKey="openMediaGalleryFromWysiwyg"/>
-            <actionGroup ref="AdminEnhancedMediaGalleryImageDeleteActionGroup" stepKey="removeSavedPreview"/>
-            <actionGroup ref="AdminAdobeStockMediaGalleryClearFiltersActionGroup" stepKey="clearFilters"/>
+            <actionGroup ref="AdminOpenCategoryGridPageActionGroup" stepKey="openCategoryPageFoDelete"/>
+            <actionGroup ref="AdminEditCategoryInGridPageActionGroup" stepKey="editCategoryItemForDelete">
+                <argument name="categoryName" value="$category.name$"/>
+            </actionGroup>
+            <actionGroup ref="AdminOpenMediaGalleryFromCategoryImageUploaderActionGroup" stepKey="openMediaGalleryForDelete"/>
+            <actionGroup ref="AdminEnhancedMediaGalleryEnableMassActionModeActionGroup" stepKey="enableMassActionToDeleteImages"/>
+            <actionGroup ref="AdminEnhancedMediaGallerySelectImageForMassActionActionGroup" stepKey="selectSecondImageToDelete">
+                <argument name="imageName" value="{{ImageUpload.fileName}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminEnhancedMediaGalleryClickDeleteImagesButtonActionGroup" stepKey="clickDeleteSelectedButton"/>
+            <actionGroup ref="AdminEnhancedMediaGalleryConfirmDeleteImagesActionGroup" stepKey="deleteImages"/>
+
             <!-- Delete category -->
             <deleteData createDataKey="category" stepKey="deleteCategory"/>
         </after>
@@ -46,18 +49,18 @@
 
         <!-- Add image to category from gallery -->
         <actionGroup ref="AdminOpenMediaGalleryFromCategoryImageUploaderActionGroup" stepKey="openMediaGallery"/>
-        <actionGroup ref="AdminAdobeStockOpenFromEnhancedMediaGalleryActionGroup" stepKey="openAdobeStockPanel"/>
-        <actionGroup ref="AdminSearchImagesOnModalActionGroup" stepKey="searchForUnlicensedImage">
-            <argument name="query" value="{{AdobeStockUnlicensedImage.id}}"/>
+        <actionGroup ref="AdminEnhancedMediaGalleryUploadImageActionGroup" stepKey="addCategoryImage">
+            <argument name="image" value="ImageUpload"/>
         </actionGroup>
-        <actionGroup ref="AdminAdobeStockExpandImagePreviewActionGroup" stepKey="expandImagePreview"/>
-        <actionGroup ref="AdminAdobeStockSavePreviewActionGroup" stepKey="saveImagePreview"/>
-        <actionGroup ref="AdminSaveAdobeStockImagePreviewActionGroup" stepKey="confirmSaveImagePreview"/>
-        <actionGroup ref="AdminMediaGalleryClickAddSelectedActionGroup" stepKey="addSelectedSavedPreview"/>
+        <actionGroup ref="AdminMediaGalleryClickImageInGridActionGroup" stepKey="selectImage">
+            <argument name="imageName" value="{{ImageUpload.fileName}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminMediaGalleryClickAddSelectedActionGroup" stepKey="addSelected"/>
+
 
         <!-- Assert added image size -->
         <actionGroup ref="AdminAssertImageUploadFileSizeThanActionGroup" stepKey="assertSize">
-            <argument name="fileSize" value="1 KB"/>
+            <argument name="fileSize" value="26 KB"/>
         </actionGroup>
     </test>
 </tests>
