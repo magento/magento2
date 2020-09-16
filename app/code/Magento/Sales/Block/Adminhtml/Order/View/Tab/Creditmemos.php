@@ -19,8 +19,8 @@ class Creditmemos extends \Magento\Framework\View\Element\Text\ListText implemen
     \Magento\Backend\Block\Widget\Tab\TabInterface
 {
      /**
-     * @var AuthorizationInterface
-     */
+      * @var AuthorizationInterface
+      */
     private $authorization;
 
     /**
@@ -40,7 +40,7 @@ class Creditmemos extends \Magento\Framework\View\Element\Text\ListText implemen
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getTabLabel()
     {
@@ -48,7 +48,7 @@ class Creditmemos extends \Magento\Framework\View\Element\Text\ListText implemen
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getTabTitle()
     {
@@ -56,7 +56,7 @@ class Creditmemos extends \Magento\Framework\View\Element\Text\ListText implemen
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function canShowTab()
     {
@@ -64,11 +64,10 @@ class Creditmemos extends \Magento\Framework\View\Element\Text\ListText implemen
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function isHidden()
     {
         return false;
     }
 }
-

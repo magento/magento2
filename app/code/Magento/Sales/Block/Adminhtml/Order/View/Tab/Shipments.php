@@ -59,7 +59,7 @@ class Shipments extends \Magento\Framework\View\Element\Text\ListText implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getTabLabel()
     {
@@ -67,7 +67,7 @@ class Shipments extends \Magento\Framework\View\Element\Text\ListText implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getTabTitle()
     {
@@ -75,7 +75,7 @@ class Shipments extends \Magento\Framework\View\Element\Text\ListText implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function canShowTab()
     {
@@ -83,7 +83,7 @@ class Shipments extends \Magento\Framework\View\Element\Text\ListText implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function isHidden()
     {
