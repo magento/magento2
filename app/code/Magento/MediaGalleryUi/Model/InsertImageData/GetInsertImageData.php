@@ -151,6 +151,7 @@ class GetInsertImageData
      */
     private function getImageRelativePath(string $content): string
     {
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         $mediaPath = parse_url($this->imagesHelper->getCurrentUrl(), PHP_URL_PATH);
         return substr($content, strlen($mediaPath));
     }
