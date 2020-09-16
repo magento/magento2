@@ -108,6 +108,9 @@ class QuoteManager
      */
     public function setGuest($checkQuote = false)
     {
+        $this->persistentSession->getSession()->removePersistentCookie();
+        $this->persistentSession->setSession(null);
+
         /** @var $quote Quote */
         $quote = $this->checkoutSession->getQuote();
         if ($quote && $quote->getId()) {
@@ -131,9 +134,6 @@ class QuoteManager
             $quote->collectTotals();
             $this->quoteRepository->save($quote);
         }
-
-        $this->persistentSession->getSession()->removePersistentCookie();
-        $this->persistentSession->setSession(null);
     }
 
     /**
