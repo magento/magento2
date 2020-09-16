@@ -138,8 +138,7 @@ define([
                 rowHeight = 0,
                 calcHeight = 0,
                 isLastRow = false,
-                rowNumber = 1,
-                currentWidth;
+                rowNumber = 1;
 
             this.setMinRatio();
 
