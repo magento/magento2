@@ -10,6 +10,7 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminOpenMediaGalleryFromPageNoEditorActionGroup">
         <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickExpandContent"/>
+        <scrollTo selector="{{CmsWYSIWYGSection.InsertImageBtn}}" x="0" y="-80" stepKey="scrollToInsertImageButton"/>
         <waitForElementVisible selector="{{CmsWYSIWYGSection.InsertImageBtn}}" stepKey="waitForInsertImageButton" />
         <click selector="{{CmsWYSIWYGSection.InsertImageBtn}}" stepKey="clickInsertImage" />
         <!-- wait for initial media gallery load, where the gallery chrome loads (and triggers loading modal) -->
