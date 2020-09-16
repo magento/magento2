@@ -11,10 +11,12 @@ namespace Magento\Cms\Test\Unit\Model\Wysiwyg;
 use Magento\Cms\Model\Wysiwyg\Validator;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Message\ManagerInterface;
+use Magento\Framework\Message\MessageInterface;
 use Magento\Framework\Validation\ValidationException;
 use Magento\Framework\Validator\HTML\WYSIWYGValidatorInterface;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
+use Magento\Framework\Message\Factory as MessageFactory;
 
 class ValidatorTest extends TestCase
 {
@@ -45,6 +47,13 @@ class ValidatorTest extends TestCase
     {
         $actuallyWarned = false;
 
+        $messageFactoryMock = $this->createMock(MessageFactory::class);
+        $messageFactoryMock->method('create')
+            ->willReturnCallback(
+                function () {
+                    return $this->getMockForAbstractClass(MessageInterface::class);
+                }
+            );
         $configMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $configMock->method('isSetFlag')
             ->with(Validator::CONFIG_PATH_THROW_EXCEPTION)
@@ -56,7 +65,7 @@ class ValidatorTest extends TestCase
         }
 
         $messagesMock = $this->getMockForAbstractClass(ManagerInterface::class);
-        $messagesMock->method('addWarningMessage')
+        $messagesMock->method('addUniqueMessages')
             ->willReturnCallback(
                 function () use (&$actuallyWarned): void {
                     $actuallyWarned = true;
@@ -65,7 +74,7 @@ class ValidatorTest extends TestCase
 
         $loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
 
-        $validator = new Validator($backendMock, $messagesMock, $configMock, $loggerMock);
+        $validator = new Validator($backendMock, $messagesMock, $configMock, $loggerMock, $messageFactoryMock);
         try {
             $validator->validate('content');
             $actuallyThrown = false;
