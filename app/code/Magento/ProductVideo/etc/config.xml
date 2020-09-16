@@ -12,7 +12,6 @@
                 <play_if_base>0</play_if_base>
                 <show_related>0</show_related>
                 <video_auto_restart>0</video_auto_restart>
-                <youtube_api_key/>
             </product_video>
         </catalog>
     </default>
