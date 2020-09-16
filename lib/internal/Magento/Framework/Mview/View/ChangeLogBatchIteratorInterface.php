@@ -20,11 +20,11 @@ interface ChangeLogBatchIteratorInterface
     /**
      * Walk through batches
      *
-     * @param array $changeLogData
-     * @param $fromVersionId
+     * @param ChangelogInterface $changelog
+     * @param int $fromVersionId
+     * @param int $lastVersionId
      * @param int $batchSize
      * @return mixed
-     * @throws ChangelogTableNotExistsException
      */
-    public function walk(array $changeLogData, $fromVersionId, int $batchSize);
+    public function walk(ChangelogInterface $changelog, int $fromVersionId, int $lastVersionId, int $batchSize);
 }
