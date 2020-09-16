@@ -96,6 +96,8 @@ class RemoveGuestPersistenceOnEmptyCartObserver implements ObserverInterface
         }
 
         if (!$cart || $cart->getItemsCount() == 0) {
+            $this->customerSession->setCustomerId(null)
+                ->setCustomerGroupId(null);
             $this->quoteManager->setGuest();
         }
     }
