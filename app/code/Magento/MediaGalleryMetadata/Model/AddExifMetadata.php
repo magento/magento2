@@ -16,14 +16,15 @@ use Magento\MediaGalleryMetadataApi\Model\FileInterfaceFactory;
 use Magento\MediaGalleryMetadataApi\Model\SegmentInterface;
 
 /**
- * Write iptc data to the file return updated FileInterface with iptc data
+ * Write exif data to the file return updated FileInterface with exif data.
  */
-class AddIptcMetadata
+class AddExifMetadata
 {
-    private const IPTC_SEGMENT_NAME = 'APP13';
-    private const IPTC_TITLE_SEGMENT = '2#005';
-    private const IPTC_DESCRIPTION_SEGMENT = '2#120';
-    private const IPTC_KEYWORDS_SEGMENT = '2#025';
+    private const EXIF_SEGMENT_NAME = 'eXIf';
+
+    private const EXIF_TITLE_SEGMENT = '0x010d';
+
+    private const EXIF_DESCRIPTION_SEGMENT = '0x010e';
 
     /**
      * @var DriverInterface
@@ -56,7 +57,7 @@ class AddIptcMetadata
     }
 
     /**
-     * Write metadata
+     * Write exif metadata.
      *
      * @param FileInterface $file
      * @param MetadataInterface $metadata
@@ -65,58 +66,55 @@ class AddIptcMetadata
      */
     public function execute(FileInterface $file, MetadataInterface $metadata, ?SegmentInterface $segment): FileInterface
     {
-        if (!is_callable('iptcembed') && !is_callable('iptcparse')) {
-            throw new LocalizedException(__('iptcembed() && iptcparse() must be enabled in php configuration'));
+        if (!is_callable('exif_read_data')) {
+            throw new LocalizedException(
+                __('exif_read_data() must be enabled in php configuration')
+            );
         }
 
-        $iptcData =  $segment ? iptcparse($segment->getData()) : [];
+        $exifData =  $segment ? $segment->getData() : [];
 
         if ($metadata->getTitle() !== null) {
-            $iptcData[self::IPTC_TITLE_SEGMENT][0] = $metadata->getTitle();
+            $exifData[self::EXIF_TITLE_SEGMENT][0] = $metadata->getTitle();
         }
 
         if ($metadata->getDescription() !== null) {
-            $iptcData[self::IPTC_DESCRIPTION_SEGMENT][0] = $metadata->getDescription();
+            $exifData[self::EXIF_DESCRIPTION_SEGMENT][0] = $metadata->getDescription();
         }
 
-        if ($metadata->getKeywords() !== null) {
-            $iptcData = $this->writeKeywords($metadata->getKeywords(), $iptcData);
-        }
-
-        $newData = '';
-
-        foreach ($iptcData as $tag => $values) {
+        $newExifData = '';
+        foreach ($exifData as $tag => $values) {
             foreach ($values as $value) {
-                $newData .= $this->iptcMaketag(2, (int) substr($tag, 2), $value);
+                $newExifData .= $this->exifMaketag(2, (int) substr($tag, 2), $value);
             }
         }
 
-        $this->writeFile($file->getPath(), iptcembed($newData, $file->getPath()));
+        $this->writeFile($file->getPath(), $newExifData);
 
-        $fileWithIptc = $this->fileReader->execute($file->getPath());
+        $fileWithExif = $this->fileReader->execute($file->getPath());
 
         return $this->fileFactory->create([
-                'path' => $fileWithIptc->getPath(),
-                'segments' => $this->getSegmentsWithIptc($fileWithIptc, $file)
+                'path' => $fileWithExif->getPath(),
+                'segments' => $this->getSegmentsWithExif($fileWithExif, $file)
         ]);
     }
 
     /**
-     * Return iptc segment from file.
+     * Return exif segments from file.
      *
-     * @param FileInterface $fileWithIptc
+     * @param FileInterface $fileWithExif
      * @param FileInterface $originFile
      * @return array
      */
-    private function getSegmentsWithIptc(FileInterface $fileWithIptc, FileInterface $originFile): array
+    private function getSegmentsWithExif(FileInterface $fileWithExif, FileInterface $originFile): array
     {
-        $segments = $fileWithIptc->getSegments();
+        $segments = $fileWithExif->getSegments();
         $originFileSegments =  $originFile->getSegments();
 
         foreach ($segments as $key => $segment) {
-            if ($segment->getName() === self::IPTC_SEGMENT_NAME) {
+            if ($segment->getName() === self::EXIF_SEGMENT_NAME) {
                 foreach ($originFileSegments as $originKey => $originSegment) {
-                    if ($originSegment->getName() === self::IPTC_SEGMENT_NAME) {
+                    if ($originSegment->getName() === self::EXIF_SEGMENT_NAME) {
                         $originFileSegments[$originKey] = $segments[$key];
                     }
                 }
@@ -127,22 +125,7 @@ class AddIptcMetadata
     }
 
     /**
-     * Write keywords field to the iptc segment.
-     *
-     * @param array $keywords
-     * @param array $iptcData
-     * @return array
-     */
-    private function writeKeywords(array $keywords, array $iptcData): array
-    {
-        foreach ($keywords as $key => $keyword) {
-            $iptcData[self::IPTC_KEYWORDS_SEGMENT][$key] = $keyword;
-        }
-        return $iptcData;
-    }
-
-    /**
-     * Write iptc data to the image directly to the file.
+     * Write the exif data to the image file directly.
      *
      * @param string $filePath
      * @param string $content
@@ -156,14 +139,14 @@ class AddIptcMetadata
     }
 
     /**
-     * Create new iptc tag text
+     * Create an exif tag.
      *
      * @param int $rec
      * @param int $tag
      * @param string $value
      * @return string
      */
-    private function iptcMaketag(int $rec, int $tag, string $value): string
+    private function exifMaketag(int $rec, int $tag, string $value): string
     {
         //phpcs:disable Magento2.Functions.DiscouragedFunction
         $length = strlen($value);

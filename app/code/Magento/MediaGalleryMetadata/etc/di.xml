@@ -69,6 +69,11 @@
             <argument name="driver" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
         </arguments>
     </type>
+    <type name="Magento\MediaGalleryMetadata\Model\AddExifMetadata">
+        <arguments>
+            <argument name="driver" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
+        </arguments>
+    </type>
     <virtualType name="Magento\MediaGalleryMetadata\Model\Jpeg\AddMetadata" type="Magento\MediaGalleryMetadata\Model\File\AddMetadata">
         <arguments>
             <argument name="fileReader" xsi:type="object">Magento\MediaGalleryMetadata\Model\Jpeg\ReadFile</argument>
@@ -76,6 +81,7 @@
             <argument name="segmentWriters" xsi:type="array">
                 <item name="xmp" xsi:type="object">Magento\MediaGalleryMetadata\Model\Jpeg\Segment\WriteXmp</item>
                 <item name="iptc" xsi:type="object">Magento\MediaGalleryMetadata\Model\Jpeg\Segment\WriteIptc</item>
+                <item name="exif" xsi:type="object">Magento\MediaGalleryMetadata\Model\Jpeg\Segment\WriteExif</item>
             </argument>
         </arguments>
     </virtualType>

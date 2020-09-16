@@ -14,6 +14,9 @@ use Magento\MediaGalleryMetadataApi\Api\AddMetadataInterface;
 use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterface;
 use Psr\Log\LoggerInterface;
 
+/**
+ * Responsible for the save the file metadata.
+ */
 class SaveMetadataToFile
 {
     /**
@@ -51,6 +54,7 @@ class SaveMetadataToFile
      *
      * @param string $path
      * @param MetadataInterface $data
+     * @throws LocalizedException
      */
     public function execute(string $path, MetadataInterface $data): void
     {
@@ -58,8 +62,14 @@ class SaveMetadataToFile
 
         try {
             $this->addMetadata->execute($absolutePath, $data);
-        } catch (LocalizedException $e) {
-            $this->logger->critical($e);
+        } catch (LocalizedException $exception) {
+            $this->logger->critical($exception);
+            throw new LocalizedException(
+                __(
+                    'Meta data not saved: %error_message',
+                    ['error_message' => $exception->getMessage()]
+                )
+            );
         }
     }
 }
