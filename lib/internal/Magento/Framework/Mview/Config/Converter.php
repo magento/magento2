@@ -29,7 +29,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             $data['action_class'] = $this->getAttributeValue($viewNode, 'class');
             $data['group'] = $this->getAttributeValue($viewNode, 'group');
             $data['store_scope'] = $this->getAttributeValue($viewNode, 'store_scope');
-            $data['attribute_scope'] = $this->getAttributeValue($viewNode, 'attribute_scope');
+            $data['iterator'] = $this->getAttributeValue($viewNode, 'iterator');
             $data['subscriptions'] = [];
 
             /** @var $childNode \DOMNode */
@@ -78,6 +78,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                     $name = $this->getAttributeValue($subscription, 'name');
                     $column = $this->getAttributeValue($subscription, 'entity_column');
                     $subscriptionModel = $this->getAttributeValue($subscription, 'subscription_model');
+
                     if (!empty($subscriptionModel)
                         && !in_array(
                             SubscriptionInterface::class,
@@ -91,11 +92,36 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                     $data['subscriptions'][$name] = [
                         'name' => $name,
                         'column' => $column,
-                        'subscription_model' => $subscriptionModel
+                        'subscription_model' => $subscriptionModel,
+                        'additional_columns' => $this->getAdditionalColumns($subscription),
+                        'processor' => $this->getAttributeValue($subscription, 'processor')
                     ];
                 }
                 break;
         }
         return $data;
+    }
+
+    /**
+     * Retrieve additional columns of subscription table
+     *
+     * @param \DOMNode $subscription
+     * @return array
+     */
+    private function getAdditionalColumns(\DOMNode $subscription): array
+    {
+        $additionalColumns = [];
+        foreach ($subscription->childNodes as $childNode) {
+            if ($childNode->nodeType != XML_ELEMENT_NODE || $childNode->nodeName != 'additionalColumns') {
+                continue;
+            }
+
+            $additionalColumns[] = [
+                'name' => $this->getAttributeValue($childNode, 'name'),
+                'cl_name' => $this->getAttributeValue($childNode, 'cl_name'),
+            ];
+        }
+
+        return $additionalColumns;
     }
 }

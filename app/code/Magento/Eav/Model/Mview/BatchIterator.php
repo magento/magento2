@@ -4,17 +4,19 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\Mview\View;
+namespace Magento\Eav\Mview;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Sql\Expression;
+use Magento\Framework\Mview\View\ChangeLogBatchIteratorInterface;
+use Magento\Framework\Mview\View\ChangelogInterface;
+use Magento\Framework\Mview\View\ChangelogTableNotExistsException;
 use Magento\Framework\Phrase;
 
 /**
- * Interface \Magento\Framework\Mview\View\ChangeLogBatchIterator
- *
+ * Class BatchIterator
  */
-class ChangeLogBatchIterator implements ChangeLogBatchIteratorInterface
+class BatchIterator implements ChangeLogBatchIteratorInterface
 {
     /**
      * @var ResourceConnection
@@ -36,25 +38,30 @@ class ChangeLogBatchIterator implements ChangeLogBatchIteratorInterface
     public function walk(ChangelogInterface $changelog, int $fromVersionId, int $toVersion, int $batchSize)
     {
         $connection = $this->resourceConnection->getConnection();
-        $changelogTableName = $this->resourceConnection->getTableName($changelog->getName());
-
-        if (!$connection->isTableExists($changelogTableName)) {
-            throw new ChangelogTableNotExistsException(new Phrase("Table %1 does not exist", [$changelogTableName]));
+        if (!$connection->isTableExists($changelog->getName())) {
+            throw new ChangelogTableNotExistsException(
+                new Phrase("Table %1 does not exist", [$changelog->getName()])
+            );
         }
-
         $select = $connection->select()->distinct(true)
             ->where(
                 'version_id > ?',
-                $fromVersionId
+                (int)$fromVersionId
             )
             ->where(
                 'version_id <= ?',
                 $toVersion
             )
-            ->group([$changelog->getColumnName()])
+            ->group([$changelog->getColumnName(), 'store_id'])
             ->limit($batchSize);
 
-        $select->from($changelogTableName, [$changelog->getColumnName()]);
+        $columns = [
+            $changelog->getColumnName(),
+            'attribute_ids' => new Expression('GROUP_CONCAT(attribute_id)'),
+            'store_id'
+        ];
+
+        $select->from($changelog->getName(), $columns);
         return $connection->fetchAll($select);
     }
 }

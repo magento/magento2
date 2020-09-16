@@ -11,6 +11,7 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\Pdo\Mysql;
 use Magento\Framework\DB\Ddl\Trigger;
 use Magento\Framework\DB\Ddl\TriggerFactory;
+use Magento\Framework\Mview\Config;
 use Magento\Framework\Mview\View\ChangelogInterface;
 use Magento\Framework\Mview\View\CollectionInterface;
 use Magento\Framework\Mview\View\StateInterface;
@@ -55,6 +56,10 @@ class SubscriptionTest extends TestCase
             ->method('quoteIdentifier')
             ->willReturnArgument(0);
 
+        $this->connectionMock->expects($this->any())
+            ->method('describeTable')
+            ->willReturn([]);
+
         $this->resourceMock->expects($this->atLeastOnce())
             ->method('getConnection')
             ->willReturn($this->connectionMock);
@@ -78,18 +83,29 @@ class SubscriptionTest extends TestCase
             true,
             []
         );
-
+        $this->viewMock->expects($this->any())
+            ->method('getId')
+            ->willReturn(1);
         $this->resourceMock->expects($this->any())
             ->method('getTableName')
             ->willReturnArgument(0);
-
+        $mviewConfigMock = $this->createMock(Config::class);
+        $mviewConfigMock->expects($this->any())
+            ->method('getView')
+            ->willReturn([
+                'attribute_scope' => false,
+                'store_scope' => false
+            ]);
+        $this->mviewConfig = $mviewConfigMock;
         $this->model = new Subscription(
             $this->resourceMock,
             $this->triggerFactoryMock,
             $this->viewCollectionMock,
             $this->viewMock,
             $this->tableName,
-            'columnName'
+            'columnName',
+            [],
+            $mviewConfigMock
         );
     }
 
@@ -122,7 +138,7 @@ class SubscriptionTest extends TestCase
         $triggerMock->expects($this->exactly(3))
             ->method('setName')
             ->with($triggerName)->willReturnSelf();
-        $triggerMock->expects($this->exactly(3))
+        $triggerMock->expects($this->any())
             ->method('getName')
             ->willReturn('triggerName');
         $triggerMock->expects($this->exactly(3))
@@ -167,7 +183,7 @@ class SubscriptionTest extends TestCase
             true,
             []
         );
-        $changelogMock->expects($this->exactly(3))
+        $changelogMock->expects($this->any())
             ->method('getName')
             ->willReturn('test_view_cl');
         $changelogMock->expects($this->exactly(3))
@@ -191,7 +207,7 @@ class SubscriptionTest extends TestCase
             true,
             []
         );
-        $otherChangelogMock->expects($this->exactly(3))
+        $otherChangelogMock->expects($this->any())
             ->method('getName')
             ->willReturn('other_test_view_cl');
         $otherChangelogMock->expects($this->exactly(3))
@@ -217,7 +233,7 @@ class SubscriptionTest extends TestCase
             ->method('getChangelog')
             ->willReturn($otherChangelogMock);
 
-        $this->viewMock->expects($this->exactly(3))
+        $this->viewMock->expects($this->any())
             ->method('getId')
             ->willReturn('this_id');
         $this->viewMock->expects($this->never())
@@ -235,7 +251,6 @@ class SubscriptionTest extends TestCase
         $this->connectionMock->expects($this->exactly(3))
             ->method('createTrigger')
             ->with($triggerMock);
-
         $this->model->create();
     }
 
@@ -244,7 +259,7 @@ class SubscriptionTest extends TestCase
         $triggerMock = $this->createMock(Trigger::class);
         $triggerMock->expects($this->exactly(3))
             ->method('setName')->willReturnSelf();
-        $triggerMock->expects($this->exactly(3))
+        $triggerMock->expects($this->any())
             ->method('getName')
             ->willReturn('triggerName');
         $triggerMock->expects($this->exactly(3))
@@ -271,7 +286,7 @@ class SubscriptionTest extends TestCase
             true,
             []
         );
-        $otherChangelogMock->expects($this->exactly(3))
+        $otherChangelogMock->expects($this->any())
             ->method('getName')
             ->willReturn('other_test_view_cl');
         $otherChangelogMock->expects($this->exactly(3))
@@ -297,7 +312,7 @@ class SubscriptionTest extends TestCase
             ->method('getChangelog')
             ->willReturn($otherChangelogMock);
 
-        $this->viewMock->expects($this->exactly(3))
+        $this->viewMock->expects($this->any())
             ->method('getId')
             ->willReturn('this_id');
         $this->viewMock->expects($this->never())
