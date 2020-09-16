@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Magento\Framework\Mview;
 
 use InvalidArgumentException;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
 use Magento\Framework\Mview\View\ChangeLogBatchIteratorInterface;
 use Magento\Framework\Mview\View\ChangelogTableNotExistsException;
@@ -27,11 +28,6 @@ class View extends DataObject implements ViewInterface
      * Default batch size for partial reindex
      */
     const DEFAULT_BATCH_SIZE = 1000;
-
-    /**
-     * Max versions to load from database at a time
-     */
-    private static $maxVersionQueryBatch = 100000;
 
     /**
      * @var string
@@ -306,52 +302,38 @@ class View extends DataObject implements ViewInterface
 
         $vsFrom = $lastVersionId;
         while ($vsFrom < $currentVersionId) {
-            if (isset($this->strategies[$this->changelog->getViewId()])) {
-                $changelogData = [
-                    'name' => $this->changelog->getName(),
-                    'column_name' => $this->changelog->getColumnName(),
-                    'view_id' => $this->changelog->getViewId()
-                ];
-                $ids = $this->strategies[$this->changelog->getViewId()]->walk($changelogData, $vsFrom, $batchSize);
-                $vsFrom += $batchSize;
-                $action->execute($ids);
-            } else {
-                $ids = $this->getBatchOfIds($vsFrom, $currentVersionId);
-                // We run the actual indexer in batches.
-                // Chunked AFTER loading to avoid duplicates in separate chunks.
-                $chunks = array_chunk($ids, $batchSize);
-                foreach ($chunks as $ids) {
-                    $action->execute($ids);
-                }
-            }
-
+            $iterator = $this->createIterator();
+            $ids = $iterator->walk($this->getChangelog(), $vsFrom, $currentVersionId, $batchSize);
+            $vsFrom += $batchSize;
+            $action->execute($ids);
         }
     }
 
     /**
-     * Get batch of entity ids
+     * Create and validate iterator class for changelog
      *
-     * @param int $lastVersionId
-     * @param int $currentVersionId
-     * @return array
+     * @return ChangeLogBatchIteratorInterface|mixed
+     * @throws Exception
      */
-    private function getBatchOfIds(int &$lastVersionId, int $currentVersionId): array
+    private function createIterator()
     {
-        $ids = [];
-        $versionBatchSize = self::$maxVersionQueryBatch;
-        $idsBatchSize = self::$maxVersionQueryBatch;
-        for ($vsFrom = $lastVersionId; $vsFrom < $currentVersionId; $vsFrom += $versionBatchSize) {
-            // Don't go past the current version for atomicity.
-            $versionTo = min($currentVersionId, $vsFrom + $versionBatchSize);
-            /** To avoid duplicate ids need to flip and merge the array */
-            $ids += array_flip($this->getChangelog()->getList($vsFrom, $versionTo));
-            $lastVersionId = $versionTo;
-            if (count($ids) >= $idsBatchSize) {
-                break;
-            }
+        $config = $this->config->getView($this->changelog->getViewId());
+        $iteratorClass = $config['iterator'];
+
+        if (!class_exists($iteratorClass)) {
+            throw new \Exception('Iterator class does not exist for view: ' . $this->changelog->getViewId());
         }
 
-        return array_keys($ids);
+        $iterator = ObjectManager::getInstance()->get($iteratorClass);
+
+        if (!$iterator instanceof ChangeLogBatchIteratorInterface) {
+            throw new \Exception(
+                'Iterator does not implement the right interface for view: ' .
+                $this->changelog->getViewId()
+            );
+        }
+
+        return $iterator;
     }
 
     /**

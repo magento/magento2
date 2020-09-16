@@ -28,7 +28,7 @@ class Changelog implements ChangelogInterface
     const COLUMN_NAME = 'entity_id';
 
     /**
-     * Version ID column name
+     * Column name for Version ID
      */
     const VERSION_ID_COLUMN_NAME = 'version_id';
 
@@ -94,7 +94,6 @@ class Changelog implements ChangelogInterface
      */
     public function create()
     {
-        $config = $this->mviewConfig->getView($this->getViewId());
         $changelogTableName = $this->resource->getTableName($this->getName());
         if (!$this->connection->isTableExists($changelogTableName)) {
             $table = $this->connection->newTable(
@@ -113,27 +112,37 @@ class Changelog implements ChangelogInterface
                 'Entity ID'
             );
 
-            if ($config && $config[self::ATTRIBUTE_SCOPE_SUPPORT]) {
-                $table->addColumn(
-                    self::ATTRIBUTE_COLUMN,
-                    \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
-                    null,
-                    ['unsigned' => true, 'nullable' => true],
-                    'Attribute ID'
-                );
-            }
-            if ($config && $config[self::STORE_SCOPE_SUPPORT]) {
-                $table->addColumn(
-                    self::STORE_COLUMN,
-                    \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
-                    null,
-                    ['unsigned' => true, 'nullable' => true],
-                    'Store ID'
-                );
+            foreach ($this->initAdditionalColumnData() as $columnData) {
+                /** @var AdditionalColumnProcessorInterface $processor */
+                $processor = $columnData['processor'];
+                $processor->processColumnForCLTable($table, $columnData['cl_name']);
             }
 
             $this->connection->createTable($table);
         }
+    }
+
+    /**
+     * Retrieve additional column data
+     *
+     * @return array
+     * @throws \Exception
+     */
+    private function initAdditionalColumnData(): array
+    {
+        $config = $this->mviewConfig->getView($this->getViewId());
+        $additionalColumns = [];
+
+        foreach ($config['subscriptions'] as $subscription) {
+            if (isset($subscription['additional_columns'])) {
+                foreach ($subscription['additional_columns'] as $additionalColumn) {
+                    //We are gatherig unique change log column names in order to create them later
+                    $additionalColumns[$additionalColumn['cl_name']] = $additionalColumn;
+                }
+            }
+        }
+
+        return $additionalColumns;
     }
 
     /**
