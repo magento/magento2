@@ -61,8 +61,7 @@
         <fillField selector="{{AdminOrderFormPaymentSection.fieldPurchaseOrderNumber}}" userInput="123456" stepKey="fillPONumber"/>
         <click selector="{{AdminOrderFormPaymentSection.blockPayment}}" stepKey="unfocus"/>
         <waitForPageLoad stepKey="waitForJavascriptToFinish"/>
-        <click selector="{{AdminOrderFormActionSection.submitOrder}}" stepKey="submitOrder"/>
-        <waitForPageLoad stepKey="waitForSubmitOrderPage"/>
+        <actionGroup ref="AdminOrderClickSubmitOrderActionGroup" stepKey="submitOrder" />
         <see stepKey="seeSuccessMessageForOrder" selector="{{AdminIndexManagementSection.successMessage}}" userInput="You created the order."/>
 
         <!-- Create Invoice -->
