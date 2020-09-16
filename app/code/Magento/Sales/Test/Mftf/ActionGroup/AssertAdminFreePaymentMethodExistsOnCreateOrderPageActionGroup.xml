@@ -7,12 +7,12 @@
 -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AssertAdminFreePaymentActionGroup">
+    <actionGroup name="AssertAdminFreePaymentMethodExistsOnCreateOrderPageActionGroup">
         <annotations>
             <description>Checks the free payment on the Admin Create Order page.</description>
         </annotations>
         <click selector="{{AdminOrderFormPaymentSection.linkPaymentOptions}}" stepKey="clickPaymentMethods"/>
-        <waitForAjaxLoad stepKey="waitForPaymentBlockLoad"/>
+        <waitForElementVisible selector="{{AdminOrderFormPaymentSection.freePaymentLabel}}" stepKey="waitForPaymentLabelVisible"/>
         <see selector="{{AdminOrderFormPaymentSection.freePaymentLabel}}" userInput="No Payment Information Required" stepKey="checkFreePaymentLabel"/>
     </actionGroup>
 </actionGroups>
