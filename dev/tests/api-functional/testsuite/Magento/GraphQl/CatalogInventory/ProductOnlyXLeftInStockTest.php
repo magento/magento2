@@ -65,12 +65,13 @@ QUERY;
     }
 
     /**
-     * @magentoApiDataFixture Magento/Catalog/_files/product_simple_out_of_stock.php
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple_out_of_stock_without_categories.php
+     * @magentoConfigFixture default_store cataloginventory/options/stock_threshold_qty 120
      * @magentoConfigFixture default_store cataloginventory/options/show_out_of_stock 1
      */
     public function testQueryProductOnlyXLeftInStockOutstock()
     {
-        $productSku = 'simple-out-of-stock';
+        $productSku = 'simple';
 
         $query = <<<QUERY
         {
