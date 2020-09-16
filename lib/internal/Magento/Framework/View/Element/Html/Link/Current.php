@@ -139,7 +139,7 @@ class Current extends Template
 
         if ($this->isCurrent()) {
             $html = '<li class="nav item current">';
-            $html .= '<strong>'
+            $html .= '<strong '.$this->getAttributesHtml().'>'
                 . $this->escapeHtml(__($this->getLabel()))
                 . '</strong>';
             $html .= '</li>';
