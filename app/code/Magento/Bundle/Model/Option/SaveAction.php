@@ -7,9 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\Bundle\Model\Option;
 
+use Magento\Bundle\Api\Data\LinkInterface;
 use Magento\Bundle\Api\Data\OptionInterface;
 use Magento\Bundle\Model\ResourceModel\Option;
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Bundle\Model\Product\Type;
@@ -51,20 +53,21 @@ class SaveAction
      * @param MetadataPool $metadataPool
      * @param Type $type
      * @param ProductLinkManagementInterface $linkManagement
-     * @param StoreManagerInterface $storeManager
+     * @param StoreManagerInterface|null $storeManager
      */
     public function __construct(
         Option $optionResource,
         MetadataPool $metadataPool,
         Type $type,
         ProductLinkManagementInterface $linkManagement,
-        StoreManagerInterface $storeManager
+        ?StoreManagerInterface $storeManager = null
     ) {
         $this->optionResource = $optionResource;
         $this->metadataPool = $metadataPool;
         $this->type = $type;
         $this->linkManagement = $linkManagement;
-        $this->storeManager = $storeManager;
+        $this->storeManager = $storeManager
+            ?: ObjectManager::getInstance()->get(StoreManagerInterface::class);
     }
 
     /**
@@ -78,7 +81,7 @@ class SaveAction
      */
     public function save(ProductInterface $bundleProduct, OptionInterface $option)
     {
-        $metadata = $this->metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
+        $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
 
         $option->setStoreId($bundleProduct->getStoreId());
         $parentId = $bundleProduct->getData($metadata->getLinkField());
@@ -117,7 +120,7 @@ class SaveAction
             throw new CouldNotSaveException(__("The option couldn't be saved."), $e);
         }
 
-        /** @var \Magento\Bundle\Api\Data\LinkInterface $linkedProduct */
+        /** @var LinkInterface $linkedProduct */
         foreach ($linksToAdd as $linkedProduct) {
             $this->linkManagement->addChild($bundleProduct, $option->getOptionId(), $linkedProduct);
         }
@@ -130,8 +133,8 @@ class SaveAction
     /**
      * Update option selections
      *
-     * @param \Magento\Catalog\Api\Data\ProductInterface $product
-     * @param \Magento\Bundle\Api\Data\OptionInterface $option
+     * @param ProductInterface $product
+     * @param OptionInterface $option
      * @return void
      */
     private function updateOptionSelection(ProductInterface $product, OptionInterface $option)
@@ -151,7 +154,7 @@ class SaveAction
                     $linksToUpdate[] = $productLink;
                 }
             }
-            /** @var \Magento\Bundle\Api\Data\LinkInterface[] $linksToDelete */
+            /** @var LinkInterface[] $linksToDelete */
             $linksToDelete = $this->compareLinks($existingLinks, $linksToUpdate);
         }
         foreach ($linksToUpdate as $linkedProduct) {
@@ -172,8 +175,8 @@ class SaveAction
     /**
      * Compute the difference between given arrays.
      *
-     * @param \Magento\Bundle\Api\Data\LinkInterface[] $firstArray
-     * @param \Magento\Bundle\Api\Data\LinkInterface[] $secondArray
+     * @param LinkInterface[] $firstArray
+     * @param LinkInterface[] $secondArray
      *
      * @return array
      */
