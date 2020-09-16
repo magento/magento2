@@ -19,6 +19,7 @@ class Config
 {
     private const TABLE_CORE_CONFIG_DATA = 'core_config_data';
     private const XML_PATH_ENABLED = 'system/media_gallery/enabled';
+    private const XML_PATH_MEDIA_GALLERY_RENDITIONS_ENABLED_PATH = 'system/media_gallery_renditions/enabled';
     private const XML_PATH_MEDIA_GALLERY_RENDITIONS_WIDTH_PATH = 'system/media_gallery_renditions/width';
     private const XML_PATH_MEDIA_GALLERY_RENDITIONS_HEIGHT_PATH = 'system/media_gallery_renditions/height';
 
@@ -52,6 +53,16 @@ class Config
     public function isEnabled(): bool
     {
         return $this->scopeConfig->isSetFlag(self::XML_PATH_ENABLED);
+    }
+
+    /**
+     * Check if the media gallery renditions is enabled
+     *
+     * @return bool
+     */
+    public function isMediaGalleryRenditionsEnabled(): bool
+    {
+        return $this->scopeConfig->isSetFlag(self::XML_PATH_MEDIA_GALLERY_RENDITIONS_ENABLED_PATH);
     }
 
     /**

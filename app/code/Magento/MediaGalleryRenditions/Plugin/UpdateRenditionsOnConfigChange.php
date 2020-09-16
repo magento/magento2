@@ -15,6 +15,7 @@ use Magento\MediaGalleryRenditions\Model\Queue\ScheduleRenditionsUpdate;
  */
 class UpdateRenditionsOnConfigChange
 {
+    private const XML_PATH_MEDIA_GALLERY_RENDITIONS_ENABLE_PATH = 'system/media_gallery_renditions/enabled';
     private const XML_PATH_MEDIA_GALLERY_RENDITIONS_WIDTH_PATH = 'system/media_gallery_renditions/width';
     private const XML_PATH_MEDIA_GALLERY_RENDITIONS_HEIGHT_PATH = 'system/media_gallery_renditions/height';
 
@@ -41,7 +42,8 @@ class UpdateRenditionsOnConfigChange
      */
     public function afterSave(Value $config, Value $result): Value
     {
-        if ($this->isRenditionsValue($result) && $result->isValueChanged()) {
+        if ($this->isMediaGalleryRenditionsEnabled($result) && $this->isRenditionsValue($result)
+            && $result->isValueChanged()) {
             $this->scheduleRenditionsUpdate->execute();
         }
 
@@ -57,6 +59,18 @@ class UpdateRenditionsOnConfigChange
     private function isRenditionsValue(Value $value): bool
     {
         return $value->getPath() === self::XML_PATH_MEDIA_GALLERY_RENDITIONS_WIDTH_PATH
-            || $value->getPath() === self::XML_PATH_MEDIA_GALLERY_RENDITIONS_HEIGHT_PATH;
+            || $value->getPath() === self::XML_PATH_MEDIA_GALLERY_RENDITIONS_HEIGHT_PATH
+            || $value->getPath() === self::XML_PATH_MEDIA_GALLERY_RENDITIONS_ENABLE_PATH;
+    }
+
+    /**
+     * Determine if media gallery renditions is enabled based on configuration value
+     *
+     * @param Value $value
+     * @return bool
+     */
+    private function isMediaGalleryRenditionsEnabled(Value $value): bool
+    {
+        return $value->getPath() === self::XML_PATH_MEDIA_GALLERY_RENDITIONS_ENABLE_PATH && $value->getValue();
     }
 }
