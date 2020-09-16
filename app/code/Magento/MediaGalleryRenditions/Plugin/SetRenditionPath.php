@@ -91,7 +91,7 @@ class SetRenditionPath
             $storeId
         ];
 
-        if (!$this->config->isEnabled() || !$this->config->isMediaGalleryRenditionsEnabled()) {
+        if (!$this->config->isEnabled()) {
             return $arguments;
         }
 
