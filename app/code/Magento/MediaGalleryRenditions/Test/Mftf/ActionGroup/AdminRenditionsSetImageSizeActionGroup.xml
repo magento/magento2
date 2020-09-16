@@ -15,6 +15,5 @@
         </arguments>
         <magentoCLI command="config:set system/media_gallery_renditions/width {{width}}" stepKey="setWidth"/>
         <magentoCLI command="config:set system/media_gallery_renditions/height {{height}}" stepKey="setHeight"/>
-        <magentoCLI command="cache:flush config" stepKey="cleanCache"/>
     </actionGroup>
 </actionGroups>
