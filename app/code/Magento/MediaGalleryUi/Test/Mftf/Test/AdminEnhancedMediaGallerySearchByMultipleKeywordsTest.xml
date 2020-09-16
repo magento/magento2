@@ -23,24 +23,52 @@
         </before>
         <after>
             <actionGroup ref="AdminAdobeStockMediaGalleryClearFiltersActionGroup" stepKey="clearFilters"/>
-            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
-            <actionGroup ref="AdminEnhancedMediaGalleryImageDeleteActionGroup" stepKey="deleteImage"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAllAdminDataGridToDefaultView"/>
         </after>
-        <actionGroup ref="AdminEnhancedMediaGalleryUploadImageActionGroup" stepKey="uploadImage">
+        <actionGroup ref="AdminEnhancedMediaGalleryUploadImageActionGroup" stepKey="uploadFirstImage">
             <argument name="image" value="ImageUpload3"/>
         </actionGroup>
-        <actionGroup ref="AdminAdobeStockMediaGallerySearchByKeywordActionGroup" stepKey="searchImage">
+        <actionGroup ref="AdminAdobeStockMediaGallerySearchByKeywordActionGroup" stepKey="searchFirstImage">
             <argument name="keyword" value="{{ImageMetadata.fileName}}"/>
         </actionGroup>
-        <actionGroup ref="AdminAssertImageInStandaloneMediaGalleryActionGroup" stepKey="assertImageIsAvailableInStandaloneGridUsingImageName">
+        <actionGroup ref="AdminAssertImageInStandaloneMediaGalleryActionGroup" stepKey="assertFirstImageIsAvailableInStandaloneGridUsingImageName">
             <argument name="imageName" value="{{ImageMetadata.file}}"/>
         </actionGroup>
-        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminFirstDataGridToDefaultView"/>
+        <actionGroup ref="AdminEnhancedMediaGalleryEditImageDetailsActionGroup" stepKey="editFirstImage"/>
+        <actionGroup ref="AdminMediaGalleryEditAssetAddKeywordActionGroup" stepKey="setFirstImageKeywords">
+            <argument name="keyword" value="UpdatedImageDetails.keyword"/>
+        </actionGroup>
+        <actionGroup ref="AdminEnhancedMediaGalleryImageDetailsSaveActionGroup" stepKey="saveFirstImage">
+            <argument name="image" value="ImageMetadata"/>
+        </actionGroup>
+        <actionGroup ref="AdminEnhancedMediaGalleryUploadImageActionGroup" stepKey="uploadSecondImage">
+            <argument name="image" value="ImageUpload"/>
+        </actionGroup>
+        <actionGroup ref="AdminAdobeStockMediaGallerySearchByKeywordActionGroup" stepKey="searchSecondImage">
+            <argument name="keyword" value="{{SearchImageData.fileName}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertImageInStandaloneMediaGalleryActionGroup" stepKey="assertSecondImageIsAvailableInStandaloneGridUsingImageName">
+            <argument name="imageName" value="{{SearchImageData.file}}"/>
+        </actionGroup>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminSecondDataGridToDefaultView"/>
+        <actionGroup ref="AdminEnhancedMediaGalleryEditImageDetailsActionGroup" stepKey="editSecondImage"/>
+        <actionGroup ref="AdminMediaGalleryEditAssetAddKeywordActionGroup" stepKey="setSecondImageKeywords">
+            <argument name="keyword" value="UpdatedImageDetails.second_keyword"/>
+        </actionGroup>
+        <actionGroup ref="AdminEnhancedMediaGalleryImageDetailsSaveActionGroup" stepKey="saveSecondImage">
+            <argument name="image" value="SearchImageData"/>
+        </actionGroup>
         <actionGroup ref="AdminAdobeStockMediaGallerySearchByKeywordActionGroup" stepKey="searchImageByKeyword">
-            <argument name="keyword" value="{{ImageMetadata.keywords}}"/>
+            <argument name="keyword" value="{{SearchImageData.searchKeywords}}"/>
         </actionGroup>
-        <actionGroup ref="AdminAssertImageInStandaloneMediaGalleryActionGroup" stepKey="assertImageIsAvailableInStandaloneGridUsingKeyword">
-            <argument name="imageName" value="{{ImageMetadata.file}}"/>
-        </actionGroup>
+<!--        <actionGroup ref="AdminAssertImageInStandaloneMediaGalleryActionGroup" stepKey="assertFirstImageIsAvailableInStandaloneGridUsingKeyword">-->
+<!--            <argument name="imageName" value="{{ImageMetadata.file}}"/>-->
+<!--        </actionGroup>-->
+<!--        <actionGroup ref="AdminAssertImageInStandaloneMediaGalleryActionGroup" stepKey="assertSecondImageIsAvailableInStandaloneGridUsingKeyword">-->
+<!--            <argument name="imageName" value="{{SearchImageData.file}}"/>-->
+<!--        </actionGroup>-->
+        <actionGroup ref="AdminEnhancedMediaGalleryImageDeleteActionGroup" stepKey="deleteFirstImage"/>
+        <actionGroup ref="AdminEnhancedMediaGalleryImageDeleteActionGroup" stepKey="deleteSecondImage"/>
     </test>
 </tests>

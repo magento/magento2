@@ -17,6 +17,8 @@ class Keyword implements CustomFilterInterface
     private const TABLE_ALIAS = 'main_table';
     private const TABLE_KEYWORDS = 'media_gallery_asset_keyword';
     private const TABLE_ASSET_KEYWORD = 'media_gallery_keyword';
+    private const PATTERN_VALID_CHARACTERS = '/[^A-Za-z0-9\_\.\,\-]/';
+    private const PATTERN_COMMA = '/,+/';
 
     /**
      * @var ResourceConnection
@@ -92,8 +94,8 @@ class Keyword implements CustomFilterInterface
      */
     public function splitRequestString(string $value): array
     {
-        $escapedKeywords = preg_replace('/[^A-Za-z0-9\_\.\,\-]/', ',', $value);
-        $formattedKeywords = preg_replace('/,+/', ',', $escapedKeywords);
+        $escapedKeywords = preg_replace(self::PATTERN_VALID_CHARACTERS, ',', $value);
+        $formattedKeywords = preg_replace(self::PATTERN_COMMA, ',', $escapedKeywords);
 
         $keywordValues = [];
         if (!is_array($value)) {
