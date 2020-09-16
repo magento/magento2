@@ -11,6 +11,7 @@
         "magento/module-checkout": "*",
         "magento/module-customer": "*",
         "magento/module-store": "*",
+        "magento/module-authorization": "*",
         "laminas/laminas-captcha": "^2.7.1",
         "laminas/laminas-db": "^2.8.2",
         "laminas/laminas-session": "^2.7.3"

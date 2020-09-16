@@ -15,7 +15,8 @@
         "magento/module-sales": "*",
         "magento/module-store": "*",
         "magento/module-tax": "*",
-        "magento/module-theme": "*"
+        "magento/module-theme": "*",
+        "magento/module-captcha": "*"
     },
     "type": "magento2-module",
     "license": [
