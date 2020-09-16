@@ -4,11 +4,11 @@
  * See COPYING.txt for license details.
  */
 
-use Magento\Backend\Block\Template;
+use Magento\MediaGalleryUi\Block\Adminhtml\ImageDetails;
 use Magento\Framework\Escaper;
 
 // phpcs:disable Magento2.Files.LineLength, Generic.Files.LineLength
-/** @var Template $block */
+/** @var ImageDetails $block */
 /** @var Escaper $escaper */
 
 ?>
@@ -73,37 +73,10 @@ use Magento\Framework\Escaper;
                         "modalWindowSelector": ".media-gallery-image-details",
                         "imageModelName" : "media_gallery_listing.media_gallery_listing.media_gallery_columns.thumbnail_url",
                         "mediaGalleryImageDetailsName": "mediaGalleryImageDetails",
-                        "actionsList": [
-                            {
-                                "title": "<?= $escaper->escapeJs(__('Edit Details')); ?>",
-                                "handler": "editImageAction",
-                                "name": "edit",
-                                "classes": "action-default scalable edit action-quaternary"
-                            },
-                            {
-                                "title": "<?= $escaper->escapeJs(__('Cancel')); ?>",
-                                "handler": "closeModal",
-                                "name": "cancel",
-                                "classes": "action-default scalable cancel action-quaternary"
-                            },
-                            {
-                                "title": "<?= $escaper->escapeJs(__('Delete Image')); ?>",
-                                "handler": "deleteImageAction",
-                                "name": "delete",
-                                "classes": "action-default scalable delete action-quaternary"
-                            },
-                            {
-                                "title": "<?= $escaper->escapeJs(__('Add Image')); ?>",
-                                "handler": "addImage",
-                                "name": "add-image",
-                                "classes": "scalable action-primary add-image-action"
-                            }
-                        ]
+                        "actionsList": <?= /* @noEscape */ $block->getActionsJson() ?>
                     }
                 }
             }
         }
     }
 </script>
-
-

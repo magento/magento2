@@ -12,8 +12,8 @@
         <annotations>
             <description>Asserts that massaction mode is terminated</description>
         </annotations>
-       
 
+        <dontSeeElement selector="{{AdminMediaGalleryHeaderButtonsSection.addSelected}}" stepKey="verifyAddSelectedButtonNotVisible"/>
         <dontSeeElement selector="{{AdminEnhancedMediaGalleryMassActionSection.totalSelected}}" stepKey="verifyTeminateMassAction"/>
     </actionGroup>
 </actionGroups>
