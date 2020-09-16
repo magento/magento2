@@ -60,7 +60,6 @@ class PriceRange implements ResolverInterface
 
         /** @var Product $product */
         $product = $value['model'];
-        $product->unsetData('minimal_price');
 
         $requestedFields = $info->getFieldSelection(10);
         $returnArray = [];
