@@ -32,7 +32,7 @@
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <createData entity="DisabledMinimumOrderAmount" stepKey="disableMinimumOrderAmount"/>
             <actionGroup ref="ClearCacheActionGroup" stepKey="clearCacheAfter"/>
-            <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
         </after>
 
         <!--Admin creates order-->
@@ -63,9 +63,7 @@
         <see selector="{{AdminOrderFormTotalSection.total('Subtotal')}}" userInput="${{AdminOrderSimpleProduct.subtotal}}" stepKey="seeOrderSubTotal"/>
         <see selector="{{AdminOrderFormTotalSection.total('Shipping')}}" userInput="${{AdminOrderSimpleProduct.shipping}}" stepKey="seeOrderShipping"/>
         <see selector="{{AdminOrderFormTotalSection.grandTotal}}" userInput="${{AdminOrderSimpleProduct.grandTotal}}" stepKey="seeCorrectGrandTotal"/>
-
-        <!--Submit Order and verify information-->
-        <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" stepKey="clickSubmitOrder"/>
+        <actionGroup ref="AdminOrderClickSubmitOrderActionGroup" stepKey="clickSubmitOrder" />
         <seeInCurrentUrl url="{{AdminOrderDetailsPage.url}}" stepKey="seeViewOrderPage"/>
 
         <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="You created the order." stepKey="seeSuccessMessage"/>

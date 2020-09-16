@@ -21,7 +21,7 @@
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
-            <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
         </after>
         <!--Create attribute set-->
         <actionGroup ref="CreateDefaultAttributeSetActionGroup" stepKey="createDefaultAttributeSet">
@@ -143,7 +143,7 @@
         <selectOption selector="{{AdminProductFormBundleSection.countryOfManufactureDropDown}}" userInput="France" stepKey="countryOfManufactureDropDown"/>
 
         <!--Save the product-->
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveButton"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSaveButton"/>
         <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="messageYouSavedTheProductIsShown"/>
 
         <!--Verify form was filled out correctly after edit-->

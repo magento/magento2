@@ -19,5 +19,6 @@
         <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFiltersInitial"/>
         <fillField selector="{{AdminProductGridFilterSection.keywordSearch}}" userInput="{{keyword}}" stepKey="fillKeywordSearchField"/>
         <click selector="{{AdminProductGridFilterSection.keywordSearchButton}}" stepKey="clickKeywordSearch"/>
+        <waitForPageLoad stepKey="waitForProductSearch"/>
     </actionGroup>
 </actionGroups>
