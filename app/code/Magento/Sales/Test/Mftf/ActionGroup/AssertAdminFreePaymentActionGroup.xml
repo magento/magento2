@@ -13,6 +13,6 @@
         </annotations>
         <click selector="{{AdminOrderFormPaymentSection.linkPaymentOptions}}" stepKey="clickPaymentMethods"/>
         <waitForAjaxLoad stepKey="waitForPaymentBlockLoad"/>
-        <see selector="{{AdminOrderFormPaymentSection.freePaymentLabel}}" userInput="No Payment Information Required" stepKey="checkFreeShipping"/>
+        <see selector="{{AdminOrderFormPaymentSection.freePaymentLabel}}" userInput="No Payment Information Required" stepKey="checkFreePaymentLabel"/>
     </actionGroup>
 </actionGroups>
