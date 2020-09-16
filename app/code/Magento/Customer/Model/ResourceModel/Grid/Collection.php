@@ -101,12 +101,12 @@ class Collection extends SearchResult
         $fields = $this->getFulltextIndexColumns();
         $whereCondition = '';
         foreach ($fields as $key => $field) {
-            $field = $field === 'billing_region'
+            $fieldWithTableAlias = $field === 'billing_region'
                 ? $this->getRegionNameExpression()
                 : 'main_table.' . $field;
             $condition = $this->_getConditionSql(
-                $this->getConnection()->quoteIdentifier($field),
-                $this->getCondition($value)
+                $this->getConnection()->quoteIdentifier($fieldWithTableAlias),
+                $this->getCondition($field, $value)
             );
 
             $whereCondition .= ($key === 0 ? '' : ' OR ') . $condition;
@@ -183,12 +183,13 @@ class Collection extends SearchResult
     /**
      * Returns condition array data
      *
+     * @param string $field
      * @param string $value
      * @return string[]
      */
-    private function getCondition(string $value): array
+    private function getCondition(string $field, string $value): array
     {
-        return preg_match(self::EXACT_SEARCH_PATTERN, $value)
+        return $field === 'email' && preg_match(self::EXACT_SEARCH_PATTERN, $value)
             ? ['eq' => trim($value, '"')]
             : ['like' => "%$value%"];
     }
