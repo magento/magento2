@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminEnhancedMediaGalleryFiltersSection">
+        <element name="filtersButton" type="button" selector="//div[@class='media-gallery-container']//button[@data-action='grid-filter-expand']"/>
+        <element name="categoryGridFiltersButton" type="button" selector="//div[@class='media-gallery-category-container']//button[@data-action='grid-filter-expand']"/>
+        <element name="sourceFilterValue" type="select" parameterized="true" selector="//div[@class='media-gallery-container']//select[@name='source']//option[@value='{{option}}']"/>
+        <element name="applyFilters" type="button" selector="//div[@class='media-gallery-container']//button[@data-action='grid-filter-apply']"/>
+        <element name="categoryGridApplyFilters" type="button" selector="//div[@class='media-gallery-category-container']//button[@data-action='grid-filter-apply']"/>
+        <element name="activeFilter" type="text" selector="//div[@class='media-gallery-container']//div[@class='admin__current-filters-list-wrap']//span[contains( ., '{{filter}}')]" parameterized="true"/>
+        <element name="activeFilterPlaceholder" type="text" selector="//div[@class='media-gallery-container']//div[@class='admin__current-filters-list-wrap']"/>
+        <element name="usedInSelectDropdown" type="text" selector="//label[@class='admin__form-field-label']/span[text()='Show Images Used In']/parent::*/parent::div/div//div[@class='admin__action-multiselect-text' and text()='Select...']"/>
+        <element name="usedInEntityType" type="text" selector="//label[@class='admin__action-multiselect-label']/span[text()='{{entityType}}']" parameterized="true"/>
+        <element name="usedInDoneButton" type="button" selector="//div[@class='admin__action-multiselect-actions-wrap']/button/span[text()='Done']"/>
+        <element name="selectFilter" type="button" selector="//label[@class='admin__form-field-label']/span[text()='{{filterLabel}}']/parent::*/parent::div/div[@class='admin__form-field-control']/select" parameterized="true"/>
+        <element name="selectFilterOption" type="button" selector="//label[@class='admin__form-field-label']/span[text()='{{filterLabel}}']/parent::*/parent::div/div[@class='admin__form-field-control']/select/option[@data-title='{{optionLabel}}']" parameterized="true"/>
+        <element name="searchOptionsFilter" type="select" selector="//div[label/span[contains(text(), '{{filterName}}')]]//div[@class='action-select admin__action-multiselect']" parameterized="true" timeout="30"/>
+        <element name="searchOptionsFilterInput" type="input" selector="//div[label/span[contains(text(), '{{filterName}}')]]//input[@data-role='advanced-select-text']" parameterized="true" timeout="30"/>
+        <element name="searchOptionsFilterOption" type="text" selector="//div[label/span[contains(text(), '{{filterName}}')]]//label[@class='admin__action-multiselect-label']/span[text()='{{optionName}}']" parameterized="true" timeout="30"/>
+        <element name="searchOptionsFilterDone" type="button" selector="//div[label/span[contains(text(), '{{filterName}}')]]//button[@data-action='close-advanced-select']" parameterized="true"/>
+        <element name="duplicatedFilterCheckbox" type="button" selector="//input[@name='duplicated']"/>
+        <element name="activeFilterValue" type="text" selector="//div[@class='media-gallery-container']//div[@class='admin__current-filters-list-wrap']//li//span[contains(text(), '{{filterPlaceholder}}')]" parameterized="true"/>
+    </section>
+</sections>

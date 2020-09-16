@@ -3,41 +3,44 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
+use Magento\Customer\Model\Address;
+use Magento\Customer\Model\Customer;
+use Magento\Customer\Model\ResourceModel\Customer as CustomerResource;
+use Magento\Framework\Registry;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\ObjectManager;
+
+/** @var $objectManager ObjectManager */
+$objectManager = Bootstrap::getObjectManager();
+
 $customers = [];
 
-//Create customer
-$customer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-    \Magento\Customer\Model\Customer::class
-);
-$customer->setWebsiteId(
-    1
-)->setEntityId(
-    1
-)->setEntityTypeId(
-    1
-)->setAttributeSetId(
-    0
-)->setEmail(
-    'BetsyParker@example.com'
-)->setPassword(
-    'password'
-)->setGroupId(
-    1
-)->setStoreId(
-    1
-)->setIsActive(
-    1
-)->setFirstname(
-    'Betsy'
-)->setLastname(
-    'Parker'
-)->setGender(
-    2
-);
+/**
+ * @var $customer Customer
+ * @var $customerResource CustomerResource
+ */
+$customer = $objectManager->create(Customer::class);
+$customerResource = $objectManager->create(CustomerResource::class);
+
+$customer->setWebsiteId(1)
+    ->setEntityId(1)
+    ->setEntityTypeId(1)
+    ->setAttributeSetId(0)
+    ->setEmail('BetsyParker@example.com')
+    ->setPassword('password')
+    ->setGroupId(1)
+    ->setStoreId(1)
+    ->setIsActive(1)
+    ->setFirstname('Betsy')
+    ->setLastname('Parker')
+    ->setGender(2);
 $customer->isObjectNew(true);
 
 // Create address
-$address = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Customer\Model\Address::class);
+$address = $objectManager->create(Address::class);
 //  default_billing and default_shipping information would not be saved, it is needed only for simple check
 $address->addData(
     [
@@ -56,46 +59,31 @@ $address->addData(
 
 // Assign customer and address
 $customer->addAddress($address);
-$customer->save();
+$customerResource->save($customer);
 
 // Mark last address as default billing and default shipping for current customer
 $customer->setDefaultBilling($address->getId());
 $customer->setDefaultShipping($address->getId());
-$customer->save();
+$customerResource->save($customer);
 
 $customers[] = $customer;
 
-$customer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-    \Magento\Customer\Model\Customer::class
-);
-$customer->setWebsiteId(
-    1
-)->setEntityId(
-    2
-)->setEntityTypeId(
-    1
-)->setAttributeSetId(
-    0
-)->setEmail(
-    'AnthonyNealy@example.com'
-)->setPassword(
-    'password'
-)->setGroupId(
-    1
-)->setStoreId(
-    1
-)->setIsActive(
-    1
-)->setFirstname(
-    'Anthony'
-)->setLastname(
-    'Nealy'
-)->setGender(
-    1
-);
+$customer = $objectManager->create(Customer::class);
+$customer->setWebsiteId(1)
+    ->setEntityId(2)
+    ->setEntityTypeId(1)
+    ->setAttributeSetId(0)
+    ->setEmail('AnthonyNealy@example.com')
+    ->setPassword('password')
+    ->setGroupId(1)
+    ->setStoreId(1)
+    ->setIsActive(1)
+    ->setFirstname('Anthony')
+    ->setLastname('Nealy')
+    ->setGender(1);
 $customer->isObjectNew(true);
 
-$address = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Customer\Model\Address::class);
+$address = $objectManager->create(Address::class);
 $address->addData(
     [
         'firstname' => 'Anthony',
@@ -112,7 +100,7 @@ $address->addData(
 );
 $customer->addAddress($address);
 
-$address = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Customer\Model\Address::class);
+$address = $objectManager->create(Address::class);
 $address->addData(
     [
         'firstname' => 'Anthony',
@@ -129,45 +117,30 @@ $address->addData(
 );
 $customer->addAddress($address);
 
-$customer->save();
+$customerResource->save($customer);
 
 $customer->setDefaultBilling($address->getId());
 $customer->setDefaultShipping($address->getId());
-$customer->save();
+$customerResource->save($customer);
 
 $customers[] = $customer;
 
-$customer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-    \Magento\Customer\Model\Customer::class
-);
-$customer->setWebsiteId(
-    1
-)->setEntityId(
-    3
-)->setEntityTypeId(
-    1
-)->setAttributeSetId(
-    0
-)->setEmail(
-    'LoriBanks@example.com'
-)->setPassword(
-    'password'
-)->setGroupId(
-    1
-)->setStoreId(
-    1
-)->setIsActive(
-    1
-)->setFirstname(
-    'Lori'
-)->setLastname(
-    'Banks'
-)->setGender(
-    2
-);
+$customer = $objectManager->create(Customer::class);
+$customer->setWebsiteId(1)
+    ->setEntityId(3)
+    ->setEntityTypeId(1)
+    ->setAttributeSetId(0)
+    ->setEmail('LoriBanks@example.com')
+    ->setPassword('password')
+    ->setGroupId(1)
+    ->setStoreId(1)
+    ->setIsActive(1)
+    ->setFirstname('Lori')
+    ->setLastname('Banks')
+    ->setGender(2);
 $customer->isObjectNew(true);
 
-$address = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Customer\Model\Address::class);
+$address = $objectManager->create(Address::class);
 $address->addData(
     [
         'firstname' => 'Lori',
@@ -183,17 +156,13 @@ $address->addData(
     ]
 );
 $customer->addAddress($address);
-$customer->save();
+$customerResource->save($customer);
 
 $customer->setDefaultBilling($address->getId());
 $customer->setDefaultShipping($address->getId());
-$customer->save();
+$customerResource->save($customer);
 
 $customers[] = $customer;
 
-/** @var $objectManager \Magento\TestFramework\ObjectManager */
-$objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-$objectManager->get(\Magento\Framework\Registry::class)
-    ->unregister('_fixture/Magento_ImportExport_Customers_Array');
-$objectManager->get(\Magento\Framework\Registry::class)
-    ->register('_fixture/Magento_ImportExport_Customers_Array', $customers);
+$objectManager->get(Registry::class)->unregister('_fixture/Magento_ImportExport_Customers_Array');
+$objectManager->get(Registry::class)->register('_fixture/Magento_ImportExport_Customers_Array', $customers);

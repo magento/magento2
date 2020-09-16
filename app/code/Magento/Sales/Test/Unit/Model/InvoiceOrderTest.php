@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Model;
 
 use Magento\Framework\App\ResourceConnection;
@@ -12,93 +14,97 @@ use Magento\Sales\Api\Data\InvoiceCreationArgumentsInterface;
 use Magento\Sales\Api\Data\InvoiceInterface;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Sales\Exception\CouldNotInvoiceException;
+use Magento\Sales\Exception\DocumentValidationException;
+use Magento\Sales\Model\InvoiceOrder;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Config as OrderConfig;
+use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\Order\Invoice\NotifierInterface;
 use Magento\Sales\Model\Order\InvoiceDocumentFactory;
 use Magento\Sales\Model\Order\InvoiceRepository;
 use Magento\Sales\Model\Order\OrderStateResolverInterface;
-use Magento\Sales\Model\Order\Validation\InvoiceOrderInterface;
 use Magento\Sales\Model\Order\PaymentAdapterInterface;
+use Magento\Sales\Model\Order\Validation\InvoiceOrderInterface;
 use Magento\Sales\Model\ValidatorResultInterface;
-use Magento\Sales\Model\InvoiceOrder;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class InvoiceOrderTest
  *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class InvoiceOrderTest extends \PHPUnit\Framework\TestCase
+class InvoiceOrderTest extends TestCase
 {
     /**
-     * @var ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResourceConnection|MockObject
      */
     private $resourceConnectionMock;
 
     /**
-     * @var OrderRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var OrderRepositoryInterface|MockObject
      */
     private $orderRepositoryMock;
 
     /**
-     * @var InvoiceDocumentFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var InvoiceDocumentFactory|MockObject
      */
     private $invoiceDocumentFactoryMock;
 
     /**
-     * @var InvoiceOrderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var InvoiceOrderInterface|MockObject
      */
     private $invoiceOrderValidatorMock;
 
     /**
-     * @var PaymentAdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var PaymentAdapterInterface|MockObject
      */
     private $paymentAdapterMock;
 
     /**
-     * @var OrderStateResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var OrderStateResolverInterface|MockObject
      */
     private $orderStateResolverMock;
 
     /**
-     * @var OrderConfig|\PHPUnit_Framework_MockObject_MockObject
+     * @var OrderConfig|MockObject
      */
     private $configMock;
 
     /**
-     * @var InvoiceRepository|\PHPUnit_Framework_MockObject_MockObject
+     * @var InvoiceRepository|MockObject
      */
     private $invoiceRepositoryMock;
 
     /**
-     * @var NotifierInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var NotifierInterface|MockObject
      */
     private $notifierInterfaceMock;
 
     /**
-     * @var InvoiceOrder|\PHPUnit_Framework_MockObject_MockObject
+     * @var InvoiceOrder|MockObject
      */
     private $invoiceOrder;
 
     /**
-     * @var InvoiceCreationArgumentsInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var InvoiceCreationArgumentsInterface|MockObject
      */
     private $invoiceCommentCreationMock;
 
     /**
-     * @var InvoiceCommentCreationInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var InvoiceCommentCreationInterface|MockObject
      */
     private $invoiceCreationArgumentsMock;
 
     /**
-     * @var OrderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var OrderInterface|MockObject
      */
     private $orderMock;
 
     /**
-     * @var InvoiceInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var InvoiceInterface|MockObject
      */
     private $invoiceMock;
 
@@ -108,16 +114,16 @@ class InvoiceOrderTest extends \PHPUnit\Framework\TestCase
     private $adapterInterface;
 
     /**
-     * @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LoggerInterface|MockObject
      */
     private $loggerMock;
 
     /**
-     * @var ValidatorResultInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ValidatorResultInterface|MockObject
      */
     private $errorMessagesMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->resourceConnectionMock = $this->getMockBuilder(ResourceConnection::class)
             ->disableOriginalConstructor()
@@ -125,7 +131,7 @@ class InvoiceOrderTest extends \PHPUnit\Framework\TestCase
 
         $this->orderRepositoryMock = $this->getMockBuilder(OrderRepositoryInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->invoiceDocumentFactoryMock = $this->getMockBuilder(InvoiceDocumentFactory::class)
             ->disableOriginalConstructor()
@@ -133,11 +139,11 @@ class InvoiceOrderTest extends \PHPUnit\Framework\TestCase
 
         $this->paymentAdapterMock = $this->getMockBuilder(PaymentAdapterInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->orderStateResolverMock = $this->getMockBuilder(OrderStateResolverInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->configMock = $this->getMockBuilder(OrderConfig::class)
             ->disableOriginalConstructor()
@@ -149,40 +155,40 @@ class InvoiceOrderTest extends \PHPUnit\Framework\TestCase
 
         $this->notifierInterfaceMock = $this->getMockBuilder(NotifierInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->invoiceCommentCreationMock = $this->getMockBuilder(InvoiceCommentCreationInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->invoiceCreationArgumentsMock = $this->getMockBuilder(InvoiceCreationArgumentsInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->orderMock = $this->getMockBuilder(OrderInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->invoiceMock = $this->getMockBuilder(InvoiceInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->adapterInterface = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->invoiceOrderValidatorMock = $this->getMockBuilder(InvoiceOrderInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->errorMessagesMock = $this->getMockBuilder(ValidatorResultInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['hasMessages', 'getMessages', 'addMessage'])
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->invoiceOrder = new InvoiceOrder(
             $this->resourceConnectionMock,
@@ -204,8 +210,8 @@ class InvoiceOrderTest extends \PHPUnit\Framework\TestCase
      * @param array $items
      * @param bool $notify
      * @param bool $appendComment
-     * @throws \Magento\Sales\Exception\CouldNotInvoiceException
-     * @throws \Magento\Sales\Exception\DocumentValidationException
+     * @throws CouldNotInvoiceException
+     * @throws DocumentValidationException
      * @dataProvider dataProvider
      */
     public function testOrderInvoice($orderId, $capture, $items, $notify, $appendComment)
@@ -267,7 +273,7 @@ class InvoiceOrderTest extends \PHPUnit\Framework\TestCase
             ->willReturnSelf();
         $this->invoiceMock->expects($this->once())
             ->method('setState')
-            ->with(\Magento\Sales\Model\Order\Invoice::STATE_PAID)
+            ->with(Invoice::STATE_PAID)
             ->willReturnSelf();
         $this->invoiceRepositoryMock->expects($this->once())
             ->method('save')
@@ -300,11 +306,9 @@ class InvoiceOrderTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * @expectedException \Magento\Sales\Api\Exception\DocumentValidationExceptionInterface
-     */
     public function testDocumentValidationException()
     {
+        $this->expectException('Magento\Sales\Api\Exception\DocumentValidationExceptionInterface');
         $orderId = 1;
         $capture = true;
         $items = [1 => 2];
@@ -357,11 +361,9 @@ class InvoiceOrderTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * @expectedException \Magento\Sales\Api\Exception\CouldNotInvoiceExceptionInterface
-     */
     public function testCouldNotInvoiceException()
     {
+        $this->expectException('Magento\Sales\Api\Exception\CouldNotInvoiceExceptionInterface');
         $orderId = 1;
         $items = [1 => 2];
         $capture = true;

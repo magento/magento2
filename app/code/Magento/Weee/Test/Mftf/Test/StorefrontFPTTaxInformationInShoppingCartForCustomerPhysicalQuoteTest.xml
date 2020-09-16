@@ -41,8 +41,8 @@
             </createData>
             <!-- Customer is created with default addresses: -->
             <createData entity="Simple_US_Customer_CA" stepKey="createCustomer"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
-            <actionGroup ref="GoToProductPageViaIDActionGroup" stepKey="openProductEditPage">
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openProductEditPage">
                 <argument name="productId" value="$createSimpleProduct.id$"/>
             </actionGroup>
             <actionGroup ref="AdminProductAddFPTValueActionGroup" stepKey="addFPTValue1">
@@ -68,7 +68,7 @@
             <createData entity="WeeeConfigDisable" stepKey="disableFPT"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
-            <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
+            <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductsGridFilters"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
             <magentoCron groups="index" stepKey="reindexBrokenIndices"/>

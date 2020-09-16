@@ -5,8 +5,8 @@
  */
 namespace Magento\Framework\App\Response\HeaderProvider;
 
+use Laminas\Http\Header\HeaderInterface;
 use Magento\Framework\App\Response\Http as HttpResponse;
-use Zend\Http\Header\HeaderInterface;
 
 /**
  * Class AbstractHeaderTestCase
@@ -21,13 +21,12 @@ abstract class AbstractHeaderTestCase extends \Magento\TestFramework\TestCase\Ab
     /**
      * @inheritDoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->_objectManager->configure(
             [
-                'preferences' =>
-                    [
+                'preferences' => [
                         HttpResponse::class => 'Magento\Framework\App\Response\Http\Interceptor'
                     ]
             ]

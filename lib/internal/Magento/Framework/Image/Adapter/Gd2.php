@@ -11,7 +11,7 @@ namespace Magento\Framework\Image\Adapter;
  *
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
-class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
+class Gd2 extends AbstractAdapter
 {
     /**
      * Required extensions
@@ -60,7 +60,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
      */
     public function open($filename)
     {
-        if (!$filename || filesize($filename) === 0) {
+        if (!$filename || filesize($filename) === 0 || !$this->validateURLScheme($filename)) {
             throw new \InvalidArgumentException('Wrong file');
         }
         $this->_fileName = $filename;
@@ -75,6 +75,23 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
             $this->_getCallback('create', null, sprintf('Unsupported image format. File: %s', $this->_fileName)),
             $this->_fileName
         );
+    }
+
+    /**
+     * Checks for invalid URL schema if it exists
+     *
+     * @param string $filename
+     * @return bool
+     */
+    private function validateURLScheme(string $filename) : bool
+    {
+        $allowed_schemes = ['ftp', 'ftps', 'http', 'https'];
+        $url = parse_url($filename);
+        if ($url && isset($url['scheme']) && !in_array($url['scheme'], $allowed_schemes)) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -401,7 +418,6 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
      *
      * @param int $angle
      * @return void
-     * @deprecated unused
      */
     public function rotate($angle)
     {

@@ -3,47 +3,58 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Store\Test\Unit\Block;
 
+use Magento\Framework\Data\Helper\PostHelper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\UrlInterface;
+use Magento\Framework\View\Element\Template\Context;
+use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Block\Switcher;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class SwitcherTest extends \PHPUnit\Framework\TestCase
+class SwitcherTest extends TestCase
 {
-    /** @var \Magento\Store\Block\Switcher */
+    /** @var Switcher */
     protected $switcher;
 
-    /** @var \Magento\Framework\View\Element\Template\Context|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Context|MockObject */
     protected $context;
 
-    /** @var \Magento\Framework\Data\Helper\PostHelper|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var PostHelper|MockObject */
     protected $corePostDataHelper;
 
-    /** @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var StoreManagerInterface|MockObject */
     protected $storeManager;
 
-    /** @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var UrlInterface|MockObject */
     protected $urlBuilder;
 
-    /** @var \Magento\Store\Api\Data\StoreInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var StoreInterface|MockObject */
     private $store;
 
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->storeManager = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)->getMock();
-        $this->urlBuilder = $this->createMock(\Magento\Framework\UrlInterface::class);
-        $this->context = $this->createMock(\Magento\Framework\View\Element\Template\Context::class);
-        $this->context->expects($this->any())->method('getStoreManager')->will($this->returnValue($this->storeManager));
-        $this->context->expects($this->any())->method('getUrlBuilder')->will($this->returnValue($this->urlBuilder));
-        $this->corePostDataHelper = $this->createMock(\Magento\Framework\Data\Helper\PostHelper::class);
-        $this->store = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)
+        $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
+            ->getMock();
+        $this->urlBuilder = $this->getMockForAbstractClass(UrlInterface::class);
+        $this->context = $this->createMock(Context::class);
+        $this->context->expects($this->any())->method('getStoreManager')->willReturn($this->storeManager);
+        $this->context->expects($this->any())->method('getUrlBuilder')->willReturn($this->urlBuilder);
+        $this->corePostDataHelper = $this->createMock(PostHelper::class);
+        $this->store = $this->getMockBuilder(StoreInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->switcher = (new ObjectManager($this))->getObject(
-            \Magento\Store\Block\Switcher::class,
+            Switcher::class,
             [
                 'context' => $this->context,
                 'postDataHelper' => $this->corePostDataHelper,
@@ -56,7 +67,7 @@ class SwitcherTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetTargetStorePostData()
     {
-        $store = $this->getMockBuilder(\Magento\Store\Model\Store::class)
+        $store = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
             ->getMock();
         $store->expects($this->any())
@@ -89,11 +100,11 @@ class SwitcherTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsStoreInUrl($isUseStoreInUrl)
     {
-        $storeMock = $this->createMock(\Magento\Store\Model\Store::class);
+        $storeMock = $this->createMock(Store::class);
 
-        $storeMock->expects($this->once())->method('isUseStoreInUrl')->will($this->returnValue($isUseStoreInUrl));
+        $storeMock->expects($this->once())->method('isUseStoreInUrl')->willReturn($isUseStoreInUrl);
 
-        $this->storeManager->expects($this->any())->method('getStore')->will($this->returnValue($storeMock));
+        $this->storeManager->expects($this->any())->method('getStore')->willReturn($storeMock);
         $this->assertEquals($this->switcher->isStoreInUrl(), $isUseStoreInUrl);
         // check value is cached
         $this->assertEquals($this->switcher->isStoreInUrl(), $isUseStoreInUrl);

@@ -3,42 +3,42 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Swagger\Controller\Index;
 
-/**
- * Class Index
- *
- * @package Magento\Swagger\Controller\Index
- */
-class Index extends \Magento\Framework\App\Action\Action
+use Magento\Framework\App\Action\Action;
+use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\View\Page\Config as PageConfig;
+use Magento\Framework\View\Result\PageFactory as PageFactory;
+
+class Index extends Action implements HttpGetActionInterface
 {
     /**
-     * @var \Magento\Framework\View\Page\Config
+     * @var PageConfig
      */
     private $pageConfig;
 
     /**
-     * @var \Magento\Framework\View\Result\PageFactory
+     * @var PageFactory
      */
     private $pageFactory;
 
     /**
-     * @param \Magento\Framework\App\Action\Context $context
-     * @param \Magento\Framework\View\Page\Config $pageConfig
-     * @param \Magento\Framework\View\Result\PageFactory $pageFactory
+     * @param Context $context
+     * @param PageConfig $pageConfig
+     * @param PageFactory $pageFactory
      */
-    public function __construct(
-        \Magento\Framework\App\Action\Context $context,
-        \Magento\Framework\View\Page\Config $pageConfig,
-        \Magento\Framework\View\Result\PageFactory $pageFactory
-    ) {
+    public function __construct(Context $context, PageConfig $pageConfig, PageFactory $pageFactory)
+    {
         parent::__construct($context);
         $this->pageConfig = $pageConfig;
         $this->pageFactory = $pageFactory;
     }
 
     /**
-     * @return \Magento\Framework\View\Result\Page
+     * @inheritDoc
      */
     public function execute()
     {

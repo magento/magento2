@@ -80,7 +80,7 @@ class DbTableTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->_model = $this->_objectManager->get(\Magento\Framework\Session\SaveHandler\DbTable::class);

@@ -3,27 +3,31 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Test\Unit\App\Scope;
 
 use Magento\Framework\App\Scope\Source;
 use Magento\Framework\App\ScopeInterface;
 use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\App\ScopeResolverPool;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class SourceTest extends \PHPUnit\Framework\TestCase
+class SourceTest extends TestCase
 {
     /** @var Source */
     protected $model;
 
-    /** @var ScopeResolverPool|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ScopeResolverPool|MockObject */
     protected $scopeResolverPoolMock;
 
     /** @var string */
     protected $scope = 'scope';
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->scopeResolverPoolMock = $this->getMockBuilder(\Magento\Framework\App\ScopeResolverPool::class)
+        $this->scopeResolverPoolMock = $this->getMockBuilder(ScopeResolverPool::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -40,12 +44,12 @@ class SourceTest extends \PHPUnit\Framework\TestCase
         ];
         $result = [$scopeData, $scopeData];
 
-        /** @var ScopeResolverInterface|\PHPUnit_Framework_MockObject_MockObject $scopeResolverMock */
-        $scopeResolverMock = $this->getMockBuilder(\Magento\Framework\App\ScopeResolverInterface::class)
+        /** @var ScopeResolverInterface|MockObject $scopeResolverMock */
+        $scopeResolverMock = $this->getMockBuilder(ScopeResolverInterface::class)
             ->getMockForAbstractClass();
 
-        /** @var ScopeInterface|\PHPUnit_Framework_MockObject_MockObject $scopeMock */
-        $scopeMock = $this->getMockBuilder(\Magento\Framework\App\ScopeInterface::class)
+        /** @var ScopeInterface|MockObject $scopeMock */
+        $scopeMock = $this->getMockBuilder(ScopeInterface::class)
             ->getMockForAbstractClass();
 
         $this->scopeResolverPoolMock->expects($this->once())

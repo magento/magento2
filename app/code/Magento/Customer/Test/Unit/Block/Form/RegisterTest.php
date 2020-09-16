@@ -3,17 +3,33 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Test\Unit\Block\Form;
 
 use Magento\Customer\Block\Form\Register;
 use Magento\Customer\Model\AccountManagement;
+use Magento\Customer\Model\Metadata\Form;
+use Magento\Customer\Model\Session;
+use Magento\Customer\Model\Url;
+use Magento\Directory\Helper\Data;
+use Magento\Directory\Model\ResourceModel\Region\CollectionFactory;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\DataObject;
+use Magento\Framework\Json\EncoderInterface;
+use Magento\Framework\Module\Manager;
+use Magento\Framework\View\Element\Template\Context;
+use Magento\Newsletter\Model\Config;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for \Magento\Customer\Block\Form\Register.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class RegisterTest extends \PHPUnit\Framework\TestCase
+class RegisterTest extends TestCase
 {
     /** Constants used by the various unit tests */
     const POST_ACTION_URL = 'http://localhost/index.php/customer/account/createpost';
@@ -30,47 +46,47 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
 
     const REGION_ID_ATTRIBUTE_VALUE = '12';
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Directory\Helper\Data */
+    /** @var MockObject|Data */
     private $directoryHelperMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\App\Config\ScopeConfigInterface */
+    /** @var MockObject|ScopeConfigInterface */
     private $_scopeConfig;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Model\Session */
+    /** @var MockObject|Session */
     private $_customerSession;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Module\Manager */
+    /** @var MockObject|Manager */
     private $_moduleManager;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Model\Url */
+    /** @var MockObject|Url */
     private $_customerUrl;
 
     /** @var Register */
     private $_block;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Newsletter\Model\Config */
+    /** @var MockObject|Config */
     private $newsletterConfig;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->_scopeConfig = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
-        $this->_moduleManager = $this->createMock(\Magento\Framework\Module\Manager::class);
-        $this->directoryHelperMock = $this->createMock(\Magento\Directory\Helper\Data::class);
-        $this->_customerUrl = $this->createMock(\Magento\Customer\Model\Url::class);
-        $this->_customerSession = $this->createPartialMock(
-            \Magento\Customer\Model\Session::class,
-            ['getCustomerFormData']
-        );
-        $this->newsletterConfig = $this->createMock(\Magento\Newsletter\Model\Config::class);
-        $context = $this->createMock(\Magento\Framework\View\Element\Template\Context::class);
-        $context->expects($this->any())->method('getScopeConfig')->will($this->returnValue($this->_scopeConfig));
+        $this->_scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->_moduleManager = $this->createMock(Manager::class);
+        $this->directoryHelperMock = $this->createMock(Data::class);
+        $this->_customerUrl = $this->createMock(Url::class);
+        $this->_customerSession = $this->getMockBuilder(Session::class)
+            ->addMethods(['getCustomerFormData'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->newsletterConfig = $this->createMock(Config::class);
+        $context = $this->createMock(Context::class);
+        $context->expects($this->any())->method('getScopeConfig')->willReturn($this->_scopeConfig);
 
-        $this->_block = new \Magento\Customer\Block\Form\Register(
+        $this->_block = new Register(
             $context,
             $this->directoryHelperMock,
-            $this->getMockForAbstractClass(\Magento\Framework\Json\EncoderInterface::class, [], '', false),
+            $this->getMockForAbstractClass(EncoderInterface::class, [], '', false),
             $this->createMock(\Magento\Framework\App\Cache\Type\Config::class),
-            $this->createMock(\Magento\Directory\Model\ResourceModel\Region\CollectionFactory::class),
+            $this->createMock(CollectionFactory::class),
             $this->createMock(\Magento\Directory\Model\ResourceModel\Country\CollectionFactory::class),
             $this->_moduleManager,
             $this->_customerSession,
@@ -88,7 +104,7 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetConfig($path, $configValue)
     {
-        $this->_scopeConfig->expects($this->once())->method('getValue')->will($this->returnValue($configValue));
+        $this->_scopeConfig->expects($this->once())->method('getValue')->willReturn($configValue);
         $this->assertEquals($configValue, $this->_block->getConfig($path));
     }
 
@@ -109,8 +125,8 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'getRegisterPostUrl'
-        )->will(
-            $this->returnValue(self::POST_ACTION_URL)
+        )->willReturn(
+            self::POST_ACTION_URL
         );
         $this->assertEquals(self::POST_ACTION_URL, $this->_block->getPostActionUrl());
     }
@@ -124,8 +140,8 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'getLoginUrl'
-        )->will(
-            $this->returnValue(self::LOGIN_URL)
+        )->willReturn(
+            self::LOGIN_URL
         );
         $this->assertEquals(self::LOGIN_URL, $this->_block->getBackUrl());
     }
@@ -144,7 +160,7 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetFormDataNotNullFormData()
     {
-        $data = new \Magento\Framework\DataObject();
+        $data = new DataObject();
         $this->_block->setData(self::FORM_DATA, $data);
         $this->assertSame($data, $this->_block->getFormData());
     }
@@ -155,8 +171,8 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetFormDataNullFormData()
     {
-        $data = new \Magento\Framework\DataObject();
-        $this->_customerSession->expects($this->once())->method('getCustomerFormData')->will($this->returnValue(null));
+        $data = new DataObject();
+        $this->_customerSession->expects($this->once())->method('getCustomerFormData')->willReturn(null);
         $this->assertEquals($data, $this->_block->getFormData());
         $this->assertEquals($data, $this->_block->getData(self::FORM_DATA));
     }
@@ -167,7 +183,7 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetFormDataNullFormDataCustomerFormData()
     {
-        $data = new \Magento\Framework\DataObject();
+        $data = new DataObject();
         $data->setFirstname('John');
         $data->setCustomerData(1);
         $customerFormData = ['firstname' => 'John'];
@@ -175,8 +191,8 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'getCustomerFormData'
-        )->will(
-            $this->returnValue($customerFormData)
+        )->willReturn(
+            $customerFormData
         );
         $this->assertEquals($data, $this->_block->getFormData());
         $this->assertEquals($data, $this->_block->getData(self::FORM_DATA));
@@ -188,7 +204,7 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetFormDataCustomerFormDataRegionId()
     {
-        $data = new \Magento\Framework\DataObject();
+        $data = new DataObject();
         $data->setRegionId(self::REGION_ID_ATTRIBUTE_VALUE);
         $data->setCustomerData(1);
         $data[self::REGION_ID_ATTRIBUTE_CODE] = (int)self::REGION_ID_ATTRIBUTE_VALUE;
@@ -197,12 +213,12 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'getCustomerFormData'
-        )->will(
-            $this->returnValue($customerFormData)
+        )->willReturn(
+            $customerFormData
         );
         $formData = $this->_block->getFormData();
         $this->assertEquals($data, $formData);
-        $this->assertTrue(isset($formData[self::REGION_ID_ATTRIBUTE_CODE]));
+        $this->assertArrayHasKey(self::REGION_ID_ATTRIBUTE_CODE, $formData);
         $this->assertSame((int)self::REGION_ID_ATTRIBUTE_VALUE, $formData[self::REGION_ID_ATTRIBUTE_CODE]);
     }
 
@@ -212,7 +228,7 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetCountryIdFormData()
     {
-        $formData = new \Magento\Framework\DataObject();
+        $formData = new DataObject();
         $formData->setCountryId(self::COUNTRY_ID);
         $this->_block->setData(self::FORM_DATA, $formData);
         $this->assertEquals(self::COUNTRY_ID, $this->_block->getCountryId());
@@ -228,8 +244,8 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'getDefaultCountry'
-        )->will(
-            $this->returnValue(self::COUNTRY_ID)
+        )->willReturn(
+            self::COUNTRY_ID
         );
         $this->assertEquals(self::COUNTRY_ID, $this->_block->getCountryId());
     }
@@ -250,7 +266,7 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetRegionByRegion()
     {
-        $formData = new \Magento\Framework\DataObject();
+        $formData = new DataObject();
         $formData->setRegion(self::REGION_ATTRIBUTE_VALUE);
         $this->_block->setData(self::FORM_DATA, $formData);
         $this->assertSame(self::REGION_ATTRIBUTE_VALUE, $this->_block->getRegion());
@@ -262,7 +278,7 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetRegionByRegionId()
     {
-        $formData = new \Magento\Framework\DataObject();
+        $formData = new DataObject();
         $formData->setRegionId(self::REGION_ID_ATTRIBUTE_VALUE);
         $this->_block->setData(self::FORM_DATA, $formData);
         $this->assertSame(self::REGION_ID_ATTRIBUTE_VALUE, $this->_block->getRegion());
@@ -274,7 +290,7 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetRegionNull()
     {
-        $formData = new \Magento\Framework\DataObject();
+        $formData = new DataObject();
         $this->_block->setData(self::FORM_DATA, $formData);
         $this->assertNull($this->_block->getRegion());
     }
@@ -294,16 +310,16 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
             'isOutputEnabled'
         )->with(
             'Magento_Newsletter'
-        )->will(
-            $this->returnValue($isNewsletterEnabled)
+        )->willReturn(
+            $isNewsletterEnabled
         );
 
         $this->newsletterConfig->expects(
             $this->any()
         )->method(
             'isActive'
-        )->will(
-            $this->returnValue($isNewsletterActive)
+        )->willReturn(
+            $isNewsletterActive
         );
 
         $this->assertEquals($expectedValue, $this->_block->isNewsletterEnabled());
@@ -323,7 +339,7 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
      */
     public function testRestoreSessionData()
     {
-        $data = new \Magento\Framework\DataObject();
+        $data = new DataObject();
         $data->setRegionId(self::REGION_ID_ATTRIBUTE_VALUE);
         $data->setCustomerData(1);
         $data[self::REGION_ID_ATTRIBUTE_CODE] = (int)self::REGION_ID_ATTRIBUTE_VALUE;
@@ -332,11 +348,11 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'getCustomerFormData'
-        )->will(
-            $this->returnValue($customerFormData)
+        )->willReturn(
+            $customerFormData
         );
-        $form = $this->createMock(\Magento\Customer\Model\Metadata\Form::class);
-        $request = $this->getMockForAbstractClass(\Magento\Framework\App\RequestInterface::class, [], '', false);
+        $form = $this->createMock(Form::class);
+        $request = $this->getMockForAbstractClass(RequestInterface::class, [], '', false);
         $formData = $this->_block->getFormData();
         $form->expects(
             $this->once()
@@ -344,8 +360,8 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
             'prepareRequest'
         )->with(
             $formData->getData()
-        )->will(
-            $this->returnValue($request)
+        )->willReturn(
+            $request
         );
         $form->expects(
             $this->once()
@@ -355,10 +371,10 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
             $request,
             null,
             false
-        )->will(
-            $this->returnValue($customerFormData)
+        )->willReturn(
+            $customerFormData
         );
-        $form->expects($this->once())->method('restoreData')->will($this->returnValue($customerFormData));
+        $form->expects($this->once())->method('restoreData')->willReturn($customerFormData);
         $block = $this->_block->restoreSessionData($form, null, false);
         $this->assertSame($this->_block, $block);
         $this->assertEquals($data, $block->getData(self::FORM_DATA));
@@ -375,8 +391,8 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
             'getValue'
         )->with(
             AccountManagement::XML_PATH_MINIMUM_PASSWORD_LENGTH
-        )->will(
-            $this->returnValue(6)
+        )->willReturn(
+            6
         );
         $this->assertEquals(6, $this->_block->getMinimumPasswordLength());
     }
@@ -392,8 +408,8 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
             'getValue'
         )->with(
             AccountManagement::XML_PATH_REQUIRED_CHARACTER_CLASSES_NUMBER
-        )->will(
-            $this->returnValue(3)
+        )->willReturn(
+            3
         );
         $this->assertEquals(3, $this->_block->getRequiredCharacterClassesNumber());
     }

@@ -3,18 +3,23 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Acl\Test\Unit\AclResource\Config\Converter;
 
-class DomTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\Acl\AclResource\Config\Converter\Dom;
+use PHPUnit\Framework\TestCase;
+
+class DomTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Acl\AclResource\Config\Converter\Dom
+     * @var Dom
      */
     protected $_converter;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->_converter = new \Magento\Framework\Acl\AclResource\Config\Converter\Dom();
+        $this->_converter = new Dom();
     }
 
     /**
@@ -44,11 +49,11 @@ class DomTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param string $xml
-     * @expectedException \Exception
      * @dataProvider convertWithInvalidDomDataProvider
      */
     public function testConvertWithInvalidDom($xml)
     {
+        $this->expectException('Exception');
         $dom = new \DOMDocument();
         $dom->loadXML($xml);
         $this->_converter->convert($dom);

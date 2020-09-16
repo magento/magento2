@@ -19,7 +19,7 @@
             <testCaseId value="N/a"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin1"/>
         </before>
         <after>
             <actionGroup ref="setEmailTextLengthLimitActionGroup" stepKey="rollbackEmailTextLengthLimit">

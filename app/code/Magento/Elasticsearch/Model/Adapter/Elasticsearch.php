@@ -3,16 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-declare(strict_types=1);
 
 namespace Magento\Elasticsearch\Model\Adapter;
 
-use Magento\Elasticsearch\Model\Adapter\Index\BuilderInterface;
-use Magento\Elasticsearch\Model\Adapter\Index\IndexNameResolver;
-use Magento\Elasticsearch\Model\Config;
-use Magento\Elasticsearch\SearchAdapter\ConnectionManager;
-use Magento\Framework\Exception\LocalizedException;
-use Psr\Log\LoggerInterface;
+use Magento\Catalog\Api\Data\ProductAttributeInterface;
+use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
+use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\StaticField;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Stdlib\ArrayManager;
 
 /**
  * Elasticsearch adapter
@@ -38,10 +36,9 @@ class Elasticsearch
     protected $connectionManager;
 
     /**
-     * @var DataMapperInterface
-     * @deprecated 100.2.0 Will be replaced with BatchDataMapperInterface
+     * @var \Magento\Elasticsearch\Model\Adapter\Index\IndexNameResolver
      */
-    protected $documentDataMapper;
+    protected $indexNameResolver;
 
     /**
      * @var FieldMapperInterface
@@ -49,29 +46,24 @@ class Elasticsearch
     protected $fieldMapper;
 
     /**
-     * @var Config
+     * @var \Magento\Elasticsearch\Model\Config
      */
     protected $clientConfig;
 
     /**
-     * @var \Magento\Elasticsearch\Model\Client\Elasticsearch
+     * @var \Magento\AdvancedSearch\Model\Client\ClientInterface
      */
     protected $client;
 
     /**
-     * @var BuilderInterface
+     * @var \Magento\Elasticsearch\Model\Adapter\Index\BuilderInterface
      */
     protected $indexBuilder;
 
     /**
-     * @var LoggerInterface
+     * @var \Psr\Log\LoggerInterface
      */
     protected $logger;
-
-    /**
-     * @var IndexNameResolver
-     */
-    protected $indexNameResolver;
 
     /**
      * @var array
@@ -84,44 +76,77 @@ class Elasticsearch
     private $batchDocumentDataMapper;
 
     /**
-     * Constructor for Elasticsearch adapter.
-     *
-     * @param ConnectionManager $connectionManager
-     * @param DataMapperInterface $documentDataMapper
+     * @var array
+     */
+    private $mappedAttributes = [];
+
+    /**
+     * @var string[]
+     */
+    private $indexByCode = [];
+
+    /**
+     * @var ProductAttributeRepositoryInterface
+     */
+    private $productAttributeRepository;
+
+    /**
+     * @var StaticField
+     */
+    private $staticFieldProvider;
+
+    /**
+     * @var ArrayManager
+     */
+    private $arrayManager;
+
+    /**
+     * @param \Magento\Elasticsearch\SearchAdapter\ConnectionManager $connectionManager
      * @param FieldMapperInterface $fieldMapper
-     * @param Config $clientConfig
-     * @param BuilderInterface $indexBuilder
-     * @param LoggerInterface $logger
-     * @param IndexNameResolver $indexNameResolver
+     * @param \Magento\Elasticsearch\Model\Config $clientConfig
+     * @param Index\BuilderInterface $indexBuilder
+     * @param \Psr\Log\LoggerInterface $logger
+     * @param Index\IndexNameResolver $indexNameResolver
      * @param BatchDataMapperInterface $batchDocumentDataMapper
      * @param array $options
-     * @throws LocalizedException
+     * @param ProductAttributeRepositoryInterface|null $productAttributeRepository
+     * @param StaticField|null $staticFieldProvider
+     * @param ArrayManager|null $arrayManager
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        ConnectionManager $connectionManager,
-        DataMapperInterface $documentDataMapper,
+        \Magento\Elasticsearch\SearchAdapter\ConnectionManager $connectionManager,
         FieldMapperInterface $fieldMapper,
-        Config $clientConfig,
-        BuilderInterface $indexBuilder,
-        LoggerInterface $logger,
-        IndexNameResolver $indexNameResolver,
+        \Magento\Elasticsearch\Model\Config $clientConfig,
+        \Magento\Elasticsearch\Model\Adapter\Index\BuilderInterface $indexBuilder,
+        \Psr\Log\LoggerInterface $logger,
+        \Magento\Elasticsearch\Model\Adapter\Index\IndexNameResolver $indexNameResolver,
         BatchDataMapperInterface $batchDocumentDataMapper,
-        $options = []
+        $options = [],
+        ProductAttributeRepositoryInterface $productAttributeRepository = null,
+        StaticField $staticFieldProvider = null,
+        ArrayManager $arrayManager = null
     ) {
         $this->connectionManager = $connectionManager;
-        $this->documentDataMapper = $documentDataMapper;
         $this->fieldMapper = $fieldMapper;
         $this->clientConfig = $clientConfig;
         $this->indexBuilder = $indexBuilder;
         $this->logger = $logger;
         $this->indexNameResolver = $indexNameResolver;
         $this->batchDocumentDataMapper = $batchDocumentDataMapper;
+        $this->productAttributeRepository = $productAttributeRepository ?:
+            ObjectManager::getInstance()->get(ProductAttributeRepositoryInterface::class);
+        $this->staticFieldProvider = $staticFieldProvider ?:
+            ObjectManager::getInstance()->get(StaticField::class);
+        $this->arrayManager = $arrayManager ?:
+            ObjectManager::getInstance()->get(ArrayManager::class);
 
         try {
             $this->client = $this->connectionManager->getConnection($options);
         } catch (\Exception $e) {
             $this->logger->critical($e);
-            throw new LocalizedException(
+            throw new \Magento\Framework\Exception\LocalizedException(
                 __('The search failed because of a search engine misconfiguration.')
             );
         }
@@ -131,14 +156,14 @@ class Elasticsearch
      * Retrieve Elasticsearch server status
      *
      * @return bool
-     * @throws LocalizedException
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function ping()
     {
         try {
             $response = $this->client->ping();
         } catch (\Exception $e) {
-            throw new LocalizedException(
+            throw new \Magento\Framework\Exception\LocalizedException(
                 __('Could not ping search engine: %1', $e->getMessage())
             );
         }
@@ -341,6 +366,93 @@ class Elasticsearch
         // remove obsolete index
         if ($oldIndex) {
             $this->client->deleteIndex($oldIndex);
+            unset($this->indexByCode[$mappedIndexerId . '_' . $storeId]);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Update Elasticsearch mapping for index.
+     *
+     * @param int $storeId
+     * @param string $mappedIndexerId
+     * @param string $attributeCode
+     * @return $this
+     */
+    public function updateIndexMapping(int $storeId, string $mappedIndexerId, string $attributeCode): self
+    {
+        $indexName = $this->getIndexFromAlias($storeId, $mappedIndexerId);
+        if (empty($indexName)) {
+            return $this;
+        }
+
+        $attribute = $this->productAttributeRepository->get($attributeCode);
+        $newAttributeMapping = $this->staticFieldProvider->getField($attribute);
+        $mappedAttributes = $this->getMappedAttributes($indexName);
+
+        $attrToUpdate = array_diff_key($newAttributeMapping, $mappedAttributes);
+        if (!empty($attrToUpdate)) {
+            $settings['index']['mapping']['total_fields']['limit'] = $this
+                ->getMappingTotalFieldsLimit(array_merge($mappedAttributes, $attrToUpdate));
+            $this->client->putIndexSettings($indexName, ['settings' => $settings]);
+
+            $this->client->addFieldsMapping(
+                $attrToUpdate,
+                $indexName,
+                $this->clientConfig->getEntityType()
+            );
+            $this->setMappedAttributes($indexName, $attrToUpdate);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Retrieve index definition from class.
+     *
+     * @param int $storeId
+     * @param string $mappedIndexerId
+     * @return string
+     */
+    private function getIndexFromAlias(int $storeId, string $mappedIndexerId): string
+    {
+        $indexCode = $mappedIndexerId . '_' . $storeId;
+        if (!isset($this->indexByCode[$indexCode])) {
+            $this->indexByCode[$indexCode] = $this->indexNameResolver->getIndexFromAlias($storeId, $mappedIndexerId);
+        }
+
+        return $this->indexByCode[$indexCode];
+    }
+
+    /**
+     * Retrieve mapped attributes from class.
+     *
+     * @param string $indexName
+     * @return array
+     */
+    private function getMappedAttributes(string $indexName): array
+    {
+        if (empty($this->mappedAttributes[$indexName])) {
+            $mappedAttributes = $this->client->getMapping(['index' => $indexName]);
+            $pathField = $this->arrayManager->findPath('properties', $mappedAttributes);
+            $this->mappedAttributes[$indexName] = $this->arrayManager->get($pathField, $mappedAttributes, []);
+        }
+
+        return $this->mappedAttributes[$indexName];
+    }
+
+    /**
+     * Set mapped attributes to class.
+     *
+     * @param string $indexName
+     * @param array $mappedAttributes
+     * @return $this
+     */
+    private function setMappedAttributes(string $indexName, array $mappedAttributes): self
+    {
+        foreach ($mappedAttributes as $attributeCode => $attributeParams) {
+            $this->mappedAttributes[$indexName][$attributeCode] = $attributeParams;
         }
 
         return $this;
