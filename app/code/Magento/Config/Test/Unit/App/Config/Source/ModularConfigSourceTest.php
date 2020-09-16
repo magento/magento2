@@ -8,7 +8,8 @@ declare(strict_types=1);
 namespace Magento\Config\Test\Unit\App\Config\Source;
 
 use Magento\Config\App\Config\Source\ModularConfigSource;
-use Magento\Framework\App\Config\Initial\Reader;
+use Magento\Config\Model\Config\Structure\Reader as ConfigStructureReader;
+use Magento\Framework\App\Config\Initial\Reader as InitialConfigReader;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -18,9 +19,14 @@ use PHPUnit\Framework\TestCase;
 class ModularConfigSourceTest extends TestCase
 {
     /**
-     * @var Reader|MockObject
+     * @var InitialConfigReader|MockObject
      */
-    private $reader;
+    private $initialConfigReader;
+
+    /**
+     * @var ConfigStructureReader|MockObject
+     */
+    private $configStructureReader;
 
     /**
      * @var ModularConfigSource
@@ -29,15 +35,17 @@ class ModularConfigSourceTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->reader = $this->getMockBuilder(Reader::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->source = new ModularConfigSource($this->reader);
+        $this->initialConfigReader = $this->createMock(InitialConfigReader::class);
+        $this->configStructureReader = $this->createMock(ConfigStructureReader::class);
+        $this->source = new ModularConfigSource(
+            $this->initialConfigReader,
+            $this->configStructureReader
+        );
     }
 
     public function testGet()
     {
-        $this->reader->expects($this->once())
+        $this->initialConfigReader->expects($this->once())
             ->method('read')
             ->willReturn(['data' => ['path' => 'value']]);
         $this->assertEquals('value', $this->source->get('path'));

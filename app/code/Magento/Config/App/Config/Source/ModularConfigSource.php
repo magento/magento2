@@ -8,6 +8,7 @@ namespace Magento\Config\App\Config\Source;
 use Magento\Config\Model\Config\Structure\Reader as ConfigStructureReader;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\Config\ConfigSourceInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
 use Magento\Framework\App\Config\Initial\Reader as InitialConfigReader;
 
@@ -31,14 +32,15 @@ class ModularConfigSource implements ConfigSourceInterface
 
     /**
      * @param InitialConfigReader $initialConfigReader
-     * @param ConfigStructureReader $configStructureReader
+     * @param ConfigStructureReader|null $configStructureReader
      */
     public function __construct(
         InitialConfigReader $initialConfigReader,
-        ConfigStructureReader $configStructureReader
+        ?ConfigStructureReader $configStructureReader = null
     ) {
         $this->initialConfigReader = $initialConfigReader;
-        $this->configStructureReader = $configStructureReader;
+        $this->configStructureReader = $configStructureReader
+            ?? ObjectManager::getInstance()->get(ConfigStructureReader::class);
     }
 
     /**
@@ -63,18 +65,6 @@ class ModularConfigSource implements ConfigSourceInterface
         return $data->getData('data' . $path) ?: [];
     }
 
-    private function addPathKey(array $data, string $path): array
-    {
-        if (strpos($path, '/') !== false) {
-            list ($key, $subPath) = explode('/', $path, 2);
-            $data[$key] = $this->addPathKey($data[$key] ?? [], $subPath);
-        } else {
-            $data += [$path => null];
-        }
-
-        return $data;
-    }
-
     /**
      * Merge initial config with config structure
      *
@@ -84,7 +74,7 @@ class ModularConfigSource implements ConfigSourceInterface
      */
     private function merge(array $config, array $sections): array
     {
-        foreach ($sections as $key => $section) {
+        foreach ($sections as $section) {
             if (isset($section['children'])) {
                 $config[$section['id']] = $this->merge(
                     $config[$section['id']] ?? [],
