@@ -32,10 +32,10 @@
                 <!--ko foreach: JSON.parse($parent.options)-->
                 <dt class="label" data-bind="text: label"></dt>
                     <!-- ko if: ($data.full_view)-->
-                    <dd class="values" data-bind="html: full_viewUnsanitizedHtml"></dd>
+                    <dd class="values" data-bind="html: full_view"></dd>
                     <!-- /ko -->
                     <!-- ko ifnot: ($data.full_view)-->
-                    <dd class="values" data-bind="html: valueUnsanitizedHtml"></dd>
+                    <dd class="values" data-bind="html: value"></dd>
                     <!-- /ko -->
                 <!-- /ko -->
             </dl>
