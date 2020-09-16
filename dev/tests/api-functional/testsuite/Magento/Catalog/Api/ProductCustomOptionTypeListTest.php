@@ -38,6 +38,6 @@ class ProductCustomOptionTypeListTest extends WebapiAbstract
             'group' => __('Select'),
         ];
         $this->assertGreaterThanOrEqual(10, count($types));
-        $this->assertContains($excepted, $types);
+        $this->assertContainsEquals($excepted, $types);
     }
 }

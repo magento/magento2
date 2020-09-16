@@ -19,20 +19,20 @@
 
         <before>
             <createData entity="defaultSimpleProduct" stepKey="createProduct"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
         </before>
         <after>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Search and Select Edit option for created product in grid -->
-        <actionGroup ref="AdminSearchAndSelectUrlRewriteInGrid" stepKey="editUrlRewrite">
+        <actionGroup ref="AdminSearchAndSelectUrlRewriteInGridActionGroup" stepKey="editUrlRewrite">
             <argument name="requestPath" value="$$createProduct.name$$"/>
         </actionGroup>
 
         <!-- Open UrlRewrite Edit page and update the fields  -->
-        <actionGroup ref="AdminUpdateUrlRewrite" stepKey="updateCategoryUrlRewrite">
+        <actionGroup ref="AdminUpdateUrlRewriteActionGroup" stepKey="updateCategoryUrlRewrite">
             <argument name="storeValue" value="{{updateUrlRewrite.store}}"/>
             <argument name="requestPath" value="{{updateUrlRewrite.request_path}}"/>
             <argument name="redirectTypeValue" value="{{updateUrlRewrite.redirect_type_label}}"/>
@@ -40,7 +40,7 @@
         </actionGroup>
 
         <!-- Assert product Url Rewrite in StoreFront -->
-        <actionGroup ref="AssertStorefrontProductRedirect" stepKey="assertProductUrlRewriteInStoreFront">
+        <actionGroup ref="AssertStorefrontProductRedirectActionGroup" stepKey="assertProductUrlRewriteInStoreFront">
             <argument name="productName" value="$$createProduct.name$$"/>
             <argument name="productSku" value="$$createProduct.sku$$"/>
             <argument name="productRequestPath" value="{{updateUrlRewrite.request_path}}"/>

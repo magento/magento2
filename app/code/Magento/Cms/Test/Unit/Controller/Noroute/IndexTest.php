@@ -3,83 +3,100 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Cms\Test\Unit\Controller\Noroute;
 
-class IndexTest extends \PHPUnit\Framework\TestCase
+use Magento\Cms\Controller\Noroute\Index;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\Response\Http;
+use Magento\Framework\Controller\Result\Forward;
+use Magento\Framework\Controller\Result\ForwardFactory;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Result\Page;
+use Magento\Store\Model\ScopeInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class IndexTest extends TestCase
 {
     /**
-     * @var \Magento\Cms\Controller\Noroute\Index
+     * @var Index
      */
     protected $_controller;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $_cmsHelperMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $_requestMock;
 
     /**
-     * @var \Magento\Framework\Controller\Result\ForwardFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ForwardFactory|MockObject
      */
     protected $forwardFactoryMock;
 
     /**
-     * @var \Magento\Framework\Controller\Result\Forward|\PHPUnit_Framework_MockObject_MockObject
+     * @var Forward|MockObject
      */
     protected $forwardMock;
 
     /**
-     * @var \Magento\Framework\View\Result\Page|\PHPUnit_Framework_MockObject_MockObject
+     * @var Page|MockObject
      */
     protected $resultPageMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
-        $responseMock = $this->createMock(\Magento\Framework\App\Response\Http::class);
-        $this->resultPageMock = $this->getMockBuilder(\Magento\Framework\View\Result\Page::class)
+        $helper = new ObjectManager($this);
+        $objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $responseMock = $this->createMock(Http::class);
+        $this->resultPageMock = $this->getMockBuilder(Page::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->forwardFactoryMock = $this->getMockBuilder(\Magento\Framework\Controller\Result\ForwardFactory::class)
+        $this->forwardFactoryMock = $this->getMockBuilder(ForwardFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->forwardMock = $this->getMockBuilder(\Magento\Framework\Controller\Result\Forward::class)
+        $this->forwardMock = $this->getMockBuilder(Forward::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->forwardFactoryMock->expects($this->any())
             ->method('create')
             ->willReturn($this->forwardMock);
 
-        $scopeConfigMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $this->_requestMock = $this->createMock(\Magento\Framework\App\Request\Http::class);
         $this->_cmsHelperMock = $this->createMock(\Magento\Cms\Helper\Page::class);
         $valueMap = [
-            [\Magento\Framework\App\Config\ScopeConfigInterface::class,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            [ScopeConfigInterface::class,
+                ScopeInterface::SCOPE_STORE,
                 $scopeConfigMock,
             ],
             [\Magento\Cms\Helper\Page::class, $this->_cmsHelperMock],
         ];
-        $objectManagerMock->expects($this->any())->method('get')->will($this->returnValueMap($valueMap));
+        $objectManagerMock->expects($this->any())->method('get')->willReturnMap($valueMap);
         $scopeConfigMock->expects(
             $this->once()
         )->method(
             'getValue'
         )->with(
             \Magento\Cms\Helper\Page::XML_PATH_NO_ROUTE_PAGE
-        )->will(
-            $this->returnValue('pageId')
+        )->willReturn(
+            'pageId'
         );
         $this->_controller = $helper->getObject(
-            \Magento\Cms\Controller\Noroute\Index::class,
+            Index::class,
             ['response' => $responseMock, 'objectManager' => $objectManagerMock, 'request' => $this->_requestMock,
-            'resultForwardFactory' => $this->forwardFactoryMock
+                'resultForwardFactory' => $this->forwardFactoryMock
             ]
         );
     }
@@ -90,9 +107,7 @@ class IndexTest extends \PHPUnit\Framework\TestCase
             $this->at(0)
         )->method(
             'setStatusHeader'
-        )->with(404, '1.1', 'Not Found')->will(
-            $this->returnSelf()
-        );
+        )->with(404, '1.1', 'Not Found')->willReturnSelf();
         $this->resultPageMock->expects(
             $this->at(1)
         )->method(
@@ -100,15 +115,13 @@ class IndexTest extends \PHPUnit\Framework\TestCase
         )->with(
             'Status',
             '404 File not found'
-        )->will(
-            $this->returnSelf()
-        );
+        )->willReturnSelf();
         $this->_cmsHelperMock->expects(
             $this->once()
         )->method(
             'prepareResultPage'
-        )->will(
-            $this->returnValue($this->resultPageMock)
+        )->willReturn(
+            $this->resultPageMock
         );
         $this->assertSame(
             $this->resultPageMock,
@@ -124,24 +137,20 @@ class IndexTest extends \PHPUnit\Framework\TestCase
             'setController'
         )->with(
             'index'
-        )->will(
-            $this->returnSelf()
-        );
+        )->willReturnSelf();
         $this->forwardMock->expects(
             $this->once()
         )->method(
             'forward'
         )->with(
             'defaultNoRoute'
-        )->will(
-            $this->returnSelf()
-        );
+        )->willReturnSelf();
         $this->_cmsHelperMock->expects(
             $this->once()
         )->method(
             'prepareResultPage'
-        )->will(
-            $this->returnValue(false)
+        )->willReturn(
+            false
         );
         $this->assertSame(
             $this->forwardMock,

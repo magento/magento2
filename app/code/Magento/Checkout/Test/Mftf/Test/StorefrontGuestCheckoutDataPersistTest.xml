@@ -30,7 +30,7 @@
         </after>
 
         <!-- Add simple product to cart -->
-        <actionGroup ref="AddSimpleProductToCart" stepKey="addProductToCart">
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProductToCart">
             <argument name="product" value="$$createProduct$$"/>
         </actionGroup>
         <!-- Navigate to checkout -->
@@ -40,7 +40,7 @@
             <argument name="shippingMethod" value="Flat Rate"/>
         </actionGroup>
         <!-- Add simple product to cart -->
-        <actionGroup ref="AddSimpleProductToCart" stepKey="addProductToCart1">
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProductToCart1">
             <argument name="product" value="$$createProduct$$"/>
         </actionGroup>
         <!-- Navigate to checkout -->

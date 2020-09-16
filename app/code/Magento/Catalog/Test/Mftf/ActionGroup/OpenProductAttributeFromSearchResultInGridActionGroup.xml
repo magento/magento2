@@ -16,7 +16,7 @@
             <argument name="productAttributeCode" type="string"/>
         </arguments>
 
-        <waitForElementVisible selector="{{AdminProductAttributeGridSection.AttributeCode(productAttributeCode)}}" stepKey="waitForAdminProductAttributeGridLoad"/>
+        <waitForElementVisible selector="{{AdminProductAttributeGridSection.AttributeCode(productAttributeCode)}}" before="seeAttributeCodeInGrid" stepKey="waitForAdminProductAttributeGridLoad"/>
         <click selector="{{AdminProductAttributeGridSection.AttributeCode(productAttributeCode)}}" stepKey="clickAttributeToView"/>
         <waitForPageLoad stepKey="waitForViewAdminProductAttributeLoad"/>
     </actionGroup>

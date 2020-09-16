@@ -1,5 +1,4 @@
 Magento/Adminhtml
-Magento/Authorizenet/Model
 Magento/Backend
 Magento/Bundle
 Magento/Catalog/Block/Product/ProductList
@@ -218,3 +217,4 @@ Magento/InventoryReservationCli/Test/Integration
 Magento/InventoryAdminUi/Controller/Adminhtml
 Magento/Newsletter/Model/Queue
 Magento/Framework/Mail/Template
+Magento/CheckoutAgreements/Model/Checkout/Plugin

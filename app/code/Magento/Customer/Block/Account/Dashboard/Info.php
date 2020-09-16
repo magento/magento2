@@ -5,7 +5,15 @@
  */
 namespace Magento\Customer\Block\Account\Dashboard;
 
+use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Customer\Block\Form\Register;
+use Magento\Customer\Helper\Session\CurrentCustomer;
+use Magento\Customer\Helper\View;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\View\Element\Template;
+use Magento\Framework\View\Element\Template\Context;
+use Magento\Newsletter\Model\Subscriber;
+use Magento\Newsletter\Model\SubscriberFactory;
 
 /**
  * Dashboard Customer Info
@@ -13,44 +21,44 @@ use Magento\Framework\Exception\NoSuchEntityException;
  * @api
  * @since 100.0.2
  */
-class Info extends \Magento\Framework\View\Element\Template
+class Info extends Template
 {
     /**
      * Cached subscription object
      *
-     * @var \Magento\Newsletter\Model\Subscriber
+     * @var Subscriber
      */
     protected $_subscription;
 
     /**
-     * @var \Magento\Newsletter\Model\SubscriberFactory
+     * @var SubscriberFactory
      */
     protected $_subscriberFactory;
 
     /**
-     * @var \Magento\Customer\Helper\View
+     * @var View
      */
     protected $_helperView;
 
     /**
-     * @var \Magento\Customer\Helper\Session\CurrentCustomer
+     * @var CurrentCustomer
      */
     protected $currentCustomer;
 
     /**
      * Constructor
      *
-     * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Customer\Helper\Session\CurrentCustomer $currentCustomer
-     * @param \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory
-     * @param \Magento\Customer\Helper\View $helperView
+     * @param Context $context
+     * @param CurrentCustomer $currentCustomer
+     * @param SubscriberFactory $subscriberFactory
+     * @param View $helperView
      * @param array $data
      */
     public function __construct(
-        \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Customer\Helper\Session\CurrentCustomer $currentCustomer,
-        \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory,
-        \Magento\Customer\Helper\View $helperView,
+        Context $context,
+        CurrentCustomer $currentCustomer,
+        SubscriberFactory $subscriberFactory,
+        View $helperView,
         array $data = []
     ) {
         $this->currentCustomer = $currentCustomer;
@@ -62,7 +70,7 @@ class Info extends \Magento\Framework\View\Element\Template
     /**
      * Returns the Magento Customer Model for this block
      *
-     * @return \Magento\Customer\Api\Data\CustomerInterface|null
+     * @return CustomerInterface|null
      */
     public function getCustomer()
     {
@@ -84,6 +92,8 @@ class Info extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Get the url to change password
+     *
      * @return string
      */
     public function getChangePasswordUrl()
@@ -94,7 +104,7 @@ class Info extends \Magento\Framework\View\Element\Template
     /**
      * Get Customer Subscription Object Information
      *
-     * @return \Magento\Newsletter\Model\Subscriber
+     * @return Subscriber
      */
     public function getSubscriptionObject()
     {
@@ -102,7 +112,8 @@ class Info extends \Magento\Framework\View\Element\Template
             $this->_subscription = $this->_createSubscriber();
             $customer = $this->getCustomer();
             if ($customer) {
-                $this->_subscription->loadByCustomerId($customer->getId());
+                $websiteId = (int)$this->_storeManager->getWebsite()->getId();
+                $this->_subscription->loadByCustomer((int)$customer->getId(), $websiteId);
             }
         }
         return $this->_subscription;
@@ -128,12 +139,14 @@ class Info extends \Magento\Framework\View\Element\Template
     public function isNewsletterEnabled()
     {
         return $this->getLayout()
-            ->getBlockSingleton(\Magento\Customer\Block\Form\Register::class)
+            ->getBlockSingleton(Register::class)
             ->isNewsletterEnabled();
     }
 
     /**
-     * @return \Magento\Newsletter\Model\Subscriber
+     * Create new instance of Subscriber
+     *
+     * @return Subscriber
      */
     protected function _createSubscriber()
     {
@@ -141,7 +154,7 @@ class Info extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * @return string
+     * @inheritdoc
      */
     protected function _toHtml()
     {

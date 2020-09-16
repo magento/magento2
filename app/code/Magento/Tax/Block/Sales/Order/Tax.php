@@ -82,7 +82,7 @@ class Tax extends \Magento\Framework\View\Element\Template
         $this->_order = $parent->getOrder();
         $this->_source = $parent->getSource();
 
-        $store = $this->getStore();
+        $store = $this->_order->getStore();
         $allowTax = $this->_source->getTaxAmount() > 0 || $this->_config->displaySalesZeroTax($store);
         $grandTotal = (double)$this->_source->getGrandTotal();
         if (!$grandTotal || $allowTax && !$this->_config->displaySalesTaxWithGrandTotal($store)) {
@@ -106,8 +106,8 @@ class Tax extends \Magento\Framework\View\Element\Template
     {
         $taxTotal = new \Magento\Framework\DataObject(['code' => 'tax', 'block_name' => $this->getNameInLayout()]);
         $totals = $this->getParentBlock()->getTotals();
-        if ($totals['grand_total']) {
-            $this->getParentBlock()->addTotalBefore($taxTotal, 'grand_total');
+        if (isset($totals['grand_total_incl'])) {
+            $this->getParentBlock()->addTotal($taxTotal, 'grand_total');
         }
         $this->getParentBlock()->addTotal($taxTotal, $after);
         return $this;
@@ -131,7 +131,7 @@ class Tax extends \Magento\Framework\View\Element\Template
      */
     protected function _initSubtotal()
     {
-        $store = $this->getStore();
+        $store = $this->_order->getStore();
         $parent = $this->getParentBlock();
         $subtotal = $parent->getTotal('subtotal');
         if (!$subtotal) {
@@ -213,7 +213,7 @@ class Tax extends \Magento\Framework\View\Element\Template
      */
     protected function _initShipping()
     {
-        $store = $this->getStore();
+        $store = $this->_order->getStore();
         /** @var \Magento\Sales\Block\Order\Totals $parent */
         $parent = $this->getParentBlock();
         $shipping = $parent->getTotal('shipping');
@@ -290,7 +290,7 @@ class Tax extends \Magento\Framework\View\Element\Template
      */
     protected function _initGrandTotal()
     {
-        $store = $this->getStore();
+        $store = $this->_order->getStore();
         $parent = $this->getParentBlock();
         $grandototal = $parent->getTotal('grand_total');
         if (!$grandototal || !(double)$this->_source->getGrandTotal()) {
@@ -322,8 +322,8 @@ class Tax extends \Magento\Framework\View\Element\Template
                     'label' => __('Grand Total (Incl.Tax)'),
                 ]
             );
-            $parent->addTotal($totalExcl, 'grand_total');
-            $parent->addTotal($totalIncl, 'tax');
+            $parent->addTotal($totalIncl, 'grand_total');
+            $parent->addTotal($totalExcl, 'tax');
             $this->_addTax('grand_total');
         }
         return $this;

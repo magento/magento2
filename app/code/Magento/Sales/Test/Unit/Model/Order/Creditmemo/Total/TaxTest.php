@@ -3,69 +3,66 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Sales\Test\Unit\Model\Order\Creditmemo\Total;
 
 use Magento\Framework\DataObject as MagentoObject;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Creditmemo;
+use Magento\Sales\Model\Order\Creditmemo\Item;
+use Magento\Sales\Model\Order\Creditmemo\Total\Tax;
+use Magento\Sales\Model\Order\Invoice;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class TaxTest extends \PHPUnit\Framework\TestCase
+class TaxTest extends TestCase
 {
     /**
-     * @var \Magento\Sales\Model\Order\Creditmemo\Total\Tax
+     * @var Tax
      */
     protected $model;
 
     /**
-     * @var \Magento\Sales\Model\Order|\PHPUnit_Framework_MockObject_MockObject
+     * @var Order|MockObject
      */
     protected $order;
 
     /**
-     * @var  \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var  ObjectManager
      */
     protected $objectManager;
 
     /**
-     * @var \Magento\Sales\Model\Order\Creditmemo|\PHPUnit_Framework_MockObject_MockObject
+     * @var Creditmemo|MockObject
      */
     protected $creditmemo;
 
     /**
-     * @var \Magento\Sales\Model\Order\Creditmemo|\PHPUnit_Framework_MockObject_MockObject
+     * @var Creditmemo|MockObject
      */
     protected $invoice;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        /** @var \Magento\Sales\Model\Order\Creditmemo\Total\Tax $model */
-        $this->model = $this->objectManager->getObject(\Magento\Sales\Model\Order\Creditmemo\Total\Tax::class);
+        $this->objectManager = new ObjectManager($this);
+        /** @var Tax $model */
+        $this->model = $this->objectManager->getObject(Tax::class);
 
-        $this->order = $this->createPartialMock(
-            \Magento\Sales\Model\Order::class,
-            [
-                '__wakeup'
-            ]
-        );
-
-        $this->invoice = $this->createPartialMock(
-            \Magento\Sales\Model\Order\Invoice::class,
-            [
-                '__wakeup',
-            ]
-        );
+        $this->order = $this->createPartialMock(Order::class, ['__wakeup']);
+        $this->invoice = $this->createPartialMock(Invoice::class, ['__wakeup']);
 
         $this->creditmemo = $this->createPartialMock(
-            \Magento\Sales\Model\Order\Creditmemo::class,
+            Creditmemo::class,
             [
                 'getAllItems',
                 'getOrder',
                 'roundPrice',
                 'isLast',
-                '__wakeup',
             ]
         );
-        $this->creditmemo->expects($this->atLeastOnce())->method('getOrder')->will($this->returnValue($this->order));
+        $this->creditmemo->expects($this->atLeastOnce())->method('getOrder')->willReturn($this->order);
     }
 
     /**
@@ -84,23 +81,23 @@ class TaxTest extends \PHPUnit\Framework\TestCase
         }
 
         //Set up creditmemo mock
-        /** @var \Magento\Sales\Model\Order\Creditmemo\Item[] $creditmemoItems */
+        /** @var Item[] $creditmemoItems */
         $creditmemoItems = [];
         foreach ($creditmemoData['items'] as $itemKey => $creditmemoItemData) {
             $creditmemoItems[$itemKey] = $this->getCreditmemoItem($creditmemoItemData);
         }
         $this->creditmemo->expects($this->once())
             ->method('getAllItems')
-            ->will($this->returnValue($creditmemoItems));
+            ->willReturn($creditmemoItems);
         $this->creditmemo->expects($this->any())
             ->method('isLast')
-            ->will($this->returnValue($creditmemoData['is_last']));
+            ->willReturn($creditmemoData['is_last']);
         foreach ($creditmemoData['data_fields'] as $key => $value) {
             $this->creditmemo->setData($key, $value);
         }
         $this->creditmemo->expects($this->any())
             ->method('roundPrice')
-            ->will($this->returnCallback(
+            ->willReturnCallback(
                 function ($price, $type) use (&$roundingDelta) {
                     if (!isset($roundingDelta[$type])) {
                         $roundingDelta[$type] = 0;
@@ -109,7 +106,7 @@ class TaxTest extends \PHPUnit\Framework\TestCase
                     $roundingDelta[$type] = $price - $roundedPrice;
                     return $roundedPrice;
                 }
-            ));
+            );
 
         $this->model->collect($this->creditmemo);
 
@@ -610,40 +607,175 @@ class TaxTest extends \PHPUnit\Framework\TestCase
             ],
         ];
 
+        // scenario 6: 2 items, 2 invoiced, price includes tax, full discount, free shipping
+        // partial credit memo, make sure that discount tax compensation (with 100 % discount) is calculated correctly
+        $result['collect_with_full_discount_product_price'] = [
+            'order_data' => [
+                'data_fields' => [
+                    'discount_amount' => -200.00,
+                    'discount_invoiced' => -200.00,
+                    'subtotal' => 181.82,
+                    'subtotal_incl_tax' => 200,
+                    'base_subtotal' => 181.82,
+                    'base_subtotal_incl_tax' => 200,
+                    'subtotal_invoiced' => 181.82,
+                    'discount_tax_compensation_amount' => 18.18,
+                    'discount_tax_compensation_invoiced' => 18.18,
+                    'base_discount_tax_compensation_amount' => 18.18,
+                    'base_discount_tax_compensation_invoiced' => 18.18,
+                    'grand_total' => 0,
+                    'base_grand_total' => 0,
+                    'shipping_tax_amount' => 0,
+                    'base_shipping_tax_amount' => 0,
+                    'shipping_discount_tax_compensation_amount' => 0,
+                    'base_shipping_discount_tax_compensation_amount' => 0,
+                    'tax_amount' => 0,
+                    'base_tax_amount' => 0,
+                    'tax_invoiced' => 0,
+                    'base_tax_invoiced' => 0,
+                    'tax_refunded' => 0,
+                    'base_tax_refunded' => 0,
+                    'base_shipping_amount' => 0,
+                ],
+            ],
+            'creditmemo_data' => [
+                'items' => [
+                    'item_1' => [
+                        'order_item' => [
+                            'qty_invoiced' => 1,
+                            'tax_amount' => 0,
+                            'tax_invoiced' => 0,
+                            'tax_refunded' => null,
+                            'base_tax_amount' => 0,
+                            'base_tax_invoiced' => 0,
+                            'base_tax_refunded' => 0,
+                            'tax_percent' => 10,
+                            'qty_refunded' => 0,
+                            'discount_percent' => 100,
+                            'discount_amount' => 100,
+                            'base_discount_amount' => 100,
+                            'discount_invoiced' => 100,
+                            'base_discount_invoiced' => 100,
+                            'row_total' => 90.91,
+                            'base_row_total' => 90.91,
+                            'row_invoiced' => 90.91,
+                            'base_row_invoiced' => 90.91,
+                            'price_incl_tax' => 100,
+                            'base_price_incl_tax' => 100,
+                            'row_total_incl_tax' => 100,
+                            'base_row_total_incl_tax' => 100,
+                            'discount_tax_compensation_amount' => 9.09,
+                            'base_discount_tax_compensation_amount' => 9.09,
+                            'discount_tax_compensation_invoiced' => 9.09,
+                            'base_discount_tax_compensation_invoiced' => 9.09,
+                        ],
+                        'is_last' => true,
+                        'qty' => 1,
+                    ],
+                    'item_2' => [
+                        'order_item' => [
+                            'qty_invoiced' => 1,
+                            'tax_amount' => 0,
+                            'tax_invoiced' => 0,
+                            'tax_refunded' => null,
+                            'base_tax_amount' => 0,
+                            'base_tax_invoiced' => 0,
+                            'base_tax_refunded' => null,
+                            'tax_percent' => 10,
+                            'qty_refunded' => 0,
+                            'discount_percent' => 100,
+                            'discount_amount' => 100,
+                            'base_discount_amount' => 100,
+                            'discount_invoiced' => 100,
+                            'base_discount_invoiced' => 100,
+                            'row_total' => 90.91,
+                            'base_row_total' => 90.91,
+                            'row_invoiced' => 90.91,
+                            'base_row_invoiced' => 90.91,
+                            'price_incl_tax' => 100,
+                            'base_price_incl_tax' => 100,
+                            'row_total_incl_tax' => 100,
+                            'base_row_total_incl_tax' => 100,
+                            'discount_tax_compensation_amount' => 9.09,
+                            'base_discount_tax_compensation_amount' => 9.09,
+                            'discount_tax_compensation_invoiced' => 9.09,
+                            'base_discount_tax_compensation_invoiced' => 9.09,
+                        ],
+                        'is_last' => false,
+                        'qty' => 0,
+                    ],
+                ],
+                'is_last' => false,
+                'data_fields' => [
+                    'grand_total' => -9.09,
+                    'base_grand_total' => -9.09,
+                    'base_shipping_amount' => 0,
+                    'tax_amount' => 0,
+                    'base_tax_amount' => 0,
+                    'invoice' => new MagentoObject(
+                        [
+                            'shipping_tax_amount' => 0,
+                            'base_shipping_tax_amount' => 0,
+                            'shipping_discount_tax_compensation_amount' => 0,
+                            'base_shipping_discount_tax_compensation_amount' => 0,
+                        ]
+                    ),
+                ],
+            ],
+            'expected_results' => [
+                'creditmemo_items' => [
+                    'item_1' => [
+                        'tax_amount' => 0,
+                        'base_tax_amount' => 0,
+                    ],
+                    'item_2' => [
+                        'tax_amount' => 0,
+                        'base_tax_amount' => 0,
+                    ],
+                ],
+                'creditmemo_data' => [
+                    'grand_total' => 0,
+                    'base_grand_total' => 0,
+                    'tax_amount' => 0,
+                    'base_tax_amount' => 0,
+                    'shipping_tax_amount' => 0,
+                    'base_shipping_tax_amount' => 0,
+                ],
+            ],
+        ];
+
         return $result;
     }
 
     /**
      * @param $creditmemoItemData array
-     * @return \Magento\Sales\Model\Order\Creditmemo\Item|\PHPUnit_Framework_MockObject_MockObject
+     * @return Item|MockObject
      */
     protected function getCreditmemoItem($creditmemoItemData)
     {
-        /** @var \Magento\Sales\Model\Order\Item|\PHPUnit_Framework_MockObject_MockObject $orderItem */
+        /** @var \Magento\Sales\Model\Order\Item|MockObject $orderItem */
         $orderItem = $this->createPartialMock(
             \Magento\Sales\Model\Order\Item::class,
             [
-                'isDummy',
-                '__wakeup'
+                'isDummy'
             ]
         );
         foreach ($creditmemoItemData['order_item'] as $key => $value) {
             $orderItem->setData($key, $value);
         }
 
-        /** @var \Magento\Sales\Model\Order\Creditmemo\Item|\PHPUnit_Framework_MockObject_MockObject $creditmemoItem */
+        /** @var Item|MockObject $creditmemoItem */
         $creditmemoItem = $this->createPartialMock(
-            \Magento\Sales\Model\Order\Creditmemo\Item::class,
+            Item::class,
             [
                 'getOrderItem',
-                'isLast',
-                '__wakeup'
+                'isLast'
             ]
         );
-        $creditmemoItem->expects($this->any())->method('getOrderItem')->will($this->returnValue($orderItem));
+        $creditmemoItem->expects($this->any())->method('getOrderItem')->willReturn($orderItem);
         $creditmemoItem->expects($this->any())
             ->method('isLast')
-            ->will($this->returnValue($creditmemoItemData['is_last']));
+            ->willReturn($creditmemoItemData['is_last']);
         $creditmemoItem->setData('qty', $creditmemoItemData['qty']);
         return $creditmemoItem;
     }

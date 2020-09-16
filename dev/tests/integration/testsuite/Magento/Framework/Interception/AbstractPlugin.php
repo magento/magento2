@@ -7,6 +7,7 @@ namespace Magento\Framework\Interception;
 
 use Magento\Framework\Code\Generator\Autoloader;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Class GeneralTest
@@ -18,7 +19,7 @@ abstract class AbstractPlugin extends \PHPUnit\Framework\TestCase
     /**
      * Config reader
      *
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_configReader;
 
@@ -39,7 +40,7 @@ abstract class AbstractPlugin extends \PHPUnit\Framework\TestCase
     /**
      * Set up
      */
-    public function setUp()
+    protected function setUp(): void
     {
         if (!$this->_objectManager) {
             return;
@@ -52,7 +53,7 @@ abstract class AbstractPlugin extends \PHPUnit\Framework\TestCase
     /**
      * Tear down
      */
-    public function tearDown()
+    protected function tearDown(): void
     {
         \Magento\Framework\App\ObjectManager::setInstance($this->applicationObjectManager);
         $this->injectObjectManager($this->applicationObjectManager);
@@ -73,18 +74,22 @@ abstract class AbstractPlugin extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'read'
-        )->will(
-            $this->returnValue($pluginConfig)
+        )->willReturn(
+            $pluginConfig
         );
 
         $areaList = $this->createMock(\Magento\Framework\App\AreaList::class);
-        $areaList->expects($this->any())->method('getCodes')->will($this->returnValue([]));
+        $areaList->expects($this->any())->method('getCodes')->willReturn([]);
         $configScope = new \Magento\Framework\Config\Scope($areaList, 'global');
         $cache = $this->createMock(\Magento\Framework\Config\CacheInterface::class);
         $cacheManager = $this->createMock(\Magento\Framework\Interception\Config\CacheManager::class);
         $cacheManager->method('load')->willReturn(null);
         $definitions = new \Magento\Framework\ObjectManager\Definition\Runtime();
         $relations = new \Magento\Framework\ObjectManager\Relations\Runtime();
+        $configLoader = $this->createMock(ConfigLoaderInterface::class);
+        $logger = $this->createMock(\Psr\Log\LoggerInterface::class);
+        $directoryList = $this->createMock(DirectoryList::class);
+        $configWriter = $this->createMock(PluginListGenerator::class);
         $interceptionConfig = new Config\Config(
             $this->_configReader,
             $configScope,
@@ -108,6 +113,10 @@ abstract class AbstractPlugin extends \PHPUnit\Framework\TestCase
             \Magento\Framework\ObjectManager\DefinitionInterface::class          => $definitions,
             \Magento\Framework\Interception\DefinitionInterface::class           => $interceptionDefinitions,
             \Magento\Framework\Serialize\SerializerInterface::class              => $json,
+            \Magento\Framework\Interception\ConfigLoaderInterface::class         => $configLoader,
+            \Psr\Log\LoggerInterface::class                                      => $logger,
+            \Magento\Framework\App\Filesystem\DirectoryList::class               => $directoryList,
+            \Magento\Framework\App\ObjectManager\ConfigWriterInterface::class    => $configWriter
         ];
         $this->_objectManager = new \Magento\Framework\ObjectManager\ObjectManager(
             $factory,
@@ -125,7 +134,9 @@ abstract class AbstractPlugin extends \PHPUnit\Framework\TestCase
                     \Magento\Framework\Interception\ChainInterface::class =>
                         \Magento\Framework\Interception\Chain\Chain::class,
                     \Magento\Framework\Interception\Code\Generator\InterceptorInterface::class =>
-                        \Magento\Framework\Interception\Code\Generator\Interceptor::class
+                        \Magento\Framework\Interception\Code\Generator\Interceptor::class,
+                    \Magento\Framework\Interception\ConfigWriterInterface::class =>
+                        \Magento\Framework\Interception\PluginListGenerator::class
                 ],
             ]
         );

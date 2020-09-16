@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCMSPageCreatePageInSingleStoreModeTest">
+        <annotations>
+            <features value="Cms"/>
+            <stories value="Create a CMS Page via the Admin"/>
+            <title value="Create CMS Page via the Admin in single store mode"/>
+            <description value="Admin should be able to create a CMS Page"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-14679"/>
+            <group value="backend"/>
+            <group value="Cms"/>
+            <group value="mtf_migrated"/>
+            <group value="WYSIWYGDisabled"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set {{StorefrontSingleStoreModeEnabledConfigData.path}} {{StorefrontSingleStoreModeEnabledConfigData.value}}" stepKey="enableSingleStoreMode" />
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <magentoCLI command="config:set {{StorefrontSingleStoreModeDisabledConfigData.path}} {{StorefrontSingleStoreModeDisabledConfigData.value}}" stepKey="disableSingleStoreMode" />
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!--Go to New CMS Page page-->
+        <actionGroup ref="AdminOpenCreateNewCMSPageActionGroup" stepKey="navigateToCreateNewPage"/>
+        <!--Fill the CMS page form-->
+        <actionGroup ref="FillOutCMSPageContent" stepKey="fillBasicPageDataForPageWithDefaultStore"/>
+        <!--Verify successfully saved-->
+        <actionGroup ref="SaveCmsPageActionGroup" stepKey="savePageInSingleStoreMode"/>
+        <!--verify page on frontend-->
+        <actionGroup ref="StorefrontGoToCMSPageActionGroup" stepKey="navigateToPageOnStoreFront">
+            <argument name="identifier" value="{{_duplicatedCMSPage.identifier}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertStoreFrontCMSPageActionGroup" stepKey="verifyPageDataOnFrontend">
+            <argument name="cmsTitle" value="{{_duplicatedCMSPage.title}}"/>
+            <argument name="cmsContent" value="{{_duplicatedCMSPage.content}}"/>
+            <argument name="cmsContentHeading" value="{{_duplicatedCMSPage.content_heading}}"/>
+        </actionGroup>
+        <!--Navigate to page in Admin-->
+        <actionGroup ref="NavigateToCreatedCMSPageActionGroup" stepKey="navigateToCMSPageInAdminInSingleStoreMode">
+            <argument name="CMSPage" value="_duplicatedCMSPage"/>
+        </actionGroup>
+        <!--Verify Page Data in Admin-->
+        <actionGroup ref="AssertCMSPageContentActionGroup" stepKey="verifyPageDataInAdminInSingleStoreMode"/>
+        <!--Delete page-->
+        <actionGroup ref="DeletePageByUrlKeyActionGroup" stepKey="deletePageInSingleStoreMode">
+            <argument name="UrlKey" value="{{_duplicatedCMSPage.identifier}}"/>
+        </actionGroup>
+    </test>
+</tests>

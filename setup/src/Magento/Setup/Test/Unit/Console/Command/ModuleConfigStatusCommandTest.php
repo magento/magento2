@@ -8,8 +8,11 @@ declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Console\Command;
 
+use Magento\Framework\App\DeploymentConfig\Reader;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Setup\Console\Command\ModuleConfigStatusCommand;
+use Magento\Setup\Model\Installer;
+use Magento\Setup\Model\InstallerFactory;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 
@@ -26,20 +29,20 @@ class ModuleConfigStatusCommandTest extends TestCase
      */
     public function testExecute(array $currentConfig, array $correctConfig, string $expectedOutput)
     {
-        $configReader = $this->createMock(\Magento\Framework\App\DeploymentConfig\Reader::class);
+        $configReader = $this->createMock(Reader::class);
         $configReader->expects($this->once())
-                     ->method('load')
-                     ->willReturn([ConfigOptionsListConstants::KEY_MODULES => $currentConfig]);
+            ->method('load')
+            ->willReturn([ConfigOptionsListConstants::KEY_MODULES => $currentConfig]);
 
-        $installer = $this->createMock(\Magento\Setup\Model\Installer::class);
+        $installer = $this->createMock(Installer::class);
         $installer->expects($this->once())
-                  ->method('getModulesConfig')
-                  ->willReturn($correctConfig);
+            ->method('getModulesConfig')
+            ->willReturn($correctConfig);
 
-        $installerFactory = $this->createMock(\Magento\Setup\Model\InstallerFactory::class);
+        $installerFactory = $this->createMock(InstallerFactory::class);
         $installerFactory->expects($this->once())
-                         ->method('create')
-                         ->willReturn($installer);
+            ->method('create')
+            ->willReturn($installer);
 
         $command = new ModuleConfigStatusCommand($configReader, $installerFactory);
 

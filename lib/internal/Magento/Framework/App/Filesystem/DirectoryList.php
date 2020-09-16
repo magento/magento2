@@ -63,6 +63,11 @@ class DirectoryList extends \Magento\Framework\Filesystem\DirectoryList
     const VAR_DIR = 'var';
 
     /**
+     * Storage of files which was exported.
+     */
+    const VAR_EXPORT = 'var_export';
+
+    /**
      * Temporary files
      */
     const TMP = 'tmp';
@@ -151,6 +156,7 @@ class DirectoryList extends \Magento\Framework\Filesystem\DirectoryList
             self::CONFIG => [parent::PATH => 'app/etc'],
             self::LIB_INTERNAL => [parent::PATH => 'lib/internal'],
             self::VAR_DIR => [parent::PATH => 'var'],
+            self::VAR_EXPORT => [parent::PATH => 'var/export'],
             self::CACHE => [parent::PATH => 'var/cache'],
             self::LOG => [parent::PATH => 'var/log'],
             self::DI => [parent::PATH => 'generated/metadata'],

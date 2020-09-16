@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontCheckCartActionGroup">
+        <annotations>
+            <description>Goes to the Storefront Shopping Cart page. Validates that the provided Subtotal, Shipping, Shipping Method and Total are present and correct.</description>
+        </annotations>
+        <arguments>
+            <argument name="subtotal" type="string"/>
+            <argument name="shipping" type="string"/>
+            <argument name="shippingMethod" type="string" defaultValue="Flat Rate - Fixed"/>
+            <argument name="total" type="string"/>
+        </arguments>
+
+        <seeInCurrentUrl url="{{CheckoutCartPage.url}}" stepKey="assertUrl"/>
+        <waitForPageLoad stepKey="waitForCartPage"/>
+        <conditionalClick selector="{{CheckoutCartSummarySection.shippingHeading}}" dependentSelector="{{CheckoutCartSummarySection.shippingMethodForm}}" visible="false" stepKey="openEstimateShippingSection"/>
+        <waitForElementVisible selector="{{CheckoutCartSummarySection.flatRateShippingMethod}}" stepKey="waitForShippingSection"/>
+        <checkOption selector="{{CheckoutCartSummarySection.flatRateShippingMethod}}" stepKey="selectShippingMethod"/>
+        <scrollTo selector="{{CheckoutCartSummarySection.subtotal}}" stepKey="scrollToSummary"/>
+        <see userInput="{{subtotal}}" selector="{{CheckoutCartSummarySection.subtotal}}" stepKey="assertSubtotal"/>
+        <see userInput="({{shippingMethod}})" selector="{{CheckoutCartSummarySection.shippingMethod}}" stepKey="assertShippingMethod"/>
+        <reloadPage stepKey="reloadPage" after="assertShippingMethod" />
+        <waitForPageLoad stepKey="WaitForPageLoaded" after="reloadPage" />
+        <waitForText userInput="{{shipping}}" selector="{{CheckoutCartSummarySection.shipping}}" time="45" stepKey="assertShipping" after="WaitForPageLoaded"/>
+        <see userInput="{{total}}" selector="{{CheckoutCartSummarySection.total}}" stepKey="assertTotal" after="assertShipping"/>
+    </actionGroup>
+</actionGroups>

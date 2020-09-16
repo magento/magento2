@@ -23,27 +23,4 @@
         <see selector="{{CheckoutPaymentSection.orderSummaryShippingTotal}}" userInput="{{orderSummaryShippingTotal}}" stepKey="seeCorrectShipping"/>
         <see selector="{{CheckoutPaymentSection.orderSummaryTotal}}" userInput="{{orderSummaryTotal}}" stepKey="seeCorrectOrderTotal"/>
     </actionGroup>
-    <!-- Assert Order Summary SubTotal You should be on checkout page -->
-    <actionGroup name="AssertStorefrontCheckoutPaymentSummarySubtotalActionGroup">
-        <arguments>
-            <argument name="orderSubtotal" type="string"/>
-        </arguments>
-        <waitForPageLoad time="30" stepKey="waitForCartFullyLoaded"/>
-        <waitForElementVisible selector="{{CheckoutPaymentSection.orderSummarySubtotal}}" time="30" stepKey="waitForOrderSummaryBlock"/>
-        <see selector="{{CheckoutPaymentSection.orderSummarySubtotal}}" userInput="{{orderSubtotal}}" stepKey="seeCorrectSubtotal"/>
-    </actionGroup>
-    <!-- Assert Order Summary Total You should be on checkout page -->
-    <actionGroup name="AssertStorefrontCheckoutPaymentSummaryTotalActionGroup">
-        <arguments>
-            <argument name="orderTotal" type="string"/>
-        </arguments>
-        <waitForPageLoad time="30" stepKey="waitForCartFullyLoaded"/>
-        <waitForElementVisible selector="{{CheckoutPaymentSection.orderSummaryTotal}}" time="30" stepKey="waitForOrderSummaryBlock"/>
-        <see selector="{{CheckoutPaymentSection.orderSummaryTotal}}" userInput="{{orderTotal}}" stepKey="seeCorrectOrderTotal"/>
-    </actionGroup>
-    <!-- Assert Order Summary Total Is Not Shown You should be on checkout page -->
-    <actionGroup name="AssertStorefrontCheckoutPaymentSummaryTotalMissingActionGroup">
-        <waitForPageLoad time="30" stepKey="waitForCartFullyLoaded"/>
-        <dontSeeElement selector="{{CheckoutPaymentSection.orderSummaryTotal}}" stepKey="seeTotalElement"/>
-    </actionGroup>
 </actionGroups>

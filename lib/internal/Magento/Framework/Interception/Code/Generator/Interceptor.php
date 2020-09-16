@@ -7,14 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Interception\Code\Generator;
 
-/**
- * Class Interceptor
- ˚*
- * @package Magento\Framework\Interception\Code\Generator
- */
-class Interceptor extends \Magento\Framework\Code\Generator\EntityAbstract implements InterceptorInterface
+use Magento\Framework\Code\Generator\EntityAbstract;
+
+class Interceptor extends EntityAbstract implements InterceptorInterface
 {
-    const ENTITY_TYPE = 'interceptor';
+    public const ENTITY_TYPE = 'interceptor'
 
     /**
      * Returns default result class name
@@ -49,9 +46,8 @@ class Interceptor extends \Magento\Framework\Code\Generator\EntityAbstract imple
         $parameters = [];
         $body = "\$this->___init();\n";
         if ($constructor) {
-            foreach ($constructor->getParameters() as $parameter) {
-                $parameters[] = $this->_getMethodParameterInfo($parameter);
-            }
+            $parameters = array_map([$this, '_getMethodParameterInfo'], $constructor->getParameters());
+
             $body .= count($parameters)
                 ? "parent::__construct({$this->_getParameterList($parameters)});"
                 : "parent::__construct();";
@@ -67,7 +63,7 @@ class Interceptor extends \Magento\Framework\Code\Generator\EntityAbstract imple
     /**
      * Returns list of methods for class generator
      *
-     * @return mixed
+     * @return array
      */
     protected function _getClassMethods()
     {
@@ -104,10 +100,7 @@ class Interceptor extends \Magento\Framework\Code\Generator\EntityAbstract imple
      */
     protected function _getMethodInfo(\ReflectionMethod $method)
     {
-        $parameters = [];
-        foreach ($method->getParameters() as $parameter) {
-            $parameters[] = $this->_getMethodParameterInfo($parameter);
-        }
+        $parameters = array_map([$this, '_getMethodParameterInfo'], $method->getParameters());
 
         $returnTypeValue = $this->getReturnTypeValue($method);
         $methodInfo = [
@@ -115,22 +108,18 @@ class Interceptor extends \Magento\Framework\Code\Generator\EntityAbstract imple
             'parameters' => $parameters,
             'body' => str_replace(
                 [
-                    '%methodName%',
+                    '%method%',
                     '%return%',
                     '%parameters%'
                 ],
                 [
                     $method->getName(),
-                    $returnTypeValue === 'void' ? '' : ' return',
+                    $returnTypeValue === 'void' ? '' : 'return ',
                     $this->_getParameterList($parameters)
                 ],
                 <<<'METHOD_BODY'
-$pluginInfo = $this->pluginList->getNext($this->subjectType, '%methodName%');
-if (!$pluginInfo) {
-   %return% parent::%methodName%(%parameters%);
-} else {
-   %return% $this->___callPlugins('%methodName%', func_get_args(), $pluginInfo);
-}
+$pluginInfo = $this->pluginList->getNext($this->subjectType, '%method%');
+%return%$pluginInfo ? $this->___callPlugins('%method%', func_get_args(), $pluginInfo) : parent::%method%(%parameters%);
 METHOD_BODY
             ),
                 'returnType' => $returnTypeValue,
@@ -203,11 +192,7 @@ METHOD_BODY
 
             if ($resultClassName !== $sourceClassName . '\\Interceptor') {
                 $this->_addError(
-                    'Invalid Interceptor class name [' .
-                    $resultClassName .
-                    ']. Use ' .
-                    $sourceClassName .
-                    '\\Interceptor'
+                    'Invalid Interceptor class name ' . $resultClassName . '. Use ' . $sourceClassName . '\\Interceptor'
                 );
                 $result = false;
             }

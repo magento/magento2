@@ -20,5 +20,10 @@
                 </input_types>
             </validator_data>
         </general>
+        <dev>
+            <caching>
+                <cache_user_defined_attributes>0</cache_user_defined_attributes>
+            </caching>
+        </dev>
     </default>
 </config>

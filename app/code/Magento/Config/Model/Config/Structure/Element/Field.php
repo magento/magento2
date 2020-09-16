@@ -150,7 +150,7 @@ class Field extends \Magento\Config\Model\Config\Structure\AbstractElement
      */
     public function getType()
     {
-        return isset($this->_data['type']) ? $this->_data['type'] : 'text';
+        return $this->_data['type'] ?? 'text';
     }
 
     /**
@@ -204,7 +204,7 @@ class Field extends \Magento\Config\Model\Config\Structure\AbstractElement
      */
     public function getFrontendClass()
     {
-        return isset($this->_data['frontend_class']) ? $this->_data['frontend_class'] : '';
+        return $this->_data['frontend_class'] ?? '';
     }
 
     /**
@@ -256,7 +256,7 @@ class Field extends \Magento\Config\Model\Config\Structure\AbstractElement
      */
     public function getConfigPath()
     {
-        return isset($this->_data['config_path']) ? $this->_data['config_path'] : null;
+        return $this->_data['config_path'] ?? null;
     }
 
     /**
@@ -334,7 +334,7 @@ class Field extends \Magento\Config\Model\Config\Structure\AbstractElement
      */
     public function getValidation()
     {
-        return isset($this->_data['validate']) ? $this->_data['validate'] : null;
+        return $this->_data['validate'] ?? null;
     }
 
     /**

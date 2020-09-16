@@ -6,8 +6,7 @@
   */
 -->
 
-<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminCreateTextSwatchTest">
         <annotations>
             <features value="Swatches"/>
@@ -19,15 +18,14 @@
             <group value="Swatches"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="adminLogout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
 
         <!-- Create a new product attribute of type "Text Swatch" -->
-        <amOnPage url="{{ProductAttributePage.url}}" stepKey="goToNewProductAttributePage"/>
-        <waitForPageLoad stepKey="waitForNewProductAttributePage"/>
+        <actionGroup ref="AdminNavigateToNewProductAttributePageActionGroup" stepKey="goToNewProductAttributePage"/>
         <fillField selector="{{AttributePropertiesSection.DefaultLabel}}" userInput="{{ProductAttributeFrontendLabel.label}}" stepKey="fillDefaultLabel"/>
         <selectOption selector="{{AttributePropertiesSection.InputType}}" userInput="swatch_text" stepKey="selectInputType"/>
         <click selector="{{AdminManageSwatchSection.addSwatchText}}" stepKey="clickAddSwatch0"/>
@@ -52,14 +50,13 @@
         <seeInField selector="{{AdminManageSwatchSection.nthSwatchAdminDescription('3')}}" userInput="Something blue." stepKey="seeDescription2"/>
 
         <!-- Create a configurable product to verify the storefront with -->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductGridPage"/>
-        <waitForPageLoad time="30" stepKey="waitForProductGrid"/>
-        <actionGroup ref="goToCreateProductPage" stepKey="goToCreateConfigurableProduct">
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="amOnProductGridPage"/>
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateConfigurableProduct">
             <argument name="product" value="BaseConfigurableProduct"/>
         </actionGroup>
         <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="openSeoSection"/>
         <fillField userInput="{{_defaultProduct.urlKey}}" selector="{{AdminProductSEOSection.urlKeyInput}}" stepKey="fillUrlKey"/>
-        <actionGroup ref="fillMainProductForm" stepKey="fillProductForm">
+        <actionGroup ref="FillMainProductFormActionGroup" stepKey="fillProductForm">
             <argument name="product" value="BaseConfigurableProduct"/>
         </actionGroup>
 
@@ -83,19 +80,19 @@
         <amOnPage url="{{_defaultProduct.urlKey}}.html" stepKey="amOnProductPage"/>
         <waitForPageLoad stepKey="waitForProductPage"/>
         <see selector="{{StorefrontProductInfoMainSection.swatchAttributeOptions}}" userInput="red" stepKey="seeRed"/>
-        <grabAttributeFrom selector="{{StorefrontProductInfoMainSection.nthSwatchOptionText('1')}}" userInput="option-label" stepKey="grabRedLabel"/>
+        <grabAttributeFrom selector="{{StorefrontProductInfoMainSection.nthSwatchOptionText('1')}}" userInput="data-option-label" stepKey="grabRedLabel"/>
         <assertEquals stepKey="assertRedLabel">
             <expectedResult type="string">Something red.</expectedResult>
             <actualResult type="string">{$grabRedLabel}</actualResult>
         </assertEquals>
         <see selector="{{StorefrontProductInfoMainSection.swatchAttributeOptions}}" userInput="green" stepKey="seeGreen"/>
-        <grabAttributeFrom selector="{{StorefrontProductInfoMainSection.nthSwatchOptionText('2')}}" userInput="option-label" stepKey="grabGreenLabel"/>
+        <grabAttributeFrom selector="{{StorefrontProductInfoMainSection.nthSwatchOptionText('2')}}" userInput="data-option-label" stepKey="grabGreenLabel"/>
         <assertEquals stepKey="assertGreenLabel">
             <expectedResult type="string">Something green.</expectedResult>
             <actualResult type="string">{$grabGreenLabel}</actualResult>
         </assertEquals>
         <see selector="{{StorefrontProductInfoMainSection.swatchAttributeOptions}}" userInput="blue" stepKey="seeBlue"/>
-        <grabAttributeFrom selector="{{StorefrontProductInfoMainSection.nthSwatchOptionText('3')}}" userInput="option-label" stepKey="grabBlueLabel"/>
+        <grabAttributeFrom selector="{{StorefrontProductInfoMainSection.nthSwatchOptionText('3')}}" userInput="data-option-label" stepKey="grabBlueLabel"/>
         <assertEquals stepKey="assertBlueLabel">
             <expectedResult type="string">Something blue.</expectedResult>
             <actualResult type="string">{$grabBlueLabel}</actualResult>

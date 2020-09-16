@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminCreateCatalogPriceRuleWithConditionActionGroup" extends="CreateCatalogPriceRuleActionGroup">
+        <waitForPageLoad stepKey="waitForPageLoad" after="addNewRule"/>
+        <click selector="{{AdminNewCatalogPriceRule.conditionsTab}}" stepKey="expandConditions" before="openActionDropdown"/>
+        <scrollTo selector="{{AdminNewCatalogPriceRule.conditionsTab}}" stepKey="scrollToConditionsTab" after="expandConditions"/>
+        <waitForElementVisible selector="{{PriceRuleConditionsSection.createNewRule}}" stepKey="waitForNewRule" after="scrollToConditionsTab"/>
+        <click selector="{{PriceRuleConditionsSection.createNewRule}}" stepKey="clickNewRule" after="waitForNewRule"/>
+        <selectOption selector="{{AdminNewCatalogPriceRuleConditions.conditionsDropdown}}" userInput="{{ProductAttributeFrontendLabel.label}}" stepKey="selectProductAttribute" after="clickNewRule"/>
+        <waitForPageLoad stepKey="waitForAttributeLoad" after="selectProductAttribute"/>
+        <!--Assert that attribute contains today date without time-->
+        <comment userInput="Assert that attribute contains today date without time" stepKey="assertDate" after="waitForAttributeLoad"/>
+        <generateDate date="now" format="Y-m-d" stepKey="today" after="assertDate"/>
+        <grabTextFrom selector="{{PriceRuleConditionsSection.firstProductAttributeSelected}}"  stepKey="grabTextFromSelectedAttribute" after="today"/>
+        <assertEquals stepKey="assertTodayDate" after="grabTextFromSelectedAttribute">
+			<actualResult type="const">$grabTextFromSelectedAttribute</actualResult>
+			<expectedResult type="const">$today</expectedResult>
+        </assertEquals>
+    </actionGroup>
+</actionGroups>

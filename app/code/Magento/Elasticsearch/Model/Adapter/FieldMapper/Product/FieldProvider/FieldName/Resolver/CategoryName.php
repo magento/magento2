@@ -8,10 +8,9 @@ declare(strict_types=1);
 namespace Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver;
 
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeAdapter;
+use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\ResolverInterface;
 use Magento\Framework\Registry;
 use Magento\Store\Model\StoreManagerInterface as StoreManager;
-use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\ResolverInterface;
-use Magento\Framework\App\ObjectManager;
 
 /**
  * Resolver field name for Category name attribute.
@@ -33,13 +32,11 @@ class CategoryName implements ResolverInterface
      * @param Registry $coreRegistry
      */
     public function __construct(
-        StoreManager $storeManager = null,
-        Registry $coreRegistry = null
+        StoreManager $storeManager,
+        Registry $coreRegistry
     ) {
-        $this->storeManager = $storeManager ?: ObjectManager::getInstance()
-            ->get(StoreManager::class);
-        $this->coreRegistry = $coreRegistry ?: ObjectManager::getInstance()
-            ->get(Registry::class);
+        $this->storeManager = $storeManager;
+        $this->coreRegistry = $coreRegistry;
     }
 
     /**

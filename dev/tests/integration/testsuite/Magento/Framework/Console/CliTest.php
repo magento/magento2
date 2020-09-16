@@ -52,7 +52,7 @@ class CliTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->configFilePool = $this->objectManager->get(ConfigFilePool::class);
@@ -66,7 +66,7 @@ class CliTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->filesystem->getDirectoryWrite(DirectoryList::CONFIG)->writeFile(
             $this->configFilePool->getPath(ConfigFilePool::APP_ENV),
@@ -80,6 +80,7 @@ class CliTest extends \PHPUnit\Framework\TestCase
      * Checks that settings from env.php config file are applied
      * to created application instance.
      *
+     * @magentoAppIsolation enabled
      * @param bool $isPub
      * @param array $params
      * @dataProvider documentRootIsPubProvider

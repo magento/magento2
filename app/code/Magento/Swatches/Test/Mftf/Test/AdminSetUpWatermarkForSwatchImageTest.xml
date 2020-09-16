@@ -11,22 +11,24 @@
     <test name="AdminSetUpWatermarkForSwatchImageTest">
         <annotations>
             <features value="Swatches"/>
+            <stories value="Product Swatches Images"/>
             <title value="Possibility to set up watermark for a swatch image type"/>
             <description value="Possibility to set up watermark for a swatch image type"/>
             <severity value="MAJOR"/>
             <testCaseId value="MC-17607"/>
             <useCaseId value="MC-15523"/>
+            <severity value="MAJOR"/>
             <group value="swatches"/>
         </annotations>
         <before>
             <!-- Login as Admin -->
             <comment userInput="Login as Admin" stepKey="commentLoginAsAdmin"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <!-- Log out -->
             <comment userInput="Log out" stepKey="commentLogOut"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!-- Go to Admin > Content > Configuration	page -->
         <comment userInput="Go to Configuration Page" stepKey="commentOpenConfigurationPage"/>
@@ -36,8 +38,7 @@
         </actionGroup>
         <!-- Select Edit next to the Default Store View -->
         <comment userInput="Select Edit next to the Default Store View" stepKey="commentEditDefaultView"/>
-        <click selector="{{AdminCustomerGridSection.firstRowEditLink}}" stepKey="clickToEditDefaultStoreView"/>
-        <waitForPageLoad stepKey="waitForDefaultStorePage"/>
+        <actionGroup ref="AdminClickFirstRowEditLinkOnCustomerGridActionGroup" stepKey="clickToEditDefaultStoreView"/>
         <!-- Expand the Product Image Watermarks section-->
         <comment userInput="Expand the Product Image Watermarks section" stepKey="commentOpenWatermarksSection"/>
         <click selector="{{AdminDesignConfigSection.watermarkSectionHeader}}" stepKey="clickToProductImageWatermarks"/>

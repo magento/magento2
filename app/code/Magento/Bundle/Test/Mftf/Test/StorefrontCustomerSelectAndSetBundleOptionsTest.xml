@@ -19,32 +19,33 @@
             <group value="Bundle"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct1"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct2"/>
+
+            <magentoCron stepKey="runCronIndex" groups="index"/>
         </before>
         <after>
             <!-- Delete the bundled product -->
-            <actionGroup stepKey="deleteBundle" ref="deleteProductUsingProductGrid">
+            <actionGroup stepKey="deleteBundle" ref="DeleteProductUsingProductGridActionGroup">
                 <argument name="product" value="BundleProduct"/>
             </actionGroup>
-            <amOnPage url="{{AdminLogoutPage.url}}" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
             <deleteData createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
             <deleteData createDataKey="simpleProduct2" stepKey="deleteSimpleProduct2"/>
         </after>
 
         <!-- Start creating a bundle product -->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToProductList"/>
-        <waitForPageLoad stepKey="waitForProductList"/>
-        <actionGroup ref="goToCreateProductPage" stepKey="goToCreateProduct">
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="goToProductList"/>
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateProduct">
             <argument name="product" value="BundleProduct"/>
         </actionGroup>
-        <actionGroup ref="fillProductNameAndSkuInProductForm" stepKey="fillNameAndSku">
+        <actionGroup ref="FillProductNameAndSkuInProductFormActionGroup" stepKey="fillNameAndSku">
             <argument name="product" value="BundleProduct"/>
         </actionGroup>
 
         <!-- Add Option One, a "Drop-down" type option -->
-        <actionGroup ref="addBundleOptionWithTwoProducts" stepKey="addBundleOptionWithTwoProducts1">
+        <actionGroup ref="AddBundleOptionWithTwoProductsActionGroup" stepKey="addBundleOptionWithTwoProducts1">
             <argument name="x" value="0"/>
             <argument name="n" value="1"/>
             <argument name="prodOneSku" value="$$simpleProduct1.sku$$"/>
@@ -56,7 +57,7 @@
         <checkOption selector="{{AdminProductFormBundleSection.userDefinedQuantity('0', '1')}}" stepKey="userDefinedQuantitiyOption0Product1"/>
 
         <!-- Add Option Two, a "Radio Buttons" type option -->
-        <actionGroup ref="addBundleOptionWithTwoProducts" stepKey="addBundleOptionWithTwoProducts2">
+        <actionGroup ref="AddBundleOptionWithTwoProductsActionGroup" stepKey="addBundleOptionWithTwoProducts2">
             <argument name="x" value="1"/>
             <argument name="n" value="2"/>
             <argument name="prodOneSku" value="$$simpleProduct1.sku$$"/>
@@ -68,7 +69,7 @@
         <checkOption selector="{{AdminProductFormBundleSection.userDefinedQuantity('1', '1')}}" stepKey="userDefinedQuantitiyOption1Product1"/>
 
         <!-- Add Option Three, a "Checkbox" type option -->
-        <actionGroup ref="addBundleOptionWithTwoProducts" stepKey="addBundleOptionWithTwoProducts3">
+        <actionGroup ref="AddBundleOptionWithTwoProductsActionGroup" stepKey="addBundleOptionWithTwoProducts3">
             <argument name="x" value="2"/>
             <argument name="n" value="3"/>
             <argument name="prodOneSku" value="$$simpleProduct1.sku$$"/>
@@ -78,7 +79,7 @@
         </actionGroup>
 
         <!-- Add Option Four, a "Multi Select" type option -->
-        <actionGroup ref="addBundleOptionWithTwoProducts" stepKey="addBundleOptionWithTwoProducts4">
+        <actionGroup ref="AddBundleOptionWithTwoProductsActionGroup" stepKey="addBundleOptionWithTwoProducts4">
             <argument name="x" value="3"/>
             <argument name="n" value="4"/>
             <argument name="prodOneSku" value="$$simpleProduct1.sku$$"/>
@@ -88,7 +89,11 @@
         </actionGroup>
 
         <!-- Save product and go to storefront -->
-        <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
+
+        <wait stepKey="waitBeforeIndexerAfterBundle" time="60"/>
+        <magentoCLI command="cron:run --group=index" stepKey="runCronIndexerAfterBundle"/>
+
         <amOnPage url="{{BundleProduct.sku}}.html" stepKey="goToStorefront"/>
         <waitForPageLoad stepKey="waitForStorefront"/>
         <click selector="{{StorefrontBundledSection.addToCart}}" stepKey="clickCustomize"/>
@@ -99,23 +104,23 @@
         <selectOption selector="{{StorefrontBundledSection.dropDownOptionOneProducts('Option One')}}" userInput="$$simpleProduct1.sku$$ +$$$simpleProduct1.price$$.00" stepKey="selectOption0Product0"/>
         <seeOptionIsSelected selector="{{StorefrontBundledSection.dropDownOptionOneProducts('Option One')}}" userInput="$$simpleProduct1.sku$$ +$$$simpleProduct1.price$$.00" stepKey="checkOption0Product0"/>
         <fillField selector="{{StorefrontBundledSection.dropDownOptionOneQuantity('Option One')}}" userInput="3" stepKey="fillQuantity00"/>
-        <seeInField selector="{{StorefrontBundledSection.dropDownOptionOneQuantity('Option One')}}" userInput="3" stepKey="checkQuantity00"/>
+        <seeInField selector="{{StorefrontBundledSection.dropDownOptionOneQuantity('Option One')}}" userInput="03" stepKey="checkQuantity00"/>
 
         <selectOption selector="{{StorefrontBundledSection.dropDownOptionOneProducts('Option One')}}" userInput="$$simpleProduct2.sku$$ +$$$simpleProduct2.price$$.00" stepKey="selectOption0Product1"/>
         <seeOptionIsSelected selector="{{StorefrontBundledSection.dropDownOptionOneProducts('Option One')}}" userInput="$$simpleProduct2.sku$$ +$$$simpleProduct2.price$$.00" stepKey="checkOption0Product1"/>
         <fillField selector="{{StorefrontBundledSection.dropDownOptionOneQuantity('Option One')}}" userInput="3" stepKey="fillQuantity01"/>
-        <seeInField selector="{{StorefrontBundledSection.dropDownOptionOneQuantity('Option One')}}" userInput="3" stepKey="checkQuantity01"/>
+        <seeInField selector="{{StorefrontBundledSection.dropDownOptionOneQuantity('Option One')}}" userInput="03" stepKey="checkQuantity01"/>
 
         <!--"Radio Buttons" type option-->
         <checkOption selector="{{StorefrontBundledSection.radioButtonOptionTwoProducts('Option Two', '1')}}" stepKey="selectOption1Product0"/>
         <seeCheckboxIsChecked selector="{{StorefrontBundledSection.radioButtonOptionTwoProducts('Option Two', '1')}}" stepKey="checkOption1Product0"/>
         <fillField selector="{{StorefrontBundledSection.radioButtonOptionTwoQuantity('Option Two')}}" userInput="3" stepKey="fillQuantity10"/>
-        <seeInField selector="{{StorefrontBundledSection.radioButtonOptionTwoQuantity('Option Two')}}" userInput="3" stepKey="checkQuantity10"/>
+        <seeInField selector="{{StorefrontBundledSection.radioButtonOptionTwoQuantity('Option Two')}}" userInput="03" stepKey="checkQuantity10"/>
 
         <checkOption selector="{{StorefrontBundledSection.radioButtonOptionTwoProducts('Option Two', '2')}}" stepKey="selectOption1Product1"/>
         <seeCheckboxIsChecked selector="{{StorefrontBundledSection.radioButtonOptionTwoProducts('Option Two', '2')}}" stepKey="checkOption1Product1"/>
         <fillField selector="{{StorefrontBundledSection.radioButtonOptionTwoQuantity('Option Two')}}" userInput="3" stepKey="fillQuantity11"/>
-        <seeInField selector="{{StorefrontBundledSection.radioButtonOptionTwoQuantity('Option Two')}}" userInput="3" stepKey="checkQuantity11"/>
+        <seeInField selector="{{StorefrontBundledSection.radioButtonOptionTwoQuantity('Option Two')}}" userInput="03" stepKey="checkQuantity11"/>
 
         <!--"Checkbox" type option-->
         <!--This option does not support user defined quantities-->

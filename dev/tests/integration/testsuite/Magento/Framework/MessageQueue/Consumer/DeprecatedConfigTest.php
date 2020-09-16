@@ -19,7 +19,7 @@ class DeprecatedConfigTest extends \PHPUnit\Framework\TestCase
      */
     private $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
     }
@@ -34,7 +34,7 @@ class DeprecatedConfigTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('deprecated.config.queue.2', $consumer->getQueue());
         $this->assertEquals('db', $consumer->getConnection());
         $this->assertEquals(\Magento\Framework\MessageQueue\ConsumerInterface::class, $consumer->getConsumerInstance());
-        $this->assertEquals(null, $consumer->getMaxMessages());
+        $this->assertNull($consumer->getMaxMessages());
 
         $handlers = $consumer->getHandlers();
         $this->assertInstanceOf(HandlerIterator::class, $handlers);
@@ -55,7 +55,7 @@ class DeprecatedConfigTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('deprecated.config.queue.3', $consumer->getQueue());
         $this->assertEquals('amqp', $consumer->getConnection());
         $this->assertEquals(\Magento\Framework\MessageQueue\ConsumerInterface::class, $consumer->getConsumerInstance());
-        $this->assertEquals(null, $consumer->getMaxMessages());
+        $this->assertNull($consumer->getMaxMessages());
 
         $handlers = $consumer->getHandlers();
         $this->assertInstanceOf(HandlerIterator::class, $handlers);
@@ -74,7 +74,7 @@ class DeprecatedConfigTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('deprecated.config.queue.4', $consumer->getQueue());
         $this->assertEquals('amqp', $consumer->getConnection());
         $this->assertEquals(\Magento\Framework\MessageQueue\ConsumerInterface::class, $consumer->getConsumerInstance());
-        $this->assertEquals(null, $consumer->getMaxMessages());
+        $this->assertNull($consumer->getMaxMessages());
 
         $handlers = $consumer->getHandlers();
         $this->assertInstanceOf(HandlerIterator::class, $handlers);
@@ -110,7 +110,7 @@ class DeprecatedConfigTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('consumer.config.queue', $consumer->getQueue());
         $this->assertEquals('amqp', $consumer->getConnection());
         $this->assertEquals(\Magento\Framework\MessageQueue\ConsumerInterface::class, $consumer->getConsumerInstance());
-        $this->assertEquals(null, $consumer->getMaxMessages());
+        $this->assertNull($consumer->getMaxMessages());
 
         $handlers = $consumer->getHandlers();
         $this->assertInstanceOf(HandlerIterator::class, $handlers);

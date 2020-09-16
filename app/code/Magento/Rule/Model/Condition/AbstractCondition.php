@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-declare(strict_types=1);
 
 namespace Magento\Rule\Model\Condition;
 
@@ -387,7 +386,7 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
     public function getValueParsed()
     {
         if (!$this->hasValueParsed()) {
-            $value = $this->getData('value');
+            $value = $this->getValue();
             if (is_array($value) && count($value) === 1) {
                 $value = reset($value);
             }
@@ -766,7 +765,7 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
     /**
      * Validate product attribute value for condition
      *
-     * @param   object|array|int|string|float|bool $validatedValue product attribute value
+     * @param   object|array|int|string|float|bool|null $validatedValue product attribute value
      * @return  bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -831,6 +830,7 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
             case '{}':
             case '!{}':
                 if (is_scalar($validatedValue) && is_array($value)) {
+                    $validatedValue = (string)$validatedValue;
                     foreach ($value as $item) {
                         if (stripos($validatedValue, (string)$item) !== false) {
                             $result = true;
@@ -878,14 +878,15 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
     /**
      * Case and type insensitive comparison of values
      *
-     * @param string|int|float $validatedValue
-     * @param string|int|float $value
+     * @param string|int|float|null $validatedValue
+     * @param string|int|float|null $value
      * @param bool $strict
      * @return bool
      */
     protected function _compareValues($validatedValue, $value, $strict = true)
     {
-        if ($strict && is_numeric($validatedValue) && is_numeric($value)) {
+        if (null === $value || null === $validatedValue ||
+            $strict && is_numeric($validatedValue) && is_numeric($value)) {
             return $validatedValue == $value;
         }
 

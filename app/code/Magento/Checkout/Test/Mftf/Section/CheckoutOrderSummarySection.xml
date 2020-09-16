@@ -20,5 +20,6 @@
         <element name="miniCartTabClosed" type="button" selector=".title[aria-expanded='false']" timeout="30"/>
         <element name="itemsQtyInCart" type="text" selector=".items-in-cart > .title > strong > span"/>
         <element name="orderSummaryShippingTotalLabelDescription" type="text" selector=".shipping.totals .label.description"/>
+        <element name="shippingTotalNotYetCalculated" type="text" selector=".shipping.totals .not-calculated"/>
     </section>
 </sections>

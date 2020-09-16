@@ -51,4 +51,13 @@
     <type name="Magento\Catalog\Model\Product\Attribute\OptionManagement">
         <plugin name="swatches_product_attribute_optionmanagement_plugin" type="Magento\Swatches\Plugin\Eav\Model\Entity\Attribute\OptionManagement"/>
     </type>
+    <type name="Magento\Eav\Model\Config">
+        <arguments>
+            <argument name="attributesForPreload" xsi:type="array">
+                <item name="catalog_product" xsi:type="array">
+                    <item name="swatch_image" xsi:type="string">catalog_product</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
 </config>
