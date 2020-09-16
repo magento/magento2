@@ -269,7 +269,7 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
      * Apply adjustment to price
      *
      * @param float|string $price
-     * @return AmountInterface
+     * @return \Magento\Framework\Pricing\Amount\AmountInterface
      */
     protected function applyAdjustment($price)
     {
