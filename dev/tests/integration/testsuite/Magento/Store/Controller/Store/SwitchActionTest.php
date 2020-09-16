@@ -5,8 +5,10 @@
  */
 namespace Magento\Store\Controller\Store;
 
+use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\App\ActionInterface;
 use Magento\Framework\Encryption\UrlCoder;
+use Magento\Framework\Interception\InterceptorInterface;
 use Magento\Store\Api\StoreResolverInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
@@ -20,6 +22,9 @@ use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Test for store switch controller.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @magentoAppArea frontend
  */
 class SwitchActionTest extends AbstractController
 {
@@ -39,6 +44,14 @@ class SwitchActionTest extends AbstractController
      * @var MockObject
      */
     private $postprocessorMock;
+    /**
+     * @var UserContextInterface
+     */
+    private $userContext;
+    /**
+     * @var MockObject
+     */
+    private $userContextMock;
 
     /**
      * @inheritDoc
@@ -48,11 +61,15 @@ class SwitchActionTest extends AbstractController
         parent::setUp();
         $this->preprocessor = $this->_objectManager->get(RedirectDataPreprocessorInterface::class);
         $this->preprocessorMock = $this->createMock(RedirectDataPreprocessorInterface::class);
-        $this->_objectManager->addSharedInstance($this->preprocessorMock, get_class($this->preprocessor));
+        $this->_objectManager->addSharedInstance($this->preprocessorMock, $this->getClassName($this->preprocessor));
 
         $this->postprocessor = $this->_objectManager->get(RedirectDataPostprocessorInterface::class);
         $this->postprocessorMock = $this->createMock(RedirectDataPostprocessorInterface::class);
-        $this->_objectManager->addSharedInstance($this->postprocessorMock, get_class($this->postprocessor));
+        $this->_objectManager->addSharedInstance($this->postprocessorMock, $this->getClassName($this->postprocessor));
+
+        $this->userContext = $this->_objectManager->get(UserContextInterface::class);
+        $this->userContextMock = $this->createMock(UserContextInterface::class);
+        $this->_objectManager->addSharedInstance($this->userContextMock, $this->getClassName($this->userContext));
     }
 
     /**
@@ -61,15 +78,19 @@ class SwitchActionTest extends AbstractController
     protected function tearDown(): void
     {
         if ($this->preprocessor) {
-            $this->_objectManager->addSharedInstance($this->preprocessor, get_class($this->preprocessor));
+            $this->_objectManager->addSharedInstance($this->preprocessor, $this->getClassName($this->preprocessor));
         }
         if ($this->postprocessor) {
-            $this->_objectManager->addSharedInstance($this->postprocessor, get_class($this->postprocessor));
+            $this->_objectManager->addSharedInstance($this->postprocessor, $this->getClassName($this->postprocessor));
+        }
+        if ($this->userContext) {
+            $this->_objectManager->addSharedInstance($this->userContext, $this->getClassName($this->userContext));
         }
         parent::tearDown();
     }
 
     /**
+     * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoDataFixture Magento/Store/_files/second_store.php
      * @magentoConfigFixture web/url/use_store 0
      * @magentoConfigFixture fixture_second_store_store web/unsecure/base_url http://second_store.test/
@@ -82,10 +103,23 @@ class SwitchActionTest extends AbstractController
         $data = ['key1' => 'value1', 'key2' => 1];
         $this->preprocessorMock->method('process')
             ->willReturn($data);
+        $this->userContextMock->method('getUserType')
+            ->willReturn(UserContextInterface::USER_TYPE_CUSTOMER);
+        $this->userContextMock->method('getUserId')
+            ->willReturn(1);
         $this->postprocessorMock->expects($this->once())
             ->method('process')
-            ->with($this->isInstanceOf(ContextInterface::class), $data);
-
+            ->with(
+                $this->callback(
+                    function (ContextInterface $context) {
+                        return $context->getFromStore()->getCode() === 'fixture_second_store'
+                            && $context->getTargetStore()->getCode() === 'default'
+                            && $context->getRedirectUrl() === 'http://localhost/index.php/'
+                            && $context->getCustomerId() === 1;
+                    }
+                ),
+                $data
+            );
         $redirectDataGenerator = $this->_objectManager->get(RedirectDataGenerator::class);
         $contextFactory = $this->_objectManager->get(ContextInterfaceFactory::class);
         $storeManager = $this->_objectManager->get(StoreManagerInterface::class);
@@ -113,6 +147,21 @@ class SwitchActionTest extends AbstractController
         );
         $this->dispatch('stores/store/switch');
         $this->assertRedirect($this->equalTo('http://localhost/index.php/'));
+    }
+
+    /**
+     * Return class name of the given object
+     *
+     * @param mixed $instance
+     */
+    private function getClassName($instance): string
+    {
+        if ($instance instanceof InterceptorInterface) {
+            $actionClass = get_parent_class($instance);
+        } else {
+            $actionClass = get_class($instance);
+        }
+        return $actionClass;
     }
 
     /**

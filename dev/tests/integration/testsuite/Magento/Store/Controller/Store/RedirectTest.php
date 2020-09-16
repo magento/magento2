@@ -7,16 +7,18 @@ declare(strict_types=1);
 
 namespace Magento\Store\Controller\Store;
 
-use Magento\Framework\App\CacheInterface;
+use Magento\Framework\Interception\InterceptorInterface;
 use Magento\Framework\Session\SidResolverInterface;
 use Magento\Store\Model\StoreResolver;
 use Magento\Store\Model\StoreSwitcher\RedirectDataPreprocessorInterface;
+use Magento\Store\Model\StoreSwitcher\RedirectDataSerializerInterface;
 use Magento\TestFramework\TestCase\AbstractController;
 use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Test Redirect controller.
  *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @magentoAppArea frontend
  */
 class RedirectTest extends AbstractController
@@ -38,7 +40,7 @@ class RedirectTest extends AbstractController
         parent::setUp();
         $this->preprocessor = $this->_objectManager->get(RedirectDataPreprocessorInterface::class);
         $this->preprocessorMock = $this->createMock(RedirectDataPreprocessorInterface::class);
-        $this->_objectManager->addSharedInstance($this->preprocessorMock, get_class($this->preprocessor));
+        $this->_objectManager->addSharedInstance($this->preprocessorMock, $this->getClassName($this->preprocessor));
     }
 
     /**
@@ -47,7 +49,7 @@ class RedirectTest extends AbstractController
     protected function tearDown(): void
     {
         if ($this->preprocessor) {
-            $this->_objectManager->addSharedInstance($this->preprocessor, get_class($this->preprocessor));
+            $this->_objectManager->addSharedInstance($this->preprocessor, $this->getClassName($this->preprocessor));
         }
         parent::tearDown();
     }
@@ -62,8 +64,9 @@ class RedirectTest extends AbstractController
      */
     public function testRedirectToSecondStoreOnAnotherUrl(): void
     {
+        $data = ['key1' => 'value1', 'key2' => 1];
         $this->preprocessorMock->method('process')
-            ->willReturn(['key1' => 'value1', 'key2' => 1]);
+            ->willReturn($data);
         $this->getRequest()->setParam(StoreResolver::PARAM_NAME, 'fixture_second_store');
         $this->getRequest()->setParam('___from_store', 'default');
         $this->dispatch('/stores/store/redirect');
@@ -79,8 +82,23 @@ class RedirectTest extends AbstractController
         $this->assertTrue(!empty($params['time_stamp']));
         $this->assertTrue(!empty($params['signature']));
         $this->assertTrue(!empty($params['data']));
-        $cache = $this->_objectManager->get(CacheInterface::class);
-        $this->assertEquals('{"key1":"value1","key2":1}', $cache->load('store_switch_' . $params['data']));
+        $serializer = $this->_objectManager->get(RedirectDataSerializerInterface::class);
+        $this->assertEquals($data, $serializer->unserialize($params['data']));
+    }
+
+    /**
+     * Return class name of the given object
+     *
+     * @param mixed $instance
+     */
+    private function getClassName($instance): string
+    {
+        if ($instance instanceof InterceptorInterface) {
+            $actionClass = get_parent_class($instance);
+        } else {
+            $actionClass = get_class($instance);
+        }
+        return $actionClass;
     }
 
     /**
