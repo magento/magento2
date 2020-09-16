@@ -18,9 +18,6 @@
             <testCaseId value="MC-13794"/>
             <group value="CatalogWidget"/>
             <group value="WYSIWYGDisabled"/>
-            <skip>
-                <issueId value="MC-13923"/>
-            </skip>
         </annotations>
         <before>
             <createData entity="SimpleSubCategory" stepKey="simplecategory"/>
@@ -40,41 +37,6 @@
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
         </before>
-        <!--Open created cms page-->
-        <comment userInput="Open created cms page" stepKey="commentOpenCreatedCmsPage"/>
-        <actionGroup ref="NavigateToCreatedCMSPageActionGroup" stepKey="navigateToCreatedCMSPage1">
-            <argument name="CMSPage" value="$$createPreReqPage$$"/>
-        </actionGroup>
-        <!--Add widget to cms page-->
-        <comment userInput="Add widget to cms page" stepKey="commentAddWidgetToCmsPage"/>
-        <click selector="{{TinyMCESection.InsertWidgetIcon}}" stepKey="clickInsertWidgetIcon" />
-        <waitForPageLoad stepKey="waitForPageLoad1" />
-        <selectOption selector="{{WidgetSection.WidgetType}}" userInput="Catalog Products List" stepKey="selectCatalogProductsList" />
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskDisappear1" />
-        <click selector="{{WidgetSection.AddParam}}" stepKey="clickAddParamBtn" />
-        <waitForElementVisible selector="{{WidgetSection.ConditionsDropdown}}" stepKey="waitForDropdownVisible"/>
-        <selectOption selector="{{WidgetSection.ConditionsDropdown}}" userInput="Category" stepKey="selectCategoryCondition" />
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskDisappear2" />
-        <click selector="{{WidgetSection.RuleParam}}" stepKey="clickRuleParam" />
-        <waitForElementVisible selector="{{WidgetSection.Chooser}}" stepKey="waitForElement" />
-        <click selector="{{WidgetSection.Chooser}}" stepKey="clickChooser" />
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskDisappear3" />
-        <click selector="{{WidgetSection.PreCreateCategory('$$simplecategory.name$$')}}" stepKey="selectCategory" />
-        <click selector="{{WidgetSection.InsertWidget}}" stepKey="clickInsertWidget" />
-        <waitForPageLoad stepKey="waitForPageLoad2" />
-        <!--Save cms page and go to Storefront-->
-        <comment userInput="Save cms page and go to Storefront" stepKey="commentSaveCmsPageAndGoToStorefront"/>
-        <click selector="{{CmsNewPagePageActionsSection.expandSplitButton}}" stepKey="expandButtonMenu"/>
-        <waitForElementVisible selector="{{CmsNewPagePageActionsSection.splitButtonMenu}}" stepKey="waitForSplitButtonMenuVisible"/>
-        <click selector="{{CmsNewPagePageActionsSection.savePage}}" stepKey="clickSavePage"/>
-        <see userInput="You saved the page." stepKey="seeSuccessMessage"/>
-        <amOnPage url="$$createPreReqPage.identifier$$" stepKey="amOnPageTestPage"/>
-        <waitForPageLoad stepKey="waitForPageLoad3" />
-        <!--Check order of products: recently added first-->
-        <comment userInput="Check order of products: recently added first" stepKey="commentCheckOrderOfProductsRecentlyAddedFirst"/>
-        <seeElement selector="{{InsertWidgetSection.checkElementStorefrontByName('1','$$createThirdProduct.name$$')}}" stepKey="seeElementByName1"/>
-        <seeElement selector="{{InsertWidgetSection.checkElementStorefrontByName('2','$$createSecondProduct.name$$')}}" stepKey="seeElementByName2"/>
-        <seeElement selector="{{InsertWidgetSection.checkElementStorefrontByName('3','$$createFirstProduct.name$$')}}" stepKey="seeElementByName3"/>
         <after>
             <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
             <deleteData createDataKey="createPreReqPage" stepKey="deletePreReqPage" />
@@ -84,5 +46,47 @@
             <deleteData createDataKey="createThirdProduct" stepKey="deleteThirdProduct"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
+        <!--Open created cms page-->
+        <comment userInput="Open created cms page" stepKey="commentOpenCreatedCmsPage"/>
+        <actionGroup ref="NavigateToCreatedCMSPageActionGroup" stepKey="navigateToCreatedCMSPage1">
+            <argument name="CMSPage" value="$createPreReqPage$"/>
+        </actionGroup>
+        <!--Add widget to cms page-->
+        <comment userInput="Add widget to cms page" stepKey="commentAddWidgetToCmsPage"/>
+        <waitForElementVisible selector="{{TinyMCESection.InsertWidgetIcon}}" stepKey="waitInsertWidgetIconVisible"/>
+        <click selector="{{TinyMCESection.InsertWidgetIcon}}" stepKey="clickInsertWidgetIcon" />
+        <waitForPageLoad stepKey="waitForPageLoad1" />
+        <waitForElementVisible selector="{{WidgetSection.WidgetType}}" stepKey="waitForWidgetTypeSelectorVisible"/>
+        <selectOption selector="{{WidgetSection.WidgetType}}" userInput="Catalog Products List" stepKey="selectCatalogProductsList" />
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskDisappear1" />
+        <waitForElementVisible selector="{{WidgetSection.AddParam}}" stepKey="waitForAddParamBtnVisible"/>
+        <click selector="{{WidgetSection.AddParam}}" stepKey="clickAddParamBtn" />
+        <waitForElementVisible selector="{{WidgetSection.ConditionsDropdown}}" stepKey="waitForDropdownVisible"/>
+        <selectOption selector="{{WidgetSection.ConditionsDropdown}}" userInput="Category" stepKey="selectCategoryCondition" />
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskDisappear2" />
+        <waitForElementVisible selector="{{WidgetSection.RuleParam}}" stepKey="waitForRuleParamVisible"/>
+        <click selector="{{WidgetSection.RuleParam}}" stepKey="clickRuleParam" />
+        <waitForElementVisible selector="{{WidgetSection.Chooser}}" stepKey="waitForElement" />
+        <click selector="{{WidgetSection.Chooser}}" stepKey="clickChooser" />
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskDisappear3" />
+        <waitForElementVisible selector="{{WidgetSection.PreCreateCategory('$simplecategory.name$')}}" stepKey="waitForCategoryVisible" />
+        <click selector="{{WidgetSection.PreCreateCategory('$simplecategory.name$')}}" stepKey="selectCategory" />
+        <click selector="{{WidgetSection.InsertWidget}}" stepKey="clickInsertWidget" />
+        <waitForPageLoad stepKey="waitForPageLoad2" />
+        <!--Save cms page and go to Storefront-->
+        <comment userInput="Save cms page and go to Storefront" stepKey="commentSaveCmsPageAndGoToStorefront"/>
+        <waitForElementVisible selector="{{CmsNewPagePageActionsSection.expandSplitButton}}" stepKey="waitForExpandButtonMenuVisible"/>
+        <click selector="{{CmsNewPagePageActionsSection.expandSplitButton}}" stepKey="expandButtonMenu"/>
+        <waitForElementVisible selector="{{CmsNewPagePageActionsSection.splitButtonMenu}}" stepKey="waitForSplitButtonMenuVisible"/>
+        <click selector="{{CmsNewPagePageActionsSection.savePage}}" stepKey="clickSavePage"/>
+        <see userInput="You saved the page." stepKey="seeSuccessMessage"/>
+        <amOnPage url="$createPreReqPage.identifier$" stepKey="amOnPageTestPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad3" />
+        <!--Check order of products: recently added first-->
+        <comment userInput="Check order of products: recently added first" stepKey="commentCheckOrderOfProductsRecentlyAddedFirst"/>
+        <waitForElementVisible selector="{{InsertWidgetSection.checkElementStorefrontByName('1','$createThirdProduct.name$')}}" stepKey="waitForThirdProductVisible"/>
+        <seeElement selector="{{InsertWidgetSection.checkElementStorefrontByName('1','$createThirdProduct.name$')}}" stepKey="seeElementByName1"/>
+        <seeElement selector="{{InsertWidgetSection.checkElementStorefrontByName('2','$createSecondProduct.name$')}}" stepKey="seeElementByName2"/>
+        <seeElement selector="{{InsertWidgetSection.checkElementStorefrontByName('3','$createFirstProduct.name$')}}" stepKey="seeElementByName3"/>
     </test>
 </tests>
