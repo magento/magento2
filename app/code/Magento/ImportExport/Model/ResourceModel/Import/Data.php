@@ -5,14 +5,23 @@
  */
 namespace Magento\ImportExport\Model\ResourceModel\Import;
 
+use Magento\Backend\Model\Auth\Session;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\DB\Select;
+
 /**
  * ImportExport import data resource model
  *
  * @api
  * @since 100.0.2
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse) Necessary to get current logged in user without modifying methods
  */
 class Data extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implements \IteratorAggregate
 {
+    /**
+     * Offline import user ID
+     */
+    private const DEFAULT_USER_ID = 0;
     /**
      * @var \Iterator
      */
@@ -24,21 +33,28 @@ class Data extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
      * @var \Magento\Framework\Json\Helper\Data
      */
     protected $jsonHelper;
+    /**
+     * @var Session
+     */
+    private $authSession;
 
     /**
      * Class constructor
      *
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
-     * @param string $connectionName
+     * @param string|null $connectionName
+     * @param Session|null $authSession
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Framework\Json\Helper\Data $jsonHelper,
-        $connectionName = null
+        $connectionName = null,
+        ?Session $authSession = null
     ) {
         parent::__construct($context, $connectionName);
         $this->jsonHelper = $jsonHelper;
+        $this->authSession = $authSession ?? ObjectManager::getInstance()->get(Session::class);
     }
 
     /**
@@ -61,6 +77,7 @@ class Data extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
     {
         $connection = $this->getConnection();
         $select = $connection->select()->from($this->getMainTable(), ['data'])->order('id ASC');
+        $select = $this->prepareSelect($select);
         $stmt = $connection->query($select);
 
         $stmt->setFetchMode(\Zend_Db::FETCH_NUM);
@@ -82,7 +99,7 @@ class Data extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
      */
     public function cleanBunches()
     {
-        return $this->getConnection()->delete($this->getMainTable());
+        return $this->getConnection()->delete($this->getMainTable(), $this->prepareDelete([]));
     }
 
     /**
@@ -115,7 +132,9 @@ class Data extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
     public function getUniqueColumnData($code)
     {
         $connection = $this->getConnection();
-        $values = array_unique($connection->fetchCol($connection->select()->from($this->getMainTable(), [$code])));
+        $select = $connection->select()->from($this->getMainTable(), [$code]);
+        $select = $this->prepareSelect($select);
+        $values = array_unique($connection->fetchCol($select));
 
         if (count($values) != 1) {
             throw new \Magento\Framework\Exception\LocalizedException(
@@ -170,7 +189,56 @@ class Data extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
 
         return $this->getConnection()->insert(
             $this->getMainTable(),
-            ['behavior' => $behavior, 'entity' => $entity, 'data' => $encodedData]
+            $this->prepareInsert(['behavior' => $behavior, 'entity' => $entity, 'data' => $encodedData])
         );
+    }
+
+    /**
+     * Prepare select for query
+     *
+     * @param Select $select
+     * @return Select
+     */
+    private function prepareSelect(Select $select): Select
+    {
+        $select->where('user_id=?', $this->getCurrentUserId() ?? self::DEFAULT_USER_ID);
+
+        return $select;
+    }
+
+    /**
+     * Prepare data for insert
+     *
+     * @param array $data
+     * @return array
+     */
+    private function prepareInsert(array $data): array
+    {
+        $data['user_id'] = $this->getCurrentUserId() ?? self::DEFAULT_USER_ID;
+
+        return $data;
+    }
+
+    /**
+     * Prepare delete constraints
+     *
+     * @param array $where
+     * @return array
+     */
+    private function prepareDelete(array $where): array
+    {
+        $where['user_id=?'] = $this->getCurrentUserId() ?? self::DEFAULT_USER_ID;
+
+        return $where;
+    }
+
+    /**
+     * Get current user ID
+     *
+     * @return int|null
+     */
+    private function getCurrentUserId(): ?int
+    {
+        return $this->authSession->isLoggedIn() ? $this->authSession->getUser()->getId() : null;
     }
 }

@@ -12,6 +12,8 @@
         <column xsi:type="varchar" name="entity" nullable="false" length="50" comment="Entity"/>
         <column xsi:type="varchar" name="behavior" nullable="false" length="10" default="append" comment="Behavior"/>
         <column xsi:type="longtext" name="data" nullable="true" comment="Data"/>
+        <column xsi:type="int" name="user_id" unsigned="true" nullable="false" identity="false" default="0"
+                comment="User ID"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="id"/>
         </constraint>
