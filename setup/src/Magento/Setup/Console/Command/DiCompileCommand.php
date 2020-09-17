@@ -10,8 +10,6 @@ use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\Filesystem\Io\File;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Magento\Framework\Filesystem;
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager\ConfigWriterInterface;
@@ -19,7 +17,6 @@ use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Console\Cli;
 use Magento\Framework\Filesystem;
-use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Setup\Model\ObjectManagerProvider;
 use Magento\Setup\Module\Di\App\Task\Manager;
 use Magento\Setup\Module\Di\App\Task\OperationException;
@@ -28,8 +25,6 @@ use Magento\Setup\Module\Di\App\Task\OperationInterface;
 use Magento\Setup\Module\Di\Compiler\Config\Chain\InterceptorSubstitutionInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Command to run compile in single-tenant mode
