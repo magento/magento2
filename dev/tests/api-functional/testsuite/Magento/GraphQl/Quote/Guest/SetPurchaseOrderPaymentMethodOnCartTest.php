@@ -26,7 +26,7 @@ class SetPurchaseOrderPaymentMethodOnCartTest extends GraphQlAbstract
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->getMaskedQuoteIdByReservedOrderId = $objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
@@ -41,7 +41,6 @@ class SetPurchaseOrderPaymentMethodOnCartTest extends GraphQlAbstract
      * @magentoConfigFixture default_store payment/cashondelivery/active 1
      * @magentoConfigFixture default_store payment/checkmo/active 1
      * @magentoConfigFixture default_store payment/purchaseorder/active 1
-     * @magentoConfigFixture default_store payment/authorizenet_acceptjs/active 1
      */
     public function testSetPurchaseOrderPaymentMethodOnCartWithSimpleProduct()
     {
@@ -57,7 +56,7 @@ mutation {
           code: "$methodCode"
           purchase_order_number: "$purchaseOrderNumber"
       }
-  }) {    
+  }) {
     cart {
       selected_payment_method {
         code
@@ -88,13 +87,13 @@ QUERY;
      * @magentoConfigFixture default_store payment/cashondelivery/active 1
      * @magentoConfigFixture default_store payment/checkmo/active 1
      * @magentoConfigFixture default_store payment/purchaseorder/active 1
-     * @magentoConfigFixture default_store payment/authorizenet_acceptjs/active 1
      *
-     * @expectedException Exception
-     * @expectedExceptionMessage Purchase order number is a required field.
      */
     public function testSetPurchaseOrderPaymentMethodOnCartWithoutPurchaseOrderNumber()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Purchase order number is a required field.');
+
         $methodCode = Purchaseorder::PAYMENT_METHOD_PURCHASEORDER_CODE;
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
 
@@ -105,7 +104,7 @@ mutation {
       payment_method: {
           code: "$methodCode"
       }
-  }) {    
+  }) {
     cart {
       selected_payment_method {
         code
@@ -123,11 +122,12 @@ QUERY;
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
      *
-     * @expectedException Exception
-     * @expectedExceptionMessage The requested Payment Method is not available.
      */
     public function testSetDisabledPurchaseOrderPaymentMethodOnCart()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('The requested Payment Method is not available.');
+
         $methodCode = Purchaseorder::PAYMENT_METHOD_PURCHASEORDER_CODE;
         $purchaseOrderNumber = '123456';
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
@@ -140,7 +140,7 @@ mutation {
           code: "$methodCode"
           purchase_order_number: "$purchaseOrderNumber"
       }
-  }) {    
+  }) {
     cart {
       selected_payment_method {
         code

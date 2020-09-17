@@ -24,8 +24,9 @@ abstract class AbstractAdapter implements AdapterInterface
      */
     public $imageBackgroundColor = 0;
 
-    /**
-     * Position constants
+    /**#@+
+     * Position constants.
+     * Used mainly for watermarks
      */
     const POSITION_TOP_LEFT = 'top-left';
 
@@ -40,7 +41,11 @@ abstract class AbstractAdapter implements AdapterInterface
     const POSITION_TILE = 'tile';
 
     const POSITION_CENTER = 'center';
+    /**#@-*/
 
+    /**
+     * The size of the font to use as default
+     */
     const DEFAULT_FONT_SIZE = 15;
 
     /**
@@ -201,7 +206,6 @@ abstract class AbstractAdapter implements AdapterInterface
      *
      * @param int $angle
      * @return void
-     * @deprecated unused
      */
     abstract public function rotate($angle);
 

@@ -13,6 +13,7 @@
                     <resource id="Magento_Backend::tools">
                         <resource id="Magento_Indexer::index" title="Index Management" translate="title" sortOrder="30" />
                         <resource id="Magento_Indexer::changeMode" title="Change indexer mode" translate="title" sortOrder="40" />
+                        <resource id="Magento_Indexer::invalidate" title="Invalidate index" translate="title" sortOrder="50" />
                     </resource>
                 </resource>
             </resource>

@@ -22,7 +22,7 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
      */
     private $queueManagement;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->observer = $this->objectManager->get(\Magento\MysqlMq\Model\Observer::class);

@@ -3,45 +3,59 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogInventory\Test\Unit\Block\Stockqty;
+
+use Magento\Catalog\Model\Product;
+use Magento\CatalogInventory\Api\Data\StockItemInterface;
+use Magento\CatalogInventory\Api\Data\StockStatusInterface;
+use Magento\CatalogInventory\Api\StockRegistryInterface;
+use Magento\CatalogInventory\Block\Stockqty\DefaultStockqty;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Registry;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Store\Model\Store;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit test for DefaultStockqty
  */
-class DefaultStockqtyTest extends \PHPUnit\Framework\TestCase
+class DefaultStockqtyTest extends TestCase
 {
     /**
-     * @var \Magento\CatalogInventory\Block\Stockqty\DefaultStockqty
+     * @var DefaultStockqty
      */
     protected $block;
 
     /**
-     * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @var Registry|MockObject
      */
     protected $registryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $stockRegistryMock;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|MockObject
      */
     protected $scopeConfigMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->registryMock = $this->createMock(\Magento\Framework\Registry::class);
-        $this->stockRegistryMock = $this->getMockBuilder(\Magento\CatalogInventory\Api\StockRegistryInterface::class)
+        $objectManager = new ObjectManager($this);
+        $this->registryMock = $this->createMock(Registry::class);
+        $this->stockRegistryMock = $this->getMockBuilder(StockRegistryInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
-        $this->scopeConfigMock = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
+            ->getMockForAbstractClass();
+        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->block = $objectManager->getObject(
-            \Magento\CatalogInventory\Block\Stockqty\DefaultStockqty::class,
+            DefaultStockqty::class,
             [
                 'registry' => $this->registryMock,
                 'stockRegistry' => $this->stockRegistryMock,
@@ -50,7 +64,7 @@ class DefaultStockqtyTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->block = null;
     }
@@ -58,12 +72,12 @@ class DefaultStockqtyTest extends \PHPUnit\Framework\TestCase
     public function testGetIdentities()
     {
         $productTags = ['catalog_product_1'];
-        $product = $this->createMock(\Magento\Catalog\Model\Product::class);
-        $product->expects($this->once())->method('getIdentities')->will($this->returnValue($productTags));
+        $product = $this->createMock(Product::class);
+        $product->expects($this->once())->method('getIdentities')->willReturn($productTags);
         $this->registryMock->expects($this->once())
             ->method('registry')
             ->with('current_product')
-            ->will($this->returnValue($product));
+            ->willReturn($product);
         $this->assertEquals($productTags, $this->block->getIdentities());
     }
 
@@ -82,27 +96,27 @@ class DefaultStockqtyTest extends \PHPUnit\Framework\TestCase
             $this->setDataArrayValue('product_stock_qty', $dataQty);
         } else {
             $product = $this->createPartialMock(
-                \Magento\Catalog\Model\Product::class,
+                Product::class,
                 ['getId', 'getStore', '__wakeup']
             );
-            $product->expects($this->any())->method('getId')->will($this->returnValue($productId));
-            $store = $this->createPartialMock(\Magento\Store\Model\Store::class, ['getWebsiteId', '__wakeup']);
+            $product->expects($this->any())->method('getId')->willReturn($productId);
+            $store = $this->createPartialMock(Store::class, ['getWebsiteId', '__wakeup']);
             $store->expects($this->any())->method('getWebsiteId')->willReturn($websiteId);
-            $product->expects($this->any())->method('getStore')->will($this->returnValue($store));
+            $product->expects($this->any())->method('getStore')->willReturn($store);
 
             $this->registryMock->expects($this->any())
                 ->method('registry')
                 ->with('current_product')
-                ->will($this->returnValue($product));
+                ->willReturn($product);
 
             if ($productId) {
-                $stockStatus = $this->getMockBuilder(\Magento\CatalogInventory\Api\Data\StockStatusInterface::class)
+                $stockStatus = $this->getMockBuilder(StockStatusInterface::class)
                     ->getMockForAbstractClass();
                 $stockStatus->expects($this->any())->method('getQty')->willReturn($productStockQty);
                 $this->stockRegistryMock->expects($this->once())
                     ->method('getStockStatus')
-                    ->with($this->equalTo($productId), $this->equalTo($websiteId))
-                    ->will($this->returnValue($stockStatus));
+                    ->with($productId, $websiteId)
+                    ->willReturn($stockStatus);
             }
         }
         $this->assertSame($expectedQty, $this->block->getStockQty());
@@ -116,13 +130,13 @@ class DefaultStockqtyTest extends \PHPUnit\Framework\TestCase
         $websiteId = 1;
         $stockQty = 2;
 
-        $storeMock = $this->getMockBuilder(\Magento\Store\Model\Store::class)
+        $storeMock = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
             ->getMock();
         $storeMock->expects($this->once())
             ->method('getWebsiteId')
             ->willReturn($websiteId);
-        $product = $this->createMock(\Magento\Catalog\Model\Product::class);
+        $product = $this->createMock(Product::class);
         $product->expects($this->any())
             ->method('getId')
             ->willReturn($productId);
@@ -132,11 +146,11 @@ class DefaultStockqtyTest extends \PHPUnit\Framework\TestCase
         $this->registryMock->expects($this->once())
             ->method('registry')
             ->with('current_product')
-            ->will($this->returnValue($product));
+            ->willReturn($product);
 
-        $stockItemMock = $this->getMockBuilder(\Magento\CatalogInventory\Api\Data\StockItemInterface::class)
+        $stockItemMock = $this->getMockBuilder(StockItemInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $stockItemMock->expects($this->once())
             ->method('getMinQty')
             ->willReturn($minQty);
