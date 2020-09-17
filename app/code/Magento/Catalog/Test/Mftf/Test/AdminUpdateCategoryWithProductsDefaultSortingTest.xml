@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminUpdateCategoryWithProductsDefaultSortingTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Update categories"/>
+            <title value="Update category, sort products by default sorting"/>
+            <description value="Login as admin, update category and sort products"/>
+            <testCaseId value="MC-25667"/>
+            <severity value="CRITICAL"/>
+            <group value="catalog"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <createData entity="defaultSimpleProduct" stepKey="simpleProduct" />
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="simpleProduct" stepKey="deleteSimpleProduct"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+        </after>
+
+        <!--Open Category Page-->
+        <actionGroup ref="GoToAdminCategoryPageByIdActionGroup" stepKey="goToAdminCategoryPage">
+            <argument name="id" value="$createCategory.id$"/>
+        </actionGroup>
+
+        <!--Update Product Display Setting-->
+        <waitForElementVisible selector="{{AdminCategoryDisplaySettingsSection.settingsHeader}}" stepKey="waitForDisplaySettingsSection"/>
+        <conditionalClick selector="{{AdminCategoryDisplaySettingsSection.settingsHeader}}" dependentSelector="{{AdminCategoryDisplaySettingsSection.displayMode}}" visible="false" stepKey="openDisplaySettingsSection"/>
+        <waitForElementVisible selector="{{CategoryDisplaySettingsSection.productListCheckBox}}" stepKey="waitForAvailableProductListCheckbox"/>
+        <click selector="{{CategoryDisplaySettingsSection.productListCheckBox}}" stepKey="enableTheAvailableProductList"/>
+        <selectOption selector="{{CategoryDisplaySettingsSection.productList}}" parameterArray="['Product Name', 'Price']" stepKey="selectPrice"/>
+        <waitForElementVisible selector="{{CategoryDisplaySettingsSection.defaultProductLisCheckBox}}" stepKey="waitForDefaultProductList"/>
+        <click selector="{{CategoryDisplaySettingsSection.defaultProductLisCheckBox}}" stepKey="enableTheDefaultProductList"/>
+        <selectOption selector="{{CategoryDisplaySettingsSection.defaultProductList}}" userInput="name" stepKey="selectProductName"/>
+
+        <!--Add Products in Category-->
+        <actionGroup ref="AdminCategoryAssignProductActionGroup" stepKey="assignSimpleProductToCategory">
+            <argument name="productSku" value="$simpleProduct.sku$"/>
+        </actionGroup>
+        <actionGroup ref="AdminSaveCategoryFormActionGroup" stepKey="saveCategory"/>
+
+        <!--Verify Category Title-->
+        <see selector="{{AdminCategoryContentSection.categoryPageTitle}}" userInput="{{_defaultCategory.name}}" stepKey="seeCategoryNamePageTitle" />
+
+        <!--Verify Category in store front page-->
+        <amOnPage url="{{StorefrontCategoryPage.url($createCategory.custom_attributes[url_key]$)}}" stepKey="openStorefrontCategoryPage"/>
+
+        <!--Verify Product in Category-->
+        <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="assertSimpleProductOnCategoryPage">
+            <argument name="productName" value="$simpleProduct.name$"/>
+        </actionGroup>
+
+        <!--Verify product name and sku on Store Front-->
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKeyActionGroup" stepKey="assertProductOnStorefrontProductPage">
+            <argument name="product" value="$simpleProduct$"/>
+        </actionGroup>
+    </test>
+</tests>
+
