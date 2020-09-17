@@ -219,11 +219,16 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
      */
     protected function generateCode($label)
     {
-        $code = substr(preg_replace('/[^a-z_0-9]/', '_', $this->filterManager->translitUrl($label)), 0, Attribute::ATTRIBUTE_CODE_MAX_LENGTH);
+        $code = substr(
+            preg_replace('/[^a-z_0-9]/', '_', $this->filterManager->translitUrl($label)),
+            0,
+            Attribute::ATTRIBUTE_CODE_MAX_LENGTH
+        );
         $validatorAttrCode = new \Zend_Validate_Regex(['pattern' => '/^[a-z][a-z_0-9]{0,29}[a-z0-9]$/']);
         if (!$validatorAttrCode->isValid($code)) {
-            $code = 'attr_' . ($code ?: substr(md5(time()), 0, 8));
+            $code = 'attr_' . ($code ?: substr(hash('sha256', time()), 0, 8));
         }
+
         return $code;
     }
 
@@ -236,7 +241,9 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
      */
     protected function validateCode($code)
     {
-        $validatorAttrCode = new \Zend_Validate_Regex(['pattern' => '/^[a-z][a-z_0-9]{0,' . Attribute::ATTRIBUTE_CODE_MAX_LENGTH . '}$/']);
+        $validatorAttrCode = new \Zend_Validate_Regex(
+            ['pattern' => '/^[a-z][a-z_0-9]{0,' . Attribute::ATTRIBUTE_CODE_MAX_LENGTH . '}$/']
+        );
         if (!$validatorAttrCode->isValid($code)) {
             throw InputException::invalidFieldValue('attribute_code', $code);
         }
