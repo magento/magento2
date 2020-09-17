@@ -14,6 +14,7 @@ use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Store\Model\StoreSwitcher\RedirectDataCacheSerializer;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 use RuntimeException;
 
 class RedirectDataCacheSerializerTest extends TestCase
@@ -36,10 +37,12 @@ class RedirectDataCacheSerializerTest extends TestCase
         parent::setUp();
         $this->cache = $this->createMock(CacheInterface::class);
         $random = $this->createMock(Random::class);
+        $logger = $this->createMock(LoggerInterface::class);
         $this->model = new RedirectDataCacheSerializer(
             new Json(),
             $random,
-            $this->cache
+            $this->cache,
+            $logger
         );
         $random->method('getRandomString')->willReturn(self::RANDOM_STRING);
     }

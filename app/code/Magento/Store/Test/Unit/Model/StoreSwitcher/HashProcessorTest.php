@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\Store\Test\Unit\Model\StoreSwitcher;
 
 use InvalidArgumentException;
-use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Store\Api\Data\StoreInterface;
@@ -76,7 +75,6 @@ class HashProcessorTest extends TestCase
         $dataFactory = $this->createMock(RedirectDataInterfaceFactory::class);
         $this->dataValidator = $this->createMock(RedirectDataValidator::class);
         $logger = $this->createMock(LoggerInterface::class);
-        $userContext = $this->createMock(UserContextInterface::class);
         $this->store1 = $this->createMock(StoreInterface::class);
         $this->store2 = $this->createMock(StoreInterface::class);
         $this->model = new HashProcessor(
@@ -87,8 +85,7 @@ class HashProcessorTest extends TestCase
             $contextFactory,
             $dataFactory,
             $this->dataValidator,
-            $logger,
-            $userContext
+            $logger
         );
 
         $contextFactory->method('create')
@@ -159,7 +156,7 @@ class HashProcessorTest extends TestCase
             ->method('process');
         $this->messageManager->expects($this->once())
             ->method('addErrorMessage')
-            ->with('Something went wrong while switching to the store.');
+            ->with('Something went wrong.');
 
         $this->assertEquals($redirectUrl, $this->model->switch($this->store1, $this->store2, $redirectUrl));
     }

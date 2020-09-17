@@ -10,6 +10,7 @@ namespace Magento\Customer\Test\Unit\Model\StoreSwitcher;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Customer\Model\Customer;
 use Magento\Customer\Model\CustomerRegistry;
+use Magento\Customer\Model\Session;
 use Magento\Customer\Model\StoreSwitcher\RedirectDataPreprocessor;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -26,13 +27,13 @@ class RedirectDataPreprocessorTest extends TestCase
      */
     private $model;
     /**
-     * @var ContextInterface|MockObject
+     * @var Session|MockObject
      */
     private $context;
     /**
      * @var UserContextInterface|MockObject
      */
-    private $userContext;
+    private $session;
 
     /**
      * @inheritDoc
@@ -42,15 +43,12 @@ class RedirectDataPreprocessorTest extends TestCase
         parent::setUp();
         $customerRegistry = $this->createMock(CustomerRegistry::class);
         $logger = $this->createMock(LoggerInterface::class);
-        $this->userContext = $this->createMock(UserContextInterface::class);
+        $this->session = $this->createMock(Session::class);
         $this->model = new RedirectDataPreprocessor(
             $customerRegistry,
-            $this->userContext,
+            $this->session,
             $logger
         );
-
-        $this->userContext->method('getUserType')
-            ->willReturn(UserContextInterface::USER_TYPE_CUSTOMER);
 
         $store1 = $this->createConfiguredMock(
             StoreInterface::class,
@@ -101,7 +99,9 @@ class RedirectDataPreprocessorTest extends TestCase
      */
     public function testProcess(?int $customerId, array $data): void
     {
-        $this->userContext->method('getUserId')
+        $this->session->method('isLoggedIn')
+            ->willReturn(true);
+        $this->session->method('getCustomerId')
             ->willReturn($customerId);
         $this->assertEquals($data, $this->model->process($this->context, []));
     }

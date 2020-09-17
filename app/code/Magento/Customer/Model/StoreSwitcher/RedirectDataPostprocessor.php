@@ -65,10 +65,10 @@ class RedirectDataPostprocessor implements RedirectDataPostprocessorInterface
                 }
             } catch (NoSuchEntityException $e) {
                 $this->logger->error($e);
-                throw new LocalizedException(__('Failed to sign into the customer account.'), $e);
+                throw new LocalizedException(__('Something went wrong.'), $e);
             } catch (LocalizedException $e) {
                 $this->logger->error($e);
-                throw new LocalizedException(__('Failed to sign into the customer account.'), $e);
+                throw new LocalizedException(__('Something went wrong.'), $e);
             }
         }
     }

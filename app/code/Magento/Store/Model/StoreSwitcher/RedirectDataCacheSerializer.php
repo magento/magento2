@@ -11,6 +11,8 @@ use InvalidArgumentException;
 use Magento\Framework\App\CacheInterface;
 use Magento\Framework\Math\Random;
 use Magento\Framework\Serialize\Serializer\Json;
+use Psr\Log\LoggerInterface;
+use Throwable;
 
 /**
  * Store switcher redirect data cache serializer
@@ -33,20 +35,27 @@ class RedirectDataCacheSerializer implements RedirectDataSerializerInterface
      * @var Random
      */
     private $random;
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
 
     /**
      * @param Json $json
      * @param Random $random
      * @param CacheInterface $cache
+     * @param LoggerInterface $logger
      */
     public function __construct(
         Json $json,
         Random $random,
-        CacheInterface $cache
+        CacheInterface $cache,
+        LoggerInterface $logger
     ) {
         $this->cache = $cache;
         $this->json = $json;
         $this->random = $random;
+        $this->logger = $logger;
     }
 
     /**
@@ -76,7 +85,11 @@ class RedirectDataCacheSerializer implements RedirectDataSerializerInterface
             throw new InvalidArgumentException('Couldn\'t retrieve data from cache.');
         }
         $result = $this->json->unserialize($json);
-        $this->cache->remove($cacheKey);
+        try {
+            $this->cache->remove($cacheKey);
+        } catch (Throwable $exception) {
+            $this->logger->error($exception);
+        }
 
         return $result;
     }

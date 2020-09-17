@@ -7,8 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Customer\Model\StoreSwitcher;
 
-use Magento\Authorization\Model\UserContextInterface;
 use Magento\Customer\Model\CustomerRegistry;
+use Magento\Customer\Model\Session;
 use Magento\Store\Model\StoreSwitcher\ContextInterface;
 use Magento\Store\Model\StoreSwitcher\RedirectDataPreprocessorInterface;
 use Psr\Log\LoggerInterface;
@@ -16,13 +16,15 @@ use Throwable;
 
 /**
  * Collect customer data to be redirected to target store
+ *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class RedirectDataPreprocessor implements RedirectDataPreprocessorInterface
 {
     /**
-     * @var UserContextInterface
+     * @var Session
      */
-    private $userContext;
+    private $session;
     /**
      * @var LoggerInterface
      */
@@ -34,16 +36,16 @@ class RedirectDataPreprocessor implements RedirectDataPreprocessorInterface
 
     /**
      * @param CustomerRegistry $customerRegistry
-     * @param UserContextInterface $userContext
+     * @param Session $session
      * @param LoggerInterface $logger
      */
     public function __construct(
         CustomerRegistry $customerRegistry,
-        UserContextInterface $userContext,
+        Session $session,
         LoggerInterface $logger
     ) {
         $this->customerRegistry = $customerRegistry;
-        $this->userContext = $userContext;
+        $this->session = $session;
         $this->logger = $logger;
     }
 
@@ -52,11 +54,9 @@ class RedirectDataPreprocessor implements RedirectDataPreprocessorInterface
      */
     public function process(ContextInterface $context, array $data): array
     {
-        if ($this->userContext->getUserType() === UserContextInterface::USER_TYPE_CUSTOMER
-            && $this->userContext->getUserId()
-        ) {
+        if ($this->session->isLoggedIn()) {
             try {
-                $customer = $this->customerRegistry->retrieve($this->userContext->getUserId());
+                $customer = $this->customerRegistry->retrieve($this->session->getCustomerId());
                 if (in_array($context->getTargetStore()->getId(), $customer->getSharedStoreIds())) {
                     $data['customer_id'] = (int) $customer->getId();
                 }

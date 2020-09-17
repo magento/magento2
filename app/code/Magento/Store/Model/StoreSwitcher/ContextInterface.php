@@ -34,11 +34,4 @@ interface ContextInterface
      * @return string
      */
     public function getRedirectUrl(): string;
-
-    /**
-     * The logged in customer ID
-     *
-     * @return int
-     */
-    public function getCustomerId(): ?int;
 }

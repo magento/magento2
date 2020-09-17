@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\Store\Model\StoreSwitcher;
 
-use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Message\ManagerInterface;
@@ -55,10 +54,6 @@ class HashProcessor implements StoreSwitcherInterface
      * @var LoggerInterface
      */
     private $logger;
-    /**
-     * @var UserContextInterface
-     */
-    private $userContext;
 
     /**
      * @param RequestInterface $request
@@ -69,7 +64,6 @@ class HashProcessor implements StoreSwitcherInterface
      * @param RedirectDataInterfaceFactory $dataFactory
      * @param RedirectDataValidator $dataValidator
      * @param LoggerInterface $logger
-     * @param UserContextInterface $userContext
      */
     public function __construct(
         RequestInterface $request,
@@ -79,8 +73,7 @@ class HashProcessor implements StoreSwitcherInterface
         ContextInterfaceFactory $contextFactory,
         RedirectDataInterfaceFactory $dataFactory,
         RedirectDataValidator $dataValidator,
-        LoggerInterface $logger,
-        UserContextInterface $userContext
+        LoggerInterface $logger
     ) {
         $this->request = $request;
         $this->postprocessor = $postprocessor;
@@ -90,7 +83,6 @@ class HashProcessor implements StoreSwitcherInterface
         $this->dataFactory = $dataFactory;
         $this->dataValidator = $dataValidator;
         $this->logger = $logger;
-        $this->userContext = $userContext;
     }
 
     /**
@@ -107,16 +99,11 @@ class HashProcessor implements StoreSwitcherInterface
         $timestamp = (int) $this->request->getParam('time_stamp');
         $signature = (string) $this->request->getParam('signature');
         $data = (string) $this->request->getParam('data');
-        $customerId = $this->userContext->getUserType() === UserContextInterface::USER_TYPE_CUSTOMER
-        && $this->userContext->getUserId()
-            ? (int) $this->userContext->getUserId()
-            : null;
         $context = $this->contextFactory->create(
             [
                 'fromStore' => $fromStore,
                 'targetStore' => $targetStore,
-                'redirectUrl' => $redirectUrl,
-                'customerId' => $customerId
+                'redirectUrl' => $redirectUrl
             ]
         );
         $redirectDataObject = $this->dataFactory->create(
@@ -140,7 +127,7 @@ class HashProcessor implements StoreSwitcherInterface
         } catch (\Throwable $exception) {
             $this->logger->error($exception);
             $this->messageManager->addErrorMessage(
-                __('Something went wrong while switching to the store.')
+                __('Something went wrong.')
             );
         }
 

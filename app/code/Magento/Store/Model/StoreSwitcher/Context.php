@@ -26,27 +26,20 @@ class Context implements ContextInterface
      * @var string
      */
     private $redirectUrl;
-    /**
-     * @var int|null
-     */
-    private $customerId;
 
     /**
      * @param StoreInterface $fromStore
      * @param StoreInterface $targetStore
      * @param string $redirectUrl
-     * @param int|null $customerId
      */
     public function __construct(
         StoreInterface $fromStore,
         StoreInterface $targetStore,
-        string $redirectUrl,
-        ?int $customerId = null
+        string $redirectUrl
     ) {
         $this->fromStore = $fromStore;
         $this->targetStore = $targetStore;
         $this->redirectUrl = $redirectUrl;
-        $this->customerId = $customerId;
     }
 
     /**
@@ -71,13 +64,5 @@ class Context implements ContextInterface
     public function getRedirectUrl(): string
     {
         return $this->redirectUrl;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getCustomerId(): ?int
-    {
-        return $this->customerId;
     }
 }
