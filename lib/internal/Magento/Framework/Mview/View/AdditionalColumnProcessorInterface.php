@@ -7,7 +7,6 @@
 namespace Magento\Framework\Mview\View;
 
 use Magento\Framework\DB\Ddl\Table;
-use Magento\Tests\NamingConvention\true\string;
 
 interface AdditionalColumnProcessorInterface
 {
