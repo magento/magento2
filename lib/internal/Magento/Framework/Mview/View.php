@@ -11,6 +11,7 @@ namespace Magento\Framework\Mview;
 use InvalidArgumentException;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
+use Magento\Framework\Mview\View\ChangeLogBatchIterator;
 use Magento\Framework\Mview\View\ChangeLogBatchIteratorInterface;
 use Magento\Framework\Mview\View\ChangelogTableNotExistsException;
 use Magento\Framework\Mview\View\SubscriptionFactory;
@@ -65,9 +66,9 @@ class View extends DataObject implements ViewInterface
     private $changelogBatchSize;
 
     /**
-     * @var ChangeLogBatchIteratorInterface[]
+     * @var ChangeLogBatchIteratorInterface
      */
-    private $strategies;
+    private $iterator;
 
     /**
      * @param ConfigInterface $config
@@ -77,7 +78,7 @@ class View extends DataObject implements ViewInterface
      * @param SubscriptionFactory $subscriptionFactory
      * @param array $data
      * @param array $changelogBatchSize
-     * @param array $strategies
+     * @param ChangeLogBatchIteratorInterface|null $changeLogBatchIterator
      */
     public function __construct(
         ConfigInterface $config,
@@ -87,7 +88,7 @@ class View extends DataObject implements ViewInterface
         SubscriptionFactory $subscriptionFactory,
         array $data = [],
         array $changelogBatchSize = [],
-        array $strategies = []
+        ChangeLogBatchIteratorInterface $changeLogBatchIterator = null
     ) {
         $this->config = $config;
         $this->actionFactory = $actionFactory;
@@ -96,7 +97,7 @@ class View extends DataObject implements ViewInterface
         $this->subscriptionFactory = $subscriptionFactory;
         $this->changelogBatchSize = $changelogBatchSize;
         parent::__construct($data);
-        $this->strategies = $strategies;
+        $this->iterator = $changeLogBatchIterator;
     }
 
     /**
@@ -302,8 +303,12 @@ class View extends DataObject implements ViewInterface
 
         $vsFrom = $lastVersionId;
         while ($vsFrom < $currentVersionId) {
-            $iterator = $this->createIterator();
+            $iterator = $this->getIterator();
             $ids = $iterator->walk($this->getChangelog(), $vsFrom, $currentVersionId, $batchSize);
+
+            if (empty($ids)) {
+                break;
+            }
             $vsFrom += $batchSize;
             $action->execute($ids);
         }
@@ -315,8 +320,12 @@ class View extends DataObject implements ViewInterface
      * @return ChangeLogBatchIteratorInterface|mixed
      * @throws Exception
      */
-    private function createIterator()
+    private function getIterator()
     {
+        if ($this->iterator) {
+            return $this->iterator;
+        }
+
         $config = $this->config->getView($this->changelog->getViewId());
         $iteratorClass = $config['iterator'];
 

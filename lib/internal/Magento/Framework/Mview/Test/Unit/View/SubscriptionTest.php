@@ -7,11 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Mview\Test\Unit\View;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\Pdo\Mysql;
 use Magento\Framework\DB\Ddl\Trigger;
 use Magento\Framework\DB\Ddl\TriggerFactory;
 use Magento\Framework\Mview\Config;
+use Magento\Framework\Mview\View\AdditionalColumnsProcessor\DefaultProcessor;
 use Magento\Framework\Mview\View\ChangelogInterface;
 use Magento\Framework\Mview\View\CollectionInterface;
 use Magento\Framework\Mview\View\StateInterface;
@@ -49,6 +51,7 @@ class SubscriptionTest extends TestCase
 
     protected function setUp(): void
     {
+        $this->tableName = 'test_table';
         $this->connectionMock = $this->createMock(Mysql::class);
         $this->resourceMock = $this->createMock(ResourceConnection::class);
 
@@ -63,7 +66,10 @@ class SubscriptionTest extends TestCase
         $this->resourceMock->expects($this->atLeastOnce())
             ->method('getConnection')
             ->willReturn($this->connectionMock);
-
+        ObjectManager::getInstance()->expects($this->any())
+            ->method('get')
+            ->with(DefaultProcessor::class)
+            ->willReturn(2);
         $this->triggerFactoryMock = $this->createMock(TriggerFactory::class);
         $this->viewCollectionMock = $this->getMockForAbstractClass(
             CollectionInterface::class,
@@ -93,8 +99,11 @@ class SubscriptionTest extends TestCase
         $mviewConfigMock->expects($this->any())
             ->method('getView')
             ->willReturn([
-                'attribute_scope' => false,
-                'store_scope' => false
+                'subscriptions' => [
+                    $this->tableName => [
+                        'processor' => DefaultProcessor::class
+                    ]
+                ]
             ]);
         $this->mviewConfig = $mviewConfigMock;
         $this->model = new Subscription(
