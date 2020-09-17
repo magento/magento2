@@ -39,7 +39,6 @@ class ValueTest extends TestCase
         $mockedResource = $this->getMockedResource();
         $mockedCollectionFactory = $this->getMockedValueCollectionFactory();
 
-
         $this->CalculateCustomOptionCatalogRule = $this->createMock(
             CalculateCustomOptionCatalogRule::class
         );

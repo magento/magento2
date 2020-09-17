@@ -7,19 +7,16 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="ApplyCatalogRuleForSimpleProductAndFixedMethodTest" deprecated="Use ApplyCatalogRuleForSimpleProductWithSelectFixedMethodTest instead">
+    <test name="ApplyCatalogRuleForSimpleProductWithSelectFixedMethodTest">
         <annotations>
             <features value="CatalogRule"/>
             <stories value="Apply catalog price rule"/>
-            <title value="DEPRECATED. Admin should be able to apply the catalog price rule for simple product with custom options"/>
+            <title value="Admin should be able to apply the catalog price rule for simple product with custom options"/>
             <description value="Admin should be able to apply the catalog price rule for simple product with custom options"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14771"/>
             <group value="CatalogRule"/>
             <group value="mtf_migrated"/>
-            <skip>
-                <issueId value="DEPRECATED">Use ApplyCatalogRuleForSimpleProductWithSelectFixedMethodTest instead</issueId>
-            </skip>
         </annotations>
         <before>
             <!-- Login as Admin -->
@@ -51,7 +48,7 @@
             </actionGroup>
 
             <!-- Logout -->
-            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
         <!-- 1. Begin creating a new catalog price rule -->
         <actionGroup ref="NewCatalogPriceRuleByUIWithConditionIsCategoryActionGroup" stepKey="newCatalogPriceRuleByUIWithConditionIsCategory">
@@ -64,11 +61,8 @@
 
         <!-- Save and apply the new catalog price rule -->
         <actionGroup ref="SaveAndApplyCatalogPriceRuleActionGroup" stepKey="saveAndApplyCatalogPriceRule"/>
-        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-            <argument name="indices" value=""/>
-        </actionGroup>
-        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-            <argument name="tags" value=""/>
+        <actionGroup ref="CreateCatalogRuleStagingUpdateWithItsStartActionGroup" stepKey="fillOutActionGroup">
+            <argument name="stagingUpdate" value="_defaultCatalogRule"/>
         </actionGroup>
 
         <!-- Navigate to category on store front -->
@@ -98,9 +92,9 @@
         <!-- Assert regular and special price after selecting ProductOptionValueDropdown1 -->
         <actionGroup ref="StorefrontSelectCustomOptionRadioAndAssertPricesActionGroup" stepKey="storefrontSelectCustomOptionAndAssertPrices1">
             <argument name="customOption" value="ProductOptionRadioButton2"/>
-            <argument name="customOptionValue" value="ProductOptionValueRadioButtons1"/>
+            <argument name="customOptionValue" value="ProductOptionValueRadioButtonsWithDiscountedPrice"/>
             <argument name="productPrice" value="$156.77"/>
-            <argument name="productFinalPrice" value="$144.47"/>
+            <argument name="productFinalPrice" value="$122.81"/>
         </actionGroup>
 
         <!-- Add product 1 to cart -->
@@ -110,7 +104,7 @@
 
         <!-- Assert sub total on mini shopping cart -->
         <actionGroup ref="AssertSubTotalOnStorefrontMiniCartActionGroup" stepKey="assertSubTotalOnStorefrontMiniCart">
-            <argument name="subTotal" value="$144.47"/>
+            <argument name="subTotal" value="$122.81"/>
         </actionGroup>
     </test>
 </tests>
