@@ -59,8 +59,7 @@ class ChangelogTest extends TestCase
         $mviewConfigMock->expects($this->any())
             ->method('getView')
             ->willReturn([
-                'attribute_scope' => false,
-                'store_scope' => false
+                'subscriptions' => []
             ]);
         return $mviewConfigMock;
     }
