@@ -36,9 +36,8 @@
                 <requiredEntity createDataKey="createSimpleProduct"/>
             </createData>
 
-            <magentoCron groups="index" stepKey="runCronIndex"/>
-            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-                <argument name="tags" value=""/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
+                <argument name="indices" value="cataloginventory_stock"/>
             </actionGroup>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
@@ -48,8 +47,8 @@
             <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
-        <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteBundleProductFilteredBySkuAndName">
-            <argument name="product" value="$createDynamicBundleProduct$"/>
+        <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteBundleProductBySku">
+            <argument name="sku" value="$createDynamicBundleProduct.sku$"/>
         </actionGroup>
         <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="A total of 1 record(s) have been deleted." stepKey="deleteMessage"/>
         <!-- Verify product on Product Page -->
@@ -61,7 +60,6 @@
         </actionGroup>
          <!-- Should not see bundle product -->
         <dontSee userInput="$createDynamicBundleProduct.sku$" selector="{{StorefrontCatalogSearchMainSection.searchResults}}" stepKey="dontSeeProduct"/>
-        <comment userInput="redundant action" stepKey="seeCantFindProductMessage"/>
         <amOnPage url="{{StorefrontCategoryPage.url($createCategory.custom_attributes[url_key]$)}}" stepKey="openCategoryPage"/>
         <!-- Should not see any products in category -->
         <dontSee userInput="$createDynamicBundleProduct.name$" selector="{{StorefrontCategoryMainSection.productsList}}" stepKey="dontSeeProductInCategory"/>
