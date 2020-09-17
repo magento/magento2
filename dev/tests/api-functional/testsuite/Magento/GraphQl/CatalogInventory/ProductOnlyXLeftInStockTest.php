@@ -106,7 +106,7 @@ QUERY;
         $productSku = 'simple';
         $showOutOfStock = $this->scopeConfig->getValue(Configuration::XML_PATH_SHOW_OUT_OF_STOCK);
 
-        $this->resourceConfig>saveConfig(
+        $this->resourceConfig->saveConfig(
             \Magento\CatalogInventory\Model\Configuration::XML_PATH_SHOW_OUT_OF_STOCK,
             1,
             ScopeConfigInterface::SCOPE_TYPE_DEFAULT
