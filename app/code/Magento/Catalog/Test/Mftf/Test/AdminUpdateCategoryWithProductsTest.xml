@@ -7,15 +7,18 @@
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminUpdateCategoryWithProductsTest">
+    <test name="AdminUpdateCategoryWithProductsTest" deprecated="Use AdminUpdateCategoryWithProductsDefaultSortingTest instead">
         <annotations>
             <stories value="Update categories"/>
-            <title value="Update category, sort products by default sorting"/>
+            <title value="DEPRECATED. Update category, sort products by default sorting"/>
             <description value="Login as admin, update category and sort products"/>
             <testCaseId value="MC-6059"/>
             <severity value="BLOCKER"/>
             <group value="Catalog"/>
             <group value="mtf_migrated"/>
+            <skip>
+                <issueId value="DEPRECATED">Use AdminUpdateCategoryWithProductsDefaultSortingTest instead</issueId>
+            </skip>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
