@@ -17,7 +17,7 @@
             <testCaseId value="MC-148"/>
             <group value="CatalogRule"/>
             <skip>
-                <issueId value="MC-22577"/>
+                <issueId value="DEPRECATED">Use AdminApplyCatalogPriceRuleByProductAttributeTest instead.</issueId>
             </skip>
         </annotations>
         <before>
