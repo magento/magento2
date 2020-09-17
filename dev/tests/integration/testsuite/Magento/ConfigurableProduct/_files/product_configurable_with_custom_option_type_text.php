@@ -7,16 +7,20 @@ declare(strict_types=1);
 
 use Magento\Catalog\Api\Data\ProductCustomOptionInterface;
 use Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory;
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-require __DIR__ . '/product_configurable.php';
+Resolver::getInstance()->requireDataFixture('Magento/ConfigurableProduct/_files/product_configurable.php');
 
 /** @var ObjectManagerInterface $objectManager */
 $objectManager = Bootstrap::getObjectManager();
 /** @var ProductCustomOptionInterfaceFactory $optionRepository */
 $optionRepository = $objectManager->get(ProductCustomOptionInterfaceFactory::class);
-
+/** @var ProductRepositoryInterface $productRepository */
+$productRepository = Bootstrap::getObjectManager()->create(ProductRepositoryInterface::class);
+$product = $productRepository->get('configurable');
 $createdOption = $optionRepository->create([
     'data' => [
         'is_require' => 0,

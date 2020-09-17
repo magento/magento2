@@ -193,8 +193,7 @@
         <!-- Place Order -->
         <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="onCheckout"/>
         <see userInput="20" selector="{{CheckoutOrderSummarySection.itemsQtyInCart}}" stepKey="see20Products"/>
-        <click selector="{{CheckoutShippingSection.next}}" stepKey="clickNextButton"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForCheckoutLoad"/>
+        <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="clickNextButton"/>
         <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="placeOrder"/>
         <waitForPageLoad stepKey="waitForSuccess"/>
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>

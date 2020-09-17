@@ -5,8 +5,17 @@
  */
 namespace Magento\Persistent\Model;
 
+use Magento\Customer\Api\Data\GroupInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Persistent\Helper\Data;
+use Magento\Quote\Api\CartRepositoryInterface;
+use Magento\Quote\Api\Data\CartExtensionFactory;
+use Magento\Quote\Api\Data\CartInterface;
+use Magento\Quote\Model\Quote;
+use Magento\Quote\Model\Quote\ShippingAssignment\ShippingAssignmentProcessor;
+
 /**
- * Class QuoteManager
+ * Quote manager model
  *
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
@@ -29,7 +38,7 @@ class QuoteManager
     /**
      * Persistent data
      *
-     * @var \Magento\Persistent\Helper\Data
+     * @var Data
      */
     protected $persistentData;
 
@@ -41,26 +50,44 @@ class QuoteManager
     protected $_setQuotePersistent = true;
 
     /**
-     * @var \Magento\Quote\Api\CartRepositoryInterface
+     * @var CartRepositoryInterface
      */
     protected $quoteRepository;
 
     /**
+     * @var ShippingAssignmentProcessor
+     */
+    private $shippingAssignmentProcessor;
+
+    /**
+     * @var CartExtensionFactory
+     */
+    private $cartExtensionFactory;
+
+    /**
      * @param \Magento\Persistent\Helper\Session $persistentSession
-     * @param \Magento\Persistent\Helper\Data $persistentData
+     * @param Data $persistentData
      * @param \Magento\Checkout\Model\Session $checkoutSession
-     * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
+     * @param CartRepositoryInterface $quoteRepository
+     * @param CartExtensionFactory|null $cartExtensionFactory
+     * @param ShippingAssignmentProcessor|null $shippingAssignmentProcessor
      */
     public function __construct(
         \Magento\Persistent\Helper\Session $persistentSession,
-        \Magento\Persistent\Helper\Data $persistentData,
+        Data $persistentData,
         \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
+        CartRepositoryInterface $quoteRepository,
+        ?CartExtensionFactory $cartExtensionFactory = null,
+        ?ShippingAssignmentProcessor $shippingAssignmentProcessor = null
     ) {
         $this->persistentSession = $persistentSession;
         $this->persistentData = $persistentData;
         $this->checkoutSession = $checkoutSession;
         $this->quoteRepository = $quoteRepository;
+        $this->cartExtensionFactory = $cartExtensionFactory
+            ?? ObjectManager::getInstance()->get(CartExtensionFactory::class);
+        $this->shippingAssignmentProcessor = $shippingAssignmentProcessor
+            ?? ObjectManager::getInstance()->get(ShippingAssignmentProcessor::class);
     }
 
     /**
@@ -71,7 +98,7 @@ class QuoteManager
      */
     public function setGuest($checkQuote = false)
     {
-        /** @var $quote \Magento\Quote\Model\Quote */
+        /** @var $quote Quote */
         $quote = $this->checkoutSession->getQuote();
         if ($quote && $quote->getId()) {
             if ($checkQuote && !$this->persistentData->isShoppingCartPersist() && !$quote->getIsPersistent()) {
@@ -87,17 +114,19 @@ class QuoteManager
                 ->setCustomerEmail(null)
                 ->setCustomerFirstname(null)
                 ->setCustomerLastname(null)
-                ->setCustomerGroupId(\Magento\Customer\Api\Data\GroupInterface::NOT_LOGGED_IN_ID)
+                ->setCustomerGroupId(GroupInterface::NOT_LOGGED_IN_ID)
                 ->setIsPersistent(false)
                 ->removeAllAddresses();
             //Create guest addresses
             $quote->getShippingAddress();
             $quote->getBillingAddress();
+            $this->setShippingAssignments($quote);
             $quote->collectTotals();
             $this->quoteRepository->save($quote);
         }
 
         $this->persistentSession->getSession()->removePersistentCookie();
+        $this->persistentSession->setSession(null);
     }
 
     /**
@@ -111,7 +140,7 @@ class QuoteManager
     public function convertCustomerCartToGuest()
     {
         $quoteId = $this->checkoutSession->getQuoteId();
-        /** @var $quote \Magento\Quote\Model\Quote */
+        /** @var $quote Quote */
         $quote = $this->quoteRepository->get($quoteId);
         if ($quote && $quote->getId()) {
             $this->_setQuotePersistent = false;
@@ -126,6 +155,7 @@ class QuoteManager
             $quote->getAddressesCollection()->walk('setEmail', ['email' => null]);
             $quote->collectTotals();
             $this->persistentSession->getSession()->removePersistentCookie();
+            $this->persistentSession->setSession(null);
             $this->quoteRepository->save($quote);
         }
     }
@@ -144,7 +174,7 @@ class QuoteManager
             $quote->setIsActive(true)
                 ->setIsPersistent(false)
                 ->setCustomerId(null)
-                ->setCustomerGroupId(\Magento\Customer\Api\Data\GroupInterface::NOT_LOGGED_IN_ID);
+                ->setCustomerGroupId(GroupInterface::NOT_LOGGED_IN_ID);
         }
     }
 
@@ -156,5 +186,24 @@ class QuoteManager
     public function isPersistent()
     {
         return $this->_setQuotePersistent;
+    }
+
+    /**
+     * Create shipping assignment for shopping cart
+     *
+     * @param CartInterface $quote
+     */
+    private function setShippingAssignments(CartInterface $quote): void
+    {
+        $shippingAssignments = [];
+        if (!$quote->isVirtual() && $quote->getItemsQty() > 0) {
+            $shippingAssignments[] = $this->shippingAssignmentProcessor->create($quote);
+        }
+        $cartExtension = $quote->getExtensionAttributes();
+        if ($cartExtension === null) {
+            $cartExtension = $this->cartExtensionFactory->create();
+        }
+        $cartExtension->setShippingAssignments($shippingAssignments);
+        $quote->setExtensionAttributes($cartExtension);
     }
 }
