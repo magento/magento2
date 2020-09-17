@@ -86,7 +86,9 @@
         <comment userInput="Check order of products: recently added first" stepKey="commentCheckOrderOfProductsRecentlyAddedFirst"/>
         <waitForElementVisible selector="{{InsertWidgetSection.checkElementStorefrontByName('1','$createThirdProduct.name$')}}" stepKey="waitForThirdProductVisible"/>
         <seeElement selector="{{InsertWidgetSection.checkElementStorefrontByName('1','$createThirdProduct.name$')}}" stepKey="seeElementByName1"/>
+        <waitForElementVisible selector="{{InsertWidgetSection.checkElementStorefrontByName('2','$createSecondProduct.name$')}}" stepKey="waitForSecondProductVisible"/>
         <seeElement selector="{{InsertWidgetSection.checkElementStorefrontByName('2','$createSecondProduct.name$')}}" stepKey="seeElementByName2"/>
+        <waitForElementVisible selector="{{InsertWidgetSection.checkElementStorefrontByName('3','$createFirstProduct.name$')}}" stepKey="waitForFirstProductVisible"/>
         <seeElement selector="{{InsertWidgetSection.checkElementStorefrontByName('3','$createFirstProduct.name$')}}" stepKey="seeElementByName3"/>
     </test>
 </tests>
