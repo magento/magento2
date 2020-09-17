@@ -5,10 +5,34 @@
  */
 namespace Magento\Framework\Mview\Config;
 
+use Magento\Framework\Mview\View\AdditionalColumnsProcessor\DefaultProcessor;
+use Magento\Framework\Mview\View\ChangeLogBatchIterator;
 use Magento\Framework\Mview\View\SubscriptionInterface;
 
 class Converter implements \Magento\Framework\Config\ConverterInterface
 {
+    /**
+     * @var string
+     */
+    private $defaultProcessor;
+
+    /**
+     * @var string
+     */
+    private $defaultIterator;
+
+    /**
+     * @param string $defaultProcessor
+     * @param string $defaultIterator
+     */
+    public function __construct(
+        string $defaultProcessor = DefaultProcessor::class,
+        string $defaultIterator = ChangeLogBatchIterator::class
+    ) {
+        $this->defaultProcessor = $defaultProcessor;
+        $this->defaultIterator = $defaultIterator;
+    }
+
     /**
      * Convert dom node tree to array
      *
@@ -29,7 +53,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             $data['action_class'] = $this->getAttributeValue($viewNode, 'class');
             $data['group'] = $this->getAttributeValue($viewNode, 'group');
             $data['store_scope'] = $this->getAttributeValue($viewNode, 'store_scope');
-            $data['iterator'] = $this->getAttributeValue($viewNode, 'iterator');
+            $data['iterator'] = $this->getAttributeValue($viewNode, 'iterator') ?: $this->defaultIterator;
             $data['subscriptions'] = [];
 
             /** @var $childNode \DOMNode */
@@ -95,6 +119,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                         'subscription_model' => $subscriptionModel,
                         'additional_columns' => $this->getAdditionalColumns($subscription),
                         'processor' => $this->getAttributeValue($subscription, 'processor')
+                            ?: $this->defaultProcessor
                     ];
                 }
                 break;
@@ -116,10 +141,17 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                 continue;
             }
 
-            $additionalColumns[] = [
-                'name' => $this->getAttributeValue($childNode, 'name'),
-                'cl_name' => $this->getAttributeValue($childNode, 'cl_name'),
-            ];
+            foreach ($childNode->childNodes as $columnNode) {
+                if ($columnNode->nodeName !== 'column') {
+                    continue;
+                }
+
+                $additionalColumns[$this->getAttributeValue($columnNode, 'name')] = [
+                    'name' => $this->getAttributeValue($columnNode, 'name'),
+                    'cl_name' => $this->getAttributeValue($columnNode, 'cl_name'),
+                    'constant' => $this->getAttributeValue($columnNode, 'constant'),
+                ];
+            }
         }
 
         return $additionalColumns;

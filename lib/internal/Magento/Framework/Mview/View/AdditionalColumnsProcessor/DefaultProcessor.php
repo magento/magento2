@@ -9,7 +9,6 @@ namespace Magento\Framework\Mview\View\AdditionalColumnsProcessor;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\Mview\View\AdditionalColumnProcessorInterface;
-use Magento\Tests\NamingConvention\true\string;
 
 class DefaultProcessor implements AdditionalColumnProcessorInterface
 {
@@ -42,8 +41,10 @@ class DefaultProcessor implements AdditionalColumnProcessorInterface
             $triggersColumns['column_names'][$additionalColumn['name']] = $resource->quoteIdentifier(
                 $additionalColumn['cl_name']
             );
-            $triggersColumns['column_values'][$additionalColumn['name']] = $eventPrefix .
-                $resource->quoteIdentifier($additionalColumn['name']);
+
+            $triggersColumns['column_values'][$additionalColumn['name']] = isset($additionalColumn['constant']) ?
+                $resource->quote($additionalColumn['constant']) :
+                $eventPrefix . $resource->quoteIdentifier($additionalColumn['name']);
         }
 
         return $triggersColumns;
@@ -64,9 +65,9 @@ class DefaultProcessor implements AdditionalColumnProcessorInterface
     {
         $table->addColumn(
             $columnName,
-            \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+            \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
             null,
-            ['unsigned' => true, 'nullable' => false, 'default' => null],
+            ['unsigned' => true, 'nullable' => true, 'default' => null],
             $columnName
         );
     }

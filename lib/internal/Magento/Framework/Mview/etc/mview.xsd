@@ -95,6 +95,7 @@
     <xs:complexType name="additionalColumnAttributeType">
         <xs:attribute name="name" type="xs:string" />
         <xs:attribute name="cl_name" type="xs:string" />
+        <xs:attribute name="constant" type="xs:string" />
     </xs:complexType>
 
     <xs:simpleType name="entityColumnType">

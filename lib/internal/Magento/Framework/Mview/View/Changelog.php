@@ -6,6 +6,7 @@
 
 namespace Magento\Framework\Mview\View;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DB\Adapter\ConnectionException;
 use Magento\Framework\DB\Sql\Expression;
 use Magento\Framework\Exception\RuntimeException;
@@ -114,7 +115,8 @@ class Changelog implements ChangelogInterface
 
             foreach ($this->initAdditionalColumnData() as $columnData) {
                 /** @var AdditionalColumnProcessorInterface $processor */
-                $processor = $columnData['processor'];
+                $processorClass = $columnData['processor'];
+                $processor = ObjectManager::getInstance()->get($processorClass);
                 $processor->processColumnForCLTable($table, $columnData['cl_name']);
             }
 
@@ -138,6 +140,7 @@ class Changelog implements ChangelogInterface
                 foreach ($subscription['additional_columns'] as $additionalColumn) {
                     //We are gatherig unique change log column names in order to create them later
                     $additionalColumns[$additionalColumn['cl_name']] = $additionalColumn;
+                    $additionalColumns[$additionalColumn['cl_name']]['processor'] = $subscription['processor'];
                 }
             }
         }
