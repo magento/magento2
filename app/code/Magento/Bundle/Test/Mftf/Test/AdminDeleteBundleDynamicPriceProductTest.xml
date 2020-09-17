@@ -35,7 +35,7 @@
                 <requiredEntity createDataKey="bundleOption"/>
                 <requiredEntity createDataKey="createSimpleProduct"/>
             </createData>
-
+            <!-- TODO: Remove this action when MC-37719 will be fixed -->
             <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexInvalidatedIndices">
                 <argument name="indices" value="cataloginventory_stock"/>
             </actionGroup>
