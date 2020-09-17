@@ -513,6 +513,7 @@ class Encryptor implements EncryptorInterface
         int $cipherVersion = null,
         string $initVector = null
     ): ?EncryptionAdapterInterface {
+        //phpcs:disable PHPCompatibility.Constants.RemovedConstants
         if (null === $key && null === $cipherVersion) {
             $cipherVersion = $this->getCipherVersion();
         }
@@ -544,6 +545,7 @@ class Encryptor implements EncryptorInterface
             $cipher = MCRYPT_BLOWFISH;
             $mode = MCRYPT_MODE_ECB;
         }
+        //phpcs:enable PHPCompatibility.Constants.RemovedConstants
 
         return new Mcrypt($key, $cipher, $mode, $initVector);
     }

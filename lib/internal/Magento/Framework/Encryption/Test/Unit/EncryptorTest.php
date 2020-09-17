@@ -272,6 +272,7 @@ class EncryptorTest extends TestCase
         [, , $iv, $encrypted] = explode(':', $data, 4);
 
         // Decrypt returned data with RIJNDAEL_256 cipher, cbc mode
+        //phpcs:ignore PHPCompatibility.Constants.RemovedConstants
         $crypt = new Crypt(self::CRYPT_KEY_1, MCRYPT_RIJNDAEL_256, MCRYPT_MODE_CBC, $iv);
         // Verify decrypted matches original data
         $this->assertEquals($encrypted, base64_encode($crypt->encrypt($actual)));
