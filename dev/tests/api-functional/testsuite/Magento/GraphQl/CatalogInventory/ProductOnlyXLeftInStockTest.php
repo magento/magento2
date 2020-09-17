@@ -7,13 +7,46 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\CatalogInventory;
 
+use Magento\Config\Model\ResourceModel\Config;
+use Magento\Framework\App\Config\ReinitableConfigInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use Magento\CatalogInventory\Model\Configuration;
 
 /**
  * Test for the product only x left in stock
  */
 class ProductOnlyXLeftInStockTest extends GraphQlAbstract
 {
+    /**
+     * @var Config $config
+     */
+    private $resourceConfig;
+
+    /**
+     * @var ScopeConfigInterface
+     */
+    private $scopeConfig;
+
+    /**
+     * @var ReinitableConfigInterface
+     */
+    private $reinitConfig;
+
+    /**
+     * @inheritdoc
+     */
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $objectManager = ObjectManager::getInstance();
+        $this->resourceConfig = $objectManager->get(Config::class);
+        $this->scopeConfig = $objectManager->get(ScopeConfigInterface::class);
+        $this->reinitConfig = $objectManager->get(ReinitableConfigInterface::class);
+    }
+
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple_with_all_fields.php
      */
@@ -67,11 +100,17 @@ QUERY;
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple_out_of_stock_without_categories.php
      * @magentoConfigFixture default_store cataloginventory/options/stock_threshold_qty 120
-     * @magentoConfigFixture default_store cataloginventory/options/show_out_of_stock 1
      */
     public function testQueryProductOnlyXLeftInStockOutstock()
     {
         $productSku = 'simple';
+        $showOutOfStock = $this->scopeConfig->getValue(Configuration::XML_PATH_SHOW_OUT_OF_STOCK);
+
+
+        $this->resourceConfig->saveConfig(Configuration::XML_PATH_SHOW_OUT_OF_STOCK,
+            1,
+            ScopeConfigInterface::SCOPE_TYPE_DEFAULT);
+        $this->reinitConfig->reinit();
 
         $query = <<<QUERY
         {
@@ -84,6 +123,9 @@ QUERY;
         }
 QUERY;
         $response = $this->graphQlQuery($query);
+
+        $this->resourceConfig->saveConfig(Configuration::XML_PATH_SHOW_OUT_OF_STOCK, $showOutOfStock);
+        $this->reinitConfig->reinit();
 
         $this->assertArrayHasKey(0, $response['products']['items']);
         $this->assertArrayHasKey('only_x_left_in_stock', $response['products']['items'][0]);
