@@ -9,9 +9,6 @@ namespace Magento\Framework\EntityManager;
 use Magento\Framework\DB\Adapter\Pdo\CallbackPool;
 use Psr\Log\LoggerInterface;
 
-/**
- * Class CallbackHandler
- */
 class CallbackHandler
 {
     /**

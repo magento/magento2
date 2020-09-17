@@ -10,7 +10,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Config\CacheInterface;
 
 /**
- * Class FileCache
+ * Files cache management.
  */
 class FileCache implements CacheInterface
 {

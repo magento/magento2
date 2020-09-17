@@ -28,10 +28,6 @@ use Magento\Framework\ObjectManager\Config\Reader\Dom;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\MockObject\MockObject;
 
-/**
- * Class CompiledInterceptorTest
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- */
 class CompiledInterceptorTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -47,7 +43,7 @@ class CompiledInterceptorTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->ioGenerator = $this->getMockBuilder(Io::class)
             ->disableOriginalConstructor()

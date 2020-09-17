@@ -18,6 +18,7 @@ use Magento\Framework\CompiledInterception\CompiledPluginList\Custom\Module\Mode
 use Magento\Framework\CompiledInterception\CompiledPluginList\Custom\Module\Model\Item\Enhanced;
 use Magento\Framework\CompiledInterception\CompiledPluginList\Custom\Module\Model\ItemPlugin\Advanced;
 use Magento\Framework\CompiledInterception\CompiledPluginList\Custom\Module\Model\ItemPlugin\Simple;
+use Magento\Framework\Exception\InvalidArgumentException;
 use Magento\Framework\Interception\ObjectManager\ConfigInterface;
 use Magento\Framework\Interception\PluginList\PluginList;
 use Magento\Framework\ObjectManager\Config\Reader\Dom;
@@ -35,7 +36,7 @@ class CompiledPluginListTest extends \PHPUnit\Framework\TestCase
      */
     private $objects;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objects = $this->createScopeReaders();
     }
@@ -163,13 +164,13 @@ class CompiledPluginListTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
      * @covers \Magento\Framework\Interception\PluginList\PluginList::getNext
      * @covers \Magento\Framework\Interception\PluginList\PluginList::_inheritPlugins
      */
     public function testInheritPluginsWithNonExistingClass()
     {
         $this->objects['frontend']->getNext('SomeType', 'someMethod');
+        $this->expectException(InvalidArgumentException::class);
     }
 
     /**

@@ -9,7 +9,7 @@ namespace Magento\Framework\CompiledInterception\Generator;
 use Magento\Framework\Config\Scope;
 
 /**
- * Class AreasPluginList
+ * Plugin list provider for area.
  */
 class AreasPluginList
 {

@@ -11,7 +11,7 @@ use Magento\Framework\Interception\PluginList\PluginList;
 use Magento\Framework\Interception\PluginListInterface;
 
 /**
- * Class CompiledPluginList
+ * List provider for compiled pligins.
  */
 class CompiledPluginList implements PluginListInterface
 {

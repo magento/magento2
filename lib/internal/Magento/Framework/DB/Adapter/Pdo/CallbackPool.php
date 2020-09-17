@@ -7,9 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\Framework\DB\Adapter\Pdo;
 
-/**
- * Class CallbackPool
- */
 class CallbackPool
 {
     /**

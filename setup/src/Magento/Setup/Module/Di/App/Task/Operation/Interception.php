@@ -13,9 +13,6 @@ use Magento\Setup\Module\Di\Code\Generator\Interceptor as InterceptorGenerator;
 use Magento\Setup\Module\Di\Code\GeneratorFactory;
 use Magento\Setup\Module\Di\Code\Reader\ClassesScanner;
 
-/**
- * Class Interception
- */
 class Interception implements OperationInterface
 {
     /**

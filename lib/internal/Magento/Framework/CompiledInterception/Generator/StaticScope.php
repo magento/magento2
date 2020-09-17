@@ -7,9 +7,6 @@ namespace Magento\Framework\CompiledInterception\Generator;
 
 use Magento\Framework\Config\ScopeInterface;
 
-/**
- * Class StaticScope
- */
 class StaticScope implements ScopeInterface
 {
     /**
