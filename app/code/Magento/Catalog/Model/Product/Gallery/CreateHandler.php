@@ -597,10 +597,21 @@ class CreateHandler implements ExtensionInterface
         $canRemoveImage = true;
         $gallery = $this->getImagesForAllStores($product);
         $storeId = $product->getStoreId();
+        $storeIds = [];
+        $storeIds[] = 0;
+        $websiteIds = array_map('intval', $product->getWebsiteIds() ?? []);
+        foreach ($this->storeManager->getStores() as $store) {
+            if (in_array((int) $store->getWebsiteId(), $websiteIds, true)) {
+                $storeIds[] = (int) $store->getId();
+            }
+        }
 
         if (!empty($gallery)) {
             foreach ($gallery as $image) {
-                if ($image['filepath'] === $imageFile && (int) $image['store_id'] !== $storeId) {
+                if (in_array((int) $image['store_id'], $storeIds)
+                    && $image['filepath'] === $imageFile
+                    && (int) $image['store_id'] !== $storeId
+                ) {
                     $canRemoveImage = false;
                 }
             }
