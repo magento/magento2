@@ -54,19 +54,12 @@ class CalculateCustomOptionCatalogRule
         $regularPrice = (float)$product->getPriceInfo()
             ->getPrice(RegularPrice::PRICE_CODE)
             ->getValue();
-        $catalogRulePrice = $this->priceModifier->modifyPrice(
-            $regularPrice,
-            $product
-        );
-
+        $catalogRulePrice = $product->getPriceInfo()->getPrice('final_price')->getValue();
         // Apply catalog price rules to product options only if catalog price rules are applied to product.
         if ($catalogRulePrice < $regularPrice) {
             $optionPrice = $this->getOptionPriceWithoutPriceRule($optionPriceValue, $isPercent, $regularPrice);
-            $totalCatalogRulePrice = $this->priceModifier->modifyPrice(
-                $regularPrice + $optionPrice,
-                $product
-            );
-            $finalOptionPrice = $totalCatalogRulePrice - $catalogRulePrice;
+            $discount = $catalogRulePrice / $regularPrice;
+            $finalOptionPrice = $optionPrice*$discount;
         } else {
             $finalOptionPrice = $this->getOptionPriceWithoutPriceRule(
                 $optionPriceValue,
@@ -77,7 +70,6 @@ class CalculateCustomOptionCatalogRule
 
         return $this->priceCurrency->convertAndRound($finalOptionPrice);
     }
-
 
     /**
      * Calculate option price without catalog price rule discount.
