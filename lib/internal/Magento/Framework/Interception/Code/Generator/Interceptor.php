@@ -11,7 +11,7 @@ use Magento\Framework\Code\Generator\EntityAbstract;
 
 class Interceptor extends EntityAbstract implements InterceptorInterface
 {
-    public const ENTITY_TYPE = 'interceptor'
+    public const ENTITY_TYPE = 'interceptor';
 
     /**
      * Returns default result class name
