@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminAssertAllImagesInStandaloneMediaGalleryActionGroup">
+        <annotations>
+            <description>Validates that all images are present and correct in the standalone media gallery.</description>
+        </annotations>
+        <arguments>
+            <argument name="firstImage" type="string"/>
+            <argument name="secondImage" type="string"/>
+        </arguments>
+
+        <seeElement selector="{{AdminEnhancedMediaGalleryActionsSection.imageSrc(firstImage)}}"
+                    stepKey="assertFirstImageInMediaGalleryGrid"/>
+        <seeElement selector="{{AdminEnhancedMediaGalleryActionsSection.secondImageSrc(secondImage)}}"
+                    stepKey="assertSecondImageInMediaGalleryGrid"/>
+    </actionGroup>
+</actionGroups>

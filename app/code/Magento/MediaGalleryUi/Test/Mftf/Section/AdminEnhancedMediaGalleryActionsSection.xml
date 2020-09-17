@@ -16,5 +16,6 @@
         <element name="createFolder" type="button" selector="[data-ui-id='create-folder-button']"/>
         <element name="deleteFolder" type="button" selector="[data-ui-id='delete-folder-button']"/>
         <element name="imageSrc" type="text" selector="//div[@class='masonry-image-column' and contains(@data-repeat-index, '0')]//img[contains(@src,'{{src}}')]" parameterized="true"/>
+        <element name="secondImageSrc" type="text" selector="//div[@class='masonry-image-column' and contains(@data-repeat-index, '1')]//img[contains(@src,'{{src}}')]" parameterized="true"/>
     </section>
 </sections>
