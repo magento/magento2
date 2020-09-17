@@ -16,7 +16,7 @@
             <description value="Admin should be able to apply the catalog price rule by product attribute"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-25351"/>
-            <group value="catalog_rule"/>
+            <group value="catalogRule"/>
         </annotations>
         <before>
             <createData entity="productDropDownAttribute" stepKey="createDropdownAttribute"/>
@@ -178,7 +178,7 @@
             <argument name="productPrice" value="$createConfigFirstChildProduct.price$"/>
             <argument name="productFinalPrice" value="$30.00"/>
         </actionGroup>
-        <!-- Verify price for configurable product with attribute option green=$54 -->
+        <!-- Verify price for configurable product with attribute option green=$30 -->
         <selectOption selector="{{AdminCustomerActivitiesConfigureSection.addAttribute}}" userInput="option2" stepKey="selectSecondOptionOfConfigProduct"/>
         <actionGroup ref="AssertStorefrontProductPricesActionGroup" stepKey="assertConfigProductWithSecondOptionPrices">
             <argument name="productPrice" value="$createConfigSecondChildProduct.price$"/>
