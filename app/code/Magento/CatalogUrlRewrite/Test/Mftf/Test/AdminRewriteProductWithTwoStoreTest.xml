@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminRewriteProductWithTwoStoreTest">
+        <annotations>
+            <stories value="Rewriting URL of product"/>
+            <title value="Rewriting URL of product"/>
+            <description value="Rewriting URL of product. Verify the full URL address"/>
+            <severity value="MAJOR"/>
+            <group value="CatalogUrlRewrite"/>
+        </annotations>
+
+        <before>
+            <magentoCLI command="config:set {{EnableCategoriesPathProductUrls.path}} {{EnableCategoriesPathProductUrls.value}}" stepKey="enableUseCategoriesPath"/>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
+
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView" />
+            <createData entity="_defaultCategoryDifferentUrlStore" stepKey="defaultCategory"/>
+            <createData entity="SimpleSubCategoryDifferentUrlStore" stepKey="subCategory">
+                <requiredEntity createDataKey="defaultCategory"/>
+            </createData>
+            <createData entity="SimpleProduct" stepKey="simpleProduct">
+                <requiredEntity createDataKey="subCategory"/>
+            </createData>
+        </before>
+
+        <after>
+            <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreView"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <deleteData createDataKey="simpleProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="defaultCategory" stepKey="deleteNewRootCategory"/>
+            <magentoCLI command="config:set {{DisableCategoriesPathProductUrls.path}} {{DisableCategoriesPathProductUrls.value}}" stepKey="disableUseCategoriesPath"/>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
+        </after>
+
+        <actionGroup ref="NavigateToCreatedCategoryActionGroup" stepKey="navigateToCreatedDefaultCategory">
+            <argument name="Category" value="$$defaultCategory$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminSwitchStoreViewActionGroup" stepKey="AdminSwitchDefaultStoreViewForDefaultCategory">
+            <argument name="storeView" value="_defaultStore.name"/>
+        </actionGroup>
+        <actionGroup ref="AdminChangeSeoUrlKeyForSubCategoryWithoutRedirectActionGroup" stepKey="changeSeoUrlKeyForDefaultCategoryDefaultStore">
+            <argument name="value" value="{{_defaultCategoryDifferentUrlStore.url_key_default_store}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminSwitchStoreViewActionGroup" stepKey="AdminSwitchCustomStoreViewForDefaultCategory">
+            <argument name="storeView" value="customStore.name"/>
+        </actionGroup>
+        <actionGroup ref="AdminChangeSeoUrlKeyForSubCategoryWithoutRedirectActionGroup" stepKey="changeSeoUrlKeyForDefaultCategoryCustomStore">
+            <argument name="value" value="{{_defaultCategoryDifferentUrlStore.url_key_custom_store}}"/>
+        </actionGroup>
+
+        <actionGroup ref="NavigateToCreatedCategoryActionGroup" stepKey="navigateToCreatedSubCategory">
+            <argument name="Category" value="$$subCategory$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminSwitchStoreViewActionGroup" stepKey="AdminSwitchDefaultStoreViewForSubCategory">
+            <argument name="storeView" value="_defaultStore.name"/>
+        </actionGroup>
+        <actionGroup ref="AdminChangeSeoUrlKeyForSubCategoryWithoutRedirectActionGroup" stepKey="changeSeoUrlKeyForSubCategoryDefaultStore">
+            <argument name="value" value="{{SimpleSubCategoryDifferentUrlStore.url_key_default_store}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminSwitchStoreViewActionGroup" stepKey="AdminSwitchCustomStoreViewForSubCategory">
+            <argument name="storeView" value="customStore.name"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminChangeSeoUrlKeyForSubCategoryWithoutRedirectActionGroup" stepKey="changeSeoUrlKeyForSubCategoryCustomStore">
+            <argument name="value" value="{{SimpleSubCategoryDifferentUrlStore.url_key_custom_store}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductRewriteUrlSubCategoryActionGroup" stepKey="validatesRewriteUrlDefaultStore">
+            <argument name="category" value="{{_defaultCategoryDifferentUrlStore.url_key_default_store}}"/>
+            <argument name="product" value="SimpleProduct" />
+        </actionGroup>
+
+        <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="switchStore">
+            <argument name="storeView" value="customStore" />
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductRewriteUrlSubCategoryActionGroup" stepKey="validatesRewriteUrlCustomStore">
+            <argument name="category" value="{{_defaultCategoryDifferentUrlStore.url_key_custom_store}}"/>
+            <argument name="product" value="SimpleProduct" />
+        </actionGroup>
+
+    </test>
+</tests>

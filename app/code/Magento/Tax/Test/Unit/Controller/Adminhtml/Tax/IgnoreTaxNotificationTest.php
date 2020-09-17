@@ -3,17 +3,27 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Tax\Test\Unit\Controller\Adminhtml\Tax;
 
+use Magento\Backend\Model\View\Result\Redirect;
+use Magento\Config\Model\ResourceModel\Config;
+use Magento\Framework\App\Cache\TypeList;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\Request\Http;
+use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Tax\Controller\Adminhtml\Tax\IgnoreTaxNotification;
+use PHPUnit\Framework\TestCase;
 
-class IgnoreTaxNotificationTest extends \PHPUnit\Framework\TestCase
+class IgnoreTaxNotificationTest extends TestCase
 {
     public function testExecute()
     {
         $objectManager = new ObjectManager($this);
-        $cacheTypeList = $this->getMockBuilder(\Magento\Framework\App\Cache\TypeList::class)
+        $cacheTypeList = $this->getMockBuilder(TypeList::class)
             ->disableOriginalConstructor()
             ->setMethods(['cleanType'])
             ->getMock();
@@ -22,7 +32,7 @@ class IgnoreTaxNotificationTest extends \PHPUnit\Framework\TestCase
             ->with('config')
             ->willReturn(null);
 
-        $request = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
+        $request = $this->getMockBuilder(Http::class)
             ->disableOriginalConstructor()
             ->setMethods(['getParam'])
             ->getMock();
@@ -30,23 +40,23 @@ class IgnoreTaxNotificationTest extends \PHPUnit\Framework\TestCase
             ->method('getParam')
             ->willReturn('tax');
 
-        $resultRedirect = $this->getMockBuilder(\Magento\Backend\Model\View\Result\Redirect::class)
+        $resultRedirect = $this->getMockBuilder(Redirect::class)
             ->disableOriginalConstructor()
             ->getMock();
         $resultRedirect->expects($this->once())
             ->method('setRefererUrl')
             ->willReturnSelf();
 
-        $resultFactory = $this->getMockBuilder(\Magento\Framework\Controller\ResultFactory::class)
+        $resultFactory = $this->getMockBuilder(ResultFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
         $resultFactory->expects($this->once())
             ->method('create')
-            ->with(\Magento\Framework\Controller\ResultFactory::TYPE_REDIRECT)
+            ->with(ResultFactory::TYPE_REDIRECT)
             ->willReturn($resultRedirect);
 
-        $config = $this->getMockBuilder(\Magento\Config\Model\ResourceModel\Config::class)
+        $config = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->setMethods(['saveConfig'])
             ->getMock();
@@ -55,16 +65,16 @@ class IgnoreTaxNotificationTest extends \PHPUnit\Framework\TestCase
             ->with('tax/notification/ignore_tax', 1, ScopeConfigInterface::SCOPE_TYPE_DEFAULT, 0)
             ->willReturn(null);
 
-        $manager = $this->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
+        $manager = $this->getMockBuilder(ObjectManagerInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['get', 'create', 'configure'])
-            ->getMock();
+            ->getMockForAbstractClass();
         $manager->expects($this->any())
             ->method('get')
             ->willReturn($config);
 
         $notification = $objectManager->getObject(
-            \Magento\Tax\Controller\Adminhtml\Tax\IgnoreTaxNotification::class,
+            IgnoreTaxNotification::class,
             [
                 'objectManager' => $manager,
                 'cacheTypeList' => $cacheTypeList,

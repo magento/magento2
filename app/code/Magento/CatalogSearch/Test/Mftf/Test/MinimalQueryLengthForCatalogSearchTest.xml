@@ -18,25 +18,27 @@
             <testCaseId value="MC-6325"/>
             <useCaseId value="MAGETWO-58764"/>
             <group value="CatalogSearch"/>
-            <group value="SearchEngineMysql"/>
+            <group value="SearchEngineElasticsearch"/>
+
         </annotations>
         <before>
             <createData entity="ApiCategory" stepKey="createCategory"/>
-            <createData entity="ApiSimpleProduct" stepKey="createProduct">
+            <createData entity="productAlphabeticalB" stepKey="createProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <createData entity="SetMinQueryLengthToDefault" stepKey="setMinimumQueryLengthToDefault"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <actionGroup ref="SetMinimalQueryLengthActionGroup" stepKey="setMinQueryLength"/>
         <comment userInput="Go to Storefront and search for product" stepKey="searchProdUsingMinQueryLength"/>
-        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToHomePage"/>
-        <fillField selector="{{StorefrontQuickSearchResultsSection.searchTextBox}}" userInput="s" stepKey="fillAttribute"/>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomePage"/>
+        <comment userInput="Quick search by single character and avoid using ES stopwords" stepKey="commentQuickSearch"/>
+        <fillField selector="{{StorefrontQuickSearchResultsSection.searchTextBox}}" userInput="B" stepKey="fillAttribute"/>
         <waitForPageLoad stepKey="waitForSearchTextBox"/>
         <click selector="{{StorefrontQuickSearchResultsSection.searchTextBoxButton}}" stepKey="clickSearchTextBoxButton"/>
         <waitForPageLoad stepKey="waitForSearch"/>

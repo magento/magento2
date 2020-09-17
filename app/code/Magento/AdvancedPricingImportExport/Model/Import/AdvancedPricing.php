@@ -10,7 +10,7 @@ use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface as Va
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 
 /**
- * Class AdvancedPricing
+ *  Import advanced pricing class
  *
  * @SuppressWarnings(PHPMD.ExcessiveParameterList)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -19,35 +19,20 @@ use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorI
 class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 {
     const VALUE_ALL_GROUPS = 'ALL GROUPS';
-
     const VALUE_ALL_WEBSITES = 'All Websites';
-
     const COL_SKU = 'sku';
-
     const COL_TIER_PRICE_WEBSITE = 'tier_price_website';
-
     const COL_TIER_PRICE_CUSTOMER_GROUP = 'tier_price_customer_group';
-
     const COL_TIER_PRICE_QTY = 'tier_price_qty';
-
     const COL_TIER_PRICE = 'tier_price';
-
     const COL_TIER_PRICE_PERCENTAGE_VALUE = 'percentage_value';
-
     const COL_TIER_PRICE_TYPE = 'tier_price_value_type';
-
     const TIER_PRICE_TYPE_FIXED = 'Fixed';
-
     const TIER_PRICE_TYPE_PERCENT = 'Discount';
-
     const TABLE_TIER_PRICE = 'catalog_product_entity_tier_price';
-
     const DEFAULT_ALL_GROUPS_GROUPED_PRICE_VALUE = '0';
-
     const ENTITY_TYPE_CODE = 'advanced_pricing';
-
     const VALIDATOR_MAIN = 'validator';
-
     const VALIDATOR_WEBSITE = 'validator_website';
 
     /**
@@ -55,7 +40,6 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      * @see VALIDATOR_TIER_PRICE
      */
     private const VALIDATOR_TEAR_PRICE = 'validator_tier_price';
-
     private const VALIDATOR_TIER_PRICE = 'validator_tier_price';
 
     /**
@@ -176,10 +160,8 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param \Magento\ImportExport\Helper\Data $importExportData
      * @param \Magento\ImportExport\Model\ResourceModel\Import\Data $importData
-     * @param \Magento\Eav\Model\Config $config
      * @param \Magento\Framework\App\ResourceConnection $resource
      * @param \Magento\ImportExport\Model\ResourceModel\Helper $resourceHelper
-     * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param ProcessingErrorAggregatorInterface $errorAggregator
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
      * @param \Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceModelFactory $resourceFactory
@@ -197,10 +179,8 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
         \Magento\Framework\Json\Helper\Data $jsonHelper,
         \Magento\ImportExport\Helper\Data $importExportData,
         \Magento\ImportExport\Model\ResourceModel\Import\Data $importData,
-        \Magento\Eav\Model\Config $config,
         \Magento\Framework\App\ResourceConnection $resource,
         \Magento\ImportExport\Model\ResourceModel\Helper $resourceHelper,
-        \Magento\Framework\Stdlib\StringUtils $string,
         ProcessingErrorAggregatorInterface $errorAggregator,
         \Magento\Framework\Stdlib\DateTime\DateTime $dateTime,
         \Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceModelFactory $resourceFactory,

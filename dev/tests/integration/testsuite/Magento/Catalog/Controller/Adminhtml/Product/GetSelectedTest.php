@@ -26,7 +26,7 @@ class GetSelectedTest extends \Magento\TestFramework\TestCase\AbstractBackendCon
             ->setPostValue('productId', $product->getId());
         $this->dispatch('backend/catalog/product/getSelected');
         $responseBody = $this->getResponse()->getBody();
-        $this->assertContains(
+        $this->assertStringContainsString(
             '{"value":"1","label":"Simple Product","is_active":1,"path":"simple"}',
             $responseBody
         );
@@ -38,6 +38,6 @@ class GetSelectedTest extends \Magento\TestFramework\TestCase\AbstractBackendCon
             ->setPostValue('productId', '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
         $this->dispatch('backend/catalog/product/getSelected');
         $responseBody = $this->getResponse()->getBody();
-        $this->assertContains('[]', $responseBody);
+        $this->assertStringContainsString('[]', $responseBody);
     }
 }

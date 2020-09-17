@@ -3,8 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-require __DIR__ . '/../../../../Magento/Bundle/_files/multiple_products.php';
+Resolver::getInstance()->requireDataFixture('Magento/Bundle/_files/multiple_products.php');
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 $productRepository = $objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
