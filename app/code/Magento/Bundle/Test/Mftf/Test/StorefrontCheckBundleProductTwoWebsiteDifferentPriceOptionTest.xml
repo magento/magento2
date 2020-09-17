@@ -14,6 +14,7 @@
             <stories value="Github issue: #12584 Bundle Item price cannot differ per website"/>
             <description value="Verify bundle item price different websites. Change bundle item price on second website."/>
             <features value="Bundle"/>
+            <severity value="MAJOR"/>
             <group value="bundle"/>
         </annotations>
         <before>
