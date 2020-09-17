@@ -217,6 +217,7 @@ class BlockRepository implements BlockRepositoryInterface
      */
     private function getCollectionProcessor()
     {
+        //phpcs:disable Magento2.PHP.LiteralNamespaces
         if (!$this->collectionProcessor) {
             $this->collectionProcessor = \Magento\Framework\App\ObjectManager::getInstance()->get(
                 'Magento\Cms\Model\Api\SearchCriteria\BlockCollectionProcessor'
