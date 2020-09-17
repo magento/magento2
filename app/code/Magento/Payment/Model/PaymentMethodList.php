@@ -6,37 +6,37 @@
 namespace Magento\Payment\Model;
 
 use Magento\Payment\Api\Data\PaymentMethodInterface;
+use Magento\Payment\Api\Data\PaymentMethodInterfaceFactory;
+use Magento\Payment\Api\PaymentMethodListInterface;
+use Magento\Payment\Helper\Data;
 use UnexpectedValueException;
 
-/**
- * Payment method list class.
- */
-class PaymentMethodList implements \Magento\Payment\Api\PaymentMethodListInterface
+class PaymentMethodList implements PaymentMethodListInterface
 {
     /**
-     * @var \Magento\Payment\Api\Data\PaymentMethodInterfaceFactory
+     * @var PaymentMethodInterfaceFactory
      */
     private $methodFactory;
 
     /**
-     * @var \Magento\Payment\Helper\Data
+     * @var Data
      */
     private $helper;
 
     /**
-     * @param \Magento\Payment\Api\Data\PaymentMethodInterfaceFactory $methodFactory
-     * @param \Magento\Payment\Helper\Data $helper
+     * @param PaymentMethodInterfaceFactory $methodFactory
+     * @param Data $helper
      */
     public function __construct(
-        \Magento\Payment\Api\Data\PaymentMethodInterfaceFactory $methodFactory,
-        \Magento\Payment\Helper\Data $helper
+        PaymentMethodInterfaceFactory $methodFactory,
+        Data $helper
     ) {
         $this->methodFactory = $methodFactory;
         $this->helper = $helper;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getList($storeId)
     {
@@ -56,7 +56,7 @@ class PaymentMethodList implements \Magento\Payment\Api\PaymentMethodListInterfa
             return $method && !($method instanceof \Magento\Payment\Model\Method\Substitution);
         });
 
-        @uasort(
+        uasort(
             $methodsInstances,
             function (MethodInterface $a, MethodInterface $b) use ($storeId) {
                 return (int)$a->getConfigData('sort_order', $storeId) - (int)$b->getConfigData('sort_order', $storeId);
@@ -80,7 +80,7 @@ class PaymentMethodList implements \Magento\Payment\Api\PaymentMethodListInterfa
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getActiveList($storeId)
     {
