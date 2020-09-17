@@ -55,6 +55,6 @@ class ChangeLogBatchIterator implements ChangeLogBatchIteratorInterface
             ->limit($batchSize);
 
         $select->from($changelogTableName, [$changelog->getColumnName()]);
-        return $connection->fetchAll($select);
+        return $connection->fetchCol($select);
     }
 }

@@ -135,6 +135,10 @@ class Changelog implements ChangelogInterface
         $config = $this->mviewConfig->getView($this->getViewId());
         $additionalColumns = [];
 
+        if (!$config) {
+            return $additionalColumns;
+        }
+
         foreach ($config['subscriptions'] as $subscription) {
             if (isset($subscription['additional_columns'])) {
                 foreach ($subscription['additional_columns'] as $additionalColumn) {
