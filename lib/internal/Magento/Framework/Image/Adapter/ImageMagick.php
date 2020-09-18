@@ -589,7 +589,7 @@ class ImageMagick extends AbstractAdapter
      *
      * @return int
      */
-    public function getColorspace(): int
+    private function getColorspace(): int
     {
         if ($this->colorspace === -1) {
             $this->colorspace = $this->_imageHandler->getImageColorspace();
@@ -597,16 +597,6 @@ class ImageMagick extends AbstractAdapter
         }
 
         return $this->colorspace;
-    }
-
-    /**
-     * Get the original image colorspace.
-     *
-     * @return int
-     */
-    public function getOriginalColorspace(): int
-    {
-        return $this->originalColorspace;
     }
 
     /**
