@@ -77,14 +77,7 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
     public function save(\Magento\Catalog\Api\Data\CategoryInterface $category)
     {
         $storeId = (int)$this->storeManager->getStore()->getId();
-        $existingData = $this->getExtensibleDataObjectConverter()
-            ->toNestedArray($category, [], \Magento\Catalog\Api\Data\CategoryInterface::class);
-        $existingData = array_diff_key($existingData, array_flip(['path', 'level', 'parent_id']));
-        $existingData['store_id'] = $storeId;
-
-        if (is_array($category->getData())) {
-            $existingData = array_replace($existingData, $category->getData());
-        }
+        $existingData = $this->getExistingData($category, $storeId);
 
         if ($category->getId()) {
             $metadata = $this->getMetadataPool()->getMetadata(
@@ -242,5 +235,26 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
                 ->get(\Magento\Framework\EntityManager\MetadataPool::class);
         }
         return $this->metadataPool;
+    }
+
+    /**
+     * Get existing data category
+     *
+     * @param CategoryInterface $category
+     * @param int $storeId
+     * @return array
+     */
+    private function getExistingData(CategoryInterface $category, int $storeId)
+    {
+        $existingData = $this->getExtensibleDataObjectConverter()
+            ->toNestedArray($category, [], \Magento\Catalog\Api\Data\CategoryInterface::class);
+        $existingData = array_diff_key($existingData, array_flip(['path', 'level', 'parent_id']));
+        $existingData['store_id'] = $storeId;
+
+        if (is_array($category->getData())) {
+            $existingData = array_replace($existingData, $category->getData());
+        }
+
+        return $existingData;
     }
 }
