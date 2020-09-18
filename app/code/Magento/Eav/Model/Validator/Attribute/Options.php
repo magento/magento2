@@ -40,6 +40,9 @@ class Options extends AbstractValidator
         $errorMessages = [];
 
         foreach ($options as $optionValues) {
+            if (!is_array($optionValues)) {
+                $optionValues = [$optionValues];
+            }
             foreach ($optionValues as $optionValue) {
                 if (!$optionValue) {
                     continue;
