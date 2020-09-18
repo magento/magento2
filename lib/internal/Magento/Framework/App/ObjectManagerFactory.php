@@ -231,6 +231,7 @@ class ObjectManagerFactory
                 'boolean' => new \Magento\Framework\Data\Argument\Interpreter\Boolean($booleanUtils),
                 'string' => new \Magento\Framework\Data\Argument\Interpreter\BaseStringUtils($booleanUtils),
                 'number' => new \Magento\Framework\Data\Argument\Interpreter\Number(),
+                'int' => new \Magento\Framework\Data\Argument\Interpreter\Integer(),
                 'null' => new \Magento\Framework\Data\Argument\Interpreter\NullType(),
                 'object' => new \Magento\Framework\Data\Argument\Interpreter\DataObject($booleanUtils),
                 'const' => $constInterpreter,
