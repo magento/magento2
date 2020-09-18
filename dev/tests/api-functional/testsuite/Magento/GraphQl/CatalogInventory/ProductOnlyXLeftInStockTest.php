@@ -9,6 +9,7 @@ namespace Magento\GraphQl\CatalogInventory;
 
 use Magento\Config\Model\ResourceModel\Config;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
@@ -19,6 +20,10 @@ use Magento\CatalogInventory\Model\Configuration;
  */
 class ProductOnlyXLeftInStockTest extends GraphQlAbstract
 {
+    /**
+     * @var ProductRepositoryInterface
+     */
+    private $productRepository;
     /**
      * @var Config $config
      */
@@ -42,6 +47,7 @@ class ProductOnlyXLeftInStockTest extends GraphQlAbstract
         parent::setUp();
 
         $objectManager = ObjectManager::getInstance();
+        $this->productRepository = $objectManager->create(ProductRepositoryInterface::class);
         $this->resourceConfig = $objectManager->get(Config::class);
         $this->scopeConfig = $objectManager->get(ScopeConfigInterface::class);
         $this->reinitConfig = $objectManager->get(ReinitableConfigInterface::class);
@@ -106,13 +112,13 @@ QUERY;
         $productSku = 'simple';
         $showOutOfStock = $this->scopeConfig->getValue(Configuration::XML_PATH_SHOW_OUT_OF_STOCK);
 
-        $this->resourceConfig->saveConfig(
-            \Magento\CatalogInventory\Model\Configuration::XML_PATH_SHOW_OUT_OF_STOCK,
-            1,
-            ScopeConfigInterface::SCOPE_TYPE_DEFAULT
-        );
+        $this->resourceConfig->saveConfig(Configuration::XML_PATH_SHOW_OUT_OF_STOCK, 1);
         $this->reinitConfig->reinit();
 
+        // need to resave product to reindex it with new configuration.
+        $product = $this->productRepository->get($productSku);
+        $this->productRepository->save($product);
+        
         $query = <<<QUERY
         {
             products(filter: {sku: {eq: "{$productSku}"}})
