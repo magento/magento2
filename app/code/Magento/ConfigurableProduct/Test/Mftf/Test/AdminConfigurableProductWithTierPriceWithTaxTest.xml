@@ -111,13 +111,13 @@
         <selectOption userInput="$$createConfigProductAttributeOptionOne.option[store_labels][1][label]$$"
                       selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}"
                       stepKey="selectOption"/>
-        <grabTextFrom selector="{{StorefrontProductInfoMainSection.tierPriceText}}" stepKey="tierPriceText"/>
-        <assertStringContainsString stepKey="assertTierPriceTextOnProductPage">
-            <expectedResult type="string">Buy {{tierProductPrice.quantity}} for $97.43 each and save 27%</expectedResult>
-            <actualResult type="variable">tierPriceText</actualResult>
-        </assertStringContainsString>
 
-        <!-- Assert tier price excluding price -->
+        <!-- Assert tier price excluding including price item -->
+        <actionGroup ref="AssertStorefrontProductDetailPageTierPriceActionGroup" stepKey="assertProductTierPriceExcludingIncludingTax">
+            <argument name="tierProductPriceDiscountQuantity" value="2"/>
+            <argument name="productPriceWithAppliedTierPriceDiscount" value="97.43  ${{tierProductPrice.price}}"/>
+            <argument name="productSavedPricePercent" value="27"/>
+        </actionGroup>
         <actionGroup ref="StorefrontAssertExcludingTierPriceActionGroup" stepKey="assertTierPriceExcludingPrice">
             <argument name="excludingPrice" value="${{tierProductPrice.price}}" />
         </actionGroup>

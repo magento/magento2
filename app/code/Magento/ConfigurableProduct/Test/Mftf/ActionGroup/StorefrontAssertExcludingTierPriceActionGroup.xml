@@ -17,9 +17,9 @@
         </arguments>
 
         <grabTextFrom selector="{{StorefrontProductInfoMainSection.tierPriceExcludingPrice}}" stepKey="tierPriceExcluding"/>
-        <assertEquals stepKey="assertTierPriceTextOnProductPage">
+        <assertStringContainsString stepKey="assertTierPriceTextOnProductPage">
             <expectedResult type="string">{{excludingPrice}}</expectedResult>
             <actualResult type="variable">tierPriceExcluding</actualResult>
-        </assertEquals>
+        </assertStringContainsString>
     </actionGroup>
 </actionGroups>
