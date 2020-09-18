@@ -318,9 +318,9 @@ script;
 <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
 <?php if ($block->isShowAddressFields()): ?>
     <?php
-    $regionJson = /* @noEscape */ $directoryHelper->getRegionJson();
-    $regionId = (int) $formData->getRegionId();
-    $countriesWithOptionalZip = /* @noEscape */ $directoryHelper->getCountriesWithOptionalZip(true);
+        $regionJson = $directoryHelper->getRegionJson();
+        $regionId = (int) $formData->getRegionId();
+        $countriesWithOptionalZip = $directoryHelper->getCountriesWithOptionalZip(true);
     ?>
 <script type="text/x-magento-init">
     {
@@ -331,9 +331,9 @@ script;
                 "regionInputId": "#region",
                 "postcodeId": "#zip",
                 "form": "#form-validate",
-                "regionJson": {$regionJson},
-                "defaultRegion": "{$regionId}",
-                "countriesWithOptionalZip": {$countriesWithOptionalZip}
+                "regionJson": <?= /* @noEscape */ $regionJson ?>,
+                "defaultRegion": "<?= /* @noEscape */ $regionId ?>",
+                "countriesWithOptionalZip": <?= /* @noEscape */ $countriesWithOptionalZip ?>
             }
         }
     }
