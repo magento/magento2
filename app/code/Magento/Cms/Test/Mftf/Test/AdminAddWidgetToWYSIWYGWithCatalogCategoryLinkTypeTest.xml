@@ -14,7 +14,7 @@
             <group value="Cms"/>
             <title value="Admin should be able to create a CMS page with widget type: Catalog category link"/>
             <description value="Admin should be able to create a CMS page with widget type: Catalog category link"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MAGETWO-83611"/>
         </annotations>
         <before>
@@ -25,8 +25,7 @@
             <actionGroup ref="ConfigAdminAccountSharingActionGroup" stepKey="allowAdminShareAccount"/>
         </before>
         <!--Main test-->
-        <amOnPage url="{{CmsNewPagePage.url}}" stepKey="navigateToPage"/>
-        <waitForPageLoad stepKey="wait1"/>
+        <actionGroup ref="AdminOpenCreateNewCMSPageActionGroup" stepKey="navigateToPage"/>
         <fillField selector="{{CmsNewPagePageBasicFieldsSection.pageTitle}}" userInput="{{_defaultCmsPage.title}}" stepKey="fillFieldTitle"/>
         <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickContentTab" />
         <waitForElementVisible selector="{{TinyMCESection.TinyMCE4}}" stepKey="waitForTinyMCE4"/>
@@ -70,9 +69,10 @@
         <see userInput="Hello CMS Page!" stepKey="seeContent2"/>
         <!--see widget on Storefront-->
         <grabAttributeFrom selector=".widget a" userInput="href" stepKey="dataHref" />
-        <assertRegExp expected="|$$createPreReqCategory.name$$.html|i"
-                      expectedType="string" actual="$dataHref" actualType="variable"
-                      stepKey="seeProductLinkInCategory"/>
+        <assertRegExp stepKey="seeProductLinkInCategory">
+			<actualResult type="variable">$dataHref</actualResult>
+			<expectedResult type="string">|$$createPreReqCategory.name$$.html|i</expectedResult>
+        </assertRegExp>
         <after>
             <deleteData createDataKey="createPreReqCategory" stepKey="deletePreReqCatalog" />
             <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>

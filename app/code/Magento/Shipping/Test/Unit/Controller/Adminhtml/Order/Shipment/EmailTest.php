@@ -3,20 +3,32 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Shipping\Test\Unit\Controller\Adminhtml\Order\Shipment;
 
-use Magento\Framework\App\Action\Context;
+use Magento\Backend\Helper\Data as BackendHelper;
+use Magento\Backend\Model\Session as BackendSession;
+use Magento\Backend\Model\View\Result\Redirect as RedirectResult;
+use Magento\Framework\App\Action\Context as ActionContext;
+use Magento\Framework\App\ActionFlag;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Message\Manager as MessageManager;
+use Magento\Framework\ObjectManager\ObjectManager;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Sales\Model\Order\Shipment;
 use Magento\Shipping\Controller\Adminhtml\Order\Shipment\Email;
+use Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader;
+use Magento\Shipping\Model\ShipmentNotifier;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Class EmailTest
- *
- * @package Magento\Shipping\Controller\Adminhtml\Order\Shipment
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class EmailTest extends \PHPUnit\Framework\TestCase
+class EmailTest extends TestCase
 {
     /**
      * @var Email
@@ -24,67 +36,68 @@ class EmailTest extends \PHPUnit\Framework\TestCase
     protected $shipmentEmail;
 
     /**
-     * @var Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var ActionContext|MockObject
      */
     protected $context;
 
     /**
-     * @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var RequestInterface|MockObject
      */
     protected $request;
 
     /**
-     * @var \Magento\Framework\App\ResponseInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResponseInterface|MockObject
      */
     protected $response;
 
     /**
-     * @var \Magento\Framework\Message\Manager|\PHPUnit_Framework_MockObject_MockObject
+     * @var MessageManager|MockObject
      */
     protected $messageManager;
 
     /**
-     * @var \Magento\Framework\ObjectManager\ObjectManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManager|MockObject
      */
     protected $objectManager;
 
     /**
-     * @var \Magento\Backend\Model\Session|\PHPUnit_Framework_MockObject_MockObject
+     * @var BackendSession|MockObject
      */
     protected $session;
 
     /**
-     * @var \Magento\Framework\App\ActionFlag|\PHPUnit_Framework_MockObject_MockObject
+     * @var ActionFlag|MockObject
      */
     protected $actionFlag;
 
     /**
-     * @var \Magento\Backend\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var BackendHelper|MockObject
      */
     protected $helper;
 
     /**
-     * @var \Magento\Framework\Controller\ResultFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResultFactory|MockObject
      */
     protected $resultFactory;
 
     /**
-     * @var \Magento\Backend\Model\View\Result\Redirect|\PHPUnit_Framework_MockObject_MockObject
+     * @var RedirectResult|MockObject
      */
     protected $resultRedirect;
 
     /**
-     * @var \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader|\PHPUnit_Framework_MockObject_MockObject
+     * @var ShipmentLoader|MockObject
      */
     protected $shipmentLoader;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
-        $this->shipmentLoader = $this->createPartialMock(
-            \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader::class,
-            ['setOrderId', 'setShipmentId', 'setShipment', 'setTracking', 'load']
-        );
+        $this->shipmentLoader = $this->getMockBuilder(ShipmentLoader::class)
+            ->addMethods(['setOrderId', 'setShipmentId', 'setShipment', 'setTracking'])
+            ->onlyMethods(['load'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->context = $this->createPartialMock(
             \Magento\Backend\App\Action\Context::class,
             [
@@ -99,11 +112,11 @@ class EmailTest extends \PHPUnit\Framework\TestCase
                 'getResultFactory'
             ]
         );
-        $this->response = $this->createPartialMock(
-            \Magento\Framework\App\ResponseInterface::class,
-            ['setRedirect', 'sendResponse']
-        );
-        $this->request = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
+        $this->response = $this->getMockBuilder(ResponseInterface::class)
+            ->addMethods(['setRedirect'])
+            ->onlyMethods(['sendResponse'])
+            ->getMockForAbstractClass();
+        $this->request = $this->getMockBuilder(RequestInterface::class)
             ->setMethods(
                 [
                     'isPost',
@@ -117,21 +130,24 @@ class EmailTest extends \PHPUnit\Framework\TestCase
             )
             ->getMockForAbstractClass();
         $this->objectManager = $this->createPartialMock(
-            \Magento\Framework\ObjectManager\ObjectManager::class,
+            ObjectManager::class,
             ['create']
         );
         $this->messageManager = $this->createPartialMock(
-            \Magento\Framework\Message\Manager::class,
+            MessageManager::class,
             ['addSuccess', 'addError']
         );
-        $this->session = $this->createPartialMock(\Magento\Backend\Model\Session::class, ['setIsUrlNotice']);
-        $this->actionFlag = $this->createPartialMock(\Magento\Framework\App\ActionFlag::class, ['get']);
-        $this->helper = $this->createPartialMock(\Magento\Backend\Helper\Data::class, ['getUrl']);
-        $this->resultRedirect = $this->createMock(\Magento\Backend\Model\View\Result\Redirect::class);
-        $this->resultFactory = $this->createPartialMock(\Magento\Framework\Controller\ResultFactory::class, ['create']);
+        $this->session = $this->getMockBuilder(BackendSession::class)
+            ->addMethods(['setIsUrlNotice'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->actionFlag = $this->createPartialMock(ActionFlag::class, ['get']);
+        $this->helper = $this->createPartialMock(BackendHelper::class, ['getUrl']);
+        $this->resultRedirect = $this->createMock(RedirectResult::class);
+        $this->resultFactory = $this->createPartialMock(ResultFactory::class, ['create']);
         $this->resultFactory->expects($this->once())
             ->method('create')
-            ->with(\Magento\Framework\Controller\ResultFactory::TYPE_REDIRECT)
+            ->with(ResultFactory::TYPE_REDIRECT)
             ->willReturn($this->resultRedirect);
 
         $this->context->expects($this->once())->method('getMessageManager')->willReturn($this->messageManager);
@@ -144,7 +160,7 @@ class EmailTest extends \PHPUnit\Framework\TestCase
         $this->context->expects($this->once())->method('getResultFactory')->willReturn($this->resultFactory);
 
         $this->shipmentEmail = $objectManagerHelper->getObject(
-            \Magento\Shipping\Controller\Adminhtml\Order\Shipment\Email::class,
+            Email::class,
             [
                 'context' => $this->context,
                 'shipmentLoader' => $this->shipmentLoader,
@@ -161,23 +177,20 @@ class EmailTest extends \PHPUnit\Framework\TestCase
         $tracking = [];
         $shipment = ['items' => []];
         $orderShipment = $this->createPartialMock(
-            \Magento\Sales\Model\Order\Shipment::class,
+            Shipment::class,
             ['load', 'save', '__wakeup']
         );
-        $shipmentNotifierClassName = \Magento\Shipping\Model\ShipmentNotifier::class;
-        $shipmentNotifier = $this->createPartialMock($shipmentNotifierClassName, ['notify', '__wakeup']);
+        $shipmentNotifier = $this->createPartialMock(ShipmentNotifier::class, ['notify', '__wakeup']);
 
         $this->request->expects($this->any())
             ->method('getParam')
-            ->will(
-                $this->returnValueMap(
-                    [
-                        ['order_id', null, $orderId],
-                        ['shipment_id', null, $shipmentId],
-                        ['shipment', null, $shipment],
-                        ['tracking', null, $tracking],
-                    ]
-                )
+            ->willReturnMap(
+                [
+                    ['order_id', null, $orderId],
+                    ['shipment_id', null, $shipmentId],
+                    ['shipment', null, $shipment],
+                    ['tracking', null, $tracking],
+                ]
             );
         $this->shipmentLoader->expects($this->once())
             ->method('setShipmentId')
@@ -193,18 +206,17 @@ class EmailTest extends \PHPUnit\Framework\TestCase
             ->with($tracking);
         $this->shipmentLoader->expects($this->once())
             ->method('load')
-            ->will($this->returnValue($orderShipment));
+            ->willReturn($orderShipment);
         $orderShipment->expects($this->once())
-            ->method('save')
-            ->will($this->returnSelf());
+            ->method('save')->willReturnSelf();
         $this->objectManager->expects($this->once())
             ->method('create')
-            ->with($shipmentNotifierClassName)
-            ->will($this->returnValue($shipmentNotifier));
+            ->with(ShipmentNotifier::class)
+            ->willReturn($shipmentNotifier);
         $shipmentNotifier->expects($this->once())
             ->method('notify')
             ->with($orderShipment)
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->messageManager->expects($this->once())
             ->method('addSuccess')
             ->with('You sent the shipment.');
@@ -226,7 +238,7 @@ class EmailTest extends \PHPUnit\Framework\TestCase
         $this->actionFlag->expects($this->any())
             ->method('get')
             ->with('', 'check_url_settings')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->session->expects($this->any())
             ->method('setIsUrlNotice')
             ->with(true);

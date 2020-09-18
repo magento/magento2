@@ -32,7 +32,7 @@
             <createData entity="ApiSimpleProduct" stepKey="createProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <!-- Create website, store and store view -->
             <comment userInput="Create website, store and store view" stepKey="createWebsite"/>
             <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createSecondWebsite">
@@ -51,8 +51,12 @@
             <!--Set catalog price scope to Global-->
             <comment userInput="Set catalog price scope to Global" stepKey="commentSetPriceScope"/>
             <magentoCLI command="config:set catalog/price/scope 0" stepKey="setPriceScopeGlobal"/>
-            <magentoCLI command="indexer:reindex catalog_product_price" stepKey="reindex"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value="catalog_product_price"/>
+            </actionGroup>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
         </before>
         <after>
             <!--Set catalog price scope to Global-->
@@ -70,7 +74,9 @@
         </after>
         <!-- Go to product edit page and assign it to created website -->
         <comment userInput="Go to product edit page and assign it to created website" stepKey="assignProductToCreatedWebsite"/>
-        <amOnPage url="{{AdminProductEditPage.url($$createProduct.id$$)}}" stepKey="navigateToProductPage"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="navigateToProductPage">
+            <argument name="productId" value="$$createProduct.id$$"/>
+        </actionGroup>
         <waitForPageLoad stepKey="waitForProductPageLoad"/>
         <actionGroup ref="SelectProductInWebsitesActionGroup" stepKey="selectWebsiteInProduct">
             <argument name="website" value="{{NewWebSiteData.name}}"/>
@@ -95,11 +101,17 @@
         <!--Set catalog price scope to Website-->
         <comment userInput="Set catalog price scope to Website" stepKey="commentSetPriceScope"/>
         <magentoCLI command="config:set catalog/price/scope 1" stepKey="setPriceScopeWebsite"/>
-        <magentoCLI command="indexer:reindex catalog_product_price" stepKey="reindex"/>
-        <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value="catalog_product_price"/>
+        </actionGroup>
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+            <argument name="tags" value=""/>
+        </actionGroup>
         <!--See available websites only 'All Websites'-->
         <comment userInput="See available websites 'All Websites', 'Main Website' and Second website" stepKey="commentCheckWebsitesInProductPage"/>
-        <amOnPage url="{{AdminProductEditPage.url($$createProduct.id$$)}}" stepKey="goToProductPageSecondTime"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProductPageSecondTime">
+            <argument name="productId" value="$$createProduct.id$$"/>
+        </actionGroup>
         <waitForPageLoad stepKey="waitForProductPageLoadSecondTime"/>
         <seeElement selector="{{AdminProductAddFPTValueSection.setWebSiteForFPTOption($$createProductFPTAttribute.attribute_code$$, 'All Websites')}}" stepKey="checkAllWebsitesInDropDown"/>
         <seeElement selector="{{AdminProductAddFPTValueSection.setWebSiteForFPTOption($$createProductFPTAttribute.attribute_code$$, 'Main Website')}}" stepKey="checkMainWebsiteInDropDown"/>
@@ -114,6 +126,6 @@
         <seeElement selector="{{AdminProductAddFPTValueSection.setWebSiteForFPTOption($$createProductFPTAttribute.attribute_code$$, NewWebSiteData.name)}}" stepKey="checkSecondWebsitesInDropDownSecondTime"/>
         <!-- Check if created tax attribute is saved -->
         <comment userInput="Check if created tax attribute is saved" stepKey="checkTaxAttributeIsSaved"/>
-        <seeInField selector="{{AdminProductAddFPTValueSection.setTaxValueForFPT($$createProductFPTAttribute.attribute_code$$)}}" userInput="10" stepKey="checkTaxAttributeSaved"/>
+        <seeInField selector="{{AdminProductAddFPTValueSection.setTaxValueForFPT($$createProductFPTAttribute.attribute_code$$)}}" userInput="10.0000" stepKey="checkTaxAttributeSaved"/>
     </test>
 </tests>

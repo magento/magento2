@@ -89,13 +89,11 @@ class Pcompared extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Abst
             // get products to skip
             $skipProducts = [];
             if ($collection = $this->getCreateOrderModel()->getCustomerCompareList()) {
-                $collection = $collection->getItemCollection()->useProductItem(
-                    true
-                )->setStoreId(
-                    $this->getStoreId()
-                )->setCustomerId(
-                    $this->getCustomerId()
-                )->load();
+                $collection = $collection->getItemCollection()
+                    ->useProductItem()
+                    ->setStoreId($this->getStoreId())
+                    ->setCustomerId($this->getCustomerId())
+                    ->load();
                 foreach ($collection as $_item) {
                     $skipProducts[] = $_item->getProductId();
                 }

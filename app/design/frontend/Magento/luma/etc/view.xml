@@ -270,6 +270,7 @@
         <var name="bundle_size">1MB</var>
     </vars>
     <exclude>
+        <item type="file">Lib::chartjs/Chart.min.js</item>
         <item type="file">Lib::jquery/jquery.min.js</item>
         <item type="file">Lib::jquery/jquery-ui-1.9.2.js</item>
         <item type="file">Lib::jquery/jquery.details.js</item>

@@ -22,7 +22,7 @@
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
 
             <!-- Login as admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <!-- Delete configurable product -->
@@ -39,8 +39,8 @@
             </actionGroup>
 
             <!-- Delete product attribute -->
-            <actionGroup ref="DeleteProductAttributeByLabelActionGroup" stepKey="deleteProductAttribute">
-                <argument name="ProductAttribute" value="colorProductAttribute"/>
+            <actionGroup ref="AdminDeleteProductAttributeByLabelActionGroup" stepKey="deleteProductAttribute">
+                <argument name="productAttributeLabel" value="{{colorProductAttribute.default_label}}"/>
             </actionGroup>
 
             <!-- Delete attribute set -->
@@ -56,8 +56,7 @@
         </after>
 
         <!-- Create configurable product -->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductGridPage"/>
-        <waitForPageLoad stepKey="waitForProductGridPageLoad"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="amOnProductGridPage"/>
         <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="createConfigurableProduct">
             <argument name="product" value="ApiConfigurableProduct"/>
         </actionGroup>
@@ -102,11 +101,17 @@
         <actionGroup ref="FilterProductGridBySkuAndNameActionGroup" stepKey="findCreatedConfigurableProduct">
             <argument name="product" value="ApiConfigurableProduct"/>
         </actionGroup>
-        <see selector="{{AdminProductGridSection.productGridCell('1', 'Type')}}" userInput="{{ApiConfigurableProduct.type_id}}" stepKey="seeProductTypeInGrid"/>
+        <actionGroup ref="AssertAdminProductGridCellActionGroup" stepKey="seeProductTypeInGrid">
+            <argument name="row" value="1"/>
+            <argument name="column" value="Type"/>
+            <argument name="value" value="{{ApiConfigurableProduct.type_id}}"/>
+        </actionGroup>
         <click selector="{{AdminProductGridFilterSection.clearFilters}}" stepKey="clickClearFiltersAfter"/>
 
         <!-- Flash cache -->
-        <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+            <argument name="tags" value=""/>
+        </actionGroup>
 
         <!--Assert configurable product in category -->
         <amOnPage url="$$createCategory.name$$.html" stepKey="amOnCategoryPage"/>
@@ -131,8 +136,7 @@
         <waitForElementVisible selector="{{StorefrontCategoryMainSection.SuccessMsg}}" stepKey="waitForSuccessMessage"/>
 
         <!-- Assert configurable product in cart -->
-        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="amOnShoppingCartPage"/>
-        <waitForPageLoad stepKey="waitForShoppingCartPageLoad"/>
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="amOnShoppingCartPage"/>
         <actionGroup ref="StorefrontCheckCartConfigurableProductActionGroup" stepKey="storefrontCheckCartConfigurableProductActionGroup">
             <argument name="product" value="ApiConfigurableProduct"/>
             <argument name="optionProduct" value="colorConfigurableProductAttribute1"/>
@@ -140,8 +144,7 @@
         </actionGroup>
 
         <!-- Assert child products are not displayed separately: two next step -->
-        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToStoreFront"/>
-        <waitForPageLoad stepKey="waitForStoreFrontPageLoad"/>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStoreFront"/>
 
         <!-- Quick search the storefront for the first attribute option -->
         <submitForm selector="{{StorefrontQuickSearchSection.searchMiniForm}}" parameterArray="['q' => {{colorConfigurableProductAttribute1.sku}}]" stepKey="searchStorefrontFirstChildProduct"/>

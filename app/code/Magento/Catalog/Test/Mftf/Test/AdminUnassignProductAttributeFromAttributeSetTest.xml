@@ -14,7 +14,7 @@
             <stories value="Add/Update attribute set"/>
             <title value="Admin should be able to unassign attributes from an attribute set"/>
             <description value="Admin should be able to unassign attributes from an attribute set"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MC-194"/>
             <group value="Catalog"/>
         </annotations>
@@ -30,7 +30,7 @@
                 <requiredEntity createDataKey="attribute"/>
             </createData>
             <createData entity="ApiProductWithDescription" stepKey="product"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <deleteData createDataKey="product" stepKey="deleteProduct"/>

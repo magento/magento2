@@ -5,11 +5,7 @@
  */
 namespace Magento\Catalog\Helper;
 
-use Magento\Catalog\Model\Config\CatalogMediaConfig;
-use Magento\Catalog\Model\View\Asset\PlaceholderFactory;
 use Magento\Framework\App\Helper\AbstractHelper;
-use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 
 /**
@@ -17,7 +13,6 @@ use Magento\Framework\View\Element\Block\ArgumentInterface;
  *
  * @api
  * @SuppressWarnings(PHPMD.TooManyFields)
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
  */
 class Image extends AbstractHelper implements ArgumentInterface
@@ -45,7 +40,6 @@ class Image extends AbstractHelper implements ArgumentInterface
      * Scheduled for rotate image
      *
      * @var bool
-     * @deprecated unused
      */
     protected $_scheduleRotate = false;
 
@@ -53,7 +47,6 @@ class Image extends AbstractHelper implements ArgumentInterface
      * Angle
      *
      * @var int
-     * @deprecated unused
      */
     protected $_angle;
 
@@ -136,39 +129,31 @@ class Image extends AbstractHelper implements ArgumentInterface
     protected $attributes = [];
 
     /**
-     * @var PlaceholderFactory
+     * @var \Magento\Catalog\Model\View\Asset\PlaceholderFactory
      */
     private $viewAssetPlaceholderFactory;
-
-    /**
-     * @var CatalogMediaConfig
-     */
-    private $mediaConfig;
 
     /**
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Catalog\Model\Product\ImageFactory $productImageFactory
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param \Magento\Framework\View\ConfigInterface $viewConfig
-     * @param PlaceholderFactory $placeholderFactory
-     * @param CatalogMediaConfig $mediaConfig
+     * @param \Magento\Catalog\Model\View\Asset\PlaceholderFactory $placeholderFactory
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Magento\Catalog\Model\Product\ImageFactory $productImageFactory,
         \Magento\Framework\View\Asset\Repository $assetRepo,
         \Magento\Framework\View\ConfigInterface $viewConfig,
-        PlaceholderFactory $placeholderFactory = null,
-        CatalogMediaConfig $mediaConfig = null
+        \Magento\Catalog\Model\View\Asset\PlaceholderFactory $placeholderFactory = null
     ) {
         $this->_productImageFactory = $productImageFactory;
         parent::__construct($context);
         $this->_assetRepo = $assetRepo;
         $this->viewConfig = $viewConfig;
         $this->viewAssetPlaceholderFactory = $placeholderFactory
-            ?: ObjectManager::getInstance()
-                ->get(PlaceholderFactory::class);
-        $this->mediaConfig = $mediaConfig ?: ObjectManager::getInstance()->get(CatalogMediaConfig::class);
+            ?: \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Catalog\Model\View\Asset\PlaceholderFactory::class);
     }
 
     /**
@@ -312,7 +297,7 @@ class Image extends AbstractHelper implements ArgumentInterface
      *
      * @param int $quality
      * @return $this
-     * @deprecated
+     * @deprecated 103.0.1
      */
     public function setQuality($quality)
     {
@@ -397,10 +382,11 @@ class Image extends AbstractHelper implements ArgumentInterface
      */
     public function backgroundColor($colorRGB)
     {
-        $args = func_get_args();
         // assume that 3 params were given instead of array
         if (!is_array($colorRGB)) {
-            $colorRGB = $args;
+            //phpcs:disable
+            $colorRGB = func_get_args();
+            //phpcs:enabled
         }
         $this->_getModel()->setBackgroundColor($colorRGB);
         return $this;
@@ -411,7 +397,6 @@ class Image extends AbstractHelper implements ArgumentInterface
      *
      * @param int $angle
      * @return $this
-     * @deprecated unused
      */
     public function rotate($angle)
     {
@@ -463,7 +448,7 @@ class Image extends AbstractHelper implements ArgumentInterface
      * @param null|string $placeholder
      * @return string
      *
-     * @deprecated 101.1.0 Returns only default placeholder.
+     * @deprecated 102.0.0 Returns only default placeholder.
      * Does not take into account custom placeholders set in Configuration.
      */
     public function getPlaceholder($placeholder = null)
@@ -515,7 +500,11 @@ class Image extends AbstractHelper implements ArgumentInterface
             if ($this->getImageFile()) {
                 $model->setBaseFile($this->getImageFile());
             } else {
-                $model->setBaseFile($this->getProduct()->getData($model->getDestinationSubdir()));
+                $model->setBaseFile(
+                    $this->getProduct()
+                        ? $this->getProduct()->getData($model->getDestinationSubdir())
+                        : ''
+                );
             }
         }
         return $this;
@@ -543,16 +532,7 @@ class Image extends AbstractHelper implements ArgumentInterface
     public function getUrl()
     {
         try {
-            switch ($this->mediaConfig->getMediaUrlFormat()) {
-                case CatalogMediaConfig::IMAGE_OPTIMIZATION_PARAMETERS:
-                    $this->initBaseFile();
-                    break;
-                case CatalogMediaConfig::HASH:
-                    $this->applyScheduledActions();
-                    break;
-                default:
-                    throw new LocalizedException(__("The specified Catalog media URL format is not supported."));
-            }
+            $this->applyScheduledActions();
             return $this->_getModel()->getUrl();
         } catch (\Exception $e) {
             return $this->getDefaultPlaceholderUrl();
@@ -574,9 +554,6 @@ class Image extends AbstractHelper implements ArgumentInterface
      * Return resized product image information
      *
      * @return array
-     * @deprecated Magento is not responsible for image resizing anymore. This method works with local filesystem only.
-     * Service that provides resized images should guarantee that the image sizes correspond to requested ones.
-     * Use `getWidth()` and `getHeight()` instead.
      */
     public function getResizedImageInfo()
     {
@@ -624,7 +601,6 @@ class Image extends AbstractHelper implements ArgumentInterface
      *
      * @param int $angle
      * @return $this
-     * @deprecated unused
      */
     protected function setAngle($angle)
     {
@@ -636,7 +612,6 @@ class Image extends AbstractHelper implements ArgumentInterface
      * Get Rotation Angle
      *
      * @return int
-     * @deprecated unused
      */
     protected function getAngle()
     {

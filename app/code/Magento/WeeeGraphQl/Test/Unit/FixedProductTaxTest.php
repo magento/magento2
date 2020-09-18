@@ -9,15 +9,15 @@ namespace Magento\WeeeGraphQl\Test\Unit;
 
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Framework\GraphQl\Config\Element\Field;
+use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\GraphQl\Model\Query\ContextExtensionInterface;
 use Magento\Weee\Helper\Data as WeeeHelper;
 use Magento\WeeeGraphQl\Model\Resolver\FixedProductTax;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 class FixedProductTaxTest extends TestCase
 {
@@ -51,15 +51,15 @@ class FixedProductTaxTest extends TestCase
     /**
      * Build the Testing Environment
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->contextMock = $this->getMockBuilder(ContextInterface::class)
             ->setMethods(['getExtensionAttributes'])
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->extensionAttributesMock = $this->getMockBuilder(ContextExtensionInterface::class)
-            ->setMethods(['getStore'])
-            ->getMock();
+            ->setMethods(['getStore', 'setStore', 'getIsCustomer', 'setIsCustomer'])
+            ->getMockForAbstractClass();
 
         $this->contextMock->method('getExtensionAttributes')
             ->willReturn($this->extensionAttributesMock);
@@ -85,7 +85,7 @@ class FixedProductTaxTest extends TestCase
     public function testExceptionWhenNoModelSpecified(): void
     {
         $this->expectException(LocalizedException::class);
-        $this->expectExceptionMessageRegExp('/value should be specified/');
+        $this->expectExceptionMessageMatches('/value should be specified/');
 
         $this->resolver->resolve(
             $this->getFieldStub(),
