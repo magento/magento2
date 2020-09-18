@@ -62,7 +62,9 @@ define([
          * @param {Object} data - customer address
          */
         deleteMassaction: function (data) {
-            var ids = _.map(data, function (val) {
+            var ids = data.selected || this.selections().selected();
+
+            ids = _.map(ids, function (val) {
                 return parseFloat(val);
             });
 
