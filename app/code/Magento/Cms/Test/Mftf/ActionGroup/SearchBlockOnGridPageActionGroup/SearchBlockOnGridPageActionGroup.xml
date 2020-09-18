@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="searchBlockOnGridPage">
+        <annotations>
+            <description>Searches the Admin CMS Blocks grid based on the provided Block.</description>
+        </annotations>
+        <arguments>
+            <argument name="Block" defaultValue=""/>
+        </arguments>
+
+        <fillField selector="//input[@name='chooser_identifier']" userInput="{{Block.identifier}}" stepKey="fillEntityIdentifier"/>
+        <click selector="//div[@class='modal-inner-wrap']//button[@title='Search']" stepKey="clickSearchBtn"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForSecondIdSortDescendingToFinish2"/>
+        <waitForElementVisible selector="{{WidgetSection.BlockPage(Block.identifier)}}" stepKey="waitForBlockTitle"/>
+    </actionGroup>
+</actionGroups>

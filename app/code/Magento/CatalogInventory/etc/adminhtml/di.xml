@@ -14,11 +14,6 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\CatalogInventory\Model\Spi\StockStateProviderInterface">
-        <arguments>
-            <argument name="qtyCheckApplicable" xsi:type="boolean">false</argument>
-        </arguments>
-    </type>
     <type name="Magento\Catalog\Ui\DataProvider\Product\ProductDataProvider">
         <arguments>
             <argument name="addFieldStrategies" xsi:type="array">

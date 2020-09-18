@@ -23,12 +23,13 @@
         <before>
             <createData entity="DefaultValueForMaxSaleQty" stepKey="setDefaultValueForMaxSaleQty"/>
             <createData entity="SimpleProduct2" stepKey="createdProduct"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <magentoCron stepKey="runCronIndex" groups="index"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
         </before>
         <after>
             <createData entity="DefaultValueForMaxSaleQty" stepKey="setDefaultValueForMaxSaleQty"/>
             <deleteData createDataKey="createdProduct" stepKey="deleteProduct"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Go to Inventory configuration page -->
@@ -54,7 +55,9 @@
         <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveConfigWithCorrectNumber"/>
 
         <!-- Go to product page -->
-        <amOnPage url="{{AdminProductEditPage.url($$createdProduct.id$$)}}" stepKey="openAdminProductEditPage"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openAdminProductEditPage">
+            <argument name="productId" value="$$createdProduct.id$$"/>
+        </actionGroup>
         <!-- Validate zero value -->
         <actionGroup ref="AdminProductMaxQtyAllowedInShoppingCartValidationActionGroup" stepKey="productValidateZeroValue">
             <argument name="qty" value="0"/>

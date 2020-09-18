@@ -15,7 +15,7 @@ use Magento\Framework\App\ObjectManager;
 class Resolver implements ResolverInterface
 {
     /**
-     * Default locale
+     * Resolver default locale
      */
     const DEFAULT_LOCALE = 'en_US';
 
@@ -79,7 +79,7 @@ class Resolver implements ResolverInterface
         $this->scopeConfig = $scopeConfig;
         $this->defaultLocalePath = $defaultLocalePath;
         $this->scopeType = $scopeType;
-        $this->deploymentConfig = $deploymentConfig ?: ObjectManager::getInstance()->create(DeploymentConfig::class);
+        $this->deploymentConfig = $deploymentConfig ?: ObjectManager::getInstance()->get(DeploymentConfig::class);
         $this->setLocale($locale);
     }
 

@@ -23,7 +23,7 @@ use PHPUnit\Framework\TestCase;
  */
 class CatalogProductListCollectionAppendSummaryFieldsObserverTest extends TestCase
 {
-    private const STORE_ID = '1';
+    private const STORE_ID = 1;
 
     /**
      * @var Event|MockObject
@@ -70,7 +70,7 @@ class CatalogProductListCollectionAppendSummaryFieldsObserverTest extends TestCa
     /**
      * @inheritdoc
      */
-    protected function setUp() : void
+    protected function setUp(): void
     {
         $this->eventMock = $this->getMockBuilder(Event::class)
             ->disableOriginalConstructor()

@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Category;
 
@@ -10,6 +11,7 @@ use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\Category\Attribute\Backend\Image;
 use Magento\Catalog\Model\Category\DataProvider;
 use Magento\Catalog\Model\Category\FileInfo;
+use Magento\Catalog\Model\Category\Image as CategoryImage;
 use Magento\Catalog\Model\CategoryFactory;
 use Magento\Catalog\Model\ResourceModel\Category\Collection;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
@@ -99,9 +101,14 @@ class DataProviderTest extends TestCase
     private $auth;
 
     /**
+     * @var CategoryImage|MockObject
+     */
+    private $categoryImage;
+
+    /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->eavValidationRules = $this->getMockBuilder(EavValidationRules::class)
             ->disableOriginalConstructor()
@@ -138,7 +145,7 @@ class DataProviderTest extends TestCase
 
         $this->request = $this->getMockBuilder(RequestInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->categoryFactory = $this->getMockBuilder(CategoryFactory::class)
             ->disableOriginalConstructor()
@@ -148,13 +155,21 @@ class DataProviderTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->modifierPool = $this->getMockBuilder(PoolInterface::class)->getMockForAbstractClass();
+        $this->modifierPool = $this->getMockBuilder(PoolInterface::class)
+            ->getMockForAbstractClass();
 
-        $this->auth = $this->getMockBuilder(AuthorizationInterface::class)->getMockForAbstractClass();
+        $this->auth = $this->getMockBuilder(AuthorizationInterface::class)
+            ->getMockForAbstractClass();
 
         $this->arrayUtils = $this->getMockBuilder(ArrayUtils::class)
             ->setMethods(['flatten'])
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->categoryImage = $this->createPartialMock(
+            CategoryImage::class,
+            ['getUrl']
+        );
     }
 
     /**
@@ -185,7 +200,8 @@ class DataProviderTest extends TestCase
                 'categoryFactory' => $this->categoryFactory,
                 'pool' => $this->modifierPool,
                 'auth' => $this->auth,
-                'arrayUtils' => $this->arrayUtils
+                'arrayUtils' => $this->arrayUtils,
+                'categoryImage' => $this->categoryImage,
             ]
         );
 
@@ -218,7 +234,8 @@ class DataProviderTest extends TestCase
             'image' => $fileName,
         ];
 
-        $imageBackendMock = $this->getMockBuilder(Image::class)->disableOriginalConstructor()
+        $imageBackendMock = $this->getMockBuilder(Image::class)
+            ->disableOriginalConstructor()
             ->getMock();
 
         $attributeMock = $this->getMockBuilder(Attribute::class)
@@ -264,7 +281,7 @@ class DataProviderTest extends TestCase
         $model = $this->getModel();
         $result = $model->getData();
 
-        $this->assertInternalType('array', $result);
+        $this->assertIsArray($result);
         $this->assertArrayHasKey($categoryId, $result);
         $this->assertArrayNotHasKey('image', $result[$categoryId]);
     }
@@ -324,8 +341,8 @@ class DataProviderTest extends TestCase
         $categoryMock->expects($this->once())
             ->method('getAttributes')
             ->willReturn(['image' => $attributeMock]);
-        $categoryMock->expects($this->once())
-            ->method('getImageUrl')
+        $this->categoryImage->expects($this->once())
+            ->method('getUrl')
             ->willReturn($categoryUrl);
 
         $this->registry->expects($this->once())
@@ -349,7 +366,7 @@ class DataProviderTest extends TestCase
         $model = $this->getModel();
         $result = $model->getData();
 
-        $this->assertInternalType('array', $result);
+        $this->assertIsArray($result);
         $this->assertArrayHasKey($categoryId, $result);
         $this->assertArrayHasKey('image', $result[$categoryId]);
 

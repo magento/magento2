@@ -5,26 +5,38 @@
  */
 
 /** @var \Magento\Review\Block\Product\ReviewRenderer $block */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 
 $url = $block->getReviewsUrl() . '#reviews';
 $urlForm = $block->getReviewsUrl() . '#review-form';
 ?>
-<?php if ($block->isReviewEnabled() && $block->getReviewsCount()) : ?>
+<?php if ($block->isReviewEnabled() && $block->getReviewsCount()): ?>
     <?php $rating = $block->getRatingSummary(); ?>
     <div class="product-reviews-summary short<?= !$rating ? ' no-rating' : '' ?>">
-        <?php if ($rating) :?>
+        <?php if ($rating):?>
         <div class="rating-summary">
             <span class="label"><span><?= $block->escapeHtml(__('Rating')) ?>:</span></span>
-            <div class="rating-result" title="<?= $block->escapeHtmlAttr($rating) ?>%">
-                <span style="width:<?= $block->escapeHtmlAttr($rating) ?>%"><span><?= $block->escapeHtml($rating) ?>%</span></span>
+            <div class="rating-result"
+                 id="rating-result_<?= /* @noEscape */ $block->getProduct()->getId() ?>"
+                 title="<?= $block->escapeHtmlAttr($rating) ?>%">
+                <span><span><?= $block->escapeHtml($rating) ?>%</span></span>
             </div>
+            <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
+                'width:' . $block->escapeHtmlAttr($rating) . '%',
+                '#rating-result_' . $block->getProduct()->getId() . ' span'
+            ) ?>
         </div>
         <?php endif;?>
         <div class="reviews-actions">
-            <a class="action view" href="<?= $block->escapeUrl($url) ?>"><?= $block->escapeHtml($block->getReviewsCount()) ?>&nbsp;<span><?= ($block->getReviewsCount() == 1) ? $block->escapeHtml(__('Review')) : $block->escapeHtml(__('Reviews')) ?></span></a>
+            <a class="action view"
+               href="<?= $block->escapeUrl($url) ?>"><?= $block->escapeHtml($block->getReviewsCount()) ?>
+                &nbsp;<span><?= ($block->getReviewsCount() == 1) ?
+                        $block->escapeHtml(__('Review')) : $block->escapeHtml(__('Reviews')) ?>
+                </span>
+            </a>
         </div>
     </div>
-<?php elseif ($block->isReviewEnabled() && $block->getDisplayIfEmpty()) : ?>
+<?php elseif ($block->isReviewEnabled() && $block->getDisplayIfEmpty()): ?>
     <div class="product-reviews-summary short empty">
         <div class="reviews-actions">
             <a class="action add" href="<?= $block->escapeUrl($urlForm) ?>">

@@ -3,18 +3,25 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Theme\Test\Unit\Block\Adminhtml\System\Design\Theme\Edit\Form\Element;
 
-class FileTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\Data\Form\Element\CollectionFactory;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Form\Element\File;
+use PHPUnit\Framework\TestCase;
+
+class FileTest extends TestCase
 {
     public function testGetHtmlAttributes()
     {
-        /** @var $fileBlock \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Form\Element\File */
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $collectionFactory = $this->createMock(\Magento\Framework\Data\Form\Element\CollectionFactory::class);
+        /** @var File $fileBlock */
+        $helper = new ObjectManager($this);
+        $collectionFactory = $this->createMock(CollectionFactory::class);
 
         $fileBlock = $helper->getObject(
-            \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Form\Element\File::class,
+            File::class,
             ['factoryCollection' => $collectionFactory]
         );
 

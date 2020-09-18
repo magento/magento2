@@ -22,7 +22,7 @@ class GenderTest extends \PHPUnit\Framework\TestCase
      * Test initialization and set up. Create the Gender block.
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $objectManager->get(\Magento\Framework\App\State::class)->setAreaCode('frontend');
@@ -42,7 +42,7 @@ class GenderTest extends \PHPUnit\Framework\TestCase
     public function testGetGenderOptions()
     {
         $options = $this->_block->getGenderOptions();
-        $this->assertInternalType('array', $options);
+        $this->assertIsArray($options);
         $this->assertNotEmpty($options);
         $this->assertContainsOnlyInstancesOf(\Magento\Customer\Model\Data\Option::class, $options);
     }
@@ -55,9 +55,9 @@ class GenderTest extends \PHPUnit\Framework\TestCase
     {
         $html = $this->_block->toHtml();
         $attributeLabel = $this->_model->getStoreLabel();
-        $this->assertContains('<span>' . $attributeLabel . '</span>', $html);
-        $this->assertContains('<option value="1">Male</option>', $html);
-        $this->assertContains('<option value="2">Female</option>', $html);
-        $this->assertContains('<option value="3">Not Specified</option>', $html);
+        $this->assertStringContainsString('<span>' . $attributeLabel . '</span>', $html);
+        $this->assertStringContainsString('<option value="1">Male</option>', $html);
+        $this->assertStringContainsString('<option value="2">Female</option>', $html);
+        $this->assertStringContainsString('<option value="3">Not Specified</option>', $html);
     }
 }

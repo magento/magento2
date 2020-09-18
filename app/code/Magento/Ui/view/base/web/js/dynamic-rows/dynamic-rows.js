@@ -657,7 +657,7 @@ define([
 
             startIndex = page || this.startIndex;
 
-            return dataRecord.slice(startIndex, this.startIndex + this.pageSize);
+            return dataRecord.slice(startIndex, this.startIndex + parseInt(this.pageSize, 10));
         },
 
         /**
@@ -960,6 +960,9 @@ define([
         reload: function () {
             this.clear();
             this.initChildren(false, true);
+
+            /* After change page size need to check existing current page */
+            this._reducePages();
         },
 
         /**
@@ -1123,13 +1126,17 @@ define([
          * Update whether value differs from default value
          */
         setDifferedFromDefault: function () {
-            var recordData = utils.copy(this.recordData());
+            var recordData;
 
-            Array.isArray(recordData) && recordData.forEach(function (item) {
-                delete item['record_id'];
-            });
+            if (this.default) {
+                recordData = utils.copy(this.recordData());
 
-            this.isDifferedFromDefault(!_.isEqual(recordData, this.default));
+                Array.isArray(recordData) && recordData.forEach(function (item) {
+                    delete item['record_id'];
+                });
+
+                this.isDifferedFromDefault(!_.isEqual(recordData, this.default));
+            }
         },
 
         /**

@@ -48,6 +48,7 @@
         <column xsi:type="longtext" name="longtext"/>
         <column xsi:type="mediumtext" name="mediumtext"/>
         <column xsi:type="varchar" name="varchar" length="254" nullable="true"/>
+        <column xsi:type="char" name="char" length="255" nullable="true"/>
         <column xsi:type="mediumblob" name="mediumblob"/>
         <column xsi:type="blob" name="blob"/>
         <column xsi:type="boolean" name="boolean"/>

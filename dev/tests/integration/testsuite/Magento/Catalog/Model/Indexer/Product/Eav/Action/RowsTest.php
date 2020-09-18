@@ -15,7 +15,7 @@ class RowsTest extends \PHPUnit\Framework\TestCase
      */
     protected $_productAction;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_productAction = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             \Magento\Catalog\Model\Product\Action::class

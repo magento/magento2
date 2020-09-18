@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Analytics\Test\Unit\Model;
 
 use Magento\Analytics\Model\Cryptographer;
@@ -15,41 +17,43 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\Filesystem\DirectoryList;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ExportDataHandlerTest extends \PHPUnit\Framework\TestCase
+class ExportDataHandlerTest extends TestCase
 {
     /**
-     * @var Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var Filesystem|MockObject
      */
     private $filesystemMock;
 
     /**
-     * @var Archive|\PHPUnit_Framework_MockObject_MockObject
+     * @var Archive|MockObject
      */
     private $archiveMock;
 
     /**
-     * @var ReportWriterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ReportWriterInterface|MockObject
      */
     private $reportWriterMock;
 
     /**
-     * @var Cryptographer|\PHPUnit_Framework_MockObject_MockObject
+     * @var Cryptographer|MockObject
      */
     private $cryptographerMock;
 
     /**
-     * @var FileRecorder|\PHPUnit_Framework_MockObject_MockObject
+     * @var FileRecorder|MockObject
      */
     private $fileRecorderMock;
 
     /**
-     * @var WriteInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var WriteInterface|MockObject
      */
     private $directoryMock;
 
     /**
-     * @var EncodedContext|\PHPUnit_Framework_MockObject_MockObject
+     * @var EncodedContext|MockObject
      */
     private $encodedContextMock;
 
@@ -76,35 +80,21 @@ class ExportDataHandlerTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->filesystemMock = $this->getMockBuilder(Filesystem::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->filesystemMock = $this->createMock(Filesystem::class);
 
-        $this->archiveMock = $this->getMockBuilder(Archive::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->archiveMock = $this->createMock(Archive::class);
 
-        $this->reportWriterMock = $this->getMockBuilder(ReportWriterInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->reportWriterMock = $this->getMockForAbstractClass(ReportWriterInterface::class);
 
-        $this->cryptographerMock = $this->getMockBuilder(Cryptographer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->cryptographerMock = $this->createMock(Cryptographer::class);
 
-        $this->fileRecorderMock = $this->getMockBuilder(FileRecorder::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->fileRecorderMock = $this->createMock(FileRecorder::class);
 
-        $this->directoryMock = $this->getMockBuilder(WriteInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->directoryMock = $this->getMockForAbstractClass(WriteInterface::class);
 
-        $this->encodedContextMock = $this->getMockBuilder(EncodedContext::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->encodedContextMock = $this->createMock(EncodedContext::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
@@ -228,10 +218,10 @@ class ExportDataHandlerTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @return void
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testPrepareExportDataWithLocalizedException()
     {
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
         $tmpFilesDirectoryPath = $this->subdirectoryPath . 'tmp/';
         $archivePath = $this->subdirectoryPath . $this->archiveName;
 
