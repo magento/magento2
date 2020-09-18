@@ -19,16 +19,10 @@ $objectManager = Bootstrap::getObjectManager();
 $exportInfoFactory = $objectManager->get(ExportInfoFactory::class);
 /** @var PublisherInterface $messagePublisher */
 $messagePublisher = $objectManager->get(PublisherInterface::class);
-$params = [
-    'file_format' => 'csv',
-    'entity' => ProductAttributeInterface::ENTITY_TYPE_CODE,
-    'export_filter' => [ProductInterface::SKU => 'simple2'],
-    'skip_attr' => [],
-];
 $dataObject = $exportInfoFactory->create(
-    $params['file_format'],
-    $params['entity'],
-    $params['export_filter'],
-    $params['skip_attr']
+    'csv',
+    ProductAttributeInterface::ENTITY_TYPE_CODE,
+    [ProductInterface::SKU => 'simple2'],
+    []
 );
 $messagePublisher->publish('import_export.export', $dataObject);

@@ -41,7 +41,7 @@ class ConsumerTest extends TestCase
     private $queue;
 
     /** @var Csv */
-    private $csv;
+    private $csvReader;
 
     /** @var Write */
     private $directory;
@@ -61,7 +61,7 @@ class ConsumerTest extends TestCase
         $this->messageEncoder = $this->objectManager->get(MessageEncoder::class);
         $this->consumer = $this->objectManager->get(Consumer::class);
         $this->directory = $this->objectManager->get(Filesystem::class)->getDirectoryWrite(DirectoryList::VAR_DIR);
-        $this->csv = $this->objectManager->get(Csv::class);
+        $this->csvReader = $this->objectManager->get(Csv::class);
     }
 
     /**
@@ -91,7 +91,7 @@ class ConsumerTest extends TestCase
         $this->consumer->process($decodedMessage);
         $this->filePath = 'export/' . $decodedMessage->getFileName();
         $this->assertTrue($this->directory->isExist($this->filePath));
-        $data = $this->csv->getData($this->directory->getAbsolutePath($this->filePath));
+        $data = $this->csvReader->getData($this->directory->getAbsolutePath($this->filePath));
         $this->assertCount(2, $data);
         $skuPosition = array_search(ProductInterface::SKU, array_keys($data));
         $this->assertNotFalse($skuPosition);

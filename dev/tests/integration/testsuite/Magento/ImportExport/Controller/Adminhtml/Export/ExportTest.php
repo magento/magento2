@@ -73,19 +73,15 @@ class ExportTest extends AbstractBackendController
         $expectedSessionMessage = (string)__('Message is added to queue, wait to get your file soon.'
             . ' Make sure your cron job is running to export the file');
         $fileFormat = 'csv';
-        $filter = ['price' => [0,1000]];
-        $this->getRequest()->setParams(
-            [
-                'entity' => ProductAttributeInterface::ENTITY_TYPE_CODE,
-                'file_format' => $fileFormat,
-            ]
-        );
+        $filter = ['price' => [0, 1000]];
         $this->getRequest()->setMethod(Http::METHOD_POST)
-            ->setPostValue([
-                'export_filter' => [
-                    $filter,
-                ],
-            ]);
+            ->setPostValue(['export_filter' => [$filter]])
+            ->setParams(
+                [
+                    'entity' => ProductAttributeInterface::ENTITY_TYPE_CODE,
+                    'file_format' => $fileFormat,
+                ]
+            );
         $this->dispatch('backend/admin/export/export');
         $this->assertSessionMessages($this->containsEqual($expectedSessionMessage));
         $this->assertRedirect($this->stringContains('/export/index/key/'));
