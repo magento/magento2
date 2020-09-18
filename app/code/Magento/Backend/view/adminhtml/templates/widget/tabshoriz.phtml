@@ -7,15 +7,14 @@
 use Magento\Framework\Escaper;
 use Magento\Framework\View\Helper\SecureHtmlRenderer;
 
-/** @var SecureHtmlRenderer $secureRenderer */
-/** @var Escaper $escaper */
-$blockId = $block->getId();
+/**
+ * @var SecureHtmlRenderer $secureRenderer
+ * @var Escaper $escaper
+ */
 ?>
-<!-- <?php if ($block->getTitle()): ?>
-    <h3><?= $escaper->escapeHtml($block->getTitle()) ?></h3>
-<?php endif ?> -->
 <?php if (!empty($tabs)): ?>
-<div id="<?=  $escaper->escapeHtmlAttr($blockId) ?>" class="hidden">
+    <?php $blockId = $block->getId() ?>
+<div id="<?= $escaper->escapeHtmlAttr($blockId) ?>" class="hidden">
 <ul  class="tabs-horiz">
     <?php foreach ($tabs as $_tab): ?>
         <?php $tabId = $block->getTabId($_tab) ?>
