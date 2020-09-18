@@ -19,6 +19,7 @@ define([
             displayedRecord: {},
             lastOpenedImage: false,
             bookmarksProvider: 'componentType = bookmark, ns = ${ $.ns }',
+            activeIndex: 'default',
             fields: {
                 previewUrl: 'preview_url',
                 title: 'title'
@@ -35,12 +36,13 @@ define([
             listens: {
                 '${ $.provider }:params.filters': 'hide',
                 '${ $.provider }:params.search': 'hide',
-                '${ $.provider }:params.paging': 'hide',
-                '${ $.bookmarksProvider }:activeIndex': 'hide',
+                '${ $.provider }:params.paging': 'onChangePage',
+                '${ $.bookmarksProvider }:activeIndex': 'onActiveIndexChange',
                 '${ $.provider }:data.items': 'updateDisplayedRecord'
             },
             imports: {
-                current: '${ $.provider }:params.paging.current'
+                current: '${ $.provider }:params.paging.current',
+                activeIndex: '${ $.bookmarksProvider }:activeIndex'
             },
             exports: {
                 height: '${ $.parentName }.thumbnail_url:previewHeight'
@@ -55,7 +57,6 @@ define([
         initialize: function () {
             this._super();
             $(document).on('keydown', this.handleKeyDown.bind(this));
-
             this.lastOpenedImage.subscribe(function (newValue) {
 
                 if (newValue === false && _.isNull(this.visibleRecord())) {
@@ -210,19 +211,33 @@ define([
         },
 
         /**
-         * Close image preview
+         * Hide and reset lastOpenedImage value when bookmarks active index changes.
          */
-        hide: function () {
+        onActiveIndexChange: function () {
+            var bookmarksLastOpenedImage = this.bookmarks().getActiveView().data.columns.preview.lastOpenedImage;
+            this.hide();
+            this.lastOpenedImage(bookmarksLastOpenedImage);
+        },
+
+        /**
+         * Hide and reset lastOpenedImage value when page changes.
+         */
+        onChangePage: function() {
             var bookmarksLastOpenedImage = this.bookmarks().getActiveView().data.columns.preview.lastOpenedImage,
                 bookmarksActiveViewIndex = this.bookmarks().getActiveView().index,
                 bookmarksActiveViewCurrentPage = this.bookmarks().getActiveView().data.paging.current,
                 currentPage = this.current;
+            this.hide();
             if (bookmarksLastOpenedImage && bookmarksActiveViewIndex !== 'default'
                 && bookmarksActiveViewCurrentPage === currentPage) {
                 this.lastOpenedImage(bookmarksLastOpenedImage);
-                return;
             }
+        },
 
+        /**
+         * Close image preview
+         */
+        hide: function () {
             this.lastOpenedImage(false);
             this.visibleRecord(null);
             this.height(0);
