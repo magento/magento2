@@ -587,7 +587,6 @@ class ImageMagick extends AbstractAdapter
     {
         if ($this->colorspace === -1) {
             $this->colorspace = $this->_imageHandler->getImageColorspace();
-            $this->originalColorspace = $this->colorspace;
         }
 
         return $this->colorspace;
