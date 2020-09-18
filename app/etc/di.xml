@@ -1809,6 +1809,7 @@
                 type="Magento\Framework\Mail\MimeMessage" />
     <preference for="Magento\Framework\Mail\MimePartInterface"
                 type="Magento\Framework\Mail\MimePart" />
+    <type name="Magento\Framework\Mail\Template\TransportBuilder" shared="false"/>
     <type name="Magento\Framework\DB\Adapter\AdapterInterface">
         <plugin name="execute_commit_callbacks" type="Magento\Framework\Model\ExecuteCommitCallbacks" />
     </type>
