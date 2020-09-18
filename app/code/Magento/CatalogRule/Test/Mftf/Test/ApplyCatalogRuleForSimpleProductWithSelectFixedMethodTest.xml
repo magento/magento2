@@ -15,7 +15,7 @@
             <description value="Admin should be able to apply the catalog price rule for simple product with custom options"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14771"/>
-            <group value="CatalogRule"/>
+            <group value="catalogRule"/>
             <group value="mtf_migrated"/>
         </annotations>
         <before>
@@ -33,7 +33,7 @@
 
             <!-- Update all products to have custom options -->
             <updateData createDataKey="createProduct1" entity="productWithFixedOptions" stepKey="updateProductWithOptions1"/>
-            <magentoCron stepKey="runCronIndex" groups="index"/>
+            <magentoCron groups="index" stepKey="runCronIndex"/>
         </before>
         <after>
             <!-- Delete products and category -->
@@ -42,7 +42,7 @@
 
             <!-- Delete the catalog price rule -->
             <actionGroup ref="AdminOpenCatalogPriceRulePageActionGroup" stepKey="goToPriceRulePage"/>
-            <actionGroup stepKey="deletePriceRule" ref="deleteEntitySecondaryGrid">
+            <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deletePriceRule">
                 <argument name="name" value="{{CatalogRuleByFixed.name}}"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.catalogRuleIdentifierSearch}}"/>
             </actionGroup>
@@ -60,13 +60,10 @@
         <actionGroup ref="SelectNotLoggedInCustomerGroupActionGroup" stepKey="selectNotLoggedInCustomerGroup"/>
 
         <!-- Save and apply the new catalog price rule -->
-        <actionGroup ref="SaveAndApplyCatalogPriceRuleActionGroup" stepKey="saveAndApplyCatalogPriceRule"/>
-        <actionGroup ref="CreateCatalogRuleStagingUpdateWithItsStartActionGroup" stepKey="fillOutActionGroup">
-            <argument name="stagingUpdate" value="_defaultCatalogRule"/>
-        </actionGroup>
+        <actionGroup ref="AdminEnableCatalogPriceRuleActionGroup" stepKey="saveAndApplyCatalogPriceRule"/>
 
         <!-- Navigate to category on store front -->
-        <amOnPage url="{{StorefrontProductPage.url($createCategory.name$)}}" stepKey="goToCategoryPage"/>
+        <amOnPage url="{{StorefrontProductPage.url($createCategory.name$)}}" stepKey="goToStorefrontCategoryPage"/>
 
         <!-- Check product 1 name on store front category page -->
         <actionGroup ref="AssertProductDetailsOnStorefrontActionGroup" stepKey="storefrontProduct1Name">
