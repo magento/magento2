@@ -47,12 +47,6 @@ class ImageMagick extends AbstractAdapter
      * @var int
      */
     private $colorspace = -1;
-    /**
-     * Original colorspace of the image
-     *
-     * @var int
-     */
-    private $originalColorspace = -1;
 
     /**
      * Set/get background color. Check Imagick::COLOR_* constants
