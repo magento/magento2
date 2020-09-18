@@ -123,8 +123,7 @@
         </actionGroup>
 
         <!-- Assert refunded Grand Total on frontend -->
-        <amOnPage url="{{StorefrontCustomerDashboardPage.url}}" stepKey="onAccountPage"/>
-        <waitForPageLoad stepKey="waitForPage"/>
+        <actionGroup ref="StorefrontOpenMyAccountPageActionGroup" stepKey="onAccountPage"/>
         <scrollTo selector="{{StorefrontCustomerResentOrdersSection.blockResentOrders}}" stepKey="scrollToResent"/>
         <click selector="{{StorefrontCustomerResentOrdersSection.viewOrder({$grabOrderId})}}" stepKey="clickOnOrder"/>
         <waitForPageLoad stepKey="waitForViewOrder"/>
