@@ -50,7 +50,6 @@
         <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteBundleProductBySku">
             <argument name="sku" value="$createDynamicBundleProduct.sku$"/>
         </actionGroup>
-        <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="A total of 1 record(s) have been deleted." stepKey="deleteMessage"/>
         <!-- Verify product on Product Page -->
         <amOnPage url="{{StorefrontProductPage.url($createDynamicBundleProduct.custom_attributes[url_key]$)}}" stepKey="openBundleProductPage"/>
         <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="Whoops, our bad..." stepKey="seeWhoopsMessage"/>
