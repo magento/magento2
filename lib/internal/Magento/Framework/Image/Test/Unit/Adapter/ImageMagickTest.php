@@ -74,7 +74,7 @@ class ImageMagickTest extends TestCase
     }
 
     /**
-     * @return array 
+     * @return array
      */
     public function watermarkDataProvider(): array
     {
