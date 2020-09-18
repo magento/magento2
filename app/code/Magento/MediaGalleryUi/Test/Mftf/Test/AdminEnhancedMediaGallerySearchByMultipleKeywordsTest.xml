@@ -22,7 +22,6 @@
             <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openMediaGallery"/>
         </before>
         <after>
-            <actionGroup ref="AdminAdobeStockMediaGalleryClearFiltersActionGroup" stepKey="clearFilters"/>
             <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAllAdminDataGridToDefaultView"/>
         </after>
 
@@ -31,8 +30,8 @@
             <argument name="image" value="ImageUpload3"/>
         </actionGroup>
         <!-- Assert first image is present in the media gallery grid -->
-        <actionGroup ref="AdminAdobeStockMediaGallerySearchByKeywordActionGroup" stepKey="searchFirstImage">
-            <argument name="keyword" value="{{ImageMetadata.fileName}}"/>
+        <actionGroup ref="SearchAdminDataGridByKeywordActionGroup" stepKey="searchFirstImage">
+            <argument name="keyword" value="ImageMetadata.fileName"/>
         </actionGroup>
         <actionGroup ref="AdminAssertImageInStandaloneMediaGalleryActionGroup" stepKey="assertFirstImageIsAvailableInStandaloneGridUsingImageName">
             <argument name="imageName" value="{{ImageMetadata.file}}"/>
@@ -54,8 +53,8 @@
             <argument name="image" value="ImageUpload"/>
         </actionGroup>
         <!-- Assert second image is present in the media gallery grid -->
-        <actionGroup ref="AdminAdobeStockMediaGallerySearchByKeywordActionGroup" stepKey="searchSecondImage">
-            <argument name="keyword" value="{{SearchImageData.fileName}}"/>
+        <actionGroup ref="SearchAdminDataGridByKeywordActionGroup" stepKey="searchSecondImage">
+            <argument name="keyword" value="SearchImageData.fileName"/>
         </actionGroup>
         <actionGroup ref="AdminAssertImageInStandaloneMediaGalleryActionGroup" stepKey="assertSecondImageIsAvailableInStandaloneGridUsingImageName">
             <argument name="imageName" value="{{SearchImageData.file}}"/>
@@ -73,8 +72,8 @@
         </actionGroup>
 
         <!-- Search and assert images by keywords -->
-        <actionGroup ref="AdminAdobeStockMediaGallerySearchByKeywordActionGroup" stepKey="searchImageByKeyword">
-            <argument name="keyword" value="{{SearchImageData.searchKeywords}}"/>
+        <actionGroup ref="SearchAdminDataGridByKeywordActionGroup" stepKey="searchImageByKeyword">
+            <argument name="keyword" value="SearchImageData.searchKeywords"/>
         </actionGroup>
         <actionGroup ref="AdminAssertAllImagesInStandaloneMediaGalleryActionGroup" stepKey="assertAllImageAreAvailableInStandaloneGridUsingKeyword">
             <argument name="firstImage" value="{{SearchImageData.file}}"/>
