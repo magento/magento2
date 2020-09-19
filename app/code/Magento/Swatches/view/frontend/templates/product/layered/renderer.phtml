@@ -108,14 +108,12 @@
         <?php endforeach; ?>
     </div>
 </div>
-<?php $scriptString = <<<script
-
-    require(["jquery", "Magento_Swatches/js/swatch-renderer"], function ($) {
-        $('.swatch-layered.{$block->escapeJs($swatchData['attribute_code'])}')
-            .find('[data-option-type="1"], [data-option-type="2"], [data-option-type="0"], [data-option-type="3"]')
-            .SwatchRendererTooltip();
-    });
-
-script;
-?>
-<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
+<script type="text/x-magento-init">
+    {
+        ".swatch-layered.<?= $escaper->escapeJs($swatchData['attribute_code']) ?>": {
+            "Magento_Swatches/js/layered/swatch-renderer": {
+                "showTooltip": <?= (int) $block->getData('configurable_view_model')->getShowSwatchTooltip() ?>
+            }
+        }
+    }
+</script>
