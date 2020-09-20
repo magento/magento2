@@ -261,6 +261,13 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\Logger\Monolog2">
+        <arguments>
+            <argument name="name" xsi:type="string">test2§</argument>
+            <argument name="handlers"  xsi:type="array">
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\Framework\Logger\Handler\Syslog">
         <arguments>
             <argument name="ident" xsi:type="string">Magento</argument>
