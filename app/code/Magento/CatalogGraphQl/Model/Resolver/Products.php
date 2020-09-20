@@ -57,6 +57,9 @@ class Products implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
+        if (isset($args['searchAllowed']) && $args['searchAllowed'] === false) {
+            throw new GraphQlInputException(__('Product search has been disabled.'));
+        }
         if ($args['currentPage'] < 1) {
             throw new GraphQlInputException(__('currentPage value must be greater than 0.'));
         }
