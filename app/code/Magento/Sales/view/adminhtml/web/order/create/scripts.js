@@ -481,6 +481,13 @@ define([
         },
 
         switchPaymentMethod: function(method){
+            if (this.paymentMethod !== method) {
+                jQuery('#edit_form')
+                    .off('submitOrder')
+                    .on('submitOrder', function(){
+                        jQuery(this).trigger('realOrder');
+                    });
+            }
             jQuery('#edit_form').trigger('changePaymentMethod', [method]);
             this.setPaymentMethod(method);
             var data = {};
@@ -1308,11 +1315,16 @@ define([
         },
 
         submit: function () {
-            var $editForm = jQuery('#edit_form');
+            var $editForm = jQuery('#edit_form'),
+                beforeSubmitOrderEvent;
 
             if ($editForm.valid()) {
                 $editForm.trigger('processStart');
-                $editForm.trigger('submitOrder');
+                beforeSubmitOrderEvent = jQuery.Event('beforeSubmitOrder');
+                $editForm.trigger(beforeSubmitOrderEvent);
+                if (beforeSubmitOrderEvent.result !== false) {
+                    $editForm.trigger('submitOrder');
+                }
             }
         },
 
