@@ -41,8 +41,7 @@ class UnitBaseCalculator extends AbstractCalculator
     /**
      * Calculate tax details for quote item with tax in price with given quantity
      *
-     * @param QuoteDetai
-     * lsItemInterface $item
+     * @param QuoteDetailsItemInterface $item
      * @param int $quantity
      * @param bool $round
      * @return \Magento\Tax\Api\Data\TaxDetailsItemInterface
