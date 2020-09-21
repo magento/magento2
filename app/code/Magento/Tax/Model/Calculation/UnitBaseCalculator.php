@@ -10,12 +10,14 @@ use Magento\Tax\Api\Data\QuoteDetailsItemInterface;
 class UnitBaseCalculator extends AbstractCalculator
 {
     /**
-     * @param $amount
-     * @param null $rate
-     * @param null $direction
+     * Determines the rounding operation type and rounds the amount
+     *
+     * @param float $amount
+     * @param string $rate
+     * @param bool $direction
      * @param string $type
      * @param bool $round
-     * @param null $item
+     * @param QuoteDetailsItemInterface $item
      * @return float|string
      */
     protected function roundAmount(
@@ -37,8 +39,10 @@ class UnitBaseCalculator extends AbstractCalculator
     }
 
     /**
-     * @inheridoc
-     * @param QuoteDetailsItemInterface $item
+     * Calculate tax details for quote item with tax in price with given quantity
+     *
+     * @param QuoteDetai
+     * lsItemInterface $item
      * @param int $quantity
      * @param bool $round
      * @return \Magento\Tax\Api\Data\TaxDetailsItemInterface
@@ -114,7 +118,8 @@ class UnitBaseCalculator extends AbstractCalculator
     }
 
     /**
-     * @inheridoc
+     * Calculate tax details for quote item with tax not in price with given quantity
+     *
      * @param QuoteDetailsItemInterface $item
      * @param int $quantity
      * @param bool $round
