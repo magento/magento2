@@ -11,15 +11,21 @@ use Magento\Eav\Model\Attribute;
 use Magento\Eav\Model\Attribute\Data\File;
 use Magento\Eav\Model\AttributeDataFactory;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Io\File as FileIo;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Framework\Url\EncoderInterface;
 use Magento\MediaStorage\Model\File\Validator\NotProtectedExtension;
+use Psr\Log\LoggerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Psr\Log\LoggerInterface;
 
+/**
+ * Test for Magento\Eav\Model\Attribute\Data\File class.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class FileTest extends TestCase
 {
     /**
@@ -37,6 +43,9 @@ class FileTest extends TestCase
      */
     protected $fileValidatorMock;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $timezoneMock = $this->getMockForAbstractClass(TimezoneInterface::class);
@@ -48,6 +57,7 @@ class FileTest extends TestCase
             ['isValid', 'getMessages']
         );
         $filesystemMock = $this->createMock(Filesystem::class);
+        $fileIo = $this->createMock(FileIo::class);
 
         $this->model = new File(
             $timezoneMock,
@@ -55,7 +65,8 @@ class FileTest extends TestCase
             $localeResolverMock,
             $this->urlEncoder,
             $this->fileValidatorMock,
-            $filesystemMock
+            $filesystemMock,
+            $fileIo
         );
     }
 

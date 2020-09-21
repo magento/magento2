@@ -45,7 +45,7 @@
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearWebsitesGridFilter"/>
 
             <!--Clear products filter-->
-            <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
+            <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductsFilters"/>
             <!--Logout everywhere-->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
@@ -67,7 +67,7 @@
         <click selector="{{AdminProductFormChangeStoreSection.acceptButton}}" stepKey="acceptStoreSwitchingForProduct1"/>
         <click selector="{{AdminProductFormSection.visibilityUseDefault}}" stepKey="uncheckVisibilityUseDefaultValueForProduct1"/>
         <selectOption userInput="Not Visible Individually" selector="{{AdminProductFormSection.visibility}}" stepKey="makeProductNotVisibleOnSecondaryStoreView"/>
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveEditedProductForProduct1"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveEditedProductForProduct1"/>
         <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForProduct2">
             <argument name="product" value="$$secondProduct$$"/>
         </actionGroup>
@@ -82,7 +82,7 @@
         <click selector="{{AdminProductFormChangeStoreSection.acceptButton}}" stepKey="acceptStoreSwitchingForProduct2"/>
         <click selector="{{AdminProductFormSection.visibilityUseDefault}}" stepKey="uncheckVisibilityUseDefaultValueForProduct2"/>
         <selectOption userInput="Not Visible Individually" selector="{{AdminProductFormSection.visibility}}" stepKey="makeProductNotVisibleOnDefaultStoreView"/>
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveEditedProductForProduct2"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveEditedProductForProduct2"/>
 
         <!-- Sign in as customer -->
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLogin">

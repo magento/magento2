@@ -13,6 +13,7 @@
             <stories value="Use Advanced Search"/>
             <title value="Unable negative price use to advanced search"/>
             <description value="Check unable negative price use to advanced search by price from and price to"/>
+            <severity value="MAJOR"/>
         </annotations>
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStorefront"/>
         <actionGroup ref="StorefrontOpenAdvancedSearchActionGroup" stepKey="openAdvancedSearch"/>

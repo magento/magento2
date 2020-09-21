@@ -79,8 +79,6 @@
                 <requiredEntity createDataKey="createBundleOptionWithAttribute"/>
                 <requiredEntity createDataKey="secondSimpleProductForFixedWithAttribute"/>
             </createData>
-
-            <magentoCron stepKey="runCron"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
@@ -94,9 +92,8 @@
             <deleteData createDataKey="firstSimpleProductForFixedWithAttribute" stepKey="deleteFirstSimpleProductForFixedWithAttribute"/>
             <deleteData createDataKey="secondSimpleProductForFixedWithAttribute" stepKey="deleteSecondSimpleProductForFixedWithAttribute"/>
             <deleteData createDataKey="createProductAttribute" stepKey="deleteProductAttribute"/>
-
-            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
             <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Go to export page -->
@@ -105,7 +102,12 @@
         <!-- Export created below products -->
         <actionGroup ref="ExportAllProductsActionGroup" stepKey="exportCreatedProducts"/>
 
-        <magentoCron stepKey="runCronIndex" groups="index"/>
+        <!-- Start message queue for export consumer -->
+        <actionGroup ref="CliConsumerStartActionGroup" stepKey="startMessageQueue">
+            <argument name="consumerName" value="{{AdminExportMessageConsumerData.consumerName}}"/>
+            <argument name="maxMessages" value="{{AdminExportMessageConsumerData.messageLimit}}"/>
+        </actionGroup>
+        <reloadPage stepKey="refreshPage"/>
         <waitForElementVisible selector="{{AdminExportAttributeSection.exportFileNameByPosition('0')}}" stepKey="waitForFileName"/>
         <grabTextFrom selector="{{AdminExportAttributeSection.exportFileNameByPosition('0')}}" stepKey="grabNameFile"/>
 
