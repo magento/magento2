@@ -11,6 +11,7 @@ use Magento\Framework\DB\Adapter\ConnectionException;
 use Magento\Framework\DB\Sql\Expression;
 use Magento\Framework\Exception\RuntimeException;
 use Magento\Framework\Mview\Config;
+use Magento\Framework\Mview\View\AdditionalColumnsProcessor\ProcessorFactory;
 use Magento\Framework\Phrase;
 
 /**
@@ -58,18 +59,26 @@ class Changelog implements ChangelogInterface
     private $mviewConfig;
 
     /**
+     * @var ProcessorFactory
+     */
+    private $additionalColumnsProcessorFactory;
+
+    /**
      * @param \Magento\Framework\App\ResourceConnection $resource
      * @param Config $mviewConfig
+     * @param ProcessorFactory $additionalColumnsProcessorFactory
      * @throws ConnectionException
      */
     public function __construct(
         \Magento\Framework\App\ResourceConnection $resource,
-        Config $mviewConfig
+        Config $mviewConfig,
+        ProcessorFactory $additionalColumnsProcessorFactory
     ) {
         $this->connection = $resource->getConnection();
         $this->resource = $resource;
         $this->checkConnection();
         $this->mviewConfig = $mviewConfig;
+        $this->additionalColumnsProcessorFactory = $additionalColumnsProcessorFactory;
     }
 
     /**
@@ -116,7 +125,7 @@ class Changelog implements ChangelogInterface
             foreach ($this->initAdditionalColumnData() as $columnData) {
                 /** @var AdditionalColumnProcessorInterface $processor */
                 $processorClass = $columnData['processor'];
-                $processor = ObjectManager::getInstance()->get($processorClass);
+                $processor = $this->additionalColumnsProcessorFactory->create($processorClass);
                 $processor->processColumnForCLTable($table, $columnData['cl_name']);
             }
 

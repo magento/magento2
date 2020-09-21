@@ -11,8 +11,8 @@ namespace Magento\Framework\Mview;
 use InvalidArgumentException;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
-use Magento\Framework\Mview\View\ChangeLogBatchIterator;
-use Magento\Framework\Mview\View\ChangeLogBatchIteratorInterface;
+use Magento\Framework\Mview\View\ChangeLogBatchWalkerFactory;
+use Magento\Framework\Mview\View\ChangeLogBatchWalkerInterface;
 use Magento\Framework\Mview\View\ChangelogTableNotExistsException;
 use Magento\Framework\Mview\View\SubscriptionFactory;
 use Exception;
@@ -66,9 +66,9 @@ class View extends DataObject implements ViewInterface
     private $changelogBatchSize;
 
     /**
-     * @var ChangeLogBatchIteratorInterface
+     * @var ChangeLogBatchWalkerFactory
      */
-    private $iterator;
+    private $changeLogBatchWalkerFactory;
 
     /**
      * @param ConfigInterface $config
@@ -78,7 +78,7 @@ class View extends DataObject implements ViewInterface
      * @param SubscriptionFactory $subscriptionFactory
      * @param array $data
      * @param array $changelogBatchSize
-     * @param ChangeLogBatchIteratorInterface|null $changeLogBatchIterator
+     * @param ChangeLogBatchWalkerFactory $changeLogBatchWalkerFactory
      */
     public function __construct(
         ConfigInterface $config,
@@ -88,7 +88,7 @@ class View extends DataObject implements ViewInterface
         SubscriptionFactory $subscriptionFactory,
         array $data = [],
         array $changelogBatchSize = [],
-        ChangeLogBatchIteratorInterface $changeLogBatchIterator = null
+        ChangeLogBatchWalkerFactory $changeLogBatchWalkerFactory = null
     ) {
         $this->config = $config;
         $this->actionFactory = $actionFactory;
@@ -97,7 +97,8 @@ class View extends DataObject implements ViewInterface
         $this->subscriptionFactory = $subscriptionFactory;
         $this->changelogBatchSize = $changelogBatchSize;
         parent::__construct($data);
-        $this->iterator = $changeLogBatchIterator;
+        $this->changeLogBatchWalkerFactory = $changeLogBatchWalkerFactory ?:
+            ObjectManager::getInstance()->get(ChangeLogBatchWalkerFactory::class);
     }
 
     /**
@@ -303,8 +304,8 @@ class View extends DataObject implements ViewInterface
 
         $vsFrom = $lastVersionId;
         while ($vsFrom < $currentVersionId) {
-            $iterator = $this->getIterator();
-            $ids = $iterator->walk($this->getChangelog(), $vsFrom, $currentVersionId, $batchSize);
+            $walker = $this->getWalker();
+            $ids = $walker->walk($this->getChangelog(), $vsFrom, $currentVersionId, $batchSize);
 
             if (empty($ids)) {
                 break;
@@ -315,34 +316,16 @@ class View extends DataObject implements ViewInterface
     }
 
     /**
-     * Create and validate iterator class for changelog
+     * Create and validate walker class for changelog
      *
-     * @return ChangeLogBatchIteratorInterface|mixed
+     * @return ChangeLogBatchWalkerInterface|mixed
      * @throws Exception
      */
-    private function getIterator()
+    private function getWalker(): ChangeLogBatchWalkerInterface
     {
-        if ($this->iterator) {
-            return $this->iterator;
-        }
-
         $config = $this->config->getView($this->changelog->getViewId());
-        $iteratorClass = $config['iterator'];
-
-        if (!class_exists($iteratorClass)) {
-            throw new \Exception('Iterator class does not exist for view: ' . $this->changelog->getViewId());
-        }
-
-        $iterator = ObjectManager::getInstance()->get($iteratorClass);
-
-        if (!$iterator instanceof ChangeLogBatchIteratorInterface) {
-            throw new \Exception(
-                'Iterator does not implement the right interface for view: ' .
-                $this->changelog->getViewId()
-            );
-        }
-
-        return $iterator;
+        $walkerClass = $config['walker'];
+        return $this->changeLogBatchWalkerFactory->create($walkerClass);
     }
 
     /**
