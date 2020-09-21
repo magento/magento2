@@ -25,7 +25,7 @@
         <after>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
-        <actionGroup ref="AdminNavigateToPageGridActionGroup" stepKey="navigateToCmsPageGrid" />
+        <actionGroup ref="AdminOpenCMSPagesGridActionGroup" stepKey="navigateToCmsPageGrid" />
         <actionGroup ref="CreateNewPageWithBasicValues" stepKey="createNewPageWithBasicValues" />
         <actionGroup ref="SaveCmsPageActionGroup" stepKey="clickSaveCmsPageButton" />
         <actionGroup ref="VerifyCreatedCmsPage" stepKey="verifyCmsPage" />
