@@ -6,7 +6,7 @@
 namespace Magento\Framework\Mview\Config;
 
 use Magento\Framework\Mview\View\AdditionalColumnsProcessor\DefaultProcessor;
-use Magento\Framework\Mview\View\ChangeLogBatchIterator;
+use Magento\Framework\Mview\View\ChangeLogBatchWalker;
 use Magento\Framework\Mview\View\SubscriptionInterface;
 
 class Converter implements \Magento\Framework\Config\ConverterInterface
@@ -27,7 +27,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      */
     public function __construct(
         string $defaultProcessor = DefaultProcessor::class,
-        string $defaultIterator = ChangeLogBatchIterator::class
+        string $defaultIterator = ChangeLogBatchWalker::class
     ) {
         $this->defaultProcessor = $defaultProcessor;
         $this->defaultIterator = $defaultIterator;
@@ -52,7 +52,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             $data['view_id'] = $viewId;
             $data['action_class'] = $this->getAttributeValue($viewNode, 'class');
             $data['group'] = $this->getAttributeValue($viewNode, 'group');
-            $data['iterator'] = $this->getAttributeValue($viewNode, 'iterator') ?: $this->defaultIterator;
+            $data['walker'] = $this->getAttributeValue($viewNode, 'walker') ?: $this->defaultIterator;
             $data['subscriptions'] = [];
 
             /** @var $childNode \DOMNode */
