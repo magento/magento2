@@ -12,10 +12,10 @@ use Magento\Framework\Mview\Config;
 use Magento\Framework\Phrase;
 
 /**
- * Interface \Magento\Framework\Mview\View\ChangeLogBatchIteratorInterface
+ * Interface \Magento\Framework\Mview\View\ChangeLogBatchWalkerInterface
  *
  */
-interface ChangeLogBatchIteratorInterface
+interface ChangeLogBatchWalkerInterface
 {
     /**
      * Walk through batches
