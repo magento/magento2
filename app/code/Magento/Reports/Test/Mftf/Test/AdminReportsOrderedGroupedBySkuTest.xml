@@ -9,13 +9,15 @@
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminReportsOrderedGroupedBySkuTest">
         <annotations>
+            <stories value="Grouped by SKU on report"/>
             <title value="Verify grouped by SKU on report"/>
             <description value="Verify the list of configurable product grouped by SKU, on report page 'Reports > Products > Ordered'"/>
+            <severity value="MAJOR"/>
             <group value="reports"/>
         </annotations>
         <before>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="CreateConfigurableProductActionGroup" stepKey="createConfigurableProduct">
                 <argument name="product" value="_defaultProduct"/>
                 <argument name="category" value="$$createCategory$$"/>
@@ -28,8 +30,8 @@
             <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteConfigurableProduct">
                 <argument name="sku" value="{{_defaultProduct.sku}}"/>
             </actionGroup>
-            <actionGroup ref="DeleteProductAttributeByLabelActionGroup" stepKey="deleteAttributeSet">
-                <argument name="ProductAttribute" value="colorProductAttribute"/>
+            <actionGroup ref="AdminDeleteProductAttributeByLabelActionGroup" stepKey="deleteAttributeSet">
+                <argument name="productAttributeLabel" value="{{colorProductAttribute.default_label}}"/>
             </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
@@ -43,7 +45,7 @@
             <argument name="attribute" value="colorProductAttribute"/>
             <argument name="option" value="colorProductAttribute1"/>
         </actionGroup>
-        <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" stepKey="submitFirstOrder"/>
+        <actionGroup ref="AdminOrderClickSubmitOrderActionGroup" stepKey="submitFirstOrder" />
 
         <!--Add second configurable product to order-->
         <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToSecondOrderWithExistingCustomer">
@@ -54,7 +56,7 @@
             <argument name="attribute" value="colorProductAttribute"/>
             <argument name="option" value="colorProductAttribute2"/>
         </actionGroup>
-        <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" stepKey="submitSecondOrder"/>
+        <actionGroup ref="AdminOrderClickSubmitOrderActionGroup" stepKey="submitSecondOrder" />
 
         <!-- Get date -->
         <generateDate stepKey="generateStartDate" date="-1 minute" format="m/d/Y"/>
@@ -66,13 +68,13 @@
 
         <!-- Verify data -->
         <grabTextFrom selector="{{SoldReportFilterSection.gridProduct}}" stepKey="grabData"/>
-        <assertContains stepKey="assertFirst">
+        <assertStringContainsString stepKey="assertFirst">
             <actualResult type="string">{$grabData}</actualResult>
             <expectedResult type="string">{{_defaultProduct.sku}}-{{colorProductAttribute1.name}}</expectedResult>
-        </assertContains>
-        <assertContains stepKey="assertSecond">
+        </assertStringContainsString>
+        <assertStringContainsString stepKey="assertSecond">
             <actualResult type="string">{$grabData}</actualResult>
             <expectedResult type="string">{{_defaultProduct.sku}}-{{colorProductAttribute2.name}}</expectedResult>
-        </assertContains>
+        </assertStringContainsString>
     </test>
 </tests>

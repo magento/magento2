@@ -26,8 +26,7 @@
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
         <!--Go to backup index page-->
-        <amOnPage url="{{BackupIndexPage.url}}" stepKey="goToBackupPage"/>
-        <waitForPageLoad stepKey="waitForBackupPage"/>
+        <actionGroup ref="AdminBackupIndexPageOpenActionGroup" stepKey="navigateToBackupPage"/>
 
         <!--Create system backup-->
         <actionGroup ref="CreateSystemBackupActionGroup" stepKey="createSystemBackup"/>
@@ -39,17 +38,17 @@
         <actionGroup ref="CreateDatabaseBackupActionGroup" stepKey="createDatabaseBackup"/>
 
         <!--Delete system backup-->
-        <actionGroup ref="deleteBackup" stepKey="deleteSystemBackup">
+        <actionGroup ref="AdminBackupDeleteActionGroup" stepKey="deleteSystemBackup">
             <argument name="backup" value="SystemBackup"/>
         </actionGroup>
 
         <!--Delete database/media backup-->
-        <actionGroup ref="deleteBackup" stepKey="deleteMediaBackup">
+        <actionGroup ref="AdminBackupDeleteActionGroup" stepKey="deleteMediaBackup">
             <argument name="backup" value="MediaBackup"/>
         </actionGroup>
 
         <!--Delete database backup-->
-        <actionGroup ref="deleteBackup" stepKey="deleteDatabaseBackup">
+        <actionGroup ref="AdminBackupDeleteActionGroup" stepKey="deleteDatabaseBackup">
             <argument name="backup" value="DatabaseBackup"/>
         </actionGroup>
 

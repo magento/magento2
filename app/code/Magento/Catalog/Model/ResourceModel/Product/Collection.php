@@ -12,7 +12,6 @@ use Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer;
 use Magento\Catalog\Model\Indexer\Product\Price\PriceTableResolver;
 use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
 use Magento\Catalog\Model\Product\Gallery\ReadHandler as GalleryReadHandler;
-use Magento\Catalog\Model\ResourceModel\Category;
 use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\CatalogUrlRewrite\Model\Storage\DbStorage;
@@ -24,6 +23,7 @@ use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Indexer\DimensionFactory;
 use Magento\Store\Model\Indexer\WebsiteDimensionProvider;
 use Magento\Store\Model\Store;
+use Magento\Catalog\Model\ResourceModel\Category;
 
 /**
  * Product collection
@@ -731,6 +731,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Add Store ID to products from collection.
      *
      * @return $this
+     * @since 102.0.8
      */
     protected function prepareStoreId()
     {
@@ -857,7 +858,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
                 ['name']
             )->where(
                 'product_website.product_id IN (?)',
-                array_keys($productWebsites)
+                array_keys($productWebsites),
+                \Zend_Db::INT_TYPE
             )->where(
                 'website.website_id > ?',
                 0
@@ -1180,7 +1182,31 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         if ($resetLeftJoins) {
             $countSelect->resetJoinLeft();
         }
+
+        $this->removeEntityIdentifierFromGroupBy($countSelect);
+
         return $countSelect;
+    }
+
+    /**
+     * Using `entity_id` for `GROUP BY` causes COUNT() return {n} rows of value = 1 instead of 1 row of value {n}
+     *
+     * @param Select $select
+     * @throws \Zend_Db_Select_Exception
+     */
+    private function removeEntityIdentifierFromGroupBy(Select $select): void
+    {
+        $originalGroupBy = $select->getPart(Select::GROUP);
+
+        if (!is_array($originalGroupBy)) {
+            return;
+        }
+
+        $groupBy = array_filter($originalGroupBy, function ($field) {
+            return false === strpos($field, $this->getIdFieldName());
+        });
+
+        $select->setPart(Select::GROUP, $groupBy);
     }
 
     /**
@@ -1333,7 +1359,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
                 $anchorStmt = clone $select;
                 $anchorStmt->limit();
                 //reset limits
-                $anchorStmt->where('count_table.category_id IN (?)', $isAnchor);
+                $anchorStmt->where('count_table.category_id IN (?)', $isAnchor, \Zend_Db::INT_TYPE);
                 $productCounts += $this->getConnection()->fetchPairs($anchorStmt);
                 $anchorStmt = null;
             }
@@ -1341,7 +1367,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
                 $notAnchorStmt = clone $select;
                 $notAnchorStmt->limit();
                 //reset limits
-                $notAnchorStmt->where('count_table.category_id IN (?)', $isNotAnchor);
+                $notAnchorStmt->where('count_table.category_id IN (?)', $isNotAnchor, \Zend_Db::INT_TYPE);
                 $notAnchorStmt->where('count_table.is_parent = 1');
                 $productCounts += $this->getConnection()->fetchPairs($notAnchorStmt);
                 $notAnchorStmt = null;
@@ -1717,7 +1743,10 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             // optimize if using cat index
             $filters = $this->_productLimitationFilters;
             if (isset($filters['category_id']) || isset($filters['visibility'])) {
-                $this->getSelect()->order('cat_index.position ' . $dir);
+                $this->getSelect()->order([
+                    'cat_index.position ' . $dir,
+                    'e.entity_id ' . \Magento\Framework\DB\Select::SQL_DESC
+                ]);
             } else {
                 $this->getSelect()->order('e.entity_id ' . $dir);
             }
@@ -1732,7 +1761,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         if ($attribute == 'price' && $storeId != 0) {
             $this->addPriceData();
             if ($this->_productLimitationFilters->isUsingPriceIndex()) {
-                $this->getSelect()->order("price_index.min_price {$dir}");
+                $this->getSelect()->order(
+                    new \Zend_Db_Expr("price_index.min_price = 0, price_index.min_price {$dir}")
+                );
                 return $this;
             }
         }
@@ -1765,30 +1796,19 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      */
     protected function _prepareProductLimitationFilters()
     {
-        if (isset(
-            $this->_productLimitationFilters['visibility']
-        ) && !isset(
-            $this->_productLimitationFilters['store_id']
-        )
-        ) {
+        if (isset($this->_productLimitationFilters['visibility'])
+            && !isset($this->_productLimitationFilters['store_id'])) {
             $this->_productLimitationFilters['store_id'] = $this->getStoreId();
         }
-        if (isset(
-            $this->_productLimitationFilters['category_id']
-        ) && !isset(
-            $this->_productLimitationFilters['store_id']
-        )
-        ) {
+
+        if (isset($this->_productLimitationFilters['category_id'])
+            && !isset($this->_productLimitationFilters['store_id'])) {
             $this->_productLimitationFilters['store_id'] = $this->getStoreId();
         }
-        if (isset(
-            $this->_productLimitationFilters['store_id']
-        ) && isset(
-            $this->_productLimitationFilters['visibility']
-        ) && !isset(
-            $this->_productLimitationFilters['category_id']
-        )
-        ) {
+
+        if (isset($this->_productLimitationFilters['store_id'])
+            && isset($this->_productLimitationFilters['visibility'])
+            && !isset($this->_productLimitationFilters['category_id'])) {
             $this->_productLimitationFilters['category_id'] = $this->_storeManager->getStore(
                 $this->_productLimitationFilters['store_id']
             )->getRootCategoryId();
@@ -1819,14 +1839,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
                 $filters['website_ids'],
                 'int'
             );
-        } elseif (isset(
-            $filters['store_id']
-        ) && (!isset(
-            $filters['visibility']
-        ) && !isset(
-            $filters['category_id']
-        )) && !$this->isEnabledFlat()
-        ) {
+        } elseif (isset($filters['store_id']) && !$this->isEnabledFlat()
+            && (!isset($filters['visibility']) && !isset($filters['category_id']))) {
             $joinWebsite = true;
             $websiteId = $this->_storeManager->getStore($filters['store_id'])->getWebsiteId();
             $conditions[] = $this->getConnection()->quoteInto('product_website.website_id = ?', $websiteId, 'int');
@@ -1901,9 +1915,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     /**
      * Join Product Price Table with left-join possibility
      *
-     * @see \Magento\Catalog\Model\ResourceModel\Product\Collection::_productLimitationJoinPrice()
      * @param bool $joinLeft
      * @return $this
+     * @see \Magento\Catalog\Model\ResourceModel\Product\Collection::_productLimitationJoinPrice()
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _productLimitationPrice($joinLeft = false)
@@ -2152,7 +2166,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         $select = $this->getConnection()->select();
 
         $select->from($this->_productCategoryTable, ['product_id', 'category_id']);
-        $select->where('product_id IN (?)', $ids);
+        $select->where('product_id IN (?)', $ids, \Zend_Db::INT_TYPE);
 
         $data = $this->getConnection()->fetchAll($select);
 
@@ -2208,7 +2222,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      *
      * @param int $customerGroupId
      * @return $this
-     * @since 101.1.0
+     * @since 102.0.0
      */
     public function addTierPriceDataByGroupId($customerGroupId)
     {
@@ -2337,35 +2351,49 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @since 101.0.1
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \Zend_Db_Statement_Exception
      */
     public function addMediaGalleryData()
     {
         if ($this->getFlag('media_gallery_added')) {
             return $this;
         }
+
         if (!$this->getSize()) {
             return $this;
         }
-        if (!$this->isLoaded()) {
-            $this->load();
-        }
-        $records = $this->getMediaGalleryResource()->getMediaRecords(
-            $this->getStoreId(),
-            $this->getLoadedIds()
-        );
+
+        $items = $this->getItems();
+        $linkField = $this->getProductEntityMetadata()->getLinkField();
+
+        $select = $this->getMediaGalleryResource()
+            ->createBatchBaseSelect(
+                $this->getStoreId(),
+                $this->getAttribute('media_gallery')->getAttributeId()
+            )->reset(
+                Select::ORDER // we don't care what order is in current scenario
+            )->where(
+                'entity.' . $linkField . ' IN (?)',
+                array_map(
+                    function ($item) use ($linkField) {
+                        return (int) $item->getOrigData($linkField);
+                    },
+                    $items
+                )
+            );
+
         $mediaGalleries = [];
-        foreach ($records as $record) {
-            $mediaGalleries[$record['entity_id']][] = $record;
+        foreach ($this->getConnection()->fetchAll($select) as $row) {
+            $mediaGalleries[$row[$linkField]][] = $row;
         }
 
-        foreach ($this->getItems() as $item) {
+        foreach ($items as $item) {
             $this->getGalleryReadHandler()
                 ->addMediaDataToProduct(
                     $item,
-                    $mediaGalleries[$item->getId()] ?? []
+                    $mediaGalleries[$item->getOrigData($linkField)] ?? []
                 );
         }
+
         $this->setFlag('media_gallery_added', true);
         return $this;
     }
@@ -2374,7 +2402,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Get product entity metadata
      *
      * @return \Magento\Framework\EntityManager\EntityMetadataInterface
-     * @since 101.1.0
+     * @since 102.0.0
      */
     public function getProductEntityMetadata()
     {

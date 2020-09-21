@@ -8,10 +8,10 @@ namespace Magento\Catalog\Controller\Adminhtml\Product\Gallery;
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Storage\StorageProvider;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
- * Upload product image action controller
+ * Class Upload
  */
 class Upload extends \Magento\Backend\App\Action implements HttpPostActionInterface
 {
@@ -53,14 +53,8 @@ class Upload extends \Magento\Backend\App\Action implements HttpPostActionInterf
     private $productMediaConfig;
 
     /**
-     * @var StorageProvider
-     */
-    private $storageProvider;
-
-    /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
-     * @param StorageProvider $storageProvider
      * @param \Magento\Framework\Image\AdapterFactory $adapterFactory
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Catalog\Model\Product\Media\Config $productMediaConfig
@@ -68,7 +62,6 @@ class Upload extends \Magento\Backend\App\Action implements HttpPostActionInterf
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\Controller\Result\RawFactory $resultRawFactory,
-        StorageProvider $storageProvider,
         \Magento\Framework\Image\AdapterFactory $adapterFactory = null,
         \Magento\Framework\Filesystem $filesystem = null,
         \Magento\Catalog\Model\Product\Media\Config $productMediaConfig = null
@@ -81,7 +74,6 @@ class Upload extends \Magento\Backend\App\Action implements HttpPostActionInterf
             ->get(\Magento\Framework\Filesystem::class);
         $this->productMediaConfig = $productMediaConfig ?: ObjectManager::getInstance()
             ->get(\Magento\Catalog\Model\Product\Media\Config::class);
-        $this->storageProvider = $storageProvider;
     }
 
     /**
@@ -92,7 +84,6 @@ class Upload extends \Magento\Backend\App\Action implements HttpPostActionInterf
     public function execute()
     {
         try {
-            /** @var \Magento\MediaStorage\Model\File\Uploader $uploader */
             $uploader = $this->_objectManager->create(
                 \Magento\MediaStorage\Model\File\Uploader::class,
                 ['fileId' => 'image']
@@ -102,17 +93,10 @@ class Upload extends \Magento\Backend\App\Action implements HttpPostActionInterf
             $uploader->addValidateCallback('catalog_product_image', $imageAdapter, 'validateUploadFile');
             $uploader->setAllowRenameFiles(true);
             $uploader->setFilesDispersion(true);
-
             $mediaDirectory = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA);
-            $baseImagePath = $this->productMediaConfig->getBaseTmpMediaPath();
             $result = $uploader->save(
-                $mediaDirectory->getAbsolutePath($baseImagePath)
+                $mediaDirectory->getAbsolutePath($this->productMediaConfig->getBaseTmpMediaPath())
             );
-
-            $origFile = $this->productMediaConfig->getTmpMediaPath($result['file']);
-            $storage = $this->storageProvider->get('media');
-            $content = $mediaDirectory->readFile($origFile);
-            $storage->put($origFile, $content);
 
             $this->_eventManager->dispatch(
                 'catalog_product_gallery_upload_image_after',

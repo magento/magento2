@@ -3,32 +3,41 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Quote\Test\Unit\Model\Product\Plugin;
 
-class RemoveQuoteItemsTest extends \PHPUnit\Framework\TestCase
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\ResourceModel\Product;
+use Magento\Quote\Model\Product\Plugin\RemoveQuoteItems;
+use Magento\Quote\Model\Product\QuoteItemsCleanerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class RemoveQuoteItemsTest extends TestCase
 {
     /**
-     * @var \Magento\Quote\Model\Product\Plugin\RemoveQuoteItems
+     * @var RemoveQuoteItems
      */
     private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Quote\Model\Product\QuoteItemsCleanerInterface
+     * @var MockObject|QuoteItemsCleanerInterface
      */
     private $quoteItemsCleanerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->quoteItemsCleanerMock = $this->createMock(
-            \Magento\Quote\Model\Product\QuoteItemsCleanerInterface::class
+            QuoteItemsCleanerInterface::class
         );
-        $this->model = new \Magento\Quote\Model\Product\Plugin\RemoveQuoteItems($this->quoteItemsCleanerMock);
+        $this->model = new RemoveQuoteItems($this->quoteItemsCleanerMock);
     }
 
     public function testAfterDelete()
     {
-        $productResourceMock = $this->createMock(\Magento\Catalog\Model\ResourceModel\Product::class);
-        $productMock = $this->createMock(\Magento\Catalog\Api\Data\ProductInterface::class);
+        $productResourceMock = $this->createMock(Product::class);
+        $productMock = $this->getMockForAbstractClass(ProductInterface::class);
 
         $this->quoteItemsCleanerMock->expects($this->once())->method('execute')->with($productMock);
         $result = $this->model->afterDelete($productResourceMock, $productResourceMock, $productMock);

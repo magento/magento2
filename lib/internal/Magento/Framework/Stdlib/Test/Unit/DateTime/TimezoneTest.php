@@ -1,21 +1,26 @@
 <?php
+declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\Stdlib\Test\Unit\DateTime;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ScopeResolverInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\Stdlib\DateTime\Timezone;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for @see Timezone
  */
-class TimezoneTest extends \PHPUnit\Framework\TestCase
+class TimezoneTest extends TestCase
 {
     /**
      * @var string|null
@@ -38,24 +43,24 @@ class TimezoneTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * @var ScopeResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeResolverInterface|MockObject
      */
     private $scopeResolver;
 
     /**
-     * @var ResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResolverInterface|MockObject
      */
     private $localeResolver;
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|MockObject
      */
     private $scopeConfig;
 
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->defaultTimeZone = date_default_timezone_get();
         date_default_timezone_set('UTC');
@@ -63,15 +68,18 @@ class TimezoneTest extends \PHPUnit\Framework\TestCase
         $this->defaultTimezonePath = 'default/timezone/path';
 
         $this->objectManager = new ObjectManager($this);
-        $this->scopeResolver = $this->getMockBuilder(ScopeResolverInterface::class)->getMock();
-        $this->localeResolver = $this->getMockBuilder(ResolverInterface::class)->getMock();
-        $this->scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)->getMock();
+        $this->scopeResolver = $this->getMockBuilder(ScopeResolverInterface::class)
+            ->getMock();
+        $this->localeResolver = $this->getMockBuilder(ResolverInterface::class)
+            ->getMock();
+        $this->scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)
+            ->getMock();
     }
 
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         date_default_timezone_set($this->defaultTimeZone);
     }
@@ -93,7 +101,12 @@ class TimezoneTest extends \PHPUnit\Framework\TestCase
 
         /** @var \DateTime $dateTime */
         $dateTime = $timezone->date($date, $locale, true, $includeTime);
-        $this->assertEquals($expectedTimestamp, $dateTime->getTimestamp());
+        if (is_numeric($expectedTimestamp)) {
+            $this->assertEquals($expectedTimestamp, $dateTime->getTimestamp());
+        } else {
+            $format = $includeTime ? DateTime::DATETIME_PHP_FORMAT : DateTime::DATE_PHP_FORMAT;
+            $this->assertEquals($expectedTimestamp, date($format, $dateTime->getTimestamp()));
+        }
     }
 
     /**
@@ -103,6 +116,16 @@ class TimezoneTest extends \PHPUnit\Framework\TestCase
      */
     public function dateIncludeTimeDataProvider(): array
     {
+        /**
+         * Greek locale needs to be installed on the system, to pass.
+         *
+         * 'Parse greek d/m/y date with time' => [
+         * '30/10/2021, 12:01 π.μ.', // datetime
+         * 'el_GR', // locale
+         * true, // include time
+         * 1635570060 // expected timestamp
+         * ],
+         */
         return [
             'Parse d/m/y date without time' => [
                 '19/05/2017', // date
@@ -134,11 +157,23 @@ class TimezoneTest extends \PHPUnit\Framework\TestCase
                 false, // include time
                 1635570000 // expected timestamp
             ],
-            'Parse greek d/m/y date with time' => [
-                '30/10/2021, 12:01 π.μ.', // datetime
-                'el_GR', // locale
-                true, // include time
-                1635570060 // expected timestamp
+            'Parse Saudi Arabia date without time' => [
+                '31‏/8‏/2020 02020',
+                'ar_SA',
+                false,
+                '2020-08-31'
+            ],
+            'Parse date in short style with long year 1999' => [
+                '9/11/1999',
+                'en_US',
+                false,
+                '1999-09-11'
+            ],
+            'Parse date in short style with long year 2099' => [
+                '9/2/2099',
+                'en_US',
+                false,
+                '2099-09-02'
             ],
         ];
     }
@@ -184,25 +219,41 @@ class TimezoneTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test configuration of the different timezones.
+     * @dataProvider getDateFixtures
      */
-    public function testDate()
+    public function testDate($expectedResult, $timezone, $date)
     {
-        $dateFixtures = $this->getDateFixtures();
-        foreach ($dateFixtures as $dateFixture) {
-            $expectedResult = $dateFixture[0];
-            $timezone = $dateFixture[1];
-            $date = $dateFixture[2];
+        $this->localeResolver->method('getLocale')->willReturn('en_GB');
+        $this->scopeConfigWillReturnConfiguredTimezone($timezone);
 
-            $this->localeResolver->method('getLocale')->willReturn('en_GB');
-            $this->scopeConfigWillReturnConfiguredTimezone($timezone);
+        $this->assertEquals(
+            $expectedResult()->format('DATE_ISO8601'),
+            $this->getTimezone()->date($date)->format('DATE_ISO8601')
+        );
+    }
 
-            $this->assertEquals(
-                $expectedResult(),
-                $this->getTimezone()->date($date, null, true),
-                '',
-                1
-            );
-        }
+    /**
+     * Data provider for testException
+     *
+     * @return array
+     */
+    public function getConvertConfigTimeToUTCDataFixtures()
+    {
+        return [
+            'datetime' => [
+                new \DateTime('2016-10-10 10:00:00', new \DateTimeZone('UTC'))
+            ]
+        ];
+    }
+
+    /**
+     * @dataProvider getConvertConfigTimeToUTCDataFixtures
+     */
+    public function testConvertConfigTimeToUtcException($date)
+    {
+        $this->expectException(LocalizedException::class);
+
+        $this->getTimezone()->convertConfigTimeToUtc($date);
     }
 
     /**
@@ -210,7 +261,7 @@ class TimezoneTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    private function getDateFixtures(): array
+    public function getDateFixtures(): array
     {
         return [
             'now_datetime_utc' => [
@@ -225,7 +276,7 @@ class TimezoneTest extends \PHPUnit\Framework\TestCase
                     return new \DateTime('2017-01-01 10:00:00', new \DateTimeZone('UTC'));
                 },
                 'UTC',
-                new \DateTime('2017-01-01 10:00:00')
+                new \DateTime('2017-01-01 10:00:00', new \DateTimeZone('UTC'))
             ],
             'now_datetime_vancouver' => [
                 function () {
@@ -246,7 +297,7 @@ class TimezoneTest extends \PHPUnit\Framework\TestCase
                     return new \DateTime('2017-01-01 10:00:00', new \DateTimeZone('UTC'));
                 },
                 'UTC',
-                new \DateTimeImmutable('2017-01-01 10:00:00')
+                new \DateTimeImmutable('2017-01-01 10:00:00', new \DateTimeZone('UTC'))
             ],
             'now_datetimeimmutable_vancouver' => [
                 function () {

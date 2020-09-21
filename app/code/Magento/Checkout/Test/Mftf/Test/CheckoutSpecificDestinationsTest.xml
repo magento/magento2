@@ -24,7 +24,7 @@
                 <requiredEntity createDataKey="defaultCategory"/>
             </createData>
 
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
 
         <!--Go to configuration general page-->
@@ -48,8 +48,7 @@
         </actionGroup>
 
         <!--Go to shopping cart-->
-        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="amOnPageShoppingCart"/>
-
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="amOnPageShoppingCart"/>
         <!--Verify country options in checkout top destination section-->
         <actionGroup ref="VerifyTopDestinationsCountryActionGroup" stepKey="verifyTopDestinationsCountry">
             <argument name="country" value="Bahamas"/>
@@ -68,7 +67,7 @@
         </actionGroup>
 
         <!--Go to shopping cart-->
-        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="amOnPageShoppingCart2"/>
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="amOnPageShoppingCart2"/>
 
         <!--Verify country options is shown by default-->
         <actionGroup ref="VerifyTopDestinationsCountryActionGroup" stepKey="verifyTopDestinationsCountry2">

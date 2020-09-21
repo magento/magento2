@@ -18,7 +18,7 @@
             <group value="review"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <createData entity="textProductAttribute" stepKey="createProductAttribute"/>
             <createData entity="CatalogAttributeSet" stepKey="createAttributeSet"/>
             <amOnPage url="{{AdminProductAttributeSetEditPage.url}}/$$createAttributeSet.attribute_set_id$$/"

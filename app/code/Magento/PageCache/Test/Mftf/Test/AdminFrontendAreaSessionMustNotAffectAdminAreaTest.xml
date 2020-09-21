@@ -39,7 +39,9 @@
                 <requiredEntity createDataKey="createCategoryA"/>
             </createData>
 
-            <magentoCLI command="cache:clean" arguments="full_page" stepKey="clearCache"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+                <argument name="tags" value="full_page"/>
+            </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer"/>
             <resetCookie userInput="PHPSESSID" stepKey="resetSessionCookie"/>
@@ -58,11 +60,10 @@
         </after>
 
         <!-- 1. Login as admin -->
-        <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
 
         <!-- 2. Navigate Go to "Catalog"->"Products" -->
-        <amOnPage url="{{ProductCatalogPage.url}}" stepKey="onCatalogProductPage"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <actionGroup ref="AdminProductCatalogPageOpenActionGroup" stepKey="onCatalogProductPage"/>
 
         <!-- 3. Open separate tab with Storefront -->
         <openNewTab stepKey="openNewTab"/>

@@ -20,7 +20,7 @@
             <group value="Catalog"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
 
             <!--Create product-->
             <createData entity="SimpleProduct2" stepKey="createProduct"/>
@@ -54,7 +54,9 @@
         </actionGroup>
 
         <!--Go to created product page and create new attribute-->
-        <amOnPage url="{{AdminProductEditPage.url($$createProduct.id$$)}}" stepKey="openAdminEditPage"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openAdminEditPage">
+            <argument name="productId" value="$$createProduct.id$$"/>
+        </actionGroup>
         <actionGroup ref="AdminCreateAttributeWithValueWithTwoStoreViesFromProductPageActionGroup" stepKey="createAttribute">
             <argument name="attributeName" value="{{productDropDownAttribute.attribute_code}}"/>
             <argument name="attributeType" value="Dropdown"/>

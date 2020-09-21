@@ -20,11 +20,11 @@
         </annotations>
 
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
         </before>
 
         <after>
-            <actionGroup ref="LoginAsAdmin" stepKey="LoginAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAdmin"/>
 
             <!-- Delete User -->
             <actionGroup ref="AdminDeleteCustomUserActionGroup" stepKey="deleteLimitedUser">
@@ -47,8 +47,9 @@
         <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAdmin"/>
 
         <!-- Login as user2 -->
-        <actionGroup ref="LoginAsAdmin" stepKey="LoginAsUser">
-            <argument name="adminUser" value="NewAdminUser"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsUser">
+            <argument name="username" value="{{NewAdminUser.username}}"/>
+            <argument name="password" value="{{NewAdminUser.password}}"/>
         </actionGroup>
 
         <!-- Bulk operation menu item isn't visible( System > Action Logs > -Bulk Actions-) -->

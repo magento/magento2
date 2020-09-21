@@ -57,6 +57,11 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
     private $dateTimeFactory;
 
     /**
+     * @var DeadlockRetrierInterface
+     */
+    private $retrier;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
@@ -64,6 +69,7 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
      * @param array $data
      * @param TimezoneInterface|null $timezoneConverter
      * @param DateTimeFactory|null $dateTimeFactory
+     * @param DeadlockRetrierInterface $retrier
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -72,11 +78,13 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
         TimezoneInterface $timezoneConverter = null,
-        DateTimeFactory $dateTimeFactory = null
+        DateTimeFactory $dateTimeFactory = null,
+        DeadlockRetrierInterface $retrier = null
     ) {
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
         $this->timezoneConverter = $timezoneConverter ?: ObjectManager::getInstance()->get(TimezoneInterface::class);
         $this->dateTimeFactory = $dateTimeFactory ?: ObjectManager::getInstance()->get(DateTimeFactory::class);
+        $this->retrier = $retrier ?: ObjectManager::getInstance()->get(DeadlockRetrierInterface::class);
     }
 
     /**
@@ -181,6 +189,7 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
         }
 
         // handle all match by modulus
+        $offset = 0;
         if ($expr === '*') {
             $from = 0;
             $to = 60;
@@ -193,6 +202,13 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
 
             $from = $this->getNumeric($e[0]);
             $to = $this->getNumeric($e[1]);
+            if ($mod !== 1) {
+                $offset = $from;
+            }
+        } elseif ($mod !== 1) {
+            $offset = $this->getNumeric($expr);
+            $from = 0;
+            $to = 60;
         } else {
             // handle regular token
             $from = $this->getNumeric($expr);
@@ -203,7 +219,7 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
             throw new CronException(__('Invalid cron expression: %1', $expr));
         }
 
-        return $num >= $from && $num <= $to && $num % $mod === 0;
+        return $num >= $from && $num <= $to && ($num - $offset) % $mod === 0;
     }
 
     /**
@@ -251,21 +267,42 @@ class Schedule extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * Lock the cron job so no other scheduled instances run simultaneously.
+     * Sets a job to STATUS_RUNNING only if it is currently in STATUS_PENDING.
      *
-     * Sets a job to STATUS_RUNNING only if it is currently in STATUS_PENDING
-     * and no other jobs of the same code are currently in STATUS_RUNNING.
      * Returns true if status was changed and false otherwise.
      *
      * @return boolean
      */
     public function tryLockJob()
     {
-        if ($this->_getResource()->trySetJobUniqueStatusAtomic(
-            $this->getId(),
-            self::STATUS_RUNNING,
-            self::STATUS_PENDING
-        )) {
+        /** @var \Magento\Cron\Model\ResourceModel\Schedule $scheduleResource */
+        $scheduleResource = $this->_getResource();
+
+        // Change statuses from running to error for terminated jobs
+        $this->retrier->execute(
+            function () use ($scheduleResource) {
+                return $scheduleResource->getConnection()->update(
+                    $scheduleResource->getTable('cron_schedule'),
+                    ['status' => self::STATUS_ERROR],
+                    ['job_code = ?' => $this->getJobCode(), 'status = ?' => self::STATUS_RUNNING]
+                );
+            },
+            $scheduleResource->getConnection()
+        );
+
+        // Change status from pending to running for ran jobs
+        $result = $this->retrier->execute(
+            function () use ($scheduleResource) {
+                return $scheduleResource->trySetJobStatusAtomic(
+                    $this->getId(),
+                    self::STATUS_RUNNING,
+                    self::STATUS_PENDING
+                );
+            },
+            $scheduleResource->getConnection()
+        );
+
+        if ($result) {
             $this->setStatus(self::STATUS_RUNNING);
             return true;
         }
