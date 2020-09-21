@@ -303,6 +303,11 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
 
             $prices[$product->getId()] =
                 [
+                    'baseOldPrice' => [
+                        'amount' => $this->localeFormat->getNumber(
+                            $priceInfo->getPrice('regular_price')->getAmount()->getBaseAmount()
+                        ),
+                    ],
                     'oldPrice' => [
                         'amount' => $this->localeFormat->getNumber(
                             $priceInfo->getPrice('regular_price')->getAmount()->getValue()
@@ -321,7 +326,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
                     'tierPrices' => $tierPrices,
                     'msrpPrice' => [
                         'amount' => $this->localeFormat->getNumber(
-                            $product->getMsrp()
+                            $this->priceCurrency->convertAndRound($product->getMsrp())
                         ),
                     ],
                  ];
