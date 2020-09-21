@@ -46,7 +46,7 @@
         <xs:attribute name="id" type="xs:string" use="required" />
         <xs:attribute name="class" type="classType" use="required" />
         <xs:attribute name="group" type="xs:string" use="required" />
-        <xs:attribute name="iterator" type="classType" default="Magento\Framework\Mview\View\LegacyChangeLogBatchIterator" />
+        <xs:attribute name="walker" type="classType" default="Magento\Framework\Mview\View\ChangeLogBatchWalker" />
     </xs:complexType>
 
     <xs:simpleType name="classType">
