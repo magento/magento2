@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCategoryProductFiltersTest">
+        <annotations>
+            <stories value="Product"/>
+            <features value="Catalog"/>
+            <title value="Admin category product filters test"/>
+            <description value="Check if Product Grid filters work correctly on Category page"/>
+            <severity value="MAJOR"/>
+            <group value="catalog"/>
+        </annotations>
+        <before>
+            <!-- Create Category -->
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+
+            <!-- Create Products -->
+            <createData entity="SimpleProduct" stepKey="createSimpleProductFirst">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="SimpleProduct" stepKey="createSimpleProductSecond">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+
+            <!--Login as admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createSimpleProductFirst" stepKey="deleteFirstSimpleProduct"/>
+            <deleteData createDataKey="createSimpleProductSecond" stepKey="deleteSecondSimpleProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!-- Open Category -->
+        <actionGroup ref="GoToAdminCategoryPageByIdActionGroup" stepKey="openCategory">
+            <argument name="id" value="$createCategory.id$"/>
+        </actionGroup>
+
+        <!-- Check if Filterable Section is available -->
+        <actionGroup ref="AdminCategoryPageOpenProductsInCategorySectionActionGroup"
+                     stepKey="openProductsInCategorySection"/>
+
+        <!-- Apply Sku Filter -->
+        <actionGroup ref="AdminCategoryFilterProductBySkuActionGroup" stepKey="applySkuFilter">
+            <argument name="sku" value="$createSimpleProductFirst.sku$"/>
+        </actionGroup>
+
+        <!-- Check Sku Filter correctly applied -->
+        <actionGroup ref="AdminCheckProductPositionInCategoryProductsGridActionGroup" stepKey="seeFirstProductFiltered">
+            <argument name="position" value="1"/>
+            <argument name="productName" value="$createSimpleProductFirst.name$"/>
+        </actionGroup>
+        <actionGroup ref="AdminCheckProductIsMissingInCategoryProductsGridActionGroup" stepKey="dontSeeSecondProduct">
+            <argument name="productName" value="$createSimpleProductSecond.name$"/>
+        </actionGroup>
+
+        <!-- Reset Product Filters -->
+        <actionGroup ref="AdminCategoryResetProductFilterActionGroup" stepKey="applyProductFilters"/>
+
+        <!-- Check Products are present in Category -->
+        <actionGroup ref="AdminCheckProductPositionInCategoryProductsGridActionGroup" stepKey="seeFirstProduct">
+            <argument name="position" value="2"/>
+            <argument name="productName" value="$createSimpleProductFirst.name$"/>
+        </actionGroup>
+        <actionGroup ref="AdminCheckProductPositionInCategoryProductsGridActionGroup" stepKey="seeSecondProduct">
+            <argument name="position" value="1"/>
+            <argument name="productName" value="$createSimpleProductSecond.name$"/>
+        </actionGroup>
+    </test>
+</tests>

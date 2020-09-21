@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminCategoryProductsGridFilterSection">
+        <element name="search" type="button" selector="#catalog_category_products button[data-action='grid-filter-apply']"/>
+        <element name="resetFilter" type="button" selector="#catalog_category_products button[data-action='grid-filter-reset']"/>
+        <element name="inCategoryFilter" type="select" selector="#catalog_category_products_filter_in_category"/>
+        <element name="idFilter" type="input" selector="#catalog_category_products_filter_entity_id"/>
+        <element name="nameFilter" type="input" selector="#catalog_category_products_filter_name"/>
+        <element name="skuFilter" type="input" selector="#catalog_category_products_filter_sku"/>
+        <element name="visibilityFilter" type="select" selector="#catalog_category_products_filter_visibility"/>
+        <element name="statusFilter" type="select" selector="#catalog_category_products_filter_status"/>
+        <element name="priceFromFilter" type="input" selector="#catalog_category_products_filter_price_from"/>
+        <element name="priceToFilter" type="input" selector="#catalog_category_products_filter_price_to"/>
+        <element name="positionFromFilter" type="input" selector="#catalog_category_products_filter_position_from"/>
+        <element name="positionToFilter" type="input" selector="#catalog_category_products_filter_position_from"/>
+    </section>
+</sections>
