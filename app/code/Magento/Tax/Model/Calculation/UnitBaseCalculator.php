@@ -10,7 +10,13 @@ use Magento\Tax\Api\Data\QuoteDetailsItemInterface;
 class UnitBaseCalculator extends AbstractCalculator
 {
     /**
-     * {@inheritdoc}
+     * @param $amount
+     * @param null $rate
+     * @param null $direction
+     * @param string $type
+     * @param bool $round
+     * @param null $item
+     * @return float|string
      */
     protected function roundAmount(
         $amount,
@@ -31,7 +37,11 @@ class UnitBaseCalculator extends AbstractCalculator
     }
 
     /**
-     * {@inheritdoc}
+     * @inheridoc
+     * @param QuoteDetailsItemInterface $item
+     * @param int $quantity
+     * @param bool $round
+     * @return \Magento\Tax\Api\Data\TaxDetailsItemInterface
      */
     protected function calculateWithTaxInPrice(QuoteDetailsItemInterface $item, $quantity, $round = true)
     {
@@ -104,7 +114,11 @@ class UnitBaseCalculator extends AbstractCalculator
     }
 
     /**
-     * {@inheritdoc}
+     * @inheridoc
+     * @param QuoteDetailsItemInterface $item
+     * @param int $quantity
+     * @param bool $round
+     * @return \Magento\Tax\Api\Data\TaxDetailsItemInterface
      */
     protected function calculateWithTaxNotInPrice(QuoteDetailsItemInterface $item, $quantity, $round = true)
     {
