@@ -87,15 +87,15 @@ class SaveTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->addressRepositoryMock = $this->createMock(AddressRepositoryInterface::class);
+        $this->addressRepositoryMock = $this->getMockForAbstractClass(AddressRepositoryInterface::class);
         $this->formFactoryMock = $this->createMock(FormFactory::class);
-        $this->customerRepositoryMock = $this->createMock(CustomerRepositoryInterface::class);
+        $this->customerRepositoryMock = $this->getMockForAbstractClass(CustomerRepositoryInterface::class);
         $this->dataObjectHelperMock = $this->createMock(DataObjectHelper ::class);
         $this->addressDataFactoryMock = $this->createMock(AddressInterfaceFactory::class);
-        $this->loggerMock = $this->createMock(LoggerInterface::class);
-        $this->requestMock = $this->createMock(RequestInterface::class);
+        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
         $this->address = $this->getMockBuilder(AddressInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -164,9 +164,9 @@ class SaveTest extends TestCase
             ->withConsecutive(['parent_id'], ['entity_id'])
             ->willReturnOnConsecutiveCalls(22, 1);
 
-        $customerMock = $this->getMockBuilder(
-            CustomerInterface::class
-        )->disableOriginalConstructor()->getMock();
+        $customerMock = $this->getMockBuilder(CustomerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
 
         $this->customerRepositoryMock->expects($this->atLeastOnce())
             ->method('getById')
@@ -189,7 +189,7 @@ class SaveTest extends TestCase
 
         $addressMock = $this->getMockBuilder(AddressInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->addressDataFactoryMock->expects($this->once())->method('create')->willReturn($addressMock);
 

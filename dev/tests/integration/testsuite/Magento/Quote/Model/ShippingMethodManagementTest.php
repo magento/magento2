@@ -53,7 +53,7 @@ class ShippingMethodManagementTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->groupRepository = $this->objectManager->get(GroupRepositoryInterface::class);

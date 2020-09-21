@@ -10,8 +10,9 @@ use Magento\Catalog\Model\Product\Type;
 use Magento\Catalog\Model\ProductFactory;
 use Magento\Store\Api\WebsiteRepositoryInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-require __DIR__ . '/../../Store/_files/website.php';
+Resolver::getInstance()->requireDataFixture('Magento/Store/_files/website.php');
 
 $objectManager =  Bootstrap::getObjectManager();
 /** @var ProductFactory $productFactory */

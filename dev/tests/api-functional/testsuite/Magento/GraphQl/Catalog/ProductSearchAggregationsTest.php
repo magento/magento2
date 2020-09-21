@@ -17,7 +17,10 @@ class ProductSearchAggregationsTest extends GraphQlAbstract
      */
     public function testAggregationBooleanAttribute()
     {
-        $this->reindex();
+        $this->markTestSkipped(
+            'MC-22184: Elasticsearch returns incorrect aggregation options for booleans'
+            . 'MC-36768: Custom attribute not appears in elasticsearch'
+        );
 
         $skus= '"search_product_1", "search_product_2", "search_product_3", "search_product_4" ,"search_product_5"';
         $query = <<<QUERY
@@ -59,23 +62,11 @@ QUERY;
         $booleanAggregation = reset($booleanAggregation);
         $this->assertEquals('Boolean Attribute', $booleanAggregation['label']);
         $this->assertEquals('boolean_attribute', $booleanAggregation['attribute_code']);
-        $this->assertContains(['label' => '1', 'value'=> '1', 'count' => '3'], $booleanAggregation['options']);
+        $this->assertContainsEquals(['label' => '1', 'value'=> '1', 'count' => '3'], $booleanAggregation['options']);
 
-        $this->markTestIncomplete('MC-22184: Elasticsearch returns incorrect aggregation options for booleans');
+        $this->markTestSkipped('MC-22184: Elasticsearch returns incorrect aggregation options for booleans');
         $this->assertEquals(2, $booleanAggregation['count']);
         $this->assertCount(2, $booleanAggregation['options']);
-        $this->assertContains(['label' => '0', 'value'=> '0', 'count' => '2'], $booleanAggregation['options']);
-    }
-
-    /**
-     * Reindex
-     *
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
-    private function reindex()
-    {
-        $appDir = dirname(Bootstrap::getInstance()->getAppTempDir());
-        // phpcs:ignore Magento2.Security.InsecureFunction
-        exec("php -f {$appDir}/bin/magento indexer:reindex");
+        $this->assertContainsEquals(['label' => '0', 'value'=> '0', 'count' => '2'], $booleanAggregation['options']);
     }
 }

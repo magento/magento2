@@ -22,7 +22,7 @@ class WidgetTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
         $this->dispatch('backend/admin/widget/loadOptions');
         $output = $this->getResponse()->getBody();
         //searching for label with text "CMS Page"
-        $this->assertContains(
+        $this->assertStringContainsString(
             'data-ui-id="wysiwyg-widget-options-fieldset-element-label-parameters-page-id-label" >' . '<span>CMS Page',
             $output
         );

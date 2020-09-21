@@ -3,28 +3,34 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Eav\Test\Unit\Model\Entity\Attribute\Backend;
 
-class ArrayBackendTest extends \PHPUnit\Framework\TestCase
+use Magento\Eav\Model\Entity\Attribute;
+use Magento\Eav\Model\Entity\Attribute\Backend\ArrayBackend;
+use Magento\Framework\DataObject;
+use PHPUnit\Framework\TestCase;
+
+class ArrayBackendTest extends TestCase
 {
     /**
-     * @var \Magento\Eav\Model\Entity\Attribute\Backend\ArrayBackend
+     * @var ArrayBackend
      */
     protected $_model;
 
     /**
-     * @var \Magento\Eav\Model\Entity\Attribute
+     * @var Attribute
      */
     protected $_attribute;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_attribute = $this->createPartialMock(
-            \Magento\Eav\Model\Entity\Attribute::class,
+            Attribute::class,
             ['getAttributeCode', '__wakeup']
         );
-        $logger = $this->createMock(\Psr\Log\LoggerInterface::class);
-        $this->_model = new \Magento\Eav\Model\Entity\Attribute\Backend\ArrayBackend($logger);
+        $this->_model = new ArrayBackend();
         $this->_model->setAttribute($this->_attribute);
     }
 
@@ -33,11 +39,11 @@ class ArrayBackendTest extends \PHPUnit\Framework\TestCase
      */
     public function testValidate($data)
     {
-        $this->_attribute->expects($this->atLeastOnce())->method('getAttributeCode')->will($this->returnValue('code'));
-        $product = new \Magento\Framework\DataObject(['code' => $data, 'empty' => '']);
+        $this->_attribute->expects($this->atLeastOnce())->method('getAttributeCode')->willReturn('code');
+        $product = new DataObject(['code' => $data, 'empty' => null]);
         $this->_model->validate($product);
         $this->assertEquals('1,2,3', $product->getCode());
-        $this->assertEquals(null, $product->getEmpty());
+        $this->assertNull($product->getEmpty());
     }
 
     /**

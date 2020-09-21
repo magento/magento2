@@ -30,7 +30,7 @@ class LinkTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -47,7 +47,7 @@ class LinkTest extends TestCase
         $block = $this->page->getLayout()->getBlock('customer-account-navigation-wish-list-link');
         $this->assertNotFalse($block);
         $html = $block->toHtml();
-        $this->assertContains('wishlist/', $html);
+        $this->assertStringContainsString('wishlist/', $html);
         $this->assertEquals('My Wish List', strip_tags($html));
     }
 

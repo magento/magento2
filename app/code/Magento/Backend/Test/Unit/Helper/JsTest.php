@@ -25,7 +25,7 @@ class JsTest extends TestCase
     /**
      * Set Up
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->helper = new Js();
     }

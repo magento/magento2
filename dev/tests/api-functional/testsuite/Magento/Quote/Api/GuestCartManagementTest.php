@@ -21,7 +21,7 @@ class GuestCartManagementTest extends WebapiAbstract
      */
     protected $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
     }
@@ -46,7 +46,7 @@ class GuestCartManagementTest extends WebapiAbstract
         $this->createdQuotes[] = $quoteId;
     }
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
@@ -123,10 +123,11 @@ class GuestCartManagementTest extends WebapiAbstract
 
     /**
      * @magentoApiDataFixture Magento/Sales/_files/quote.php
-     * @expectedException \Exception
      */
     public function testAssignCustomerThrowsExceptionIfThereIsNoCustomerWithGivenId()
     {
+        $this->expectException(\Exception::class);
+
         /** @var $quote \Magento\Quote\Model\Quote */
         $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class)->load('test01', 'reserved_order_id');
         $cartId = $quote->getId();
@@ -153,10 +154,11 @@ class GuestCartManagementTest extends WebapiAbstract
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @expectedException \Exception
      */
     public function testAssignCustomerThrowsExceptionIfThereIsNoCartWithGivenId()
     {
+        $this->expectException(\Exception::class);
+
         $cartId = 9999;
         $customerId = 1;
         $serviceInfo = [
@@ -181,11 +183,12 @@ class GuestCartManagementTest extends WebapiAbstract
 
     /**
      * @magentoApiDataFixture Magento/Sales/_files/quote_with_customer.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage The customer can't be assigned to the cart because the cart isn't anonymous.
      */
     public function testAssignCustomerThrowsExceptionIfTargetCartIsNotAnonymous()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('The customer can\'t be assigned to the cart because the cart isn\'t anonymous.');
+
         /** @var $customer \Magento\Customer\Model\Customer */
         $customer = $this->objectManager->create(\Magento\Customer\Model\Customer::class)->load(1);
         $customerId = $customer->getId();
@@ -332,11 +335,12 @@ class GuestCartManagementTest extends WebapiAbstract
     /**
      * @magentoApiDataFixture Magento/Sales/_files/quote.php
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage You don't have the correct permissions to assign the customer to the cart.
      */
     public function testAssignCustomerByGuestUser()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('You don\'t have the correct permissions to assign the customer to the cart.');
+
         /** @var $quote \Magento\Quote\Model\Quote */
         $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class)->load('test01', 'reserved_order_id');
         $cartId = $quote->getId();

@@ -8,6 +8,6 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="NewsletterWYSIWYGSection">
-        <element name="TinyMCE3" type="text" selector="#cms_page_form_content_tbl"/>
+        <element name="TinyMCE3" type="text" selector="#cms_page_form_content_tbl" deprecated="This version of TinyMCE is no longer supported"/>
     </section>
 </sections>

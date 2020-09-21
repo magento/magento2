@@ -34,7 +34,7 @@ class AjaxBlockTest extends AbstractBackendController
 
         $actual = $this->getResponse()->getBody();
 
-        $this->assertContains($expectedResult, $actual);
+        $this->assertStringContainsString($expectedResult, $actual);
     }
 
     /**
