@@ -55,6 +55,25 @@ class ExportBase extends AbstractBackendController
     }
 
     /**
+     * Parses string response depends of format.
+     *
+     * @param string $format
+     * @param string $response
+     * @return array
+     */
+    protected function parseResponse(string $format, string $response): array
+    {
+        $result = [];
+        if ($format === ExportBase::CSV_FORMAT) {
+            $result = $this->parseCsvResponse($response);
+        } elseif ($format === ExportBase::XML_FORMAT) {
+            $result = $this->parseXmlResponse($response);
+        }
+
+        return $result;
+    }
+
+    /**
      * Converts string in scv format to assoc array.
      *
      * @param string $data

@@ -10,16 +10,17 @@ use Magento\Framework\DB\Transaction;
 use Magento\Sales\Api\CreditmemoItemRepositoryInterface;
 use Magento\Sales\Api\CreditmemoRepositoryInterface;
 use Magento\Sales\Api\Data\CreditmemoItemInterfaceFactory;
+use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderInterfaceFactory;
+use Magento\Sales\Api\Data\OrderItemInterface;
+use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Api\InvoiceManagementInterface;
 use Magento\Sales\Api\Data\OrderItemInterfaceFactory;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Address as OrderAddress;
-use Magento\Sales\Model\Order\Creditmemo\Item;
+use Magento\Sales\Model\Order\Creditmemo;
 use Magento\Sales\Model\Order\CreditmemoFactory;
-use Magento\Sales\Model\Order\Item as OrderItem;
-use Magento\Sales\Model\Order\Payment;
 use Magento\Sales\Model\Order\ShipmentFactory;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -54,12 +55,12 @@ $billingAddress = $objectManager->create(OrderAddress::class, ['data' => $addres
 $billingAddress->setAddressType(OrderAddress::TYPE_BILLING);
 $shippingAddress = clone $billingAddress;
 $shippingAddress->setId(null)->setAddressType(OrderAddress::TYPE_SHIPPING);
-/** @var Payment $payment */
-$payment = $objectManager->create(Payment::class);
+/** @var OrderPaymentInterface $payment */
+$payment = $objectManager->create(OrderPaymentInterface::class);
 $payment->setMethod('checkmo')
     ->setAdditionalInformation('last_trans_id', '11122')
     ->setAdditionalInformation('metadata', ['type' => 'free', 'fraudulent' => false]);
-/** @var OrderItem $orderItem */
+/** @var OrderItemInterface $orderItem */
 $orderItem = $objectManager->get(OrderItemInterfaceFactory::class)->create();
 $orderItem->setProductId($product->getId())
     ->setQtyOrdered(2)
@@ -70,7 +71,7 @@ $orderItem->setProductId($product->getId())
     ->setName($product->getName())
     ->setSku($product->getSku())
     ->setName('Test item');
-/** @var Order $order */
+/** @var  OrderInterface $order */
 $order = $objectManager->get(OrderInterfaceFactory::class)->create();
 $order->setIncrementId('200000001')
     ->setState(Order::STATE_PROCESSING)
@@ -112,15 +113,14 @@ $transactionSave->addObject($shipment)->addObject($order)->save();
 $creditmemoFactory = $objectManager->get(CreditmemoFactory::class);
 $creditmemo = $creditmemoFactory->createByOrder($order, $order->getData());
 $creditmemo->setOrder($order);
-$creditmemo->setState(Magento\Sales\Model\Order\Creditmemo::STATE_OPEN);
+$creditmemo->setState(Creditmemo::STATE_OPEN);
 $creditmemo->setIncrementId($order->getIncrementId());
 $creditmemoRepository->save($creditmemo);
 $orderItem->setName('Test item')
     ->setQtyRefunded(2)
     ->setQtyInvoiced(2)
     ->setOriginalPrice($product->getPrice());
-/** @var Item $creditItem */
-$creditItem = $objectManager->get(Item::class);
+$creditItem = $creditmemoItemFactory->create();
 $creditItem->setCreditmemo($creditmemo)
     ->setName('Creditmemo item')
     ->setOrderItemId($orderItem->getId())

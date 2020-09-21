@@ -53,12 +53,7 @@ class ExportTest extends ExportBase
             $url,
             ['namespace' => $namespace, 'filters' => ['order_increment_id' => '200000001']]
         );
-        $invoices = [];
-        if ($format === ExportBase::CSV_FORMAT) {
-            $invoices = $this->parseCsvResponse($response);
-        } elseif ($format === ExportBase::XML_FORMAT) {
-            $invoices = $this->parseXmlResponse($response);
-        }
+        $invoices = $this->parseResponse($format, $response);
         $invoice = $this->getInvoice('200000001');
         $exportedInvoice = reset($invoices);
         $this->assertNotFalse($exportedInvoice);

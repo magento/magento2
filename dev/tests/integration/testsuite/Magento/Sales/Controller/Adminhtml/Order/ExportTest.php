@@ -20,23 +20,17 @@ class ExportTest extends ExportBase
      * @magentoDataFixture Magento/Sales/_files/order_with_invoice_shipment_creditmemo_on_second_website.php
      * @dataProvider exportOrderDataProvider
      * @param string $format
-     * @param string $namespace
      * @return void
      */
-    public function testExportOrder(string $format, string $namespace): void
+    public function testExportOrder(string $format): void
     {
         $order = $this->getOrder('200000001');
         $url = $this->getExportUrl($format, null);
         $response = $this->dispatchExport(
             $url,
-            ['namespace' => $namespace, 'filters' => ['increment_id' => '200000001']]
+            ['namespace' => 'sales_order_grid', 'filters' => ['increment_id' => '200000001']]
         );
-        $orders = [];
-        if ($format === ExportBase::CSV_FORMAT) {
-            $orders = $this->parseCsvResponse($response);
-        } elseif ($format === ExportBase::XML_FORMAT) {
-            $orders = $this->parseXmlResponse($response);
-        }
+        $orders = $this->parseResponse($format, $response);
         $exportedOrder = reset($orders);
         $this->assertNotFalse($exportedOrder);
         $this->assertEquals(
@@ -51,14 +45,8 @@ class ExportTest extends ExportBase
     public function exportOrderDataProvider(): array
     {
         return [
-            'order_grid_in_csv' => [
-                'format' => ExportBase::CSV_FORMAT,
-                'namespace' => 'sales_order_grid',
-            ],
-            'order_grid_in_xml' => [
-                'format' => ExportBase::XML_FORMAT,
-                'namespace' => 'sales_order_grid',
-            ],
+            'order_grid_in_csv' => ['format' => ExportBase::CSV_FORMAT],
+            'order_grid_in_xml' => ['format' => ExportBase::XML_FORMAT],
         ];
     }
 }

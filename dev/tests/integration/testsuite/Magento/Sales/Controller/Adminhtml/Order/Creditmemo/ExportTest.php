@@ -53,12 +53,7 @@ class ExportTest extends ExportBase
             $url,
             ['namespace' => $namespace, 'filters' => ['order_increment_id' => '200000001']]
         );
-        $creditmemos = [];
-        if ($format === ExportBase::CSV_FORMAT) {
-            $creditmemos = $this->parseCsvResponse($response);
-        } elseif ($format === ExportBase::XML_FORMAT) {
-            $creditmemos = $this->parseXmlResponse($response);
-        }
+        $creditmemos = $this->parseResponse($format, $response);
         $creditmemo = $this->getCreditmemo('200000001');
         $exportedCreditmemo = reset($creditmemos);
         $this->assertNotFalse($exportedCreditmemo);
