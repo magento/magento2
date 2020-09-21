@@ -27,11 +27,12 @@ define([
         /**
          * Name column.
          *
-         * @param {String} name
+         * @param {String} label
          * @returns {String}
          */
-        getNameUnsanitizedHtml: function (name) {
-            return escaper.escapeHtml(name, this.allowedTags);
+        getNameUnsanitizedHtml: function (label) {
+            debugger;
+            return escaper.escapeHtml(label, this.allowedTags);
         }
     });
 });
