@@ -83,10 +83,8 @@ class UploaderTest extends \PHPUnit\Framework\TestCase
         $this->expectExceptionMessage('Destination folder path is too long; must be 255 characters or less');
 
         $uploader = $this->createUploader('text.txt');
-
-        // phpcs:disable Generic.Files.LineLength.TooLong
-        $longDirectoryFolderName = 'wysiwyg////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////long/destination/folder/name';
-        // phpcs:enable Generic.Files.LineLength.TooLong
+        $longStringFilePath = __DIR__ . '/_files/fixture_with_long_string.txt';
+        $longDirectoryFolderName = file_get_contents($longStringFilePath);
 
         $uploader->save($longDirectoryFolderName);
     }
