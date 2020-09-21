@@ -315,10 +315,7 @@ class ProductTest extends TestCase
 
         $contextMock = $this->createPartialMock(
             Context::class,
-            ['getEventDispatcher', 'getCacheManager', 'getAppState', 'getActionValidator'],
-            [],
-            '',
-            false
+            ['getEventDispatcher', 'getCacheManager', 'getAppState', 'getActionValidator']
         );
         $contextMock->expects($this->any())->method('getAppState')->willReturn($this->appStateMock);
         $contextMock->expects($this->any())
@@ -621,7 +618,7 @@ class ProductTest extends TestCase
 
         $result = $product->getCategoryCollection();
 
-        $productIdCachedActual = $this->getPropertyValue($product, '_productIdCached', $productIdCached);
+        $productIdCachedActual = $this->getPropertyValue($product, '_productIdCached');
         $this->assertEquals($getIdResult, $productIdCachedActual);
         $this->assertEquals($initCategoryCollection, $result);
     }
@@ -1362,6 +1359,7 @@ class ProductTest extends TestCase
                 'url' => 'http://magento.dev/pub/imageFile.jpg',
                 'id' => 1,
                 'path' => '/var/www/html/pub/imageFile.jpg',
+                'position' => 1,
             ]
         );
         $expectedSmallImageDataObject = new DataObject(
@@ -1372,6 +1370,7 @@ class ProductTest extends TestCase
                 'url' => 'http://magento.dev/pub/smallImageFile.jpg',
                 'id' => 2,
                 'path' => '/var/www/html/pub/smallImageFile.jpg',
+                'position' => 3,
             ]
         );
 
