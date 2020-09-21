@@ -66,7 +66,7 @@
                 <queryReference clause="should" ref="sku_query"/>
                 <queryReference clause="should" ref="price_query"/>
                 <queryReference clause="should" ref="category_query"/>
-                <queryReference clause="must" ref="visibility"/>
+                <queryReference clause="must" ref="visibility_query"/>
             </query>
             <query name="sku_query" xsi:type="filteredQuery">
                 <filterReference clause="must" ref="sku_query_filter"/>
@@ -77,7 +77,7 @@
             <query name="category_query" xsi:type="filteredQuery">
                 <filterReference clause="must" ref="category_filter"/>
             </query>
-            <query name="visibility" xsi:type="filteredQuery">
+            <query name="visibility_query" xsi:type="filteredQuery">
                 <filterReference clause="must" ref="visibility_filter"/>
             </query>
         </queries>

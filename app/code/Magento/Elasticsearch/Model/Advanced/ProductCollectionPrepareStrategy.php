@@ -36,7 +36,7 @@ class ProductCollectionPrepareStrategy implements ProductCollectionPrepareStrate
     ) {
         $this->catalogConfig = $catalogConfig;
         $this->catalogProductVisibility = $catalogProductVisibility
-            ?? ObjectManager::getInstance()->get(Visibility::class);;
+            ?? ObjectManager::getInstance()->get(Visibility::class);
     }
 
     /**
