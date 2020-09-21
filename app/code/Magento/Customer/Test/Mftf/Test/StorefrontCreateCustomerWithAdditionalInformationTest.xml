@@ -28,7 +28,6 @@
             <magentoCLI command="config:set customer/address/taxvat_show opt" stepKey="setShowTaxNumber"/>
             <magentoCLI command="config:set customer/address/gender_show opt" stepKey="setShowGender"/>
             <magentoCLI command="config:set customer/address/telephone_show opt" stepKey="setShowTelephone"/>
-            <magentoCLI command="config:set customer/address/company_show opt" stepKey="setShowCompany"/>
         </before>
         <after>
             <magentoCLI command="config:set customer/address/show_address_fields 0" stepKey="setShowAddressInformation"/>
@@ -38,8 +37,7 @@
             <magentoCLI command="config:set customer/address/dob_show ''" stepKey="setShowDOB"/>
             <magentoCLI command="config:set customer/address/taxvat_show ''" stepKey="setShowTaxNumber"/>
             <magentoCLI command="config:set customer/address/gender_show ''" stepKey="setShowGender"/>
-            <magentoCLI command="config:set customer/address/telephone_show ''" stepKey="setShowTelephone"/>
-            <magentoCLI command="config:set customer/address/company_show ''" stepKey="setShowCompany"/>
+            <magentoCLI command="config:set customer/address/telephone_show req" stepKey="setShowTelephone"/>
             <magentoCLI command="indexer:reindex" stepKey="reindex"/>
 
             <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
@@ -47,7 +45,6 @@
                 <argument name="email" value="{{CustomerEntityOne.email}}"/>
             </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
-
         </after>
 
         <actionGroup ref="StorefrontCustomerCreateAccountWithAdditionalInformationActionGroup" stepKey="SignUpNewUser">
@@ -55,6 +52,5 @@
             <argument name="dob" value="{{EN_US_DATE.short4DigitYear}}"/>
             <argument name="address" value="CustomerAddressSimple"/>
         </actionGroup>
-
     </test>
 </tests>
