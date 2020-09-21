@@ -286,28 +286,24 @@ class Timezone implements TimezoneInterface
         if (!($date instanceof \DateTimeInterface)) {
             $date = new \DateTime($date);
         }
-        if ($dateType === null) {
-           $dateType = \IntlDateFormatter::SHORT;
-        }
-        if ($timeType === null) {
-            $timeType = \IntlDateFormatter::SHORT;
-        }
         if ($timezone === null) {
             if ($date->getTimezone() == null || $date->getTimezone()->getName() == 'UTC'
                 || $date->getTimezone()->getName() == '+00:00'
             ) {
                 $timezone = $this->getConfigTimezone();
             } else {
-                $timezone = $date->getTimezone()->getName();
+                $timezone = $date->getTimezone();
             }
         }
 
         $formatter = $this->dateFormatterFactory->create(
             (string)($locale ?: $this->_localeResolver->getLocale()),
-            (int)$dateType,
-            (int)$timeType,
-            (string)$timezone
+            (int)($dateType ?? \IntlDateFormatter::SHORT),
+            (int)($timeType ?? \IntlDateFormatter::SHORT)
         );
+        if ($timezone) {
+            $formatter->setTimeZone($timezone);
+        }
         if ($pattern) {
             $formatter->setPattern($pattern);
         }
