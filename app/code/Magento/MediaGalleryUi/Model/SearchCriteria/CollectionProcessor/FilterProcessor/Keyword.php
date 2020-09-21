@@ -19,6 +19,7 @@ class Keyword implements CustomFilterInterface
     private const TABLE_ASSET_KEYWORD = 'media_gallery_keyword';
     private const PATTERN_VALID_CHARACTERS = '/[^A-Za-z0-9\_\.\,\-]/';
     private const PATTERN_COMMA = '/,+/';
+    private const SPECIAL_CHARACTERS = '/[.,*?!@#$&-_ ]+$/';
 
     /**
      * @var ResourceConnection
@@ -38,15 +39,17 @@ class Keyword implements CustomFilterInterface
      */
     public function apply(Filter $filter, AbstractDb $collection): bool
     {
-        $value = $filter->getValue();
+        $value = $this->formatKeywordValue($filter->getValue());
 
-        $collection->addFieldToFilter(
-            [self::TABLE_ALIAS . '.title', self::TABLE_ALIAS . '.id'],
-            [
-                ['like' => sprintf('%%%s%%', $value)],
-                ['in' => $this->getAssetIdsByKeyword($value)]
-            ]
-        );
+        foreach ($this->splitRequestString($value) as $keyword) {
+            $collection->addFieldToFilter(
+                [self::TABLE_ALIAS . '.title', self::TABLE_ALIAS . '.id'],
+                [
+                    ['like' => sprintf('%%%s%%', $keyword)],
+                    ['in' => $this->getAssetIdsByKeyword($keyword)]
+                ]
+            );
+        }
 
         return true;
     }
@@ -65,14 +68,10 @@ class Keyword implements CustomFilterInterface
         $select->from(
             ['asset_keywords_table' => $this->connection->getTableName(self::TABLE_ASSET_KEYWORD)],
             ['id']
-        );
-        foreach ($this->splitRequestString($value) as $keyword) {
-            $select->orWhere(
-                'keyword LIKE ?',
-                '%' . $keyword . '%'
-            );
-        }
-        $select->joinInner(
+        )->where(
+            'keyword = ?',
+            $value
+        )->joinInner(
             ['keywords_table' => $this->connection->getTableName(self::TABLE_KEYWORDS)],
             'keywords_table.keyword_id = asset_keywords_table.id',
             ['asset_id']
@@ -88,11 +87,13 @@ class Keyword implements CustomFilterInterface
 
     /**
      * Split the request string
+     * $escapedKeywords removes all invalid characters and replaces with comma/s
+     * $formattedKeywords removes succeeding commas from $escapedKeywords
      *
      * @param string $value
      * @return array
      */
-    public function splitRequestString(string $value): array
+    private function splitRequestString(string $value): array
     {
         $escapedKeywords = preg_replace(self::PATTERN_VALID_CHARACTERS, ',', $value);
         $formattedKeywords = preg_replace(self::PATTERN_COMMA, ',', $escapedKeywords);
@@ -103,5 +104,20 @@ class Keyword implements CustomFilterInterface
         }
 
         return $keywordValues;
+    }
+
+    /**
+     * Format request string to remove special characters at the end of the string
+     *
+     * @param string $value
+     * @return string
+     */
+    private function formatKeywordValue(string $value): string
+    {
+        if (preg_match(self::SPECIAL_CHARACTERS, $value) > 0) {
+            $value = preg_replace(self::SPECIAL_CHARACTERS, "", $value);
+        }
+
+        return $value;
     }
 }

@@ -22,66 +22,31 @@
             <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openMediaGallery"/>
         </before>
         <after>
-            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAllAdminDataGridToDefaultView"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
+            <actionGroup ref="AdminEnhancedMediaGalleryImageDeleteActionGroup" stepKey="deleteImage"/>
         </after>
 
-        <!-- Upload first image -->
-        <actionGroup ref="AdminEnhancedMediaGalleryUploadImageActionGroup" stepKey="uploadFirstImage">
+        <!-- Upload image -->
+        <actionGroup ref="AdminEnhancedMediaGalleryUploadImageActionGroup" stepKey="uploadImage">
             <argument name="image" value="ImageUpload3"/>
         </actionGroup>
-        <!-- Assert first image is present in the media gallery grid -->
-        <actionGroup ref="SearchAdminDataGridByKeywordActionGroup" stepKey="searchFirstImage">
+
+        <!-- Assert image is present in the media gallery grid -->
+        <actionGroup ref="SearchAdminDataGridByKeywordActionGroup" stepKey="searchImage">
             <argument name="keyword" value="ImageMetadata.fileName"/>
         </actionGroup>
-        <actionGroup ref="AdminAssertImageInStandaloneMediaGalleryActionGroup" stepKey="assertFirstImageIsAvailableInStandaloneGridUsingImageName">
+        <actionGroup ref="AdminAssertImageInStandaloneMediaGalleryActionGroup" stepKey="assertImageIsAvailableInStandaloneGridUsingImageName">
             <argument name="imageName" value="{{ImageMetadata.file}}"/>
         </actionGroup>
         <!-- Reset media gallery grid -->
-        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminFirstDataGridToDefaultView"/>
-        <!-- Add new keyword to the first image -->
-        <actionGroup ref="AdminEnhancedMediaGalleryEditImageDetailsActionGroup" stepKey="editFirstImage"/>
-        <actionGroup ref="AdminMediaGalleryEditAssetAddKeywordActionGroup" stepKey="setFirstImageKeywords">
-            <argument name="keyword" value="UpdatedImageDetails.keyword"/>
-        </actionGroup>
-        <!-- Save first image -->
-        <actionGroup ref="AdminEnhancedMediaGalleryImageDetailsSaveActionGroup" stepKey="saveFirstImage">
-            <argument name="image" value="ImageMetadata"/>
-        </actionGroup>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
 
-        <!-- Upload second image -->
-        <actionGroup ref="AdminEnhancedMediaGalleryUploadImageActionGroup" stepKey="uploadSecondImage">
-            <argument name="image" value="ImageUpload"/>
-        </actionGroup>
-        <!-- Assert second image is present in the media gallery grid -->
-        <actionGroup ref="SearchAdminDataGridByKeywordActionGroup" stepKey="searchSecondImage">
-            <argument name="keyword" value="SearchImageData.fileName"/>
-        </actionGroup>
-        <actionGroup ref="AdminAssertImageInStandaloneMediaGalleryActionGroup" stepKey="assertSecondImageIsAvailableInStandaloneGridUsingImageName">
-            <argument name="imageName" value="{{SearchImageData.file}}"/>
-        </actionGroup>
-        <!-- Reset media gallery grid -->
-        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminSecondDataGridToDefaultView"/>
-        <!-- Add new keyword to the second image -->
-        <actionGroup ref="AdminEnhancedMediaGalleryEditImageDetailsActionGroup" stepKey="editSecondImage"/>
-        <actionGroup ref="AdminMediaGalleryEditAssetAddKeywordActionGroup" stepKey="setSecondImageKeywords">
-            <argument name="keyword" value="UpdatedImageDetails.second_keyword"/>
-        </actionGroup>
-        <!-- Save second image -->
-        <actionGroup ref="AdminEnhancedMediaGalleryImageDetailsSaveActionGroup" stepKey="saveSecondImage">
-            <argument name="image" value="SearchImageData"/>
-        </actionGroup>
-
-        <!-- Search and assert images by keywords -->
+        <!-- Search and assert image by keywords -->
         <actionGroup ref="SearchAdminDataGridByKeywordActionGroup" stepKey="searchImageByKeyword">
-            <argument name="keyword" value="SearchImageData.searchKeywords"/>
+            <argument name="keyword" value="ImageMetadata.keywords"/>
         </actionGroup>
-        <actionGroup ref="AdminAssertAllImagesInStandaloneMediaGalleryActionGroup" stepKey="assertAllImageAreAvailableInStandaloneGridUsingKeyword">
-            <argument name="firstImage" value="{{SearchImageData.file}}"/>
-            <argument name="secondImage" value="{{ImageMetadata.file}}"/>
+        <actionGroup ref="AdminAssertImageInStandaloneMediaGalleryActionGroup" stepKey="assertImageIsAvailableInStandaloneGridUsingKeyword">
+            <argument name="imageName" value="{{ImageMetadata.file}}"/>
         </actionGroup>
-
-        <!-- Delete uploaded images -->
-        <actionGroup ref="AdminEnhancedMediaGalleryImageDeleteActionGroup" stepKey="deleteFirstImage"/>
-        <actionGroup ref="AdminEnhancedMediaGalleryImageDeleteActionGroup" stepKey="deleteSecondImage"/>
     </test>
 </tests>

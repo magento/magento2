@@ -15,7 +15,6 @@
         <data key="fileName">renamed title</data>
         <data key="extension">jpg</data>
         <data key="keyword">newkeyword</data>
-        <data key="second_keyword">anotherkeyword</data>
     </entity>
      <entity name="ImageUploadPng" type="uploadImage">
         <data key="title" unique="suffix">Image1</data>
@@ -40,12 +39,5 @@
         <data key="fileName">Title of the magento image</data>
         <data key="extension">jpg</data>
         <data key="keywords">magento, mediagallerymetadata</data>
-    </entity>
-    <entity name="SearchImageData" type="image">
-        <data key="title">magento</data>
-        <data key="description">Description of the magento image</data>
-        <data key="file">magento.jpg</data>
-        <data key="fileName">magento</data>
-        <data key="searchKeywords">newkeyword, anotherkeyword</data>
     </entity>
 </entities>
