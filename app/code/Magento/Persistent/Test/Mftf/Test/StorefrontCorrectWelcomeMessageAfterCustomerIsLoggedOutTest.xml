@@ -54,7 +54,7 @@
              stepKey="seeLoggedInCustomerWelcomeMessage"/>
         <!--Logout and check default welcome message-->
         <actionGroup ref="CustomerLogoutStorefrontByMenuItemsActionGroup" stepKey="storefrontCustomerLogout"/>
-        <seeInCurrentUrl url="{{StorefrontCustomerLogoutSuccessPage.url}}" stepKey="seeCustomerSignOutPageUrl"/>
+        <actionGroup ref="AssertStorefrontCustomerLogoutSuccessPageActionGroup" stepKey="seeCustomerSignOutPageUrl"/>
         <see userInput="Default welcome msg!"
              selector="{{StorefrontHeaderSection.welcomeMessage}}"
              stepKey="seeDefaultWelcomeMessage"/>
@@ -71,7 +71,7 @@
 
         <!--Logout and check persistent customer welcome message-->
         <actionGroup ref="CustomerLogoutStorefrontByMenuItemsActionGroup" stepKey="storefrontCustomerLogout1"/>
-        <seeInCurrentUrl url="{{StorefrontCustomerLogoutSuccessPage.url}}" stepKey="seeCustomerSignOutPageUrl1"/>
+        <actionGroup ref="AssertStorefrontCustomerLogoutSuccessPageActionGroup" stepKey="seeCustomerSignOutPageUrl1"/>
         <see userInput="Welcome, $$createCustomerForPersistent.firstname$$ $$createCustomerForPersistent.lastname$$! Not you?"
              selector="{{StorefrontHeaderSection.welcomeMessage}}"
              stepKey="seePersistentWelcomeMessage"/>

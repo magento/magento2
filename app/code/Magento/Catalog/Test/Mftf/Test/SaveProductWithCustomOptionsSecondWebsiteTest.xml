@@ -77,8 +77,7 @@
         <fillField selector="{{AdminProductCustomizableOptionsSection.fillOptionValuePrice('Radio Option', '2')}}" userInput="7" stepKey="fillOptionValuePrice3"/>
 
         <!--Save the product with custom options -->
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveButton"/>
-        <waitForLoadingMaskToDisappear stepKey="waitProductPageSave"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSaveButton"/>
         <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeProductSavedMessage"/>
 
         <!-- Add this product to second website -->

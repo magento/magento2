@@ -44,8 +44,7 @@
         <fillField userInput="{{_defaultProduct.quantity}}" selector="{{AdminProductFormSection.productQuantity}}" stepKey="fillQuantity"/>
         <dontSeeElement selector="{{ProductAttributeWYSIWYGSection.TinyMCE4($$myProductAttributeCreation.attribute_code$$)}}" stepKey="dontSeeTinyMCE4" />
         <fillField selector="{{ProductAttributeWYSIWYGSection.TextArea($$myProductAttributeCreation.attribute_code$$)}}" userInput="Text Area" stepKey="fillContentTextarea" />
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoading1"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveProduct"/>
         <!-- Go to storefront product page, assert product content -->
         <amOnPage url="{{_defaultProduct.name}}.html" stepKey="navigateToProductPage"/>
         <waitForPageLoad stepKey="waitForPageLoad5"/>
