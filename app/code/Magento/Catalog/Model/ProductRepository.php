@@ -32,7 +32,7 @@ use Magento\Framework\Exception\ValidatorException;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 
 /**
- *  Manage product data
+ * @inheritdoc
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -550,7 +550,9 @@ class ProductRepository implements ProductRepositoryInterface
         if (!$ignoreLinksFlag && $ignoreLinksFlag !== null) {
             $productLinks = $product->getProductLinks();
         }
-        $productDataArray['store_id'] = (int)$this->storeManager->getStore()->getId();
+        if (!isset($productDataArray['store_id'])) {
+            $productDataArray['store_id'] = (int) $this->storeManager->getStore()->getId();
+        }
         $product = $this->initializeProductData($productDataArray, empty($existingProduct));
 
         $this->processLinks($product, $productLinks);
@@ -743,6 +745,7 @@ class ProductRepository implements ProductRepositoryInterface
         if (!$this->collectionProcessor) {
         // phpstan:ignore ProductCollectionProcessor not found.
             $this->collectionProcessor = \Magento\Framework\App\ObjectManager::getInstance()->get(
+                // phpstan:ignore "Class Magento\Catalog\Model\Api\SearchCriteria\ProductCollectionProcessor not found."
                 \Magento\Catalog\Model\Api\SearchCriteria\ProductCollectionProcessor::class
             );
         }
