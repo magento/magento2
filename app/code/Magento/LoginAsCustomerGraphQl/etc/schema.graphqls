@@ -1,0 +1,27 @@
+type Mutation {
+    generateCustomerTokenAsAdmin(
+        input: GenerateCustomerTokenAsAdminInput!
+    ): GenerateCustomerTokenAsAdminOutput
+    @resolver(class: "Magento\\LoginAsCustomerGraphQl\\Model\\Resolver\\RequestCustomerToken")
+    @doc(description: "Request a token using Customer email")
+}
+
+input GenerateCustomerTokenAsAdminInput {
+    customer_email: String!
+}
+
+type GenerateCustomerTokenAsAdminOutput {
+    customer_token: String!
+}
+
+type Customer {
+    allow_remote_shopping_assistance: Boolean!
+}
+
+input CustomerCreateInput {
+    allow_remote_shopping_assistance: Boolean
+}
+
+input CustomerUpdateInput {
+    allow_remote_shopping_assistance: Boolean
+}
