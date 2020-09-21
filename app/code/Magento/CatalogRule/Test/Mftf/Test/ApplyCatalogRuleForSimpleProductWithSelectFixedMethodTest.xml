@@ -19,9 +19,6 @@
             <group value="mtf_migrated"/>
         </annotations>
         <before>
-            <!-- Login as Admin -->
-            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
-
             <!-- Create category -->
             <createData entity="_defaultCategory" stepKey="createCategory"/>
 
@@ -33,7 +30,12 @@
 
             <!-- Update all products to have custom options -->
             <updateData createDataKey="createProduct1" entity="productWithFixedOptions" stepKey="updateProductWithOptions1"/>
-            <magentoCron groups="index" stepKey="runCronIndex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+
+            <!-- Login as Admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <!-- Delete products and category -->
@@ -60,7 +62,9 @@
         <actionGroup ref="SelectNotLoggedInCustomerGroupActionGroup" stepKey="selectNotLoggedInCustomerGroup"/>
 
         <!-- Save and apply the new catalog price rule -->
-        <actionGroup ref="AdminEnableCatalogPriceRuleActionGroup" stepKey="saveAndApplyCatalogPriceRule"/>
+        <conditionalClick selector="{{AdminNewCatalogPriceRule.active}}" dependentSelector="{{AdminNewCatalogPriceRule.activeIsEnabled}}" visible="false" stepKey="enableActiveBtn"/>
+        <click selector="{{AdminNewCatalogPriceRule.save}}" stepKey="clickSave"/>
+        <waitForPageLoad stepKey="waitForSave"/>
 
         <!-- Navigate to category on store front -->
         <amOnPage url="{{StorefrontProductPage.url($createCategory.name$)}}" stepKey="goToStorefrontCategoryPage"/>
