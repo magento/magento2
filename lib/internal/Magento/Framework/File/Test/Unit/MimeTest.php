@@ -58,6 +58,7 @@ class MimeTest extends TestCase
             'weird extension' => [__DIR__ . '/_files/file.weird', 'application/octet-stream'],
             'weird uppercase extension' => [__DIR__ . '/_files/UPPERCASE.WEIRD', 'application/octet-stream'],
             'generic mime type' => [__DIR__ . '/_files/blank.html', 'text/html'],
+            'tmp file mime type' => [__DIR__ . '/_files/magento', 'image/jpeg'],
         ];
     }
 }

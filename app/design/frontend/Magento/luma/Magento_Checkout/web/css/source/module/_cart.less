@@ -424,7 +424,14 @@
     .cart-container {
         .form-cart {
             .actions.main {
-                text-align: center;
+                .lib-vendor-prefix-display();
+                .lib-vendor-prefix-flex-direction(column);
+                .lib-vendor-box-align(center);
+
+                .clear,
+                .continue {
+                    .lib-css(margin, 0 0 @indent__m 0);
+                }
             }
         }
     }

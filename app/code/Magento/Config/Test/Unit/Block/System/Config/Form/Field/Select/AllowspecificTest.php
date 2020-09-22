@@ -14,6 +14,9 @@ use Magento\Framework\Escaper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\Math\Random;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+use Magento\Framework\DataObject;
 
 class AllowspecificTest extends TestCase
 {
@@ -30,10 +33,30 @@ class AllowspecificTest extends TestCase
     protected function setUp(): void
     {
         $testHelper = new ObjectManager($this);
+
+        $randomMock = $this->createMock(Random::class);
+        $randomMock->method('getRandomString')->willReturn('some-rando-string');
+        $secureRendererMock = $this->createMock(SecureHtmlRenderer::class);
+        $secureRendererMock->method('renderEventListenerAsTag')
+            ->willReturnCallback(
+                function (string $event, string $listener, string $selector): string {
+                    return "<script>document.querySelector('{$selector}').{$event} = () => { {$listener} };</script>";
+                }
+            );
+        $secureRendererMock->method('renderTag')
+            ->willReturnCallback(
+                function (string $tag, array $attributes, string $content): string {
+                    $attributes = new DataObject($attributes);
+
+                    return "<$tag {$attributes->serialize()}>$content</$tag>";
+                }
+            );
         $this->_object = $testHelper->getObject(
             Allowspecific::class,
             [
-                '_escaper' => $testHelper->getObject(Escaper::class)
+                '_escaper' => $testHelper->getObject(Escaper::class),
+                'random' => $randomMock,
+                'secureRenderer' => $secureRendererMock
             ]
         );
         $this->_object->setData('html_id', 'spec_element');
@@ -68,7 +91,7 @@ class AllowspecificTest extends TestCase
         $actual = $this->_object->getAfterElementHtml();
 
         $this->assertStringEndsWith('</script>' . $afterHtmlCode, $actual);
-        $this->assertStringStartsWith('<script type="text/javascript">', trim($actual));
+        $this->assertStringStartsWith('<script >', trim($actual));
         $this->assertStringContainsString('test_prefix_spec_element_test_suffix', $actual);
     }
 

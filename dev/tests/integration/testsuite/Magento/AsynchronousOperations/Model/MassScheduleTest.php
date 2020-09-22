@@ -26,6 +26,8 @@ use Magento\Framework\ObjectManagerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ *
+ * @magentoDbIsolation disabled
  */
 class MassScheduleTest extends \PHPUnit\Framework\TestCase
 {
@@ -63,6 +65,9 @@ class MassScheduleTest extends \PHPUnit\Framework\TestCase
      * @var array
      */
     private $skus = [];
+
+    /** @var string */
+    private $logFilePath;
 
     /**
      * @var Registry
