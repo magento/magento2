@@ -8,8 +8,7 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <!-- Select Shipping Method on Cart -->
-    <actionGroup name="StorefrontCartShippingMethodSelectActionGroup">
+    <actionGroup name="StorefrontCartPageSelectShippingMethodActionGroup">
         <annotations>
             <description>Select a shipping method in the Estimate Shipping and Tax block on the Storefront Shopping Cart page.</description>
         </annotations>
