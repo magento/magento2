@@ -30,9 +30,6 @@ class GenerateLoginCustomerTokenTest extends GraphQlAbstract
      */
     private $adminTokenService;
 
-    /**
-     * Set Up
-     */
     protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
@@ -54,7 +51,12 @@ class GenerateLoginCustomerTokenTest extends GraphQlAbstract
 
         $mutation = $this->getQuery($customerEmail);
 
-        $response = $this->graphQlMutation($mutation, [], '', $this->getAdminHeaderAuthentication('TestAdmin1', 'Zilker777'));
+        $response = $this->graphQlMutation(
+            $mutation,
+            [],
+            '',
+            $this->getAdminHeaderAuthentication('TestAdmin1', 'Zilker777')
+        );
         $this->assertArrayHasKey('generateCustomerTokenAsAdmin', $response);
         $this->assertIsArray($response['generateCustomerTokenAsAdmin']);
     }
@@ -200,7 +202,7 @@ MUTATION;
      * @return string[]
      * @throws AuthenticationException
      */
-    public function getAdminHeaderAuthentication(string $userName, string $password)
+    private function getAdminHeaderAuthentication(string $userName, string $password)
     {
         try {
             $adminAccessToken = $this->adminTokenService->createAdminAccessToken($userName, $password);

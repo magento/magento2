@@ -4,11 +4,15 @@
  * See COPYING.txt for license details.
  */
 use Magento\User\Model\UserFactory;
+use Magento\User\Model\ResourceModel\User as UserResource;
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
 /** @var UserFactory $userFactory */
 $userFactory = $objectManager->get(UserFactory::class);
+/** @var UserResource $userResource */
+$userResource = $objectManager->get(UserResource::class);
+
 $adminInfo = [
     'username'  => 'TestAdmin1',
     'firstname' => 'test',
@@ -23,7 +27,6 @@ $userModel = $userFactory->create();
 try {
     $userModel->setData($adminInfo);
     $userModel->setRoleId(1);
-    $userModel->save();
+    $userResource->save($userModel);
 } catch (\Magento\Framework\Exception\AlreadyExistsException $e) {
-
 }

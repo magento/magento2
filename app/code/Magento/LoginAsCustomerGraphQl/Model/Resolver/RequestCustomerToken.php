@@ -17,18 +17,16 @@ use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Framework\GraphQl\Query\Resolver\Value;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\LoginAsCustomerApi\Api\ConfigInterface;
+use Magento\LoginAsCustomerApi\Api\ConfigInterface as LoginAsCustomerConfig;
 use Magento\LoginAsCustomerGraphQl\Model\LoginAsCustomer\CreateCustomerToken;
 
 /**
  * Gets customer token
- *
- * Class RequestCustomerToken
  */
 class RequestCustomerToken implements ResolverInterface
 {
     /**
-     * @var ConfigInterface
+     * @var LoginAsCustomerConfig
      */
     private $config;
 
@@ -45,12 +43,12 @@ class RequestCustomerToken implements ResolverInterface
     /**
      * RequestCustomerToken constructor.
      * @param AuthorizationInterface $authorization
-     * @param ConfigInterface $config
+     * @param LoginAsCustomerConfig $config
      * @param CreateCustomerToken $createCustomerToken
      */
     public function __construct(
         AuthorizationInterface $authorization,
-        ConfigInterface $config,
+        LoginAsCustomerConfig $config,
         CreateCustomerToken $createCustomerToken
     ) {
         $this->authorization = $authorization;
@@ -104,12 +102,12 @@ class RequestCustomerToken implements ResolverInterface
     /**
      * Check if its an admin user
      *
-     * @param $context
+     * @param ContextInterface $context
      * @throws GraphQlAuthorizationException
      */
-    private function validateUser($context)
+    private function validateUser(ContextInterface $context): void
     {
-        if ($context->getUserType() != 2 || $context->getUserId() == 0) {
+        if ($context->getUserType() !== 2 || $context->getUserId() === 0) {
             throw new GraphQlAuthorizationException(__('The current customer isn\'t authorized.'));
         }
     }
