@@ -7,9 +7,6 @@ namespace Magento\Framework\ObjectManager\Code\Generator;
 
 class Factory extends \Magento\Framework\Code\Generator\EntityAbstract
 {
-    /**
-     * Entity type
-     */
     const ENTITY_TYPE = 'factory';
 
     /**
@@ -90,7 +87,7 @@ class Factory extends \Magento\Framework\Code\Generator\EntityAbstract
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function _validateData()
     {

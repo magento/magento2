@@ -45,7 +45,7 @@ class ExtensionAttributesInterfaceFactoryGenerator extends Factory
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function getResultClassSuffix()
     {
