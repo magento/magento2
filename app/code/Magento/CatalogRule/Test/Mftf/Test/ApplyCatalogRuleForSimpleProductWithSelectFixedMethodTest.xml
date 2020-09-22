@@ -93,9 +93,9 @@
         <!-- Assert regular and special price after selecting ProductOptionValueDropdown1 -->
         <actionGroup ref="StorefrontSelectCustomOptionRadioAndAssertPricesActionGroup" stepKey="storefrontSelectCustomOptionAndAssertPrices1">
             <argument name="customOption" value="ProductOptionRadioButton2"/>
-            <argument name="customOptionValue" value="ProductOptionValueRadioButtonsWithDiscountedPrice"/>
+            <argument name="customOptionValue" value="ProductOptionValueRadioButtons1"/>
             <argument name="productPrice" value="$156.77"/>
-            <argument name="productFinalPrice" value="$122.81"/>
+            <argument name="productFinalPrice" value="$144.47"/>
         </actionGroup>
 
         <!-- Add product 1 to cart -->
@@ -105,7 +105,7 @@
 
         <!-- Assert sub total on mini shopping cart -->
         <actionGroup ref="AssertSubTotalOnStorefrontMiniCartActionGroup" stepKey="assertSubTotalOnStorefrontMiniCart">
-            <argument name="subTotal" value="$122.81"/>
+            <argument name="subTotal" value="$144.47"/>
         </actionGroup>
     </test>
 </tests>

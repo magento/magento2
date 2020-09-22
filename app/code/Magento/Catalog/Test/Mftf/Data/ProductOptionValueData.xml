@@ -26,12 +26,6 @@
         <data key="price">99.99</data>
         <data key="price_type">fixed</data>
     </entity>
-    <entity name="ProductOptionValueRadioButtonsWithDiscountedPrice" type="product_option_value">
-        <data key="title">OptionValueRadioButtons1</data>
-        <data key="sort_order">1</data>
-        <data key="price">78.33</data>
-        <data key="price_type">fixed</data>
-    </entity>
     <entity name="ProductOptionValueRadioButtons2" type="product_option_value">
         <data key="title">OptionValueRadioButtons2</data>
         <data key="sort_order">2</data>
