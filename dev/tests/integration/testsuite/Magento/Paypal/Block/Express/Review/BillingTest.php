@@ -33,7 +33,7 @@ class BillingTest extends \PHPUnit\Framework\TestCase
 
     const SAMPLE_LAST_NAME = 'UpdatedLastName';
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $objectManager = Bootstrap::getObjectManager();

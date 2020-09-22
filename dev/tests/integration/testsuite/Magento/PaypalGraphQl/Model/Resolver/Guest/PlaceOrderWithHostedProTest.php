@@ -45,7 +45,7 @@ class PlaceOrderWithHostedProTest extends TestCase
     /** @var Nvp|MockObject */
     private $nvpMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->graphQlRequest = $this->objectManager->create(GraphQlRequest::class);
@@ -69,7 +69,7 @@ class PlaceOrderWithHostedProTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->objectManager->removeSharedInstance(ApiFactory::class);
     }

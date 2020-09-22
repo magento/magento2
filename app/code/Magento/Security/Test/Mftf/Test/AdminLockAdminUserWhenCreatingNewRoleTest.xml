@@ -18,8 +18,6 @@
             <testCaseId value="MC-14384" />
             <group value="security"/>
             <group value="mtf_migrated"/>
-            <!-- skip due to MQE-1964 -->
-            <group value="skip"/>
         </annotations>
         <before>
             <!-- Log in to Admin Panel -->
@@ -41,7 +39,7 @@
             <argument name="message" value="The password entered for the current user is invalid. Verify the password and try again." />
             <argument name="messageType" value="error" />
         </actionGroup>
-        
+
         <actionGroup ref="AdminFillUserRoleFormActionGroup" stepKey="fillFieldSecondAttempt">
             <argument name="role" value="roleAdministrator" />
             <argument name="currentAdminPassword" value="{{_ENV.MAGENTO_ADMIN_PASSWORD}}INVALID" />

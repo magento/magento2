@@ -3,68 +3,83 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Quote\Test\Unit\Model;
 
+use Magento\Customer\Api\AccountManagementInterface;
+use Magento\Customer\Api\AddressRepositoryInterface;
+use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Api\Data\AddressInterface;
+use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Customer\Model\AddressFactory;
+use Magento\Framework\Validator;
+use Magento\Framework\Validator\Factory;
+use Magento\Quote\Model\CustomerManagement;
+use Magento\Quote\Model\Quote;
+use Magento\Quote\Model\Quote\Address;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
 /**
- * Class CustomerManagementTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CustomerManagementTest extends \PHPUnit\Framework\TestCase
+class CustomerManagementTest extends TestCase
 {
     /**
-     * @var \Magento\Quote\Model\CustomerManagement
+     * @var CustomerManagement
      */
     protected $customerManagement;
 
     /**
-     * @var \Magento\Customer\Api\CustomerRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CustomerRepositoryInterface|MockObject
      */
     protected $customerRepositoryMock;
 
     /**
-     * @var \Magento\Customer\Api\AccountManagementInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AccountManagementInterface|MockObject
      */
     protected $accountManagementMock;
 
     /**
-     * @var \Magento\Customer\Api\AddressRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AddressRepositoryInterface|MockObject
      */
     protected $customerAddressRepositoryMock;
 
     /**
-     * @var \Magento\Quote\Model\Quote|\PHPUnit_Framework_MockObject_MockObject
+     * @var Quote|MockObject
      */
     protected $quoteMock;
 
     /**
-     * @var \Magento\Quote\Model\Quote\Address|\PHPUnit_Framework_MockObject_MockObject
+     * @var Address|MockObject
      */
     protected $quoteAddressMock;
 
     /**
-     * @var \Magento\Customer\Api\Data\CustomerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CustomerInterface|MockObject
      */
     protected $customerMock;
 
     /**
-     * @var \Magento\Customer\Api\Data\AddressInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AddressInterface|MockObject
      */
     protected $customerAddressMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $validatorFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $addressFactoryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->customerRepositoryMock = $this->getMockForAbstractClass(
-            \Magento\Customer\Api\CustomerRepositoryInterface::class,
+            CustomerRepositoryInterface::class,
             [],
             '',
             false,
@@ -73,7 +88,7 @@ class CustomerManagementTest extends \PHPUnit\Framework\TestCase
             ['getById']
         );
         $this->customerAddressRepositoryMock = $this->getMockForAbstractClass(
-            \Magento\Customer\Api\AddressRepositoryInterface::class,
+            AddressRepositoryInterface::class,
             [],
             '',
             false,
@@ -82,7 +97,7 @@ class CustomerManagementTest extends \PHPUnit\Framework\TestCase
             ['getById']
         );
         $this->accountManagementMock = $this->getMockForAbstractClass(
-            \Magento\Customer\Api\AccountManagementInterface::class,
+            AccountManagementInterface::class,
             [],
             '',
             false,
@@ -90,13 +105,14 @@ class CustomerManagementTest extends \PHPUnit\Framework\TestCase
             true,
             []
         );
-        $this->quoteMock = $this->createPartialMock(
-            \Magento\Quote\Model\Quote::class,
-            ['getId', 'getCustomer', 'getBillingAddress', 'getShippingAddress', 'setCustomer', 'getPasswordHash']
-        );
-        $this->quoteAddressMock = $this->createMock(\Magento\Quote\Model\Quote\Address::class);
+        $this->quoteMock = $this->getMockBuilder(Quote::class)
+            ->addMethods(['getPasswordHash'])
+            ->onlyMethods(['getId', 'getCustomer', 'getBillingAddress', 'getShippingAddress', 'setCustomer'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->quoteAddressMock = $this->createMock(Address::class);
         $this->customerMock = $this->getMockForAbstractClass(
-            \Magento\Customer\Api\Data\CustomerInterface::class,
+            CustomerInterface::class,
             [],
             '',
             false,
@@ -105,7 +121,7 @@ class CustomerManagementTest extends \PHPUnit\Framework\TestCase
             ['getId', 'getDefaultBilling']
         );
         $this->customerAddressMock = $this->getMockForAbstractClass(
-            \Magento\Customer\Api\Data\AddressInterface::class,
+            AddressInterface::class,
             [],
             '',
             false,
@@ -113,14 +129,14 @@ class CustomerManagementTest extends \PHPUnit\Framework\TestCase
             true,
             []
         );
-        $this->addressFactoryMock = $this->getMockBuilder(\Magento\Customer\Model\AddressFactory::class)
+        $this->addressFactoryMock = $this->getMockBuilder(AddressFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->validatorFactoryMock = $this->getMockBuilder(\Magento\Framework\Validator\Factory::class)
+        $this->validatorFactoryMock = $this->getMockBuilder(Factory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->customerManagement = new \Magento\Quote\Model\CustomerManagement(
+        $this->customerManagement = new CustomerManagement(
             $this->customerRepositoryMock,
             $this->customerAddressRepositoryMock,
             $this->accountManagementMock,
@@ -131,7 +147,7 @@ class CustomerManagementTest extends \PHPUnit\Framework\TestCase
 
     public function testPopulateCustomerInfo()
     {
-        $this->quoteMock->expects($this->once())
+        $this->quoteMock->expects($this->atLeastOnce())
             ->method('getCustomer')
             ->willReturn($this->customerMock);
         $this->customerMock->expects($this->atLeastOnce())
@@ -215,7 +231,7 @@ class CustomerManagementTest extends \PHPUnit\Framework\TestCase
             ->expects($this->any())
             ->method('getById')
             ->willReturn($this->customerAddressMock);
-        $validatorMock = $this->getMockBuilder(\Magento\Framework\Validator::class)
+        $validatorMock = $this->getMockBuilder(Validator::class)
             ->disableOriginalConstructor()
             ->getMock();
         $addressMock = $this->getMockBuilder(\Magento\Customer\Model\Address::class)

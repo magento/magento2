@@ -36,7 +36,7 @@ class IndexTest extends AbstractBackendController
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->customerRepository = $this->_objectManager->get(CustomerRepositoryInterface::class);
@@ -46,7 +46,7 @@ class IndexTest extends AbstractBackendController
     /**
      * @inheritDoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         /**
          * Unset customer data
@@ -115,7 +115,7 @@ class IndexTest extends AbstractBackendController
         $body = $this->getResponse()->getBody();
 
         // verify
-        $this->assertContains('<h1 class="page-title">test firstname test lastname</h1>', $body);
+        $this->assertStringContainsString('<h1 class="page-title">test firstname test lastname</h1>', $body);
     }
 
     /**
@@ -127,7 +127,7 @@ class IndexTest extends AbstractBackendController
         $body = $this->getResponse()->getBody();
 
         // verify
-        $this->assertContains('<h1 class="page-title">New Customer</h1>', $body);
+        $this->assertStringContainsString('<h1 class="page-title">New Customer</h1>', $body);
     }
 
     /**
@@ -151,17 +151,6 @@ class IndexTest extends AbstractBackendController
         $context = Bootstrap::getObjectManager()->get(\Magento\Backend\Block\Template\Context::class);
         $context->getBackendSession()->setCustomerData($customerData);
         $this->testNewAction();
-    }
-
-    /**
-     * @magentoDataFixture Magento/Customer/_files/customer_sample.php
-     */
-    public function testCartAction()
-    {
-        $this->getRequest()->setParam('id', 1)->setParam('website_id', 1)->setPostValue('delete', 1);
-        $this->dispatch('backend/customer/index/cart');
-        $body = $this->getResponse()->getBody();
-        $this->assertContains('<div id="customer_cart_grid"', $body);
     }
 
     /**
@@ -210,7 +199,7 @@ class IndexTest extends AbstractBackendController
      * @param array $sender
      * @param int $customerId
      * @param string|null $newEmail
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      * @magentoDataFixture Magento/Customer/_files/customer.php
      */
     protected function prepareEmailMock(
@@ -219,7 +208,7 @@ class IndexTest extends AbstractBackendController
         array $sender,
         int $customerId,
         $newEmail = null
-    ) : \PHPUnit_Framework_MockObject_MockObject {
+    ) : \PHPUnit\Framework\MockObject\MockObject {
         $area = \Magento\Framework\App\Area::AREA_FRONTEND;
         $customer = $this->customerRepository->getById($customerId);
         $storeId = $customer->getStoreId();
@@ -265,11 +254,11 @@ class IndexTest extends AbstractBackendController
     }
 
     /**
-     * @param \PHPUnit_Framework_MockObject_MockObject $transportBuilderMock
+     * @param \PHPUnit\Framework\MockObject\MockObject $transportBuilderMock
      * @param string $className
      */
     protected function addEmailMockToClass(
-        \PHPUnit_Framework_MockObject_MockObject $transportBuilderMock,
+        \PHPUnit\Framework\MockObject\MockObject $transportBuilderMock,
         $className
     ) {
         $mocked = $this->_objectManager->create(

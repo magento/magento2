@@ -43,7 +43,7 @@ class Logo extends \Magento\Framework\View\Element\Template
     /**
      * Check if current url is url for home page
      *
-     * @deprecated This function is no longer used. It was previously used by
+     * @deprecated 101.0.1 This function is no longer used. It was previously used by
      * Magento/Theme/view/frontend/templates/html/header/logo.phtml
      * to check if the logo should be clickable on the homepage.
      *

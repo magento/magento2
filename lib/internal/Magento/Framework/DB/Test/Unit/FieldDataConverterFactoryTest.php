@@ -3,23 +3,27 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\DB\Test\Unit;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\DB\DataConverter\DataConverterInterface;
+use Magento\Framework\DB\FieldDataConverter;
 use Magento\Framework\DB\FieldDataConverterFactory;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\DB\FieldDataConverter;
-use Magento\Framework\DB\DataConverter\DataConverterInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class FieldDataConverterFactoryTest extends \PHPUnit\Framework\TestCase
+class FieldDataConverterFactoryTest extends TestCase
 {
     /**
-     * @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface|MockObject
      */
     private $objectManagerMock;
 
     /**
-     * @var DataConverterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var DataConverterInterface|MockObject
      */
     private $dataConverterMock;
 
@@ -28,11 +32,11 @@ class FieldDataConverterFactoryTest extends \PHPUnit\Framework\TestCase
      */
     private $fieldDataConverterFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->objectManagerMock = $this->createMock(ObjectManagerInterface::class);
-        $this->dataConverterMock = $this->createMock(DataConverterInterface::class);
+        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->dataConverterMock = $this->getMockForAbstractClass(DataConverterInterface::class);
         $this->fieldDataConverterFactory = $objectManager->getObject(
             FieldDataConverterFactory::class,
             [

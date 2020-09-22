@@ -50,7 +50,7 @@ class CustomLayoutManagerTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->resultFactory = $objectManager->get(PageResultFactory::class);

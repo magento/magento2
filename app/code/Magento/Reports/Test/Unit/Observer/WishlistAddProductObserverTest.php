@@ -46,7 +46,7 @@ class WishlistAddProductObserverTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->eventObserverMock = $this->createMock(Observer::class);
         $this->eventSaverMock = $this->createMock(EventSaver::class);
@@ -81,10 +81,13 @@ class WishlistAddProductObserverTest extends TestCase
             ->with(Event::EVENT_PRODUCT_TO_WISHLIST)
             ->willReturn(true);
 
-        $eventMock = $this->createPartialMock(Event::class, ['getProduct']);
+        $eventMock = $this->getMockBuilder(Event::class)
+            ->addMethods(['getProduct'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $eventMock->expects($this->once())
             ->method('getProduct')
-            ->willReturn($this->createMock(ProductInterface::class));
+            ->willReturn($this->getMockForAbstractClass(ProductInterface::class));
         $this->eventObserverMock->expects($this->once())->method('getEvent')->willReturn($eventMock);
 
         $this->eventSaverMock->expects($this->once())->method('save');

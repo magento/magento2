@@ -21,7 +21,7 @@ class CollectTotalsObserverTest extends \PHPUnit\Framework\TestCase
      */
     private $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->model = $this->objectManager->create(
@@ -133,6 +133,6 @@ class CollectTotalsObserverTest extends \PHPUnit\Framework\TestCase
         );
         $this->model->execute($eventObserver);
 
-        $this->assertEquals(1, $quote->getCustomer()->getGroupId());
+        $this->assertEquals(2, $quote->getCustomer()->getGroupId());
     }
 }
