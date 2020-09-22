@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Mview/etc/mview.xsd">
+    <view id="test_view"
+          class="\Some\Class"
+          group="indexer"
+          walker="Magento\Eav\Model\Mview\ChangeLogBatchWalker"
+    >
+        <subscriptions>
+            <table name="catalog_product_entity" entity_column="entity_id" />
+            <table name="catalog_product_entity_varchar" entity_column="entity_id">
+                <additionalColumns>
+                    <column name="store_id" cl_name="store_id" />
+                    <column name="attribute_id" cl_name="attribute_id" />
+                </additionalColumns>
+            </table>
+      </subscriptions>
+    </view>
+</config>
