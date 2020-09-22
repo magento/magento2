@@ -6,7 +6,8 @@
         "magento/framework": "*",
         "magento/module-media-gallery-ui-api": "*",
         "magento/module-media-gallery-api": "*",
-        "magento/module-media-gallery-synchronization-api": "*"
+        "magento/module-media-gallery-synchronization-api": "*",
+        "magento/module-ui": "*"
     },
     "require-dev": {
         "magento/module-cms": "*"
