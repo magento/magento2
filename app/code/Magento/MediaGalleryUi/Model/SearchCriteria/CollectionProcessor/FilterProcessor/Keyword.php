@@ -12,14 +12,15 @@ use Magento\Framework\Api\SearchCriteria\CollectionProcessor\FilterProcessor\Cus
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Data\Collection\AbstractDb;
 
+/**
+ * Search request string applied to title, description and keywords. More words in the string narrows down the results
+ */
 class Keyword implements CustomFilterInterface
 {
     private const TABLE_ALIAS = 'main_table';
     private const TABLE_KEYWORDS = 'media_gallery_asset_keyword';
     private const TABLE_ASSET_KEYWORD = 'media_gallery_keyword';
-    private const PATTERN_VALID_CHARACTERS = '/[^A-Za-z0-9\_\.\,\-]/';
-    private const PATTERN_COMMA = '/,+/';
-    private const SPECIAL_CHARACTERS = '/[.,*?!@#$&-_ ]+$/';
+    private const SPECIAL_CHARACTERS = '/[.,*?!@#$&-_]/';
 
     /**
      * @var ResourceConnection
@@ -35,16 +36,19 @@ class Keyword implements CustomFilterInterface
     }
 
     /**
-     * @inheritDoc
+     * @inheritdoc
      */
     public function apply(Filter $filter, AbstractDb $collection): bool
     {
-        $value = $this->formatKeywordValue($filter->getValue());
-
-        foreach ($this->splitRequestString($value) as $keyword) {
+        foreach ($this->getKeywords($filter->getValue()) as $keyword) {
             $collection->addFieldToFilter(
-                [self::TABLE_ALIAS . '.title', self::TABLE_ALIAS . '.id'],
                 [
+                    self::TABLE_ALIAS . '.title',
+                    self::TABLE_ALIAS . '.description',
+                    self::TABLE_ALIAS . '.id',
+                ],
+                [
+                    ['like' => sprintf('%%%s%%', $keyword)],
                     ['like' => sprintf('%%%s%%', $keyword)],
                     ['in' => $this->getAssetIdsByKeyword($keyword)]
                 ]
@@ -55,12 +59,12 @@ class Keyword implements CustomFilterInterface
     }
 
     /**
-     * Return  asset ids by keyword
+     * Retrieve all asset id's by keyword exact match
      *
-     * @param string $value
+     * @param string $keyword
      * @return array
      */
-    private function getAssetIdsByKeyword(string $value): array
+    private function getAssetIdsByKeyword(string $keyword): array
     {
         $connection = $this->connection->getConnection();
 
@@ -70,7 +74,7 @@ class Keyword implements CustomFilterInterface
             ['id']
         )->where(
             'keyword = ?',
-            $value
+            $keyword
         )->joinInner(
             ['keywords_table' => $this->connection->getTableName(self::TABLE_KEYWORDS)],
             'keywords_table.keyword_id = asset_keywords_table.id',
@@ -86,38 +90,13 @@ class Keyword implements CustomFilterInterface
     }
 
     /**
-     * Split the request string
-     * $escapedKeywords removes all invalid characters and replaces with comma/s
-     * $formattedKeywords removes succeeding commas from $escapedKeywords
+     * Remove special characters and split the request string into keywords
      *
      * @param string $value
      * @return array
      */
-    private function splitRequestString(string $value): array
+    private function getKeywords(string $value): array
     {
-        $escapedKeywords = preg_replace(self::PATTERN_VALID_CHARACTERS, ',', $value);
-        $formattedKeywords = preg_replace(self::PATTERN_COMMA, ',', $escapedKeywords);
-
-        $keywordValues = [];
-        if (!is_array($value)) {
-            $keywordValues = explode(',', $formattedKeywords);
-        }
-
-        return $keywordValues;
-    }
-
-    /**
-     * Format request string to remove special characters at the end of the string
-     *
-     * @param string $value
-     * @return string
-     */
-    private function formatKeywordValue(string $value): string
-    {
-        if (preg_match(self::SPECIAL_CHARACTERS, $value) > 0) {
-            $value = preg_replace(self::SPECIAL_CHARACTERS, "", $value);
-        }
-
-        return $value;
+        return array_filter(explode(' ', preg_replace(self::SPECIAL_CHARACTERS, ' ', $value)));
     }
 }
