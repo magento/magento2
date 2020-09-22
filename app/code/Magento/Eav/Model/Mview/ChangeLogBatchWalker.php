@@ -8,6 +8,7 @@ namespace Magento\Eav\Model\Mview;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Sql\Expression;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Mview\View\ChangeLogBatchWalkerInterface;
 use Magento\Framework\Mview\View\ChangelogInterface;
 
@@ -47,26 +48,24 @@ class ChangeLogBatchWalker implements ChangeLogBatchWalkerInterface
      *
      * @param ChangelogInterface $changelog
      * @return int
-     * @throws \Exception
+     * @throws LocalizedException
      */
     private function calculateEavAttributeSize(ChangelogInterface $changelog): int
     {
         $connection = $this->resourceConnection->getConnection();
 
         if (!isset($this->entityTypeCodes[$changelog->getViewId()])) {
-            throw new \Exception('Entity type for view was not defined');
+            throw new LocalizedException(__('Entity type for view was not defined'));
         }
 
         $select = $connection->select();
         $select->from(
             $this->resourceConnection->getTableName('eav_attribute'),
             new Expression('COUNT(*)')
-        )
-            ->joinInner(
-              ['type' => $connection->getTableName('eav_entity_type')],
+        )->joinInner(
+            ['type' => $connection->getTableName('eav_entity_type')],
                 'type.entity_type_id=eav_attribute.entity_type_id'
-            )
-            ->where('type.entity_type_code = ?', $this->entityTypeCodes[$changelog->getViewId()]);
+        )->where('type.entity_type_code = ?', $this->entityTypeCodes[$changelog->getViewId()]);
 
         return (int) $connection->fetchOne($select);
     }

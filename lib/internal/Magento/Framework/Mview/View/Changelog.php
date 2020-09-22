@@ -72,13 +72,14 @@ class Changelog implements ChangelogInterface
     public function __construct(
         \Magento\Framework\App\ResourceConnection $resource,
         Config $mviewConfig,
-        ProcessorFactory $additionalColumnsProcessorFactory
+        ProcessorFactory $additionalColumnsProcessorFactory = null
     ) {
         $this->connection = $resource->getConnection();
         $this->resource = $resource;
         $this->checkConnection();
         $this->mviewConfig = $mviewConfig;
-        $this->additionalColumnsProcessorFactory = $additionalColumnsProcessorFactory;
+        $this->additionalColumnsProcessorFactory = $additionalColumnsProcessorFactory ??
+            ObjectManager::getInstance()->get(ProcessorFactory::class);
     }
 
     /**

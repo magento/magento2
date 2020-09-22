@@ -17,7 +17,7 @@ interface AdditionalColumnProcessorInterface
      * @param array $additionalColumns
      * @return array
      */
-    public function getTriggerColumns(string $eventPrefix, array $additionalColumns): array ;
+    public function getTriggerColumns(string $eventPrefix, array $additionalColumns): array;
 
     /**
      * Process column for DDL table
@@ -26,11 +26,10 @@ interface AdditionalColumnProcessorInterface
      * @param string $columnName
      * @return void
      */
-    public function processColumnForCLTable(Table $table, string $columnName): void ;
+    public function processColumnForCLTable(Table $table, string $columnName): void;
 
     /**
-     * Retrieve pre-statement for trigger
-     * For instance DQL
+     * Retrieve pre-statement for trigger, for instance DQL
      *
      * @return string
      */

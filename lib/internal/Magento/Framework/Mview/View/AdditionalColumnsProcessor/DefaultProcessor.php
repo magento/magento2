@@ -51,6 +51,8 @@ class DefaultProcessor implements AdditionalColumnProcessorInterface
     }
 
     /**
+     * Retrieve pre-statement for a trigger in Mview
+     *
      * @return string
      */
     public function getPreStatements(): string

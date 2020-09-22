@@ -55,7 +55,7 @@ class ViewTest extends TestCase
     protected $subscriptionFactoryMock;
 
     /**
-     * @var MockObject|View\ChangeLogBatchIteratorInterface
+     * @var MockObject|View\ChangeLogBatchWalkerInterface
      */
     private $iteratorMock;
 
@@ -73,7 +73,7 @@ class ViewTest extends TestCase
             true,
             ['getView']
         );
-        $this->iteratorMock = $this->createMock(View\ChangeLogBatchIteratorInterface::class);
+        $this->iteratorMock = $this->createMock(View\ChangeLogBatchWalker::class);
         $this->actionFactoryMock = $this->createPartialMock(ActionFactory::class, ['get']);
         $this->stateMock = $this->createPartialMock(
             State::class,

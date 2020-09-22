@@ -10,12 +10,13 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Ddl\Trigger;
 use Magento\Framework\Mview\Config;
+use Magento\Framework\Mview\View\AdditionalColumnsProcessor\ProcessorFactory;
 use Magento\Framework\Mview\View\StateInterface;
 
 /**
  * Class Subscription
  *
- * @package Magento\Framework\Mview\View
+ * Create triggers for subscription tables for Mview
  */
 class Subscription implements SubscriptionInterface
 {
@@ -70,10 +71,16 @@ class Subscription implements SubscriptionInterface
      * @var Resource
      */
     protected $resource;
+
     /**
      * @var Config
      */
     private $mviewConfig;
+
+    /**
+     * @var ProcessorFactory|null
+     */
+    private $additionalColumnsProcessorFactory;
 
     /**
      * @param ResourceConnection $resource
@@ -84,6 +91,9 @@ class Subscription implements SubscriptionInterface
      * @param string $columnName
      * @param array $ignoredUpdateColumns
      * @param Config|null $mviewConfig
+     * @param ProcessorFactory|null $additionalColumnsProcessorFactory
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         ResourceConnection $resource,
@@ -93,7 +103,8 @@ class Subscription implements SubscriptionInterface
         $tableName,
         $columnName,
         $ignoredUpdateColumns = [],
-        Config $mviewConfig = null
+        Config $mviewConfig = null,
+        ProcessorFactory $additionalColumnsProcessorFactory = null
     ) {
         $this->connection = $resource->getConnection();
         $this->triggerFactory = $triggerFactory;
@@ -104,6 +115,8 @@ class Subscription implements SubscriptionInterface
         $this->resource = $resource;
         $this->ignoredUpdateColumns = $ignoredUpdateColumns;
         $this->mviewConfig = $mviewConfig ?? ObjectManager::getInstance()->get(Config::class);
+        $this->additionalColumnsProcessorFactory = $additionalColumnsProcessorFactory ??
+            ObjectManager::getInstance()->get(ProcessorFactory::class);
     }
 
     /**
@@ -209,7 +222,10 @@ class Subscription implements SubscriptionInterface
     protected function prepareColumns(ChangelogInterface $changelog, string $event): array
     {
         $prefix = $event === Trigger::EVENT_DELETE ? 'OLD.' : 'NEW.';
-        $subscriptionData = $this->mviewConfig->getView($changelog->getViewId())['subscriptions'][$this->getTableName()];
+        $subscriptionData = $this->mviewConfig->getView(
+            $changelog->getViewId()
+        )['subscriptions'][$this->getTableName()];
+
         $columns = [
             'column_names' => [
                 'entity_id' => $this->connection->quoteIdentifier($changelog->getColumnName())
@@ -270,7 +286,7 @@ class Subscription implements SubscriptionInterface
             $trigger,
             $this->getProcessor()->getPreStatements(),
             $this->connection->quoteIdentifier($this->resource->getTableName($changelog->getName())),
-            implode(", " , $columns['column_names']),
+            implode(", ", $columns['column_names']),
             implode(", ", $columns['column_values'])
         );
     }
@@ -279,24 +295,17 @@ class Subscription implements SubscriptionInterface
      * Instantiate and retrieve additional columns processor
      *
      * @return AdditionalColumnProcessorInterface
-     * @throws \Exception
      */
     private function getProcessor(): AdditionalColumnProcessorInterface
     {
         $subscriptionData = $this->mviewConfig->getView($this->getView()->getId())['subscriptions'];
         $processorClass = $subscriptionData[$this->getTableName()]['processor'];
-        $processor = ObjectManager::getInstance()->get($processorClass);
-
-        if (!$processor instanceof AdditionalColumnProcessorInterface) {
-            throw new \Exception(
-                'Processor should implements ' . AdditionalColumnProcessorInterface::class
-            );
-        }
-
-        return $processor;
+        return $this->additionalColumnsProcessorFactory->create($processorClass);
     }
 
     /**
+     * Retrieves entity column for subscription tables
+     *
      * @param string $prefix
      * @return string
      */
