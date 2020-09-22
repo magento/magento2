@@ -19,9 +19,10 @@ use Magento\Framework\Url\DecoderInterface;
 use Magento\Framework\Url\EncoderInterface;
 use Magento\Framework\View\Design\Theme\Customization;
 use Magento\Framework\View\Design\Theme\FlyweightFactory;
+use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Theme\Helper\Storage;
-use Magento\Theme\Model\Theme;
 use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Theme\Model\Theme;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -91,6 +92,11 @@ class StorageTest extends TestCase
 
     protected $requestParams;
 
+    /**
+     * @var DriverInterface|MockObject
+     */
+    private $filesystemDriver;
+
     protected function setUp(): void
     {
         $this->customizationPath = '/' . implode('/', ['var', 'theme']);
@@ -117,6 +123,7 @@ class StorageTest extends TestCase
         $this->contextHelper->expects($this->any())->method('getUrlEncoder')->willReturn($this->urlEncoder);
         $this->contextHelper->expects($this->any())->method('getUrlDecoder')->willReturn($this->urlDecoder);
         $this->themeFactory->expects($this->any())->method('create')->willReturn($this->theme);
+        $this->filesystemDriver = $this->createMock(DriverInterface::class);
 
         $this->theme->expects($this->any())
             ->method('getCustomization')
@@ -135,7 +142,9 @@ class StorageTest extends TestCase
             $this->contextHelper,
             $this->filesystem,
             $this->session,
-            $this->themeFactory
+            $this->themeFactory,
+            null,
+            $this->filesystemDriver
         );
     }
 
@@ -279,6 +288,9 @@ class StorageTest extends TestCase
     {
         $this->expectException('InvalidArgumentException');
         $this->expectExceptionMessage('The image not found');
+
+        $this->filesystemDriver->method('getRealpathSafety')
+            ->willReturnArgument(0);
         $image = 'notFoundImage.png';
         $root = '/image';
         $sourceNode = '/not/a/root';
@@ -455,5 +467,68 @@ class StorageTest extends TestCase
             $this->themeFactory
         );
         $helper->getStorageRoot();
+    }
+
+    /**
+     * @dataProvider getCurrentPathDataProvider
+     */
+    public function testGetCurrentPathCachesResult()
+    {
+        $this->request->expects($this->once())
+            ->method('getParam')
+            ->with(Storage::PARAM_NODE)
+            ->willReturn(Storage::NODE_ROOT);
+
+        $actualPath = $this->helper->getCurrentPath();
+        self::assertSame('/image', $actualPath);
+    }
+
+    /**
+     * @dataProvider getCurrentPathDataProvider
+     */
+    public function testGetCurrentPath(
+        string $expectedPath,
+        string $requestedPath,
+        ?bool $isDirectory = null,
+        ?string $relativePath = null,
+        ?string $resolvedPath = null
+    ) {
+        $this->directoryWrite->method('isDirectory')
+            ->willReturn($isDirectory);
+
+        $this->directoryWrite->method('getRelativePath')
+            ->willReturn($relativePath);
+
+        $this->urlDecoder->method('decode')
+            ->willReturnArgument(0);
+
+        if ($resolvedPath) {
+            $this->filesystemDriver->method('getRealpathSafety')
+                ->willReturn($resolvedPath);
+        } else {
+            $this->filesystemDriver->method('getRealpathSafety')
+                ->willReturnArgument(0);
+        }
+
+        $this->request->method('getParam')
+            ->with(Storage::PARAM_NODE)
+            ->willReturn($requestedPath);
+
+        $actualPath = $this->helper->getCurrentPath();
+
+        self::assertSame($expectedPath, $actualPath);
+    }
+
+    public function getCurrentPathDataProvider(): array
+    {
+        $rootPath = '/' . \Magento\Theme\Model\Wysiwyg\Storage::TYPE_IMAGE;
+
+        return [
+            'requested path "root" should short-circuit' => [$rootPath, Storage::NODE_ROOT],
+            'non-existent directory should default to the base path' => [$rootPath, $rootPath . '/foo'],
+            'requested path that resolves to a bad path should default to root' =>
+                [$rootPath, $rootPath . '/something', true, null, '/bar'],
+            'real path should resolve to relative path' => ['foo/', $rootPath . '/foo', true, 'foo/'],
+        ];
     }
 }

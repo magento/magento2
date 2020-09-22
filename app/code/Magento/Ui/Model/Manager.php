@@ -24,7 +24,7 @@ use Magento\Framework\View\Element\UiComponent\Config\UiReaderInterface;
 /**
  * @inheritdoc
  *
- * @deprecated 100.2.0
+ * @deprecated 101.0.0
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Manager implements ManagerInterface

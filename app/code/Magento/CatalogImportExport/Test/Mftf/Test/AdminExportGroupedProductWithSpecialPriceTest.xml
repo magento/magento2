@@ -55,7 +55,7 @@
             <deleteData createDataKey="createSecondSimpleProduct" stepKey="deleteSecondSimpleProduct"/>
             <deleteData createDataKey="createGroupedProduct" stepKey="deleteGroupedProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
             <!-- Log out -->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
@@ -73,8 +73,7 @@
             <argument name="maxMessages" value="{{AdminExportMessageConsumerData.messageLimit}}"/>
         </actionGroup>
         <reloadPage stepKey="refreshPage"/>
-        <waitForPageLoad stepKey="waitForPageLoaded"/>
-
+        <waitForElementVisible selector="{{AdminExportAttributeSection.exportFileNameByPosition('0')}}" stepKey="waitForFileName"/>
         <grabTextFrom selector="{{AdminExportAttributeSection.exportFileNameByPosition('0')}}" stepKey="grabNameFile"/>
 
         <!-- Download product -->

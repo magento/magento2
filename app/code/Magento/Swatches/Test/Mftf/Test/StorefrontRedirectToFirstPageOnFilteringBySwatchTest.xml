@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontRedirectToFirstPageOnFilteringBySwatchTest">
+        <annotations>
+            <features value="Swatches"/>
+            <stories value="Filter by swatch attribute on plp layered navigation"/>
+            <title value="Customers are redirected to first plp page after filtering by swatch"/>
+            <description value="Customers are redirected to first plp page after filtering by swatch"/>
+            <severity value="MINOR"/>
+            <group value="Swatches"/>
+        </annotations>
+
+        <before>
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct1">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct2">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct3">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+
+            <magentoCLI command="config:set catalog/frontend/grid_per_page 1" stepKey="setOneProductPerPage"/>
+            <magentoCLI command="config:set catalog/frontend/grid_per_page_values 1" stepKey="setGridPerPage"/>
+
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AddTextSwatchToProductActionGroup" stepKey="addSwatchAttribute">
+                <argument name="usedInLayeredNavigation" value="1"/>
+            </actionGroup>
+        </before>
+
+        <after>
+            <actionGroup ref="DeleteProductAttributeActionGroup" stepKey="deleteSwatchAttribute">
+                <argument name="ProductAttribute" value="textSwatchAttribute"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+
+            <magentoCLI command="config:set catalog/frontend/grid_per_page 12" stepKey="setDefaultProductsPerPage"/>
+            <magentoCLI command="config:set catalog/frontend/grid_per_page_values 12,24,36" stepKey="setDefaultGridPerPage"/>
+            <magentoCLI command="cache:clean config full_page" stepKey="cleanInvalidatedCaches"/>
+
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createSimpleProduct1" stepKey="deleteSimpleProduct1"/>
+            <deleteData createDataKey="createSimpleProduct2" stepKey="deleteSimpleProduct2"/>
+            <deleteData createDataKey="createSimpleProduct3" stepKey="deleteSimpleProduct3"/>
+        </after>
+
+        <amOnPage url="{{AdminProductAttributeSetEditPage.url}}/{{AddToDefaultSet.attributeSetId}}/" stepKey="onAttributeSetEdit"/>
+        <actionGroup ref="AssignAttributeToGroupActionGroup" stepKey="assignAttributeToGroup">
+            <argument name="group" value="Product Details"/>
+            <argument name="attribute" value="{{textSwatchAttribute.attribute_code}}"/>
+        </actionGroup>
+        <actionGroup ref="SaveAttributeSetActionGroup" stepKey="SaveAttributeSet"/>
+
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="goToProductIndexPage"/>
+        <actionGroup ref="ClearFiltersAdminProductGridActionGroup" stepKey="clearFiltersOnProductIndexPage"/>
+
+        <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="goToProduct1EditPage">
+            <argument name="product" value="$$createSimpleProduct1$$"/>
+        </actionGroup>
+        <selectOption selector="{{AdminProductAttributesSection.attributeDropdownByCode(textSwatchAttribute.attribute_code)}}" userInput="textSwatchOption1" stepKey="selectProduct1AttributeOption"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct1"/>
+
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="goToProductsGridPage2"/>
+        <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="goToProduct2EditPage">
+            <argument name="product" value="$$createSimpleProduct2$$"/>
+        </actionGroup>
+        <selectOption selector="{{AdminProductAttributesSection.attributeDropdownByCode(textSwatchAttribute.attribute_code)}}" userInput="textSwatchOption1" stepKey="selectProduct2AttributeOption"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct2"/>
+
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="goToProductsGridPage3"/>
+        <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="goToProduct3EditPage">
+            <argument name="product" value="$$createSimpleProduct3$$"/>
+        </actionGroup>
+        <selectOption selector="{{AdminProductAttributesSection.attributeDropdownByCode(textSwatchAttribute.attribute_code)}}" userInput="textSwatchOption2" stepKey="selectProduct3AttributeOption"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct3"/>
+
+        <magentoCron groups="index" stepKey="runCronIndexer"/>
+
+        <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="navigateToCategoryPage">
+            <argument name="category" value="$$createCategory$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontNavigateCategoryNextPageActionGroup" stepKey="navigateToCategoryNextPage"/>
+
+        <click selector="{{StorefrontCategorySidebarSection.filterOptionTitle(textSwatchAttribute.default_label)}}" stepKey="expandAttribute"/>
+        <click selector="{{StorefrontCategorySidebarSection.attributeNthOption(textSwatchAttribute.attribute_code, '1')}}" stepKey="filterBySwatch1"/>
+        <waitForPageLoad stepKey="waitForPageToLoad2"/>
+
+        <actionGroup ref="AssertStorefrontCategoryCurrentPageIsNthActionGroup" stepKey="assertCurrentPageIsFirst">
+            <argument name="expectedPage" value="1"/>
+        </actionGroup>
+    </test>
+</tests>

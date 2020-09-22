@@ -27,7 +27,6 @@
             <createData entity="SimpleProduct2" stepKey="createProduct2"/>
             <createData entity="Simple_US_Customer_Two_Addresses" stepKey="createCustomer"/>
             <!-- Set configurations -->
-            <magentoCLI command="config:set {{EnableMultiShippingCheckoutMultiple.path}} {{EnableMultiShippingCheckoutMultiple.value}}" stepKey="allowShippingToMultipleAddresses"/>
             <magentoCLI command="config:set {{EnableFreeShippingMethod.path}} {{EnableFreeShippingMethod.value}}" stepKey="enableFreeShipping"/>
             <magentoCLI command="config:set {{EnableFlatRateShippingMethod.path}} {{EnableFlatRateShippingMethod.value}}" stepKey="enableFlatRateShipping"/>
             <magentoCLI command="config:set {{EnableCheckMoneyOrderPaymentMethod.path}} {{EnableCheckMoneyOrderPaymentMethod.value}}" stepKey="enableCheckMoneyOrderPaymentMethod"/>
@@ -43,7 +42,6 @@
             <!-- Need logout before customer delete. Fatal error appears otherwise -->
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
-            <magentoCLI command="config:set {{DisableMultiShippingCheckoutMultiple.path}} {{DisableMultiShippingCheckoutMultiple.value}}" stepKey="withdrawShippingToMultipleAddresses"/>
             <magentoCLI command="config:set {{DisableFreeShippingMethod.path}} {{DisableFreeShippingMethod.value}}" stepKey="disableFreeShipping"/>
             <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearAllOrdersGridFilters"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>

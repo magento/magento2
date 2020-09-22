@@ -10,8 +10,10 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="StorefrontCreateOrdersWithMoveJSCodeBottomTest">
         <annotations>
+            <stories value="Create a product and orders with set 'Move Js code to the bottom' to 'Yes'."/>
             <title value="Create a product and orders with set 'Move Js code to the bottom' to 'Yes'."/>
             <description value="Create a product and orders with a set 'Move JS code to the bottom of the page' to 'Yes' for registered customers and guests."/>
+            <severity value="MAJOR"/>
         </annotations>
         <before>
             <magentoCLI command="config:set {{StorefrontEnableMoveJsCodeBottom.path}} {{StorefrontEnableMoveJsCodeBottom.value}}" stepKey="moveJsCodeBottomEnable"/>

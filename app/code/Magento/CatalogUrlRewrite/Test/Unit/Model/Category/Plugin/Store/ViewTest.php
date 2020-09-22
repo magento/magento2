@@ -125,7 +125,7 @@ class ViewTest extends TestCase
             ->getMock();
         $this->productCollectionMock = $this->getMockBuilder(ProductCollection::class)
             ->disableOriginalConstructor()
-            ->setMethods(['addCategoryIds', 'addAttributeToSelect', 'addWebsiteFilter', 'getIterator'])
+            ->setMethods(['addCategoryIds', 'addAttributeToSelect', 'getIterator', 'addStoreFilter'])
             ->getMock();
         $this->productMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
@@ -190,7 +190,7 @@ class ViewTest extends TestCase
             ->method('addAttributeToSelect')
             ->willReturn($this->productCollectionMock);
         $this->productCollectionMock->expects($this->once())
-            ->method('addWebsiteFilter')
+            ->method('addStoreFilter')
             ->willReturn($this->productCollectionMock);
         $iterator = new \ArrayIterator([$this->productMock]);
         $this->productCollectionMock->expects($this->once())
