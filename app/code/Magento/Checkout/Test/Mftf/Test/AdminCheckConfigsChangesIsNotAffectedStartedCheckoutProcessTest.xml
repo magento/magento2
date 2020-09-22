@@ -84,7 +84,9 @@
         <actionGroup ref="AdminChangeFlatRateShippingMethodStatusActionGroup" stepKey="enableFlatRateShippingStatus"/>
 
         <!-- Flush cache -->
-        <magentoCLI command="cache:flush" stepKey="cacheFlush"/>
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+            <argument name="tags" value=""/>
+        </actionGroup>
 
         <!-- Back to the Checkout and refresh the page -->
         <switchToPreviousTab stepKey="switchToPreviousTab"/>

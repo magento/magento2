@@ -12,7 +12,7 @@ use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\SalesGraphQl\Model\Resolver\OrderItem\DataProvider as OrderItemProvider;
+use Magento\SalesGraphQl\Model\OrderItem\DataProvider as OrderItemProvider;
 
 /**
  * Resolve a single order item

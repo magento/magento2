@@ -106,6 +106,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      * Local cache
      *
      * @var array
+     * @since 100.4.0
      */
     protected $isSaleableBySku = [];
 
@@ -591,6 +592,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      *
      * @param  \Magento\Catalog\Model\Product $product
      * @return \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\Collection
+     * @since 100.4.0
      */
     protected function getLinkedProductCollection($product)
     {
@@ -1266,7 +1268,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
 
     /**
      * @inheritdoc
-     * @since 100.2.0
+     * @since 100.1.11
      */
     public function isPossibleBuyFromList($product)
     {

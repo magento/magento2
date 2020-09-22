@@ -52,7 +52,7 @@
         <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton2"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton3"/>
         <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton4"/>
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveProduct"/>
 
         <!-- Verify that the removed option is not present in the storefront -->
         <amOnPage url="{{StorefrontProductPage.url(_defaultProduct.urlKey)}}" stepKey="amOnStorefrontPage"/>
