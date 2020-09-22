@@ -15,5 +15,6 @@
 
         <waitForElementVisible selector="{{AdminEnhancedMediaGalleryMassActionSection.deleteImages}}" stepKey="waitForMassActionButton"/>
         <click selector="{{AdminEnhancedMediaGalleryMassActionSection.deleteImages}}" stepKey="clickOnMassActionButton"/>
+        <waitForPageLoad stepKey="waitForPageLoaded" />
     </actionGroup>
 </actionGroups>
