@@ -16,6 +16,7 @@
             <description value="Global search in backend can search into Categories."/>
             <severity value="MINOR"/>
             <group value="Search"/>
+            <testCaseId value="MC-37809"/>
         </annotations>
         <before>
             <!-- Login as admin -->
