@@ -308,7 +308,7 @@ class ConfigTest extends TestCase
             ->with(self::STUB_STORE_VIEW_WITH_ID_2)
             ->willReturn(self::STUB_STORE_VIEW_LABEL_WITH_ID_2);
 
-        $result = $this->salesConfig->getStatusFrontendLabel(
+        $result = $this->salesConfig->getStatusFrontendLabelStore(
             self::STUB_PENDING_STATUS_CODE,
             self::STUB_STORE_VIEW_WITH_ID_2
         );

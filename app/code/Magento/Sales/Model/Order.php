@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-declare(strict_types=1);
 
 namespace Magento\Sales\Model;
 
@@ -1082,7 +1081,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      */
     public function getFrontendStatusLabel()
     {
-        return $this->getConfig()->getStatusFrontendLabel($this->getStatus(), $this->getStoreId());
+        return $this->getConfig()->getStatusFrontendLabelStore($this->getStatus(), $this->getStoreId());
     }
 
     /**
@@ -2054,7 +2053,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     {
         $storeId = $this->getStoreId();
         if ($storeId === null) {
-            return $this->getStoreName(1);
+            return $this->getStoreName();
         }
         return $this->getStore()->getGroup()->getName();
     }

@@ -3,8 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-declare(strict_types=1);
-
 namespace Magento\Sales\Model\Order;
 
 use Magento\Framework\Exception\LocalizedException;
@@ -159,11 +157,24 @@ class Config
      * Retrieve status label for area
      *
      * @param string|null $code
-     * @param int|null $storeId
      * @return string|null
      * @since 102.0.1
+     * @deprecated Not used label status config store when receiving the label.
+     * @see getStatusFrontendLabelStore()
      */
-    public function getStatusFrontendLabel(?string $code, int $storeId = null): ?string
+    public function getStatusFrontendLabel(?string $code): ?string
+    {
+        return $this->getStatusLabelForArea($code, \Magento\Framework\App\Area::AREA_FRONTEND);
+    }
+
+    /**
+     * Retrieve status label for area considering label status config
+     *
+     * @param string|null $code
+     * @param int|null $storeId
+     * @return string|null
+     */
+    public function getStatusFrontendLabelStore(?string $code, int $storeId = null): ?string
     {
         return $this->getStatusLabelForArea($code, \Magento\Framework\App\Area::AREA_FRONTEND, $storeId);
     }
