@@ -69,10 +69,16 @@ class Grid extends IndexerHandler
      */
     public function deleteIndex($dimensions, \Traversable $ids)
     {
-        foreach ($this->batch->getItems($ids, $this->batchSize) as $batchIds) {
-            $this->connection->delete(
-                $this->getTableName('filterable', $dimensions),
-                ['entity_id IN(?)' => $batchIds]
+        if (!empty(iterator_to_array($ids))) {
+            foreach ($this->batch->getItems($ids, $this->batchSize) as $batchIds) {
+                $this->connection->delete(
+                    $this->getTableName('filterable', $dimensions),
+                    ['entity_id IN(?)' => $batchIds]
+                );
+            }
+        } else {
+            $this->connection->truncateTable(
+                $this->getTableName('filterable', $dimensions)
             );
         }
     }

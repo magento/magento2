@@ -5,6 +5,7 @@
  */
 namespace Magento\Theme\Model\Indexer\Design;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Indexer\ActionInterface;
 use Magento\Framework\Indexer\FieldsetPool;
 use Magento\Framework\Indexer\HandlerPool;
@@ -93,11 +94,28 @@ class Config implements ActionInterface
         /** @var \Magento\Theme\Model\ResourceModel\Design\Config\Scope\Collection $collection */
         $collection = $this->collectionFactory->create();
         $this->prepareFields();
-        if (!count($ids)) {
+
+        $tmp = $this->isFlatTableExists();
+
+        if (!$this->isFlatTableExists()) {
+            // instead of clean index check if table exists and create it if not
             $this->getSaveHandler()->cleanIndex([]);
         }
         $this->getSaveHandler()->deleteIndex([], new \ArrayObject($ids));
         $this->getSaveHandler()->saveIndex([], $collection);
+    }
+
+    private function isFlatTableExists()
+    {
+        /** @var \Magento\Framework\App\ResourceConnection $resource */
+        $resource = ObjectManager::getInstance()->get(\Magento\Framework\App\ResourceConnection::class);
+
+        /** @var \Magento\Framework\DB\Adapter\AdapterInterface $connection */
+        $connection = ObjectManager::getInstance()->get(\Magento\Framework\App\ResourceConnection::class)->getConnection();
+
+        $tableName = $resource->getTableName('design_config_grid_flat');
+
+        return $connection->isTableExists($tableName);
     }
 
     /**
