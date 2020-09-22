@@ -13,7 +13,8 @@
             <stories value="Create Product Attributes"/>
             <title value="Attributess with reserved codes should not be created"/>
             <description value="Admin should not be able to create product attribute with reserved codes"/>
-            <severity value="AVERAGE"/>
+            <severity value="MINOR"/>
+            <testCaseId value="MC-37806"/>
             <group value="catalog"/>
         </annotations>
 
