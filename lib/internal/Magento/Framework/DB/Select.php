@@ -111,7 +111,7 @@ class Select extends \Zend_Db_Select
      * @param string $cond The WHERE condition.
      * @param array|null|int|string|float|Expression|Select|\DateTimeInterface $value The value to quote.
      * @param int|string|null $type OPTIONAL SQL datatype of the given value e.g. Zend_Db::FLOAT_TYPE or "INT"
-     * @return Select
+     * @return \Magento\Framework\DB\Select
      */
     public function where($cond, $value = null, $type = null)
     {
