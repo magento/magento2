@@ -31,7 +31,6 @@ define([
          * @returns {String}
          */
         getNameUnsanitizedHtml: function (label) {
-            debugger;
             return escaper.escapeHtml(label, this.allowedTags);
         }
     });
