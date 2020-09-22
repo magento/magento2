@@ -96,7 +96,7 @@ class Fulltext implements
      * @param StateFactory $indexScopeStateFactory
      * @param DimensionProviderInterface $dimensionProvider
      * @param array $data
-     * @param ProcessManager|null $processManager
+     * @param ProcessManager $processManager
      * @param int|null $batchSize
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -108,7 +108,7 @@ class Fulltext implements
         StateFactory $indexScopeStateFactory,
         DimensionProviderInterface $dimensionProvider,
         array $data,
-        ?ProcessManager $processManager = null,
+        ProcessManager $processManager = null,
         ?int $batchSize = null
     ) {
         $this->fullAction = $fullActionFactory->create(['data' => $data]);
