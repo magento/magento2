@@ -6,12 +6,15 @@
 namespace Magento\Shipping\Block\Adminhtml\Order;
 
 use Magento\Backend\Block\Template;
+use Magento\Framework\Api\SearchCriteria;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Registry;
-use Magento\Sales\Api\Data\OrderInterfaceFactory;
+use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\ShipmentTrackInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
+use Magento\Sales\Api\OrderRepositoryInterface;
 
 /**
  * Class verifies packaging popup.
@@ -20,34 +23,54 @@ use PHPUnit\Framework\TestCase;
  */
 class AddToPackageTest extends TestCase
 {
+    /**
+     * @var OrderRepositoryInterface
+     */
+    private $orderRepository;
+
     /** @var ObjectManagerInterface */
     private $objectManager;
 
     /** @var Registry */
     private $registry;
-    /**
-     * @var OrderInterfaceFactory|mixed
-     */
-    private $orderFactory;
 
     protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->registry = $this->objectManager->get(Registry::class);
-        $this->orderFactory = $this->objectManager->get(OrderInterfaceFactory::class);
+        $this->orderRepository = $this->objectManager->get(OrderRepositoryInterface::class);
+    }
+
+    /**
+     * Loads order entity by provided order increment ID.
+     *
+     * @param string $incrementId
+     * @return OrderInterface
+     */
+    private function getOrderByIncrementId(string $incrementId) : OrderInterface
+    {
+        /** @var SearchCriteria $searchCriteria */
+        $searchCriteria = $this->objectManager->get(SearchCriteriaBuilder::class)
+            ->addFilter('increment_id', $incrementId)
+            ->create();
+
+        $items = $this->orderRepository->getList($searchCriteria)
+            ->getItems();
+
+        return array_pop($items);
     }
 
     /**
      * Test that Packaging popup renders
      *
-     * @magentoDataFixture Magento/GraphQl/Sales/_files/customer_order_with_ups_shipping.php
+     * @magentoDataFixture Magento/Shipping/_files/shipping_with_carrier_data.php
      */
     public function testGetCommentsHtml()
     {
         /** @var Template $block */
         $block = $this->objectManager->get(Packaging::class);
 
-        $order = $this->orderFactory->create()->loadByIncrementId('100000001');
+        $order = $this->getOrderByIncrementId('100000001');
 
         /** @var ShipmentTrackInterface $track */
         $shipment = $order->getShipmentsCollection()->getFirstItem();
