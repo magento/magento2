@@ -45,9 +45,10 @@ use Magento\Store\Model\Store;
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @since 100.0.2
  */
-class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
+class Product extends AbstractEntity
 {
-    const CONFIG_KEY_PRODUCT_TYPES = 'global/importexport/import_product_types';
+    public const CONFIG_KEY_PRODUCT_TYPES = 'global/importexport/import_product_types';
+    private const HASH_ALGORITHM = 'sha256';
 
     /**
      * Size of bunch - part of products to save in one step.
@@ -1749,43 +1750,12 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 $position = 0;
                 foreach ($rowImages as $column => $columnImages) {
                     foreach ($columnImages as $columnImageKey => $columnImage) {
-                        $hash = '';
-                        if (filter_var($columnImage, FILTER_VALIDATE_URL) === false) {
-                            $filename = $importDir . DIRECTORY_SEPARATOR . $columnImage;
-                            if ($this->fileDriver->isExists($filename)) {
-                                $hash = hash_file(
-                                    'sha256',
-                                    $importDir . DIRECTORY_SEPARATOR . $columnImage
-                                );
-                            }
-                        } else {
-                            $hash = hash_file('sha256', $columnImage);
-                        }
+                        $filePath = filter_var($columnImage, FILTER_VALIDATE_URL)
+                            ? $columnImage
+                            : $importDir . DS . $columnImage;
 
-                        // Add new images
-                        if (empty($rowExistingImages)) {
-                            $imageAlreadyExists = false;
-                        } else {
-                            $imageAlreadyExists = array_reduce(
-                                $rowExistingImages,
-                                function ($exists, $file) use ($hash) {
-                                    if ($exists) {
-                                        return $exists;
-                                    }
-
-                                    if (isset($file['hash']) && $file['hash'] === $hash) {
-                                        return $file['value'];
-                                    }
-
-                                    return $exists;
-                                },
-                                ''
-                            );
-                        }
-
-                        if ($imageAlreadyExists) {
-                            $uploadedFile = $imageAlreadyExists;
-                        } elseif (!isset($uploadedImages[$columnImage])) {
+                        $uploadedFile = $this->getAlreadyExistedImage($rowExistingImages, $filePath);
+                        if (!$uploadedFile && !isset($uploadedImages[$columnImage])) {
                             $uploadedFile = $this->uploadMediaFiles($columnImage);
                             $uploadedFile = $uploadedFile ?: $this->getSystemFile($columnImage);
                             if ($uploadedFile) {
@@ -1800,7 +1770,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                                     ProcessingError::ERROR_LEVEL_NOT_CRITICAL
                                 );
                             }
-                        } else {
+                        } elseif (isset($uploadedImages[$columnImage])) {
                             $uploadedFile = $uploadedImages[$columnImage];
                         }
 
@@ -1954,24 +1924,14 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 }
             }
 
-            $this->saveProductEntity(
-                $entityRowsIn,
-                $entityRowsUp
-            )->_saveProductWebsites(
-                $this->websitesCache
-            )->_saveProductCategories(
-                $this->categoriesCache
-            )->_saveProductTierPrices(
-                $tierPrices
-            )->_saveMediaGallery(
-                $mediaGallery
-            )->_saveProductAttributes(
-                $attributes
-            )->updateMediaGalleryVisibility(
-                $imagesForChangeVisibility
-            )->updateMediaGalleryLabels(
-                $labelsForUpdate
-            );
+            $this->saveProductEntity($entityRowsIn, $entityRowsUp)
+                ->_saveProductWebsites($this->websitesCache)
+                ->_saveProductCategories($this->categoriesCache)
+                ->_saveProductTierPrices($tierPrices)
+                ->_saveMediaGallery($mediaGallery)
+                ->_saveProductAttributes($attributes)
+                ->updateMediaGalleryVisibility($imagesForChangeVisibility)
+                ->updateMediaGalleryLabels($labelsForUpdate);
 
             $this->_eventManager->dispatch(
                 'catalog_product_import_bunch_save_after',
@@ -1984,6 +1944,51 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     //phpcs:enable Generic.Metrics.NestingLevel
 
     // phpcs:enable
+
+    /**
+     * Returns image hash by path
+     *
+     * @param string $filePath
+     * @return string
+     */
+    private function getFileHash(string $filePath): string
+    {
+        try {
+            $fileExists = $this->fileDriver->isExists($filePath);
+        } catch (\Exception $exception) {
+            $fileExists = false;
+        }
+
+        return $fileExists ? hash_file(self::HASH_ALGORITHM, $filePath) : '';
+    }
+
+    /**
+     * Returns existed image
+     *
+     * @param array $imageRow
+     * @param string $filePath
+     * @return string
+     */
+    private function getAlreadyExistedImage(array $imageRow, string $filePath): string
+    {
+        $hash = $this->getFileHash($filePath);
+
+        return array_reduce(
+            $imageRow,
+            function ($exists, $file) use ($hash) {
+                if ($exists) {
+                    return $exists;
+                }
+
+                if (isset($file['hash']) && $file['hash'] === $hash) {
+                    return $file['value'];
+                }
+
+                return $exists;
+            },
+            ''
+        );
+    }
 
     /**
      * Generate hashes for existing images for comparison with newly uploaded images.
@@ -2001,7 +2006,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 foreach ($files as $path => $file) {
                     if ($this->fileDriver->isExists($productMediaPath . $file['value'])) {
                         $fileName = $productMediaPath . $file['value'];
-                        $images[$storeId][$sku][$path]['hash'] = hash_file('sha256', $fileName);
+                        $images[$storeId][$sku][$path]['hash'] = $this->getFileHash($fileName);
                     }
                 }
             }
@@ -2019,9 +2024,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     {
         foreach ($rowImages as $column => $columnImages) {
             foreach ($columnImages as $key => $image) {
-                if ($image == 'no_selection') {
-                    unset($rowImages[$column][$key]);
-                    unset($rowData[$column]);
+                if ($image === 'no_selection') {
+                    unset($rowImages[$column][$key], $rowData[$column]);
                 }
             }
         }
