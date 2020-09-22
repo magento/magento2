@@ -10,9 +10,9 @@ namespace Magento\Search\Test\Unit\Controller\Term;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Controller\Result\Forward as ResultForward;
 use Magento\Framework\Controller\Result\ForwardFactory as ResultForwardFactory;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Result\Page as ResultPage;
 use Magento\Framework\View\Result\PageFactory as ResultPageFactory;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Search\Controller\Term\Popular;
 use Magento\Store\Model\ScopeInterface;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -42,7 +42,7 @@ class PopularTest extends TestCase
      */
     private $scopeConfigMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->resultForwardFactoryMock = $this->getMockBuilder(ResultForwardFactory::class)
             ->disableOriginalConstructor()

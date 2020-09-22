@@ -18,7 +18,7 @@ use Magento\Framework\Indexer\DimensionalIndexerInterface;
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
- * @deprecated Not used anymore for price indexation. Class left for backward compatibility
+ * @deprecated 102.0.6 Not used anymore for price indexation. Class left for backward compatibility
  * @see DimensionalIndexerInterface
  */
 class DefaultPrice extends AbstractIndexer implements PriceInterface
@@ -240,7 +240,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
      * Prepare final price temporary index table
      *
      * @return $this
-     * @deprecated
+     * @deprecated 102.0.5
      * @see prepareFinalPriceTable()
      */
     protected function _prepareDefaultFinalPriceTable()
@@ -775,7 +775,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
         $select = $connection->select()->from($table, $columns);
 
         if ($entityIds !== null) {
-            $select->where('entity_id in (?)', count($entityIds) > 0 ? $entityIds : 0);
+            $select->where('entity_id in (?)', count($entityIds) > 0 ? $entityIds : 0, \Zend_Db::INT_TYPE);
         }
 
         $query = $select->insertFromSelect($this->getIdxTable(), [], false);

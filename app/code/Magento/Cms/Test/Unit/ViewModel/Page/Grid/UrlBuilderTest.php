@@ -45,15 +45,15 @@ class UrlBuilderTest extends TestCase
     /**
      * Set Up
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->frontendUrlBuilderMock = $this->getMockBuilder(UrlInterface::class)
             ->setMethods(['getUrl', 'setScope'])
             ->getMockForAbstractClass();
-        $this->urlEncoderMock = $this->createMock(EncoderInterface::class);
+        $this->urlEncoderMock = $this->getMockForAbstractClass(EncoderInterface::class);
         $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->viewModel = new UrlBuilder(
             $this->frontendUrlBuilderMock,
@@ -123,7 +123,7 @@ class UrlBuilderTest extends TestCase
         string $scope = 'store'
     ) {
         /** @var StoreInterface|MockObject $storeMock */
-        $storeMock = $this->createMock(StoreInterface::class);
+        $storeMock = $this->getMockForAbstractClass(StoreInterface::class);
         $storeMock->expects($this->any())
             ->method('getCode')
             ->willReturn($defaultStoreCode);

@@ -1,58 +1,70 @@
 <?php
-declare(strict_types=1);
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Customer\Test\Unit\Controller\Address;
 
+use Magento\Backend\Model\View\Result\RedirectFactory;
+use Magento\Customer\Controller\Adminhtml\Address\Validate;
+use Magento\Customer\Model\Metadata\Form;
+use Magento\Customer\Model\Metadata\FormFactory;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Controller\Result\Json;
+use Magento\Framework\Controller\Result\JsonFactory;
+use Magento\Framework\DataObject;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ValidateTest extends \PHPUnit\Framework\TestCase
+class ValidateTest extends TestCase
 {
     /**
-     * @var \Magento\Customer\Controller\Adminhtml\Address\Validate
+     * @var Validate
      */
     private $model;
 
     /**
-     * @var \Magento\Customer\Model\Metadata\FormFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var FormFactory|MockObject
      */
     private $formFactoryMock;
 
     /**
-     * @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var RequestInterface|MockObject
      */
     private $requestMock;
 
     /**
-     * @var \Magento\Backend\Model\View\Result\RedirectFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var RedirectFactory|MockObject
      */
     private $resultRedirectFactoryMock;
 
     /**
-     * @var \Magento\Framework\Controller\Result\JsonFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var JsonFactory|MockObject
      */
     private $resultJsonFactoryMock;
 
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->formFactoryMock = $this->createMock(\Magento\Customer\Model\Metadata\FormFactory::class);
-        $this->requestMock = $this->createMock(\Magento\Framework\App\RequestInterface::class);
-        $this->resultJsonFactoryMock = $this->createMock(\Magento\Framework\Controller\Result\JsonFactory::class);
-        $this->resultRedirectFactoryMock = $this->createMock(\Magento\Backend\Model\View\Result\RedirectFactory::class);
+        $this->formFactoryMock = $this->createMock(FormFactory::class);
+        $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
+        $this->resultJsonFactoryMock = $this->createMock(JsonFactory::class);
+        $this->resultRedirectFactoryMock = $this->createMock(RedirectFactory::class);
 
         $objectManager = new ObjectManagerHelper($this);
 
         $this->model = $objectManager->getObject(
-            \Magento\Customer\Controller\Adminhtml\Address\Validate::class,
+            Validate::class,
             [
                 'formFactory'           => $this->formFactoryMock,
                 'request'               => $this->requestMock,
@@ -65,7 +77,7 @@ class ValidateTest extends \PHPUnit\Framework\TestCase
     /**
      * Test method \Magento\Customer\Controller\Adminhtml\Address\Save::execute
      *
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws NoSuchEntityException
      */
     public function testExecute()
     {
@@ -85,7 +97,7 @@ class ValidateTest extends \PHPUnit\Framework\TestCase
             'id'               => $addressId,
         ];
 
-        $customerAddressFormMock = $this->createMock(\Magento\Customer\Model\Metadata\Form::class);
+        $customerAddressFormMock = $this->createMock(Form::class);
 
         $customerAddressFormMock->expects($this->atLeastOnce())
             ->method('extractData')
@@ -100,14 +112,14 @@ class ValidateTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->willReturn($customerAddressFormMock);
 
-        $resultJson = $this->createMock(\Magento\Framework\Controller\Result\Json::class);
+        $resultJson = $this->createMock(Json::class);
         $this->resultJsonFactoryMock->method('create')
             ->willReturn($resultJson);
 
-        $validateResponseMock = $this->createPartialMock(
-            \Magento\Framework\DataObject::class,
-            ['getError', 'setMessages']
-        );
+        $validateResponseMock = $this->getMockBuilder(DataObject::class)
+            ->addMethods(['getError', 'setMessages'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $validateResponseMock->method('setMessages')->willReturnSelf();
         $validateResponseMock->method('getError')->willReturn(1);
 

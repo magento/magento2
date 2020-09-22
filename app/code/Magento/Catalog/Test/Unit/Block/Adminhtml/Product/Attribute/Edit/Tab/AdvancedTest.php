@@ -20,6 +20,7 @@ use Magento\Framework\Data\Form\Element\Text;
 use Magento\Framework\Data\FormFactory;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
+use Magento\Framework\Json\Helper\Data as JsonHelper;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\Stdlib\DateTime;
@@ -76,9 +77,9 @@ class AdvancedTest extends TestCase
     private $propertyLockerMock;
 
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $this->registryMock = $this->createMock(Registry::class);
@@ -91,10 +92,10 @@ class AdvancedTest extends TestCase
 
         $objectManagerMock = $this->createMock(ObjectManagerInterface::class);
         $objectManagerMock->method('get')
-            ->with(ElementCreator::class)
-            ->willReturn(
-                $objectManager->getObject(ElementCreator::class)
-            );
+            ->willReturnMap([
+                [ElementCreator::class, $objectManager->getObject(ElementCreator::class)],
+                [JsonHelper::class, $objectManager->getObject(JsonHelper::class)]
+            ]);
         \Magento\Framework\App\ObjectManager::setInstance($objectManagerMock);
 
         $this->block = $objectManager->getObject(
@@ -123,37 +124,42 @@ class AdvancedTest extends TestCase
         $timeFormat = 'H:i:s:';
         $timeZone = 'America/Chicago';
 
-        $fieldSet = $this->createMock(Fieldset::class);
-        $form = $this->createMock(Form::class);
-        $attributeModel = $this->createPartialMock(
-            Attribute::class,
-            [
-                'getDefaultValue',
-                'setDisabled',
-                'getId',
-                'getEntityType',
-                'getIsUserDefined',
-                'getAttributeCode',
-                'getFrontendInput'
-            ]
-        );
-        $entityType = $this->createMock(EntityType::class);
-        $formElement = $this->createPartialMock(Text::class, ['setDisabled']);
-        $directoryReadInterface = $this->createMock(ReadInterface::class);
+        $fieldsetMock = $this->createMock(Fieldset::class);
+        $formMock = $this->createMock(Form::class);
+        $attributeModelMock = $this->getMockBuilder(Attribute::class)
+            ->addMethods(['setDisabled'])
+            ->onlyMethods(
+                [
+                    'getDefaultValue',
+                    'getId',
+                    'getEntityType',
+                    'getIsUserDefined',
+                    'getAttributeCode',
+                    'getFrontendInput'
+                ]
+            )
+            ->disableOriginalConstructor()
+            ->getMock();
+        $entityTypeMock = $this->createMock(EntityType::class);
+        $formElementMock = $this->getMockBuilder(Text::class)
+            ->addMethods(['setDisabled'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $directoryReadInterfaceMock = $this->getMockForAbstractClass(ReadInterface::class);
 
         $this->registryMock->method('registry')->with('entity_attribute')
-            ->willReturn($attributeModel);
-        $this->formFactoryMock->method('create')->willReturn($form);
-        $form->method('addFieldset')->willReturn($fieldSet);
-        $form->method('getElement')->willReturn($formElement);
-        $fieldSet->method('addField')->willReturnSelf();
-        $attributeModel->method('getDefaultValue')->willReturn($defaultValue);
-        $attributeModel->method('setDisabled')->willReturnSelf();
-        $attributeModel->method('getId')->willReturn(1);
-        $attributeModel->method('getEntityType')->willReturn($entityType);
-        $attributeModel->method('getIsUserDefined')->willReturn(false);
-        $attributeModel->method('getAttributeCode')->willReturn('attribute_code');
-        $attributeModel->method('getFrontendInput')->willReturn($frontendInput);
+            ->willReturn($attributeModelMock);
+        $this->formFactoryMock->method('create')->willReturn($formMock);
+        $formMock->method('addFieldset')->willReturn($fieldsetMock);
+        $formMock->method('getElement')->willReturn($formElementMock);
+        $fieldsetMock->method('addField')->willReturnSelf();
+        $attributeModelMock->method('getDefaultValue')->willReturn($defaultValue);
+        $attributeModelMock->method('setDisabled')->willReturnSelf();
+        $attributeModelMock->method('getId')->willReturn(1);
+        $attributeModelMock->method('getEntityType')->willReturn($entityTypeMock);
+        $attributeModelMock->method('getIsUserDefined')->willReturn(false);
+        $attributeModelMock->method('getAttributeCode')->willReturn('attribute_code');
+        $attributeModelMock->method('getFrontendInput')->willReturn($frontendInput);
 
         $dateTimeMock = $this->createMock(\DateTime::class);
         $dateTimeMock->expects($this->once())->method('setTimezone')->with(new \DateTimeZone($timeZone));
@@ -169,13 +175,13 @@ class AdvancedTest extends TestCase
             ->with($defaultValue, null, false)
             ->willReturn($dateTimeMock);
 
-        $entityType->method('getEntityTypeCode')->willReturn('entity_type_code');
+        $entityTypeMock->method('getEntityTypeCode')->willReturn('entity_type_code');
         $this->eavDataMock->method('getFrontendClasses')->willReturn([]);
-        $formElement->expects($this->exactly(3))->method('setDisabled')->willReturnSelf();
+        $formElementMock->expects($this->exactly(3))->method('setDisabled')->willReturnSelf();
         $this->yesNoMock->method('toOptionArray')->willReturn(['yes', 'no']);
-        $this->filesystemMock->method('getDirectoryRead')->willReturn($directoryReadInterface);
-        $directoryReadInterface->method('getRelativePath')->willReturn('relative_path');
-        $this->propertyLockerMock->expects($this->once())->method('lock')->with($form);
+        $this->filesystemMock->method('getDirectoryRead')->willReturn($directoryReadInterfaceMock);
+        $directoryReadInterfaceMock->method('getRelativePath')->willReturn('relative_path');
+        $this->propertyLockerMock->expects($this->once())->method('lock')->with($formMock);
 
         $this->block->setData(['action' => 'save']);
         $this->block->toHtml();

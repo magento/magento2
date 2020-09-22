@@ -17,7 +17,7 @@
                 <group value="mtf_migrated"/>
             </annotations>
             <before>
-                <actionGroup ref = "LoginAsAdmin" stepKey="loginAsAdmin"/>
+                <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
                 <!-- Create store -->
                 <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="createFirstStore">
                     <argument name="website" value="{{_defaultWebsite.name}}"/>

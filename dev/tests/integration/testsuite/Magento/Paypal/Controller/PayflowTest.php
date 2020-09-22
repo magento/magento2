@@ -37,7 +37,7 @@ class PayflowTest extends \Magento\TestFramework\TestCase\AbstractController
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -78,7 +78,7 @@ class PayflowTest extends \Magento\TestFramework\TestCase\AbstractController
     public function testCancelPaymentActionIsContentGenerated()
     {
         $this->dispatch('paypal/payflow/cancelpayment');
-        $this->assertContains("goToSuccessPage = ''", $this->getResponse()->getBody());
+        $this->assertStringContainsString("goToSuccessPage = ''", $this->getResponse()->getBody());
     }
 
     public function testReturnurlActionIsContentGenerated()
@@ -86,13 +86,13 @@ class PayflowTest extends \Magento\TestFramework\TestCase\AbstractController
         $checkoutHelper = $this->_objectManager->create(\Magento\Paypal\Helper\Checkout::class);
         $checkoutHelper->cancelCurrentOrder('test');
         $this->dispatch('paypal/payflow/returnurl');
-        $this->assertContains("goToSuccessPage = ''", $this->getResponse()->getBody());
+        $this->assertStringContainsString("goToSuccessPage = ''", $this->getResponse()->getBody());
     }
 
     public function testFormActionIsContentGenerated()
     {
         $this->dispatch('paypal/payflow/form');
-        $this->assertContains(
+        $this->assertStringContainsString(
             '<form id="token_form" method="GET" action="https://payflowlink.paypal.com">',
             $this->getResponse()->getBody()
         );

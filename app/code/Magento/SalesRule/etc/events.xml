@@ -39,4 +39,7 @@
     <event name="sales_quote_collect_totals_before">
         <observer name="salesrule_sales_quote_collect_totals_before" instance="\Magento\SalesRule\Observer\QuoteResetAppliedRulesObserver" />
     </event>
+    <event name="sales_model_service_quote_submit_failure">
+        <observer name="sales_rule_decrement_coupon_usage_quote_submit_failure" instance="\Magento\SalesRule\Observer\CouponUsagesDecrement" />
+    </event>
 </config>

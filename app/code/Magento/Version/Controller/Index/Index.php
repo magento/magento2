@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Version\Controller\Index;
 
+use Magento\Framework\App\Action\Action;
+use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Framework\Controller\Result\RawFactory as RawResponseFactory;
@@ -14,7 +16,7 @@ use Magento\Framework\Controller\Result\RawFactory as RawResponseFactory;
 /**
  * Magento Version controller: Sets the response body to ProductName/Major.MinorVersion (Edition).
  */
-class Index implements HttpGetActionInterface
+class Index extends Action implements HttpGetActionInterface
 {
     const DEV_PREFIX = 'dev-';
 
@@ -29,11 +31,16 @@ class Index implements HttpGetActionInterface
     private $rawFactory;
 
     /**
+     * @param Context $context
      * @param RawResponseFactory $rawFactory
      * @param ProductMetadataInterface $productMetadata
      */
-    public function __construct(RawResponseFactory $rawFactory, ProductMetadataInterface $productMetadata)
-    {
+    public function __construct(
+        Context $context,
+        RawResponseFactory $rawFactory,
+        ProductMetadataInterface $productMetadata
+    ) {
+        parent::__construct($context);
         $this->rawFactory = $rawFactory;
         $this->productMetadata = $productMetadata;
     }

@@ -14,7 +14,7 @@ use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Ui\Component\Listing\Columns\Column;
 
 /**
- * Class ViewAction
+ * Class ViewAction for Listing Column
  */
 class ViewAction extends Column
 {
@@ -66,7 +66,6 @@ class ViewAction extends Column
                                 ]
                             ),
                             'label' => __('View'),
-                            '__disableTmpl' => true,
                         ]
                     ];
                 }

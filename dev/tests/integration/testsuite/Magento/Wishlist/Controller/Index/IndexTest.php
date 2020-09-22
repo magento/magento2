@@ -14,7 +14,7 @@ use Magento\TestFramework\TestCase\AbstractController;
 /**
  * Test wish list on customer account page.
  *
- * @magentoDbIsolation enabled
+ * @magentoDbIsolation disabled
  * @magentoAppArea frontend
  */
 class IndexTest extends AbstractController
@@ -25,7 +25,7 @@ class IndexTest extends AbstractController
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -35,7 +35,7 @@ class IndexTest extends AbstractController
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->customerSession->setCustomerId(null);
 

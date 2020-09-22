@@ -28,7 +28,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->orderConfig = $this->objectManager->create(Config::class);
