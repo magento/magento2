@@ -18,8 +18,9 @@
             <description value="Change full access role for admin user to custom one with restricted permission (Sales)"/>
             <group value="user"/>
             <group value="mtf_migrated"/>
-            <!-- skip due to MQE-1964 -->
-            <group value="skip"/>
+            <skip>
+                <issueId value="MQE-1964"/>
+            </skip>
         </annotations>
 
         <before>

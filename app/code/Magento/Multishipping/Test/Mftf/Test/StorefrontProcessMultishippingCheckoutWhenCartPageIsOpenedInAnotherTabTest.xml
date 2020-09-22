@@ -22,8 +22,6 @@
         <before>
             <!-- Login as Admin -->
             <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
-            <!-- Set configurations -->
-            <magentoCLI command="config:set multishipping/options/checkout_multiple 1" stepKey="allowShippingToMultipleAddresses"/>
             <!-- Create two simple products -->
             <createData entity="ApiCategory" stepKey="createCategory"/>
             <createData entity="_defaultProduct" stepKey="createFirstProduct">
@@ -103,7 +101,7 @@
         <seeElement selector="{{StorefrontCustomerOrdersGridSection.orderView({$grabSecondOrderId})}}" stepKey="seeSecondOrder"/>
         <waitForPageLoad stepKey="waitForOrderPageLoad"/>
         <!-- Go to Admin > Sales > Orders -->
-        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="onOrdersPage"/>
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="onOrdersPage"/>
         <actionGroup ref="SearchAdminDataGridByKeywordActionGroup" stepKey="searchFirstOrder">
             <argument name="keyword" value="$grabFirstOrderId"/>
         </actionGroup>

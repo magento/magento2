@@ -23,7 +23,7 @@
                 <field key="price">10</field>
             </createData>
             <createData entity="FreeShippinMethodConfig" stepKey="enableFreeShipping"/>
-            <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToStorefront"/>
+            <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStorefront"/>
             <executeJS function="window.localStorage.clear();" stepKey="clearLocalStorage"/>
         </before>
         <after>
