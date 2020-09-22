@@ -190,16 +190,12 @@ require([
         postToFrame: function(newActionUrl) {
             var fileUploader = document.getElementById('{$fieldNameSourceFile}');
 
-            for (var i = 0; i < fileUploader.files.length; i++) {
-                const file = fileUploader.files[i];
-
-                if (this.loadedFileLastModified !== file.lastModified) {
-                    alert({
-                        content: '{$uploaderErrorMessage}'
-                    });
-                    fileUploader.value = null;
-                    return;
-                }
+            if (fileUploader.files.length > 0 && fileUploader.files[0].lastModified !== this.loadedFileLastModified) {
+                alert({
+                    content: '{$uploaderErrorMessage}'
+                });
+                fileUploader.value = null;
+                return;
             }
 
             if (!jQuery('[name="' + this.ifrElemName + '"]').length) {
