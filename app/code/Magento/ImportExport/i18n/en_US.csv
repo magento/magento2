@@ -127,3 +127,4 @@ Summary,Summary
 "File %1 deleted","File %1 deleted"
 "Please provide valid export file name","Please provide valid export file name"
 "%1 is not a valid file","%1 is not a valid file"
+"Something went wrong while getting data from a file, please re-upload file","Something went wrong while getting data from a file, please re-upload file"
