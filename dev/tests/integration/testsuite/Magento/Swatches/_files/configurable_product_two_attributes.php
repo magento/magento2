@@ -49,12 +49,14 @@ array_shift($options);
 array_shift($secondAttributeOptions);
 
 foreach ($options as $option) {
+    $i = 0;
     foreach ($secondAttributeOptions as $secondAttrOption) {
         $product = $productFactory->create();
         $product->setTypeId(ProductType::TYPE_SIMPLE)
             ->setAttributeSetId($product->getDefaultAttributeSetId())
             ->setWebsiteIds([$baseWebsite->getId()])
             ->setName('Configurable Option ' . $option->getLabel())
+            ->setUrlKey('Configurable Option ' . $option->getLabel() . '-' . $i++)
             ->setSku(
                 strtolower(
                     str_replace(' ', '_', 'simple ' . $option->getLabel() . '_' . $secondAttrOption->getLabel())
