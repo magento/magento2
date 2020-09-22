@@ -58,11 +58,8 @@ class DateFormatterFactory
             /**
              * Gives 4 places for year value in short style
              */
-            $pattern = $formatter->getPattern();
-            $dateFormat = $this->setFourYearPlaces($formatter->getPattern());
-            if ($dateFormat !== $pattern) {
-                $formatter->setPattern($dateFormat);
-            }
+            $longYearPattern = $this->setFourYearPlaces((string)$formatter->getPattern());
+            $formatter->setPattern($longYearPattern);
         }
 
         return $formatter;
