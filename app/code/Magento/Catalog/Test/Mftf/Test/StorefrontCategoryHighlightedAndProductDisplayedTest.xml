@@ -20,7 +20,7 @@
             <group value="Catalog"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <createData entity="SimpleSubCategory" stepKey="category1"/>
             <createData entity="SimpleSubCategory" stepKey="category2"/>
             <createData entity="SimpleSubCategory" stepKey="category3"/>
@@ -51,8 +51,7 @@
         </after>
         <!--Open Storefront home page-->
         <comment userInput="Open Storefront home page" stepKey="openStorefrontHomePage"/>
-        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToStorefrontHomePage"/>
-        <waitForPageLoad stepKey="waitForSimpleProductPage"/>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStorefrontHomePage"/>
         <!--Click on first category-->
         <comment userInput="Click on first category" stepKey="openFirstCategoryPage"/>
         <click selector="{{AdminCategorySidebarTreeSection.categoryInTree($$category1.name$$)}}" stepKey="clickCategory1Name"/>
@@ -60,10 +59,10 @@
         <!--Check if current category is highlighted and the others are not-->
         <comment userInput="Check if current category is highlighted and the others are not" stepKey="checkCateg1NameIsHighlighted"/>
         <grabAttributeFrom selector="{{AdminCategorySidebarTreeSection.categoryHighlighted($$category1.name$$)}}" userInput="class" stepKey="grabCategory1Class"/>
-        <assertContains stepKey="assertCategory1IsHighlighted">
+        <assertStringContainsString stepKey="assertCategory1IsHighlighted">
 			<actualResult type="const">$grabCategory1Class</actualResult>
 			<expectedResult type="string">active</expectedResult>
-        </assertContains>
+        </assertStringContainsString>
         <executeJS function="return document.querySelectorAll('{{AdminCategorySidebarTreeSection.categoryNotHighlighted}}').length" stepKey="highlightedAmount"/>
         <assertEquals stepKey="assertRestCategories1IsNotHighlighted">
 			<actualResult type="const">$highlightedAmount</actualResult>
@@ -80,10 +79,10 @@
         <!--Check if current category is highlighted  and the others are not-->
         <comment userInput="Check if current category is highlighted and the others are not" stepKey="checkCateg2NameIsHighlighted"/>
         <grabAttributeFrom selector="{{AdminCategorySidebarTreeSection.categoryHighlighted($$category2.name$$)}}" userInput="class" stepKey="grabCategory2Class"/>
-        <assertContains stepKey="assertCategory2IsHighlighted">
+        <assertStringContainsString stepKey="assertCategory2IsHighlighted">
 			<actualResult type="const">$grabCategory2Class</actualResult>
 			<expectedResult type="string">active</expectedResult>
-        </assertContains>
+        </assertStringContainsString>
         <executeJS function="return document.querySelectorAll('{{AdminCategorySidebarTreeSection.categoryNotHighlighted}}').length" stepKey="highlightedAmount2"/>
         <assertEquals stepKey="assertRestCategories1IsNotHighlighted2">
 			<actualResult type="const">$highlightedAmount2</actualResult>

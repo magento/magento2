@@ -18,5 +18,9 @@
         <element name="billingAddress" type="text" selector=".box.box-order-billing-address"/>
         <element name="orderStatusInGrid" type="text" selector="//td[contains(.,'{{orderId}}')]/../td[contains(.,'{{status}}')]" parameterized="true"/>
         <element name="pager" type="block" selector=".pager"/>
+        <element name="createdDate" type="text" selector=".block-order-details-comments .comment-date"/>
+        <element name="orderPlacedBy" type="text" selector=".block-order-details-comments .comment-content"/>
+        <element name="productName" type="text" selector="//td[@data-th='Product Name']"/>
+        <element name="grandTotal" type="text" selector="//tr[@class='grand_total']//td[@data-th='Grand Total']"/>
     </section>
 </sections>

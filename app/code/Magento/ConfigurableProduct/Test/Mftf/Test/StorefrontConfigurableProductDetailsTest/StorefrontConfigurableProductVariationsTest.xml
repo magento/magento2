@@ -37,7 +37,7 @@
             <createData entity="productAttributeOption2" stepKey="createSecondAttributeSecondOption">
                 <requiredEntity createDataKey="createSecondAttribute"/>
             </createData>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>

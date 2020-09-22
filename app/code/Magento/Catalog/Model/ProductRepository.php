@@ -30,7 +30,8 @@ use Magento\Framework\Exception\TemporaryState\CouldNotSaveException as Temporar
 use Magento\Framework\Exception\ValidatorException;
 
 /**
- * Product Repository.
+ * @inheritdoc
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
  */
@@ -122,14 +123,14 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     protected $fileSystem;
 
     /**
-     * @deprecated
+     * @deprecated 103.0.2
      *
      * @var ImageContentInterfaceFactory
      */
     protected $contentFactory;
 
     /**
-     * @deprecated
+     * @deprecated 103.0.2
      *
      * @var ImageProcessorInterface
      */
@@ -141,7 +142,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     protected $extensionAttributesJoinProcessor;
 
     /**
-     * @deprecated
+     * @deprecated 103.0.2
      *
      * @var \Magento\Catalog\Model\Product\Gallery\Processor
      */
@@ -404,7 +405,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     /**
      * Process new gallery media entry.
      *
-     * @deprecated
+     * @deprecated 103.0.2
      * @see MediaGalleryProcessor::processNewMediaGalleryEntry()
      *
      * @param ProductInterface $product
@@ -543,7 +544,9 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         if (!$ignoreLinksFlag && $ignoreLinksFlag !== null) {
             $productLinks = $product->getProductLinks();
         }
-        $productDataArray['store_id'] = (int)$this->storeManager->getStore()->getId();
+        if (!isset($productDataArray['store_id'])) {
+            $productDataArray['store_id'] = (int) $this->storeManager->getStore()->getId();
+        }
         $product = $this->initializeProductData($productDataArray, empty($existingProduct));
 
         $this->processLinks($product, $productLinks);
@@ -669,7 +672,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     /**
      * Helper function that adds a FilterGroup to the collection.
      *
-     * @deprecated 101.1.0
+     * @deprecated 102.0.0
      * @param \Magento\Framework\Api\Search\FilterGroup $filterGroup
      * @param Collection $collection
      * @return void
@@ -728,13 +731,14 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     /**
      * Retrieve collection processor
      *
-     * @deprecated 101.1.0
+     * @deprecated 102.0.0
      * @return CollectionProcessorInterface
      */
     private function getCollectionProcessor()
     {
         if (!$this->collectionProcessor) {
             $this->collectionProcessor = \Magento\Framework\App\ObjectManager::getInstance()->get(
+                // phpstan:ignore "Class Magento\Catalog\Model\Api\SearchCriteria\ProductCollectionProcessor not found."
                 \Magento\Catalog\Model\Api\SearchCriteria\ProductCollectionProcessor::class
             );
         }

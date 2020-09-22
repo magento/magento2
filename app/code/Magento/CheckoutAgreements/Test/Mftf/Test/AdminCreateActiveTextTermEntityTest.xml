@@ -8,7 +8,7 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminCreateActiveTextTermEntityTest">
+    <test name="AdminCreateActiveTextTermEntityTest" extends="AdminCreateActiveHtmlTermEntityTest">
         <annotations>
             <features value="CheckoutAgreements"/>
             <stories value="Checkout agreements"/>
@@ -19,33 +19,19 @@
             <group value="checkoutAgreements"/>
             <group value="mtf_migrated"/>
         </annotations>
-        <before>
-            <magentoCLI command="config:set checkout/options/enable_agreements 1" stepKey="setEnableTermsOnCheckout"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin" />
-            <createData entity="SimpleTwo" stepKey="createdProduct"/>
-            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
-        </before>
         <after>
-            <magentoCLI command="config:set checkout/options/enable_agreements 0" stepKey="setDisableTermsOnCheckout"/>
-            <deleteData createDataKey="createdProduct" stepKey="deletedProduct"/>
-            <actionGroup ref="DeleteTermActionGroup" stepKey="deleteTerm">
-                <argument name="term" value="activeTextTerm"/>
+            <actionGroup ref="AdminTermsConditionsEditTermByNameActionGroup" stepKey="openTermToDelete">
+                <argument name="termName" value="{{activeTextTerm.name}}"/>
             </actionGroup>
-            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
-        <actionGroup ref="CreateNewTermActionGroup" stepKey="createTerm">
+        <actionGroup ref="AdminTermsConditionsFillTermEditFormActionGroup" stepKey="fillNewTerm">
             <argument name="term" value="activeTextTerm"/>
         </actionGroup>
-        <actionGroup ref="AdminAssertTermInGridActionGroup" stepKey="assertTermInGrid">
+        <actionGroup ref="AssertAdminTermsConditionsInGridActionGroup" stepKey="assertTermInGrid">
             <argument name="termName" value="{{activeTextTerm.name}}"/>
         </actionGroup>
-        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addProductToTheCart">
-            <argument name="product" value="$$createdProduct$$"/>
-        </actionGroup>
-        <actionGroup ref="StorefrontProcessCheckoutToPaymentActionGroup" stepKey="processCheckoutToThePaymentMethodsPage"/>
-        <actionGroup ref="StorefrontAssertTermInCheckoutActionGroup" stepKey="assertTermInCheckout">
+        <actionGroup ref="AssertStorefrontTermInCheckoutActionGroup" stepKey="assertTermInCheckout">
             <argument name="termCheckboxText" value="{{activeTextTerm.checkboxText}}"/>
         </actionGroup>
     </test>

@@ -19,6 +19,11 @@ use Magento\Customer\Model\CustomerRegistry;
 use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Config\CacheInterface;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Sales\Api\Data\InvoiceInterface;
+use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Sales\Api\InvoiceOrderInterface;
+use Magento\Sales\Api\InvoiceRepositoryInterface;
+use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
@@ -34,11 +39,17 @@ use Magento\Customer\Model\Customer;
  */
 class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
 {
+    const NEW_CUSTOMER_EMAIL = 'new.customer@example.com';
+    const CUSTOMER_ID = 1;
+
     /** @var AccountManagementInterface */
     private $accountManagement;
 
     /** @var CustomerRepositoryInterface */
     private $customerRepository;
+
+    /** @var OrderRepositoryInterface */
+    private $orderRepository;
 
     /** @var ObjectManagerInterface */
     private $objectManager;
@@ -67,10 +78,11 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->customerRepository = $this->objectManager->create(CustomerRepositoryInterface::class);
+        $this->orderRepository = $this->objectManager->create(OrderRepositoryInterface::class);
         $this->customerFactory = $this->objectManager->create(CustomerInterfaceFactory::class);
         $this->addressFactory = $this->objectManager->create(AddressInterfaceFactory::class);
         $this->regionFactory = $this->objectManager->create(RegionInterfaceFactory::class);
@@ -88,7 +100,7 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         /** @var \Magento\Customer\Model\CustomerRegistry $customerRegistry */
@@ -273,7 +285,7 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
             ->setAddresses([$newAddressDataObject, $addresses[1]]);
         $this->customerRepository->save($newCustomerEntity);
         $newCustomer = $this->customerRepository->get($email);
-        $this->assertEquals(2, count($newCustomer->getAddresses()));
+        $this->assertCount(2, $newCustomer->getAddresses());
 
         foreach ($newCustomer->getAddresses() as $newAddress) {
             if ($newAddress->getId() == $addressId) {
@@ -306,7 +318,7 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
 
         $newCustomerDetails = $this->customerRepository->getById($customerId);
         //Verify that old addresses are still present
-        $this->assertEquals(2, count($newCustomerDetails->getAddresses()));
+        $this->assertCount(2, $newCustomerDetails->getAddresses());
     }
 
     /**
@@ -333,7 +345,7 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
 
         $newCustomerDetails = $this->customerRepository->getById($customerId);
         //Verify that old addresses are removed
-        $this->assertEquals(0, count($newCustomerDetails->getAddresses()));
+        $this->assertCount(0, $newCustomerDetails->getAddresses());
     }
 
     /**
@@ -624,5 +636,56 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
             $oldDefaultShipping,
             'Default shipping should not be overridden'
         );
+    }
+
+    /**
+     * Test that UpgradeOrderCustomerEmailObserver is executed
+     *
+     * @magentoDataFixture Magento/Sales/_files/order_with_customer.php
+     * @magentoDbIsolation enabled
+     */
+    public function testUpgradeOrderCustomerEmailObserverWhenEmailIsModified()
+    {
+        $customer = $this->customerRepository->getById(self::CUSTOMER_ID);
+        $customer->setEmail(self::NEW_CUSTOMER_EMAIL);
+
+        $this->customerRepository->save($customer);
+
+        /** @var SearchCriteriaBuilder $searchBuilder */
+        $searchBuilder = $this->objectManager->create(SearchCriteriaBuilder::class);
+        $searchCriteria = $searchBuilder
+            ->addFilter(OrderInterface::CUSTOMER_ID, $customer->getId())
+            ->create();
+
+        $customerOrders = $this->orderRepository->getList($searchCriteria);
+
+        foreach ($customerOrders as $customerOrder) {
+            $this->assertEquals(self::NEW_CUSTOMER_EMAIL, $customerOrder->getCustomerEmail());
+        }
+    }
+
+    /**
+     * Test that UpgradeOrderCustomerEmailObserver is executed but does not update orders
+     *
+     * @magentoDataFixture Magento/Sales/_files/order_with_customer.php
+     * @magentoDbIsolation enabled
+     */
+    public function testUpgradeOrderCustomerEmailObserverWhenEmailIsNotModified(): void
+    {
+        $customer = $this->customerRepository->getById(self::CUSTOMER_ID);
+
+        $this->customerRepository->save($customer);
+
+        /** @var SearchCriteriaBuilder $searchBuilder */
+        $searchBuilder = $this->objectManager->create(SearchCriteriaBuilder::class);
+        $searchCriteria = $searchBuilder
+            ->addFilter(OrderInterface::CUSTOMER_ID, $customer->getId())
+            ->create();
+
+        $customerOrders = $this->orderRepository->getList($searchCriteria);
+
+        foreach ($customerOrders as $customerOrder) {
+            $this->assertEquals('customer@null.com', $customerOrder->getCustomerEmail());
+        }
     }
 }

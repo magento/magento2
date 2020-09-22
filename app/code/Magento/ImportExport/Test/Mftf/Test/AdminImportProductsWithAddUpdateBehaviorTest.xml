@@ -29,7 +29,7 @@
             </createData>
 
             <!-- Login as Admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
             <!-- Create Website -->
             <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="AdminCreateWebsite">

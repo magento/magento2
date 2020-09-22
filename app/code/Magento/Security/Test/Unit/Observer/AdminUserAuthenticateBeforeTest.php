@@ -7,48 +7,59 @@ declare(strict_types=1);
 
 namespace Magento\Security\Test\Unit\Observer;
 
+use Magento\Framework\Event;
+use Magento\Framework\Event\Observer;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Security\Api\Data\UserExpirationInterface;
+use Magento\Security\Model\UserExpirationManager;
+use Magento\Security\Observer\AdminUserAuthenticateBefore;
+use Magento\User\Model\User;
+use Magento\User\Model\UserFactory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
 /**
  * Test for \Magento\Security\Observer\AdminUserAuthenticateBefore
  */
-class AdminUserAuthenticateBeforeTest extends \PHPUnit\Framework\TestCase
+class AdminUserAuthenticateBeforeTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
     private $objectManager;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Security\Model\UserExpirationManager
+     * @var MockObject|UserExpirationManager
      */
     private $userExpirationManagerMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\User\Model\User
+     * @var MockObject|User
      */
     private $userMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\User\Model\UserFactory
+     * @var MockObject|UserFactory
      */
     private $userFactoryMock;
 
     /**
-     * @var \Magento\Security\Observer\AdminUserAuthenticateBefore
+     * @var AdminUserAuthenticateBefore
      */
     private $observer;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Event\Observer::class
+     * @var MockObject|Observer ::class
      */
     private $eventObserverMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Event
+     * @var MockObject|Event
      */
     private $eventMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Security\Api\Data\UserExpirationInterface
+     * @var MockObject|UserExpirationInterface
      */
     private $userExpirationMock;
 
@@ -57,27 +68,30 @@ class AdminUserAuthenticateBeforeTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->objectManager = new ObjectManager($this);
 
         $this->userExpirationManagerMock = $this->createPartialMock(
-            \Magento\Security\Model\UserExpirationManager::class,
+            UserExpirationManager::class,
             ['isUserExpired', 'deactivateExpiredUsersById']
         );
-        $this->userFactoryMock = $this->createPartialMock(\Magento\User\Model\UserFactory::class, ['create']);
-        $this->userMock = $this->createPartialMock(\Magento\User\Model\User::class, ['loadByUsername', 'getId']);
+        $this->userFactoryMock = $this->createPartialMock(UserFactory::class, ['create']);
+        $this->userMock = $this->createPartialMock(User::class, ['loadByUsername', 'getId']);
         $this->observer = $this->objectManager->getObject(
-            \Magento\Security\Observer\AdminUserAuthenticateBefore::class,
+            AdminUserAuthenticateBefore::class,
             [
                 'userExpirationManager' => $this->userExpirationManagerMock,
                 'userFactory' => $this->userFactoryMock,
             ]
         );
-        $this->eventObserverMock = $this->createPartialMock(\Magento\Framework\Event\Observer::class, ['getEvent']);
-        $this->eventMock = $this->createPartialMock(\Magento\Framework\Event::class, ['getUsername']);
+        $this->eventObserverMock = $this->createPartialMock(Observer::class, ['getEvent']);
+        $this->eventMock = $this->getMockBuilder(Event::class)
+            ->addMethods(['getUsername'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->userExpirationMock = $this->createPartialMock(
-            \Magento\Security\Api\Data\UserExpirationInterface::class,
+            UserExpirationInterface::class,
             [
                 'getUserId',
                 'getExpiresAt',
@@ -89,13 +103,12 @@ class AdminUserAuthenticateBeforeTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\Plugin\AuthenticationException
-     * @expectedExceptionMessage The account sign-in was incorrect or your account is disabled temporarily.
-     *  Please wait and try again later
-     */
     public function testWithExpiredUser()
     {
+        $this->expectException('Magento\Framework\Exception\Plugin\AuthenticationException');
+        $this->expectExceptionMessage(
+            'The account sign-in was incorrect or your account is disabled temporarily. Please wait and try again later'
+        );
         $adminUserId = '123';
         $username = 'testuser';
         $this->eventObserverMock->expects(static::once())->method('getEvent')->willReturn($this->eventMock);
@@ -110,8 +123,7 @@ class AdminUserAuthenticateBeforeTest extends \PHPUnit\Framework\TestCase
         $this->userMock->expects(static::exactly(3))->method('getId')->willReturn($adminUserId);
         $this->userExpirationManagerMock->expects(static::once())
             ->method('deactivateExpiredUsersById')
-            ->with([$adminUserId])
-            ->willReturn(null);
+            ->with([$adminUserId]);
         $this->observer->execute($this->eventObserverMock);
     }
 

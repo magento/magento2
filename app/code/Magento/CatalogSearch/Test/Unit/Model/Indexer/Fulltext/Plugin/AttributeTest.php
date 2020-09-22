@@ -3,30 +3,38 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogSearch\Test\Unit\Model\Indexer\Fulltext\Plugin;
 
+use Magento\CatalogSearch\Model\Indexer\Fulltext;
 use Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Attribute;
+use Magento\Framework\Indexer\IndexerInterface;
+use Magento\Framework\Indexer\IndexerRegistry;
+use Magento\Framework\Search\Request\Config;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class AttributeTest extends \PHPUnit\Framework\TestCase
+class AttributeTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Indexer\IndexerInterface
+     * @var MockObject|IndexerInterface
      */
     protected $indexerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\ResourceModel\Attribute
+     * @var MockObject|\Magento\Catalog\Model\ResourceModel\Attribute
      */
     protected $subjectMock;
 
     /**
-     * @var \Magento\Framework\Indexer\IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
+     * @var IndexerRegistry|MockObject
      */
     protected $indexerRegistryMock;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Attribute|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\ResourceModel\Attribute|MockObject
      */
     private $attributeMock;
 
@@ -41,16 +49,16 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * @var \Magento\Framework\Search\Request\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|MockObject
      */
     private $config;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $this->subjectMock = $this->createMock(\Magento\Catalog\Model\ResourceModel\Attribute::class);
         $this->indexerMock = $this->getMockForAbstractClass(
-            \Magento\Framework\Indexer\IndexerInterface::class,
+            IndexerInterface::class,
             [],
             '',
             false,
@@ -59,14 +67,14 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
             ['getId', 'getState', '__wakeup']
         );
         $this->indexerRegistryMock = $this->createPartialMock(
-            \Magento\Framework\Indexer\IndexerRegistry::class,
+            IndexerRegistry::class,
             ['get']
         );
         $this->attributeMock = $this->createPartialMock(
             \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class,
-            ['dataHasChangedFor', 'isObjectNew', 'getIsSearchable']
+            ['dataHasChangedFor', 'isObjectNew', 'getIsSearchable', 'getData']
         );
-        $this->config =  $this->getMockBuilder(\Magento\Framework\Search\Request\Config::class)
+        $this->config =  $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->setMethods(['reset'])
             ->getMock();
@@ -85,11 +93,10 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
             ->method('isObjectNew')
             ->willReturn(true);
         $this->attributeMock->expects($this->once())
-            ->method('dataHasChangedFor')
+            ->method('getData')
             ->with('is_searchable')
             ->willReturn(true);
-        $this->assertEquals(
-            null,
+        $this->assertNull(
             $this->model->beforeSave($this->subjectMock, $this->attributeMock)
         );
     }
@@ -102,27 +109,52 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testAfterSaveWithInvalidation()
+    /**
+     * Test afterSave with invalidation.
+     *
+     * @param bool $saveNeedInvalidation
+     * @param bool $saveIsNew
+     * @dataProvider afterSaveDataProvider
+     */
+    public function testAfterSaveWithInvalidation(bool $saveNeedInvalidation, bool $saveIsNew)
     {
         $model = $this->objectManager->getObject(
             Attribute::class,
             [
                 'indexerRegistry' => $this->indexerRegistryMock,
                 'config' => $this->config,
-                'saveNeedInvalidation' => true,
-                'saveIsNew' => true
+                'saveNeedInvalidation' => $saveNeedInvalidation,
+                'saveIsNew' => $saveIsNew,
             ]
         );
 
-        $this->indexerMock->expects($this->once())->method('invalidate');
-        $this->prepareIndexer();
-        $this->config->expects($this->once())
-            ->method('reset');
+        if ($saveNeedInvalidation) {
+            $this->indexerMock->expects($this->once())->method('invalidate');
+            $this->prepareIndexer();
+        }
+
+        if ($saveIsNew || $saveNeedInvalidation) {
+            $this->config->expects($this->once())
+                ->method('reset');
+        }
 
         $this->assertEquals(
             $this->subjectMock,
             $model->afterSave($this->subjectMock, $this->subjectMock)
         );
+    }
+
+    /**
+     * @return array
+     */
+    public function afterSaveDataProvider(): array
+    {
+        return [
+            'save_new_with_invalidation' => ['saveNeedInvalidation' => true, 'isNew' => true],
+            'save_new_without_invalidation' => ['saveNeedInvalidation' => false, 'isNew' => true],
+            'update_existing_with_inalidation' => ['saveNeedInvalidation' => true, 'isNew' => false],
+            'update_existing_without_inalidation' => ['saveNeedInvalidation' => false, 'isNew' => false],
+        ];
     }
 
     public function testBeforeDelete()
@@ -133,8 +165,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
         $this->attributeMock->expects($this->once())
             ->method('getIsSearchable')
             ->willReturn(true);
-        $this->assertEquals(
-            null,
+        $this->assertNull(
             $this->model->beforeDelete($this->subjectMock, $this->attributeMock)
         );
     }
@@ -171,7 +202,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
     {
         $this->indexerRegistryMock->expects($this->once())
             ->method('get')
-            ->with(\Magento\CatalogSearch\Model\Indexer\Fulltext::INDEXER_ID)
-            ->will($this->returnValue($this->indexerMock));
+            ->with(Fulltext::INDEXER_ID)
+            ->willReturn($this->indexerMock);
     }
 }

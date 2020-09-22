@@ -16,7 +16,7 @@ class NameTest extends \PHPUnit\Framework\TestCase
     /** @var Name */
     protected $_block;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $objectManager->get(\Magento\Framework\App\State::class)->setAreaCode('frontend');
@@ -43,13 +43,13 @@ class NameTest extends \PHPUnit\Framework\TestCase
 
         $html = $this->_block->toHtml();
 
-        $this->assertContains('title="First&#x20;Name"', $html);
-        $this->assertContains('value="Jane"', $html);
-        $this->assertContains('title="Last&#x20;Name"', $html);
-        $this->assertContains('value="Doe"', $html);
-        $this->assertNotContains('title="Middle&#x20;Name&#x2F;Initial"', $html);
-        $this->assertNotContains('title="Name&#x20;Prefix"', $html);
-        $this->assertNotContains('title="Name&#x20;Suffix"', $html);
+        $this->assertStringContainsString('title="First&#x20;Name"', $html);
+        $this->assertStringContainsString('value="Jane"', $html);
+        $this->assertStringContainsString('title="Last&#x20;Name"', $html);
+        $this->assertStringContainsString('value="Doe"', $html);
+        $this->assertStringNotContainsString('title="Middle&#x20;Name&#x2F;Initial"', $html);
+        $this->assertStringNotContainsString('title="Name&#x20;Prefix"', $html);
+        $this->assertStringNotContainsString('title="Name&#x20;Suffix"', $html);
     }
 
     /**
@@ -78,15 +78,15 @@ class NameTest extends \PHPUnit\Framework\TestCase
 
         $html = $this->_block->toHtml();
 
-        $this->assertContains('title="First&#x20;Name"', $html);
-        $this->assertContains('value="Jane"', $html);
-        $this->assertContains('title="Last&#x20;Name"', $html);
-        $this->assertContains('value="Doe"', $html);
-        $this->assertContains('title="Middle&#x20;Name&#x2F;Initial"', $html);
-        $this->assertContains('value="Roe"', $html);
-        $this->assertContains('title="Name&#x20;Prefix"', $html);
-        $this->assertContains('value="Dr."', $html);
-        $this->assertContains('title="Name&#x20;Suffix"', $html);
-        $this->assertContains('value="Ph.D."', $html);
+        $this->assertStringContainsString('title="First&#x20;Name"', $html);
+        $this->assertStringContainsString('value="Jane"', $html);
+        $this->assertStringContainsString('title="Last&#x20;Name"', $html);
+        $this->assertStringContainsString('value="Doe"', $html);
+        $this->assertStringContainsString('title="Middle&#x20;Name&#x2F;Initial"', $html);
+        $this->assertStringContainsString('value="Roe"', $html);
+        $this->assertStringContainsString('title="Name&#x20;Prefix"', $html);
+        $this->assertStringContainsString('value="Dr."', $html);
+        $this->assertStringContainsString('title="Name&#x20;Suffix"', $html);
+        $this->assertStringContainsString('value="Ph.D."', $html);
     }
 }

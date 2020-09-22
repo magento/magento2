@@ -28,9 +28,13 @@
         </before>
         <remove keyForRemoval="switchStoreView"/>
         <!-- 3. Edit Category 1 for All store view: -->
-        <actionGroup ref="NavigateToCreatedCategoryActionGroup" stepKey="goToCategoryPage" after="seeValue4">
+        <actionGroup ref="NavigateToCreatedCategoryActionGroup" stepKey="goToCategoryPage" after="doNotSeeValueFour">
             <argument name="Category" value="$$simpleSubCategory1$$"/>
         </actionGroup>
         <remove keyForRemoval="uncheckRedirect2"/>
+        <!-- 4. Change URL key for category and save changes -->
+        <actionGroup ref="ChangeSeoUrlKeyActionGroup" stepKey="changeCategoryUrlKey" after="goToCategoryPage">
+            <argument name="value" value="$simpleSubCategory1.custom_attributes[url_key]$new"/>
+        </actionGroup>
     </test>
 </tests>
