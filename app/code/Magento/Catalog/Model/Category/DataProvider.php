@@ -157,7 +157,7 @@ class DataProvider extends ModifierPoolDataProvider
     /**
      * @var DataInterfaceFactory
      */
-    protected $uiConfigFactory;
+    private $uiConfigFactory;
 
     /**
      * @var ScopeOverriddenValue
@@ -183,6 +183,7 @@ class DataProvider extends ModifierPoolDataProvider
      * @var AuthorizationInterface
      */
     private $auth;
+
     /**
      * @var Image
      */
