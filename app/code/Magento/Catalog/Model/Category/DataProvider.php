@@ -217,7 +217,7 @@ class DataProvider extends ModifierPoolDataProvider
         CategoryFactory $categoryFactory,
         array $meta = [],
         array $data = [],
-        PoolInterface $pool = null,
+        PoolInterface $pool,
         ?AuthorizationInterface $auth = null,
         ?ArrayUtils $arrayUtils = null,
         ScopeOverriddenValue $scopeOverriddenValue = null,
