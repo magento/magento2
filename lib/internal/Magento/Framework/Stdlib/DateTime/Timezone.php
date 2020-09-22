@@ -129,7 +129,9 @@ class Timezone implements TimezoneInterface
         $formatter = $this->dateFormatterFactory->create(
             (string)$this->_localeResolver->getLocale(),
             (int)$type,
-            \IntlDateFormatter::NONE
+            \IntlDateFormatter::NONE,
+            null,
+            false
         );
 
         return $formatter->getPattern();
@@ -140,7 +142,13 @@ class Timezone implements TimezoneInterface
      */
     public function getDateFormatWithLongYear()
     {
-        return $this->getDateFormat();
+        $formatter = $this->dateFormatterFactory->create(
+            (string)$this->_localeResolver->getLocale(),
+            \IntlDateFormatter::SHORT,
+            \IntlDateFormatter::NONE
+        );
+
+        return $formatter->getPattern();
     }
 
     /**

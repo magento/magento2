@@ -180,16 +180,22 @@ class TimezoneTest extends TestCase
                 null
             ],
             'Parse date in short style with long year 1999' => [
-                '9/11/1999',
+                '8/11/1999',
                 'en_US',
                 false,
-                '1999-09-11'
+                '1999-08-11'
             ],
             'Parse date in short style with long year 2099' => [
                 '9/2/2099',
                 'en_US',
                 false,
                 '2099-09-02'
+            ],
+            'Parse date in short style with short year 1999' => [
+                '8/11/99',
+                'en_US',
+                false,
+                '1999-08-11'
             ],
         ];
     }
@@ -207,11 +213,37 @@ class TimezoneTest extends TestCase
         $this->assertEquals($expectedFormat, $this->getTimezone()->getDateTimeFormat($style));
     }
 
+    /**
+     * @return array
+     */
     public function getDatetimeFormatDataProvider(): array
     {
         return [
-            ['en_US', \IntlDateFormatter::SHORT, 'M/d/y h:mm a'],
+            ['en_US', \IntlDateFormatter::SHORT, 'M/d/yy h:mm a'],
             ['ar_SA', \IntlDateFormatter::SHORT, 'd/MM/y h:mm a']
+        ];
+    }
+
+    /**
+     * @param string $locale
+     * @param int $style
+     * @param string $expectedFormat
+     * @dataProvider getDateFormatWithLongYearDataProvider
+     */
+    public function testGetDateFormatWithLongYear(string $locale, string $expectedFormat): void
+    {
+        /** @var Timezone $timezone */
+        $this->localeResolver->method('getLocale')->willReturn($locale);
+        $this->assertEquals($expectedFormat, $this->getTimezone()->getDateFormatWithLongYear());
+    }
+
+    /**
+     * @return array
+     */
+    public function getDateFormatWithLongYearDataProvider(): array
+    {
+        return [
+            ['en_US', 'M/d/y'],
         ];
     }
 

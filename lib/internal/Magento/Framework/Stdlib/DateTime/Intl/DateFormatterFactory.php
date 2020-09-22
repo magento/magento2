@@ -32,19 +32,21 @@ class DateFormatterFactory
      * @param int $dateStyle
      * @param int $timeStyle
      * @param string|null $timeZone
+     * @param bool $useFourDigitsForYear
      * @return \IntlDateFormatter
      */
     public function create(
         string $locale,
         int $dateStyle,
         int $timeStyle,
-        ?string $timeZone = null
+        ?string $timeZone = null,
+        bool $useFourDigitsForYear = true
     ): \IntlDateFormatter {
         $formatter = new \IntlDateFormatter(
             $locale,
             $dateStyle,
             $timeStyle,
-            $timeZone ? new \DateTimeZone($timeZone): null
+            $timeZone
         );
         /**
          * Process custom date formats
@@ -52,7 +54,7 @@ class DateFormatterFactory
         $customDateFormat = $this->getCustomDateFormat($locale, $dateStyle, $timeStyle);
         if ($customDateFormat !== null) {
             $formatter->setPattern($customDateFormat);
-        } elseif ($dateStyle === \IntlDateFormatter::SHORT) {
+        } elseif ($dateStyle === \IntlDateFormatter::SHORT && $useFourDigitsForYear) {
             /**
              * Gives 4 places for year value in short style
              */
