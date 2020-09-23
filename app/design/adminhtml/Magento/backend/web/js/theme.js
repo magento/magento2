@@ -347,21 +347,21 @@ define('globalSearch', [
                 self.field.addClass(self.options.fieldActiveClass);
             });
 
-            $(document).keydown(function (e) {
+            $(document).keydown(function (event) {
                 var inputs = [
                     'input',
                     'select',
                     'textarea'
                 ];
 
-                if (keyCodes[e.which] !== 'forwardSlashKey' ||
-                    inputs.indexOf(e.target.tagName.toLowerCase()) !== -1 ||
-                    e.target.isContentEditable
+                if (keyCodes[event.which] !== 'forwardSlashKey' ||
+                    inputs.indexOf(event.target.tagName.toLowerCase()) !== -1 ||
+                    event.target.isContentEditable
                 ) {
                     return;
                 }
 
-                e.preventDefault();
+                event.preventDefault();
 
                 self.input.focus();
             });
