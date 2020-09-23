@@ -11,9 +11,9 @@ use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Backend\Model\Auth\Session;
 use Magento\Customer\Api\CustomerRepositoryInterface;
-use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Controller\Result\Redirect;
+use Magento\Framework\Controller\Result\Json as JsonResult;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Exception\LocalizedException;
@@ -34,7 +34,7 @@ use Magento\Store\Model\StoreManagerInterface;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Login extends Action implements HttpGetActionInterface
+class Login extends Action implements HttpPostActionInterface
 {
     /**
      * Authorization level of a basic admin session
@@ -146,8 +146,7 @@ class Login extends Action implements HttpGetActionInterface
      */
     public function execute(): ResultInterface
     {
-        /** @var Redirect $resultRedirect */
-        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
+        $messages = [];
 
         $customerId = (int)$this->_request->getParam('customer_id');
         if (!$customerId) {
@@ -160,21 +159,21 @@ class Login extends Action implements HttpGetActionInterface
                 $this->messageManager->addErrorMessage(__($message));
             }
 
-            return $resultRedirect->setPath('customer/index/index');
+            return $this->prepareJsonResult($messages);
         }
 
         try {
             $customer = $this->customerRepository->getById($customerId);
         } catch (NoSuchEntityException $e) {
-            $this->messageManager->addErrorMessage('Customer with this ID are no longer exist.');
-            return $resultRedirect->setPath('customer/index/index');
+            $messages[] = __('Customer with this ID no longer exists.');
+            return $this->prepareJsonResult($messages);
         }
 
         if ($this->config->isStoreManualChoiceEnabled()) {
             $storeId = (int)$this->_request->getParam('store_id');
             if (empty($storeId)) {
-                $this->messageManager->addNoticeMessage(__('Please select a Store View to login in.'));
-                return $resultRedirect->setPath('customer/index/edit', ['id' => $customerId]);
+                $messages[] = __('Please select a Store View to login in.');
+                return $this->prepareJsonResult($messages);
             }
         } else {
             $storeId = (int)$customer->getStoreId();
@@ -197,8 +196,8 @@ class Login extends Action implements HttpGetActionInterface
         $this->setLoggedAsCustomerCustomerId->execute($customerId);
 
         $redirectUrl = $this->getLoginProceedRedirectUrl($secret, $storeId);
-        $resultRedirect->setUrl($redirectUrl);
-        return $resultRedirect;
+
+        return $this->prepareJsonResult($messages, $redirectUrl);
     }
 
     /**
@@ -216,5 +215,25 @@ class Login extends Action implements HttpGetActionInterface
         return $this->url
             ->setScope($store)
             ->getUrl('loginascustomer/login/index', ['secret' => $secret, '_nosid' => true]);
+    }
+
+    /**
+     * Prepare JSON result
+     *
+     * @param array messages
+     * @param string|null $redirectUrl
+     * @return JsonResult
+     */
+    private function prepareJsonResult(array $messages, ?string $redirectUrl = null)
+    {
+        /** @var JsonResult $jsonResult */
+        $jsonResult = $this->resultFactory->create(ResultFactory::TYPE_JSON);
+
+        $jsonResult->setData([
+            'redirectUrl' => $redirectUrl,
+            'messages' => $messages,
+        ]);
+
+        return $jsonResult;
     }
 }
