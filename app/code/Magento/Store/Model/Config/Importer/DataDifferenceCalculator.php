@@ -21,11 +21,47 @@ class DataDifferenceCalculator
     private $runtimeConfigSource;
 
     /**
+     * Scopes identifier
+     *
+     * @var string[]
+     */
+    private $identifiers = [
+        'websites' => 'website_id',
+        'groups' => 'group_id',
+        'stores' => 'store_id',
+    ];
+
+    /**
      * @param ConfigSourceInterface $runtimeConfigSource The config source to retrieve current config
      */
     public function __construct(ConfigSourceInterface $runtimeConfigSource)
     {
         $this->runtimeConfigSource = $runtimeConfigSource;
+    }
+
+    /**
+     * Update data by checking ID
+     *
+     * @param string $scope
+     * @param array $data
+     * @param array $runtimeScopeData
+     * @return array
+     */
+    private function updateDataById(string $scope, array $data, array $runtimeScopeData): array
+    {
+        $diffData = array_diff_key($data, $runtimeScopeData);
+        foreach ($diffData as $code => $datum) {
+            foreach ($runtimeScopeData as $runTimeScopeCode => $runtimeScopeDatum) {
+                if (isset($datum[$this->identifiers[$scope]])
+                    && $datum[$this->identifiers[$scope]] === $runtimeScopeDatum[$this->identifiers[$scope]]
+                ) {
+                    $data[$runTimeScopeCode] = $data[$code];
+                    unset($data[$code]);
+                }
+            }
+        }
+
+        return $data;
     }
 
     /**
@@ -41,6 +77,7 @@ class DataDifferenceCalculator
         $runtimeScopeData = $this->changeDataKeyToCode(
             $this->getRuntimeData($scope)
         );
+        $data = $this->updateDataById($scope, $data, $runtimeScopeData);
 
         return array_diff_key($runtimeScopeData, $data);
     }
@@ -58,6 +95,7 @@ class DataDifferenceCalculator
         $runtimeScopeData = $this->changeDataKeyToCode(
             $this->getRuntimeData($scope)
         );
+        $data = $this->updateDataById($scope, $data, $runtimeScopeData);
 
         return array_diff_key($data, $runtimeScopeData);
     }
@@ -77,7 +115,7 @@ class DataDifferenceCalculator
         $runtimeScopeData = $this->changeDataKeyToCode(
             $this->getRuntimeData($scope)
         );
-
+        $data = $this->updateDataById($scope, $data, $runtimeScopeData);
         foreach ($runtimeScopeData as $entityCode => $entityData) {
             if (isset($data[$entityCode]) && array_diff_assoc($entityData, $data[$entityCode])) {
                 $itemsToUpdate[$entityCode] = array_replace($entityData, $data[$entityCode]);

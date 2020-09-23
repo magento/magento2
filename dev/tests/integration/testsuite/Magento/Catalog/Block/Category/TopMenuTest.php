@@ -50,7 +50,7 @@ class TopMenuTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -71,7 +71,7 @@ class TopMenuTest extends TestCase
     public function testTopMenuItemDisplay(): void
     {
         $output = $this->block->getHtml('level-top', 'submenu', 0);
-        $this->assertContains('Category 1', $output);
+        $this->assertStringContainsString('Category 1', $output);
     }
 
     /**
@@ -130,7 +130,7 @@ class TopMenuTest extends TestCase
         $this->updateCategories($categories);
         $output = $this->block->getHtml('level-top', 'submenu', 0);
         foreach ($expectedCategories as $data) {
-            $this->assertContains(
+            $this->assertStringContainsString(
                 $data['name'],
                 $output,
                 'Category ' . $data['name'] . ' should appear in the menu!'
@@ -200,7 +200,7 @@ class TopMenuTest extends TestCase
         $this->updateCategories($categories);
         $output = $this->block->getHtml('level-top', 'submenu', 0);
         foreach ($expectedCategories as $data) {
-            $this->assertNotContains(
+            $this->assertStringNotContainsString(
                 $data['name'],
                 $output,
                 'Category ' . $data['name'] . ' should not appear in the menu!'
@@ -430,12 +430,12 @@ class TopMenuTest extends TestCase
     ): void {
         $this->storeManager->setCurrentStore($storeCode);
         $output = $this->block->getHtml('level-top', 'submenu', 0);
-        $this->assertContains(
+        $this->assertStringContainsString(
             $expectedCategory,
             $output,
             'Category "' . $expectedCategory . '" should appear in the menu!'
         );
-        $this->assertNotContains(
+        $this->assertStringNotContainsString(
             $notExpectedCategory,
             $output,
             'Category "' . $notExpectedCategory . '" should not appear in the menu!'

@@ -7,10 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Fixtures\AttributeSet;
 
+use Magento\Setup\Fixtures\AttributeSet\Pattern;
+use PHPUnit\Framework\TestCase;
+
 /**
  * @SuppressWarnings(PHPMD)
  */
-class PatternTest extends \PHPUnit\Framework\TestCase
+class PatternTest extends TestCase
 {
     public function testGenerateAttributeSet()
     {
@@ -46,7 +49,7 @@ class PatternTest extends \PHPUnit\Framework\TestCase
                 ]
             ]
         ];
-        $pattern = new \Magento\Setup\Fixtures\AttributeSet\Pattern();
+        $pattern = new Pattern();
         $this->assertEquals(
             $attributeSets,
             $pattern->generateAttributeSet(

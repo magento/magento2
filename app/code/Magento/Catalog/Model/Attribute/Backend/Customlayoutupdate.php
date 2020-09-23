@@ -22,7 +22,7 @@ class Customlayoutupdate extends AbstractBackend
 {
     /**
      * @var ValidatorFactory
-     * @deprecated Is not used anymore.
+     * @deprecated 103.0.4 Is not used anymore.
      */
     protected $_layoutUpdateValidatorFactory;
 
@@ -117,6 +117,7 @@ class Customlayoutupdate extends AbstractBackend
      *
      * @param AbstractModel $object
      * @throws LocalizedException
+     * @since 103.0.4
      */
     public function beforeSave($object)
     {

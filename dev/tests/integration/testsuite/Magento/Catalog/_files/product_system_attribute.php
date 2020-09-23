@@ -5,8 +5,9 @@
  */
 declare(strict_types=1);
 
-// phpcs:ignore Magento2.Security.IncludeFile
-require __DIR__ . '/product_attribute.php';
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
+
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/product_attribute.php');
 /** @var $attributeRepository \Magento\Catalog\Model\Product\Attribute\Repository */
 $attributeRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
     ->get(\Magento\Catalog\Model\Product\Attribute\Repository::class);

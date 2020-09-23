@@ -4,33 +4,42 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Bundle\Test\Unit\Model;
 
-class OptionTypeListTest extends \PHPUnit\Framework\TestCase
+use Magento\Bundle\Api\Data\OptionTypeInterface;
+use Magento\Bundle\Api\Data\OptionTypeInterfaceFactory;
+use Magento\Bundle\Model\OptionTypeList;
+use Magento\Bundle\Model\Source\Option\Type;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class OptionTypeListTest extends TestCase
 {
     /**
-     * @var \Magento\Bundle\Model\OptionTypeList
+     * @var OptionTypeList
      */
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $typeMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $typeFactoryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->typeMock = $this->createMock(\Magento\Bundle\Model\Source\Option\Type::class);
+        $this->typeMock = $this->createMock(Type::class);
         $this->typeFactoryMock = $this->createPartialMock(
-            \Magento\Bundle\Api\Data\OptionTypeInterfaceFactory::class,
+            OptionTypeInterfaceFactory::class,
             ['create']
         );
-        $this->model = new \Magento\Bundle\Model\OptionTypeList(
+        $this->model = new OptionTypeList(
             $this->typeMock,
             $this->typeFactoryMock
         );
@@ -42,7 +51,7 @@ class OptionTypeListTest extends \PHPUnit\Framework\TestCase
             ->method('toOptionArray')
             ->willReturn([['value' => 'value', 'label' => 'label']]);
 
-        $typeMock = $this->createMock(\Magento\Bundle\Api\Data\OptionTypeInterface::class);
+        $typeMock = $this->getMockForAbstractClass(OptionTypeInterface::class);
         $typeMock->expects($this->once())->method('setCode')->with('value')->willReturnSelf();
         $typeMock->expects($this->once())->method('setLabel')->with('label')->willReturnSelf();
         $this->typeFactoryMock->expects($this->once())->method('create')->willReturn($typeMock);

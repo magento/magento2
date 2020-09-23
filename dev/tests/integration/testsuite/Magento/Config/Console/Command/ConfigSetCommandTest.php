@@ -23,7 +23,7 @@ use Magento\Framework\Stdlib\ArrayManager;
 use Magento\Store\Model\ScopeInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
-use PHPUnit_Framework_MockObject_MockObject as Mock;
+use PHPUnit\Framework\MockObject\MockObject as Mock;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -89,7 +89,7 @@ class ConfigSetCommandTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         Bootstrap::getInstance()->reinitialize();
         $this->objectManager = Bootstrap::getObjectManager();
@@ -115,7 +115,7 @@ class ConfigSetCommandTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->filesystem->getDirectoryWrite(DirectoryList::CONFIG)->writeFile(
             $this->configFilePool->getPath(ConfigFilePool::APP_ENV),
@@ -253,7 +253,7 @@ class ConfigSetCommandTest extends \PHPUnit\Framework\TestCase
             $value,
             $this->scopeConfig->getValue($path, $scope, $scopeCode)
         );
-        $this->assertSame(null, $this->arrayManager->get($configPath, $this->loadConfig()));
+        $this->assertNull($this->arrayManager->get($configPath, $this->loadConfig()));
 
         $this->runCommand($arguments, $optionsLock, '<info>Value was saved in app/etc/env.php and locked.</info>');
         $this->runCommand($arguments, $optionsLock, '<info>Value was saved in app/etc/env.php and locked.</info>');

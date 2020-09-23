@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminEnhancedMediaGalleryAssertActiveFiltersActionGroup">
+        <annotations>
+            <description>Assert media gallery grid filters</description>
+        </annotations>
+        <arguments>
+            <argument name="resultValue" type="string"/>
+        </arguments>
+        <click selector="{{AdminEnhancedMediaGalleryFiltersSection.filtersButton}}" stepKey="expandFiltersToCheckAppliedFilter"/>
+        <see selector="{{AdminEnhancedMediaGalleryFiltersSection.activeFilter(resultValue)}}" userInput="{{resultValue}}" stepKey="verifyAppliedFilter"/>
+    </actionGroup>
+</actionGroups>

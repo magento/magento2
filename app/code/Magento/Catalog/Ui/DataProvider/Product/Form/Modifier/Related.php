@@ -25,7 +25,7 @@ use Magento\Catalog\Helper\Image as ImageHelper;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 
 /**
- * Class Related
+ * Class for Product Modifier Related
  *
  * @api
  *
@@ -143,7 +143,8 @@ class Related extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @since 101.0.0
      */
     public function modifyMeta(array $meta)
@@ -182,7 +183,8 @@ class Related extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @since 101.0.0
      */
     public function modifyData(array $data)
@@ -528,10 +530,12 @@ class Related extends AbstractModifier
                                 'imports' => [
                                     'productId' => '${ $.provider }:data.product.current_product_id',
                                     'storeId' => '${ $.provider }:data.product.current_store_id',
+                                    '__disableTmpl' => ['productId' => false, 'storeId' => false],
                                 ],
                                 'exports' => [
                                     'productId' => '${ $.externalProvider }:params.current_product_id',
                                     'storeId' => '${ $.externalProvider }:params.current_store_id',
+                                    '__disableTmpl' => ['productId' => false, 'storeId' => false],
                                 ]
                             ],
                         ],
@@ -582,7 +586,8 @@ class Related extends AbstractModifier
                             'thumbnail' => 'thumbnail_src',
                         ],
                         'links' => [
-                            'insertData' => '${ $.provider }:${ $.dataProvider }'
+                            'insertData' => '${ $.provider }:${ $.dataProvider }',
+                            '__disableTmpl' => ['insertData' => false],
                         ],
                         'sortOrder' => 2,
                     ],

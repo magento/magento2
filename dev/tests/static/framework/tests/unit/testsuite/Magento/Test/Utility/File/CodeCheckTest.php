@@ -14,7 +14,7 @@ class CodeCheckTest extends \PHPUnit\Framework\TestCase
      */
     private $codeCheck;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->codeCheck = new CodeCheck();
     }

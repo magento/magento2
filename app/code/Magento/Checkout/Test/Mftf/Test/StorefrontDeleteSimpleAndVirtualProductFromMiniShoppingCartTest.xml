@@ -47,8 +47,7 @@
         </actionGroup>
 
         <!-- Assert Simple and Virtual products in mini cart -->
-        <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="clickOnMiniCart"/>
-        <waitForPageLoad stepKey="waitForPageToLoad1"/>
+        <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="clickOnMiniCart"/>
         <actionGroup ref="AssertStorefrontMiniCartItemsActionGroup" stepKey="assertSimpleProductInMiniCart">
             <argument name="productName" value="$$simpleProduct.name$$"/>
             <argument name="productPrice" value="$10.00"/>

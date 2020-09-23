@@ -3,19 +3,23 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Analytics\Test\Unit\Model;
 
 use Magento\Analytics\Model\Config;
 use Magento\Framework\Config\DataInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ConfigTest extends \PHPUnit\Framework\TestCase
+class ConfigTest extends TestCase
 {
     /**
-     * @var DataInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var DataInterface|MockObject
      */
     private $dataInterfaceMock;
 
@@ -32,11 +36,9 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->dataInterfaceMock = $this->getMockBuilder(DataInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->dataInterfaceMock = $this->getMockForAbstractClass(DataInterface::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
