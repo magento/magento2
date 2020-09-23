@@ -5,9 +5,10 @@
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Create;
 
-use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Catalog\Model\Product;
-use Magento\Catalog\Pricing\Price\FinalPrice;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Quote\Model\Quote\Item as QuoteItem;
+use Magento\Wishlist\Model\Item as WishlistItem;
 
 /**
  * Adminhtml sales order create abstract block
@@ -133,6 +134,8 @@ abstract class AbstractCreate extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Returns item price
+     *
      * @param Product $product
      * @return string
      */
@@ -164,8 +167,7 @@ abstract class AbstractCreate extends \Magento\Backend\Block\Widget
     /**
      * If item is quote or wishlist we need to get product from it.
      *
-     * @param $item
-     *
+     * @param QuoteItem|WishlistItem|Product $item
      * @return Product
      */
     public function getProduct($item)
