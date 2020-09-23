@@ -220,7 +220,7 @@ class Login extends Action implements HttpPostActionInterface
     /**
      * Prepare JSON result
      *
-     * @param array messages
+     * @param array $messages
      * @param string|null $redirectUrl
      * @return JsonResult
      */
