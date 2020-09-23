@@ -16,12 +16,12 @@
                 <field id="customer" translate="label comment" type="text" sortOrder="30" showInDefault="1" canRestore="1">
                     <label>Customer Token Lifetime (hours)</label>
                     <comment>We will disable this feature if the value is empty.</comment>
-                    <validate>required-entry validate-zero-or-greater validate-number</validate>
+                    <validate>validate-zero-or-greater validate-number</validate>
                 </field>
                 <field id="admin" translate="label comment" type="text" sortOrder="60" showInDefault="1" canRestore="1">
                     <label>Admin Token Lifetime (hours)</label>
                     <comment>We will disable this feature if the value is empty.</comment>
-                    <validate>required-entry validate-zero-or-greater validate-number</validate>
+                    <validate>validate-zero-or-greater validate-number</validate>
                 </field>
             </group>
             <group id="cleanup" translate="label" type="text" sortOrder="300" showInDefault="1">
