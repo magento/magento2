@@ -18,7 +18,6 @@ class DateFormatterFactory
     private const CUSTOM_DATE_FORMATS = [
         'ar_SA' => [
             \IntlDateFormatter::SHORT => 'd/MM/y',
-            \IntlDateFormatter::MEDIUM => 'MMM d, y',
         ]
     ];
 
