@@ -15,7 +15,6 @@
         <arguments>
             <argument name="category"/>
             <argument name="simpleProduct"/>
-            <argument name="charLimit"/>
         </arguments>
 
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>

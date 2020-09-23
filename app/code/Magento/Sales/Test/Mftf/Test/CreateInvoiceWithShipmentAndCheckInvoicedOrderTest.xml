@@ -71,18 +71,17 @@
         <grabTextFrom selector="|Order # (\d+)|" stepKey="getOrderId"/>
 
         <!-- Open created order -->
-        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="goToOrdersPage"/>
-        <waitForPageLoad stepKey="waitForOrdersPageLoad"/>
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="goToOrdersPage"/>
         <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrdersGridById">
             <argument name="orderId" value="$getOrderId"/>
         </actionGroup>
         <click selector="{{AdminDataGridTableSection.firstRow}}" stepKey="clickCreatedOrderInGrid"/>
 
         <!-- Go to invoice tab and fill data -->
-        <click selector="{{AdminOrderDetailsMainActionsSection.invoice}}" stepKey="clickInvoiceAction"/>
+        <actionGroup ref="AdminClickInvoiceButtonOrderViewActionGroup" stepKey="clickInvoiceAction"/>
         <click selector="{{AdminInvoicePaymentShippingSection.CreateShipment}}" stepKey="createShipment"/>
         <fillField selector="{{AdminInvoiceTotalSection.invoiceComment}}" userInput="comment" stepKey="writeComment"/>
-        <click selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="clickSubmitInvoice"/>
+        <actionGroup ref="AdminInvoiceClickSubmitActionGroup" stepKey="clickSubmitInvoice"/>
 
         <!-- Assert invoice with shipment success message -->
         <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="You created the invoice and shipment." stepKey="seeSuccessMessage"/>
@@ -101,8 +100,7 @@
         <grabFromCurrentUrl regex="~/invoice_id/(\d+)/~" stepKey="grabInvoiceId"/>
 
         <!-- Assert no invoice button -->
-        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="goToOrders"/>
-        <waitForPageLoad stepKey="waitForOrdersLoad"/>
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="goToOrders"/>
         <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderGridByIdForAssertingInvoiceBtn">
             <argument name="orderId" value="$getOrderId"/>
         </actionGroup>
@@ -126,8 +124,7 @@
         <waitForPageLoad stepKey="waitForCustomerLogin"/>
 
         <!-- Open My Account > My Orders -->
-        <amOnPage stepKey="goToMyAccountPage" url="{{StorefrontCustomerDashboardPage.url}}"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <actionGroup ref="StorefrontOpenMyAccountPageActionGroup" stepKey="goToMyAccountPage"/>
         <actionGroup ref="StorefrontCustomerGoToSidebarMenu" stepKey="goToSidebarMenu">
             <argument name="menu" value="My Orders"/>
         </actionGroup>
@@ -146,8 +143,7 @@
         <grabFromCurrentUrl regex="~/shipment_id/(\d+)/~" stepKey="grabShipmentId"/>
 
         <!-- Assert no ship button -->
-        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="goToAdminOrdersPage"/>
-        <waitForPageLoad stepKey="waitForOrdersPageToLoad"/>
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="goToAdminOrdersPage"/>
         <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderGridByIdForAssertingShipBtn">
             <argument name="orderId" value="$getOrderId"/>
         </actionGroup>

@@ -43,7 +43,7 @@ class PlaceOrderTest extends GraphQlAbstract
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->getMaskedQuoteIdByReservedOrderId = $objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
@@ -83,11 +83,12 @@ class PlaceOrderTest extends GraphQlAbstract
     }
 
     /**
-     * @expectedException Exception
-     * @expectedExceptionMessage Required parameter "cart_id" is missing
      */
     public function testPlaceOrderIfCartIdIsEmpty()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Required parameter "cart_id" is missing');
+
         $maskedQuoteId = '';
         $query = $this->getQuery($maskedQuoteId);
 
@@ -110,11 +111,12 @@ class PlaceOrderTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_flatrate_shipping_method.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_checkmo_payment_method.php
      *
-     * @expectedException \Exception
-     * @expectedExceptionMessage Guest email for cart is missing.
      */
     public function testPlaceOrderWithNoEmail()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Guest email for cart is missing.');
+
         $reservedOrderId = 'test_quote';
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute($reservedOrderId);
         $query = $this->getQuery($maskedQuoteId);
@@ -193,7 +195,7 @@ class PlaceOrderTest extends GraphQlAbstract
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute($reservedOrderId);
         $query = $this->getQuery($maskedQuoteId);
 
-        self::expectExceptionMessageRegExp(
+        self::expectExceptionMessageMatches(
             '/Unable to place order: Please check the billing address information*/'
         );
         $this->graphQlMutation($query);
@@ -268,7 +270,7 @@ class PlaceOrderTest extends GraphQlAbstract
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute($reservedOrderId);
         $query = $this->getQuery($maskedQuoteId);
 
-        self::expectExceptionMessageRegExp('/The current user cannot perform operations on cart*/');
+        self::expectExceptionMessageMatches('/The current user cannot perform operations on cart*/');
         $this->graphQlMutation($query);
     }
 
@@ -292,7 +294,7 @@ QUERY;
     /**
      * @inheritdoc
      */
-    public function tearDown()
+    protected function tearDown(): void
     {
         $this->registry->unregister('isSecureArea');
         $this->registry->register('isSecureArea', true);

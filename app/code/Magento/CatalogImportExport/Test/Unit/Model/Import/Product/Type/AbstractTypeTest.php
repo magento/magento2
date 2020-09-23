@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /**
  * Copyright © Magento, Inc. All rights reserved.
@@ -6,8 +6,20 @@
  */
 namespace Magento\CatalogImportExport\Test\Unit\Model\Import\Product\Type;
 
+use Magento\CatalogImportExport\Model\Import\Product;
+use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
 use Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType as AbstractType;
+use Magento\CatalogImportExport\Model\Import\Product\Type\Simple;
+use Magento\Eav\Model\Entity\Attribute;
+use Magento\Eav\Model\Entity\Attribute\Set;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Adapter\Pdo\Mysql;
+use Magento\Framework\DB\Select;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for import product AbstractType class
@@ -15,15 +27,15 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
  * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AbstractTypeTest extends \PHPUnit\Framework\TestCase
+class AbstractTypeTest extends TestCase
 {
     /**
-     * @var \Magento\CatalogImportExport\Model\Import\Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var Product|MockObject
      */
     protected $entityModel;
 
     /**
-     * @var \Magento\CatalogImportExport\Model\Import\Product\Type\Simple
+     * @var Simple
      */
     protected $simpleType;
 
@@ -33,38 +45,38 @@ class AbstractTypeTest extends \PHPUnit\Framework\TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResourceConnection|MockObject
      */
     protected $resource;
 
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AdapterInterface|MockObject
      */
     protected $connection;
 
     /**
-     * @var \Magento\Framework\DB\Select|\PHPUnit_Framework_MockObject_MockObject
+     * @var Select|MockObject
      */
     protected $select;
 
     /**
-     * @var AbstractType|\PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractType|MockObject
      */
     protected $abstractType;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->entityModel = $this->createMock(\Magento\CatalogImportExport\Model\Import\Product::class);
+        $this->entityModel = $this->createMock(Product::class);
         $attrSetColFactory = $this->createPartialMock(
             \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory::class,
             ['create']
         );
-        $attrSetCollection = $this->createMock(\Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection::class);
+        $attrSetCollection = $this->createMock(Collection::class);
         $attrColFactory = $this->createPartialMock(
             \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory::class,
             ['create']
         );
-        $attributeSet = $this->createMock(\Magento\Eav\Model\Entity\Attribute\Set::class);
+        $attributeSet = $this->createMock(Set::class);
         $attrCollection = $this->createPartialMock(
             \Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection::class,
             [
@@ -72,23 +84,22 @@ class AbstractTypeTest extends \PHPUnit\Framework\TestCase
                 'setAttributeSetFilter'
             ]
         );
-        $attribute = $this->createPartialMock(
-            \Magento\Eav\Model\Entity\Attribute::class,
-            [
-                'getAttributeCode',
-                'getId',
-                'getIsVisible',
-                'getIsGlobal',
-                'getIsRequired',
-                'getIsUnique',
-                'getFrontendLabel',
-                'isStatic',
-                'getApplyTo',
-                'getDefaultValue',
-                'usesSource',
-                'getFrontendInput',
-            ]
-        );
+        $attribute = $this->getMockBuilder(Attribute::class)
+            ->addMethods(['getIsVisible', 'getIsGlobal', 'getFrontendLabel', 'getApplyTo'])
+            ->onlyMethods(
+                [
+                    'getAttributeCode',
+                    'getId',
+                    'getIsRequired',
+                    'getIsUnique',
+                    'isStatic',
+                    'getDefaultValue',
+                    'usesSource',
+                    'getFrontendInput'
+                ]
+            )
+            ->disableOriginalConstructor()
+            ->getMock();
         $attribute->expects($this->any())->method('getIsVisible')->willReturn(true);
         $attribute->expects($this->any())->method('getIsGlobal')->willReturn(true);
         $attribute->expects($this->any())->method('getIsRequired')->willReturn(true);
@@ -148,42 +159,33 @@ class AbstractTypeTest extends \PHPUnit\Framework\TestCase
                 ['main_table.attribute_id', 'main_table.attribute_code'],
                 [
                     [
-                        'in' =>
-                            [
-                                'attribute_id',
-                                'boolean_attribute',
-                            ],
+                        'in' => [
+                            'attribute_id',
+                            'boolean_attribute',
+                        ],
                     ],
                     [
-                        'in' =>
-                            [
-                                'related_tgtr_position_behavior',
-                                'related_tgtr_position_limit',
-                                'upsell_tgtr_position_behavior',
-                                'upsell_tgtr_position_limit',
-                                'thumbnail_label',
-                                'small_image_label',
-                                'image_label',
-                            ],
+                        'in' => [
+                            'related_tgtr_position_behavior',
+                            'related_tgtr_position_limit',
+                            'upsell_tgtr_position_behavior',
+                            'upsell_tgtr_position_limit',
+                            'thumbnail_label',
+                            'small_image_label',
+                            'image_label',
+                        ],
                     ],
                 ]
             )
             ->willReturn([$attribute1, $attribute2, $attribute3]);
 
-        $this->connection = $this->createPartialMock(
-            \Magento\Framework\DB\Adapter\Pdo\Mysql::class,
-            [
-                'select',
-                'fetchAll',
-                'fetchPairs',
-                'joinLeft',
-                'insertOnDuplicate',
-                'delete',
-                'quoteInto'
-            ]
-        );
+        $this->connection = $this->getMockBuilder(Mysql::class)
+            ->addMethods(['joinLeft'])
+            ->onlyMethods(['select', 'fetchAll', 'fetchPairs', 'insertOnDuplicate', 'delete', 'quoteInto'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->select = $this->createPartialMock(
-            \Magento\Framework\DB\Select::class,
+            Select::class,
             [
                 'from',
                 'where',
@@ -191,12 +193,12 @@ class AbstractTypeTest extends \PHPUnit\Framework\TestCase
                 'getConnection',
             ]
         );
-        $this->select->expects($this->any())->method('from')->will($this->returnSelf());
-        $this->select->expects($this->any())->method('where')->will($this->returnSelf());
-        $this->select->expects($this->any())->method('joinLeft')->will($this->returnSelf());
-        $this->connection->expects($this->any())->method('select')->will($this->returnValue($this->select));
-        $connection = $this->createMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class);
-        $connection->expects($this->any())->method('quoteInto')->will($this->returnValue('query'));
+        $this->select->expects($this->any())->method('from')->willReturnSelf();
+        $this->select->expects($this->any())->method('where')->willReturnSelf();
+        $this->select->expects($this->any())->method('joinLeft')->willReturnSelf();
+        $this->connection->expects($this->any())->method('select')->willReturn($this->select);
+        $connection = $this->createMock(Mysql::class);
+        $connection->expects($this->any())->method('quoteInto')->willReturn('query');
         $this->select->expects($this->any())->method('getConnection')->willReturn($connection);
         $this->connection->expects($this->any())->method('insertOnDuplicate')->willReturnSelf();
         $this->connection->expects($this->any())->method('delete')->willReturnSelf();
@@ -204,25 +206,25 @@ class AbstractTypeTest extends \PHPUnit\Framework\TestCase
         $this->connection
             ->expects($this->any())
             ->method('fetchAll')
-            ->will($this->returnValue($entityAttributes));
+            ->willReturn($entityAttributes);
 
         $this->resource = $this->createPartialMock(
-            \Magento\Framework\App\ResourceConnection::class,
+            ResourceConnection::class,
             [
                 'getConnection',
                 'getTableName',
             ]
         );
-        $this->resource->expects($this->any())->method('getConnection')->will(
-            $this->returnValue($this->connection)
+        $this->resource->expects($this->any())->method('getConnection')->willReturn(
+            $this->connection
         );
-        $this->resource->expects($this->any())->method('getTableName')->will(
-            $this->returnValue('tableName')
+        $this->resource->expects($this->any())->method('getTableName')->willReturn(
+            'tableName'
         );
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->simpleType = $this->objectManagerHelper->getObject(
-            \Magento\CatalogImportExport\Model\Import\Product\Type\Simple::class,
+            Simple::class,
             [
                 'attrSetColFac' => $attrSetColFactory,
                 'prodAttrColFac' => $attrColFactory,
@@ -234,8 +236,8 @@ class AbstractTypeTest extends \PHPUnit\Framework\TestCase
         $this->abstractType = $this->getMockBuilder(
             \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType::class
         )
-        ->disableOriginalConstructor()
-        ->getMockForAbstractClass();
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
     }
 
     /**
@@ -281,7 +283,7 @@ class AbstractTypeTest extends \PHPUnit\Framework\TestCase
             $this->simpleType,
             '_attributes',
             [
-                $rowData[\Magento\CatalogImportExport\Model\Import\Product::COL_ATTR_SET] => [],
+                $rowData[Product::COL_ATTR_SET] => [],
             ]
         );
         $this->assertTrue($this->simpleType->isRowValid($rowData, $rowNum));
@@ -297,7 +299,7 @@ class AbstractTypeTest extends \PHPUnit\Framework\TestCase
         $this->entityModel->expects($this->any())->method('getRowScope')->willReturn(1);
         $this->entityModel->expects($this->once())->method('addRowError')
             ->with(
-                \Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface::ERROR_VALUE_IS_REQUIRED,
+                RowValidatorInterface::ERROR_VALUE_IS_REQUIRED,
                 1,
                 'attr_code'
             )
@@ -306,7 +308,7 @@ class AbstractTypeTest extends \PHPUnit\Framework\TestCase
             $this->simpleType,
             '_attributes',
             [
-                $rowData[\Magento\CatalogImportExport\Model\Import\Product::COL_ATTR_SET] => [
+                $rowData[Product::COL_ATTR_SET] => [
                     'attr_code' => [
                         'is_required' => true,
                     ],

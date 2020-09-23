@@ -14,7 +14,7 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
      */
     protected $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
     }
@@ -35,17 +35,17 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
         $result = $model->processFileContent($imageContent);
 
         $this->assertArrayHasKey('fullpath', $result);
-        $this->assertTrue(file_exists($result['fullpath']));
+        $this->assertFileExists($result['fullpath']);
 
         /** @var  $filesystem \Magento\Framework\Filesystem */
         $filesystem = $this->objectManager->get(\Magento\Framework\Filesystem::class);
         $this->assertArrayHasKey('quote_path', $result);
         $filePath = $filesystem->getDirectoryRead(DirectoryList::MEDIA)->getAbsolutePath($result['quote_path']);
-        $this->assertTrue(file_exists($filePath));
+        $this->assertFileExists($filePath);
 
         $this->assertArrayHasKey('order_path', $result);
         $filePath = $filesystem->getDirectoryRead(DirectoryList::MEDIA)->getAbsolutePath($result['order_path']);
-        $this->assertTrue(file_exists($filePath));
+        $this->assertFileExists($filePath);
     }
 
     public function pathConfigDataProvider()

@@ -8,6 +8,8 @@ declare(strict_types=1);
 namespace Magento\Captcha\Controller\Refresh;
 
 use Magento\Captcha\Helper\Data as CaptchaHelper;
+use Magento\Framework\App\Action\Action;
+use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Controller\Result\JsonFactory as JsonResultFactory;
@@ -18,7 +20,7 @@ use Magento\Framework\View\LayoutInterface;
  * Refreshes captcha and returns JSON encoded URL to image (AJAX action)
  * Example: {'imgSrc': 'http://example.com/media/captcha/67842gh187612ngf8s.png'}
  */
-class Index implements HttpPostActionInterface
+class Index extends Action implements HttpPostActionInterface
 {
     /**
      * @var CaptchaHelper
@@ -46,6 +48,7 @@ class Index implements HttpPostActionInterface
     private $jsonResultFactory;
 
     /**
+     * @param Context $context
      * @param RequestInterface $request
      * @param JsonResultFactory $jsonFactory
      * @param CaptchaHelper $captchaHelper
@@ -53,12 +56,14 @@ class Index implements HttpPostActionInterface
      * @param JsonSerializer $serializer
      */
     public function __construct(
+        Context $context,
         RequestInterface $request,
         JsonResultFactory $jsonFactory,
         CaptchaHelper $captchaHelper,
         LayoutInterface $layout,
         JsonSerializer $serializer
     ) {
+        parent::__construct($context);
         $this->request = $request;
         $this->jsonResultFactory = $jsonFactory;
         $this->captchaHelper = $captchaHelper;

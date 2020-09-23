@@ -33,7 +33,7 @@ class MergeCartsTest extends GraphQlAbstract
      */
     private $quoteIdToMaskedId;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->quoteResource = $objectManager->get(QuoteResource::class);
@@ -45,11 +45,12 @@ class MergeCartsTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/Checkout/_files/simple_product.php
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_virtual_product_saved.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage The current customer isn't authorized.
      */
     public function testMergeGuestCarts()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('The current customer isn\'t authorized.');
+
         $firstQuote = $this->quoteFactory->create();
         $this->quoteResource->load($firstQuote, 'test_order_with_simple_product_without_address', 'reserved_order_id');
 
