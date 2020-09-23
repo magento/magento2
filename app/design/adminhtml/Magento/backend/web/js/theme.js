@@ -312,8 +312,9 @@ define('globalNavigation', [
 
 define('globalSearch', [
     'jquery',
+    'Magento_Ui/js/lib/key-codes',
     'jquery/ui'
-], function ($) {
+], function ($, keyCodes) {
     'use strict';
 
     $.widget('mage.globalSearch', {
@@ -353,7 +354,7 @@ define('globalSearch', [
                     'textarea'
                 ];
 
-                if (e.which !== 191 || // forward slash - '/'
+                if (keyCodes[e.which] !== 'forwardSlashKey' ||
                     inputs.indexOf(e.target.tagName.toLowerCase()) !== -1 ||
                     e.target.isContentEditable
                 ) {
