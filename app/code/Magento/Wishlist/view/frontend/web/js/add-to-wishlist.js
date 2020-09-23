@@ -118,6 +118,8 @@ define([
                     };
                 }
 
+                self._removeExcessiveData(params, dataToAdd);
+
                 params.data = $.extend({}, params.data, dataToAdd, {
                     'qty': $(self.options.qtyInfo).val()
                 });
@@ -130,7 +132,6 @@ define([
          * @param {Object} array2
          * @return {Object}
          * @private
-         * @deprecated
          */
         _arrayDiffByKeys: function (array1, array2) {
             var result = {};
@@ -183,7 +184,6 @@ define([
          * @param {Object} params
          * @param {Object} dataToAdd
          * @private
-         * @deprecated
          */
         _removeExcessiveData: function (params, dataToAdd) {
             var dataToRemove = this._arrayDiffByKeys(params.data, dataToAdd);
