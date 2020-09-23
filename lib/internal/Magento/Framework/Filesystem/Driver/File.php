@@ -257,7 +257,7 @@ class File implements DriverInterface
             $flags = \FilesystemIterator::SKIP_DOTS |
                      \FilesystemIterator::UNIX_PATHS |
                      \RecursiveDirectoryIterator::FOLLOW_SYMLINKS;
-            
+
             $iterator = new \FilesystemIterator($path, $flags);
             $result = [];
             /** @var \FilesystemIterator $file */
@@ -305,7 +305,7 @@ class File implements DriverInterface
         } else {
             $content = $this->fileGetContents($oldPath);
             if (false !== $targetDriver->filePutContents($newPath, $content)) {
-                $result = $this->deleteFile($newPath);
+                $result = $this->deleteFile($oldPath);
             }
         }
         if (!$result) {
@@ -952,7 +952,7 @@ class File implements DriverInterface
         $flags = \FilesystemIterator::SKIP_DOTS |
                  \FilesystemIterator::UNIX_PATHS |
                  \RecursiveDirectoryIterator::FOLLOW_SYMLINKS;
- 
+
         try {
             $iterator = new \RecursiveIteratorIterator(
                 new \RecursiveDirectoryIterator($path, $flags),

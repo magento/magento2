@@ -3,57 +3,58 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Config\Model\Config\Reader\Source\Deployed;
 
-use Magento\Framework\Config\ConfigOptionsListConstants;
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Config\DocumentRoot as BaseDocumentRoot;
 
 /**
- * Class DocumentRoot
- * @package Magento\Config\Model\Config\Reader\Source\Deployed
+ * Document root detector.
+ *
  * @api
  * @since 101.0.0
+ *
+ * @deprecated Use new implementation
+ * @see \Magento\Framework\Config\DocumentRoot
  */
 class DocumentRoot
 {
     /**
-     * @var DeploymentConfig
+     * @var BaseDocumentRoot
      */
-    private $config;
+    private $documentRoot;
 
     /**
-     * DocumentRoot constructor.
      * @param DeploymentConfig $config
+     * @param BaseDocumentRoot $documentRoot
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function __construct(DeploymentConfig $config)
+    public function __construct(DeploymentConfig $config, BaseDocumentRoot $documentRoot = null)
     {
-        $this->config = $config;
+        $this->documentRoot = $documentRoot ?: ObjectManager::getInstance()->get(BaseDocumentRoot::class);
     }
 
     /**
-     * A shortcut to load the document root path from the DirectoryList based on the
-     * deployment configuration.
+     * A shortcut to load the document root path from the DirectoryList.
      *
      * @return string
      * @since 101.0.0
      */
     public function getPath()
     {
-        return $this->isPub() ? DirectoryList::PUB : DirectoryList::ROOT;
+        return $this->documentRoot->getPath();
     }
 
     /**
-     * Returns whether the deployment configuration specifies that the document root is
-     * in the pub/ folder. This affects ares such as sitemaps and robots.txt (and will
-     * likely be extended to control other areas).
+     * Checks if root folder is /pub.
      *
      * @return bool
      * @since 101.0.0
      */
     public function isPub()
     {
-        return (bool)$this->config->get(ConfigOptionsListConstants::CONFIG_PATH_DOCUMENT_ROOT_IS_PUB);
+        return $this->documentRoot->isPub();
     }
 }

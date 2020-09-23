@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <virtualType name="remoteWriteFactory" type="Magento\Framework\Filesystem\Directory\WriteFactory">
+        <arguments>
+            <argument name="driverPool" xsi:type="object">Magento\RemoteStorage\Driver\DriverPool</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="remoteReadFactory" type="Magento\Framework\Filesystem\Directory\ReadFactory">
+        <arguments>
+            <argument name="driverPool" xsi:type="object">Magento\RemoteStorage\Driver\DriverPool</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="remoteFilesystem" type="Magento\RemoteStorage\Model\Filesystem">
+        <arguments>
+            <argument name="writeFactory" xsi:type="object">remoteWriteFactory</argument>
+            <argument name="readFactory" xsi:type="object">remoteReadFactory</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Sitemap\Controller\Adminhtml\Sitemap\Save">
+        <arguments>
+            <argument name="filesystem" xsi:type="object">remoteFilesystem</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sitemap\Block\Adminhtml\Grid\Renderer\Link">
+        <arguments>
+            <argument name="filesystem" xsi:type="object">remoteFilesystem</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sitemap\Controller\Adminhtml\Sitemap\Delete">
+        <arguments>
+            <argument name="filesystem" xsi:type="object">remoteFilesystem</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sitemap\Model\Sitemap">
+        <arguments>
+            <argument name="filesystem" xsi:type="object">remoteFilesystem</argument>
+        </arguments>
+        <plugin name="remote_sitemap" type="Magento\RemoteStorage\Plugin\Sitemap" />
+    </type>
+    <type name="Magento\Framework\Filesystem\Directory\TargetDirectory">
+        <arguments>
+            <argument name="filesystem" xsi:type="object">remoteFilesystem</argument>
+        </arguments>
+    </type>
+</config>

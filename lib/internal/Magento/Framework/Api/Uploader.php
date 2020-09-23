@@ -13,6 +13,8 @@ class Uploader extends \Magento\Framework\File\Uploader
 {
     /**
      * Avoid running the default constructor specific to FILE upload
+     *
+     * phpcs:disable Magento2.CodeAnalysis.EmptyBlock
      */
     public function __construct()
     {
@@ -30,9 +32,27 @@ class Uploader extends \Magento\Framework\File\Uploader
         $this->_file = $fileAttributes;
         if (!file_exists($this->_file['tmp_name'])) {
             $code = empty($this->_file['tmp_name']) ? self::TMP_NAME_EMPTY : 0;
+
+            // phpcs:ignore Magento2.Exceptions.DirectThrow.FoundDirectThrow
             throw new \Exception('File was not processed correctly.', $code);
         } else {
             $this->_fileExists = true;
+        }
+    }
+
+    /**
+     * Move files from TMP folder into destination folder
+     *
+     * @param string $tmpPath
+     * @param string $destPath
+     * @return bool|void
+     */
+    protected function _moveFile($tmpPath, $destPath)
+    {
+        if (is_uploaded_file($tmpPath)) {
+            return move_uploaded_file($tmpPath, $destPath);
+        } elseif (is_file($tmpPath)) {
+            return rename($tmpPath, $destPath);
         }
     }
 }

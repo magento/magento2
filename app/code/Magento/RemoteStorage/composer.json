@@ -1,0 +1,25 @@
+{
+    "name": "magento/module-remote-storage",
+    "description": "N/A",
+    "require": {
+        "php": "~7.3.0||~7.4.0",
+        "magento/framework": "^100.0.2"
+    },
+    "suggest": {
+        "magento/module-backend": "*",
+        "magento/module-sitemap": "*"
+    },
+    "type": "magento2-module",
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Magento\\RemoteStorage\\": ""
+        }
+    }
+}

@@ -5,13 +5,13 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Config\Test\Unit\Model\Config\Reader\Source\Deployed;
+namespace Magento\Framework\App\Test\Unit\Config;
 
-use Magento\Config\Model\Config\Reader\Source\Deployed\DocumentRoot;
 use Magento\Framework\App\Config;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Config\ConfigOptionsListConstants;
+use Magento\Framework\Config\DocumentRoot;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 

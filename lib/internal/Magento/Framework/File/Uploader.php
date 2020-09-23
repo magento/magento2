@@ -7,7 +7,9 @@ namespace Magento\Framework\File;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Config\DocumentRoot;
 use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Filesystem\Directory\TargetDirectory;
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\Filesystem\DriverPool;
 use Magento\Framework\Validation\ValidationException;
@@ -19,6 +21,7 @@ use Magento\Framework\Validation\ValidationException;
  * validation by protected file extension list to extended class
  *
  * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  *
  * @api
  * @since 100.0.2
@@ -181,19 +184,33 @@ class Uploader
     private $fileDriver;
 
     /**
+     * @var TargetDirectory
+     */
+    private $targetDirectory;
+
+    /**
+     * @var DocumentRoot
+     */
+    private $documentRoot;
+
+    /**
      * Init upload
      *
      * @param string|array $fileId
      * @param \Magento\Framework\File\Mime|null $fileMime
      * @param DirectoryList|null $directoryList
      * @param DriverPool|null $driverPool
+     * @param TargetDirectory|null $targetDirectory
+     * @param DocumentRoot|null $documentRoot
      * @throws \DomainException
      */
     public function __construct(
         $fileId,
         Mime $fileMime = null,
         DirectoryList $directoryList = null,
-        DriverPool $driverPool = null
+        DriverPool $driverPool = null,
+        TargetDirectory $targetDirectory = null,
+        DocumentRoot $documentRoot = null
     ) {
         $this->directoryList= $directoryList ?: ObjectManager::getInstance()->get(DirectoryList::class);
 
@@ -205,7 +222,9 @@ class Uploader
             $this->_fileExists = true;
         }
         $this->fileMime = $fileMime ?: ObjectManager::getInstance()->get(Mime::class);
-        $this->driverPool = $driverPool;
+        $this->driverPool = $driverPool ?: ObjectManager::getInstance()->get(DriverPool::class);
+        $this->targetDirectory = $targetDirectory ?: ObjectManager::getInstance()->get(TargetDirectory::class);
+        $this->documentRoot = $documentRoot ?: ObjectManager::getInstance()->get(DocumentRoot::class);
     }
 
     /**
@@ -319,11 +338,57 @@ class Uploader
      */
     protected function _moveFile($tmpPath, $destPath)
     {
-        if (is_uploaded_file($tmpPath)) {
-            return move_uploaded_file($tmpPath, $destPath);
-        } elseif (is_file($tmpPath)) {
-            return rename($tmpPath, $destPath);
+        $rootPath = $this->getDocumentRoot()->getPath();
+        $destPath = str_replace($this->getDirectoryList()->getPath($rootPath), '', $destPath);
+        $directory = $this->getTargetDirectory()->getDirectoryWrite($rootPath);
+
+        return $this->getFileDriver()->rename(
+            $tmpPath,
+            $directory->getAbsolutePath($destPath),
+            $directory->getDriver()
+        );
+    }
+
+    /**
+     * Retrieves target directory.
+     *
+     * @return TargetDirectory
+     */
+    private function getTargetDirectory(): TargetDirectory
+    {
+        if (!isset($this->targetDirectory)) {
+            $this->targetDirectory = ObjectManager::getInstance()->get(TargetDirectory::class);
         }
+
+        return $this->targetDirectory;
+    }
+
+    /**
+     * Retrieves document root.
+     *
+     * @return DocumentRoot
+     */
+    private function getDocumentRoot(): DocumentRoot
+    {
+        if (!isset($this->documentRoot)) {
+            $this->documentRoot = ObjectManager::getInstance()->get(DocumentRoot::class);
+        }
+
+        return $this->documentRoot;
+    }
+
+    /**
+     * Retrieves directory list.
+     *
+     * @return DirectoryList
+     */
+    private function getDirectoryList(): DirectoryList
+    {
+        if (!isset($this->directoryList)) {
+            $this->directoryList = ObjectManager::getInstance()->get(DirectoryList::class);
+        }
+
+        return $this->directoryList;
     }
 
     /**
