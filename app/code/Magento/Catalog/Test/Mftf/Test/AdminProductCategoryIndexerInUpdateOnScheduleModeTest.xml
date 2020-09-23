@@ -91,7 +91,7 @@
 
         <!-- The category is still empty -->
         <see userInput="$$createCategoryA.name$$" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="seeCategoryA1Name"/>
-        <see userInput="We can't find products matching the selection." stepKey="seeEmptyNotice"/>
+        <actionGroup ref="AssertStorefrontNoProductsFoundActionGroup" stepKey="seeEmptyNotice"/>
         <dontSee userInput="$$createProductA1.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="dontseeProductA1"/>
 
         <!-- 4. Run cron to reindex -->
@@ -132,7 +132,7 @@
 
         <!-- Category A is empty now -->
         <see userInput="$$createCategoryA.name$$" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="seeOnPageCategoryAName"/>
-        <see userInput="We can't find products matching the selection." stepKey="seeOnPageEmptyNotice"/>
+        <actionGroup ref="AssertStorefrontNoProductsFoundActionGroup" stepKey="seeOnPageEmptyNotice"/>
         <dontSee userInput="$$createProductA1.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="dontseeProductA1OnPage"/>
 
         <!-- Case: change product status -->

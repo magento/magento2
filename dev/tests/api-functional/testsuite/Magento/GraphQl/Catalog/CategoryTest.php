@@ -45,7 +45,7 @@ class CategoryTest extends GraphQlAbstract
      */
     private $metadataPool;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->categoryRepository = $this->objectManager->get(CategoryRepository::class);
@@ -235,7 +235,7 @@ QUERY;
 
         $this->assertArrayHasKey('category', $response);
         $this->assertArrayHasKey('children', $response['category']);
-        $this->assertSame(6, count($response['category']['children']));
+        $this->assertCount(6, $response['category']['children']);
     }
 
     /**
@@ -259,11 +259,12 @@ QUERY;
 
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/categories.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage Category doesn't exist
      */
     public function testGetDisabledCategory()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Category doesn\'t exist');
+
         $categoryId = 8;
         $query = <<<QUERY
 {
@@ -278,11 +279,12 @@ QUERY;
 
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/categories.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage Category doesn't exist
      */
     public function testGetCategoryIdZero()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Category doesn\'t exist');
+
         $categoryId = 0;
         $query = <<<QUERY
 {

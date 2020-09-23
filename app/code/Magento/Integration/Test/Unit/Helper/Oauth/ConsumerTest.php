@@ -3,104 +3,131 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Integration\Test\Unit\Helper\Oauth;
+
+use Magento\Framework\HTTP\ZendClient;
+use Magento\Framework\Oauth\Helper\Oauth;
+use Magento\Framework\Stdlib\DateTime\DateTime;
+use Magento\Integration\Api\OauthServiceInterface;
+use Magento\Integration\Helper\Oauth\Data;
+use Magento\Integration\Model\Oauth\Consumer;
+use Magento\Integration\Model\Oauth\ConsumerFactory;
+use Magento\Integration\Model\Oauth\Token;
+use Magento\Integration\Model\Oauth\Token\Provider;
+use Magento\Integration\Model\Oauth\TokenFactory;
+use Magento\Integration\Model\OauthService;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
 /**
  * Test for \Magento\Integration\Model\Oauth\Consumer
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ConsumerTest extends \PHPUnit\Framework\TestCase
+class ConsumerTest extends TestCase
 {
-    /** @var \Magento\Store\Model\StoreManagerInterface */
+    /** @var StoreManagerInterface */
     protected $_storeManagerMock;
 
-    /** @var \Magento\Integration\Model\Oauth\ConsumerFactory */
+    /** @var ConsumerFactory */
     protected $_consumerFactory;
 
-    /** @var \Magento\Integration\Model\Oauth\Consumer */
+    /** @var Consumer */
     protected $_consumerMock;
 
-    /** @var \Magento\Framework\HTTP\ZendClient */
+    /** @var ZendClient */
     protected $_httpClientMock;
 
-    /** @var \Magento\Integration\Model\Oauth\TokenFactory */
+    /** @var TokenFactory */
     protected $_tokenFactory;
 
-    /** @var \Magento\Integration\Model\Oauth\Token */
+    /** @var Token */
     protected $_tokenMock;
 
-    /** @var \Magento\Store\Model\Store */
+    /** @var Store */
     protected $_storeMock;
 
-    /** @var \Magento\Integration\Helper\Oauth\Data */
+    /** @var Data */
     protected $_dataHelper;
 
-    /** @var \Magento\Integration\Api\OauthServiceInterface */
+    /** @var OauthServiceInterface */
     protected $_oauthService;
 
-    /** @var \Psr\Log\LoggerInterface */
+    /** @var LoggerInterface */
     protected $_loggerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->_consumerFactory = $this->getMockBuilder(\Magento\Integration\Model\Oauth\ConsumerFactory::class)
+        $this->_consumerFactory = $this->getMockBuilder(ConsumerFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
         $this->_consumerMock = $this->getMockBuilder(
-            \Magento\Integration\Model\Oauth\Consumer::class
-        )->disableOriginalConstructor()->getMock();
+            Consumer::class
+        )->disableOriginalConstructor()
+            ->getMock();
         $this->_consumerFactory->expects(
             $this->any()
         )->method(
             'create'
-        )->will(
-            $this->returnValue($this->_consumerMock)
+        )->willReturn(
+            $this->_consumerMock
         );
 
         $this->_tokenFactory = $this->getMockBuilder(
-            \Magento\Integration\Model\Oauth\TokenFactory::class
-        )->disableOriginalConstructor()->setMethods(['create'])->getMock();
+            TokenFactory::class
+        )->disableOriginalConstructor()
+            ->setMethods(['create'])->getMock();
         $this->_tokenMock = $this->getMockBuilder(
-            \Magento\Integration\Model\Oauth\Token::class
-        )->disableOriginalConstructor()->getMock();
-        $this->_tokenFactory->expects($this->any())->method('create')->will($this->returnValue($this->_tokenMock));
+            Token::class
+        )->disableOriginalConstructor()
+            ->getMock();
+        $this->_tokenFactory->expects($this->any())->method('create')->willReturn($this->_tokenMock);
 
         $this->_storeManagerMock = $this->getMockBuilder(
-            \Magento\Store\Model\StoreManagerInterface::class
-        )->disableOriginalConstructor()->getMockForAbstractClass();
+            StoreManagerInterface::class
+        )->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $this->_storeMock = $this->getMockBuilder(
-            \Magento\Store\Model\Store::class
-        )->disableOriginalConstructor()->getMock();
+            Store::class
+        )->disableOriginalConstructor()
+            ->getMock();
         $this->_storeManagerMock->expects(
             $this->any()
         )->method(
             'getStore'
-        )->will(
-            $this->returnValue($this->_storeMock)
+        )->willReturn(
+            $this->_storeMock
         );
 
         $this->_dataHelper = $this->getMockBuilder(
-            \Magento\Integration\Helper\Oauth\Data::class
-        )->disableOriginalConstructor()->getMock();
+            Data::class
+        )->disableOriginalConstructor()
+            ->getMock();
 
         $oauthHelperMock = $this->getMockBuilder(
-            \Magento\Framework\Oauth\Helper\Oauth::class
-        )->disableOriginalConstructor()->getMock();
+            Oauth::class
+        )->disableOriginalConstructor()
+            ->getMock();
 
         $tokenProviderMock = $this->getMockBuilder(
-            \Magento\Integration\Model\Oauth\Token\Provider::class
-        )->disableOriginalConstructor()->getMock();
+            Provider::class
+        )->disableOriginalConstructor()
+            ->getMock();
 
         $this->_httpClientMock = $this->getMockBuilder(
-            \Magento\Framework\HTTP\ZendClient::class
-        )->disableOriginalConstructor()->getMock();
+            ZendClient::class
+        )->disableOriginalConstructor()
+            ->getMock();
         $this->_loggerMock = $this->getMockBuilder(
-            \Psr\Log\LoggerInterface::class
+            LoggerInterface::class
         )->getMock();
 
-        $this->_oauthService = new \Magento\Integration\Model\OauthService(
+        $this->_oauthService = new OauthService(
             $this->_storeManagerMock,
             $this->_consumerFactory,
             $this->_tokenFactory,
@@ -112,7 +139,7 @@ class ConsumerTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_storeManagerMock);
         unset($this->_consumerFactory);
@@ -125,14 +152,14 @@ class ConsumerTest extends \PHPUnit\Framework\TestCase
 
     public function testCreateConsumer()
     {
-        $key = $this->_generateRandomString(\Magento\Framework\Oauth\Helper\Oauth::LENGTH_CONSUMER_KEY);
-        $secret = $this->_generateRandomString(\Magento\Framework\Oauth\Helper\Oauth::LENGTH_CONSUMER_SECRET);
+        $key = $this->_generateRandomString(Oauth::LENGTH_CONSUMER_KEY);
+        $secret = $this->_generateRandomString(Oauth::LENGTH_CONSUMER_SECRET);
 
         $consumerData = ['name' => 'Integration Name', 'key' => $key, 'secret' => $secret];
-        $this->_consumerMock->expects($this->once())->method('setData')->will($this->returnSelf());
-        $this->_consumerMock->expects($this->once())->method('save')->will($this->returnSelf());
+        $this->_consumerMock->expects($this->once())->method('setData')->willReturnSelf();
+        $this->_consumerMock->expects($this->once())->method('save')->willReturnSelf();
 
-        /** @var \Magento\Integration\Model\Oauth\Consumer $consumer */
+        /** @var Consumer $consumer */
         $consumer = $this->_oauthService->createConsumer($consumerData);
 
         $this->assertEquals($consumer, $this->_consumerMock, 'Consumer object was expected to be returned');
@@ -142,9 +169,9 @@ class ConsumerTest extends \PHPUnit\Framework\TestCase
     {
         $consumerId = 1;
 
-        $key = $this->_generateRandomString(\Magento\Framework\Oauth\Helper\Oauth::LENGTH_CONSUMER_KEY);
-        $secret = $this->_generateRandomString(\Magento\Framework\Oauth\Helper\Oauth::LENGTH_CONSUMER_SECRET);
-        $oauthVerifier = $this->_generateRandomString(\Magento\Framework\Oauth\Helper\Oauth::LENGTH_TOKEN_VERIFIER);
+        $key = $this->_generateRandomString(Oauth::LENGTH_CONSUMER_KEY);
+        $secret = $this->_generateRandomString(Oauth::LENGTH_CONSUMER_SECRET);
+        $oauthVerifier = $this->_generateRandomString(Oauth::LENGTH_TOKEN_VERIFIER);
 
         $consumerData = ['entity_id' => $consumerId, 'key' => $key, 'secret' => $secret];
 
@@ -154,43 +181,40 @@ class ConsumerTest extends \PHPUnit\Framework\TestCase
             'load'
         )->with(
             $this->equalTo($consumerId)
-        )->will(
-            $this->returnSelf()
+        )->willReturnSelf(
         );
 
-        $dateHelperMock = $this->getMockBuilder(\Magento\Framework\Stdlib\DateTime\DateTime::class)
+        $dateHelperMock = $this->getMockBuilder(DateTime::class)
             ->disableOriginalConstructor()
             ->getMock();
         $dateHelperMock->expects($this->any())->method('gmtDate');
 
-        $dateHelper = new \ReflectionProperty(\Magento\Integration\Model\OauthService::class, '_dateHelper');
+        $dateHelper = new \ReflectionProperty(OauthService::class, '_dateHelper');
         $dateHelper->setAccessible(true);
         $dateHelper->setValue($this->_oauthService, $dateHelperMock);
 
-        $this->_consumerMock->expects($this->once())->method('getId')->will($this->returnValue($consumerId));
-        $this->_consumerMock->expects($this->once())->method('getData')->will($this->returnValue($consumerData));
+        $this->_consumerMock->expects($this->once())->method('getId')->willReturn($consumerId);
+        $this->_consumerMock->expects($this->once())->method('getData')->willReturn($consumerData);
         $this->_httpClientMock->expects(
             $this->once()
         )->method(
             'setUri'
         )->with(
             'http://www.magento.com'
-        )->will(
-            $this->returnSelf()
+        )->willReturnSelf(
         );
-        $this->_httpClientMock->expects($this->once())->method('setParameterPost')->will($this->returnSelf());
+        $this->_httpClientMock->expects($this->once())->method('setParameterPost')->willReturnSelf();
         $this->_tokenMock->expects(
             $this->once()
         )->method(
             'createVerifierToken'
         )->with(
             $consumerId
-        )->will(
-            $this->returnSelf()
+        )->willReturnSelf(
         );
-        $this->_tokenMock->expects($this->any())->method('getVerifier')->will($this->returnValue($oauthVerifier));
-        $this->_dataHelper->expects($this->once())->method('getConsumerPostMaxRedirects')->will($this->returnValue(5));
-        $this->_dataHelper->expects($this->once())->method('getConsumerPostTimeout')->will($this->returnValue(120));
+        $this->_tokenMock->expects($this->any())->method('getVerifier')->willReturn($oauthVerifier);
+        $this->_dataHelper->expects($this->once())->method('getConsumerPostMaxRedirects')->willReturn(5);
+        $this->_dataHelper->expects($this->once())->method('getConsumerPostTimeout')->willReturn(120);
 
         $verifier = $this->_oauthService->postToConsumer($consumerId, 'http://www.magento.com');
 

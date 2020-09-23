@@ -29,12 +29,20 @@
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductForm"/>
         <!--Assert simple product on Admin product page grid-->
         <comment userInput="Assert simple product in Admin product page grid" stepKey="commentAssertProductOnAdmin"/>
-        <amOnPage url="{{AdminCatalogProductPage.url}}" stepKey="goToCatalogSimpleProductPage"/>
+        <actionGroup ref="AdminOpenCatalogProductPageActionGroup" stepKey="goToCatalogSimpleProductPage"/>
         <actionGroup ref="FilterProductGridBySku2ActionGroup" stepKey="filterSimpleProductGridBySku">
             <argument name="sku" value="$$createProduct.sku$$"/>
         </actionGroup>
-        <see selector="{{AdminProductGridSection.productGridCell('1', 'Name')}}" userInput="$$createProduct.name$$" stepKey="seeSimpleProductNameInGrid"/>
-        <see selector="{{AdminProductGridSection.productGridCell('1', 'Type')}}" userInput="Simple Product" stepKey="seeSimpleProductTypeInGrid"/>
+        <actionGroup ref="AssertAdminProductGridCellActionGroup" stepKey="seeSimpleProductNameInGrid">
+            <argument name="row" value="1"/>
+            <argument name="column" value="Name"/>
+            <argument name="value" value="$$createProduct.name$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminProductGridCellActionGroup" stepKey="seeSimpleProductTypeInGrid">
+            <argument name="row" value="1"/>
+            <argument name="column" value="Type"/>
+            <argument name="value" value="Simple Product"/>
+        </actionGroup>
         <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearSimpleProductFilters"/>
         <!--Assert simple product on storefront-->
         <comment userInput="Assert simple product on storefront" stepKey="commentAssertSimpleProductOnStorefront"/>

@@ -34,7 +34,7 @@
                 <requiredEntity createDataKey="createBundleOption"/>
                 <requiredEntity createDataKey="createSimpleProduct"/>
             </createData>
-            <magentoCron stepKey="runCronIndex" groups="index"/>
+            <magentoCLI stepKey="runCronIndex" command="cron:run --group=index"/>
         </before>
         <after>
             <!-- Delete Simple Product -->
@@ -56,9 +56,11 @@
         <actionGroup ref="AdminUpdateProductNameAndDescriptionAttributes" stepKey="updateProductAttribute">
             <argument name="product" value="UpdateAttributeNameAndDescription"/>
         </actionGroup>
-        <!--Run cron twice-->
-        <magentoCLI command="cron:run" stepKey="cronRun"/>
-        <magentoCLI command="cron:run" stepKey="cronRunTwice"/>
+        <!-- Start message queue for product attribute consumer -->
+        <actionGroup ref="CliConsumerStartActionGroup" stepKey="startMessageQueue">
+            <argument name="consumerName" value="{{AdminProductAttributeUpdateMessageConsumerData.consumerName}}"/>
+            <argument name="maxMessages" value="{{AdminProductAttributeUpdateMessageConsumerData.messageLimit}}"/>
+        </actionGroup>
         <!-- Search for a product with a new name and Open Product -->
         <actionGroup ref="FilterProductGridByNameActionGroup" stepKey="searchWithNewProductName">
             <argument name="product" value="UpdateAttributeNameAndDescription"/>

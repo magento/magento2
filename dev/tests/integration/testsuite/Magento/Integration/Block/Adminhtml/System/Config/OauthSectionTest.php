@@ -22,9 +22,9 @@ class OauthSectionTest extends \Magento\TestFramework\TestCase\AbstractBackendCo
     {
         $this->dispatch('backend/admin/system_config/edit/section/oauth/');
         $body = $this->getResponse()->getBody();
-        $this->assertContains('id="oauth_access_token_lifetime-head"', $body);
-        $this->assertContains('id="oauth_cleanup-head"', $body);
-        $this->assertContains('id="oauth_consumer-head"', $body);
-        $this->assertContains('id="oauth_authentication_lock-head"', $body);
+        $this->assertStringContainsString('id="oauth_access_token_lifetime-head"', $body);
+        $this->assertStringContainsString('id="oauth_cleanup-head"', $body);
+        $this->assertStringContainsString('id="oauth_consumer-head"', $body);
+        $this->assertStringContainsString('id="oauth_authentication_lock-head"', $body);
     }
 }
