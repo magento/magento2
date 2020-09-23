@@ -193,9 +193,9 @@ class DataProvider extends ModifierPoolDataProvider
      * @param Config $eavConfig
      * @param RequestInterface $request
      * @param CategoryFactory $categoryFactory
-     * @param PoolInterface|null $pool
      * @param array $meta
      * @param array $data
+     * @param PoolInterface|null $pool
      * @param AuthorizationInterface|null $auth
      * @param ArrayUtils|null $arrayUtils
      * @param ScopeOverriddenValue|null $scopeOverriddenValue
@@ -215,9 +215,9 @@ class DataProvider extends ModifierPoolDataProvider
         Config $eavConfig,
         RequestInterface $request,
         CategoryFactory $categoryFactory,
-        PoolInterface $pool,
         array $meta = [],
         array $data = [],
+        PoolInterface $pool,
         ?AuthorizationInterface $auth = null,
         ?ArrayUtils $arrayUtils = null,
         ScopeOverriddenValue $scopeOverriddenValue = null,
