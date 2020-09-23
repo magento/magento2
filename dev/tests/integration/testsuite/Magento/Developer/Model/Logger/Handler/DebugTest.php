@@ -19,6 +19,7 @@ use Magento\TestFramework\ObjectManager;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @magentoAppIsolation enabled
  */
 class DebugTest extends \PHPUnit\Framework\TestCase
 {

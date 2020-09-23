@@ -5,12 +5,13 @@
  */
 namespace Magento\TestFramework;
 
-use Magento\Framework\Autoload\AutoloaderInterface;
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\DeploymentConfig;
-use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\App\DeploymentConfig\Reader;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Autoload\AutoloaderInterface;
+use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Filesystem\Glob;
+use Magento\Framework\Logger\Monolog;
 
 /**
  * Encapsulates application installation, initialization and uninstall.
@@ -189,8 +190,8 @@ class Application
             \Magento\Framework\App\Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS => $customDirs,
             \Magento\Framework\App\State::PARAM_MODE => $appMode
         ];
-        $driverPool = new \Magento\Framework\Filesystem\DriverPool;
-        $configFilePool = new \Magento\Framework\Config\File\ConfigFilePool;
+        $driverPool = new \Magento\Framework\Filesystem\DriverPool();
+        $configFilePool = new \Magento\Framework\Config\File\ConfigFilePool();
         $this->_factory = new \Magento\TestFramework\ObjectManagerFactory($this->dirList, $driverPool, $configFilePool);
 
         $this->_configDir = $this->dirList->getPath(DirectoryList::CONFIG);
@@ -332,8 +333,8 @@ class Application
             ]
         );
 
-        $objectManager->removeSharedInstance(\Magento\Framework\Logger\Monolog::class);
-        $objectManager->addSharedInstance($logger, \Magento\Framework\Logger\Monolog::class);
+        $objectManager->removeSharedInstance(Monolog::class);
+        $objectManager->addSharedInstance($logger, Monolog::class);
         return $logger;
     }
 
@@ -372,10 +373,8 @@ class Application
         $objectManagerConfiguration = [
             'preferences' => [
                 \Magento\Framework\App\State::class => \Magento\TestFramework\App\State::class,
-                \Magento\Framework\Mail\TransportInterface::class =>
-                    \Magento\TestFramework\Mail\TransportInterfaceMock::class,
-                \Magento\Framework\Mail\Template\TransportBuilder::class
-                => \Magento\TestFramework\Mail\Template\TransportBuilderMock::class,
+                \Magento\Framework\Mail\TransportInterface::class => \Magento\TestFramework\Mail\TransportInterfaceMock::class,
+                \Magento\Framework\Mail\Template\TransportBuilder::class => \Magento\TestFramework\Mail\Template\TransportBuilderMock::class,
             ]
         ];
         if ($this->loadTestExtensionAttributes) {
@@ -649,7 +648,7 @@ class Application
             // phpcs:ignore Magento2.Functions.DiscouragedFunction
             mkdir($dir, 0777, true);
             umask($old);
-            // phpcs:ignore Magento2.Functions.DiscouragedFunction
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         } elseif (!is_dir($dir)) {
             throw new \Magento\Framework\Exception\LocalizedException(__("'%1' is not a directory.", $dir));
         }

@@ -19,6 +19,9 @@ use Magento\Sales\Model\Order\Email\Sender\OrderSender;
 use Magento\TestFramework\TestCase\AbstractController;
 use PHPUnit\Framework\MockObject_MockObject as MockObject;
 
+/**
+ * @magentoAppIsolation enabled
+ */
 class SilentPostTest extends AbstractController
 {
     /**

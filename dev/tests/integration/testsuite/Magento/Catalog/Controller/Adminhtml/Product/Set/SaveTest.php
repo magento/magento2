@@ -31,6 +31,7 @@ use Magento\TestFramework\TestCase\AbstractBackendController;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @magentoAppArea adminhtml
+ * @magentoAppIsolation enabled
  */
 class SaveTest extends AbstractBackendController
 {
