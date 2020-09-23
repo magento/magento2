@@ -57,8 +57,12 @@
             <argument name="imageName" value="{{ImageMetadata.title}}"/>
         </actionGroup>
         <actionGroup ref="AdminMediaGalleryClickAddSelectedActionGroup" stepKey="clickAddSelectedContentImage"/>
-        <click selector="{{CmsNewPagePageActionsSection.saveAndContinueEdit}}" stepKey="savePage"/>
+        <waitForPageLoad stepKey="waitForPageLoad10" />
+        <waitForElementVisible selector="{{CmsNewPagePageActionsSection.saveAndContinueEdit}}" stepKey="waitForSaveButtonVisible"/>
+        <click selector="{{CmsNewPagePageActionsSection.expandSplitButton}}" stepKey="expandButtonMenu"/>
+        <click selector="{{CmsNewPagePageActionsSection.savePage}}" stepKey="savePage"/>
         <waitForPageLoad stepKey="waitForSaveToFinish"/>
+        <see userInput="You saved the page." stepKey="seeSuccessMessage"/>
         <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openStandaloneMediaGallery"/>
         <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
         <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectFolder">
