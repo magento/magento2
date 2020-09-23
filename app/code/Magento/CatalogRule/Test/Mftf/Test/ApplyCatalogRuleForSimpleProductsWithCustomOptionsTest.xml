@@ -70,12 +70,6 @@
         <conditionalClick selector="{{AdminNewCatalogPriceRule.active}}" dependentSelector="{{AdminNewCatalogPriceRule.activeIsEnabled}}" visible="false" stepKey="enableActiveBtn"/>
         <click selector="{{AdminNewCatalogPriceRule.save}}" stepKey="clickSave"/>
         <waitForPageLoad stepKey="waitForSave"/>
-        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-            <argument name="indices" value=""/>
-        </actionGroup>
-        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-            <argument name="tags" value=""/>
-        </actionGroup>
 
         <!-- Navigate to category on store front -->
         <amOnPage url="{{StorefrontProductPage.url($createCategory.name$)}}" stepKey="goToCategoryPage"/>
