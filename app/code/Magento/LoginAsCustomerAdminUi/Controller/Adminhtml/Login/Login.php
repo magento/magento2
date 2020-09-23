@@ -156,7 +156,7 @@ class Login extends Action implements HttpPostActionInterface
         $isLoginAsCustomerEnabled = $this->isLoginAsCustomerEnabled->execute($customerId);
         if (!$isLoginAsCustomerEnabled->isEnabled()) {
             foreach ($isLoginAsCustomerEnabled->getMessages() as $message) {
-                $this->messageManager->addErrorMessage(__($message));
+                $messages[] = __($message);
             }
 
             return $this->prepareJsonResult($messages);
