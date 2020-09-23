@@ -5,12 +5,9 @@
  */
 namespace Magento\Config\App\Config\Source;
 
-use Magento\Config\Model\Config\Structure\Reader as ConfigStructureReader;
-use Magento\Framework\App\Area;
 use Magento\Framework\App\Config\ConfigSourceInterface;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
-use Magento\Framework\App\Config\Initial\Reader as InitialConfigReader;
+use Magento\Framework\App\Config\Initial\Reader;
 
 /**
  * Class for retrieving initial configuration from modules
@@ -21,26 +18,16 @@ use Magento\Framework\App\Config\Initial\Reader as InitialConfigReader;
 class ModularConfigSource implements ConfigSourceInterface
 {
     /**
-     * @var InitialConfigReader
+     * @var Reader
      */
-    private $initialConfigReader;
+    private $reader;
 
     /**
-     * @var ConfigStructureReader
+     * @param Reader $reader
      */
-    private $configStructureReader;
-
-    /**
-     * @param InitialConfigReader $initialConfigReader
-     * @param ConfigStructureReader|null $configStructureReader
-     */
-    public function __construct(
-        InitialConfigReader $initialConfigReader,
-        ?ConfigStructureReader $configStructureReader = null
-    ) {
-        $this->initialConfigReader = $initialConfigReader;
-        $this->configStructureReader = $configStructureReader
-            ?? ObjectManager::getInstance()->get(ConfigStructureReader::class);
+    public function __construct(Reader $reader)
+    {
+        $this->reader = $reader;
     }
 
     /**
@@ -52,39 +39,10 @@ class ModularConfigSource implements ConfigSourceInterface
      */
     public function get($path = '')
     {
-        $initialConfig = $this->initialConfigReader->read();
-        $configStructure = $this->configStructureReader->read(Area::AREA_ADMINHTML);
-        $sections = $configStructure['config']['system']['sections'] ?? [];
-        $defaultConfig = $initialConfig['data']['default'] ?? [];
-        $initialConfig['data']['default'] = $this->merge($defaultConfig, $sections);
-
-        $data = new DataObject($initialConfig);
+        $data = new DataObject($this->reader->read());
         if ($path !== '') {
             $path = '/' . $path;
         }
         return $data->getData('data' . $path) ?: [];
-    }
-
-    /**
-     * Merge initial config with config structure
-     *
-     * @param array $config
-     * @param array $sections
-     * @return array
-     */
-    private function merge(array $config, array $sections): array
-    {
-        foreach ($sections as $section) {
-            if (isset($section['children'])) {
-                $config[$section['id']] = $this->merge(
-                    $config[$section['id']] ?? [],
-                    $section['children']
-                );
-            } elseif ($section['_elementType'] === 'field') {
-                $config += [$section['id'] => null];
-            }
-        }
-
-        return $config;
     }
 }

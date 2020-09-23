@@ -207,6 +207,10 @@
     <virtualType name="appDumpSystemSource" type="Magento\Config\App\Config\Source\DumpConfigSourceAggregated">
         <arguments>
             <argument name="sources" xsi:type="array">
+                <item name="structure" xsi:type="array">
+                    <item name="source" xsi:type="object">Magento\Config\App\Config\Source\ConfigStructureSource</item>
+                    <item name="sortOrder" xsi:type="string">1</item>
+                </item>
                 <item name="modular" xsi:type="array">
                     <item name="source" xsi:type="object">Magento\Config\App\Config\Source\ModularConfigSource</item>
                     <item name="sortOrder" xsi:type="string">10</item>
