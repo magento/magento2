@@ -56,13 +56,6 @@
         <actionGroup ref="AdminMediaGalleryClickImageInGridActionGroup" stepKey="selectContentImageInGrid">
             <argument name="imageName" value="{{ImageMetadata.title}}"/>
         </actionGroup>
-        <actionGroup ref="AdminEnhancedMediaGalleryViewImageDetails" stepKey="viewImageDetails"/>
-        <actionGroup ref="AdminEnhancedMediaGalleryImageDetailsEditActionGroup" stepKey="editImage"/>
-        <actionGroup ref="AdminEnhancedMediaGalleryImageDetailsSaveActionGroup" stepKey="saveImage">
-            <argument name="image" value="UpdatedImageDetails"/>
-        </actionGroup>
-        <actionGroup ref="AdminEnhancedMediaGalleryCloseViewDetailsActionGroup" stepKey="closeViewDetails"/>
-
         <actionGroup ref="AdminMediaGalleryClickAddSelectedActionGroup" stepKey="clickAddSelectedContentImage"/>
         <click selector="{{CmsNewPagePageActionsSection.saveAndContinueEdit}}" stepKey="savePage"/>
         <waitForPageLoad stepKey="waitForSaveToFinish"/>
@@ -76,7 +69,7 @@
             <argument name="entityName" value="Pages"/>
         </actionGroup>
         <actionGroup ref="AdminAssertMediaGalleryFilterPlaceHolderGridActionGroup" stepKey="assertFilterApplied">
-            <argument name="filterPlaceholder" value="{{UpdatedImageDetails.title}}"/>
+            <argument name="filterPlaceholder" value="{{ImageMetadata.title}}"/>
         </actionGroup>
          <actionGroup ref="AdminDeleteCmsPageFromGridActionGroup" stepKey="deleteCmsPage">
             <argument name="urlKey" value="test-page-1"/>
