@@ -14,6 +14,7 @@
             <title value="Create configurable product with tier price and check excluding tax item price"/>
             <description value="Create configurable product with tier price and check excluding tax item price"/>
             <severity value="MAJOR"/>
+            <testCaseId value="MC-37863"/>
             <group value="ConfigurableProduct"/>
         </annotations>
         <before>
