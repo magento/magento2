@@ -44,16 +44,29 @@ class IndexerHandler extends Grid
     }
 
     /**
-     * Clean index table by truncation
+     * @return bool
+     */
+    private function isFlatTableExists()
+    {
+        $adapter = $this->resource->getConnection('write');
+        $tableName = $this->flatScopeResolver->resolve($this->getIndexName(), []);
+
+        return $adapter->isTableExists($tableName);
+    }
+
+    /**
+     * Clean index table by deleting all records
      *
      * @inheritdoc
      */
     public function cleanIndex($dimensions)
     {
-        $adapter = $this->resource->getConnection('write');
-        $tableName = $this->flatScopeResolver->resolve($this->getIndexName(), $dimensions);
-        if ($adapter->isTableExists($tableName)) {
-            $adapter->truncateTable($tableName);
+        if ($this->isFlatTableExists()) {
+            $adapter = $this->resource->getConnection('write');
+            $tableName = $this->flatScopeResolver->resolve($this->getIndexName(), $dimensions);
+            $adapter->delete($tableName);
+        } else {
+            $this->indexStructure->create($this->getIndexName(), $this->fields, $dimensions);
         }
     }
 }
