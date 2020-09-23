@@ -623,7 +623,7 @@
                         <label>Header Image URL</label>
                         <config_path>paypal/style/paypal_hdrimg</config_path>
                         <tooltip>
-                            <![CDATA[The image at the top left of the checkout page. Max size is 750x90-pixel. <strong style="color:red">https</strong> is highly encouraged.]]>
+                            <![CDATA[The image at the top left of the checkout page. Max size is 750x90-pixel. <strong class="colorRed">https</strong> is highly encouraged.]]>
                         </tooltip>
                         <attribute type="shared">1</attribute>
                     </field>

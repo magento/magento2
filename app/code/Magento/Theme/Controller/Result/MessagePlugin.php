@@ -14,6 +14,8 @@ use Magento\Framework\Translate\InlineInterface;
 
 /**
  * Plugin for putting messages to cookies
+ *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class MessagePlugin
 {
@@ -115,7 +117,6 @@ class MessagePlugin
      *     'text' => 'cookie_value',
      *   ],
      * ]
-     *
      *
      * @param array $messages List of Magento messages that must be set as 'mage-messages' cookie.
      * @return void

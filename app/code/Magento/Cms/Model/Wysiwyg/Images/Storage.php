@@ -22,6 +22,7 @@ use Magento\Framework\App\ObjectManager;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  *
  * @api
  * @since 100.0.2
@@ -153,6 +154,11 @@ class Storage extends \Magento\Framework\DataObject
     private $ioFile;
 
     /**
+     * @var \Magento\Framework\File\Mime|null
+     */
+    private $mime;
+
+    /**
      * Construct
      *
      * @param \Magento\Backend\Model\Session $session
@@ -174,6 +180,7 @@ class Storage extends \Magento\Framework\DataObject
      * @param \Magento\Framework\Filesystem\DriverInterface $file
      * @param \Magento\Framework\Filesystem\Io\File|null $ioFile
      * @param \Psr\Log\LoggerInterface|null $logger
+     * @param \Magento\Framework\File\Mime $mime
      *
      * @throws \Magento\Framework\Exception\FileSystemException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -197,7 +204,8 @@ class Storage extends \Magento\Framework\DataObject
         array $data = [],
         \Magento\Framework\Filesystem\DriverInterface $file = null,
         \Magento\Framework\Filesystem\Io\File $ioFile = null,
-        \Psr\Log\LoggerInterface $logger = null
+        \Psr\Log\LoggerInterface $logger = null,
+        \Magento\Framework\File\Mime $mime = null
     ) {
         $this->_session = $session;
         $this->_backendUrl = $backendUrl;
@@ -217,6 +225,7 @@ class Storage extends \Magento\Framework\DataObject
         $this->_dirs = $dirs;
         $this->file = $file ?: ObjectManager::getInstance()->get(\Magento\Framework\Filesystem\Driver\File::class);
         $this->ioFile = $ioFile ?: ObjectManager::getInstance()->get(\Magento\Framework\Filesystem\Io\File::class);
+        $this->mime = $mime ?: ObjectManager::getInstance()->get(\Magento\Framework\File\Mime::class);
         parent::__construct($data);
     }
 
@@ -225,6 +234,8 @@ class Storage extends \Magento\Framework\DataObject
      *
      * @param string $path
      * @return void
+     * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws \Magento\Framework\Exception\ValidatorException
      */
     protected function createSubDirectories($path)
     {
@@ -295,6 +306,7 @@ class Storage extends \Magento\Framework\DataObject
      *
      * @param string $path Parent directory path
      * @return \Magento\Framework\Data\Collection\Filesystem
+     * @throws \Exception
      */
     public function getDirsCollection($path)
     {
@@ -359,7 +371,7 @@ class Storage extends \Magento\Framework\DataObject
             $item->setUrl($this->_cmsWysiwygImages->getCurrentUrl() . $item->getBasename());
             $itemStats = $this->file->stat($item->getFilename());
             $item->setSize($itemStats['size']);
-            $item->setMimeType(\mime_content_type($item->getFilename()));
+            $item->setMimeType($this->mime->getMimeType($item->getFilename()));
 
             if ($this->isImage($item->getBasename())) {
                 $thumbUrl = $this->getThumbnailUrl($item->getFilename(), true);
@@ -393,6 +405,7 @@ class Storage extends \Magento\Framework\DataObject
      *
      * @param string $path Path to the directory
      * @return \Magento\Cms\Model\Wysiwyg\Images\Storage\Collection
+     * @throws \Exception
      */
     public function getCollection($path = null)
     {
@@ -485,6 +498,9 @@ class Storage extends \Magento\Framework\DataObject
      *
      * @param string $path
      * @return void
+     * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\ValidatorException
      */
     protected function _deleteByPath($path)
     {
@@ -500,6 +516,8 @@ class Storage extends \Magento\Framework\DataObject
      *
      * @param string $target File path to be deleted
      * @return $this
+     * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws \Magento\Framework\Exception\ValidatorException
      */
     public function deleteFile($target)
     {
@@ -561,9 +579,11 @@ class Storage extends \Magento\Framework\DataObject
     /**
      * Thumbnail path getter
      *
-     * @param  string $filePath original file path
-     * @param  bool $checkFile OPTIONAL is it necessary to check file availability
+     * @param string $filePath original file path
+     * @param bool $checkFile OPTIONAL is it necessary to check file availability
      * @return string|false
+     * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws \Magento\Framework\Exception\ValidatorException
      */
     public function getThumbnailPath($filePath, $checkFile = false)
     {
@@ -587,9 +607,11 @@ class Storage extends \Magento\Framework\DataObject
     /**
      * Thumbnail URL getter
      *
-     * @param  string $filePath original file path
-     * @param  bool $checkFile OPTIONAL is it necessary to check file availability
+     * @param string $filePath original file path
+     * @param bool $checkFile OPTIONAL is it necessary to check file availability
      * @return string|false
+     * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws \Magento\Framework\Exception\ValidatorException
      */
     public function getThumbnailUrl($filePath, $checkFile = false)
     {
@@ -610,6 +632,8 @@ class Storage extends \Magento\Framework\DataObject
      * @param string $source Image path to be resized
      * @param bool $keepRatio Keep aspect ratio or not
      * @return bool|string Resized filepath or false if errors were occurred
+     * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws \Magento\Framework\Exception\ValidatorException
      */
     public function resizeFile($source, $keepRatio = true)
     {
@@ -628,8 +652,12 @@ class Storage extends \Magento\Framework\DataObject
         }
         $image = $this->_imageFactory->create();
         $image->open($source);
+
         $image->keepAspectRatio($keepRatio);
-        $image->resize($this->_resizeParameters['width'], $this->_resizeParameters['height']);
+
+        list($imageWidth, $imageHeight) = $this->getResizedParams($source);
+
+        $image->resize($imageWidth, $imageHeight);
         $dest = $targetDir . '/' . $this->ioFile->getPathInfo($source)['basename'];
         $image->save($dest);
         if ($this->_directory->isFile($this->_directory->getRelativePath($dest))) {
@@ -639,10 +667,36 @@ class Storage extends \Magento\Framework\DataObject
     }
 
     /**
+     * Return width height for the image resizing.
+     *
+     * @param string $source
+     * @return array
+     */
+    private function getResizedParams(string $source): array
+    {
+        $configWidth = $this->_resizeParameters['width'];
+        $configHeight = $this->_resizeParameters['height'];
+
+        //phpcs:ignore Generic.PHP.NoSilencedErrors
+        list($imageWidth, $imageHeight) = @getimagesize($source);
+
+        if ($imageWidth && $imageHeight) {
+            $imageWidth = $configWidth > $imageWidth ? $imageWidth : $configWidth;
+            $imageHeight = $configHeight > $imageHeight ? $imageHeight : $configHeight;
+
+            return  [$imageWidth, $imageHeight];
+        }
+        return [$configWidth, $configHeight];
+    }
+
+    /**
      * Resize images on the fly in controller action
      *
      * @param string $filename File basename
      * @return bool|string Thumbnail path or false for errors
+     * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\ValidatorException
      */
     public function resizeOnTheFly($filename)
     {
@@ -658,6 +712,8 @@ class Storage extends \Magento\Framework\DataObject
      *
      * @param bool|string $filePath Path to the file
      * @return string
+     * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws \Magento\Framework\Exception\ValidatorException
      */
     public function getThumbsPath($filePath = false)
     {
@@ -782,10 +838,20 @@ class Storage extends \Magento\Framework\DataObject
      *
      * @param string $path
      * @return string
+     * @throws \Magento\Framework\Exception\ValidatorException
      */
     protected function _sanitizePath($path)
     {
-        return rtrim(preg_replace('~[/\\\]+~', '/', $this->_directory->getDriver()->getRealPathSafety($path)), '/');
+        return rtrim(
+            preg_replace(
+                '~[/\\\]+~',
+                '/',
+                $this->_directory->getDriver()->getRealPathSafety(
+                    $this->_directory->getAbsolutePath($path)
+                )
+            ),
+            '/'
+        );
     }
 
     /**
@@ -793,6 +859,7 @@ class Storage extends \Magento\Framework\DataObject
      *
      * @param string $path
      * @return string|bool
+     * @throws \Magento\Framework\Exception\ValidatorException
      */
     protected function _getRelativePathToRoot($path)
     {
