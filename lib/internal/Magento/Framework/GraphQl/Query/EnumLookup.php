@@ -60,7 +60,7 @@ class EnumLookup
         $mappedValues = $this->enumDataMapper->getMappedEnums($enumName);
 
         foreach ($enumObject->getValues() as $enumItem) {
-            if (isset($mappedValues[$enumItem->getName()]) && $mappedValues[$enumItem->getName()] === $fieldValue) {
+            if (isset($mappedValues[$enumItem->getName()]) && $mappedValues[$enumItem->getName()] == $fieldValue) {
                 return $enumItem->getValue();
             }
         }
