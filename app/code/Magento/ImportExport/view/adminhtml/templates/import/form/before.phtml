@@ -190,12 +190,30 @@ require([
         postToFrame: function(newActionUrl) {
             var fileUploader = document.getElementById('{$fieldNameSourceFile}');
 
-            if (fileUploader.files.length > 0 && fileUploader.files[0].lastModified !== this.loadedFileLastModified) {
-                alert({
-                    content: '{$uploaderErrorMessage}'
-                });
-                fileUploader.value = null;
-                return;
+            if (fileUploader.files.length > 0) {
+                var file = fileUploader.files[0],
+                    ifrElName = this.ifrElemName,
+                    reader = new FileReader();
+
+                reader.readAsText(file, "UTF-8");
+
+                reader.onerror = function () {
+                    jQuery('body').loader('hide');
+                    alert({
+                        content: '{$uploaderErrorMessage}'
+                    });
+                    fileUploader.value = null;
+                    jQuery('iframe#' + ifrElName).remove();
+                    return;
+                }
+
+                if (file.lastModified !== this.loadedFileLastModified) {
+                    alert({
+                        content: '{$uploaderErrorMessage}'
+                    });
+                    fileUploader.value = null;
+                    return;
+                }
             }
 
             if (!jQuery('[name="' + this.ifrElemName + '"]').length) {
