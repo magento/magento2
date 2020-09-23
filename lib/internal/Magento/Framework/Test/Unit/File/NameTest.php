@@ -30,7 +30,10 @@ class NameTest extends \PHPUnit\Framework\TestCase
      */
     private $name;
 
-    protected function setUp()
+    /**
+     * @inheritDoc
+     */
+    protected function setUp(): void
     {
         $this->name = new Name();
         $this->existingFilePath = __DIR__ . '/../_files/source.txt';
