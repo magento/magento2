@@ -21,6 +21,17 @@
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
         </before>
+        <after>
+            <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openMediaGallery"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultViewAgain"/>
+            <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectFolder">
+                <argument name="name" value="pageTestImage"/>
+            </actionGroup>
+            <actionGroup ref="AdminMediaGalleryFolderDeleteActionGroup" stepKey="deleteFolder"/>
+            <actionGroup ref="AdminMediaGalleryAssertFolderDoesNotExistActionGroup" stepKey="assertFolderWasDeleted">
+                <argument name="name" value="pageTestImage"/>
+            </actionGroup>
+        </after>
         <actionGroup ref="AdminOpenCreateNewCMSPageActionGroup" stepKey="navigateToCreateNewPage"/>
         <actionGroup ref="FillOutCustomCMSPageContentActionGroup" stepKey="fillBasicPageDataForPageWithDefaultStore">
             <argument name="title" value="Unique page title MediaGalleryUi"/>
@@ -30,6 +41,7 @@
 
         <actionGroup ref="AdminOpenMediaGalleryFromPageNoEditorActionGroup" stepKey="openMediaGalleryForPage"/>
         <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilter"/>
+        <wait time="5" stepKey="waitFilterReallyCleared"/>
         <actionGroup ref="AdminMediaGalleryOpenNewFolderFormActionGroup" stepKey="openNewFolderForm"/>
         <actionGroup ref="AdminMediaGalleryCreateNewFolderActionGroup" stepKey="createNewFolder">
             <argument name="name" value="pageTestImage"/>
@@ -38,15 +50,9 @@
             <argument name="name" value="pageTestImage"/>
         </actionGroup>
         <waitForPageLoad stepKey="waitForGridToLoadAfterNewFolderCreated"/>
-        <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilterAgain"/>
-        <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectNewlyCreatedFolder">
-            <argument name="name" value="pageTestImage"/>
-        </actionGroup>
-        <waitForPageLoad stepKey="waitForPageLoadAgain"/>
         <actionGroup ref="AdminEnhancedMediaGalleryUploadImageActionGroup" stepKey="uploadImage">
             <argument name="image" value="ImageUpload3"/>
         </actionGroup>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear" />
         <actionGroup ref="AdminEnhancedMediaGalleryViewImageDetails" stepKey="viewImageDetails"/>
         <actionGroup ref="AdminEnhancedMediaGalleryImageDetailsEditActionGroup" stepKey="editImage"/>
         <actionGroup ref="AdminEnhancedMediaGalleryImageDetailsSaveActionGroup" stepKey="saveImage">
@@ -80,11 +86,5 @@
         <actionGroup ref="AdminEnhancedMediaGalleryViewImageDetails" stepKey="openViewImageDetailsToVerifyEmptyUsedIn"/>
         <actionGroup ref="AssertAdminEnhancedMediaGalleryUsedInSectionNotDisplayedActionGroup" stepKey="assertThereIsNoUsedInSection"/>
         <actionGroup ref="AdminEnhancedMediaGalleryCloseViewDetailsActionGroup" stepKey="closeDetails"/>
-
-        <actionGroup ref="AdminMediaGalleryFolderDeleteActionGroup" stepKey="deleteFolder"/>
-        <actionGroup ref="AdminMediaGalleryAssertFolderDoesNotExistActionGroup" stepKey="assertFolderWasDeleted">
-            <argument name="name" value="pageTestImage"/>
-        </actionGroup>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappearAfterFolderDelete"/>
    </test>
 </tests>
