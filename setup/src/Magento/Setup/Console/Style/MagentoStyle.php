@@ -565,6 +565,7 @@ class MagentoStyle extends OutputStyle implements MagentoStyleInterface
     ) {
         $indentLength = 0;
         $prefixLength = Helper::strlenWithoutDecoration($this->getFormatter(), $prefix);
+        $lineIndentation = '';
         if (null !== $type) {
             $type = sprintf('[%s] ', $type);
             $indentLength = strlen($type);

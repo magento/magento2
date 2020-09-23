@@ -19,6 +19,7 @@ class Helper extends \Magento\Framework\DB\Helper
      * @param \Magento\Framework\App\ResourceConnection $resource
      * @param string $modulePrefix
      * @codeCoverageIgnore
+     * phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
      */
     public function __construct(\Magento\Framework\App\ResourceConnection $resource, $modulePrefix = 'Magento_Eav')
     {

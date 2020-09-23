@@ -12,9 +12,6 @@ use Magento\Catalog\Model\Indexer\Product\Price\Processor as PriceIndexerProcess
 use Magento\Catalog\Model\Product\Price\Validation\TierPriceValidator;
 use Magento\Catalog\Model\ProductIdLocatorInterface;
 
-/**
- * Tier price storage.
- */
 class TierPriceStorage implements TierPriceStorageInterface
 {
     /**

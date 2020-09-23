@@ -33,10 +33,8 @@ class Generator extends AbstractSchemaGenerator
      */
     const ERROR_SCHEMA = '#/definitions/error-response';
 
-    /** Unauthorized description */
     const UNAUTHORIZED_DESCRIPTION = '401 Unauthorized';
 
-    /** Array signifier */
     const ARRAY_SIGNIFIER = '[0]';
 
     /**

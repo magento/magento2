@@ -535,7 +535,7 @@ class Package
         $area,
         $theme,
         $locale,
-        array & $result = [],
+        array &$result = [],
         ThemeInterface $themeModel = null
     ) {
         if (($package->getArea() != $area) || ($package->getTheme() != $theme) || ($package->getLocale() != $locale)) {

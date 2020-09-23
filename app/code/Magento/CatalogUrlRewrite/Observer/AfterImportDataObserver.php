@@ -37,8 +37,6 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory;
 use RuntimeException;
 
 /**
- * Class AfterImportDataObserver
- *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
