@@ -252,6 +252,8 @@ class CategoryRepositoryTest extends WebapiAbstract
      */
     public function testUpdateUrlKey()
     {
+        $this->_markTestAsRestOnly('Functionality available in REST mode only.');
+
         $categoryId = 333;
         $categoryData = [
             'name' => 'Update Category Test Old Name',
@@ -301,7 +303,6 @@ class CategoryRepositoryTest extends WebapiAbstract
         $this->assertEquals($categoryId, $urlRewrite->getEntityId());
         $this->assertEquals(CategoryUrlRewriteGenerator::ENTITY_TYPE, $urlRewrite->getEntityType());
         $this->assertEquals('update-category-test-new-name.html', $urlRewrite->getRequestPath());
-
 
         // check for the forward from the old name to the new name
         $storage = Bootstrap::getObjectManager()->get(\Magento\UrlRewrite\Model\Storage\DbStorage::class);
