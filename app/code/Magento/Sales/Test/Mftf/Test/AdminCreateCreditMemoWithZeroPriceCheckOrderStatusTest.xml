@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateCreditMemoWithZeroPriceCheckOrderStatusTest">
+        <annotations>
+            <stories value="Github issue: #22762 Credit Memo with Zero Total: Order Status 'Complete' and not 'Closed'"/>
+            <title value="Create Credit Memo with zero total."/>
+            <description value="Assert order status after create CreditMemo with zero total."/>
+            <severity value="MAJOR"/>
+            <group value="sales"/>
+            <testCaseId value="MC-35848"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct_zero" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="FreeShippinMethodConfig" stepKey="enableFreeShipping"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <createData entity="FreeShippingMethodDisableConfig" stepKey="disableFreeShipping"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderPage">
+            <argument name="customer" value="$createCustomer$"/>
+        </actionGroup>
+        <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addSecondProduct">
+            <argument name="product" value="$createProduct$"/>
+            <argument name="productQty" value="1"/>
+        </actionGroup>
+        <actionGroup ref="FillOrderCustomerInformationActionGroup" stepKey="fillCustomerInfo">
+            <argument name="customer" value="$createCustomer$"/>
+            <argument name="address" value="US_Address_TX"/>
+        </actionGroup>
+        <actionGroup ref="OrderSelectFreeShippingActionGroup" stepKey="selectFlatRate"/>
+        <actionGroup ref="AdminSubmitOrderActionGroup" stepKey="submitOrder"/>
+
+        <actionGroup ref="AdminCreateInvoiceAndCreditMemoActionGroup" stepKey="createCreditMemo"/>
+
+        <actionGroup ref="AdminOrderViewCheckStatusActionGroup" stepKey="seeOrderClose">
+            <argument name="status" value="Closed"/>
+        </actionGroup>
+    </test>
+</tests>

@@ -16,13 +16,6 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Search\Model\AdapterFactory">
-        <arguments>
-            <argument name="adapters" xsi:type="array">
-                <item name="mysql" xsi:type="string">Magento\Framework\Search\Adapter\Mysql\Adapter</item>
-            </argument>
-        </arguments>
-    </type>
     <preference for="Magento\Search\Model\QueryFactoryInterface" type="Magento\Search\Model\QueryFactory" />
     <preference for="Magento\Search\Model\QueryInterface" type="Magento\Search\Model\Query" />
     <preference for="Magento\Search\Api\SynonymAnalyzerInterface" type="Magento\Search\Model\SynonymAnalyzer" />
@@ -55,13 +48,6 @@
     <preference for="Magento\Search\Api\Data\SynonymGroupInterface" type="Magento\Search\Model\SynonymGroup" />
     <preference for="Magento\Search\Api\SynonymGroupRepositoryInterface" type="Magento\Search\Model\SynonymGroupRepository" />
     <preference for="Magento\Framework\Search\Adapter\Preprocessor\PreprocessorInterface" type="Magento\Search\Adapter\Query\Preprocessor\Synonyms" />
-    <type name="Magento\Framework\Search\Adapter\Mysql\Query\Builder\Match">
-        <arguments>
-            <argument name="preprocessors" xsi:type="array">
-                <item name="synonymsPreprocessor" xsi:type="object">Magento\Search\Adapter\Query\Preprocessor\Synonyms</item>
-            </argument>
-        </arguments>
-    </type>
     <preference for="Magento\Framework\Search\SearchEngine\ConfigInterface" type="Magento\Search\Model\SearchEngine\Config" />
     <type name="Magento\Search\Model\SearchEngine\Config">
         <arguments>

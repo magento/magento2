@@ -15,6 +15,7 @@
             <title value="Sitemap Creation With Path Error"/>
             <description value="Sitemap Entity Creation With Path Error"/>
             <testCaseId value="MC-14313"/>
+            <severity value="MAJOR"/>
             <group value="sitemap"/>
             <group value="mtf_migrated"/>
         </annotations>
