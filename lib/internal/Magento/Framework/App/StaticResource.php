@@ -194,8 +194,8 @@ class StaticResource implements \Magento\Framework\AppInterface
      */
     protected function parsePath($path)
     {
-        $path = $this->driver->getRealPathSafety(ltrim($path, '/'));
-        $parts = explode('/', $path, 6);
+        $safePath = $this->driver->getRealPathSafety(ltrim($path, '/'));
+        $parts = explode('/', $safePath, 6);
         if (count($parts) < 5) {
             //Checking that path contains all required parts and is not above static folder.
             throw new \InvalidArgumentException("Requested path '$path' is wrong.");

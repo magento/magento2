@@ -348,7 +348,7 @@ class StaticResourceTest extends TestCase
         $this->driverMock->expects($this->once())
             ->method('getRealPathSafety')
             ->with('frontend/..\..\folder_above/././Magento_Ui/template/messages.html')
-            ->willReturn('frontend/..\..\folder_above/Magento_Ui/template/messages.html');
+            ->willReturn('folder_above/Magento_Ui/template/messages.html');
         $this->expectExceptionMessage("Requested path '$path' is wrong.");
 
         $this->object->launch();
