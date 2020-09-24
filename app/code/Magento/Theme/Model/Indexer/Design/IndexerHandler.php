@@ -9,12 +9,13 @@ declare(strict_types=1);
 namespace Magento\Theme\Model\Indexer\Design;
 
 use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Indexer\IndexStructureInterface;
 use Magento\Framework\Indexer\SaveHandler\Batch;
 use Magento\Framework\Indexer\SaveHandler\Grid;
+use Magento\Framework\Indexer\SaveHandler\IndexerInterface;
 use Magento\Framework\Indexer\ScopeResolver\FlatScopeResolver;
 use Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver;
+use Magento\Framework\Search\Request\Dimension;
 
 class IndexerHandler extends Grid
 {
@@ -57,8 +58,8 @@ class IndexerHandler extends Grid
     /**
      * Clean index table by deleting all records unconditionally or create the index table if not exists
      *
-     * @param $dimensions
-     * @return IndexerHandler
+     * @param Dimension[] $dimensions
+     * @return IndexerInterface
      */
     public function cleanIndex($dimensions)
     {
