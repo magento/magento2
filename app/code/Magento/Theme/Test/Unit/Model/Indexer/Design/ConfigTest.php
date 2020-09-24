@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 /**
  * Test design config indexer model
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 namespace Magento\Theme\Test\Unit\Model\Indexer\Design;
 
