@@ -15,6 +15,7 @@
             <actionGroup ref="AdminMediaGalleryEnhancedEnableActionGroup" stepKey="enableEnhancedMediaGallery">
                 <argument name="enabled" value="1"/>
             </actionGroup>
+            <actionGroup ref="AdminMediaGalleryRenditionsEnableActionGroup" stepKey="enableMediaGalleryRenditions"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </before>
         <after>
