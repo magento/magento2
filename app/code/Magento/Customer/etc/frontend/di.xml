@@ -113,4 +113,18 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Store\Model\StoreSwitcher\RedirectDataPreprocessorComposite">
+        <arguments>
+            <argument name="processors" xsi:type="array">
+                <item name="customer_session" xsi:type="object">Magento\Customer\Model\StoreSwitcher\RedirectDataPreprocessor</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Store\Model\StoreSwitcher\RedirectDataPostprocessorComposite">
+        <arguments>
+            <argument name="processors" xsi:type="array">
+                <item name="customer_session" xsi:type="object">Magento\Customer\Model\StoreSwitcher\RedirectDataPostprocessor</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
