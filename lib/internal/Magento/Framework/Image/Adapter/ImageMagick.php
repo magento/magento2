@@ -617,8 +617,7 @@ class ImageMagick extends AbstractAdapter
     }
 
     /**
-     * Convert colorspace to SRGB if current colorspace
-     * is COLORSPACE_CMYK or COLORSPACE_UNDEFINED.
+     * Convert colorspace to SRGB if current colorspace is COLORSPACE_CMYK or COLORSPACE_UNDEFINED.
      *
      * @return void
      */
