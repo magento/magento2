@@ -46,8 +46,14 @@ class Category extends DataObject
     private $string;
 
     /**
+     * @var SearchCriteriaBuilder|void
+     */
+    private $searchCriteriaBuilder;
+
+    /**
      * @param Data $adminhtmlData
      * @param CategoryListInterface $categoryRepository
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param SearchCriteriaBuilderFactory $searchCriteriaBuilderFactory
      * @param FilterBuilder $filterBuilder
      * @param StringUtils $string
@@ -55,12 +61,14 @@ class Category extends DataObject
     public function __construct(
         Data $adminhtmlData,
         CategoryListInterface $categoryRepository,
+        SearchCriteriaBuilder $searchCriteriaBuilder,
         SearchCriteriaBuilderFactory $searchCriteriaBuilderFactory,
         FilterBuilder $filterBuilder,
         StringUtils $string
     ) {
         $this->adminhtmlData = $adminhtmlData;
         $this->categoryRepository = $categoryRepository;
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->searchCriteriaBuilderFactory = $searchCriteriaBuilderFactory;
         $this->filterBuilder = $filterBuilder;
         $this->string = $string;
