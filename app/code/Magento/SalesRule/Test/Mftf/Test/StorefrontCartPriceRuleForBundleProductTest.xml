@@ -16,6 +16,9 @@
             <severity value="BLOCKER"/>
             <testCaseId value="MAGETWO-28921"/>
             <group value="SalesRule"/>
+            <skip>
+                <issueId value="MQE-2288" />
+            </skip>
         </annotations>
 
         <before>
