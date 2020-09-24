@@ -9,6 +9,7 @@
     <default>
         <system>
             <media_gallery_renditions>
+                <enabled>1</enabled>
                 <width>1000</width>
                 <height>1000</height>
             </media_gallery_renditions>
