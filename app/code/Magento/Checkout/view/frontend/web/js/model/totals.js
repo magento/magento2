@@ -15,7 +15,7 @@ define([
 
     var quoteItems = ko.observable(quote.totals().items),
         cartData = customerData.get('cart'),
-        quoteSubtotal = parseFloat(quote.totals().subtotal_incl_tax),
+        quoteSubtotal = parseFloat(quote.totals()['subtotal_incl_tax']),
         subtotalAmount = parseFloat(cartData().subtotalAmount);
 
     quote.totals.subscribe(function (newValue) {
