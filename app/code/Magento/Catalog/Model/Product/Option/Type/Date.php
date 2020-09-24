@@ -7,6 +7,7 @@
 namespace Magento\Catalog\Model\Product\Option\Type;
 
 use Magento\Catalog\Api\Data\ProductCustomOptionInterface;
+use function PHPUnit\Framework\matches;
 
 /**
  * Catalog product option date type
@@ -72,6 +73,11 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
         $dateValid = true;
         if ($this->_dateExists()) {
             if ($this->useCalendar()) {
+                if (is_string($value) && preg_match('/^\d{1,4}.+\d{1,4}.+\d{1,4},+(\w|\W)*$/', $value)) {
+                    $value = [
+                        'date' => preg_replace('/,([^,]+),?$/', '', $value),
+                    ];
+                }
                 $dateValid = isset($value['date']) && preg_match('/^\d{1,4}.+\d{1,4}.+\d{1,4}$/', $value['date']);
             } else {
                 $dateValid = isset(
@@ -184,8 +190,10 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
             $date = (new \DateTime())->setTimestamp($timestamp);
             $result = $date->format('Y-m-d H:i:s');
 
+            $originDate = (isset($value['date']) && $value['date'] != '') ? $value['date'] : null;
+
             // Save date in internal format to avoid locale date bugs
-            $this->_setInternalInRequest($result);
+            $this->_setInternalInRequest($result, $originDate);
 
             return $result;
         } else {
@@ -352,9 +360,10 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      * Save internal value of option in infoBuy_request
      *
      * @param string $internalValue Datetime value in internal format
+     * @param string|null $originDate date value in origin format
      * @return void
      */
-    protected function _setInternalInRequest($internalValue)
+    protected function _setInternalInRequest($internalValue, $originDate = null)
     {
         $requestOptions = $this->getRequest()->getOptions();
         if (!isset($requestOptions[$this->getOption()->getId()])) {
@@ -364,6 +373,9 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
             $requestOptions[$this->getOption()->getId()] = [];
         }
         $requestOptions[$this->getOption()->getId()]['date_internal'] = $internalValue;
+        if ($originDate) {
+            $requestOptions[$this->getOption()->getId()]['date'] = $originDate;
+        }
         $this->getRequest()->setOptions($requestOptions);
     }
 
