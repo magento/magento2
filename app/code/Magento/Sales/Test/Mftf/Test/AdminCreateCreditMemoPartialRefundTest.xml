@@ -127,8 +127,7 @@
         <scrollTo selector="{{StorefrontCustomerResentOrdersSection.blockResentOrders}}" stepKey="scrollToResent"/>
         <click selector="{{StorefrontCustomerResentOrdersSection.viewOrder({$grabOrderId})}}" stepKey="clickOnOrder"/>
         <waitForPageLoad stepKey="waitForViewOrder"/>
-        <click selector="{{StorefrontCustomerOrderSection.tabRefund}}" stepKey="clickRefund"/>
-        <waitForPageLoad stepKey="waitRefundsLoad"/>
+        <actionGroup ref="StorefrontClickRefundTabCustomerOrderViewActionGroup" stepKey="clickRefund"/>
         <scrollTo selector="{{StorefrontCustomerOrderSection.grandTotalRefund}}" stepKey="scrollToGrandTotal"/>
         <see selector="{{StorefrontCustomerOrderSection.grandTotalRefund}}" userInput="110.00" stepKey="seeGrandTotal"/>
 
