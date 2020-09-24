@@ -18,7 +18,7 @@ use Magento\CatalogInventory\Api\StockConfigurationInterface;
  *
  * Adds stock status limitations to a given Select object.
  */
-class StockStatusBaseSelectProcessor implements BaseSelectProcessorInterface
+class BaseStockStatusSelectProcessor implements BaseSelectProcessorInterface
 {
     /**
      * @var ResourceConnection
