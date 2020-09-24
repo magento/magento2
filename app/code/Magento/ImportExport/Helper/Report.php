@@ -31,7 +31,7 @@ class Report extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * @var ReadInterface
      */
-    protected $importHistoryDirectory;
+    private $importHistoryDirectory;
 
     /**
      * Construct

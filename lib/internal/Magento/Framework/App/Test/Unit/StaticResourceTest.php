@@ -207,6 +207,9 @@ class StaticResourceTest extends TestCase
         $this->responseMock->expects($this->once())
             ->method('setFilePath')
             ->with('resource/file.css');
+        $this->driverMock->expects($this->once())
+            ->method('getRealPathSafety')
+            ->willReturnArgument(0);
         $this->object->launch();
     }
 
@@ -277,6 +280,9 @@ class StaticResourceTest extends TestCase
             ->method('get')
             ->with('resource')
             ->willReturn('short/path.js');
+        $this->driverMock->expects($this->once())
+            ->method('getRealPathSafety')
+            ->willReturnArgument(0);
         $this->object->launch();
     }
 
@@ -339,6 +345,10 @@ class StaticResourceTest extends TestCase
             ->method('get')
             ->with('resource')
             ->willReturn('frontend/..\..\folder_above/././Magento_Ui/template/messages.html');
+        $this->driverMock->expects($this->once())
+            ->method('getRealPathSafety')
+            ->with('frontend/..\..\folder_above/././Magento_Ui/template/messages.html')
+            ->willReturn('frontend/..\..\folder_above/Magento_Ui/template/messages.html');
         $this->expectExceptionMessage("Requested path '$path' is wrong.");
 
         $this->object->launch();

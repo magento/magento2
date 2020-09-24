@@ -27,11 +27,6 @@ use Magento\Framework\Validation\ValidationException;
 class Uploader
 {
     /**
-     * @var Filesystem
-     */
-    protected $filesystem;
-
-    /**
      * Uploaded file handle (copy of $_FILES[] element)
      *
      * @var array
@@ -136,6 +131,11 @@ class Uploader
      * @var \Magento\Framework\File\Mime
      */
     private $fileMime;
+
+    /**
+     * @var Filesystem
+     */
+    private $filesystem;
 
     /**#@+
      * File upload type (multiple or single)

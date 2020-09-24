@@ -170,7 +170,6 @@ class DownloadTest extends TestCase
             ->with('filename')
             ->willReturn('sampleFile');
 
-
         $this->directoryMock->expects($this->once())->method('isFile')->willReturn(false);
         $this->directoryMock->expects($this->once())->method('isExist')->willReturn(true);
         $this->messageManagerMock->expects($this->once())->method('addErrorMessage');

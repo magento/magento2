@@ -91,6 +91,8 @@ class StaticResource implements \Magento\Framework\AppInterface
      * @param ConfigLoaderInterface $configLoader
      * @param DeploymentConfig|null $deploymentConfig
      * @param File|null $driver
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         State $state,

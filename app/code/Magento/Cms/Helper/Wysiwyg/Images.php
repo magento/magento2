@@ -6,6 +6,7 @@
 namespace Magento\Cms\Helper\Wysiwyg;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Exception\ValidatorException;
 
 /**
  * Wysiwyg Images Helper.
@@ -158,7 +159,7 @@ class Images extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param string $id
      * @return string
-     * @throws \InvalidArgumentException When path contains restricted symbols.
+     * @throws ValidatorException
      */
     public function convertIdToPath($id)
     {

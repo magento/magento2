@@ -101,7 +101,6 @@ class ImagesTest extends TestCase
     {
         $this->path = 'PATH';
 
-
         $this->objectManager = new ObjectManager($this);
 
         $this->eventManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
