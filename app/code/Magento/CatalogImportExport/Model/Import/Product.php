@@ -1750,11 +1750,7 @@ class Product extends AbstractEntity
                 $position = 0;
                 foreach ($rowImages as $column => $columnImages) {
                     foreach ($columnImages as $columnImageKey => $columnImage) {
-                        $filePath = filter_var($columnImage, FILTER_VALIDATE_URL)
-                            ? $columnImage
-                            : $importDir . DS . $columnImage;
-
-                        $uploadedFile = $this->getAlreadyExistedImage($rowExistingImages, $filePath);
+                        $uploadedFile = $this->getAlreadyExistedImage($rowExistingImages, $columnImage, $importDir);
                         if (!$uploadedFile && !isset($uploadedImages[$columnImage])) {
                             $uploadedFile = $this->uploadMediaFiles($columnImage);
                             $uploadedFile = $uploadedFile ?: $this->getSystemFile($columnImage);
@@ -1948,30 +1944,30 @@ class Product extends AbstractEntity
     /**
      * Returns image hash by path
      *
-     * @param string $filePath
+     * @param string $path
      * @return string
      */
-    private function getFileHash(string $filePath): string
+    private function getFileHash(string $path): string
     {
-        try {
-            $fileExists = $this->fileDriver->isExists($filePath);
-        } catch (\Exception $exception) {
-            $fileExists = false;
-        }
-
-        return $fileExists ? hash_file(self::HASH_ALGORITHM, $filePath) : '';
+        return hash_file(self::HASH_ALGORITHM, $path);
     }
 
     /**
      * Returns existed image
      *
      * @param array $imageRow
-     * @param string $filePath
+     * @param string $columnImage
+     * @param string $importDir
      * @return string
      */
-    private function getAlreadyExistedImage(array $imageRow, string $filePath): string
+    private function getAlreadyExistedImage(array $imageRow, string $columnImage, string $importDir): string
     {
-        $hash = $this->getFileHash($filePath);
+        if (filter_var($columnImage, FILTER_VALIDATE_URL)) {
+            $hash = $this->getFileHash($columnImage);
+        } else {
+            $path = $importDir . DS . $columnImage;
+            $hash = $this->isFileExists($path) ? $this->getFileHash($path) : '';
+        }
 
         return array_reduce(
             $imageRow,
@@ -2011,6 +2007,23 @@ class Product extends AbstractEntity
                 }
             }
         }
+    }
+
+    /**
+     * Is file exists
+     *
+     * @param string $path
+     * @return bool
+     */
+    private function isFileExists(string $path): bool
+    {
+        try {
+            $fileExists = $this->fileDriver->isExists($path);
+        } catch (\Exception $exception) {
+            $fileExists = false;
+        }
+
+        return $fileExists;
     }
 
     /**
