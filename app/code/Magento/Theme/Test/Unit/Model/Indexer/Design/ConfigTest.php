@@ -7,8 +7,6 @@ declare(strict_types=1);
 
 /**
  * Test design config indexer model
- *
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 namespace Magento\Theme\Test\Unit\Model\Indexer\Design;
 
@@ -32,6 +30,9 @@ use PHPUnit\Framework\TestCase;
 use Magento\Theme\Model\Indexer\Design\IndexerHandler;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ConfigTest extends TestCase
 {
     /**
