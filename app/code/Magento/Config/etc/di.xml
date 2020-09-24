@@ -350,4 +350,19 @@
             <argument name="excludeList" xsi:type="object">Magento\Config\Model\Config\Export\ExcludeList</argument>
         </arguments>
     </type>
+    <virtualType name="adminhtmlConfigStructureData" type="\Magento\Config\Model\Config\Structure\Data">
+        <arguments>
+            <argument name="configScope" xsi:type="object">adminhtmlConfigScope</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="adminhtmlConfigStructure" type="Magento\Config\Model\Config\Structure">
+        <arguments>
+            <argument name="structureData" xsi:type="object">adminhtmlConfigStructureData</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Config\App\Config\Source\ConfigStructureSource">
+        <arguments>
+            <argument name="structure" xsi:type="object">adminhtmlConfigStructure</argument>
+        </arguments>
+    </type>
 </config>

@@ -7,8 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Config\App\Config\Source;
 
-use Magento\Config\Model\Config\Structure\Reader;
-use Magento\Framework\App\Area;
+use Magento\Config\Model\Config\Structure;
 use Magento\Framework\App\Config\ConfigSourceInterface;
 use Magento\Framework\DataObject;
 
@@ -18,16 +17,16 @@ use Magento\Framework\DataObject;
 class ConfigStructureSource implements ConfigSourceInterface
 {
     /**
-     * @var Reader
+     * @var Structure
      */
-    private $reader;
+    private $structure;
 
     /**
-     * @param Reader $reader
+     * @param Structure $structure
      */
-    public function __construct(Reader $reader)
+    public function __construct(Structure $structure)
     {
-        $this->reader = $reader;
+        $this->structure = $structure;
     }
 
     /**
@@ -35,32 +34,33 @@ class ConfigStructureSource implements ConfigSourceInterface
      */
     public function get($path = '')
     {
-        $configStructure = $this->reader->read(Area::AREA_ADMINHTML);
-        $sections = $configStructure['config']['system']['sections'] ?? [];
-        $defaultConfig = $this->merge([], $sections);
+        $fieldPaths = array_keys($this->structure->getFieldPaths());
+        $defaultConfig = [];
+        foreach ($fieldPaths as $fieldPath) {
+            $defaultConfig = $this->addPathToConfig($defaultConfig, $fieldPath);
+        }
         $data = new DataObject(['default' => $defaultConfig]);
 
         return $data->getData($path);
     }
 
     /**
-     * Merge existed config with config structure
+     * Add config path to config structure
      *
      * @param array $config
-     * @param array $sections
+     * @param string $path
      * @return array
      */
-    private function merge(array $config, array $sections): array
+    private function addPathToConfig(array $config, string $path): array
     {
-        foreach ($sections as $section) {
-            if (isset($section['children'])) {
-                $config[$section['id']] = $this->merge(
-                    $config[$section['id']] ?? [],
-                    $section['children']
-                );
-            } elseif ($section['_elementType'] === 'field') {
-                $config += [$section['id'] => null];
-            }
+        if (strpos($path, '/') !== false) {
+            list ($key, $subPath) = explode('/', $path, 2);
+            $config[$key] = $this->addPathToConfig(
+                $config[$key] ?? [],
+                $subPath
+            );
+        } else {
+            $config[$path] = null;
         }
 
         return $config;
