@@ -337,6 +337,10 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
 
         $collection->setVisibility($this->catalogProductVisibility->getVisibleInCatalogIds());
 
+        /**
+         * Change sorting attribute to entity_id because created_at can be the same for products fastly created
+         * one by one and sorting by created_at is indeterministic in this case.
+         */
         $collection = $this->_addProductAttributesAndPrices($collection)
             ->addStoreFilter()
             ->addAttributeToSort('entity_id', 'desc')
