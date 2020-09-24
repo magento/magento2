@@ -260,20 +260,7 @@ class Select extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
             foreach (explode(',', $optionValue) as $value) {
                 $_result = $option->getValueById($value);
                 if ($_result) {
-                    $catalogPriceValue = $this->calculateCustomOptionCatalogRule->execute(
-                        $option->getProduct(),
-                        (float)$_result->getPrice(),
-                        $_result->getPriceType() === Value::TYPE_PERCENT
-                    );
-                    if ($catalogPriceValue!==null) {
-                        $result += $catalogPriceValue;
-                    } else {
-                        $result += $this->_getChargeableOptionPrice(
-                            $_result->getPrice(),
-                            $_result->getPriceType() == 'percent',
-                            $basePrice
-                        );
-                    }
+                    $result += $this->getCalculatedOptionValue($option, $_result, $basePrice);
                 } else {
                     if ($this->getListener()) {
                         $this->getListener()->setHasError(true)->setMessage($this->_getWrongConfigurationMessage());
@@ -358,5 +345,32 @@ class Select extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
     protected function _isSingleSelection()
     {
         return in_array($this->getOption()->getType(), $this->singleSelectionTypes, true);
+    }
+
+    /**
+     * Returns calculated price of option
+     *
+     * @param \Magento\Catalog\Model\Product\Option $option
+     * @param \Magento\Catalog\Model\Product\Option\Value $result
+     * @param float $basePrice
+     * @return float|null
+     */
+    protected function getCalculatedOptionValue($option, $result, $basePrice)
+    {
+        $catalogPriceValue = $this->calculateCustomOptionCatalogRule->execute(
+            $option->getProduct(),
+            (float)$result->getPrice(),
+            $result->getPriceType() === Value::TYPE_PERCENT
+        );
+        if ($catalogPriceValue!==null) {
+            $optionCalculatedValue = $catalogPriceValue;
+        } else {
+            $optionCalculatedValue = $this->_getChargeableOptionPrice(
+                $result->getPrice(),
+                $result->getPriceType() == 'percent',
+                $basePrice
+            );
+        }
+        return $optionCalculatedValue;
     }
 }
