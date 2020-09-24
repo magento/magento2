@@ -7,7 +7,6 @@
 namespace Magento\Catalog\Model\Product\Option\Type;
 
 use Magento\Catalog\Api\Data\ProductCustomOptionInterface;
-use function PHPUnit\Framework\matches;
 
 /**
  * Catalog product option date type
