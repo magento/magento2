@@ -18,6 +18,7 @@ use Magento\Catalog\Model\Product\Option\Type\Select;
 use Magento\Catalog\Model\Product\Option\Type\Text;
 use Magento\Catalog\Model\Product\Option\Value;
 use Magento\Catalog\Model\ResourceModel\Product\Option\Value\Collection;
+use Magento\Catalog\Pricing\Price\BasePrice;
 use Magento\Catalog\Pricing\Price\CalculateCustomOptionCatalogRule;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\EntityManager\MetadataPool;
@@ -473,12 +474,18 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
      */
     public function getPrice($flag = false)
     {
-        if ($flag) {
-            return $this->calculateCustomOptionCatalogRule->execute(
+        if ($flag && $this->getPriceType() == self::$typePercent) {
+            $price = $this->calculateCustomOptionCatalogRule->execute(
                 $this->getProduct(),
                 (float)$this->getData(self::KEY_PRICE),
                 $this->getPriceType() === Value::TYPE_PERCENT
             );
+
+            if ($price == null) {
+                $basePrice = $this->getProduct()->getPriceInfo()->getPrice(BasePrice::PRICE_CODE)->getValue();
+                $price = $basePrice * ($this->_getData(self::KEY_PRICE) / 100);
+            }
+            return $price;
         }
         return $this->_getData(self::KEY_PRICE);
     }

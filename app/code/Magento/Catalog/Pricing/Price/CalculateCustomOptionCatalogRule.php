@@ -9,8 +9,6 @@ namespace Magento\Catalog\Pricing\Price;
 
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\PriceModifierInterface;
-use Magento\CatalogRule\Pricing\Price\CatalogRulePrice;
-use Magento\Framework\Pricing\Price\BasePriceProviderInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 
 /**
@@ -29,6 +27,7 @@ class CalculateCustomOptionCatalogRule
     private $priceModifier;
 
     /**
+     * CalculateCustomOptionCatalogRule constructor.
      * @param PriceCurrencyInterface $priceCurrency
      * @param PriceModifierInterface $priceModifier
      */
@@ -46,13 +45,13 @@ class CalculateCustomOptionCatalogRule
      * @param Product $product
      * @param float $optionPriceValue
      * @param bool $isPercent
-     * @return float
+     * @return float|null
      */
     public function execute(
         Product $product,
         float $optionPriceValue,
         bool $isPercent
-    ): float {
+    ) {
         $regularPrice = (float)$product->getPriceInfo()
             ->getPrice(RegularPrice::PRICE_CODE)
             ->getValue();
@@ -68,39 +67,9 @@ class CalculateCustomOptionCatalogRule
                 $product
             );
             $finalOptionPrice = $totalCatalogRulePrice - $catalogRulePrice;
-        } else {
-            $finalOptionPrice = $this->getOptionPriceWithoutPriceRule(
-                $optionPriceValue,
-                $isPercent,
-                $this->getGetBasePriceWithOutCatalogRules($product)
-            );
+            return $this->priceCurrency->convertAndRound($finalOptionPrice);
         }
-
-        return $this->priceCurrency->convertAndRound($finalOptionPrice);
-    }
-
-    /**
-     * Get product base price without catalog rules applied.
-     *
-     * @param Product $product
-     * @return float
-     */
-    private function getGetBasePriceWithOutCatalogRules(Product $product): float
-    {
-        $basePrice = null;
-        foreach ($product->getPriceInfo()->getPrices() as $price) {
-            if ($price instanceof BasePriceProviderInterface
-                && $price->getPriceCode() !== CatalogRulePrice::PRICE_CODE
-                && $price->getValue() !== false
-            ) {
-                $basePrice = min(
-                    $price->getValue(),
-                    $basePrice ?? $price->getValue()
-                );
-            }
-        }
-
-        return $basePrice ?? $product->getPrice();
+        return null;
     }
 
     /**

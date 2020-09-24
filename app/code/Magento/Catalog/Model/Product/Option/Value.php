@@ -264,11 +264,16 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
     public function getPrice($flag = false)
     {
         if ($flag) {
-            return $this->calculateCustomOptionCatalogRule->execute(
+            $catalogPriceValue = $this->calculateCustomOptionCatalogRule->execute(
                 $this->getProduct(),
                 (float)$this->getData(self::KEY_PRICE),
                 $this->getPriceType() === self::TYPE_PERCENT
             );
+            if ($catalogPriceValue!==null) {
+                return $catalogPriceValue;
+            } else {
+                return $this->customOptionPriceCalculator->getOptionPriceByPriceCode($this, BasePrice::PRICE_CODE);
+            }
         }
         return $this->_getData(self::KEY_PRICE);
     }

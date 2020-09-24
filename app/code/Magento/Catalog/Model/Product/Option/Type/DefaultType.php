@@ -352,11 +352,20 @@ class DefaultType extends \Magento\Framework\DataObject
     {
         $option = $this->getOption();
 
-        return $this->calculateCustomOptionCatalogRule->execute(
+        $catalogPriceValue = $this->calculateCustomOptionCatalogRule->execute(
             $option->getProduct(),
             (float)$option->getPrice(),
             $option->getPriceType() === Value::TYPE_PERCENT
         );
+        if ($catalogPriceValue!==null) {
+            return $catalogPriceValue;
+        } else {
+            return $this->_getChargeableOptionPrice(
+                $option->getPrice(),
+                $option->getPriceType() == 'percent',
+                $basePrice
+            );
+        }
     }
 
     /**

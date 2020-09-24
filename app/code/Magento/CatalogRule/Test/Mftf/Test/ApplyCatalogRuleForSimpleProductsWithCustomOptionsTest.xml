@@ -20,7 +20,6 @@
         </annotations>
         <before>
             <!-- Login as Admin -->
-            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
             <createData entity="_defaultProduct" stepKey="createProduct1">
                 <requiredEntity createDataKey="createCategory"/>
@@ -39,7 +38,7 @@
             <updateData createDataKey="createProduct1" entity="productWithCustomOptions" stepKey="updateProductWithOptions1"/>
             <updateData createDataKey="createProduct2" entity="productWithCustomOptions" stepKey="updateProductWithOptions2"/>
             <updateData createDataKey="createProduct3" entity="productWithCustomOptions" stepKey="updateProductWithOptions3"/>
-            <magentoCron stepKey="runCronIndex" groups="index"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <!-- Delete products and category -->
@@ -53,6 +52,13 @@
             <actionGroup stepKey="deletePriceRule" ref="deleteEntitySecondaryGrid">
                 <argument name="name" value="{{_defaultCatalogRule.name}}"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.catalogRuleIdentifierSearch}}"/>
+            </actionGroup>
+
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexAdterTest">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCacheAfterTest">
+                <argument name="tags" value=""/>
             </actionGroup>
 
             <!-- Logout -->
@@ -70,6 +76,13 @@
         <conditionalClick selector="{{AdminNewCatalogPriceRule.active}}" dependentSelector="{{AdminNewCatalogPriceRule.activeIsEnabled}}" visible="false" stepKey="enableActiveBtn"/>
         <click selector="{{AdminNewCatalogPriceRule.save}}" stepKey="clickSave"/>
         <waitForPageLoad stepKey="waitForSave"/>
+
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+            <argument name="tags" value=""/>
+        </actionGroup>
 
         <!-- Navigate to category on store front -->
         <amOnPage url="{{StorefrontProductPage.url($createCategory.name$)}}" stepKey="goToCategoryPage"/>

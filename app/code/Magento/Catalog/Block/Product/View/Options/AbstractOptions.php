@@ -124,6 +124,7 @@ abstract class AbstractOptions extends \Magento\Framework\View\Element\Template
      * Retrieve formatted price
      *
      * @return string
+     * @since 102.0.6
      */
     public function getFormattedPrice()
     {
@@ -143,7 +144,7 @@ abstract class AbstractOptions extends \Magento\Framework\View\Element\Template
      *
      * @return string
      *
-     * @deprecated
+     * @deprecated 102.0.6
      * @see getFormattedPrice()
      */
     public function getFormatedPrice()
@@ -175,11 +176,14 @@ abstract class AbstractOptions extends \Magento\Framework\View\Element\Template
         $customOptionPrice = $this->getProduct()->getPriceInfo()->getPrice('custom_option_price');
 
         if (!$value['is_percent']) {
-            $value['pricing_value'] = $this->calculateCustomOptionCatalogRule->execute(
+            $catalogPriceValue = $this->calculateCustomOptionCatalogRule->execute(
                 $this->getProduct(),
                 (float)$value['pricing_value'],
                 (bool)$value['is_percent']
             );
+            if ($catalogPriceValue!==null) {
+                $value['pricing_value'] = $catalogPriceValue;
+            }
         }
 
         $context = [CustomOptionPriceInterface::CONFIGURATION_OPTION_FLAG => true];

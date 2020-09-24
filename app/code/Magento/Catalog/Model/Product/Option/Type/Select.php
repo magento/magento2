@@ -260,11 +260,20 @@ class Select extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
             foreach (explode(',', $optionValue) as $value) {
                 $_result = $option->getValueById($value);
                 if ($_result) {
-                    $result += $this->calculateCustomOptionCatalogRule->execute(
+                    $catalogPriceValue = $this->calculateCustomOptionCatalogRule->execute(
                         $option->getProduct(),
                         (float)$_result->getPrice(),
                         $_result->getPriceType() === Value::TYPE_PERCENT
                     );
+                    if ($catalogPriceValue!==null) {
+                        $result += $catalogPriceValue;
+                    } else {
+                        $result += $this->_getChargeableOptionPrice(
+                            $_result->getPrice(),
+                            $_result->getPriceType() == 'percent',
+                            $basePrice
+                        );
+                    }
                 } else {
                     if ($this->getListener()) {
                         $this->getListener()->setHasError(true)->setMessage($this->_getWrongConfigurationMessage());
@@ -275,11 +284,20 @@ class Select extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
         } elseif ($this->_isSingleSelection()) {
             $_result = $option->getValueById($optionValue);
             if ($_result) {
-                $result = $this->calculateCustomOptionCatalogRule->execute(
+                $catalogPriceValue = $this->calculateCustomOptionCatalogRule->execute(
                     $option->getProduct(),
                     (float)$_result->getPrice(),
                     $_result->getPriceType() === Value::TYPE_PERCENT
                 );
+                if ($catalogPriceValue !== null) {
+                    $result = $catalogPriceValue;
+                } else {
+                    $result = $this->_getChargeableOptionPrice(
+                        $_result->getPrice(),
+                        $_result->getPriceType() == 'percent',
+                        $basePrice
+                    );
+                }
             } else {
                 if ($this->getListener()) {
                     $this->getListener()->setHasError(true)->setMessage($this->_getWrongConfigurationMessage());
