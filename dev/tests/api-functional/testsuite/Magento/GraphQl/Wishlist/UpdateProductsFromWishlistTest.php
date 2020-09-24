@@ -67,11 +67,12 @@ class UpdateProductsFromWishlistTest extends GraphQlAbstract
     public function testUnauthorizedWishlistItemUpdate()
     {
         $wishlist = $this->getWishlist();
-        $wishlistItem = $wishlist['customer']['wishlist']['items'][0];
+        $wishlistItem = $wishlist['customer']['wishlist']['items_v2'][0];
         $wishlist2 = $this->getWishlist('customer_two@example.com');
         $wishlist2Id = $wishlist2['customer']['wishlist']['id'];
         $qty = 2;
-        $updateWishlistQuery = $this->getQueryWithNoDescription((int) $wishlist2Id, (int) $wishlistItem['id'], $qty);
+        $description = 'New Description';
+        $updateWishlistQuery = $this->getQuery((int) $wishlist2Id, (int) $wishlistItem['id'], $qty, $description);
         $response = $this->graphQlMutation(
             $updateWishlistQuery,
             [],
@@ -79,8 +80,8 @@ class UpdateProductsFromWishlistTest extends GraphQlAbstract
             $this->getHeaderMap('customer_two@example.com')
         );
         self::assertEquals(1, $response['updateProductsInWishlist']['wishlist']['items_count']);
-        self::assertNotEmpty($response['updateProductsInWishlist']['wishlist']['items'], 'empty wish list items');
-        self::assertCount(1, $response['updateProductsInWishlist']['wishlist']['items']);
+        self::assertNotEmpty($response['updateProductsInWishlist']['wishlist']['items_v2'], 'empty wish list items');
+        self::assertCount(1, $response['updateProductsInWishlist']['wishlist']['items_v2']);
         self::assertEquals(
             'The wishlist item with ID "'.$wishlistItem['id'].'" does not belong to the wishlist',
             $response['updateProductsInWishlist']['user_errors'][0]['message']

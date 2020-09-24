@@ -64,7 +64,7 @@ class DeleteProductsFromWishlistTest extends GraphQlAbstract
     public function testUnauthorizedWishlistItemDelete()
     {
         $wishlist = $this->getWishlist();
-        $wishlistItem = $wishlist['customer']['wishlist']['items'][0];
+        $wishlistItem = $wishlist['customer']['wishlist']['items_v2'][0];
         $wishlist2 = $this->getWishlist('customer_two@example.com');
         $wishlist2Id = $wishlist2['customer']['wishlist']['id'];
         $query = $this->getQuery((int) $wishlist2Id, (int) $wishlistItem['id']);
@@ -75,8 +75,8 @@ class DeleteProductsFromWishlistTest extends GraphQlAbstract
             $this->getHeaderMap('customer_two@example.com')
         );
         self::assertEquals(1, $response['removeProductsFromWishlist']['wishlist']['items_count']);
-        self::assertNotEmpty($response['removeProductsFromWishlist']['wishlist']['items'], 'empty wish list items');
-        self::assertCount(1, $response['removeProductsFromWishlist']['wishlist']['items']);
+        self::assertNotEmpty($response['removeProductsFromWishlist']['wishlist']['items_v2'], 'empty wish list items');
+        self::assertCount(1, $response['removeProductsFromWishlist']['wishlist']['items_v2']);
         self::assertEquals(
             'The wishlist item with ID "'.$wishlistItem['id'].'" does not belong to the wishlist',
             $response['removeProductsFromWishlist']['user_errors'][0]['message']
