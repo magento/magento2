@@ -5,13 +5,16 @@
  */
 namespace Magento\Catalog\Model;
 
-use Magento\Catalog\Api\Data\ProductOptionExtensionFactory;
 use Magento\Catalog\Api\Data\ProductOptionInterface;
 use Magento\Catalog\Model\CustomOptions\CustomOption;
 use Magento\Catalog\Model\CustomOptions\CustomOptionFactory;
 use Magento\Framework\DataObject;
 use Magento\Framework\DataObject\Factory as DataObjectFactory;
+use Magento\Framework\Serialize\Serializer\Json;
 
+/**
+ * Processor ofr product options
+ */
 class ProductOptionProcessor implements ProductOptionProcessorInterface
 {
     /**
@@ -30,15 +33,26 @@ class ProductOptionProcessor implements ProductOptionProcessorInterface
     private $urlBuilder;
 
     /**
+     * Serializer interface instance.
+     *
+     * @var Json
+     */
+    private $serializer;
+
+    /**
      * @param DataObjectFactory $objectFactory
      * @param CustomOptionFactory $customOptionFactory
+     * @param Json|null $serializer
      */
     public function __construct(
         DataObjectFactory $objectFactory,
-        CustomOptionFactory $customOptionFactory
+        CustomOptionFactory $customOptionFactory,
+        Json $serializer = null
     ) {
         $this->objectFactory = $objectFactory;
         $this->customOptionFactory = $customOptionFactory;
+        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
     }
 
     /**
@@ -88,7 +102,8 @@ class ProductOptionProcessor implements ProductOptionProcessorInterface
         if (!empty($options) && is_array($options)) {
             $data = [];
             foreach ($options as $optionId => $optionValue) {
-                if (is_array($optionValue)) {
+
+                if (is_array($optionValue) && !$this->isDateWithDateInternal($optionValue)) {
                     $optionValue = $this->processFileOptionValue($optionValue);
                     $optionValue = implode(',', $optionValue);
                 }
@@ -126,6 +141,8 @@ class ProductOptionProcessor implements ProductOptionProcessorInterface
     }
 
     /**
+     * Get url builder
+     *
      * @return \Magento\Catalog\Model\Product\Option\UrlBuilder
      *
      * @deprecated 101.0.0
@@ -137,5 +154,16 @@ class ProductOptionProcessor implements ProductOptionProcessorInterface
                 ->get(\Magento\Catalog\Model\Product\Option\UrlBuilder::class);
         }
         return $this->urlBuilder;
+    }
+
+    /**
+     * Returns date option value only with 'date_internal data
+     *
+     * @param array $optionValue
+     * @return bool
+     */
+    private function isDateWithDateInternal(array $optionValue): bool
+    {
+        return array_key_exists('date_internal', $optionValue) && array_key_exists('date', $optionValue);
     }
 }
