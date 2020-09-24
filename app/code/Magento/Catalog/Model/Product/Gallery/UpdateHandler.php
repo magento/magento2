@@ -87,9 +87,6 @@ class UpdateHandler extends CreateHandler
         foreach ($images as &$image) {
             if (!empty($image['removed'])) {
                 if (!empty($image['value_id'])) {
-                    if (preg_match('/\.\.(\\\|\/)/', $image['file'])) {
-                        continue;
-                    }
                     $recordsToDelete[] = $image['value_id'];
                     $imagesToDelete[] = $image['file'];
                     $catalogPath = $this->mediaConfig->getBaseMediaPath();

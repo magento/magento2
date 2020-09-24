@@ -100,6 +100,8 @@ class ImagesTest extends TestCase
     protected function setUp(): void
     {
         $this->path = 'PATH';
+
+
         $this->objectManager = new ObjectManager($this);
 
         $this->eventManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
@@ -125,15 +127,6 @@ class ImagesTest extends TestCase
             ->setConstructorArgs(['path' => $this->path])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->directoryWriteMock->expects($this->any())
-            ->method('getAbsolutePath')
-            ->willReturnMap(
-                [
-                    [WysiwygConfig::IMAGE_DIRECTORY, null, $this->getAbsolutePath(WysiwygConfig::IMAGE_DIRECTORY)],
-                    [null, null, $this->getAbsolutePath(null)],
-                    ['', null, $this->getAbsolutePath('')],
-                ]
-            );
 
         $this->filesystemMock = $this->createMock(Filesystem::class);
         $this->filesystemMock->expects($this->once())
@@ -165,6 +158,43 @@ class ImagesTest extends TestCase
                 'escaper' => $this->escaperMock,
             ]
         );
+
+        $this->directoryWriteMock->expects($this->any())
+            ->method('getAbsolutePath')
+            ->willReturnMap(
+                [
+                    [
+                        WysiwygConfig::IMAGE_DIRECTORY,
+                        null,
+                        $this->getAbsolutePath(WysiwygConfig::IMAGE_DIRECTORY)
+                    ],
+                    [
+                        null,
+                        null,
+                        $this->getAbsolutePath(null)
+                    ],
+                    [
+                        '',
+                        null,
+                        $this->getAbsolutePath('')
+                    ],
+                    [
+                        $this->path,
+                        null,
+                        $this->path
+                    ],
+                    [
+                        $this->path . '/test_path',
+                        null,
+                        $this->path . '/test_path'
+                    ],
+                    [
+                        $this->path . '/tmp',
+                        null,
+                        $this->path . '/tmp'
+                    ]
+                ]
+            );
     }
 
     protected function tearDown(): void
@@ -258,13 +288,6 @@ class ImagesTest extends TestCase
     {
         $pathId = Storage::NODE_ROOT;
         $this->assertEquals($this->imagesHelper->getStorageRoot(), $this->imagesHelper->convertIdToPath($pathId));
-    }
-
-    public function testConvertIdToPathInvalid()
-    {
-        $this->expectException('InvalidArgumentException');
-        $this->expectExceptionMessage('Path is invalid');
-        $this->imagesHelper->convertIdToPath('Ly4uLy4uLy4uLy4uLy4uL3dvcms-');
     }
 
     /**
@@ -403,7 +426,7 @@ class ImagesTest extends TestCase
     {
         $this->requestMock->expects($this->any())
             ->method('getParam')
-            ->willReturn('PATH');
+            ->willReturn('L3RtcA');
 
         $this->expectException(LocalizedException::class);
         $this->expectExceptionMessage(

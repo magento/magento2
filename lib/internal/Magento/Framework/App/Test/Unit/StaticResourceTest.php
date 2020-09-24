@@ -16,6 +16,7 @@ use Magento\Framework\App\State;
 use Magento\Framework\App\StaticResource;
 use Magento\Framework\App\View\Asset\Publisher;
 use Magento\Framework\Config\ConfigOptionsListConstants;
+use Magento\Framework\Filesystem\Driver\File;
 use Magento\Framework\Module\ModuleList;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\View\Asset\LocalInterface;
@@ -80,6 +81,11 @@ class StaticResourceTest extends TestCase
     private $deploymentConfigMock;
 
     /**
+     * @var File|MockObject
+     */
+    private $driverMock;
+
+    /**
      * @var StaticResource
      */
     private $object;
@@ -99,6 +105,7 @@ class StaticResourceTest extends TestCase
         $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
         $this->configLoaderMock = $this->createMock(ConfigLoader::class);
         $this->deploymentConfigMock = $this->createMock(DeploymentConfig::class);
+        $this->driverMock = $this->createMock(File::class);
         $this->object = new StaticResource(
             $this->stateMock,
             $this->responseMock,
@@ -108,7 +115,8 @@ class StaticResourceTest extends TestCase
             $this->moduleListMock,
             $this->objectManagerMock,
             $this->configLoaderMock,
-            $this->deploymentConfigMock
+            $this->deploymentConfigMock,
+            $this->driverMock
         );
     }
 

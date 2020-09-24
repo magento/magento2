@@ -11,6 +11,8 @@ use Magento\Backend\App\Action;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Response\Http\FileFactory;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Exception\ValidatorException;
 use Magento\ImportExport\Controller\Adminhtml\Export as ExportController;
 use Magento\Framework\Filesystem;
 
@@ -53,15 +55,25 @@ class Download extends ExportController implements HttpGetActionInterface
     /**
      * Controller basic method implementation.
      *
-     * @return \Magento\Framework\App\ResponseInterface
+     * @return \Magento\Framework\Controller\Result\Redirect | \Magento\Framework\App\ResponseInterface
      */
     public function execute()
     {
-        /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
         $resultRedirect->setPath('adminhtml/export/index');
         $fileName = $this->getRequest()->getParam('filename');
-        if (empty($fileName) || preg_match('/\.\.(\\\|\/)/', $fileName) !== 0) {
+        $exportDirectory = $this->filesystem->getDirectoryRead(DirectoryList::VAR_EXPORT);
+        try {
+            if (empty($fileName) || !$exportDirectory->isExist($fileName)) {
+                $this->messageManager->addErrorMessage(__('Please provide valid export file name'));
+
+                return $resultRedirect;
+            }
+        } catch (FileSystemException $e) {
+            $this->messageManager->addErrorMessage(__('Please provide valid export file name'));
+
+            return $resultRedirect;
+        } catch (ValidatorException $e) {
             $this->messageManager->addErrorMessage(__('Please provide valid export file name'));
 
             return $resultRedirect;

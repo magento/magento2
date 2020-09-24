@@ -8,6 +8,7 @@ namespace Magento\ImportExport\Helper;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\ImportExport\Model\Import;
+use Magento\Framework\Filesystem\Directory\ReadInterface;
 
 /**
  * ImportExport history reports helper
@@ -28,6 +29,11 @@ class Report extends \Magento\Framework\App\Helper\AbstractHelper
     protected $varDirectory;
 
     /**
+     * @var ReadInterface
+     */
+    protected $importHistoryDirectory;
+
+    /**
      * Construct
      *
      * @param \Magento\Framework\App\Helper\Context $context
@@ -41,6 +47,7 @@ class Report extends \Magento\Framework\App\Helper\AbstractHelper
     ) {
         $this->timeZone = $timeZone;
         $this->varDirectory = $filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
+        $this->importHistoryDirectory = $filesystem->getDirectoryRead(DirectoryList::VAR_IMPORT_HISTORY);
         parent::__construct($context);
     }
 
@@ -129,11 +136,7 @@ class Report extends \Magento\Framework\App\Helper\AbstractHelper
      */
     protected function getFilePath($filename)
     {
-        if (preg_match('/\.\.(\\\|\/)/', $filename)) {
-            throw new \InvalidArgumentException('Filename has not permitted symbols in it');
-        }
-
-        return $this->varDirectory->getRelativePath(Import::IMPORT_HISTORY_DIR . $filename);
+        return $this->varDirectory->getRelativePath($this->importHistoryDirectory->getRelativePath($filename));
     }
 
     /**
