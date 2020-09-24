@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Magento\Theme\Model\Indexer\Design;
 
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Indexer\IndexStructureInterface;
 use Magento\Framework\Indexer\SaveHandler\Batch;
 use Magento\Framework\Indexer\SaveHandler\Grid;
@@ -22,6 +23,15 @@ class IndexerHandler extends Grid
      */
     private $flatScopeResolver;
 
+    /**
+     * @param IndexStructureInterface $indexStructure
+     * @param ResourceConnection $resource
+     * @param Batch $batch
+     * @param IndexScopeResolver $indexScopeResolver
+     * @param FlatScopeResolver $flatScopeResolver
+     * @param array $data
+     * @param int $batchSize
+     */
     public function __construct(
         IndexStructureInterface $indexStructure,
         ResourceConnection $resource,
@@ -29,8 +39,8 @@ class IndexerHandler extends Grid
         IndexScopeResolver $indexScopeResolver,
         FlatScopeResolver $flatScopeResolver,
         array $data,
-        $batchSize = 100)
-    {
+        $batchSize = 100
+    ) {
         parent::__construct(
             $indexStructure,
             $resource,
@@ -38,35 +48,28 @@ class IndexerHandler extends Grid
             $indexScopeResolver,
             $flatScopeResolver,
             $data,
-            $batchSize);
+            $batchSize
+        );
 
         $this->flatScopeResolver = $flatScopeResolver;
     }
 
     /**
-     * @return bool
-     */
-    private function isFlatTableExists()
-    {
-        $adapter = $this->resource->getConnection('write');
-        $tableName = $this->flatScopeResolver->resolve($this->getIndexName(), []);
-
-        return $adapter->isTableExists($tableName);
-    }
-
-    /**
-     * Clean index table by deleting all records
+     * Clean index table by deleting all records unconditionally or create the index table if not exists
      *
-     * @inheritdoc
+     * @param $dimensions
+     * @return IndexerHandler
      */
     public function cleanIndex($dimensions)
     {
-        if ($this->isFlatTableExists()) {
-            $adapter = $this->resource->getConnection('write');
-            $tableName = $this->flatScopeResolver->resolve($this->getIndexName(), $dimensions);
-            $adapter->delete($tableName);
+        $tableName = $this->flatScopeResolver->resolve($this->getIndexName(), $dimensions);
+
+        if ($this->connection->isTableExists($tableName)) {
+            $this->connection->delete($tableName);
         } else {
             $this->indexStructure->create($this->getIndexName(), $this->fields, $dimensions);
         }
+
+        return $this;
     }
 }
