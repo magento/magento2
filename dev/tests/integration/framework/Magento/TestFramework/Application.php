@@ -11,7 +11,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Autoload\AutoloaderInterface;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Filesystem\Glob;
-use Magento\Framework\Logger\Monolog;
+use Psr\Log\LoggerInterface;
 
 /**
  * Encapsulates application installation, initialization and uninstall.
@@ -332,9 +332,8 @@ class Application
                 ]
             ]
         );
-
-        $objectManager->removeSharedInstance(Monolog::class);
-        $objectManager->addSharedInstance($logger, Monolog::class);
+        $objectManager->removeSharedInstance(LoggerInterface::class, true);
+        $objectManager->addSharedInstance($logger, LoggerInterface::class, true);
         return $logger;
     }
 

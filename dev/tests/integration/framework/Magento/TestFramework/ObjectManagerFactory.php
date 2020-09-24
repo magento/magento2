@@ -60,7 +60,8 @@ class ObjectManagerFactory extends \Magento\Framework\App\ObjectManagerFactory
         $objectManager->addSharedInstance($deploymentConfig, \Magento\Framework\App\DeploymentConfig::class);
         $objectManager->addSharedInstance(
             $objectManager->get(\Magento\Framework\App\ObjectManager\ConfigLoader::class),
-            \Magento\Framework\ObjectManager\ConfigLoaderInterface::class
+            \Magento\Framework\ObjectManager\ConfigLoaderInterface::class,
+            true
         );
         $objectManager->get(\Magento\Framework\Interception\PluginListInterface::class)->reset();
         $objectManager->configure(
