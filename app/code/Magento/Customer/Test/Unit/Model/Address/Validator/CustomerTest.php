@@ -11,6 +11,7 @@ use Magento\Customer\Model\Address;
 use Magento\Customer\Model\Address\Validator\Customer as CustomerValidator;
 use Magento\Customer\Model\AddressFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Quote\Model\Quote\Address as QuoteAddress;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -71,7 +72,7 @@ class CustomerTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $addressMock->expects($this->exactly(2))->method('getId')->willReturn(1);
+        $addressMock->expects($this->once())->method('getId')->willReturn(1);
         $addressMock->expects($this->once())->method('getCustomerId')->willReturn(null);
         $this->addressFactoryMock->expects($this->once())->method('create')->willReturn($originalAddressMock);
         $originalAddressMock->expects($this->once())
@@ -121,7 +122,7 @@ class CustomerTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $addressMock->expects($this->exactly(2))->method('getId')->willReturn(1);
+        $addressMock->expects($this->once())->method('getId')->willReturn(1);
         $this->addressFactoryMock->expects($this->once())->method('create')->willReturn($originalAddressMock);
         $originalAddressMock->expects($this->once())
             ->method('load')
@@ -148,7 +149,7 @@ class CustomerTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $addressMock->expects($this->exactly(2))->method('getId')->willReturn(1);
+        $addressMock->expects($this->once())->method('getId')->willReturn(1);
         $this->addressFactoryMock->expects($this->once())->method('create')->willReturn($originalAddressMock);
         $originalAddressMock->expects($this->once())
             ->method('load')
@@ -167,5 +168,34 @@ class CustomerTest extends TestCase
             ],
             $this->model->validate($addressMock)
         );
+    }
+
+    /**
+     * @return void
+     */
+    public function testValidateExistingCustomerWithQuoteAddress(): void
+    {
+        $addressMock = $this->getMockBuilder(QuoteAddress::class)
+            ->onlyMethods(['getCustomerAddressId', 'getCustomerId'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $originalAddressMock = $this->getMockBuilder(Address::class)
+            ->onlyMethods(['getId', 'load', 'getCustomerId'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $addressMock->expects($this->once())->method('getCustomerAddressId')->willReturn(1);
+        $addressMock->expects($this->once())->method('getCustomerId')->willReturn(1);
+
+        $this->addressFactoryMock->expects($this->once())->method('create')->willReturn($originalAddressMock);
+        $originalAddressMock->expects($this->once())
+            ->method('load')
+            ->with(1)
+            ->willReturn($originalAddressMock);
+
+        $addressMock->expects($this->once())->method('getCustomerId')->willReturn(1);
+        $originalAddressMock->expects($this->once())->method('getCustomerId')->willReturn(1);
+
+        $this->assertEmpty($this->model->validate($addressMock));
     }
 }

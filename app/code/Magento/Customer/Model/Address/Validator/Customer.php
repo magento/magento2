@@ -10,6 +10,7 @@ namespace Magento\Customer\Model\Address\Validator;
 use Magento\Customer\Model\Address\AbstractAddress;
 use Magento\Customer\Model\Address\ValidatorInterface;
 use Magento\Customer\Model\AddressFactory;
+use Magento\Quote\Api\Data\AddressInterface as QuoteAddressInterface;
 
 /**
  * Validates that current Address is related to given Customer.
@@ -35,11 +36,11 @@ class Customer implements ValidatorInterface
     public function validate(AbstractAddress $address): array
     {
         $errors = [];
-
-        if ($address->getId() !== null) {
+        $addressId = $address instanceof QuoteAddressInterface ? $address->getCustomerAddressId() : $address->getId();
+        if ($addressId !== null) {
             $addressCustomerId = (int) $address->getCustomerId();
             $originalAddressCustomerId = (int) $this->addressFactory->create()
-                ->load($address->getId())
+                ->load($addressId)
                 ->getCustomerId();
 
             if ($originalAddressCustomerId !== 0 && $originalAddressCustomerId !== $addressCustomerId) {
