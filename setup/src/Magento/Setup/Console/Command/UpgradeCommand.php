@@ -144,7 +144,7 @@ class UpgradeCommand extends AbstractSetupCommand
             $searchConfig->validateSearchEngine();
             $installer->removeUnusedTriggers();
             $installer->installSchema($request);
-            $installer->installDataFixtures($request);
+            $installer->installDataFixtures($request, true);
 
             if ($this->deploymentConfig->isAvailable()) {
                 $importConfigCommand = $this->getApplication()->find(ConfigImportCommand::COMMAND_NAME);
