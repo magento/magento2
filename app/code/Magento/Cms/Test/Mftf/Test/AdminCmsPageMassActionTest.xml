@@ -28,6 +28,8 @@
         <after>
             <deleteData createDataKey="firstCMSPage" stepKey="deleteFirstCMSPage" />
             <deleteData createDataKey="secondCMSPage" stepKey="deleteSecondCMSPage" />
+            <actionGroup ref="AdminOpenCMSPagesGridActionGroup" stepKey="navigateToCMSPageGrid"/>
+            <actionGroup ref="AdminGridFilterResetActionGroup" stepKey="clearPossibleGridFilters"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
