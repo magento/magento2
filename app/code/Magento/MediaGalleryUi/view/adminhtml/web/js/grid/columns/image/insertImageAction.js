@@ -47,13 +47,13 @@ define([
                 showLoader: true
             }).done($.proxy(function (data) {
                 if (targetElement.is('textarea')) {
-                    this.insertAtCursor(targetElement.get(0), data);
+                    this.insertAtCursor(targetElement.get(0), data.content);
                     targetElement.focus();
                     $(targetElement).change();
                 } else {
-                    targetElement.val(data)
-                        .data('size', record.size)
-                        .data('mime-type', record['content_type'])
+                    targetElement.val(data.content)
+                        .data('size', data.size)
+                        .data('mime-type', data.type)
                         .trigger('change');
                 }
             }, this));

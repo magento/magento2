@@ -42,14 +42,14 @@
                 <argument name="customStore" value="customStoreEN"/>
             </actionGroup>
             <actionGroup ref="AdminCreateCustomerWithWebSiteAndGroupActionGroup" stepKey="createCustomer">
-                <argument name="customerData" value="Simple_US_Customer"/>
+                <argument name="customerData" value="Simple_US_Customer_Assistance_Allowed"/>
                 <argument name="website" value="{{customWebsite.name}}"/>
                 <argument name="storeView" value="{{customStoreEN.name}}"/>
             </actionGroup>
         </before>
         <after>
             <actionGroup ref="AdminDeleteCustomerActionGroup" stepKey="deleteCustomer">
-                <argument name="customerEmail" value="Simple_US_Customer.email"/>
+                <argument name="customerEmail" value="Simple_US_Customer_Assistance_Allowed.email"/>
             </actionGroup>
             <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite">
                 <argument name="websiteName" value="{{customWebsite.name}}"/>
@@ -65,7 +65,7 @@
 
         <!-- Login as Customer from Customer page -->
         <actionGroup ref="OpenEditCustomerFromAdminActionGroup" stepKey="OpenEditCustomerFrom">
-            <argument name="customer" value="Simple_US_Customer"/>
+            <argument name="customer" value="Simple_US_Customer_Assistance_Allowed"/>
         </actionGroup>
         <grabFromCurrentUrl regex="~id/(\d+)/~"  stepKey="customerId" />
         <actionGroup ref="AdminLoginAsCustomerLoginFromCustomerPageActionGroup"
