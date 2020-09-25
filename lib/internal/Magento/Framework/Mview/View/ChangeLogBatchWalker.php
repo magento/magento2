@@ -16,44 +16,89 @@ use Magento\Framework\Phrase;
 class ChangeLogBatchWalker implements ChangeLogBatchWalkerInterface
 {
     /**
+     * @var ChangelogInterface
+     */
+    private $changelog;
+    /**
+     * @var int
+     */
+    private $fromVersionId;
+
+    /**
+     * @var int
+     */
+    private $toVersionId;
+
+    /**
+     * @var int
+     */
+    private $batchSize;
+
+    /**
      * @var ResourceConnection
      */
     private $resourceConnection;
 
     /**
      * @param ResourceConnection $resourceConnection
+     * @param ChangelogInterface $changelog
+     * @param int $fromVersionId
+     * @param int $toVersionId
+     * @param int $batchSize
+     * @param array $entityTypeCodes
      */
     public function __construct(
-        ResourceConnection $resourceConnection
+        ResourceConnection $resourceConnection,
+        ChangelogInterface $changelog,
+        int $fromVersionId,
+        int $toVersionId,
+        int $batchSize
     ) {
         $this->resourceConnection = $resourceConnection;
+        $this->changelog = $changelog;
+        $this->fromVersionId = $fromVersionId;
+        $this->toVersionId = $toVersionId;
+        $this->batchSize = $batchSize;
+    }
+
+    /**
+     * @return \Generator|\Traversable
+     * @throws \Exception
+     */
+    public function getIterator(): \Generator
+    {
+        while ($this->fromVersionId < $this->toVersionId) {
+            $ids = $this->walk();
+
+            if (empty($ids)) {
+                break;
+            }
+            $this->fromVersionId += $this->batchSize;
+            yield $ids;
+        }
     }
 
     /**
      * @inheritdoc
      */
-    public function walk(ChangelogInterface $changelog, int $fromVersionId, int $toVersion, int $batchSize)
+    private function walk()
     {
         $connection = $this->resourceConnection->getConnection();
-        $changelogTableName = $this->resourceConnection->getTableName($changelog->getName());
-
-        if (!$connection->isTableExists($changelogTableName)) {
-            throw new ChangelogTableNotExistsException(new Phrase("Table %1 does not exist", [$changelogTableName]));
-        }
+        $changelogTableName = $this->resourceConnection->getTableName($this->changelog->getName());
 
         $select = $connection->select()->distinct(true)
             ->where(
                 'version_id > ?',
-                $fromVersionId
+                $this->fromVersionId
             )
             ->where(
                 'version_id <= ?',
-                $toVersion
+                $this->toVersionId
             )
-            ->group([$changelog->getColumnName()])
-            ->limit($batchSize);
+            ->group([$this->changelog->getColumnName()])
+            ->limit($this->batchSize);
 
-        $select->from($changelogTableName, [$changelog->getColumnName()]);
+        $select->from($changelogTableName, [$this->changelog->getColumnName()]);
         return $connection->fetchCol($select);
     }
 }

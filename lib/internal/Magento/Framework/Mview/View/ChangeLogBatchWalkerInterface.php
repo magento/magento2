@@ -15,16 +15,6 @@ use Magento\Framework\Phrase;
  * Interface \Magento\Framework\Mview\View\ChangeLogBatchWalkerInterface
  *
  */
-interface ChangeLogBatchWalkerInterface
+interface ChangeLogBatchWalkerInterface extends \IteratorAggregate
 {
-    /**
-     * Walk through batches
-     *
-     * @param ChangelogInterface $changelog
-     * @param int $fromVersionId
-     * @param int $lastVersionId
-     * @param int $batchSize
-     * @return mixed
-     */
-    public function walk(ChangelogInterface $changelog, int $fromVersionId, int $lastVersionId, int $batchSize);
 }

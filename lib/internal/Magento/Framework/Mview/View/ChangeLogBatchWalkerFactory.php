@@ -28,10 +28,11 @@ class ChangeLogBatchWalkerFactory
      * Instantiate BatchWalker interface
      *
      * @param string $batchWalkerClassName
+     * @param array $data
      * @return ChangeLogBatchWalkerInterface
      */
-    public function create(string $batchWalkerClassName): ChangeLogBatchWalkerInterface
+    public function create(string $batchWalkerClassName, array $data): ChangeLogBatchWalkerInterface
     {
-        return $this->objectManager->create($batchWalkerClassName);
+        return $this->objectManager->create($batchWalkerClassName, $data);
     }
 }

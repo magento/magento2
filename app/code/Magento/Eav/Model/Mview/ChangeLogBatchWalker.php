@@ -32,15 +32,63 @@ class ChangeLogBatchWalker implements ChangeLogBatchWalkerInterface
     private $entityTypeCodes;
 
     /**
+     * @var ChangelogInterface
+     */
+    private $changelog;
+    /**
+     * @var int
+     */
+    private $fromVersionId;
+
+    /**
+     * @var int
+     */
+    private $toVersionId;
+
+    /**
+     * @var int
+     */
+    private $batchSize;
+
+    /**
      * @param ResourceConnection $resourceConnection
+     * @param ChangelogInterface $changelog
+     * @param int $fromVersionId
+     * @param int $toVersionId
+     * @param int $batchSize
      * @param array $entityTypeCodes
      */
     public function __construct(
         ResourceConnection $resourceConnection,
+        ChangelogInterface $changelog,
+        int $fromVersionId,
+        int $toVersionId,
+        int $batchSize,
         array $entityTypeCodes = []
     ) {
         $this->resourceConnection = $resourceConnection;
         $this->entityTypeCodes = $entityTypeCodes;
+        $this->changelog = $changelog;
+        $this->fromVersionId = $fromVersionId;
+        $this->toVersionId = $toVersionId;
+        $this->batchSize = $batchSize;
+    }
+
+    /**
+     * @return \Generator|\Traversable
+     * @throws \Exception
+     */
+    public function getIterator(): \Generator
+    {
+        while ($this->fromVersionId < $this->toVersionId) {
+            $ids = $this->walk();
+
+            if (empty($ids)) {
+                break;
+            }
+            $this->fromVersionId += $this->batchSize;
+            yield $ids;
+        }
     }
 
     /**
@@ -50,11 +98,11 @@ class ChangeLogBatchWalker implements ChangeLogBatchWalkerInterface
      * @return int
      * @throws LocalizedException
      */
-    private function calculateEavAttributeSize(ChangelogInterface $changelog): int
+    private function calculateEavAttributeSize(): int
     {
         $connection = $this->resourceConnection->getConnection();
 
-        if (!isset($this->entityTypeCodes[$changelog->getViewId()])) {
+        if (!isset($this->entityTypeCodes[$this->changelog->getViewId()])) {
             throw new LocalizedException(__('Entity type for view was not defined'));
         }
 
@@ -65,7 +113,7 @@ class ChangeLogBatchWalker implements ChangeLogBatchWalkerInterface
         )->joinInner(
             ['type' => $connection->getTableName('eav_entity_type')],
                 'type.entity_type_id=eav_attribute.entity_type_id'
-        )->where('type.entity_type_code = ?', $this->entityTypeCodes[$changelog->getViewId()]);
+        )->where('type.entity_type_code = ?', $this->entityTypeCodes[$this->changelog->getViewId()]);
 
         return (int) $connection->fetchOne($select);
     }
@@ -91,29 +139,29 @@ class ChangeLogBatchWalker implements ChangeLogBatchWalkerInterface
      * @inheritdoc
      * @throws \Exception
      */
-    public function walk(ChangelogInterface $changelog, int $fromVersionId, int $toVersion, int $batchSize)
+    private function walk()
     {
         $connection = $this->resourceConnection->getConnection();
-        $numberOfAttributes = $this->calculateEavAttributeSize($changelog);
+        $numberOfAttributes = $this->calculateEavAttributeSize();
         $this->setGroupConcatMax($numberOfAttributes);
         $select = $connection->select()->distinct(true)
             ->where(
                 'version_id > ?',
-                (int) $fromVersionId
+                (int) $this->fromVersionId
             )
             ->where(
                 'version_id <= ?',
-                $toVersion
+                $this->toVersionId
             )
-            ->group([$changelog->getColumnName(), 'store_id'])
-            ->limit($batchSize);
+            ->group([$this->changelog->getColumnName(), 'store_id'])
+            ->limit($this->batchSize);
 
         $columns = [
-            $changelog->getColumnName(),
+            $this->changelog->getColumnName(),
             'attribute_ids' => new Expression('GROUP_CONCAT(attribute_id)'),
             'store_id'
         ];
-        $select->from($changelog->getName(), $columns);
+        $select->from($this->changelog->getName(), $columns);
         return $connection->fetchAll($select);
     }
 }

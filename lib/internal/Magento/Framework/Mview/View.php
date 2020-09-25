@@ -13,6 +13,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
 use Magento\Framework\Mview\View\ChangeLogBatchWalkerFactory;
 use Magento\Framework\Mview\View\ChangeLogBatchWalkerInterface;
+use Magento\Framework\Mview\View\ChangelogInterface;
 use Magento\Framework\Mview\View\ChangelogTableNotExistsException;
 use Magento\Framework\Mview\View\SubscriptionFactory;
 use Exception;
@@ -303,29 +304,36 @@ class View extends DataObject implements ViewInterface
             : self::DEFAULT_BATCH_SIZE;
 
         $vsFrom = $lastVersionId;
-        while ($vsFrom < $currentVersionId) {
-            $walker = $this->getWalker();
-            $ids = $walker->walk($this->getChangelog(), $vsFrom, $currentVersionId, $batchSize);
-
-            if (empty($ids)) {
-                break;
-            }
-            $vsFrom += $batchSize;
-            $action->execute($ids);
+        $iterator = $this->getWalker($this->getChangelog(), $vsFrom, $currentVersionId, $batchSize);
+        foreach ($iterator as $batchOfIds) {
+            $action->execute($batchOfIds);
         }
     }
 
     /**
      * Create and validate walker class for changelog
      *
+     * @param ChangelogInterface $changelog
+     * @param int $vsFrom
+     * @param int $vsTo
+     * @param int $batchSize
      * @return ChangeLogBatchWalkerInterface|mixed
-     * @throws Exception
      */
-    private function getWalker(): ChangeLogBatchWalkerInterface
+    private function getWalker(
+        ChangelogInterface $changelog,
+        int $vsFrom,
+        int $vsTo,
+        int $batchSize
+    ): ChangeLogBatchWalkerInterface
     {
         $config = $this->config->getView($this->changelog->getViewId());
         $walkerClass = $config['walker'];
-        return $this->changeLogBatchWalkerFactory->create($walkerClass);
+        return $this->changeLogBatchWalkerFactory->create($walkerClass, [
+            'changelog' => $changelog,
+            'fromVersionId' => $vsFrom,
+            'toVersionId' => $vsTo,
+            'batchSize' => $batchSize
+        ]);
     }
 
     /**
