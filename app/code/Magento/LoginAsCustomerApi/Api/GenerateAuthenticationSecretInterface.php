@@ -11,7 +11,6 @@ use Magento\LoginAsCustomerApi\Api\Data\AuthenticationDataInterface;
 
 /**
  * Generate authentication secret
- * @api
  */
 interface GenerateAuthenticationSecretInterface
 {
