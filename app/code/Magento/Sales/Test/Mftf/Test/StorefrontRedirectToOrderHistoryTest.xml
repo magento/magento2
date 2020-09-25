@@ -18,6 +18,9 @@
             <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-92854"/>
             <group value="sales"/>
+            <skip>
+                <issueId value="MQE-2288" />
+            </skip>
         </annotations>
         <before>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
