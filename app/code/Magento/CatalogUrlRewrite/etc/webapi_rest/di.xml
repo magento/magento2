@@ -10,4 +10,7 @@
         <plugin name="product_save_rewrites_history_rest_plugin" type="Magento\CatalogUrlRewrite\Plugin\Webapi\Controller\Rest\ProductInputParamsResolver" disabled="false" />
         <plugin name="category_save_rewrites_history_rest_plugin" type="Magento\CatalogUrlRewrite\Plugin\Webapi\Controller\Rest\CategoryInputParamsResolver" disabled="false" />
     </type>
+    <type name="Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator">
+        <plugin name="category_set_save_rewrites_history_rest_plugin" type="Magento\CatalogUrlRewrite\Plugin\Model\UpdateCategoryDataList" disabled="false" />
+    </type>
 </config>
