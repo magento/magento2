@@ -1972,11 +1972,7 @@ class Product extends AbstractEntity
         return array_reduce(
             $imageRow,
             function ($exists, $file) use ($hash) {
-                if ($exists) {
-                    return $exists;
-                }
-
-                if (isset($file['hash']) && $file['hash'] === $hash) {
+                if (!$exists && isset($file['hash']) && $file['hash'] === $hash) {
                     return $file['value'];
                 }
 
