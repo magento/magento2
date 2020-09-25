@@ -28,17 +28,17 @@ class RequestCustomerToken implements ResolverInterface
     /**
      * @var LoginAsCustomerConfig
      */
-    private $config;
+    private LoginAsCustomerConfig $config;
 
     /**
      * @var AuthorizationInterface
      */
-    private $authorization;
+    private AuthorizationInterface $authorization;
 
     /**
      * @var CreateCustomerToken
      */
-    private $createCustomerToken;
+    private CreateCustomerToken $createCustomerToken;
 
     /**
      * RequestCustomerToken constructor.

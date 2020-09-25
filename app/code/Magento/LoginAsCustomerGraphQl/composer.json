@@ -1,5 +1,5 @@
 {
-    "name": "magento/module-loginascustomergraphql",
+    "name": "magento/module-login-as-customer-graph-ql",
     "description": "Flexible login as a customer so a merchant or merchant admin can log into an end customer's account to assist them with their account.",
     "type": "magento2-module",
     "require": {},

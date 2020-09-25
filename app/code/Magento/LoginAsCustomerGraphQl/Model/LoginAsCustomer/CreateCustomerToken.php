@@ -24,17 +24,17 @@ class CreateCustomerToken
     /**
      * @var CustomerFactory
      */
-    private $customerFactory;
+    private CustomerFactory $customerFactory;
 
     /**
      * @var TokenFactory
      */
-    private $tokenModelFactory;
+    private TokenFactory $tokenModelFactory;
 
     /**
      * @var StoreManagerInterface
      */
-    private $storeManager;
+    private StoreManagerInterface $storeManager;
 
     /**
      * CreateCustomerToken constructor.

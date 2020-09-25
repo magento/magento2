@@ -148,12 +148,6 @@ class GenerateLoginCustomerTokenTest extends GraphQlAbstract
                 'Zilker777',
                 'DCvsMarvel@example.com',
                 'Customer email provided does not exist'
-            ],
-            'empty_customer_email' => [
-                'TestAdmin1',
-                'Zilker777',
-                'Specify the customer email value',
-                'Customer email provided does not exist'
             ]
         ];
     }
