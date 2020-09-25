@@ -1815,6 +1815,9 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
             'simple2' => 'url-key2',
             'simple3' => 'url-key3'
         ];
+        // added by _files/products_to_import_with_valid_url_keys.csv
+        $this->importedProducts[] = 'simple3';
+
         $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create(\Magento\Framework\Filesystem::class);
         $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
@@ -1855,6 +1858,9 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
             'simple2' => 'normal-url',
             'simple3' => 'some!wrong\'url'
         ];
+        // added by _files/products_to_import_with_invalid_url_keys.csv
+        $this->importedProducts[] = 'simple3';
+
         $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create(\Magento\Framework\Filesystem::class);
         $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
@@ -2004,6 +2010,9 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
             'simple2' => 'simple-2',
             'simple3' => 'simple-3'
         ];
+        // added by _files/products_to_import_without_url_keys.csv
+        $this->importedProducts[] = 'simple3';
+
         $filesystem = $this->objectManager->create(\Magento\Framework\Filesystem::class);
         $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
         $source = $this->objectManager->create(
@@ -2221,11 +2230,15 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         $registry->register('isSecureArea', true);
 
         $productSkuList = ['simple1', 'simple2', 'simple3'];
+        $categoryIds = [];
         foreach ($productSkuList as $sku) {
             try {
+                /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
                 $productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
                     ->get(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+                /** @var \Magento\Catalog\Model\Product $product */
                 $product = $productRepository->get($sku, true);
+                $categoryIds[] = $product->getCategoryIds();
                 if ($product->getId()) {
                     $productRepository->delete($product);
                 }
@@ -2234,6 +2247,14 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
                 //Product already removed
             }
         }
+
+        /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $collection */
+        $collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create(\Magento\Catalog\Model\ResourceModel\Category\Collection::class);
+        $collection
+            ->addAttributeToFilter('entity_id', ['in' => \array_unique(\array_merge(...$categoryIds))])
+            ->load()
+            ->delete();
 
         $registry->unregister('isSecureArea');
         $registry->register('isSecureArea', false);
@@ -3169,6 +3190,12 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
      */
     public function testCheckDoubleImportOfProducts()
     {
+        $this->importedProducts = [
+            'simple1',
+            'simple2',
+            'simple3',
+        ];
+
         /** @var SearchCriteria $searchCriteria */
         $searchCriteria = $this->searchCriteriaBuilder->create();
 

@@ -497,7 +497,8 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $product->getData($this->metadata->getLinkField())
         )->where(
             'store_id IN (?)',
-            $storeIds
+            $storeIds,
+            \Zend_Db::INT_TYPE
         )->where(
             'attribute_code IN (?)',
             $this->mediaConfig->getMediaAttributeCodes()
