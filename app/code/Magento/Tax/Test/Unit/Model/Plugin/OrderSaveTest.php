@@ -195,14 +195,11 @@ class OrderSaveTest extends TestCase
         $orderMock = $this->setupOrderMock();
 
         $extensionAttributeMock = $this->setupExtensionAttributeMock();
-        $extensionAttributeMock->expects($this->any())
-            ->method('getConvertingFromQuote')
+        $extensionAttributeMock->method('getConvertingFromQuote')
             ->willReturn(true);
-        $extensionAttributeMock->expects($this->any())
-            ->method('getAppliedTaxes')
+        $extensionAttributeMock->method('getAppliedTaxes')
             ->willReturn($appliedTaxes);
-        $extensionAttributeMock->expects($this->any())
-            ->method('getItemAppliedTaxes')
+        $extensionAttributeMock->method('getItemAppliedTaxes')
             ->willReturn($itemAppliedTaxes);
 
         $orderItemMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Item::class)
@@ -211,23 +208,18 @@ class OrderSaveTest extends TestCase
             ->getMock();
         $orderItemMock->method('getId')
             ->willReturn($itemId);
-        $orderMock->expects($this->once())
-            ->method('getAppliedTaxIsSaved')
+        $orderMock->method('getAppliedTaxIsSaved')
             ->willReturn(false);
-        $orderMock->expects($this->once())
-            ->method('getExtensionAttributes')
+        $orderMock->method('getExtensionAttributes')
             ->willReturn($extensionAttributeMock);
         $itemByQuoteId = $itemId ? $orderItemMock : $itemId;
-        $orderMock->expects($this->atLeastOnce())
-            ->method('getItemByQuoteItemId')
+        $orderMock->method('getItemByQuoteItemId')
             ->with(self::ITEMID)
             ->willReturn($itemByQuoteId);
-        $orderMock->expects($this->atLeastOnce())
-            ->method('getEntityId')
+        $orderMock->method('getEntityId')
             ->willReturn(self::ORDERID);
 
-        $orderMock->expects($this->once())
-            ->method('setAppliedTaxIsSaved')
+        $orderMock->method('setAppliedTaxIsSaved')
             ->with(true);
 
         $this->verifyOrderTaxes($expectedTaxes);
