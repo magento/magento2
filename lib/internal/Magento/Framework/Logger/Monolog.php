@@ -11,7 +11,7 @@ use Monolog\Logger;
 class Monolog extends Logger
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function __construct($name, array $handlers = [], array $processors = [])
     {
