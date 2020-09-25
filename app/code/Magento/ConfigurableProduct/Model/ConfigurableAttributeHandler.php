@@ -3,22 +3,28 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\ConfigurableProduct\Model;
+
+use Magento\Catalog\Model\Product\Type;
+use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
+use Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface;
+use Zend_Db_Expr;
 
 class ConfigurableAttributeHandler
 {
     /**
-     * Attribute collection factory
-     *
-     * @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory
+     * @var CollectionFactory
      */
     protected $collectionFactory;
 
     /**
-     * @param \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $attributeColFactory
+     * @param CollectionFactory $attributeColFactory
      */
     public function __construct(
-        \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $attributeColFactory
+        CollectionFactory $attributeColFactory
     ) {
         $this->collectionFactory = $attributeColFactory;
     }
@@ -32,7 +38,7 @@ class ConfigurableAttributeHandler
     {
         /** @var $collection \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection */
         $collection = $this->collectionFactory->create();
-        return $collection->addFieldToFilter(
+        $collection->addFieldToFilter(
             'frontend_input',
             'select'
         )->addFieldToFilter(
@@ -40,20 +46,39 @@ class ConfigurableAttributeHandler
             1
         )->addFieldToFilter(
             'is_global',
-            \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_GLOBAL
+            ScopedAttributeInterface::SCOPE_GLOBAL
         );
+
+        $types = [
+            Type::TYPE_SIMPLE,
+            Type::TYPE_VIRTUAL,
+            Configurable::TYPE_CODE,
+        ];
+        $applyToArr = [];
+        foreach ($types as $type) {
+            $applyToArr[] = "apply_to REGEXP '(^|(.*,))$type($|,.*)'";
+        }
+        $whereExprStr = 'apply_to IS NULL OR (' . implode(' AND ', $applyToArr) . ')';
+
+        $collection->getSelect()->where(new Zend_Db_Expr($whereExprStr));
+
+        return $collection;
     }
 
     /**
+     * Check if attribute is applicable for configurable products
+     * @deprecated is applicable check is added to collection query
+     * @see \Magento\ConfigurableProduct\Model\ConfigurableAttributeHandler::getApplicableAttributes
      * @param \Magento\Catalog\Api\Data\ProductAttributeInterface $attribute
+     *
      * @return bool
      */
     public function isAttributeApplicable($attribute)
     {
         $types = [
-            \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE,
-            \Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL,
-            \Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE,
+            Type::TYPE_SIMPLE,
+            Type::TYPE_VIRTUAL,
+            Configurable::TYPE_CODE,
         ];
         return !$attribute->getApplyTo() || count(array_diff($types, $attribute->getApplyTo())) === 0;
     }

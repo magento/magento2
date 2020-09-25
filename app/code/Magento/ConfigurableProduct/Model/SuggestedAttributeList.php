@@ -50,15 +50,14 @@ class SuggestedAttributeList
         $result = [];
         foreach ($collection->getItems() as $id => $attribute) {
             /** @var $attribute \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
-            if ($this->configurableAttributeHandler->isAttributeApplicable($attribute)) {
-                $result[$id] = [
-                    'id' => $attribute->getId(),
-                    'label' => $attribute->getFrontendLabel(),
-                    'code' => $attribute->getAttributeCode(),
-                    'options' => $attribute->getSource()->getAllOptions(false),
-                ];
-            }
+            $result[$id] = [
+                'id' => $attribute->getId(),
+                'label' => $attribute->getFrontendLabel(),
+                'code' => $attribute->getAttributeCode(),
+                'options' => $attribute->getSource()->getAllOptions(false),
+            ];
         }
+
         return $result;
     }
 }
