@@ -175,15 +175,23 @@ class OrderSaveTest extends TestCase
     }
 
     /**
+     * Test for order afterSave
+     *
      * @dataProvider afterSaveDataProvider
+     * @param array $appliedTaxes
+     * @param array $itemAppliedTaxes
+     * @param array $expectedTaxes
+     * @param array $expectedItemTaxes
+     * @param int|null $itemId
+     * @return void
      */
     public function testAfterSave(
-        $appliedTaxes,
-        $itemAppliedTaxes,
-        $expectedTaxes,
-        $expectedItemTaxes,
-        $itemId
-    ) {
+        array $appliedTaxes,
+        array $itemAppliedTaxes,
+        array $expectedTaxes,
+        array $expectedItemTaxes,
+        ?int $itemId
+    ): void {
         $orderMock = $this->setupOrderMock();
 
         $extensionAttributeMock = $this->setupExtensionAttributeMock();
@@ -229,10 +237,12 @@ class OrderSaveTest extends TestCase
     }
 
     /**
+     * After save data provider
+     *
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function afterSaveDataProvider()
+    public function afterSaveDataProvider(): array
     {
         return [
             //one item with shipping
