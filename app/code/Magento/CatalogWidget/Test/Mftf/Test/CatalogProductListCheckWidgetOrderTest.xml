@@ -19,6 +19,7 @@
             <useCaseId value="MC-5905"/>
             <group value="catalogWidget"/>
             <group value="catalog"/>
+            <group value="WYSIWYGDisabled"/>
         </annotations>
         <before>
             <createData entity="SimpleSubCategory" stepKey="simplecategory"/>
