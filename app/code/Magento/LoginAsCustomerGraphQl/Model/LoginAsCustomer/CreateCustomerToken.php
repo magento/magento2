@@ -53,6 +53,8 @@ class CreateCustomerToken
     }
 
     /**
+     * Get admin user token
+     *
      * @param string $email
      * @return array
      * @throws LocalizedException

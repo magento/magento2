@@ -75,7 +75,12 @@ class GenerateLoginCustomerTokenTest extends GraphQlAbstract
 
         $mutation = $this->getQuery($customerEmail);
 
-        $response = $this->graphQlMutation($mutation, [], '', $this->getAdminHeaderAuthentication('TestAdmin1', 'Zilker777'));
+        $response = $this->graphQlMutation(
+            $mutation,
+            [],
+            '',
+            $this->getAdminHeaderAuthentication('TestAdmin1', 'Zilker777')
+        );
         $this->assertArrayHasKey('generateCustomerTokenAsAdmin', $response);
         $this->assertIsArray($response['generateCustomerTokenAsAdmin']);
     }
@@ -97,7 +102,12 @@ class GenerateLoginCustomerTokenTest extends GraphQlAbstract
         $this->expectException(Exception::class);
         $this->expectExceptionMessage("The current customer isn't authorized.");
 
-        $response = $this->graphQlMutation($mutation, [], '', $this->getCustomerHeaderAuthentication($customerEmail, $password));
+        $response = $this->graphQlMutation(
+            $mutation,
+            [],
+            '',
+            $this->getCustomerHeaderAuthentication($customerEmail, $password)
+        );
         $this->assertArrayHasKey('generateCustomerTokenAsAdmin', $response);
         $this->assertIsArray($response['generateCustomerTokenAsAdmin']);
     }
@@ -114,16 +124,27 @@ class GenerateLoginCustomerTokenTest extends GraphQlAbstract
      * @param string $customerEmail
      * @param string $message
      */
-    public function testGenerateCustomerTokenInvalidData(string $adminUserName, string $adminPassword, string $customerEmail, string $message)
-    {
+    public function testGenerateCustomerTokenInvalidData(
+        string $adminUserName,
+        string $adminPassword,
+        string $customerEmail,
+        string $message
+    ) {
         $this->expectException(Exception::class);
 
         $mutation = $this->getQuery($customerEmail);
         $this->expectExceptionMessage($message);
-        $response = $this->graphQlMutation($mutation, [], '', $this->getAdminHeaderAuthentication($adminUserName, $adminPassword));
+        $response = $this->graphQlMutation(
+            $mutation,
+            [],
+            '',
+            $this->getAdminHeaderAuthentication($adminUserName, $adminPassword)
+        );
     }
 
     /**
+     * Provides invalid test cases data
+     *
      * @return array
      */
     public function dataProviderInvalidInfo(): array
@@ -142,12 +163,6 @@ class GenerateLoginCustomerTokenTest extends GraphQlAbstract
                 'customer@example.com',
                 'The account sign-in was incorrect or your account is disabled temporarily. ' .
                 'Please wait and try again later.'
-            ],
-            'invalid_customer_email' => [
-                'TestAdmin1',
-                'Zilker777',
-                'DCvsMarvel@example.com',
-                'Customer email provided does not exist'
             ]
         ];
     }
