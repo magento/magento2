@@ -516,6 +516,20 @@
                 </checkbox>
             </formElements>
         </field>
+        <field name="apply_to" sortOrder="80" formElement="multiselect">
+            <settings>
+                <dataType>string</dataType>
+                <label translate="true">Apply To</label>
+                <dataScope>apply_to</dataScope>
+            </settings>
+            <formElements>
+                <multiselect>
+                    <settings>
+                        <options class="Magento\Catalog\Model\Attribute\Source\ApplyTo"/>
+                    </settings>
+                </multiselect>
+            </formElements>
+        </field>
     </fieldset>
     <fieldset name="manage-titles" sortOrder="25">
         <settings>
