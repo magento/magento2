@@ -2006,14 +2006,16 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
             $this->_errors[] = __('Please specify order items.');
         }
 
+        $errors = [];
         foreach ($items as $item) {
             /** @var \Magento\Quote\Model\Quote\Item $item */
             $messages = $item->getMessage(false);
             if ($item->getHasError() && is_array($messages) && !empty($messages)) {
-                // phpcs:ignore Magento2.Performance.ForeachArrayMerge
-                $this->_errors = array_merge($this->_errors, $messages);
+                $errors[] = $messages;
             }
         }
+
+        $this->_errors = array_merge([], $this->_errors, ...$errors);
 
         if (!$this->getQuote()->isVirtual()) {
             if (!$this->getQuote()->getShippingAddress()->getShippingMethod()) {
