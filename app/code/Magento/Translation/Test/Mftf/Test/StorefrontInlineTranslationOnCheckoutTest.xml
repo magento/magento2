@@ -120,8 +120,7 @@
         </actionGroup>
 
         <!-- 3. Go to storefront and click on cart button on the top -->
-        <reloadPage stepKey="reloadPage"/>
-        <waitForPageLoad stepKey="waitForReload"/>
+        <actionGroup ref="ReloadPageActionGroup" stepKey="reloadPage"/>
         <actionGroup ref="StorefrontOpenMiniCartActionGroup" stepKey="openMiniCart"/>
 
         <!-- Check button "Proceed to Checkout". There must be red borders and "book" icons on labels that can be translated. -->
@@ -490,8 +489,7 @@
         <resetCookie userInput="mage-translation-file-version" stepKey="resetTranslationFileVersion"/>
 
         <!-- Reload page after full clear -->
-        <reloadPage stepKey="reloadPageAfterFullClean"/>
-        <waitForPageLoad stepKey="waitForPageLoadAfterFullClean"/>
+        <actionGroup ref="ReloadPageActionGroup" stepKey="reloadPageAfterFullClean"/>
 
         <!-- Add product to cart and go through Checkout process like you did in steps ##3-6 and check translation you maid. -->
         <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="openProductPage1">

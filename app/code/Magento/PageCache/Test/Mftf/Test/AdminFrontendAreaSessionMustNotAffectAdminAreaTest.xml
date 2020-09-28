@@ -76,10 +76,8 @@
 
         <!-- 5. Open admin tab with page with products. Reload this page twice. -->
         <switchToPreviousTab stepKey="switchToPreviousTab"/>
-        <reloadPage stepKey="reloadAdminCatalogPageFirst"/>
-        <waitForPageLoad stepKey="waitForReloadFirst"/>
-        <reloadPage stepKey="reloadAdminCatalogPageSecond"/>
-        <waitForPageLoad stepKey="waitForReloadSecond"/>
+        <actionGroup ref="ReloadPageActionGroup" stepKey="reloadAdminCatalogPageFirst"/>
+        <actionGroup ref="ReloadPageActionGroup" stepKey="reloadAdminCatalogPageSecond"/>
 
         <seeInTitle userInput="Products / Inventory / Catalog / Magento Admin" stepKey="seeAdminProductsPageTitle"/>
         <see userInput="Products" selector="{{AdminHeaderSection.pageTitle}}" stepKey="seeAdminProductsPageHeader"/>

@@ -90,8 +90,7 @@
 
         <!-- Back to the Checkout and refresh the page -->
         <switchToPreviousTab stepKey="switchToPreviousTab"/>
-        <reloadPage stepKey="refreshPage"/>
-        <waitForPageLoad stepKey="waitPageReload"/>
+        <actionGroup ref="ReloadPageActionGroup" stepKey="refreshPage"/>
 
         <!-- Payment step is opened after refreshing -->
         <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" stepKey="waitForPaymentSection"/>

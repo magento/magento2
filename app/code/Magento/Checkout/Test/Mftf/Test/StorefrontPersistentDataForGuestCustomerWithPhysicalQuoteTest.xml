@@ -49,8 +49,7 @@
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappearAfterFlatRateSelection"/>
         <see selector="{{CheckoutCartSummarySection.total}}" userInput="15" stepKey="assertOrderTotalField"/>
         <!-- 5. Refresh browser page (F5) -->
-        <reloadPage stepKey="reloadPage"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <actionGroup ref="ReloadPageActionGroup" stepKey="reloadPage"/>
         <actionGroup ref="StorefrontAssertCartEstimateShippingAndTaxActionGroup" stepKey="assertCartEstimateShippingAndTaxAfterPageReload"/>
         <actionGroup ref="StorefrontAssertCartShippingMethodSelectedActionGroup" stepKey="assertFlatRateShippingMethodIsChecked">
             <argument name="carrierCode" value="flatrate"/>
@@ -71,8 +70,7 @@
         <!-- 9. Fill other fields -->
         <actionGroup ref="StorefrontFillGuestShippingInfoActionGroup" stepKey="fillOtherFieldsInCheckoutShippingSection"/>
         <!-- 10. Refresh browser page(F5) -->
-        <reloadPage stepKey="reloadCheckoutPage"/>
-        <waitForPageLoad stepKey="waitForCheckoutPageLoad"/>
+        <actionGroup ref="ReloadPageActionGroup" stepKey="reloadCheckoutPage"/>
         <actionGroup ref="StorefrontAssertGuestShippingInfoActionGroup" stepKey="assertGuestShippingPersistedInfoAfterReloadingCheckoutShippingPage"/>
         <actionGroup ref="StorefrontAssertCheckoutShippingMethodSelectedActionGroup" stepKey="assertFreeShippingShippingMethodIsChecked">
             <argument name="shippingMethod" value="Free Shipping"/>
