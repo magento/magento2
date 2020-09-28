@@ -72,6 +72,8 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
         $dateValid = true;
         if ($this->_dateExists()) {
             if ($this->useCalendar()) {
+                /* Fixed validation if the date was not saved correctly after re-saved the order
+                for example: "09\/24\/2020,2020-09-24 00:00:00" */
                 if (is_string($value) && preg_match('/^\d{1,4}.+\d{1,4}.+\d{1,4},+(\w|\W)*$/', $value)) {
                     $value = [
                         'date' => preg_replace('/,([^,]+),?$/', '', $value),

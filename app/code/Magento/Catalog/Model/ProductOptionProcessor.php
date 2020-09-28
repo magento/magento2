@@ -33,26 +33,15 @@ class ProductOptionProcessor implements ProductOptionProcessorInterface
     private $urlBuilder;
 
     /**
-     * Serializer interface instance.
-     *
-     * @var Json
-     */
-    private $serializer;
-
-    /**
      * @param DataObjectFactory $objectFactory
      * @param CustomOptionFactory $customOptionFactory
-     * @param Json|null $serializer
      */
     public function __construct(
         DataObjectFactory $objectFactory,
-        CustomOptionFactory $customOptionFactory,
-        Json $serializer = null
+        CustomOptionFactory $customOptionFactory
     ) {
         $this->objectFactory = $objectFactory;
         $this->customOptionFactory = $customOptionFactory;
-        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
     }
 
     /**
