@@ -329,13 +329,13 @@ class AddressTest extends TestCase
 
         // form attribute list
         $keyAttribute = 'postcode';
-        $requiredAttributes[] = $keyAttribute;
+        $requiredAttributes[] = [$keyAttribute];
         foreach (['update', 'remove'] as $action) {
             foreach ($this->_updateData[$action] as $attributes) {
-                // phpcs:ignore Magento2.Performance.ForeachArrayMerge
-                $requiredAttributes = array_merge($requiredAttributes, array_keys($attributes));
+                $requiredAttributes[] = array_keys($attributes);
             }
         }
+        $requiredAttributes = array_merge([], ...$requiredAttributes);
 
         // get addresses
         $addressCollection = Bootstrap::getObjectManager()->create(
