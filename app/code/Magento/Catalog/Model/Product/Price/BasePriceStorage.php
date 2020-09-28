@@ -134,7 +134,7 @@ class BasePriceStorage implements BasePriceStorageInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function get(array $skus)
     {
@@ -159,7 +159,7 @@ class BasePriceStorage implements BasePriceStorageInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function update(array $prices)
     {
@@ -270,7 +270,7 @@ class BasePriceStorage implements BasePriceStorageInterface
      * @return array
      * @throws NoSuchEntityException
      */
-    private function applyWebsitePrices($formattedPrices)
+    private function applyWebsitePrices($formattedPrices): array
     {
         foreach ($formattedPrices as $price) {
             if ($price['store_id'] == Store::DEFAULT_STORE_ID) {
