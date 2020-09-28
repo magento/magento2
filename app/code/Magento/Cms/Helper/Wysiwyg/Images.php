@@ -45,6 +45,11 @@ class Images extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_directory;
 
     /**
+     * @var \Magento\Framework\Filesystem\Directory\Read
+     */
+    protected $_readDirectory;
+
+    /**
      * Adminhtml data
      *
      * @var \Magento\Backend\Helper\Data
@@ -88,6 +93,7 @@ class Images extends \Magento\Framework\App\Helper\AbstractHelper
 
         $this->_directory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         $this->_directory->create($this->getStorageRoot());
+        $this->_readDirectory = $filesystem->getDirectoryRead($this->getStorageRoot());
     }
 
     /**
@@ -159,7 +165,7 @@ class Images extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param string $id
      * @return string
-     * @throws ValidatorException
+     * @throws \InvalidArgumentException
      */
     public function convertIdToPath($id)
     {
@@ -168,7 +174,13 @@ class Images extends \Magento\Framework\App\Helper\AbstractHelper
         } else {
             $path = $this->getStorageRoot() . $this->idDecode($id);
 
-            return $this->_directory->getAbsolutePath($path);
+            try {
+                $this->_readDirectory->getAbsolutePath($path);
+            } catch (\Exception $e) {
+                throw new \InvalidArgumentException('Path is invalid');
+            }
+
+            return $path;
         }
     }
 

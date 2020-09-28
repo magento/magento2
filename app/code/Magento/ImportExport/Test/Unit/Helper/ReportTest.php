@@ -11,6 +11,7 @@ use Magento\CatalogImportExport\Model\Import\Product;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\App\Request\Http;
+use Magento\Framework\Exception\ValidatorException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\Write;
 use Magento\Framework\Filesystem\Directory\Read;
@@ -97,7 +98,7 @@ class ReportTest extends TestCase
         );
         $this->importHistoryDirectory = $this->createPartialMock(
             Read::class,
-            ['getRelativePath']
+            ['getAbsolutePath']
         );
 
         $this->filesystem = $this->createPartialMock(Filesystem::class, ['getDirectoryWrite', 'getDirectoryRead']);
@@ -107,7 +108,7 @@ class ReportTest extends TestCase
         $this->varDirectory->expects($this->any())->method('stat')->willReturn(false);
         $this->filesystem->expects($this->any())->method('getDirectoryWrite')->willReturn($this->varDirectory);
 
-        $this->importHistoryDirectory->expects($this->any())->method('getRelativePath')->willReturn('path');
+        $this->importHistoryDirectory->expects($this->any())->method('getAbsolutePath')->willReturnArgument(0);
         $this->filesystem->expects($this->any())->method('getDirectoryRead')->willReturn($this->importHistoryDirectory);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
@@ -190,6 +191,30 @@ class ReportTest extends TestCase
         $message = $this->report->getSummaryStats($import);
         $this->assertInstanceOf(Phrase::class, $message);
     }
+
+    /**
+     * @dataProvider importFileExistsDataProvider
+     * @param string $fileName
+     * @return void
+     */
+    public function testImportFileExistsException($fileName)
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('File not found');
+        $this->importHistoryDirectory->expects($this->any())->method('getAbsolutePath')->will(
+            $this->throwException(new ValidatorException(__("Error")))
+        );
+        $this->report->importFileExists($fileName);
+    }
+
+    /**
+     * Test importFileExists()
+     */
+    public function testImportFileExists()
+    {
+        $this->assertEquals($this->report->importFileExists('..file..name'), true);
+    }
+
 
     /**
      * Dataprovider for testImportFileExistsException()

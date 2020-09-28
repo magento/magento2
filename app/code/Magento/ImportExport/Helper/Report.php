@@ -7,6 +7,7 @@
 namespace Magento\ImportExport\Helper;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Exception\ValidatorException;
 use Magento\ImportExport\Model\Import;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
 
@@ -47,7 +48,7 @@ class Report extends \Magento\Framework\App\Helper\AbstractHelper
     ) {
         $this->timeZone = $timeZone;
         $this->varDirectory = $filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
-        $this->importHistoryDirectory = $filesystem->getDirectoryRead(DirectoryList::VAR_IMPORT_HISTORY);
+        $this->importHistoryDirectory = $filesystem->getDirectoryRead($this->varDirectory->getAbsolutePath('import_history'));
         parent::__construct($context);
     }
 
@@ -136,7 +137,12 @@ class Report extends \Magento\Framework\App\Helper\AbstractHelper
      */
     protected function getFilePath($filename)
     {
-        return $this->varDirectory->getRelativePath($this->importHistoryDirectory->getRelativePath($filename));
+        try {
+            $filePath = $this->varDirectory->getRelativePath($this->importHistoryDirectory->getAbsolutePath($filename));
+        } catch (ValidatorException $e) {
+            throw new \InvalidArgumentException('File not found');
+        }
+        return $filePath;
     }
 
     /**

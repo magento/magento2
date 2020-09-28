@@ -61,13 +61,8 @@ class Download extends ExportController implements HttpGetActionInterface
         $resultRedirect->setPath('adminhtml/export/index');
         $fileName = $this->getRequest()->getParam('filename');
         $exportDirectory = $this->filesystem->getDirectoryRead(DirectoryList::VAR_EXPORT);
-        try {
-            if (empty($fileName) || !$exportDirectory->isExist($fileName)) {
-                $this->messageManager->addErrorMessage(__('Please provide valid export file name'));
 
-                return $resultRedirect;
-            }
-        } catch (\Exception $e) {
+        if (empty($fileName) || !$exportDirectory->isExist($fileName)) {
             $this->messageManager->addErrorMessage(__('Please provide valid export file name'));
 
             return $resultRedirect;

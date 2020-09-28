@@ -16,7 +16,9 @@ use Magento\Framework\Escaper;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\ValidatorException;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\Read;
 use Magento\Framework\Filesystem\Directory\Write;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Url\EncoderInterface;
@@ -51,6 +53,11 @@ class ImagesTest extends TestCase
      * @var Write|MockObject
      */
     protected $directoryWriteMock;
+
+    /**
+     * @var Read|MockObject
+     */
+    protected $directoryReadMock;
 
     /**
      * @var StoreManagerInterface|MockObject
@@ -127,10 +134,19 @@ class ImagesTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->directoryReadMock = $this->getMockBuilder(Read::class)
+            ->setConstructorArgs(['path' => $this->path])
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->filesystemMock = $this->createMock(Filesystem::class);
         $this->filesystemMock->expects($this->once())
             ->method('getDirectoryWrite')
             ->willReturn($this->directoryWriteMock);
+
+        $this->filesystemMock->expects($this->once())
+            ->method('getDirectoryRead')
+            ->willReturn($this->directoryReadMock);
 
         $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
             ->setMethods(
@@ -176,24 +192,31 @@ class ImagesTest extends TestCase
                         '',
                         null,
                         $this->getAbsolutePath('')
-                    ],
-                    [
-                        $this->path,
-                        null,
-                        $this->path
-                    ],
-                    [
-                        $this->path . '/test_path',
-                        null,
-                        $this->path . '/test_path'
-                    ],
-                    [
-                        $this->path . '/tmp',
-                        null,
-                        $this->path . '/tmp'
                     ]
                 ]
             );
+
+        $this->directoryReadMock->expects($this->any())
+                ->method('getAbsolutePath')
+                ->willReturnMap(
+                    [
+                        [
+                            $this->path,
+                            null,
+                            $this->path
+                        ],
+                        [
+                            $this->path . '/test_path',
+                            null,
+                            $this->path . '/test_path'
+                        ],
+                        [
+                            $this->path . '/tmp',
+                            null,
+                            $this->path . '/tmp'
+                        ]
+                    ]
+                );
     }
 
     protected function tearDown(): void
@@ -258,6 +281,18 @@ class ImagesTest extends TestCase
             $this->imagesHelper->convertPathToId($pathOne),
             $this->imagesHelper->convertPathToId($pathTwo)
         );
+    }
+
+    public function testConvertIdToPathInvalid()
+    {
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage('Path is invalid');
+        $this->directoryReadMock->expects($this->any())
+            ->method('getAbsolutePath')
+            ->will(
+                $this->throwException(new ValidatorException(__("Error")))
+            );
+        $this->imagesHelper->convertIdToPath('Ly4uLy4uLy4uLy4uLy4uL3dvcms-');
     }
 
     /**
