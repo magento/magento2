@@ -67,6 +67,7 @@ class RequestCustomerToken implements ResolverInterface
      * @param array|null $args
      * @return Value|mixed|void
      * @throws GraphQlAuthorizationException|GraphQlNoSuchEntityException|LocalizedException
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function resolve(
         Field $field,
