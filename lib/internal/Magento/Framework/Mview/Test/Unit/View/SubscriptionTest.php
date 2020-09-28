@@ -44,7 +44,7 @@ class SubscriptionTest extends TestCase
     protected $viewMock;
 
     /** @var  string */
-    private $tableName;
+    private $tableName = 'thisTableName';
 
     protected function setUp(): void
     {
@@ -210,9 +210,14 @@ class SubscriptionTest extends TestCase
         $otherViewMock->expects($this->exactly(1))
             ->method('getId')
             ->willReturn('other_id');
-        $otherViewMock->expects($this->exactly(1))
+        $otherViewMock->expects($this->exactly(4))
             ->method('getSubscriptions')
-            ->willReturn([['name' => $this->tableName], ['name' => 'otherTableName']]);
+            ->willReturn(
+                [
+                    $this->tableName => ['name' => $this->tableName, 'column' => 'columnName'],
+                    'otherTableName' => ['name' => 'otherTableName', 'column' => 'columnName']
+                ]
+            );
         $otherViewMock->expects($this->exactly(3))
             ->method('getChangelog')
             ->willReturn($otherChangelogMock);
@@ -233,6 +238,17 @@ class SubscriptionTest extends TestCase
         $this->connectionMock->expects($this->exactly(3))
             ->method('createTrigger')
             ->with($triggerMock);
+
+        $this->tableName = 'thisTableName';
+
+        $this->viewMock->expects($this->exactly(3))
+            ->method('getSubscriptions')
+            ->willReturn(
+                [
+                    $this->tableName => ['name' => $this->tableName, 'column' => 'columnName'],
+                    'otherTableName' => ['name' => 'otherTableName', 'column' => 'columnName']
+                ]
+            );
 
         $this->model->create();
     }
@@ -285,6 +301,7 @@ class SubscriptionTest extends TestCase
             true,
             []
         );
+
         $otherViewMock->expects($this->exactly(1))
             ->method('getId')
             ->willReturn('other_id');
@@ -292,6 +309,15 @@ class SubscriptionTest extends TestCase
         $otherViewMock->expects($this->exactly(3))
             ->method('getChangelog')
             ->willReturn($otherChangelogMock);
+
+        $otherViewMock->expects($this->any())
+            ->method('getSubscriptions')
+            ->willReturn(
+                [
+                    $this->tableName => ['name' => $this->tableName, 'column' => 'columnName'],
+                    'otherTableName' => ['name' => 'otherTableName', 'column' => 'columnName']
+                ]
+            );
 
         $this->viewMock->expects($this->exactly(3))
             ->method('getId')

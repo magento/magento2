@@ -11,9 +11,7 @@ use Magento\Framework\DB\Ddl\Trigger;
 use Magento\Framework\Mview\View\StateInterface;
 
 /**
- * Class Subscription
- *
- * @package Magento\Framework\Mview\View
+ * Mview subscription.
  */
 class Subscription implements SubscriptionInterface
 {
@@ -202,7 +200,7 @@ class Subscription implements SubscriptionInterface
         // We will use column name from it.
         $subscriptions = $view->getSubscriptions() ?? [];
         if (empty($subscriptions[$this->getTableName()])) {
-          return '';
+            return '';
         }
 
         $subscription = $subscriptions[$this->getTableName()];
