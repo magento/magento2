@@ -16,6 +16,4 @@
             </argument>
         </arguments>
     </type>
-    <preference for="Magento\Customer\Api\AccountManagementInterface"
-                type="Magento\Customer\Model\AccountManagementApi" />
 </config>
