@@ -9,6 +9,7 @@ namespace Magento\Framework\Stdlib\Test\Unit\DateTime;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ScopeResolverInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\Stdlib\DateTime\Timezone;
@@ -100,7 +101,12 @@ class TimezoneTest extends TestCase
 
         /** @var \DateTime $dateTime */
         $dateTime = $timezone->date($date, $locale, true, $includeTime);
-        $this->assertEquals($expectedTimestamp, $dateTime->getTimestamp());
+        if (is_numeric($expectedTimestamp)) {
+            $this->assertEquals($expectedTimestamp, $dateTime->getTimestamp());
+        } else {
+            $format = $includeTime ? DateTime::DATETIME_PHP_FORMAT : DateTime::DATE_PHP_FORMAT;
+            $this->assertEquals($expectedTimestamp, date($format, $dateTime->getTimestamp()));
+        }
     }
 
     /**
@@ -150,7 +156,25 @@ class TimezoneTest extends TestCase
                 'el_GR', // locale
                 false, // include time
                 1635570000 // expected timestamp
-            ]
+            ],
+            'Parse Saudi Arabia date without time' => [
+                '31‏/8‏/2020 02020',
+                'ar_SA',
+                false,
+                '2020-08-31'
+            ],
+            'Parse date in short style with long year 1999' => [
+                '9/11/1999',
+                'en_US',
+                false,
+                '1999-09-11'
+            ],
+            'Parse date in short style with long year 2099' => [
+                '9/2/2099',
+                'en_US',
+                false,
+                '2099-09-02'
+            ],
         ];
     }
 
@@ -206,6 +230,30 @@ class TimezoneTest extends TestCase
             $expectedResult()->format('DATE_ISO8601'),
             $this->getTimezone()->date($date)->format('DATE_ISO8601')
         );
+    }
+
+    /**
+     * Data provider for testException
+     *
+     * @return array
+     */
+    public function getConvertConfigTimeToUTCDataFixtures()
+    {
+        return [
+            'datetime' => [
+                new \DateTime('2016-10-10 10:00:00', new \DateTimeZone('UTC'))
+            ]
+        ];
+    }
+
+    /**
+     * @dataProvider getConvertConfigTimeToUTCDataFixtures
+     */
+    public function testConvertConfigTimeToUtcException($date)
+    {
+        $this->expectException(LocalizedException::class);
+
+        $this->getTimezone()->convertConfigTimeToUtc($date);
     }
 
     /**

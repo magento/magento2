@@ -60,14 +60,30 @@
         <actionGroup ref="SaveConfiguredProductActionGroup" stepKey="saveNewConfigurableProductForm"/>
         <!--Assert configurable product on Admin product page grid-->
         <comment userInput="Assert configurable product in Admin product page grid" stepKey="commentAssertConfigurableProductOnAdmin"/>
-        <amOnPage url="{{AdminCatalogProductPage.url}}" stepKey="goToCatalogProductPageForConfigurable"/>
+        <actionGroup ref="AdminOpenCatalogProductPageActionGroup" stepKey="goToCatalogProductPageForConfigurable"/>
         <actionGroup ref="FilterProductGridBySku2ActionGroup" stepKey="filterProductGridBySkuForConfigurable">
             <argument name="sku" value="$$createProduct.sku$$"/>
         </actionGroup>
-        <see selector="{{AdminProductGridSection.productGridCell('1', 'Name')}}" userInput="$$createProduct.name$$" stepKey="seeConfigurableProductNameInGrid"/>
-        <see selector="{{AdminProductGridSection.productGridCell('1', 'Type')}}" userInput="Configurable Product" stepKey="seeConfigurableProductTypeInGrid"/>
-        <see selector="{{AdminProductGridSection.productGridCell('2', 'Name')}}" userInput="$$createProduct.name$$-option1" stepKey="seeConfigurableProductNameInGrid1"/>
-        <see selector="{{AdminProductGridSection.productGridCell('3', 'Name')}}" userInput="$$createProduct.name$$-option2" stepKey="seeConfigurableProductNameInGrid2"/>
+        <actionGroup ref="AssertAdminProductGridCellActionGroup" stepKey="seeConfigurableProductNameInGrid">
+            <argument name="row" value="1"/>
+            <argument name="column" value="Name"/>
+            <argument name="value" value="$$createProduct.name$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminProductGridCellActionGroup" stepKey="seeConfigurableProductTypeInGrid">
+            <argument name="row" value="1"/>
+            <argument name="column" value="Type"/>
+            <argument name="value" value="Configurable Product"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminProductGridCellActionGroup" stepKey="seeConfigurableProductNameInGrid1">
+            <argument name="row" value="2"/>
+            <argument name="column" value="Name"/>
+            <argument name="value" value="$$createProduct.name$$-option1"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminProductGridCellActionGroup" stepKey="seeConfigurableProductNameInGrid2">
+            <argument name="row" value="3"/>
+            <argument name="column" value="Name"/>
+            <argument name="value" value="$$createProduct.name$$-option2"/>
+        </actionGroup>
         <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearConfigurableProductFilters"/>
         <!--Assert configurable product on storefront-->
         <comment userInput="Assert configurable product on storefront" stepKey="commentAssertConfigurableProductOnStorefront"/>

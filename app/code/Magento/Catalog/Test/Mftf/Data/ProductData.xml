@@ -284,6 +284,9 @@
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
         <requiredEntity type="custom_attribute">CustomAttributeProductAttribute</requiredEntity>
     </entity>
+    <entity name="ApiSimpleProductWithCategory" type="product2" extends="ApiSimpleOne">
+        <requiredEntity type="custom_attribute">CustomAttributeCategoryIds</requiredEntity>
+    </entity>
     <entity name="ApiSimpleProductWithShortSKU" type="product2" extends="ApiSimpleOne">
         <data key="sku" unique="suffix">pr</data>
     </entity>
@@ -1242,6 +1245,20 @@
         <data key="visibility">4</data>
         <data key="name" unique="suffix">testProductName</data>
         <data key="price">100.00</data>
+        <data key="urlKey" unique="suffix">testurlkey</data>
+        <data key="status">1</data>
+        <data key="quantity">777</data>
+        <data key="weight">1</data>
+        <requiredEntity type="product_extension_attribute">EavStock777</requiredEntity>
+        <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
+    </entity>
+    <entity name="SimpleProduct_zero" type="product">
+        <data key="sku" unique="suffix">testSku</data>
+        <data key="type_id">simple</data>
+        <data key="attribute_set_id">4</data>
+        <data key="visibility">4</data>
+        <data key="name" unique="suffix">testProductName</data>
+        <data key="price">0.00</data>
         <data key="urlKey" unique="suffix">testurlkey</data>
         <data key="status">1</data>
         <data key="quantity">777</data>

@@ -69,6 +69,35 @@ class SpecialPriceStorageTest extends WebapiAbstract
     }
 
     /**
+     * Test get method when special price is 0.
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     */
+    public function testGetZeroValue()
+    {
+        $specialPrice = 0;
+        $productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
+        $product = $productRepository->get(self::SIMPLE_PRODUCT_SKU, true);
+        $product->setData('special_price', $specialPrice);
+        $productRepository->save($product);
+
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => '/V1/products/special-price-information',
+                'httpMethod' => Request::HTTP_METHOD_POST
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'Get',
+            ],
+        ];
+        $response = $this->_webApiCall($serviceInfo, ['skus' => [self::SIMPLE_PRODUCT_SKU]]);
+        $this->assertNotEmpty($response);
+        $this->assertEquals($specialPrice, $response[0]['price']);
+    }
+
+    /**
      * Test update method.
      *
      * @magentoApiDataFixture Magento/Catalog/_files/product_virtual.php
