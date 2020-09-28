@@ -67,14 +67,26 @@ define([
          * @returns {Object} data
          */
         prepareData: function (data) {
-            var result = {};
+            var result = {},
+                scopeId;
 
             _.each(data, function (item) {
-                result[item.id] = {
-                    'added_at': new Date().getTime() / 1000,
-                    'product_id': item.id,
-                    'website_id': window.checkout.websiteId
-                };
+                if (typeof item.productScope !== 'undefined') {
+                    scopeId = item.productScope === 'store' ? window.checkout.storeId :
+                        item.productScope === 'group' ? window.checkout.storeGroupId :
+                            window.checkout.websiteId;
+
+                    result[item.productScope + '-' + scopeId + '-' + item.id] = {
+                        'added_at': new Date().getTime() / 1000,
+                        'product_id': item.id,
+                        'scope_id': scopeId
+                    };
+                } else {
+                    result[item.id] = {
+                        'added_at': new Date().getTime() / 1000,
+                        'product_id': item.id
+                    };
+                }
             });
 
             return result;

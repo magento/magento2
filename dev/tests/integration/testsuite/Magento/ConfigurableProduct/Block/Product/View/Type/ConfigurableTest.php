@@ -7,10 +7,15 @@ declare(strict_types=1);
 
 namespace Magento\ConfigurableProduct\Block\Product\View\Type;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Catalog\Model\Product;
+use Magento\Catalog\Helper\Product as HelperProduct;
 use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute as ConfigurableAttribute;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute\Collection;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\DataObject;
+use Magento\Framework\DataObjectFactory;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\View\LayoutInterface;
@@ -18,49 +23,77 @@ use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Test class to check configurable product view behaviour
+ * Test class to check configurable product view behaviour.
  *
  * @see \Magento\ConfigurableProduct\Block\Product\View\Type\Configurable
  *
  * @magentoAppIsolation enabled
+ * @magentoDbIsolation enabled
  * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ConfigurableTest extends TestCase
 {
-    /** @var ObjectManagerInterface */
+    /**
+     * @var ObjectManagerInterface
+     */
     private $objectManager;
 
-    /** @var Configurable */
+    /**
+     * @var SerializerInterface
+     */
+    private $serializer;
+
+    /**
+     * @var SearchCriteriaBuilder
+     */
+    private $searchBuilder;
+
+    /**
+     * @var Configurable
+     */
     private $block;
 
-    /** @var Product */
-    private $product;
-
-    /** @var LayoutInterface */
-    private $layout;
-
-    /** @var ProductRepositoryInterface */
+    /**
+     * @var ProductRepositoryInterface
+     */
     private $productRepository;
 
-    /** @var SerializerInterface */
-    private $json;
-
-    /** @var ProductResource */
+    /**
+     * @var ProductResource
+     */
     private $productResource;
+
+    /**
+     * @var ProductInterface
+     */
+    private $product;
+
+    /**
+     * @var HelperProduct
+     */
+    private $helperProduct;
+
+    /** @var DataObjectFactory */
+    private $dataObjectFactory;
 
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
+        parent::setUp();
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
-        $this->product = $this->productRepository->get('configurable');
-        $this->layout = $this->objectManager->get(LayoutInterface::class);
-        $this->block = $this->layout->createBlock(Configurable::class);
-        $this->json = $this->objectManager->get(SerializerInterface::class);
-        $this->block->setProduct($this->product);
+        $this->serializer = $this->objectManager->get(SerializerInterface::class);
+        $this->searchBuilder = $this->objectManager->get(SearchCriteriaBuilder::class);
+        $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
+        $this->productRepository->cleanCache();
         $this->productResource = $this->objectManager->create(ProductResource::class);
+        $this->product = $this->productRepository->get('configurable');
+        $this->block = $this->objectManager->get(LayoutInterface::class)->createBlock(Configurable::class);
+        $this->block->setProduct($this->product);
+        $this->helperProduct = $this->objectManager->get(HelperProduct::class);
+        $this->dataObjectFactory = $this->objectManager->get(DataObjectFactory::class);
     }
 
     /**
@@ -89,7 +122,7 @@ class ConfigurableTest extends TestCase
         $products = $this->block->getAllowProducts();
         $this->assertGreaterThanOrEqual(2, count($products));
         foreach ($products as $product) {
-            $this->assertInstanceOf(Product::class, $product);
+            $this->assertInstanceOf(ProductInterface::class, $product);
         }
     }
 
@@ -98,7 +131,7 @@ class ConfigurableTest extends TestCase
      */
     public function testGetJsonConfig(): void
     {
-        $config = $this->json->unserialize($this->block->getJsonConfig());
+        $config = $this->serializer->unserialize($this->block->getJsonConfig());
         $this->assertNotEmpty($config);
         $this->assertArrayHasKey('productId', $config);
         $this->assertEquals(1, $config['productId']);
@@ -106,6 +139,58 @@ class ConfigurableTest extends TestCase
         $this->assertArrayHasKey('template', $config);
         $this->assertArrayHasKey('prices', $config);
         $this->assertArrayHasKey('basePrice', $config['prices']);
+        $this->assertArrayHasKey('images', $config);
+        $this->assertCount(0, $config['images']);
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetJsonConfigWithPreconfiguredValues(): void
+    {
+        /** @var ConfigurableAttribute $attribute */
+        $attribute = $this->product->getExtensionAttributes()->getConfigurableProductOptions()[0];
+        $expectedAttributeValue = [
+            $attribute->getAttributeId() => $attribute->getOptions()[0]['value_index'],
+        ];
+        /** @var DataObject $request */
+        $buyRequest = $this->dataObjectFactory->create();
+        $buyRequest->setData([
+            'qty' => 1,
+            'super_attribute' => $expectedAttributeValue,
+        ]);
+        $this->helperProduct->prepareProductOptions($this->product, $buyRequest);
+
+        $config = $this->serializer->unserialize($this->block->getJsonConfig());
+        $this->assertArrayHasKey('defaultValues', $config);
+        $this->assertEquals($expectedAttributeValue, $config['defaultValues']);
+    }
+
+    /**
+     * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_product_with_child_products_with_images.php
+     * @return void
+     */
+    public function testGetJsonConfigWithChildProductsImages(): void
+    {
+        $config = $this->serializer->unserialize($this->block->getJsonConfig());
+        $this->assertNotEmpty($config);
+        $this->assertArrayHasKey('images', $config);
+        $this->assertCount(2, $config['images']);
+        $products = $this->getProducts(
+            $this->product->getExtensionAttributes()->getConfigurableProductLinks()
+        );
+        $i = 0;
+        foreach ($products as $simpleProduct) {
+            $i++;
+            $resultImage = reset($config['images'][$simpleProduct->getId()]);
+            $this->assertStringContainsString($simpleProduct->getImage(), $resultImage['thumb']);
+            $this->assertStringContainsString($simpleProduct->getImage(), $resultImage['img']);
+            $this->assertStringContainsString($simpleProduct->getImage(), $resultImage['full']);
+            $this->assertTrue($resultImage['isMain']);
+            $this->assertEquals('image', $resultImage['type']);
+            $this->assertEquals($i, $resultImage['position']);
+            $this->assertNull($resultImage['videoUrl']);
+        }
     }
 
     /**
@@ -121,7 +206,7 @@ class ConfigurableTest extends TestCase
         $this->assertCount(1, $attributes);
         $attribute = $attributes->getFirstItem();
         $this->assertEquals($label, $attribute->getLabel());
-        $config = $this->json->unserialize($this->block->getJsonConfig())['attributes'] ?? null;
+        $config = $this->serializer->unserialize($this->block->getJsonConfig())['attributes'] ?? null;
         $this->assertNotNull($config);
         $this->assertConfig(reset($config), $expectedConfig);
     }
@@ -158,7 +243,7 @@ class ConfigurableTest extends TestCase
      * @param array $expectedData
      * @return void
      */
-    private function assertConfig($data, $expectedData): void
+    private function assertConfig(array $data, array $expectedData): void
     {
         $this->assertEquals($expectedData['label'], $data['label']);
         $skus = array_column($expectedData['options'], 'sku');
@@ -174,5 +259,18 @@ class ConfigurableTest extends TestCase
                 }
             }
         }
+    }
+
+    /**
+     * Returns products by ids list.
+     *
+     * @param array $productIds
+     * @return ProductInterface[]
+     */
+    private function getProducts(array $productIds): array
+    {
+        $criteria = $this->searchBuilder->addFilter('entity_id', $productIds, 'in')
+            ->create();
+        return $this->productRepository->getList($criteria)->getItems();
     }
 }

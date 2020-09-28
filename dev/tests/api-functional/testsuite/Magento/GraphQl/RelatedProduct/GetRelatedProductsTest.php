@@ -10,7 +10,7 @@ namespace Magento\GraphQl\RelatedProduct;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
- * Get related products test
+ * Test coverage for get related products
  */
 class GetRelatedProductsTest extends GraphQlAbstract
 {
@@ -41,12 +41,46 @@ QUERY;
 
         self::assertArrayHasKey('products', $response);
         self::assertArrayHasKey('items', $response['products']);
-        self::assertEquals(1, count($response['products']['items']));
+        self::assertCount(1, $response['products']['items']);
         self::assertArrayHasKey(0, $response['products']['items']);
         self::assertArrayHasKey('related_products', $response['products']['items'][0]);
         $relatedProducts = $response['products']['items'][0]['related_products'];
         self::assertCount(2, $relatedProducts);
         self::assertRelatedProducts($relatedProducts);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/products_related_disabled.php
+     */
+    public function testQueryDisableRelatedProduct()
+    {
+        $productSku = 'simple_with_cross';
+
+        $query = <<<QUERY
+{
+    products(filter: {sku: {eq: "{$productSku}"}})
+    {
+        items {            
+            related_products
+            {
+                sku
+                name
+                url_key
+                created_at
+            }
+        }
+    }
+}
+QUERY;
+        $response = $this->graphQlQuery($query);
+
+        self::assertArrayHasKey('products', $response);
+        self::assertArrayHasKey('items', $response['products']);
+        self::assertCount(1, $response['products']['items']);
+        self::assertArrayHasKey(0, $response['products']['items']);
+        self::assertArrayHasKey('related_products', $response['products']['items'][0]);
+        $relatedProducts = $response['products']['items'][0]['related_products'];
+        self::assertCount(0, $relatedProducts);
     }
 
     /**
@@ -76,7 +110,7 @@ QUERY;
 
         self::assertArrayHasKey('products', $response);
         self::assertArrayHasKey('items', $response['products']);
-        self::assertEquals(1, count($response['products']['items']));
+        self::assertCount(1, $response['products']['items']);
         self::assertArrayHasKey(0, $response['products']['items']);
         self::assertArrayHasKey('crosssell_products', $response['products']['items'][0]);
         $crossSellProducts = $response['products']['items'][0]['crosssell_products'];
@@ -119,7 +153,7 @@ QUERY;
 
         self::assertArrayHasKey('products', $response);
         self::assertArrayHasKey('items', $response['products']);
-        self::assertEquals(1, count($response['products']['items']));
+        self::assertCount(1, $response['products']['items']);
         self::assertArrayHasKey(0, $response['products']['items']);
         self::assertArrayHasKey('upsell_products', $response['products']['items'][0]);
         $upSellProducts = $response['products']['items'][0]['upsell_products'];

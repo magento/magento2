@@ -188,7 +188,8 @@ define([
 
             result = {
                 items: this.getByIds(request.ids),
-                totalRecords: request.totalRecords
+                totalRecords: request.totalRecords,
+                errorMessage: request.errorMessage
             };
 
             delay ?
@@ -216,7 +217,8 @@ define([
             this._requests.push({
                 ids: this.getIds(data.items),
                 params: params,
-                totalRecords: data.totalRecords
+                totalRecords: data.totalRecords,
+                errorMessage: data.errorMessage
             });
 
             return this;

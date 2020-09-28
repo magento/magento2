@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontConfigurableProductAddToCartTest">
+        <annotations>
+            <features value="ConfigurableProduct"/>
+            <stories value="View configurable product in a category in storefront"/>
+            <title value="customer should be taken to the product details page when clicking add to cart"/>
+            <description value="customer should be taken to the product details page when clicking add to cart"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-89"/>
+            <group value="ConfigurableProduct"/>
+        </annotations>
+
+        <before>
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin1"/>
+
+            <!-- Create a configurable product via the UI -->
+            <actionGroup ref="CreateConfigurableProductActionGroup" stepKey="createProduct">
+                <argument name="product" value="_defaultProduct"/>
+                <argument name="category" value="$$createCategory$$"/>
+            </actionGroup>
+        </before>
+
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+        </after>
+
+        <!-- Should be taken to product details page when adding to cart because an option needs to be selected -->
+        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="amOnCategoryPage1"/>
+        <waitForPageLoad stepKey="wait1"/>
+        <click selector="{{StorefrontCategoryMainSection.modeListButton}}" stepKey="clickListView"/>
+        <waitForPageLoad stepKey="wait2"/>
+        <actionGroup ref="StorefrontClickAddToCartButtonActionGroup" stepKey="clickAddToCart"/>
+        <grabFromCurrentUrl stepKey="grabUrl"/>
+        <assertStringContainsString stepKey="assertUrl">
+            <expectedResult type="string">{{_defaultProduct.urlKey}}</expectedResult>
+            <actualResult type="string">{$grabUrl}</actualResult>
+        </assertStringContainsString>
+    </test>
+</tests>

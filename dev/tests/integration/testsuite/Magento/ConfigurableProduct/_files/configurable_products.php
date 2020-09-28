@@ -12,16 +12,22 @@ use Magento\Catalog\Setup\CategorySetup;
 use Magento\ConfigurableProduct\Helper\Product\Options\Factory;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Eav\Api\Data\AttributeOptionInterface;
+use Magento\Eav\Model\Config;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-require __DIR__ . '/configurable_attribute.php';
+Resolver::getInstance()->requireDataFixture('Magento/ConfigurableProduct/_files/configurable_attribute.php');
 
+$objectManager = Bootstrap::getObjectManager();
 /** @var ProductRepositoryInterface $productRepository */
-$productRepository = Bootstrap::getObjectManager()
+$productRepository = $objectManager
     ->get(ProductRepositoryInterface::class);
+/** @var Config $eavConfig */
+$eavConfig = $objectManager->get(Config::class);
+$attribute = $eavConfig->getAttribute(Product::ENTITY, 'test_configurable');
 
 /** @var $installer CategorySetup */
-$installer = Bootstrap::getObjectManager()->create(CategorySetup::class);
+$installer = $objectManager->create(CategorySetup::class);
 
 /* Create simple products per each option value*/
 /** @var AttributeOptionInterface[] $options */
@@ -35,10 +41,9 @@ array_shift($options); //remove the first option which is empty
 
 foreach ($options as $option) {
     /** @var $product Product */
-    $product = Bootstrap::getObjectManager()->create(Product::class);
+    $product = $objectManager->create(Product::class);
     $productId = array_shift($productIds);
     $product->setTypeId(Type::TYPE_SIMPLE)
-        ->setId($productId)
         ->setAttributeSetId($attributeSetId)
         ->setWebsiteIds([1])
         ->setName('Configurable Option' . $option->getLabel())
@@ -59,9 +64,9 @@ foreach ($options as $option) {
 }
 
 /** @var $product Product */
-$product = Bootstrap::getObjectManager()->create(Product::class);
+$product = $objectManager->create(Product::class);
 /** @var Factory $optionsFactory */
-$optionsFactory = Bootstrap::getObjectManager()->create(Factory::class);
+$optionsFactory = $objectManager->create(Factory::class);
 $configurableAttributesData = [
     [
         'attribute_id' => $attribute->getId(),
@@ -78,7 +83,6 @@ $extensionConfigurableAttributes->setConfigurableProductLinks($associatedProduct
 $product->setExtensionAttributes($extensionConfigurableAttributes);
 
 $product->setTypeId(Configurable::TYPE_CODE)
-    ->setId(1)
     ->setAttributeSetId($attributeSetId)
     ->setWebsiteIds([1])
     ->setName('Configurable Product')
@@ -101,10 +105,9 @@ array_shift($options); //remove the first option which is empty
 
 foreach ($options as $option) {
     /** @var $product Product */
-    $product = Bootstrap::getObjectManager()->create(Product::class);
+    $product = $objectManager->create(Product::class);
     $productId = array_shift($productIds);
     $product->setTypeId(Type::TYPE_SIMPLE)
-        ->setId($productId)
         ->setAttributeSetId($attributeSetId)
         ->setWebsiteIds([1])
         ->setName('Configurable Option' . $option->getLabel())
@@ -125,10 +128,10 @@ foreach ($options as $option) {
 }
 
 /** @var $product Product */
-$product = Bootstrap::getObjectManager()->create(Product::class);
+$product = $objectManager->create(Product::class);
 
 /** @var Factory $optionsFactory */
-$optionsFactory = Bootstrap::getObjectManager()->create(Factory::class);
+$optionsFactory = $objectManager->create(Factory::class);
 
 $configurableAttributesData = [
     [
@@ -149,7 +152,6 @@ $extensionConfigurableAttributes->setConfigurableProductLinks($associatedProduct
 $product->setExtensionAttributes($extensionConfigurableAttributes);
 
 $product->setTypeId(Configurable::TYPE_CODE)
-    ->setId(11)
     ->setAttributeSetId($attributeSetId)
     ->setWebsiteIds([1])
     ->setName('Configurable Product 12345')

@@ -3,31 +3,44 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\AsynchronousOperations\Test\Unit\Model\ResourceModel\Operation;
+
+use Magento\AsynchronousOperations\Api\Data\OperationInterface;
+use Magento\AsynchronousOperations\Api\Data\OperationListInterface;
+use Magento\AsynchronousOperations\Model\ResourceModel\Operation\Create;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\EntityManager\EntityMetadataInterface;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\EntityManager\TypeResolver;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit test for Create operation.
  */
-class CreateTest extends \PHPUnit\Framework\TestCase
+class CreateTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\EntityManager\MetadataPool|\PHPUnit_Framework_MockObject_MockObject
+     * @var MetadataPool|MockObject
      */
     private $metadataPool;
 
     /**
-     * @var \Magento\Framework\EntityManager\TypeResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var TypeResolver|MockObject
      */
     private $typeResolver;
 
     /**
-     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResourceConnection|MockObject
      */
     private $resourceConnection;
 
     /**
-     * @var \Magento\AsynchronousOperations\Model\ResourceModel\Operation\Create
+     * @var Create
      */
     private $create;
 
@@ -36,18 +49,15 @@ class CreateTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->metadataPool = $this->getMockBuilder(\Magento\Framework\EntityManager\MetadataPool::class)
-            ->disableOriginalConstructor()->getMock();
-        $this->typeResolver = $this->getMockBuilder(\Magento\Framework\EntityManager\TypeResolver::class)
-            ->disableOriginalConstructor()->getMock();
-        $this->resourceConnection = $this->getMockBuilder(\Magento\Framework\App\ResourceConnection::class)
-            ->disableOriginalConstructor()->getMock();
+        $this->metadataPool = $this->createMock(MetadataPool::class);
+        $this->typeResolver = $this->createMock(TypeResolver::class);
+        $this->resourceConnection = $this->createMock(ResourceConnection::class);
 
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
         $this->create = $objectManager->getObject(
-            \Magento\AsynchronousOperations\Model\ResourceModel\Operation\Create::class,
+            Create::class,
             [
                 'metadataPool' => $this->metadataPool,
                 'typeResolver' => $this->typeResolver,
@@ -66,21 +76,18 @@ class CreateTest extends \PHPUnit\Framework\TestCase
         $connectionName = 'default';
         $operationData = ['key1' => 'value1'];
         $operationTable = 'magento_operation';
-        $operationList = $this->getMockBuilder(\Magento\AsynchronousOperations\Api\Data\OperationListInterface::class)
-            ->disableOriginalConstructor()->getMock();
+        $operationList = $this->getMockForAbstractClass(OperationListInterface::class);
         $this->typeResolver->expects($this->once())->method('resolve')->with($operationList)
-            ->willReturn(\Magento\AsynchronousOperations\Api\Data\OperationListInterface::class);
-        $metadata = $this->getMockBuilder(\Magento\Framework\EntityManager\EntityMetadataInterface::class)
-            ->disableOriginalConstructor()->getMock();
+            ->willReturn(OperationListInterface::class);
+        $metadata = $this->getMockForAbstractClass(EntityMetadataInterface::class);
         $this->metadataPool->expects($this->once())->method('getMetadata')
-            ->with(\Magento\AsynchronousOperations\Api\Data\OperationListInterface::class)->willReturn($metadata);
+            ->with(OperationListInterface::class)->willReturn($metadata);
         $metadata->expects($this->once())->method('getEntityConnectionName')->willReturn($connectionName);
-        $connection = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
-            ->disableOriginalConstructor()->getMock();
+        $connection = $this->getMockForAbstractClass(AdapterInterface::class);
         $this->resourceConnection->expects($this->once())
             ->method('getConnection')->with($connectionName)->willReturn($connection);
         $connection->expects($this->once())->method('beginTransaction')->willReturnSelf();
-        $operation = $this->getMockBuilder(\Magento\AsynchronousOperations\Api\Data\OperationInterface::class)
+        $operation = $this->getMockBuilder(OperationInterface::class)
             ->setMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -97,28 +104,25 @@ class CreateTest extends \PHPUnit\Framework\TestCase
      * Test for execute method with exception.
      *
      * @return void
-     * @expectedException \Exception
      */
     public function testExecuteWithException()
     {
+        $this->expectException('Exception');
         $connectionName = 'default';
         $operationData = ['key1' => 'value1'];
         $operationTable = 'magento_operation';
-        $operationList = $this->getMockBuilder(\Magento\AsynchronousOperations\Api\Data\OperationListInterface::class)
-            ->disableOriginalConstructor()->getMock();
+        $operationList = $this->getMockForAbstractClass(OperationListInterface::class);
         $this->typeResolver->expects($this->once())->method('resolve')->with($operationList)
-            ->willReturn(\Magento\AsynchronousOperations\Api\Data\OperationListInterface::class);
-        $metadata = $this->getMockBuilder(\Magento\Framework\EntityManager\EntityMetadataInterface::class)
-            ->disableOriginalConstructor()->getMock();
+            ->willReturn(OperationListInterface::class);
+        $metadata = $this->getMockForAbstractClass(EntityMetadataInterface::class);
         $this->metadataPool->expects($this->once())->method('getMetadata')
-            ->with(\Magento\AsynchronousOperations\Api\Data\OperationListInterface::class)->willReturn($metadata);
+            ->with(OperationListInterface::class)->willReturn($metadata);
         $metadata->expects($this->once())->method('getEntityConnectionName')->willReturn($connectionName);
-        $connection = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
-            ->disableOriginalConstructor()->getMock();
+        $connection = $this->getMockForAbstractClass(AdapterInterface::class);
         $this->resourceConnection->expects($this->once())
             ->method('getConnection')->with($connectionName)->willReturn($connection);
         $connection->expects($this->once())->method('beginTransaction')->willReturnSelf();
-        $operation = $this->getMockBuilder(\Magento\AsynchronousOperations\Api\Data\OperationInterface::class)
+        $operation = $this->getMockBuilder(OperationInterface::class)
             ->setMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();

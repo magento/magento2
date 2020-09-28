@@ -45,12 +45,12 @@ class CustomerSendmailTest extends AbstractController
     /**
      * @throws LocalizedException
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->accountManagement = $this->_objectManager->create(AccountManagementInterface::class);
         $this->formKey = $this->_objectManager->create(FormKey::class);
-        $logger = $this->createMock(LoggerInterface::class);
+        $logger = $this->getMockForAbstractClass(LoggerInterface::class);
         $this->session = $this->_objectManager->create(
             Session::class,
             [$logger]

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCheckPayPalSmartButtonWithPayLabelOnCartPageTest" extends="StorefrontCheckPayPalSmartButtonWithBuyNowLabelOnProductPageTest">
+        <annotations>
+            <features value="PayPal"/>
+            <stories value="PayPal Smart Button Configuration"/>
+            <title value="Check PayPal Smart Button configuration with Pay label on Cart page"/>
+            <description value="Admin is able to customize PayPal Smart Button with Pay label on Cart page"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-28711"/>
+            <group value="paypal"/>
+            <group value="paypalExpress"/>
+            <skip>
+                <issueId value="MC-33951"/>
+            </skip>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set {{StorefrontPaypalCartPageEnableCustomizeButtonConfigData.path}} {{StorefrontPaypalCartPageEnableCustomizeButtonConfigData.value}}" stepKey="enableCustomizeButton"/>
+            <magentoCLI command="config:set {{StorefrontPaypalCartPageButtonPayLabelConfigData.path}} {{StorefrontPaypalCartPageButtonPayLabelConfigData.value}}" stepKey="setLabelForPayPalSmartButton"/>
+            <magentoCLI command="config:set {{StorefrontPaypalCartPageButtonVerticalLayoutConfigData.path}} {{StorefrontPaypalCartPageButtonVerticalLayoutConfigData.value}}" stepKey="setLayoutForPayPalSmartButton"/>
+            <magentoCLI command="config:set {{StorefrontPaypalCartPageButtonRectangleShapeConfigData.path}} {{StorefrontPaypalCartPageButtonRectangleShapeConfigData.value}}" stepKey="setShapeForPayPalSmartButton"/>
+            <magentoCLI command="config:set {{StorefrontPaypalCartPageButtonGoldColorConfigData.path}} {{StorefrontPaypalCartPageButtonGoldColorConfigData.value}}" stepKey="setColorForPayPalSmartButton"/>
+        </before>
+        <after>
+            <magentoCLI command="config:set {{StorefrontPaypalCartPageDisableCustomizeButtonConfigData.path}} {{StorefrontPaypalCartPageDisableCustomizeButtonConfigData.value}}" stepKey="disableCustomizeButton"/>
+        </after>
+        <!-- Add Product to Cart -->
+        <actionGroup ref="StorefrontAddSimpleProductToShoppingCartActionGroup" before="goToPayPalSmartButtonPage" stepKey="addProductToCart">
+            <argument name="product" value="$createProduct$"/>
+        </actionGroup>
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="goToPayPalSmartButtonPage"/>
+        <actionGroup ref="StorefrontSwitchToPayPalButtonIframeActionGroup" stepKey="switchToIframe">
+            <argument name="elementNumber" value="1"/>
+        </actionGroup>
+        <!-- Check PayPal smart button configurations -->
+        <actionGroup ref="AssertPayPalButtonLayoutActionGroup" stepKey="assertLayoutBtn">
+            <argument name="label" value="{{PayPalLabel.pay}}"/>
+            <argument name="layout" value="{{PayPalLayout.vertical}}"/>
+            <argument name="shape" value="{{PayPalShape.rectangle}}"/>
+            <argument name="color" value="{{PayPalColor.gold}}"/>
+        </actionGroup>
+    </test>
+</tests>

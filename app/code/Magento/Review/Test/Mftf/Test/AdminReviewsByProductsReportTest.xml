@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminReviewsByProductsReportTest">
+        <annotations>
+            <features value="Review"/>
+            <stories value="Review By Products"/>
+            <title value="Admin Reports Review by Products"/>
+            <description value="Review By Products Grid Filters"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="MC-32333"/>
+            <skip>
+                <issueId value="MQE-2288" />
+            </skip>
+        </annotations>
+        <before>
+            <!--Login-->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+            <!--Create product and Category-->
+            <createData stepKey="category" entity="SimpleSubCategory"/>
+            <createData stepKey="createProduct1" entity="SimpleProduct">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+            <createData stepKey="createProduct2" entity="SimpleProduct">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+        </before>
+        <after>
+            <!-- Delete reviews -->
+            <actionGroup ref="AdminOpenReviewsPageActionGroup" stepKey="openAllReviewsPage"/>
+            <actionGroup ref="AdminDeleteReviewsByUserNicknameActionGroup" stepKey="deleteCustomerReview"/>
+            <!--delete Category and Products -->
+            <deleteData createDataKey="createProduct1" stepKey="deleteProduct1"/>
+            <deleteData createDataKey="createProduct2" stepKey="deleteProduct2"/>
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>
+            <!--Logout-->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!-- Navigate to Marketing > User Content> All Review -->
+        <amOnPage url="{{AdminReviewsPage.url}}" stepKey="openReviewsPage"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoadCreatedReviewOne"/>
+        <actionGroup ref="AdminAddProductReviewActionGroup" stepKey="addFirstReview">
+            <argument name="sku" value="$$createProduct1.sku$$"/>
+        </actionGroup>
+        <waitForPageLoad time="30" stepKey="waitForPageLoadCreatedReviewTwo"/>
+        <actionGroup ref="AdminAddProductReviewActionGroup" stepKey="addSecondReview">
+            <argument name="sku" value="$$createProduct2.sku$$"/>
+        </actionGroup>
+        <!-- Navigate to Reports > Reviews >By Products -->
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToReportsByProductsPage">
+            <argument name="menuUiId" value="{{AdminMenuReports.dataUiId}}"/>
+            <argument name="submenuUiId" value="{{AdminMenuReportsReviewsByProducts.dataUiId}}"/>
+        </actionGroup>
+        <!--Sort Review Column -->
+        <grabTextFrom selector="{{AdminCreateNewReviewSection.gridReviewColumn}}" stepKey="grabReviewQuantity"/>
+        <actionGroup ref="AdminFilterProductReviewActionGroup" stepKey="navigateToReportsReview">
+            <argument name="reviewCount" value="$grabReviewQuantity"/>
+        </actionGroup>
+    </test>
+</tests>

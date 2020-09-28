@@ -157,12 +157,12 @@ class Config
 
     /**
      * @param \Magento\Framework\App\CacheInterface $cache
-     * @param \Magento\Eav\Model\Entity\TypeFactory $entityTypeFactory
-     * @param \Magento\Eav\Model\ResourceModel\Entity\Type\CollectionFactory $entityTypeCollectionFactory
+     * @param Entity\TypeFactory $entityTypeFactory
+     * @param ResourceModel\Entity\Type\CollectionFactory $entityTypeCollectionFactory
      * @param \Magento\Framework\App\Cache\StateInterface $cacheState
      * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
-     * @param SerializerInterface $serializer
-     * @param ScopeConfigInterface $scopeConfig
+     * @param SerializerInterface|null $serializer
+     * @param ScopeConfigInterface|null $scopeConfig
      * @param array $attributesForPreload
      * @codeCoverageIgnore
      */
@@ -228,7 +228,7 @@ class Config
      */
     protected function _load($id)
     {
-        return isset($this->_objects[$id]) ? $this->_objects[$id] : null;
+        return $this->_objects[$id] ?? null;
     }
 
     /**
@@ -239,14 +239,14 @@ class Config
      */
     private function loadAttributes($entityTypeCode)
     {
-        return isset($this->attributes[$entityTypeCode]) ? $this->attributes[$entityTypeCode] : [];
+        return $this->attributes[$entityTypeCode] ?? [];
     }
 
     /**
      * Associate object with identifier
      *
-     * @param   mixed $obj
-     * @param   mixed $id
+     * @param mixed $obj
+     * @param mixed $id
      * @return void
      * @codeCoverageIgnore
      */
@@ -271,8 +271,8 @@ class Config
     /**
      * Specify reference for entity type id
      *
-     * @param   int $id
-     * @param   string $code
+     * @param int $id
+     * @param string $code
      * @return $this
      * @codeCoverageIgnore
      */
@@ -290,15 +290,15 @@ class Config
      */
     protected function _getEntityTypeReference($id)
     {
-        return isset($this->_references['entity'][$id]) ? $this->_references['entity'][$id] : null;
+        return $this->_references['entity'][$id] ?? null;
     }
 
     /**
      * Specify reference between entity attribute id and attribute code
      *
-     * @param   int $id
-     * @param   string $code
-     * @param   string $entityTypeCode
+     * @param int $id
+     * @param string $code
+     * @param string $entityTypeCode
      * @return $this
      */
     protected function _addAttributeReference($id, $code, $entityTypeCode)
@@ -374,7 +374,9 @@ class Config
         }
         \Magento\Framework\Profiler::start('EAV: ' . __METHOD__, ['group' => 'EAV', 'method' => __METHOD__]);
 
-        if ($this->isCacheEnabled() && ($cache = $this->_cache->load(self::ENTITIES_CACHE_ID))) {
+        if ($this->isCacheEnabled() &&
+            ($cache = $this->_cache->load(self::ENTITIES_CACHE_ID))
+        ) {
             $this->_entityTypeData = $this->serializer->unserialize($cache);
             foreach ($this->_entityTypeData as $typeCode => $data) {
                 $typeId = $data['entity_type_id'];
@@ -507,12 +509,12 @@ class Config
     /**
      * Get attributes by entity type
      *
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      * @see \Magento\Eav\Model\Config::getEntityAttributes
      *
      * @param string $entityType
      * @return AbstractAttribute[]
-     * @since 100.2.0
+     * @since 101.0.0
      */
     public function getAttributes($entityType)
     {
@@ -522,9 +524,9 @@ class Config
     /**
      * Get attribute by code for entity type
      *
-     * @param   mixed $entityType
-     * @param   mixed $code
-     * @return  AbstractAttribute
+     * @param mixed $entityType
+     * @param mixed $code
+     * @return AbstractAttribute
      * @throws LocalizedException
      */
     public function getAttribute($entityType, $code)
@@ -722,7 +724,7 @@ class Config
     /**
      * Get codes of all entity type attributes
      *
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      * @see \Magento\Eav\Model\Config::getEntityAttributes
      *
      * @param mixed $entityType
@@ -737,13 +739,13 @@ class Config
     /**
      * Get all entity type attributes
      *
-     * @param  int|string|Type $entityType
-     * @param  \Magento\Framework\DataObject|null $object
+     * @param int|string|Type $entityType
+     * @param \Magento\Framework\DataObject|null $object
      * @return AbstractAttribute[]
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @since 100.2.0
+     * @since 101.0.0
      */
     public function getEntityAttributes($entityType, $object = null)
     {
@@ -822,6 +824,10 @@ class Config
             $fullAttributeData = array_key_exists('is_required', $attributeData);
 
             if ($existsFullAttribute || (!$existsFullAttribute && !$fullAttributeData)) {
+                $scopeIsRequired = $attributeData['scope_is_required'] ?? null;
+                if ($scopeIsRequired !== null) {
+                    $attribute->setData('scope_is_required', $scopeIsRequired);
+                }
                 return $attribute;
             }
         }
@@ -833,6 +839,7 @@ class Config
         }
         /** @var AbstractAttribute $attribute */
         $attribute = $this->createAttribute($model)->setData($attributeData);
+        $attribute->setOrigData('entity_type_id', $attribute->getEntityTypeId());
         $this->_addAttributeReference(
             $attributeData['attribute_id'],
             $code,

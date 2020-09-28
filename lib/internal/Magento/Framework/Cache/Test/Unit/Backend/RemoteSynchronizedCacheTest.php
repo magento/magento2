@@ -3,31 +3,75 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Cache\Test\Unit\Backend;
 
-class RemoteSynchronizedCacheTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\Cache\Backend\Database;
+use Magento\Framework\Cache\Backend\RemoteSynchronizedCache;
+use Magento\Framework\DB\Adapter\Pdo\Mysql;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class RemoteSynchronizedCacheTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
     protected $objectManager;
 
-    protected function setUp()
+    /**
+     * @var \Cm_Cache_Backend_File|MockObject
+     */
+    private $localCacheMockExample;
+
+    /**
+     * @var Database|MockObject
+     */
+    private $remoteCacheMockExample;
+
+    /**
+     * @var RemoteSynchronizedCache
+     */
+    private $remoteSyncCacheInstance;
+
+    protected function setUp(): void
     {
-        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->objectManager = new ObjectManager($this);
+
+        $this->localCacheMockExample = $this->getMockBuilder(\Cm_Cache_Backend_File::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->remoteCacheMockExample = $this->getMockBuilder(Database::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        /** @var \Magento\Framework\Cache\Backend\Database $databaseCacheInstance */
+
+        $this->remoteSyncCacheInstance = $this->objectManager->getObject(
+            RemoteSynchronizedCache::class,
+            [
+                'options' => [
+                    'remote_backend' => $this->remoteCacheMockExample,
+                    'local_backend' => $this->localCacheMockExample,
+                ],
+            ]
+        );
     }
 
     /**
+     * Test that exception is thrown if cache is not configured.
+     *
      * @param array $options
      *
-     * @expectedException \Zend_Cache_Exception
      * @dataProvider initializeWithExceptionDataProvider
      */
-    public function testInitializeWithException($options)
+    public function testInitializeWithException($options): void
     {
+        $this->expectException('Zend_Cache_Exception');
         $this->objectManager->getObject(
-            \Magento\Framework\Cache\Backend\RemoteSynchronizedCache::class,
+            RemoteSynchronizedCache::class,
             [
                 'options' => $options,
             ]
@@ -37,7 +81,7 @@ class RemoteSynchronizedCacheTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function initializeWithExceptionDataProvider()
+    public function initializeWithExceptionDataProvider(): array
     {
         return [
             'empty_backend_option' => [
@@ -48,7 +92,7 @@ class RemoteSynchronizedCacheTest extends \PHPUnit\Framework\TestCase
             ],
             'empty_remote_backend_option' => [
                 'options' => [
-                    'remote_backend' => \Magento\Framework\Cache\Backend\Database::class,
+                    'remote_backend' => Database::class,
                     'local_backend' => null,
                 ],
             ],
@@ -62,34 +106,36 @@ class RemoteSynchronizedCacheTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Test that exception is not thrown if cache is configured.
+     *
      * @param array $options
      *
      * @dataProvider initializeWithOutExceptionDataProvider
      */
-    public function testInitializeWithOutException($options)
+    public function testInitializeWithOutException($options): void
     {
         $result = $this->objectManager->getObject(
-            \Magento\Framework\Cache\Backend\RemoteSynchronizedCache::class,
+            RemoteSynchronizedCache::class,
             [
                 'options' => $options,
             ]
         );
-        $this->assertInstanceOf(\Magento\Framework\Cache\Backend\RemoteSynchronizedCache::class, $result);
+        $this->assertInstanceOf(RemoteSynchronizedCache::class, $result);
     }
 
     /**
      * @return array
      */
-    public function initializeWithOutExceptionDataProvider()
+    public function initializeWithOutExceptionDataProvider(): array
     {
-        $connectionMock = $this->getMockBuilder(\Magento\Framework\DB\Adapter\Pdo\Mysql::class)
+        $connectionMock = $this->getMockBuilder(Mysql::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         return [
             'not_empty_backend_option' => [
                 'options' => [
-                    'remote_backend' => \Magento\Framework\Cache\Backend\Database::class,
+                    'remote_backend' => Database::class,
                     'remote_backend_options' => [
                         'adapter_callback' => '',
                         'data_table' => 'data_table',
@@ -109,152 +155,279 @@ class RemoteSynchronizedCacheTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param array $options
-     * @param bool|string $expected
+     * Test that load will return the newest data.
      *
-     * @dataProvider loadDataProvider
+     * @return void
      */
-    public function testLoad($options, $expected)
+    public function testLoad(): void
     {
-        /** @var \Magento\Framework\Cache\Backend\Database $database */
-        $database = $this->objectManager->getObject(
-            \Magento\Framework\Cache\Backend\RemoteSynchronizedCache::class,
-            [
-                'options' => $options,
-            ]
-        );
+        $localData = 1;
+        $remoteData = 2;
 
-        $this->assertEquals($expected, $database->load(5));
-    }
-
-    /**
-     * @return array
-     */
-    public function loadDataProvider()
-    {
-        return [
-            'cacheInvalidationTime_is_less_than_that_dataModificationTime' => [
-                'options' => [
-                    'remote_backend' => $this->getDatabaseMock(444),
-                    'local_backend' => $this->getFileMock(555, 'loaded_value'),
-                ],
-                'expected' => 'loaded_value',
-            ],
-            'cacheInvalidationTime_is_greater_than_that_dataModificationTime' => [
-                'options' => [
-                    'remote_backend' => $this->getDatabaseMock(444),
-                    'local_backend' => $this->getFileMock(333, 'loaded_value'),
-                ],
-                'expected' => false,
-            ],
-            'cacheInvalidationTime_is_equal_to_the_dataModificationTime' => [
-                'options' => [
-                    'remote_backend' => $this->getDatabaseMock(444),
-                    'local_backend' => $this->getFileMock(444, 'loaded_value'),
-                ],
-                'expected' => 'loaded_value',
-            ],
-        ];
-    }
-
-    /**
-     * @param integer $cacheInvalidationTime
-     * @return \Magento\Framework\Cache\Backend\Database|\PHPUnit_Framework_MockObject_MockObject
-     */
-    public function getDatabaseMock($cacheInvalidationTime)
-    {
-        $databaseMock = $this->getMockBuilder(\Magento\Framework\Cache\Backend\Database::class)
-            ->setMethods(['load'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $databaseMock->expects($this->once())
+        $this->localCacheMockExample
+            ->expects($this->at(0))
             ->method('load')
-            ->will($this->returnValue($cacheInvalidationTime));
+            ->willReturn($localData);
 
-        return $databaseMock;
-    }
-
-    /**
-     * @param integer $dataModificationTime
-     * @return \Cm_Cache_Backend_File|\PHPUnit_Framework_MockObject_MockObject
-     */
-    public function getFileMock($dataModificationTime, $cacheResult)
-    {
-        $fileMock = $this->getMockBuilder(\Cm_Cache_Backend_File::class)
-            ->setMethods(['test', 'load'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $fileMock->expects($this->once())
-            ->method('test')
-            ->will($this->returnValue($dataModificationTime));
-        $fileMock->expects($this->any())
+        $this->remoteCacheMockExample
+            ->expects($this->at(0))
             ->method('load')
-            ->will($this->returnValue($cacheResult));
+            ->willReturn(\hash('sha256', (string)$remoteData));
 
-        return $fileMock;
-    }
+        $this->remoteCacheMockExample
+            ->expects($this->at(1))
+            ->method('load')
+            ->willReturn($remoteData);
 
-    public function testRemove()
-    {
-        $databaseMock = $this->getMockBuilder(\Magento\Framework\Cache\Backend\Database::class)
-            ->setMethods(['save'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $databaseMock->expects($this->once())
+        $this->localCacheMockExample
+            ->expects($this->atLeastOnce())
             ->method('save')
-            ->will($this->returnValue(true));
+            ->with($remoteData)
+            ->willReturn(true);
 
-        $fileMock = $this->getMockBuilder(\Cm_Cache_Backend_File::class)
-            ->setMethods(['remove'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $fileMock->expects($this->once())
+        $this->assertEquals($remoteData, $this->remoteSyncCacheInstance->load(1));
+    }
+
+    /**
+     * Test that load will not return data when no local data and no remote data exist.
+     *
+     * @return void
+     */
+    public function testLoadWithNoLocalAndNoRemoteData(): void
+    {
+        $localData = false;
+        $remoteData = false;
+
+        $this->localCacheMockExample
+            ->expects($this->at(0))
+            ->method('load')
+            ->willReturn($localData);
+
+        $this->remoteCacheMockExample
+            ->expects($this->at(0))
+            ->method('load')
+            ->willReturn($remoteData);
+
+        $this->assertEquals(false, $this->remoteSyncCacheInstance->load(1));
+    }
+
+    /**
+     * Test that load will return the newest data when only remote data exists.
+     *
+     * @return void
+     */
+    public function testLoadWithNoLocalAndWithRemoteData(): void
+    {
+        $localData = false;
+        $remoteData = 1;
+
+        $this->localCacheMockExample
+            ->expects($this->atLeastOnce())
+            ->method('load')
+            ->willReturn($localData);
+
+        $this->remoteCacheMockExample
+            ->expects($this->at(0))
+            ->method('load')
+            ->willReturn($remoteData);
+
+        $this->localCacheMockExample
+            ->expects($this->atLeastOnce())
+            ->method('save')
+            ->willReturn(true);
+
+        $this->assertEquals($remoteData, $this->remoteSyncCacheInstance->load(1));
+    }
+
+    /**
+     * Test that load will return the newest data when local data and remote data are the same.
+     *
+     * @return void
+     */
+    public function testLoadWithEqualLocalAndRemoteData(): void
+    {
+        $localData = 1;
+        $remoteData = 1;
+
+        $this->localCacheMockExample
+            ->expects($this->at(0))
+            ->method('load')
+            ->willReturn($localData);
+
+        $this->remoteCacheMockExample
+            ->expects($this->at(0))
+            ->method('load')
+            ->willReturn(\hash('sha256', (string)$remoteData));
+
+        $this->assertEquals($localData, $this->remoteSyncCacheInstance->load(1));
+    }
+
+    /**
+     * Test that load will return stale cache.
+     *
+     * @return void
+     */
+    public function testLoadWithStaleCache(): void
+    {
+        $localData = 1;
+
+        $this->localCacheMockExample
+            ->expects($this->at(0))
+            ->method('load')
+            ->willReturn($localData);
+
+        $this->remoteCacheMockExample
+            ->expects($this->at(0))
+            ->method('load')
+            ->willReturn(false);
+
+        $closure = \Closure::bind(function ($cacheInstance) {
+            $cacheInstance->_options['use_stale_cache'] = true;
+        }, null, $this->remoteSyncCacheInstance);
+        $closure($this->remoteSyncCacheInstance);
+
+        $this->remoteCacheMockExample
+            ->expects($this->at(2))
+            ->method('load')
+            ->willReturn(true);
+
+        $this->assertEquals($localData, $this->remoteSyncCacheInstance->load(1));
+    }
+
+    /**
+     * Test that load will generate data on the first attempt.
+     *
+     * @return void
+     */
+    public function testLoadWithoutStaleCache(): void
+    {
+        $localData = 1;
+
+        $this->localCacheMockExample
+            ->expects($this->at(0))
+            ->method('load')
+            ->willReturn($localData);
+
+        $this->remoteCacheMockExample
+            ->expects($this->at(0))
+            ->method('load')
+            ->willReturn(false);
+
+        $closure = \Closure::bind(function ($cacheInstance) {
+            $cacheInstance->_options['use_stale_cache'] = true;
+        }, null, $this->remoteSyncCacheInstance);
+        $closure($this->remoteSyncCacheInstance);
+
+        $this->remoteCacheMockExample
+            ->expects($this->at(2))
+            ->method('load')
+            ->willReturn(false);
+
+        $closure = \Closure::bind(function ($cacheInstance) {
+            return $cacheInstance->lockSign;
+        }, null, $this->remoteSyncCacheInstance);
+        $lockSign = $closure($this->remoteSyncCacheInstance);
+
+        $this->remoteCacheMockExample
+            ->expects($this->at(4))
+            ->method('load')
+            ->willReturn($lockSign);
+
+        $this->assertEquals(false, $this->remoteSyncCacheInstance->load(1));
+    }
+
+    /**
+     * Test data remove.
+     *
+     * @return void
+     */
+    public function testRemove(): void
+    {
+        $this->remoteCacheMockExample
+            ->expects($this->exactly(2))
             ->method('remove')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
-        /** @var \Magento\Framework\Cache\Backend\Database $database */
-        $database = $this->objectManager->getObject(
-            \Magento\Framework\Cache\Backend\RemoteSynchronizedCache::class,
-            [
-                'options' => [
-                    'remote_backend' => $databaseMock,
-                    'local_backend' => $fileMock,
-                ]
-            ]
-        );
+        $this->localCacheMockExample
+            ->expects($this->exactly(1))
+            ->method('remove')
+            ->willReturn(true);
 
-        $this->assertEquals(true, $database->remove(5));
+        $this->remoteSyncCacheInstance->remove(1);
     }
 
-    public function testClean()
+    /**
+     * Test data clean.
+     *
+     * @return void
+     */
+    public function testClean(): void
     {
-        $databaseMock = $this->getMockBuilder(\Magento\Framework\Cache\Backend\Database::class)
-            ->setMethods(['save'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $databaseMock->expects($this->once())
-            ->method('save')
-            ->will($this->returnValue(true));
-
-        $fileMock = $this->getMockBuilder(\Cm_Cache_Backend_File::class)
-            ->setMethods(['clean'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $fileMock->expects($this->once())
+        $this->remoteCacheMockExample
+            ->expects($this->exactly(1))
             ->method('clean')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
-        /** @var \Magento\Framework\Cache\Backend\Database $database */
-        $database = $this->objectManager->getObject(
-            \Magento\Framework\Cache\Backend\RemoteSynchronizedCache::class,
-            [
-                'options' => [
-                    'remote_backend' => $databaseMock,
-                    'local_backend' => $fileMock,
-                ]
-            ]
-        );
+        $this->remoteSyncCacheInstance->clean();
+    }
 
-        $this->assertEquals(true, $database->clean());
+    /**
+     * Test data save when remote data exist.
+     *
+     * @return void
+     */
+    public function testSaveWithEqualRemoteData(): void
+    {
+        $remoteData = 1;
+
+        $this->remoteCacheMockExample
+            ->expects($this->at(0))
+            ->method('load')
+            ->willReturn(\hash('sha256', (string)$remoteData));
+
+        $this->remoteCacheMockExample
+            ->expects($this->at(1))
+            ->method('load')
+            ->willReturn($remoteData);
+
+        $this->localCacheMockExample
+            ->expects($this->once())
+            ->method('save')
+            ->willReturn(true);
+
+        $this->remoteSyncCacheInstance->save($remoteData, 1);
+    }
+
+    public function testSaveWithMismatchedRemoteData()
+    {
+        $remoteData = '1';
+
+        $this->remoteCacheMockExample
+            ->expects($this->at(0))
+            ->method('load')
+            ->willReturn(\hash('sha256', $remoteData));
+
+        $this->remoteCacheMockExample->expects($this->exactly(2))->method('save');
+        $this->localCacheMockExample->expects($this->once())->method('save');
+
+        $this->remoteSyncCacheInstance->save(2, 1);
+    }
+
+    /**
+     * Test data save when remote data is not exist.
+     *
+     * @return void
+     */
+    public function testSaveWithoutRemoteData(): void
+    {
+        $this->remoteCacheMockExample
+            ->expects($this->at(0))
+            ->method('load')
+            ->willReturn(false);
+
+        $this->remoteCacheMockExample->expects($this->exactly(2))->method('save');
+        $this->localCacheMockExample->expects($this->once())->method('save');
+
+        $this->remoteSyncCacheInstance->save(1, 1);
     }
 }
