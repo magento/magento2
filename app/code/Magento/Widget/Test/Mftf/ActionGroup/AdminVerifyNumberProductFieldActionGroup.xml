@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+   <actionGroup name="AdminVerifyNumberProductFieldActionGroup">
+       <annotations>
+           <description>Check to see an error message appears when filling the incorrect values ​​for the Products Number field.</description>
+       </annotations>
+       <arguments>
+           <argument name="testValue" type="string" defaultValue="{{ProductsListWidget.number_products}}"/>
+       </arguments>
+
+       <fillField selector="{{AdminNewWidgetSection.numberProducts}}" userInput="{{testValue}}" stepKey="fillTestValue" />
+       <see selector="{{AdminNewWidgetSection.messageForNumberProducts}}" userInput="A positive non-decimal number please" stepKey="assertErrorMessage"/>
+       <waitForPageLoad stepKey="waitForWidgetOptions"/>
+   </actionGroup>
+</actionGroups>

@@ -6,8 +6,7 @@
   */
 -->
 
-<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminNewWidgetSection">
         <element name="widgetType" type="select" selector="#code"/>
         <element name="widgetDesignTheme" type="select" selector="#theme_id"/>
@@ -40,5 +39,7 @@
         <element name="displayMode" type="select" selector="select[id*='display_mode']"/>
         <element name="restrictTypes" type="select" selector="select[id*='types']"/>
         <element name="saveAndContinue" type="button" selector="#save_and_edit_button" timeout="30"/>
+        <element name="numberProducts" type="input" selector="//input[@type='text'][contains(@class, 'widget-option positive-integer input-text admin__control-text required-entry _required')]" />
+        <element name="messageForNumberProducts" type="text" selector="//label[contains(text(), 'A positive non-decimal number please')]" />
     </section>
 </sections>

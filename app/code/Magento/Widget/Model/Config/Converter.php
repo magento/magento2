@@ -3,12 +3,26 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
+/**
+ * Widget Block Converter
+ *
+ * @author      Magento Core Team <core@magentocommerce.com>
+ */
 namespace Magento\Widget\Model\Config;
 
+/**
+ * Widget Converter Model
+ */
 class Converter implements \Magento\Framework\Config\ConverterInterface
 {
     /**
-     * {@inheritdoc}
+     * Convert dom node to Magento array
+     *
+     * @param \DOMNode $source
+     * @return array
+     * @throws \LogicException
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
@@ -34,54 +48,99 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             $widgetId = $widgetAttributes->getNamedItem('id');
             /** @var $widgetSubNode \DOMNode */
             foreach ($widget->childNodes as $widgetSubNode) {
-                switch ($widgetSubNode->nodeName) {
-                    case 'label':
-                        $widgetArray['name'] = $widgetSubNode->nodeValue;
-                        break;
-                    case 'description':
-                        $widgetArray['description'] = $widgetSubNode->nodeValue;
-                        break;
-                    case 'parameters':
-                        /** @var $parameter \DOMNode */
-                        foreach ($widgetSubNode->childNodes as $parameter) {
-                            if ($parameter->nodeName === '#text' || $parameter->nodeName === '#comment') {
-                                continue;
-                            }
-                            $subNodeAttributes = $parameter->attributes;
-                            $parameterName = $subNodeAttributes->getNamedItem('name')->nodeValue;
-                            $widgetArray['parameters'][$parameterName] = $this->_convertParameter($parameter);
-                        }
-                        break;
-                    case 'containers':
-                        if (!isset($widgetArray['supported_containers'])) {
-                            $widgetArray['supported_containers'] = [];
-                        }
-                        foreach ($widgetSubNode->childNodes as $container) {
-                            if ($container->nodeName === '#text' || $container->nodeName === '#comment') {
-                                continue;
-                            }
-                            $widgetArray['supported_containers'] = array_merge(
-                                $widgetArray['supported_containers'],
-                                $this->_convertContainer($container)
-                            );
-                        }
-                        break;
-                    case "#text":
-                        break;
-                    case '#comment':
-                        break;
-                    default:
-                        throw new \LogicException(
-                            sprintf(
-                                "Unsupported child xml node '%s' found in the 'widget' node",
-                                $widgetSubNode->nodeName
-                            )
-                        );
-                }
+                $widgetArray = $this->processWidgetSubNode($widgetSubNode, $widgetArray);
             }
             $widgets[$widgetId->nodeValue] = $widgetArray;
         }
         return $widgets;
+    }
+
+    /**
+     * Convert dom sub node to Magento array
+     *
+     * @param \DOMNode $widgetSubNode
+     * @param array $widgetArray
+     * @return array
+     * @throws \LogicException
+     */
+    private function processWidgetSubNode(\DOMNode $widgetSubNode, array $widgetArray) : array
+    {
+        switch ($widgetSubNode->nodeName) {
+            case 'label':
+                $widgetArray['name'] = $widgetSubNode->nodeValue;
+                break;
+            case 'description':
+                $widgetArray['description'] = $widgetSubNode->nodeValue;
+                break;
+            case 'parameters':
+                $widgetArray = $this->processParameters($widgetSubNode, $widgetArray);
+                break;
+            case 'containers':
+                $widgetArray = $this->processContainers($widgetSubNode, $widgetArray);
+                break;
+            case "#text":
+                break;
+            case '#comment':
+                break;
+            default:
+                throw new \LogicException(
+                    sprintf(
+                        "Unsupported child xml node '%s' found in the 'widget' node",
+                        $widgetSubNode->nodeName
+                    )
+                );
+        }
+
+        return $widgetArray;
+    }
+
+    /**
+     * Convert dom sub node to Magento array
+     *
+     * @param \DOMNode $widgetSubNode
+     * @param array $widgetArray
+     * @return array
+     */
+    private function processParameters(\DOMNode $widgetSubNode, array $widgetArray) : array
+    {
+        /** @var $parameter \DOMNode */
+        foreach ($widgetSubNode->childNodes as $parameter) {
+            if ($parameter->nodeName === '#text' || $parameter->nodeName === '#comment') {
+                continue;
+            }
+            $subNodeAttributes = $parameter->attributes;
+            $parameterName = $subNodeAttributes->getNamedItem('name')->nodeValue;
+            $widgetArray['parameters'][$parameterName] = $this->_convertParameter($parameter);
+        }
+
+        return $widgetArray;
+    }
+
+    /**
+     * Convert dom sub node to Magento array
+     *
+     * @param \DOMNode $widgetSubNode
+     * @param array $widgetArray
+     * @return array
+     */
+    private function processContainers(\DOMNode $widgetSubNode, array $widgetArray) : array
+    {
+        if (!isset($widgetArray['supported_containers'])) {
+            $widgetArray['supported_containers'] = [];
+        }
+        $supportedContainers = [[]];
+        foreach ($widgetSubNode->childNodes as $container) {
+            if ($container->nodeName === '#text' || $container->nodeName === '#comment') {
+                continue;
+            }
+            $supportedContainers[] = $this->_convertContainer($container);
+        }
+        $widgetArray['supported_containers'] = array_merge(
+            $widgetArray['supported_containers'],
+            ...$supportedContainers
+        );
+
+        return $widgetArray;
     }
 
     /**
@@ -208,6 +267,12 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                     break;
             }
         }
+
+        $additional_classes = $sourceAttributes->getNamedItem('additional_classes');
+        if ($additional_classes) {
+            $parameter['additional_classes'] = $additional_classes->nodeValue;
+        }
+
         return $parameter;
     }
 
@@ -240,7 +305,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                 ];
 
                 continue;
-            } else if (!isset($depends[$dependencyName]['values'])) {
+            } elseif (!isset($depends[$dependencyName]['values'])) {
                 $depends[$dependencyName]['values'] = [$depends[$dependencyName]['value']];
                 unset($depends[$dependencyName]['value']);
             }

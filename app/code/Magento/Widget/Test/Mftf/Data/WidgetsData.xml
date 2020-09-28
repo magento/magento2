@@ -18,6 +18,13 @@
         <data key="condition">SKU</data>
         <data key="display_on">All Pages</data>
         <data key="container">Main Content Area</data>
+        <data key="number_products">10</data>
+    </entity>
+    <entity name="WidgetWithNegativeNumberProduct" type="widget">
+        <data key="number_products">-10</data>
+    </entity>
+    <entity name="WidgetWithStringNumberProduct" type="widget">
+        <data key="number_products">Test</data>
     </entity>
     <entity name="DynamicBlocksRotatorWidget" type="widget">
         <data key="type">Dynamic Blocks Rotator</data>

@@ -76,6 +76,7 @@
         <xs:attribute name="visible" type="xs:boolean" />
         <xs:attribute name="sort_order" type="xs:int" />
         <xs:attribute name="required" type="xs:string" />
+        <xs:attribute name="additional_classes" type="xs:string" />
     </xs:complexType>
 
     <xs:complexType name="dependsParameterType">

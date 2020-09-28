@@ -148,7 +148,7 @@ class Options extends \Magento\Backend\Block\Widget\Form\Generic
             'name' => $form->addSuffixToName($fieldName, 'parameters'),
             'label' => __($parameter->getLabel()),
             'required' => $parameter->getRequired(),
-            'class' => 'widget-option',
+            'class' => $this->getCssClasses($parameter),
             'note' => __($parameter->getDescription()),
         ];
 
@@ -234,6 +234,23 @@ class Options extends \Magento\Backend\Block\Widget\Form\Generic
         }
 
         return $field;
+    }
+
+    /**
+     * Get css classes from xml to apply for validation and/or css styles
+     *
+     * @param \Magento\Framework\DataObject $parameter
+     * @return string
+     */
+    private function getCssClasses(\Magento\Framework\DataObject $parameter) : string
+    {
+        $cssClass = 'widget-option';
+        $additionalClasses = $parameter->getAdditionalClasses();
+        if ($additionalClasses) {
+            $cssClass .= ' '.$additionalClasses;
+        }
+
+        return $cssClass;
     }
 
     /**

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+
+    <test name="AdminVerifyNumbersProductsFieldForWidgetTest">
+        <annotations>
+            <group value="WYSIWYGDisabled"/>
+            <features value="Widget"/>
+            <title value="Verify Number Products field for New widget"/>
+            <description value="Verify validation Number Products field during creating a New Widget for category product list"/>
+            <group value="Widget"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
+        </before>
+
+        <after>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <actionGroup ref="AdminChooseTypeWidgetOnCmsPagesActionGroup" stepKey="chooseWidget">
+            <argument name="widget" value="{{ProductsListWidget.type}}"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminVerifyNumberProductFieldActionGroup" stepKey="fillNegativeValue">
+            <argument name="testValue" value="{{WidgetWithNegativeNumberProduct.number_products}}"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminVerifyNumberProductFieldActionGroup" stepKey="fillStringValue">
+            <argument name="testValue" value="{{WidgetWithStringNumberProduct.number_products}}"/>
+        </actionGroup>
+    </test>
+</tests>

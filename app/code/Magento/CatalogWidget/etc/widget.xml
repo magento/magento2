@@ -26,7 +26,7 @@
                 </depends>
                 <value>5</value>
             </parameter>
-            <parameter name="products_count" xsi:type="text" required="true" visible="true">
+            <parameter name="products_count" xsi:type="text" required="true" visible="true" additional_classes="positive-integer">
                 <label translate="true">Number of Products to Display</label>
                 <value>10</value>
             </parameter>
