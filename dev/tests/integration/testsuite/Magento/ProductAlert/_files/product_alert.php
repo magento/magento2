@@ -4,10 +4,23 @@
  * See COPYING.txt for license details.
  */
 
-require __DIR__ . '/../../../Magento/Customer/_files/customer.php';
-require __DIR__ . '/../../../Magento/Catalog/_files/product_simple.php';
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Customer\Model\CustomerRegistry;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-$price = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\ProductAlert\Model\Price::class);
+Resolver::getInstance()->requireDataFixture('Magento/Customer/_files/customer.php');
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/product_simple.php');
+
+$objectManager = Bootstrap::getObjectManager();
+/** @var ProductRepositoryInterface $productRepository */
+$productRepository = $objectManager->create(ProductRepositoryInterface::class);
+$product = $productRepository->get('simple');
+/** @var CustomerRegistry $customerRegistry */
+$customerRegistry = Bootstrap::getObjectManager()->create(CustomerRegistry::class);
+$customer = $customerRegistry->retrieve(1);
+
+$price = Bootstrap::getObjectManager()->create(\Magento\ProductAlert\Model\Price::class);
 $price->setCustomerId(
     $customer->getId()
 )->setProductId(
@@ -19,7 +32,7 @@ $price->setCustomerId(
 );
 $price->save();
 
-$stock = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\ProductAlert\Model\Stock::class);
+$stock = Bootstrap::getObjectManager()->create(\Magento\ProductAlert\Model\Stock::class);
 $stock->setCustomerId(
     $customer->getId()
 )->setProductId(

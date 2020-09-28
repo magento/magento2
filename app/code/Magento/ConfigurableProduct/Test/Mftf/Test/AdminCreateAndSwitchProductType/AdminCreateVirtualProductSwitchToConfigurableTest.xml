@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateVirtualProductSwitchToConfigurableTest" extends="AdminCreateSimpleProductSwitchToVirtualTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Product Type Switching"/>
+            <title value="Admin should be able to switch a new product from virtual to configurable"/>
+            <description value="After selecting a virtual product when adding Admin should be switch to configurable implicitly"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-10930"/>
+            <group value="catalog"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <createData entity="productAttributeWithTwoOptions" stepKey="createConfigProductAttribute"/>
+            <createData entity="productAttributeOption1" stepKey="createConfigProductAttributeOption1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+        </before>
+        <after>
+            <deleteData stepKey="deleteAttribute" createDataKey="createConfigProductAttribute"/>
+        </after>
+        <actionGroup ref="GoToSpecifiedCreateProductPageActionGroup" stepKey="openProductFillForm">
+            <argument name="productType" value="virtual"/>
+        </actionGroup>
+        <actionGroup ref="FillMainProductFormActionGroup" stepKey="fillProductForm">
+            <argument name="product" value="_defaultProduct"/>
+        </actionGroup>
+        <comment before="createConfiguration" stepKey="beforeCreateConfiguration" userInput="Adding Configuration to Product"/>
+        <actionGroup ref="GenerateConfigurationsByAttributeCodeActionGroup" stepKey="createConfiguration" after="fillProductForm">
+            <argument name="attributeCode" value="$$createConfigProductAttribute.attribute_code$$"/>
+        </actionGroup>
+        <actionGroup ref="SaveConfiguredProductActionGroup" stepKey="saveProductForm"/>
+        <actionGroup ref="AssertAdminProductGridCellActionGroup" stepKey="seeProductTypeInGrid">
+            <argument name="row" value="2"/>
+            <argument name="column" value="Type"/>
+            <argument name="value" value="Configurable Product"/>
+        </actionGroup>
+        <actionGroup ref="VerifyOptionInProductStorefrontActionGroup" stepKey="verifyConfigurableOption" after="AssertProductInStorefrontProductPage">
+            <argument name="attributeCode" value="$createConfigProductAttribute.default_frontend_label$"/>
+            <argument name="optionName" value="$createConfigProductAttributeOption1.option[store_labels][1][label]$"/>
+        </actionGroup>
+    </test>
+</tests>

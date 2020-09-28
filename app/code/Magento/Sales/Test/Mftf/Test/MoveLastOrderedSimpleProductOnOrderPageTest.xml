@@ -14,14 +14,14 @@
             <stories value="Add Products to Order from Last Ordered Products Section"/>
             <title value="Move last ordered simple product on order page test"/>
             <description value="Move last ordered simple product on order page"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MC-16154"/>
             <group value="sales"/>
             <group value="mtf_migrated"/>
         </annotations>
         <before>
             <!-- Login as admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
             <!-- Create customer -->
             <createData entity="Simple_US_CA_Customer" stepKey="createCustomer"/>
@@ -33,7 +33,7 @@
             <!-- Delete created data -->
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
-            <actionGroup ref="logout" stepKey="logOut"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logOut"/>
         </after>
 
         <!-- Create order -->
@@ -46,8 +46,7 @@
         <actionGroup ref="AdminFilterCustomerByEmail" stepKey="filterCreatedCustomer">
             <argument name="email" value="$$createCustomer.email$$"/>
         </actionGroup>
-        <click selector="{{AdminCustomerGridSection.firstRowEditLink}}" stepKey="clickEditButton"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <actionGroup ref="AdminClickFirstRowEditLinkOnCustomerGridActionGroup" stepKey="clickEditButton"/>
 
         <!-- Click create order -->
         <click selector="{{AdminCustomerMainActionsSection.createOrderBtn}}" stepKey="clickCreateOrder"/>

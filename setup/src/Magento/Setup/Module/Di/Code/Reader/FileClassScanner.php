@@ -3,13 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Setup\Module\Di\Code\Reader;
 
 /**
  * Class FileClassScanner
- *
- * @package Magento\Setup\Module\Di\Code\Reader
  */
 class FileClassScanner
 {
@@ -20,9 +19,10 @@ class FileClassScanner
     ];
 
     private const ALLOWED_OPEN_BRACES_TOKENS = [
-        T_CURLY_OPEN               => true,
+        T_CURLY_OPEN => true,
         T_DOLLAR_OPEN_CURLY_BRACES => true,
-        T_STRING_VARNAME           => true];
+        T_STRING_VARNAME => true
+    ];
 
     /**
      * The filename of the file to introspect
@@ -32,11 +32,11 @@ class FileClassScanner
     private $filename;
 
     /**
-     * The list of classes found in the file.
+     * The class name found in the file.
      *
      * @var bool
      */
-    private $classNames = false;
+    private $className = false;
 
     /**
      * @var array
@@ -76,6 +76,19 @@ class FileClassScanner
     }
 
     /**
+     * Retrieves the first class found in a class file.
+     *
+     * @return string
+     */
+    public function getClassName(): string
+    {
+        if ($this->className === false) {
+            $this->className = $this->extract();
+        }
+        return $this->className;
+    }
+
+    /**
      * Extracts the fully qualified class name from a file.
      *
      * It only searches for the first match and stops looking as soon as it enters the class definition itself.
@@ -85,11 +98,10 @@ class FileClassScanner
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @return array
+     * @return string
      */
-    private function extract()
+    private function extract(): string
     {
-        $classes = [];
         $namespaceParts = [];
         $class = '';
         $triggerClass = false;
@@ -117,6 +129,9 @@ class FileClassScanner
                 }
                 $namespaceParts[] = $token[1];
 
+            // `class` token is not used with a valid class name
+            } elseif ($triggerClass && !$tokenIsArray) {
+                $triggerClass = false;
             // The class keyword was found in the last loop
             } elseif ($triggerClass && $token[0] === T_STRING) {
                 $triggerClass = false;
@@ -125,27 +140,26 @@ class FileClassScanner
 
             switch ($token[0]) {
                 case T_NAMESPACE:
-                    // Current loop contains the namespace keyword.  Between this and the semicolon is the namespace
+                    // Current loop contains the namespace keyword. Between this and the semicolon is the namespace
                     $triggerNamespace = true;
                     $namespaceParts = [];
                     $bracedNamespace = $this->isBracedNamespace($index);
                     break;
                 case T_CLASS:
-                    // Current loop contains the class keyword.  Next loop will have the class name itself.
+                    // Current loop contains the class keyword. Next loop will have the class name itself.
                     if ($braceLevel == 0 || ($bracedNamespace && $braceLevel == 1)) {
                         $triggerClass = true;
                     }
                     break;
             }
 
-            // We have a class name, let's concatenate and store it!
+            // We have a class name, let's concatenate and return it!
             if ($class !== '') {
                 $fqClassName = trim(join('', $namespaceParts)) . trim($class);
-                $classes[] = $fqClassName;
-                $class = '';
+                return $fqClassName;
             }
         }
-        return $classes;
+        return $class;
     }
 
     /**
@@ -172,20 +186,5 @@ class FileClassScanner
             }
         }
         throw new InvalidFileException('Could not find namespace termination');
-    }
-
-    /**
-     * Retrieves the first class found in a class file.
-     *
-     * The return value is in an array format so it retains the same usage as the FileScanner.
-     *
-     * @return array
-     */
-    public function getClassNames()
-    {
-        if ($this->classNames === false) {
-            $this->classNames = $this->extract();
-        }
-        return $this->classNames;
     }
 }

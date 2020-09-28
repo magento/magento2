@@ -16,7 +16,7 @@ use Magento\AdminNotification\Model\Inbox;
 use Magento\Backend\Block\Context;
 use Magento\Backend\Block\Widget\Grid\Column;
 use Magento\Framework\DataObject;
-use Magento\Framework\Escaper;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class SeverityTest extends TestCase
@@ -28,22 +28,22 @@ class SeverityTest extends TestCase
      */
     private $sut;
 
-    protected function setUp() : void
+    protected function setUp(): void
     {
         parent::setUp();
 
-        /** @var Inbox |\PHPUnit_Framework_MockObject_MockObject $inboxMock */
-        $inboxMock = $this->getMockBuilder(Inbox::class)->disableOriginalConstructor()->getMock();
+        /** @var Inbox|MockObject $inboxMock */
+        $inboxMock = $this->createMock(Inbox::class);
 
-        /** @var Context | \PHPUnit_Framework_MockObject_MockObject $contextMock */
-        $contextMock = $this->getMockBuilder(Context::class)->disableOriginalConstructor()->getMock();
+        /** @var Context|MockObject $contextMock */
+        $contextMock = $this->createMock(Context::class);
 
         $this->sut = new Severity($contextMock, $inboxMock);
     }
 
     public function testShouldRenderSeverity() : void
     {
-        /** @var Column | \PHPUnit_Framework_MockObject_MockObject $columnMock */
+        /** @var Column|MockObject $columnMock */
         $columnMock = $this->getMockBuilder(Column::class)
             ->disableOriginalConstructor()
             ->setMethods(['getIndex'])

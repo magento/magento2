@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminDownloadableProductTypeSwitchingToSimpleProductTest" extends="AdminVirtualProductTypeSwitchingToDownloadableProductTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Product type switching"/>
+            <title value="Downloadable product type switching on editing to Simple product"/>
+            <description value="Downloadable product type switching on editing to Simple product"/>
+            <testCaseId value="MC-17955"/>
+            <useCaseId value="MAGETWO-44170"/>
+            <severity value="MAJOR"/>
+            <group value="catalog"/>
+        </annotations>
+        <!--Change product type to Simple-->
+        <comment userInput="Change product type to Simple Product" stepKey="commentCreateSimple"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="gotToProductPage">
+            <argument name="productId" value="$$createProduct.id$$"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForProductPageLoad"/>
+        <actionGroup ref="AdminAddDownloadableLinkInformationActionGroup" stepKey="addDownloadableLinkInformation"/>
+        <selectOption selector="{{AdminProductFormSection.productWeightSelect}}" userInput="This item has weight" stepKey="selectWeightForProduct"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductForm"/>
+        <!--Assert simple product on Admin product page grid-->
+        <comment userInput="Assert simple product in Admin product page grid" stepKey="commentAssertProductOnAdmin"/>
+        <actionGroup ref="AdminOpenCatalogProductPageActionGroup" stepKey="goToCatalogSimpleProductPage"/>
+        <actionGroup ref="FilterProductGridBySku2ActionGroup" stepKey="filterSimpleProductGridBySku">
+            <argument name="sku" value="$$createProduct.sku$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminProductGridCellActionGroup" stepKey="seeSimpleProductNameInGrid">
+            <argument name="row" value="1"/>
+            <argument name="column" value="Name"/>
+            <argument name="value" value="$$createProduct.name$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminProductGridCellActionGroup" stepKey="seeSimpleProductTypeInGrid">
+            <argument name="row" value="1"/>
+            <argument name="column" value="Type"/>
+            <argument name="value" value="Simple Product"/>
+        </actionGroup>
+        <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearSimpleProductFilters"/>
+        <!--Assert simple product on storefront-->
+        <comment userInput="Assert simple product on storefront" stepKey="commentAssertSimpleProductOnStorefront"/>
+        <amOnPage url="{{StorefrontProductPage.url($$createProduct.name$$)}}" stepKey="openSimpleProductPage"/>
+        <waitForPageLoad stepKey="waitForStorefrontSimpleProductPageLoad"/>
+        <see userInput="IN STOCK" selector="{{StorefrontProductInfoMainSection.productStockStatus}}" stepKey="assertSimpleProductInStock"/>
+        <dontSeeElement selector="{{StorefrontDownloadableProductSection.downloadableLinkLabel(downloadableLinkWithMaxDownloads.title)}}" stepKey="dontSeeDownloadableLink"/>
+    </test>
+</tests>

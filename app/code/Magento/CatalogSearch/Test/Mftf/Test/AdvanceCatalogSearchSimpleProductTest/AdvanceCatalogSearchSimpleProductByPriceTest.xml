@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdvanceCatalogSearchSimpleProductByPriceTest">
+        <annotations>
+            <features value="CatalogSearch"/>
+            <group value="CatalogSearch"/>
+        </annotations>
+
+        <!-- Perform reindex and flush cache -->
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+            <argument name="tags" value=""/>
+        </actionGroup>
+
+        <actionGroup ref="GoToStoreViewAdvancedCatalogSearchActionGroup" stepKey="GoToStoreViewAdvancedCatalogSearchActionGroup"/>
+        <actionGroup ref="StorefrontAdvancedCatalogSearchByProductNameAndPriceActionGroup" stepKey="search">
+            <argument name="name" value="$$arg1.name$$"/>
+            <argument name="priceFrom" value="$$arg2.price$$"/>
+            <argument name="priceTo" value="$$arg3.price$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCheckAdvancedSearchResultActionGroup" stepKey="StorefrontCheckAdvancedSearchResult"/>
+        <see userInput="1 item" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.itemFound}}" stepKey="see"/>
+        <see userInput="$$arg1.name$$" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.productName}}" stepKey="seeProductName"/>
+    </test>
+</tests>

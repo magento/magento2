@@ -3,22 +3,26 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Console\Command;
 
+use Magento\Framework\App\MaintenanceMode;
 use Magento\Setup\Console\Command\MaintenanceAllowIpsCommand;
 use Magento\Setup\Validator\IpValidator;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class MaintenanceAllowIpsCommandTest extends \PHPUnit\Framework\TestCase
+class MaintenanceAllowIpsCommandTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\App\MaintenanceMode|\PHPUnit_Framework_MockObject_MockObject
+     * @var MaintenanceMode|MockObject
      */
     private $maintenanceMode;
 
     /**
-     * @var IpValidator|\PHPUnit_Framework_MockObject_MockObject
+     * @var IpValidator|MockObject
      */
     private $ipValidator;
 
@@ -27,10 +31,10 @@ class MaintenanceAllowIpsCommandTest extends \PHPUnit\Framework\TestCase
      */
     private $command;
 
-    public function setUp()
+    protected function setUp(): void
     {
-        $this->maintenanceMode = $this->createMock(\Magento\Framework\App\MaintenanceMode::class);
-        $this->ipValidator = $this->createMock(\Magento\Setup\Validator\IpValidator::class);
+        $this->maintenanceMode = $this->createMock(MaintenanceMode::class);
+        $this->ipValidator = $this->createMock(IpValidator::class);
         $this->command = new MaintenanceAllowIpsCommand($this->maintenanceMode, $this->ipValidator);
     }
 

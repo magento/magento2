@@ -10,10 +10,21 @@ namespace Magento\Catalog\Model\Product\AttributeSet;
  */
 class Options implements \Magento\Framework\Data\OptionSourceInterface
 {
+
     /**
      * @var array
      */
     protected $options;
+
+    /**
+     * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory
+     */
+    protected $collectionFactory;
+
+    /**
+     * @var \Magento\Catalog\Model\ResourceModel\Product
+     */
+    protected $product;
 
     /**
      * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $collectionFactory
@@ -36,13 +47,6 @@ class Options implements \Magento\Framework\Data\OptionSourceInterface
             $this->options = $this->collectionFactory->create()
                 ->setEntityTypeFilter($this->product->getTypeId())
                 ->toOptionArray();
-
-            array_walk(
-                $this->options,
-                function (&$option) {
-                    $option['__disableTmpl'] = true;
-                }
-            );
         }
 
         return $this->options;
