@@ -5,10 +5,12 @@
  */
 namespace Magento\Indexer\Model;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Indexer\ConfigInterface;
 use Magento\Framework\Indexer\IndexerInterface;
 use Magento\Framework\Indexer\IndexerInterfaceFactory;
-use Magento\Framework\Indexer\StateInterface;
+use Magento\Framework\Mview\ProcessorInterface;
+use Magento\Indexer\Model\Processor\MakeSharedIndexValid;
 
 /**
  * Indexer processor
@@ -36,26 +38,34 @@ class Processor
     protected $indexersFactory;
 
     /**
-     * @var \Magento\Framework\Mview\ProcessorInterface
+     * @var ProcessorInterface
      */
     protected $mviewProcessor;
+
+    /**
+     * @var MakeSharedIndexValid
+     */
+    protected $makeSharedValid;
 
     /**
      * @param ConfigInterface $config
      * @param IndexerInterfaceFactory $indexerFactory
      * @param Indexer\CollectionFactory $indexersFactory
-     * @param \Magento\Framework\Mview\ProcessorInterface $mviewProcessor
+     * @param ProcessorInterface $mviewProcessor
+     * @param MakeSharedIndexValid|null $makeSharedValid
      */
     public function __construct(
         ConfigInterface $config,
         IndexerInterfaceFactory $indexerFactory,
         Indexer\CollectionFactory $indexersFactory,
-        \Magento\Framework\Mview\ProcessorInterface $mviewProcessor
+        ProcessorInterface $mviewProcessor,
+        MakeSharedIndexValid $makeSharedValid = null
     ) {
         $this->config = $config;
         $this->indexerFactory = $indexerFactory;
         $this->indexersFactory = $indexersFactory;
         $this->mviewProcessor = $mviewProcessor;
+        $this->makeSharedValid = $makeSharedValid ?: ObjectManager::getInstance()->get(MakeSharedIndexValid::class);
     }
 
     /**
@@ -70,7 +80,6 @@ class Processor
             $indexer = $this->indexerFactory->create();
             $indexer->load($indexerId);
             $indexerConfig = $this->config->getIndexer($indexerId);
-            $sharedIndex = $indexerConfig['shared_index'];
 
             if ($indexer->isInvalid()) {
                 // Skip indexers having shared index that was already complete
@@ -78,68 +87,12 @@ class Processor
                 if (!in_array($sharedIndex, $this->sharedIndexesComplete)) {
                     $indexer->reindexAll();
 
-                    if ($sharedIndex) {
-                        $this->validateSharedIndex($sharedIndex);
+                    if (!empty($sharedIndex) && $this->makeSharedValid->execute($sharedIndex)) {
+                        $this->sharedIndexesComplete[] = $sharedIndex;
                     }
                 }
             }
         }
-    }
-
-    /**
-     * Get indexer ids that have common shared index
-     *
-     * @param string $sharedIndex
-     * @return array
-     */
-    private function getIndexerIdsBySharedIndex(string $sharedIndex): array
-    {
-        $indexers = $this->config->getIndexers();
-
-        $result = [];
-        foreach ($indexers as $indexerConfig) {
-            if ($indexerConfig['shared_index'] == $sharedIndex) {
-                $result[] = $indexerConfig['indexer_id'];
-            }
-        }
-
-        return $result;
-    }
-
-    /**
-     * Validate indexers by shared index ID
-     *
-     * @param string $sharedIndex
-     * @return $this
-     */
-    private function validateSharedIndex(string $sharedIndex): self
-    {
-        if (empty($sharedIndex)) {
-            throw new \InvalidArgumentException(
-                'The sharedIndex is an invalid shared index identifier. Verify the identifier and try again.'
-            );
-        }
-
-        $indexerIds = $this->getIndexerIdsBySharedIndex($sharedIndex);
-        if (empty($indexerIds)) {
-            return $this;
-        }
-
-        foreach ($indexerIds as $indexerId) {
-            /** @var \Magento\Indexer\Model\Indexer $indexer */
-            $indexer = $this->indexerFactory->create();
-            $indexer->load($indexerId);
-            /** @var \Magento\Indexer\Model\Indexer\State $state */
-            $state = $indexer->getState();
-            $state->setStatus(StateInterface::STATUS_WORKING);
-            $state->save();
-            $state->setStatus(StateInterface::STATUS_VALID);
-            $state->save();
-        }
-
-        $this->sharedIndexesComplete[] = $sharedIndex;
-
-        return $this;
     }
 
     /**
