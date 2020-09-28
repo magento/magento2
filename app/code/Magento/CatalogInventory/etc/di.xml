@@ -32,6 +32,7 @@
     <preference for="Magento\CatalogInventory\Model\Spi\StockStateProviderInterface" type="Magento\CatalogInventory\Model\StockStateProvider" />
 
     <preference for="Magento\CatalogInventory\Model\ResourceModel\QtyCounterInterface" type="Magento\CatalogInventory\Model\ResourceModel\Stock" />
+    <preference for="Magento\CatalogInventory\Model\ResourceModel\StockStatusFilterInterface" type="Magento\CatalogInventory\Model\ResourceModel\StockStatusFilter" />
     <type name="Magento\Catalog\Model\Product\Attribute\Repository">
         <plugin name="filterCustomAttribute" type="Magento\CatalogInventory\Model\Plugin\FilterCustomAttribute" />
     </type>
