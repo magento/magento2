@@ -10,6 +10,7 @@
     <test name="CreateProductAttributeEntityApplyToFieldTest">
         <annotations>
             <features value="Catalog"/>
+            <stories value="Create Product Attributes"/>
             <title value="Create product attribute entity apply to field test"/>
             <description value="Check if 'Apply to' field on Product Attribute creation form works properly"/>
             <severity value="AVERAGE"/>
