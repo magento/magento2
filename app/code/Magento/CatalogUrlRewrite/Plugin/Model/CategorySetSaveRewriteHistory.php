@@ -33,11 +33,17 @@ class CategorySetSaveRewriteHistory
      *
      * @param CategoryUrlRewriteGenerator $subject
      * @param Category $category
-     * @return void
+     * @param bool $overrideStoreUrls
+     * @param int|null $rootCategoryId
+     * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function beforeGenerate(CategoryUrlRewriteGenerator $subject, Category $category)
-    {
+    public function beforeGenerate(
+        CategoryUrlRewriteGenerator $subject,
+        Category $category,
+        bool $overrideStoreUrls = false,
+        ?int $rootCategoryId = null
+    ) {
         $requestBodyParams = $this->request->getBodyParams();
 
         if ($this->isCustomAttributesExists($requestBodyParams, CategoryUrlRewriteGenerator::ENTITY_TYPE)) {
@@ -47,6 +53,8 @@ class CategorySetSaveRewriteHistory
                 }
             }
         }
+
+        return [$category, $overrideStoreUrls, $rootCategoryId];
     }
 
     /**
