@@ -94,7 +94,7 @@ class Images extends \Magento\Framework\App\Helper\AbstractHelper
 
         $this->_directory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         $this->_directory->create($this->getStorageRoot());
-        $this->_readDirectory = $filesystem->getDirectoryRead($this->getStorageRoot());
+        $this->_readDirectory = $filesystem->getDirectoryReadByPath($this->getStorageRoot());
     }
 
     /**

@@ -145,7 +145,7 @@ class ImagesTest extends TestCase
             ->willReturn($this->directoryWriteMock);
 
         $this->filesystemMock->expects($this->once())
-            ->method('getDirectoryRead')
+            ->method('getDirectoryReadByPath')
             ->willReturn($this->directoryReadMock);
 
         $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
