@@ -70,7 +70,7 @@ class CallbackInvoker implements CallbackInvokerInterface
         $sleep = null
     ) {
         $this->poisonPillVersion = $this->poisonPillRead->getLatestVersion();
-        $sleep = 0; //(int) $sleep ?: 1;
+        $sleep = (int) $sleep ?: 1;
         $maxIdleTime = $maxIdleTime ? (int) $maxIdleTime : PHP_INT_MAX;
         for ($i = $maxNumberOfMessages; $i > 0; $i--) {
             $idleStartTime = microtime(true);
@@ -103,6 +103,6 @@ class CallbackInvoker implements CallbackInvokerInterface
      */
     private function isWaitingNextMessage(): bool
     {
-        return false; //$this->deploymentConfig->get('queue/consumers_wait_for_messages', 1) === 1;
+        return $this->deploymentConfig->get('queue/consumers_wait_for_messages', 1) === 1;
     }
 }
