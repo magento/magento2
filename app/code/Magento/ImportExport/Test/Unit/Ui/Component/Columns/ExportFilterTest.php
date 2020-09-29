@@ -100,6 +100,7 @@ class ExportFilterTest extends TestCase
 
     /**
      * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function prepareDataSourceDataProvider() :array
     {
