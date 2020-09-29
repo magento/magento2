@@ -5,11 +5,13 @@
  */
 declare(strict_types=1);
 
-namespace Magento\CatalogUrlRewrite\Model;
+namespace Magento\CatalogUrlRewrite\Plugin\Model;
 
+use Magento\Catalog\Model\Category;
 use Magento\Framework\Webapi\Rest\Request as RestRequest;
+use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
 
-class SetSaveRewriteHistory
+class CategorySetSaveRewriteHistory
 {
     private const SAVE_REWRITES_HISTORY = 'save_rewrites_history';
 
@@ -27,32 +29,24 @@ class SetSaveRewriteHistory
     }
 
     /**
-     * Add 'save_rewrites_history' param to the data
+     * Add 'save_rewrites_history' param to the category for list
      *
-     * @param array $result
-     * @param string $entityCode
-     * @param string $type
-     * @return mixed
+     * @param CategoryUrlRewriteGenerator $subject
+     * @param Category $category
+     * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function execute($result, $entityCode, $type)
+    public function beforeGenerate(CategoryUrlRewriteGenerator $subject, Category $category)
     {
         $requestBodyParams = $this->request->getBodyParams();
 
-        if ($this->isCustomAttributesExists($requestBodyParams, $entityCode)) {
-            foreach ($requestBodyParams[$entityCode]['custom_attributes'] as $attribute) {
+        if ($this->isCustomAttributesExists($requestBodyParams, CategoryUrlRewriteGenerator::ENTITY_TYPE)) {
+            foreach ($requestBodyParams[CategoryUrlRewriteGenerator::ENTITY_TYPE]['custom_attributes'] as $attribute) {
                 if ($attribute['attribute_code'] === self::SAVE_REWRITES_HISTORY) {
-                    foreach ($result as $resultItem) {
-                        if ($resultItem instanceof $type) {
-                            $resultItem->setData(self::SAVE_REWRITES_HISTORY, (bool)$attribute['value']);
-                            break 2;
-                        }
-                    }
-                    break;
+                    $category->setData(self::SAVE_REWRITES_HISTORY, (bool)$attribute['value']);
                 }
             }
         }
-
-        return $result;
     }
 
     /**
