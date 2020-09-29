@@ -218,7 +218,7 @@ class Config
             unset($this->connection);
         }
 
-        if (self::$persistentConneciton->isConnected()) {
+        if (self::$persistentConneciton && self::$persistentConneciton->isConnected()) {
             self::$persistentConneciton->close();
             self::$persistentConneciton = null;
         }
