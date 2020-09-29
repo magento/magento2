@@ -70,7 +70,7 @@ class FormTest extends TestCase
     public function testGetFormValues(): void
     {
         $address = $this->getOrderAddress('100000001');
-        $this->prepareFormBlock($address);
+        $this->registerOrderAddress($address);
         $formValues = $this->block->getFormValues();
         $this->assertEquals($address->getData(), $formValues);
     }
@@ -88,7 +88,7 @@ class FormTest extends TestCase
     public function testCountryIdInAllowedList(): void
     {
         $address = $this->getOrderAddress('100000001');
-        $this->prepareFormBlock($address);
+        $this->registerOrderAddress($address);
         $this->assertEquals('US', $address->getCountryId());
         $this->assertCountryField('US');
     }
@@ -106,7 +106,7 @@ class FormTest extends TestCase
     public function testCountryIdInNotAllowedList(): void
     {
         $address = $this->getOrderAddress('100000001');
-        $this->prepareFormBlock($address);
+        $this->registerOrderAddress($address);
         $this->assertCountryField('CA');
     }
 
@@ -116,7 +116,7 @@ class FormTest extends TestCase
      * @param OrderAddressInterface $address
      * @return void
      */
-    private function prepareFormBlock(OrderAddressInterface $address): void
+    private function registerOrderAddress(OrderAddressInterface $address): void
     {
         $this->registry->unregister('order_address');
         $this->registry->register('order_address', $address);
