@@ -144,7 +144,6 @@ class Calculation extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $value = (isset($rate['value']) ? $rate['value'] : $rate['percent']) * 1;
 
             $oneRate = [
-                'tax_id' => $rate['tax_id'],
                 'code' => $rate['code'],
                 'title' => $rate['title'],
                 'percent' => $value,
