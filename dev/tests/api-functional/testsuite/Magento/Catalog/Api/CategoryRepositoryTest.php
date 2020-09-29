@@ -44,6 +44,11 @@ class CategoryRepositoryTest extends WebapiAbstract
     private $adminTokens;
 
     /**
+     * @var string[]
+     */
+    private $createdCategories;
+
+    /**
      * @inheritDoc
      */
     protected function setUp(): void
@@ -132,8 +137,7 @@ class CategoryRepositoryTest extends WebapiAbstract
                 sprintf('"%s" field value is invalid', $fieldName)
             );
         }
-        // delete category to clean up auto-generated url rewrites
-        $this->deleteCategory($result['id']);
+        $this->createdCategories = [$result['id']];
     }
 
     /**
@@ -214,8 +218,7 @@ class CategoryRepositoryTest extends WebapiAbstract
         $this->assertFalse((bool)$category->getIsActive(), 'Category "is_active" must equal to false');
         $this->assertEquals("Update Category Test", $category->getName());
         $this->assertEquals("Update Category Description Test", $category->getDescription());
-        // delete category to clean up auto-generated url rewrites
-        $this->deleteCategory($categoryId);
+        $this->createdCategories = [$categoryId];
     }
 
     /**
@@ -243,8 +246,7 @@ class CategoryRepositoryTest extends WebapiAbstract
         $this->assertTrue((bool)$category->getIsActive(), 'Category "is_active" must equal to true');
         $this->assertEquals("Update Category Test With default_sort_by Attribute", $category->getName());
         $this->assertEquals("name", $category->getDefaultSortBy());
-        // delete category to clean up auto-generated url rewrites
-        $this->deleteCategory($categoryId);
+        $this->createdCategories = [$categoryId];
     }
 
     /**
@@ -552,5 +554,23 @@ class CategoryRepositoryTest extends WebapiAbstract
         }
         //We don't have permissions to do that.
         $this->assertEquals('Not allowed to edit the category\'s design attributes', $exceptionMessage);
+        $this->createdCategories = [$result['id']];
+    }
+
+    /**
+     * @inheritDoc
+     *
+     * @return void
+     */
+    protected function tearDown(): void
+    {
+        if (!empty($this->createdCategories)) {
+            // delete category to clean up auto-generated url rewrites
+            foreach ($this->createdCategories as $categoryId) {
+                $this->deleteCategory($categoryId);
+            }
+        }
+
+        parent::tearDown();
     }
 }

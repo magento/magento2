@@ -21,7 +21,7 @@ use Magento\Framework\Exception\RuntimeException;
  *
  * @see ValueInterface
  * @api
- * @since 100.2.0
+ * @since 101.0.0
  */
 class PreparedValueFactory
 {
@@ -92,7 +92,7 @@ class PreparedValueFactory
      * @return ValueInterface
      * @throws RuntimeException If Value can not be created
      * @see ValueInterface
-     * @since 100.2.0
+     * @since 101.0.0
      */
     public function create($path, $value, $scope, $scopeCode = null)
     {

@@ -225,7 +225,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     /**
      * Links attribute name-to-link type ID.
      *
-     * @deprecated use DI for LinkProcessor class if you want to add additional types
+     * @deprecated 101.1.0 use DI for LinkProcessor class if you want to add additional types
      *
      * @var array
      */
@@ -554,7 +554,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
     /**
      * @var \Magento\CatalogInventory\Model\ResourceModel\Stock\ItemFactory
-     * @deprecated this variable isn't used anymore.
+     * @deprecated 101.0.0 this variable isn't used anymore.
      */
     protected $_stockResItemFac;
 
@@ -618,7 +618,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
     /**
      * @var array
-     * @deprecated 100.1.5
+     * @deprecated 100.0.3
      * @since 100.0.3
      */
     protected $productUrlKeys = [];
@@ -969,6 +969,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * Return empty attribute value constant
      *
      * @return string
+     * @since 101.0.0
      */
     public function getEmptyAttributeValueConstant()
     {
@@ -1211,6 +1212,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected function _initTypeModels()
     {
         $productTypes = $this->_importConfig->getEntityTypes($this->getEntityTypeCode());
+        $fieldsMap = [];
+        $specialAttributes = [];
         foreach ($productTypes as $productTypeName => $productTypeConfig) {
             $params = [$this, $productTypeName];
             if (!($model = $this->_productTypeFactory->create($productTypeConfig['model'], ['params' => $params]))
@@ -1230,14 +1233,13 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             if ($model->isSuitable()) {
                 $this->_productTypeModels[$productTypeName] = $model;
             }
-            // phpcs:disable Magento2.Performance.ForeachArrayMerge.ForeachArrayMerge
-            $this->_fieldsMap = array_merge($this->_fieldsMap, $model->getCustomFieldsMapping());
-            $this->_specialAttributes = array_merge($this->_specialAttributes, $model->getParticularAttributes());
-            // phpcs:enable
+            $fieldsMap[] = $model->getCustomFieldsMapping();
+            $specialAttributes[] = $model->getParticularAttributes();
         }
+        $this->_fieldsMap = array_merge([], $this->_fieldsMap, ...$fieldsMap);
         $this->_initErrorTemplates();
         // remove doubles
-        $this->_specialAttributes = array_unique($this->_specialAttributes);
+        $this->_specialAttributes = array_unique(array_merge([], $this->_specialAttributes, ...$specialAttributes));
 
         return $this;
     }
@@ -1289,7 +1291,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      *
      * Must be called after ALL products saving done.
      *
-     * @deprecated use linkProcessor Directly
+     * @deprecated 101.1.0 use linkProcessor Directly
      *
      * @return $this
      */
@@ -1473,7 +1475,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      *
      * @return void
      * @since 100.0.4
-     * @deprecated
+     * @deprecated 100.2.3
      */
     protected function initMediaGalleryResources()
     {

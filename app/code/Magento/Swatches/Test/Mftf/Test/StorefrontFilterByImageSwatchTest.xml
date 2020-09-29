@@ -53,8 +53,8 @@
         </actionGroup>
         <click selector="{{AdminManageSwatchSection.nthUploadFile('1')}}" stepKey="clickUploadFile1"/>
         <attachFile selector="input[name='datafile']" userInput="adobe-thumb.jpg" stepKey="attachFile1"/>
+        <waitForPageLoad stepKey="waitFileAttached1"/>
         <fillField selector="{{AdminManageSwatchSection.adminInputByIndex('0')}}" userInput="adobe-thumb" stepKey="fillAdmin1"/>
-        <click selector="{{AdminManageSwatchSection.swatchWindow('0')}}" stepKey="clicksWatchWindow1"/>
 
         <!-- Set swatch #2 image using the file upload -->
         <click selector="{{AdminManageSwatchSection.addSwatch}}" stepKey="clickAddSwatch2"/>
@@ -63,6 +63,7 @@
         </actionGroup>
         <click selector="{{AdminManageSwatchSection.nthUploadFile('2')}}" stepKey="clickUploadFile2"/>
         <attachFile selector="input[name='datafile']" userInput="adobe-small.jpg" stepKey="attachFile2"/>
+        <waitForPageLoad stepKey="waitFileAttached2"/>
         <fillField selector="{{AdminManageSwatchSection.adminInputByIndex('1')}}" userInput="adobe-small" stepKey="fillAdmin2"/>
 
         <!-- Set scope to global -->
@@ -103,7 +104,9 @@
         </actionGroup>
 
         <!-- Run re-index task-->
-        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
 
         <!-- Go to the category page -->
         <amOnPage url="$$createCategory.name$$.html" stepKey="amOnCategoryPage"/>
