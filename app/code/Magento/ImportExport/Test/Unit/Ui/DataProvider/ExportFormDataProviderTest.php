@@ -18,7 +18,10 @@ class ExportFormDataProviderTest extends TestCase
      */
     private $dataProvider;
 
-    protected function setUp()
+    /**
+     * @inheritDoc
+     */
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $this->dataProvider = $objectManager->getObject(ExportFormDataProvider::class);

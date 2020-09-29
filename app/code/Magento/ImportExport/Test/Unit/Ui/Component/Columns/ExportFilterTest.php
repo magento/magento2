@@ -43,7 +43,10 @@ class ExportFilterTest extends TestCase
      */
     private $component;
 
-    protected function setUp()
+    /**
+     * @inheritDoc
+     */
+    protected function setUp(): void
     {
         $this->context = $this->createMock(ContextInterface::class);
         $this->attributeFilterType = $this->createMock(AttributeFilterType::class);

@@ -40,7 +40,10 @@ class ExportFilterDataProviderTest extends TestCase
      */
     private $dataProvider;
 
-    protected function setUp()
+    /**
+     * @inheritDoc
+     */
+    protected function setUp(): void
     {
         $this->collection = $this->createMock(Collection::class);
         $collectionFactory = $this->createConfiguredMock(CollectionFactory::class, [
