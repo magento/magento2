@@ -157,7 +157,7 @@ class ReorderTest extends AbstractController
         $this->quote = $this->checkoutSession->getQuote();
         $quoteItemsCollection = $this->quote->getItemsCollection();
         $this->assertCount(1, $quoteItemsCollection);
-        $items = $this->quote->getItems();
+        $items = $quoteItemsCollection->getItems();
         $quoteItem = array_pop($items);
         $quoteRequestOptions = $quoteItem->getBuyRequest()->getOptions();
         $this->assertEquals($orderRequestOptions, $quoteRequestOptions);
