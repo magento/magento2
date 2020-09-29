@@ -34,9 +34,7 @@ class AutoloaderTest extends TestCase
     protected function setUp(): void
     {
         $loggerTestDouble = $this->createMock(LoggerInterface::class);
-        /** @var \Magento\Framework\ObjectManager\ConfigInterface $config */
-        $config = $this->getTestFrameworkObjectManager()->get(\Magento\Framework\ObjectManager\ConfigInterface::class);
-        $this->getTestFrameworkObjectManager()->addSharedInstance($loggerTestDouble, $config->getPreference(LoggerInterface::class));
+        $this->getTestFrameworkObjectManager()->addSharedInstance($loggerTestDouble, LoggerInterface::class, true);
         // magentoAppIsolation will cleanup the mess
     }
 
