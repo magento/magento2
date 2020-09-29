@@ -13,7 +13,8 @@
             <title value="Verify url category for different store view."/>
             <description value="Verify url category for different store view, after change ukr_key category for one of them store view."/>
             <features value="CatalogUrlRewrite"/>
-            <severity value="MAJOR"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="MC-38053"/>
         </annotations>
         <before>
             <magentoCLI command="config:set catalog/seo/product_use_categories 1" stepKey="setEnableUseCategoriesPath"/>
