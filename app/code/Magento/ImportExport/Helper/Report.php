@@ -48,7 +48,7 @@ class Report extends \Magento\Framework\App\Helper\AbstractHelper
     ) {
         $this->timeZone = $timeZone;
         $this->varDirectory = $filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
-        $this->importHistoryDirectory = $filesystem->getDirectoryRead($this->varDirectory->getAbsolutePath('import_history'));
+        $this->importHistoryDirectory = $filesystem->getDirectoryReadByPath($this->varDirectory->getAbsolutePath('import_history'));
         parent::__construct($context);
     }
 

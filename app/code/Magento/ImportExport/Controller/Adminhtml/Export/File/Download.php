@@ -62,13 +62,12 @@ class Download extends ExportController implements HttpGetActionInterface
         $fileName = $this->getRequest()->getParam('filename');
         $exportDirectory = $this->filesystem->getDirectoryRead(DirectoryList::VAR_EXPORT);
 
-        if (empty($fileName) || !$exportDirectory->isExist($fileName)) {
-            $this->messageManager->addErrorMessage(__('Please provide valid export file name'));
-
-            return $resultRedirect;
-        }
-
         try {
+            if (empty($fileName) || !$exportDirectory->isExist($fileName)) {
+                $this->messageManager->addErrorMessage(__('Please provide valid export file name'));
+
+                return $resultRedirect;
+            }
             $path = 'export/' . $fileName;
             $directory = $this->filesystem->getDirectoryRead(DirectoryList::VAR_DIR);
             if ($directory->isFile($path)) {

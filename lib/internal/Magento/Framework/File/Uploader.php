@@ -11,6 +11,7 @@ use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\Filesystem\DriverPool;
+use Magento\Framework\Filter\ArrayFilter;
 use Magento\Framework\Validation\ValidationException;
 
 /**
@@ -638,7 +639,7 @@ class Uploader
             $tmpName = trim($fileId['tmp_name']);
 
             $allowedFolders = [
-                sys_get_temp_dir(),
+                $this->directoryList->getRoot() . sys_get_temp_dir(),
                 $this->directoryList->getPath(DirectoryList::MEDIA),
                 $this->directoryList->getPath(DirectoryList::VAR_DIR),
                 $this->directoryList->getPath(DirectoryList::TMP),

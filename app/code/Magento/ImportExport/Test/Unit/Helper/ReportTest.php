@@ -101,7 +101,7 @@ class ReportTest extends TestCase
             ['getAbsolutePath']
         );
 
-        $this->filesystem = $this->createPartialMock(Filesystem::class, ['getDirectoryWrite', 'getDirectoryRead']);
+        $this->filesystem = $this->createPartialMock(Filesystem::class, ['getDirectoryWrite', 'getDirectoryReadByPath']);
         $this->varDirectory->expects($this->any())->method('getRelativePath')->willReturn('path');
         $this->varDirectory->expects($this->any())->method('getAbsolutePath')->willReturn('path');
         $this->varDirectory->expects($this->any())->method('readFile')->willReturn('contents');
@@ -110,7 +110,7 @@ class ReportTest extends TestCase
         $this->filesystem->expects($this->any())->method('getDirectoryWrite')->willReturn($this->varDirectory);
 
         $this->importHistoryDirectory->expects($this->any())->method('getAbsolutePath')->willReturnArgument(0);
-        $this->filesystem->expects($this->any())->method('getDirectoryRead')->willReturn($this->importHistoryDirectory);
+        $this->filesystem->expects($this->any())->method('getDirectoryReadByPath')->willReturn($this->importHistoryDirectory);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->report = $this->objectManagerHelper->getObject(
