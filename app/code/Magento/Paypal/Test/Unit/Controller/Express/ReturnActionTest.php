@@ -4,9 +4,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Paypal\Test\Unit\Controller\Express;
 
-class ReturnActionTest extends \Magento\Paypal\Test\Unit\Controller\ExpressTest
+use Magento\Paypal\Test\Unit\Controller\ExpressTest;
+
+class ReturnActionTest extends ExpressTest
 {
     protected $name = 'ReturnAction';
 
@@ -25,11 +29,11 @@ class ReturnActionTest extends \Magento\Paypal\Test\Unit\Controller\ExpressTest
         $this->request->expects($this->once())
             ->method('getParam')
             ->with('retry_authorization')
-            ->will($this->returnValue('true'));
+            ->willReturn('true');
         $this->checkoutSession->expects($this->once())
             ->method('__call')
             ->with('getPaypalTransactionData')
-            ->will($this->returnValue(['any array']));
+            ->willReturn(['any array']);
         $this->_expectForwardPlaceOrder();
         $this->model->execute();
     }
@@ -53,7 +57,7 @@ class ReturnActionTest extends \Magento\Paypal\Test\Unit\Controller\ExpressTest
             ->with('unsPaypalTransactionData');
         $this->checkout->expects($this->once())
             ->method('canSkipOrderReviewStep')
-            ->will($this->returnValue($canSkipOrderReviewStep));
+            ->willReturn($canSkipOrderReviewStep);
         if ($canSkipOrderReviewStep) {
             $this->_expectForwardPlaceOrder();
         } else {

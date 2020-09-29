@@ -21,7 +21,7 @@
         <before>
             <!-- Login as Admin -->
             <comment userInput="Login as Admin" stepKey="commentLoginAsAdmin"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <!-- Create customer on Storefront and bundle product -->
             <comment userInput="Create customer on Storefront and bundle product" stepKey="commentCreateData"/>
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
@@ -50,6 +50,8 @@
                 <requiredEntity createDataKey="bundleOption"/>
                 <requiredEntity createDataKey="createSimpleProduct2"/>
             </createData>
+            <magentoCron stepKey="runCronIndex" groups="index"/>
+
             <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProductEditPage">
                 <argument name="productId" value="$$createProduct.id$$"/>
             </actionGroup>

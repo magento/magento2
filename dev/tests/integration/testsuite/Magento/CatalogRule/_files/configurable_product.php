@@ -5,8 +5,10 @@
  */
 declare(strict_types=1);
 
-require __DIR__ . '/../../ConfigurableProduct/_files/configurable_attribute.php';
-require __DIR__ . '/simple_products.php';
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
+
+Resolver::getInstance()->requireDataFixture('Magento/ConfigurableProduct/_files/configurable_attribute.php');
+Resolver::getInstance()->requireDataFixture('Magento/CatalogRule/_files/simple_products.php');
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 

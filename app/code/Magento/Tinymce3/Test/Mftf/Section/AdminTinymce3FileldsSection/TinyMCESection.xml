@@ -8,7 +8,7 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="TinyMCESection">
-        <element name="TinyMCE3" type="text" selector="#cms_page_form_content_tbl"/>
-        <element name="InsertImageBtnTinyMCE3" type="button" selector="#cms_page_form_content_image"/>
+        <element name="TinyMCE3" type="text" selector="#cms_page_form_content_tbl" deprecated="Deprecated this version of TinyMCE is no longer supported"/>
+        <element name="InsertImageBtnTinyMCE3" type="button" selector="#cms_page_form_content_image" deprecated="Deprecated this version of TinyMCE is no longer supported"/>
     </section>
 </sections>

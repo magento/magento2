@@ -5,12 +5,13 @@
  */
 declare(strict_types=1);
 
-include __DIR__ . '/../../Catalog/_files/category.php';
-
 use Magento\Catalog\Api\CategoryLinkManagementInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\Product\Visibility;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
+
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/category.php');
 
 $categoryId = 333;
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();

@@ -6,23 +6,26 @@
 
 namespace Magento\Customer\Api;
 
-use Magento\Customer\Api\Data\CustomerInterface as Customer;
 use Magento\Customer\Api\Data\AddressInterface as Address;
+use Magento\Customer\Api\Data\CustomerInterface as Customer;
+use Magento\Customer\Api\Data\CustomerInterfaceFactory;
+use Magento\Customer\Model\CustomerRegistry;
+use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Webapi\Exception as HTTPExceptionCodes;
 use Magento\Framework\Webapi\Rest\Request;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\Customer as CustomerHelper;
 use Magento\TestFramework\TestCase\WebapiAbstract;
-use Magento\Framework\Webapi\Exception as HTTPExceptionCodes;
-use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
- * Test class for Magento\Customer\Api\CustomerRepositoryInterface
+ * Test for \Magento\Customer\Api\CustomerRepositoryInterface.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -31,13 +34,8 @@ class CustomerRepositoryTest extends WebapiAbstract
     const SERVICE_VERSION = 'V1';
     const SERVICE_NAME = 'customerCustomerRepositoryV1';
     const RESOURCE_PATH = '/V1/customers';
-    const RESOURCE_PATH_CUSTOMER_TOKEN = "/V1/integration/customer/token";
 
-    /**
-     * Sample values for testing
-     */
-    const ATTRIBUTE_CODE = 'attribute_code';
-    const ATTRIBUTE_VALUE = 'attribute_value';
+    private const STUB_INVALID_CUSTOMER_GROUP_ID = 777;
 
     /**
      * @var CustomerRepositoryInterface
@@ -45,12 +43,12 @@ class CustomerRepositoryTest extends WebapiAbstract
     private $customerRepository;
 
     /**
-     * @var \Magento\Framework\Api\DataObjectHelper
+     * @var DataObjectHelper
      */
     private $dataObjectHelper;
 
     /**
-     * @var \Magento\Customer\Api\Data\CustomerInterfaceFactory
+     * @var CustomerInterfaceFactory
      */
     private $customerDataFactory;
 
@@ -70,7 +68,7 @@ class CustomerRepositoryTest extends WebapiAbstract
     private $filterGroupBuilder;
 
     /**
-     * @var \Magento\Customer\Model\CustomerRegistry
+     * @var CustomerRegistry
      */
     private $customerRegistry;
 
@@ -92,7 +90,7 @@ class CustomerRepositoryTest extends WebapiAbstract
     /**
      * Execute per test initialization.
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->customerRegistry = Bootstrap::getObjectManager()->get(
             \Magento\Customer\Model\CustomerRegistry::class
@@ -124,14 +122,14 @@ class CustomerRepositoryTest extends WebapiAbstract
         );
     }
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         if (!empty($this->currentCustomerId)) {
             foreach ($this->currentCustomerId as $customerId) {
                 $serviceInfo = [
                     'rest' => [
                         'resourcePath' => self::RESOURCE_PATH . '/' . $customerId,
-                        'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_DELETE,
+                        'httpMethod' => Request::HTTP_METHOD_DELETE,
                     ],
                     'soap' => [
                         'service' => self::SERVICE_NAME,
@@ -151,10 +149,11 @@ class CustomerRepositoryTest extends WebapiAbstract
     /**
      * Validate update by invalid customer.
      *
-     * @expectedException \Exception
      */
     public function testInvalidCustomerUpdate()
     {
+        $this->expectException(\Exception::class);
+
         //Create first customer and retrieve customer token.
         $firstCustomerData = $this->_createCustomer();
 
@@ -164,24 +163,23 @@ class CustomerRepositoryTest extends WebapiAbstract
         $customerTokenService = Bootstrap::getObjectManager()->create(
             \Magento\Integration\Api\CustomerTokenServiceInterface::class
         );
-        $token = $customerTokenService->createCustomerAccessToken($firstCustomerData[Customer::EMAIL], 'test@123');
+        $token = $customerTokenService->createCustomerAccessToken(
+            $firstCustomerData[Customer::EMAIL],
+            'test@123'
+        );
 
         //Create second customer and update lastname.
         $customerData = $this->_createCustomer();
-        $existingCustomerDataObject = $this->_getCustomerData($customerData[Customer::ID]);
+        $existingCustomerDataObject = $this->getCustomerData($customerData[Customer::ID]);
         $lastName = $existingCustomerDataObject->getLastname();
         $customerData[Customer::LASTNAME] = $lastName . 'Updated';
         $newCustomerDataObject = $this->customerDataFactory->create();
-        $this->dataObjectHelper->populateWithArray(
-            $newCustomerDataObject,
-            $customerData,
-            \Magento\Customer\Api\Data\CustomerInterface::class
-        );
+        $this->dataObjectHelper->populateWithArray($newCustomerDataObject, $customerData, Customer::class);
 
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . "/{$customerData[Customer::ID]}",
-                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
+                'httpMethod' => Request::HTTP_METHOD_PUT,
                 'token' => $token,
             ],
             'soap' => [
@@ -194,7 +192,7 @@ class CustomerRepositoryTest extends WebapiAbstract
 
         $newCustomerDataObject = $this->dataObjectProcessor->buildOutputDataArray(
             $newCustomerDataObject,
-            \Magento\Customer\Api\Data\CustomerInterface::class
+            Customer::class
         );
         $requestData = ['customer' => $newCustomerDataObject];
         $this->_webApiCall($serviceInfo, $requestData);
@@ -208,7 +206,7 @@ class CustomerRepositoryTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . '/' . $customerData[Customer::ID],
-                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_DELETE,
+                'httpMethod' => Request::HTTP_METHOD_DELETE,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -227,16 +225,21 @@ class CustomerRepositoryTest extends WebapiAbstract
         //Verify if the customer is deleted
         $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
         $this->expectExceptionMessage(sprintf("No such entity with customerId = %s", $customerData[Customer::ID]));
-        $this->_getCustomerData($customerData[Customer::ID]);
+        $this->getCustomerData($customerData[Customer::ID]);
     }
 
-    public function testDeleteCustomerInvalidCustomerId()
+    /**
+     * Test delete customer with invalid id
+     *
+     * @return void
+     */
+    public function testDeleteCustomerInvalidCustomerId(): void
     {
         $invalidId = -1;
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . '/' . $invalidId,
-                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_DELETE,
+                'httpMethod' => Request::HTTP_METHOD_DELETE,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -252,7 +255,7 @@ class CustomerRepositoryTest extends WebapiAbstract
 
             $this->fail("Expected exception");
         } catch (\SoapFault $e) {
-            $this->assertContains(
+            $this->assertStringContainsString(
                 $expectedMessage,
                 $e->getMessage(),
                 "SoapFault does not contain expected message."
@@ -265,23 +268,25 @@ class CustomerRepositoryTest extends WebapiAbstract
         }
     }
 
-    public function testUpdateCustomer()
+    /**
+     * Test customer update
+     *
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     *
+     * @return void
+     */
+    public function testUpdateCustomer(): void
     {
-        $customerData = $this->_createCustomer();
-        $existingCustomerDataObject = $this->_getCustomerData($customerData[Customer::ID]);
-        $lastName = $existingCustomerDataObject->getLastname();
-        $customerData[Customer::LASTNAME] = $lastName . 'Updated';
-        $newCustomerDataObject = $this->customerDataFactory->create();
-        $this->dataObjectHelper->populateWithArray(
-            $newCustomerDataObject,
-            $customerData,
-            \Magento\Customer\Api\Data\CustomerInterface::class
-        );
+        $customerId = 1;
+        $updatedLastname = 'Updated lastname';
+        $customer = $this->getCustomerData($customerId);
+        $customerData = $this->dataObjectProcessor->buildOutputDataArray($customer, Customer::class);
+        $customerData[Customer::LASTNAME] = $updatedLastname;
 
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . "/{$customerData[Customer::ID]}",
-                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
+                'resourcePath' => self::RESOURCE_PATH . '/' . $customerId,
+                'httpMethod' => Request::HTTP_METHOD_PUT,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -289,17 +294,18 @@ class CustomerRepositoryTest extends WebapiAbstract
                 'operation' => self::SERVICE_NAME . 'Save',
             ],
         ];
-        $newCustomerDataObject = $this->dataObjectProcessor->buildOutputDataArray(
-            $newCustomerDataObject,
-            \Magento\Customer\Api\Data\CustomerInterface::class
-        );
-        $requestData = ['customer' => $newCustomerDataObject];
+
+        $requestData['customer'] = TESTS_WEB_API_ADAPTER === self::ADAPTER_SOAP
+            ? $customerData
+            : [Customer::LASTNAME => $updatedLastname];
+
         $response = $this->_webApiCall($serviceInfo, $requestData);
-        $this->assertTrue($response !== null);
+        $this->assertNotNull($response);
 
         //Verify if the customer is updated
-        $existingCustomerDataObject = $this->_getCustomerData($customerData[Customer::ID]);
-        $this->assertEquals($lastName . "Updated", $existingCustomerDataObject->getLastname());
+        $existingCustomerDataObject = $this->getCustomerData($customerId);
+        $this->assertEquals($updatedLastname, $existingCustomerDataObject->getLastname());
+        $this->assertEquals($customerData[Customer::FIRSTNAME], $existingCustomerDataObject->getFirstname());
     }
 
     /**
@@ -308,20 +314,20 @@ class CustomerRepositoryTest extends WebapiAbstract
     public function testUpdateCustomerNoWebsiteId()
     {
         $customerData = $this->customerHelper->createSampleCustomer();
-        $existingCustomerDataObject = $this->_getCustomerData($customerData[Customer::ID]);
+        $existingCustomerDataObject = $this->getCustomerData($customerData[Customer::ID]);
         $lastName = $existingCustomerDataObject->getLastname();
         $customerData[Customer::LASTNAME] = $lastName . 'Updated';
         $newCustomerDataObject = $this->customerDataFactory->create();
         $this->dataObjectHelper->populateWithArray(
             $newCustomerDataObject,
             $customerData,
-            \Magento\Customer\Api\Data\CustomerInterface::class
+            Customer::class
         );
 
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . "/{$customerData[Customer::ID]}",
-                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
+                'httpMethod' => Request::HTTP_METHOD_PUT,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -331,32 +337,28 @@ class CustomerRepositoryTest extends WebapiAbstract
         ];
         $newCustomerDataObject = $this->dataObjectProcessor->buildOutputDataArray(
             $newCustomerDataObject,
-            \Magento\Customer\Api\Data\CustomerInterface::class
+            Customer::class
         );
         unset($newCustomerDataObject['website_id']);
         $requestData = ['customer' => $newCustomerDataObject];
 
-        $expectedMessage = '"Associate to Website" is a required value.';
         try {
-            $this->_webApiCall($serviceInfo, $requestData);
-            $this->fail("Expected exception.");
+            $response = $this->_webApiCall($serviceInfo, $requestData);
+            $this->assertEquals($customerData['website_id'], $response['website_id']);
         } catch (\SoapFault $e) {
-            $this->assertContains(
-                $expectedMessage,
-                $e->getMessage(),
-                "SoapFault does not contain expected message."
-            );
-        } catch (\Exception $e) {
-            $errorObj =  $this->customerHelper->processRestExceptionResult($e);
-            $this->assertEquals($expectedMessage, $errorObj['message'], 'Invalid message: "' . $e->getMessage() . '"');
-            $this->assertEquals(HTTPExceptionCodes::HTTP_BAD_REQUEST, $e->getCode());
+            $this->assertStringContainsString('"Associate to Website" is a required value.', $e->getMessage());
         }
     }
 
-    public function testUpdateCustomerException()
+    /**
+     * Test customer exception update
+     *
+     * @return void
+     */
+    public function testUpdateCustomerException(): void
     {
         $customerData = $this->_createCustomer();
-        $existingCustomerDataObject = $this->_getCustomerData($customerData[Customer::ID]);
+        $existingCustomerDataObject = $this->getCustomerData($customerData[Customer::ID]);
         $lastName = $existingCustomerDataObject->getLastname();
 
         //Set non-existent id = -1
@@ -366,13 +368,13 @@ class CustomerRepositoryTest extends WebapiAbstract
         $this->dataObjectHelper->populateWithArray(
             $newCustomerDataObject,
             $customerData,
-            \Magento\Customer\Api\Data\CustomerInterface::class
+            Customer::class
         );
 
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . "/-1",
-                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
+                'httpMethod' => Request::HTTP_METHOD_PUT,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -382,7 +384,7 @@ class CustomerRepositoryTest extends WebapiAbstract
         ];
         $newCustomerDataObject = $this->dataObjectProcessor->buildOutputDataArray(
             $newCustomerDataObject,
-            \Magento\Customer\Api\Data\CustomerInterface::class
+            Customer::class
         );
         $requestData = ['customer' => $newCustomerDataObject];
 
@@ -392,7 +394,7 @@ class CustomerRepositoryTest extends WebapiAbstract
             $this->_webApiCall($serviceInfo, $requestData);
             $this->fail("Expected exception.");
         } catch (\SoapFault $e) {
-            $this->assertContains(
+            $this->assertStringContainsString(
                 $expectedMessage,
                 $e->getMessage(),
                 "SoapFault does not contain expected message."
@@ -406,13 +408,98 @@ class CustomerRepositoryTest extends WebapiAbstract
     }
 
     /**
-     * Test creating a customer with absent required address fields
+     * Test customer update with invalid customer group id
+     *
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     *
+     * @return void
      */
-    public function testCreateCustomerWithoutAddressRequiresException()
+    public function testUpdateCustomerWithInvalidGroupId(): void
+    {
+        $customerId = 1;
+        $customerData = $this->dataObjectProcessor->buildOutputDataArray(
+            $this->getCustomerData($customerId),
+            Customer::class
+        );
+        $customerData[Customer::GROUP_ID] = self::STUB_INVALID_CUSTOMER_GROUP_ID;
+
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH . '/' . $customerId,
+                'httpMethod' => Request::HTTP_METHOD_PUT,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'Save',
+            ],
+        ];
+
+        $requestData['customer'] = $customerData;
+        $expectedMessage = 'The specified customer group id does not exist.';
+
+        try {
+            $this->_webApiCall($serviceInfo, $requestData);
+            $this->fail('Expected exception was not raised');
+        } catch (\SoapFault $e) {
+            $this->assertStringContainsString($expectedMessage, $e->getMessage());
+        } catch (\Exception $e) {
+            $errorObj = $this->processRestExceptionResult($e);
+            $this->assertEquals(HTTPExceptionCodes::HTTP_BAD_REQUEST, $e->getCode());
+            $this->assertEquals($expectedMessage, $errorObj['message']);
+        }
+    }
+
+    /**
+     * Test customer create with invalid customer group id
+     *
+     * @return void
+     */
+    public function testCreateCustomerWithInvalidGroupId(): void
+    {
+        $customerData = $this->dataObjectProcessor->buildOutputDataArray(
+            $this->customerHelper->createSampleCustomerDataObject(),
+            Customer::class
+        );
+        $customerData[Customer::GROUP_ID] = self::STUB_INVALID_CUSTOMER_GROUP_ID;
+
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH,
+                'httpMethod' => Request::HTTP_METHOD_POST,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'Save',
+            ],
+        ];
+
+        $requestData = ['customer' => $customerData];
+        $expectedMessage = 'The specified customer group id does not exist.';
+
+        try {
+            $this->_webApiCall($serviceInfo, $requestData);
+            $this->fail('Expected exception was not raised');
+        } catch (\SoapFault $e) {
+            $this->assertStringContainsString($expectedMessage, $e->getMessage());
+        } catch (\Exception $e) {
+            $errorObj = $this->processRestExceptionResult($e);
+            $this->assertEquals(HTTPExceptionCodes::HTTP_BAD_REQUEST, $e->getCode());
+            $this->assertEquals($expectedMessage, $errorObj['message']);
+        }
+    }
+
+    /**
+     * Test creating a customer with absent required address fields
+     *
+     * @return void
+     */
+    public function testCreateCustomerWithoutAddressRequiresException(): void
     {
         $customerDataArray = $this->dataObjectProcessor->buildOutputDataArray(
             $this->customerHelper->createSampleCustomerDataObject(),
-            \Magento\Customer\Api\Data\CustomerInterface::class
+            Customer::class
         );
 
         foreach ($customerDataArray[Customer::KEY_ADDRESSES] as & $address) {
@@ -422,7 +509,7 @@ class CustomerRepositoryTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH,
-                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
+                'httpMethod' => Request::HTTP_METHOD_POST,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -570,7 +657,7 @@ class CustomerRepositoryTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . '/search?' . $searchQueryString,
-                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
+                'httpMethod' => Request::HTTP_METHOD_GET,
             ],
         ];
         $searchResults = $this->_webApiCall($serviceInfo);
@@ -587,7 +674,7 @@ class CustomerRepositoryTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . '/search',
-                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
+                'httpMethod' => Request::HTTP_METHOD_GET,
             ],
         ];
         try {
@@ -639,7 +726,7 @@ class CustomerRepositoryTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . '/search' . '?' . http_build_query($requestData),
-                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
+                'httpMethod' => Request::HTTP_METHOD_GET,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -681,7 +768,7 @@ class CustomerRepositoryTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . '/search?' . $searchQueryString,
-                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
+                'httpMethod' => Request::HTTP_METHOD_GET,
             ],
         ];
         $searchResults = $this->_webApiCall($serviceInfo);
@@ -715,7 +802,7 @@ class CustomerRepositoryTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . '/search' . '?' . http_build_query($requestData),
-                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
+                'httpMethod' => Request::HTTP_METHOD_GET,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -754,7 +841,7 @@ class CustomerRepositoryTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . '/search?' . $searchQueryString,
-                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
+                'httpMethod' => Request::HTTP_METHOD_GET,
             ],
         ];
         $searchResults = $this->_webApiCall($serviceInfo, $requestData);
@@ -792,7 +879,7 @@ class CustomerRepositoryTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . '/search' . '?' . http_build_query($requestData),
-                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
+                'httpMethod' => Request::HTTP_METHOD_GET,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -850,7 +937,8 @@ class CustomerRepositoryTest extends WebapiAbstract
         $customerLoadedData = $this->_webApiCall($serviceInfo, ['customerId' => $customerData[Customer::ID]]);
         self::assertGreaterThanOrEqual($customerData[Customer::UPDATED_AT], $customerLoadedData[Customer::UPDATED_AT]);
         unset($customerData[Customer::UPDATED_AT]);
-        self::assertArraySubset($customerData, $customerLoadedData);
+        unset($customerLoadedData[Customer::UPDATED_AT], $customerLoadedData[Customer::CONFIRMATION]);
+        self::assertEquals($customerData, $customerLoadedData);
 
         $revokeToken = $customerTokenService->revokeCustomerAccessToken($customerData[Customer::ID]);
         self::assertTrue($revokeToken);
@@ -867,7 +955,7 @@ class CustomerRepositoryTest extends WebapiAbstract
         try {
             $this->_webApiCall($serviceInfo, ['customerId' => $customerData[Customer::ID]]);
         } catch (\SoapFault $e) {
-            $this->assertContains(
+            $this->assertStringContainsString(
                 $expectedMessage,
                 $e->getMessage(),
                 'SoapFault does not contain expected message.'
@@ -884,11 +972,11 @@ class CustomerRepositoryTest extends WebapiAbstract
      * Retrieve customer data by Id
      *
      * @param int $customerId
-     * @return \Magento\Customer\Api\Data\CustomerInterface
+     * @return Customer
      */
-    protected function _getCustomerData($customerId)
+    private function getCustomerData($customerId): Customer
     {
-        $customerData =  $this->customerRepository->getById($customerId);
+        $customerData = $this->customerRepository->getById($customerId);
         $this->customerRegistry->remove($customerId);
         return $customerData;
     }

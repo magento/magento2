@@ -26,12 +26,14 @@
             <createData entity="SimpleProduct" stepKey="createProductForUrlRewrite">
                <requiredEntity createDataKey="createCategory" />
             </createData>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <!-- Create second store view -->
             <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createCustomStoreView">
                 <argument name="customStore" value="customStore"/>
             </actionGroup>
-            <magentoCLI command="indexer:reindex" stepKey="runReindex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runReindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </before>
         <after>
             <deleteData createDataKey="createProduct"  stepKey="deleteProduct" />

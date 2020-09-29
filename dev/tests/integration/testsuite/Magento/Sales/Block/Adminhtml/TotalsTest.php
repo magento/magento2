@@ -28,7 +28,7 @@ class TotalsTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->layout = $this->_objectManager->get(LayoutInterface::class);
@@ -50,7 +50,7 @@ class TotalsTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
 
         $shippingTotal = $this->block->getTotal('shipping');
         $this->assertNotFalse($shippingTotal, 'Shipping method is absent on the total\'s block.');
-        $this->assertContains(
+        $this->assertStringContainsString(
             '1234567890',
             $shippingTotal->getLabel(),
             'Coupon code is absent in the shipping method label name.'

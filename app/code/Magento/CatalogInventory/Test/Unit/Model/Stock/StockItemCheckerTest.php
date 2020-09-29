@@ -8,8 +8,8 @@ declare(strict_types=1);
 namespace Magento\CatalogInventory\Test\Unit\Model\Stock;
 
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
-use Magento\CatalogInventory\Model\Stock\StockItemChecker;
 use Magento\CatalogInventory\Model\Stock\Item as StockItem;
+use Magento\CatalogInventory\Model\Stock\StockItemChecker;
 use Magento\CatalogInventory\Model\Stock\StockItemRepository;
 use Magento\Framework\Stdlib\ArrayUtils;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -45,7 +45,7 @@ class StockItemCheckerTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
 

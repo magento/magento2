@@ -3,9 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Customer\Test\Unit\Controller\Adminhtml\Index;
 
+use Magento\Backend\App\Action\Context as BackendContext;
 use Magento\Backend\Model\View\Result\Redirect;
 use Magento\Backend\Model\View\Result\RedirectFactory;
 use Magento\Customer\Api\CustomerRepositoryInterface;
@@ -95,15 +97,16 @@ class MassUnsubscribeTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
 
-        $this->contextMock = $this->createMock(\Magento\Backend\App\Action\Context::class);
+        $this->contextMock = $this->createMock(BackendContext::class);
         $resultRedirectFactory = $this->createMock(RedirectFactory::class);
-        $this->responseMock = $this->createMock(ResponseInterface::class);
+        $this->responseMock = $this->getMockForAbstractClass(ResponseInterface::class);
         $this->requestMock = $this->getMockBuilder(Http::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->objectManagerMock = $this->createPartialMock(
             ObjectManager::class,
             ['create']
@@ -111,8 +114,8 @@ class MassUnsubscribeTest extends TestCase
         $this->messageManagerMock = $this->createMock(Manager::class);
         $this->customerCollectionMock =
             $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+                ->disableOriginalConstructor()
+                ->getMock();
         $this->customerCollectionFactoryMock =
             $this->getMockBuilder(CollectionFactory::class)
                 ->disableOriginalConstructor()
@@ -129,7 +132,7 @@ class MassUnsubscribeTest extends TestCase
             ->method('create')
             ->with(ResultFactory::TYPE_REDIRECT)
             ->willReturn($redirectMock);
-        $this->subscriptionManager = $this->createMock(SubscriptionManagerInterface::class);
+        $this->subscriptionManager = $this->getMockForAbstractClass(SubscriptionManagerInterface::class);
         $this->resultRedirectMock = $this->createMock(Redirect::class);
         $resultRedirectFactory->expects($this->any())->method('create')->willReturn($this->resultRedirectMock);
 
@@ -176,7 +179,7 @@ class MassUnsubscribeTest extends TestCase
         $customersIds = [$customerId, $customerId, $customerId];
 
         $this->customerCollectionMock->method('getAllIds')->willReturn($customersIds);
-        $customer = $this->createMock(CustomerInterface::class);
+        $customer = $this->getMockForAbstractClass(CustomerInterface::class);
         $customer->method('getStoreId')->willReturn($storeId);
         $customer->method('getId')->willReturn($customerId);
         $this->customerRepositoryMock->method('getById')->with($customerId)->willReturn($customer);

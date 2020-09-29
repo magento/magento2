@@ -28,7 +28,7 @@
                 <requiredEntity createDataKey="attribute"/>
             </createData>
 
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <deleteData createDataKey="attribute" stepKey="deleteAttribute"/>

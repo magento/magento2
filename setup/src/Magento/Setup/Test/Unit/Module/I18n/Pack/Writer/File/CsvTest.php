@@ -3,58 +3,62 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Setup\Test\Unit\Module\I18n\Pack\Writer\File;
 
-use Magento\Setup\Module\I18n\Context;
-use Magento\Setup\Module\I18n\Locale;
-use Magento\Setup\Module\I18n\Dictionary;
-use Magento\Setup\Module\I18n\Factory;
-use Magento\Setup\Module\I18n\Dictionary\Phrase;
-use Magento\Setup\Module\I18n\Pack\Writer\File\Csv;
-use Magento\Setup\Module\I18n\Dictionary\WriterInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Setup\Module\I18n\Context;
+use Magento\Setup\Module\I18n\Dictionary;
+use Magento\Setup\Module\I18n\Dictionary\Phrase;
+use Magento\Setup\Module\I18n\Dictionary\WriterInterface;
+use Magento\Setup\Module\I18n\Factory;
+use Magento\Setup\Module\I18n\Locale;
+use Magento\Setup\Module\I18n\Pack\Writer\File\Csv;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 require_once __DIR__ . '/_files/ioMock.php';
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CsvTest extends \PHPUnit\Framework\TestCase
+class CsvTest extends TestCase
 {
     /**
-     * @var Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|MockObject
      */
     private $contextMock;
 
     /**
-     * @var Locale|\PHPUnit_Framework_MockObject_MockObject
+     * @var Locale|MockObject
      */
     private $localeMock;
 
     /**
-     * @var Dictionary|\PHPUnit_Framework_MockObject_MockObject
+     * @var Dictionary|MockObject
      */
     private $dictionaryMock;
 
     /**
-     * @var Phrase|\PHPUnit_Framework_MockObject_MockObject
+     * @var Phrase|MockObject
      */
     private $phraseMock;
 
     /**
-     * @var Factory|\PHPUnit_Framework_MockObject_MockObject
+     * @var Factory|MockObject
      */
     private $factoryMock;
 
     /**
-     * @var Csv|\PHPUnit_Framework_MockObject_MockObject
+     * @var Csv|MockObject
      */
     private $object;
 
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         /** @var ObjectManagerHelper $objectManagerHelper */
         $objectManagerHelper = new ObjectManagerHelper($this);
@@ -79,11 +83,11 @@ class CsvTest extends \PHPUnit\Framework\TestCase
      * @param string $contextType
      * @param array $contextValue
      * @dataProvider writeDictionaryWithRuntimeExceptionDataProvider
-     * @expectedException \RuntimeException
      * @return void
      */
     public function testWriteDictionaryWithRuntimeException($contextType, $contextValue)
     {
+        $this->expectException('RuntimeException');
         $this->configureGeneralPhrasesMock($contextType, $contextValue);
 
         $this->object->writeDictionary($this->dictionaryMock, $this->localeMock);
@@ -102,12 +106,12 @@ class CsvTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Some error. Row #1.
      * @return void
      */
     public function testWriteDictionaryWithInvalidArgumentException()
     {
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage('Some error. Row #1.');
         $contextType = 'module';
         $contextValue = 'Magento_Module';
 
