@@ -21,12 +21,14 @@ interface CollectionProcessorInterface
      *
      * @param Collection $collection
      * @param SearchCriteriaInterface $searchCriteria
+     * @param array $attributeNames
      * @param ContextInterface|null $context
      * @return Collection
      */
     public function process(
         Collection $collection,
         SearchCriteriaInterface $searchCriteria,
+        array $attributeNames,
         ContextInterface $context = null
     ): Collection;
 }

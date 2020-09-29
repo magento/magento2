@@ -37,12 +37,15 @@ class CatalogProcessor implements CollectionProcessorInterface
      *
      * @param Collection $collection
      * @param SearchCriteriaInterface $searchCriteria
+     * @param array $attributeNames
      * @param ContextInterface|null $context
      * @return Collection
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function process(
         Collection $collection,
         SearchCriteriaInterface $searchCriteria,
+        array $attributeNames,
         ContextInterface $context = null
     ): Collection {
         $this->collectionProcessor->process($searchCriteria, $collection);

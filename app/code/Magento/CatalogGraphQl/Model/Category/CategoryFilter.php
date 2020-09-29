@@ -83,16 +83,17 @@ class CategoryFilter
      *
      * @param array $criteria
      * @param StoreInterface $store
+     * @param array $attributeNames
      * @param ContextInterface $context
      * @return int[]
      * @throws InputException
      */
-    public function getResult(array $criteria, StoreInterface $store, ContextInterface $context)
+    public function getResult(array $criteria, StoreInterface $store, array $attributeNames, ContextInterface $context)
     {
         $searchCriteria = $this->searchCriteria->buildCriteria($criteria, $store);
         $collection = $this->categoryCollectionFactory->create();
         $this->extensionAttributesJoinProcessor->process($collection);
-        $this->collectionProcessor->process($collection, $searchCriteria, $context);
+        $this->collectionProcessor->process($collection, $searchCriteria, $attributeNames, $context);
 
         /** @var CategorySearchResultsInterface $searchResult */
         $categories = $this->categorySearchResultsFactory->create();
