@@ -37,7 +37,7 @@ $attributeSetId = $installer->getAttributeSetId('catalog_product', 'Default');
 $associatedProductIds = [];
 $productIds = [10, 20];
 array_shift($options); //remove the first option which is empty
-
+$inc = 0;
 foreach ($options as $option) {
     /** @var $product Product */
     $product = $objectManager->create(Product::class);
@@ -47,6 +47,7 @@ foreach ($options as $option) {
         ->setAttributeSetId($attributeSetId)
         ->setWebsiteIds([1])
         ->setName('Configurable Option' . $option->getLabel())
+        ->setUrlKey('Configurable Option ' . $option->getLabel() . '-' . ($inc++))
         ->setSku('simple_' . $productId)
         ->setPrice($productId)
         ->setTestConfigurable($option->getValue())

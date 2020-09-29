@@ -39,6 +39,7 @@ $productIds = [1010, 1020];
 array_shift($options); //remove the first option which is empty
 
 $isFirstOption = true;
+$inc = 0;
 foreach ($options as $option) {
     /** @var $product Product */
     $product = Bootstrap::getObjectManager()->create(Product::class);
@@ -48,6 +49,7 @@ foreach ($options as $option) {
         ->setAttributeSetId($attributeSetId)
         ->setWebsiteIds([1])
         ->setName('Configurable Option' . $option->getLabel())
+        ->setUrlKey('Configurable Option ' . $option->getLabel() . '-' . ($inc++))
         ->setSku('simple_' . $productId)
         ->setPrice($productId)
         ->setTestConfigurable($option->getValue())
