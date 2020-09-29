@@ -26,6 +26,7 @@ use Magento\LoginAsCustomerApi\Api\DeleteAuthenticationDataForUserInterface;
 use Magento\LoginAsCustomerApi\Api\IsLoginAsCustomerEnabledForCustomerInterface;
 use Magento\LoginAsCustomerApi\Api\SaveAuthenticationDataInterface;
 use Magento\LoginAsCustomerApi\Api\SetLoggedAsCustomerCustomerIdInterface;
+use Magento\LoginAsCustomerApi\Api\GenerateAuthenticationSecretInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
@@ -94,6 +95,11 @@ class Login extends Action implements HttpPostActionInterface
     private $isLoginAsCustomerEnabled;
 
     /**
+     * @var GenerateAuthenticationSecretInterface
+     */
+    private $generateAuthenticationSecret;
+
+    /**
      * @param Context $context
      * @param Session $authSession
      * @param StoreManagerInterface $storeManager
@@ -103,9 +109,9 @@ class Login extends Action implements HttpPostActionInterface
      * @param SaveAuthenticationDataInterface $saveAuthenticationData
      * @param DeleteAuthenticationDataForUserInterface $deleteAuthenticationDataForUser
      * @param Url $url
-     * @param SetLoggedAsCustomerCustomerIdInterface $setLoggedAsCustomerCustomerId
-     * @param IsLoginAsCustomerEnabledForCustomerInterface $isLoginAsCustomerEnabled
-     *
+     * @param SetLoggedAsCustomerCustomerIdInterface|null $setLoggedAsCustomerCustomerId
+     * @param IsLoginAsCustomerEnabledForCustomerInterface|null $isLoginAsCustomerEnabled
+     * @param GenerateAuthenticationSecretInterface|null $generateAuthenticationSecret
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -119,7 +125,8 @@ class Login extends Action implements HttpPostActionInterface
         DeleteAuthenticationDataForUserInterface $deleteAuthenticationDataForUser,
         Url $url,
         ?SetLoggedAsCustomerCustomerIdInterface $setLoggedAsCustomerCustomerId = null,
-        ?IsLoginAsCustomerEnabledForCustomerInterface $isLoginAsCustomerEnabled = null
+        ?IsLoginAsCustomerEnabledForCustomerInterface $isLoginAsCustomerEnabled = null,
+        ?GenerateAuthenticationSecretInterface $generateAuthenticationSecret = null
     ) {
         parent::__construct($context);
 
@@ -135,6 +142,8 @@ class Login extends Action implements HttpPostActionInterface
             ?? ObjectManager::getInstance()->get(SetLoggedAsCustomerCustomerIdInterface::class);
         $this->isLoginAsCustomerEnabled = $isLoginAsCustomerEnabled
             ?? ObjectManager::getInstance()->get(IsLoginAsCustomerEnabledForCustomerInterface::class);
+        $this->generateAuthenticationSecret = $generateAuthenticationSecret
+            ?? ObjectManager::getInstance()->get(GenerateAuthenticationSecretInterface::class);
     }
 
     /**
@@ -192,9 +201,10 @@ class Login extends Action implements HttpPostActionInterface
         );
 
         $this->deleteAuthenticationDataForUser->execute($userId);
-        $secret = $this->saveAuthenticationData->execute($authenticationData);
+        $this->saveAuthenticationData->execute($authenticationData);
         $this->setLoggedAsCustomerCustomerId->execute($customerId);
 
+        $secret = $this->generateAuthenticationSecret->execute($authenticationData);
         $redirectUrl = $this->getLoginProceedRedirectUrl($secret, $storeId);
 
         return $this->prepareJsonResult($messages, $redirectUrl);
@@ -211,10 +221,10 @@ class Login extends Action implements HttpPostActionInterface
     private function getLoginProceedRedirectUrl(string $secret, int $storeId): string
     {
         $store = $this->storeManager->getStore($storeId);
-
+        $queryParameters = ['secret' => $secret];
         return $this->url
             ->setScope($store)
-            ->getUrl('loginascustomer/login/index', ['secret' => $secret, '_nosid' => true]);
+            ->getUrl('loginascustomer/login/index', ['_query' => $queryParameters, '_nosid' => true]);
     }
 
     /**
