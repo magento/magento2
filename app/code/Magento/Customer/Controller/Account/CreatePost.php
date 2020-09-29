@@ -363,6 +363,8 @@ class CreatePost extends AbstractAccount implements CsrfAwareActionInterface, Ht
         }
         $this->session->regenerateId();
         try {
+            /** Clear redirect cookie to prevent redirect to other pages*/
+            $this->accountRedirect->clearRedirectCookie();
             $address = $this->extractAddress();
             $addresses = $address === null ? [] : [$address];
             $customer = $this->customerExtractor->extract('customer_account_create', $this->_request);
