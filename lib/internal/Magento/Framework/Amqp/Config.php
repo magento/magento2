@@ -56,6 +56,11 @@ class Config
     private $channel;
 
     /**
+     * @var AbstractConnection
+     */
+    private static $persistentConneciton;
+
+    /**
      * Associative array of Amqp configuration
      *
      * @var array
@@ -167,7 +172,7 @@ class Config
     {
         if (!isset($this->connection) || !isset($this->channel)) {
             $this->connection = $this->createConnection();
-
+            self::$persistentConneciton = $this->connection;
             $this->channel = $this->connection->channel();
         }
         return $this->channel;
@@ -211,6 +216,11 @@ class Config
         if (isset($this->connection)) {
             $this->connection->close();
             unset($this->connection);
+        }
+
+        if (!isset($this->connection) && isset(self::$persistentConneciton)) {
+            self::$persistentConneciton->close();
+            self::$persistentConneciton = null;
         }
     }
 }
