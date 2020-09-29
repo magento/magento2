@@ -94,7 +94,7 @@ class ReportTest extends TestCase
             ->getMock();
         $this->varDirectory = $this->createPartialMock(
             Write::class,
-            ['getRelativePath', 'readFile', 'isFile', 'stat']
+            ['getRelativePath', 'getAbsolutePath', 'readFile', 'isFile', 'stat']
         );
         $this->importHistoryDirectory = $this->createPartialMock(
             Read::class,
@@ -103,6 +103,7 @@ class ReportTest extends TestCase
 
         $this->filesystem = $this->createPartialMock(Filesystem::class, ['getDirectoryWrite', 'getDirectoryRead']);
         $this->varDirectory->expects($this->any())->method('getRelativePath')->willReturn('path');
+        $this->varDirectory->expects($this->any())->method('getAbsolutePath')->willReturn('path');
         $this->varDirectory->expects($this->any())->method('readFile')->willReturn('contents');
         $this->varDirectory->expects($this->any())->method('isFile')->willReturn(true);
         $this->varDirectory->expects($this->any())->method('stat')->willReturn(false);

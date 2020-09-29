@@ -10,6 +10,7 @@ use Magento\Framework\Exception\ValidatorException;
 
 /**
  * Wysiwyg Images Helper.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Images extends \Magento\Framework\App\Helper\AbstractHelper
 {
