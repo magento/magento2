@@ -15,8 +15,9 @@
  */
 ?>
 <ul class="block multicheckout progress items opc-progress-bar" id="checkout-progress-state">
-    <?php foreach ($block->getSteps() as $_step) : ?>
-        <li title="<?= $block->escapeHtmlAttr($_step->getLabel()) ?>" class="opc-progress-bar-item item<?= ($_step->getIsActive()) ? ' _active' : '' ?>">
+    <?php foreach ($block->getSteps() as $_step): ?>
+        <li title="<?= $block->escapeHtmlAttr($_step->getLabel()) ?>"
+            class="opc-progress-bar-item item<?= ($_step->getIsActive()) ? ' _active' : '' ?>">
             <span><?= $block->escapeHtml($_step->getLabel()) ?></span>
         </li>
     <?php endforeach; ?>
