@@ -96,8 +96,7 @@
         </actionGroup>
 
         <!--Filter catalog-->
-        <amOnPage url="{{AdminCatalogProductPage.url}}" stepKey="goToCatalogProductPage"/>
-        <waitForPageLoad stepKey="WaitForPageToLoad"/>
+        <actionGroup ref="AdminOpenCatalogProductPageActionGroup" stepKey="goToCatalogProductPage"/>
         <actionGroup ref="FilterProductGridByNameActionGroup" stepKey="filterBundleProductOptionsDownToName">
             <argument name="product" value="BundleProduct"/>
         </actionGroup>
