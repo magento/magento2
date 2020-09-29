@@ -389,7 +389,9 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
 
             if (is_string($_result)) {
                 return $_result;
-            } elseif (!isset($_result[0])) {
+            }
+
+            if (!isset($_result[0])) {
                 return __('Cannot process the item.')->render();
             }
 
@@ -407,6 +409,11 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
                         ]
                     )
                 );
+                if ($buyRequest->getSuperGroup()) {
+                    $serializedValue = $this->serializer->serialize($buyRequest->getSuperGroup());
+                    $_result[0]->addCustomOption('super_group', $serializedValue);
+                }
+
                 $products[] = $_result[0];
             } else {
                 $associatedProductsInfo[] = [$subProduct->getId() => $qty];

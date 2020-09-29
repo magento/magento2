@@ -11,6 +11,6 @@
     </extension_attributes>
 
     <extension_attributes for="Magento\Quote\Api\Data\ProductOptionInterface">
-        <attribute code="super_group" type="Magento\GroupedProduct\Api\Data\GroupedItemQtyInterface[]" />
+        <attribute code="grouped_options" type="Magento\GroupedProduct\Api\Data\GroupedOptionsInterface[]" />
     </extension_attributes>
 </config>
