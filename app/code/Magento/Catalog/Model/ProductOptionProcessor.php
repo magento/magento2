@@ -10,10 +10,9 @@ use Magento\Catalog\Model\CustomOptions\CustomOption;
 use Magento\Catalog\Model\CustomOptions\CustomOptionFactory;
 use Magento\Framework\DataObject;
 use Magento\Framework\DataObject\Factory as DataObjectFactory;
-use Magento\Framework\Serialize\Serializer\Json;
 
 /**
- * Processor ofr product options
+ * Processor for product options
  */
 class ProductOptionProcessor implements ProductOptionProcessorInterface
 {
@@ -146,7 +145,7 @@ class ProductOptionProcessor implements ProductOptionProcessorInterface
     }
 
     /**
-     * Returns date option value only with 'date_internal data
+     * Check if the option has a date_internal and date
      *
      * @param array $optionValue
      * @return bool

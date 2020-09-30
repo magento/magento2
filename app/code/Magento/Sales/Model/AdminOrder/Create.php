@@ -667,8 +667,9 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
             $productOptions = $orderItem->getProductOptions();
             if ($productOptions !== null && !empty($productOptions['options'])) {
                 $formattedOptions = [];
+                $useFrontendCalendar = $this->useFrontendCalendar();
                 foreach ($productOptions['options'] as $option) {
-                    if (in_array($option['option_type'], ['date', 'date_time']) && $this->useFrontendCalendar()) {
+                    if (in_array($option['option_type'], ['date', 'date_time']) && $useFrontendCalendar) {
                         $product->setSkipCheckRequiredOption(false);
                         break;
                     }
