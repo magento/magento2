@@ -153,7 +153,7 @@ class Forgotpassword extends Auth implements HttpGetActionInterface, HttpPostAct
      * @param User $user
      * @return bool
      */
-    protected function userHasValidPasswordResetToken(User $user): bool
+    private function userHasValidPasswordResetToken(User $user): bool
     {
         try {
             $newPassResetToken = $user->getRpToken();

@@ -1599,7 +1599,7 @@ class AccountManagement implements AccountManagementInterface
      * @param CustomerInterface $customer
      * @return bool
      */
-    protected function customerHasValidPasswordResetToken(CustomerInterface $customer): bool
+    private function customerHasValidPasswordResetToken(CustomerInterface $customer): bool
     {
         try {
             $customerId = $customer->getId();
