@@ -135,7 +135,7 @@ class Event extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         // get all or specified stores
         if ($predefinedStoreIds !== null) {
             $stores = $predefinedStoreIds;
-        } else if ($this->_storeManager->getStore()->getId() == 0) {
+        } elseif ($this->_storeManager->getStore()->getId() == 0) {
             foreach ($this->_storeManager->getStores() as $store) {
                 $stores[] = $store->getId();
             }
