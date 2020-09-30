@@ -11,8 +11,8 @@ use Magento\Customer\Model\CustomerFactory;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Integration\Model\Oauth\TokenFactory;
-use Magento\Setup\Exception;
 use Magento\Store\Model\StoreManagerInterface;
+use Exception;
 
 /**
  * Create customer token from customer email

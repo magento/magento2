@@ -12,6 +12,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Framework\GraphQl\Query\Resolver\Value;
@@ -19,7 +20,6 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\LoginAsCustomerApi\Api\ConfigInterface as LoginAsCustomerConfig;
 use Magento\LoginAsCustomerGraphQl\Model\LoginAsCustomer\CreateCustomerToken;
-use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 
 /**
  * Gets customer token
@@ -29,17 +29,17 @@ class RequestCustomerToken implements ResolverInterface
     /**
      * @var LoginAsCustomerConfig
      */
-    private LoginAsCustomerConfig $config;
+    private $config;
 
     /**
      * @var AuthorizationInterface
      */
-    private AuthorizationInterface $authorization;
+    private $authorization;
 
     /**
      * @var CreateCustomerToken
      */
-    private CreateCustomerToken $createCustomerToken;
+    private $createCustomerToken;
 
     /**
      * RequestCustomerToken constructor.
@@ -67,7 +67,7 @@ class RequestCustomerToken implements ResolverInterface
      * @param array|null $args
      * @return Value|mixed|void
      * @throws GraphQlAuthorizationException|GraphQlNoSuchEntityException|LocalizedException
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function resolve(
         Field $field,
