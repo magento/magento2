@@ -76,9 +76,7 @@
             </actionGroup>
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="indexerReindexAfterCreate">
-                <argument name="indices" value=""/>
-            </actionGroup>
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices" />
         </before>
 
         <after>
@@ -105,9 +103,7 @@
 	        <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="indexerReindexAfterDeleted">
-                <argument name="indices" value=""/>
-            </actionGroup>
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices2" />
         </after>
 
         <!-- Create the rule -->
@@ -142,8 +138,8 @@
         <click selector="{{StorefrontBundledSection.addToCart}}" stepKey="clickCustomize"/>
 
         <!-- Select two products -->
-        <click stepKey="selectProduct1" selector="{{StorefrontBundledSection.checkboxOptionLabel('$$createBundleOption1_1.sku$$','$$simpleProduct1.name$$')}}"/>
-        <click stepKey="selectProduct2" selector="{{StorefrontBundledSection.checkboxOptionLabel('$$createBundleOption1_2.sku$$','$$simpleProduct3.name$$')}}"/>
+        <click stepKey="selectProduct1" selector="{{StorefrontBundledSection.productCheckbox('1','1')}}"/>
+        <click stepKey="selectProduct2" selector="{{StorefrontBundledSection.productCheckbox('2','1')}}"/>
 
         <!--Click "Add to Cart" button-->
         <click selector="{{StorefrontBundleProductActionSection.addToCartButton}}" stepKey="clickAddBundleProductToCart"/>
