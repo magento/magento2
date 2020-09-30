@@ -4,13 +4,15 @@
  */
 
 define([
-    'uiComponent'
-], function (Component) {
+    'uiComponent',
+    'escaper'
+], function (Component, escaper) {
     'use strict';
 
     return Component.extend({
         defaults: {
-            template: 'Magento_Checkout/summary/item/details'
+            template: 'Magento_Checkout/summary/item/details',
+            allowedTags: ['div', 'span', 'b', 'strong', 'i', 'em', 'u', 'a']
         },
 
         /**
@@ -19,6 +21,16 @@ define([
          */
         getValue: function (quoteItem) {
             return quoteItem.name;
+        },
+
+        /**
+         * Name column.
+         *
+         * @param {String} name
+         * @returns {String}
+         */
+        getNameUnsanitizedHtml: function (name) {
+            return escaper.escapeHtml(name, this.allowedTags);
         }
     });
 });
