@@ -68,7 +68,7 @@ define([
                 self = this;
 
             if (event.handleObj.selector == this.options.qtyInfo) { //eslint-disable-line eqeqeq
-                this._updateAddToWishlistButton({});
+                this._updateQTY();
                 event.stopPropagation();
 
                 return;
@@ -118,11 +118,49 @@ define([
                     };
                 }
 
-                self._removeExcessiveData(params, dataToAdd);
+                let wishListItemsToDel = {};
+
+                $.each(params.data, function (key, value) {
+                    if (key.indexOf('option') === -1) {
+                        return;
+                    }
+
+                    if (!dataToAdd[key]) {
+                        wishListItemsToDel[key] = value;
+                    }
+
+                    return wishListItemsToDel;
+                });
+
+                $.each(wishListItemsToDel, function (key) {
+                    delete params.data[key];
+                });
+
+                // if ($.isEmptyObject(dataToAdd)) {
+                //     self._removeExcessiveData(params, dataToAdd);
+                // }
 
                 params.data = $.extend({}, params.data, dataToAdd, {
                     'qty': $(self.options.qtyInfo).val()
                 });
+                $(element).data('post', params);
+            });
+        },
+
+        /** Update only QTY
+         *
+         * @private
+         */
+        _updateQTY: function () {
+            var self = this;
+
+            $('[data-action="add-to-wishlist"]').each(function (index, element) {
+                var params = $(element).data('post');
+
+                params.data = $.extend({}, params.data, {
+                    'qty': $(self.options.qtyInfo).val()
+                });
+
                 $(element).data('post', params);
             });
         },
@@ -132,6 +170,7 @@ define([
          * @param {Object} array2
          * @return {Object}
          * @private
+         * @deprecated
          */
         _arrayDiffByKeys: function (array1, array2) {
             var result = {};
@@ -184,6 +223,7 @@ define([
          * @param {Object} params
          * @param {Object} dataToAdd
          * @private
+         * @deprecated
          */
         _removeExcessiveData: function (params, dataToAdd) {
             var dataToRemove = this._arrayDiffByKeys(params.data, dataToAdd);
