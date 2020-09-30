@@ -43,7 +43,8 @@
             <argument name="product" value="$$createFirstSimpleProduct$$"/>
         </actionGroup>
         <!--2.Run cron for updating stock status of parent product-->
-        <magentoCron stepKey="runAllCronJobs"/>
+        <magentoCLI command="cron:run" stepKey="runCron"/>
+        <wait time="60" stepKey="waitForChanges"/>
         <!--3.Check stock status of grouped product. Stock status should be "Out of Stock"-->
         <actionGroup ref="AssertAdminProductStockStatusActionGroup" stepKey="checkProductOutOfStock">
             <argument name="productId" value="$$createGroupedProduct.id$$"/>
