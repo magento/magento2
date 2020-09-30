@@ -174,6 +174,10 @@ class EventTest extends TestCase
             ->expects($this->any())
             ->method('getSelect')
             ->willReturn($collectionSelectMock);
+        $collectionMock
+            ->expects($this->any())
+            ->method('getStoreId')
+            ->willReturn(1);
 
         $selectMock = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()
