@@ -151,18 +151,17 @@ QUERY;
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
      * @magentoApiDataFixture Magento/Store/_files/second_store.php
-     *
      */
     public function testGetCartWithWrongStore()
     {
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('Wrong store code specified for cart');
-
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
         $query = $this->getQuery($maskedQuoteId);
 
         $headerMap = ['Store' => 'fixture_second_store'];
-        $this->graphQlQuery($query, [], '', $headerMap);
+        $response = $this->graphQlQuery($query, [], '', $headerMap);
+
+        self::assertArrayHasKey('cart', $response);
+        self::assertArrayHasKey('items', $response['cart']);
     }
 
     /**

@@ -76,12 +76,8 @@ class GetCartForUser
         }
 
         if ((int)$cart->getStoreId() !== $storeId) {
-            throw new GraphQlNoSuchEntityException(
-                __(
-                    'Wrong store code specified for cart "%masked_cart_id"',
-                    ['masked_cart_id' => $cartHash]
-                )
-            );
+            $cart->setStoreId($storeId);
+            $this->cartRepository->save($cart);
         }
 
         $cartCustomerId = (int)$cart->getCustomerId();
