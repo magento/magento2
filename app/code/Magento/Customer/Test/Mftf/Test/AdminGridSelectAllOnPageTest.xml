@@ -32,6 +32,7 @@
         </after>
         <amOnPage url="{{AdminCustomerPage.url}}" stepKey="openCustomerPage"/>
         <!-- Select all from dropdown -->
+        <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilters" />
         <actionGroup ref="AdminGridSelectAllActionGroup" stepKey="selectAllCustomers"/>
         <!-- Deselect third customer -->
         <click selector="{{AdminCustomerGridMainActionsSection.customerCheckbox(($$thirdCustomer.email$$)}}" stepKey="selectThirdCustomer"/>
