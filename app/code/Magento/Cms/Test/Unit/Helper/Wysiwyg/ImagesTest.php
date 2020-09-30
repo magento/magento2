@@ -107,17 +107,11 @@ class ImagesTest extends TestCase
     protected function setUp(): void
     {
         $this->path = 'PATH';
-
         $this->objectManager = new ObjectManager($this);
-
         $this->eventManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
-
         $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
-
         $this->urlEncoderMock = $this->getMockForAbstractClass(EncoderInterface::class);
-
         $this->backendDataMock = $this->createMock(Data::class);
-
         $this->contextMock = $this->createMock(Context::class);
         $this->contextMock->expects($this->any())
             ->method('getEventManager')
@@ -128,26 +122,21 @@ class ImagesTest extends TestCase
         $this->contextMock->expects($this->any())
             ->method('getUrlEncoder')
             ->willReturn($this->urlEncoderMock);
-
         $this->directoryWriteMock = $this->getMockBuilder(Write::class)
             ->setConstructorArgs(['path' => $this->path])
             ->disableOriginalConstructor()
             ->getMock();
-
         $this->directoryReadMock = $this->getMockBuilder(Read::class)
             ->setConstructorArgs(['path' => $this->path])
             ->disableOriginalConstructor()
             ->getMock();
-
         $this->filesystemMock = $this->createMock(Filesystem::class);
         $this->filesystemMock->expects($this->once())
             ->method('getDirectoryWrite')
             ->willReturn($this->directoryWriteMock);
-
         $this->filesystemMock->expects($this->once())
             ->method('getDirectoryReadByPath')
             ->willReturn($this->directoryReadMock);
-
         $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
             ->setMethods(
                 [
@@ -158,11 +147,8 @@ class ImagesTest extends TestCase
             )
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-
         $this->storeMock = $this->createMock(Store::class);
-
         $this->escaperMock = $this->createMock(Escaper::class);
-
         $this->imagesHelper = $this->objectManager->getObject(
             Images::class,
             [
@@ -173,11 +159,9 @@ class ImagesTest extends TestCase
                 'escaper' => $this->escaperMock,
             ]
         );
-
         $this->directoryWriteMock->expects($this->any())
             ->method('getAbsolutePath')
-            ->willReturnMap(
-                [
+            ->willReturnMap([
                     [
                         WysiwygConfig::IMAGE_DIRECTORY,
                         null,
@@ -193,13 +177,10 @@ class ImagesTest extends TestCase
                         null,
                         $this->getAbsolutePath('')
                     ]
-                ]
-            );
-
+                ]);
         $this->directoryReadMock->expects($this->any())
                 ->method('getAbsolutePath')
-                ->willReturnMap(
-                    [
+                ->willReturnMap([
                         [
                             $this->path,
                             null,
@@ -215,8 +196,7 @@ class ImagesTest extends TestCase
                             null,
                             $this->path . '/tmp'
                         ]
-                    ]
-                );
+                    ]);
     }
 
     protected function tearDown(): void
