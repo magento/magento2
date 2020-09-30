@@ -176,7 +176,7 @@ class Config
     public function getChannel()
     {
         //If just new object was created
-        if (!isset($this->channel) && self::$persistentChannel) {
+        if (!isset($this->channel) && self::$persistentChannel && self::$persistentChannel->is_open()) {
             return self::$persistentChannel;
         }
 
