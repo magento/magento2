@@ -93,7 +93,7 @@ class ProcessUrlRewriteOnChangeVisibilityObserverTest extends \PHPUnit\Framework
         );
 
         $actual = $this->getActualResults($productFilter);
-        $this->assertCount(0, $actual);
+        $this->assertCount(2, $actual);
     }
 
     /**
@@ -115,7 +115,7 @@ class ProcessUrlRewriteOnChangeVisibilityObserverTest extends \PHPUnit\Framework
         ];
 
         $actual = $this->getActualResults($productFilter);
-        $this->assertCount(0, $actual);
+        $this->assertCount(2, $actual);
 
         $this->eventManager->dispatch(
             'catalog_product_attribute_update_before',
@@ -146,30 +146,6 @@ class ProcessUrlRewriteOnChangeVisibilityObserverTest extends \PHPUnit\Framework
         foreach ($expected as $row) {
             $this->assertContains($row, $actual);
         }
-    }
-
-    /**
-     * @magentoDataFixture Magento/CatalogUrlRewrite/_files/products_invisible.php
-     * @magentoAppIsolation enabled
-     */
-    public function testErrorOnDuplicatedUrlKey()
-    {
-        $skus = ['product1', 'product2'];
-        foreach ($skus as $sku) {
-            /** @var \Magento\Catalog\Model\Product $product */
-            $productIds[] = $this->productRepository->get($sku)->getId();
-        }
-        $this->expectException(UrlAlreadyExistsException::class);
-        $this->expectExceptionMessage('Can not change the visibility of the product with SKU equals "product2". '
-            . 'URL key "product-1" for specified store already exists.');
-
-        $this->eventManager->dispatch(
-            'catalog_product_attribute_update_before',
-            [
-                'attributes_data' => [ ProductInterface::VISIBILITY => Visibility::VISIBILITY_BOTH ],
-                'product_ids' => $productIds
-            ]
-        );
     }
 
     /**

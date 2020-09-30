@@ -19,6 +19,7 @@ $installer = $objectManager->create(CategorySetup::class);
 $productRepository = $objectManager->get(ProductRepositoryInterface::class);
 
 $skus = ['product1', 'product2'];
+$inc = 0;
 foreach ($skus as $sku) {
     /** @var $product \Magento\Catalog\Model\Product */
     $product = $objectManager->create(\Magento\Catalog\Model\Product::class);
@@ -31,7 +32,7 @@ foreach ($skus as $sku) {
         ->setPrice(10)
         ->setWeight(18)
         ->setStockData(['use_config_manage_stock' => 0])
-        ->setUrlKey('product-1')
+        ->setUrlKey('product-1' . '-' . ($inc++))
         ->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_NOT_VISIBLE)
         ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED);
     $productRepository->save($product);
