@@ -38,10 +38,9 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
         <!--1.Open product grid page and choose "Update attributes" and set product stock status to "Out of Stock"-->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="openProductGridFirstTime"/>
-        <waitForPageLoad stepKey="waitForProductGridFirstTime"/>
         <actionGroup ref="AdminMassUpdateProductQtyAndStockStatusActionGroup" stepKey="setProductToOutOfStock">
             <argument name="attributes" value="UpdateAttributeQtyAndStockToOutOfStock"/>
+            <argument name="product" value="$$createFirstSimpleProduct$$"/>
         </actionGroup>
         <!--2.Run cron for updating stock status of parent product-->
         <magentoCron stepKey="runAllCronJobs"/>
@@ -51,10 +50,9 @@
             <argument name="stockStatus" value="Out of Stock"/>
         </actionGroup>
         <!--4.Open product grid page choose "Update attributes" and set product stock status to "In Stock"-->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="openProductGridSecondTime"/>
-        <waitForPageLoad stepKey="waitForProductGridSecondTime"/>
         <actionGroup ref="AdminMassUpdateProductQtyAndStockStatusActionGroup" stepKey="returnProductToInStock">
             <argument name="attributes" value="UpdateAttributeQtyAndStockToInStock"/>
+            <argument name="product" value="$$createFirstSimpleProduct$$"/>
         </actionGroup>
         <!--5.Check stock status of grouped product. Stock status should be "In Stock"-->
         <actionGroup ref="AssertAdminProductStockStatusActionGroup" stepKey="checkProductInStock">
