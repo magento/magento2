@@ -136,10 +136,6 @@ define([
                     delete params.data[key];
                 });
 
-                // if ($.isEmptyObject(dataToAdd)) {
-                //     self._removeExcessiveData(params, dataToAdd);
-                // }
-
                 params.data = $.extend({}, params.data, dataToAdd, {
                     'qty': $(self.options.qtyInfo).val()
                 });
