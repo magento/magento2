@@ -47,12 +47,12 @@ class LoggerProxyTest extends \PHPUnit\Framework\TestCase
         $logger = $this->getMockBuilder(LoggerInterface::class)
             ->getMockForAbstractClass();
 
-        $objectManager->expects($this->atLeastOnce())
+        $objectManager->expects($this->at(0))
             ->method('get')
             ->with(DeploymentConfig::class)
             ->willReturn($deploymentConfig);
 
-        $objectManager->expects($this->atLeastOnce())
+        $objectManager->expects($this->at(1))
             ->method('get')
             ->with(Monolog::class)
             ->willReturn($logger);
@@ -81,6 +81,11 @@ class LoggerProxyTest extends \PHPUnit\Framework\TestCase
             ->method('get')
             ->with('log/args')
             ->willReturn($args);
+
+        $objectManager->expects($this->at(0))
+            ->method('get')
+            ->with(DeploymentConfig::class)
+            ->willReturn($deploymentConfig);
 
         $objectManager->expects($this->once())
             ->method('create')

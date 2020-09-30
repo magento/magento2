@@ -46,7 +46,7 @@ class LoggerProxy implements LoggerInterface, NoninterceptableInterface
      */
     public function __sleep()
     {
-        return ['logger'];
+        return [];
     }
 
     /**
