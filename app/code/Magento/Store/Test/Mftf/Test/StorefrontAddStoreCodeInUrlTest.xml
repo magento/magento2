@@ -21,15 +21,12 @@
         </annotations>
         <before>
             <magentoCLI command="config:set {{StorefrontEnableAddStoreCodeToUrls.path}} {{StorefrontEnableAddStoreCodeToUrls.value}}" stepKey="addStoreCodeToUrlEnable"/>
-            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCachesAfterSet">
-                <argument name="tags" value="config full_page"/>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushPageCache">
+                <argument name="tags" value="full_page"/>
             </actionGroup>
         </before>
         <after>
             <magentoCLI command="config:set {{StorefrontDisableAddStoreCodeToUrls.path}} {{StorefrontDisableAddStoreCodeToUrls.value}}" stepKey="addStoreCodeToUrlDisable"/>
-            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCachesDefault">
-                <argument name="tags" value="config full_page"/>
-            </actionGroup>
         </after>
 
         <actionGroup ref="StorefrontClickOnHeaderLogoActionGroup" stepKey="clickOnStorefrontHeaderLogo"/>
