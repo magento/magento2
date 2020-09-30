@@ -118,7 +118,7 @@ class ResetPassword implements ResolverInterface
                 $args['newPassword']
             );
         } catch (LocalizedException $e) {
-            throw new GraphQlInputException(__($e->getMessage()), $e);
+            throw new GraphQlInputException(__('The password must be at least 8 characters long, minimum of 3 different classes of characters: Lower Case, Upper Case, Digits, Special Characters.'), $e);
         }
     }
 }
