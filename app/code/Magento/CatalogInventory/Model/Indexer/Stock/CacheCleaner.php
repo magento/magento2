@@ -118,7 +118,7 @@ class CacheCleaner
                 'cpr.parent_id = cpe.' . $linkField,
                 ['parent_id' => 'cpe.entity_id']
             )
-            ->where('product_id IN (?)', $productIds)
+            ->where('product_id IN (?)', $productIds, \Zend_Db::INT_TYPE)
             ->where('stock_id = ?', Stock::DEFAULT_STOCK_ID)
             ->where('website_id = ?', $this->stockConfiguration->getDefaultScopeId());
 

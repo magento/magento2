@@ -52,7 +52,7 @@ class FilterFactoryTest extends TestCase
     /**
      * Setup environment for test
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
 
@@ -71,7 +71,7 @@ class FilterFactoryTest extends TestCase
      */
     public function testCreateWithUseSourceAttribute()
     {
-        $contextMock = $this->createMock(ContextInterface::class);
+        $contextMock = $this->getMockForAbstractClass(ContextInterface::class);
         $attributeMock = $this->getMockBuilder(ProductAttributeInterface::class)
             ->setMethods(['usesSource', 'getSource'])
             ->getMockForAbstractClass();
@@ -81,7 +81,7 @@ class FilterFactoryTest extends TestCase
         $attributeMock->method('usesSource')->willReturn(self::STUB_ATTRIBUTE['uses_source']);
         $attributeMock->method('getSourceModel')->willReturn(self::STUB_ATTRIBUTE['source_model']);
         $attributeMock->method('getFrontendInput')->willReturn(self::STUB_ATTRIBUTE['frontend_input']);
-        $sourceMock = $this->createMock(SourceInterface::class);
+        $sourceMock = $this->getMockForAbstractClass(SourceInterface::class);
         $attributeMock->method('getSource')->willReturn($sourceMock);
         $sourceMock->method('getAllOptions')->willReturn(self::STUB_ATTRIBUTE['all_options']);
         $this->componentFactoryMock->expects($this->once())

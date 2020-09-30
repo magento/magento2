@@ -7,6 +7,7 @@
  */
 namespace Magento\ConfigurableProduct\Block\Product\View\Type;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\ConfigurableProduct\Model\ConfigurableAttributeData;
 use Magento\Customer\Helper\Session\CurrentCustomer;
@@ -35,7 +36,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
     /**
      * Current customer
      *
-     * @deprecated 100.2.0, as unused property
+     * @deprecated 100.2.0 as unused property
      * @var CurrentCustomer
      */
     protected $currentCustomer;
@@ -134,7 +135,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
      * Get cache key informative items.
      *
      * @return array
-     * @since 100.2.0
+     * @since 100.1.10
      */
     public function getCacheKeyInfo()
     {
@@ -253,7 +254,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
      * Get product images for configurable variations
      *
      * @return array
-     * @since 100.2.0
+     * @since 100.1.10
      */
     protected function getOptionImages()
     {
@@ -287,52 +288,74 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
     {
         $prices = [];
         foreach ($this->getAllowProducts() as $product) {
-            $tierPrices = [];
             $priceInfo = $product->getPriceInfo();
-            $tierPriceModel =  $priceInfo->getPrice('tier_price');
-            $tierPricesList = $tierPriceModel->getTierPriceList();
-            foreach ($tierPricesList as $tierPrice) {
-                $tierPrices[] = [
-                    'qty' => $this->localeFormat->getNumber($tierPrice['price_qty']),
-                    'price' => $this->localeFormat->getNumber($tierPrice['price']->getValue()),
-                    'percentage' => $this->localeFormat->getNumber(
-                        $tierPriceModel->getSavePercent($tierPrice['price'])
-                    ),
-                ];
-            }
 
-            $prices[$product->getId()] =
-                [
-                    'oldPrice' => [
-                        'amount' => $this->localeFormat->getNumber(
-                            $priceInfo->getPrice('regular_price')->getAmount()->getValue()
-                        ),
-                    ],
-                    'basePrice' => [
-                        'amount' => $this->localeFormat->getNumber(
-                            $priceInfo->getPrice('final_price')->getAmount()->getBaseAmount()
-                        ),
-                    ],
-                    'finalPrice' => [
-                        'amount' => $this->localeFormat->getNumber(
-                            $priceInfo->getPrice('final_price')->getAmount()->getValue()
-                        ),
-                    ],
-                    'tierPrices' => $tierPrices,
-                    'msrpPrice' => [
-                        'amount' => $this->localeFormat->getNumber(
-                            $product->getMsrp()
-                        ),
-                    ],
-                 ];
+            $prices[$product->getId()] = [
+                'baseOldPrice' => [
+                    'amount' => $this->localeFormat->getNumber(
+                        $priceInfo->getPrice('regular_price')->getAmount()->getBaseAmount()
+                    ),
+                ],
+                'oldPrice' => [
+                    'amount' => $this->localeFormat->getNumber(
+                        $priceInfo->getPrice('regular_price')->getAmount()->getValue()
+                    ),
+                ],
+                'basePrice' => [
+                    'amount' => $this->localeFormat->getNumber(
+                        $priceInfo->getPrice('final_price')->getAmount()->getBaseAmount()
+                    ),
+                ],
+                'finalPrice' => [
+                    'amount' => $this->localeFormat->getNumber(
+                        $priceInfo->getPrice('final_price')->getAmount()->getValue()
+                    ),
+                ],
+                'tierPrices' => $this->getTierPricesByProduct($product),
+                'msrpPrice' => [
+                    'amount' => $this->localeFormat->getNumber(
+                        $this->priceCurrency->convertAndRound($product->getMsrp())
+                    ),
+                ],
+            ];
         }
+
         return $prices;
+    }
+
+    /**
+     * Returns product's tier prices list
+     *
+     * @param ProductInterface $product
+     * @return array
+     */
+    private function getTierPricesByProduct(ProductInterface $product): array
+    {
+        $tierPrices = [];
+        $tierPriceModel = $product->getPriceInfo()->getPrice('tier_price');
+        foreach ($tierPriceModel->getTierPriceList() as $tierPrice) {
+            $tierPriceData = [
+                'qty' => $this->localeFormat->getNumber($tierPrice['price_qty']),
+                'price' => $this->localeFormat->getNumber($tierPrice['price']->getValue()),
+                'percentage' => $this->localeFormat->getNumber(
+                    $tierPriceModel->getSavePercent($tierPrice['price'])
+                ),
+            ];
+
+            if (isset($tierPrice['excl_tax_price'])) {
+                $excludingTax = $tierPrice['excl_tax_price'];
+                $tierPriceData['excl_tax_price'] = $this->localeFormat->getNumber($excludingTax->getBaseAmount());
+            }
+            $tierPrices[] = $tierPriceData;
+        }
+
+        return $tierPrices;
     }
 
     /**
      * Replace ',' on '.' for js
      *
-     * @deprecated 100.2.0 Will be removed in major release
+     * @deprecated 100.1.10 Will be removed in major release
      * @param float $price
      * @return string
      */
@@ -345,7 +368,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
      * Should we generate "As low as" block or not
      *
      * @return bool
-     * @since 100.2.0
+     * @since 100.1.10
      */
     public function showMinimalPrice()
     {

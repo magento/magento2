@@ -3,19 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Setup\Test\Unit\Patch;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Setup\Patch\PatchFactory;
 use Magento\Framework\Setup\Patch\PatchHistory;
 use Magento\Framework\Setup\Patch\PatchRegistry;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class PatchRegirtryTest
- * @package Magento\Framework\Setup\Test\Unit\Patch
- */
-class PatchRegirtryTest extends \PHPUnit\Framework\TestCase
+class PatchRegirtryTest extends TestCase
 {
     /**
      * @var PatchRegistry
@@ -23,22 +22,22 @@ class PatchRegirtryTest extends \PHPUnit\Framework\TestCase
     private $patchRegistry;
 
     /**
-     * @var PatchFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var PatchFactory|MockObject
      */
     private $patchFactoryMock;
 
     /**
-     * @var PatchHistory|\PHPUnit_Framework_MockObject_MockObject
+     * @var PatchHistory|MockObject
      */
     private $patchHistoryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $this->patchFactoryMock = $this->getMockBuilder(PatchFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        
+
         $this->patchHistoryMock = $this->getMockBuilder(PatchHistory::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -70,7 +69,7 @@ class PatchRegirtryTest extends \PHPUnit\Framework\TestCase
             ->with(\SomeDataPatch::class)
             ->willReturn(true);
 
-        $this->assertEquals(false, $this->patchRegistry->registerPatch(\SomeDataPatch::class));
+        $this->assertFalse($this->patchRegistry->registerPatch(\SomeDataPatch::class));
     }
 
     public function testGetIterator()

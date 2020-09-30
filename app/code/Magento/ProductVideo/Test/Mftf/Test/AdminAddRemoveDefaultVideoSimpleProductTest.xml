@@ -19,6 +19,9 @@
             <testCaseId value="MC-206"/>
             <group value="catalog"/>
             <group value="productVideo"/>
+            <skip>
+                <issueId value="MC-33903"/>
+            </skip>
         </annotations>
         <before>
             <createData entity="ProductVideoYoutubeApiKeyConfig" stepKey="setYoutubeApiKeyConfig"/>

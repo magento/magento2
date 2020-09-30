@@ -13,6 +13,7 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Visibility;
 use Magento\Eav\Model\Entity\Type;
+use Magento\Framework\App\Cache\Manager;
 use Magento\Framework\App\Http;
 use Magento\Framework\Registry;
 use Magento\Store\Model\StoreManagerInterface;
@@ -67,7 +68,7 @@ class ViewTest extends AbstractController
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -269,6 +270,30 @@ class ViewTest extends AbstractController
     }
 
     /**
+     * Test that 404 page has product tag if product is not visible
+     *
+     * @magentoDataFixture Magento/Quote/_files/is_not_salable_product.php
+     * @magentoCache full_page enabled
+     * @return void
+     */
+    public function test404NotFoundPageCacheTags(): void
+    {
+        $cache = $this->_objectManager->get(Manager::class);
+        $cache->clean(['full_page']);
+        $product = $this->productRepository->get('simple-99');
+        $this->dispatch(sprintf('catalog/product/view/id/%s/', $product->getId()));
+        $this->assert404NotFound();
+        $pTag = Product::CACHE_TAG . '_' . $product->getId();
+        $hTags = $this->getResponse()->getHeader('X-Magento-Tags');
+        $tags = $hTags && $hTags->getFieldValue() ? explode(',', $hTags->getFieldValue()) : [];
+        $this->assertContains(
+            $pTag,
+            $tags,
+            "Failed asserting that X-Magento-Tags: {$hTags->getFieldValue()} contains \"$pTag\""
+        );
+    }
+
+    /**
      * @param string|ProductInterface $product
      * @param array $data
      * @return ProductInterface
@@ -336,7 +361,7 @@ class ViewTest extends AbstractController
     {
         $logger = $this->getMockBuilder(LoggerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->_objectManager->addSharedInstance($logger, MagentoMonologLogger::class);
 
         return $logger;

@@ -26,8 +26,7 @@
 
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         <!--Create product via admin-->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToProductIndex"/>
-        <waitForPageLoad stepKey="waitForProductIndexPage"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="goToProductIndex"/>
         <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToProductCreatePage">
             <argument name="product" value="SimpleProductNameWithDoubleQuote"/>
         </actionGroup>
@@ -41,7 +40,9 @@
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
 
         <!--Run re-index task-->
-        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
 
         <!--Check product in category listing-->
         <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="goToCategoryPage"/>
@@ -52,7 +53,9 @@
         <click selector="{{StorefrontCategoryProductSection.ProductTitleByName(SimpleProductNameWithDoubleQuote.name)}}" stepKey="clickProductToGoProductPage"/>
         <waitForPageLoad stepKey="waitForProductDisplayPageLoad"/>
         <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{SimpleProductNameWithDoubleQuote.name}}" stepKey="seeCorrectName"/>
-        <see selector="{{StorefrontProductInfoMainSection.productSku}}" userInput="{{SimpleProductNameWithDoubleQuote.sku}}" stepKey="seeCorrectSku"/>
+        <actionGroup ref="StorefrontAssertProductSkuOnProductPageActionGroup" stepKey="seeCorrectSku">
+            <argument name="productSku" value="{{SimpleProductNameWithDoubleQuote.sku}}"/>
+        </actionGroup>
         <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="${{SimpleProductNameWithDoubleQuote.price}}" stepKey="seeCorrectPrice"/>
         <seeElement selector="{{StorefrontProductInfoMainSection.productImageSrc(ProductImage.fileName)}}" stepKey="seeCorrectImage"/>
         <see selector="{{StorefrontProductInfoMainSection.stock}}" userInput="In Stock" stepKey="seeInStock"/>

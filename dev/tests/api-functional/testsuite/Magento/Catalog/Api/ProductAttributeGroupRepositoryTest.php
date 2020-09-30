@@ -48,10 +48,11 @@ class ProductAttributeGroupRepositoryTest extends \Magento\TestFramework\TestCas
     }
 
     /**
-     * @expectedException \Exception
      */
     public function testCreateGroupWithAttributeSetThatDoesNotExist()
     {
+        $this->expectException(\Exception::class);
+
         $attributeSetId = -1;
         $this->createGroup($attributeSetId);
     }
