@@ -36,7 +36,9 @@
                     <requiredEntity createDataKey="simpleProduct"/>
                 </createData>
                 <!-- Run reindex stock status -->
-                <magentoCLI command="indexer:reindex" arguments="cataloginventory_stock" stepKey="reindex"/>
+                <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                    <argument name="indices" value="cataloginventory_stock"/>
+                </actionGroup>
             </before>
             <after>
                 <deleteData createDataKey="bundleProduct" stepKey="deleteBundleProduct"/>

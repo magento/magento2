@@ -7,11 +7,13 @@
  *
  * @var \Magento\Integration\Block\Adminhtml\Integration\Activate\Permissions\Tab\Webapi $block
  */
+
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
 <fieldset class="admin__fieldset form-inline entry-edit">
-    <?php if ($block->isTreeEmpty()) : ?>
+    <?php if ($block->isTreeEmpty()): ?>
         <p class="empty"><?= $block->escapeHtml(__('No permissions requested')) ?></p>
-    <?php else : ?>
+    <?php else: ?>
         <div class="field" data-role="tree-resources-container">
             <div class="control">
                 <div id="resource-tree" class="tree x-tree" data-role="resource-tree"></div>
@@ -19,8 +21,11 @@
         </div>
     <?php endif ?>
 </fieldset>
-<?php if (!$block->isTreeEmpty()) : ?>
-    <script>
+<?php
+if (!$block->isTreeEmpty()):
+    $treeJson = /* @noEscape */ $block->getResourcesTreeJson();
+    $selectedJson = /* @noEscape */ $block->getSelectedResourcesJson();
+    $scriptString = <<<script
         require(["jquery", "Magento_User/js/roles-tree"], function($){
             $.widget('mage.rolesTree', $.mage.rolesTree, {
                 _checkNode: function(event) {},
@@ -32,9 +37,11 @@
             });
 
             $('[data-role="resource-tree"]').rolesTree({
-                'treeInitData': <?= /* @noEscape */ $block->getResourcesTreeJson() ?>,
-                'treeInitSelectedData': <?= /* @noEscape */ $block->getSelectedResourcesJson() ?>
+                'treeInitData': {$treeJson},
+                'treeInitSelectedData': {$selectedJson}
             });
         });
-    </script>
+script;
+    ?>
+    <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
 <?php endif ?>

@@ -9,9 +9,13 @@ namespace Magento\ConfigurableProduct\Block\Product\View\Type;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Helper\Product as HelperProduct;
 use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute as ConfigurableAttribute;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute\Collection;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\DataObject;
+use Magento\Framework\DataObjectFactory;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\View\LayoutInterface;
@@ -26,6 +30,7 @@ use PHPUnit\Framework\TestCase;
  * @magentoAppIsolation enabled
  * @magentoDbIsolation enabled
  * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ConfigurableTest extends TestCase
 {
@@ -65,6 +70,14 @@ class ConfigurableTest extends TestCase
     private $product;
 
     /**
+     * @var HelperProduct
+     */
+    private $helperProduct;
+
+    /** @var DataObjectFactory */
+    private $dataObjectFactory;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -79,6 +92,8 @@ class ConfigurableTest extends TestCase
         $this->product = $this->productRepository->get('configurable');
         $this->block = $this->objectManager->get(LayoutInterface::class)->createBlock(Configurable::class);
         $this->block->setProduct($this->product);
+        $this->helperProduct = $this->objectManager->get(HelperProduct::class);
+        $this->dataObjectFactory = $this->objectManager->get(DataObjectFactory::class);
     }
 
     /**
@@ -126,6 +141,29 @@ class ConfigurableTest extends TestCase
         $this->assertArrayHasKey('basePrice', $config['prices']);
         $this->assertArrayHasKey('images', $config);
         $this->assertCount(0, $config['images']);
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetJsonConfigWithPreconfiguredValues(): void
+    {
+        /** @var ConfigurableAttribute $attribute */
+        $attribute = $this->product->getExtensionAttributes()->getConfigurableProductOptions()[0];
+        $expectedAttributeValue = [
+            $attribute->getAttributeId() => $attribute->getOptions()[0]['value_index'],
+        ];
+        /** @var DataObject $request */
+        $buyRequest = $this->dataObjectFactory->create();
+        $buyRequest->setData([
+            'qty' => 1,
+            'super_attribute' => $expectedAttributeValue,
+        ]);
+        $this->helperProduct->prepareProductOptions($this->product, $buyRequest);
+
+        $config = $this->serializer->unserialize($this->block->getJsonConfig());
+        $this->assertArrayHasKey('defaultValues', $config);
+        $this->assertEquals($expectedAttributeValue, $config['defaultValues']);
     }
 
     /**

@@ -16,6 +16,7 @@ use Magento\Framework\Search\RequestInterface;
  *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Builder
 {
@@ -104,6 +105,7 @@ class Builder
      *
      * @param \Magento\Framework\Api\SortOrder[] $sort
      * @return $this
+     * @since 102.0.2
      */
     public function setSort($sort)
     {

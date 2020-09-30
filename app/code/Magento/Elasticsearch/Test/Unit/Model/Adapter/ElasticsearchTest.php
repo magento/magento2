@@ -11,14 +11,18 @@ use Elasticsearch\Client;
 use Elasticsearch\Namespaces\IndicesNamespace;
 use Magento\AdvancedSearch\Model\Client\ClientInterface as ElasticsearchClient;
 use Magento\AdvancedSearch\Model\Client\ClientOptionsInterface;
+use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
+use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Elasticsearch\Model\Adapter\BatchDataMapperInterface;
 use Magento\Elasticsearch\Model\Adapter\Elasticsearch as ElasticsearchAdapter;
 use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
+use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\StaticField;
 use Magento\Elasticsearch\Model\Adapter\Index\BuilderInterface;
 use Magento\Elasticsearch\Model\Adapter\Index\IndexNameResolver;
 use Magento\Elasticsearch\Model\Config;
 use Magento\Elasticsearch\SearchAdapter\ConnectionManager;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Stdlib\ArrayManager;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -80,6 +84,21 @@ class ElasticsearchTest extends TestCase
      * @var IndexNameResolver|MockObject
      */
     protected $indexNameResolver;
+
+    /**
+     * @var ProductAttributeRepositoryInterface|MockObject
+     */
+    private $productAttributeRepository;
+
+    /**
+     * @var StaticField|MockObject
+     */
+    private $staticFieldProvider;
+
+    /**
+     * @var ArrayManager|MockObject
+     */
+    private $arrayManager;
 
     /**
      * Setup
@@ -155,7 +174,14 @@ class ElasticsearchTest extends TestCase
             ->method('getAllAttributesTypes')
             ->willReturn(
                 [
-                    'name' => 'string',
+                    'name' => [
+                        'type' => 'string',
+                        'fields' => [
+                            'keyword' => [
+                                'type' => "keyword",
+                            ],
+                        ],
+                    ],
                 ]
             );
         $this->clientConfig->expects($this->any())
@@ -177,9 +203,17 @@ class ElasticsearchTest extends TestCase
             )
             ->disableOriginalConstructor()
             ->getMock();
-        $this->batchDocumentDataMapper = $this->getMockBuilder(
-            BatchDataMapperInterface::class
-        )->disableOriginalConstructor()
+        $this->batchDocumentDataMapper = $this->getMockBuilder(BatchDataMapperInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $this->productAttributeRepository = $this->getMockBuilder(ProductAttributeRepositoryInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $this->staticFieldProvider = $this->getMockBuilder(StaticField::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->arrayManager = $this->getMockBuilder(ArrayManager::class)
+            ->disableOriginalConstructor()
             ->getMock();
         $this->model = $this->objectManager->getObject(
             \Magento\Elasticsearch\Model\Adapter\Elasticsearch::class,
@@ -192,6 +226,9 @@ class ElasticsearchTest extends TestCase
                 'logger' => $this->logger,
                 'indexNameResolver' => $this->indexNameResolver,
                 'options' => [],
+                'productAttributeRepository' => $this->productAttributeRepository,
+                'staticFieldProvider' => $this->staticFieldProvider,
+                'arrayManager' => $this->arrayManager,
             ]
         );
     }
@@ -457,6 +494,103 @@ class ElasticsearchTest extends TestCase
             ->willReturn(['indexName_product_1_v2' => 'indexName_product_1_v2']);
 
         $this->assertEquals($this->model, $this->model->updateAlias(1, 'product'));
+    }
+
+    /**
+     * Test update Elasticsearch mapping for index without alias definition.
+     *
+     * @return void
+     */
+    public function testUpdateIndexMappingWithoutAliasDefinition(): void
+    {
+        $storeId = 1;
+        $mappedIndexerId = 'product';
+
+        $this->indexNameResolver->expects($this->once())
+            ->method('getIndexFromAlias')
+            ->with($storeId, $mappedIndexerId)
+            ->willReturn('');
+
+        $this->productAttributeRepository->expects($this->never())
+            ->method('get');
+
+        $this->model->updateIndexMapping($storeId, $mappedIndexerId, 'attribute_code');
+    }
+
+    /**
+     * Test update Elasticsearch mapping for index with alias definition.
+     *
+     * @return void
+     */
+    public function testUpdateIndexMappingWithAliasDefinition(): void
+    {
+        $storeId = 1;
+        $mappedIndexerId = 'product';
+        $indexName = '_product_1_v1';
+        $attributeCode = 'example_attribute_code';
+
+        $this->indexNameResolver->expects($this->once())
+            ->method('getIndexFromAlias')
+            ->with($storeId, $mappedIndexerId)
+            ->willReturn($indexName);
+
+        $attribute = $this->getMockBuilder(AbstractAttribute::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
+        $this->productAttributeRepository->expects($this->once())
+            ->method('get')
+            ->with($attributeCode)
+            ->willReturn($attribute);
+
+        $this->staticFieldProvider->expects($this->once())
+            ->method('getField')
+            ->with($attribute)
+            ->willReturn([$attributeCode => ['type' => 'text']]);
+
+        $mappedAttributes = ['another_attribute_code' => 'attribute_mapping'];
+        $this->client->expects($this->once())
+            ->method('getMapping')
+            ->with(['index' => $indexName])
+            ->willReturn(['properties' => $mappedAttributes]);
+
+        $this->arrayManager->expects($this->once())
+            ->method('findPath')
+            ->with('properties', ['properties' => $mappedAttributes])
+            ->willReturn('example/path/to/properties');
+
+        $this->arrayManager->expects($this->once())
+            ->method('get')
+            ->with('example/path/to/properties', ['properties' => $mappedAttributes], [])
+            ->willReturn($mappedAttributes);
+
+        $this->client->expects($this->once())
+            ->method('addFieldsMapping')
+            ->with([$attributeCode => ['type' => 'text']], $indexName, 'product');
+
+        $this->model->updateIndexMapping($storeId, $mappedIndexerId, $attributeCode);
+    }
+
+    /**
+     * Test for get mapping total fields limit
+     *
+     * @return void
+     */
+    public function testGetMappingTotalFieldsLimit(): void
+    {
+        $settings = [
+            'index' => [
+                    'mapping' => [
+                        'total_fields' => [
+                            'limit'  => 1002
+                        ]
+                    ]
+            ]
+        ];
+        $this->client->expects($this->at(1))
+            ->method('createIndex')
+            ->with(null, ['settings' => $settings]);
+        $this->model->cleanIndex(1, 'product');
     }
 
     /**

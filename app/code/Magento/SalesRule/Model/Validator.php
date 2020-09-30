@@ -281,6 +281,13 @@ class Validator extends \Magento\Framework\Model\AbstractModel
         $item->setDiscountAmount(0);
         $item->setBaseDiscountAmount(0);
         $item->setDiscountPercent(0);
+        if ($item->getChildren() && $item->isChildrenCalculated()) {
+            foreach ($item->getChildren() as $child) {
+                $child->setDiscountAmount(0);
+                $child->setBaseDiscountAmount(0);
+                $child->setDiscountPercent(0);
+            }
+        }
 
         $itemPrice = $this->getItemPrice($item);
         if ($itemPrice < 0) {

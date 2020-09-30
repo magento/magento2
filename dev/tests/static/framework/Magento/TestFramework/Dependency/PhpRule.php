@@ -167,8 +167,9 @@ class PhpRule implements RuleInterface
                 '[_\\\\]|',
                 Files::init()->getNamespaces()
             )
-            . '[_\\\\])[a-zA-Z0-9]+)'
-            . '(?<class_inside_module>[a-zA-Z0-9_\\\\]*))\b(?:::(?<module_scoped_key>[a-z0-9_]+)[\'"])?~';
+            . '(?<delimiter>[_\\\\]))[a-zA-Z0-9]{2,})'
+            . '(?<class_inside_module>\\4[a-zA-Z0-9_\\\\]{2,})?)\b'
+            . '(?:::(?<module_scoped_key>[A-Za-z0-9_/.]+)[\'"])?~';
 
         if (!preg_match_all($pattern, $contents, $matches)) {
             return [];

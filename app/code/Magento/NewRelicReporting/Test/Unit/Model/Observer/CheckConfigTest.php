@@ -125,7 +125,7 @@ class CheckConfigTest extends TestCase
         $this->config->expects($this->once())
             ->method('disableModule');
         $this->messageManager->expects($this->once())
-            ->method('addError');
+            ->method('addErrorMessage');
 
         $this->model->execute($eventObserver);
     }

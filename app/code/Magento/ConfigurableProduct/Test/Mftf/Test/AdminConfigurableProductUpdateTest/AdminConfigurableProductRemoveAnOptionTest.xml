@@ -92,8 +92,7 @@
         <!--remove an option-->
         <click selector="{{AdminProductFormConfigurationsSection.actionsBtn('1')}}" stepKey="clickToExpandActions"/>
         <click selector="{{AdminProductFormConfigurationsSection.removeProductBtn}}" stepKey="clickRemove"/>
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSave"/>
-        <waitForPageLoad stepKey="wait3"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSave"/>
 
         <!--check admin for one option-->
         <dontSee selector="{{AdminProductFormConfigurationsSection.currentVariationsNameCells}}" userInput="$$createConfigChildProduct1.name$$" stepKey="dontSeeOption1Admin"/>

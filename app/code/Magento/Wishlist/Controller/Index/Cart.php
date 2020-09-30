@@ -220,12 +220,13 @@ class Cart extends AbstractIndex implements Action\HttpPostActionInterface
             $wishlist->save();
 
             if (!$this->cart->getQuote()->getHasError()) {
-                $message = __(
-                    'You added %1 to your shopping cart.',
-                    $this->escaper->escapeHtml($item->getProduct()->getName())
+                $this->messageManager->addComplexSuccessMessage(
+                    'addCartSuccessMessage',
+                    [
+                        'product_name' => $item->getProduct()->getName(),
+                        'cart_url' => $this->cartHelper->getCartUrl()
+                    ]
                 );
-                $this->messageManager->addSuccessMessage($message);
-
                 $productsToAdd = [
                     [
                         'sku' => $item->getProduct()->getSku(),

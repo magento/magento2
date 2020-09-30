@@ -1,0 +1,74 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<div class="edit-image-details" if="image">
+    <fieldset class="admin__fieldset">
+        <input type="hidden" ko-value="image().id" data-ui-id="id" name="id"/>
+        <div class="admin__field _required">
+            <label for="title" class="admin__field-label">
+                <span translate="'Title'"></span>
+            </label>
+            <div class="admin__field-control">
+                <input type="text" id="title" data-ui-id="title" name="title" placeholder="Title"
+                       class="admin__control-text required-entry minimum-length-1 maximum-length-128"
+                       ko-value="image().title" event="{keypress: handleEnterKey}"
+                       data-validate="{'required':true,'validate-image-title':true, 'validate-length':true}"/>
+            </div>
+        </div>
+        <div class="admin__field">
+            <label for="path" class="admin__field-label">
+                <span translate="'Filename'"></span>
+            </label>
+            <div class="admin__field-control path-display">
+                <span data-ui-id="path" id="path" text="image().path"></span>
+            </div>
+        </div>
+        <div class="admin__field">
+            <label for="description" class="admin__field-label">
+                <span translate="'Description'"></span>
+            </label>
+            <div class="admin__field-control">
+                <textarea id="description"
+                          data-ui-id="description"
+                          name="description"
+                          class="admin__control-textarea minimum-length-0 maximum-length-500"
+                          rows="7" cols="80"
+                          ko-value="image().description"
+                          data-validate="{'validate-image-description':true, 'validate-length':true}"></textarea>
+            </div>
+        </div>
+        <div class="admin__field">
+            <label class="admin__field-label">
+                <span translate="'Tags'"></span>
+            </label>
+            <div class="admin__field-control">
+                <div class="admin__field">
+                    <scope args="keywordsSelect">
+                         <render args="template"/>
+                    </scope>
+                </div>
+                <div class="admin__field">
+                    <div class="admin__field-control admin__field-option admin__control-grouped">
+                        <div class="admin__field admin__field-group-additional">
+                            <div class="admin__field-control">
+                                <input type="text" id="keyword" data-ui-id="keyword" name="keyword" placeholder="New Tag"
+                                       class="admin__control-text minimum-length-0 maximum-length-128" ko-value="newKeyword"
+                                       data-validate="{'validate-image-keyword': true, 'validate-length': true}"/>
+                            </div>
+                        </div>
+                        <div class="admin__field admin__field-group-additional admin__field-small">
+                            <div class="admin__field-control">
+                                <button type="button" data-ui-id="add-keyword" class="action-basic" click="addKeyword">
+                                    <span translate="'Add New Tag'"></span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+</div>

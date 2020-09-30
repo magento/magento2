@@ -33,6 +33,12 @@ use PHPUnit\Framework\TestCase;
  */
 class ProductRepositoryTest extends TestCase
 {
+    private const STUB_STORE_ID = 1;
+    private const STUB_STORE_ID_GLOBAL = 0;
+    private const STUB_PRODUCT_NAME = 'Simple Product';
+    private const STUB_UPDATED_PRODUCT_NAME = 'updated';
+    private const STUB_PRODUCT_SKU = 'simple';
+
     /**
      * @var ObjectManagerInterface
      */
@@ -87,6 +93,12 @@ class ProductRepositoryTest extends TestCase
     {
         parent::setUp();
 
+        Bootstrap::getObjectManager()->configure([
+            'preferences' => [
+                \Magento\Catalog\Model\Product\Attribute\LayoutUpdateManager::class =>
+                    \Magento\TestFramework\Catalog\Model\ProductLayoutUpdateManager::class
+            ]
+        ]);
         $this->objectManager = Bootstrap::getObjectManager();
         $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
         $this->productRepository->cleanCache();
@@ -266,5 +278,56 @@ class ProductRepositoryTest extends TestCase
             __("The product that was requested doesn't exist. Verify the product and try again.")
         ));
         $this->productRepository->get($sku);
+    }
+
+    /**
+     * Tests product repository update
+     *
+     * @dataProvider productUpdateDataProvider
+     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @param int $storeId
+     * @param int $checkStoreId
+     * @param string $expectedNameStore
+     * @param string $expectedNameCheckedStore
+     */
+    public function testProductUpdate(
+        int $storeId,
+        int $checkStoreId,
+        string $expectedNameStore,
+        string $expectedNameCheckedStore
+    ): void {
+        $sku = self::STUB_PRODUCT_SKU;
+
+        $product = $this->productRepository->get($sku, false, $storeId);
+        $product->setName(self::STUB_UPDATED_PRODUCT_NAME);
+        $this->productRepository->save($product);
+        $productNameStoreId = $this->productRepository->get($sku, false, $storeId)->getName();
+        $productNameCheckedStoreId = $this->productRepository->get($sku, false, $checkStoreId)->getName();
+
+        $this->assertEquals($expectedNameStore, $productNameStoreId);
+        $this->assertEquals($expectedNameCheckedStore, $productNameCheckedStoreId);
+    }
+
+    /**
+     * Product update data provider
+     *
+     * @return array
+     */
+    public function productUpdateDataProvider(): array
+    {
+        return [
+            'Updating for global store' => [
+                self::STUB_STORE_ID_GLOBAL,
+                self::STUB_STORE_ID,
+                self::STUB_UPDATED_PRODUCT_NAME,
+                self::STUB_UPDATED_PRODUCT_NAME,
+            ],
+            'Updating for store' => [
+                self::STUB_STORE_ID,
+                self::STUB_STORE_ID_GLOBAL,
+                self::STUB_UPDATED_PRODUCT_NAME,
+                self::STUB_PRODUCT_NAME,
+            ],
+        ];
     }
 }

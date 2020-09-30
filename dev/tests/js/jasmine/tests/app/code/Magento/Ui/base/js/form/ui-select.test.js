@@ -246,6 +246,12 @@ define([
 
                 expect(type).toEqual('object');
             });
+            it('Must be false if "disabled" is true', function () {
+                obj.listVisible(false);
+                obj.disabled(true);
+                obj.toggleListVisible();
+                expect(obj.listVisible()).toEqual(false);
+            });
             it('Must be false if "listVisible" is true', function () {
                 obj.listVisible(true);
                 obj.toggleListVisible();

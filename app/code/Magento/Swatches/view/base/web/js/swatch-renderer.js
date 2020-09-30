@@ -311,6 +311,7 @@ define([
             if ($(this.element).attr('data-rendered')) {
                 return;
             }
+
             $(this.element).attr('data-rendered', true);
 
             if (_.isEmpty(this.options.jsonConfig.images)) {
@@ -319,6 +320,8 @@ define([
                 // to use it in events handlers instead of _LoadProductMedia()
                 this._debouncedLoadProductMedia = _.debounce(this._LoadProductMedia.bind(this), 500);
             }
+
+            this.options.tierPriceTemplate = $(this.options.tierPriceTemplateSelector).html();
 
             if (this.options.jsonConfig !== '' && this.options.jsonSwatchConfig !== '') {
                 // store unsorted attributes
@@ -330,7 +333,6 @@ define([
             } else {
                 console.log('SwatchRenderer: No input data received');
             }
-            this.options.tierPriceTemplate = $(this.options.tierPriceTemplateSelector).html();
         },
 
         /**

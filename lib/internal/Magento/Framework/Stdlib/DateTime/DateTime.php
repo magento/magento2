@@ -10,6 +10,7 @@ namespace Magento\Framework\Stdlib\DateTime;
  * Date conversion model
  *
  * @api
+ * @since 100.0.2
  */
 class DateTime
 {

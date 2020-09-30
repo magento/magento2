@@ -22,6 +22,7 @@ use Magento\Framework\App\ObjectManager;
  * @SuppressWarnings(PHPMD)
  *
  * @api
+ * @since 100.0.2
  */
 class Context implements \Magento\Framework\ObjectManager\ContextInterface
 {
@@ -379,6 +380,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
      * Lock guarded cache loader.
      *
      * @return LockGuardedCacheLoader
+     * @since 102.0.2
      */
     public function getLockGuardedCacheLoader()
     {

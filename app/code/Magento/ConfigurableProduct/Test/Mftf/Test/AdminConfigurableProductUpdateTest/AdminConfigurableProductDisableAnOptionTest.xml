@@ -88,8 +88,7 @@
         <waitForPageLoad stepKey="wait2"/>
         <click selector="{{AdminProductFormConfigurationsSection.actionsBtn('1')}}" stepKey="clickToExpandActions"/>
         <click selector="{{AdminProductFormConfigurationsSection.disableProductBtn}}" stepKey="clickDisable"/>
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSave"/>
-        <waitForPageLoad stepKey="wait3"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSave"/>
 
         <!--check storefront for one option-->
         <amOnPage url="$$createConfigProduct.sku$$.html" stepKey="amOnStorefront2"/>

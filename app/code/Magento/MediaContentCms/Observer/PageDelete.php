@@ -15,6 +15,7 @@ use Magento\MediaContentApi\Api\Data\ContentAssetLinkInterfaceFactory;
 use Magento\MediaContentApi\Api\DeleteContentAssetLinksInterface;
 use Magento\MediaContentApi\Model\GetEntityContentsInterface;
 use Magento\MediaContentApi\Api\ExtractAssetsFromContentInterface;
+use Magento\MediaContentApi\Model\Config;
 
 /**
  * Observe the cms_page_delete_before event and deletes relation between page content and media asset.
@@ -25,7 +26,7 @@ class PageDelete implements ObserverInterface
     private const TYPE = 'entityType';
     private const ENTITY_ID = 'entityId';
     private const FIELD = 'field';
-    
+
     /**
      * @var ContentIdentityInterfaceFactory
      */
@@ -55,13 +56,19 @@ class PageDelete implements ObserverInterface
      * @var ExtractAssetsFromContentInterface
      */
     private $extractAssetsFromContent;
-    
+
+    /**
+     * @var Config
+     */
+    private $config;
+
     /**
      * @param ExtractAssetsFromContentInterface $extractAssetsFromContent
      * @param GetEntityContentsInterface $getContent
      * @param DeleteContentAssetLinksInterface $deleteContentAssetLinks
      * @param ContentIdentityInterfaceFactory $contentIdentityFactory
      * @param ContentAssetLinkInterfaceFactory $contentAssetLinkFactory
+     * @param Config $config
      * @param arry $fields
      */
     public function __construct(
@@ -70,6 +77,7 @@ class PageDelete implements ObserverInterface
         DeleteContentAssetLinksInterface $deleteContentAssetLinks,
         ContentIdentityInterfaceFactory $contentIdentityFactory,
         ContentAssetLinkInterfaceFactory $contentAssetLinkFactory,
+        Config $config,
         array $fields
     ) {
         $this->extractAssetsFromContent = $extractAssetsFromContent;
@@ -77,6 +85,7 @@ class PageDelete implements ObserverInterface
         $this->deleteContentAssetLinks = $deleteContentAssetLinks;
         $this->contentAssetLinkFactory = $contentAssetLinkFactory;
         $this->contentIdentityFactory = $contentIdentityFactory;
+        $this->config = $config;
         $this->fields = $fields;
     }
 
@@ -88,9 +97,13 @@ class PageDelete implements ObserverInterface
      */
     public function execute(Observer $observer): void
     {
+        if (!$this->config->isEnabled()) {
+            return;
+        }
+
         $page = $observer->getEvent()->getData('object');
         $contentAssetLinks = [];
-        
+
         if ($page instanceof CmsPage) {
             foreach ($this->fields as $field) {
                 $contentIdentity = $this->contentIdentityFactory->create(
@@ -100,9 +113,9 @@ class PageDelete implements ObserverInterface
                         self::ENTITY_ID => (string) $page->getId(),
                     ]
                 );
-                
+
                 $assets = $this->extractAssetsFromContent->execute((string) $page->getData($field));
-                
+
                 foreach ($assets as $asset) {
                     $contentAssetLinks[] = $this->contentAssetLinkFactory->create(
                         [

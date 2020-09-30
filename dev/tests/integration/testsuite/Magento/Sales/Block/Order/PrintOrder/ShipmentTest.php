@@ -151,7 +151,7 @@ class ShipmentTest extends TestCase
         foreach ([$order->getShippingAddress(), $order->getBillingAddress()] as $address) {
             $addressBoxXpath = ($address->getAddressType() == 'shipping')
                 ? "//div[contains(@class, 'box-order-shipping-address')]//address[contains(., '%s')]"
-                : "//div[contains(@class, 'box-order-billing-method')]//address[contains(., '%s')]";
+                : "//div[contains(@class, 'box-order-billing-address')]//address[contains(., '%s')]";
             $this->assertEquals(
                 1,
                 Xpath::getElementsCountForXpath(sprintf($addressBoxXpath, $address->getName()), $html),

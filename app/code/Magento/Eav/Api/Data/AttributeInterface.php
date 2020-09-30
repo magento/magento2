@@ -316,6 +316,7 @@ interface AttributeInterface extends CustomAttributesDataInterface, MetadataObje
      *
      * @param \Magento\Eav\Api\Data\AttributeExtensionInterface $extensionAttributes
      * @return $this
+     * @since 102.0.0
      */
     public function setExtensionAttributes(
         \Magento\Eav\Api\Data\AttributeExtensionInterface $extensionAttributes

@@ -97,6 +97,7 @@ $order->setBaseSubtotal(60);
 $order->setBaseGrandTotal(60);
 $order->setGrandTotal(60);
 $order->setOrderCurrencyCode('USD');
+$order->setBaseCurrencyCode('EUR');
 $order->setCustomerId(1)
     ->setCustomerIsGuest(false)
     ->save();

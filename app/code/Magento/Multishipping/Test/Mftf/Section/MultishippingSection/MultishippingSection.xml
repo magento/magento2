@@ -14,5 +14,6 @@
         <element name="shippingAddressSelector" type="select" selector="//tr[position()={{addressPosition}}]//td[@data-th='Send To']//select" parameterized="true"/>
         <element name="shippingAddressOptions" type="select" selector="#multiship-addresses-table tbody tr:nth-of-type({{addressPosition}}) .col.address select option:nth-of-type({{optionIndex}})" parameterized="true"/>
         <element name="selectShippingAddress" type="select" selector="(//table[@id='multiship-addresses-table'] //div[@class='field address'] //select)[{{sequenceNumber}}]" parameterized="true"/>
+        <element name="removeItemButton" type="button" selector="//a[contains(@title, 'Remove Item')][{{var}}]" parameterized="true"/>
     </section>
 </sections>

@@ -206,4 +206,23 @@
         <data key="store_type">store</data>
         <data key="store_action">add</data>
     </entity>
+    <!--Stores views with same name-->
+    <entity name="customStoreViewSameNameFirst" type="store">
+        <data key="name">sameNameStoreView</data>
+        <data key="code" unique="suffix">storeViewCode</data>
+        <data key="is_active">1</data>
+        <data key="store_id">null</data>
+        <data key="store_action">add</data>
+        <data key="store_type">store</data>
+        <requiredEntity type="storeGroup">customStoreGroup</requiredEntity>
+    </entity>
+    <entity name="customStoreViewSameNameSecond" type="store">
+        <data key="name">sameNameStoreView</data>
+        <data key="code" unique="suffix">storeViewCode</data>
+        <data key="is_active">1</data>
+        <data key="store_id">null</data>
+        <data key="store_action">add</data>
+        <data key="store_type">store</data>
+        <requiredEntity type="storeGroup">customStoreGroup</requiredEntity>
+    </entity>
 </entities>

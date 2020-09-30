@@ -3,10 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
-<?php if ($block->getCanDisplayTotalDue()) : ?>
-<tr>
-    <td class="label"><strong style="font-size: larger"><?= $block->escapeHtml(__('Total Due')) ?></strong></td>
-    <td class="emph" style="font-size: larger"><?= /* @noEscape */ $block->displayPriceAttribute('total_due', true) ?></td>
+<?php if ($block->getCanDisplayTotalDue()): ?>
+<tr id="total-due">
+    <td class="label"><strong><?= $block->escapeHtml(__('Total Due')) ?></strong></td>
+
+    <td class="emph"><?= /* @noEscape */ $block->displayPriceAttribute('total_due', true) ?></td>
 </tr>
+    <?= /* @noEscape */ $secureRenderer->renderStyleAsTag('font-size: larger', 'tr.total-due td.label strong') ?>
+    <?= /* @noEscape */ $secureRenderer->renderStyleAsTag('font-size: larger', 'tr.total-due td.emph') ?>
 <?php endif; ?>

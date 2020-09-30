@@ -8,6 +8,7 @@ namespace Magento\Checkout\Api\Data;
 /**
  * Interface ShippingInformationInterface
  * @api
+ * @since 100.0.2
  */
 interface ShippingInformationInterface extends \Magento\Framework\Api\CustomAttributesDataInterface
 {

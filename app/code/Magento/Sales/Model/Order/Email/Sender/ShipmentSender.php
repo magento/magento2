@@ -19,7 +19,7 @@ use Magento\Framework\DataObject;
 /**
  * Sends order shipment email to the customer.
  *
- * @deprecated since this class works only with the concrete model and no data interface
+ * @deprecated 102.1.0 since this class works only with the concrete model and no data interface
  * @see \Magento\Sales\Model\Order\Shipment\Sender\EmailSender
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */

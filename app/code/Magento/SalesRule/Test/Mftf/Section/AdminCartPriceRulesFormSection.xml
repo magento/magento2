@@ -10,7 +10,7 @@
     <section name="AdminCartPriceRulesFormSection">
         <element name="save" type="button" selector="#save" timeout="30"/>
         <element name="saveAndContinue" type="button" selector="#save_and_continue" timeout="30"/>
-        <element name="delete" type="button" selector="#delete" timeout="30"/>
+        <element name="delete" type="button" selector="button#delete" timeout="30"/>
         <element name="modalAcceptButton" type="button" selector="button.action-accept" timeout="30"/>
 
         <!-- Rule Information (the main form on the page) -->
@@ -18,6 +18,8 @@
         <element name="ruleName" type="input" selector="input[name='name']"/>
         <element name="description" type="textarea" selector="//div[@class='admin__field-control']/textarea[@name='description']"/>
         <element name="active" type="checkbox" selector="//div[@class='admin__actions-switch']/input[@name='is_active']/../label"/>
+        <element name="isActive" type="text" selector="input[name='is_active']+label"/>
+        <element name="activeByStatus" type="text" selector="div.admin__actions-switch input[name='is_active'][value='{{value}}']+label" parameterized="true"/>
         <element name="websites" type="multiselect" selector="select[name='website_ids']"/>
         <element name="websitesOptions" type="select" selector="[name='website_ids'] option"/>
         <element name="customerGroups" type="multiselect" selector="select[name='customer_group_ids']"/>
@@ -84,6 +86,8 @@
         <element name="discountStep" type="input" selector="input[name='discount_step']"/>
         <element name="applyToShippingAmount" type="checkbox" selector="//div[@class='admin__actions-switch']/input[@name='apply_to_shipping']/../label"/>
         <element name="discardSubsequentRules" type="checkbox" selector="//div[@class='admin__actions-switch']/input[@name='stop_rules_processing']/../label"/>
+        <element name="discardSubsequentRulesLabel" type="text" selector="div.admin__actions-switch input[name='stop_rules_processing']+label"/>
+        <element name="discardSubsequentRulesByStatus" type="text" selector="div.admin__actions-switch input[name='stop_rules_processing'][value='{{value}}']+label" parameterized="true"/>
         <element name="addRewardPoints" type="input" selector="input[name='extension_attributes[reward_points_delta]']"/>
         <element name="freeShipping" type="select" selector="//select[@name='simple_free_shipping']"/>
 

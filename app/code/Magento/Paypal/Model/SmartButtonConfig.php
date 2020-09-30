@@ -11,7 +11,7 @@ use Magento\Checkout\Helper\Data;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Store\Model\ScopeInterface;
-use Magento\Paypal\Model\Config as PayPalConfig;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Provides configuration values for PayPal in-context checkout
@@ -51,6 +51,11 @@ class SmartButtonConfig
     private $unsupportedPaymentMethods;
 
     /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
      * Base url for Paypal SDK
      */
     private const BASE_URL = 'https://www.paypal.com/sdk/js?';
@@ -59,6 +64,7 @@ class SmartButtonConfig
      * @param ResolverInterface $localeResolver
      * @param ConfigFactory $configFactory
      * @param ScopeConfigInterface $scopeConfig
+     * @param StoreManagerInterface $storeManager
      * @param array $defaultStyles
      * @param array $disallowedFundingMap
      * @param array $unsupportedPaymentMethods
@@ -67,6 +73,7 @@ class SmartButtonConfig
         ResolverInterface $localeResolver,
         ConfigFactory $configFactory,
         ScopeConfigInterface $scopeConfig,
+        StoreManagerInterface $storeManager,
         $defaultStyles = [],
         $disallowedFundingMap = [],
         $unsupportedPaymentMethods = []
@@ -75,6 +82,7 @@ class SmartButtonConfig
         $this->config = $configFactory->create();
         $this->config->setMethod(Config::METHOD_EXPRESS);
         $this->scopeConfig = $scopeConfig;
+        $this->storeManager = $storeManager;
         $this->defaultStyles = $defaultStyles;
         $this->disallowedFundingMap = $disallowedFundingMap;
         $this->unsupportedPaymentMethods = $unsupportedPaymentMethods;
@@ -123,6 +131,7 @@ class SmartButtonConfig
                 'merchant-id' => $this->config->getValue('merchant_id'),
                 'locale' => $this->localeResolver->getLocale(),
                 'intent' => $this->getIntent(),
+                'currency' => $this->storeManager->getStore()->getBaseCurrencyCode(),
             ];
         if ($disallowedFunding) {
             $params['disable-funding'] = $disallowedFunding;

@@ -11,9 +11,10 @@
  *
  * @see \Magento\Framework\View\Element\Html\Calendar
  */
-?>
 
-<script>
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+
+$scriptString = '
 require([
     "jquery",
     "jquery/ui"
@@ -21,20 +22,20 @@ require([
 
     $.extend(true, $, {
         calendarConfig: {
-            dayNames: <?= /* @noEscape */ $days['wide'] ?>,
-            dayNamesMin: <?= /* @noEscape */ $days['abbreviated'] ?>,
-            monthNames: <?= /* @noEscape */ $months['wide'] ?>,
-            monthNamesShort: <?= /* @noEscape */ $months['abbreviated'] ?>,
-            infoTitle: "<?= $block->escapeJs(__('About the calendar')) ?>",
-            firstDay: <?= /* @noEscape */ $firstDay ?>,
-            closeText: "<?= $block->escapeJs(__('Close')) ?>",
-            currentText: "<?= $block->escapeJs(__('Go Today')) ?>",
-            prevText: "<?= $block->escapeJs(__('Previous')) ?>",
-            nextText: "<?= $block->escapeJs(__('Next')) ?>",
-            weekHeader: "<?= $block->escapeJs(__('WK')) ?>",
-            timeText: "<?= $block->escapeJs(__('Time')) ?>",
-            hourText: "<?= $block->escapeJs(__('Hour')) ?>",
-            minuteText: "<?= $block->escapeJs(__('Minute')) ?>",
+            dayNames: ' .  /* @noEscape */ $days['wide'] . ',
+            dayNamesMin: ' . /* @noEscape */ $days['abbreviated'] . ',
+            monthNames: ' . /* @noEscape */ $months['wide'] . ',
+            monthNamesShort: ' . /* @noEscape */ $months['abbreviated'] . ',
+            infoTitle: "' . $block->escapeJs(__('About the calendar')) . '",
+            firstDay: ' . /* @noEscape */ $firstDay . ',
+            closeText: "' . $block->escapeJs(__('Close')) . '",
+            currentText: "' . $block->escapeJs(__('Go Today')) . '",
+            prevText: "' . $block->escapeJs(__('Previous')) . '",
+            nextText: "' . $block->escapeJs(__('Next')) . '",
+            weekHeader: "' . $block->escapeJs(__('WK')) . '",
+            timeText: "' . $block->escapeJs(__('Time')) . '",
+            hourText: "' . $block->escapeJs(__('Hour')) . '",
+            minuteText: "' . $block->escapeJs(__('Minute')) . '",
             dateFormat: $.datepicker.RFC_2822,
             showOn: "button",
             showAnim: "",
@@ -45,17 +46,18 @@ require([
             showButtonPanel: true,
             showOtherMonths: true,
             showWeek: false,
-            timeFormat: '',
+            timeFormat: \'\',
             showTime: false,
             showHour: false,
             showMinute: false,
-            serverTimezoneSeconds: <?= (int) $block->getStoreTimestamp() ?>,
-            serverTimezoneOffset: <?= (int) $block->getTimezoneOffsetSeconds() ?>,
-            yearRange: '<?= $block->escapeJs($block->getYearRange()) ?>'
+            serverTimezoneSeconds: ' . (int) $block->getStoreTimestamp() . ',
+            serverTimezoneOffset: ' . (int) $block->getTimezoneOffsetSeconds() . ',
+            yearRange: \'' . $block->escapeJs($block->getYearRange()) . '\'
         }
     });
 
-enUS = <?= /* @noEscape */ $enUS ?>; // en_US locale reference
+enUS = ' . /* @noEscape */ $enUS . '; // en_US locale reference
 
-});
-</script>
+});';
+
+echo /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false);

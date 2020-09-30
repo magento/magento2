@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontAssertLoginAsCustomerNotificationBannerActionGroup">
+        <annotations>
+            <description>Verify Login as Customer notification banner present on page.</description>
+        </annotations>
+        <arguments>
+            <argument name="customerFullName" type="string"/>
+            <argument name="websiteName" type="string" defaultValue="Main Website"/>
+        </arguments>
+
+        <waitForElementVisible selector="{{StorefrontLoginAsCustomerNotificationSection.notificationText}}" stepKey="waitForNotificationBanner"/>
+        <see selector="{{StorefrontLoginAsCustomerNotificationSection.notificationText}}"
+             userInput="You are connected as {{customerFullName}} on {{websiteName}}"
+             stepKey="assertCorrectNotificationBannerMessage"/>
+        <seeElement selector="{{StorefrontLoginAsCustomerNotificationSection.closeLink}}"
+             stepKey="assertCloseNotificationBannerPresent"/>
+    </actionGroup>
+</actionGroups>

@@ -1,0 +1,22 @@
+{
+    "name": "magento/module-media-gallery-metadata",
+    "description": "Magento module responsible for images metadata processing",
+    "require": {
+        "php": "~7.3.0||~7.4.0",
+        "magento/framework": "*",
+        "magento/module-media-gallery-metadata-api": "*"
+    },
+    "type": "magento2-module",
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Magento\\MediaGalleryMetadata\\": ""
+        }
+    }
+}

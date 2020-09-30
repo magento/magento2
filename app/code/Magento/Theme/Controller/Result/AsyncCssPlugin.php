@@ -10,6 +10,9 @@ namespace Magento\Theme\Controller\Result;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\App\Response\Http;
+use Magento\Framework\App\Response\HttpInterface as HttpResponseInterface;
+use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\View\Result\Layout;
 
 /**
  * Plugin for asynchronous CSS loading.
@@ -32,48 +35,94 @@ class AsyncCssPlugin
     }
 
     /**
-     * Load CSS asynchronously if it is enabled in configuration.
+     * Extracts styles to head after critical css if critical path feature is enabled.
      *
-     * @param Http $subject
-     * @return void
+     * @param Layout $subject
+     * @param Layout $result
+     * @param HttpResponseInterface|ResponseInterface $httpResponse
+     * @return Layout (That should be void, actually)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function beforeSendResponse(Http $subject): void
+    public function afterRenderResult(Layout $subject, Layout $result, ResponseInterface $httpResponse)
     {
-        $content = $subject->getContent();
+        if (!$this->isCssCriticalEnabled()) {
+            return $result;
+        }
 
-        if (\is_string($content) && strpos($content, '</body') !== false && $this->scopeConfig->isSetFlag(
-            self::XML_PATH_USE_CSS_CRITICAL_PATH,
-            ScopeInterface::SCOPE_STORE
-        )) {
-            $cssMatches = [];
-            // add link rel preload to style sheets
-            $content = preg_replace_callback(
-                '@<link\b.*?rel=("|\')stylesheet\1.*?/>@',
-                function ($matches) use (&$cssMatches) {
-                    $cssMatches[] = $matches[0];
-                    preg_match('@href=("|\')(.*?)\1@', $matches[0], $hrefAttribute);
-                    $href = $hrefAttribute[2];
-                    if (preg_match('@media=("|\')(.*?)\1@', $matches[0], $mediaAttribute)) {
-                        $media = $mediaAttribute[2];
-                    }
-                    $media = $media ?? 'all';
-                    $loadCssAsync = sprintf(
-                        '<link rel="preload" as="style" media="%s"' .
-                         ' onload="this.onload=null;this.rel=\'stylesheet\'"' .
-                        ' href="%s" />',
-                        $media,
-                        $href
-                    );
+        $content = (string)$httpResponse->getContent();
+        $headCloseTag = '</head>';
 
-                    return $loadCssAsync;
-                },
-                $content
-            );
+        $headEndTagFound = strpos($content, $headCloseTag) !== false;
 
-            if (!empty($cssMatches)) {
-                $content = str_replace('</body', implode("\n", $cssMatches) . "\n</body", $content);
-                $subject->setContent($content);
+        if ($headEndTagFound) {
+            $styles = $this->extractLinkTags($content);
+            if ($styles) {
+                $newHeadEndTagPosition = strrpos($content, $headCloseTag);
+                $content = substr_replace($content, $styles . "\n", $newHeadEndTagPosition, 0);
+                $httpResponse->setContent($content);
             }
         }
+
+        return $result;
+    }
+
+    /**
+     * Extracts link tags found in given content.
+     *
+     * @param string $content
+     */
+    private function extractLinkTags(string &$content): string
+    {
+        $styles = '';
+        $styleOpen = '<link';
+        $styleClose = '>';
+        $styleOpenPos = strpos($content, $styleOpen);
+
+        while ($styleOpenPos !== false) {
+            $styleClosePos = strpos($content, $styleClose, $styleOpenPos);
+            $style = substr($content, $styleOpenPos, $styleClosePos - $styleOpenPos + strlen($styleClose));
+
+            if (!preg_match('@rel=["\']stylesheet["\']@', $style)) {
+                // Link is not a stylesheet, search for another one after it.
+                $styleOpenPos = strpos($content, $styleOpen, $styleClosePos);
+                continue;
+            }
+            // Remove the link from HTML to add it before </head> tag later.
+            $content = str_replace($style, '', $content);
+
+            if (!preg_match('@href=("|\')(.*?)\1@', $style, $hrefAttribute)) {
+                throw new \RuntimeException("Invalid link {$style} syntax provided");
+            }
+            $href = $hrefAttribute[2];
+
+            if (preg_match('@media=("|\')(.*?)\1@', $style, $mediaAttribute)) {
+                $media = $mediaAttribute[2];
+            }
+            $media = $media ?? 'all';
+
+            $style = sprintf(
+                '<link rel="stylesheet" media="print" onload="this.onload=null;this.media=\'%s\'" href="%s">',
+                $media,
+                $href
+            );
+            $styles .= "\n" . $style;
+            // Link was cut out, search for the next one at its former position.
+            $styleOpenPos = strpos($content, $styleOpen, $styleOpenPos);
+        }
+
+        return $styles;
+    }
+
+    /**
+     * Returns information whether css critical path is enabled
+     *
+     * @return bool
+     */
+    private function isCssCriticalEnabled(): bool
+    {
+        return $this->scopeConfig->isSetFlag(
+            self::XML_PATH_USE_CSS_CRITICAL_PATH,
+            ScopeInterface::SCOPE_STORE
+        );
     }
 }

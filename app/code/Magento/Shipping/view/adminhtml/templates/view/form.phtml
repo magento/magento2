@@ -5,9 +5,14 @@
  */
 /**
  * @var \Magento\Shipping\Block\Adminhtml\View\Form $block
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
  */
-//phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
-//phpcs:disable Magento2.Files.LineLength.MaxExceeded
+
+/** @var \Magento\Shipping\Helper\Data $shippingHelper */
+$shippingHelper = $block->getData('shippingHelper');
+/** @var \Magento\Tax\Helper\Data $taxHelper */
+$taxHelper = $block->getData('taxHelper');
+/** @var \Magento\Sales\Model\Order $order */
 $order = $block->getShipment()->getOrder();
 ?>
 <?= $block->getChildHtml('order_info'); ?>
@@ -34,12 +39,19 @@ $order = $block->getShipment()->getOrder();
             </div>
             <div class="admin__page-section-item-content">
                 <div class="shipping-description-wrapper">
-                    <?php if ($block->getShipment()->getTracksCollection()->count()) : ?>
+                    <?php if ($block->getShipment()->getTracksCollection()->count()): ?>
                         <p>
-                            <a href="#" id="linkId" onclick="popWin('<?= $block->escapeUrl($this->helper(\Magento\Shipping\Helper\Data::class)->getTrackingPopupUrlBySalesModel($block->getShipment())); ?>','trackshipment','width=800,height=600,resizable=yes,scrollbars=yes')"
-                               title="<?= $block->escapeHtml(__('Track this shipment')); ?>">
+                            <a href="#" id="linkId" title="<?= $block->escapeHtml(__('Track this shipment')); ?>">
                                 <?= $block->escapeHtml(__('Track this shipment')); ?>
                             </a>
+                            <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
+                                'onclick',
+                                'event.preventDefault();' .
+                                "popWin('{$block->escapeJs($shippingHelper->getTrackingPopupUrlBySalesModel(
+                                    $block->getShipment()
+                                    ))}','trackshipment','width=800,height=600,resizable=yes,scrollbars=yes')",
+                                'a#linkId'
+                            ) ?>
                         </p>
                     <?php endif; ?>
                     <div class="shipping-description-title">
@@ -48,34 +60,35 @@ $order = $block->getShipment()->getOrder();
 
                     <?= $block->escapeHtml(__('Total Shipping Charges')); ?>:
 
-                    <?php if ($this->helper(\Magento\Tax\Helper\Data::class)->displayShippingPriceIncludingTax()) : ?>
+                    <?php if ($taxHelper->displayShippingPriceIncludingTax()): ?>
                         <?php $excl = $block->displayShippingPriceInclTax($order); ?>
-                    <?php else : ?>
+                    <?php else: ?>
                         <?php $excl = $block->displayPriceAttribute('shipping_amount', false, ' '); ?>
                     <?php endif; ?>
                     <?php $incl = $block->displayShippingPriceInclTax($order); ?>
 
                     <?= /* @noEscape */ $excl; ?>
-                    <?php if ($this->helper(\Magento\Tax\Helper\Data::class)->displayShippingBothPrices() && $incl != $excl) : ?>
+                    <?php if ($taxHelper->displayShippingBothPrices() && $incl != $excl): ?>
                         (<?= $block->escapeHtml(__('Incl. Tax')); ?> <?= /* @noEscape */ $incl; ?>)
                     <?php endif; ?>
                 </div>
 
                 <p>
-                    <?php if ($block->canCreateShippingLabel()) : ?>
+                    <?php if ($block->canCreateShippingLabel()): ?>
                         <?= /* @noEscape */ $block->getCreateLabelButton(); ?>
                     <?php endif ?>
-                    <?php if ($block->getShipment()->getShippingLabel()) : ?>
+                    <?php if ($block->getShipment()->getShippingLabel()): ?>
                         <?= /* @noEscape */ $block->getPrintLabelButton(); ?>
                     <?php endif ?>
-                    <?php if ($block->getShipment()->getPackages()) : ?>
+                    <?php if ($block->getShipment()->getPackages()): ?>
                         <?= /* @noEscape */ $block->getShowPackagesButton(); ?>
                     <?php endif ?>
                 </p>
                 <?= $block->getChildHtml('shipment_tracking'); ?>
 
                 <?= $block->getChildHtml('shipment_packaging'); ?>
-                <script>
+                <?php $scriptString = <<<script
+
                     require([
                         'jquery',
                         'prototype'
@@ -85,7 +98,10 @@ $order = $block->getShipment()->getOrder();
                                 window.packaging.sendCreateLabelRequest();
                             });
                             window.packaging.setLabelCreatedCallback(function () {
-                                setLocation("<?= $block->escapeUrl($block->getUrl('adminhtml/order_shipment/view', ['shipment_id' => $block->getShipment()->getId()])); ?>");
+                                setLocation("{$block->escapeJs($block->getUrl(
+                                        'adminhtml/order_shipment/view',
+                                        ['shipment_id' => $block->getShipment()->getId()]
+                                    ))}");
                             });
                         };
 
@@ -95,7 +111,10 @@ $order = $block->getShipment()->getOrder();
                             jQuery(document).on('packaging:inited', setCallbacks);
                         }
                     });
-                </script>
+
+script;
+                ?>
+                <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
             </div>
         </div>
     </div>

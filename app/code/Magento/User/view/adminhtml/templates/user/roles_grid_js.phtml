@@ -3,18 +3,25 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
-<script>
+<?php $scriptString = <<<script
+
 require([
     "mage/adminhtml/grid",
     "prototype"
 ], function(){
 
-<?php $myBlock = $block->getLayout()->getBlock('user.roles.grid'); ?>
-<?php if (is_object($myBlock) && $myBlock->getJsObjectName()) : ?>
-    var radioBoxes = $H({});
+script;
+
+$myBlock = $block->getLayout()->getBlock('user.roles.grid');
+if (is_object($myBlock) && $myBlock->getJsObjectName()):
+    $scriptString .= <<<script
+
+    var radioBoxes = \$H({});
     var warning = false;
-    var userRoles = $H(<?= /* @noEscape */ $myBlock->getSelectedRoles(true) ?>);
+    var userRoles = \$H({$myBlock->getSelectedRoles(true)});
     if (userRoles.size() > 0) warning = true;
     $('user_user_roles').value = userRoles.toQueryString();
 
@@ -37,7 +44,9 @@ require([
             if(checkbox[0] && !checkbox[0].checked){
                 var checked = isInput ? checkbox[0].checked : !checkbox[0].checked;
                 if (checked && warning && radioBoxes.size() > 0) {
-                    if ( !confirm("<?= $myBlock->escapeHtml(__('Warning!\r\nThis action will remove this user from already assigned role\r\nAre you sure?')) ?>") ) {
+                    if ( !confirm("{$myBlock->escapeJs(
+                        __('Warning!<br>This action will remove this user from already assigned role.<br>Are you sure?')
+                        )}") ) {
                         checkbox[0].checked = false;
                         for(i in radioBoxes) {
                             if( radioBoxes[i].status == 1) {
@@ -48,7 +57,7 @@ require([
                     }
                     warning = false;
                 }
-                <?= $myBlock->escapeJs($myBlock->getJsObjectName()) ?>.setCheckboxChecked(checkbox[0], checked);
+                {$myBlock->escapeJs($myBlock->getJsObjectName())}.setCheckboxChecked(checkbox[0], checked);
             }
         }
     }
@@ -60,19 +69,24 @@ require([
         }
     }
 
-    <?= $myBlock->escapeJs($myBlock->getJsObjectName()) ?>.rowClickCallback = roleRowClick;
-    <?= $myBlock->escapeJs($myBlock->getJsObjectName()) ?>.initRowCallback = rolesRowInit;
-    <?= $myBlock->escapeJs($myBlock->getJsObjectName()) ?>.checkboxCheckCallback = registerUserRole;
-    <?= $myBlock->escapeJs($myBlock->getJsObjectName()) ?>.rows.each(function(row){
-        rolesRowInit(<?= $myBlock->escapeJs($myBlock->getJsObjectName()) ?>, row)
+    {$myBlock->escapeJs($myBlock->getJsObjectName())}.rowClickCallback = roleRowClick;
+    {$myBlock->escapeJs($myBlock->getJsObjectName())}.initRowCallback = rolesRowInit;
+    {$myBlock->escapeJs($myBlock->getJsObjectName())}.checkboxCheckCallback = registerUserRole;
+    {$myBlock->escapeJs($myBlock->getJsObjectName())}.rows.each(function(row){
+        rolesRowInit({$myBlock->escapeJs($myBlock->getJsObjectName())}, row)
     });
-<?php endif; ?>
+
+script;
+endif;
+$scriptString .= <<<script
 
 });
-</script>
 
+script;
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
 <?php $editBlock = $block->getLayout()->getBlock('adminhtml.user.edit'); ?>
-<?php if (is_object($editBlock)) : ?>
+<?php if (is_object($editBlock)): ?>
     <script type="text/x-magento-init">
         {
             "[data-role=delete-user]" : {

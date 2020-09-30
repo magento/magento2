@@ -5,6 +5,7 @@
  */
 
 /** @var $block \Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Attributes\Extend */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 $elementHtml = $block->getParentElementHtml();
 
 $attributeCode = $block->getAttribute()
@@ -18,18 +19,19 @@ $isElementReadonly = $block->getElement()
     ->getReadonly();
 ?>
 
-<?php if (!($attributeCode === 'price' && $block->getCanReadPrice() === false)) : ?>
+<?php if (!($attributeCode === 'price' && $block->getCanReadPrice() === false)): ?>
     <div class="<?= $block->escapeHtmlAttr($attributeCode) ?> "><?= /* @noEscape */ $elementHtml ?></div>
 <?php endif; ?>
 
 <?= $block->getExtendedElement($switchAttributeCode)->toHtml() ?>
 
-<?php if (!$isElementReadonly && $block->getDisableChild()) { ?>
-    <script>
+<?php if (!$isElementReadonly && $block->getDisableChild()) {
+    $switchAttributeCode = /* @noEscape */ $switchAttributeCode;
+    $scriptString = <<<script
         require(['prototype'], function () {
-            function <?= /* @noEscape */ $switchAttributeCode ?>_change() {
-                var $attribute = $('<?= $block->escapeJs($attributeCode) ?>');
-                if ($('<?= /* @noEscape */ $switchAttributeCode ?>').value == '<?= $block->escapeJs($block::DYNAMIC) ?>') {
+            function {$switchAttributeCode}_change() {
+                var $attribute = $('{$block->escapeJs($attributeCode)}');
+                if ($('{$switchAttributeCode}').value == '{$block->escapeJs($block::DYNAMIC)}') {
                     if ($attribute) {
                         $attribute.disabled = true;
                         $attribute.value = '';
@@ -40,28 +42,36 @@ $isElementReadonly = $block->getElement()
                     }
                 } else {
                     if ($attribute) {
-                        <?php if ($attributeCode === 'price' && !$block->getCanEditPrice() && $block->getCanReadPrice()
-                                && $block->getProduct()->isObjectNew()) : ?>
-                                        <?php $defaultProductPrice = $block->getDefaultProductPrice() ?: "''"; ?>
-                            $attribute.value = <?= /* @noEscape */ (string)$defaultProductPrice ?>;
-                        <?php else : ?>
-                            $attribute.disabled = false;
-                            $attribute.addClassName('required-entry');
-                        <?php endif; ?>
-                    }
-                    if ($('dynamic-price-warning')) {
-                        $('dynamic-price-warning').hide();
-                    }
+script;
+    if ($attributeCode === 'price' && !$block->getCanEditPrice() &&
+        $block->getCanReadPrice() && $block->getProduct()->isObjectNew()):
+        $defaultProductPrice = $block->getDefaultProductPrice() ?: "''";
+        $scriptString .= '$attribute.value = ' . /* @noEscape */ (string)$defaultProductPrice . ';';
+    else:
+        $scriptString = <<<script
+            $attribute.disabled = false;
+            $attribute.addClassName('required-entry');
+script;
+    endif;
+    $scriptString .= <<<script
+            }
+                if ($('dynamic-price-warning')) {
+                    $('dynamic-price-warning').hide();
                 }
             }
-
-            <?php if (!($attributeCode === 'price' && !$block->getCanEditPrice()
-                    && !$block->getProduct()->isObjectNew())) : ?>
-                $('<?= /* @noEscape */ $switchAttributeCode ?>').observe('change', <?= /* @noEscape */ $switchAttributeCode ?>_change);
-            <?php endif; ?>
+        }
+script;
+    if (!($attributeCode === 'price' && !$block->getCanEditPrice() && !$block->getProduct()->isObjectNew())):
+        $scriptString .= <<<script
+            $('{$switchAttributeCode}').observe('change', {$switchAttributeCode}_change);
+script;
+    endif;
+    $scriptString .= <<<script
             Event.observe(window, 'load', function(){
-                <?= /* @noEscape */ $switchAttributeCode ?>_change();
+                {$switchAttributeCode}_change();
             });
         });
-    </script>
+script;
+    ?>
+    <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
 <?php } ?>

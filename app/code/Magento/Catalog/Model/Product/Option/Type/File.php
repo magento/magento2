@@ -416,7 +416,7 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      * @param string $optionValue Prepared for cart option value
      * @return string
      *
-     * @deprecated 101.1.0
+     * @deprecated 102.0.0
      */
     public function getEditableOptionValue($optionValue)
     {
@@ -440,7 +440,7 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      *
-     * @deprecated 101.1.0
+     * @deprecated 102.0.0
      */
     public function parseOptionValue($optionValue, $productOptionValues)
     {

@@ -8,10 +8,11 @@ declare(strict_types=1);
 namespace Magento\LoginAsCustomerAdminUi\Plugin\Button;
 
 use Magento\Backend\Block\Widget\Button\ButtonList;
-use Magento\Backend\Block\Widget\Button\Toolbar;
-use Magento\Framework\View\Element\AbstractBlock;
-use Magento\Framework\Escaper;
+use Magento\Backend\Block\Widget\Button\ToolbarInterface;
 use Magento\Framework\AuthorizationInterface;
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\AbstractBlock;
+use Magento\LoginAsCustomerAdminUi\Ui\Customer\Component\Button\DataProvider;
 use Magento\LoginAsCustomerApi\Api\ConfigInterface;
 
 /**
@@ -35,68 +36,79 @@ class ToolbarPlugin
     private $config;
 
     /**
+     * @var DataProvider
+     */
+    private $dataProvider;
+
+    /**
      * ToolbarPlugin constructor.
      * @param AuthorizationInterface $authorization
      * @param ConfigInterface $config
      * @param Escaper $escaper
+     * @param DataProvider $dataProvider
      */
     public function __construct(
         AuthorizationInterface $authorization,
         ConfigInterface $config,
-        Escaper $escaper
+        Escaper $escaper,
+        DataProvider $dataProvider
     ) {
         $this->authorization = $authorization;
         $this->config = $config;
         $this->escaper = $escaper;
+        $this->dataProvider = $dataProvider;
     }
 
     /**
      * Add Login as Customer button.
      *
-     * @param \Magento\Backend\Block\Widget\Button\Toolbar $subject
-     * @param \Magento\Framework\View\Element\AbstractBlock $context
-     * @param \Magento\Backend\Block\Widget\Button\ButtonList $buttonList
+     * @param ToolbarInterface $subject
+     * @param AbstractBlock $context
+     * @param ButtonList $buttonList
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function beforePushButtons(
-        Toolbar $subject,
+        ToolbarInterface $subject,
         AbstractBlock $context,
         ButtonList $buttonList
-    ):void {
-        $order = false;
+    ): void {
         $nameInLayout = $context->getNameInLayout();
 
-        if ('sales_order_edit' == $nameInLayout) {
-            $order = $context->getOrder();
-        } elseif ('sales_invoice_view' == $nameInLayout) {
-            $order = $context->getInvoice()->getOrder();
-        } elseif ('sales_shipment_view' == $nameInLayout) {
-            $order = $context->getShipment()->getOrder();
-        } elseif ('sales_creditmemo_view' == $nameInLayout) {
-            $order = $context->getCreditmemo()->getOrder();
+        $order = $this->getOrder($nameInLayout, $context);
+        if ($order
+            && !empty($order['customer_id'])
+            && $this->config->isEnabled()
+            && $this->authorization->isAllowed('Magento_LoginAsCustomer::login_button')
+        ) {
+            $customerId = (int)$order['customer_id'];
+            $buttonList->add(
+                'guest_to_customer',
+                $this->dataProvider->getData($customerId),
+                -1
+            );
         }
-        if ($order) {
+    }
 
-            $isAllowed = $this->authorization->isAllowed('Magento_LoginAsCustomer::login_button');
-            $isEnabled = $this->config->isEnabled();
-            if ($isAllowed && $isEnabled) {
-                if (!empty($order['customer_id'])) {
-                    $buttonUrl = $context->getUrl('loginascustomer/login/login', [
-                        'customer_id' => $order['customer_id']
-                    ]);
-                    $buttonList->add(
-                        'guest_to_customer',
-                        [
-                            'label' => __('Login as Customer'),
-                            'onclick' => 'window.lacConfirmationPopup("'
-                                . $this->escaper->escapeHtml($this->escaper->escapeJs($buttonUrl))
-                                . '")',
-                            'class' => 'reset'
-                        ],
-                        -1
-                    );
-                }
-            }
+    /**
+     * Extract order data from context.
+     *
+     * @param string $nameInLayout
+     * @param AbstractBlock $context
+     * @return array|null
+     */
+    private function getOrder(string $nameInLayout, AbstractBlock $context)
+    {
+        switch ($nameInLayout) {
+            case 'sales_order_edit':
+                return $context->getOrder();
+            case 'sales_invoice_view':
+                return $context->getInvoice()->getOrder();
+            case 'sales_shipment_view':
+                return $context->getShipment()->getOrder();
+            case 'sales_creditmemo_view':
+                return $context->getCreditmemo()->getOrder();
         }
+
+        return null;
     }
 }

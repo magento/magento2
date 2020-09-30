@@ -76,7 +76,7 @@ class CorsHeadersTest extends GraphQlAbstract
         $this->resourceConfig->saveConfig(Configuration::XML_PATH_CORS_ALLOWED_HEADERS, 'Origin');
         $this->resourceConfig->saveConfig(Configuration::XML_PATH_CORS_ALLOW_CREDENTIALS, '1');
         $this->resourceConfig->saveConfig(Configuration::XML_PATH_CORS_ALLOWED_METHODS, 'GET,POST');
-        $this->resourceConfig->saveConfig(Configuration::XML_PATH_CORS_ALLOWED_ORIGINS, 'magento.local');
+        $this->resourceConfig->saveConfig(Configuration::XML_PATH_CORS_ALLOWED_ORIGINS, 'http://magento.local');
         $this->resourceConfig->saveConfig(Configuration::XML_PATH_CORS_MAX_AGE, '86400');
         $this->reinitConfig->reinit();
 
@@ -85,7 +85,7 @@ class CorsHeadersTest extends GraphQlAbstract
         self::assertEquals('Origin', $headers['Access-Control-Allow-Headers']);
         self::assertEquals('1', $headers['Access-Control-Allow-Credentials']);
         self::assertEquals('GET,POST', $headers['Access-Control-Allow-Methods']);
-        self::assertEquals('magento.local', $headers['Access-Control-Allow-Origin']);
+        self::assertEquals('http://magento.local', $headers['Access-Control-Allow-Origin']);
         self::assertEquals('86400', $headers['Access-Control-Max-Age']);
     }
 

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminEnhancedMediaGalleryImageDetailsSaveActionGroup">
+        <annotations>
+            <description>Save image details from the View Details panel</description>
+        </annotations>
+        <arguments>
+            <argument name="image"/>
+        </arguments>
+
+        <fillField selector="{{AdminEnhancedMediaGalleryEditDetailsSection.title}}" userInput="{{image.title}}" stepKey="setTitle" />
+        <fillField selector="{{AdminEnhancedMediaGalleryEditDetailsSection.description}}" userInput="{{image.description}}" stepKey="setDescription" />
+        <click selector="{{AdminEnhancedMediaGalleryEditDetailsSection.save}}" stepKey="saveDetails"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear"/>
+    </actionGroup>
+</actionGroups>

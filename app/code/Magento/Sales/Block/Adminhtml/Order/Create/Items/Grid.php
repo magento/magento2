@@ -8,9 +8,11 @@ namespace Magento\Sales\Block\Adminhtml\Order\Create\Items;
 use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
 use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\CatalogInventory\Api\StockStateInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Session\SessionManagerInterface;
 use Magento\Quote\Model\Quote\Item;
+use Magento\Catalog\Helper\Data as CatalogHelper;
 
 /**
  * Adminhtml sales order create items grid block
@@ -85,6 +87,7 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      * @param StockRegistryInterface $stockRegistry
      * @param StockStateInterface $stockState
      * @param array $data
+     * @param CatalogHelper|null $catalogHelper
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -99,7 +102,8 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
         \Magento\GiftMessage\Helper\Message $messageHelper,
         StockRegistryInterface $stockRegistry,
         StockStateInterface $stockState,
-        array $data = []
+        array $data = [],
+        ?CatalogHelper $catalogHelper = null
     ) {
         $this->_messageHelper = $messageHelper;
         $this->_wishlistFactory = $wishlistFactory;
@@ -108,6 +112,7 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
         $this->_taxData = $taxData;
         $this->stockRegistry = $stockRegistry;
         $this->stockState = $stockState;
+        $data['catalogHelper'] = $catalogHelper ?? ObjectManager::getInstance()->get(CatalogHelper::class);
         parent::__construct($context, $sessionQuote, $orderCreate, $priceCurrency, $data);
     }
 
@@ -428,7 +433,7 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      * @param Item $item
      * @return string
      *
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      */
     public function getCustomOptions(Item $item)
     {

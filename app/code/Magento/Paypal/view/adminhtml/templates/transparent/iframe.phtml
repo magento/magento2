@@ -6,22 +6,28 @@
 
 /**
  * @var \Magento\Payment\Block\Transparent\Iframe $block
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
  */
 $params = $block->getParams();
 
+/** @var \Magento\Framework\Json\Helper\Data $jsonHelper */
+$jsonHelper = $block->getData('jsonHelper');
 ?>
 <html>
 <head>
-<script>
-<?php if (isset($params['redirect'])) : ?>
-    window.location="<?= $block->escapeUrl($params['redirect']) ?>";
-<?php elseif (isset($params['redirect_parent'])) : ?>
-    window.top.location="<?= $block->escapeUrl($params['redirect_parent']) ?>";
-<?php elseif (isset($params['error_msg'])) : ?>
-    window.top.alert(<?= /* @noEscape */ $this->helper(\Magento\Framework\Json\Helper\Data::class)->jsonEncode($params['error_msg']) ?>);
-<?php elseif (isset($params['order_success'])) : ?>
-    window.top.location = "<?= $block->escapeUrl($params['order_success']) ?>";
-<?php else : ?>
+<?php
+$scriptString = '';
+if (isset($params['redirect'])):
+    $scriptString .= 'window.location="' . $block->escapeJs($params['redirect']) . '";' . PHP_EOL;
+elseif (isset($params['redirect_parent'])):
+    $scriptString .= 'window.top.location="' . $block->escapeJs($params['redirect_parent']) . '";' . PHP_EOL;
+elseif (isset($params['error_msg'])):
+    $scriptString .= 'window.top.alert(' . /* @noEscape */ $jsonHelper->jsonEncode($params['error_msg']) . ');' .
+        PHP_EOL;
+elseif (isset($params['order_success'])):
+    $scriptString .= 'window.top.location = "' . $block->escapeJs($params['order_success']) . '";' . PHP_EOL;
+else:
+    $scriptString .= <<<script
     var require = window.top.require;
     require(['jquery'], function($) {
         var cc_number = $("input[name='payment[cc_number]']").val();
@@ -33,8 +39,10 @@ $params = $block->getParams();
 
         $('#edit_form').trigger('realOrder');
     });
-<?php endif; ?>
-</script>
+script;
+endif;
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
 </head>
 <body>
 </body>

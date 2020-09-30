@@ -10,7 +10,8 @@
         "magento/module-backend": "*",
         "magento/module-directory": "*",
         "magento/module-store": "*",
-        "magento/module-tax": "*"
+        "magento/module-tax": "*",
+        "magento/module-ui": "*"
     },
     "type": "magento2-module",
     "license": [

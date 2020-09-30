@@ -135,6 +135,19 @@ define([
             expect(multiSelect.selected().toString()).toEqual('3,4,1,2');
         });
 
+        it('Select all rows all over the Grid and deselects all records', function () {
+            multiSelect.rows([{
+                id: 1
+            }, {
+                id: 2
+            }]);
+
+            multiSelect.selectAll();
+            multiSelect.deselectAll();
+            multiSelect.indetermine(2);
+            expect(multiSelect.togglePage().selected()).toEqual([1, 2]);
+        });
+
         it('Select all rows all over the Grid without all rows on current page but with specific rows on another page',
             function () {
                 multiSelect.rows([{

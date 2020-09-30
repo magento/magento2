@@ -11,6 +11,7 @@ use Magento\Framework\App\State;
 /**
  * Helper class for static files minification related processes.
  * @api
+ * @since 100.0.2
  */
 class Minification
 {

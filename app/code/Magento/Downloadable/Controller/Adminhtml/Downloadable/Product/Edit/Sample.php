@@ -4,26 +4,33 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Downloadable\Controller\Adminhtml\Downloadable\Product\Edit;
 
 use Magento\Downloadable\Helper\Download as DownloadHelper;
+use Magento\Downloadable\Model\Sample as ModelSample;
 
-class Sample extends \Magento\Downloadable\Controller\Adminhtml\Downloadable\Product\Edit\Link
+class Sample extends Link
 {
     /**
-     * @return \Magento\Downloadable\Model\Sample
+     * Create link
+     *
+     * @return ModelSample
      */
     protected function _createLink()
     {
-        return $this->_objectManager->create(\Magento\Downloadable\Model\Sample::class);
+        return $this->_objectManager->create(ModelSample::class);
     }
 
     /**
-     * @return \Magento\Downloadable\Model\Sample
+     * Get link
+     *
+     * @return ModelSample
      */
     protected function _getLink()
     {
-        return $this->_objectManager->get(\Magento\Downloadable\Model\Sample::class);
+        return $this->_objectManager->get(ModelSample::class);
     }
 
     /**
@@ -34,7 +41,7 @@ class Sample extends \Magento\Downloadable\Controller\Adminhtml\Downloadable\Pro
     public function execute()
     {
         $sampleId = $this->getRequest()->getParam('id', 0);
-        /** @var \Magento\Downloadable\Model\Sample $sample */
+        /** @var ModelSample $sample */
         $sample = $this->_createLink()->load($sampleId);
         if ($sample->getId()) {
             $resource = '';
@@ -54,7 +61,7 @@ class Sample extends \Magento\Downloadable\Controller\Adminhtml\Downloadable\Pro
             try {
                 $this->_processDownload($resource, $resourceType);
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
-                $this->messageManager->addError(__('Something went wrong while getting the requested content.'));
+                $this->messageManager->addErrorMessage(__('Something went wrong while getting the requested content.'));
             }
         }
     }

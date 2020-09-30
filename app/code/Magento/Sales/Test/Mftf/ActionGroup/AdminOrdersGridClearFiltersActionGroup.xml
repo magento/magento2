@@ -16,5 +16,6 @@
         <amOnPage url="{{AdminOrdersPage.url}}" stepKey="goToGridOrdersPage"/>
         <waitForPageLoad stepKey="waitForPageToLoad"/>
         <conditionalClick selector="{{AdminOrdersGridSection.clearFilters}}" dependentSelector="{{AdminOrdersGridSection.enabledFilters}}" visible="true" stepKey="clickOnButtonToRemoveFiltersIfPresent"/>
+        <waitForLoadingMaskToDisappear stepKey="waitAfterClearFilters"/>
     </actionGroup>
 </actionGroups>

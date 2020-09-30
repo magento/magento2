@@ -7,6 +7,7 @@
 <?php
 /**
  * @var $block \Magento\Backend\Block\Widget\Grid\Serializer
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
  */
 ?>
 <?php
@@ -14,8 +15,8 @@
 $_id = 'id_' . md5(microtime());
 ?>
 <?php $formId = $block->getFormId()?>
-<?php if (!empty($formId)) : ?>
-<script>
+<?php if (!empty($formId)): ?>
+    <?php $scriptString = <<<script
     require([
         'prototype',
         'mage/adminhtml/grid'
@@ -23,24 +24,33 @@ $_id = 'id_' . md5(microtime());
         Event.observe(window, "load", function(){
             var serializeInput  = document.createElement('input');
             serializeInput.type = 'hidden';
-            serializeInput.name = '<?= $block->escapeJs($block->getInputElementName()) ?>';
-            serializeInput.id   = '<?= /* @noEscape */ $_id ?>';
+            serializeInput.name = '{$block->escapeJs($block->getInputElementName())}';
+            serializeInput.id   = '{$_id}';
             try {
-                document.getElementById('<?= $block->escapeJs($formId) ?>').appendChild(serializeInput);
-                new serializerController('<?= /* @noEscape */ $_id ?>', <?= /* @noEscape */ $block->getDataAsJSON() ?>, <?= /* @noEscape */ $block->getColumnInputNames(true) ?>, <?= $block->escapeJs($block->getGridBlock()->getJsObjectName()) ?>, '<?= $block->escapeJs($block->getReloadParamName()) ?>');
+                document.getElementById('{$block->escapeJs($formId)}').appendChild(serializeInput);
+                new serializerController('{$_id}', {$block->getDataAsJSON()}, {$block->getColumnInputNames(true)},
+                 {$block->escapeJs($block->getGridBlock()->getJsObjectName())},
+                 '{$block->escapeJs($block->getReloadParamName())}');
             } catch(e) {
                 //Error add serializer
             }
         });
     });
-</script>
-<?php else :?>
-<input type="hidden" name="<?= $block->escapeHtmlAttr($block->getInputElementName()) ?>"  value="" id="<?= /* @noEscape */ $_id ?>" />
-<script>
+script;
+    ?>
+    <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
+<?php else:?>
+<input type="hidden" name="<?= $block->escapeHtmlAttr($block->getInputElementName()) ?>"  value=""
+       id="<?= /* @noEscape */ $_id ?>" />
+    <?php $scriptString = <<<script
     require([
         'mage/adminhtml/grid'
     ], function(){
-        new serializerController('<?= /* @noEscape */ $_id ?>', <?= /* @noEscape */ $block->getDataAsJSON() ?>, <?= /* @noEscape */ $block->getColumnInputNames(true) ?>, <?= $block->escapeJs($block->getGridBlock()->getJsObjectName()) ?>, '<?= $block->escapeJs($block->getReloadParamName()) ?>');
+        new serializerController('{$_id}', {$block->getDataAsJSON()}, {$block->getColumnInputNames(true)},
+         {$block->escapeJs($block->getGridBlock()->getJsObjectName())},
+         '{$block->escapeJs($block->getReloadParamName())}');
     });
-</script>
+script;
+    ?>
+    <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
 <?php endif;?>

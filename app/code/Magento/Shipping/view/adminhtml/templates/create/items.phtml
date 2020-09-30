@@ -3,8 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-//phpcs:disable Squiz.ControlStructures.ControlSignature.NewlineAfterOpenBrace
-//phpcs:disable Squiz.WhiteSpace.ScopeClosingBrace.ContentBefore
+
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
 
 <section class="admin__page-section">
@@ -17,17 +17,17 @@
                 <tr class="headings">
                     <th class="col-product"><span><?= $block->escapeHtml(__('Product')) ?></span></th>
                     <th class="col-ordered-qty"><span><?= $block->escapeHtml(__('Qty')) ?></span></th>
-                    <th class="col-qty<?php if ($block->isShipmentRegular()) : ?> last<?php endif; ?>">
+                    <th class="col-qty<?php if ($block->isShipmentRegular()): ?> last<?php endif; ?>">
                         <span><?= $block->escapeHtml(__('Qty to Ship')) ?></span>
                     </th>
-                    <?php if (!$block->canShipPartiallyItem()) : ?>
+                    <?php if (!$block->canShipPartiallyItem()): ?>
                     <th class="col-ship last"><span><?= $block->escapeHtml(__('Ship')) ?></span></th>
                     <?php endif; ?>
                 </tr>
             </thead>
             <?php $_items = $block->getShipment()->getAllItems() ?>
-            <?php $_i = 0; foreach ($_items as $_item) :
-                if ($_item->getOrderItem()->getParentItem()) :
+            <?php $_i = 0; foreach ($_items as $_item):
+                if ($_item->getOrderItem()->getParentItem()):
                     continue;
                 endif;
                 $_i++ ?>
@@ -70,17 +70,21 @@
             <span class="title"><?= $block->escapeHtml(__('Shipment Options')) ?></span>
         </div>
         <div class="admin__page-section-item-content">
-            <?php if ($block->canCreateShippingLabel()) : ?>
+            <?php if ($block->canCreateShippingLabel()): ?>
                 <div class="field choice admin__field admin__field-option field-create">
                     <input id="create_shipping_label"
                            class="admin__control-checkbox"
                            name="shipment[create_shipping_label]"
                            value="1"
-                           type="checkbox"
-                           onclick="toggleCreateLabelCheckbox();"/>
+                           type="checkbox"/>
                     <label class="admin__field-label"
                            for="create_shipping_label">
                         <span><?= $block->escapeHtml(__('Create Shipping Label')) ?></span></label>
+                    <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
+                        'onclick',
+                        'toggleCreateLabelCheckbox();',
+                        'input#create_shipping_label'
+                    ) ?>
                 </div>
             <?php endif ?>
 
@@ -95,7 +99,7 @@
                     <span><?=$block->escapeHtml(__('Append Comments')) ?></span></label>
             </div>
 
-            <?php if ($block->canSendShipmentEmail()) : ?>
+            <?php if ($block->canSendShipmentEmail()): ?>
                 <div class="field choice admin__field admin__field-option field-email">
                     <input id="send_email"
                            class="admin__control-checkbox"
@@ -115,7 +119,8 @@
         </div>
     </div>
 </section>
-<script>
+<?php $scriptString = <<<script
+
 require([
     "jquery",
     "Magento_Ui/js/modal/alert",
@@ -150,7 +155,7 @@ window.toggleCreateLabelCheckbox = function() {
 window.submitShipment = function(btn) {
     if (!validQtyItems()) {
         alert({
-            content: '<?= $block->escapeJs($block->escapeHtml(__('Invalid value(s) for Qty to Ship'))) ?>'
+            content: '{$block->escapeJs(__('Invalid value(s) for Qty to Ship'))}'
         });
         return;
     }
@@ -186,4 +191,7 @@ window.sendEmailCheckbox = sendEmailCheckbox;
 //]]>
 
 });
-</script>
+
+script;
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>

@@ -59,8 +59,7 @@
         <actionGroup ref="AdminAddProductToCategoryActionGroup" stepKey="addProductToCategory">
             <argument name="product" value="$$simpleProduct$$"/>
         </actionGroup>
-        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="clickSaveButton"/>
-        <waitForPageLoad stepKey="waitForCategorySaved"/>
+        <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="clickSaveButton"/>
         <actionGroup ref="AssertAdminCategorySaveSuccessMessageActionGroup" stepKey="assertSuccessMessage"/>
         <waitForPageLoad stepKey="waitForPageTitleToBeSaved"/>
 

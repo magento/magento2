@@ -122,7 +122,6 @@ class Gd2Test extends TestCase
 
     /**
      * Test if open() method resets cached fileType
-     *
      */
     public function testOpenDifferentTypes()
     {
@@ -153,5 +152,15 @@ class Gd2Test extends TestCase
         $type2 = $this->adapter->getImageType();
 
         $this->assertNotEquals($type1, $type2);
+    }
+
+    /**
+     * Test open() with invalid URL.
+     */
+    public function testOpenInvalidURL()
+    {
+        $this->expectException(\InvalidArgumentException::class);
+
+        $this->adapter->open('bar://foo.bar');
     }
 }

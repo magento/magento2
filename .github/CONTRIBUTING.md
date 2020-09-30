@@ -23,7 +23,7 @@ For more detailed information on contribution please read our [beginners guide](
 * Unit/integration test coverage
 * Proposed [documentation](https://devdocs.magento.com) updates. Documentation contributions can be submitted via the [devdocs GitHub](https://github.com/magento/devdocs).
 4. For larger features or changes, please [open an issue](https://github.com/magento/magento2/issues) to discuss the proposed changes prior to development. This may prevent duplicate or unnecessary effort and allow other contributors to provide input.
-5. All automated tests must pass (all builds on [Travis CI](https://travis-ci.org/magento/magento2) must be green).
+5. All automated tests must pass.
 
 ## Contribution process
 

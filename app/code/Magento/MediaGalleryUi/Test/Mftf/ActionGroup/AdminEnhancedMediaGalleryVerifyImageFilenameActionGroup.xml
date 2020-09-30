@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminEnhancedMediaGalleryVerifyImageFilenameActionGroup">
+        <annotations>
+            <description>Verifies image filename on the View Details panel</description>
+        </annotations>
+        <arguments>
+            <argument name="filename" type="string"/>
+        </arguments>
+
+        <grabTextFrom selector="{{AdminEnhancedMediaGalleryViewDetailsSection.filename}}" stepKey="grabFilename"/>
+        <assertStringContainsString stepKey="verifyFilename">
+            <actualResult type="variable">grabFilename</actualResult>
+            <expectedResult type="string">{{filename}}</expectedResult>
+        </assertStringContainsString>
+    </actionGroup>
+</actionGroups>

@@ -16,8 +16,7 @@ use Laminas\Code\Reflection\ParameterReflection;
 
 /**
  * Class Repository
- * @since 2.0.0
- * @deprecated 2.2.0 As current implementation breaks Repository contract. Not removed from codebase to prevent
+ * @deprecated 101.0.0 As current implementation breaks Repository contract. Not removed from codebase to prevent
  * possible backward incompatibilities if this functionality being used by 3rd party developers.
  */
 class Repository extends \Magento\Framework\Code\Generator\EntityAbstract

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="CreateProductAttributeEntityWithReservedKeysTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Create Product Attributes"/>
+            <title value="Attributess with reserved codes should not be created"/>
+            <description value="Admin should not be able to create product attribute with reserved codes"/>
+            <severity value="MINOR"/>
+            <testCaseId value="MC-37806"/>
+            <group value="catalog"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!--Navigate to Stores > Attributes > Product.-->
+        <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="goToProductAttributesGrid"/>
+
+        <!--Create new Product Attribute as TextField, with type_id code.-->
+        <actionGroup ref="CreateProductAttributeActionGroup" stepKey="createAttribute">
+            <argument name="attribute" value="ProductTypeIdAttribute"/>
+        </actionGroup>
+        <see stepKey="seeErrorMessage" selector="{{AdminMessagesSection.errorMessage}}" userInput="Code (type_id) is a reserved key and cannot be used as attribute code."/>
+
+        <!--Navigate to Stores > Attributes > Product.-->
+        <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="backToProductAttributesGrid"/>
+
+        <!--Create new Product Attribute as TextField, with product_type code.-->
+        <actionGroup ref="CreateProductAttributeActionGroup" stepKey="createAttribute2">
+            <argument name="attribute" value="ProductProductTypeAttribute"/>
+        </actionGroup>
+
+        <see stepKey="seeErrorMessage2" selector="{{AdminMessagesSection.errorMessage}}" userInput="Code (product_type) is a reserved key and cannot be used as attribute code."/>
+    </test>
+</tests>

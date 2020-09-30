@@ -4,26 +4,41 @@
  * See COPYING.txt for license details.
  */
 
-/** @var \Magento\Review\Block\Customer\Recent $block */
+/**
+ * @var \Magento\Review\Block\Customer\Recent $block
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ */
 ?>
-<?php if ($block->getReviews() && count($block->getReviews())) : ?>
+<?php if ($block->getReviews() && count($block->getReviews())): ?>
 <div class="block block-reviews-dashboard">
     <div class="block-title">
         <strong><?= $block->escapeHtml(__('My Recent Reviews')) ?></strong>
-        <a class="action view" href="<?= $block->escapeUrl($block->getAllReviewsUrl()) ?>"><span><?= $block->escapeHtml(__('View All')) ?></span></a>
+        <a class="action view" href="<?= $block->escapeUrl($block->getAllReviewsUrl()) ?>">
+            <span><?= $block->escapeHtml(__('View All')) ?></span>
+        </a>
     </div>
     <div class="block-content">
         <ol class="items">
-        <?php foreach ($block->getReviews() as $_review) : ?>
+        <?php foreach ($block->getReviews() as $_review): ?>
             <li class="item">
-                <strong class="product-name"><a href="<?= $block->escapeUrl($block->getReviewUrl($_review->getReviewId())) ?>"><?= $block->escapeHtml($_review->getName()) ?></a></strong>
-                <?php if ($_review->getSum()) : ?>
+                <strong class="product-name">
+                    <a href="<?= $block->escapeUrl($block->getReviewUrl($_review->getReviewId())) ?>">
+                        <?= $block->escapeHtml($_review->getName()) ?>
+                    </a>
+                </strong>
+                <?php if ($_review->getSum()): ?>
                     <?php $rating = $_review->getSum() / $_review->getCount() ?>
                     <div class="rating-summary">
                          <span class="label"><span><?= $block->escapeHtml(__('Rating')) ?>:</span></span>
                          <div class="rating-result" title="<?= $block->escapeHtmlAttr($rating) ?>%">
-                             <span style="width:<?= $block->escapeHtmlAttr($rating) ?>%"><span><?= $block->escapeHtml($rating) ?>%</span></span>
+                             <span>
+                                 <span><?= $block->escapeHtml($rating) ?>%</span>
+                             </span>
                          </div>
+                        <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
+                            "width:". $block->escapeHtmlAttr($rating) . "%",
+                            'div.rating-result>span:first-child'
+                        ) ?>
                      </div>
                 <?php endif; ?>
             </li>

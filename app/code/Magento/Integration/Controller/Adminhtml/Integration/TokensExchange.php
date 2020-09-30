@@ -4,12 +4,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Integration\Controller\Adminhtml\Integration;
 
+use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Integration\Controller\Adminhtml\Integration;
 use Magento\Integration\Model\Integration as IntegrationModel;
 
-class TokensExchange extends \Magento\Integration\Controller\Adminhtml\Integration
+class TokensExchange extends Integration implements HttpPostActionInterface
 {
     /**
      * Let the admin know that integration has been sent for activation and token exchange is in process.
@@ -72,12 +75,12 @@ class TokensExchange extends \Magento\Integration\Controller\Adminhtml\Integrati
             ];
             $this->getResponse()->representJson($this->jsonHelper->jsonEncode($result));
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->messageManager->addError($e->getMessage());
+            $this->messageManager->addErrorMessage($e->getMessage());
             $this->_redirect('*/*');
             return;
         } catch (\Exception $e) {
             $this->_logger->critical($e);
-            $this->messageManager->addError(__('Internal error. Check exception log for details.'));
+            $this->messageManager->addErrorMessage(__('Internal error. Check exception log for details.'));
             $this->_redirect('*/*');
             return;
         }

@@ -15,6 +15,8 @@ use Magento\Catalog\Model\ResourceModel\Category\Collection;
 use Magento\Catalog\Model\ResourceModel\Category\Tree;
 use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
 use Magento\Eav\Model\Entity\Attribute\Exception as AttributeException;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Math\Random;
 use Magento\Framework\Url;
 use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\Store\Model\Store;
@@ -417,6 +419,29 @@ class CategoryTest extends TestCase
         $category = $this->categoryRepository->get($this->_model->getId());
         $categoryData = $category->toArray(array_keys($data));
         $this->assertSame($data, $categoryData);
+    }
+
+    /**
+     * Test for Category Description field to be able to contain >64kb of data
+     *
+     * @throws NoSuchEntityException
+     * @throws \Exception
+     */
+    public function testMaximumDescriptionLength(): void
+    {
+        $random = Bootstrap::getObjectManager()->get(Random::class);
+        $longDescription = $random->getRandomString(70000);
+
+        $requiredData = [
+            'name' => 'Test Category',
+            'attribute_set_id' => '3',
+            'parent_id' => 2,
+            'description' => $longDescription
+        ];
+        $this->_model->setData($requiredData);
+        $this->categoryResource->save($this->_model);
+        $category = $this->categoryRepository->get($this->_model->getId());
+        $this->assertEquals($longDescription, $category->getDescription());
     }
 
     /**

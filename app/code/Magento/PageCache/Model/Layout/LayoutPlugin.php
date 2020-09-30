@@ -85,10 +85,11 @@ class LayoutPlugin
     {
         if ($subject->isCacheable() && $this->config->isEnabled()) {
             $tags = [[]];
+            $isVarnish = $this->config->getType() === Config::VARNISH;
+
             foreach ($subject->getAllBlocks() as $block) {
                 if ($block instanceof IdentityInterface) {
                     $isEsiBlock = $block->getTtl() > 0;
-                    $isVarnish = $this->config->getType() == Config::VARNISH;
                     if ($isVarnish && $isEsiBlock) {
                         continue;
                     }

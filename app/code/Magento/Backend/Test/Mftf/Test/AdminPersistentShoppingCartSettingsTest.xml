@@ -21,11 +21,15 @@
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <magentoCLI stepKey="enablePersistentShoppingCart" command="config:set persistent/options/enabled 1"/>
-            <magentoCLI stepKey="cacheClean" command="cache:clean config"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+                <argument name="tags" value="config"/>
+            </actionGroup>
         </before>
         <after>
             <magentoCLI stepKey="disablePersistentShoppingCart" command="config:set persistent/options/enabled 0"/>
-            <magentoCLI stepKey="cacheClean" command="cache:clean config"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+                <argument name="tags" value="config"/>
+            </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 

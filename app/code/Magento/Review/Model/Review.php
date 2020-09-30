@@ -101,7 +101,7 @@ class Review extends \Magento\Framework\Model\AbstractModel implements IdentityI
     /**
      * Review model summary
      *
-     * @deprecated Summary factory injected as separate property
+     * @deprecated 100.3.3 Summary factory injected as separate property
      * @var \Magento\Review\Model\Review\Summary
      */
     protected $_reviewSummary;
@@ -216,7 +216,7 @@ class Review extends \Magento\Framework\Model\AbstractModel implements IdentityI
     /**
      * Get entity summary
      *
-     * @deprecated
+     * @deprecated 100.3.3
      * @param Product $product
      * @param int $storeId
      * @return void
@@ -306,7 +306,7 @@ class Review extends \Magento\Framework\Model\AbstractModel implements IdentityI
     /**
      * Append review summary data object to product collection
      *
-     * @deprecated
+     * @deprecated 100.3.3
      * @param ProductCollection $collection
      * @return $this
      * @throws \Magento\Framework\Exception\NoSuchEntityException

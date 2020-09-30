@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<csp_whitelist xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Csp:etc/csp_whitelist.xsd">
+    <policies>
+        <policy id="img-src">
+            <values>
+                <value id="paypal_analytics" type="host">t.paypal.com</value>
+                <value id="www_paypal" type="host">www.paypal.com</value>
+                <value id="paypal_objects" type="host">www.paypalobjects.com</value>
+                <value id="paypal_fpdbs" type="host">fpdbs.paypal.com</value>
+                <value id="paypal_fpdbs_sandbox" type="host">fpdbs.sandbox.paypal.com</value>
+            </values>
+        </policy>
+        <policy id="script-src">
+            <values>
+                <value id="www_paypal" type="host">www.paypal.com</value>
+                <value id="www_sandbox_paypal" type="host">www.sandbox.paypal.com</value>
+                <value id="paypal_objects" type="host">www.paypalobjects.com</value>
+                <value id="paypal_analytics" type="host">t.paypal.com</value>
+            </values>
+        </policy>
+        <policy id="frame-src">
+            <values>
+                <value id="www_paypal" type="host">www.paypal.com</value>
+                <value id="www_sandbox_paypal" type="host">www.sandbox.paypal.com</value>
+            </values>
+        </policy>
+    </policies>
+</csp_whitelist>

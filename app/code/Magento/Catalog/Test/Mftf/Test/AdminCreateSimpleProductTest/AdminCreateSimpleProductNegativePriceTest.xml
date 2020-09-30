@@ -22,7 +22,7 @@
         <waitForPageLoad stepKey="wait1"/>
         <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{SimpleProduct.name}}" stepKey="fillName"/>
         <fillField selector="{{AdminProductFormSection.productPrice}}" userInput="-42" stepKey="fillPrice"/>
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSave"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSave"/>
         <see selector="{{AdminProductFormSection.priceFieldError}}" userInput="Please enter a number 0 or greater in this field." stepKey="seePriceValidationError"/>
     </test>
 </tests>

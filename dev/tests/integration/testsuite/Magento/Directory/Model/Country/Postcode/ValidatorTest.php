@@ -104,7 +104,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
             ['countryId' => 'BY', 'postcode' => '123456'],
             ['countryId' => 'BE', 'postcode' => '1234'],
             ['countryId' => 'BA', 'postcode' => '12345'],
-            ['countryId' => 'BR', 'postcode' => '12345'],
+            ['countryId' => 'BR', 'postcode' => '12345678'],
             ['countryId' => 'BR', 'postcode' => '12345-678'],
             ['countryId' => 'BN', 'postcode' => 'PS1234'],
             ['countryId' => 'BG', 'postcode' => '1234'],

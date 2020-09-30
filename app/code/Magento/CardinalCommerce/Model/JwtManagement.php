@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\CardinalCommerce\Model;
 
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\Encryption\Helper\Security;
 
 /**
  * JSON Web Token management.
@@ -62,7 +63,8 @@ class JwtManagement
         $payload = $this->json->unserialize($payloadJson);
 
         $signature = $this->urlSafeB64Decode($signatureB64);
-        if ($signature !== $this->sign($headB64 . '.' . $payloadB64, $key, $header['alg'])) {
+
+        if (!Security::compareStrings($signature, $this->sign($headB64 . '.' . $payloadB64, $key, $header['alg']))) {
             throw new \InvalidArgumentException('JWT signature verification failed');
         }
 

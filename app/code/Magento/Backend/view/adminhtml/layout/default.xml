@@ -70,7 +70,6 @@
                             <argument name="bugreport_url" xsi:type="string">https://github.com/magento/magento2/issues</argument>
                         </arguments>
                     </block>
-                    
                 </container>
             </container>
         </referenceContainer>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminAssertImageUploadFileSizeThanActionGroup">
+        <annotations>
+            <description>Validates that the provided image has correct file size in category content section.</description>
+        </annotations>
+        <arguments>
+            <argument name="fileSize" type="string"/>
+        </arguments>
+
+        <grabTextFrom selector="{{AdminCategoryContentSection.imageFileMeta}}" stepKey="imageSize"/>
+        <assertStringContainsString stepKey="assertFileSize">
+            <expectedResult type="string">{{fileSize}}</expectedResult>
+            <actualResult type="variable">imageSize</actualResult>
+        </assertStringContainsString>
+
+    </actionGroup>
+</actionGroups>

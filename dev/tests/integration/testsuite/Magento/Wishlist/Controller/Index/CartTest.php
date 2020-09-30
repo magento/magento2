@@ -69,7 +69,8 @@ class CartTest extends AbstractController
         $item = $this->getWishlistByCustomerId->getItemBySku(1, 'simple-1');
         $this->assertNotNull($item);
         $this->performAddToCartRequest(['item' => $item->getId(), 'qty' => 3]);
-        $message = sprintf('You added %s to your shopping cart.', $item->getName());
+        $message = sprintf("\n" . 'You added %s to your ' .
+            '<a href="http://localhost/index.php/checkout/cart/">shopping cart</a>.', $item->getName());
         $this->assertSessionMessages($this->equalTo([(string)__($message)]), MessageInterface::TYPE_SUCCESS);
         $this->assertCount(0, $this->getWishlistByCustomerId->execute(1)->getItemCollection());
         $cart = $this->cartFactory->create();

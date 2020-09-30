@@ -10,6 +10,7 @@ class SharedTest extends \Magento\TestFramework\TestCase\AbstractController
 {
     /**
      * @magentoDataFixture Magento/Wishlist/_files/wishlist_shared.php
+     * @magentoDbIsolation disabled
      * @return void
      */
     public function testAllcartAction()

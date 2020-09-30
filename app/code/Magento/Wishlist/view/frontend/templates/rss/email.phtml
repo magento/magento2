@@ -5,11 +5,19 @@
  */
 
 /* @var \Magento\Wishlist\Block\Rss\EmailLink $block */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+
+/** @var \Magento\Wishlist\Helper\Data $wishlistHelper */
+$wishlistHelper = $block->getData('wishlistHelper');
 ?>
-<?php if ($block->getLink()) : ?>
-<p style="font-size:12px; line-height:16px; margin:0 0 16px;">
-    <?= $block->escapeHtml(__("RSS link to %1's wishlist", $this->helper(\Magento\Wishlist\Helper\Data::class)->getCustomerName())) ?>
+<?php if ($block->getLink()): ?>
+<p id="wishlist-rss-email-link">
+    <?= $block->escapeHtml(__("RSS link to %1's wishlist", $wishlistHelper->getCustomerName())) ?>
     <br />
     <a href="<?= $block->escapeUrl($block->getLink()) ?>"><?= $block->escapeUrl($block->getLink()) ?></a>
 </p>
+    <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
+        "font-size:12px; line-height:16px; margin:0 0 16px;",
+        'p#wishlist-rss-email-link'
+    ) ?>
 <?php endif; ?>

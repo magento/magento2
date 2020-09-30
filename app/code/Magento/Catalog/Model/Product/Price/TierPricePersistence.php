@@ -56,7 +56,7 @@ class TierPricePersistence
     {
         $select = $this->tierpriceResource->getConnection()->select()->from($this->tierpriceResource->getMainTable());
         return $this->tierpriceResource->getConnection()->fetchAll(
-            $select->where($this->getEntityLinkField() . ' IN (?)', $ids)
+            $select->where($this->getEntityLinkField() . ' IN (?)', $ids, \Zend_Db::INT_TYPE)
         );
     }
 

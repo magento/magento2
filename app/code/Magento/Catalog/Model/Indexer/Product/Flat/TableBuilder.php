@@ -9,7 +9,7 @@ use Magento\Catalog\Model\Indexer\Product\Flat\Table\BuilderInterfaceFactory;
 use Magento\Store\Model\Store;
 
 /**
- * Class TableBuilder
+ * Prepare temporary tables structure for product flat indexer
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -86,12 +86,13 @@ class TableBuilder
         //Create list of temporary tables based on available attributes attributes
         $valueTables = [];
         foreach ($temporaryEavAttributes as $tableName => $columns) {
-            // phpcs:ignore Magento2.Performance.ForeachArrayMerge
-            $valueTables = array_merge(
-                $valueTables,
-                $this->_createTemporaryTable($this->_getTemporaryTableName($tableName), $columns, $valueFieldSuffix)
+            $valueTables[] = $this->_createTemporaryTable(
+                $this->_getTemporaryTableName($tableName),
+                $columns,
+                $valueFieldSuffix
             );
         }
+        $valueTables = array_merge([], ...$valueTables);
 
         //Fill "base" table which contains all available products
         $this->_fillTemporaryEntityTable($entityTableName, $entityTableColumns, $changedIds);
@@ -347,7 +348,9 @@ class TableBuilder
                 }
 
                 if (!empty($changedIds)) {
-                    $select->where($this->_connection->quoteInto('e.entity_id IN (?)', $changedIds));
+                    $select->where(
+                        $this->_connection->quoteInto('e.entity_id IN (?)', $changedIds, \Zend_Db::INT_TYPE)
+                    );
                 }
 
                 $sql = $select->insertFromSelect($temporaryTableName, $columns, true);
@@ -355,7 +358,9 @@ class TableBuilder
 
                 if (count($valueColumns) > 1) {
                     if (!empty($changedIds)) {
-                        $selectValue->where($this->_connection->quoteInto('e.entity_id IN (?)', $changedIds));
+                        $selectValue->where(
+                            $this->_connection->quoteInto('e.entity_id IN (?)', $changedIds, \Zend_Db::INT_TYPE)
+                        );
                     }
                     $sql = $selectValue->insertFromSelect($temporaryValueTableName, $valueColumns, true);
                     $this->_connection->query($sql);
@@ -368,7 +373,7 @@ class TableBuilder
      * Get Metadata Pool
      *
      * @return \Magento\Framework\EntityManager\MetadataPool
-     * @deprecated 101.1.0
+     * @deprecated 102.0.0
      */
     private function getMetadataPool()
     {

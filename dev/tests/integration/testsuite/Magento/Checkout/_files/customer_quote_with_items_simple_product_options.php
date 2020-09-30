@@ -10,7 +10,7 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product\Option;
 use Magento\Catalog\Model\Product\Option\Type\File\ValidatorFile;
 use Magento\Catalog\Model\Product\Option\Value;
-use Magento\Checkout\_files\ValidatorFileMock;
+use Magento\TestFramework\Catalog\Model\Product\Option\Type\File\ValidatorFileMock;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\DataObject;
 use Magento\Quote\Api\CartRepositoryInterface;
@@ -83,7 +83,7 @@ foreach ($dropDownValues as $dropDownId => $dropDownValue) {
     $itemsOptions[$dropDownValue->getTitle()] = $options;
 }
 
-$validatorFileMock = (new ValidatorFileMock())->getInstance();
+$validatorFileMock = $objectManager->get(ValidatorFileMock::class)->getInstance();
 $objectManager->addSharedInstance($validatorFileMock, ValidatorFile::class);
 
 $quote->setStoreId($storeManager->getStore()->getId())

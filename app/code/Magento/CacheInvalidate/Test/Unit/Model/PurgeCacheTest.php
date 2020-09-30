@@ -53,6 +53,7 @@ class PurgeCacheTest extends TestCase
                 'cacheServer' => $this->cacheServer,
                 'socketAdapterFactory' => $socketFactoryMock,
                 'logger' => $this->loggerMock,
+                'maxHeaderSize' => 256
             ]
         );
     }
@@ -64,6 +65,7 @@ class PurgeCacheTest extends TestCase
     public function testSendPurgeRequest($hosts)
     {
         $uris = [];
+        /** @var array $host */
         foreach ($hosts as $host) {
             $port = isset($host['port']) ? $host['port'] : Server::DEFAULT_PORT;
             $uris[] = UriFactory::factory('')->setHost($host['host'])
@@ -92,7 +94,50 @@ class PurgeCacheTest extends TestCase
         $this->loggerMock->expects($this->once())
             ->method('execute');
 
-        $this->assertTrue($this->model->sendPurgeRequest('tags'));
+        $this->assertTrue($this->model->sendPurgeRequest(['tags']));
+    }
+
+    public function testSendMultiPurgeRequest()
+    {
+        $tags = [
+            '(^|,)cat_p_95(,|$)', '(^|,)cat_p_96(,|$)', '(^|,)cat_p_97(,|$)', '(^|,)cat_p_98(,|$)',
+            '(^|,)cat_p_99(,|$)', '(^|,)cat_p_100(,|$)', '(^|,)cat_p_10038(,|$)', '(^|,)cat_p_142985(,|$)',
+            '(^|,)cat_p_199(,|$)', '(^|,)cat_p_300(,|$)', '(^|,)cat_p_12038(,|$)', '(^|,)cat_p_152985(,|$)',
+            '(^|,)cat_p_299(,|$)', '(^|,)cat_p_400(,|$)', '(^|,)cat_p_13038(,|$)', '(^|,)cat_p_162985(,|$)',
+        ];
+
+        $tagsSplitA = array_slice($tags, 0, 12);
+        $tagsSplitB = array_slice($tags, 12, 4);
+
+        $uri =  UriFactory::factory('')->setHost('localhost')
+            ->setPort(80)
+            ->setScheme('http');
+
+        $this->cacheServer->expects($this->once())
+            ->method('getUris')
+            ->willReturn([$uri]);
+
+        $this->socketAdapterMock->expects($this->exactly(2))
+            ->method('connect')
+            ->with($uri->getHost(), $uri->getPort());
+
+        $this->socketAdapterMock->expects($this->exactly(2))
+            ->method('write')
+            ->withConsecutive(
+                [
+                    'PURGE', $uri, '1.1',
+                    ['X-Magento-Tags-Pattern' => implode('|', $tagsSplitA), 'Host' => $uri->getHost()]
+                ],
+                [
+                    'PURGE', $uri, '1.1',
+                    ['X-Magento-Tags-Pattern' => implode('|', $tagsSplitB), 'Host' => $uri->getHost()]
+                ]
+            );
+
+        $this->socketAdapterMock->expects($this->exactly(2))
+            ->method('close');
+
+        $this->assertTrue($this->model->sendPurgeRequest($tags));
     }
 
     /**
@@ -130,6 +175,6 @@ class PurgeCacheTest extends TestCase
         $this->loggerMock->expects($this->once())
             ->method('critical');
 
-        $this->assertFalse($this->model->sendPurgeRequest('tags'));
+        $this->assertFalse($this->model->sendPurgeRequest(['tags']));
     }
 }

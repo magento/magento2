@@ -412,7 +412,7 @@ class AttributeMerger
      *
      * @param array $countryOptions
      * @return array
-     * @deprecated 100.2.0
+     * @deprecated 100.1.7
      */
     protected function orderCountryOptions(array $countryOptions)
     {

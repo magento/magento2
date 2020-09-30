@@ -11,6 +11,9 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 
+/**
+ * Resolver for Item
+ */
 class Item implements ResolverInterface
 {
     /**

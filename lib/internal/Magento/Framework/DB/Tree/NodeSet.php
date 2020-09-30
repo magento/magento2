@@ -8,7 +8,7 @@ namespace Magento\Framework\DB\Tree;
 /**
  * TODO implements iterators
  *
- * @deprecated Not used anymore.
+ * @deprecated 102.0.0 Not used anymore.
  */
 class NodeSet implements \Iterator, \Countable
 {
@@ -35,7 +35,7 @@ class NodeSet implements \Iterator, \Countable
     /**
      * Constructor
      *
-     * @deprecated
+     * @deprecated 102.0.0
      */
     public function __construct()
     {
@@ -49,7 +49,7 @@ class NodeSet implements \Iterator, \Countable
      * @param Node $node
      * @return int
      *
-     * @deprecated
+     * @deprecated 102.0.0
      */
     public function addNode(Node $node)
     {
@@ -61,7 +61,7 @@ class NodeSet implements \Iterator, \Countable
     /**
      * @return int
      *
-     * @deprecated
+     * @deprecated 102.0.0
      */
     public function count()
     {
@@ -71,7 +71,7 @@ class NodeSet implements \Iterator, \Countable
     /**
      * @return bool
      *
-     * @deprecated
+     * @deprecated 102.0.0
      */
     public function valid()
     {
@@ -81,7 +81,7 @@ class NodeSet implements \Iterator, \Countable
     /**
      * @return false|int
      *
-     * @deprecated
+     * @deprecated 102.0.0
      */
     public function next()
     {
@@ -95,7 +95,7 @@ class NodeSet implements \Iterator, \Countable
     /**
      * @return int
      *
-     * @deprecated
+     * @deprecated 102.0.0
      */
     public function key()
     {
@@ -105,7 +105,7 @@ class NodeSet implements \Iterator, \Countable
     /**
      * @return Node
      *
-     * @deprecated
+     * @deprecated 102.0.0
      */
     public function current()
     {
@@ -115,7 +115,7 @@ class NodeSet implements \Iterator, \Countable
     /**
      * @return void
      *
-     * @deprecated
+     * @deprecated 102.0.0
      */
     public function rewind()
     {

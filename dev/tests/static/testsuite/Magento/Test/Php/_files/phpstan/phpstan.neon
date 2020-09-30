@@ -26,8 +26,23 @@ parameters:
 		- '#Function setCustomErrorHandler not found#'
 		# Ignore 'return statement is missing' error when 'void' is present in return type list
 		- '#Method (?:.*?) should return (?:.*?)void(?:.*?) but return statement is missing.#'
+		# Ignore constants, defined dynamically.
+		- '#Constant TESTS_WEB_API_ADAPTER not found.#'
+		- '#Constant TESTS_BASE_URL not found.#'
+		- '#Constant TESTS_XDEBUG_ENABLED not found.#'
+		- '#Constant TESTS_XDEBUG_SESSION not found.#'
+		- '#Constant INTEGRATION_TESTS_DIR not found.#'
+		- '#Constant MAGENTO_MODULES_PATH not found.#'
+		- '#Constant TESTS_MODULES_PATH not found.#'
+		- '#Constant TESTS_INSTALLATION_DB_CONFIG_FILE not found.#'
+		- '#Constant T_[A-Z_]+ not found.#'
+
 
 services:
+    -
+        class: Magento\PhpStan\Reflection\Php\DataObjectClassReflectionExtension
+        tags: {phpstan.broker.methodsClassReflectionExtension: {priority: 100}}
+
     errorFormatter.filtered:
         class: Magento\PhpStan\Formatters\FilteredErrorFormatter
         arguments:

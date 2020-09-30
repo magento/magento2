@@ -6,12 +6,43 @@
 
 namespace Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+
 /**
  * Bundle product attributes tab
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
 class Attributes extends \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Attributes
 {
+    /**
+     * @var SecureHtmlRenderer
+     */
+    protected $secureRenderer;
+
+    /**
+     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Data\FormFactory $formFactory
+     * @param array $data
+     * @param SecureHtmlRenderer|null $htmlRenderer
+     */
+    public function __construct(
+        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Framework\Registry $registry,
+        \Magento\Framework\Data\FormFactory $formFactory,
+        array $data = [],
+        SecureHtmlRenderer $htmlRenderer = null
+    ) {
+        parent::__construct(
+            $context,
+            $registry,
+            $formFactory,
+            $data
+        );
+        $this->secureRenderer = $htmlRenderer ?? ObjectManager::getInstance()->get(SecureHtmlRenderer::class);
+    }
+
     /**
      * Prepare attributes form of bundle product
      *
@@ -69,9 +100,7 @@ class Attributes extends \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Attri
 
         $tax = $this->getForm()->getElement('tax_class_id');
         if ($tax) {
-            $tax->setAfterElementHtml(
-                '<script>' .
-                "
+            $scriptString = "
                 require(['prototype'], function(){
                 function changeTaxClassId() {
                     if ($('price_type').value == '" .
@@ -96,9 +125,9 @@ class Attributes extends \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Attri
                     changeTaxClassId();
                 }
                 });
-                " .
-                '</script>'
-            );
+                ";
+
+            $tax->setAfterElementHtml($this->secureRenderer->renderTag('script', [], $scriptString, false));
         }
 
         $weight = $this->getForm()->getElement('weight');

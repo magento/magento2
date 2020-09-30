@@ -110,7 +110,7 @@ class LinkProcessor
     /**
      * Add link types (exists for backwards compatibility)
      *
-     * @deprecated Use DI to inject to the constructor
+     * @deprecated 101.1.0 Use DI to inject to the constructor
      * @param array $nameToIds
      */
     public function addNameToIds(array $nameToIds): void

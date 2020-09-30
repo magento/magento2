@@ -68,7 +68,7 @@ class ItemConverter
     }
 
     /**
-     * Converts a specified rate model to a shipping method data object.
+     * Converts a specified quote item model to a totals item data object.
      *
      * @param \Magento\Quote\Model\Quote\Item $item
      * @return \Magento\Quote\Api\Data\TotalsItemInterface

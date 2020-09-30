@@ -20,7 +20,9 @@
         </annotations>
         <before>
             <!-- Flush cache -->
-            <magentoCLI command="cache:flush" stepKey="clearCache"/>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
 
             <!-- Create two customers -->
             <createData entity="Simple_US_Customer" stepKey="createFirstCustomer"/>

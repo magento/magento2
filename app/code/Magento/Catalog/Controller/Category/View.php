@@ -205,10 +205,9 @@ class View extends Action implements HttpGetActionInterface, HttpPostActionInter
     /**
      * Category view action
      *
-     * @return ResultInterface
      * @throws NoSuchEntityException
      */
-    public function execute(): ?ResultInterface
+    public function execute()
     {
         $result = null;
 

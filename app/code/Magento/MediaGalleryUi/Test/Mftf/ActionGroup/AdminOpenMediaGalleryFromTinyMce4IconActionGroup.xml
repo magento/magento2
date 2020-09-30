@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminOpenMediaGalleryTinyMce4ActionGroup">
+        <annotations>
+            <description>Opens Enhanced MediaGallery from category page  by tyniMce4 image icon</description>
+        </annotations>
+        
+        <click selector="{{AdminCategoryContentSection.sectionHeader}}" stepKey="clickExpandContent"/>
+        <waitForElementVisible selector="{{TinyMCESection.TinyMCE4}}" stepKey="waitForTinyMCE4" />
+        <click selector="{{TinyMCESection.InsertImageIcon}}" stepKey="clickInsertImageIcon" />
+        <waitForPageLoad stepKey="waitForPageLoad" />
+        <click selector="{{MediaGallerySection.Browse}}" stepKey="clickBrowse"/>
+        <waitForPageLoad stepKey="waitForPopup"/>
+    </actionGroup>
+</actionGroups>

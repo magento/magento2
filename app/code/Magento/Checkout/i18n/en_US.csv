@@ -153,6 +153,8 @@ Shipping,Shipping
 "Maximum Number of Items to Display in Order Summary","Maximum Number of Items to Display in Order Summary"
 "Quote Lifetime (days)","Quote Lifetime (days)"
 "After Adding a Product Redirect to Shopping Cart","After Adding a Product Redirect to Shopping Cart"
+"Enable Clear Shopping Cart","Enable Clear Shopping Cart"
+"Are you sure you want to remove all items from your shopping cart?","Are you sure you want to remove all items from your shopping cart?"
 "Number of Items to Display Pager","Number of Items to Display Pager"
 "My Cart Link","My Cart Link"
 "Display Cart Summary","Display Cart Summary"
@@ -174,7 +176,7 @@ Summary,Summary
 "We'll send your order confirmation here.","We'll send your order confirmation here."
 Payment,Payment
 "Not yet calculated","Not yet calculated"
-"We received your order!","We received your order!"
+"The order was not successful!","The order was not successful!"
 "Thank you for your purchase!","Thank you for your purchase!"
 "Password", "Password"
 "Something went wrong while saving the page. Please refresh the page and try again.","Something went wrong while saving the page. Please refresh the page and try again."
@@ -183,3 +185,4 @@ Payment,Payment
 "Close","Close"
 "Show Cross-sell Items in the Shopping Cart","Show Cross-sell Items in the Shopping Cart"
 "You added %1 to your <a href=""%2"">shopping cart</a>.","You added %1 to your <a href=""%2"">shopping cart</a>."
+"The shipping method is missing. Select the shipping method and try again.","The shipping method is missing. Select the shipping method and try again."

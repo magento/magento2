@@ -14,7 +14,7 @@
                     <label>Enable MAP</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <comment>
-                        <![CDATA[<strong style="color:red">Warning!</strong> Enabling MAP by default will hide all product prices on Storefront.]]>
+                        <![CDATA[<strong class="colorRed">Warning!</strong> Enabling MAP by default will hide all product prices on Storefront.]]>
                     </comment>
                 </field>
                 <field id="display_price_type" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" canRestore="1">

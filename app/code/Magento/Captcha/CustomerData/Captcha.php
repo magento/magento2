@@ -58,7 +58,7 @@ class Captcha extends DataObject implements SectionSourceInterface
     /**
      * @inheritdoc
      */
-    public function getSectionData() :array
+    public function getSectionData(): array
     {
         $data = [];
 

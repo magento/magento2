@@ -34,6 +34,9 @@ use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
 /**
+ * Class ShipOrderTest
+ *
+ * Test Save shipment and order data
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
  */
@@ -186,7 +189,7 @@ class ShipOrderTest extends TestCase
             ->getMockForAbstractClass();
         $this->shipOrderValidatorMock = $this->getMockBuilder(ShipOrderInterface::class)
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->validationMessagesMock = $this->getMockBuilder(ValidatorResultInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['hasMessages', 'getMessages', 'addMessage'])
@@ -291,7 +294,7 @@ class ShipOrderTest extends TestCase
                 ->method('notify')
                 ->with($this->orderMock, $this->shipmentMock, $this->shipmentCommentCreationMock);
         }
-        $this->shipmentMock->expects($this->once())
+        $this->shipmentMock->expects($this->exactly(2))
             ->method('getEntityId')
             ->willReturn(2);
         $this->assertEquals(

@@ -6,8 +6,9 @@
 namespace Magento\Setup\Model;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Component\ComponentRegistrarInterface;
 use Magento\Framework\Filesystem;
-use Magento\Framework\Module\FullModuleList;
 use Magento\Framework\Setup\ConfigOptionsListInterface;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 
@@ -31,13 +32,6 @@ class ConfigOptionsListCollector
     private $filesystem;
 
     /**
-     * Module list including enabled and disabled modules
-     *
-     * @var FullModuleList
-     */
-    private $fullModuleList;
-
-    /**
      * Object manager provider
      *
      * @var ObjectManagerProvider
@@ -52,26 +46,33 @@ class ConfigOptionsListCollector
     private $serviceLocator;
 
     /**
+     * Component list
+     *
+     * @var ComponentRegistrarInterface
+     */
+    private $componentRegistrar;
+
+    /**
      * Constructor
      *
      * @param DirectoryList $directoryList
      * @param Filesystem $filesystem
-     * @param FullModuleList $fullModuleList
+     * @param ComponentRegistrarInterface $componentRegistrar
      * @param ObjectManagerProvider $objectManagerProvider
      * @param ServiceLocatorInterface $serviceLocator
      */
     public function __construct(
         DirectoryList $directoryList,
         Filesystem $filesystem,
-        FullModuleList $fullModuleList,
+        ComponentRegistrarInterface $componentRegistrar,
         ObjectManagerProvider $objectManagerProvider,
         ServiceLocatorInterface $serviceLocator
     ) {
         $this->directoryList = $directoryList;
         $this->filesystem = $filesystem;
-        $this->fullModuleList = $fullModuleList;
         $this->objectManagerProvider = $objectManagerProvider;
         $this->serviceLocator = $serviceLocator;
+        $this->componentRegistrar = $componentRegistrar;
     }
 
     /**
@@ -86,8 +87,8 @@ class ConfigOptionsListCollector
     {
         $optionsList = [];
 
-        // go through modules
-        foreach ($this->fullModuleList->getNames() as $moduleName) {
+        $modulePaths = $this->componentRegistrar->getPaths(ComponentRegistrar::MODULE);
+        foreach (array_keys($modulePaths) as $moduleName) {
             $optionsClassName = str_replace('_', '\\', $moduleName) . '\Setup\ConfigOptionsList';
             if (class_exists($optionsClassName)) {
                 $optionsClass = $this->objectManagerProvider->get()->create($optionsClassName);

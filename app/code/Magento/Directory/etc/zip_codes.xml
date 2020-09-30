@@ -64,7 +64,7 @@
     </zip>
     <zip countryCode="BR">
         <codes>
-            <code id="pattern_1" active="true" example="12345">^[0-9]{5}$</code>
+            <code id="pattern_1" active="true" example="12345678">^[0-9]{8}$</code>
             <code id="pattern_2" active="true" example="12345-678">^[0-9]{5}\-[0-9]{3}$</code>
         </codes>
     </zip>

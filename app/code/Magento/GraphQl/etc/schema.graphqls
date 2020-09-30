@@ -30,14 +30,14 @@ directive @resolver(class: String="") on QUERY
     | OBJECT
     | FIELD_DEFINITION
     | ARGUMENT_DEFINITION
-    | INTERFACE
-    | UNION
     | ENUM
     | ENUM_VALUE
     | INPUT_OBJECT
     | INPUT_FIELD_DEFINITION
 
-directive @typeResolver(class: String="") on INTERFACE | OBJECT
+directive @typeResolver(class: String="") on UNION
+    | INTERFACE
+    | OBJECT
 
 directive @cache(cacheIdentity: String="" cacheable: Boolean=true) on QUERY
 
@@ -276,4 +276,9 @@ enum CurrencyEnum @doc(description: "The list of available currency codes") {
     ROL
     TRL
     XPF
+}
+
+input EnteredOptionInput @doc(description: "Defines a customer-entered option") {
+    uid: ID! @doc(description: "An encoded ID")
+    value: String! @doc(description: "Text the customer entered")
 }

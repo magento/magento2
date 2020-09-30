@@ -9,6 +9,7 @@ namespace Magento\Framework\Validator;
  * Abstract validator class.
  *
  * @api
+ * @since 100.0.2
  */
 abstract class AbstractValidator implements \Magento\Framework\Validator\ValidatorInterface
 {

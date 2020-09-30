@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminMediaGalleryRenditionsEnableActionGroup">
+        <arguments>
+            <argument name="enabled" type="string" defaultValue="{{MediaGalleryRenditionsDataEnabled.value}}"/>
+        </arguments>
+        <amOnPage url="{{AdminMediaGalleryConfigSystemPage.url}}" stepKey="navigateToSystemConfigurationPage" />
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <scrollTo selector="{{AdminConfigSystemSection.mediaGalleryRenditionsFieldset}}" stepKey="scrollToMediaGalleryRenditionsFieldset"/>
+        <conditionalClick stepKey="expandMediaGalleryRenditionsTab" selector="{{AdminConfigSystemSection.mediaGalleryRenditionsFieldset}}" dependentSelector="{{AdminConfigSystemSection.mediaGalleryRenditionsEnabledField}}" visible="false" />
+        <waitForElementVisible selector="{{AdminConfigSystemSection.mediaGalleryRenditionsFieldset}}" stepKey="waitForFieldset" />
+        <selectOption userInput="{{enabled}}" selector="{{AdminConfigSystemSection.mediaGalleryRenditionsEnabledField}}" stepKey="enableOrDisableMediaGalleryRenditions"/>
+        <click selector="{{AdminConfigSystemSection.saveConfig}}" stepKey="saveConfiguration"/>
+        <waitForPageLoad stepKey="waitForConfigurationToSave"/>
+    </actionGroup>
+</actionGroups>

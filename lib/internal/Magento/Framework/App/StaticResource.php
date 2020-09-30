@@ -124,17 +124,28 @@ class StaticResource implements \Magento\Framework\AppInterface
             )
         ) {
             $this->response->setHttpResponseCode(404);
-        } else {
-            $path = $this->request->get('resource');
-            $params = $this->parsePath($path);
-            $this->state->setAreaCode($params['area']);
-            $this->objectManager->configure($this->configLoader->load($params['area']));
-            $file = $params['file'];
-            unset($params['file']);
-            $asset = $this->assetRepo->createAsset($file, $params);
-            $this->response->setFilePath($asset->getSourceFile());
-            $this->publisher->publish($asset);
+            return $this->response;
         }
+
+        $path = $this->request->get('resource');
+        try {
+            $params = $this->parsePath($path);
+        } catch (\InvalidArgumentException $e) {
+            if ($appMode == \Magento\Framework\App\State::MODE_PRODUCTION) {
+                $this->response->setHttpResponseCode(404);
+                return $this->response;
+            }
+            throw $e;
+        }
+
+        $this->state->setAreaCode($params['area']);
+        $this->objectManager->configure($this->configLoader->load($params['area']));
+        $file = $params['file'];
+        unset($params['file']);
+        $asset = $this->assetRepo->createAsset($file, $params);
+        $this->response->setFilePath($asset->getSourceFile());
+        $this->publisher->publish($asset);
+
         return $this->response;
     }
 
@@ -215,7 +226,7 @@ class StaticResource implements \Magento\Framework\AppInterface
      * Retrieves LoggerInterface instance
      *
      * @return LoggerInterface
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      */
     private function getLogger()
     {

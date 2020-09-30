@@ -10,6 +10,7 @@ namespace Magento\Framework\Pricing\Amount;
  * Class AmountFactory
  *
  * @api
+ * @since 100.0.2
  */
 class AmountFactory
 {

@@ -45,6 +45,9 @@ class CustomizableEnteredOptionValueUid implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
+        if (isset($value['uid'])) {
+            return $value['uid'];
+        }
         if (!isset($value['option_id']) || empty($value['option_id'])) {
             throw new GraphQlInputException(__('"option_id" value should be specified.'));
         }

@@ -63,14 +63,14 @@
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="source" xsi:type="string">block</item>
-                    <item name="default" xsi:type="number">0</item>
+                    <item name="default" xsi:type="string">0:0</item>
                 </item>
             </argument>
             <settings>
                 <validation>
                     <rule name="required-entry" xsi:type="boolean">true</rule>
                 </validation>
-                <dataType>int</dataType>
+                <dataType>text</dataType>
                 <tooltip>
                     <link>https://docs.magento.com/m2/ce/user_guide/stores/websites-stores-views.html</link>
                     <description translate="true">You can adjust the scope of this synonym group by selecting an option from the list.</description>

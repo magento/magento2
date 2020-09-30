@@ -67,7 +67,7 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
     /**
      * Initialize dependencies
      *
-     * @deprecated
+     * @deprecated 101.0.2
      * @var Config
      */
     protected $_catalogConfig;

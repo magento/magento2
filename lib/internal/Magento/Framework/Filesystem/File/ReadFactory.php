@@ -11,6 +11,7 @@ use Magento\Framework\Filesystem\DriverPool;
 /**
  * Opens a file for reading
  * @api
+ * @since 100.0.2
  */
 class ReadFactory
 {

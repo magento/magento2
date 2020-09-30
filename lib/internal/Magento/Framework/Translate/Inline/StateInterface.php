@@ -10,6 +10,7 @@ namespace Magento\Framework\Translate\Inline;
  * Controls and represents the  state of the inline translation processing.
  *
  * @api
+ * @since 100.0.2
  */
 interface StateInterface
 {

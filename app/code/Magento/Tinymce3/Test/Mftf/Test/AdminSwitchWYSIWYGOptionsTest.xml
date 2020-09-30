@@ -8,7 +8,7 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminSwitchWYSIWYGOptionsTest">
+    <test name="AdminSwitchWYSIWYGOptionsTest" deprecated="TinyMCE3 is no longer supported">
         <annotations>
             <features value="Cms"/>
             <stories value="MAGETWO-51829-Extensible list of WYSIWYG editors available in Magento"/>
@@ -17,13 +17,15 @@
             <description value="Admin should able to switch between versions of TinyMCE"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-6114"/>
+            <skip>
+                <issueId value="DEPRECATED">TinyMCE3 is no longer supported</issueId>
+            </skip>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginGetFromGeneralFile"/>
             <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
         </before>
-        <amOnPage url="{{ConfigurationStoresPage.url}}" stepKey="navigateToWYSIWYGConfigPage1"/>
-        <waitForPageLoad stepKey="wait1"/>
+        <actionGroup ref="AdminOpenConfigurationStoresPageActionGroup" stepKey="navigateToWYSIWYGConfigPage1"/>
         <conditionalClick stepKey="expandWYSIWYGOptions1" selector="{{ContentManagementSection.WYSIWYGOptions}}" dependentSelector="{{ContentManagementSection.CheckIfTabExpand}}" visible="true" />
         <waitForElementVisible selector="{{ContentManagementSection.SwitcherSystemValue}}" stepKey="waitForCheckbox1" />
         <uncheckOption selector="{{ContentManagementSection.SwitcherSystemValue}}" stepKey="uncheckUseSystemValue1"/>
@@ -31,8 +33,7 @@
         <selectOption selector="{{ContentManagementSection.Switcher}}" userInput="TinyMCE 4" stepKey="switchToVersion4" />
         <click selector="{{ContentManagementSection.WYSIWYGOptions}}" stepKey="collapseWYSIWYGOptions1" />
         <click selector="{{ContentManagementSection.Save}}" stepKey="clickSaveConfig1" />
-        <amOnPage url="{{CmsNewPagePage.url}}" stepKey="navigateToPage1"/>
-        <waitForPageLoad stepKey="wait2"/>
+        <actionGroup ref="AdminOpenCreateNewCMSPageActionGroup" stepKey="navigateToPage1"/>
         <fillField selector="{{CmsNewPagePageBasicFieldsSection.pageTitle}}" userInput="{{_defaultCmsPage.title}}" stepKey="fillFieldTitle1"/>
         <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickContentTab1" />
         <waitForElementVisible selector="{{TinyMCESection.TinyMCE4}}" stepKey="waitForTinyMCE4"/>
@@ -50,8 +51,7 @@
         <waitForPageLoad stepKey="wait3" />
         <!--see widget on Storefront-->
         <see userInput="Hello TinyMCE4!" stepKey="seeContent1"/>
-        <amOnPage url="{{ConfigurationStoresPage.url}}" stepKey="navigateToWYSIWYGConfigPage2"/>
-        <waitForPageLoad stepKey="wait4"/>
+        <actionGroup ref="AdminOpenConfigurationStoresPageActionGroup" stepKey="navigateToWYSIWYGConfigPage2"/>
         <conditionalClick stepKey="expandWYSIWYGOptions" selector="{{ContentManagementSection.WYSIWYGOptions}}" dependentSelector="{{ContentManagementSection.CheckIfTabExpand}}" visible="true" />
         <waitForElementVisible selector="{{ContentManagementSection.SwitcherSystemValue}}" stepKey="waitForCheckbox2" />
         <uncheckOption selector="{{ContentManagementSection.SwitcherSystemValue}}" stepKey="uncheckUseSystemValue2"/>
@@ -59,12 +59,11 @@
         <selectOption selector="{{ContentManagementSection.Switcher}}" userInput="TinyMCE 3" stepKey="switchToVersion3" />
         <click selector="{{ContentManagementSection.WYSIWYGOptions}}" stepKey="collapseWYSIWYGOptions2" />
         <click selector="{{ContentManagementSection.Save}}" stepKey="clickSaveConfig2" />
-        <amOnPage url="{{CmsNewPagePage.url}}" stepKey="navigateToPage2"/>
-        <waitForPageLoad stepKey="wait5"/>
+        <actionGroup ref="AdminOpenCreateNewCMSPageActionGroup" stepKey="navigateToPage2"/>
         <fillField selector="{{CmsNewPagePageBasicFieldsSection.pageTitle}}" userInput="{{_defaultCmsPage.title}}" stepKey="fillFieldTitle2"/>
         <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickContentTab2" />
-        <waitForElementVisible selector="{{TinyMCESection.TinyMCE3}}" stepKey="waitForTinyMCE3"/>
-        <seeElement selector="{{TinyMCESection.TinyMCE3}}" stepKey="seeTinyMCE3" />
+        <comment userInput="removing deprecated element" stepKey="waitForTinyMCE3"/>
+        <comment userInput="removing deprecated element" stepKey="seeTinyMCE3" />
         <executeJS function="tinyMCE.activeEditor.setContent('Hello TinyMCE3!');" stepKey="executeJSFillContent2"/>
         <click selector="{{CmsWYSIWYGSection.ShowHideBtn}}" stepKey="clickShowHideBtn2" />
         <scrollTo selector="{{CmsNewPagePageSeoSection.header}}" stepKey="scrollToSearchEngineTab2" />

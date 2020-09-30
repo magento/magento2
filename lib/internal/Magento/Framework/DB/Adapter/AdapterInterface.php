@@ -12,6 +12,7 @@ use Magento\Framework\DB\Ddl\Table;
  * Magento Database Adapter Interface
  *
  * @api
+ * @since 100.0.2
  */
 interface AdapterInterface
 {
@@ -36,7 +37,7 @@ interface AdapterInterface
     const INSERT_ON_DUPLICATE = 1;
 
     const INSERT_IGNORE = 2;
-    
+
     /** Strategy for updating data in table. See https://dev.mysql.com/doc/refman/5.7/en/replace.html */
     const REPLACE = 4;
 
@@ -258,7 +259,7 @@ interface AdapterInterface
      *
      * @param string $tableName
      * @param string $columnName
-     * @param array|string $definition  string specific or universal array DB Server definition
+     * @param array|string $definition string specific or universal array DB Server definition
      * @param string $schemaName
      * @return \Magento\Framework\DB\Adapter\AdapterInterface
      */
@@ -273,7 +274,7 @@ interface AdapterInterface
      * @param string $oldColumnName
      * @param string $newColumnName
      * @param array|string $definition
-     * @param boolean $flushData        flush table statistic
+     * @param boolean $flushData flush table statistic
      * @param string $schemaName
      * @return \Magento\Framework\DB\Adapter\AdapterInterface
      */
@@ -323,8 +324,8 @@ interface AdapterInterface
      *
      * @param string $tableName
      * @param string $indexName
-     * @param string|array $fields  the table column name or array of ones
-     * @param string $indexType     the index type
+     * @param string|array $fields the table column name or array of ones
+     * @param string $indexType the index type
      * @param string $schemaName
      * @return \Zend_Db_Statement_Interface
      */
@@ -468,7 +469,7 @@ interface AdapterInterface
      *      array('value1', 'value2')
      *
      * @param   string $table
-     * @param   string[] $columns  the data array column map
+     * @param   string[] $columns the data array column map
      * @param   array $data
      * @return  int
      */
@@ -550,7 +551,7 @@ interface AdapterInterface
      * @param string|\Magento\Framework\DB\Select $sql An SQL SELECT statement.
      * @param mixed $bind Data to bind into SELECT placeholders.
      * @param mixed $fetchMode Override current fetch mode.
-     * @return array
+     * @return mixed Array, object, or scalar depending on fetch mode.
      */
     public function fetchRow($sql, $bind = [], $fetchMode = null);
 
@@ -750,7 +751,7 @@ interface AdapterInterface
      * Return false if cache does not exists
      *
      * @param string $tableCacheKey the table cache key
-     * @param int $ddlType          the DDL constant
+     * @param int $ddlType the DDL constant
      * @return string|array|int|false
      */
     public function loadDdlCache($tableCacheKey, $ddlType);
@@ -864,7 +865,7 @@ interface AdapterInterface
      *
      * @see INTERVAL_* constants for $unit
      *
-     * @param \Zend_Db_Expr|string $date   quoted field name or SQL statement
+     * @param \Zend_Db_Expr|string $date quoted field name or SQL statement
      * @param int $interval
      * @param string $unit
      * @return \Zend_Db_Expr
@@ -876,7 +877,7 @@ interface AdapterInterface
      *
      * @see INTERVAL_* constants for $unit
      *
-     * @param \Zend_Db_Expr|string $date   quoted field name or SQL statement
+     * @param \Zend_Db_Expr|string $date quoted field name or SQL statement
      * @param int|string $interval
      * @param string $unit
      * @return \Zend_Db_Expr
@@ -895,7 +896,7 @@ interface AdapterInterface
      * %m   Month, numeric (00..12)
      * %Y   Year, numeric, four digits
      *
-     * @param \Zend_Db_Expr|string $date   quoted field name or SQL statement
+     * @param \Zend_Db_Expr|string $date quoted field name or SQL statement
      * @param string $format
      * @return \Zend_Db_Expr
      */
@@ -932,7 +933,7 @@ interface AdapterInterface
      *
      * @see INTERVAL_* constants for $unit
      *
-     * @param \Zend_Db_Expr|string $date   quoted field name or SQL statement
+     * @param \Zend_Db_Expr|string $date quoted field name or SQL statement
      * @param string $unit
      * @return \Zend_Db_Expr
      */
@@ -951,9 +952,9 @@ interface AdapterInterface
     /**
      * Build a trigger name based on table name and trigger details
      *
-     * @param string $tableName  The table that is the subject of the trigger
-     * @param string $time  Either "before" or "after"
-     * @param string $event  The DB level event which activates the trigger, i.e. "update" or "insert"
+     * @param string $tableName The table that is the subject of the trigger
+     * @param string $time Either "before" or "after"
+     * @param string $event The DB level event which activates the trigger, i.e. "update" or "insert"
      * @return string
      */
     public function getTriggerName($tableName, $time, $event);
@@ -964,7 +965,7 @@ interface AdapterInterface
      * Check index name length and allowed symbols
      *
      * @param string $tableName
-     * @param string|array $fields  the columns list
+     * @param string|array $fields the columns list
      * @param string $indexType
      * @return string
      */

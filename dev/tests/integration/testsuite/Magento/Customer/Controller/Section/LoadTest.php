@@ -16,7 +16,7 @@ use Magento\Framework\Escaper;
 /**
  * Load customer data test class.
  *
- * @magentoDbIsolation enabled
+ * @magentoDbIsolation disabled
  * @magentoAppArea frontend
  */
 class LoadTest extends AbstractController

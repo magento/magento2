@@ -69,8 +69,8 @@ $viewModel = $block->getViewModel();
                           class="input-text"
                           cols="5"
                           rows="3"
-                          data-validate="{required:true}"><?= $block->escapeHtml($viewModel->getUserComment()) ?>
-                </textarea>
+                          data-validate="{required:true}"
+                ><?= $block->escapeHtml($viewModel->getUserComment()) ?></textarea>
             </div>
         </div>
         <?= $block->getChildHtml('form.additional.info') ?>

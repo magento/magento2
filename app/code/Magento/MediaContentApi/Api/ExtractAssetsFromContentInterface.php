@@ -12,6 +12,7 @@ use Magento\MediaGalleryApi\Api\Data\AssetInterface;
 /**
  * Parse the content string for references to media assets and return the list of identified media assets
  * @api
+ * @since 100.4.0
  */
 interface ExtractAssetsFromContentInterface
 {
@@ -20,6 +21,7 @@ interface ExtractAssetsFromContentInterface
      *
      * @param string $content
      * @return AssetInterface[]
+     * @since 100.4.0
      */
     public function execute(string $content): array;
 }

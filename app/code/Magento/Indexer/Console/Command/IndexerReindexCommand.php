@@ -74,7 +74,7 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $returnValue = Cli::RETURN_FAILURE;
+        $returnValue = Cli::RETURN_SUCCESS;
         foreach ($this->getIndexers($input) as $indexer) {
             try {
                 $this->validateIndexerStatus($indexer);
@@ -97,14 +97,15 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
                 $output->writeln(
                     __('has been rebuilt successfully in %time', ['time' => gmdate('H:i:s', $resultTime)])
                 );
-                $returnValue = Cli::RETURN_SUCCESS;
             } catch (LocalizedException $e) {
                 $output->writeln(__('exception: %message', ['message' => $e->getMessage()]));
+                $returnValue = Cli::RETURN_FAILURE;
             } catch (\Exception $e) {
                 $output->writeln('process unknown error:');
                 $output->writeln($e->getMessage());
 
                 $output->writeln($e->getTraceAsString(), OutputInterface::VERBOSITY_DEBUG);
+                $returnValue = Cli::RETURN_FAILURE;
             }
         }
 

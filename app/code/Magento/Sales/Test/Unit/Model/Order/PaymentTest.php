@@ -637,7 +637,7 @@ class PaymentTest extends TestCase
             ->method('getMethodInstance')
             ->willReturn($this->paymentMethod);
 
-        $this->paymentMethod->expects($this->once())
+        $this->paymentMethod->expects($this->exactly(2))
             ->method('setStore')->willReturnSelf();
 
         $this->paymentMethod->expects($this->once())
@@ -690,7 +690,7 @@ class PaymentTest extends TestCase
             ->method('getMethodInstance')
             ->willReturn($this->paymentMethod);
 
-        $this->paymentMethod->expects($this->once())
+        $this->paymentMethod->expects($this->exactly(2))
             ->method('setStore')->willReturnSelf();
 
         $this->paymentMethod->expects($this->once())
@@ -730,7 +730,7 @@ class PaymentTest extends TestCase
             ->method('getMethodInstance')
             ->willReturn($this->paymentMethod);
 
-        $this->paymentMethod->expects($this->once())
+        $this->paymentMethod->expects($this->exactly(2))
             ->method('setStore')->willReturnSelf();
 
         $this->paymentMethod->expects($this->once())
@@ -756,7 +756,7 @@ class PaymentTest extends TestCase
             ->method('getMethodInstance')
             ->willReturn($this->paymentMethod);
 
-        $this->paymentMethod->expects($this->once())
+        $this->paymentMethod->expects($this->exactly(2))
             ->method('setStore')->willReturnSelf();
 
         $this->paymentMethod->expects($this->once())
@@ -812,7 +812,7 @@ class PaymentTest extends TestCase
             ->method('getMethodInstance')
             ->willReturn($this->paymentMethod);
 
-        $this->paymentMethod->expects($this->once())
+        $this->paymentMethod->expects($this->exactly(2))
             ->method('setStore')->willReturnSelf();
 
         $this->paymentMethod->expects($this->once())
@@ -846,7 +846,7 @@ class PaymentTest extends TestCase
             ->method('getMethodInstance')
             ->willReturn($this->paymentMethod);
 
-        $this->paymentMethod->expects($this->once())
+        $this->paymentMethod->expects($this->exactly(2))
             ->method('setStore')->willReturnSelf();
 
         $this->paymentMethod->expects($this->once())
@@ -925,13 +925,13 @@ class PaymentTest extends TestCase
         $this->invoice->setBaseGrandTotal($baseGrandTotal);
         $this->mockResultTrueMethods($this->transactionId, $baseGrandTotal, $message);
 
-        $this->order->expects($this->once())
+        $this->order->expects($this->exactly(2))
             ->method('getStoreId')
             ->willReturn($storeId);
         $this->helper->expects($this->once())
             ->method('getMethodInstance')
             ->willReturn($this->paymentMethod);
-        $this->paymentMethod->expects($this->once())
+        $this->paymentMethod->expects($this->exactly(2))
             ->method('setStore')
             ->with($storeId)
             ->willReturn($this->paymentMethod);
@@ -985,13 +985,13 @@ class PaymentTest extends TestCase
         $this->mockInvoice($this->transactionId);
         $this->mockResultFalseMethods($message);
 
-        $this->order->expects($this->once())
+        $this->order->expects($this->exactly(2))
             ->method('getStoreId')
             ->willReturn($storeId);
         $this->helper->expects($this->once())
             ->method('getMethodInstance')
             ->willReturn($this->paymentMethod);
-        $this->paymentMethod->expects($this->once())
+        $this->paymentMethod->expects($this->exactly(2))
             ->method('setStore')
             ->with($storeId)
             ->willReturn($this->paymentMethod);
@@ -1027,13 +1027,13 @@ class PaymentTest extends TestCase
 
         $this->assertOrderUpdated(Order::STATE_PAYMENT_REVIEW, $status, $message);
 
-        $this->order->expects($this->once())
+        $this->order->expects($this->exactly(2))
             ->method('getStoreId')
             ->willReturn($storeId);
         $this->helper->expects($this->once())
             ->method('getMethodInstance')
             ->willReturn($this->paymentMethod);
-        $this->paymentMethod->expects($this->once())
+        $this->paymentMethod->expects($this->exactly(2))
             ->method('setStore')
             ->with($storeId)
             ->willReturn($this->paymentMethod);
@@ -1069,13 +1069,13 @@ class PaymentTest extends TestCase
             ->method('addStatusHistoryComment')
             ->with($message);
 
-        $this->order->expects($this->once())
+        $this->order->expects($this->exactly(2))
             ->method('getStoreId')
             ->willReturn($storeId);
         $this->helper->expects($this->once())
             ->method('getMethodInstance')
             ->willReturn($this->paymentMethod);
-        $this->paymentMethod->expects($this->once())
+        $this->paymentMethod->expects($this->exactly(2))
             ->method('setStore')
             ->with($storeId)
             ->willReturn($this->paymentMethod);
@@ -1144,7 +1144,7 @@ class PaymentTest extends TestCase
             ->method('getMethodInstance')
             ->willReturn($this->paymentMethod);
 
-        $this->paymentMethod->expects($this->once())
+        $this->paymentMethod->expects($this->exactly(2))
             ->method('setStore')->willReturnSelf();
 
         $this->paymentMethod->expects($this->once())
@@ -1178,7 +1178,7 @@ class PaymentTest extends TestCase
             ->method('getMethodInstance')
             ->willReturn($this->paymentMethod);
 
-        $this->paymentMethod->expects($this->once())
+        $this->paymentMethod->expects($this->exactly(2))
             ->method('setStore')->willReturnSelf();
 
         $this->paymentMethod->expects($this->once())

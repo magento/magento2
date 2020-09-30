@@ -47,6 +47,7 @@ class Swatch extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param array $optionIDs
      * @param int $type
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 100.2.4
      */
     public function clearSwatchOptionByOptionIdAndType($optionIDs, $type = null)
     {

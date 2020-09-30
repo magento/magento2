@@ -131,7 +131,7 @@ class ConsumersRunner
             ];
 
             if ($maxMessages) {
-                $arguments[] = '--max-messages=' . $maxMessages;
+                $arguments[] = '--max-messages=' . min($consumer->getMaxMessages() ?? $maxMessages, $maxMessages);
             }
 
             $command = $php . ' ' . BP . '/bin/magento queue:consumers:start %s %s'
@@ -176,7 +176,12 @@ class ConsumersRunner
             return false;
         }
 
-        if ($consumerConfig->getOnlySpawnWhenMessageAvailable()) {
+        $globalOnlySpawnWhenMessageAvailable = (bool)$this->deploymentConfig->get(
+            'queue/only_spawn_when_message_available',
+            true
+        );
+        if ($consumerConfig->getOnlySpawnWhenMessageAvailable() === true
+            || ($consumerConfig->getOnlySpawnWhenMessageAvailable() === null && $globalOnlySpawnWhenMessageAvailable)) {
             try {
                 return $this->checkIsAvailableMessages->execute(
                     $connectionName,

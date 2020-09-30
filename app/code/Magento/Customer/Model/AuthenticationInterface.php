@@ -11,6 +11,7 @@ use Magento\Framework\Exception\State\UserLockedException;
 /**
  * Interface \Magento\Customer\Model\AuthenticationInterface
  * @api
+ * @since 100.1.0
  */
 interface AuthenticationInterface
 {
@@ -19,6 +20,7 @@ interface AuthenticationInterface
      *
      * @param int $customerId
      * @return void
+     * @since 100.1.0
      */
     public function processAuthenticationFailure($customerId);
 
@@ -27,6 +29,7 @@ interface AuthenticationInterface
      *
      * @param int $customerId
      * @return void
+     * @since 100.1.0
      */
     public function unlock($customerId);
 
@@ -35,6 +38,7 @@ interface AuthenticationInterface
      *
      * @param int $customerId
      * @return boolean
+     * @since 100.1.0
      */
     public function isLocked($customerId);
 
@@ -46,6 +50,7 @@ interface AuthenticationInterface
      * @return boolean
      * @throws InvalidEmailOrPasswordException
      * @throws UserLockedException
+     * @since 100.1.0
      */
     public function authenticate($customerId, $password);
 }

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminConfigSaveEmptySettingsTest">
+        <annotations>
+            <features value="Configuration"/>
+            <stories value="Save settings 'Access Token Expiration'."/>
+            <title value="Save settings 'Access Token Expiration' with empty values."/>
+            <description value="Save settings 'Customer Token Lifetime' and 'Admin Token Lifetime' with empty values without validations."/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="MC-37382"/>
+            <group value="configuration"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <amOnPage url="{{AdminConfigServicesOauthPage.url}}" stepKey="navigateToConfigurationPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <conditionalClick selector="{{AdminConfigAccessTokenExpirationSection.tabAccessTokenLifetime}}" dependentSelector="{{AdminConfigAccessTokenExpirationSection.CheckIfTabExpand}}" visible="true" stepKey="expandTab"/>
+        <waitForAjaxLoad stepKey="waitForAjax"/>
+        <uncheckOption selector="{{AdminConfigAccessTokenExpirationSection.systemValueForTokenLifetime}}" stepKey="uncheckUseSystemValue"/>
+        <fillField selector="{{AdminConfigAccessTokenExpirationSection.valueForTokenLifetime}}" userInput="" stepKey="valueForTokenLifetime"/>
+        <uncheckOption selector="{{AdminConfigAccessTokenExpirationSection.systemValueForTokenLifetimeAdmin}}" stepKey="uncheckUseSystemValueAdmin"/>
+        <fillField selector="{{AdminConfigAccessTokenExpirationSection.valueForTokenLifetimeAdmin}}" userInput="" stepKey="valueForTokenLifetimeAdmin"/>
+        <actionGroup ref="AdminSaveConfigActionGroup" stepKey="saveConfig"/>
+    </test>
+</tests>

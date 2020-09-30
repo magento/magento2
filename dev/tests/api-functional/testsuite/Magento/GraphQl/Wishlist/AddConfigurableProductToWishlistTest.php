@@ -48,7 +48,7 @@ class AddConfigurableProductToWishlistTest extends GraphQlAbstract
      *
      * @throws Exception
      */
-    public function testAddDownloadableProductWithOptions(): void
+    public function testAddConfigurableProductWithOptions(): void
     {
         $product = $this->getConfigurableProductInfo();
         $customerId = 1;
@@ -57,7 +57,7 @@ class AddConfigurableProductToWishlistTest extends GraphQlAbstract
         $valueIndex = $product['configurable_options'][0]['values'][0]['value_index'];
         $childSku = $product['variants'][0]['product']['sku'];
         $parentSku = $product['sku'];
-        $selectedConfigurableOptionsQuery = $this->generateSuperAttributesIdV2Query($attributeId, $valueIndex);
+        $selectedConfigurableOptionsQuery = $this->generateSuperAttributesUidQuery($attributeId, $valueIndex);
 
         $query = $this->getQuery($parentSku, $childSku, $qty, $selectedConfigurableOptionsQuery);
 
@@ -66,16 +66,19 @@ class AddConfigurableProductToWishlistTest extends GraphQlAbstract
         /** @var Item $wishlistItem */
         $wishlistItem = $wishlist->getItemCollection()->getFirstItem();
 
-        self::assertArrayHasKey('addProductsToWishlist', $response);
-        self::assertArrayHasKey('wishlist', $response['addProductsToWishlist']);
+        $this->assertArrayHasKey('addProductsToWishlist', $response);
+        $this->assertArrayHasKey('wishlist', $response['addProductsToWishlist']);
         $wishlistResponse = $response['addProductsToWishlist']['wishlist'];
-        self::assertEquals($wishlist->getItemsCount(), $wishlistResponse['items_count']);
-        self::assertEquals($wishlist->getSharingCode(), $wishlistResponse['sharing_code']);
-        self::assertEquals($wishlist->getUpdatedAt(), $wishlistResponse['updated_at']);
-        self::assertEquals($wishlistItem->getId(), $wishlistResponse['items'][0]['id']);
-        self::assertEquals($wishlistItem->getData('qty'), $wishlistResponse['items'][0]['qty']);
-        self::assertEquals($wishlistItem->getDescription(), $wishlistResponse['items'][0]['description']);
-        self::assertEquals($wishlistItem->getAddedAt(), $wishlistResponse['items'][0]['added_at']);
+        $this->assertEquals($wishlist->getItemsCount(), $wishlistResponse['items_count']);
+        $this->assertEquals($wishlist->getSharingCode(), $wishlistResponse['sharing_code']);
+        $this->assertEquals($wishlist->getUpdatedAt(), $wishlistResponse['updated_at']);
+        $this->assertEquals($wishlistItem->getId(), $wishlistResponse['items_v2'][0]['id']);
+        $this->assertEquals($wishlistItem->getData('qty'), $wishlistResponse['items_v2'][0]['quantity']);
+        $this->assertEquals($wishlistItem->getDescription(), $wishlistResponse['items_v2'][0]['description']);
+        $this->assertEquals($wishlistItem->getAddedAt(), $wishlistResponse['items_v2'][0]['added_at']);
+        $this->assertNotEmpty($wishlistResponse['items_v2'][0]['configurable_options']);
+        $configurableOptions = $wishlistResponse['items_v2'][0]['configurable_options'];
+        $this->assertEquals('Test Configurable', $configurableOptions[0]['option_label']);
     }
 
     /**
@@ -126,7 +129,7 @@ mutation {
       }
     ]
 ) {
-    userInputErrors {
+    user_errors {
       code
       message
     }
@@ -135,11 +138,20 @@ mutation {
       sharing_code
       items_count
       updated_at
-      items {
+      items_v2 {
         id
         description
-        qty
+        quantity
         added_at
+        ... on ConfigurableWishlistItem {
+          child_sku
+          configurable_options {
+            id
+            option_label
+            value_id
+            value_label
+          }
+        }
       }
     }
   }
@@ -148,14 +160,14 @@ MUTATION;
     }
 
     /**
-     * Generates Id_v2 for super configurable product super attributes
+     * Generates uid for super configurable product super attributes
      *
      * @param int $attributeId
      * @param int $valueIndex
      *
      * @return string
      */
-    private function generateSuperAttributesIdV2Query(int $attributeId, int $valueIndex): string
+    private function generateSuperAttributesUidQuery(int $attributeId, int $valueIndex): string
     {
         return 'selected_options: ["' . base64_encode("configurable/$attributeId/$valueIndex") . '"]';
     }

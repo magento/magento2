@@ -226,6 +226,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'title' => __('Select File to Import'),
                 'required' => true,
                 'class' => 'input-file',
+                'onchange' => 'varienImport.refreshLoadedFileLastModified(this);',
                 'note' => __(
                     'File must be saved in UTF-8 encoding for proper import'
                 ),
@@ -282,7 +283,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     private function getImportBehaviorTooltip()
     {
         $html = '<div class="admin__field-tooltip tooltip">
-            <a class="admin__field-tooltip-action action-help" target="_blank" title="What is this?" 
+            <a class="admin__field-tooltip-action action-help" target="_blank" title="What is this?"
                 href="https://docs.magento.com/m2/ce/user_guide/system/data-import.html"><span>'
             . __('What is this?')
             . '</span></a></div>';

@@ -1,0 +1,28 @@
+{
+    "name": "magento/module-media-gallery-catalog-integration",
+    "description": "Magento module responsible for extending catalog image uploader functionality",
+    "require": {
+        "php": "~7.3.0||~7.4.0",
+        "magento/framework": "*",
+        "magento/module-cms": "*",
+        "magento/module-media-gallery-api": "*",
+        "magento/module-media-gallery-synchronization-api": "*",
+        "magento/module-media-gallery-ui-api": "*"
+    },
+    "suggest": {
+        "magento/module-catalog": "*"
+    },
+    "type": "magento2-module",
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Magento\\MediaGalleryCatalogIntegration\\": ""
+        }
+    }
+}

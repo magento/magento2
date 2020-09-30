@@ -5,6 +5,9 @@
  */
 namespace Magento\Review\Block\Adminhtml\Add;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+
 /**
  * Adminhtml add product review form
  *
@@ -27,12 +30,18 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     protected $_systemStore;
 
     /**
+     * @var SecureHtmlRenderer
+     */
+    private $secureRenderer;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param \Magento\Store\Model\System\Store $systemStore
      * @param \Magento\Review\Helper\Data $reviewData
      * @param array $data
+     * @param SecureHtmlRenderer|null $htmlRenderer
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -40,10 +49,12 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         \Magento\Framework\Data\FormFactory $formFactory,
         \Magento\Store\Model\System\Store $systemStore,
         \Magento\Review\Helper\Data $reviewData,
-        array $data = []
+        array $data = [],
+        ?SecureHtmlRenderer $htmlRenderer = null
     ) {
         $this->_reviewData = $reviewData;
         $this->_systemStore = $systemStore;
+        $this->secureRenderer = $htmlRenderer ?: ObjectManager::getInstance()->get(SecureHtmlRenderer::class);
         parent::__construct($context, $registry, $formFactory, $data);
     }
 
@@ -59,6 +70,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $form = $this->_formFactory->create();
 
         $fieldset = $form->addFieldset('add_review_form', ['legend' => __('Review Details')]);
+        $beforeHtml = $this->secureRenderer->renderStyleAsTag('display: none;', '#edit_form');
+        $fieldset->setBeforeElementHtml($beforeHtml);
 
         $fieldset->addField('product_name', 'note', ['label' => __('Product'), 'text' => 'product_name']);
 

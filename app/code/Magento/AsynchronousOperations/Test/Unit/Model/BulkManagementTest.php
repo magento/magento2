@@ -196,7 +196,7 @@ class BulkManagementTest extends TestCase
         $bulkUuid = 'bulk-001';
         $errorCodes = ['errorCode'];
         $connectionName = 'default';
-        $operationId = 1;
+        $operationId = 0;
         $operationTable = 'magento_operation';
         $topicName = 'topic.name';
         $metadata = $this->getMockForAbstractClass(EntityMetadataInterface::class);
@@ -216,13 +216,20 @@ class BulkManagementTest extends TestCase
         $operationCollection->expects($this->once())->method('getItems')->willReturn([$operation]);
         $connection->expects($this->once())->method('beginTransaction')->willReturnSelf();
         $operation->expects($this->once())->method('getId')->willReturn($operationId);
-        $operation->expects($this->once())->method('setId')->with(null)->willReturnSelf();
         $this->resourceConnection->expects($this->once())
             ->method('getTableName')->with($operationTable)->willReturn($operationTable);
+        $connection->expects($this->at(1))
+            ->method('quoteInto')
+            ->with('operation_key IN (?)', [$operationId])
+            ->willReturn('operation_key IN (' . $operationId . ')');
+        $connection->expects($this->at(2))
+            ->method('quoteInto')
+            ->with('bulk_uuid = ?', $bulkUuid)
+            ->willReturn("bulk_uuid = '$bulkUuid'");
         $connection->expects($this->once())
-            ->method('quoteInto')->with('id IN (?)', [$operationId])->willReturn('id IN (' . $operationId . ')');
-        $connection->expects($this->once())
-            ->method('delete')->with($operationTable, 'id IN (' . $operationId . ')')->willReturn(1);
+            ->method('delete')
+            ->with($operationTable, 'operation_key IN (' . $operationId . ') AND bulk_uuid = \'' . $bulkUuid . '\'')
+            ->willReturn(1);
         $connection->expects($this->once())->method('commit')->willReturnSelf();
         $operation->expects($this->once())->method('getTopicName')->willReturn($topicName);
         $this->publisher->expects($this->once())->method('publish')->with($topicName, [$operation])->willReturn(null);
@@ -239,7 +246,7 @@ class BulkManagementTest extends TestCase
         $bulkUuid = 'bulk-001';
         $errorCodes = ['errorCode'];
         $connectionName = 'default';
-        $operationId = 1;
+        $operationId = 0;
         $operationTable = 'magento_operation';
         $exceptionMessage = 'Exception message';
         $metadata = $this->getMockForAbstractClass(EntityMetadataInterface::class);
@@ -259,13 +266,19 @@ class BulkManagementTest extends TestCase
         $operationCollection->expects($this->once())->method('getItems')->willReturn([$operation]);
         $connection->expects($this->once())->method('beginTransaction')->willReturnSelf();
         $operation->expects($this->once())->method('getId')->willReturn($operationId);
-        $operation->expects($this->once())->method('setId')->with(null)->willReturnSelf();
         $this->resourceConnection->expects($this->once())
             ->method('getTableName')->with($operationTable)->willReturn($operationTable);
+        $connection->expects($this->at(1))
+            ->method('quoteInto')
+            ->with('operation_key IN (?)', [$operationId])
+            ->willReturn('operation_key IN (' . $operationId . ')');
+        $connection->expects($this->at(2))
+            ->method('quoteInto')
+            ->with('bulk_uuid = ?', $bulkUuid)
+            ->willReturn("bulk_uuid = '$bulkUuid'");
         $connection->expects($this->once())
-            ->method('quoteInto')->with('id IN (?)', [$operationId])->willReturn('id IN (' . $operationId . ')');
-        $connection->expects($this->once())
-            ->method('delete')->with($operationTable, 'id IN (' . $operationId . ')')
+            ->method('delete')
+            ->with($operationTable, 'operation_key IN (' . $operationId . ') AND bulk_uuid = \'' . $bulkUuid . '\'')
             ->willThrowException(new \Exception($exceptionMessage));
         $connection->expects($this->once())->method('rollBack')->willReturnSelf();
         $this->logger->expects($this->once())->method('critical')->with($exceptionMessage);

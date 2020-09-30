@@ -3,7 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 \Magento\TestFramework\Helper\Bootstrap::getInstance()->loadArea('frontend');
+
+$storeManager = Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+    ->get(\Magento\Store\Model\StoreManagerInterface::class);
 $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Catalog\Model\Product::class);
 $product->setTypeId('simple')
     ->setId(1)
@@ -23,7 +27,9 @@ $product->setTypeId('simple')
             'is_in_stock' => 1,
             'manage_stock' => 1,
         ]
-    )->save();
+    )
+    ->setWebsiteIds([$storeManager->getStore()->getWebsiteId()])
+    ->save();
 
 $productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
     ->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
@@ -39,9 +45,7 @@ $billingAddress->setAddressType('billing');
 $shippingAddress = clone $billingAddress;
 $shippingAddress->setId(null)->setAddressType('shipping');
 
-$store = Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->get(\Magento\Store\Model\StoreManagerInterface::class)
-    ->getStore();
+$store = $storeManager->getStore();
 
 /** @var \Magento\Quote\Model\Quote $quote */
 $quote = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Quote\Model\Quote::class);

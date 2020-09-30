@@ -11,8 +11,38 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Helper\Form;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Data\Form\Element\CollectionFactory;
+use Magento\Framework\Data\Form\Element\Factory;
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+
 class Config extends \Magento\Framework\Data\Form\Element\Select
 {
+    /**
+     * @var SecureHtmlRenderer
+     */
+    private $secureRenderer;
+
+    /**
+     * @param Factory $factoryElement
+     * @param CollectionFactory $factoryCollection
+     * @param Escaper $escaper
+     * @param array $data
+     * @param SecureHtmlRenderer|null $secureRenderer
+     */
+    public function __construct(
+        Factory $factoryElement,
+        CollectionFactory $factoryCollection,
+        Escaper $escaper,
+        $data = [],
+        ?SecureHtmlRenderer $secureRenderer = null
+    ) {
+        $secureRenderer = $secureRenderer ?? ObjectManager::getInstance()->get(SecureHtmlRenderer::class);
+        parent::__construct($factoryElement, $factoryCollection, $escaper, $data, $secureRenderer);
+        $this->secureRenderer = $secureRenderer;
+    }
+
     /**
      * Retrieve element html
      *
@@ -31,13 +61,19 @@ class Config extends \Magento\Framework\Data\Form\Element\Select
         $disabled = $this->getReadonly() ? ' disabled="disabled"' : '';
 
         $html .= '<input id="' . $htmlId . '" name="product[' . $htmlId . ']" ' . $disabled . ' value="1" ' . $checked;
-        $html .= ' onclick="toggleValueElements(this, this.parentNode);" class="checkbox" type="checkbox" />';
+        $html .= ' class="checkbox" type="checkbox" />';
         $html .= ' <label for="' . $htmlId . '">' . __('Use Config Settings') . '</label>';
-        $html .= '<script>require(["prototype"], function(){toggleValueElements($(\'' .
+        $scriptString = 'require(["prototype"], function(){toggleValueElements($(\'' .
             $htmlId .
             '\'), $(\'' .
             $htmlId .
-            '\').parentNode);});</script>';
+            '\').parentNode);});';
+        $html .= /* @noEscape */ $this->secureRenderer->renderTag('script', [], $scriptString, false);
+        $html .= /* @noEscape */ $this->secureRenderer->renderEventListenerAsTag(
+            'onclick',
+            "toggleValueElements($('#' . $htmlId), $('#' . $htmlId).parentNode);",
+            '#' . $htmlId
+        );
 
         return $html;
     }

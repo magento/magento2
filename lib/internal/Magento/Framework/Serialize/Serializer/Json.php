@@ -11,13 +11,13 @@ use Magento\Framework\Serialize\SerializerInterface;
  * Serialize data to JSON, unserialize JSON encoded data
  *
  * @api
- * @since 100.2.0
+ * @since 101.0.0
  */
 class Json implements SerializerInterface
 {
     /**
      * @inheritDoc
-     * @since 100.2.0
+     * @since 101.0.0
      */
     public function serialize($data)
     {
@@ -30,7 +30,7 @@ class Json implements SerializerInterface
 
     /**
      * @inheritDoc
-     * @since 100.2.0
+     * @since 101.0.0
      */
     public function unserialize($string)
     {

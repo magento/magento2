@@ -105,7 +105,7 @@ class ProductPriceIndexFilter implements PriceModifierInterface
         }
 
         if (!empty($entityIds)) {
-            $select->where('stock_item.product_id in (?)', $entityIds);
+            $select->where('stock_item.product_id in (?)', $entityIds, \Zend_Db::INT_TYPE);
         }
 
         $select->group('stock_item.product_id');

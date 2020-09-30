@@ -243,10 +243,9 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
                 realpath(__DIR__) . '/_files/dependency_test/whitelist/redundant_dependencies_*.php';
             $redundantDependenciesWhitelist = [];
             foreach (glob($redundantDependenciesWhitelistFilePattern) as $fileName) {
-                //phpcs:ignore Magento2.Performance.ForeachArrayMerge
-                $redundantDependenciesWhitelist = array_merge($redundantDependenciesWhitelist, include $fileName);
+                $redundantDependenciesWhitelist[] = include $fileName;
             }
-            self::$redundantDependenciesWhitelist = $redundantDependenciesWhitelist;
+            self::$redundantDependenciesWhitelist = array_merge([], ...$redundantDependenciesWhitelist);
         }
         return self::$redundantDependenciesWhitelist;
     }
@@ -310,10 +309,9 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
             $routesWhitelistFilePattern = realpath(__DIR__) . '/_files/dependency_test/whitelist/routes_*.php';
             $routesWhitelist = [];
             foreach (glob($routesWhitelistFilePattern) as $fileName) {
-                //phpcs:ignore Magento2.Performance.ForeachArrayMerge
-                $routesWhitelist = array_merge($routesWhitelist, include $fileName);
+                $routesWhitelist[] = include $fileName;
             }
-            self::$routesWhitelist = $routesWhitelist;
+            self::$routesWhitelist = array_merge([], ...$routesWhitelist);
         }
         return self::$routesWhitelist;
     }
@@ -678,9 +676,9 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
         foreach (self::$_rulesInstances as $rule) {
             /** @var \Magento\TestFramework\Dependency\RuleInterface $rule */
             $newDependencies = $rule->getDependencyInfo($module, $fileType, $file, $contents);
-            //phpcs:ignore Magento2.Performance.ForeachArrayMerge
-            $dependencies = array_merge($dependencies, $newDependencies);
+            $dependencies[] = $newDependencies;
         }
+        $dependencies = array_merge([], ...$dependencies);
 
         foreach ($dependencies as $dependencyKey => $dependency) {
             foreach (self::$whiteList as $namespace) {

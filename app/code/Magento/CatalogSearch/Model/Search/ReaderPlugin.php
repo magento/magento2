@@ -6,7 +6,7 @@
 namespace Magento\CatalogSearch\Model\Search;
 
 /**
- * @deprecated
+ * @deprecated 101.0.0
  * @see \Magento\ElasticSearch
  */
 class ReaderPlugin

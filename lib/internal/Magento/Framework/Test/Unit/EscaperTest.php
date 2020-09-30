@@ -235,10 +235,12 @@ class EscaperTest extends TestCase
                 'allowedTags' => ['a'],
             ],
             'text with allowed and not allowed tags, with allowed and not allowed attributes' => [
-                'data' => 'Some test <span>text in span tag</span> <strong>text in strong tag</strong> '
-                    . '<a type="some-type" href="http://domain.com/" onclick="alert(1)">Click here</a><script>alert(1)'
+                'data' => 'Some test <span style="fine">text in span tag</span> <strong>text in strong tag</strong> '
+                    . '<a type="some-type" href="http://domain.com/" style="bad" onclick="alert(1)">'
+                    . 'Click here</a><script>alert(1)'
                     . '</script>',
-                'expected' => 'Some test <span>text in span tag</span> text in strong tag <a href="http://domain.com/">'
+                'expected' => 'Some test <span style="fine">text in span tag</span> text in strong tag '
+                    . '<a href="http://domain.com/">'
                     . 'Click here</a>alert(1)',
                 'allowedTags' => ['a', 'span'],
             ],

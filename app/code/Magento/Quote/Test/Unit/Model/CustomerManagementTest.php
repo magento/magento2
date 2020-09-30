@@ -147,7 +147,7 @@ class CustomerManagementTest extends TestCase
 
     public function testPopulateCustomerInfo()
     {
-        $this->quoteMock->expects($this->once())
+        $this->quoteMock->expects($this->atLeastOnce())
             ->method('getCustomer')
             ->willReturn($this->customerMock);
         $this->customerMock->expects($this->atLeastOnce())

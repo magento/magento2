@@ -731,6 +731,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Add Store ID to products from collection.
      *
      * @return $this
+     * @since 102.0.8
      */
     protected function prepareStoreId()
     {
@@ -857,7 +858,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
                 ['name']
             )->where(
                 'product_website.product_id IN (?)',
-                array_keys($productWebsites)
+                array_keys($productWebsites),
+                \Zend_Db::INT_TYPE
             )->where(
                 'website.website_id > ?',
                 0
@@ -1357,7 +1359,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
                 $anchorStmt = clone $select;
                 $anchorStmt->limit();
                 //reset limits
-                $anchorStmt->where('count_table.category_id IN (?)', $isAnchor);
+                $anchorStmt->where('count_table.category_id IN (?)', $isAnchor, \Zend_Db::INT_TYPE);
                 $productCounts += $this->getConnection()->fetchPairs($anchorStmt);
                 $anchorStmt = null;
             }
@@ -1365,7 +1367,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
                 $notAnchorStmt = clone $select;
                 $notAnchorStmt->limit();
                 //reset limits
-                $notAnchorStmt->where('count_table.category_id IN (?)', $isNotAnchor);
+                $notAnchorStmt->where('count_table.category_id IN (?)', $isNotAnchor, \Zend_Db::INT_TYPE);
                 $notAnchorStmt->where('count_table.is_parent = 1');
                 $productCounts += $this->getConnection()->fetchPairs($notAnchorStmt);
                 $notAnchorStmt = null;
@@ -2164,7 +2166,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         $select = $this->getConnection()->select();
 
         $select->from($this->_productCategoryTable, ['product_id', 'category_id']);
-        $select->where('product_id IN (?)', $ids);
+        $select->where('product_id IN (?)', $ids, \Zend_Db::INT_TYPE);
 
         $data = $this->getConnection()->fetchAll($select);
 
@@ -2220,7 +2222,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      *
      * @param int $customerGroupId
      * @return $this
-     * @since 101.1.0
+     * @since 102.0.0
      */
     public function addTierPriceDataByGroupId($customerGroupId)
     {
@@ -2400,7 +2402,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Get product entity metadata
      *
      * @return \Magento\Framework\EntityManager\EntityMetadataInterface
-     * @since 101.1.0
+     * @since 102.0.0
      */
     public function getProductEntityMetadata()
     {

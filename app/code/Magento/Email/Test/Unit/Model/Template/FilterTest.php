@@ -14,6 +14,8 @@ use Magento\Email\Model\Template\Filter;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Exception\MailException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\App\State;
 use Magento\Framework\Css\PreProcessor\Adapter\CssInliner;
 use Magento\Framework\Escaper;
@@ -451,5 +453,46 @@ class FilterTest extends TestCase
             ->willReturn($scopeConfigValue);
 
         $this->assertEquals($scopeConfigValue, $this->getModel()->configDirective($construction));
+    }
+
+    /**
+     * @throws MailException
+     * @throws NoSuchEntityException
+     */
+    public function testProtocolDirectiveWithValidSchema()
+    {
+        $model = $this->getModel();
+        $storeMock = $this->createMock(\Magento\Store\Model\Store::class);
+        $storeMock->expects($this->once())->method('isCurrentlySecure')->willReturn(true);
+        $this->storeManager->expects($this->once())->method('getStore')->willReturn($storeMock);
+
+        $data = [
+            "{{protocol http=\"http://url\" https=\"https://url\"}}",
+            "protocol",
+            " http=\"http://url\" https=\"https://url\""
+        ];
+        $this->assertEquals('https://url', $model->protocolDirective($data));
+    }
+
+    /**
+     * @throws NoSuchEntityException
+     */
+    public function testProtocolDirectiveWithInvalidSchema()
+    {
+        $this->expectException(
+            \Magento\Framework\Exception\MailException::class
+        );
+
+        $model = $this->getModel();
+        $storeMock = $this->createMock(\Magento\Store\Model\Store::class);
+        $storeMock->expects($this->once())->method('isCurrentlySecure')->willReturn(true);
+        $this->storeManager->expects($this->once())->method('getStore')->willReturn($storeMock);
+
+        $data = [
+            "{{protocol http=\"https://url\" https=\"http://url\"}}",
+            "protocol",
+            " http=\"https://url\" https=\"http://url\""
+        ];
+        $model->protocolDirective($data);
     }
 }

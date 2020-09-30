@@ -7,6 +7,7 @@
 -->
 <pages xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/PageObject.xsd">
+    <!--  @deprecated New Page was introduced. Please use "AdminConfigurationStoresPage"  -->
     <page name="ConfigurationStoresPage" url="admin/system_config/edit/section/cms/" area="admin" module="Catalog">
         <section name="WYSIWYGOptionsSection"/>
     </page>

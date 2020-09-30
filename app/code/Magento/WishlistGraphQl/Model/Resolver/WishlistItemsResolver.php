@@ -70,7 +70,7 @@ class WishlistItemsResolver implements ResolverInterface
                 'qty' => $wishlistItem->getData('qty'),
                 'description' => $wishlistItem->getDescription(),
                 'added_at' => $wishlistItem->getAddedAt(),
-                'model' => $wishlistItem,
+                'model' => $wishlistItem->getProduct(),
             ];
         }
         return $data;

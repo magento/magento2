@@ -169,4 +169,4 @@ $product->setExtensionAttributes($extension);
 
 /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
 $productRepository = $objectManager->get(\Magento\Catalog\Api\ProductRepositoryInterface::class);
-$productRepository->save($product)->getData();
+$productRepository->save($product);

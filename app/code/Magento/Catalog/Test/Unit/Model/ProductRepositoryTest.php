@@ -48,12 +48,20 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
+ * Test for \Magento\Catalog\Model\ProductRepository.
+ *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
  */
 class ProductRepositoryTest extends TestCase
 {
+    private const STUB_STORE_ID = 1;
+    private const STUB_STORE_ID_GLOBAL = 0;
+    private const STUB_PRODUCT_ID = 100;
+    private const STUB_PRODUCT_NAME = 'name';
+    private const STUB_PRODUCT_SKU = 'sku';
+
     /**
      * @var Product|MockObject
      */
@@ -298,6 +306,7 @@ class ProductRepositoryTest extends TestCase
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMockForAbstractClass();
+        $storeMock->method('getId')->willReturn(self::STUB_STORE_ID);
         $storeMock->expects($this->any())->method('getWebsiteId')->willReturn('1');
         $storeMock->expects($this->any())->method('getCode')->willReturn(Store::ADMIN_CODE);
         $this->storeManager->expects($this->any())->method('getStore')->willReturn($storeMock);
@@ -351,6 +360,72 @@ class ProductRepositoryTest extends TestCase
         $this->objectManager->setBackwardCompatibleProperty($this->model, 'mediaProcessor', $mediaProcessor);
     }
 
+    /**
+     * Test save product with global store id
+     *
+     * @param array $productData
+     * @return void
+     * @dataProvider getProductData
+     */
+    public function testSaveForAllStoreViewScope(array $productData): void
+    {
+        $this->productFactory->method('create')->willReturn($this->product);
+        $this->product->method('getSku')->willReturn($productData['sku']);
+        $this->extensibleDataObjectConverter
+            ->expects($this->once())
+            ->method('toNestedArray')
+            ->willReturn($productData);
+        $this->resourceModel->method('getIdBySku')->willReturn(self::STUB_PRODUCT_ID);
+        $this->resourceModel->expects($this->once())->method('validate')->willReturn(true);
+        $this->product->expects($this->at(14))->method('setData')
+            ->with('store_id', $productData['store_id']);
+
+        $this->model->save($this->product);
+    }
+
+    /**
+     * Product data provider
+     *
+     * @return array
+     */
+    public function getProductData(): array
+    {
+        return [
+            [
+                [
+                    'sku' => self::STUB_PRODUCT_SKU,
+                    'name' => self::STUB_PRODUCT_NAME,
+                    'store_id' => self::STUB_STORE_ID_GLOBAL,
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * Test save product without store
+     *
+     * @return void
+     */
+    public function testSaveWithoutStoreId(): void
+    {
+        $this->productFactory->method('create')->willReturn($this->product);
+        $this->product->method('getSku')->willReturn($this->productData['sku']);
+        $this->extensibleDataObjectConverter
+            ->expects($this->once())
+            ->method('toNestedArray')
+            ->willReturn($this->productData);
+        $this->resourceModel->method('getIdBySku')->willReturn(self::STUB_PRODUCT_ID);
+        $this->resourceModel->expects($this->once())->method('validate')->willReturn(true);
+        $this->product->expects($this->at(15))->method('setData')
+            ->with('store_id', self::STUB_STORE_ID);
+
+        $this->model->save($this->product);
+    }
+
+    /**
+     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
+     * @expectedExceptionMessage The product that was requested doesn't exist. Verify the product and try again.
+     */
     public function testGetAbsentProduct()
     {
         $this->expectException('Magento\Framework\Exception\NoSuchEntityException');

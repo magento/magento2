@@ -180,6 +180,23 @@ class Elasticsearch implements ClientInterface
     }
 
     /**
+     * Add/update an Elasticsearch index settings.
+     *
+     * @param string $index
+     * @param array $settings
+     * @return void
+     */
+    public function putIndexSettings(string $index, array $settings): void
+    {
+        $this->getElasticsearchClient()->indices()->putSettings(
+            [
+                'index' => $index,
+                'body' => $settings,
+            ]
+        );
+    }
+
+    /**
      * Delete an Elasticsearch 7 index.
      *
      * @param string $index
@@ -348,6 +365,17 @@ class Elasticsearch implements ClientInterface
     public function query(array $query): array
     {
         return $this->getElasticsearchClient()->search($query);
+    }
+
+    /**
+     * Get mapping from Elasticsearch index.
+     *
+     * @param array $params
+     * @return array
+     */
+    public function getMapping(array $params): array
+    {
+        return $this->getElasticsearchClient()->indices()->getMapping($params);
     }
 
     /**

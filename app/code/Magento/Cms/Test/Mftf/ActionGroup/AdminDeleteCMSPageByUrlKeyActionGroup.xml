@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminDeleteCMSPageByUrlKeyActionGroup">
+        <annotations>
+            <description>Goes to the Admin CMS Pages page. Filters the grid based on the provided Page url key. Deletes the Page via the grid.</description>
+        </annotations>
+        <arguments>
+            <argument name="pageUrlKey" type="string" defaultValue="cms_page"/>
+        </arguments>
+
+        <amOnPage url="{{CmsPagesPage.url}}" stepKey="navigateToCMSPagesGrid"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <conditionalClick selector="{{CmsPagesPageActionsSection.clearAllButton}}" dependentSelector="{{CmsPagesPageActionsSection.activeFilters}}" visible="true" stepKey="clickToResetFilter"/>
+        <waitForPageLoad stepKey="waitForPageLoadAfterClearFilters"/>
+        <click selector="{{CmsPagesPageActionsSection.filterButton}}" stepKey="clickFilterButton"/>
+        <fillField selector="{{CmsPagesPageActionsSection.URLKey}}" userInput="{{pageUrlKey}}" stepKey="fillPageUrlKeyFilter"/>
+        <click selector="{{CmsPagesPageActionsSection.ApplyFiltersBtn}}" stepKey="applyFilter"/>
+        <waitForElementVisible selector="{{CmsPagesPageActionsSection.select(pageUrlKey)}}" stepKey="waitItemAppears"/>
+        <click selector="{{CmsPagesPageActionsSection.select(pageUrlKey)}}" stepKey="clickSelect"/>
+        <click selector="{{CmsPagesPageActionsSection.delete(pageUrlKey)}}" stepKey="clickDelete"/>
+        <waitForElementVisible selector="{{CmsPagesPageActionsSection.deleteConfirm}}" stepKey="waitForOkButtonToBeVisible"/>
+        <click selector="{{CmsPagesPageActionsSection.deleteConfirm}}" stepKey="clickOkButton"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitSuccessMessageAppeared"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="The page has been deleted." stepKey="seeSuccessMessage"/>
+    </actionGroup>
+</actionGroups>

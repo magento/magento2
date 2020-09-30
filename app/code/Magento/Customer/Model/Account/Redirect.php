@@ -58,7 +58,7 @@ class Redirect
     protected $customerUrl;
 
     /**
-     * @deprecated 100.1.8
+     * @deprecated 100.0.2
      * @var UrlInterface
      */
     protected $url;

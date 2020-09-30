@@ -12,12 +12,15 @@
         <annotations>
             <features value="Checkout"/>
             <stories value="Check customer information created by guest"/>
-            <title value="Check Customer Information Created By Guest"/>
+            <title value="Deprecated. Check Customer Information Created By Guest"/>
             <description value="Check customer information after placing the order as the guest who created an account"/>
             <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-95932"/>
             <useCaseId value="MAGETWO-95820"/>
             <group value="checkout"/>
+            <skip>
+                <issueId value="DEPRECATED">Use StorefrontCheckCustomerInfoOnOrderPageCreatedByGuestTest instead.</issueId>
+            </skip>
         </annotations>
 
         <before>
@@ -25,7 +28,9 @@
             <createData entity="_defaultProduct" stepKey="product">
                 <requiredEntity createDataKey="category"/>
             </createData>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
         </before>
 
         <after>

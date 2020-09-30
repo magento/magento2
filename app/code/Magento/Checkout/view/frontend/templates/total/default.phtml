@@ -4,40 +4,42 @@
  * See COPYING.txt for license details.
  */
 
-// phpcs:disable Magento2.Templates.ThisInTemplate
-
 /** @var $block \Magento\Checkout\Block\Total\DefaultTotal */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+?>
+
+<?php
+/** @var \Magento\Checkout\Helper\Data $checkoutHelper */
+$checkoutHelper = $block->getData('checkoutHelper');
 ?>
 <tr class="totals">
-    <th
-            colspan="<?= $block->escapeHtmlAttr($block->getColspan()) ?>"
-            style="<?= $block->escapeHtmlAttr($block->getTotal()->getStyle()) ?>"
-            class="mark" scope="row"
-    >
-        <?php if ($block->getRenderingArea() == $block->getTotal()->getArea()) :?>
+    <th colspan="<?= $block->escapeHtmlAttr($block->getColspan()) ?>"
+        class="mark" scope="row">
+        <?php if ($block->getRenderingArea() == $block->getTotal()->getArea()):?>
             <strong>
         <?php endif; ?>
         <?= $block->escapeHtml($block->getTotal()->getTitle()) ?>
-        <?php if ($block->getRenderingArea() == $block->getTotal()->getArea()) :?>
+        <?php if ($block->getRenderingArea() == $block->getTotal()->getArea()):?>
             </strong>
         <?php endif; ?>
     </th>
-    <td
-            style="<?= $block->escapeHtmlAttr($block->getTotal()->getStyle()) ?>"
-            class="amount"
-            data-th="<?= $block->escapeHtmlAttr($block->getTotal()->getTitle()) ?>"
-    >
-        <?php if ($block->getRenderingArea() == $block->getTotal()->getArea()) :?>
+    <td class="amount"
+        data-th="<?= $block->escapeHtmlAttr($block->getTotal()->getTitle()) ?>">
+        <?php if ($block->getRenderingArea() == $block->getTotal()->getArea()):?>
             <strong>
         <?php endif; ?>
             <span>
                 <?= $block->escapeHtml(
-                    $this->helper(Magento\Checkout\Helper\Data::class)->formatPrice($block->getTotal()->getValue()),
+                    $checkoutHelper->formatPrice($block->getTotal()->getValue()),
                     ['span']
                 ) ?>
             </span>
-        <?php if ($block->getRenderingArea() == $block->getTotal()->getArea()) :?>
+        <?php if ($block->getRenderingArea() == $block->getTotal()->getArea()):?>
             </strong>
         <?php endif; ?>
     </td>
 </tr>
+<?php if ($block->getTotal()->getStyle()): ?>
+    <?= /* @noEscape */ $secureRenderer->renderStyleAsTag($block->getTotal()->getStyle(), 'tr.totals th.mark') ?>
+    <?= /* @noEscape */ $secureRenderer->renderStyleAsTag($block->getTotal()->getStyle(), 'tr.totals td.amount') ?>
+<?php endif; ?>

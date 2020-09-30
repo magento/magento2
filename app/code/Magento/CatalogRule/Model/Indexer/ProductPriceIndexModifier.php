@@ -71,7 +71,7 @@ class ProductPriceIndexModifier implements PriceModifierInterface
             []
         );
         if ($entityIds) {
-            $select->where('i.entity_id IN (?)', $entityIds);
+            $select->where('i.entity_id IN (?)', $entityIds, \Zend_Db::INT_TYPE);
         }
 
         $finalPrice = $priceTable->getFinalPriceField();

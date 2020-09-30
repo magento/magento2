@@ -16,6 +16,7 @@ use Magento\Store\Ui\Component\Listing\Column\Store\Options as StoreOptions;
  * Login confirmation pop-up
  *
  * @api
+ * @since 100.4.0
  */
 class ConfirmationPopup extends Template
 {
@@ -56,6 +57,7 @@ class ConfirmationPopup extends Template
 
     /**
      * @inheritdoc
+     * @since 100.4.0
      */
     public function getJsLayout()
     {
@@ -78,6 +80,7 @@ class ConfirmationPopup extends Template
 
     /**
      * @inheritdoc
+     * @since 100.4.0
      */
     public function toHtml()
     {

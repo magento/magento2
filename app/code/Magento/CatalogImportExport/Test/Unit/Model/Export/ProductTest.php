@@ -8,12 +8,14 @@ declare(strict_types=1);
 namespace Magento\CatalogImportExport\Test\Unit\Model\Export;
 
 use Magento\Catalog\Model\Product\LinkTypeProvider;
+use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
 use Magento\CatalogImportExport\Model\Export\Product;
 use Magento\CatalogImportExport\Model\Export\Product\Type\Factory;
 use Magento\CatalogImportExport\Model\Export\RowCustomizer\Composite;
 use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Collection\AbstractCollection;
 use Magento\Eav\Model\Entity\Type;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory as AttributeSetCollectionFactory;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Logger\Monolog;
@@ -83,7 +85,7 @@ class ProductTest extends TestCase
     protected $attrSetColFactory;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory|MockObject
+     * @var CategoryCollectionFactory|MockObject
      */
     protected $categoryColFactory;
 
@@ -174,15 +176,14 @@ class ProductTest extends TestCase
             ->onlyMethods(['create'])
             ->getMock();
 
-        $this->attrSetColFactory = $this->getMockBuilder(
-            \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory::class
-        )->addMethods(['setEntityTypeFilter'])
+        $this->attrSetColFactory = $this->getMockBuilder(AttributeSetCollectionFactory::class)
+            ->disableOriginalConstructor()
+            ->addMethods(['setEntityTypeFilter'])
             ->onlyMethods(['create'])
             ->getMock();
 
-        $this->categoryColFactory = $this->getMockBuilder(
-            \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory::class
-        )->addMethods(['addNameToResult'])
+        $this->categoryColFactory = $this->getMockBuilder(CategoryCollectionFactory::class)
+            ->disableOriginalConstructor()->addMethods(['addNameToResult'])
             ->onlyMethods(['create'])
             ->getMock();
 

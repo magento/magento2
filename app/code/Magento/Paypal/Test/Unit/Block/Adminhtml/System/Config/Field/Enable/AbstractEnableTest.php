@@ -7,12 +7,15 @@ declare(strict_types=1);
 
 namespace Magento\Paypal\Test\Unit\Block\Adminhtml\System\Config\Field\Enable;
 
+use Magento\Framework\Data\Form\Element\CollectionFactory;
+use Magento\Framework\Escaper;
+use Magento\Framework\Math\Random;
 use Magento\Framework\Data\Form;
 use Magento\Framework\Data\Form\Element\AbstractElement;
-use Magento\Framework\Escaper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Paypal\Test\Unit\Block\Adminhtml\System\Config\Field\Enable\AbstractEnable\Stub;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
 use PHPUnit\Framework\MockObject\MockObject;
+use Magento\Paypal\Test\Unit\Block\Adminhtml\System\Config\Field\Enable\AbstractEnable\Stub;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -35,6 +38,22 @@ class AbstractEnableTest extends TestCase
     protected $elementMock;
 
     /**
+     * Create mock objects.
+     *
+     * @param string[] $classes
+     * @return MockObject[]
+     */
+    private function createMocks(array $classes): array
+    {
+        $mocks = [];
+        foreach ($classes as $class) {
+            $mocks[] = $this->getMockBuilder($class)->disableOriginalConstructor()->getMock();
+        }
+
+        return $mocks;
+    }
+
+    /**
      * Set up
      *
      * @return void
@@ -43,14 +62,24 @@ class AbstractEnableTest extends TestCase
     {
         $objectManager = new ObjectManager($this);
 
+        $randomMock = $this->getMockBuilder(Random::class)->disableOriginalConstructor()->getMock();
+        $randomMock->method('getRandomString')->willReturn('12345abcdef');
+        $mockArguments = $this->createMocks([
+            \Magento\Framework\Data\Form\Element\Factory::class,
+            CollectionFactory::class,
+            Escaper::class
+        ]);
+        $mockArguments[] = [];
+        $mockArguments[] = $this->createMock(SecureHtmlRenderer::class);
+        $mockArguments[] = $randomMock;
         $this->elementMock = $this->getMockBuilder(AbstractElement::class)
             ->setMethods(
                 [
                     'getHtmlId',
                     'getTooltip',
-                    'getForm',
+                    'getForm'
                 ]
-            )->disableOriginalConstructor()
+            )->setConstructorArgs($mockArguments)
             ->getMockForAbstractClass();
 
         $objectManager = new ObjectManager($this);

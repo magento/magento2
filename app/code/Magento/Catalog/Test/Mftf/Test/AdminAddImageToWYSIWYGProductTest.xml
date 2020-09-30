@@ -32,6 +32,7 @@
         <actionGroup ref="FillMainProductFormActionGroup" stepKey="fillBasicProductInfo" />
 
         <click selector="{{AdminProductFormSection.contentTab}}" stepKey="clickContentTab" />
+        <scrollTo selector="{{ProductDescriptionWYSIWYGToolbarSection.showHideBtn}}" y="-150" x="0" stepKey="scrollToDescription" />
         <waitForElementVisible selector="{{ProductDescriptionWYSIWYGToolbarSection.TinyMCE4}}" stepKey="waitForDescription" />
         <click selector="{{ProductDescriptionWYSIWYGToolbarSection.InsertImageIcon}}" stepKey="clickInsertImageIcon1" />
         <click selector="{{ProductDescriptionWYSIWYGToolbarSection.Browse}}" stepKey="clickBrowse1" />
@@ -67,7 +68,7 @@
         <fillField selector="{{ProductDescriptionWYSIWYGToolbarSection.ImageDescription}}" userInput="{{ImageUpload1.content}}" stepKey="fillImageDescription1" />
         <fillField selector="{{ProductDescriptionWYSIWYGToolbarSection.Height}}" userInput="{{ImageUpload1.height}}" stepKey="fillImageHeight1" />
         <click selector="{{ProductDescriptionWYSIWYGToolbarSection.OkBtn}}" stepKey="clickOkBtn1" />
-        <scrollTo selector="{{ProductDescriptionWYSIWYGToolbarSection.TinyMCE4}}" stepKey="scrollToTinyMCE4" />
+        <scrollTo selector="{{ProductShortDescriptionWYSIWYGToolbarSection.showHideBtn}}" y="-150" x="0" stepKey="scrollToTinyMCE4" />
         <click selector="{{ProductShortDescriptionWYSIWYGToolbarSection.InsertImageIcon}}" stepKey="clickInsertImageIcon2" />
         <click selector="{{ProductShortDescriptionWYSIWYGToolbarSection.Browse}}" stepKey="clickBrowse2" />
         <waitForLoadingMaskToDisappear stepKey="waitForLoading13"/>
@@ -98,8 +99,7 @@
         <fillField selector="{{ProductShortDescriptionWYSIWYGToolbarSection.Height}}" userInput="{{ImageUpload3.height}}" stepKey="fillImageHeight2" />
         <click selector="{{ProductShortDescriptionWYSIWYGToolbarSection.OkBtn}}" stepKey="clickOkBtn2" />
         <waitForPageLoad stepKey="waitForPageLoad6"/>
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoading12" />
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveProduct"/>
         <amOnPage url="{{_defaultProduct.name}}.html" stepKey="navigateToProductPage"/>
         <waitForPageLoad stepKey="waitForPageLoad7"/>
         <seeElement selector="{{StorefrontProductInfoMainSection.mediaDescription}}" stepKey="assertMediaDescription"/>

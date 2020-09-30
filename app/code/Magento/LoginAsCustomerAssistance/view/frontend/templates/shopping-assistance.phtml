@@ -1,0 +1,54 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+use Magento\Framework\Escaper;
+use Magento\LoginAsCustomerAssistance\Api\IsAssistanceEnabledInterface;
+use Magento\LoginAsCustomerAssistance\ViewModel\ShoppingAssistanceViewModel;
+
+/** @var Escaper $escaper */
+/** @var ShoppingAssistanceViewModel $viewModel */
+$viewModel = $block->getViewModel();
+?>
+
+<script type="text/x-magento-init">
+{
+    ".form-create-account, .form-edit-account": {
+        "Magento_LoginAsCustomerAssistance/js/opt-in": {
+            "allowAccess": "<?= /* @noEscape */ IsAssistanceEnabledInterface::ALLOWED ?>",
+            "denyAccess": "<?= /* @noEscape */ IsAssistanceEnabledInterface::DENIED ?>"
+        }
+    }
+}
+</script>
+
+<?php if ($viewModel->isLoginAsCustomerEnabled()): ?>
+    <div class="field choice">
+        <input type="checkbox"
+               name="assistance_allowed_checkbox"
+               title="<?= $escaper->escapeHtmlAttr(__($viewModel->getAssistanceCheckboxTitle())) ?>"
+               value="1"
+               id="assistance_allowed_checkbox"
+               <?php if ($viewModel->isAssistanceAllowed()): ?>checked="checked"<?php endif; ?>
+               class="checkbox">
+        <label for="assistance_allowed_checkbox" class="label">
+            <span><?= $escaper->escapeHtmlAttr(__($viewModel->getAssistanceCheckboxTitle())) ?></span>
+        </label>
+
+        <input type="hidden" name="assistance_allowed" value=""/>
+
+        <div class="field-tooltip toggle">
+            <span id="tooltip-label" class="label"><span>Tooltip</span></span>
+            <span id="tooltip" class="field-tooltip-action action-help" tabindex="0" data-toggle="dropdown"
+                  data-bind="mageInit: {'dropdown':{'activeClass': '_active', 'parent': '.field-tooltip.toggle'}}"
+                  aria-labelledby="tooltip-label" aria-haspopup="true" aria-expanded="false" role="button">
+         </span>
+            <div class="field-tooltip-content" data-target="dropdown"
+                 aria-hidden="true">
+                <?= $escaper->escapeHtmlAttr(__($viewModel->getAssistanceCheckboxTooltip())) ?>
+            </div>
+        </div>
+    </div>
+<?php endif ?>

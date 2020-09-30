@@ -11,6 +11,7 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\MediaGallery\Model\ResourceModel\Keyword\SaveAssetLinks;
+use Magento\MediaGalleryApi\Api\GetAssetsKeywordsInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -33,6 +34,11 @@ class SaveAssetLinksTest extends TestCase
     private $resourceConnectionMock;
 
     /**
+     * @var GetAssetsKeywordsInterface
+     */
+    private $getAssetsKeywords;
+
+    /**
      * @var LoggerInterface|MockObject
      */
     private $loggerMock;
@@ -44,9 +50,11 @@ class SaveAssetLinksTest extends TestCase
     {
         $this->connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
         $this->resourceConnectionMock = $this->createMock(ResourceConnection::class);
+        $this->getAssetsKeywords = $this->getMockForAbstractClass(GetAssetsKeywordsInterface::class);
         $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
 
         $this->sut = new SaveAssetLinks(
+            $this->getAssetsKeywords,
             $this->resourceConnectionMock,
             $this->loggerMock
         );
@@ -60,19 +68,24 @@ class SaveAssetLinksTest extends TestCase
      * @param int $assetId
      * @param array $keywordIds
      * @param array $values
+     * @throws CouldNotSaveException
      */
     public function testAssetKeywordsSave(int $assetId, array $keywordIds, array $values): void
     {
         $expectedCalls = (int) (count($keywordIds));
 
         if ($expectedCalls) {
-            $this->resourceConnectionMock->expects($this->once())
+            $this->resourceConnectionMock->expects($this->exactly(2))
                 ->method('getConnection')
                 ->willReturn($this->connectionMock);
-            $this->resourceConnectionMock->expects($this->once())
+            $this->resourceConnectionMock->expects($this->any())
                 ->method('getTableName')
-                ->with('media_gallery_asset_keyword')
-                ->willReturn('prefix_media_gallery_asset_keyword');
+                ->willReturnMap(
+                    [
+                        ['media_gallery_asset_keyword', 'default', 'prefix_media_gallery_asset_keyword'],
+                        ['media_gallery_asset', 'default', 'prefix_media_gallery_asset']
+                    ]
+                );
             $this->connectionMock->expects($this->once())
                 ->method('insertArray')
                 ->with(

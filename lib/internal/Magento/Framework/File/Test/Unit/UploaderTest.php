@@ -26,7 +26,7 @@ class UploaderTest extends TestCase
         $isExceptionExpected = $expectedCorrectedFileName === true;
 
         if ($isExceptionExpected) {
-            $this->expectException(\InvalidArgumentException::class);
+            $this->expectException(\LengthException::class);
         }
 
         $this->assertEquals(
@@ -62,7 +62,7 @@ class UploaderTest extends TestCase
                 'a.' . str_repeat('b', 88)
             ],
             [
-                'a.' . str_repeat('b', 89),
+                'a.' . str_repeat('b', 199), // 201 characters
                 true
             ]
         ];

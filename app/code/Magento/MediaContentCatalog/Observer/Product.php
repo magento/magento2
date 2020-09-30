@@ -13,6 +13,7 @@ use Magento\Framework\Event\ObserverInterface;
 use Magento\MediaContentApi\Api\UpdateContentAssetLinksInterface;
 use Magento\MediaContentApi\Api\Data\ContentIdentityInterfaceFactory;
 use Magento\MediaContentApi\Model\GetEntityContentsInterface;
+use Magento\MediaContentApi\Model\Config;
 
 /**
  * Observe the catalog_product_save_after event and run processing relation between product content and media asset
@@ -35,6 +36,11 @@ class Product implements ObserverInterface
     private $fields;
 
     /**
+     * @var Config
+     */
+    private $config;
+
+    /**
      * @var ContentIdentityInterfaceFactory
      */
     private $contentIdentityFactory;
@@ -45,22 +51,25 @@ class Product implements ObserverInterface
     private $getContent;
 
     /**
-     * * Create links for product content
+     * Product observer constructor
      *
      * @param ContentIdentityInterfaceFactory $contentIdentityFactory
      * @param GetEntityContentsInterface $getContent
      * @param UpdateContentAssetLinksInterface $updateContentAssetLinks
+     * @param Config $config
      * @param array $fields
      */
     public function __construct(
         ContentIdentityInterfaceFactory $contentIdentityFactory,
         GetEntityContentsInterface $getContent,
         UpdateContentAssetLinksInterface $updateContentAssetLinks,
+        Config $config,
         array $fields
     ) {
         $this->contentIdentityFactory = $contentIdentityFactory;
         $this->getContent = $getContent;
         $this->updateContentAssetLinks = $updateContentAssetLinks;
+        $this->config = $config;
         $this->fields = $fields;
     }
 
@@ -72,6 +81,10 @@ class Product implements ObserverInterface
      */
     public function execute(Observer $observer): void
     {
+        if (!$this->config->isEnabled()) {
+            return;
+        }
+
         $model = $observer->getEvent()->getData('product');
         if ($model instanceof CatalogProduct) {
             foreach ($this->fields as $field) {

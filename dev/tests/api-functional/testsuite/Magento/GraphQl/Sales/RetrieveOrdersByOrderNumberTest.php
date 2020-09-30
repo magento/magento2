@@ -186,9 +186,7 @@ class RetrieveOrdersByOrderNumberTest extends GraphQlAbstract
                 'amount_excluding_tax' => ['value' => 20],
                 'total_amount' => ['value' => 20, 'currency' =>'USD'],
                 'discounts' => [
-                    0 => ['amount'=>['value'=> 2, 'currency' =>'USD'],
-                        'label' => 'Discount Label for 10% off'
-                    ]
+                    0 => ['amount'=>['value'=> 2, 'currency' =>'USD']]
                 ],
                 'taxes'=> [
                     0 => [
@@ -271,9 +269,7 @@ class RetrieveOrdersByOrderNumberTest extends GraphQlAbstract
                 'amount_excluding_tax' => ['value' => 20],
                 'total_amount' => ['value' => 20, 'currency' =>'USD'],
                 'discounts' => [
-                    0 => ['amount'=>['value'=> 2, 'currency' =>'USD'],
-                        'label' => 'Discount Label for 10% off'
-                    ]
+                    0 => ['amount'=>['value'=> 2, 'currency' =>'USD']]
                 ],
                 'taxes'=> [
                     0 => [
@@ -1245,7 +1241,7 @@ QUERY;
                amount_excluding_tax{value}
                total_amount{value currency}
                taxes {amount{value} title rate}
-               discounts {amount{value currency} label}
+               discounts {amount{value currency}}
              }
 
            }

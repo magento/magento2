@@ -17,6 +17,7 @@ use Magento\Store\Model\Store;
 /**
  * Adminhtml dashboard totals bar
  * @api
+ * @since 100.0.2
  */
 class Totals extends Bar
 {

@@ -108,7 +108,7 @@ class PlaceOrderWithPaymentsAdvancedTest extends TestCase
         $cartId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
 
         $productMetadata = ObjectManager::getInstance()->get(ProductMetadataInterface::class);
-        $button = 'Magento_Cart_' . $productMetadata->getEdition();
+        $button = 'Magento_2_' . $productMetadata->getEdition();
 
         $payflowLinkResponse = new DataObject(
             [
@@ -256,7 +256,7 @@ class PlaceOrderWithPaymentsAdvancedTest extends TestCase
              error_url:"paypal/payflowadvanced/customerror"
           }
       }
-  }) {    
+  }) {
        cart {
           selected_payment_method {
           code
@@ -300,7 +300,7 @@ QUERY;
              error_url:"paypal/payflowadvanced/error"
           }
       }
-  }) {    
+  }) {
        cart {
           selected_payment_method {
           code

@@ -19,7 +19,7 @@ class MethodList
 {
     /**
      * @var \Magento\Payment\Helper\Data
-     * @deprecated 100.1.3 Do not use this property in case of inheritance.
+     * @deprecated 100.1.0 Do not use this property in case of inheritance.
      */
     protected $paymentHelper;
 

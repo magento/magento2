@@ -7,18 +7,23 @@
 use Magento\Backend\ViewModel\ChartsPeriod;
 use Magento\Framework\Escaper;
 use Magento\Framework\View\Element\Template;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
 
 /**
  * @var Template $block
  * @var Escaper $escaper
  * @var ChartsPeriod $viewModel
+ * @var SecureHtmlRenderer $secureRenderer
  */
 $viewModel = $block->getViewModel();
 ?>
 <div class="dashboard-diagram">
     <div class="dashboard-diagram-graph">
-        <canvas id="chart_<?= $escaper->escapeHtmlAttr($block->getData('html_id')) ?>_period"
-                style="display: none;"></canvas>
+        <canvas id="chart_<?= $escaper->escapeHtmlAttr($block->getData('html_id')) ?>_period"/>
+        <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
+            'display:none',
+            '#chart_' . $escaper->escapeJs($block->getData('html_id')) . '_period'
+        ) ?>
         <div class="dashboard-diagram-nodata">
             <span><?= $escaper->escapeHtml(__('No Data Found')) ?></span>
         </div>

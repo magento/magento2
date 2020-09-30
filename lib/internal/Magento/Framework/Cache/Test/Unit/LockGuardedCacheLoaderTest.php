@@ -95,7 +95,7 @@ class LockGuardedCacheLoaderTest extends TestCase
 
         $this->lockManagerInterfaceMock
             ->expects($this->atLeastOnce())->method('lock')
-            ->with($lockName, 10)
+            ->with($lockName, 0)
             ->willReturn(false);
 
         $this->lockManagerInterfaceMock->expects($this->never())->method('unlock');
@@ -129,7 +129,7 @@ class LockGuardedCacheLoaderTest extends TestCase
 
         $this->lockManagerInterfaceMock
             ->expects($this->once())->method('lock')
-            ->with($lockName, 10)
+            ->with($lockName, 0)
             ->willReturn(true);
 
         $this->lockManagerInterfaceMock->expects($this->once())->method('unlock');
@@ -168,7 +168,7 @@ class LockGuardedCacheLoaderTest extends TestCase
 
         $this->lockManagerInterfaceMock
             ->expects($this->once())->method('lock')
-            ->with($lockName, 10)
+            ->with($lockName, 0)
             ->willReturn(false);
 
         $this->lockManagerInterfaceMock->expects($this->never())->method('unlock');

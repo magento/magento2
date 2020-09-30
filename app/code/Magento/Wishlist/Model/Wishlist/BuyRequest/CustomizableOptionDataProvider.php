@@ -31,21 +31,25 @@ class CustomizableOptionDataProvider implements BuyRequestDataProviderInterface
                 continue;
             }
 
-            [, $optionId, $optionValue] = $optionData;
+            [$optionType, $optionId, $optionValue] = $optionData;
 
-            $customizableOptionsData[$optionId][] = $optionValue;
+            if ($optionType == self::PROVIDER_OPTION_TYPE) {
+                $customizableOptionsData[$optionId][] = $optionValue;
+            }
         }
 
         foreach ($wishlistItemData->getEnteredOptions() as $option) {
-            $optionData = \explode('/', base64_decode($option->getId()));
+            $optionData = \explode('/', base64_decode($option->getUid()));
 
             if ($this->isProviderApplicable($optionData) === false) {
                 continue;
             }
 
-            [, $optionId] = $optionData;
+            [$optionType, $optionId] = $optionData;
 
-            $customizableOptionsData[$optionId][] = $option->getValue();
+            if ($optionType == self::PROVIDER_OPTION_TYPE) {
+                $customizableOptionsData[$optionId][] = $option->getValue();
+            }
         }
 
         if (empty($customizableOptionsData)) {

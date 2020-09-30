@@ -4,15 +4,18 @@
  * See COPYING.txt for license details.
  */
 
-/** @var \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar $block */
+/**
+ * @var \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar $block
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ */
 ?>
 <div class="customer-current-activity-inner">
     <h4 class="customer-activity-title"><?= $block->escapeHtml(__('Customer\'s Activities')) ?></h4>
     <div class="create-order-sidebar-container">
     <?= $block->getChildHtml('top_button') ?>
-    <?php foreach ($block->getLayout()->getChildBlocks($block->getNameInLayout()) as $_alias => $_child) : ?>
-        <?php if ($_alias != 'top_button' && $_alias != 'bottom_button') : ?>
-            <?php if ($block->canDisplay($_child)) : ?>
+    <?php foreach ($block->getLayout()->getChildBlocks($block->getNameInLayout()) as $_alias => $_child): ?>
+        <?php if ($_alias != 'top_button' && $_alias != 'bottom_button'): ?>
+            <?php if ($block->canDisplay($_child)): ?>
                 <div class="order-sidebar-block" id="order-sidebar_<?= $block->escapeHtmlAttr($_alias) ?>">
                     <?= $block->getChildHtml($_alias) ?>
                 </div>
@@ -22,7 +25,7 @@
     <?= $block->getChildHtml('bottom_button') ?>
     </div>
 </div>
-<script>
+<?php $scriptString = <<<script
 require([
     "prototype",
     "Magento_Catalog/catalog/product/composite/configure"
@@ -30,12 +33,12 @@ require([
 
     function addSidebarCompositeListType() {
         productConfigure.addListType('sidebar', {
-            urlFetch: '<?= $block->escapeJs($block->escapeUrl($block->getUrl('sales/order_create/configureProductToAdd'))) ?>',
-            urlConfirm: '<?= $block->escapeJs($block->escapeUrl($block->getUrl('sales/order_create/addConfigured'))) ?>'
+            urlFetch: '{$block->escapeJs($block->getUrl('sales/order_create/configureProductToAdd'))}',
+            urlConfirm: '{$block->escapeJs($block->getUrl('sales/order_create/addConfigured'))}'
         });
         productConfigure.addListType('sidebar_wishlist', {
-            urlFetch: '<?= $block->escapeJs($block->escapeUrl($block->getUrl('customer/wishlist_product_composite_wishlist/configure'))) ?>',
-            urlConfirm: '<?= $block->escapeJs($block->escapeUrl($block->getUrl('sales/order_create/addConfigured'))) ?>'
+            urlFetch: '{$block->escapeJs($block->getUrl('customer/wishlist_product_composite_wishlist/configure'))}',
+            urlConfirm: '{$block->escapeJs($block->getUrl('sales/order_create/addConfigured'))}'
         });
     }
 
@@ -55,4 +58,6 @@ require([
 
     window.addSidebarCompositeListType = addSidebarCompositeListType;
 });
-</script>
+script;
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>

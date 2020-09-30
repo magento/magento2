@@ -207,7 +207,7 @@ class Coupon extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * Get expiration date
      *
      * @return string|null
-     * @deprecated Coupon expiration must follow sales rule expiration date.
+     * @deprecated 101.1.3 Coupon expiration must follow sales rule expiration date.
      */
     public function getExpirationDate()
     {
@@ -219,7 +219,7 @@ class Coupon extends \Magento\Framework\Model\AbstractExtensibleModel implements
      *
      * @param string $expirationDate
      * @return $this
-     * @deprecated Coupon expiration must follow sales rule expiration date.
+     * @deprecated 101.1.3 Coupon expiration must follow sales rule expiration date.
      */
     public function setExpirationDate($expirationDate)
     {

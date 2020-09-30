@@ -50,7 +50,6 @@ class LayoutUpdate implements ModifierInterface
 
     /**
      * @inheritdoc
-     * @since 101.1.0
      */
     public function modifyData(array $data)
     {

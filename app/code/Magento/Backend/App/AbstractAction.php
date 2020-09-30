@@ -16,11 +16,12 @@ use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\Data\Form\FormKey\Validator as FormKeyValidator;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\View\Element\AbstractBlock;
+use Magento\Framework\Encryption\Helper\Security;
 
 /**
  * Generic backend controller
  *
- * @deprecated Use \Magento\Framework\App\ActionInterface
+ * @deprecated 102.0.0 Use \Magento\Framework\App\ActionInterface
  *
  * phpcs:disable Magento2.Classes.AbstractApi
  * @api
@@ -386,7 +387,7 @@ abstract class AbstractAction extends \Magento\Framework\App\Action\Action
         }
 
         $secretKey = $this->getRequest()->getParam(UrlInterface::SECRET_KEY_PARAM_NAME, null);
-        if (!$secretKey || $secretKey != $this->_backendUrl->getSecretKey()) {
+        if (!$secretKey || !Security::compareStrings($secretKey, $this->_backendUrl->getSecretKey())) {
             return false;
         }
         return true;

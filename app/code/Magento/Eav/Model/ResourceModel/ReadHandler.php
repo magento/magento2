@@ -71,7 +71,7 @@ class ReadHandler implements AttributeInterface
      * @param string $entityType
      * @return \Magento\Eav\Api\Data\AttributeInterface[]
      * @throws Exception if for unknown entity type
-     * @deprecated Not used anymore
+     * @deprecated 101.0.5 Not used anymore
      * @see ReadHandler::getEntityAttributes
      */
     protected function getAttributes($entityType)
@@ -152,7 +152,7 @@ class ReadHandler implements AttributeInterface
                         ['value' => 't.value', 'attribute_id' => 't.attribute_id']
                     )
                     ->where($metadata->getLinkField() . ' = ?', $entityData[$metadata->getLinkField()])
-                    ->where('attribute_id IN (?)', $attributeIds);
+                    ->where('attribute_id IN (?)', $attributeIds, \Zend_Db::INT_TYPE);
                 $attributeIdentifiers = [];
                 foreach ($context as $scope) {
                     //TODO: if (in table exists context field)

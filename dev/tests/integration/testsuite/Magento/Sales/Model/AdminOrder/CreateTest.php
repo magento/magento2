@@ -249,6 +249,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      * @magentoAppIsolation enabled
+     * @magentoDbIsolation disabled
      */
     public function testGetCustomerWishlist()
     {
@@ -683,7 +684,6 @@ class CreateTest extends \PHPUnit\Framework\TestCase
     public function testGetCustomerCartNewCart()
     {
         $customerIdFromFixture = 1;
-        $customerEmailFromFixture = 'customer@example.com';
 
         /** Preconditions */
         /** @var SessionQuote $session */
@@ -692,12 +692,8 @@ class CreateTest extends \PHPUnit\Framework\TestCase
 
         /** SUT execution */
         $customerQuote = $this->model->getCustomerCart();
-        self::assertNotEmpty($customerQuote->getId(), 'Quote ID is invalid.');
-        self::assertEquals(
-            $customerEmailFromFixture,
-            $customerQuote->getCustomerEmail(),
-            'Customer data is preserved incorrectly in a newly quote.'
-        );
+        self::assertInstanceOf(Quote::class, $customerQuote);
+        self::assertEmpty($customerQuote->getData());
     }
 
     /**

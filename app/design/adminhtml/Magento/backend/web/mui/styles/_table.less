@@ -414,7 +414,7 @@ td.col-type {
     }
 
     tbody tr:nth-child(odd) td {
-        &:extend(.data-table tbody tr:nth-child(odd) td);
+        &:extend(.data-table tbody tr:nth-child(odd) td all);
     }
 
     tfoot tr:last-child td {
@@ -601,13 +601,13 @@ td.col-type {
         }
 
         .label {
-            &:extend(.grid-actions .export .label);
+            &:extend(.grid-actions .export .label all);
             padding: 0;
             width: auto;
         }
 
         .action- {
-            &:extend(.grid-actions .export .action-);
+            &:extend(.grid-actions .export .action- all);
             vertical-align: top;
         }
     }

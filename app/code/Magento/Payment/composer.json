@@ -12,7 +12,8 @@
         "magento/module-directory": "*",
         "magento/module-quote": "*",
         "magento/module-sales": "*",
-        "magento/module-store": "*"
+        "magento/module-store": "*",
+        "magento/module-ui": "*"
     },
     "type": "magento2-module",
     "license": [

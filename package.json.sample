@@ -18,7 +18,7 @@
         "grunt-contrib-connect": "~1.0.2",
         "grunt-contrib-cssmin": "~2.2.1",
         "grunt-contrib-imagemin": "~2.0.1",
-        "grunt-contrib-jasmine": "~1.1.0",
+        "grunt-contrib-jasmine": "~1.2.0",
         "grunt-contrib-less": "~1.4.1",
         "grunt-contrib-watch": "~1.0.0",
         "grunt-eslint": "~20.1.0",

@@ -12,7 +12,8 @@
         "magento/module-customer": "*",
         "magento/module-security": "*",
         "magento/module-store": "*",
-        "magento/module-user": "*"
+        "magento/module-user": "*",
+        "magento/module-ui": "*"
     },
     "type": "magento2-module",
     "license": [

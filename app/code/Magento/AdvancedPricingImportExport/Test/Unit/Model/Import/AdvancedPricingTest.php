@@ -16,7 +16,6 @@ use Magento\CatalogImportExport\Model\Import\Product;
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface as RowValidatorInterface;
 use Magento\CatalogImportExport\Model\Import\Product\StoreResolver;
 use Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceModelFactory as ResourceFactory;
-use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Type;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
@@ -26,7 +25,6 @@ use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Json\Helper\Data;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
-use Magento\Framework\Stdlib\StringUtils;
 use Magento\ImportExport\Model\Import;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 use Magento\ImportExport\Model\ResourceModel\Helper;
@@ -100,11 +98,6 @@ class AdvancedPricingTest extends AbstractImportTestCase
     protected $dataSourceModel;
 
     /**
-     * @var Config
-     */
-    protected $eavConfig;
-
-    /**
      * @var TimezoneInterface|MockObject
      */
     protected $dateTime;
@@ -140,11 +133,6 @@ class AdvancedPricingTest extends AbstractImportTestCase
     protected $advancedPricing;
 
     /**
-     * @var StringUtils
-     */
-    protected $stringObject;
-
-    /**
      * @var ProcessingErrorAggregatorInterface
      */
     protected $errorAggregator;
@@ -165,10 +153,8 @@ class AdvancedPricingTest extends AbstractImportTestCase
         );
         $this->resource->method('getConnection')->willReturn($this->connection);
         $this->dataSourceModel = $this->createMock(\Magento\ImportExport\Model\ResourceModel\Import\Data::class);
-        $this->eavConfig = $this->createMock(Config::class);
         $entityType = $this->createMock(Type::class);
         $entityType->method('getEntityTypeId')->willReturn('');
-        $this->eavConfig->method('getEntityType')->willReturn($entityType);
         $this->resourceFactory = $this->getMockBuilder(
             \Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceModelFactory::class
         )
@@ -193,7 +179,6 @@ class AdvancedPricingTest extends AbstractImportTestCase
         $this->tierPriceValidator = $this->createMock(
             TierPrice::class
         );
-        $this->stringObject = $this->createMock(StringUtils::class);
         $this->errorAggregator = $this->getErrorAggregatorObject();
         $this->dateTime = $this->getMockBuilder(DateTime::class)
             ->disableOriginalConstructor()
@@ -1070,10 +1055,8 @@ class AdvancedPricingTest extends AbstractImportTestCase
                     $this->jsonHelper,
                     $this->importExportData,
                     $this->dataSourceModel,
-                    $this->eavConfig,
                     $this->resource,
                     $this->resourceHelper,
-                    $this->stringObject,
                     $this->errorAggregator,
                     $this->dateTime,
                     $this->resourceFactory,

@@ -41,12 +41,21 @@
         </after>
 
         <!-- Create a catalog rule for the NOT LOGGED IN customer group -->
-        <actionGroup ref="AdminOpenNewCatalogPriceRuleFormPageActionGroup" stepKey="createNewPriceRule"/>
-        <actionGroup ref="AdminCatalogPriceRuleFillMainInfoActionGroup" stepKey="fillMainInfoForPriceRule">
-            <argument name="groups" value="'NOT LOGGED IN'"/>
+        <actionGroup ref="NewCatalogPriceRuleByUIActionGroup" stepKey="createNewPriceRule"/>
+        <actionGroup ref="SelectNotLoggedInCustomerGroupActionGroup" stepKey="selectNotLoggedInCustomerGroup"/>
+        <conditionalClick selector="{{AdminNewCatalogPriceRule.active}}" dependentSelector="{{AdminNewCatalogPriceRule.activeIsEnabled}}" visible="false" stepKey="enableActiveBtn"/>
+        <click selector="{{AdminNewCatalogPriceRule.saveAndApply}}" stepKey="saveAndApply"/>
+
+        <!--<click selector="{{AdminNewCatalogPriceRule.saveAndApply}}" stepKey="saveAndApply"/>-->
+        <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the rule." stepKey="assertSuccess"/>
+
+        <!-- Perform reindex and flush cache -->
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
         </actionGroup>
-        <actionGroup ref="AdminCatalogPriceRuleFillActionsActionGroup" stepKey="fillActionsPriceRule"/>
-        <actionGroup ref="AdminCatalogPriceRuleSaveAndApplyActionGroup" stepKey="saveAndApplyFPriceRule"/>
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+            <argument name="tags" value=""/>
+        </actionGroup>
 
         <!-- As a NOT LOGGED IN user, go to the storefront category page and should see the discount -->
         <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="goToCategory1">

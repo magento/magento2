@@ -15,7 +15,7 @@ class EnteredOption
     /**
      * @var string
      */
-    private $id;
+    private $uid;
 
     /**
      * @var string
@@ -23,12 +23,12 @@ class EnteredOption
     private $value;
 
     /**
-     * @param string $id
+     * @param string $uid
      * @param string $value
      */
-    public function __construct(string $id, string $value)
+    public function __construct(string $uid, string $value)
     {
-        $this->id = $id;
+        $this->uid = $uid;
         $this->value = $value;
     }
 
@@ -37,9 +37,9 @@ class EnteredOption
      *
      * @return string
      */
-    public function getId(): string
+    public function getUid(): string
     {
-        return $this->id;
+        return $this->uid;
     }
 
     /**

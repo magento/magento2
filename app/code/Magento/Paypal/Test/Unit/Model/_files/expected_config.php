@@ -46,6 +46,7 @@ return [
                     'merchant-id' => 'merchant',
                     'locale' => 'es_MX',
                     'intent' => 'authorize',
+                    'currency' => 'USD',
                     'disable-funding' => implode(
                         ',',
                         ['credit', 'venmo', 'bancontact', 'eps', 'giropay', 'ideal', 'mybank', 'p24', 'sofort']
@@ -84,6 +85,7 @@ return [
                     'merchant-id' => 'merchant',
                     'locale' => 'en_BR',
                     'intent' => 'authorize',
+                    'currency' => 'USD',
                     'disable-funding' => implode(
                         ',',
                         ['venmo', 'bancontact', 'eps', 'giropay', 'ideal', 'mybank', 'p24', 'sofort']
@@ -121,6 +123,7 @@ return [
                     'merchant-id' => 'merchant',
                     'locale' => 'en_US',
                     'intent' => 'authorize',
+                    'currency' => 'USD',
                     'disable-funding' => implode(
                         ',',
                         ['venmo', 'bancontact', 'eps', 'giropay', 'ideal', 'mybank', 'p24', 'sofort']
@@ -158,6 +161,7 @@ return [
                     'merchant-id' => 'merchant',
                     'locale' => 'en_US',
                     'intent' => 'authorize',
+                    'currency' => 'USD',
                     'disable-funding' => implode(
                         ',',
                         ['credit','venmo', 'bancontact', 'eps', 'giropay', 'ideal', 'mybank', 'p24', 'sofort']
@@ -196,6 +200,7 @@ return [
                     'merchant-id' => 'merchant',
                     'locale' => 'en_BR',
                     'intent' => 'authorize',
+                    'currency' => 'USD',
                     'disable-funding' => implode(
                         ',',
                         ['card','venmo', 'bancontact', 'eps', 'giropay', 'ideal', 'mybank', 'p24', 'sofort']

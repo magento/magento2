@@ -8,13 +8,13 @@ declare(strict_types=1);
 
 namespace Magento\Setup\Console\Command;
 
+use Magento\Framework\Console\Cli;
 use Magento\Framework\Module\FullModuleList;
 use Magento\Framework\Module\ModuleList;
 use Magento\Setup\Model\ObjectManagerProvider;
-use Magento\Framework\Console\Cli;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Input\InputArgument;
 
 /**
  * Command for displaying status of modules
@@ -22,15 +22,11 @@ use Symfony\Component\Console\Input\InputArgument;
 class ModuleStatusCommand extends AbstractSetupCommand
 {
     /**
-     * Object manager provider
-     *
      * @var ObjectManagerProvider
      */
     private $objectManagerProvider;
 
     /**
-     * Inject dependencies
-     *
      * @param ObjectManagerProvider $objectManagerProvider
      */
     public function __construct(ObjectManagerProvider $objectManagerProvider)
@@ -40,26 +36,33 @@ class ModuleStatusCommand extends AbstractSetupCommand
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function configure()
     {
         $this->setName('module:status')
             ->setDescription('Displays status of modules')
-            ->addArgument('module', InputArgument::OPTIONAL, 'Optional module name')
+            ->addArgument(
+                'module-names',
+                InputArgument::OPTIONAL | InputArgument::IS_ARRAY,
+                'Optional module name'
+            )
             ->addOption('enabled', null, null, 'Print only enabled modules')
             ->addOption('disabled', null, null, 'Print only disabled modules');
         parent::configure();
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $moduleName = (string)$input->getArgument('module');
-        if ($moduleName) {
-            return $this->showSpecificModule($moduleName, $output);
+        $moduleNames = $input->getArgument('module-names');
+        if (!empty($moduleNames)) {
+            foreach ($moduleNames as $moduleName) {
+                $this->showSpecificModule($moduleName, $output);
+            }
+            return Cli::RETURN_SUCCESS;
         }
 
         $onlyEnabled = $input->getOption('enabled');
@@ -79,34 +82,42 @@ class ModuleStatusCommand extends AbstractSetupCommand
         $output->writeln("<info>List of disabled modules:</info>");
         $this->showDisabledModules($output);
         $output->writeln('');
+
+        return Cli::RETURN_SUCCESS;
     }
 
     /**
+     * Specific module show
+     *
      * @param string $moduleName
      * @param OutputInterface $output
+     * @return int
      */
-    private function showSpecificModule(string $moduleName, OutputInterface $output)
+    private function showSpecificModule(string $moduleName, OutputInterface $output): int
     {
         $allModules = $this->getAllModules();
-        if (!in_array($moduleName, $allModules->getNames())) {
-            $output->writeln('<error>Module does not exist</error>');
+        if (!in_array($moduleName, $allModules->getNames(), true)) {
+            $output->writeln($moduleName . ' : <error>Module does not exist</error>');
             return Cli::RETURN_FAILURE;
         }
 
         $enabledModules = $this->getEnabledModules();
-        if (in_array($moduleName, $enabledModules->getNames())) {
-            $output->writeln('<info>Module is enabled</info>');
+        if (in_array($moduleName, $enabledModules->getNames(), true)) {
+            $output->writeln($moduleName . ' : <info>Module is enabled</info>');
             return Cli::RETURN_FAILURE;
         }
 
-        $output->writeln('<info>Module is disabled</info>');
-        return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
+        $output->writeln($moduleName . ' : <info> Module is disabled</info>');
+        return Cli::RETURN_SUCCESS;
     }
 
     /**
+     * Enable modules show
+     *
      * @param OutputInterface $output
+     * @return int
      */
-    private function showEnabledModules(OutputInterface $output)
+    private function showEnabledModules(OutputInterface $output): int
     {
         $enabledModules = $this->getEnabledModules();
         $enabledModuleNames = $enabledModules->getNames();
@@ -116,13 +127,17 @@ class ModuleStatusCommand extends AbstractSetupCommand
         }
 
         $output->writeln(join("\n", $enabledModuleNames));
-        return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
+
+        return Cli::RETURN_SUCCESS;
     }
 
     /**
+     * Disabled modules show
+     *
      * @param OutputInterface $output
+     * @return int
      */
-    private function showDisabledModules(OutputInterface $output)
+    private function showDisabledModules(OutputInterface $output): int
     {
         $disabledModuleNames = $this->getDisabledModuleNames();
         if (count($disabledModuleNames) === 0) {
@@ -131,32 +146,42 @@ class ModuleStatusCommand extends AbstractSetupCommand
         }
 
         $output->writeln(join("\n", $disabledModuleNames));
-        return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
+
+        return Cli::RETURN_SUCCESS;
     }
 
     /**
+     * Returns all modules
+     *
      * @return FullModuleList
      */
     private function getAllModules(): FullModuleList
     {
-        return $this->objectManagerProvider->get()->create(FullModuleList::class);
+        return $this->objectManagerProvider->get()
+            ->create(FullModuleList::class);
     }
 
     /**
+     * Returns enabled modules
+     *
      * @return ModuleList
      */
     private function getEnabledModules(): ModuleList
     {
-        return $this->objectManagerProvider->get()->create(ModuleList::class);
+        return $this->objectManagerProvider->get()
+            ->create(ModuleList::class);
     }
 
     /**
+     * Returns disabled module names
+     *
      * @return array
      */
     private function getDisabledModuleNames(): array
     {
         $fullModuleList = $this->getAllModules();
         $enabledModules = $this->getEnabledModules();
+
         return array_diff($fullModuleList->getNames(), $enabledModules->getNames());
     }
 }

@@ -30,7 +30,7 @@ class View extends AbstractProduct implements \Magento\Framework\DataObject\Iden
 
     /**
      * @var \Magento\Framework\Pricing\PriceCurrencyInterface
-     * @deprecated 101.1.0
+     * @deprecated 102.0.0
      */
     protected $priceCurrency;
 
@@ -196,6 +196,10 @@ class View extends AbstractProduct implements \Magento\Framework\DataObject\Iden
             'productId'   => (int)$product->getId(),
             'priceFormat' => $this->_localeFormat->getPriceFormat(),
             'prices'      => [
+                'baseOldPrice' => [
+                    'amount'      => $priceInfo->getPrice('regular_price')->getAmount()->getBaseAmount() * 1,
+                    'adjustments' => []
+                ],
                 'oldPrice'   => [
                     'amount'      => $priceInfo->getPrice('regular_price')->getAmount()->getValue() * 1,
                     'adjustments' => []

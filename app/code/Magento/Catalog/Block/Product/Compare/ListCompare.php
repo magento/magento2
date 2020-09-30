@@ -213,6 +213,7 @@ class ListCompare extends \Magento\Catalog\Block\Product\AbstractProduct
      *
      * @param \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute
      * @return bool
+     * @since 102.0.6
      */
     public function hasAttributeValueForProducts($attribute)
     {

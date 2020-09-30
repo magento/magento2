@@ -3,11 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
 
-<div id="cookie-status" style="display: none">
+<div id="cookie-status">
     <?= $block->escapeHtml(__('The store will not work correctly in the case when cookies are disabled.')); ?>
 </div>
+<?php
+$script = 'document.querySelector("#cookie-status").style.display = "none";';
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', ['type' => 'text/javascript'], $script, false); ?>
 
 <script type="text/x-magento-init">
     {
@@ -16,5 +22,3 @@
         }
     }
 </script>
-
-

@@ -12,6 +12,8 @@ use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Elasticsearch client
+ *
+ * @deprecated the new minor release supports compatibility with Elasticsearch 7
  */
 class Elasticsearch implements ClientInterface
 {
@@ -178,6 +180,23 @@ class Elasticsearch implements ClientInterface
     }
 
     /**
+     * Add/update an Elasticsearch index settings.
+     *
+     * @param string $index
+     * @param array $settings
+     * @return void
+     */
+    public function putIndexSettings(string $index, array $settings): void
+    {
+        $this->getClient()->indices()->putSettings(
+            [
+                'index' => $index,
+                'body' => $settings,
+            ]
+        );
+    }
+
+    /**
      * Delete an Elasticsearch index.
      *
      * @param string $index
@@ -328,6 +347,17 @@ class Elasticsearch implements ClientInterface
         }
 
         $this->getClient()->indices()->putMapping($params);
+    }
+
+    /**
+     * Get mapping from Elasticsearch index.
+     *
+     * @param array $params
+     * @return array
+     */
+    public function getMapping(array $params): array
+    {
+        return $this->getClient()->indices()->getMapping($params);
     }
 
     /**

@@ -1,0 +1,22 @@
+{
+    "name": "magento/module-quote-bundle-options",
+    "description": "Magento module provides data provider for creating buy request for bundle products",
+    "require": {
+        "php": "~7.3.0||~7.4.0",
+        "magento/framework": "*",
+        "magento/module-quote": "*"
+    },
+    "type": "magento2-module",
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Magento\\QuoteBundleOptions\\": ""
+        }
+    }
+}

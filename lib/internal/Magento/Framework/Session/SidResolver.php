@@ -12,7 +12,7 @@ use Magento\Framework\App\State;
 /**
  * Resolves SID by processing request parameters.
  *
- * @deprecated 2.3.3 SIDs in URLs are no longer used
+ * @deprecated 102.0.2 SIDs in URLs are no longer used
  */
 class SidResolver implements SidResolverInterface
 {
@@ -28,13 +28,13 @@ class SidResolver implements SidResolverInterface
 
     /**
      * @var \Magento\Framework\UrlInterface
-     * @deprecated Not used anymore.
+     * @deprecated 102.0.5 Not used anymore.
      */
     protected $urlBuilder;
 
     /**
      * @var \Magento\Framework\App\RequestInterface
-     * @deprecated Not used anymore.
+     * @deprecated 102.0.5 Not used anymore.
      */
     protected $request;
 
@@ -56,7 +56,7 @@ class SidResolver implements SidResolverInterface
      * @var bool|null
      * @see \Magento\Framework\UrlInterface
      */
-    protected $_useSessionInUrl;
+    protected $_useSessionInUrl = false;
 
     /**
      * @var string
@@ -88,26 +88,21 @@ class SidResolver implements SidResolverInterface
     }
 
     /**
-     * Get Sid
-     *
-     * @param SessionManagerInterface $session
-     * @return string|null
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @inheritDoc
      */
     public function getSid(SessionManagerInterface $session)
     {
+        trigger_error('Session ID is not used as URL parameter anymore.', E_USER_DEPRECATED);
+
         return null;
     }
 
     /**
-     * Get session id query param
-     *
-     * @param SessionManagerInterface $session
-     * @return string
+     * @inheritDoc
      */
     public function getSessionIdQueryParam(SessionManagerInterface $session)
     {
+        trigger_error('Session ID is not used as URL parameter anymore.', E_USER_DEPRECATED);
         $sessionName = $session->getName();
         if ($sessionName && isset($this->sidNameMap[$sessionName])) {
             return $this->sidNameMap[$sessionName];
@@ -116,57 +111,42 @@ class SidResolver implements SidResolverInterface
     }
 
     /**
-     * Set use session var instead of SID for URL
-     *
-     * @param bool $var
-     * @return $this
+     * @inheritDoc
      */
     public function setUseSessionVar($var)
     {
-        $this->_useSessionVar = (bool)$var;
+        trigger_error('Session ID is not used as URL parameter anymore.', E_USER_DEPRECATED);
+
         return $this;
     }
 
     /**
-     * Retrieve use flag session var instead of SID for URL
-     *
-     * @return bool
-     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @inheritDoc
      */
     public function getUseSessionVar()
     {
-        return $this->_useSessionVar;
+        trigger_error('Session ID is not used as URL parameter anymore.', E_USER_DEPRECATED);
+
+        return false;
     }
 
     /**
-     * Set Use session in URL flag
-     *
-     * @param bool $flag
-     * @return $this
+     * @inheritDoc
      */
     public function setUseSessionInUrl($flag = true)
     {
-        $this->_useSessionInUrl = (bool)$flag;
+        trigger_error('Session ID is not used as URL parameter anymore.', E_USER_DEPRECATED);
+
         return $this;
     }
 
     /**
-     * Retrieve use session in URL flag.
-     *
-     * @return bool
-     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @inheritDoc
      */
     public function getUseSessionInUrl()
     {
-        if ($this->_useSessionInUrl === null) {
-            //Using config value by default, can be overridden by using the
-            //setter.
-            $this->_useSessionInUrl = $this->scopeConfig->isSetFlag(
-                self::XML_PATH_USE_FRONTEND_SID,
-                $this->_scopeType
-            );
-        }
+        trigger_error('Session ID is not used as URL parameter anymore.', E_USER_DEPRECATED);
 
-        return $this->_useSessionInUrl;
+        return false;
     }
 }
