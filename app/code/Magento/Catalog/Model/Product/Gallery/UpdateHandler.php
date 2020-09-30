@@ -90,7 +90,8 @@ class UpdateHandler extends CreateHandler
                     $recordsToDelete[] = $image['value_id'];
                     $imagesToDelete[] = $image['file'];
                     $catalogPath = $this->mediaConfig->getBaseMediaPath();
-                    $isFile = $this->mediaDirectory->isFile($catalogPath . $this->mediaDirectory->getRelativePath($image['file']));
+                    $filePath = $this->mediaDirectory->getRelativePath($catalogPath . $image['file']);
+                    $isFile = $this->mediaDirectory->isFile($filePath);
                     // only delete physical files if they are not used by any other products and if this file exist
                     if ($isFile && !($this->resourceModel->countImageUses($image['file']) > 1)) {
                         $filesToDelete[] = ltrim($image['file'], '/');

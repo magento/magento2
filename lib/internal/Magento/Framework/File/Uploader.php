@@ -639,7 +639,7 @@ class Uploader
             $tmpName = trim($fileId['tmp_name']);
 
             $allowedFolders = [
-                $this->directoryList->getRoot() . sys_get_temp_dir(),
+                sys_get_temp_dir(),
                 $this->directoryList->getPath(DirectoryList::MEDIA),
                 $this->directoryList->getPath(DirectoryList::VAR_DIR),
                 $this->directoryList->getPath(DirectoryList::TMP),

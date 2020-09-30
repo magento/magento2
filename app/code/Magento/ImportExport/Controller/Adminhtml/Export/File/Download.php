@@ -13,6 +13,7 @@ use Magento\Framework\App\Response\Http\FileFactory;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\ImportExport\Controller\Adminhtml\Export as ExportController;
 use Magento\Framework\Filesystem;
+use Throwable;
 
 /**
  * Controller that download file by name.
@@ -63,11 +64,18 @@ class Download extends ExportController implements HttpGetActionInterface
         $exportDirectory = $this->filesystem->getDirectoryRead(DirectoryList::VAR_EXPORT);
 
         try {
-            if (empty($fileName) || !$exportDirectory->isExist($fileName)) {
-                $this->messageManager->addErrorMessage(__('Please provide valid export file name'));
+            $fileExist = $exportDirectory->isExist($fileName);
+        } catch (Throwable $e) {
+            $fileExist = false;
+        }
 
-                return $resultRedirect;
-            }
+        if (empty($fileName) || !$fileExist) {
+            $this->messageManager->addErrorMessage(__('Please provide valid export file name'));
+
+            return $resultRedirect;
+        }
+
+        try {
             $path = 'export/' . $fileName;
             $directory = $this->filesystem->getDirectoryRead(DirectoryList::VAR_DIR);
             if ($directory->isFile($path)) {
