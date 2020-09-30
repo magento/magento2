@@ -349,6 +349,13 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Customer\Console\Command\UpgradeHashAlgorithmCommand">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="resourceModel" xsi:type="object">Magento\Customer\Model\ResourceModel\Customer\Proxy</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\Customer\Api\CustomerRepositoryInterface">
         <plugin name="transactionWrapper" type="Magento\Customer\Model\Plugin\CustomerRepository\TransactionWrapper" sortOrder="-1"/>
     </type>
