@@ -156,7 +156,7 @@ QUERY;
     public function testResetPasswordTokenMismatched()
     {
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('The password must be at least 8 characters long, minimum of 3 different classes of characters: Lower Case, Upper Case, Digits, Special Characters.');
+        $this->expectExceptionMessage('The password token is mismatched. Reset and try again');
         $query = <<<QUERY
 mutation {
     resetPassword (
