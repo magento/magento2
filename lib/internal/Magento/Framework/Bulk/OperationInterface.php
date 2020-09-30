@@ -177,17 +177,17 @@ interface OperationInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Get operation key
      *
-     * @return int
+     * @return int|null
      * @since 103.0.1
      */
-    public function getOperationKey();
+    public function getOperationKey(): ?int;
 
     /**
      * Set operation key
      *
-     * @param int $operationKey
+     * @param int|null $operationKey
      * @return $this
      * @since 103.0.1
      */
-    public function setOperationKey(int $operationKey);
+    public function setOperationKey(?int $operationKey): self;
 }

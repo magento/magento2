@@ -25,6 +25,13 @@ $bulks = [
         'operation_count' => 6,
         'start_time' => '2009-10-10 00:00:00',
     ],
+    'started_searchable_second' => [
+        'uuid' => 'bulk-uuid-searchable-8',
+        'user_id' => 1,
+        'description' => 'Bulk Description',
+        'operation_count' => 1,
+        'start_time' => '2012-10-10 00:00:00',
+    ],
     'not_started' => [
         'uuid' => 'bulk-uuid-searchable-7',
         'user_id' => 1,
@@ -90,7 +97,7 @@ $operations = [
         'operation_key' => 5
     ],
     [
-        'bulk_uuid' => 'bulk-uuid-searchable-6-1',
+        'bulk_uuid' => 'bulk-uuid-searchable-8',
         'topic_name' => 'topic-5',
         'serialized_data' => json_encode(['entity_id' => 5]),
         'status' => OperationInterface::STATUS_TYPE_COMPLETE,
