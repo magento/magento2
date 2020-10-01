@@ -8,6 +8,7 @@
 use \Magento\Framework\App;
 use \Magento\Framework as MF;
 use \Magento\TestFramework as TF;
+
 return [
     MF\Stdlib\CookieManagerInterface::class => TF\CookieManager::class,
     MF\ObjectManager\DynamicConfigInterface::class => TF\ObjectManager\Configurator::class,
