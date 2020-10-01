@@ -56,16 +56,6 @@ class Config
     private $channel;
 
     /**
-     * @var AbstractConnection
-     */
-    private static $persistentConneciton;
-
-    /**
-     * @var AMQPChannel
-     */
-    private static $persistentChannel;
-
-    /**
      * Associative array of Amqp configuration
      *
      * @var array
@@ -175,16 +165,10 @@ class Config
      */
     public function getChannel()
     {
-        //If just new object was created
-        if (!isset($this->channel) && self::$persistentChannel && self::$persistentChannel->is_open()) {
-            return self::$persistentChannel;
-        }
-
         if (!isset($this->connection) || !isset($this->channel)) {
             $this->connection = $this->createConnection();
-            self::$persistentConneciton = $this->connection;
+
             $this->channel = $this->connection->channel();
-            self::$persistentChannel = $this->channel;
         }
         return $this->channel;
     }
@@ -227,16 +211,6 @@ class Config
         if (isset($this->connection)) {
             $this->connection->close();
             unset($this->connection);
-        }
-
-        if (self::$persistentConneciton && self::$persistentConneciton->isConnected()) {
-            self::$persistentConneciton->close();
-            self::$persistentConneciton = null;
-        }
-
-        if (self::$persistentChannel && self::$persistentChannel->is_open()) {
-            self::$persistentChannel->close();
-            self::$persistentChannel = null;
         }
     }
 }
