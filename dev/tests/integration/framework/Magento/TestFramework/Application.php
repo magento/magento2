@@ -7,10 +7,10 @@ namespace Magento\TestFramework;
 
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\DeploymentConfig\Reader;
-use Magento\Framework\App\Filesystem;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Autoload\AutoloaderInterface;
 use Magento\Framework\Config\ConfigOptionsListConstants;
+use Magento\Framework\Filesystem\Glob;
 use Magento\Framework\Mail;
 use Magento\TestFramework;
 use Psr\Log\LoggerInterface;
@@ -556,9 +556,9 @@ class Application
      */
     private function copyAppConfigFiles()
     {
-        $globalConfigFiles = Filesystem\Glob::glob(
+        $globalConfigFiles = Glob::glob(
             $this->_globalConfigDir . '/{di.xml,*/di.xml,db_schema.xml,vendor_path.php}',
-            Filesystem\Glob::GLOB_BRACE
+            Glob::GLOB_BRACE
         );
         foreach ($globalConfigFiles as $file) {
             $targetFile = $this->_configDir . str_replace($this->_globalConfigDir, '', $file);

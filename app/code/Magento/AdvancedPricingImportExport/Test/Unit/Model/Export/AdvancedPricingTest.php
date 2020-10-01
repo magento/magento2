@@ -306,7 +306,6 @@ class AdvancedPricingTest extends TestCase
 
     /**
      * Test export for current page
-     * @magentoAppIsolation enabled
      */
     public function testExportCurrentPageCalls()
     {

@@ -119,6 +119,8 @@ class ObjectManager extends \Magento\Framework\App\ObjectManager
     }
 
     /**
+     * Get object factory
+     *
      * @return \Magento\Framework\ObjectManager\FactoryInterface|\Magento\Framework\ObjectManager\Factory\Factory
      */
     public function getFactory()
