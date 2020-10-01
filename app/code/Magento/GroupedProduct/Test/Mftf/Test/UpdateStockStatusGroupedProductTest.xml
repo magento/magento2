@@ -57,7 +57,12 @@
             <argument name="attributes" value="UpdateAttributeQtyAndStockToInStock"/>
             <argument name="product" value="$$createFirstSimpleProduct$$"/>
         </actionGroup>
-        <!--5.Check stock status of grouped product. Stock status should be "In Stock"-->
+        <!--5.Run cron for start consumer -->
+        <actionGroup ref="CliConsumerStartActionGroup" stepKey="startMessageQueueSecond">
+            <argument name="consumerName" value="{{AdminInventoryMassUpdateConsumerData.consumerName}}"/>
+            <argument name="maxMessages" value="{{AdminInventoryMassUpdateConsumerData.messageLimit}}"/>
+        </actionGroup>
+        <!--6.Check stock status of grouped product. Stock status should be "In Stock"-->
         <actionGroup ref="AssertAdminProductStockStatusActionGroup" stepKey="checkProductInStock">
             <argument name="productId" value="$$createGroupedProduct.id$$"/>
             <argument name="stockStatus" value="In Stock"/>
