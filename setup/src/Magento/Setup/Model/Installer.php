@@ -32,6 +32,7 @@ use Magento\Framework\Module\ModuleList\Loader as ModuleLoader;
 use Magento\Framework\Module\ModuleListInterface;
 use Magento\Framework\Module\ModuleResource;
 use Magento\Framework\Mview\TriggerCleaner;
+use Magento\Framework\Setup\ConsoleLoggerInterface;
 use Magento\Framework\Setup\Declaration\Schema\DryRunLogger;
 use Magento\Framework\Setup\FilePermissions;
 use Magento\Framework\Setup\InstallDataInterface;
@@ -263,7 +264,7 @@ class Installer
      * @param ModuleListInterface $moduleList
      * @param ModuleLoader $moduleLoader
      * @param AdminAccountFactory $adminAccountFactory
-     * @param LoggerInterface $log
+     * @param ConsoleLoggerInterface $log
      * @param ConnectionFactory $connectionFactory
      * @param MaintenanceMode $maintenanceMode
      * @param Filesystem $filesystem
@@ -288,7 +289,7 @@ class Installer
         ModuleListInterface $moduleList,
         ModuleLoader $moduleLoader,
         AdminAccountFactory $adminAccountFactory,
-        LoggerInterface $log,
+        ConsoleLoggerInterface $log,
         ConnectionFactory $connectionFactory,
         MaintenanceMode $maintenanceMode,
         Filesystem $filesystem,
@@ -1487,7 +1488,7 @@ class Installer
         $cacheManager = $this->objectManagerProvider->get()->get(Manager::class);
         $types = empty($types) ? $cacheManager->getAvailableTypes() : $types;
         $cacheManager->flush($types);
-        $this->log->log('Cache types ' . implode(',', $types) . ' flushed successfully');
+        $this->log->logSuccess('Cache types ' . implode(',', $types) . ' flushed successfully');
     }
 
     /**
