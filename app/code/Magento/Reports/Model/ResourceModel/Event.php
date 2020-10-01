@@ -93,7 +93,9 @@ class Event extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $skipIds = []
     ) {
         $idFieldName = $collection->getResource()->getIdFieldName();
-        $predefinedStoreIds = ($collection->getStoreId() === null) ?: [$collection->getStoreId()];
+        $predefinedStoreIds = ($collection->getStoreId() === null)
+            ? null
+            : [$collection->getStoreId()];
 
         $derivedSelect = $this->getConnection()
             ->select()
