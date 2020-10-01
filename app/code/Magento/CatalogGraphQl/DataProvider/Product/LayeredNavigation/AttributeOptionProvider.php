@@ -126,7 +126,8 @@ class AttributeOptionProvider
                 $result[$option['attribute_code']] = [
                     'attribute_id' => $option['attribute_id'],
                     'attribute_code' => $option['attribute_code'],
-                    'attribute_label' => $option['attribute_store_label'] ? $option['attribute_store_label'] : $option['attribute_label'],
+                    'attribute_label' => $option['attribute_store_label']
+                        ? $option['attribute_store_label'] : $option['attribute_label'],
                     'options' => [],
                 ];
             }
