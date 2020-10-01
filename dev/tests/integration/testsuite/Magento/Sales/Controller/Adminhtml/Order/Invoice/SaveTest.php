@@ -7,38 +7,53 @@ declare(strict_types=1);
 
 namespace Magento\Sales\Controller\Adminhtml\Order\Invoice;
 
+use Magento\Framework\Escaper;
+use Magento\Sales\Api\Data\InvoiceInterface;
+use Magento\Sales\Model\Order;
 use PHPUnit\Framework\Constraint\StringContains;
 
 /**
- * Class tests invoice creation in backend.
+ * Class tests invoice creation in admin panel.
+ *
+ * @see \Magento\Sales\Controller\Adminhtml\Order\Invoice\Save
  *
  * @magentoDbIsolation enabled
  * @magentoAppArea adminhtml
- * @magentoDataFixture Magento/Sales/_files/order.php
  */
 class SaveTest extends AbstractInvoiceControllerTest
 {
-    /**
-     * @var string
-     */
+    /** @var string  */
     protected $uri = 'backend/sales/order_invoice/save';
 
+    /** @var Escaper */
+    private $escaper;
+
     /**
+     * @inheritdoc
+     */
+    protected function setUp()
+    {
+        parent::setUp();
+
+        $this->escaper = $this->_objectManager->get(Escaper::class);
+    }
+
+    /**
+     * @magentoDataFixture Magento/Sales/_files/order.php
+     *
      * @return void
      */
     public function testSendEmailOnInvoiceSave(): void
     {
-        $order = $this->prepareRequest();
-        $this->dispatch('backend/sales/order_invoice/save');
-
-        $this->assertSessionMessages(
-            $this->equalTo([(string)__('The invoice has been created.')]),
-            \Magento\Framework\Message\MessageInterface::TYPE_SUCCESS
-        );
-        $this->assertRedirect($this->stringContains('sales/order/view/order_id/' . $order->getEntityId()));
-
+        $order = $this->getOrder('100000001');
+        $itemId = $order->getItemsCollection()->getFirstItem()->getId();
+        $post = $this->hydratePost([$itemId => 2]);
+        $this->prepareRequest($post, ['order_id' => $order->getEntityId()]);
+        $this->dispatch($this->uri);
         $invoice = $this->getInvoiceByOrder($order);
+        $this->checkSuccess($invoice, 2);
         $message = $this->transportBuilder->getSentMessage();
+        $this->assertNotNull($message);
         $subject = __('Invoice for your %1 order', $order->getStore()->getFrontendName())->render();
         $messageConstraint = $this->logicalAnd(
             new StringContains($invoice->getBillingAddress()->getName()),
@@ -49,9 +64,113 @@ class SaveTest extends AbstractInvoiceControllerTest
                 "Your Invoice #{$invoice->getIncrementId()} for Order #{$order->getIncrementId()}"
             )
         );
-
         $this->assertEquals($message->getSubject(), $subject);
-        $this->assertThat($message->getBody()->getParts()[0]->getRawContent(), $messageConstraint);
+        $bodyParts = $message->getBody()->getParts();
+        $this->assertThat(reset($bodyParts)->getRawContent(), $messageConstraint);
+    }
+
+    /**
+     * @magentoConfigFixture current_store sales_email/invoice/enabled 0
+     *
+     * @magentoDataFixture Magento/Sales/_files/order.php
+     *
+     * @return void
+     */
+    public function testSendEmailOnInvoiceSaveWithDisabledConfig(): void
+    {
+        $order = $this->getOrder('100000001');
+        $post = $this->hydratePost([$order->getItemsCollection()->getFirstItem()->getId() => 2]);
+        $this->prepareRequest($post, ['order_id' => $order->getEntityId()]);
+        $this->dispatch($this->uri);
+        $this->checkSuccess($this->getInvoiceByOrder($order), 2);
+        $this->assertNull($this->transportBuilder->getSentMessage());
+    }
+
+    /**
+     * @dataProvider invoiceDataProvider
+     *
+     * @magentoDataFixture Magento/Sales/_files/order.php
+     *
+     * @param int $invoicedItemsQty
+     * @param string $commentMessage
+     * @param bool $doShipment
+     * @return void
+     */
+    public function testSuccessfulInvoice(
+        int $invoicedItemsQty,
+        string $commentMessage = '',
+        bool $doShipment = false
+    ): void {
+        $order = $this->getOrder('100000001');
+        $post = $this->hydratePost(
+            [$order->getItemsCollection()->getFirstItem()->getId() => $invoicedItemsQty],
+            $commentMessage,
+            $doShipment
+        );
+        $this->prepareRequest($post, ['order_id' => $order->getEntityId()]);
+        $this->dispatch($this->uri);
+        $this->checkSuccess($this->getInvoiceByOrder($order), $invoicedItemsQty, $commentMessage, $doShipment);
+    }
+
+    /**
+     * @return array
+     */
+    public function invoiceDataProvider(): array
+    {
+        return [
+            'with_comment_message' => [
+                'invoiced_items_qty' => 2,
+                'comment_message' => 'test comment message',
+            ],
+            'partial_invoice' => [
+                'invoiced_items_qty' => 1,
+            ],
+            'with_do_shipment' => [
+                'invoiced_items_qty' => 2,
+                'comment_message' => '',
+                'do_shipment' => true,
+            ],
+        ];
+    }
+
+    /**
+     * @return void
+     */
+    public function testWitNoExistingOrder(): void
+    {
+        $expectedMessage = (string)__('The order no longer exists.');
+        $this->prepareRequest(['order_id' => 899989]);
+        $this->dispatch($this->uri);
+        $this->assertErrorResponse($expectedMessage);
+    }
+
+    /**
+     * @magentoDataFixture Magento/Sales/_files/order_with_bundle_and_invoiced.php
+     *
+     * @return void
+     */
+    public function testCanNotInvoiceOrder(): void
+    {
+        $expectedMessage = (string)__('The order does not allow an invoice to be created.');
+        $order = $this->getOrder('100000001');
+        $this->prepareRequest([], ['order_id' => $order->getEntityId()]);
+        $this->dispatch($this->uri);
+        $this->assertErrorResponse($expectedMessage);
+    }
+
+    /**
+     * @magentoDataFixture Magento/Sales/_files/order.php
+     *
+     * @return void
+     */
+    public function testInvoiceWithoutQty(): void
+    {
+        $expectedMessage = (string)__('The invoice can\'t be created without products. Add products and try again.');
+        $order = $this->getOrder('100000001');
+        $post = $this->hydratePost([$order->getItemsCollection()->getFirstItem()->getId() => '0']);
+        $this->prepareRequest($post, ['order_id' => $order->getEntityId()]);
+        $this->dispatch($this->uri);
+        $this->assertErrorResponse($this->escaper->escapeHtml($expectedMessage));
     }
 
     /**
@@ -75,23 +194,46 @@ class SaveTest extends AbstractInvoiceControllerTest
     }
 
     /**
-     * @param array $params
-     * @return \Magento\Sales\Api\Data\OrderInterface|null
+     * Check error response
+     *
+     * @param string $expectedMessage
+     * @return void
      */
-    private function prepareRequest(array $params = [])
+    private function assertErrorResponse(string $expectedMessage): void
     {
-        $order = $this->getOrder('100000001');
-        $this->getRequest()->setMethod('POST');
-        $this->getRequest()->setParams(
-            [
-                'order_id' => $order->getEntityId(),
-                'form_key' => $this->formKey->getFormKey(),
-            ]
+        $this->assertRedirect($this->stringContains('sales/order_invoice/new'));
+        $this->assertSessionMessages($this->contains($expectedMessage));
+    }
+
+    /**
+     * Check that invoice was successfully created
+     *
+     * @param InvoiceInterface $invoice
+     * @param int $invoicedItemsQty
+     * @param string|null $commentMessage
+     * @param bool $doShipment
+     * @return void
+     */
+    private function checkSuccess(
+        InvoiceInterface $invoice,
+        int $invoicedItemsQty,
+        ?string $commentMessage = null,
+        bool $doShipment = false
+    ): void {
+        $message = $doShipment ? 'You created the invoice and shipment.' : 'The invoice has been created.';
+        $expectedState = $doShipment ? Order::STATE_COMPLETE : Order::STATE_PROCESSING;
+        $this->assertNotNull($invoice->getEntityId());
+        $this->assertEquals($invoicedItemsQty, (int)$invoice->getTotalQty());
+        $order = $invoice->getOrder();
+        $this->assertEquals($expectedState, $order->getState());
+
+        if ($commentMessage) {
+            $this->assertEquals($commentMessage, $invoice->getCustomerNote());
+        }
+
+        $this->assertRedirect(
+            $this->stringContains(sprintf('sales/order/view/order_id/%u', (int)$order->getEntityId()))
         );
-
-        $data = $params ?? [];
-        $this->getRequest()->setPostValue($data);
-
-        return $order;
+        $this->assertSessionMessages($this->contains((string)__($message)));
     }
 }
