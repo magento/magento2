@@ -3,42 +3,58 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Ui\Model;
 
-class BookmarkManagement implements \Magento\Ui\Api\BookmarkManagementInterface
+use Magento\Authorization\Model\UserContextInterface;
+use Magento\Framework\Api\FilterBuilder;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Ui\Api\BookmarkManagementInterface;
+use Magento\Ui\Api\BookmarkRepositoryInterface;
+
+/**
+ * Bookmark Management class provide functional for retrieving bookmarks by params
+ * @SuppressWarnings(PHPMD.LongVariable)
+ */
+class BookmarkManagement implements BookmarkManagementInterface
 {
     /**
-     * @var \Magento\Ui\Api\BookmarkRepositoryInterface
+     * @var BookmarkRepositoryInterface
      */
     protected $bookmarkRepository;
 
     /**
-     * @var \Magento\Framework\Api\SearchCriteriaBuilder
+     * @var SearchCriteriaBuilder
      */
     protected $searchCriteriaBuilder;
 
     /**
-     * @var \Magento\Framework\Api\FilterBuilder
+     * @var FilterBuilder
      */
     protected $filterBuilder;
 
     /**
-     * @var \Magento\Authorization\Model\UserContextInterface
+     * @var UserContextInterface
      */
     protected $userContext;
 
     /**
-     * @param \Magento\Ui\Api\BookmarkRepositoryInterface $bookmarkRepository
-     * @param \Magento\Framework\Api\FilterBuilder $filterBuilder
-     * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
-     * @param \Magento\Authorization\Model\UserContextInterface $userContext
+     * @var array
+     */
+    private $bookmarkRegistry = [];
+
+    /**
+     * @param BookmarkRepositoryInterface $bookmarkRepository
+     * @param FilterBuilder $filterBuilder
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param UserContextInterface $userContext
      */
     public function __construct(
-        \Magento\Ui\Api\BookmarkRepositoryInterface $bookmarkRepository,
-        \Magento\Framework\Api\FilterBuilder $filterBuilder,
-        \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
-        \Magento\Authorization\Model\UserContextInterface $userContext
+        BookmarkRepositoryInterface $bookmarkRepository,
+        FilterBuilder $filterBuilder,
+        SearchCriteriaBuilder $searchCriteriaBuilder,
+        UserContextInterface $userContext
     ) {
         $this->bookmarkRepository = $bookmarkRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
@@ -47,9 +63,12 @@ class BookmarkManagement implements \Magento\Ui\Api\BookmarkManagementInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Create search criteria builder with namespace and user filters
+     *
+     * @param $namespace
+     * @return void
      */
-    public function loadByNamespace($namespace)
+    private function prepareSearchCriteriaBuilderByNamespace($namespace): void
     {
         $userIdFilter = $this->filterBuilder
             ->setField('user_id')
@@ -64,11 +83,16 @@ class BookmarkManagement implements \Magento\Ui\Api\BookmarkManagementInterface
 
         $this->searchCriteriaBuilder->addFilters([$userIdFilter]);
         $this->searchCriteriaBuilder->addFilters([$namespaceFilter]);
+    }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function loadByNamespace($namespace)
+    {
+        $this->prepareSearchCriteriaBuilderByNamespace($namespace);
         $searchCriteria = $this->searchCriteriaBuilder->create();
-        $searchResults = $this->bookmarkRepository->getList($searchCriteria);
-
-        return $searchResults;
+        return $this->bookmarkRepository->getList($searchCriteria);
     }
 
     /**
@@ -76,35 +100,24 @@ class BookmarkManagement implements \Magento\Ui\Api\BookmarkManagementInterface
      */
     public function getByIdentifierNamespace($identifier, $namespace)
     {
-        $userIdFilter = $this->filterBuilder
-            ->setField('user_id')
-            ->setConditionType('eq')
-            ->setValue($this->userContext->getUserId())
-            ->create();
-        $identifierFilter = $this->filterBuilder
-            ->setField('identifier')
-            ->setConditionType('eq')
-            ->setValue($identifier)
-            ->create();
-        $namespaceFilter = $this->filterBuilder
-            ->setField('namespace')
-            ->setConditionType('eq')
-            ->setValue($namespace)
-            ->create();
+        if (!isset($this->bookmarkRegistry[$identifier . $namespace])) {
+            $this->prepareSearchCriteriaBuilderByNamespace($namespace);
+            $identifierFilter = $this->filterBuilder
+                ->setField('identifier')
+                ->setConditionType('eq')
+                ->setValue($identifier)
+                ->create();
+            $this->searchCriteriaBuilder->addFilters([$identifierFilter]);
 
-        $this->searchCriteriaBuilder->addFilters([$userIdFilter]);
-        $this->searchCriteriaBuilder->addFilters([$identifierFilter]);
-        $this->searchCriteriaBuilder->addFilters([$namespaceFilter]);
-
-        $searchCriteria = $this->searchCriteriaBuilder->create();
-        $searchResults = $this->bookmarkRepository->getList($searchCriteria);
-        if ($searchResults->getTotalCount() > 0) {
-            foreach ($searchResults->getItems() as $searchResult) {
-                $bookmark = $this->bookmarkRepository->getById($searchResult->getId());
-                return $bookmark;
+            $searchCriteria = $this->searchCriteriaBuilder->create();
+            $searchResults = $this->bookmarkRepository->getList($searchCriteria);
+            if ($searchResults->getTotalCount() > 0) {
+                $items = $searchResults->getItems();
+                $this->bookmarkRegistry[$identifier . $namespace] = array_shift($items);
+                return $this->bookmarkRegistry[$identifier . $namespace];
             }
         }
 
-        return null;
+        return $this->bookmarkRegistry[$identifier . $namespace] ?? null;
     }
 }

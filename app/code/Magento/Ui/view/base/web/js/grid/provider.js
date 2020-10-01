@@ -47,14 +47,22 @@ define([
             _.bindAll(this, 'onReload');
 
             this._super()
-                .initStorage()
-                .clearData();
+                .initStorage();
 
-            // Load data when there will
-            // be no more pending assets.
-            resolver(this.reload, this);
+            /* Call set data with predefined data for correct rendering action column */
+            this.setData(this.data);
+
+            resolver(this.triggerReloaded, this);
 
             return this;
+        },
+
+        /**
+         * Trigger reloaded event
+         */
+        triggerReloaded: function () {
+            this.firstLoad = false;
+            this.trigger('reloaded');
         },
 
         /**

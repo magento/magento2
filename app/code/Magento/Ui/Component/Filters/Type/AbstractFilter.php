@@ -3,8 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Ui\Component\Filters\Type;
 
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Ui\Api\BookmarkManagementInterface;
 use Magento\Ui\Component\AbstractComponent;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
@@ -57,6 +61,8 @@ abstract class AbstractFilter extends AbstractComponent
      * @param FilterModifier $filterModifier
      * @param array $components
      * @param array $data
+     * @param BookmarkManagementInterface|null $bookmarkManagement
+     * @param RequestInterface|null $request
      */
     public function __construct(
         ContextInterface $context,
@@ -64,13 +70,38 @@ abstract class AbstractFilter extends AbstractComponent
         FilterBuilder $filterBuilder,
         FilterModifier $filterModifier,
         array $components = [],
-        array $data = []
+        array $data = [],
+        BookmarkManagementInterface $bookmarkManagement = null,
+        RequestInterface $request = null
     ) {
         $this->uiComponentFactory = $uiComponentFactory;
         $this->filterBuilder = $filterBuilder;
         parent::__construct($context, $components, $data);
-        $this->filterData = $this->getContext()->getFiltersParams();
         $this->filterModifier = $filterModifier;
+
+        $bookmarkManagement = $bookmarkManagement ?: ObjectManager::getInstance()
+            ->get(BookmarkManagementInterface::class);
+        $request = $request ?: ObjectManager::getInstance()->get(RequestInterface::class);
+
+        $filterData = $this->getContext()->getFiltersParams();
+        if (!$request->isAjax()) {
+            $bookmark = $bookmarkManagement->getByIdentifierNamespace(
+                'current',
+                $context->getNamespace()
+            );
+            if (null !== $bookmark) {
+                $bookmarkConfig = $bookmark->getConfig();
+                $filterData = $bookmarkConfig['current']['filters']['applied'] ?? [];
+
+                $request->setParams(
+                    [
+                        'paging' => $bookmarkConfig['current']['paging'] ?? []
+                    ]
+                );
+            }
+        }
+
+        $this->filterData = $filterData;
     }
 
     /**
