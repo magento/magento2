@@ -9,7 +9,7 @@ namespace Magento\Framework\Setup;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 
-class ConsoleLogger implements LoggerInterface
+class ConsoleLogger implements ConsoleLoggerInterface
 {
     /**
      * Indicator of whether inline output is started
