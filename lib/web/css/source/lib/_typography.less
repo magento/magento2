@@ -32,6 +32,57 @@
     @font-weight: normal,
     @font-style: normal,
     @font-display: auto
+) when not (@font-format = false) and (@font-format = 'ttf') {
+    @font-face {
+        font-family: @family-name;
+        src: url('@{font-path}.@{font-format}') format('truetype');
+        font-weight: @font-weight;
+        font-style: @font-style;
+        font-display: @font-display;
+    }
+}
+
+.lib-font-face(
+    @family-name,
+    @font-path,
+    @font-format: false,
+    @font-weight: normal,
+    @font-style: normal,
+    @font-display: auto
+) when not (@font-format = false) and (@font-format = 'eot') {
+    @font-face {
+        font-family: @family-name;
+        src: url('@{font-path}.@{font-format}') format('embedded-opentype');
+        font-weight: @font-weight;
+        font-style: @font-style;
+        font-display: @font-display;
+    }
+}
+
+.lib-font-face(
+    @family-name,
+    @font-path,
+    @font-format: false,
+    @font-weight: normal,
+    @font-style: normal,
+    @font-display: auto
+) when not (@font-format = false) and (@font-format = 'otf') {
+    @font-face {
+        font-family: @family-name;
+        src: url('@{font-path}.@{font-format}') format('opentype');
+        font-weight: @font-weight;
+        font-style: @font-style;
+        font-display: @font-display;
+    }
+}
+
+.lib-font-face(
+    @family-name,
+    @font-path,
+    @font-format: false,
+    @font-weight: normal,
+    @font-style: normal,
+    @font-display: auto
 ) when not (@font-format = false) {
     @font-face {
         font-family: @family-name;
