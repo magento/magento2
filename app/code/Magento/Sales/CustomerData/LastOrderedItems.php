@@ -23,7 +23,7 @@ class LastOrderedItems implements SectionSourceInterface
     const SIDEBAR_ORDER_LIMIT = 5;
 
     /**
-     * @var \Magento\Sales\Model\ResourceModel\Order\CollectionFactory
+     * @var \Magento\Sales\Model\ResourceModel\Order\CollectionFactoryInterface
      */
     protected $_orderCollectionFactory;
 
@@ -68,7 +68,7 @@ class LastOrderedItems implements SectionSourceInterface
     private $logger;
 
     /**
-     * @param \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $orderCollectionFactory
+     * @param \Magento\Sales\Model\ResourceModel\Order\CollectionFactoryInterface $orderCollectionFactory
      * @param \Magento\Sales\Model\Order\Config $orderConfig
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
@@ -77,7 +77,7 @@ class LastOrderedItems implements SectionSourceInterface
      * @param LoggerInterface $logger
      */
     public function __construct(
-        \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $orderCollectionFactory,
+        \Magento\Sales\Model\ResourceModel\Order\CollectionFactoryInterface $orderCollectionFactory,
         \Magento\Sales\Model\Order\Config $orderConfig,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
@@ -103,7 +103,7 @@ class LastOrderedItems implements SectionSourceInterface
     {
         $customerId = $this->_customerSession->getCustomerId();
 
-        $orders = $this->_orderCollectionFactory->create()
+        $orders = $this->_orderCollectionFactory->create($customerId)
             ->addAttributeToFilter('customer_id', $customerId)
             ->addAttributeToFilter('status', ['in' => $this->_orderConfig->getVisibleOnFrontStatuses()])
             ->addAttributeToSort('created_at', 'desc')
@@ -138,7 +138,7 @@ class LastOrderedItems implements SectionSourceInterface
                     $this->logger->critical($noEntityException);
                     continue;
                 }
-                if (isset($product) && in_array($website, $product->getWebsiteIds())) {
+                if (in_array($website, $product->getWebsiteIds())) {
                     $url = $product->isVisibleInSiteVisibility() ? $product->getProductUrl() : null;
                     $items[] = [
                         'id' => $item->getId(),
@@ -188,7 +188,7 @@ class LastOrderedItems implements SectionSourceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getSectionData()
     {
