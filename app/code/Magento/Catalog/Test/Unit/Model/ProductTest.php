@@ -69,6 +69,8 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
+ * Unit test for Product class
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
@@ -313,10 +315,7 @@ class ProductTest extends TestCase
 
         $contextMock = $this->createPartialMock(
             Context::class,
-            ['getEventDispatcher', 'getCacheManager', 'getAppState', 'getActionValidator'],
-            [],
-            '',
-            false
+            ['getEventDispatcher', 'getCacheManager', 'getAppState', 'getActionValidator']
         );
         $contextMock->expects($this->any())->method('getAppState')->willReturn($this->appStateMock);
         $contextMock->expects($this->any())
@@ -619,7 +618,7 @@ class ProductTest extends TestCase
 
         $result = $product->getCategoryCollection();
 
-        $productIdCachedActual = $this->getPropertyValue($product, '_productIdCached', $productIdCached);
+        $productIdCachedActual = $this->getPropertyValue($product, '_productIdCached');
         $this->assertEquals($getIdResult, $productIdCachedActual);
         $this->assertEquals($initCategoryCollection, $result);
     }
@@ -1056,6 +1055,8 @@ class ProductTest extends TestCase
 
     /**
      * Configure environment for `testSave` and `testSaveAndDuplicate` methods
+     *
+     * @return void
      */
     protected function configureSaveTest()
     {
@@ -1330,22 +1331,25 @@ class ProductTest extends TestCase
     {
         $mediaEntries =
             [
-                'images' => [
-                    [
-                        'value_id' => 1,
-                        'file' => 'imageFile.jpg',
-                        'media_type' => 'image',
-                    ],
-                    [
-                        'value_id' => 3,
-                        'file' => 'imageFile.jpg',
-                    ],
-                    [
-                        'value_id' => 2,
-                        'file' => 'smallImageFile.jpg',
-                        'media_type' => 'image',
-                    ],
+            'images' => [
+                [
+                    'value_id' => 1,
+                    'file' => 'imageFile.jpg',
+                    'media_type' => 'image',
+                    'position' => 1,
+                ],
+                [
+                    'value_id' => 3,
+                    'file' => 'imageFile.jpg',
+                    'position' => 2,
+                ],
+                [
+                    'value_id' => 2,
+                    'file' => 'smallImageFile.jpg',
+                    'media_type' => 'image',
+                    'position' => 3,
                 ]
+              ]
             ];
         $expectedImageDataObject = new DataObject(
             [
@@ -1355,6 +1359,7 @@ class ProductTest extends TestCase
                 'url' => 'http://magento.dev/pub/imageFile.jpg',
                 'id' => 1,
                 'path' => '/var/www/html/pub/imageFile.jpg',
+                'position' => 1,
             ]
         );
         $expectedSmallImageDataObject = new DataObject(
@@ -1365,6 +1370,7 @@ class ProductTest extends TestCase
                 'url' => 'http://magento.dev/pub/smallImageFile.jpg',
                 'id' => 2,
                 'path' => '/var/www/html/pub/smallImageFile.jpg',
+                'position' => 3,
             ]
         );
 

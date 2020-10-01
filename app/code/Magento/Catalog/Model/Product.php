@@ -1033,7 +1033,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function eavReindexCallback()
     {
-        if ($this->isObjectNew() || $this->isDataChanged($this)) {
+        if ($this->isObjectNew() || $this->isDataChanged()) {
             $this->_productEavIndexerProcessor->reindexRow($this->getEntityId());
         }
     }
@@ -1168,8 +1168,8 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * Get product tier price for the customer, based on qty of this product
      *
-     * @param   float $qty
-     * @return  float|array
+     * @param float $qty
+     * @return float|array
      */
     public function getTierPrice($qty = null)
     {
@@ -1179,7 +1179,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * Get formatted by currency product price
      *
-     * @return  array|double
+     * @return array|float
      * @since 102.0.6
      */
     public function getFormattedPrice()
@@ -1547,7 +1547,18 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         }
         if (!$this->getData('media_gallery_images')->count() && is_array($this->getMediaGallery('images'))) {
             $images = $this->getData('media_gallery_images');
-            foreach ($this->getMediaGallery('images') as $image) {
+            $mediaGallery = $this->getMediaGallery('images');
+            usort(
+                $mediaGallery,
+                function (array $media, array $compare): int {
+                    $posA = (int)$media['position'];
+                    $posB = (int)$compare['position'];
+
+                    return $posA <=> $posB;
+                }
+            );
+
+            foreach ($mediaGallery as $image) {
                 if (!empty($image['disabled'])
                     || !empty($image['removed'])
                     || empty($image['value_id'])
