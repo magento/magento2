@@ -207,13 +207,12 @@ class EventTest extends TestCase
         $selectMock
             ->expects($this->any())
             ->method('where')
-            ->withConsecutive([
+            ->willReturnMap([
                 ['event_type_id = ?', 1],
                 ['subject_id = ?', 1],
                 ['subtype = ?', 1],
                 ['store_id IN(?)', $storeIdSelect]
-            ])
-            ->willReturn($selectMock);
+            ]);
 
         $this->connectionMock
             ->expects($this->once())
