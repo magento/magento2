@@ -7,16 +7,16 @@
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="StorefrontGuestCheckoutUsingFreeShippingAndTaxesTest">
+    <test name="StorefrontGuestCheckoutUsingFreeShippingAndTaxesTest" deprecated="Use StorefrontVerifyGuestCheckoutUsingFreeShippingAndTaxesTest">
         <annotations>
             <stories value="Checkout"/>
-            <title value="Verify guest checkout using free shipping and tax variations"/>
+            <title value="DEPRECATED. Verify guest checkout using free shipping and tax variations"/>
             <description value="Verify guest checkout using free shipping and tax variations"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14709"/>
             <group value="mtf_migrated"/>
             <skip>
-                <issueId value="MC-18802"/>
+                <issueId value="DEPRECATED">Use StorefrontVerifyGuestCheckoutUsingFreeShippingAndTaxesTest</issueId>
             </skip>
         </annotations>
 
