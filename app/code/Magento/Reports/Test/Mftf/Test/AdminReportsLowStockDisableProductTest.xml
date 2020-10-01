@@ -10,19 +10,21 @@
     <test name="AdminReportsLowStockDisableProductTest">
         <annotations>
             <features value="Reports"/>
+            <stories value="Disabled product doesn't present on 'Low Stock' report"/>
             <group value="reports"/>
             <title value="The disabled product doesn't present on 'Low Stock' report."/>
             <description value="A product must don't presents on 'Low Stock' report if the product is disabled."/>
+            <severity value="MAJOR"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
             <!-- Created disabled simple product with stock quantity zero -->
             <createData entity="SimpleProductDisabledStockQuantityZero" stepKey="createProduct"/>
         </before>
         <after>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToReportsLowStockPage">

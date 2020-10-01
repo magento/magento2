@@ -26,18 +26,20 @@
             </createData>
 
             <!-- Perform reindex and flush cache -->
-            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
-            <amOnPage url="{{StorefrontHomePage.url}}" stepKey="amOnStorefrontPage1"/>
-            <waitForPageLoad stepKey="waitForPageLoad1"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
+            <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="amOnStorefrontPage1"/>
         </before>
         <after>
             <deleteData createDataKey="createProduct1" stepKey="deleteSimpleProduct1"/>
             <deleteData createDataKey="createCategory1" stepKey="deleteCategory1"/>
 
             <!-- Delete all search terms -->
-            <amOnPage url="{{AdminCatalogSearchTermIndexPage.url}}" stepKey="openAdminCatalogSearchTermIndexPage"/>
-            <waitForPageLoad stepKey="waitForAdminCatalogSearchTermIndexPageLoad"/>
+            <actionGroup ref="AdminOpenCatalogSearchTermIndexPageActionGroup" stepKey="openAdminCatalogSearchTermIndexPage"/>
             <comment userInput="Delete all search terms" stepKey="deleteAllSearchTermsComment"/>
             <actionGroup ref="AdminDeleteAllSearchTermsActionGroup" stepKey="deleteAllSearchTerms"/>
 
@@ -48,10 +50,9 @@
             <argument name="phrase" value="$$createProduct1.name$$"/>
         </actionGroup>
 
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin1"/>
 
-        <amOnPage url="{{AdminCatalogSearchTermIndexPage.url}}" stepKey="openAdminCatalogSearchTermIndexPage1"/>
-        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <actionGroup ref="AdminOpenCatalogSearchTermIndexPageActionGroup" stepKey="openAdminCatalogSearchTermIndexPage1"/>
 
         <actionGroup ref="AdminSearchTermFilterBySearchQueryActionGroup" stepKey="filterByFirstSearchQuery1">
             <argument name="searchQuery" value="$$createProduct1.name$$"/>
@@ -64,15 +65,13 @@
             <argument name="searchTerm" value="UpdatedSearchTermData1"/>
         </actionGroup>
 
-        <amOnPage url="{{AdminCatalogSearchTermIndexPage.url}}" stepKey="openAdminCatalogSearchTermIndexPage2"/>
-        <waitForPageLoad stepKey="waitForPageLoad3"/>
+        <actionGroup ref="AdminOpenCatalogSearchTermIndexPageActionGroup" stepKey="openAdminCatalogSearchTermIndexPage2"/>
 
         <actionGroup ref="AdminSearchTermFilterBySearchQueryActionGroup" stepKey="filterByFirstSearchQuery2">
             <argument name="searchQuery" value="{{UpdatedSearchTermData1.query_text}}"/>
         </actionGroup>
 
-        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="amOnStorefrontPage2"/>
-        <waitForPageLoad stepKey="waitForPageLoad4"/>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="amOnStorefrontPage2"/>
 
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchByProductName2">
             <argument name="phrase" value="{{UpdatedSearchTermData1.query_text}}"/>

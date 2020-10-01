@@ -74,7 +74,7 @@ class AsyncBulkScheduleTest extends WebapiAbstract
      */
     private $registry;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->logFilePath = TESTS_TEMP_DIR . "/MessageQueueTestLog.txt";
@@ -194,11 +194,12 @@ class AsyncBulkScheduleTest extends WebapiAbstract
      * @param string $sku
      * @param string|null $storeCode
      * @dataProvider productGetDataProvider
-     * @expectedException \Exception
-     * @expectedExceptionMessage Specified request cannot be processed.
      */
     public function testGETRequestToAsyncBulk($sku, $storeCode = null)
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Specified request cannot be processed.');
+
         $this->_markTestAsRestOnly();
         $serviceInfo = [
             'rest' => [
@@ -216,7 +217,7 @@ class AsyncBulkScheduleTest extends WebapiAbstract
         $this->assertNull($response);
     }
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         $this->clearProducts();
         $this->publisherConsumerController->stopConsumers();

@@ -20,7 +20,7 @@
         </annotations>
 
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
             <!-- Enable Cash On Delivery payment method -->
             <magentoCLI command="config:set {{EnableCashOnDeliveryConfigData.path}} {{EnableCashOnDeliveryConfigData.value}}" stepKey="enableCashOnDeliveryPayment"/>
@@ -59,9 +59,7 @@
         <!-- Select Cash On Delivery payment method -->
         <waitForElementVisible selector="{{AdminOrderFormPaymentSection.paymentBlock}}" stepKey="waitForPaymentOptions"/>
         <checkOption selector="{{AdminOrderFormPaymentSection.cashOnDeliveryOption}}" stepKey="selectCashOnDeliveryPaymentOption"/>
-
-        <!-- Submit order -->
-        <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" stepKey="submitOrder"/>
+        <actionGroup ref="AdminOrderClickSubmitOrderActionGroup" stepKey="submitOrder" />
 
         <!--Verify order information-->
         <actionGroup ref="VerifyCreatedOrderInformationActionGroup" stepKey="verifyCreatedOrderInformation"/>

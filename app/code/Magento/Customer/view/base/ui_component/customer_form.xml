@@ -117,7 +117,7 @@
                 <visible>false</visible>
             </settings>
         </field>
-        <field name="website_id" component="Magento_Ui/js/form/element/website" formElement="select">
+        <field name="website_id" component="Magento_Customer/js/form/element/website" formElement="select">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="source" xsi:type="string">customer</item>
@@ -136,6 +136,13 @@
                     <link name="customerId">${ $.provider }:data.customer.entity_id</link>
                 </imports>
             </settings>
+            <formElements>
+                <select>
+                    <settings>
+                        <options class="Magento\Customer\ViewModel\Customer\Website"/>
+                    </settings>
+                </select>
+            </formElements>
         </field>
         <field name="prefix" formElement="input">
             <argument name="data" xsi:type="array">
@@ -467,7 +474,7 @@
         <modal name="customer_address_update_modal">
             <settings>
                 <options>
-                    <option name="title" xsi:type="string">Add/Update Address</option>
+                    <option name="title" xsi:type="string" translate="true">Add/Update Address</option>
                 </options>
             </settings>
             <insertForm name="update_customer_address_form_loader" component="Magento_Customer/js/form/components/insert-form">
@@ -504,7 +511,7 @@
                     <imports>true</imports>
                 </dataLinks>
                 <externalProvider>customer_address_listing.customer_address_listing_data_source</externalProvider>
-                <selectionsProvider>customer_address_listing.customer_address_listing.customer_address_listing_columns.ids</selectionsProvider>
+                <selectionsProvider>customer_address_listing.customer_address_listing.customer_address_columns.ids</selectionsProvider>
                 <autoRender>true</autoRender>
                 <dataScope>customer_address_listing</dataScope>
                 <ns>customer_address_listing</ns>

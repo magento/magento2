@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertStorefrontTermInCheckoutActionGroup">
+        <arguments>
+            <argument name="termCheckboxText" type="string"/>
+        </arguments>
+        <!--Check if agreement is present on checkout and select it-->
+        <see selector="{{StorefrontCheckoutAgreementsSection.checkoutAgreementButton}}" userInput="{{termCheckboxText}}" stepKey="seeTermInCheckout"/>
+        <selectOption selector="{{StorefrontCheckoutAgreementsSection.checkoutAgreementCheckbox}}" userInput="{{termCheckboxText}}" stepKey="checkAgreement"/>
+
+        <!--Checkout select Check/Money Order payment-->
+        <waitForLoadingMaskToDisappear stepKey="waitForPaymentPageRendering"/>
+        <waitForPageLoad stepKey="waitForPaymentRendering"/>
+        <conditionalClick selector="{{StorefrontCheckoutPaymentMethodSection.checkPaymentMethodByName('Check / Money order')}}" dependentSelector="{{StorefrontCheckoutPaymentMethodSection.checkPaymentMethodByName('Check / Money order')}}" visible="true" stepKey="selectCheckmoPaymentMethod"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskAfterPaymentMethodSelection"/>
+
+        <!--Click Place Order button-->
+        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
+
+        <!--See success messages-->
+        <see selector="{{CheckoutSuccessMainSection.successTitle}}" userInput="Thank you for your purchase!" stepKey="seeSuccessTitle"/>
+        <see selector="{{CheckoutSuccessMainSection.orderNumberText}}" userInput="Your order # is: " stepKey="seeOrderNumber"/>
+    </actionGroup>
+</actionGroups>

@@ -84,7 +84,7 @@ define([
                     }, 10);
                 };
 
-                if (jQuery('#' + this.getAreaId('items')).is(':visible')) {
+                jQuery.async('#order-items .admin__page-section-title', (function () {
                     this.dataArea.onLoad = this.dataArea.onLoad.wrap(function (proceed) {
                         proceed();
                         this._parent.itemsArea.setNode($(this._parent.getAreaId('items')));
@@ -93,13 +93,15 @@ define([
 
                     this.itemsArea.onLoad = this.itemsArea.onLoad.wrap(function (proceed) {
                         proceed();
-                        if ($(searchAreaId) && !$(searchAreaId).visible() && !$(searchButtonId)) {
+                        if ($(searchAreaId) && !jQuery('#' + searchAreaId).is(':visible') && !$(searchButtonId)) {
                             this.addControlButton(searchButton);
                         }
                     });
                     this.areasLoaded();
                     this.itemsArea.onLoad();
-                }
+
+                }).bind(this));
+
             }).bind(this));
 
             jQuery('#edit_form')
@@ -479,6 +481,13 @@ define([
         },
 
         switchPaymentMethod: function(method){
+            if (this.paymentMethod !== method) {
+                jQuery('#edit_form')
+                    .off('submitOrder')
+                    .on('submitOrder', function(){
+                        jQuery(this).trigger('realOrder');
+                    });
+            }
             jQuery('#edit_form').trigger('changePaymentMethod', [method]);
             this.setPaymentMethod(method);
             var data = {};
@@ -1306,11 +1315,16 @@ define([
         },
 
         submit: function () {
-            var $editForm = jQuery('#edit_form');
+            var $editForm = jQuery('#edit_form'),
+                beforeSubmitOrderEvent;
 
             if ($editForm.valid()) {
                 $editForm.trigger('processStart');
-                $editForm.trigger('submitOrder');
+                beforeSubmitOrderEvent = jQuery.Event('beforeSubmitOrder');
+                $editForm.trigger(beforeSubmitOrderEvent);
+                if (beforeSubmitOrderEvent.result !== false) {
+                    $editForm.trigger('submitOrder');
+                }
             }
         },
 

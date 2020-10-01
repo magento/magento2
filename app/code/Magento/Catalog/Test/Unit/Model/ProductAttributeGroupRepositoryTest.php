@@ -3,46 +3,57 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model;
 
-class ProductAttributeGroupRepositoryTest extends \PHPUnit\Framework\TestCase
+use Magento\Catalog\Model\Product\Attribute\GroupFactory;
+use Magento\Catalog\Model\ProductAttributeGroupRepository;
+use Magento\Eav\Api\AttributeGroupRepositoryInterface;
+use Magento\Eav\Api\Data\AttributeGroupInterface;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\Group;
+use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class ProductAttributeGroupRepositoryTest extends TestCase
 {
     /**
-     * @var \Magento\Catalog\Model\ProductAttributeGroupRepository
+     * @var ProductAttributeGroupRepository
      */
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $groupRepositoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $groupFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $groupResourceMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->groupRepositoryMock = $this->createMock(\Magento\Eav\Api\AttributeGroupRepositoryInterface::class);
+        $this->groupRepositoryMock = $this->getMockForAbstractClass(AttributeGroupRepositoryInterface::class);
         $this->groupFactoryMock = $this->createPartialMock(
-            \Magento\Catalog\Model\Product\Attribute\GroupFactory::class,
+            GroupFactory::class,
             ['create']
         );
         $this->groupResourceMock = $this->createPartialMock(
-            \Magento\Eav\Model\ResourceModel\Entity\Attribute\Group::class,
-            ['load', '__wakeup']
+            Group::class,
+            ['load']
         );
 
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
         $this->model = $objectManager->getObject(
-            \Magento\Catalog\Model\ProductAttributeGroupRepository::class,
+            ProductAttributeGroupRepository::class,
             [
                 'groupRepository' => $this->groupRepositoryMock,
                 'groupResource' => $this->groupResourceMock,
@@ -53,8 +64,8 @@ class ProductAttributeGroupRepositoryTest extends \PHPUnit\Framework\TestCase
 
     public function testSave()
     {
-        $groupMock = $this->createMock(\Magento\Eav\Api\Data\AttributeGroupInterface::class);
-        $expectedResult = $this->createMock(\Magento\Eav\Api\Data\AttributeGroupInterface::class);
+        $groupMock = $this->getMockForAbstractClass(AttributeGroupInterface::class);
+        $expectedResult = $this->getMockForAbstractClass(AttributeGroupInterface::class);
         $this->groupRepositoryMock->expects($this->once())->method('save')->with($groupMock)
             ->willReturn($expectedResult);
         $this->assertEquals($expectedResult, $this->model->save($groupMock));
@@ -62,8 +73,8 @@ class ProductAttributeGroupRepositoryTest extends \PHPUnit\Framework\TestCase
 
     public function testGetList()
     {
-        $searchCriteriaMock = $this->createMock(\Magento\Framework\Api\SearchCriteriaInterface::class);
-        $expectedResult = $this->createMock(\Magento\Eav\Api\Data\AttributeGroupInterface::class);
+        $searchCriteriaMock = $this->getMockForAbstractClass(SearchCriteriaInterface::class);
+        $expectedResult = $this->getMockForAbstractClass(AttributeGroupInterface::class);
         $this->groupRepositoryMock->expects($this->once())->method('getList')->with($searchCriteriaMock)
             ->willReturn($expectedResult);
         $this->assertEquals($expectedResult, $this->model->getList($searchCriteriaMock));
@@ -79,11 +90,9 @@ class ProductAttributeGroupRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($groupMock, $this->model->get($groupId));
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     */
     public function testGetThrowsExceptionIfGroupDoesNotExist()
     {
+        $this->expectException('Magento\Framework\Exception\NoSuchEntityException');
         $groupId = 42;
         $groupMock = $this->createMock(\Magento\Catalog\Model\Product\Attribute\Group::class);
         $this->groupFactoryMock->expects($this->once())->method('create')->willReturn($groupMock);
@@ -120,12 +129,10 @@ class ProductAttributeGroupRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($this->model->delete($groupMock));
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage The attribute group can't be deleted because it contains system attributes.
-     */
     public function testDeleteThrowsExceptionIfGroupHasSystemAttributes()
     {
+        $this->expectException('Magento\Framework\Exception\StateException');
+        $this->expectExceptionMessage('The attribute group can\'t be deleted because it contains system attributes.');
         $groupMock = $this->createPartialMock(
             \Magento\Catalog\Model\Product\Attribute\Group::class,
             ['hasSystemAttributes']

@@ -3,18 +3,21 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\ConfigurableProduct\Test\Unit\Block\Plugin\Product\Media;
 
-use Magento\ConfigurableProduct\Block\Plugin\Product\Media\Gallery;
 use Magento\Catalog\Model\Product;
+use Magento\ConfigurableProduct\Block\Plugin\Product\Media\Gallery;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
+use Magento\Framework\DataObject;
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class GalleryTest
- */
-class GalleryTest extends \PHPUnit\Framework\TestCase
+class GalleryTest extends TestCase
 {
-
     public function testAfterGetOptions()
     {
         $jsonMock = $this->createJsonMock();
@@ -34,7 +37,7 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
                 ]
             ]
         ];
-        $image = new \Magento\Framework\DataObject(
+        $image = new DataObject(
             ['media_type' => 'type', 'video_url' => 'url', 'file' => 'image.jpg']
         );
 
@@ -49,7 +52,7 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
         $jsonMock->expects($this->once())->method('serialize')->with($expectedGalleryJson)
             ->willReturn(json_encode($expectedGalleryJson));
 
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $helper = new ObjectManager($this);
         $plugin = $helper->getObject(
             Gallery::class,
             [
@@ -61,7 +64,7 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject
      */
     private function createJsonMock()
     {
@@ -71,7 +74,7 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject
      */
     private function createProductMock()
     {
@@ -81,7 +84,7 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject
      */
     private function createGalleryMock()
     {
@@ -91,11 +94,11 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject
      */
     private function createConfigurableTypeMock()
     {
-        return $this->getMockBuilder(\Magento\ConfigurableProduct\Model\Product\Type\Configurable::class)
+        return $this->getMockBuilder(Configurable::class)
             ->disableOriginalConstructor()
             ->getMock();
     }

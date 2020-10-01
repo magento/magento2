@@ -11,8 +11,8 @@ use Magento\Framework\Profiler\Driver\Standard\Stat;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\NewRelicReporting\Model\NewRelicWrapper;
 use Magento\NewRelicReporting\Plugin\StatPlugin;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 class StatPluginTest extends TestCase
 {
@@ -37,7 +37,7 @@ class StatPluginTest extends TestCase
     /**
      * Build class for testing
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
 
@@ -45,7 +45,9 @@ class StatPluginTest extends TestCase
             'newRelicWrapper' => $this->getNewRelicWrapperMock()
         ]);
 
-        $this->statMock = $this->getMockBuilder(Stat::class)->disableOriginalConstructor()->getMock();
+        $this->statMock = $this->getMockBuilder(Stat::class)
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 
     /**

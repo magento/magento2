@@ -3,27 +3,33 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Model\Test\Unit\ResourceModel\Db\Relation;
 
+use Magento\Framework\Model\ResourceModel\Db\Relation\ActionPool;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ActionPoolTest extends \PHPUnit\Framework\TestCase
+class ActionPoolTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Model\ResourceModel\Db\Relation\ActionPool
+     * @var ActionPool
      */
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $objectManagerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->objectManagerMock = $this->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
+        $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $objectManager = new ObjectManager($this);
 
         $entityType = 'Entity_Test';
@@ -31,7 +37,7 @@ class ActionPoolTest extends \PHPUnit\Framework\TestCase
 
         $relationActions = [$entityType => $actionName];
         $this->model = $objectManager->getObject(
-            \Magento\Framework\Model\ResourceModel\Db\Relation\ActionPool::class,
+            ActionPool::class,
             [
                 'objectManager' => $this->objectManagerMock,
                 'relationActions' => $relationActions

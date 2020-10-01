@@ -3,17 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\EntityManager\Test\Unit;
 
-use PHPUnit\Framework\TestCase;
-use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\EntityManager\Operation\Read;
 use Magento\Framework\EntityManager\OperationPool;
+use Magento\Framework\ObjectManagerInterface;
+use PHPUnit\Framework\TestCase;
 
 class OperationPoolTest extends TestCase
 {
     public function testGetOperationUsesDefaultValueForEntityThatDoesNotProvideCustomMapping()
     {
-        $objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $operationPool = new OperationPool(
             $objectManagerMock,
             []
@@ -21,14 +24,14 @@ class OperationPoolTest extends TestCase
 
         $objectManagerMock->expects($this->once())
             ->method('get')
-            ->with(\Magento\Framework\EntityManager\Operation\Read::class);
+            ->with(Read::class);
         $operationPool->getOperation('entity_type', 'read');
     }
 
     public function testGetOperationUsesOverriddenDefaultValueForEntityThatDoesNotProvideCustomMapping()
     {
         $customReadOperation = 'CustomReadOperation';
-        $objectManagerMock = $this->createMock(ObjectManagerInterface::class);
+        $objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $operationPool = new OperationPool(
             $objectManagerMock,
             [

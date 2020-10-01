@@ -24,7 +24,7 @@
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
             <createData entity="Simple_US_Customer_ArmedForcesEurope" stepKey="createCustomer"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
@@ -67,8 +67,7 @@
             <argument name="shippingMethodName" value="Best Way"/>
         </actionGroup>
         <!--Proceed to Review and Payments section-->
-        <click selector="{{CheckoutShippingSection.next}}" stepKey="clickToSaveShippingInfo"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskAfterClickNext"/>
+        <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="clickToSaveShippingInfo"/>
         <waitForPageLoad stepKey="waitForReviewAndPaymentsPageIsLoaded"/>
         <!--Place order and assert the message of success-->
         <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="placeOrderProductSuccessful"/>

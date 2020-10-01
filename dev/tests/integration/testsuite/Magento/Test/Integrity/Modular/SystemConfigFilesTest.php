@@ -30,7 +30,7 @@ class SystemConfigFilesTest extends \PHPUnit\Framework\TestCase
             \Magento\Framework\Module\Dir\Reader::class,
             ['getConfigurationFiles', 'getModuleDir']
         );
-        $configMock->expects($this->any())->method('getConfigurationFiles')->will($this->returnValue($fileList));
+        $configMock->expects($this->any())->method('getConfigurationFiles')->willReturn($fileList);
         $configMock->expects(
             $this->any()
         )->method(
@@ -38,8 +38,8 @@ class SystemConfigFilesTest extends \PHPUnit\Framework\TestCase
         )->with(
             'etc',
             'Magento_Backend'
-        )->will(
-            $this->returnValue($modulesDir->getAbsolutePath() . '/app/code/Magento/Backend/etc')
+        )->willReturn(
+            $modulesDir->getAbsolutePath() . '/app/code/Magento/Backend/etc'
         );
         try {
             $objectManager->create(

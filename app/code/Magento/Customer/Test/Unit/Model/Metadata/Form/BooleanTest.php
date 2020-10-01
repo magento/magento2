@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * test Magento\Customer\Model\Metadata\Form\Boolean
  *
@@ -6,6 +6,8 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Model\Metadata\Form;
+
+use Magento\Customer\Model\Metadata\Form\Boolean;
 
 class BooleanTest extends AbstractFormTestCase
 {
@@ -17,7 +19,7 @@ class BooleanTest extends AbstractFormTestCase
     public function testGetOptionText($value, $expected)
     {
         // calling outputValue() will cause the protected method getOptionText() to be called
-        $boolean = new \Magento\Customer\Model\Metadata\Form\Boolean(
+        $boolean = new Boolean(
             $this->localeMock,
             $this->loggerMock,
             $this->attributeMetadataMock,

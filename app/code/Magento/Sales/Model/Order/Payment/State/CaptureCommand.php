@@ -74,7 +74,7 @@ class CaptureCommand implements CommandInterface
      * @param string $status
      * @param string $state
      * @return void
-     * @deprecated 100.2.0 Replaced by a StatusResolver class call.
+     * @deprecated 100.1.9 Replaced by a StatusResolver class call.
      */
     protected function setOrderStateAndStatus(Order $order, $status, $state)
     {

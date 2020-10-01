@@ -28,15 +28,19 @@
             <createData entity="SimpleProduct2" stepKey="createSimpleProductSecond"/>
 
             <!--Login as admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
 
             <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView">
                 <argument name="customStore" value="storeViewData"/>
             </actionGroup>
 
             <!--Run full reindex and clear caches -->
-            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-            <magentoCLI command="cache:flush" arguments="full_page" stepKey="flushCache"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value="full_page"/>
+            </actionGroup>
         </before>
         <after>
             <deleteData createDataKey="createSimpleProductFirst" stepKey="deleteFirstSimpleProduct"/>
@@ -51,7 +55,9 @@
         </after>
 
         <!-- Open product -->
-        <amOnPage url="{{AdminProductEditPage.url($createSimpleProductSecond.id$)}}" stepKey="openProductSecondEditPage"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openProductSecondEditPage">
+            <argument name="productId" value="$createSimpleProductSecond.id$"/>
+        </actionGroup>
         <!-- switch store view -->
         <actionGroup ref="AdminSwitchStoreViewActionGroup" stepKey="switchToStoreView">
             <argument name="storeView" value="storeViewData.name"/>
@@ -74,14 +80,14 @@
             <argument name="productSku" value="$createSimpleProductSecond.sku$"/>
         </actionGroup>
 
-        <actionGroup ref="SaveCategoryFormActionGroup" stepKey="saveCategory"/>
+        <actionGroup ref="AdminSaveCategoryFormActionGroup" stepKey="saveCategory"/>
 
         <executeJS function="return '$createCategory.name$'.toLowerCase();" stepKey="categoryNameLower" />
         <executeJS function="return '$createSimpleProductFirst.name$'.toLowerCase();" stepKey="simpleProductFirstNameLower" />
         <executeJS function="return '$createSimpleProductSecond.name$'.toLowerCase();" stepKey="simpleProductSecondNameLower" />
 
         <!-- Make assertions on frontend -->
-        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToStorefrontPage"/>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomePage"/>
         <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($createCategory.name$)}}" stepKey="onCategoryPage"/>
         <seeInCurrentUrl url="{$categoryNameLower}.html" stepKey="checkCategryUrlKey"/>
 

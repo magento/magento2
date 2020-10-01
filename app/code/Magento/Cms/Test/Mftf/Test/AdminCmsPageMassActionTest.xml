@@ -21,13 +21,15 @@
             <group value="mtf_migrated"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <createData entity="_defaultCmsPage" stepKey="firstCMSPage" />
             <createData entity="_duplicatedCMSPage" stepKey="secondCMSPage" />
         </before>
         <after>
             <deleteData createDataKey="firstCMSPage" stepKey="deleteFirstCMSPage" />
             <deleteData createDataKey="secondCMSPage" stepKey="deleteSecondCMSPage" />
+            <actionGroup ref="AdminOpenCMSPagesGridActionGroup" stepKey="navigateToCMSPageGrid"/>
+            <actionGroup ref="AdminGridFilterResetActionGroup" stepKey="clearPossibleGridFilters"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
