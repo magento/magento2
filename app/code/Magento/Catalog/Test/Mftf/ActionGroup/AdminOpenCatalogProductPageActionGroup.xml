@@ -5,12 +5,15 @@
   * See COPYING.txt for license details.
   */
 -->
+
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminOpenCmsBlockActionGroup">
-        <arguments>
-            <argument name="block_id" type="string"/>
-        </arguments>
-        <amOnPage url="{{AdminEditBlockPage.url(block_id)}}" stepKey="openEditCmsBlock"/>
+    <actionGroup name="AdminOpenCatalogProductPageActionGroup">
+        <annotations>
+            <description>Open page with product grid.</description>
+        </annotations>
+
+        <amOnPage url="{{AdminCatalogProductPage.url}}" stepKey="openCatalogProductPage"/>
+        <waitForPageLoad stepKey="waitForPageToLoad"/>
     </actionGroup>
 </actionGroups>
