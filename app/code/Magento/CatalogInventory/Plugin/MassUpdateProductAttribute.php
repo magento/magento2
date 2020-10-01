@@ -3,11 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogInventory\Plugin;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute\Save;
-use Magento\Catalog\Model\Product;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Observer\ParentItemProcessorInterface;
 
@@ -181,10 +183,10 @@ class MassUpdateProductAttribute
     /**
      * Process stock data for parent products
      *
-     * @param Product $product
+     * @param ProductInterface $product
      * @return void
      */
-    private function processParents(Product $product): void
+    private function processParents(ProductInterface $product): void
     {
         foreach ($this->parentItemProcessors as $processor) {
             $processor->process($product);
