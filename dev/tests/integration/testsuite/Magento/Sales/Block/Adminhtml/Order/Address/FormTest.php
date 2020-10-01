@@ -10,7 +10,10 @@ namespace Magento\Sales\Block\Adminhtml\Order\Address;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\View\LayoutInterface;
+use Magento\Sales\Api\Data\OrderAddressInterface;
+use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderInterfaceFactory;
+use Magento\TestFramework\App\Config;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
@@ -46,6 +49,7 @@ class FormTest extends TestCase
         $this->block = $this->objectManager->get(LayoutInterface::class)->createBlock(Form::class);
         $this->orderFactory = $this->objectManager->get(OrderInterfaceFactory::class);
         $this->registry = $this->objectManager->get(Registry::class);
+        $this->objectManager->removeSharedInstance(Config::class);
     }
 
     /**
@@ -65,11 +69,86 @@ class FormTest extends TestCase
      */
     public function testGetFormValues(): void
     {
-        $this->registry->unregister('order_address');
-        $order = $this->orderFactory->create()->loadByIncrementId(100000001);
-        $address = $order->getShippingAddress();
-        $this->registry->register('order_address', $address);
+        $address = $this->getOrderAddress('100000001');
+        $this->registerOrderAddress($address);
         $formValues = $this->block->getFormValues();
         $this->assertEquals($address->getData(), $formValues);
+    }
+
+    /**
+     * @magentoDbIsolation disabled
+     * @magentoDataFixture Magento/Store/_files/second_website_with_store_group_and_store.php
+     * @magentoDataFixture Magento/Sales/_files/order_with_customer.php
+     * @magentoConfigFixture default_store general/country/default US
+     * @magentoConfigFixture default_store general/country/allow US
+     * @magentoConfigFixture fixture_second_store_store general/country/default UY
+     * @magentoConfigFixture fixture_second_store_store general/country/allow UY
+     * @return void
+     */
+    public function testCountryIdInAllowedList(): void
+    {
+        $address = $this->getOrderAddress('100000001');
+        $this->registerOrderAddress($address);
+        $this->assertEquals('US', $address->getCountryId());
+        $this->assertCountryField('US');
+    }
+
+    /**
+     * @magentoDbIsolation disabled
+     * @magentoDataFixture Magento/Store/_files/second_website_with_store_group_and_store.php
+     * @magentoDataFixture Magento/Sales/_files/order_with_customer.php
+     * @magentoConfigFixture default_store general/country/default CA
+     * @magentoConfigFixture default_store general/country/allow CA
+     * @magentoConfigFixture fixture_second_store_store general/country/default UY
+     * @magentoConfigFixture fixture_second_store_store general/country/allow UY
+     * @return void
+     */
+    public function testCountryIdInNotAllowedList(): void
+    {
+        $address = $this->getOrderAddress('100000001');
+        $this->registerOrderAddress($address);
+        $this->assertCountryField('CA');
+    }
+
+    /**
+     * Prepares address edit from block.
+     *
+     * @param OrderAddressInterface $address
+     * @return void
+     */
+    private function registerOrderAddress(OrderAddressInterface $address): void
+    {
+        $this->registry->unregister('order_address');
+        $this->registry->register('order_address', $address);
+    }
+
+    /**
+     * Return order billing address.
+     *
+     * @param string $orderIncrementId
+     * @return OrderAddressInterface
+     */
+    private function getOrderAddress(string $orderIncrementId): OrderAddressInterface
+    {
+        /** @var OrderInterface $order */
+        $order = $this->orderFactory->create()->loadByIncrementId($orderIncrementId);
+
+        return $order->getBillingAddress();
+    }
+
+    /**
+     * Asserts country field data.
+     *
+     * @param string $countryCode
+     * @return void
+     */
+    private function assertCountryField(string $countryCode): void
+    {
+        $countryIdField = $this->block->getForm()->getElement('country_id');
+        $this->assertEquals($countryCode, $countryIdField->getValue());
+        $options = $countryIdField->getValues();
+        $this->assertCount(1, $options);
+        $firstOption = reset($options);
+        $this->assertEquals($countryCode, $firstOption['value']);
     }
 }
