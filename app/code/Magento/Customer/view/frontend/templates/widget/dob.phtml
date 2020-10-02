@@ -27,10 +27,12 @@ $fieldCssClass = 'field date field-' . $block->getHtmlId();
 $fieldCssClass .= $block->isRequired() ? ' required' : '';
 ?>
 <div class="<?= $block->escapeHtmlAttr($fieldCssClass) ?>">
-    <label class="label" for="<?= $block->escapeHtmlAttr($block->getHtmlId()) ?>"><span><?= $block->escapeHtml($block->getStoreLabel('dob')) ?></span></label>
+    <label class="label" for="<?= $block->escapeHtmlAttr($block->getHtmlId()) ?>">
+        <span><?= $block->escapeHtml($block->getStoreLabel('dob')) ?></span>
+    </label>
     <div class="control customer-dob">
         <?= $block->getFieldHtml() ?>
-        <?php if ($_message = $block->getAdditionalDescription()) : ?>
+        <?php if ($_message = $block->getAdditionalDescription()): ?>
             <div class="note"><?= $block->escapeHtml($_message) ?></div>
         <?php endif; ?>
     </div>
@@ -42,4 +44,15 @@ $fieldCssClass .= $block->isRequired() ? ' required' : '';
            "Magento_Customer/js/validation": {}
        }
     }
- </script>
+</script>
+
+<script>
+    require([
+        'jquery',
+        'jquery-ui-modules/datepicker'
+    ], function ( $ ) {
+        $.extend(true, $, {
+            calendarConfig: <?= $block->escapeJs($block->getTranslatedCalendarConfigJson()); ?>
+        });
+    });
+</script>
