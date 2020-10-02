@@ -126,7 +126,7 @@ class Address extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
     /**
      * Get instance of DeleteRelation class
      *
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      * @return DeleteRelation
      */
     private function getDeleteRelation()
@@ -137,7 +137,7 @@ class Address extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
     /**
      * Get instance of CustomerRegistry class
      *
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      * @return CustomerRegistry
      */
     private function getCustomerRegistry()

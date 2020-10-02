@@ -3,56 +3,61 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Pricing\Price;
 
-use \Magento\Catalog\Pricing\Price\RegularPrice;
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Pricing\Price\RegularPrice;
+use Magento\Framework\Pricing\Adjustment\Calculator;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Framework\Pricing\PriceInfo\Base;
+use Magento\Framework\Pricing\PriceInfoInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class RegularPriceTest
- */
-class RegularPriceTest extends \PHPUnit\Framework\TestCase
+class RegularPriceTest extends TestCase
 {
     /**
-     * @var \Magento\Catalog\Pricing\Price\RegularPrice
+     * @var RegularPrice
      */
     protected $regularPrice;
 
     /**
-     * @var \Magento\Framework\Pricing\PriceInfoInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var PriceInfoInterface|MockObject
      */
     protected $priceInfoMock;
 
     /**
-     * @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var Product|MockObject
      */
     protected $saleableItemMock;
 
     /**
-     * @var \Magento\Framework\Pricing\Adjustment\Calculator|\PHPUnit_Framework_MockObject_MockObject
+     * @var Calculator|MockObject
      */
     protected $calculatorMock;
 
     /**
-     * @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var PriceCurrencyInterface|MockObject
      */
     protected $priceCurrencyMock;
 
     /**
      * Test setUp
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $qty = 1;
-        $this->saleableItemMock = $this->createMock(\Magento\Catalog\Model\Product::class);
-        $this->priceInfoMock = $this->createMock(\Magento\Framework\Pricing\PriceInfo\Base::class);
-        $this->calculatorMock = $this->createMock(\Magento\Framework\Pricing\Adjustment\Calculator::class);
+        $this->saleableItemMock = $this->createMock(Product::class);
+        $this->priceInfoMock = $this->createMock(Base::class);
+        $this->calculatorMock = $this->createMock(Calculator::class);
 
         $this->saleableItemMock->expects($this->once())
             ->method('getPriceInfo')
-            ->will($this->returnValue($this->priceInfoMock));
+            ->willReturn($this->priceInfoMock);
 
-        $this->priceCurrencyMock = $this->createMock(\Magento\Framework\Pricing\PriceCurrencyInterface::class);
+        $this->priceCurrencyMock = $this->getMockForAbstractClass(PriceCurrencyInterface::class);
 
         $this->regularPrice = new RegularPrice(
             $this->saleableItemMock,
@@ -73,11 +78,11 @@ class RegularPriceTest extends \PHPUnit\Framework\TestCase
         $convertedPrice = 85;
         $this->saleableItemMock->expects($this->once())
             ->method('getPrice')
-            ->will($this->returnValue($price));
+            ->willReturn($price);
         $this->priceCurrencyMock->expects($this->any())
             ->method('convertAndRound')
             ->with($price)
-            ->will($this->returnValue($convertedPrice));
+            ->willReturn($convertedPrice);
         $this->assertEquals($convertedPrice, $this->regularPrice->getValue());
         //The second call will use cached value
         $this->assertEquals($convertedPrice, $this->regularPrice->getValue());
@@ -107,15 +112,15 @@ class RegularPriceTest extends \PHPUnit\Framework\TestCase
 
         $this->saleableItemMock->expects($this->once())
             ->method('getPrice')
-            ->will($this->returnValue($priceValue));
+            ->willReturn($priceValue);
         $this->priceCurrencyMock->expects($this->any())
             ->method('convertAndRound')
             ->with($priceValue)
-            ->will($this->returnValue($convertedPrice));
+            ->willReturn($convertedPrice);
         $this->calculatorMock->expects($this->once())
             ->method('getAmount')
-            ->with($this->equalTo($convertedPrice))
-            ->will($this->returnValue($amountValue));
+            ->with($convertedPrice)
+            ->willReturn($amountValue);
         $this->assertEquals($amountValue, $this->regularPrice->getAmount());
     }
 

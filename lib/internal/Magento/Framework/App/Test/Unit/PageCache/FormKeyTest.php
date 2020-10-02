@@ -3,19 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\App\Test\Unit\PageCache;
 
 use Magento\Framework\App\PageCache\FormKey;
-use Magento\Framework\Stdlib\CookieManagerInterface;
 use Magento\Framework\Session\SessionManagerInterface;
 use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
 use Magento\Framework\Stdlib\Cookie\PublicCookieMetadata;
+use Magento\Framework\Stdlib\CookieManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class FormKeyTest
- */
-class FormKeyTest extends \PHPUnit\Framework\TestCase
+class FormKeyTest extends TestCase
 {
     /**
      * Version instance
@@ -27,32 +27,32 @@ class FormKeyTest extends \PHPUnit\Framework\TestCase
     /**
      * Cookie mock
      *
-     * @var CookieManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CookieManagerInterface|MockObject
      */
     protected $cookieManagerMock;
 
     /**
-     * @var CookieMetadataFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CookieMetadataFactory|MockObject
      */
     private $cookieMetadataFactory;
 
     /**
-     * @var SessionManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var SessionManagerInterface|MockObject
      */
     private $sessionManager;
 
     /**
      * Create cookie mock and FormKey instance
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->cookieManagerMock = $this->createMock(\Magento\Framework\Stdlib\CookieManagerInterface::class);
+        $this->cookieManagerMock = $this->getMockForAbstractClass(CookieManagerInterface::class);
         $this->cookieMetadataFactory = $this->getMockBuilder(
-            \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory::class
+            CookieMetadataFactory::class
         )
             ->disableOriginalConstructor()
             ->getMock();
-        $this->sessionManager = $this->createMock(\Magento\Framework\Session\SessionManagerInterface::class);
+        $this->sessionManager = $this->getMockForAbstractClass(SessionManagerInterface::class);
         $this->formKey = new FormKey(
             $this->cookieManagerMock,
             $this->cookieMetadataFactory,
@@ -69,7 +69,7 @@ class FormKeyTest extends \PHPUnit\Framework\TestCase
         $this->cookieManagerMock->expects($this->once())
             ->method('getCookie')
             ->with(FormKey::COOKIE_NAME)
-            ->will($this->returnValue($formKey));
+            ->willReturn($formKey);
 
         $this->assertEquals($formKey, $this->formKey->get());
     }
@@ -77,9 +77,9 @@ class FormKeyTest extends \PHPUnit\Framework\TestCase
     public function testSet()
     {
         $formKeyValue = 'form_key';
-        /** @var PublicCookieMetadata|\PHPUnit_Framework_MockObject_MockObject $metadata */
+        /** @var PublicCookieMetadata|MockObject $metadata */
         $metadata = $this->getMockBuilder(
-            \Magento\Framework\Stdlib\Cookie\PublicCookieMetadata::class
+            PublicCookieMetadata::class
         )
             ->disableOriginalConstructor()
             ->getMock();
@@ -99,9 +99,9 @@ class FormKeyTest extends \PHPUnit\Framework\TestCase
     {
         $cookiePath = '/';
         $cookieDomain = 'example.com';
-        /** @var PublicCookieMetadata|\PHPUnit_Framework_MockObject_MockObject $metadata */
+        /** @var PublicCookieMetadata|MockObject $metadata */
         $metadata = $this->getMockBuilder(
-            \Magento\Framework\Stdlib\Cookie\PublicCookieMetadata::class
+            PublicCookieMetadata::class
         )
             ->disableOriginalConstructor()
             ->getMock();

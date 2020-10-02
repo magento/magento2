@@ -3,69 +3,79 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Test\Unit\Ui\Component;
 
+use Magento\Customer\Api\Data\AttributeMetadataInterface;
+use Magento\Customer\Api\Data\OptionInterface;
 use Magento\Customer\Ui\Component\ColumnFactory;
+use Magento\Customer\Ui\Component\Listing\Column\InlineEditUpdater;
+use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use Magento\Framework\View\Element\UiComponentFactory;
+use Magento\Ui\Component\Listing\Columns\ColumnInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test ColumnFactory Class
  */
-class ColumnFactoryTest extends \PHPUnit\Framework\TestCase
+class ColumnFactoryTest extends TestCase
 {
-    /** @var \Magento\Customer\Api\Data\OptionInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var OptionInterface|MockObject */
     protected $attributeOption;
 
-    /** @var \Magento\Framework\View\Element\UiComponent\ContextInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ContextInterface|MockObject */
     protected $context;
 
-    /** @var \Magento\Framework\View\Element\UiComponentFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var UiComponentFactory|MockObject */
     protected $componentFactory;
 
-    /** @var \Magento\Customer\Api\Data\AttributeMetadataInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var AttributeMetadataInterface|MockObject */
     protected $attributeMetadata;
 
-    /** @var \Magento\Ui\Component\Listing\Columns\ColumnInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ColumnInterface|MockObject */
     protected $column;
 
-    /** @var \Magento\Customer\Ui\Component\Listing\Column\InlineEditUpdater|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var InlineEditUpdater|MockObject */
     protected $inlineEditUpdater;
 
     /** @var ColumnFactory */
     protected $columnFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->context = $this->getMockForAbstractClass(
-            \Magento\Framework\View\Element\UiComponent\ContextInterface::class,
+            ContextInterface::class,
             [],
             '',
             false
         );
         $this->componentFactory = $this->createPartialMock(
-            \Magento\Framework\View\Element\UiComponentFactory::class,
+            UiComponentFactory::class,
             ['create']
         );
         $this->attributeMetadata = $this->getMockForAbstractClass(
-            \Magento\Customer\Api\Data\AttributeMetadataInterface::class,
+            AttributeMetadataInterface::class,
             [],
             '',
             false
         );
         $this->column = $this->getMockForAbstractClass(
-            \Magento\Ui\Component\Listing\Columns\ColumnInterface::class,
+            ColumnInterface::class,
             [],
             '',
             false
         );
         $this->attributeOption = $this->getMockForAbstractClass(
-            \Magento\Customer\Api\Data\OptionInterface::class,
+            OptionInterface::class,
             [],
             '',
             false
         );
 
         $this->inlineEditUpdater = $this->getMockBuilder(
-            \Magento\Customer\Ui\Component\Listing\Column\InlineEditUpdater::class
+            InlineEditUpdater::class
         )
             ->disableOriginalConstructor()
             ->getMock();
@@ -93,7 +103,6 @@ class ColumnFactoryTest extends \PHPUnit\Framework\TestCase
                         ]
                     ],
                     'component' => 'Magento_Ui/js/grid/columns/column',
-                    '__disableTmpl' => 'true'
                 ],
             ],
             'context' => $this->context,

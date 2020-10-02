@@ -87,7 +87,7 @@ class Interval implements IntervalInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function load($limit, $offset = null, $lower = null, $upper = null)
     {
@@ -116,7 +116,7 @@ class Interval implements IntervalInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function loadPrevious($data, $index, $lower = null)
     {
@@ -141,11 +141,15 @@ class Interval implements IntervalInterface
             return false;
         }
 
+        if (is_array($offset)) {
+            $offset = $offset['value'];
+        }
+
         return $this->load($index - $offset + 1, $offset - 1, $lower);
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function loadNext($data, $rightIndex, $upper = null)
     {
@@ -164,6 +168,10 @@ class Interval implements IntervalInterface
         $offset = $queryCountResult['hits']['total'];
         if (!$offset) {
             return false;
+        }
+
+        if (is_array($offset)) {
+            $offset = $offset['value'];
         }
 
         $from = ['gte' => $data - self::DELTA];

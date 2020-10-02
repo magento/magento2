@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminFillCatalogRuleConditionActionGroup">
+        <annotations>
+            <description>Clicks on the Conditions tab. Fills in the provided condition for Catalog Price Rule.</description>
+        </annotations>
+        <arguments>
+            <argument name="condition" type="string" defaultValue="{{CatalogRuleProductConditions.categoryIds}}"/>
+            <argument name="conditionOperator" type="string" defaultValue="is"/>
+            <argument name="conditionValue" type="string" defaultValue="2"/>
+        </arguments>
+
+        <conditionalClick selector="{{AdminNewCatalogPriceRule.conditionsTab}}" dependentSelector="{{AdminNewCatalogPriceRuleConditions.newCondition}}" visible="false" stepKey="openConditionsTab"/>
+        <waitForElementVisible selector="{{AdminNewCatalogPriceRuleConditions.newCondition}}" stepKey="waitForAddConditionButton"/>
+        <click selector="{{AdminNewCatalogPriceRuleConditions.newCondition}}" stepKey="addNewCondition"/>
+        <selectOption selector="{{AdminNewCatalogPriceRuleConditions.conditionSelect('1')}}" userInput="{{condition}}" stepKey="selectTypeCondition"/>
+        <click selector="{{AdminNewCatalogPriceRuleConditions.condition('is')}}" stepKey="clickOnOperator"/>
+        <selectOption selector="{{AdminNewCatalogPriceRuleConditions.activeOperatorSelect}}" userInput="{{conditionOperator}}" stepKey="selectCondition"/>
+        <!-- In case we are choosing already selected value - select is not closed automatically -->
+        <conditionalClick selector="{{AdminNewCatalogPriceRuleConditions.condition('...')}}" dependentSelector="{{AdminNewCatalogPriceRuleConditions.activeOperatorSelect}}" visible="true" stepKey="closeSelect"/>
+        <click selector="{{AdminNewCatalogPriceRuleConditions.condition('...')}}" stepKey="clickToChooseOption3"/>
+        <waitForElementVisible selector="{{AdminNewCatalogPriceRuleConditions.activeValueInput}}" stepKey="waitForValueInput"/>
+        <fillField selector="{{AdminNewCatalogPriceRuleConditions.activeValueInput}}" userInput="{{conditionValue}}" stepKey="fillConditionValue"/>
+        <click selector="{{AdminNewCatalogPriceRuleConditions.activeConditionApplyButton}}" stepKey="clickApply"/>
+        <waitForElementNotVisible selector="{{AdminNewCatalogPriceRuleConditions.activeConditionApplyButton}}" stepKey="waitForApplyButtonInvisibility"/>
+    </actionGroup>
+</actionGroups>

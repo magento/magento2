@@ -67,8 +67,8 @@ class Write extends Read implements WriteInterface
      */
     protected function assertIsFile($path)
     {
-        clearstatcache();
         $absolutePath = $this->driver->getAbsolutePath($this->path, $path);
+        clearstatcache(true, $absolutePath);
         if (!$this->driver->isFile($absolutePath)) {
             throw new FileSystemException(
                 new \Magento\Framework\Phrase('The "%1" file doesn\'t exist.', [$absolutePath])

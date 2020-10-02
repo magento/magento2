@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertSearchTermSaveSuccessMessageActionGroup">
+        <annotations>
+            <description>Goes to the Catalog Search Term grid page. Adds the provided Search Term. Validates that the Success Message is present and correct.</description>
+        </annotations>
+        <arguments>
+            <argument name="searchQuery" type="string"/>
+            <argument name="storeValue" type="string"/>
+            <argument name="redirectUrl" type="string"/>
+            <argument name="displayInSuggestedTerm" type="string"/>
+        </arguments>
+
+        <amOnPage url="{{AdminCatalogSearchTermIndexPage.url}}" stepKey="openAdminCatalogSearchTermIndexPage"/>
+        <waitForPageLoad stepKey="waitForAdminCatalogSearchTermIndexPageLoad"/>
+        <click selector="{{AdminCatalogSearchTermIndexSection.addNewSearchTermButton}}" stepKey="clickAddNewSearchTermButton"/>
+        <waitForPageLoad stepKey="waitForAdminCatalogSearchTermNewPageLoad"/>
+        <fillField selector="{{AdminCatalogSearchTermNewSection.searchQuery}}" userInput="{{searchQuery}}" stepKey="fillSearchQueryTextBox"/>
+        <selectOption selector="{{AdminCatalogSearchTermNewSection.store}}" userInput="{{storeValue}}" stepKey="selectStoreValue"/>
+        <fillField selector="{{AdminCatalogSearchTermNewSection.redirectUrl}}" userInput="{{redirectUrl}}" stepKey="fillRedirectUrl"/>
+        <selectOption selector="{{AdminCatalogSearchTermNewSection.displayInSuggestedTerm}}" userInput="{{displayInSuggestedTerm}}" stepKey="selectDisplayInSuggestedTerm"/>
+        <click selector="{{AdminCatalogSearchTermNewSection.saveSearchButton}}" stepKey="clickSaveSearchButton"/>
+        <see selector="{{AdminCatalogSearchTermMessagesSection.successMessage}}" userInput="You saved the search term." stepKey="seeSaveSuccessMessage"/>
+    </actionGroup>
+</actionGroups>

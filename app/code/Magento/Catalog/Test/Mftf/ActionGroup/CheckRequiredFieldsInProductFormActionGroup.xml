@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="CheckRequiredFieldsInProductFormActionGroup">
+        <annotations>
+            <description>Validates that the 'Required Field' error message is present and correct for the Product Name, SKU and Price fields.</description>
+        </annotations>
+
+        <clearField selector="{{AdminProductFormSection.productName}}" stepKey="clearProductName"/>
+        <clearField selector="{{AdminProductFormSection.productSku}}" stepKey="clearProductSku"/>
+        <clearField selector="{{AdminProductFormSection.productPrice}}" stepKey="clearProductPrice"/>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveButton"/>
+        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="New Product" stepKey="seeStillOnEditPage"/>
+        <see selector="{{AdminProductFormSection.fieldError('name')}}" userInput="This is a required field." stepKey="seeNameRequired"/>
+        <see selector="{{AdminProductFormSection.fieldError('sku')}}" userInput="This is a required field." stepKey="seeSkuRequired"/>
+        <see selector="{{AdminProductFormSection.priceFieldError}}" userInput="This is a required field." stepKey="seePriceRequired"/>
+    </actionGroup>
+</actionGroups>

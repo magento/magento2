@@ -18,19 +18,18 @@
             <group value="mtf_migrated"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
             <createData entity="_defaultBlock" stepKey="createDefaultCMSBlock"/>
             <createData entity="defaultSimpleProduct" stepKey="simpleProduct" />
         </before>
         <after>
-            <actionGroup ref="DeleteCategory" stepKey="deleteCategory"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="DeleteCategoryActionGroup" stepKey="deleteCategory"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
             <deleteData createDataKey="createDefaultCMSBlock" stepKey="deleteDefaultCMSBlock"/>
             <deleteData stepKey="deleteSimpleProduct" createDataKey="simpleProduct"/>
         </after>
         <!--Create  SubCategory-->
-        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="openAdminCategoryIndexPage"/>
-        <waitForPageLoad stepKey="waitForPageToLoaded"/>
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openAdminCategoryIndexPage"/>
         <click selector="{{AdminCategorySidebarActionSection.AddSubcategoryButton}}" stepKey="clickOnAddSubCategoryButton"/>
         <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{_defaultCategory.name}}" stepKey="fillCategoryName"/>
         <checkOption selector="{{AdminCategoryBasicFieldSection.EnableCategory}}" stepKey="enableCategory"/>
@@ -58,15 +57,26 @@
         <fillField selector="{{AdminCategoryContentSection.productTableColumnName}}" userInput="$$simpleProduct.name$$"  stepKey="selectProduct"/>
         <click selector="{{AdminCategoryContentSection.productSearch}}" stepKey="clickSearchButton"/>
         <click selector="{{AdminCategoryContentSection.productTableRow}}" stepKey="selectProductFromTableRow"/>
-        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="clickSaveButton"/>
-        <waitForPageLoad stepKey="waitForCategorySaved"/>
-        <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the category." stepKey="assertSuccessMessage"/>
+        <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="clickSaveButton"/>
+        <actionGroup ref="AssertAdminCategorySaveSuccessMessageActionGroup" stepKey="assertSuccessMessage"/>
         <waitForPageLoad stepKey="waitForPageTitleToBeSaved"/>
         <!--Verify the Category Title-->
         <see selector="{{AdminCategoryContentSection.categoryPageTitle}}" userInput="{{_defaultCategory.name}}" stepKey="seePageTitle" />
+        <grabFromCurrentUrl stepKey="categoryId" regex="#\/([0-9]*)?\/$#"/>
+        <!-- Assert Redirect path, Target Path and Redirect type in grid -->
+        <actionGroup ref="AdminSearchByRequestPathActionGroup" stepKey="searchByRequestPath">
+            <argument name="redirectPath" value="{{_defaultCategory.name}}.html" />
+            <argument name="redirectType" value="No" />
+            <argument name="targetPath" value="catalog/category/view/id/{$categoryId}"/>
+        </actionGroup>
+
         <!--Clear cache and reindex-->
-        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-        <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+            <argument name="tags" value=""/>
+        </actionGroup>
         <!--Verify Product in store front page-->
         <amOnPage url="{{StorefrontCategoryPage.url(_defaultCategory.name_lwr)}}"  stepKey="amOnCategoryPage"/>
         <waitForPageLoad stepKey="waitForPageToBeLoaded"/>

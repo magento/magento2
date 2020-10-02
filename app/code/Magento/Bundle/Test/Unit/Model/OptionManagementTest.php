@@ -4,12 +4,21 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Bundle\Test\Unit\Model;
 
-use \Magento\Bundle\Model\OptionManagement;
+use Magento\Bundle\Api\Data\OptionInterface;
+use Magento\Bundle\Api\ProductOptionRepositoryInterface;
+use Magento\Bundle\Model\OptionManagement;
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\Product\Type;
+use Magento\Framework\Exception\InputException;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class OptionManagementTest extends \PHPUnit\Framework\TestCase
+class OptionManagementTest extends TestCase
 {
     /**
      * @var OptionManagement
@@ -17,33 +26,33 @@ class OptionManagementTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $optionRepositoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $productRepositoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $optionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $productMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->optionRepositoryMock =
-            $this->createMock(\Magento\Bundle\Api\ProductOptionRepositoryInterface::class);
+            $this->getMockForAbstractClass(ProductOptionRepositoryInterface::class);
         $this->productRepositoryMock =
-            $this->createMock(\Magento\Catalog\Api\ProductRepositoryInterface::class);
-        $this->optionMock = $this->createMock(\Magento\Bundle\Api\Data\OptionInterface::class);
-        $this->productMock = $this->createMock(\Magento\Catalog\Api\Data\ProductInterface::class);
+            $this->getMockForAbstractClass(ProductRepositoryInterface::class);
+        $this->optionMock = $this->getMockForAbstractClass(OptionInterface::class);
+        $this->productMock = $this->getMockForAbstractClass(ProductInterface::class);
 
         $this->model = new OptionManagement($this->optionRepositoryMock, $this->productRepositoryMock);
     }
@@ -57,7 +66,7 @@ class OptionManagementTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->productMock);
         $this->productMock->expects($this->once())
             ->method('getTypeId')
-            ->willReturn(\Magento\Catalog\Model\Product\Type::TYPE_BUNDLE);
+            ->willReturn(Type::TYPE_BUNDLE);
         $this->optionRepositoryMock->expects($this->once())
             ->method('save')
             ->with($this->productMock, $this->optionMock);
@@ -65,12 +74,11 @@ class OptionManagementTest extends \PHPUnit\Framework\TestCase
         $this->model->save($this->optionMock);
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage This is implemented for bundle products only.
-     */
     public function testSaveWithException()
     {
+        $this->expectException(InputException::class);
+        $this->expectExceptionMessage('This is implemented for bundle products only.');
+
         $this->optionMock->expects($this->once())->method('getSku')->willReturn('bundle_product_sku');
         $this->productRepositoryMock->expects($this->once())
             ->method('get')
@@ -78,7 +86,7 @@ class OptionManagementTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->productMock);
         $this->productMock->expects($this->once())
             ->method('getTypeId')
-            ->willReturn(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE);
+            ->willReturn(Type::TYPE_SIMPLE);
         $this->optionRepositoryMock->expects($this->never())->method('save');
 
         $this->model->save($this->optionMock);

@@ -3,69 +3,66 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Sales\Test\Unit\Model\Order\Creditmemo\Total;
 
 use Magento\Framework\DataObject as MagentoObject;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Creditmemo;
+use Magento\Sales\Model\Order\Creditmemo\Item;
+use Magento\Sales\Model\Order\Creditmemo\Total\Tax;
+use Magento\Sales\Model\Order\Invoice;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class TaxTest extends \PHPUnit\Framework\TestCase
+class TaxTest extends TestCase
 {
     /**
-     * @var \Magento\Sales\Model\Order\Creditmemo\Total\Tax
+     * @var Tax
      */
     protected $model;
 
     /**
-     * @var \Magento\Sales\Model\Order|\PHPUnit_Framework_MockObject_MockObject
+     * @var Order|MockObject
      */
     protected $order;
 
     /**
-     * @var  \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var  ObjectManager
      */
     protected $objectManager;
 
     /**
-     * @var \Magento\Sales\Model\Order\Creditmemo|\PHPUnit_Framework_MockObject_MockObject
+     * @var Creditmemo|MockObject
      */
     protected $creditmemo;
 
     /**
-     * @var \Magento\Sales\Model\Order\Creditmemo|\PHPUnit_Framework_MockObject_MockObject
+     * @var Creditmemo|MockObject
      */
     protected $invoice;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        /** @var \Magento\Sales\Model\Order\Creditmemo\Total\Tax $model */
-        $this->model = $this->objectManager->getObject(\Magento\Sales\Model\Order\Creditmemo\Total\Tax::class);
+        $this->objectManager = new ObjectManager($this);
+        /** @var Tax $model */
+        $this->model = $this->objectManager->getObject(Tax::class);
 
-        $this->order = $this->createPartialMock(
-            \Magento\Sales\Model\Order::class,
-            [
-                '__wakeup'
-            ]
-        );
-
-        $this->invoice = $this->createPartialMock(
-            \Magento\Sales\Model\Order\Invoice::class,
-            [
-                '__wakeup',
-            ]
-        );
+        $this->order = $this->createPartialMock(Order::class, ['__wakeup']);
+        $this->invoice = $this->createPartialMock(Invoice::class, ['__wakeup']);
 
         $this->creditmemo = $this->createPartialMock(
-            \Magento\Sales\Model\Order\Creditmemo::class,
+            Creditmemo::class,
             [
                 'getAllItems',
                 'getOrder',
                 'roundPrice',
                 'isLast',
-                '__wakeup',
             ]
         );
-        $this->creditmemo->expects($this->atLeastOnce())->method('getOrder')->will($this->returnValue($this->order));
+        $this->creditmemo->expects($this->atLeastOnce())->method('getOrder')->willReturn($this->order);
     }
 
     /**
@@ -84,33 +81,31 @@ class TaxTest extends \PHPUnit\Framework\TestCase
         }
 
         //Set up creditmemo mock
-        /** @var \Magento\Sales\Model\Order\Creditmemo\Item[] $creditmemoItems */
+        /** @var Item[] $creditmemoItems */
         $creditmemoItems = [];
         foreach ($creditmemoData['items'] as $itemKey => $creditmemoItemData) {
             $creditmemoItems[$itemKey] = $this->getCreditmemoItem($creditmemoItemData);
         }
         $this->creditmemo->expects($this->once())
             ->method('getAllItems')
-            ->will($this->returnValue($creditmemoItems));
+            ->willReturn($creditmemoItems);
         $this->creditmemo->expects($this->any())
             ->method('isLast')
-            ->will($this->returnValue($creditmemoData['is_last']));
+            ->willReturn($creditmemoData['is_last']);
         foreach ($creditmemoData['data_fields'] as $key => $value) {
             $this->creditmemo->setData($key, $value);
         }
         $this->creditmemo->expects($this->any())
             ->method('roundPrice')
-            ->will(
-                $this->returnCallback(
-                    function ($price, $type) use (&$roundingDelta) {
-                        if (!isset($roundingDelta[$type])) {
-                            $roundingDelta[$type] = 0;
-                        }
-                        $roundedPrice = round($price + $roundingDelta[$type], 2);
-                        $roundingDelta[$type] = $price - $roundedPrice;
-                        return $roundedPrice;
+            ->willReturnCallback(
+                function ($price, $type) use (&$roundingDelta) {
+                    if (!isset($roundingDelta[$type])) {
+                        $roundingDelta[$type] = 0;
                     }
-                )
+                    $roundedPrice = round($price + $roundingDelta[$type], 2);
+                    $roundingDelta[$type] = $price - $roundedPrice;
+                    return $roundedPrice;
+                }
             );
 
         $this->model->collect($this->creditmemo);
@@ -754,35 +749,33 @@ class TaxTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param $creditmemoItemData array
-     * @return \Magento\Sales\Model\Order\Creditmemo\Item|\PHPUnit_Framework_MockObject_MockObject
+     * @return Item|MockObject
      */
     protected function getCreditmemoItem($creditmemoItemData)
     {
-        /** @var \Magento\Sales\Model\Order\Item|\PHPUnit_Framework_MockObject_MockObject $orderItem */
+        /** @var \Magento\Sales\Model\Order\Item|MockObject $orderItem */
         $orderItem = $this->createPartialMock(
             \Magento\Sales\Model\Order\Item::class,
             [
-                'isDummy',
-                '__wakeup'
+                'isDummy'
             ]
         );
         foreach ($creditmemoItemData['order_item'] as $key => $value) {
             $orderItem->setData($key, $value);
         }
 
-        /** @var \Magento\Sales\Model\Order\Creditmemo\Item|\PHPUnit_Framework_MockObject_MockObject $creditmemoItem */
+        /** @var Item|MockObject $creditmemoItem */
         $creditmemoItem = $this->createPartialMock(
-            \Magento\Sales\Model\Order\Creditmemo\Item::class,
+            Item::class,
             [
                 'getOrderItem',
-                'isLast',
-                '__wakeup'
+                'isLast'
             ]
         );
-        $creditmemoItem->expects($this->any())->method('getOrderItem')->will($this->returnValue($orderItem));
+        $creditmemoItem->expects($this->any())->method('getOrderItem')->willReturn($orderItem);
         $creditmemoItem->expects($this->any())
             ->method('isLast')
-            ->will($this->returnValue($creditmemoItemData['is_last']));
+            ->willReturn($creditmemoItemData['is_last']);
         $creditmemoItem->setData('qty', $creditmemoItemData['qty']);
         return $creditmemoItem;
     }

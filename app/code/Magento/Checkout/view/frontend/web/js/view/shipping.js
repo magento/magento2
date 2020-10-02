@@ -60,7 +60,10 @@ define([
             template: 'Magento_Checkout/shipping',
             shippingFormTemplate: 'Magento_Checkout/shipping-address/form',
             shippingMethodListTemplate: 'Magento_Checkout/shipping-address/shipping-method-list',
-            shippingMethodItemTemplate: 'Magento_Checkout/shipping-address/shipping-method-item'
+            shippingMethodItemTemplate: 'Magento_Checkout/shipping-address/shipping-method-item',
+            imports: {
+                countryOptions: '${ $.parentName }.shippingAddress.shipping-address-fieldset.country_id:indexedOptions'
+            }
         },
         visible: ko.observable(!quote.isVirtual()),
         errorValidationMessage: ko.observable(false),
@@ -276,9 +279,7 @@ define([
                 loginFormSelector = 'form[data-role=email-with-possible-login]',
                 emailValidationResult = customer.isLoggedIn(),
                 field,
-                country = registry.get(this.parentName + '.shippingAddress.shipping-address-fieldset.country_id'),
-                countryIndexedOptions = country.indexedOptions,
-                option = countryIndexedOptions[quote.shippingAddress().countryId],
+                option = _.isObject(this.countryOptions) && this.countryOptions[quote.shippingAddress().countryId],
                 messageContainer = registry.get('checkout.errors').messageContainer;
 
             if (!quote.shippingMethod()) {
@@ -297,6 +298,12 @@ define([
             if (this.isFormInline) {
                 this.source.set('params.invalid', false);
                 this.triggerShippingDataValidateEvent();
+
+                if (!quote.shippingMethod()['method_code']) {
+                    this.errorValidationMessage(
+                        $t('The shipping method is missing. Select the shipping method and try again.')
+                    );
+                }
 
                 if (emailValidationResult &&
                     this.source.get('params.invalid') ||

@@ -3,32 +3,39 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Product\Flat;
 
+use Magento\Catalog\Model\Indexer\Product\Flat\TableData;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class TableDataTest extends \PHPUnit\Framework\TestCase
+class TableDataTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AdapterInterface|MockObject
      */
     protected $_connectionMock;
 
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
     protected $_objectManager;
 
     /**
-     * @var Resource|\PHPUnit_Framework_MockObject_MockObject
+     * @var Resource|MockObject
      */
     protected $_resourceMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->_objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->_connectionMock = $this->createMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
-        $this->_resourceMock = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
+        $this->_objectManager = new ObjectManager($this);
+        $this->_connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
+        $this->_resourceMock = $this->createMock(ResourceConnection::class);
     }
 
     /**
@@ -53,8 +60,8 @@ class TableDataTest extends \PHPUnit\Framework\TestCase
             'isTableExists'
         )->with(
             $flatTable
-        )->will(
-            $this->returnValue($isFlatTableExists)
+        )->willReturn(
+            $isFlatTableExists
         );
 
         $this->_connectionMock->expects(
@@ -69,12 +76,12 @@ class TableDataTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'getConnection'
-        )->will(
-            $this->returnValue($this->_connectionMock)
+        )->willReturn(
+            $this->_connectionMock
         );
 
         $model = $this->_objectManager->getObject(
-            \Magento\Catalog\Model\Indexer\Product\Flat\TableData::class,
+            TableData::class,
             ['resource' => $this->_resourceMock]
         );
 

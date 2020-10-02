@@ -444,6 +444,18 @@ button {
             > .action-menu-item {
                 min-width: 100%;
             }
+
+            &::after {
+                border-color: transparent transparent transparent @color-black;
+                border-style: solid;
+                border-width: .4rem 0 .4rem .5rem;
+                content: '';
+                height: 0;
+                position: relative;
+                right: 1.2rem;
+                top: 1.4rem;
+                width: 0;
+            }
         }
     }
 
