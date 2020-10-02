@@ -38,8 +38,8 @@ class ObjectManager implements ObjectManagerInterface
 
     /**
      * @param FactoryInterface $factory
-     * @param ConfigInterface  $config
-     * @param array            $sharedInstances
+     * @param ConfigInterface $config
+     * @param array $sharedInstances
      */
     public function __construct(FactoryInterface $factory, ConfigInterface $config, &$sharedInstances = [])
     {
@@ -52,8 +52,8 @@ class ObjectManager implements ObjectManagerInterface
     /**
      * Create new object instance
      *
-     * @param  string $type
-     * @param  array  $arguments
+     * @param string $type
+     * @param array $arguments
      * @return mixed
      */
     public function create($type, array $arguments = [])
@@ -64,7 +64,7 @@ class ObjectManager implements ObjectManagerInterface
     /**
      * Retrieve cached object instance
      *
-     * @param  string $type
+     * @param string $type
      * @return mixed
      */
     public function get($type)
@@ -82,7 +82,7 @@ class ObjectManager implements ObjectManagerInterface
      *
      * Note: All arguments should be pre-processed (sort order, translations, etc) before passing to method configure.
      *
-     * @param  array $configuration
+     * @param array $configuration
      * @return void
      */
     public function configure(array $configuration)
@@ -93,7 +93,7 @@ class ObjectManager implements ObjectManagerInterface
     /**
      * Disable show ObjectManager internals with var_dump
      *
-     * @see    https://www.php.net/manual/en/language.oop5.magic.php#object.debuginfo
+     * @see https://www.php.net/manual/en/language.oop5.magic.php#object.debuginfo
      * @return array
      */
     public function __debugInfo()

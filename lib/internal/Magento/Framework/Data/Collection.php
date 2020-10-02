@@ -9,8 +9,6 @@ namespace Magento\Framework\Data;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Data\Collection\EntityFactoryInterface;
 use Magento\Framework\DataObject;
-use Magento\Framework\Exception\AlreadyExistsException;
-use Magento\Framework\Option\ArrayInterface;
 
 /**
  * Data collection
@@ -19,8 +17,10 @@ use Magento\Framework\Option\ArrayInterface;
  *
  * @api
  * @since 100.0.2
+ *
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  */
-class Collection implements \IteratorAggregate, \Countable, ArrayInterface, CollectionDataSourceInterface
+class Collection implements \IteratorAggregate, \Countable, OptionSourceInterface, CollectionDataSourceInterface
 {
     const SORT_ORDER_ASC = 'ASC';
 
@@ -767,6 +767,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
         $additional['label'] = $labelField;
 
         foreach ($this as $item) {
+            $data = [];
             foreach ($additional as $code => $field) {
                 $data[$code] = $item->getData($field);
             }
