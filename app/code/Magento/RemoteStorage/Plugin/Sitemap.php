@@ -7,7 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\RemoteStorage\Plugin;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\RemoteStorage\Driver\DriverPool;
+use Magento\RemoteStorage\Filesystem;
 use Magento\RemoteStorage\Model\Config;
 use Magento\Sitemap\Model\Sitemap as BaseSitemap;
 
@@ -17,23 +19,23 @@ use Magento\Sitemap\Model\Sitemap as BaseSitemap;
 class Sitemap
 {
     /**
-     * @var Config
+     * @var Filesystem
      */
-    private $config;
+    private $filesystem;
 
     /**
-     * @var DriverPool
+     * @var bool
      */
-    private $driverPool;
+    private $isEnabled;
 
     /**
-     * @param DriverPool $driverPool
+     * @param Filesystem $filesystem
      * @param Config $config
      */
-    public function __construct(DriverPool $driverPool, Config $config)
+    public function __construct(Filesystem $filesystem, Config $config)
     {
-        $this->driverPool = $driverPool;
-        $this->config = $config;
+        $this->filesystem = $filesystem;
+        $this->isEnabled = $config->isEnabled();
     }
 
     /**
@@ -53,10 +55,11 @@ class Sitemap
         string $sitemapPath,
         string $sitemapFileName
     ): string {
-        if ($this->config->isEnabled()) {
+        if ($this->isEnabled) {
             $path = trim($sitemapPath . $sitemapFileName, '/');
 
-            return $this->driverPool->getDriver()->getAbsolutePath('', $path);
+            return $this->filesystem->getDirectoryRead(DirectoryList::ROOT, DriverPool::REMOTE)
+                ->getAbsolutePath($path);
         }
 
         return $result;

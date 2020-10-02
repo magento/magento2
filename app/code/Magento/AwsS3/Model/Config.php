@@ -7,28 +7,28 @@ declare(strict_types=1);
 
 namespace Magento\AwsS3\Model;
 
-use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\DeploymentConfig;
 
 /**
  * Configuration for AWS S3.
  */
 class Config
 {
-    public const PATH_DRIVER = 'system/file_system/driver';
-    public const PATH_REGION = 'system/file_system/region';
-    public const PATH_BUCKET = 'system/file_system/bucket';
-    public const PATH_ACCESS_KEY = 'system/file_system/access_key';
-    public const PATH_SECRET_KEY = 'system/file_system/secret_key';
+    public const PATH_REGION = 'remote_storage/region';
+    public const PATH_BUCKET = 'remote_storage/bucket';
+    public const PATH_ACCESS_KEY = 'remote_storage/access_key';
+    public const PATH_SECRET_KEY = 'remote_storage/secret_key';
+    public const PATH_PREFIX = 'remote_storage/prefix';
 
     /**
-     * @var ScopeConfigInterface
+     * @var DeploymentConfig
      */
     private $config;
 
     /**
-     * @param ScopeConfigInterface $config
+     * @param DeploymentConfig $config
      */
-    public function __construct(ScopeConfigInterface $config)
+    public function __construct(DeploymentConfig $config)
     {
         $this->config = $config;
     }
@@ -40,7 +40,7 @@ class Config
      */
     public function getRegion(): string
     {
-        return (string)$this->config->getValue(self::PATH_REGION);
+        return (string)$this->config->get(self::PATH_REGION);
     }
 
     /**
@@ -50,7 +50,7 @@ class Config
      */
     public function getBucket(): string
     {
-        return (string)$this->config->getValue(self::PATH_BUCKET);
+        return (string)$this->config->get(self::PATH_BUCKET);
     }
 
     /**
@@ -60,7 +60,7 @@ class Config
      */
     public function getAccessKey(): string
     {
-        return (string)$this->config->getValue(self::PATH_ACCESS_KEY);
+        return (string)$this->config->get(self::PATH_ACCESS_KEY);
     }
 
     /**
@@ -70,6 +70,16 @@ class Config
      */
     public function getSecretKey(): string
     {
-        return (string)$this->config->getValue(self::PATH_SECRET_KEY);
+        return (string)$this->config->get(self::PATH_SECRET_KEY);
+    }
+
+    /**
+     * Retrieves prefix.
+     *
+     * @return string
+     */
+    public function getPrefix(): string
+    {
+        return (string)$this->config->get(self::PATH_PREFIX, '');
     }
 }

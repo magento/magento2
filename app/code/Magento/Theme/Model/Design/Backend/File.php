@@ -160,7 +160,7 @@ class File extends BackendFile
                         'size' => is_array($stat) ? $stat['size'] : 0,
                         //phpcs:ignore Magento2.Functions.DiscouragedFunction
                         'name' => basename($value),
-                        'type' => $this->getMimeType($fileName),
+                        'type' => $stat['mimetype'] ?? $this->getMimeType($fileName),
                         'exists' => true,
                     ]
                 ];

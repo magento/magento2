@@ -16,36 +16,56 @@
             <argument name="driverPool" xsi:type="object">Magento\RemoteStorage\Driver\DriverPool</argument>
         </arguments>
     </virtualType>
-    <virtualType name="remoteFilesystem" type="Magento\RemoteStorage\Model\Filesystem">
+    <type name="Magento\RemoteStorage\Filesystem">
         <arguments>
             <argument name="writeFactory" xsi:type="object">remoteWriteFactory</argument>
             <argument name="readFactory" xsi:type="object">remoteReadFactory</argument>
         </arguments>
+    </type>
+    <virtualType name="customRemoteFilesystem" type="Magento\RemoteStorage\Filesystem">
+        <arguments>
+            <argument name="directoryCodes" xsi:type="array">
+                <item name="media" xsi:type="const">Magento\Framework\App\Filesystem\DirectoryList::MEDIA</item>
+            </argument>
+        </arguments>
     </virtualType>
-    <type name="Magento\Sitemap\Controller\Adminhtml\Sitemap\Save">
+    <virtualType name="fullRemoteFilesystem" type="Magento\RemoteStorage\Filesystem" />
+    <preference for="Magento\Framework\Filesystem" type="customRemoteFilesystem"/>
+    <type name="Magento\Framework\Filesystem\Directory\TargetDirectory">
         <arguments>
-            <argument name="filesystem" xsi:type="object">remoteFilesystem</argument>
-        </arguments>
-    </type>
-    <type name="Magento\Sitemap\Block\Adminhtml\Grid\Renderer\Link">
-        <arguments>
-            <argument name="filesystem" xsi:type="object">remoteFilesystem</argument>
-        </arguments>
-    </type>
-    <type name="Magento\Sitemap\Controller\Adminhtml\Sitemap\Delete">
-        <arguments>
-            <argument name="filesystem" xsi:type="object">remoteFilesystem</argument>
+            <argument name="filesystem" xsi:type="object">fullRemoteFilesystem</argument>
+            <argument name="driverCode" xsi:type="const">Magento\RemoteStorage\Driver\DriverPool::REMOTE</argument>
         </arguments>
     </type>
     <type name="Magento\Sitemap\Model\Sitemap">
         <arguments>
-            <argument name="filesystem" xsi:type="object">remoteFilesystem</argument>
+            <argument name="filesystem" xsi:type="object">fullRemoteFilesystem</argument>
         </arguments>
         <plugin name="remote_sitemap" type="Magento\RemoteStorage\Plugin\Sitemap" />
     </type>
-    <type name="Magento\Framework\Filesystem\Directory\TargetDirectory">
+    <type name="Magento\Sitemap\Controller\Adminhtml\Sitemap\Save">
         <arguments>
-            <argument name="filesystem" xsi:type="object">remoteFilesystem</argument>
+            <argument name="filesystem" xsi:type="object">fullRemoteFilesystem</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sitemap\Block\Adminhtml\Grid\Renderer\Link">
+        <arguments>
+            <argument name="filesystem" xsi:type="object">fullRemoteFilesystem</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sitemap\Controller\Adminhtml\Sitemap\Delete">
+        <arguments>
+            <argument name="filesystem" xsi:type="object">fullRemoteFilesystem</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Url\ScopeInterface">
+        <plugin name="remote_url" type="Magento\RemoteStorage\Plugin\Scope" />
+    </type>
+    <type name="Magento\Framework\Console\CommandListInterface">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="remoteStorageEnable" xsi:type="object">Magento\RemoteStorage\Console\Command\RemoteStorageEnableCommand</item>
+            </argument>
         </arguments>
     </type>
 </config>

@@ -311,7 +311,10 @@ class Uploader
     {
         if ($this->_allowCreateFolders) {
             $this->createDestinationFolder($destinationFolder);
-        } elseif (!$this->getFileDriver()->isWritable($destinationFolder)) {
+        } elseif (!$this->getTargetDirectory()
+            ->getDirectoryWrite(DirectoryList::ROOT)
+            ->isWritable($destinationFolder)
+        ) {
             throw new FileSystemException(__('Destination folder is not writable or does not exists.'));
         }
     }
@@ -334,13 +337,19 @@ class Uploader
      *
      * @param string $tmpPath
      * @param string $destPath
-     * @return bool|void
+     * @return bool
+     * @throws FileSystemException
      */
     protected function _moveFile($tmpPath, $destPath)
     {
-        $rootPath = $this->getDocumentRoot()->getPath();
-        $destPath = str_replace($this->getDirectoryList()->getPath($rootPath), '', $destPath);
-        $directory = $this->getTargetDirectory()->getDirectoryWrite($rootPath);
+        $rootCode = $this->getDocumentRoot()->getPath();
+
+        if (strpos($destPath, $this->getDirectoryList()->getPath($rootCode)) !== 0) {
+            $rootCode = DirectoryList::ROOT;
+        }
+
+        $destPath = str_replace($this->getDirectoryList()->getPath($rootCode), '', $destPath);
+        $directory = $this->getTargetDirectory()->getDirectoryWrite($rootCode);
 
         return $this->getFileDriver()->rename(
             $tmpPath,
@@ -745,8 +754,10 @@ class Uploader
             $destinationFolder = substr($destinationFolder, 0, -1);
         }
 
-        if (!$this->getFileDriver()->isDirectory($destinationFolder)) {
-            $result = $this->getFileDriver()->createDirectory($destinationFolder);
+        $rootDirectory = $this->getTargetDirectory()->getDirectoryWrite(DirectoryList::ROOT);
+
+        if (!$rootDirectory->isDirectory($destinationFolder)) {
+            $result = $rootDirectory->getDriver()->createDirectory($destinationFolder);
             if (!$result) {
                 throw new FileSystemException(__('Unable to create directory %1.', $destinationFolder));
             }

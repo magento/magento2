@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\AwsS3\Driver;
 
-use Aws\S3\S3Client;
 use League\Flysystem\AwsS3v3\AwsS3Adapter;
 use League\Flysystem\Config;
 use Magento\Framework\Exception\FileSystemException;
@@ -18,10 +17,10 @@ use Magento\Framework\Filesystem\DriverInterface;
  */
 class AwsS3 implements DriverInterface
 {
-    public const S3 = 'aws-s3';
+    public const TYPE_DIR = 'dir';
+    public const TYPE_FILE = 'file';
 
-    private const TYPE_DIR = 'dir';
-    private const TYPE_FILE = 'file';
+    private const CONFIG = ['ACL' => 'public-read'];
 
     /**
      * @var AwsS3Adapter
@@ -34,27 +33,11 @@ class AwsS3 implements DriverInterface
     private $streams = [];
 
     /**
-     * @param string $region
-     * @param string $bucket
-     * @param string|null $key
-     * @param string|null $secret
+     * @param AwsS3Adapter $adapter
      */
-    public function __construct(string $region, string $bucket, string $key = null, string $secret = null)
+    public function __construct(AwsS3Adapter $adapter)
     {
-        $config = [
-            'region' => $region,
-            'version' => 'latest'
-        ];
-
-        if ($key && $secret) {
-            $config['credentials'] = [
-                'key' => $key,
-                'secret' => $secret,
-            ];
-        }
-
-        $client = new S3Client($config);
-        $this->adapter = new AwsS3Adapter($client, $bucket);
+        $this->adapter = $adapter;
     }
 
     /**
@@ -74,7 +57,7 @@ class AwsS3 implements DriverInterface
      */
     public function fileGetContents($path, $flag = null, $context = null): string
     {
-        $path = $this->getRelativePath('', $path);
+        $path = $this->normalizeRelativePath($path);
 
         if (isset($this->streams[$path])) {
             //phpcs:disable
@@ -82,7 +65,7 @@ class AwsS3 implements DriverInterface
             //phpcs:enable
         }
 
-        return $this->adapter->read($path)['contents'];
+        return $this->adapter->read($path)['contents'] ?? '';
     }
 
     /**
@@ -94,7 +77,7 @@ class AwsS3 implements DriverInterface
             return true;
         }
 
-        $path = $this->getRelativePath('', $path);
+        $path = $this->normalizeRelativePath($path);
 
         if (!$path || $path === '/') {
             return true;
@@ -120,7 +103,26 @@ class AwsS3 implements DriverInterface
             return true;
         }
 
-        $path = $this->getRelativePath('', $path);
+        return $this->createDirectoryRecursively(
+            $this->normalizeRelativePath($path)
+        );
+    }
+
+    /**
+     * Created directory recursively.
+     *
+     * @param string $path
+     * @return bool
+     * @throws FileSystemException
+     */
+    private function createDirectoryRecursively(string $path): bool
+    {
+        //phpcs:ignore Magento2.Functions.DiscouragedFunction
+        $parentDir = dirname($path);
+
+        while (!$this->isDirectory($parentDir)) {
+            $this->createDirectoryRecursively($parentDir);
+        }
 
         return (bool)$this->adapter->createDir(rtrim($path, '/'), new Config([]));
     }
@@ -130,10 +132,10 @@ class AwsS3 implements DriverInterface
      */
     public function copy($source, $destination, DriverInterface $targetDriver = null): bool
     {
-        $source = $this->getRelativePath('', $source);
-        $destination = $this->getRelativePath('', $destination);
-
-        return $this->adapter->copy($source, $destination);
+        return $this->adapter->copy(
+            $this->normalizeRelativePath($source),
+            $this->normalizeRelativePath($destination)
+        );
     }
 
     /**
@@ -141,9 +143,9 @@ class AwsS3 implements DriverInterface
      */
     public function deleteFile($path): bool
     {
-        $path = $this->getRelativePath('', $path);
-
-        return $this->adapter->delete($path);
+        return $this->adapter->delete(
+            $this->normalizeRelativePath($path)
+        );
     }
 
     /**
@@ -151,9 +153,9 @@ class AwsS3 implements DriverInterface
      */
     public function deleteDirectory($path): bool
     {
-        $path = $this->getRelativePath('', $path);
-
-        return $this->adapter->deleteDir($path);
+        return $this->adapter->deleteDir(
+            $this->normalizeRelativePath($path)
+        );
     }
 
     /**
@@ -161,9 +163,9 @@ class AwsS3 implements DriverInterface
      */
     public function filePutContents($path, $content, $mode = null, $context = null): int
     {
-        $path = $this->getRelativePath('', $path);
+        $path = $this->normalizeRelativePath($path);
 
-        return $this->adapter->write($path, $content, new Config(['ACL' => 'public-read']))['size'];
+        return $this->adapter->write($path, $content, new Config(self::CONFIG))['size'];
     }
 
     /**
@@ -171,9 +173,10 @@ class AwsS3 implements DriverInterface
      */
     public function readDirectoryRecursively($path = null): array
     {
-        $path = $this->getRelativePath('', $path);
-
-        return $this->adapter->listContents($path, true);
+        return $this->adapter->listContents(
+            $this->normalizeRelativePath($path),
+            true
+        );
     }
 
     /**
@@ -181,9 +184,10 @@ class AwsS3 implements DriverInterface
      */
     public function readDirectory($path): array
     {
-        $path = $this->getRelativePath('', $path);
-
-        return $this->adapter->listContents($path, false);
+        return $this->adapter->listContents(
+            $this->normalizeRelativePath($path),
+            false
+        );
     }
 
     /**
@@ -191,7 +195,9 @@ class AwsS3 implements DriverInterface
      */
     public function getRealPathSafety($path)
     {
-        return '/';
+        return $this->normalizeAbsolutePath(
+            $this->normalizeRelativePath($path)
+        );
     }
 
     /**
@@ -199,19 +205,52 @@ class AwsS3 implements DriverInterface
      */
     public function getAbsolutePath($basePath, $path, $scheme = null)
     {
-        $path = $this->getRelativePath($basePath, $path);
-
-        if ($path === '/') {
-            $path = '';
+        if ($basePath && $path && 0 === strpos($path, $basePath)) {
+            return $this->normalizeAbsolutePath(
+                $this->normalizeRelativePath($path)
+            );
         }
 
-        if ($basePath !== '/') {
-            $path = $basePath . $path;
+        if ($basePath && $basePath !== '/') {
+            return $basePath . ltrim((string)$path, '/');
         }
 
-        $path = $path ?: '.';
+        return $this->normalizeAbsolutePath($path);
+    }
 
-        return $this->adapter->getClient()->getObjectUrl($this->adapter->getBucket(), $path);
+    /**
+     * Resolves absolute path.
+     *
+     * @param string $path Relative path
+     * @return string Absolute path
+     */
+    private function normalizeAbsolutePath(string $path = '.'): string
+    {
+        $path = ltrim($path, '/');
+
+        if (!$path) {
+            $path = '.';
+        }
+
+        return $this->adapter->getClient()->getObjectUrl(
+            $this->adapter->getBucket(),
+            $this->adapter->applyPathPrefix($path)
+        );
+    }
+
+    /**
+     * Resolves relative path.
+     *
+     * @param string $path Absolute path
+     * @return string Relative path
+     */
+    private function normalizeRelativePath(string $path): string
+    {
+        return str_replace(
+            $this->normalizeAbsolutePath(),
+            '',
+            $path
+        );
     }
 
     /**
@@ -227,11 +266,11 @@ class AwsS3 implements DriverInterface
      */
     public function isFile($path): bool
     {
-        if ($path === '/') {
+        if (!$path || $path === '/') {
             return false;
         }
 
-        $path = $this->getRelativePath('', $path);
+        $path = $this->normalizeRelativePath($path);
         $path = rtrim($path, '/');
 
         return $this->adapter->has($path) && $this->adapter->getMetadata($path)['type'] === self::TYPE_FILE;
@@ -242,11 +281,11 @@ class AwsS3 implements DriverInterface
      */
     public function isDirectory($path): bool
     {
-        if ($path === '/') {
+        if (in_array($path, ['.', '/'], true)) {
             return true;
         }
 
-        $path = $this->getRelativePath('', $path);
+        $path = $this->normalizeRelativePath($path);
 
         if (!$path || $path === '/') {
             return true;
@@ -262,23 +301,14 @@ class AwsS3 implements DriverInterface
      */
     public function getRelativePath($basePath, $path = null): string
     {
-        $relativePath = str_replace(
-            $this->adapter->getClient()->getObjectUrl($this->adapter->getBucket(), '.'),
-            '',
-            $path
-        );
+        $basePath = $this->normalizeAbsolutePath($basePath);
+        $absolutePath = $this->normalizeAbsolutePath((string)$path);
 
-        if ($basePath && $basePath !== '/') {
-            $relativePath = str_replace($basePath, '', $relativePath);
+        if ($basePath === $absolutePath . '/' || strpos($absolutePath, $basePath) === 0) {
+            return ltrim(substr($absolutePath, strlen($basePath)), '/');
         }
 
-        $relativePath = ltrim($relativePath, '/');
-
-        if (!$relativePath) {
-            $relativePath = '/';
-        }
-
-        return $relativePath;
+        return ltrim($path, '/');
     }
 
     /**
@@ -286,7 +316,8 @@ class AwsS3 implements DriverInterface
      */
     public function getParentDirectory($path): string
     {
-        return '/';
+        //phpcs:ignore Magento2.Functions.DiscouragedFunction
+        return dirname($this->normalizeAbsolutePath($path));
     }
 
     /**
@@ -294,7 +325,7 @@ class AwsS3 implements DriverInterface
      */
     public function getRealPath($path)
     {
-        return $this->getAbsolutePath('', $path);
+        return $this->normalizeAbsolutePath($path);
     }
 
     /**
@@ -302,10 +333,10 @@ class AwsS3 implements DriverInterface
      */
     public function rename($oldPath, $newPath, DriverInterface $targetDriver = null): bool
     {
-        $oldPath = $this->getRelativePath('', $oldPath);
-        $newPath = $this->getRelativePath('', $newPath);
-
-        return $this->adapter->rename($oldPath, $newPath);
+        return $this->adapter->rename(
+            $this->normalizeRelativePath($oldPath),
+            $this->normalizeRelativePath($newPath)
+        );
     }
 
     /**
@@ -313,7 +344,7 @@ class AwsS3 implements DriverInterface
      */
     public function stat($path): array
     {
-        $path = $this->getRelativePath('', $path);
+        $path = $this->normalizeRelativePath($path);
         $metaInfo = $this->adapter->getMetadata($path);
 
         if (!$metaInfo) {
@@ -336,6 +367,7 @@ class AwsS3 implements DriverInterface
             'type' => $metaInfo['type'],
             'mtime' => $metaInfo['timestamp'],
             'disposition' => null,
+            'mimetype' => $metaInfo['mimetype']
         ];
     }
 
@@ -368,7 +400,7 @@ class AwsS3 implements DriverInterface
      */
     public function changePermissionsRecursively($path, $dirPermissions, $filePermissions): bool
     {
-        throw new FileSystemException(__('Method %1 is not supported', __METHOD__));
+        return true;
     }
 
     /**
@@ -376,7 +408,13 @@ class AwsS3 implements DriverInterface
      */
     public function touch($path, $modificationTime = null)
     {
-        return true;
+        $path = $this->normalizeRelativePath($path);
+
+        $content = $this->adapter->has($path) ?
+            $this->adapter->read($path)['contents']
+            : '';
+
+        return (bool)$this->adapter->write($path, $content, new Config([]));
     }
 
     /**
@@ -478,13 +516,15 @@ class AwsS3 implements DriverInterface
     {
         //phpcs:disable
         $resourcePath = stream_get_meta_data($resource)['uri'];
+        //phpcs:enable
 
         foreach ($this->streams as $stream) {
+            //phpcs:disable
             if (stream_get_meta_data($stream)['uri'] === $resourcePath) {
                 return fwrite($stream, $data);
             }
+            //phpcs:enable
         }
-        //phpcs:enable
 
         return false;
     }
@@ -496,10 +536,12 @@ class AwsS3 implements DriverInterface
     {
         //phpcs:disable
         $resourcePath = stream_get_meta_data($resource)['uri'];
+        //phpcs:enable
 
         foreach ($this->streams as $path => $stream) {
+            //phpcs:disable
             if (stream_get_meta_data($stream)['uri'] === $resourcePath) {
-                $this->adapter->writeStream($path, $resource, new Config(['ACL' => 'public-read']));
+                $this->adapter->writeStream($path, $resource, new Config(self::CONFIG));
 
                 // Remove path from streams after
                 unset($this->streams[$path]);
@@ -507,7 +549,6 @@ class AwsS3 implements DriverInterface
                 return fclose($stream);
             }
         }
-        //phpcs:enable
 
         return false;
     }
@@ -517,7 +558,7 @@ class AwsS3 implements DriverInterface
      */
     public function fileOpen($path, $mode)
     {
-        $path = $this->getRelativePath('', $path);
+        $path = $this->normalizeRelativePath($path);
 
         if (!isset($this->streams[$path])) {
             $this->streams[$path] = tmpfile();

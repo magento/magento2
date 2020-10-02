@@ -7,9 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\AwsS3\Driver;
 
+use Aws\S3\S3Client;
+use League\Flysystem\AwsS3v3\AwsS3Adapter;
 use Magento\AwsS3\Model\Config;
-
 use Magento\Framework\Filesystem\DriverInterface;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\RemoteStorage\Driver\DriverFactoryInterface;
 
 /**
@@ -18,15 +20,22 @@ use Magento\RemoteStorage\Driver\DriverFactoryInterface;
 class AwsS3Factory implements DriverFactoryInterface
 {
     /**
+     * @var ObjectManagerInterface
+     */
+    private $objectManager;
+
+    /**
      * @var Config
      */
     private $config;
 
     /**
+     * @param ObjectManagerInterface $objectManager
      * @param Config $config
      */
-    public function __construct(Config $config)
+    public function __construct(ObjectManagerInterface $objectManager, Config $config)
     {
+        $this->objectManager = $objectManager;
         $this->config = $config;
     }
 
@@ -37,11 +46,33 @@ class AwsS3Factory implements DriverFactoryInterface
      */
     public function create(): DriverInterface
     {
-        return new AwsS3(
-            $this->config->getRegion(),
-            $this->config->getBucket(),
-            $this->config->getAccessKey(),
-            $this->config->getSecretKey()
+        $config = [
+            'region' => $this->config->getRegion(),
+            'version' => 'latest'
+        ];
+
+        $key = $this->config->getAccessKey();
+        $secret = $this->config->getSecretKey();
+
+        if ($key && $secret) {
+            $config['credentials'] = [
+                'key' => $key,
+                'secret' => $secret,
+            ];
+        }
+
+        return $this->objectManager->create(
+            AwsS3::class,
+            [
+                'adapter' => $this->objectManager->create(
+                    AwsS3Adapter::class,
+                    [
+                        'client' => $this->objectManager->create(S3Client::class, ['args' => $config]),
+                        'bucket' => $this->config->getBucket(),
+                        'prefix' => $this->config->getPrefix()
+                    ]
+                )
+            ]
         );
     }
 }
