@@ -12,25 +12,27 @@ define([
     return Component.extend({
         defaults: {
             template: 'Magento_Checkout/summary/item/details',
-            allowedTags: ['div', 'span', 'b', 'strong', 'i', 'em', 'u', 'a']
+            allowedTags: ['b', 'strong', 'i', 'em', 'u']
         },
 
         /**
          * @param {Object} quoteItem
          * @return {String}
          */
-        getValue: function (quoteItem) {
-            return quoteItem.name;
+        getNameUnsanitizedHtml: function (quoteItem) {
+            var txt = document.createElement('textarea');
+
+            txt.innerHTML = quoteItem.name;
+
+            return escaper.escapeHtml(txt.value, this.allowedTags);
         },
 
         /**
-         * Name column.
-         *
-         * @param {String} name
-         * @returns {String}
+         * @param {Object} quoteItem
+         * @return {String}Magento_Checkout/js/region-updater
          */
-        getNameUnsanitizedHtml: function (name) {
-            return escaper.escapeHtml(name, this.allowedTags);
+        getValue: function (quoteItem) {
+            return quoteItem.name;
         }
     });
 });

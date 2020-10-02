@@ -19,6 +19,7 @@ use Magento\Framework\Escaper;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Locale\Resolver;
 use Magento\Framework\Locale\ResolverInterface;
+use Magento\Framework\Stdlib\DateTime\Intl\DateFormatterFactory;
 use Magento\Framework\Stdlib\DateTime\Timezone;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Element\Html\Date;
@@ -50,7 +51,7 @@ class DobTest extends TestCase
     const YEAR = '2014';
 
     // Value of date('Y', strtotime(self::DATE))
-    const DATE_FORMAT = 'M/d/Y';
+    const DATE_FORMAT = 'M/d/y';
 
     /** Constants used by Dob::setDateInput($code, $html) */
     const DAY_HTML =
@@ -119,7 +120,7 @@ class DobTest extends TestCase
             );
         $timezone = $objectManager->getObject(
             Timezone::class,
-            ['localeResolver' => $localeResolver]
+            ['localeResolver' => $localeResolver, 'dateFormatterFactory' => new DateFormatterFactory()]
         );
 
         $this->_locale = Resolver::DEFAULT_LOCALE;
@@ -357,7 +358,8 @@ class DobTest extends TestCase
                 preg_replace(
                     '/[^MmDdYy\/\.\-]/',
                     '',
-                    (new \IntlDateFormatter('ar_SA', \IntlDateFormatter::SHORT, \IntlDateFormatter::NONE))
+                    (new DateFormatterFactory())
+                        ->create('ar_SA', \IntlDateFormatter::SHORT, \IntlDateFormatter::NONE)
                         ->getPattern()
                 )
             ],
