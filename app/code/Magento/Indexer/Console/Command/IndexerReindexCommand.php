@@ -64,7 +64,7 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
     ) {
         $this->indexerRegistry = $indexerRegistry;
         $this->dependencyInfoProvider = $dependencyInfoProvider;
-        $this->makeSharedValid = $makeSharedValid ?: ObjectManager::getInstance()->get(MakeSharedIndexValid::class);
+        $this->makeSharedValid = $makeSharedValid;
         parent::__construct($objectManagerFactory);
     }
 
@@ -99,7 +99,7 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
                 // Skip indexers having shared index that was already complete
                 if (!in_array($sharedIndex, $this->sharedIndexesComplete)) {
                     $indexer->reindexAll();
-                    if (!empty($sharedIndex) && $this->makeSharedValid->execute($sharedIndex)) {
+                    if (!empty($sharedIndex) && $this->getMakeSharedValid()->execute($sharedIndex)) {
                         $this->sharedIndexesComplete[] = $sharedIndex;
                     }
                 }
@@ -252,5 +252,19 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
             $this->dependencyInfoProvider = $this->getObjectManager()->get(DependencyInfoProvider::class);
         }
         return $this->dependencyInfoProvider;
+    }
+
+    /**
+     * Get MakeSharedIndexValid processor.
+     *
+     * @return MakeSharedIndexValid
+     */
+    private function getMakeSharedValid(): MakeSharedIndexValid
+    {
+        if (!$this->makeSharedValid) {
+            $this->makeSharedValid = $this->getObjectManager()->get(MakeSharedIndexValid::class);
+        }
+
+        return $this->makeSharedValid;
     }
 }
