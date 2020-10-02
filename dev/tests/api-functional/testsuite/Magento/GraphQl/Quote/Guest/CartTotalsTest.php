@@ -232,6 +232,30 @@ class CartTotalsTest extends GraphQlAbstract
     }
 
     /**
+     * The totals calculation with second currency.
+     *
+     * @magentoApiDataFixture Magento/Store/_files/second_store_with_second_currency.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     */
+    public function testGetCartTotalsWithDifferentCurrency()
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        $query = $this->getQuery($maskedQuoteId);
+        $storeCodeFromFixture = 'fixture_second_store';
+        $headerMap = ['Store' => $storeCodeFromFixture, 'Content-Currency' => 'EUR'];
+        $response = $this->graphQlQuery($query, [], '', $headerMap);
+
+        $cartItem = $response['cart']['items'][0];
+        self::assertEquals(20, $cartItem['prices']['price']['value']);
+        self::assertEquals(40, $cartItem['prices']['row_total']['value']);
+        self::assertEquals(40, $cartItem['prices']['row_total_including_tax']['value']);
+        self::assertEquals('EUR', $cartItem['prices']['price']['currency']);
+        self::assertEquals('EUR', $cartItem['prices']['row_total']['currency']);
+    }
+
+    /**
      * _security
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/GraphQl/Tax/_files/tax_rule_for_region_1.php
