@@ -99,7 +99,7 @@ define([
             }
 
             elems.forEach(function (elem) {
-                registry.get(elem, function () {
+                registry.get(elem, function (elem) { //eslint-disable-line
                     this.elems.push(elem);
                 }.bind(this));
             }, this);
