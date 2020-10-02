@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\QuoteGraphQl\Model\Cart;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
@@ -44,11 +45,11 @@ class GetCartForUser
     public function __construct(
         MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToQuoteId,
         CartRepositoryInterface $cartRepository,
-        StoreRepositoryInterface $storeRepository
+        StoreRepositoryInterface $storeRepository = null
     ) {
         $this->maskedQuoteIdToQuoteId = $maskedQuoteIdToQuoteId;
         $this->cartRepository = $cartRepository;
-        $this->storeRepository = $storeRepository;
+        $this->storeRepository = $storeRepository ?: ObjectManager::getInstance()->get(StoreRepositoryInterface::class);
     }
 
     /**
