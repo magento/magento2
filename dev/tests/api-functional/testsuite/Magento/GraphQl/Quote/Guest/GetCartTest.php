@@ -165,6 +165,21 @@ QUERY;
     }
 
     /**
+     * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
+     * @magentoApiDataFixture Magento/Store/_files/second_website_with_store_group_and_store.php
+     */
+    public function testGetCartWithDifferentStoreDifferentWebsite() {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Can\'t assign cart to store in different website.');
+
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
+        $query = $this->getQuery($maskedQuoteId);
+
+        $headerMap = ['Store' => 'fixture_second_store'];
+        $this->graphQlQuery($query, [], '', $headerMap);
+    }
+
+    /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/Checkout/_files/active_quote_guest_not_default_store.php
      *

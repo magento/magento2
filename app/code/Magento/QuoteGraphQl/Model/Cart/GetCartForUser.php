@@ -9,10 +9,12 @@ namespace Magento\QuoteGraphQl\Model\Cart;
 
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Model\MaskedQuoteIdToQuoteIdInterface;
 use Magento\Quote\Model\Quote;
+use Magento\Store\Api\StoreRepositoryInterface;
 
 /**
  * Get cart
@@ -30,15 +32,23 @@ class GetCartForUser
     private $cartRepository;
 
     /**
+     * @var StoreRepositoryInterface
+     */
+    private $storeRepository;
+
+    /**
      * @param MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToQuoteId
      * @param CartRepositoryInterface $cartRepository
+     * @param StoreRepositoryInterface $storeRepository
      */
     public function __construct(
         MaskedQuoteIdToQuoteIdInterface $maskedQuoteIdToQuoteId,
-        CartRepositoryInterface $cartRepository
+        CartRepositoryInterface $cartRepository,
+        StoreRepositoryInterface $storeRepository
     ) {
         $this->maskedQuoteIdToQuoteId = $maskedQuoteIdToQuoteId;
         $this->cartRepository = $cartRepository;
+        $this->storeRepository = $storeRepository;
     }
 
     /**
@@ -49,6 +59,7 @@ class GetCartForUser
      * @param int $storeId
      * @return Quote
      * @throws GraphQlAuthorizationException
+     * @throws GraphQlInputException
      * @throws GraphQlNoSuchEntityException
      * @throws NoSuchEntityException
      */
@@ -76,6 +87,13 @@ class GetCartForUser
         }
 
         if ((int)$cart->getStoreId() !== $storeId) {
+            $cartStore = $this->storeRepository->getById($cart->getStoreId());
+            $newStore = $this->storeRepository->getById($storeId);
+            if ($cartStore->getWebsite() !== $newStore->getWebsite()) {
+                throw new GraphQlInputException(
+                    __('Can\'t assign cart to store in different website.')
+                );
+            }
             $cart->setStoreId($storeId);
             $this->cartRepository->save($cart);
         }
