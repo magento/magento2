@@ -79,7 +79,7 @@ define([
          * @returns {Object[]}
          */
         getChild: function (row) {
-            let elem = _.findWhere(this.elems(), {
+            var elem = _.findWhere(this.elems(), {
                 entity: this.entity,
                 code: row[this.indexField]
             });
@@ -99,7 +99,7 @@ define([
             }
 
             elems.forEach(function (elem) {
-                registry.get(elem, function (elem) {
+                registry.get(elem, function () {
                     this.elems.push(elem);
                 }.bind(this));
             }, this);
@@ -114,7 +114,7 @@ define([
          * @returns {Object}
          */
         getRowTemplate: function (row) {
-            let templates = this.templates,
+            var templates = this.templates,
                 type      = row[this.index].type || 'text',
                 template  = utils.extend({}, templates.base, templates[type]);
 
@@ -132,7 +132,7 @@ define([
          * @param {Object} data
          */
         onDataUpdate: function (data) {
-            let children = [];
+            var children = [];
 
             data.items.forEach(function (row) {
                 children.push(this.getRowTemplate(row));
@@ -146,7 +146,7 @@ define([
          *
          * @param {String} entity
          */
-        onEntityUpdate: function (entity) {
+        onEntityUpdate: function (entity) { //eslint-disable-line no-unused-vars
             this.elems().forEach(function (elem) {
                 if (_.isFunction(elem.clear)) {
                     elem.clear();

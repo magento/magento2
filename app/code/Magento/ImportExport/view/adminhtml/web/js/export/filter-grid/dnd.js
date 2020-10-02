@@ -18,11 +18,11 @@ define([
          * @returns {Dnd} Chainbale.
          */
         _cloneTable: function (elem) {
-            this._super(elem);
-
-            let columnIndex = this._getColumnIndex(elem),
+            var columnIndex = this._getColumnIndex(elem),
                 filterRow   = this.dragTable.tHead.lastElementChild,
                 filterCells = _.toArray(filterRow.cells);
+
+            this._super(elem);
 
             filterCells.forEach(function (td, index) {
                 if (index !== columnIndex) {
