@@ -276,7 +276,6 @@ QUERY;
         $this->assertSavedBillingAddressFields($billingAddressResponse);
     }
 
-
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/Customer/_files/customer_two_addresses.php
@@ -326,7 +325,6 @@ QUERY;
         $billingAddressResponse = $cartResponse['billing_address'];
         $this->assertSavedBillingAddressFields($billingAddressResponse);
     }
-
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
