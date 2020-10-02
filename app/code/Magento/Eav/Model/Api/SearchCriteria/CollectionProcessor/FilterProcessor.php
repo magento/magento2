@@ -11,6 +11,8 @@ use Magento\Framework\Api\SearchCriteria\CollectionProcessor\FilterProcessor\Cus
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Data\Collection\AbstractDb;
+use Magento\Framework\DB\Select;
+use Zend_Db_Select_Exception;
 
 /**
  *  SearchCriteria FilterProcessor
@@ -59,6 +61,7 @@ class FilterProcessor implements CollectionProcessorInterface
      * @param FilterGroup $filterGroup
      * @param AbstractDb $collection
      * @return void
+     * @throws Zend_Db_Select_Exception
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -68,9 +71,9 @@ class FilterProcessor implements CollectionProcessorInterface
     ) {
         $fields = [];
         $customFilters = [];
+        $applyLater = false;
         foreach ($filterGroup->getFilters() as $filter) {
             $isApplied = false;
-            $applyLater = false;
             $customFilter = $this->getCustomFilterForField($filter->getField());
             if ($customFilter) {
                 if ($filter->getConditionType() === 'eq') {
@@ -80,7 +83,7 @@ class FilterProcessor implements CollectionProcessorInterface
                                 $filter = reset($customFilter['filter']);
                                 $filter->setValue(implode(',', $values));
                                 $filter->setConditionType('in');
-                                $customFilter['filter'] = $filter;
+                                $customFilter['filter'] = [$filter];
                             }
 
                             return $customFilter;
@@ -102,25 +105,62 @@ class FilterProcessor implements CollectionProcessorInterface
                 }
             }
 
-            if (!$isApplied && !$applyLater) {
+            if (!$isApplied && !$customFilter) {
                 $field = $this->getFieldMapping($filter->getField());
                 $condition = $filter->getConditionType() ? $filter->getConditionType() : 'eq';
                 $fields[] = ['attribute' => $field, $condition => $filter->getValue()];
             }
         }
 
-        if ($applyLater && count($customFilters)) {
+        $whereParts = $collection->getSelect()->getPart(Select::WHERE);
+        $whereSql = $this->applyFilters($collection, $fields, $customFilters);
+        $collection->getSelect()->setPart(Select::WHERE, $whereParts);
+        $collection->getSelect()->where($whereSql);
+    }
+
+    /**
+     * Apply filters and retrieve `where` conditions
+     *
+     * @param AbstractDb $collection
+     * @param array $fields
+     * @param array $customFilters
+     * @return string
+     * @throws Zend_Db_Select_Exception
+     */
+    private function applyFilters(
+        AbstractDb $collection,
+        array $fields,
+        array $customFilters
+    ): string {
+        $select = $collection->getSelect();
+        $select->reset(Select::WHERE);
+        $whereParts = [];
+        if (count($fields)) {
+            $collection->addFieldToFilter($fields);
+            $whereParts[] = $select->getPart(Select::WHERE)[0];
+            $select->reset(Select::WHERE);
+        }
+
+        if (count($customFilters)) {
             foreach ($customFilters as $field => $filter) {
                 $customFilter = $this->getCustomFilterForField($field);
                 /** @var Filter $filter */
-                $filter = $filter['filter'];
+                $filter = reset($filter['filter']);
                 $customFilter->apply($filter, $collection);
+                $whereCondition = $select->getPart(Select::WHERE);
+                if (is_array($whereCondition) && count($whereCondition)) {
+                    $whereParts[] = $whereCondition[0];
+                    $select->reset(Select::WHERE);
+                }
             }
         }
+        $resultCondition = '';
 
-        if ($fields) {
-            $collection->addFieldToFilter($fields);
+        if (count($whereParts)) {
+            $resultCondition = '(' . implode(') ' . Select::SQL_OR . ' (', $whereParts) . ')';
         }
+
+        return $resultCondition;
     }
 
     /**
