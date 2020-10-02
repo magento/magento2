@@ -11,7 +11,7 @@ use Magento\Ui\Component\Listing\Columns\Column;
 use Magento\Framework\UrlInterface;
 
 /**
- * Class ProductActions
+ * Class ProductActions for Listing Columns
  *
  * @api
  * @since 100.0.2
@@ -60,7 +60,6 @@ class ProductActions extends Column
                     ),
                     'label' => __('Edit'),
                     'hidden' => false,
-                    '__disableTmpl' => true
                 ];
             }
         }

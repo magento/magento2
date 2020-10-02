@@ -21,7 +21,7 @@ class ListCompareTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Customer\Model\Session */
     protected $_session;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         /** @var $session \Magento\Customer\Model\Session */
         $this->_session = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
@@ -35,7 +35,7 @@ class ListCompareTest extends \PHPUnit\Framework\TestCase
             ->create(\Magento\Catalog\Model\Product\Compare\ListCompare::class, ['customerVisitor' => $this->_visitor]);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->_session->setCustomerId(null);
     }

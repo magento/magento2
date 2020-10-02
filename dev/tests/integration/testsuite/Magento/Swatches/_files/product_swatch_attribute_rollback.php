@@ -5,4 +5,6 @@
  */
 declare(strict_types=1);
 
-include __DIR__ . '/swatch_attribute_rollback.php';
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
+
+Resolver::getInstance()->requireDataFixture('Magento/Swatches/_files/swatch_attribute_rollback.php');

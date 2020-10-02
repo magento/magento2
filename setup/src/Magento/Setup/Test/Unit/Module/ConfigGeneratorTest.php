@@ -3,19 +3,22 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Setup\Test\Unit\Module;
 
 use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Config\Data\ConfigData;
 use Magento\Framework\Config\Data\ConfigDataFactory;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Math\Random;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Setup\Model\ConfigGenerator;
-use Magento\Framework\Config\ConfigOptionsListConstants;
-use Magento\Setup\Model\CryptKeyGenerator;
-use PHPUnit\Framework\TestCase;
 use Magento\Setup\Model\ConfigOptionsList\DriverOptions;
+use Magento\Setup\Model\CryptKeyGenerator;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for Magento\Setup\Model\ConfigGenerator class.
@@ -27,13 +30,13 @@ class ConfigGeneratorTest extends TestCase
      */
     private $configGeneratorObject;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        /** @var DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject $deployConfig */
+        /** @var DeploymentConfig|MockObject $deployConfig */
         $deployConfig = $this->createMock(DeploymentConfig::class);
         $deployConfig->expects($this->any())->method('isAvailable')->willReturn(false);
 
-        /** @var Random|\PHPUnit_Framework_MockObject_MockObject $randomMock */
+        /** @var Random|MockObject $randomMock */
         $randomMock = $this->createMock(Random::class);
         $randomMock->expects($this->any())->method('getRandomString')->willReturn('key');
 

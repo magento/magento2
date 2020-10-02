@@ -10,7 +10,6 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminFilterLegacyGridActionGroup">
         <arguments>
-            <argument name="fieldSelector" type="string"/>
             <argument name="value" type="string"/>
             <argument name="button" type="string" defaultValue="{{AdminLegacyDataGridFilterSection.apply}}"/>
         </arguments>

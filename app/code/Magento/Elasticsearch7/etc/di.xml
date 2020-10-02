@@ -17,7 +17,7 @@
     <type name="Magento\Search\Model\Adminhtml\System\Config\Source\Engine">
         <arguments>
             <argument name="engines" xsi:type="array">
-                <item sortOrder="30" name="elasticsearch7" xsi:type="string">Elasticsearch 7.0+</item>
+                <item sortOrder="30" name="elasticsearch7" xsi:type="string">Elasticsearch 7</item>
             </argument>
         </arguments>
     </type>
@@ -85,6 +85,7 @@
             <argument name="engines" xsi:type="array">
                 <item name="elasticsearch7" xsi:type="string">elasticsearch7</item>
             </argument>
+            <argument name="defaultEngine" xsi:type="string">elasticsearch7</argument>
         </arguments>
     </type>
 
@@ -175,6 +176,7 @@
         <arguments>
             <argument name="factories" xsi:type="array">
                 <item name="elasticsearch7" xsi:type="object">elasticsearchAdvancedCollectionFactory</item>
+                <item name="default" xsi:type="object">elasticsearchAdvancedCollectionFactory</item>
             </argument>
         </arguments>
     </type>
@@ -218,6 +220,34 @@
             <argument name="fieldsMappingPreprocessors" xsi:type="array">
                 <item name="elasticsearch7_copy_searchable_fields_to_search_field" xsi:type="object">Magento\Elasticsearch\Model\Adapter\FieldMapper\CopySearchableFieldsToSearchField</item>
                 <item name="elasticsearch7_add_default_search_field" xsi:type="object">Magento\Elasticsearch\Model\Adapter\FieldMapper\AddDefaultSearchField</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <virtualType name="Magento\Elasticsearch7\Setup\InstallConfig" type="Magento\Elasticsearch\Setup\InstallConfig">
+        <arguments>
+            <argument name="searchConfigMapping" xsi:type="array">
+                <item name="elasticsearch-host" xsi:type="string">elasticsearch7_server_hostname</item>
+                <item name="elasticsearch-port" xsi:type="string">elasticsearch7_server_port</item>
+                <item name="elasticsearch-timeout" xsi:type="string">elasticsearch7_server_timeout</item>
+                <item name="elasticsearch-index-prefix" xsi:type="string">elasticsearch7_index_prefix</item>
+                <item name="elasticsearch-enable-auth" xsi:type="string">elasticsearch7_enable_auth</item>
+                <item name="elasticsearch-username" xsi:type="string">elasticsearch7_username</item>
+                <item name="elasticsearch-password" xsi:type="string">elasticsearch7_password</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Search\Setup\CompositeInstallConfig">
+        <arguments>
+            <argument name="installConfigList" xsi:type="array">
+                <item name="elasticsearch7" xsi:type="object">Magento\Elasticsearch7\Setup\InstallConfig</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Search\Model\SearchEngine\Validator">
+        <arguments>
+            <argument name="engineValidators" xsi:type="array">
+                <item name="elasticsearch7" xsi:type="object">Magento\Elasticsearch\Setup\Validator</item>
             </argument>
         </arguments>
     </type>

@@ -5,6 +5,10 @@
  */
 declare(strict_types=1);
 
-require __DIR__ . '/visual_swatch_attribute_with_different_options_type_rollback.php';
-require __DIR__ . '/../../../Magento/ConfigurableProduct/_files/configurable_products_rollback.php';
-require __DIR__ . '/../../../Magento/Catalog/_files/product_image_rollback.php';
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
+
+Resolver::getInstance()->requireDataFixture(
+    'Magento/Swatches/_files/visual_swatch_attribute_with_different_options_type_rollback.php'
+);
+Resolver::getInstance()->requireDataFixture('Magento/ConfigurableProduct/_files/configurable_products_rollback.php');
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/product_image_rollback.php');

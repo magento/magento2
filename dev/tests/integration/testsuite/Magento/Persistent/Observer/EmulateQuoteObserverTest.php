@@ -37,11 +37,11 @@ class EmulateQuoteObserverTest extends \PHPUnit\Framework\TestCase
     protected $_customerSession;
 
     /**
-     * @var \Magento\Checkout\Model\Session | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Checkout\Model\Session | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_checkoutSession;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
@@ -82,7 +82,7 @@ class EmulateQuoteObserverTest extends \PHPUnit\Framework\TestCase
         )->disableOriginalConstructor()->setMethods(
             []
         )->getMock();
-        $requestMock->expects($this->once())->method('getFullActionName')->will($this->returnValue('valid_action'));
+        $requestMock->expects($this->once())->method('getFullActionName')->willReturn('valid_action');
         $event = new \Magento\Framework\Event(['request' => $requestMock]);
         $observer = new \Magento\Framework\Event\Observer();
         $observer->setEvent($event);

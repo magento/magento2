@@ -3,93 +3,99 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sitemap\Test\Unit\Model;
 
-use Magento\Framework\App\Area;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sitemap\Model\EmailNotification;
+use Magento\Sitemap\Model\Observer;
+use Magento\Sitemap\Model\ResourceModel\Sitemap\Collection;
+use Magento\Sitemap\Model\ResourceModel\Sitemap\CollectionFactory;
+use Magento\Sitemap\Model\Sitemap;
 use Magento\Store\Model\App\Emulation;
+use Magento\Store\Model\ScopeInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Class ObserverTest
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ObserverTest extends \PHPUnit\Framework\TestCase
+class ObserverTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
     private $objectManager;
 
     /**
-     * @var \Magento\Sitemap\Model\Observer
+     * @var Observer
      */
     private $observer;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|MockObject
      */
     private $scopeConfigMock;
 
     /**
-     * @var \Magento\Sitemap\Model\ResourceModel\Sitemap\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionFactory|MockObject
      */
     private $collectionFactoryMock;
 
     /**
-     * @var \Magento\Sitemap\Model\ResourceModel\Sitemap\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var Collection|MockObject
      */
     private $sitemapCollectionMock;
 
     /**
-     * @var \Magento\Sitemap\Model\Sitemap|\PHPUnit_Framework_MockObject_MockObject
+     * @var Sitemap|MockObject
      */
     private $sitemapMock;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface|MockObject
      */
     private $objectManagerMock;
 
     /**
-     * @var Emulation|\PHPUnit_Framework_MockObject_MockObject
+     * @var Emulation|MockObject
      */
     private $appEmulationMock;
 
     /**
-     * @var EmailNotification|\PHPUnit_Framework_MockObject_MockObject
+     * @var EmailNotification|MockObject
      */
     private $emailNotificationMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->objectManagerMock = $this->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
+        $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
             ->getMock();
-        $this->scopeConfigMock = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
+        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
             ->getMock();
         $this->collectionFactoryMock = $this->getMockBuilder(
-            \Magento\Sitemap\Model\ResourceModel\Sitemap\CollectionFactory::class
+            CollectionFactory::class
         )->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
         $this->sitemapCollectionMock = $this->createPartialMock(
-            \Magento\Sitemap\Model\ResourceModel\Sitemap\Collection::class,
+            Collection::class,
             ['getIterator']
         );
-        $this->sitemapMock = $this->createPartialMock(
-            \Magento\Sitemap\Model\Sitemap::class,
-            [
-                'generateXml',
-                'getStoreId',
-            ]
-        );
+        $this->sitemapMock = $this->getMockBuilder(Sitemap::class)
+            ->addMethods(['getStoreId'])
+            ->onlyMethods(['generateXml'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->appEmulationMock = $this->createMock(Emulation::class);
         $this->emailNotificationMock = $this->createMock(EmailNotification::class);
         $this->objectManager = new ObjectManager($this);
 
         $this->observer = $this->objectManager->getObject(
-            \Magento\Sitemap\Model\Observer::class,
+            Observer::class,
             [
                 'scopeConfig' => $this->scopeConfigMock,
                 'collectionFactory' => $this->collectionFactoryMock,
@@ -125,10 +131,49 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
         $this->scopeConfigMock->expects($this->at(0))
             ->method('getValue')
             ->with(
-                \Magento\Sitemap\Model\Observer::XML_PATH_ERROR_RECIPIENT,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                Observer::XML_PATH_ERROR_RECIPIENT,
+                ScopeInterface::SCOPE_STORE
             )
             ->willReturn('error-recipient@example.com');
+
+        $this->emailNotificationMock->expects($this->once())
+            ->method('sendErrors')
+            ->with([$exception]);
+
+        $this->observer->scheduledGenerateSitemaps();
+    }
+
+    /**
+     * Test if cron scheduled XML sitemap generation will start and stop the store environment emulation
+     *
+     * @throws \Exception
+     */
+    public function testCronGenerateSitemapEnvironmentEmulation()
+    {
+        $storeId = 1;
+
+        $this->scopeConfigMock->expects($this->once())->method('isSetFlag')->willReturn(true);
+
+        $this->collectionFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($this->sitemapCollectionMock);
+
+        $this->sitemapCollectionMock->expects($this->any())
+            ->method('getIterator')
+            ->willReturn(new \ArrayIterator([$this->sitemapMock]));
+
+        $this->sitemapMock->expects($this->at(0))
+            ->method('getStoreId')
+            ->willReturn($storeId);
+
+        $this->sitemapMock->expects($this->once())
+            ->method('generateXml');
+
+        $this->appEmulationMock->expects($this->once())
+            ->method('startEnvironmentEmulation');
+
+        $this->appEmulationMock->expects($this->once())
+            ->method('stopEnvironmentEmulation');
 
         $this->observer->scheduledGenerateSitemaps();
     }

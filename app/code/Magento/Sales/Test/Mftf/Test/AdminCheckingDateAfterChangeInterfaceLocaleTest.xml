@@ -27,7 +27,7 @@
             <createData entity="SimpleProduct2" stepKey="createProduct"/>
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
             <!--Login to Admin page-->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <!--Delete entities-->
@@ -62,10 +62,10 @@
         <executeJS function="return (new Date('{$grabPurchaseDateInDefaultLocale}').toLocaleDateString('en-US', {month: 'short'}))" stepKey="getMonthNameInUS"/>
 
         <!--Checking Date with default "Interface Locale"-->
-        <assertContains stepKey="checkingDateWithDefaultInterfaceLocale">
+        <assertStringContainsString stepKey="checkingDateWithDefaultInterfaceLocale">
             <expectedResult type="variable">getMonthNameInUS</expectedResult>
             <actualResult type="variable">grabPurchaseDateInDefaultLocale</actualResult>
-        </assertContains>
+        </assertStringContainsString>
 
         <!--Set Admin "Interface Locale" to "Français (France) / français (France)"-->
         <actionGroup ref="SetAdminAccountActionGroup" stepKey="setAdminInterfaceLocaleToFrance">
@@ -84,9 +84,9 @@
         <executeJS function="return (new Date('{$grabPurchaseDateInDefaultLocale}').toLocaleDateString('fr-FR', {month: 'short'}))" stepKey="getMonthNameInFrench"/>
 
         <!--Checking Date after changing "Interface Locale"-->
-        <assertContains stepKey="checkingDateAfterChangeInterfaceLocale">
+        <assertStringContainsString stepKey="checkingDateAfterChangeInterfaceLocale">
             <expectedResult type="variable">getMonthNameInFrench</expectedResult>
             <actualResult type="variable">grabPurchaseDateInFrenchLocale</actualResult>
-        </assertContains>
+        </assertStringContainsString>
     </test>
 </tests>

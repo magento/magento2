@@ -81,15 +81,14 @@
         <see selector="{{StorefrontProductInfoMainSection.productAttributeOptions1}}" userInput="option2" stepKey="seeOption2Storefront"/>
 
         <!--go to admin and disable an option-->
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToEditPage">
             <argument name="productId" value="$$createConfigProduct.id$$"/>
         </actionGroup>
         <waitForPageLoad stepKey="wait2"/>
         <click selector="{{AdminProductFormConfigurationsSection.actionsBtn('1')}}" stepKey="clickToExpandActions"/>
         <click selector="{{AdminProductFormConfigurationsSection.disableProductBtn}}" stepKey="clickDisable"/>
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSave"/>
-        <waitForPageLoad stepKey="wait3"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSave"/>
 
         <!--check storefront for one option-->
         <amOnPage url="$$createConfigProduct.sku$$.html" stepKey="amOnStorefront2"/>

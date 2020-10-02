@@ -3,46 +3,57 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\ConfigurableProduct\Test\Unit\Pricing\Price;
 
+use Magento\Catalog\Model\Product;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
+use Magento\ConfigurableProduct\Pricing\Price\ConfigurablePriceResolver;
 use Magento\ConfigurableProduct\Pricing\Price\LowestPriceOptionsProviderInterface;
+use Magento\ConfigurableProduct\Pricing\Price\PriceResolverInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ConfigurablePriceResolverTest extends \PHPUnit\Framework\TestCase
+class ConfigurablePriceResolverTest extends TestCase
 {
     /**
-     * @var LowestPriceOptionsProviderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LowestPriceOptionsProviderInterface|MockObject
      */
     private $lowestPriceOptionsProvider;
 
     /**
-     * @var \Magento\ConfigurableProduct\Pricing\Price\ConfigurablePriceResolver
+     * @var ConfigurablePriceResolver
      */
     protected $resolver;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\ConfigurableProduct\Model\Product\Type\Configurable
+     * @var MockObject|Configurable
      */
     protected $configurable;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\ConfigurableProduct\Pricing\Price\PriceResolverInterface
+     * @var MockObject|PriceResolverInterface
      */
     protected $priceResolver;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $className = \Magento\ConfigurableProduct\Model\Product\Type\Configurable::class;
-        $this->configurable = $this->createPartialMock($className, ['getUsedProducts']);
+        $className = Configurable::class;
+        $this->configurable = $this->getMockBuilder($className)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getUsedProducts'])
+            ->getMock();
 
-        $className = \Magento\ConfigurableProduct\Pricing\Price\PriceResolverInterface::class;
+        $className = PriceResolverInterface::class;
         $this->priceResolver = $this->getMockForAbstractClass($className, [], '', false, true, true, ['resolvePrice']);
 
-        $this->lowestPriceOptionsProvider = $this->createMock(LowestPriceOptionsProviderInterface::class);
+        $this->lowestPriceOptionsProvider = $this->getMockForAbstractClass(LowestPriceOptionsProviderInterface::class);
 
         $objectManager = new ObjectManager($this);
         $this->resolver = $objectManager->getObject(
-            \Magento\ConfigurableProduct\Pricing\Price\ConfigurablePriceResolver::class,
+            ConfigurablePriceResolver::class,
             [
                 'priceResolver' => $this->priceResolver,
                 'configurable' => $this->configurable,
@@ -62,13 +73,14 @@ class ConfigurablePriceResolverTest extends \PHPUnit\Framework\TestCase
     public function testResolvePrice($variantPrices, $expectedPrice)
     {
         $product = $this->getMockBuilder(
-            \Magento\Catalog\Model\Product::class
-        )->disableOriginalConstructor()->getMock();
+            Product::class
+        )->disableOriginalConstructor()
+            ->getMock();
 
         $product->expects($this->never())->method('getSku');
 
         $products = array_map(function () {
-            return $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+            return $this->getMockBuilder(Product::class)
                 ->disableOriginalConstructor()
                 ->getMock();
         }, $variantPrices);
