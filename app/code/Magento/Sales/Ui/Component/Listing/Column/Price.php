@@ -16,6 +16,8 @@ use Magento\Directory\Model\Currency;
 
 /**
  * Class Price
+ *
+ * UiComponent class for Price format column
  */
 class Price extends Column
 {
