@@ -7,12 +7,12 @@
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminGoToBlockEditPageAfterClickBlockOnGridTest">
+    <test name="AdminOpenBlockEditPageAfterClickBlockOnGridTest">
         <annotations>
             <features value="Cms"/>
-            <stories value="Go to CMS Block Edit Page"/>
-            <title value="Go to CMS Block Edit Page after choosing block on the grid."/>
-            <description value="Go to CMS Block Edit Page after choosing block on the grid."/>
+            <stories value="Open CMS Block Edit Page"/>
+            <title value="Open CMS Block Edit Page after choosing block on the grid."/>
+            <description value="Open CMS Block Edit Page after choosing block on the grid."/>
             <severity value="MINOR"/>
         </annotations>
         <before>
@@ -24,11 +24,14 @@
         </after>
 
         <actionGroup ref="AdminCreateNewCMSBlockActionGroup" stepKey="addNewBlock"/>
+        <actionGroup ref="AdminOpenCmsBlocksGridActionGroup" stepKey="openCmsBlocksGrid"/>
 
-        <amOnPage url="{{CmsBlocksPage.url}}" stepKey="navigateBlockGrid"/>
-        <waitForPageLoad stepKey="waitForBlockGridLoad"/>
-        <click selector="{{AdminBlockGridSection.blockEditPage(_defaultBlock.title)}}" stepKey="navigateToBlockEditPage"/>
-        <waitForPageLoad stepKey="waitForBlockEditPageLoad"/>
-        <see userInput="{{_defaultBlock.title}}" selector="{{AdminCmsBlockPageSection.cmsBlockTitle}}" stepKey="seeHomePageTitle"/>
+        <actionGroup ref="AdminClickTableGridRowBySelectorActionGroup" stepKey="clickTableRow">
+            <argument name="selector" value="{{AdminBlockGridSection.blockEditPage(_defaultBlock.title)}}"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminAssertPageTitleActionGroup" stepKey="seePageTitle">
+            <argument name="title" value="{{_defaultBlock.title}}"/>
+        </actionGroup>
     </test>
 </tests>

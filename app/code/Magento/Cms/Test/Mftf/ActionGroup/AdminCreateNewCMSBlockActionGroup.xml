@@ -8,6 +8,10 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminCreateNewCMSBlockActionGroup">
+        <annotations>
+            <description>Create new CMS Block.</description>
+        </annotations>
+
         <amOnPage url="{{CmsNewBlock.url}}" stepKey="amNewCMSBlockPage"/>
         <waitForPageLoad stepKey="waitForBlockPageLoad"/>
         <fillField selector="{{BlockNewPageBasicFieldsSection.blockTitle}}" userInput="{{_defaultBlock.title}}" stepKey="fillFieldTitle1"/>
