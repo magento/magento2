@@ -154,17 +154,6 @@ class IndexTest extends AbstractBackendController
     }
 
     /**
-     * @magentoDataFixture Magento/Customer/_files/customer_sample.php
-     */
-    public function testCartAction()
-    {
-        $this->getRequest()->setParam('id', 1)->setParam('website_id', 1)->setPostValue('delete', 1);
-        $this->dispatch('backend/customer/index/cart');
-        $body = $this->getResponse()->getBody();
-        $this->assertStringContainsString('<div id="customer_cart_grid"', $body);
-    }
-
-    /**
      * @magentoDbIsolation enabled
      */
     public function testResetPasswordActionNoCustomerId()

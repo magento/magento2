@@ -7,20 +7,38 @@ declare(strict_types=1);
 
 namespace Magento\ConfigurableProduct\Test\Unit\Plugin\Model\ResourceModel;
 
+use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
+use Magento\Catalog\Model\Product as ModelProduct;
 use Magento\Catalog\Model\Product\Type;
+use Magento\Catalog\Model\ProductAttributeSearchResults;
+use Magento\Catalog\Model\ResourceModel\Eav\Attribute as EavAttribute;
+use Magento\Catalog\Model\ResourceModel\Product as ResourceModelProduct;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
-use Magento\ConfigurableProduct\Plugin\Model\ResourceModel\Product;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute as ConfigurableAttribute;
+use Magento\ConfigurableProduct\Plugin\Model\ResourceModel\Product as PluginResourceModelProduct;
+use Magento\Framework\Api\ExtensionAttributesInterface;
+use Magento\Framework\Api\FilterBuilder;
+use Magento\Framework\Api\SearchCriteria;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Indexer\ActionInterface;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ProductTest extends TestCase
 {
     /**
-     * @var ObjectManager
+     * @var PluginResourceModelProduct
      */
-    private $objectManager;
+    private $model;
+
+    /**
+     * @var ObjectManagerHelper
+     */
+    private $objectManagerHelper;
 
     /**
      * @var Configurable|MockObject
@@ -33,39 +51,128 @@ class ProductTest extends TestCase
     private $actionMock;
 
     /**
-     * @var Product
+     * @var ProductAttributeRepositoryInterface|MockObject
      */
-    private $model;
+    private $productAttributeRepositoryMock;
+
+    /**
+     * @var SearchCriteriaBuilder|MockObject
+     */
+    private $searchCriteriaBuilderMock;
+
+    /**
+     * @var FilterBuilder|MockObject
+     */
+    private $filterBuilderMock;
 
     protected function setUp(): void
     {
-        $this->objectManager = new ObjectManager($this);
         $this->configurableMock = $this->createMock(Configurable::class);
         $this->actionMock = $this->getMockForAbstractClass(ActionInterface::class);
-
-        $this->model = $this->objectManager->getObject(
-            Product::class,
+        $this->productAttributeRepositoryMock = $this->getMockBuilder(ProductAttributeRepositoryInterface::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getList'])
+            ->getMockForAbstractClass();
+        $this->searchCriteriaBuilderMock = $this->createPartialMock(
+            SearchCriteriaBuilder::class,
+            ['addFilters', 'create']
+        );
+        $this->filterBuilderMock = $this->createPartialMock(
+            FilterBuilder::class,
+            ['setField', 'setConditionType', 'setValue', 'create']
+        );
+        $this->objectManagerHelper = new ObjectManagerHelper($this);
+        $this->model = $this->objectManagerHelper->getObject(
+            PluginResourceModelProduct::class,
             [
                 'configurable' => $this->configurableMock,
                 'productIndexer' => $this->actionMock,
+                'productAttributeRepository' => $this->productAttributeRepositoryMock,
+                'searchCriteriaBuilder' => $this->searchCriteriaBuilderMock,
+                'filterBuilder' => $this->filterBuilderMock
             ]
         );
     }
 
-    public function testBeforeSaveConfigurable()
+    public function testBeforeSaveConfigurable(): void
     {
-        /** @var \Magento\Catalog\Model\ResourceModel\Product|MockObject $subject */
-        $subject = $this->createMock(\Magento\Catalog\Model\ResourceModel\Product::class);
-        /** @var \Magento\Catalog\Model\Product|MockObject $object */
-        $object = $this->createPartialMock(\Magento\Catalog\Model\Product::class, ['getTypeId', 'getTypeInstance']);
+        /** @var ResourceModelProduct|MockObject $subject */
+        $subject = $this->createMock(ResourceModelProduct::class);
+        /** @var ModelProduct|MockObject $object */
+        $object = $this->createPartialMock(
+            ModelProduct::class,
+            [
+                'getTypeId',
+                'getTypeInstance',
+                'getExtensionAttributes',
+                'setData'
+            ]
+        );
         $type = $this->createPartialMock(
             Configurable::class,
             ['getSetAttributes']
         );
-        $type->expects($this->once())->method('getSetAttributes')->with($object);
+        $extensionAttributes = $this->getMockBuilder(ExtensionAttributesInterface::class)
+            ->disableOriginalConstructor()
+            ->addMethods(['getConfigurableProductOptions'])
+            ->getMock();
+        $option = $this->createPartialMock(
+            ConfigurableAttribute::class,
+            ['getAttributeId']
+        );
+        $extensionAttributes->expects($this->exactly(2))
+            ->method('getConfigurableProductOptions')
+            ->willReturn([$option]);
+        $object->expects($this->once())
+            ->method('getExtensionAttributes')
+            ->willReturn($extensionAttributes);
 
-        $object->expects($this->once())->method('getTypeId')->willReturn(Configurable::TYPE_CODE);
-        $object->expects($this->once())->method('getTypeInstance')->willReturn($type);
+        $this->filterBuilderMock->expects($this->atLeastOnce())
+            ->method('setField')
+            ->willReturnSelf();
+        $this->filterBuilderMock->expects($this->atLeastOnce())
+            ->method('setValue')
+            ->willReturnSelf();
+        $this->filterBuilderMock->expects($this->atLeastOnce())
+            ->method('setConditionType')
+            ->willReturnSelf();
+        $this->filterBuilderMock->expects($this->atLeastOnce())
+            ->method('create')
+            ->willReturnSelf();
+        $searchCriteria = $this->createMock(SearchCriteria::class);
+        $this->searchCriteriaBuilderMock->expects($this->once())
+            ->method('create')
+            ->willReturn($searchCriteria);
+        $searchResultMockClass = $this->createPartialMock(
+            ProductAttributeSearchResults::class,
+            ['getItems']
+        );
+        $this->productAttributeRepositoryMock->expects($this->once())
+            ->method('getList')
+            ->with($searchCriteria)
+            ->willReturn($searchResultMockClass);
+        $optionAttribute = $this->createPartialMock(
+            EavAttribute::class,
+            ['getAttributeCode']
+        );
+        $searchResultMockClass->expects($this->once())
+            ->method('getItems')
+            ->willReturn([$optionAttribute]);
+        $type->expects($this->once())
+            ->method('getSetAttributes')
+            ->with($object);
+        $object->expects($this->once())
+            ->method('getTypeId')
+            ->will($this->returnValue(Configurable::TYPE_CODE));
+        $object->expects($this->once())
+            ->method('getTypeInstance')
+            ->will($this->returnValue($type));
+        $object->expects($this->once())
+            ->method('setData');
+        $option->expects($this->once())
+            ->method('getAttributeId');
+        $optionAttribute->expects($this->once())
+            ->method('getAttributeCode');
 
         $this->model->beforeSave(
             $subject,
@@ -73,14 +180,23 @@ class ProductTest extends TestCase
         );
     }
 
-    public function testBeforeSaveSimple()
+    public function testBeforeSaveSimple(): void
     {
-        /** @var \Magento\Catalog\Model\ResourceModel\Product|MockObject $subject */
-        $subject = $this->createMock(\Magento\Catalog\Model\ResourceModel\Product::class);
-        /** @var \Magento\Catalog\Model\Product|MockObject $object */
-        $object = $this->createPartialMock(\Magento\Catalog\Model\Product::class, ['getTypeId', 'getTypeInstance']);
-        $object->expects($this->once())->method('getTypeId')->willReturn(Type::TYPE_SIMPLE);
-        $object->expects($this->never())->method('getTypeInstance');
+        /** @var ResourceModelProduct|MockObject$subject */
+        $subject = $this->createMock(ResourceModelProduct::class);
+        /** @var ModelProduct|MockObject $object */
+        $object = $this->createPartialMock(
+            ModelProduct::class,
+            [
+                'getTypeId',
+                'getTypeInstance'
+            ]
+        );
+        $object->expects($this->once())
+            ->method('getTypeId')
+            ->will($this->returnValue(Type::TYPE_SIMPLE));
+        $object->expects($this->never())
+            ->method('getTypeInstance');
 
         $this->model->beforeSave(
             $subject,
@@ -88,29 +204,35 @@ class ProductTest extends TestCase
         );
     }
 
-    public function testAroundDelete()
+    public function testAroundDelete(): void
     {
         $productId = '1';
         $parentConfigId = ['2'];
-        /** @var \Magento\Catalog\Model\ResourceModel\Product|MockObject $subject */
-        $subject = $this->createMock(\Magento\Catalog\Model\ResourceModel\Product::class);
-        /** @var \Magento\Catalog\Model\Product|MockObject $product */
+        /** @var ResourceModelProduct|MockObject $subject */
+        $subject = $this->createMock(ResourceModelProduct::class);
+        /** @var ModelProduct|MockObject $product */
         $product = $this->createPartialMock(
-            \Magento\Catalog\Model\Product::class,
+            ModelProduct::class,
             ['getId', 'delete']
         );
-        $product->expects($this->once())->method('getId')->willReturn($productId);
-        $product->expects($this->once())->method('delete')->willReturn(true);
+        $product->expects($this->once())
+            ->method('getId')
+            ->willReturn($productId);
+        $product->expects($this->once())
+            ->method('delete')
+            ->willReturn(true);
         $this->configurableMock->expects($this->once())
             ->method('getParentIdsByChild')
             ->with($productId)
             ->willReturn($parentConfigId);
-        $this->actionMock->expects($this->once())->method('executeList')->with($parentConfigId);
+        $this->actionMock->expects($this->once())
+            ->method('executeList')
+            ->with($parentConfigId);
 
         $return = $this->model->aroundDelete(
             $subject,
-            /** @var \Magento\Catalog\Model\Product|MockObject $prod */
-            function (\Magento\Catalog\Model\Product $prod) use ($subject) {
+            /** @var ModelProduct|MockObject $prod */
+            function (ModelProduct $prod) use ($subject) {
                 $prod->delete();
                 return $subject;
             },

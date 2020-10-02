@@ -156,7 +156,7 @@ class DiffOldSchemaTest extends SetupTestCase
         return [
             'type' => 'bigint',
             'nullable' => true,
-            'padding' => 20,
+            'padding' => null,
             'unsigned' => false,
             'identity' => false,
             'default' => 0,
@@ -172,7 +172,7 @@ class DiffOldSchemaTest extends SetupTestCase
         return [
             'type' => 'bigint',
             'nullable' => true,
-            'padding' => 20,
+            'padding' => null,
             'unsigned' => false,
             'identity' => false,
             'default' => 1,

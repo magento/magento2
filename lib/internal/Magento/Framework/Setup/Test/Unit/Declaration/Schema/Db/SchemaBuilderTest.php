@@ -8,6 +8,8 @@ declare(strict_types=1);
 namespace Magento\Framework\Setup\Test\Unit\Declaration\Schema\Db;
 
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\SqlVersionProvider;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\Setup\Declaration\Schema\Db\DbSchemaReaderInterface;
 use Magento\Framework\Setup\Declaration\Schema\Db\SchemaBuilder;
 use Magento\Framework\Setup\Declaration\Schema\Dto\Columns\Integer;
@@ -19,14 +21,12 @@ use Magento\Framework\Setup\Declaration\Schema\Dto\Index;
 use Magento\Framework\Setup\Declaration\Schema\Dto\Schema;
 use Magento\Framework\Setup\Declaration\Schema\Dto\Table;
 use Magento\Framework\Setup\Declaration\Schema\Sharding;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
  * Test for SchemaBuilder.
- *
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -57,6 +57,11 @@ class SchemaBuilderTest extends TestCase
      */
     private $shardingMock;
 
+    /**
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\DB\Adapter\SqlVersionProvider
+     */
+    private $sqlVersionProvider;
+
     protected function setUp(): void
     {
         $this->elementFactoryMock = $this->getMockBuilder(ElementFactory::class)
@@ -67,6 +72,9 @@ class SchemaBuilderTest extends TestCase
         $this->shardingMock = $this->getMockBuilder(Sharding::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->sqlVersionProvider = $this->getMockBuilder(SqlVersionProvider::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $this->objectManagerHelper->getObject(
@@ -74,7 +82,8 @@ class SchemaBuilderTest extends TestCase
             [
                 'elementFactory' => $this->elementFactoryMock,
                 'dbSchemaReader' => $this->dbSchemaReaderMock,
-                'sharding' => $this->shardingMock
+                'sharding' => $this->shardingMock,
+                'getDbVersion' => $this->sqlVersionProvider
             ]
         );
     }
@@ -105,8 +114,7 @@ class SchemaBuilderTest extends TestCase
                         'second_column' => [
                             'name' => 'second_column',
                             'type' => 'timestamp',
-                            'default' => 'CURRENT_TIMESTAMP',
-                            'on_update' => true
+                            'default' => 'CURRENT_TIMESTAMP'
                         ],
                     ],
                     'second_table' => [
@@ -408,7 +416,7 @@ class SchemaBuilderTest extends TestCase
                         'table' => $table,
                         'padding' => 10,
                         'identity' => true,
-                        'nullable' => false,
+                        'nullable' => false
                     ]
                 ],
                 [
@@ -418,7 +426,7 @@ class SchemaBuilderTest extends TestCase
                         'type' => 'int',
                         'table' => $table,
                         'padding' => 10,
-                        'nullable' => false,
+                        'nullable' => false
                     ]
                 ],
                 [
@@ -427,8 +435,7 @@ class SchemaBuilderTest extends TestCase
                         'name' => 'second_column',
                         'type' => 'timestamp',
                         'table' => $table,
-                        'default' => 'CURRENT_TIMESTAMP',
-                        'on_update' => true,
+                        'default' => 'CURRENT_TIMESTAMP'
                     ]
                 ],
                 [
@@ -460,7 +467,7 @@ class SchemaBuilderTest extends TestCase
                         'type' => 'int',
                         'table' => $refTable,
                         'padding' => 10,
-                        'nullable' => false,
+                        'nullable' => false
                     ]
                 ],
                 [

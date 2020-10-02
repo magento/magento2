@@ -33,7 +33,9 @@
             <createData entity="FlatRateShippingMethodConfig" stepKey="enableFlatRate"/>
             <createData entity="FreeShippingMethodsSettingConfig" stepKey="freeShippingMethodsSettingConfig"/>
             <createData entity="MinimumOrderAmount90" stepKey="minimumOrderAmount90"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache1"/>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
             <actionGroup ref="AdminCreateCartPriceRuleWithCouponCodeActionGroup" stepKey="createCartPriceRule">
                 <argument name="ruleName" value="CatPriceRule"/>
                 <argument name="couponCode" value="CatPriceRule.coupon_code"/>
@@ -50,7 +52,10 @@
             <createData entity="DefaultShippingMethodsConfig" stepKey="defaultShippingMethodsConfig"/>
             <createData entity="DefaultMinimumOrderAmount" stepKey="defaultMinimumOrderAmount"/>
             <deleteData createDataKey="createSimpleUsCustomer" stepKey="deleteCustomer"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache2"/>
+
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
             <actionGroup ref="DeleteCartPriceRuleByName" stepKey="deleteCartPriceRule">
                 <argument name="ruleName" value="{{CatPriceRule.name}}"/>
             </actionGroup>
@@ -73,7 +78,7 @@
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart2"/>
         <waitForPageLoad stepKey="waitForShippingMethods"/>
         <click stepKey="chooseFreeShipping" selector="{{CheckoutShippingMethodsSection.shippingMethodRowByName('Free')}}"/>
-        <click selector="{{CheckoutShippingMethodsSection.next}}" stepKey="clickNext1"/>
+        <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickNext1"/>
         <waitForPageLoad stepKey="waitForReviewAndPayments1"/>
         <conditionalClick selector="{{DiscountSection.DiscountTab}}" dependentSelector="{{DiscountSection.CouponInput}}" visible="false" stepKey="clickIfDiscountTabClosed2"/>
         <waitForPageLoad stepKey="waitForCouponTabOpen2"/>
@@ -87,7 +92,7 @@
         <amOnPage stepKey="navigateToShippingPage" url="{{CheckoutShippingPage.url}}"/>
         <waitForPageLoad stepKey="waitForShippingPageLoad"/>
         <click stepKey="chooseFlatRateShipping" selector="{{CheckoutShippingMethodsSection.shippingMethodRowByName('Flat Rate')}}"/>
-        <click selector="{{CheckoutShippingMethodsSection.next}}" stepKey="clickNext2"/>
+        <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickNext2"/>
         <waitForPageLoad stepKey="waitForReviewAndPayments2"/>
         <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder2"/>
         <waitForPageLoad stepKey="waitForSuccessfullyPlacedOrder"/>
