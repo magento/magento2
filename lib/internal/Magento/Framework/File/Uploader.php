@@ -407,8 +407,12 @@ class Uploader
         $fileInfo['extension'] = $fileInfo['extension'] ?? '';
 
         // account for excessively long filenames that cannot be stored completely in database
-        if (strlen($fileInfo['basename']) > 90) {
-            throw new \InvalidArgumentException('Filename is too long; must be 90 characters or less');
+        $maxFilenameLength = 200;
+
+        if (strlen($fileInfo['basename']) > $maxFilenameLength) {
+            throw new \LengthException(
+                __('Filename is too long; must be %1 characters or less', $maxFilenameLength)
+            );
         }
 
         if (preg_match('/^_+$/', $fileInfo['filename'])) {
