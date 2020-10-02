@@ -7,8 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\TestFramework\Annotation;
 
-use Magento\Framework\Component\ComponentRegistrarInterface;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
@@ -70,7 +68,7 @@ abstract class AbstractDataFixture
     protected function getAnnotations(TestCase $test): array
     {
         $annotations = $test->getAnnotations();
-        return array_replace($annotations['class'], $annotations['method']);
+        return array_replace((array)$annotations['class'], (array)$annotations['method']);
     }
 
     /**
@@ -106,10 +104,18 @@ abstract class AbstractDataFixture
      * Execute fixture scripts if any
      *
      * @param array $fixtures
+     * @param TestCase $test
      * @return void
      */
-    protected function _applyFixtures(array $fixtures)
+    protected function _applyFixtures(array $fixtures, TestCase $test)
     {
+        /** @var \Magento\TestFramework\Annotation\TestsIsolation $testsIsolation */
+        $testsIsolation = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            \Magento\TestFramework\Annotation\TestsIsolation::class
+        );
+        $dbIsolationState = $this->getDbIsolationState($test);
+        $testsIsolation->createDbSnapshot($test, $dbIsolationState);
+
         /* Execute fixture scripts */
         foreach ($fixtures as $oneFixture) {
             $this->_applyOneFixture($oneFixture);
@@ -122,9 +128,10 @@ abstract class AbstractDataFixture
     /**
      * Revert changes done by fixtures
      *
+     * @param TestCase|null $test
      * @return void
      */
-    protected function _revertFixtures()
+    protected function _revertFixtures(?TestCase $test = null)
     {
         $resolver = Resolver::getInstance();
         $resolver->setCurrentFixtureType($this->getAnnotation());
@@ -149,13 +156,22 @@ abstract class AbstractDataFixture
         }
         $this->_appliedFixtures = [];
         $resolver->setCurrentFixtureType(null);
+
+        if (null !== $test) {
+            /** @var \Magento\TestFramework\Annotation\TestsIsolation $testsIsolation */
+            $testsIsolation = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+                \Magento\TestFramework\Annotation\TestsIsolation::class
+            );
+            $dbIsolationState = $this->getDbIsolationState($test);
+            $testsIsolation->checkTestIsolation($test, $dbIsolationState);
+        }
     }
 
     /**
      * Return is explicit set isolation state
      *
      * @param TestCase $test
-     * @return bool|null
+     * @return array|null
      */
     protected function getDbIsolationState(TestCase $test)
     {
