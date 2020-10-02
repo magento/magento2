@@ -122,9 +122,7 @@ define([
                 }
                 checkoutProvider.on('shippingAddress', function (shippingAddrsData) {
                     //jscs:disable requireCamelCaseOrUpperCaseIdentifiers
-                    if (quote.shippingAddress().countryId !== shippingAddrsData.country_id &&
-                        (shippingAddrsData.postcode || shippingAddrsData.region_id)
-                    ) {
+                    if (shippingAddrsData.street && shippingAddrsData.street[0].length > 0) {
                         checkoutData.setShippingAddressFromData(shippingAddrsData);
                     }
                     //jscs:enable requireCamelCaseOrUpperCaseIdentifiers
