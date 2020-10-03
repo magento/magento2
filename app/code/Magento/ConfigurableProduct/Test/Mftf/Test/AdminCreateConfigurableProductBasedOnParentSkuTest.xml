@@ -71,10 +71,18 @@
         <actionGroup ref="FilterProductGridByName2ActionGroup" stepKey="filterFirstProductByNameInGrid">
             <argument name="name" value="{{colorConfigurableProductAttribute1.name}}"/>
         </actionGroup>
-        <see selector="{{AdminProductGridSection.productGridCell('1', 'SKU')}}" userInput="{{ApiConfigurableProduct.sku}}-{{colorConfigurableProductAttribute1.name}}"  stepKey="seeFirstProductSkuInGrid"/>
+        <actionGroup ref="AssertAdminProductGridCellActionGroup" stepKey="seeFirstProductSkuInGrid">
+            <argument name="row" value="1"/>
+            <argument name="column" value="SKU"/>
+            <argument name="value" value="{{ApiConfigurableProduct.sku}}-{{colorConfigurableProductAttribute1.name}}"/>
+        </actionGroup>
         <actionGroup ref="FilterProductGridByName2ActionGroup" stepKey="filterSecondProductByNameInGrid">
             <argument name="name" value="{{colorConfigurableProductAttribute2.name}}"/>
         </actionGroup>
-        <see selector="{{AdminProductGridSection.productGridCell('1', 'SKU')}}" userInput="{{ApiConfigurableProduct.sku}}-{{colorConfigurableProductAttribute2.name}}"  stepKey="seeSecondProductSkuInGrid"/>
+        <actionGroup ref="AssertAdminProductGridCellActionGroup" stepKey="seeSecondProductSkuInGrid">
+            <argument name="row" value="1"/>
+            <argument name="column" value="SKU"/>
+            <argument name="value" value="{{ApiConfigurableProduct.sku}}-{{colorConfigurableProductAttribute2.name}}"/>
+        </actionGroup>
     </test>
 </tests>

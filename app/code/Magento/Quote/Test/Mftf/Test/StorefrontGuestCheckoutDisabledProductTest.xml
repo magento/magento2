@@ -75,7 +75,9 @@
             </createData>
             <magentoCLI command="config:set customer/online_customers/section_data_lifetime 1"
                         stepKey="setConfigForCartLifetime"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache" />
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
         </before>
         <after>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
@@ -110,8 +112,7 @@
             <argument name="product" value="$$createConfigChildProduct1$$"/>
         </actionGroup>
         <waitForPageLoad stepKey="waitForFiltersToBeApplied"/>
-        <click selector="{{AdminProductGridSection.firstRow}}" stepKey="clickOnProductPage"/>
-        <waitForPageLoad stepKey="waitForProductPageLoad"/>
+        <actionGroup ref="AdminProductGridSectionClickFirstRowActionGroup" stepKey="clickOnProductPage"/>
         <!-- Disabled child configurable product -->
         <click selector="{{AdminProductFormSection.enableProductAttributeLabel}}" stepKey="clickDisableProduct"/>
         <actionGroup ref="SaveProductFormActionGroup" stepKey="clickSaveProduct"/>
@@ -141,8 +142,7 @@
         <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="findCreatedProduct2">
             <argument name="product" value="$$createSimpleProduct2$$"/>
         </actionGroup>
-        <click selector="{{AdminProductGridSection.firstRow}}" stepKey="clickOnProductPage2"/>
-        <waitForPageLoad stepKey="waitForProductPageLoad2"/>
+        <actionGroup ref="AdminProductGridSectionClickFirstRowActionGroup" stepKey="clickOnProductPage2"/>
         <!-- Disabled simple product from grid -->
         <actionGroup ref="ChangeStatusProductUsingProductGridActionGroup" stepKey="disabledProductFromGrid2">
             <argument name="product" value="$$createSimpleProduct2$$"/>

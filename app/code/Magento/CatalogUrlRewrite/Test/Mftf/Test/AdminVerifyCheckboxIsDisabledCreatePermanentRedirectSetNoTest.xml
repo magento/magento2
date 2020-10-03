@@ -13,6 +13,7 @@
             <stories value="Url rewrites"/>
             <title value="Verify checkbox is disabled 'Create Permanent Redirect' set 'No'"/>
             <description value="Verify checkbox is disabled 'Create Permanent Redirect' set 'No' on category and product edit page."/>
+            <severity value="AVERAGE"/>
             <testCaseId value="MC-35589"/>
         </annotations>
         <before>

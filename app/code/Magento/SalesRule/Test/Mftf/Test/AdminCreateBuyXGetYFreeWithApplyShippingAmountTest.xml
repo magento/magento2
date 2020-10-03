@@ -10,8 +10,11 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminCreateBuyXGetYFreeWithApplyShippingAmountTest" extends="AdminCreateBuyXGetYFreeTest">
         <annotations>
+            <features value="SalesRule"/>
+            <stories value="Create cart price rule"/>
             <title value="Admin should be able to create a cart price rule of type Buy X get Y free enable 'Apply to Shipping Amount' "/>
             <description value="Use cart price rule of type Buy X get Y free with enable 'Apply to Shipping Amount'"/>
+            <severity value="MAJOR"/>
             <group value="SalesRule"/>
         </annotations>
 

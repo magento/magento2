@@ -224,7 +224,7 @@ class Save extends Attribute implements HttpPostActionInterface
                     return $this->returnResult('catalog/*/', [], ['error' => true]);
                 }
                 // entity type check
-                if ($model->getEntityTypeId() != $this->_entityTypeId) {
+                if ($model->getEntityTypeId() != $this->_entityTypeId || array_key_exists('backend_model', $data)) {
                     $this->messageManager->addErrorMessage(__('We can\'t update the attribute.'));
                     $this->_session->setAttributeData($data);
                     return $this->returnResult('catalog/*/', [], ['error' => true]);
@@ -264,6 +264,8 @@ class Save extends Attribute implements HttpPostActionInterface
             if ($model->getBackendType() == 'static' && !$model->getIsUserDefined()) {
                 $data['frontend_class'] = $model->getFrontendClass();
             }
+
+            unset($data['entity_type_id']);
 
             $model->addData($data);
 

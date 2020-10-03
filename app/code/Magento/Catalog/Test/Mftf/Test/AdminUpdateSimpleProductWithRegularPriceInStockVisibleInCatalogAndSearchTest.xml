@@ -57,7 +57,7 @@
         <fillField selector="{{AdminProductFormSection.searchCategory}}" userInput="$$categoryEntity.name$$" stepKey="fillSearchCategory" />
         <waitForPageLoad stepKey="waitForCategory2"/>
         <click selector="{{AdminProductFormSection.selectCategory($$categoryEntity.name$$)}}" stepKey="clickOnCategory"/>
-        <click selector="{{AdminProductFormSection.done}}" stepKey="clickOnDoneAdvancedCategorySelect"/>
+        <actionGroup ref="AdminSubmitCategoriesPopupActionGroup" stepKey="clickOnDoneAdvancedCategorySelect"/>
         <selectOption selector="{{AdminProductFormSection.visibility}}" userInput="{{simpleProductRegularPrice245InStock.visibility}}" stepKey="selectVisibility"/>
         <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="clickAdminProductSEOSection"/>
         <fillField selector="{{AdminProductSEOSection.urlKeyInput}}" userInput="{{simpleProductRegularPrice245InStock.urlKey}}" stepKey="fillSimpleProductUrlKey"/>
@@ -92,7 +92,9 @@
         <seeInField selector="{{AdminProductSEOSection.urlKeyInput}}" userInput="{{simpleProductRegularPrice245InStock.urlKey}}" stepKey="seeUrlKey"/>
 
         <!--Run re-index task -->
-        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
 
         <!--Verify customer see updated simple product link on category page -->
         <amOnPage url="{{StorefrontCategoryPage.url($$categoryEntity.name$$)}}" stepKey="openCategoryPage"/>
@@ -104,7 +106,9 @@
         <waitForPageLoad stepKey="waitForStorefrontProductPageLoad"/>
         <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{simpleProductRegularPrice245InStock.name}}" stepKey="seeSimpleProductNameOnStoreFrontPage"/>
         <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="{{simpleProductRegularPrice245InStock.price}}" stepKey="seeSimpleProductPriceOnStoreFrontPage"/>
-        <see selector="{{StorefrontProductInfoMainSection.productSku}}" userInput="{{simpleProductRegularPrice245InStock.sku}}" stepKey="seeSimpleProductSkuOnStoreFrontPage"/>
+        <actionGroup ref="StorefrontAssertProductSkuOnProductPageActionGroup" stepKey="seeSimpleProductSkuOnStoreFrontPage">
+            <argument name="productSku" value="{{simpleProductRegularPrice245InStock.sku}}"/>
+        </actionGroup>
         <grabTextFrom selector="{{StorefrontProductInfoMainSection.productStockStatus}}" stepKey="productStockAvailableStatus"/>
         <assertEquals stepKey="assertStockAvailableOnProductPage">
             <expectedResult type="string">{{simpleProductRegularPrice245InStock.storefrontStatus}}</expectedResult>

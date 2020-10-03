@@ -12,6 +12,7 @@ use Magento\Framework\Pricing\SaleableInterface;
  * Class Collection
  *
  * @api
+ * @since 100.0.2
  */
 class Collection implements \Iterator
 {
