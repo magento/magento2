@@ -73,12 +73,12 @@ class DataMapper
                 foreach ($exchange['bindings'] as $binding) {
                     if ($binding['destinationType'] === 'queue') {
                         $queueItems = $this->createQueueItems(
-                            (string) $binding['destination'],
-                            (string) $binding['topic'],
-                            (array) $binding['arguments'],
-                            (string) $connection
+                            (string)$binding['destination'],
+                            (string)$binding['topic'],
+                            (array)$binding['arguments'],
+                            (string)$connection
                         );
-                        $this->mappedData += $queueItems;
+                        $this->mappedData = array_merge($this->mappedData, $queueItems);
                     }
                 }
             }
@@ -141,7 +141,7 @@ class DataMapper
     {
         try {
             $topic = $this->communicationConfig->getTopic($topicName);
-            return (bool) $topic[CommunicationConfig::TOPIC_IS_SYNCHRONOUS];
+            return (bool)$topic[CommunicationConfig::TOPIC_IS_SYNCHRONOUS];
         } catch (LocalizedException $exception) {
             throw new LocalizedException(new Phrase('Error while checking if topic is synchronous'));
         }

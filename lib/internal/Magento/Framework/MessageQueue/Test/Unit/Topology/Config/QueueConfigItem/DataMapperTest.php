@@ -6,7 +6,6 @@ declare(strict_types=1);
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-declare(strict_types=1);
 
 namespace Magento\Framework\MessageQueue\Test\Unit\Topology\Config\QueueConfigItem;
 
@@ -23,17 +22,17 @@ class DataMapperTest extends TestCase
     /**
      * @var Data|MockObject
      */
-    private $configData;
+    private $configDataMock;
 
     /**
      * @var CommunicationConfig|MockObject
      */
-    private $communicationConfig;
+    private $communicationConfigMock;
 
     /**
      * @var ResponseQueueNameBuilder|MockObject
      */
-    private $queueNameBuilder;
+    private $queueNameBuilderMock;
 
     /**
      * @var DataMapper
@@ -45,10 +44,14 @@ class DataMapperTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->configData = $this->createMock(Data::class);
-        $this->communicationConfig = $this->createMock(CommunicationConfig::class);
-        $this->queueNameBuilder = $this->createMock(ResponseQueueNameBuilder::class);
-        $this->model = new DataMapper($this->configData, $this->communicationConfig, $this->queueNameBuilder);
+        $this->configDataMock = $this->createMock(Data::class);
+        $this->communicationConfigMock = $this->createMock(CommunicationConfig::class);
+        $this->queueNameBuilderMock = $this->createMock(ResponseQueueNameBuilder::class);
+        $this->model = new DataMapper(
+            $this->configDataMock,
+            $this->communicationConfigMock,
+            $this->queueNameBuilderMock
+        );
     }
 
     /**
@@ -112,11 +115,11 @@ class DataMapperTest extends TestCase
             ['topic02', ['name' => 'topic02', 'is_synchronous' => false]],
         ];
 
-        $this->communicationConfig->expects($this->exactly(2))
+        $this->communicationConfigMock->expects($this->exactly(2))
             ->method('getTopic')
             ->willReturnMap($communicationMap);
-        $this->configData->expects($this->once())->method('get')->willReturn($data);
-        $this->queueNameBuilder->expects($this->once())
+        $this->configDataMock->expects($this->once())->method('get')->willReturn($data);
+        $this->queueNameBuilderMock->expects($this->once())
             ->method('getQueueName')
             ->with('topic01')
             ->willReturn('responseQueue.topic01');
@@ -218,15 +221,15 @@ class DataMapperTest extends TestCase
             'topic08.part2.some.test' =>  ['name' => 'topic08.part2.some.test', 'is_synchronous' => true],
         ];
 
-        $this->communicationConfig->expects($this->once())
+        $this->communicationConfigMock->expects($this->once())
             ->method('getTopic')
             ->with('topic01')
             ->willReturn(['name' => 'topic01', 'is_synchronous' => true]);
-        $this->communicationConfig->expects($this->any())
+        $this->communicationConfigMock->expects($this->any())
             ->method('getTopics')
             ->willReturn($communicationData);
-        $this->configData->expects($this->once())->method('get')->willReturn($data);
-        $this->queueNameBuilder->expects($this->any())
+        $this->configDataMock->expects($this->once())->method('get')->willReturn($data);
+        $this->queueNameBuilderMock->expects($this->any())
             ->method('getQueueName')
             ->willReturnCallback(function ($value) {
                 return 'responseQueue.' . $value;
