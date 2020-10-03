@@ -13,7 +13,7 @@ use Magento\Review\Model\ResourceModel\Review\Summary\CollectionFactory as Summa
 /**
  * Class used to append review summary data to entity
  * @deprecated This class won't work in case of different entity type id for Product
- * @see \Magento\Review\Model\Review\SummaryData
+ * @see \Magento\Review\Model\Review\AppendSummaryDataToObject
  */
 class ReviewSummary
 {

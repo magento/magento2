@@ -9,11 +9,14 @@ namespace Magento\Review\Block\Product;
 
 use Magento\Catalog\Block\Product\ReviewRendererInterface;
 use Magento\Catalog\Model\Product;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
-use Magento\Review\Model\Review\SummaryData as ReviewSummaryData;
+use Magento\Review\Model\Review\AppendSummaryDataToObject;
+use Magento\Review\Model\ReviewFactory;
+use Magento\Review\Model\ReviewSummaryFactory;
 use Magento\Review\Observer\PredispatchReviewObserver;
 use Magento\Store\Model\ScopeInterface;
 
@@ -33,22 +36,44 @@ class ReviewRenderer extends Template implements ReviewRendererInterface
     ];
 
     /**
-     * @var ReviewSummaryData
+     * @deprecated due to new class introduced
+     * @see $this->>appendSummaryDataToObject
+     * @var ReviewFactory
      */
-    private $reviewSummaryData;
+    protected $_reviewFactory;
+
+    /**
+     * @deprecated due to new class introduced
+     * @see $this->>appendSummaryDataToObject
+     * @var ReviewSummaryFactory
+     */
+    private $reviewSummaryFactory;
+
+    /**
+     * @var AppendSummaryDataToObject
+     */
+    private $appendSummaryDataToObject;
 
     /**
      * @param Context $context
-     * @param ReviewSummaryData $reviewSummaryData
+     * @param ReviewFactory $reviewFactory
      * @param array $data
+     * @param ReviewSummaryFactory|null $reviewSummaryFactory
+     * @param AppendSummaryDataToObject|null $appendSummaryDataToObject
      */
     public function __construct(
         Context $context,
-        ReviewSummaryData $reviewSummaryData,
-        array $data = []
+        ReviewFactory $reviewFactory,
+        array $data = [],
+        ?ReviewSummaryFactory $reviewSummaryFactory = null,
+        ?AppendSummaryDataToObject $appendSummaryDataToObject = null
     ) {
-        $this->reviewSummaryData = $reviewSummaryData;
         parent::__construct($context, $data);
+        $this->_reviewFactory = $reviewFactory;
+        $this->reviewSummaryFactory = $reviewSummaryFactory ??
+            ObjectManager::getInstance()->get(ReviewSummaryFactory::class);
+        $this->appendSummaryDataToObject = $appendSummaryDataToObject ??
+            ObjectManager::getInstance()->get(AppendSummaryDataToObject::class);
     }
 
     /**
@@ -81,7 +106,7 @@ class ReviewRenderer extends Template implements ReviewRendererInterface
         $displayIfNoReviews = false
     ) {
         if ($product->getRatingSummary() === null) {
-            $this->reviewSummaryData->appendSummaryDataToObject(
+            $this->appendSummaryDataToObject->execute(
                 $product,
                 (int)$this->_storeManager->getStore()->getId()
             );

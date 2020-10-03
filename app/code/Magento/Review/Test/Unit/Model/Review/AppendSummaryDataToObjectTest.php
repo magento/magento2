@@ -8,25 +8,21 @@ declare(strict_types=1);
 namespace Magento\Review\Test\Unit\Model\Review;
 
 use Magento\Catalog\Model\Product;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Review\Model\ResourceModel\Review as ReviewResource;
 use Magento\Review\Model\ResourceModel\Review\Summary\Collection;
 use Magento\Review\Model\ResourceModel\Review\Summary\CollectionFactory;
 use Magento\Review\Model\Review;
 use Magento\Review\Model\Review\Summary;
-use Magento\Review\Model\Review\SummaryData;
+use Magento\Review\Model\Review\AppendSummaryDataToObject;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-/**
- * Test for Magento\Review\Model\Review\SummaryData class.
- */
-class SummaryDataTest extends TestCase
+class AppendSummaryDataToObjectTest extends TestCase
 {
     /**
-     * @var SummaryData
+     * @var AppendSummaryDataToObject
      */
-    private $summaryData;
+    private $model;
 
     /**
      * @var CollectionFactory|MockObject
@@ -50,17 +46,13 @@ class SummaryDataTest extends TestCase
             ['getEntityIdByCode']
         );
 
-        $objectManager = new ObjectManager($this);
-        $this->summaryData = $objectManager->getObject(
-            SummaryData::class,
-            [
-                'sumColFactory' => $this->reviewSummaryCollectionFactoryMock,
-                'reviewResource' => $this->reviewResourceMock
-            ]
+        $this->model = new AppendSummaryDataToObject(
+            $this->reviewSummaryCollectionFactoryMock,
+            $this->reviewResourceMock
         );
     }
 
-    public function testAppendSummaryDataToObject()
+    public function testExecute()
     {
         $productId = 6;
         $storeId = 4;
@@ -72,8 +64,8 @@ class SummaryDataTest extends TestCase
             Product::class,
             ['getId', 'addData', '__wakeup']
         );
-        $product->expects(self::once())->method('getId')->willReturn($productId);
-        $product->expects(self::once())
+        $product->expects($this->once())->method('getId')->willReturn($productId);
+        $product->expects($this->once())
             ->method('addData')
             ->with($testSummaryData)
             ->willReturnSelf();
@@ -92,24 +84,24 @@ class SummaryDataTest extends TestCase
             Collection::class,
             ['addEntityFilter', 'addStoreFilter', 'getFirstItem', '__wakeup']
         );
-        $summaryCollection->expects(self::once())
+        $summaryCollection->expects($this->once())
             ->method('addEntityFilter')
             ->willReturnSelf();
-        $summaryCollection->expects(self::once())
+        $summaryCollection->expects($this->once())
             ->method('addStoreFilter')
             ->willReturnSelf();
-        $summaryCollection->expects(self::once())
+        $summaryCollection->expects($this->once())
             ->method('getFirstItem')
             ->willReturn($summaryData);
 
-        $this->reviewResourceMock->expects(self::once())
+        $this->reviewResourceMock->expects($this->once())
             ->method('getEntityIdByCode')
             ->with(Review::ENTITY_PRODUCT_CODE)
             ->willReturn(1);
-        $this->reviewSummaryCollectionFactoryMock->expects(self::once())
+        $this->reviewSummaryCollectionFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($summaryCollection);
 
-        $this->summaryData->appendSummaryDataToObject($product, $storeId);
+        $this->model->execute($product, $storeId);
     }
 }

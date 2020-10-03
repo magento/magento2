@@ -12,10 +12,7 @@ use Magento\Review\Model\ResourceModel\Review as ReviewResource;
 use Magento\Review\Model\ResourceModel\Review\Summary\CollectionFactory as SummaryCollectionFactory;
 use Magento\Review\Model\Review;
 
-/**
- * Class used to append review summary data to entity
- */
-class SummaryData
+class AppendSummaryDataToObject
 {
     /**
      * @var SummaryCollectionFactory
@@ -46,7 +43,7 @@ class SummaryData
      * @param int $storeId
      * @param string $entityCode
      */
-    public function appendSummaryDataToObject(
+    public function execute(
         AbstractModel $object,
         int $storeId,
         string $entityCode = Review::ENTITY_PRODUCT_CODE
