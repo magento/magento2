@@ -24,7 +24,7 @@ use Magento\CompareListGraphQl\Model\Service\CompareListService;
 /**
  * Class add products to compare list
  */
-class AddItemsToCompareList implements ResolverInterface
+class AddProductsToCompareList implements ResolverInterface
 {
     /**
      * @var CompareListFactory

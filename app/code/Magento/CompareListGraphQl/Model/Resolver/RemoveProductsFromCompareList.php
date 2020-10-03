@@ -24,7 +24,7 @@ use Magento\Store\Api\Data\StoreInterface;
 /**
  * Remove items from compare list
  */
-class RemoveItemsFromCompareList implements ResolverInterface
+class RemoveProductsFromCompareList implements ResolverInterface
 {
     /**
      * @var CompareListFactory

@@ -13,16 +13,16 @@ type ComparableItem {
 
 type ProductAttribute {
     code: String! @doc(description:"Attribute code")
-    value: String! @doc(description:"Addibute display value")
+    value: String! @doc(description:"Attribute display value")
 }
 
 type ComparableAttribute {
     code: String! @doc(description: "Attribute code")
-    title: String! @doc(description: "Addibute display title")
+    title: String! @doc(description: "Attribute display title")
 }
 
 type CompareList {
-    list_id: ID! @doc(description: "Compare list id")
+    uid: ID! @doc(description: "Compare list id")
     items: [ComparableItem] @doc(description: "Comparable products")
     attributes: [ComparableAttribute] @doc(description: "Comparable attributes, provides codes and titles for the attributes")
 }
@@ -32,11 +32,31 @@ type Customer {
 }
 
 type Query {
-    compareList(id: ID!): CompareList @resolver(class: "\\Magento\\CompareListGraphQl\\Model\\Resolver\\CompareList") @doc(description: "Compare list")
+    compareList(uid: ID!): CompareList @resolver(class: "\\Magento\\CompareListGraphQl\\Model\\Resolver\\CompareList") @doc(description: "Compare list")
 }
 
 type Mutation {
-    addItemsToCompareList(id: ID!, items: [ID!]): CompareList @resolver(class: "\\Magento\\CompareListGraphQl\\Model\\Resolver\\AddItemsToCompareList") @doc(description: "Add items to compare list")
-    removeItemsFromCompareList(id: ID!, items: [ID!]): CompareList @resolver(class: "\\Magento\\CompareListGraphQl\\Model\\Resolver\\RemoveItemsFromCompareList") @doc(description: "Remove items from compare list")
-    assignCompareListToCustomer(customerId: ID!, listId: ID!): Boolean @resolver(class: "\\Magento\\CompareListGraphQl\\Model\\Resolver\\AssignCompareListToCustomer") @doc(description: "Assign compare list to customer")
+    createCompareList(input: CreateCompareListInput): CompareList @resolver(class: "\\Magento\\CompareListGraphQl\\Model\\Resolver\\CreateCompareList") @doc(description: "Creates a new compare list. For a logged in user, the created list is assigned to the user")
+    addProductsToCompareList(input: AddProductsToCompareListInput): CompareList @resolver(class: "\\Magento\\CompareListGraphQl\\Model\\Resolver\\AddProductsToCompareList") @doc(description: "Add products to compare list")
+    removeProductsFromCompareList(input: RemoveProductsFromCompareListInput): CompareList @resolver(class: "\\Magento\\CompareListGraphQl\\Model\\Resolver\\RemoveProductsFromCompareList") @doc(description: "Remove products from compare list")
+    assignCompareListToCustomer(uid: ID!): Boolean @resolver(class: "\\Magento\\CompareListGraphQl\\Model\\Resolver\\AssignCompareListToCustomer") @doc(description: "Assign compare list to customer")
+    deleteCompareList(uid: ID!): DeleteCompareListOutput @resolver(class: "\\Magento\\CompareListGraphQl\\Model\\Resolver\\DeleteCompareList") @doc(description: "Delete compare list")
+}
+
+input CreateCompareListInput {
+    products: [ID!]
+}
+
+input AddProductsToCompareListInput {
+    uid: ID!,
+    products: [ID!]!
+}
+
+input RemoveProductsFromCompareListInput {
+    uid: ID!,
+    products: [ID!]!
+}
+
+type DeleteCompareListOutput {
+    result: Boolean!
 }
