@@ -65,7 +65,6 @@ class Reorder implements ResolverInterface
 
         $currentUserId = $context->getUserId();
         $orderNumber = $args['orderNumber'] ?? '';
-        $storeId = (string)$context->getExtensionAttributes()->getStore()->getId();
 
         $order = $this->orderFactory->create()->loadByIncrementId($orderNumber);
         if ((int)$order->getCustomerId() !== $currentUserId) {
