@@ -67,14 +67,14 @@ class Reorder implements ResolverInterface
         $orderNumber = $args['orderNumber'] ?? '';
         $storeId = (string)$context->getExtensionAttributes()->getStore()->getId();
 
-        $order = $this->orderFactory->create()->loadByIncrementIdAndStoreId($orderNumber, $storeId);
+        $order = $this->orderFactory->create()->loadByIncrementId($orderNumber);
         if ((int)$order->getCustomerId() !== $currentUserId) {
             throw new GraphQlInputException(
                 __('Order number "%1" doesn\'t belong to the current customer', $orderNumber)
             );
         }
 
-        $reorderOutput = $this->reorder->execute($orderNumber, $storeId);
+        $reorderOutput = $this->reorder->execute($orderNumber, $order->getStoreId());
 
         return [
             'cart' => [
