@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\View\Template\Html;
 
@@ -140,10 +141,10 @@ class Minifier implements MinifierInterface
                         . '(?:<(?>textarea|pre|script)\b|\z))#',
                         ' ',
                         preg_replace(
-                            '#(?<!:|\\\\|\'|")//(?!\s*\<\!\[)(?!\s*]]\>)[^\n\r]*#',
+                            '#(?<!:|\\\\|\'|"|/)//(?!/)(?!\s*\<\!\[)(?!\s*]]\>)[^\n\r]*#',
                             '',
                             preg_replace(
-                                '#(?<!:|\'|")//[^\n\r]*(\?\>)#',
+                                '#(?<!:|\'|")//[^\n\r<]*(\?\>)#',
                                 ' $1',
                                 preg_replace(
                                     '#(?<!:)//[^\n\r]*(\<\?php)[^\n\r]*(\s\?\>)[^\n\r]*#',
