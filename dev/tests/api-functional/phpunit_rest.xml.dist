@@ -8,7 +8,7 @@
  */
 -->
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/6.2/phpunit.xsd"
+         xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/9.1/phpunit.xsd"
          colors="true"
          columns="max"
          beStrictAboutTestsThatDoNotTestAnything="false"
@@ -22,8 +22,8 @@
             <file>testsuite/Magento/WebApiTest.php</file>
         </testsuite>
         <testsuite name="Magento REST web API functional tests real suite">
-            <directory suffix="Test.php">testsuite</directory>
-            <directory suffix="Test.php">../../../app/code/*/*/Test/Api</directory>
+            <directory>testsuite</directory>
+            <directory>../../../app/code/*/*/Test/Api</directory>
             <exclude>testsuite/Magento/GraphQl</exclude>
         </testsuite>
     </testsuites>
