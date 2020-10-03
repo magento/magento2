@@ -300,8 +300,7 @@ class DeclarativeSchemaDependencyProvider
      * @param string $moduleName
      * @return array
      */
-    private function 
-                          (
+    private function addModuleAssigment(
         array $tableDeclaration,
         string $entityType,
         string $moduleName
