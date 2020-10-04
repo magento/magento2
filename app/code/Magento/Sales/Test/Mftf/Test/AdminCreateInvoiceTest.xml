@@ -55,7 +55,7 @@
 
         <actionGroup ref="AdminSelectFirstGridRowActionGroup" stepKey="openInvoiceFromGrid"/>
 
-        <actionGroup ref="AdminOrderViewCheckStatusActionGroup" stepKey="checkIfOrderStatusIsPending">
+        <actionGroup ref="AdminOrderViewCheckStatusActionGroup" stepKey="checkIfOrderStatusIsProcessing">
             <argument name="status" value="Processing"/>
         </actionGroup>    
 
