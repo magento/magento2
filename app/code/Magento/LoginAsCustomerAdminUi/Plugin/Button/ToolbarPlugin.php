@@ -10,7 +10,6 @@ namespace Magento\LoginAsCustomerAdminUi\Plugin\Button;
 use Magento\Backend\Block\Widget\Button\ButtonList;
 use Magento\Backend\Block\Widget\Button\ToolbarInterface;
 use Magento\Framework\AuthorizationInterface;
-use Magento\Framework\Escaper;
 use Magento\Framework\View\Element\AbstractBlock;
 use Magento\LoginAsCustomerAdminUi\Ui\Customer\Component\Button\DataProvider;
 use Magento\LoginAsCustomerApi\Api\ConfigInterface;
@@ -26,11 +25,6 @@ class ToolbarPlugin
     private $authorization;
 
     /**
-     * @var Escaper
-     */
-    private $escaper;
-
-    /**
      * @var ConfigInterface
      */
     private $config;
@@ -44,18 +38,15 @@ class ToolbarPlugin
      * ToolbarPlugin constructor.
      * @param AuthorizationInterface $authorization
      * @param ConfigInterface $config
-     * @param Escaper $escaper
      * @param DataProvider $dataProvider
      */
     public function __construct(
         AuthorizationInterface $authorization,
         ConfigInterface $config,
-        Escaper $escaper,
         DataProvider $dataProvider
     ) {
         $this->authorization = $authorization;
         $this->config = $config;
-        $this->escaper = $escaper;
         $this->dataProvider = $dataProvider;
     }
 
