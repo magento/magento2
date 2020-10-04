@@ -9,11 +9,14 @@ use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Email\Container\IdentityInterface;
 use Magento\Sales\Model\Order\Email\Container\Template;
 use Magento\Sales\Model\Order\Address\Renderer;
+use Magento\Store\Model\App\Emulation;
+use Magento\Framework\App\Area;
 
 /**
  * Class Sender
- * @api
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
+ * @api
  * @since 100.0.2
  */
 abstract class Sender
@@ -46,9 +49,9 @@ abstract class Sender
     /**
      * App emulation model
      *
-     * @var \Magento\Store\Model\App\Emulation
+     * @var Emulation
      */
-    protected $_appEmulation;
+    private $appEmulation;
 
     /**
      * @param Template $templateContainer
@@ -56,7 +59,7 @@ abstract class Sender
      * @param SenderBuilderFactory $senderBuilderFactory
      * @param \Psr\Log\LoggerInterface $logger
      * @param Renderer $addressRenderer
-     * @param \Magento\Store\Model\App\Emulation $appEmulation
+     * @param Emulation $appEmulation
      */
     public function __construct(
         Template $templateContainer,
@@ -64,15 +67,14 @@ abstract class Sender
         \Magento\Sales\Model\Order\Email\SenderBuilderFactory $senderBuilderFactory,
         \Psr\Log\LoggerInterface $logger,
         Renderer $addressRenderer,
-        \Magento\Store\Model\App\Emulation $appEmulation = null
+        Emulation $appEmulation = null
     ) {
         $this->templateContainer = $templateContainer;
         $this->identityContainer = $identityContainer;
         $this->senderBuilderFactory = $senderBuilderFactory;
         $this->logger = $logger;
         $this->addressRenderer = $addressRenderer;
-        $this->_appEmulation = $appEmulation ?: \Magento\Framework\App\ObjectManager::getInstance()
-                              ->get(\Magento\Store\Model\App\Emulation::class);
+        $this->_appEmulation = $appEmulation ?: \Magento\Framework\App\ObjectManager::getInstance()->get(Emulation::class);
     }
 
     /**
@@ -98,10 +100,12 @@ abstract class Sender
             $this->logger->error($e->getMessage());
             return false;
         }
-        try {
-            $sender->sendCopyTo();
-        } catch (\Exception $e) {
-            $this->logger->error($e->getMessage());
+        if ($this->identityContainer->getCopyMethod() == 'copy') {
+            try {
+                $sender->sendCopyTo();
+            } catch (\Exception $e) {
+                $this->logger->error($e->getMessage());
+            }
         }
         return true;
     }
@@ -151,7 +155,6 @@ abstract class Sender
      */
     protected function getTemplateOptions()
     {
-        //echo  $this->identityContainer->getStore()->getStoreId(); die("dd");
         return [
             'area' => \Magento\Framework\App\Area::AREA_FRONTEND,
             'store' => $this->identityContainer->getStore()->getStoreId()
@@ -166,19 +169,14 @@ abstract class Sender
      */
     protected function getFormattedShippingAddress($order)
     {
-       // echo $order->getStore()->getId(); die("dss");
-        $writer = new \Zend\Log\Writer\Stream(BP . '/var/log/test11.log');
-        $logger = new \Zend\Log\Logger();
-        $logger->addWriter($writer);
-        $logger->info($order->getStore()->getStoreId());
-        $this->_appEmulation->startEnvironmentEmulation($order->getStoreId(),\Magento\Framework\App\Area::AREA_FRONTEND,1);
-        
-        $shippingAddress = $order->getIsVirtual()
-            ? null
-            : $this->addressRenderer->format($order->getShippingAddress(), 'html');
-
-        $this->_appEmulation->stopEnvironmentEmulation();
-
+        try {
+            $this->_appEmulation->startEnvironmentEmulation($order->getStoreId(),\Magento\Framework\App\Area::AREA_FRONTEND,1);
+            $shippingAddress = $order->getIsVirtual()
+                ? null
+                : $this->addressRenderer->format($order->getShippingAddress(), 'html');
+        } finally {
+            $this->_appEmulation->stopEnvironmentEmulation();
+        }  
         return $shippingAddress;
     }
 
@@ -190,11 +188,13 @@ abstract class Sender
      */
     protected function getFormattedBillingAddress($order)
     {
-        $this->_appEmulation->startEnvironmentEmulation($order->getStoreId(),\Magento\Framework\App\Area::AREA_FRONTEND,1);
-
-        $billingAddress =  $this->addressRenderer->format($order->getBillingAddress(), 'html');
-
-        $this->_appEmulation->stopEnvironmentEmulation();
+        try {
+            $this->_appEmulation->startEnvironmentEmulation($order->getStoreId(),Area::AREA_FRONTEND,true);
+            
+            $billingAddress =  $this->addressRenderer->format($order->getBillingAddress(), 'html'); 
+        } finally {
+            $this->_appEmulation->stopEnvironmentEmulation();
+        }
         return $billingAddress;
     }
 }
