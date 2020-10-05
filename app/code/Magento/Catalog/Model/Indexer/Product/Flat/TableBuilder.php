@@ -86,12 +86,13 @@ class TableBuilder
         //Create list of temporary tables based on available attributes attributes
         $valueTables = [];
         foreach ($temporaryEavAttributes as $tableName => $columns) {
-            // phpcs:ignore Magento2.Performance.ForeachArrayMerge
-            $valueTables = array_merge(
-                $valueTables,
-                $this->_createTemporaryTable($this->_getTemporaryTableName($tableName), $columns, $valueFieldSuffix)
+            $valueTables[] = $this->_createTemporaryTable(
+                $this->_getTemporaryTableName($tableName),
+                $columns,
+                $valueFieldSuffix
             );
         }
+        $valueTables = array_merge([], ...$valueTables);
 
         //Fill "base" table which contains all available products
         $this->_fillTemporaryEntityTable($entityTableName, $entityTableColumns, $changedIds);
