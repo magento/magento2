@@ -578,14 +578,16 @@
         </index>
     </table>
     <table name="catalog_compare_list" resource="default" engine="innodb" comment="Catalog Compare List with hash Table">
+        <column xsi:type="int" name="id" padding="5" unsigned="true" nullable="false"
+                identity="true" comment="ID"/>
         <column xsi:type="varchar" name="list_id" padding="10" unsigned="true" nullable="false"
-                identity="true" comment="Compare List ID"/>
+                identity="false" comment="Compare List ID"/>
         <column xsi:type="int" name="visitor_id" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Visitor ID"/>
         <column xsi:type="int" name="customer_id" padding="10" unsigned="true" nullable="true" identity="false"
                 comment="Customer ID"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
-            <column name="list_id"/>
+            <column name="id"/>
         </constraint>
         <constraint xsi:type="foreign" referenceId="CATALOG_COMPARE_LIST_CUSTOMER_ID_CUSTOMER_ENTITY_ENTITY_ID"
                     table="catalog_compare_list" column="customer_id" referenceTable="customer_entity"

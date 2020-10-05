@@ -1127,6 +1127,7 @@
     },
     "catalog_compare_list": {
         "column": {
+            "id": true,
             "list_id": true,
             "visitor_id": true,
             "customer_id": true

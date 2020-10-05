@@ -18,6 +18,6 @@ class CompareList extends AbstractDb
      */
     protected function _construct()
     {
-        $this->_init('catalog_compare_list', 'list_id');
+        $this->_init('catalog_compare_list', 'id');
     }
 }
