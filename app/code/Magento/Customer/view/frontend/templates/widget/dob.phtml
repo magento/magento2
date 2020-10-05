@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 /** @var \Magento\Customer\Block\Widget\Dob $block */
 
 /*
@@ -23,6 +24,7 @@ NOTE: Regarding styles - if we leave it this way, we'll move it to boxes.css. Al
 automatically using block input parameters.
 */
 
+$translatedCalendarConfigJson = $block->getTranslatedCalendarConfigJson();
 $fieldCssClass = 'field date field-' . $block->getHtmlId();
 $fieldCssClass .= $block->isRequired() ? ' required' : '';
 ?>
@@ -46,13 +48,20 @@ $fieldCssClass .= $block->isRequired() ? ' required' : '';
     }
 </script>
 
-<script>
-    require([
-        'jquery',
-        'jquery-ui-modules/datepicker'
-    ], function ( $ ) {
-        $.extend(true, $, {
-            calendarConfig: <?= $block->escapeJs($block->getTranslatedCalendarConfigJson()); ?>
-        });
+<?php $scriptString = <<<script
+
+require([
+    'jquery',
+    'jquery-ui-modules/datepicker'
+], function($){
+
+//<![CDATA[
+    $.extend(true, $, {
+        calendarConfig: {$translatedCalendarConfigJson}
     });
-</script>
+//]]>
+
+});
+script;
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
