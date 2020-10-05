@@ -9,10 +9,12 @@ namespace Magento\Ui\Test\Unit\Component\Filters\Type;
 
 use Magento\Framework\Api\Filter;
 use Magento\Framework\Api\FilterBuilder;
+use Magento\Framework\App\RequestInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
 use Magento\Framework\View\Element\UiComponent\Processor;
 use Magento\Framework\View\Element\UiComponentFactory;
+use Magento\Ui\Api\BookmarkManagementInterface;
 use Magento\Ui\Component\Filters\FilterModifier;
 use Magento\Ui\Component\Filters\Type\Range;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -41,6 +43,16 @@ class RangeTest extends TestCase
     protected $filterModifierMock;
 
     /**
+     * @var BookmarkManagementInterface|MockObject
+     */
+    private $bookmarkManagementMock;
+
+    /**
+     * @var RequestInterface|MockObject
+     */
+    private $requestMock;
+
+    /**
      * Set up
      */
     protected function setUp(): void
@@ -57,6 +69,15 @@ class RangeTest extends TestCase
             FilterModifier::class,
             ['applyFilterModifier']
         );
+        $this->bookmarkManagementMock = $this->getMockForAbstractClass(
+            BookmarkManagementInterface::class
+        );
+        $this->bookmarkManagementMock->expects($this->never())->method('getByIdentifierNamespace');
+
+        $this->requestMock = $this->getMockBuilder(RequestInterface::class)
+            ->addMethods(['isAjax'])
+            ->getMockForAbstractClass();
+        $this->requestMock->expects($this->once())->method('isAjax')->willReturn(true);
     }
 
     /**
@@ -72,7 +93,10 @@ class RangeTest extends TestCase
             $this->uiComponentFactory,
             $this->filterBuilderMock,
             $this->filterModifierMock,
-            []
+            [],
+            [],
+            $this->bookmarkManagementMock,
+            $this->requestMock
         );
 
         $this->assertSame(Range::NAME, $range->getComponentName());
@@ -139,7 +163,9 @@ class RangeTest extends TestCase
             $this->filterBuilderMock,
             $this->filterModifierMock,
             [],
-            ['name' => $name]
+            ['name' => $name],
+            $this->bookmarkManagementMock,
+            $this->requestMock
         );
         $range->prepare();
     }

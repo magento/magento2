@@ -9,10 +9,12 @@ namespace Magento\Ui\Test\Unit\Component\Filters\Type;
 
 use Magento\Framework\Api\Filter;
 use Magento\Framework\Api\FilterBuilder;
+use Magento\Framework\App\RequestInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
 use Magento\Framework\View\Element\UiComponent\Processor;
 use Magento\Framework\View\Element\UiComponentFactory;
+use Magento\Ui\Api\BookmarkManagementInterface;
 use Magento\Ui\Component\Filters\FilterModifier;
 use Magento\Ui\Component\Filters\Type\Date;
 use Magento\Ui\Component\Form\Element\DataType\Date as FormDate;
@@ -50,6 +52,16 @@ class DateTest extends TestCase
     private $dataProviderMock;
 
     /**
+     * @var BookmarkManagementInterface|MockObject
+     */
+    private $bookmarkManagementMock;
+
+    /**
+     * @var MockObject
+     */
+    private $requestMock;
+
+    /**
      * Set up
      */
     protected function setUp(): void
@@ -69,6 +81,16 @@ class DateTest extends TestCase
             ->getMock();
 
         $this->dataProviderMock = $this->getMockForAbstractClass(DataProviderInterface::class);
+
+        $this->bookmarkManagementMock = $this->getMockForAbstractClass(
+            BookmarkManagementInterface::class
+        );
+        $this->bookmarkManagementMock->expects($this->never())->method('getByIdentifierNamespace');
+
+        $this->requestMock = $this->getMockBuilder(RequestInterface::class)
+            ->addMethods(['isAjax'])
+            ->getMockForAbstractClass();
+        $this->requestMock->expects($this->once())->method('isAjax')->willReturn(true);
     }
 
     /**
@@ -84,7 +106,10 @@ class DateTest extends TestCase
             $this->uiComponentFactory,
             $this->filterBuilderMock,
             $this->filterModifierMock,
-            []
+            [],
+            [],
+            $this->bookmarkManagementMock,
+            $this->requestMock
         );
 
         static::assertSame(Date::NAME, $date->getComponentName());
@@ -148,7 +173,9 @@ class DateTest extends TestCase
             [
                 'name' => $name,
                 'config' => ['options' => ['showsTime' => $showsTime]],
-            ]
+            ],
+            $this->bookmarkManagementMock,
+            $this->requestMock
         );
         $date->prepare();
     }
@@ -209,8 +236,10 @@ class DateTest extends TestCase
                 'showsTime' => false,
                 'filterData' => ['test_date' => ['from' => '11-05-2015', 'to' => '11-05-2015']],
                 'expectedCondition' => [
-                    'date_from' => '2015-05-11 00:00:00', 'type_from' => 'gteq',
-                    'date_to' => '2015-05-11 23:59:59', 'type_to' => 'lteq'
+                    'date_from' => '2015-05-11 00:00:00',
+                    'type_from' => 'gteq',
+                    'date_to' => '2015-05-11 23:59:59',
+                    'type_to' => 'lteq'
                 ],
             ],
             [
@@ -230,8 +259,10 @@ class DateTest extends TestCase
                 'showsTime' => true,
                 'filterData' => ['test_date' => ['from' => '11-05-2015 10:20:00', 'to' => '11-05-2015 18:25:00']],
                 'expectedCondition' => [
-                    'date_from' => '2015-05-11 10:20:00', 'type_from' => 'gteq',
-                    'date_to' => '2015-05-11 18:25:00', 'type_to' => 'lteq'
+                    'date_from' => '2015-05-11 10:20:00',
+                    'type_from' => 'gteq',
+                    'date_to' => '2015-05-11 18:25:00',
+                    'type_to' => 'lteq'
                 ],
             ],
         ];

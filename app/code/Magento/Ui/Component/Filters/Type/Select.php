@@ -3,11 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Ui\Component\Filters\Type;
 
+use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Data\OptionSourceInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use Magento\Ui\Api\BookmarkManagementInterface;
 use Magento\Ui\Component\Form\Element\Select as ElementSelect;
 use Magento\Ui\Component\Filters\FilterModifier;
 
@@ -41,6 +44,8 @@ class Select extends AbstractFilter
      * @param OptionSourceInterface|null $optionsProvider
      * @param array $components
      * @param array $data
+     * @param BookmarkManagementInterface|null $bookmarkManagement
+     * @param RequestInterface|null $request
      */
     public function __construct(
         ContextInterface $context,
@@ -49,10 +54,21 @@ class Select extends AbstractFilter
         FilterModifier $filterModifier,
         OptionSourceInterface $optionsProvider = null,
         array $components = [],
-        array $data = []
+        array $data = [],
+        BookmarkManagementInterface $bookmarkManagement = null,
+        RequestInterface $request = null
     ) {
         $this->optionsProvider = $optionsProvider;
-        parent::__construct($context, $uiComponentFactory, $filterBuilder, $filterModifier, $components, $data);
+        parent::__construct(
+            $context,
+            $uiComponentFactory,
+            $filterBuilder,
+            $filterModifier,
+            $components,
+            $data,
+            $bookmarkManagement,
+            $request
+        );
     }
 
     /**
