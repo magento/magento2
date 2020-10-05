@@ -141,6 +141,9 @@ class FilterProcessorTest extends TestCase
 
         $selectMock = $this->createMock(Select::class);
         $collectionMock->method('getSelect')->willReturn($selectMock);
+        $selectMock->method('getPart')
+            ->with(Select::WHERE)
+            ->willReturn([0 => '']);
 
         $model->process($searchCriteriaMock, $collectionMock);
     }
