@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Sales\Ui\Component\Listing\Column;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Store\Model\StoreManagerInterface;
@@ -45,7 +46,7 @@ class Price extends Column
      * @param array $components
      * @param array $data
      * @param Currency $currency
-     * @param StoreManagerInterface|null $storeManager
+     * @param StoreManagerInterface $storeManager
      */
     public function __construct(
         ContextInterface $context,
@@ -57,10 +58,10 @@ class Price extends Column
         StoreManagerInterface $storeManager = null
     ) {
         $this->priceFormatter = $priceFormatter;
-        $this->currency = $currency ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->create(Currency::class);
-        $this->storeManager = $storeManager ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->create(StoreManagerInterface::class);
+        $this->currency = $currency ?: ObjectManager::getInstance()
+            ->get(Currency::class);
+        $this->storeManager = $storeManager ?: ObjectManager::getInstance()
+            ->get(StoreManagerInterface::class);
         parent::__construct($context, $uiComponentFactory, $components, $data);
     }
 
