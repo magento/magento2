@@ -42,4 +42,17 @@ class State extends \Magento\Framework\View\Element\Template
     {
         return $this->_multishippingState->getSteps();
     }
+
+    /**
+     * Return multishipping steps to render
+     *
+     * @return array
+     */
+    public function getStepsToRender(): array
+    {
+        $allSteps = $this->_multishippingState->getSteps();
+        array_splice($allSteps, -2);
+
+        return $allSteps;
+    }
 }
