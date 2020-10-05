@@ -979,6 +979,13 @@ class File implements DriverInterface
             return $path;
         }
 
+        //Check backslashes
+        $path = preg_replace(
+            '/\\\\+/',
+            DIRECTORY_SEPARATOR,
+            $path
+        );
+
         //Removing redundant directory separators.
         $path = preg_replace(
             '/\\' . DIRECTORY_SEPARATOR . '\\' . DIRECTORY_SEPARATOR . '+/',

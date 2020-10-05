@@ -15,6 +15,7 @@ use Magento\Catalog\Model\Product\Media\Config;
 use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
 use Magento\Catalog\Model\ResourceModel\Product\Gallery;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Exception\ValidatorException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\ObjectManagerInterface;
@@ -114,6 +115,7 @@ class UpdateHandlerTest extends \PHPUnit\Framework\TestCase
      */
     public function testExecuteWithIllegalFilename(): void
     {
+        $this->expectException(ValidatorException::class);
         $product = $this->getProduct();
         $product->setData(
             'media_gallery',
@@ -121,7 +123,7 @@ class UpdateHandlerTest extends \PHPUnit\Framework\TestCase
                 'images' => [
                     'image' => [
                         'value_id' => '100',
-                        'file' => '/../..' . DIRECTORY_SEPARATOR . $this->fileName,
+                        'file' => '/../../..' . DIRECTORY_SEPARATOR . $this->fileName,
                         'label' => 'New image',
                         'removed' => 1,
                     ],

@@ -9,11 +9,12 @@ namespace Magento\ImportExport\Controller\Adminhtml\Export\File;
 
 use Magento\Backend\App\Action;
 use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\Response\Http\FileFactory;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\ImportExport\Controller\Adminhtml\Export as ExportController;
 use Magento\Framework\Filesystem;
+use Magento\ImportExport\Controller\Adminhtml\Export as ExportController;
+use Throwable;
 
 /**
  * Controller that download file by name.
@@ -60,7 +61,13 @@ class Download extends ExportController implements HttpGetActionInterface
     public function execute()
     {
         $fileName = $this->getRequest()->getParam('filename');
-        if (empty($fileName) || preg_match('/\.\.(\\\|\/)/', $fileName) !== 0) {
+        $exportDirectory = $this->filesystem->getDirectoryRead(DirectoryList::VAR_EXPORT);
+        try {
+            $fileExist = $exportDirectory->isExist($fileName);
+        } catch (Throwable $e) {
+            $fileExist = false;
+        }
+        if (empty($fileName) || !$fileExist) {
             throw new LocalizedException(__('Please provide valid export file name'));
         }
         try {

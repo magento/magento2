@@ -8,6 +8,7 @@ namespace Magento\Framework\File;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\Filesystem\DriverPool;
 use Magento\Framework\Validation\ValidationException;
@@ -19,6 +20,7 @@ use Magento\Framework\Validation\ValidationException;
  * validation by protected file extension list to extended class
  *
  * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  *
  * @api
  * @since 100.0.2
@@ -131,6 +133,11 @@ class Uploader
      */
     private $fileMime;
 
+    /**
+     * @var Filesystem
+     */
+    private $filesystem;
+
     /**#@+
      * File upload type (multiple or single)
      */
@@ -187,16 +194,19 @@ class Uploader
      * @param \Magento\Framework\File\Mime|null $fileMime
      * @param DirectoryList|null $directoryList
      * @param DriverPool|null $driverPool
+     * @param Filesystem $filesystem
      * @throws \DomainException
      */
     public function __construct(
         $fileId,
         Mime $fileMime = null,
         DirectoryList $directoryList = null,
-        DriverPool $driverPool = null
+        DriverPool $driverPool = null,
+        Filesystem $filesystem = null
     ) {
         $this->directoryList= $directoryList ?: ObjectManager::getInstance()->get(DirectoryList::class);
 
+        $this->filesystem = $filesystem ?: ObjectManager::getInstance()->get(FileSystem::class);
         $this->_setUploadFileId($fileId);
         if (!file_exists($this->_file['tmp_name'])) {
             $code = empty($this->_file['tmp_name']) ? self::TMP_NAME_EMPTY : 0;
@@ -623,31 +633,31 @@ class Uploader
         if (isset($fileId['tmp_name'])) {
             $tmpName = trim($fileId['tmp_name']);
 
-            if (preg_match('/\.\.(\\\|\/)/', $tmpName) !== 1) {
-                $allowedFolders = [
-                    sys_get_temp_dir(),
-                    $this->directoryList->getPath(DirectoryList::MEDIA),
-                    $this->directoryList->getPath(DirectoryList::VAR_DIR),
-                    $this->directoryList->getPath(DirectoryList::TMP),
-                    $this->directoryList->getPath(DirectoryList::UPLOAD),
-                ];
+            $allowedFolders = [
+                sys_get_temp_dir(),
+                $this->directoryList->getPath(DirectoryList::MEDIA),
+                $this->directoryList->getPath(DirectoryList::VAR_DIR),
+                $this->directoryList->getPath(DirectoryList::TMP),
+                $this->directoryList->getPath(DirectoryList::UPLOAD),
+            ];
 
-                $disallowedFolders = [
-                    $this->directoryList->getPath(DirectoryList::LOG),
-                ];
+            $disallowedFolders = [
+                $this->directoryList->getPath(DirectoryList::LOG),
+            ];
 
-                foreach ($allowedFolders as $allowedFolder) {
-                    if (stripos($tmpName, $allowedFolder) === 0) {
-                        $isValid = true;
-                        break;
-                    }
+            foreach ($allowedFolders as $allowedFolder) {
+                $dir = $this->filesystem->getDirectoryReadByPath($allowedFolder);
+                if ($dir->isExist($tmpName)) {
+                    $isValid = true;
+                    break;
                 }
+            }
 
-                foreach ($disallowedFolders as $disallowedFolder) {
-                    if (stripos($tmpName, $disallowedFolder) === 0) {
-                        $isValid = false;
-                        break;
-                    }
+            foreach ($disallowedFolders as $disallowedFolder) {
+                $dir = $this->filesystem->getDirectoryReadByPath($disallowedFolder);
+                if ($dir->isExist($tmpName)) {
+                    $isValid = false;
+                    break;
                 }
             }
         }
