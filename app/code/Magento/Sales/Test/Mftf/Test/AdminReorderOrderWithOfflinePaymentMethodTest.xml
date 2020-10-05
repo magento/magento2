@@ -55,7 +55,7 @@
         <click selector="{{AdminOrderDetailsMainActionsSection.reorder}}" stepKey="clickReorderButton"/>
         <actionGroup ref="AdminOrderClickSubmitOrderActionGroup" stepKey="submitReorder"/>
         <actionGroup ref="VerifyCreatedOrderInformationActionGroup" stepKey="verifyCreatedOrderInformation"/>
-        <actionGroup ref="AssertOrderAddressInformationActionGroup" stepKey="verifyOrderInformation">
+        <actionGroup ref="AssertOrderAddressInformationActionGroup" stepKey="verifyOrderAddressInformation">
             <argument name="customer" value="$createCustomer$"/>
             <argument name="shippingAddress" value="ShippingAddressTX"/>
             <argument name="billingAddress" value="BillingAddressTX"/>
