@@ -45,7 +45,9 @@
 
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin1"/>
       
-        <amOnPage url="{{AdminOrderPage.url($createGuestCart.return$)}}" stepKey="navigateToOrderPage"/>
+        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="openOrder">
+            <argument name="entity_id" value="$createGuestCart.return$"/>
+        </actionGroup>    
 
         <actionGroup ref="AdminCreateInvoiceActionGroup" stepKey="createInvoice"/>
 
