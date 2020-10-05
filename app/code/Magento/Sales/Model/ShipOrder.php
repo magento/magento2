@@ -177,11 +177,13 @@ class ShipOrder implements ShipOrderInterface
         $connection->beginTransaction();
         try {
             $this->orderRegistrar->register($order, $shipment);
-            $order->setState(
-                $this->orderStateResolver->getStateForOrder($order, [OrderStateResolverInterface::IN_PROGRESS])
-            );
-            $order->setStatus($this->config->getStateDefaultStatus($order->getState()));
-            $shippingData = $this->shipmentRepository->save($shipment);
+            $shipment = $this->shipmentRepository->save($shipment);
+            if ($order->getState() === Order::STATE_NEW) {
+                $order->setState(
+                    $this->orderStateResolver->getStateForOrder($order, [OrderStateResolverInterface::IN_PROGRESS])
+                );
+                $order->setStatus($this->config->getStateDefaultStatus($order->getState()));
+            }
             $this->orderRepository->save($order);
             $connection->commit();
         } catch (\Exception $e) {
@@ -191,9 +193,7 @@ class ShipOrder implements ShipOrderInterface
                 __('Could not save a shipment, see error log for details')
             );
         }
-        if ($shipment && empty($shipment->getEntityId())) {
-            $shipment->setEntityId($shippingData->getEntityId());
-        }
+
         if ($notify) {
             if (!$appendComment) {
                 $comment = null;
