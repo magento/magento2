@@ -62,6 +62,7 @@ class ShipOrderTest extends \Magento\TestFramework\TestCase\WebapiAbstract
         $shipmentId = (int)$this->_webApiCall($this->getServiceInfo($existingOrder), $requestData);
         $this->assertNotEmpty($shipmentId);
 
+        $shipment = null;
         try {
             $shipment = $this->shipmentRepository->get($shipmentId);
         } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
@@ -86,6 +87,42 @@ class ShipOrderTest extends \Magento\TestFramework\TestCase\WebapiAbstract
             $productsQuantity,
             count($shipment->getItems()),
             'Failed asserting that quantity of products and sales shipment items is equal'
+        );
+    }
+
+    /**
+     * Tests that order doesn't change a status from custom to the default after shipment creation.
+     *
+     * @magentoApiDataFixture Magento/Sales/_files/order_status.php
+     */
+    public function testShipOrderStatusPreserve()
+    {
+        $incrementId = '100000001';
+        $orderStatus = 'example';
+
+        /** @var Order $existingOrder */
+        $order = $this->getOrder($incrementId);
+        $this->assertEquals($orderStatus, $order->getStatus());
+
+        $requestData = [
+            'orderId' => $order->getId()
+        ];
+        /** @var OrderItemInterface $item */
+        foreach ($order->getAllItems() as $item) {
+            $requestData['items'][] = [
+                'order_item_id' => $item->getItemId(),
+                'qty' => $item->getQtyOrdered(),
+            ];
+        }
+
+        $shipmentId = $this->_webApiCall($this->getServiceInfo($order), $requestData);
+        $this->assertNotEmpty($shipmentId);
+        $actualOrder = $this->getOrder($order->getIncrementId());
+
+        $this->assertEquals(
+            $order->getStatus(),
+            $actualOrder->getStatus(),
+            'Failed asserting that Order status wasn\'t changed'
         );
     }
 
@@ -214,6 +251,7 @@ class ShipOrderTest extends \Magento\TestFramework\TestCase\WebapiAbstract
         $shipmentId = $this->_webApiCall($this->getServiceInfo($existingOrder), $requestData);
         $this->assertNotEmpty($shipmentId);
 
+        $shipment = null;
         try {
             $shipment = $this->shipmentRepository->get($shipmentId);
         } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
@@ -268,6 +306,7 @@ class ShipOrderTest extends \Magento\TestFramework\TestCase\WebapiAbstract
         $shipmentId = $this->_webApiCall($this->getServiceInfo($order), $requestData);
         $this->assertNotEmpty($shipmentId);
 
+        $shipment = null;
         try {
             $shipment = $this->shipmentRepository->get($shipmentId);
         } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {

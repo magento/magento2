@@ -144,7 +144,7 @@ class FulltextTest extends TestCase
                     $dimension = $this->getMockBuilder(Dimension::class)
                         ->disableOriginalConstructor()
                         ->getMock();
-                    $dimension->expects($this->once())
+                    $dimension->expects($this->any())
                         ->method('getValue')
                         ->willReturn($storeId);
 

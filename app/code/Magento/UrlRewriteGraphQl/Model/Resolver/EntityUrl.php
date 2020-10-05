@@ -64,7 +64,9 @@ class EntityUrl implements ResolverInterface
 
         $storeId = (int)$context->getExtensionAttributes()->getStore()->getId();
         $result = null;
-        $url = $args['url'];
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
+        $urlParts = parse_url($args['url']);
+        $url = $urlParts['path'] ?? $args['url'];
         if (substr($url, 0, 1) === '/' && $url !== '/') {
             $url = ltrim($url, '/');
         }
@@ -81,6 +83,9 @@ class EntityUrl implements ResolverInterface
                 'redirectCode' => $this->redirectType,
                 'type' => $this->sanitizeType($finalUrlRewrite->getEntityType())
             ];
+            if (!empty($urlParts['query'])) {
+                $resultArray['relative_url'] .= '?' . $urlParts['query'];
+            }
 
             if (empty($resultArray['id'])) {
                 throw new GraphQlNoSuchEntityException(

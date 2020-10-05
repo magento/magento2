@@ -416,7 +416,7 @@ class UpdateHandlerTest extends \PHPUnit\Framework\TestCase
         $product->setWebsiteIds([$defaultWebsiteId, $secondWebsiteId]);
         $this->productRepository->save($product);
         // Assert that product image has roles in global scope only
-        $imageRolesPerStore = $this->getProductStoreImageRoles($product);
+        $imageRolesPerStore = $this->getProductStoreImageRoles($product, $imageRoles);
         $this->assertEquals($image, $imageRolesPerStore[$globalScopeId]['image']);
         $this->assertEquals($image, $imageRolesPerStore[$globalScopeId]['small_image']);
         $this->assertEquals($image, $imageRolesPerStore[$globalScopeId]['thumbnail']);
@@ -428,7 +428,7 @@ class UpdateHandlerTest extends \PHPUnit\Framework\TestCase
         $product->addData(array_fill_keys($imageRoles, $image));
         $this->productRepository->save($product);
         // Assert that roles are assigned to product image for second store
-        $imageRolesPerStore = $this->getProductStoreImageRoles($product);
+        $imageRolesPerStore = $this->getProductStoreImageRoles($product, $imageRoles);
         $this->assertEquals($image, $imageRolesPerStore[$globalScopeId]['image']);
         $this->assertEquals($image, $imageRolesPerStore[$globalScopeId]['small_image']);
         $this->assertEquals($image, $imageRolesPerStore[$globalScopeId]['thumbnail']);
@@ -454,7 +454,7 @@ class UpdateHandlerTest extends \PHPUnit\Framework\TestCase
         $this->assertEmpty($product->getMediaGalleryEntries());
         $this->assertFileDoesNotExist($path);
         // Load image roles
-        $imageRolesPerStore = $this->getProductStoreImageRoles($product);
+        $imageRolesPerStore = $this->getProductStoreImageRoles($product, $imageRoles);
         // Assert that image roles are reset on global scope and removed on second store
         // as the product is no longer assigned to second website
         $this->assertEquals('no_selection', $imageRolesPerStore[$globalScopeId]['image']);
@@ -466,14 +466,17 @@ class UpdateHandlerTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param Product $product
+     * @param array $roles
      * @return array
      */
-    private function getProductStoreImageRoles(Product $product): array
+    private function getProductStoreImageRoles(Product $product, array $roles = []): array
     {
         $imageRolesPerStore = [];
         $stores = array_keys($this->storeManager->getStores(true));
         foreach ($this->galleryResource->getProductImages($product, $stores) as $role) {
-            $imageRolesPerStore[$role['store_id']][$role['attribute_code']] = $role['filepath'];
+            if (empty($roles) || in_array($role['attribute_code'], $roles)) {
+                $imageRolesPerStore[$role['store_id']][$role['attribute_code']] = $role['filepath'];
+            }
         }
         return $imageRolesPerStore;
     }

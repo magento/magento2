@@ -90,6 +90,15 @@ class UpdateProductsInWishlist
     private function updateItemInWishlist(Wishlist $wishlist, WishlistItemData $wishlistItemData): void
     {
         try {
+            if ($wishlist->getItem($wishlistItemData->getId()) == null) {
+                throw new LocalizedException(
+                    __(
+                        'The wishlist item with ID "%id" does not belong to the wishlist',
+                        ['id' => $wishlistItemData->getId()]
+                    )
+                );
+            }
+            $wishlist->getItemCollection()->clear();
             $options = $this->buyRequestBuilder->build($wishlistItemData);
             /** @var WishlistItem $wishlistItem */
             $wishlistItem = $this->wishlistItemFactory->create();

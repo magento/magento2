@@ -33,6 +33,9 @@
             <actionGroup ref="AdminSwitchIndexerToActionModeActionGroup" stepKey="switchProductCategory">
                 <argument name="indexerValue" value="catalog_product_category"/>
             </actionGroup>
+            <actionGroup ref="AdminSwitchIndexerToActionModeActionGroup" stepKey="switchCatalogSearch">
+                <argument name="indexerValue" value="catalogsearch_fulltext"/>
+            </actionGroup>
         </before>
 
         <after>
