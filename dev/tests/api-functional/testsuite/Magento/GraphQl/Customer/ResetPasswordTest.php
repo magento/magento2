@@ -222,7 +222,7 @@ QUERY;
      * @throws Exception
      * @throws LocalizedException
      */
-    public function testNewPasswordCheckCharactersStrenth()
+    public function testNewPasswordCheckCharactersStrength()
     {
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Minimum of different classes of characters in password is 3. Classes of characters: Lower Case, Upper Case, Digits, Special Characters.');
