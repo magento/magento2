@@ -13,4 +13,11 @@
         <plugin name="persistent_convert_customer_cart_to_guest_cart"
                 type="Magento\Persistent\Model\Checkout\GuestShippingInformationManagementPlugin"/>
     </type>
+    <type name="Magento\Customer\Model\Customer\AuthorizationComposite">
+        <arguments>
+            <argument name="authorizationChecks" xsi:type="array">
+                <item name="persistent_soap_customer_authorization" xsi:type="object">Magento\Persistent\Model\Customer\Authorization</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

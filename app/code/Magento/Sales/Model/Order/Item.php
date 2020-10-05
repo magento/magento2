@@ -2409,7 +2409,7 @@ class Item extends AbstractModel implements OrderItemInterface
      * Check if it is possible to process item after cancellation
      *
      * @return bool
-     * @since 100.2.0
+     * @since 101.0.0
      */
     public function isProcessingAvailable()
     {

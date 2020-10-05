@@ -31,7 +31,9 @@
                 <argument name="websiteCode" value="{{customWebsite.code}}"/>
             </actionGroup>
             <actionGroup ref="EnableWebUrlOptionsActionGroup" stepKey="addStoreCodeToUrls"/>
-            <magentoCLI command="cache:flush" stepKey="flushCacheAfterEnableWebUrlOptions"/>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCacheAfterEnableWebUrlOptions">
+                <argument name="tags" value=""/>
+            </actionGroup>
         </before>
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
@@ -40,17 +42,20 @@
             <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteTestWebsite">
                 <argument name="websiteName" value="{{customWebsite.name}}"/>
             </actionGroup>
-            <actionGroup ref="GoToProductCatalogPageActionGroup" stepKey="goToProductCatalogPage"/>
+            <actionGroup ref="AdminOpenCatalogProductPageActionGroup" stepKey="goToProductCatalogPage"/>
             <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetProductGridColumnsInitial"/>
             <actionGroup ref="ResetWebUrlOptionsActionGroup" stepKey="resetUrlOption"/>
-            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Assign Custom Website to Simple Product -->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToCatalogProductGrid"/>
-        <waitForPageLoad stepKey="waitForCatalogProductGrid"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToCatalogProductGrid"/>
 
         <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFiltersInitial"/>
         <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="assignCustomWebsiteToProduct">
@@ -62,13 +67,11 @@
         <uncheckOption selector="{{ProductInWebsitesSection.website(_defaultWebsite.name)}}" stepKey="deselectMainWebsite"/>
         <checkOption selector="{{ProductInWebsitesSection.website(customWebsite.name)}}" stepKey="selectWebsite"/>
 
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSave"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForProductPageToSaveAgain"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSave"/>
         <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeSaveProductMessageAgain"/>
 
         <!--Navigate To Product Grid To Check Website Sorting-->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToCatalogProductGridToSortByWebsite"/>
-        <waitForPageLoad stepKey="waitForCatalogProductGridLoaded"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToCatalogProductGridToSortByWebsite"/>
 
         <!--Sorting works (By Websites) ASC-->
         <click selector="{{AdminProductGridSection.columnHeader('Websites')}}" stepKey="clickWebsitesHeaderToSortAsc"/>

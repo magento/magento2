@@ -644,23 +644,19 @@ class Files
                         $regex = '#^' . $modulePath . '/view/(?P<area>[a-z]+)/layout/(?P<path>.+)$#i';
                         if (preg_match($regex, $moduleFile, $matches)) {
                             $files[] = [
-                                $matches['area'],
-                                '',
-                                $moduleName,
-                                $matches['path'],
-                                $moduleFile,
+                                [$matches['area'], '', $moduleName, $matches['path'], $moduleFile]
                             ];
                         } else {
                             throw new \UnexpectedValueException("Could not parse modular layout file '$moduleFile'");
                         }
                     }
                 } else {
-                    // phpcs:ignore Magento2.Performance.ForeachArrayMerge
-                    $files = array_merge($files, $moduleFiles);
+                    $files[] = $moduleFiles;
                 }
             }
         }
-        return $files;
+
+        return array_merge([], ...$files);
     }
 
     /**
@@ -691,14 +687,14 @@ class Files
 
                 if ($params['with_metainfo']) {
                     // phpcs:ignore Magento2.Performance.ForeachArrayMerge
-                    $files = array_merge($this->parseThemeFiles($themeFiles, $currentThemePath, $theme));
+                    $files[] = [array_merge($this->parseThemeFiles($themeFiles, $currentThemePath, $theme))];
                 } else {
-                    // phpcs:ignore Magento2.Performance.ForeachArrayMerge
-                    $files = array_merge($files, $themeFiles);
+                    $files[] = $themeFiles;
                 }
             }
         }
-        return $files;
+
+        return array_merge([], ...$files);
     }
 
     /**
@@ -1020,7 +1016,7 @@ class Files
     /**
      * Parse meta-info of a static file in module
      *
-     * @deprecated Replaced with method accumulateStaticFiles()
+     * @deprecated 102.0.4 Replaced with method accumulateStaticFiles()
      *
      * @param string $file
      * @return array
@@ -1116,7 +1112,7 @@ class Files
         } else {
             $frontendPaths = [BP . "/lib/web/mage"];
             /* current structure of /lib/web/mage directory contains frontend javascript in the root,
-               backend javascript in subdirectories. That's why script shouldn't go recursive throught subdirectories
+               backend javascript in subdirectories. That's why script shouldn't go recursive through subdirectories
                to get js files for frontend */
             $files = array_merge($files, self::getFiles($frontendPaths, '*.js', false));
         }

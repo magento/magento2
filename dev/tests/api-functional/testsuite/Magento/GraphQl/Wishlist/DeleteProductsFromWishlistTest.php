@@ -42,17 +42,45 @@ class DeleteProductsFromWishlistTest extends GraphQlAbstract
         $wishlist = $this->getWishlist();
         $wishlistId = $wishlist['customer']['wishlist']['id'];
         $wishlist = $wishlist['customer']['wishlist'];
-        $wishlistItems = $wishlist['items'];
-        self::assertEquals(1, $wishlist['items_count']);
+        $wishlistItems = $wishlist['items_v2'];
+        $this->assertEquals(1, $wishlist['items_count']);
 
         $query = $this->getQuery((int) $wishlistId, (int) $wishlistItems[0]['id']);
         $response = $this->graphQlMutation($query, [], '', $this->getHeaderMap());
 
-        self::assertArrayHasKey('removeProductsFromWishlist', $response);
-        self::assertArrayHasKey('wishlist', $response['removeProductsFromWishlist']);
+        $this->assertArrayHasKey('removeProductsFromWishlist', $response);
+        $this->assertArrayHasKey('wishlist', $response['removeProductsFromWishlist']);
         $wishlistResponse = $response['removeProductsFromWishlist']['wishlist'];
-        self::assertEquals(0, $wishlistResponse['items_count']);
-        self::assertEmpty($wishlistResponse['items']);
+        $this->assertEquals(0, $wishlistResponse['items_count']);
+        $this->assertEmpty($wishlistResponse['items_v2']);
+    }
+
+    /**
+     * Test deleting the wishlist item of another customer
+     *
+     * @magentoConfigFixture default_store wishlist/general/active 1
+     * @magentoApiDataFixture Magento/Wishlist/_files/two_wishlists_for_two_diff_customers.php
+     */
+    public function testUnauthorizedWishlistItemDelete()
+    {
+        $wishlist = $this->getWishlist();
+        $wishlistItem = $wishlist['customer']['wishlist']['items_v2'][0];
+        $wishlist2 = $this->getWishlist('customer_two@example.com');
+        $wishlist2Id = $wishlist2['customer']['wishlist']['id'];
+        $query = $this->getQuery((int) $wishlist2Id, (int) $wishlistItem['id']);
+        $response = $this->graphQlMutation(
+            $query,
+            [],
+            '',
+            $this->getHeaderMap('customer_two@example.com')
+        );
+        self::assertEquals(1, $response['removeProductsFromWishlist']['wishlist']['items_count']);
+        self::assertNotEmpty($response['removeProductsFromWishlist']['wishlist']['items_v2'], 'empty wish list items');
+        self::assertCount(1, $response['removeProductsFromWishlist']['wishlist']['items_v2']);
+        self::assertEquals(
+            'The wishlist item with ID "'.$wishlistItem['id'].'" does not belong to the wishlist',
+            $response['removeProductsFromWishlist']['user_errors'][0]['message']
+        );
     }
 
     /**
@@ -90,7 +118,7 @@ mutation {
     wishlistId: {$wishlistId},
     wishlistItemsIds: [{$wishlistItemId}]
 ) {
-    userInputErrors {
+    user_errors {
       code
       message
     }
@@ -98,10 +126,10 @@ mutation {
       id
       sharing_code
       items_count
-      items {
+      items_v2 {
         id
         description
-        qty
+        quantity
       }
     }
   }
@@ -116,9 +144,9 @@ MUTATION;
      *
      * @throws Exception
      */
-    public function getWishlist(): array
+    public function getWishlist(string $username = 'customer@example.com'): array
     {
-        return $this->graphQlQuery($this->getCustomerWishlistQuery(), [], '', $this->getHeaderMap());
+        return $this->graphQlQuery($this->getCustomerWishlistQuery(), [], '', $this->getHeaderMap($username));
     }
 
     /**
@@ -134,9 +162,9 @@ query {
     wishlist {
       id
       items_count
-      items {
+      items_v2 {
         id
-        qty
+        quantity
         description
       }
     }

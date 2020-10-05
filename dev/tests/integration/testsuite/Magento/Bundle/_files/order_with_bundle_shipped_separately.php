@@ -155,6 +155,8 @@ $orderItems = [];
 /** @var \Magento\Sales\Model\Order\Item $orderItem */
 $orderItem = $objectManager->create(\Magento\Sales\Model\Order\Item::class);
 $orderItem->setProductId($product->getId());
+$orderItem->setSku($product->getSku());
+$orderItem->setName($product->getName());
 $orderItem->setQtyOrdered(1);
 $orderItem->setBasePrice($product->getPrice());
 $orderItem->setPrice($product->getPrice());
@@ -172,6 +174,8 @@ foreach ($optionsData as $optionId => $productId) {
     /** @var \Magento\Sales\Model\Order\Item $orderItem */
     $orderItem = $objectManager->create(\Magento\Sales\Model\Order\Item::class);
     $orderItem->setProductId($productId);
+    $orderItem->setSku($selectedProduct->getSku());
+    $orderItem->setName($selectedProduct->getName());
     $orderItem->setQtyOrdered(1);
     $orderItem->setBasePrice($selectedProduct->getPrice());
     $orderItem->setPrice($selectedProduct->getPrice());

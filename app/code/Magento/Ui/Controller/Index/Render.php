@@ -104,9 +104,7 @@ class Render extends Action implements HttpGetActionInterface
     public function execute()
     {
         if ($this->getRequest()->getParam('namespace') === null) {
-            $this->redirect('admin/noroute');
-
-            return;
+            return $this->redirect('noroute');
         }
 
         try {
@@ -117,6 +115,7 @@ class Render extends Action implements HttpGetActionInterface
 
                 $contentType = $this->contentTypeResolver->resolve($component->getContext());
                 $this->getResponse()->setHeader('Content-Type', $contentType, true);
+                return $this->getResponse();
             } else {
                 /** @var Json $resultJson */
                 $resultJson = $this->resultJsonFactory->create();

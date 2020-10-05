@@ -4,6 +4,9 @@
  * See COPYING.txt for license details.
  */
 
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+/** @var \Magento\Framework\View\Element\Html\Calendar $block */
+
 /**
  * Calendar localization script. Should be put into page header.
  *
@@ -11,7 +14,9 @@
  */
 ?>
 
-<script>
+<?php $intFirstDay = (int)$firstDay;
+$scriptString = <<<script
+
 require([
     'jquery',
 ], function($){
@@ -19,23 +24,23 @@ require([
 //<![CDATA[
     $.extend(true, $, {
         calendarConfig: {
-            dayNames: <?= /* @noEscape */ $days['wide'] ?>,
-            dayNamesMin: <?= /* @noEscape */ $days['abbreviated'] ?>,
-            monthNames: <?= /* @noEscape */ $months['wide'] ?>,
-            monthNamesShort: <?= /* @noEscape */ $months['abbreviated'] ?>,
-            infoTitle: "<?= $block->escapeJs(__('About the calendar')) ?>",
-            firstDay: <?= (int)$firstDay ?>,
-            closeText: "<?= $block->escapeJs(__('Close')) ?>",
-            currentText: "<?= $block->escapeJs(__('Go Today')) ?>",
-            prevText: "<?= $block->escapeJs(__('Previous')) ?>",
-            nextText: "<?= $block->escapeJs(__('Next')) ?>",
-            weekHeader: "<?= $block->escapeJs(__('WK')) ?>",
-            timeText: "<?= $block->escapeJs(__('Time')) ?>",
-            hourText: "<?= $block->escapeJs(__('Hour')) ?>",
-            minuteText: "<?= $block->escapeJs(__('Minute')) ?>",
+            dayNames: {$days['wide']},
+            dayNamesMin: {$days['abbreviated']},
+            monthNames: {$months['wide']},
+            monthNamesShort: {$months['abbreviated']},
+            infoTitle: '{$block->escapeJs(__('About the calendar'))}',
+            firstDay: {$intFirstDay},
+            closeText: '{$block->escapeJs(__('Close'))}',
+            currentText: '{$block->escapeJs(__('Go Today'))}',
+            prevText: '{$block->escapeJs(__('Previous'))}',
+            nextText: '{$block->escapeJs(__('Next'))}',
+            weekHeader: '{$block->escapeJs(__('WK'))}',
+            timeText: '{$block->escapeJs(__('Time'))}',
+            hourText: '{$block->escapeJs(__('Hour'))}',
+            minuteText: '{$block->escapeJs(__('Minute'))}',
             dateFormat: "D, d M yy", // $.datepicker.RFC_2822
-            showOn: "button",
-            showAnim: "",
+            showOn: 'button',
+            showAnim: '',
             changeMonth: true,
             changeYear: true,
             buttonImageOnly: null,
@@ -49,8 +54,10 @@ require([
         }
     });
 
-    enUS = <?= /* @noEscape */ $enUS ?>; // en_US locale reference
+    enUS = {$enUS}; // en_US locale reference
 //]]>
 
 });
-</script>
+script;
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
