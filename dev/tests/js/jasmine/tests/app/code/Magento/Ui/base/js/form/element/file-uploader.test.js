@@ -360,8 +360,6 @@ define([
 
         describe('onFail handler', function () {
             it('it logs responseText and status', function () {
-                spyOn(console, 'error');
-
                 var fakeEvent = {
                         target: document.createElement('input')
                     },
@@ -371,6 +369,8 @@ define([
                             status: '500'
                         }
                     };
+
+                spyOn(console, 'error');
 
                 component.onFail(fakeEvent, data);
                 expect(console.error).toHaveBeenCalledWith(data.jqXHR.responseText);
