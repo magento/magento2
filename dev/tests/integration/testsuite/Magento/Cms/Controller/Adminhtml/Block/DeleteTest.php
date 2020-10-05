@@ -24,7 +24,7 @@ use Magento\TestFramework\TestCase\AbstractBackendController;
 class DeleteTest extends AbstractBackendController
 {
     /** @var GetBlockByIdentifierInterface */
-    private $getBlockByIdentifierInterface;
+    private $getBlockByIdentifier;
 
     /** @var StoreManagerInterface */
     private $storeManager;
@@ -39,7 +39,7 @@ class DeleteTest extends AbstractBackendController
     {
         parent::setUp();
 
-        $this->getBlockByIdentifierInterface = $this->_objectManager->get(GetBlockByIdentifierInterface::class);
+        $this->getBlockByIdentifier = $this->_objectManager->get(GetBlockByIdentifierInterface::class);
         $this->storeManager = $this->_objectManager->get(StoreManagerInterface::class);
         $this->collectionFactory = $this->_objectManager->get(CollectionFactory::class);
     }
@@ -52,7 +52,7 @@ class DeleteTest extends AbstractBackendController
     public function testDeleteBlock(): void
     {
         $defaultStoreId = (int)$this->storeManager->getStore('default')->getId();
-        $blockId = $this->getBlockByIdentifierInterface->execute('default_store_block', $defaultStoreId)->getId();
+        $blockId = $this->getBlockByIdentifier->execute('default_store_block', $defaultStoreId)->getId();
         $this->getRequest()->setMethod(Http::METHOD_POST)
             ->setParams(['block_id' => $blockId]);
         $this->dispatch('backend/cms/block/delete');
