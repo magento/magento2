@@ -15,8 +15,8 @@
             <title value="Product grid filtering by store view level attribute"/>
             <description value="Verify that products grid can be filtered on all store view level by attribute"/>
             <severity value="MAJOR"/>
-            <testCaseId value="MAGETWO-98755"/>
-            <useCaseId value="MAGETWO-98335"/>
+            <testCaseId value="MC-28534"/>
+            <useCaseId value="MC-37347"/>
             <group value="catalog"/>
         </annotations>
         <before>
