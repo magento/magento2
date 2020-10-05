@@ -625,8 +625,11 @@ class DobTest extends TestCase
      * @dataProvider getTranslatedCalendarConfigJsonDataProvider
      * @return void
      */
-    public function testGetTranslatedCalendarConfigJson(string $locale, array $expectedArray, string $expectedJson): void
-    {
+    public function testGetTranslatedCalendarConfigJson(
+        string $locale,
+        array $expectedArray,
+        string $expectedJson
+    ): void {
         $this->_locale = $locale;
 
         $this->encoder->expects($this->once())
@@ -657,12 +660,15 @@ class DobTest extends TestCase
                     'currentText' => 'Today',
                     'monthNames' => ['January', 'February', 'March', 'April', 'May', 'June',
                         'July', 'August', 'September', 'October', 'November', 'December'],
-                    'monthNamesShort' => ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    'monthNamesShort' => ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                        'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
                     'dayNames' => ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
                     'dayNamesShort' => ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
                     'dayNamesMin' => ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
                 ],
+                // phpcs:disable Generic.Files.LineLength.TooLong
                 'expectedJson' => '{"closeText":"Done","prevText":"Prev","nextText":"Next","currentText":"Today","monthNames":["January","February","March","April","May","June","July","August","September","October","November","December"],"monthNamesShort":["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"dayNames":["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],"dayNamesShort":["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],"dayNamesMin":["Su","Mo","Tu","We","Th","Fr","Sa"]}'
+                // phpcs:enable Generic.Files.LineLength.TooLong
             ],
             [
                 'locale' => 'de_DE',
@@ -673,12 +679,15 @@ class DobTest extends TestCase
                     'currentText' => 'Today',
                     'monthNames' => ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni',
                         'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'],
-                    'monthNamesShort' => ['Jan.', 'Feb.', 'März', 'Apr.', 'Mai', 'Juni', 'Juli', 'Aug.', 'Sept.', 'Okt.', 'Nov.', 'Dez.'],
+                    'monthNamesShort' => ['Jan.', 'Feb.', 'März', 'Apr.', 'Mai', 'Juni',
+                        'Juli', 'Aug.', 'Sept.', 'Okt.', 'Nov.', 'Dez.'],
                     'dayNames' => ['Sonntag', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag'],
                     'dayNamesShort' => ['So.', 'Mo.', 'Di.', 'Mi.', 'Do.', 'Fr.', 'Sa.'],
                     'dayNamesMin' => ['So.', 'Mo.', 'Di.', 'Mi.', 'Do.', 'Fr.', 'Sa.'],
                 ],
+                // phpcs:disable Generic.Files.LineLength.TooLong
                 'expectedJson' => '{"closeText":"Done","prevText":"Prev","nextText":"Next","currentText":"Today","monthNames":["Januar","Februar","M\u00e4rz","April","Mai","Juni","Juli","August","September","Oktober","November","Dezember"],"monthNamesShort":["Jan.","Feb.","M\u00e4rz","Apr.","Mai","Juni","Juli","Aug.","Sept.","Okt.","Nov.","Dez."],"dayNames":["Sonntag","Montag","Dienstag","Mittwoch","Donnerstag","Freitag","Samstag"],"dayNamesShort":["So.","Mo.","Di.","Mi.","Do.","Fr.","Sa."],"dayNamesMin":["So.","Mo.","Di.","Mi.","Do.","Fr.","Sa."]}'
+                // phpcs:enable Generic.Files.LineLength.TooLong
             ],
         ];
     }
