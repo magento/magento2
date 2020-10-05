@@ -42,6 +42,7 @@ class SynonymAnalyzer implements SynonymAnalyzerInterface
      *   3 => [ 0 => "british", 1 => "english" ],
      *   4 => [ 0 => "queen", 1 => "monarch" ]
      * ]
+     *
      * @param string $phrase
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
