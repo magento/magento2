@@ -7,7 +7,7 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="ApplyCatalogRuleForSimpleProductAndFixedMethodTest" deprecated="Use ApplyCatalogRuleForSimpleProductWithSelectFixedMethodTest instead">
+    <test name="ApplyCatalogRuleForSimpleProductAndFixedMethodTest" deprecated="Use StorefrontApplyCatalogRuleForSimpleProductWithSelectFixedMethodTest instead">
         <annotations>
             <features value="CatalogRule"/>
             <stories value="Apply catalog price rule"/>
@@ -18,7 +18,7 @@
             <group value="CatalogRule"/>
             <group value="mtf_migrated"/>
             <skip>
-                <issueId value="DEPRECATED">Use ApplyCatalogRuleForSimpleProductWithSelectFixedMethodTest instead</issueId>
+                <issueId value="DEPRECATED">Use StorefrontApplyCatalogRuleForSimpleProductWithSelectFixedMethodTest instead</issueId>
             </skip>
         </annotations>
         <before>

@@ -73,7 +73,7 @@ class DefaultType extends \Magento\Framework\DataObject
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param array $data
-     * @param CalculateCustomOptionCatalogRule $calculateCustomOptionCatalogRule
+     * @param CalculateCustomOptionCatalogRule|null $calculateCustomOptionCatalogRule
      */
     public function __construct(
         \Magento\Checkout\Model\Session $checkoutSession,
@@ -357,12 +357,12 @@ class DefaultType extends \Magento\Framework\DataObject
             (float)$option->getPrice(),
             $option->getPriceType() === Value::TYPE_PERCENT
         );
-        if ($catalogPriceValue!==null) {
+        if ($catalogPriceValue !== null) {
             return $catalogPriceValue;
         } else {
             return $this->_getChargeableOptionPrice(
                 $option->getPrice(),
-                $option->getPriceType() == 'percent',
+                $option->getPriceType() === Value::TYPE_PERCENT,
                 $basePrice
             );
         }

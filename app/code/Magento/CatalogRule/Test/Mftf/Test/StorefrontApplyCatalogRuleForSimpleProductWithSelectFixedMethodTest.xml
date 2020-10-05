@@ -7,7 +7,7 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="ApplyCatalogRuleForSimpleProductWithSelectFixedMethodTest">
+    <test name="StorefrontApplyCatalogRuleForSimpleProductWithSelectFixedMethodTest">
         <annotations>
             <features value="CatalogRule"/>
             <stories value="Apply catalog price rule"/>
@@ -17,6 +17,7 @@
             <testCaseId value="MC-14771"/>
             <group value="catalogRule"/>
             <group value="mtf_migrated"/>
+            <group value="catalog"/>
         </annotations>
         <before>
             <!-- Create category -->
@@ -29,13 +30,16 @@
             </createData>
 
             <!-- Update all products to have custom options -->
-            <updateData createDataKey="createProduct1" entity="productWithFixedOptions" stepKey="updateProductWithOptions1"/>
-            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-                <argument name="indices" value=""/>
-            </actionGroup>
+            <updateData createDataKey="createProduct1" entity="productWithFixedOptions" stepKey="updateFirstProductWithOptions"/>
 
             <!-- Login as Admin -->
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+
+            <!-- Clear all catalog price rules and reindex before test -->
+            <actionGroup ref="AdminCatalogPriceRuleDeleteAllActionGroup" stepKey="deleteAllCatalogRulesBeforeTest"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </before>
         <after>
             <!-- Delete products and category -->
@@ -43,31 +47,28 @@
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
 
             <!-- Delete the catalog price rule -->
-            <actionGroup ref="AdminOpenCatalogPriceRulePageActionGroup" stepKey="goToPriceRulePage"/>
-            <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deletePriceRule">
-                <argument name="name" value="{{CatalogRuleByFixed.name}}"/>
-                <argument name="searchInput" value="{{AdminSecondaryGridSection.catalogRuleIdentifierSearch}}"/>
-            </actionGroup>
-
+            <actionGroup ref="AdminCatalogPriceRuleDeleteAllActionGroup" stepKey="deleteAllCatalogRulesAfterTest"/>
             <!-- Logout -->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
         <!-- 1. Begin creating a new catalog price rule -->
-        <actionGroup ref="NewCatalogPriceRuleByUIWithConditionIsCategoryActionGroup" stepKey="newCatalogPriceRuleByUIWithConditionIsCategory">
-            <argument name ="categoryId" value="$createCategory.id$"/>
-            <argument name ="catalogRule" value="CatalogRuleByFixed"/>
+        <actionGroup ref="AdminOpenNewCatalogPriceRuleFormPageActionGroup" stepKey="startCreatingFirstPriceRule"/>
+        <actionGroup ref="AdminCatalogPriceRuleFillMainInfoActionGroup" stepKey="fillMainInfoForFirstPriceRule">
+            <argument name="groups" value="'NOT LOGGED IN'"/>
         </actionGroup>
-
-        <!-- Select not logged in customer group -->
-        <actionGroup ref="SelectNotLoggedInCustomerGroupActionGroup" stepKey="selectNotLoggedInCustomerGroup"/>
-
-        <!-- Save and apply the new catalog price rule -->
-        <conditionalClick selector="{{AdminNewCatalogPriceRule.active}}" dependentSelector="{{AdminNewCatalogPriceRule.activeIsEnabled}}" visible="false" stepKey="enableActiveBtn"/>
-        <click selector="{{AdminNewCatalogPriceRule.save}}" stepKey="clickSave"/>
-        <waitForPageLoad stepKey="waitForSave"/>
+        <actionGroup ref="AdminFillCatalogRuleConditionActionGroup" stepKey="createCatalogPriceRule">
+            <argument name="conditionValue" value="$createCategory.id$"/>
+        </actionGroup>
+        <actionGroup ref="AdminCatalogPriceRuleFillActionsActionGroup" stepKey="fillActionsForCatalogPriceRule">
+            <argument name="apply" value="by_fixed"/>
+            <argument name="discountAmount" value="12.3"/>
+        </actionGroup>
+        <actionGroup ref="AdminCatalogPriceRuleSaveAndApplyActionGroup" stepKey="saveAndApplyCatalogPriceRule"/>
 
         <!-- Navigate to category on store front -->
-        <amOnPage url="{{StorefrontProductPage.url($createCategory.name$)}}" stepKey="goToStorefrontCategoryPage"/>
+        <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="goToStorefrontCategoryPage">
+            <argument name="category" value="$createCategory$"/>
+        </actionGroup>
 
         <!-- Check product 1 name on store front category page -->
         <actionGroup ref="AssertProductDetailsOnStorefrontActionGroup" stepKey="storefrontProduct1Name">
@@ -87,8 +88,10 @@
             <argument name="productNumber" value="1"/>
         </actionGroup>
 
-        <!-- Navigate to product 1 on store front -->
-        <amOnPage url="{{StorefrontProductPage.url($createProduct1.name$)}}" stepKey="goToProductPage1"/>
+        <!-- Navigate to product on store front -->
+        <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="goToProductPage1">
+            <argument name="productUrlKey" value="$createProduct1.custom_attributes[url_key]$"/>
+        </actionGroup>
 
         <!-- Assert regular and special price after selecting ProductOptionValueDropdown1 -->
         <actionGroup ref="StorefrontSelectCustomOptionRadioAndAssertPricesActionGroup" stepKey="storefrontSelectCustomOptionAndAssertPrices1">
@@ -99,8 +102,8 @@
         </actionGroup>
 
         <!-- Add product 1 to cart -->
-        <actionGroup ref="StorefrontAddProductToCartWithQtyActionGroup" stepKey="cartAddSimpleProduct1ToCart">
-            <argument name="productQty" value="1"/>
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage1">
+            <argument name="productName" value="$createProduct1.name$"/>
         </actionGroup>
 
         <!-- Assert sub total on mini shopping cart -->

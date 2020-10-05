@@ -32,14 +32,14 @@ class ValueTest extends TestCase
     /**
      * @var CalculateCustomOptionCatalogRule|MockObject
      */
-    private $CalculateCustomOptionCatalogRule;
+    private $calculateCustomOptionCatalogRule;
 
     protected function setUp(): void
     {
         $mockedResource = $this->getMockedResource();
         $mockedCollectionFactory = $this->getMockedValueCollectionFactory();
 
-        $this->CalculateCustomOptionCatalogRule = $this->createMock(
+        $this->calculateCustomOptionCatalogRule = $this->createMock(
             CalculateCustomOptionCatalogRule::class
         );
 
@@ -49,7 +49,7 @@ class ValueTest extends TestCase
             [
                 'resource' => $mockedResource,
                 'valueCollectionFactory' => $mockedCollectionFactory,
-                'CalculateCustomOptionCatalogRule' => $this->CalculateCustomOptionCatalogRule
+                'CalculateCustomOptionCatalogRule' => $this->calculateCustomOptionCatalogRule
             ]
         );
         $this->model->setOption($this->getMockedOption());
@@ -77,7 +77,7 @@ class ValueTest extends TestCase
         $this->assertEquals($price, $this->model->getPrice(false));
 
         $percentPrice = 100.0;
-        $this->CalculateCustomOptionCatalogRule->expects($this->atLeastOnce())
+        $this->calculateCustomOptionCatalogRule->expects($this->atLeastOnce())
             ->method('execute')
             ->willReturn($percentPrice);
         $this->assertEquals($percentPrice, $this->model->getPrice(true));

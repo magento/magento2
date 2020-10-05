@@ -7,7 +7,7 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="ApplyCatalogRuleForSimpleProductsWithCustomOptionsTest">
+    <test name="StorefrontApplyCatalogRuleForSimpleProductsWithCustomOptionsTest">
         <annotations>
             <features value="CatalogRule"/>
             <stories value="Apply catalog price rule"/>
@@ -17,6 +17,7 @@
             <testCaseId value="MC-14769"/>
             <group value="catalogRule"/>
             <group value="mtf_migrated"/>
+            <group value="catalog"/>
         </annotations>
         <before>
             <!-- Login as Admin -->
@@ -39,6 +40,7 @@
             <updateData createDataKey="createProduct2" entity="productWithCustomOptions" stepKey="updateProductWithOptions2"/>
             <updateData createDataKey="createProduct3" entity="productWithCustomOptions" stepKey="updateProductWithOptions3"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminCatalogPriceRuleDeleteAllActionGroup" stepKey="deleteAllCatalogRulesBeforeTest"/>
         </before>
         <after>
             <!-- Delete products and category -->
@@ -48,65 +50,71 @@
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
 
             <!-- Delete the catalog price rule -->
-            <actionGroup ref="AdminOpenCatalogPriceRulePageActionGroup" stepKey="goToPriceRulePage"/>
-            <actionGroup stepKey="deletePriceRule" ref="deleteEntitySecondaryGrid">
-                <argument name="name" value="{{_defaultCatalogRule.name}}"/>
-                <argument name="searchInput" value="{{AdminSecondaryGridSection.catalogRuleIdentifierSearch}}"/>
-            </actionGroup>
-
-            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexAdterTest">
-                <argument name="indices" value=""/>
-            </actionGroup>
-            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCacheAfterTest">
-                <argument name="tags" value=""/>
-            </actionGroup>
+            <actionGroup ref="AdminCatalogPriceRuleDeleteAllActionGroup" stepKey="deleteAllCatalogRulesAfterTest"/>
+            <magentoCron groups="index" stepKey="fixInvalidatedIndices"/>
 
             <!-- Logout -->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!-- 1. Begin creating a new catalog price rule -->
-        <actionGroup ref="NewCatalogPriceRuleByUIWithConditionIsCategoryActionGroup" stepKey="newCatalogPriceRuleByUIWithConditionIsCategory">
-            <argument name ="categoryId" value="$createCategory.id$"/>
+        <actionGroup ref="AdminOpenNewCatalogPriceRuleFormPageActionGroup" stepKey="startCreatingFirstPriceRule"/>
+        <actionGroup ref="AdminCatalogPriceRuleFillMainInfoActionGroup" stepKey="fillMainInfoForFirstPriceRule">
+            <argument name="groups" value="'NOT LOGGED IN'"/>
         </actionGroup>
-
-        <!-- Select not logged in customer group -->
-        <actionGroup ref="SelectNotLoggedInCustomerGroupActionGroup" stepKey="selectNotLoggedInCustomerGroup"/>
-
-        <!-- Save and apply the new catalog price rule -->
-        <conditionalClick selector="{{AdminNewCatalogPriceRule.active}}" dependentSelector="{{AdminNewCatalogPriceRule.activeIsEnabled}}" visible="false" stepKey="enableActiveBtn"/>
-        <click selector="{{AdminNewCatalogPriceRule.save}}" stepKey="clickSave"/>
-        <waitForPageLoad stepKey="waitForSave"/>
-
-        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-            <argument name="indices" value=""/>
+        <actionGroup ref="AdminFillCatalogRuleConditionActionGroup" stepKey="createCatalogPriceRule">
+            <argument name="conditionValue" value="$createCategory.id$"/>
         </actionGroup>
-        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-            <argument name="tags" value=""/>
+        <actionGroup ref="AdminCatalogPriceRuleFillActionsActionGroup" stepKey="fillActionsForCatalogPriceRule">
+            <argument name="apply" value="by_percent"/>
+            <argument name="discountAmount" value="10"/>
         </actionGroup>
+        <actionGroup ref="AdminCatalogPriceRuleSaveAndApplyActionGroup" stepKey="saveAndApplyCatalogPriceRule"/>
 
         <!-- Navigate to category on store front -->
-        <amOnPage url="{{StorefrontProductPage.url($createCategory.name$)}}" stepKey="goToCategoryPage"/>
+        <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="goToStorefrontCategoryPage">
+            <argument name="category" value="$createCategory$"/>
+        </actionGroup>
 
         <!-- Check product 1 price on store front category page -->
-        <see selector="{{StorefrontCategoryProductSection.ProductInfoByName($createProduct1.name$)}}" userInput="$51.10" stepKey="storefrontProduct1Price"/>
+        <actionGroup ref="StorefrontAssertProductPriceOnCategoryPageActionGroup" stepKey="storefrontProduct1Price">
+            <argument name="productName" value="$createProduct1.name$"/>
+            <argument name="productPrice" value="$51.10"/>
+        </actionGroup>
 
         <!-- Check product 1 regular price on store front category page -->
-        <see selector="{{StorefrontCategoryProductSection.ProductInfoByName($createProduct1.name$)}}" userInput="$56.78" stepKey="storefrontProduct1RegularPrice"/>
+        <actionGroup ref="StorefrontAssertProductPriceOnCategoryPageActionGroup" stepKey="storefrontProduct1RegularPrice">
+            <argument name="productName" value="$createProduct1.name$"/>
+            <argument name="productPrice" value="$56.78"/>
+        </actionGroup>
 
         <!-- Check product 2 price on store front category page -->
-        <see selector="{{StorefrontCategoryProductSection.ProductInfoByName($createProduct2.name$)}}" userInput="$51.10" stepKey="storefrontProduct2Price"/>
+        <actionGroup ref="StorefrontAssertProductPriceOnCategoryPageActionGroup" stepKey="storefrontProduct2Price">
+            <argument name="productName" value="$createProduct2.name$"/>
+            <argument name="productPrice" value="$51.10"/>
+        </actionGroup>
 
         <!-- Check product 2 regular price on store front category page -->
-        <see selector="{{StorefrontCategoryProductSection.ProductInfoByName($createProduct2.name$)}}" userInput="$56.78" stepKey="storefrontProduct2RegularPrice"/>
+        <actionGroup ref="StorefrontAssertProductPriceOnCategoryPageActionGroup" stepKey="storefrontProduct2RegularPrice">
+            <argument name="productName" value="$createProduct2.name$"/>
+            <argument name="productPrice" value="$56.78"/>
+        </actionGroup>
 
         <!-- Check product 3 price on store front category page -->
-        <see selector="{{StorefrontCategoryProductSection.ProductInfoByName($createProduct3.name$)}}" userInput="$51.10" stepKey="storefrontProduct3Price"/>
+        <actionGroup ref="StorefrontAssertProductPriceOnCategoryPageActionGroup" stepKey="storefrontProduct3Price">
+            <argument name="productName" value="$createProduct3.name$"/>
+            <argument name="productPrice" value="$51.10"/>
+        </actionGroup>
 
         <!-- Check product 3 regular price on store front category page -->
-        <see selector="{{StorefrontCategoryProductSection.ProductInfoByName($createProduct3.name$)}}" userInput="$56.78" stepKey="storefrontProduct3RegularPrice"/>
+        <actionGroup ref="StorefrontAssertProductPriceOnCategoryPageActionGroup" stepKey="storefrontProduct3RegularPrice">
+            <argument name="productName" value="$createProduct3.name$"/>
+            <argument name="productPrice" value="$56.78"/>
+        </actionGroup>
 
         <!-- Navigate to product 1 on store front -->
-        <amOnPage url="{{StorefrontProductPage.url($createProduct1.name$)}}" stepKey="goToProductPage1"/>
+        <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="goToProductPage1">
+            <argument name="productUrlKey" value="$createProduct1.custom_attributes[url_key]$"/>
+        </actionGroup>
 
         <!-- Assert regular and special price after selecting ProductOptionValueDropdown1 -->
         <actionGroup ref="StorefrontSelectCustomOptionDropDownAndAssertPricesActionGroup" stepKey="storefrontSelectCustomOptionAndAssertPrices1">
@@ -116,12 +124,14 @@
         </actionGroup>
 
         <!-- Add product 1 to cart -->
-        <actionGroup ref="StorefrontAddProductToCartWithQtyActionGroup" stepKey="cartAddSimpleProduct1ToCart">
-            <argument name="productQty" value="1"/>
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage1">
+            <argument name="productName" value="$createProduct1.name$"/>
         </actionGroup>
 
         <!-- Navigate to product 2 on store front -->
-        <amOnPage url="{{StorefrontProductPage.url($createProduct1.name$)}}" stepKey="goToProductPage2"/>
+        <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="goToProductPage2">
+            <argument name="productUrlKey" value="$createProduct2.custom_attributes[url_key]$"/>
+        </actionGroup>
 
         <!-- Assert regular and special price after selecting ProductOptionValueDropdown3 -->
         <actionGroup ref="StorefrontSelectCustomOptionDropDownAndAssertPricesActionGroup" stepKey="storefrontSelectCustomOptionAndAssertPrices2">
@@ -131,16 +141,18 @@
         </actionGroup>
 
         <!-- Add product 2 to cart -->
-        <actionGroup ref="StorefrontAddProductToCartWithQtyActionGroup" stepKey="cartAddSimpleProduct2ToCart">
-            <argument name="productQty" value="1"/>
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage2">
+            <argument name="productName" value="$createProduct2.name$"/>
         </actionGroup>
 
         <!-- Navigate to product 3 on store front -->
-        <amOnPage url="{{StorefrontProductPage.url($createProduct3.name$)}}" stepKey="goToProductPage3"/>
+        <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="goToProductPage3">
+            <argument name="productUrlKey" value="$createProduct3.custom_attributes[url_key]$"/>
+        </actionGroup>
 
         <!-- Add product 3 to cart with no custom option -->
-        <actionGroup ref="StorefrontAddProductToCartWithQtyActionGroup" stepKey="cartAddSimpleProduct3ToCart">
-            <argument name="productQty" value="1"/>
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage3">
+            <argument name="productName" value="$createProduct3.name$"/>
         </actionGroup>
 
         <!-- Assert sub total on mini shopping cart -->
@@ -149,8 +161,7 @@
         </actionGroup>
 
         <!-- Navigate to checkout shipping page -->
-        <amOnPage stepKey="navigateToShippingPage" url="{{CheckoutShippingPage.url}}"/>
-        <waitForPageLoad stepKey="waitFoCheckoutShippingPageLoad"/>
+        <actionGroup ref="OpenStoreFrontCheckoutShippingPageActionGroup" stepKey="onCheckout"/>
 
         <!-- Fill Shipping information -->
         <actionGroup ref="GuestCheckoutFillingShippingSectionActionGroup" stepKey="fillOrderShippingInfo">

@@ -146,7 +146,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
      * @param ProductCustomOptionValuesInterfaceFactory|null $customOptionValuesFactory
      * @param array $optionGroups
      * @param array $optionTypesToGroups
-     * @param CalculateCustomOptionCatalogRule $calculateCustomOptionCatalogRule
+     * @param CalculateCustomOptionCatalogRule|null $calculateCustomOptionCatalogRule
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -474,19 +474,21 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
      */
     public function getPrice($flag = false)
     {
-        if ($flag && $this->getPriceType() == self::$typePercent) {
+        if ($flag && $this->getPriceType() === self::$typePercent) {
             $price = $this->calculateCustomOptionCatalogRule->execute(
                 $this->getProduct(),
                 (float)$this->getData(self::KEY_PRICE),
                 $this->getPriceType() === Value::TYPE_PERCENT
             );
 
-            if ($price == null) {
+            if ($price === null) {
                 $basePrice = $this->getProduct()->getPriceInfo()->getPrice(BasePrice::PRICE_CODE)->getValue();
                 $price = $basePrice * ($this->_getData(self::KEY_PRICE) / 100);
             }
+
             return $price;
         }
+
         return $this->_getData(self::KEY_PRICE);
     }
 

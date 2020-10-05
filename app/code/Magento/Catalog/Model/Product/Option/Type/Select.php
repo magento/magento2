@@ -10,6 +10,7 @@ use Magento\Catalog\Model\Product\Option\Value;
 use Magento\Catalog\Pricing\Price\CalculateCustomOptionCatalogRule;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Catalog\Model\Product\Option;
 
 /**
  * Catalog product option select type
@@ -52,7 +53,7 @@ class Select extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      * @param \Magento\Framework\Escaper $escaper
      * @param array $data
      * @param array $singleSelectionTypes
-     * @param CalculateCustomOptionCatalogRule $calculateCustomOptionCatalogRule
+     * @param CalculateCustomOptionCatalogRule|null $calculateCustomOptionCatalogRule
      */
     public function __construct(
         \Magento\Checkout\Model\Session $checkoutSession,
@@ -350,24 +351,24 @@ class Select extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
     /**
      * Returns calculated price of option
      *
-     * @param \Magento\Catalog\Model\Product\Option $option
-     * @param \Magento\Catalog\Model\Product\Option\Value $result
+     * @param Option $option
+     * @param Option\Value $result
      * @param float $basePrice
-     * @return float|null
+     * @return float
      */
-    protected function getCalculatedOptionValue($option, $result, $basePrice)
+    protected function getCalculatedOptionValue(Option $option, Value $result, float $basePrice) : float
     {
         $catalogPriceValue = $this->calculateCustomOptionCatalogRule->execute(
             $option->getProduct(),
             (float)$result->getPrice(),
             $result->getPriceType() === Value::TYPE_PERCENT
         );
-        if ($catalogPriceValue!==null) {
+        if ($catalogPriceValue !== null) {
             $optionCalculatedValue = $catalogPriceValue;
         } else {
             $optionCalculatedValue = $this->_getChargeableOptionPrice(
                 $result->getPrice(),
-                $result->getPriceType() == 'percent',
+                $result->getPriceType() === Value::TYPE_PERCENT,
                 $basePrice
             );
         }

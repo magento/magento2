@@ -27,7 +27,6 @@ class CalculateCustomOptionCatalogRule
     private $priceModifier;
 
     /**
-     * CalculateCustomOptionCatalogRule constructor.
      * @param PriceCurrencyInterface $priceCurrency
      * @param PriceModifierInterface $priceModifier
      */
@@ -51,7 +50,7 @@ class CalculateCustomOptionCatalogRule
         Product $product,
         float $optionPriceValue,
         bool $isPercent
-    ) {
+    ): ?float {
         $regularPrice = (float)$product->getPriceInfo()
             ->getPrice(RegularPrice::PRICE_CODE)
             ->getValue();
@@ -69,6 +68,7 @@ class CalculateCustomOptionCatalogRule
             $finalOptionPrice = $totalCatalogRulePrice - $catalogRulePrice;
             return $this->priceCurrency->convertAndRound($finalOptionPrice);
         }
+
         return null;
     }
 

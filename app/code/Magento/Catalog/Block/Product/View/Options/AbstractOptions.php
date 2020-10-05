@@ -60,7 +60,7 @@ abstract class AbstractOptions extends \Magento\Framework\View\Element\Template
      * @param \Magento\Framework\Pricing\Helper\Data $pricingHelper
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param array $data
-     * @param CalculateCustomOptionCatalogRule $calculateCustomOptionCatalogRule
+     * @param CalculateCustomOptionCatalogRule|null $calculateCustomOptionCatalogRule
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -174,14 +174,15 @@ abstract class AbstractOptions extends \Magento\Framework\View\Element\Template
         $priceStr = $sign;
 
         $customOptionPrice = $this->getProduct()->getPriceInfo()->getPrice('custom_option_price');
+        $isPercent = (bool) $value['is_percent'];
 
-        if (!$value['is_percent']) {
+        if (!$isPercent) {
             $catalogPriceValue = $this->calculateCustomOptionCatalogRule->execute(
                 $this->getProduct(),
                 (float)$value['pricing_value'],
-                (bool)$value['is_percent']
+                $isPercent
             );
-            if ($catalogPriceValue!==null) {
+            if ($catalogPriceValue !== null) {
                 $value['pricing_value'] = $catalogPriceValue;
             }
         }
