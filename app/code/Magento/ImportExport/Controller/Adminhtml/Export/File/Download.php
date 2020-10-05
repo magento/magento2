@@ -79,8 +79,14 @@ class Download extends ExportController implements HttpGetActionInterface
                     $directory->readFile($path),
                     DirectoryList::VAR_DIR
                 );
+            } else {
+                $fileExist = false;
             }
         } catch (LocalizedException | \Exception $exception) {
+            $fileExist = false;
+        }
+
+        if (!$fileExist) {
             throw new LocalizedException(__('There are no export file with such name %1', $fileName));
         }
     }

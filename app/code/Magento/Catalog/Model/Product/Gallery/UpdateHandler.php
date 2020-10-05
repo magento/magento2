@@ -123,5 +123,7 @@ class UpdateHandler extends \Magento\Catalog\Model\Product\Gallery\CreateHandler
         foreach ($files as $filePath) {
             $this->mediaDirectory->delete($catalogPath . '/' . $filePath);
         }
+
+        return;
     }
 }
