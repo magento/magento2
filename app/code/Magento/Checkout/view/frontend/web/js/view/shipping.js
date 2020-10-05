@@ -121,11 +121,9 @@ define([
                     );
                 }
                 checkoutProvider.on('shippingAddress', function (shippingAddrsData) {
-                    //jscs:disable requireCamelCaseOrUpperCaseIdentifiers
-                    if (shippingAddrsData.street && shippingAddrsData.street[0].length > 0) {
+                    if (!_.isEmpty(shippingAddrsData.street[0])) {
                         checkoutData.setShippingAddressFromData(shippingAddrsData);
                     }
-                    //jscs:enable requireCamelCaseOrUpperCaseIdentifiers
                 });
                 shippingRatesValidator.initFields(fieldsetName);
             });
