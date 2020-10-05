@@ -44,7 +44,6 @@ class SyslogTest extends TestCase
         $this->deploymentConfigMock = $this->createMock(DeploymentConfig::class);
 
         $this->model = new Syslog(
-            $this->scopeConfigMock,
             $this->deploymentConfigMock,
             'Magento'
         );

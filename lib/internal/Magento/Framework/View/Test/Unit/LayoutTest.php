@@ -19,6 +19,7 @@ use Magento\Framework\View\Design\ThemeInterface;
 use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Layout;
+use Magento\Framework\View\Layout\BuilderInterface;
 use Magento\Framework\View\Layout\Data\Structure as LayoutStructure;
 use Magento\Framework\View\Layout\Element;
 use Magento\Framework\View\Layout\Generator\Block;
@@ -943,7 +944,7 @@ class LayoutTest extends TestCase
 
         $this->cacheMock->expects($this->once())
             ->method('save')
-            ->with(json_encode($data), 'structure_' . $layoutCacheId, $handles)
+            ->with(json_encode($data), 'structure_' . $layoutCacheId, $handles, 31536000)
             ->willReturn(true);
 
         $generatorContextMock = $this->getMockBuilder(Context::class)
@@ -1168,5 +1169,28 @@ class LayoutTest extends TestCase
             [false],
             [null],
         ];
+    }
+
+    /**
+     * Test render element with exception
+     *
+     * @return void
+     */
+    public function testRenderNonCachedElementWithException(): void
+    {
+        $exception = new \Exception('Error message');
+
+        $builderMock = $this->createMock(BuilderInterface::class);
+        $builderMock->expects($this->once())
+            ->method('build')
+            ->willThrowException($exception);
+
+        $this->loggerMock->expects($this->once())
+            ->method('critical')
+            ->with($exception);
+
+        $model = clone $this->model;
+        $model->setBuilder($builderMock);
+        $model->renderNonCachedElement('test_container');
     }
 }

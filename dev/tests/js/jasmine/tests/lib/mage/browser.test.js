@@ -9,7 +9,8 @@ define([
 ], function (browser, $) {
     'use strict';
 
-    var obj;
+    var obj,
+        openUrl = 'http://example.com/target_element_id/theTargetId/tree_path/wysiwyg&current_tree_path=d3lzaXd5Zw,';
 
     beforeEach(function () {
         /**
@@ -41,8 +42,9 @@ define([
                         }
                     };
                 });
-            obj.openDialog('instance/url', 100, 100, 'title', options);
-            obj.openDialog('instance/url', 100, 100, 'title', options);
+            obj.openDialog(openUrl, 100, 100, 'title', options);
+            obj.openDialog(openUrl, 100, 100, 'title', options);
+            expect(obj.pathId).toBe('d3lzaXd5Zw,');
             expect($.ajax.calls.count()).toBe(1);
         });
 
@@ -59,9 +61,10 @@ define([
                         }
                     };
                 });
-            obj.openDialog('instance/url/target_element_id/YDW2424/', 100, 100, 'title', undefined);
-            obj.openDialog('instance/target_element_id/Y45GDRg/', 100, 100, 'title', undefined);
+            obj.openDialog(openUrl, 100, 100, 'title', undefined);
+            obj.openDialog(openUrl, 100, 100, 'title', undefined);
             expect($.ajax.calls.count()).toBe(1);
+            expect(obj.pathId).toBe('d3lzaXd5Zw,');
         });
     });
 });

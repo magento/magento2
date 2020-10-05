@@ -215,7 +215,7 @@ QUERY;
         $this->assertEquals('Its a description of Test Category 1.2', $secondChildCategory['description']);
         $firstChildCategoryExpectedProducts = [
             ['sku' => 'simple-4', 'name' => 'Simple Product Three'],
-            ['sku' => 'simple', 'name' => 'Simple Product'],
+            ['sku' => 'simple', 'name' => 'Simple Product']
         ];
         $this->assertCategoryProducts($secondChildCategory, $firstChildCategoryExpectedProducts);
         $firstChildCategoryChildren = [];
@@ -630,15 +630,6 @@ QUERY;
                 '["category-1-2", "movable"]',
                 [
                     [
-                        'id' => '7',
-                        'name' => 'Movable',
-                        'url_key' => 'movable',
-                        'url_path' => 'movable',
-                        'children_count' => '0',
-                        'path' => '1/2/7',
-                        'position' => '3'
-                    ],
-                    [
                         'id' => '13',
                         'name' => 'Category 1.2',
                         'url_key' => 'category-1-2',
@@ -646,6 +637,15 @@ QUERY;
                         'children_count' => '0',
                         'path' => '1/2/3/13',
                         'position' => '2'
+                    ],
+                    [
+                        'id' => '7',
+                        'name' => 'Movable',
+                        'url_key' => 'movable',
+                        'url_path' => 'movable',
+                        'children_count' => '0',
+                        'path' => '1/2/7',
+                        'position' => '3'
                     ]
                 ]
             ],
@@ -713,5 +713,61 @@ QUERY;
         foreach ($expectedChildren as $i => $expectedChild) {
             $this->assertResponseFields($category['children'][$i], $expectedChild);
         }
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/categories.php
+     */
+    public function testFilterCategoryInlineFragment()
+    {
+        $query = <<<QUERY
+{
+    categoryList(filters: {ids: {eq: "6"}}){
+        ... on CategoryTree {
+            id
+            name
+            url_key
+            url_path
+            children_count
+            path
+            position
+        }
+    }
+}
+QUERY;
+        $result = $this->graphQlQuery($query);
+        $this->assertArrayNotHasKey('errors', $result);
+        $this->assertCount(1, $result['categoryList']);
+        $this->assertEquals($result['categoryList'][0]['name'], 'Category 2');
+        $this->assertEquals($result['categoryList'][0]['url_path'], 'category-2');
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/categories.php
+     */
+    public function testFilterCategoryNamedFragment()
+    {
+        $query = <<<QUERY
+{
+    categoryList(filters: {ids: {eq: "6"}}){
+        ...Cat
+    }
+}
+
+fragment Cat on CategoryTree {
+    id
+    name
+    url_key
+    url_path
+    children_count
+    path
+    position
+}
+QUERY;
+        $result = $this->graphQlQuery($query);
+        $this->assertArrayNotHasKey('errors', $result);
+        $this->assertCount(1, $result['categoryList']);
+        $this->assertEquals($result['categoryList'][0]['name'], 'Category 2');
+        $this->assertEquals($result['categoryList'][0]['url_path'], 'category-2');
     }
 }
