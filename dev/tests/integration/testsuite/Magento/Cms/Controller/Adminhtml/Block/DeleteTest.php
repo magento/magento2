@@ -19,7 +19,7 @@ use Magento\TestFramework\TestCase\AbstractBackendController;
  * Checks that cms block can be successfully deleted
  *
  * @magentoAppArea adminhtml
- * @magentoDbIsolation disabled
+ * @magentoDbIsolation enabled
  */
 class DeleteTest extends AbstractBackendController
 {
