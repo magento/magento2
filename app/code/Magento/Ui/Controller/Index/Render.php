@@ -116,21 +116,21 @@ class Render extends Action implements HttpGetActionInterface
                 $contentType = $this->contentTypeResolver->resolve($component->getContext());
                 $this->getResponse()->setHeader('Content-Type', $contentType, true);
                 return $this->getResponse();
-            } else {
-                /** @var Json $resultJson */
-                $resultJson = $this->resultJsonFactory->create();
-                $resultJson->setStatusHeader(
-                    Response::STATUS_CODE_403,
-                    AbstractMessage::VERSION_11,
-                    'Forbidden'
-                );
-                return $resultJson->setData(
-                    [
-                        'error' => $this->escaper->escapeHtml('Forbidden'),
-                        'errorcode' => 403
-                    ]
-                );
             }
+
+            /** @var Json $resultJson */
+            $resultJson = $this->resultJsonFactory->create();
+            $resultJson->setStatusHeader(
+                Response::STATUS_CODE_403,
+                AbstractMessage::VERSION_11,
+                'Forbidden'
+            );
+            return $resultJson->setData(
+                [
+                    'error' => $this->escaper->escapeHtml('Forbidden'),
+                    'errorcode' => 403
+                ]
+            );
         } catch (LocalizedException $e) {
             $this->logger->critical($e);
             $result = [
@@ -171,7 +171,7 @@ class Render extends Action implements HttpGetActionInterface
      * @param array $arguments
      * @return ResponseInterface
      */
-    private function redirect($path, $arguments = []): ResponseInterface
+    private function redirect(string $path, $arguments = []): ResponseInterface
     {
         $this->_redirect->redirect($this->getResponse(), $path, $arguments);
         return $this->getResponse();
@@ -185,14 +185,14 @@ class Render extends Action implements HttpGetActionInterface
      */
     private function validateAclResource($dataProviderConfigData): bool
     {
-        if (isset($dataProviderConfigData['aclResource'])) {
-            if (!$this->authorization->isAllowed($dataProviderConfigData['aclResource'])) {
-                if (!$this->getRequest()->isAjax()) {
-                    $this->redirect('noroute');
-                }
-
-                return false;
+        if (isset($dataProviderConfigData['aclResource'])
+            && !$this->authorization->isAllowed($dataProviderConfigData['aclResource'])
+        ) {
+            if (!$this->getRequest()->isAjax()) {
+                $this->redirect('noroute');
             }
+
+            return false;
         }
 
         return true;
