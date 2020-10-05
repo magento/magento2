@@ -17,6 +17,7 @@ use Magento\Framework\Cache\FrontendInterface;
 use Magento\Framework\Data\Form\FilterFactory;
 use Magento\Framework\Escaper;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Json\EncoderInterface;
 use Magento\Framework\Locale\Resolver;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Stdlib\DateTime\Intl\DateFormatterFactory;
@@ -92,6 +93,11 @@ class DobTest extends TestCase
     private $_locale;
 
     /**
+     * @var EncoderInterface
+     */
+    private $encoder;
+
+    /**
      * @inheritDoc
      */
     protected function setUp(): void
@@ -157,12 +163,16 @@ class DobTest extends TestCase
                 }
             );
 
+        $this->encoder = $this->getMockForAbstractClass(EncoderInterface::class);
+
         $this->_block = new Dob(
             $this->context,
             $this->createMock(Address::class),
             $this->customerMetadata,
             $this->createMock(Date::class),
-            $this->filterFactory
+            $this->filterFactory,
+            [],
+            $this->encoder
         );
     }
 
@@ -597,5 +607,52 @@ class DobTest extends TestCase
             "data-validate=\"$validation\"",
             $this->_block->getHtmlExtraParams()
         );
+    }
+
+    /**
+     * Tests getTranslatedCalendarConfigJson()
+     *
+     * @param array $expectedArray
+     * @param string $expectedJson
+     * @dataProvider getTranslatedCalendarConfigJsonDataProvider
+     * @return void
+     */
+    public function testGetTranslatedCalendarConfigJson(array $expectedArray, string $expectedJson): void
+    {
+        $this->encoder->expects($this->once())
+            ->method('encode')
+            ->with($expectedArray)
+            ->willReturn($expectedJson);
+
+        $this->assertEquals(
+            $expectedJson,
+            $this->_block->getTranslatedCalendarConfigJson()
+        );
+    }
+
+    /**
+     * Provider for testGetTranslatedCalendarConfigJson
+     *
+     * @return array
+     */
+    public function getTranslatedCalendarConfigJsonDataProvider()
+    {
+        return [
+            [
+                'expectedArray' => [
+                    'closeText' => 'Done',
+                    'prevText' => 'Prev',
+                    'nextText' => 'Next',
+                    'currentText' => 'Today',
+                    'monthNames' => ['January', 'February', 'March', 'April', 'May', 'June',
+                        'July', 'August', 'September', 'October', 'November', 'December'],
+                    'monthNamesShort' => ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    'dayNames' => ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+                    'dayNamesShort' => ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+                    'dayNamesMin' => ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
+                ],
+                'expectedJson' => '{"closeText":"Done","prevText":"Prev","nextText":"Next","currentText":"Today","monthNames":["January","February","March","April","May","June","July","August","September","October","November","December"],"monthNamesShort":["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"dayNames":["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],"dayNamesShort":["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],"dayNamesMin":["Su","Mo","Tu","We","Th","Fr","Sa"]}'
+            ],
+        ];
     }
 }
