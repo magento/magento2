@@ -1,11 +1,12 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\Framework\MessageQueue\Topology\Config\QueueConfigItem;
 
 use Magento\Framework\Communication\ConfigInterface as CommunicationConfig;
@@ -67,7 +68,7 @@ class DataMapper
     public function getMappedData(): array
     {
         if (null === $this->mappedData) {
-            $this->mappedData = [];
+            $mappedData = [];
             foreach ($this->configData->get() as $exchange) {
                 $connection = $exchange['connection'];
                 foreach ($exchange['bindings'] as $binding) {
@@ -78,10 +79,11 @@ class DataMapper
                             (array)$binding['arguments'],
                             (string)$connection
                         );
-                        $this->mappedData = array_merge($this->mappedData, $queueItems);
+                        $mappedData[] = $queueItems;
                     }
                 }
             }
+            $this->mappedData = array_merge([], ...$mappedData);
         }
 
         return $this->mappedData;
@@ -158,7 +160,7 @@ class DataMapper
         $topicDefinitions = array_filter(
             $this->communicationConfig->getTopics(),
             function ($item) {
-                return (bool) $item[CommunicationConfig::TOPIC_IS_SYNCHRONOUS];
+                return (bool)$item[CommunicationConfig::TOPIC_IS_SYNCHRONOUS];
             }
         );
 
