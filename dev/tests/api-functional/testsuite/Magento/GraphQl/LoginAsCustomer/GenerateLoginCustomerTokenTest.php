@@ -16,6 +16,7 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
  * API-functional tests cases for generateCustomerToken mutation
+ * @SuppressWarnings(PHPMD)
  */
 class GenerateLoginCustomerTokenTest extends GraphQlAbstract
 {
@@ -71,12 +72,12 @@ class GenerateLoginCustomerTokenTest extends GraphQlAbstract
      */
     public function testGenerateCustomerValidTokenLoginAsCustomerDisabled()
     {
-        $customerEmail = 'customer@example.com';
-
-        $mutation = $this->getQuery($customerEmail);
         $this->expectException(Exception::class);
         $this->expectExceptionMessage("Login as Customer is disabled..");
 
+        $customerEmail = 'customer@example.com';
+
+        $mutation = $this->getQuery($customerEmail);
         $response = $this->graphQlMutation(
             $mutation,
             [],
@@ -96,13 +97,13 @@ class GenerateLoginCustomerTokenTest extends GraphQlAbstract
      */
     public function testGenerateCustomerTokenLoginWithCustomerCredentials()
     {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage("The current customer isn't authorized.");
+
         $customerEmail = 'customer@example.com';
         $password = 'password';
 
         $mutation = $this->getQuery($customerEmail);
-
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage("The current customer isn't authorized.");
 
         $response = $this->graphQlMutation(
             $mutation,
@@ -133,9 +134,9 @@ class GenerateLoginCustomerTokenTest extends GraphQlAbstract
         string $message
     ) {
         $this->expectException(Exception::class);
+        $this->expectExceptionMessage($message);
 
         $mutation = $this->getQuery($customerEmail);
-        $this->expectExceptionMessage($message);
         $response = $this->graphQlMutation(
             $mutation,
             [],
