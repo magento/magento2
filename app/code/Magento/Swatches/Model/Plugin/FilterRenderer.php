@@ -9,7 +9,6 @@ namespace Magento\Swatches\Model\Plugin;
 
 use Closure;
 use Magento\Catalog\Model\Layer\Filter\FilterInterface;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View\LayoutInterface;
 use Magento\LayeredNavigation\Block\Navigation\FilterRenderer as Subject;
@@ -22,12 +21,12 @@ class FilterRenderer
     /**
      * @var LayoutInterface
      */
-    protected $layout;
+    private $layout;
 
     /**
      * @var Data
      */
-    protected $swatchHelper;
+    private $swatchHelper;
 
     /**
      * @var ConfigurableViewModel|null
@@ -37,22 +36,21 @@ class FilterRenderer
     /**
      * @var string
      */
-    protected $block = RenderLayered::class;
+    private $block = RenderLayered::class;
 
     /**
      * @param LayoutInterface $layout
      * @param Data $swatchHelper
-     * @param ConfigurableViewModel|null $configurableViewModel
+     * @param ConfigurableViewModel $configurableViewModel
      */
     public function __construct(
         LayoutInterface $layout,
         Data $swatchHelper,
-        ?ConfigurableViewModel $configurableViewModel = null
+        ConfigurableViewModel $configurableViewModel
     ) {
         $this->layout = $layout;
         $this->swatchHelper = $swatchHelper;
-        $this->configurableViewModel = $configurableViewModel
-            ?? ObjectManager::getInstance()->get(ConfigurableViewModel::class);
+        $this->configurableViewModel = $configurableViewModel;
     }
 
     /**
