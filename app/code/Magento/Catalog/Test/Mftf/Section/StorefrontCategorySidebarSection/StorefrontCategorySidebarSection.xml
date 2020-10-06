@@ -34,5 +34,6 @@
         <element name="seeVisualSwatchOption" type="text" selector="//div[@class='swatch-option image ']/..//div[@data-option-label='visualSwatchOption2']"/>
         <element name="expandLayeredNavigationAttribute" type="button" selector="//div[@class='filter-options-title' and text()='{{AttributeName}}']" parameterized="true"/>
         <element name="layeredNavigationAttributeOptions" type="button" selector="//div[@class='filter-options-title' and text()='{{AttributeName}}']/following-sibling::div//a[text()='{{arg}}']" parameterized="true"/>
+        <element name="activeFilterOptionsByTitle" type="text" selector="//div[@class='filter-options-title' and contains(text(), '{{var1}}')]/following-sibling::*[@class='filter-options-item active'][1]/*[@class='items']" parameterized="true"/>
     </section>
 </sections>

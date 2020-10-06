@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminSaveProductWithNewAttributeActionGroup">
+        <annotations>
+            <description>Clicks on the Save button. If popup related to new attribute appears, clicks on the Confirm button to close it. Validates that the Success Message is present and correct.</description>
+        </annotations>
+
+        <scrollToTopOfPage stepKey="scrollTopPageProduct"/>
+        <waitForElementVisible selector="{{AdminProductFormActionSection.saveButton}}" stepKey="waitForSaveProductButton"/>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveProduct"/>
+        <wait time="1" stepKey="waitForPopup"/>
+        <conditionalClick selector="{{AdminChooseAffectedAttributeSetPopup.confirm}}"
+                          dependentSelector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" visible="true"
+                          stepKey="clickOnConfirmInPopup"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitProductSaveSuccessMessage"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You saved the product." stepKey="seeSaveConfirmation"/>
+    </actionGroup>
+</actionGroups>
