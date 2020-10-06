@@ -58,7 +58,7 @@ class MassUpdateProductAttribute
     /**
      * @var ParentItemProcessorInterface[]
      */
-    private $parentItemProcessors;
+    private $parentItemProcessorPool;
 
     /**
      * @var ProductRepositoryInterface
@@ -73,7 +73,7 @@ class MassUpdateProductAttribute
      * @param \Magento\Catalog\Helper\Product\Edit\Action\Attribute $attributeHelper
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      * @param ProductRepositoryInterface $productRepository
-     * @param ParentItemProcessorInterface[] $parentItemProcessors
+     * @param ParentItemProcessorInterface[] $parentItemProcessorPool
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -85,7 +85,7 @@ class MassUpdateProductAttribute
         \Magento\Catalog\Helper\Product\Edit\Action\Attribute $attributeHelper,
         \Magento\Framework\Message\ManagerInterface $messageManager,
         ProductRepositoryInterface $productRepository,
-        array $parentItemProcessors = []
+        array $parentItemProcessorPool = []
     ) {
         $this->stockIndexerProcessor = $stockIndexerProcessor;
         $this->dataObjectHelper = $dataObjectHelper;
@@ -95,7 +95,7 @@ class MassUpdateProductAttribute
         $this->attributeHelper = $attributeHelper;
         $this->messageManager = $messageManager;
         $this->productRepository = $productRepository;
-        $this->parentItemProcessors = $parentItemProcessors;
+        $this->parentItemProcessorPool = $parentItemProcessorPool;
     }
 
     /**
@@ -188,7 +188,7 @@ class MassUpdateProductAttribute
      */
     private function processParents(ProductInterface $product): void
     {
-        foreach ($this->parentItemProcessors as $processor) {
+        foreach ($this->parentItemProcessorPool as $processor) {
             $processor->process($product);
         }
     }
