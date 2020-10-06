@@ -219,12 +219,14 @@ class Encryptor implements EncryptorInterface
         }
 
         if ($isArgon) {
+            //phpcs:disable PHPCompatibility.Constants.NewConstants
             $seedBytes = SODIUM_CRYPTO_SIGN_SEEDBYTES;
             $opsLimit = SODIUM_CRYPTO_PWHASH_OPSLIMIT_INTERACTIVE;
             $memLimit = SODIUM_CRYPTO_PWHASH_MEMLIMIT_INTERACTIVE;
             if ($version === self::HASH_VERSION_ARGON2ID13_AGNOSTIC) {
                 $version = implode('_', [self::HASH_VERSION_ARGON2ID13_AGNOSTIC, $seedBytes, $opsLimit, $memLimit]);
             }
+            //phpcs:enable PHPCompatibility.Constants.NewConstants
 
             $hash = $this->getArgonHash($password, $seedBytes, $opsLimit, $memLimit, $salt);
         } else {
@@ -302,6 +304,7 @@ class Encryptor implements EncryptorInterface
                         $hashSalt
                     );
                 } elseif ((int)$hashVersion === self::HASH_VERSION_ARGON2ID13) {
+                    //phpcs:disable PHPCompatibility.Constants.NewConstants
                     $recreated = $this->getArgonHash(
                         $recreated,
                         SODIUM_CRYPTO_SIGN_SEEDBYTES,
@@ -309,6 +312,7 @@ class Encryptor implements EncryptorInterface
                         SODIUM_CRYPTO_PWHASH_MEMLIMIT_INTERACTIVE,
                         $hashSalt
                     );
+                    //phpcs:enable PHPCompatibility.Constants.NewConstants
                 } else {
                     $recreated = $this->generateSimpleHash($hashSalt . $recreated, (int)$hashVersion);
                 }
@@ -586,6 +590,7 @@ class Encryptor implements EncryptorInterface
         int $memLimit,
         string $salt
     ): string {
+        //phpcs:disable PHPCompatibility.Constants.NewConstants
         if (strlen($salt) < SODIUM_CRYPTO_PWHASH_SALTBYTES) {
             $salt = str_pad($salt, SODIUM_CRYPTO_PWHASH_SALTBYTES, $salt);
         } elseif (strlen($salt) > SODIUM_CRYPTO_PWHASH_SALTBYTES) {
@@ -602,5 +607,6 @@ class Encryptor implements EncryptorInterface
                 SODIUM_CRYPTO_PWHASH_ALG_ARGON2ID13
             )
         );
+        //phpcs:enable PHPCompatibility.Constants.NewConstants
     }
 }

@@ -96,6 +96,7 @@ class EncryptorTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetHashRandomSaltDefaultLength(): void
     {
+        //phpcs:disable PHPCompatibility.Constants.NewConstants
         $salt = 'random-salt';
         $salt = str_pad(
             $salt,
@@ -116,6 +117,7 @@ class EncryptorTest extends \PHPUnit\Framework\TestCase
             ->willReturn($salt);
         $actual = $this->encryptor->getHash('password', true, $version);
         $this->assertEquals($expected, $actual);
+        //phpcs:enable PHPCompatibility.Constants.NewConstants
     }
 
     /**
