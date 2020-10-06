@@ -123,7 +123,6 @@ class RouteMapperTest extends TestCase
         $this->routerMap->getDependencyByRoutePath('unknown', 'controller', 'action');
     }
 
-
     /**
      * Get fake path to controller file.
      *
