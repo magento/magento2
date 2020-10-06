@@ -48,7 +48,7 @@ $fieldCssClass .= $block->isRequired() ? ' required' : '';
     }
 </script>
 
-<?php $scriptString = <<<script
+<?php $scriptString = <<<code
 
 require([
     'jquery',
@@ -62,6 +62,6 @@ require([
 //]]>
 
 });
-script;
+code;
 ?>
 <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
