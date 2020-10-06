@@ -68,7 +68,7 @@ class Term implements FilterInterface
             $fieldName .= '.' . $suffix;
         }
 
-        if ($filter->getValue()) {
+        if ($filter->getValue() !== false) {
             $operator = is_array($filter->getValue()) ? 'terms' : 'term';
             $filterQuery []= [
                 $operator => [

@@ -83,4 +83,24 @@ class ResetPasswordTest extends TestCase
             'Set password button was not found on the page'
         );
     }
+
+    /**
+     * @magentoConfigFixture current_store customer/password/autocomplete_on_storefront 1
+     *
+     * @return void
+     */
+    public function testAutocompletePasswordEnabled(): void
+    {
+        $this->assertFalse($this->block->isAutocompleteDisabled());
+    }
+
+    /**
+     * @magentoConfigFixture current_store customer/password/autocomplete_on_storefront 0
+     *
+     * @return void
+     */
+    public function testAutocompletePasswordDisabled(): void
+    {
+        $this->assertTrue($this->block->isAutocompleteDisabled());
+    }
 }

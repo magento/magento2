@@ -35,15 +35,14 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
         </after>
 
-        <amOnPage url="{{AdminCatalogProductPage.url}}" stepKey="GoToCatalogProductPage1"/>
+        <actionGroup ref="AdminOpenCatalogProductPageActionGroup" stepKey="goToCatalogProductPage1"/>
 
         <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFiltersInitial"/>
         <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditProduct">
             <argument name="product" value="$$createConfigProduct$$"/>
         </actionGroup>
         <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="100" stepKey="changeProductQuantity"/>
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveChanges"/>
-        <waitForPageLoad stepKey="waitProductGridToBeLoaded"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveChanges"/>
 
         <amOnPage url="$$createConfigProduct.sku$$.html" stepKey="navigateToProductPage"/>
         <waitForPageLoad stepKey="waitForProductPage"/>
@@ -71,12 +70,11 @@
         </actionGroup>
 
         <actionGroup ref="AdminOrderGridClickFirstRowActionGroup" stepKey="clickOrderRow"/>
-        <click selector="{{AdminOrderDetailsMainActionsSection.invoice}}" stepKey="clickInvoiceButton"/>
-        <waitForPageLoad stepKey="waitForNewInvoicePageLoad"/>
+        <actionGroup ref="AdminClickInvoiceButtonOrderViewActionGroup" stepKey="clickInvoiceButton"/>
         <fillField selector="{{AdminInvoiceItemsSection.qtyToInvoiceColumn}}" userInput="1" stepKey="ChangeQtyToInvoice"/>
         <click selector="{{AdminInvoiceItemsSection.updateQty}}" stepKey="updateQuantity"/>
         <waitForPageLoad stepKey="waitPageToBeLoaded"/>
-        <click selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="clickSubmitInvoice"/>
+        <actionGroup ref="AdminInvoiceClickSubmitActionGroup" stepKey="clickSubmitInvoice"/>
         <click selector="{{AdminOrderDetailsMainActionsSection.ship}}" stepKey="clickShipAction"/>
         <waitForPageLoad stepKey="waitOrderDetailToLoad"/>
         <fillField selector="{{AdminShipmentItemsSection.itemQtyToShip('1')}}" userInput="1" stepKey="changeItemQtyToShip"/>
@@ -88,12 +86,16 @@
 
         <see selector="{{AdminOrderItemsOrderedSection.itemQty('1')}}" userInput="Canceled 3" stepKey="seeCanceledQuantity"/>
 
-        <amOnPage url="{{AdminCatalogProductPage.url}}" stepKey="GoToCatalogProductPage"/>
+        <actionGroup ref="AdminOpenCatalogProductPageActionGroup" stepKey="goToCatalogProductPage"/>
 
         <actionGroup ref="FilterProductGridBySku2ActionGroup" stepKey="filterProductGridBySku">
             <argument name="sku" value="$$createConfigProduct.sku$$"/>
         </actionGroup>
-        <see selector="{{AdminProductGridSection.productGridCell('1', 'Quantity')}}" userInput="99" stepKey="seeProductSkuInGrid"/>
+        <actionGroup ref="AssertAdminProductGridCellActionGroup" stepKey="seeProductSkuInGrid">
+            <argument name="row" value="1"/>
+            <argument name="column" value="Quantity"/>
+            <argument name="value" value="99"/>
+        </actionGroup>
         <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearProductFilters"/>
         <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrderFilters"/>
     </test>

@@ -220,7 +220,7 @@
         <column xsi:type="varchar" name="shipping_method" nullable="true" length="120"/>
         <column xsi:type="varchar" name="store_currency_code" nullable="true" length="3" comment="Store Currency Code"/>
         <column xsi:type="varchar" name="store_name" nullable="true" length="255" comment="Store Name"/>
-        <column xsi:type="varchar" name="x_forwarded_for" nullable="true" length="32" comment="X Forwarded For"/>
+        <column xsi:type="varchar" name="x_forwarded_for" nullable="true" length="255" comment="X Forwarded For"/>
         <column xsi:type="text" name="customer_note" nullable="true" comment="Customer Note"/>
         <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
                 comment="Created At"/>
@@ -769,7 +769,7 @@
         <column xsi:type="varchar" name="order_increment_id" nullable="false" length="32" comment="Order Increment ID"/>
         <column xsi:type="int" name="order_id" unsigned="true" nullable="false" identity="false"
                 comment="Order ID"/>
-        <column xsi:type="timestamp" name="order_created_at" on_update="true" nullable="false"
+        <column xsi:type="timestamp" name="order_created_at" on_update="false" nullable="false"
                 default="CURRENT_TIMESTAMP" comment="Order Increment ID"/>
         <column xsi:type="varchar" name="customer_name" nullable="false" length="128" comment="Customer Name"/>
         <column xsi:type="decimal" name="total_qty" scale="4" precision="12" unsigned="false" nullable="true"

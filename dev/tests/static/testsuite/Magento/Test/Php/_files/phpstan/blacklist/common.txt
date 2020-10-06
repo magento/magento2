@@ -3,9 +3,10 @@
 # Example:
 # app/code/Magento/Catalog
 # dev/tests/static/framework/bootstrap.php
-lib/internal/Magento/Framework/Interception/Test/Unit/Config/ConfigTest.php
 lib/internal/Magento/Framework/Cache/Backend/Eaccelerator.php
 lib/internal/Magento/Framework/Image/Adapter/ImageMagick.php
+lib/internal/Magento/Framework/Interception/Test/Unit/Code/Generator/InterceptorTest.php
+lib/internal/Magento/Framework/Interception/Test/Unit/Config/ConfigTest.php
 dev/tests/integration/framework/deployTestModules.php
 dev/tests/integration/testsuite/Magento/Framework/Filter/DirectiveProcessor/SimpleDirectiveTest.php
 dev/tests/integration/testsuite/Magento/Framework/Session/ConfigTest.php

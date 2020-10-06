@@ -29,8 +29,7 @@
         <click selector="{{AdminCategorySidebarActionSection.AddSubcategoryButton}}" stepKey="clickOnAddSubCategoryButton"/>
         <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{_defaultCategory.name}}" stepKey="fillCategoryName"/>
         <checkOption selector="{{AdminCategoryBasicFieldSection.EnableCategory}}" stepKey="enableCategory"/>
-        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="clickSaveButton"/>
-        <waitForPageLoad stepKey="waitForCategorySaved"/>
+        <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="clickSaveButton"/>
         <!-- Verify success message -->
         <actionGroup ref="AssertAdminCategorySaveSuccessMessageActionGroup" stepKey="assertSuccessMessage"/>
         <!-- Verify subcategory created with required fields -->

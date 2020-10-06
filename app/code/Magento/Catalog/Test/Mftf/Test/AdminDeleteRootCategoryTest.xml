@@ -27,16 +27,19 @@
 
         <!--Verify Created root Category-->
         <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openAdminCategoryIndexPage"/>
-        <click selector="{{AdminCategorySidebarTreeSection.expandAll}}" stepKey="expandToSeeAllCategories"/>
-        <waitForPageLoad stepKey="waitForPageToLoad"/>
-        <seeElement selector="{{AdminCategoryBasicFieldSection.CategoryNameInput(NewRootCategory.name)}}" stepKey="seeRootCategory"/>
+        <actionGroup ref="AdminExpandCategoryTreeActionGroup" stepKey="expandCategoryTree"/>
+        <actionGroup ref="AssertAdminCategoryIsListedInCategoriesTreeActionGroup" stepKey="seeRootCategory">
+            <argument name="categoryName" value="{{NewRootCategory.name}}"/>
+        </actionGroup>
 
         <!--Delete Root Category-->
         <deleteData createDataKey="rootCategory" stepKey="deleteRootCategory"/>
 
         <!--Verify Root Category is not listed in backend-->
         <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openAdminCategoryIndexPage1"/>
-        <click selector="{{AdminCategorySidebarTreeSection.expandAll}}" stepKey="expandToSeeAllCategories1"/>
-        <dontSee selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{NewRootCategory.name}}" stepKey="dontSeeRootCategory"/>
+        <actionGroup ref="AdminExpandCategoryTreeActionGroup" stepKey="expandTheCategoryTree"/>
+        <actionGroup ref="AssertAdminCategoryIsNotListedInCategoriesTreeActionGroup" stepKey="doNotSeeRootCategory">
+            <argument name="categoryName" value="{{NewRootCategory.name}}"/>
+        </actionGroup>
     </test>
 </tests>
