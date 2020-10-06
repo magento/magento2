@@ -35,7 +35,7 @@
             <actionGroup ref="AdminCatalogPriceRuleSaveAndApplyActionGroup" stepKey="saveAndApplyFirstPriceRule"/>
             <!-- Perform reindex -->
             <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-                <argument name="indices" value="catalogrule_rule"/>
+                <argument name="indices" value=""/>
             </actionGroup>
         </before>
 

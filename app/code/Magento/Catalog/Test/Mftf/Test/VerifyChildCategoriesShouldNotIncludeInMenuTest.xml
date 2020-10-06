@@ -18,63 +18,83 @@
             <testCaseId value="MAGETWO-72238"/>
             <group value="category"/>
         </annotations>
+        <before>
+            <!-- Create a category -->
+            <createData entity="ApiCategory" stepKey="simpleCategory"/>
+            <!-- Create second category, having as parent the 1st one -->
+            <createData entity="SubCategoryWithParent" stepKey="simpleSubCategory">
+                <requiredEntity createDataKey="simpleCategory"/>
+            </createData>
+        </before>
         <after>
-            <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="navigateToCategoryPage2"/>
-
-            <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(SimpleSubCategory.name)}}" stepKey="clickOnCreatedSimpleSubCategoryBeforeDelete"/>
-            <actionGroup ref="DeleteCategoryActionGroup" stepKey="deleteCategory">
-                <argument name="categoryEntity" value="SimpleSubCategory"/>
-            </actionGroup>
+            <deleteData createDataKey="simpleSubCategory" stepKey="deleteSubCategory"/>
+            <deleteData createDataKey="simpleCategory" stepKey="deleteCategory"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
-        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
-        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="navigateToCategoryPage1"/>
-        <scrollToTopOfPage stepKey="scrollToTopOfPage"/>
-        <!--Create new category under Default Category-->
-        <actionGroup ref="CreateCategoryActionGroup" stepKey="createSubcategory1">
-            <argument name="categoryEntity" value="SimpleSubCategory"/>
-        </actionGroup>
-        <!--Create another subcategory under created category-->
-        <actionGroup ref="CreateCategoryActionGroup" stepKey="createSubcategory2">
-            <argument name="categoryEntity" value="SubCategoryWithParent"/>
-        </actionGroup>
+
         <!--Go to storefront and verify visibility of categories-->
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStorefrontPage"/>
-        <seeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName(SimpleSubCategory.name)}}" stepKey="seeSimpleSubCategoryOnStorefront1"/>
-        <dontSeeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName(SubCategoryWithParent.name)}}" stepKey="dontSeeSubCategoryWithParentOnStorefront1"/>
+        <actionGroup ref="StorefrontAssertCategoryNameIsShownInMenuActionGroup" stepKey="seeCreatedCategoryOnStorefront">
+            <argument name="categoryName" value="$$simpleCategory.name$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertCategoryNameIsNotShownInMenuActionGroup" stepKey="doNotSeeSubCategoryOnStorefront">
+            <argument name="categoryName" value="$$simpleSubCategory.name$$"/>
+        </actionGroup>
+
         <!--Set Include in menu to No on created category under Default Category -->
-        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="navigateToCategoryPage2"/>
-        <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(SimpleSubCategory.name)}}" stepKey="clickOnCreatedSimpleSubCategory1"/>
-        <click selector="{{AdminCategoryBasicFieldSection.includeInMenuLabel}}" stepKey="setNoToIncludeInMenuSelect"/>
-        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="clickSaveButton1"/>
-        <seeCheckboxIsChecked selector="{{AdminCategoryBasicFieldSection.EnableCategory}}" stepKey="seeCheckboxEnableCategoryIsChecked"/>
-        <dontSeeCheckboxIsChecked selector="{{AdminCategoryBasicFieldSection.IncludeInMenu}}" stepKey="dontSeeCheckboxIncludeInMenuIsChecked"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
+        <actionGroup ref="NavigateToCreatedCategoryActionGroup" stepKey="openParentCategoryViaAdmin">
+            <argument name="Category" value="$$simpleCategory$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminDisableIncludeInMenuConfigActionGroup" stepKey="setNoToIncludeInMenuSelect"/>
+        <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveCategory"/>
+        <actionGroup ref="AssertAdminCategoryIsEnabledActionGroup" stepKey="assertParentCategoryIsActive"/>
+        <actionGroup ref="AssertAdminCategoryIsNotIncludeInMenuActionGroup" stepKey="assertParentCategoryIsNotIncludeInMenu"/>
+
         <!--Go to storefront and verify visibility of categories-->
-        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStorefrontPage2"/>
-        <dontSeeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName(SimpleSubCategory.name)}}" stepKey="dontSeeSimpleSubCategoryOnStorefront1"/>
-        <dontSeeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName(SubCategoryWithParent.name)}}" stepKey="dontSeeSubCategoryWithParentOnStorefront2"/>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStorefrontPageSecondTime"/>
+        <actionGroup ref="StorefrontAssertCategoryNameIsNotShownInMenuActionGroup" stepKey="doNotSeeParentCategoryOnStorefront">
+            <argument name="categoryName" value="$$simpleCategory.name$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertCategoryNameIsNotShownInMenuActionGroup" stepKey="doNotSeeSubCategory">
+            <argument name="categoryName" value="$$simpleSubCategory.name$$"/>
+        </actionGroup>
+
         <!--Set Enable category to No and Include in menu to Yes on created category under Default Category -->
-        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="navigateToCategoryPage3"/>
-        <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(SimpleSubCategory.name)}}" stepKey="clickOnCreatedSimpleSubCategory2"/>
-        <click selector="{{AdminCategoryBasicFieldSection.enableCategoryLabel}}" stepKey="SetNoToEnableCategorySelect"/>
-        <click selector="{{AdminCategoryBasicFieldSection.includeInMenuLabel}}" stepKey="SetYesToIncludeInMenuSelect"/>
-        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="clickSaveButton2"/>
-        <dontSeeCheckboxIsChecked selector="{{AdminCategoryBasicFieldSection.EnableCategory}}" stepKey="dontSeeCheckboxEnableCategoryIsChecked"/>
-        <seeCheckboxIsChecked selector="{{AdminCategoryBasicFieldSection.IncludeInMenu}}" stepKey="seeCheckboxIncludeInMenuIsChecked"/>
+        <actionGroup ref="NavigateToCreatedCategoryActionGroup" stepKey="openParentCategoryViaAdminSecondTime">
+            <argument name="Category" value="$$simpleCategory$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminDisableActiveCategoryActionGroup" stepKey="SetNoToEnableCategorySelect"/>
+        <actionGroup ref="AdminIncludeInMenuExcludedCategoryActionGroup" stepKey="SetToYesIncludeInMenuSelect"/>
+        <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveParentCategory"/>
+        <actionGroup ref="AssertAdminCategoryIsInactiveActionGroup" stepKey="seeCategoryIsDisabled"/>
+        <actionGroup ref="AssertAdminCategoryIncludedToMenuActionGroup" stepKey="seeCheckboxIncludeInMenuIsChecked"/>
+
         <!--Go to storefront and verify visibility of categories-->
-        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStorefrontPage3"/>
-        <dontSeeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName(SimpleSubCategory.name)}}" stepKey="dontSeeSimpleSubCategoryOnStorefront2"/>
-        <dontSeeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName(SubCategoryWithParent.name)}}" stepKey="dontSeeSubCategoryWithParentOnStorefront3"/>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStorefrontPageThirdTime"/>
+        <actionGroup ref="StorefrontAssertCategoryNameIsNotShownInMenuActionGroup" stepKey="doNotSeeCategoryInMenuOnStorefront">
+            <argument name="categoryName" value="$$simpleCategory.name$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertCategoryNameIsNotShownInMenuActionGroup" stepKey="doNotSeeSubCategoryInMenuOnStorefront">
+            <argument name="categoryName" value="$$simpleSubCategory.name$$"/>
+        </actionGroup>
+
         <!--Set Enable category to No and Include in menu to No on created category under Default Category -->
-        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="navigateToCategoryPage4"/>
-        <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(SimpleSubCategory.name)}}" stepKey="clickOnCreatedSimpleSubCategory3"/>
-        <click selector="{{AdminCategoryBasicFieldSection.includeInMenuLabel}}" stepKey="setNoToIncludeInMenuSelect2"/>
-        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="clickSaveButton3"/>
-        <dontSeeCheckboxIsChecked selector="{{AdminCategoryBasicFieldSection.EnableCategory}}" stepKey="dontSeeCheckboxEnableCategoryIsChecked2"/>
-        <dontSeeCheckboxIsChecked selector="{{AdminCategoryBasicFieldSection.IncludeInMenu}}" stepKey="dontSeeCheckboxIncludeInMenuIsChecked2"/>
+        <actionGroup ref="NavigateToCreatedCategoryActionGroup" stepKey="openParentCategoryViaAdminThirdTime">
+            <argument name="Category" value="$$simpleCategory$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminDisableIncludeInMenuConfigActionGroup" stepKey="setNoToIncludeInMenuForParentCategory"/>
+        <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveChanges"/>
+        <actionGroup ref="AssertAdminCategoryIsInactiveActionGroup" stepKey="assertCategoryIsDisabled"/>
+        <actionGroup ref="AssertAdminCategoryIsNotIncludeInMenuActionGroup" stepKey="assertParentCategoryIsNotIncludeToMenu"/>
+
         <!--Go to storefront and verify visibility of categories-->
-        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStorefrontPage4"/>
-        <dontSeeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName(SimpleSubCategory.name)}}" stepKey="dontSeeSimpleSubCategoryOnStorefront3"/>
-        <dontSeeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName(SubCategoryWithParent.name)}}" stepKey="dontSeeSubCategoryWithParentOnStorefront4"/>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStorefrontPageFourthTime"/>
+        <actionGroup ref="StorefrontAssertCategoryNameIsNotShownInMenuActionGroup" stepKey="doNotSeeCategoryOnStorefront">
+            <argument name="categoryName" value="$$simpleCategory.name$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertCategoryNameIsNotShownInMenuActionGroup" stepKey="doNotSeeSubCategoryInMenu">
+            <argument name="categoryName" value="$$simpleSubCategory.name$$"/>
+        </actionGroup>
     </test>
 </tests>
