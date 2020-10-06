@@ -18,5 +18,7 @@
         <element name="folderNameField" type="button" selector="[name=folder_name]"/>
         <element name="folderConfirmCreateButton" type="button" selector="//button/span[contains(text(),'Confirm')]"/>
         <element name="folderNameValidationMessage" type="block" selector="label.mage-error"/>
+        <element name="folderArrow" type="button" selector="#{{id}} &gt; .jstree-icon" parameterized="true"/>
+        <element name="checkIfFolderArrowExpand" type="button" selector="//li[@id='{{id}}' and contains(@class,'jstree-closed')]" parameterized="true"/>
     </section>
 </sections>
