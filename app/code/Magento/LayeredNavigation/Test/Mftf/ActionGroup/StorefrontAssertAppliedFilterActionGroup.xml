@@ -13,8 +13,8 @@
             <description>Asserts applied filter label and value on category page is layered navigation block.</description>
         </annotations>
         <arguments>
-            <argument name="attributeLabel" type="string" defaultValue=""/>
-            <argument name="attributeOptionLabel" type="string" defaultValue=""/>
+            <argument name="attributeLabel" type="string"/>
+            <argument name="attributeOptionLabel" type="string"/>
         </arguments>
         <see selector="{{StorefrontLayeredNavigationSection.appliedFilterLabel('1')}}" userInput="{{attributeLabel}}" stepKey="seeAppliedFilterLabel"/>
         <see selector="{{StorefrontLayeredNavigationSection.appliedFilterValue('1')}}" userInput="{{attributeOptionLabel}}" stepKey="seeAppliedFilterValue"/>

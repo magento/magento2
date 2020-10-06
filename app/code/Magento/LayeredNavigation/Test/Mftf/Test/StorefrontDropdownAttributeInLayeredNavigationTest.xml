@@ -15,7 +15,7 @@
             <title value="[ES] Search with Layered Navigation and different types of attribute products."/>
             <description value="Filtering by dropdown attribute in Layered navigation"/>
             <severity value="CRITICAL"/>
-            <testCaseId value="MC-28963"/>
+            <testCaseId value="MC-36326"/>
             <group value="layeredNavigation"/>
             <group value="catalog"/>
             <group value="SearchEngineElasticsearch"/>
@@ -83,7 +83,6 @@
             <argument name="productName" value="$createSecondProduct.name$"/>
         </actionGroup>
         <click selector="{{StorefrontCategorySidebarSection.removeFilter}}" stepKey="removeSideBarFilter"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
         <actionGroup ref="StorefrontFilterCategoryPageByAttributeOptionActionGroup" stepKey="filterCategoryBySecondOption">
             <argument name="attributeLabel" value="$createDropdownProductAttribute.attribute[frontend_labels][0][label]$"/>
             <argument name="attributeOptionLabel" value="$getSecondDropdownProductAttributeOption.label$"/>
