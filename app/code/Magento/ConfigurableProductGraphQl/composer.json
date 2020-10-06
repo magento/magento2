@@ -6,7 +6,6 @@
         "php": "~7.3.0||~7.4.0",
         "magento/module-catalog": "*",
         "magento/module-configurable-product": "*",
-        "magento/module-eav": "*",
         "magento/module-graph-ql": "*",
         "magento/module-catalog-graph-ql": "*",
         "magento/module-quote": "*",
