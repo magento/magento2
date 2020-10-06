@@ -113,6 +113,7 @@ class UpdateHandler extends \Magento\Catalog\Model\Product\Gallery\CreateHandler
      * Remove deleted images.
      *
      * @param array $files
+     * @return null
      * @throws \Magento\Framework\Exception\FileSystemException
      * @since 101.0.0
      */
