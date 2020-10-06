@@ -19,23 +19,22 @@
             <group value="sales"/>
             <group value="mtf_migrated"/>
         </annotations>
+
         <before>
             <!-- Create customer -->
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
-
             <!-- Create product -->
             <createData entity="SimpleProduct2" stepKey="createProduct"/>
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </before>
+
         <after>
             <!-- Admin log out -->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
-
             <!-- Customer log out -->
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
-
             <!-- Delete customer -->
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
-
             <!-- Delete product -->
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
         </after>
@@ -58,8 +57,7 @@
         <actionGroup ref="AdminFilterCustomerByEmail" stepKey="filterCreatedCustomer">
             <argument name="email" value="$$createCustomer.email$$"/>
         </actionGroup>
-        <click selector="{{AdminCustomerGridSection.firstRowEditLink}}" stepKey="clickEditButton"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <actionGroup ref="AdminClickFirstRowEditLinkOnCustomerGridActionGroup" stepKey="clickEditButton"/>
 
         <!-- Click create order -->
         <click selector="{{AdminCustomerMainActionsSection.createOrderBtn}}" stepKey="clickCreateOrder"/>
