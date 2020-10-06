@@ -6,18 +6,19 @@
 define([
     'jquery',
     'mage/translate'
-], function ($, $t) {
+], function ($) {
     'use strict';
 
     return function (config) {
+        var previousDefault = $(config.isDefaultRadioSelector + ':checked').val();
+        var clearDefault = false;
+
         config = $.extend({
             'hiddenInputSelector': '',
             'isDefaultRadioSelector': 'input[name="default[]"]',
             'wrapperSelector': '#manage-options-panel'
         }, config);
 
-        var previousDefault = $(config.isDefaultRadioSelector + ':checked').val();
-        var clearDefault = false;
         if (config.hasOwnProperty('hiddenInputSelector') && $(config.hiddenInputSelector).length) {
             clearDefault = $(config.hiddenInputSelector);
         }
@@ -26,11 +27,11 @@ define([
         $(config.wrapperSelector).on(
             'click',
             config.isDefaultRadioSelector,
-            function() {
+            function () {
                 var radioValue = $(this).val();
 
                 //If radio is already selected, deselect it.
-                if (radioValue == previousDefault) {
+                if (radioValue === previousDefault) {
                     this.checked = false;
                     this.blur();
                     previousDefault = false;
@@ -38,7 +39,7 @@ define([
                         clearDefault.val('1');
                     }
                 } else {
-                //New radio selected.
+                    //New radio selected.
                     previousDefault = radioValue;
                     if (clearDefault) {
                         clearDefault.val('0');
