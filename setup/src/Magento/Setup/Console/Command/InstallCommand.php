@@ -8,21 +8,21 @@ declare(strict_types=1);
 namespace Magento\Setup\Console\Command;
 
 use Magento\Deploy\Console\Command\App\ConfigImportCommand;
+use Magento\Framework\Setup\ConsoleLogger;
 use Magento\Framework\Setup\Declaration\Schema\DryRunLogger;
 use Magento\Framework\Setup\Declaration\Schema\OperationsExecutor;
-use Magento\Framework\Setup\Declaration\Schema\Request;
 use Magento\Setup\Model\AdminAccount;
 use Magento\Setup\Model\ConfigModel;
 use Magento\Setup\Model\InstallerFactory;
-use Magento\Framework\Setup\ConsoleLogger;
 use Magento\Setup\Model\SearchConfigOptionsList;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Question\Question;
-use Symfony\Component\Console\Question\ChoiceQuestion;
+use Magento\Setup\Model\StoreConfigurationDataMapper;
 use Symfony\Component\Console\Helper\QuestionHelper;
+use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\ChoiceQuestion;
+use Symfony\Component\Console\Question\Question;
 
 /**
  * Command to install Magento application
@@ -267,6 +267,10 @@ class InstallCommand extends AbstractSetupCommand
         $errors = array_merge($errors, $this->validate($input));
         $errors = array_merge($errors, $this->userConfig->validate($input));
 
+        if (!$input->getParameterOption('--' . StoreConfigurationDataMapper::KEY_BASE_URL)) {
+            $errors[] = '--' . StoreConfigurationDataMapper::KEY_BASE_URL . ' is required field';
+        }
+
         if (!empty($errors)) {
             foreach ($errors as $error) {
                 $output->writeln("<error>$error</error>");
@@ -401,7 +405,6 @@ class InstallCommand extends AbstractSetupCommand
         }
 
         $question->setValidator(function ($answer) use ($option, $validateInline) {
-
             if ($option instanceof \Magento\Framework\Setup\Option\SelectConfigOption) {
                 $answer = $option->getSelectOptions()[$answer];
             }
