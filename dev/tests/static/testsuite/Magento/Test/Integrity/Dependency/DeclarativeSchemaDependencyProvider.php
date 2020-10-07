@@ -215,8 +215,8 @@ class DeclarativeSchemaDependencyProvider
                     $moduleDeclaration,
                     [
                         self::SCHEMA_ENTITY_TABLE => [
-                                $tableName => $tableDeclaration,
-                            ]
+                            $tableName => $tableDeclaration,
+                        ]
                     ]
                 );
                 foreach ($entityTypes as $entityType) {
