@@ -431,8 +431,11 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
      */
     public function renderTotals($totals, $colspan = null)
     {
-        //check if the shipment is multi shipment
-        $totals = $this->sortTotals($this->getMultishippingTotals($totals));
+        // check if the shipment is multi shipment
+        $totals = $this->getMultishippingTotals($totals);
+
+        // sort totals by configuration settings
+        $totals = $this->sortTotals($totals);
 
         if ($colspan === null) {
             $colspan = 3;
