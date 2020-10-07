@@ -10,7 +10,7 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="StorefrontAssertAppliedFilterActionGroup">
         <annotations>
-            <description>Asserts applied filter label and value on category page is layered navigation block.</description>
+            <description>Asserts applied filter label and value on storefront category page.</description>
         </annotations>
         <arguments>
             <argument name="attributeLabel" type="string"/>

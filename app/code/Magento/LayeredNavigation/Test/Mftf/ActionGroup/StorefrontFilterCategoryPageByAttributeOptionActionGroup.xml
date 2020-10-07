@@ -10,7 +10,7 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="StorefrontFilterCategoryPageByAttributeOptionActionGroup">
         <annotations>
-            <description>Filters category page by given filterable attribute and attribute option is layered navigation block.</description>
+            <description>Filters storefront category page by given filterable attribute and attribute option.</description>
         </annotations>
         <arguments>
             <argument name="attributeLabel" type="string"/>
@@ -19,6 +19,5 @@
         <waitForElementVisible selector="{{StorefrontCategorySidebarSection.filterOptionsTitle(attributeLabel)}}" stepKey="waitForFilterVisible"/>
         <conditionalClick selector="{{StorefrontCategorySidebarSection.filterOptionsTitle(attributeLabel)}}" dependentSelector="{{StorefrontCategorySidebarSection.activeFilterOptions}}" visible="false" stepKey="clickToExpandFilter"/>
         <click selector="{{StorefrontCategorySidebarSection.enabledFilterOptionItemByLabel(attributeOptionLabel)}}" stepKey="clickOnOption"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
     </actionGroup>
 </actionGroups>
