@@ -12,7 +12,7 @@ class AddressFormatsFilesTest extends \PHPUnit\Framework\TestCase
      */
     protected $_schemaFile;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         /** @var \Magento\Customer\Model\Address\Config\SchemaLocator $schemaLocator */
         $schemaLocator = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(

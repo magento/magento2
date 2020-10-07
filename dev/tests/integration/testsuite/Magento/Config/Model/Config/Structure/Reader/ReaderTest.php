@@ -64,14 +64,14 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
     private $converter;
 
     /**
-     * @var CompilerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CompilerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $compiler;
 
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->fileUtility = Files::init();

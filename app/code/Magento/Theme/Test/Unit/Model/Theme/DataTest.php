@@ -3,46 +3,59 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Theme\Test\Unit\Model\Theme;
 
 use Magento\Framework\App\Area;
+use Magento\Framework\App\State;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Design\Theme\Domain\Factory;
+use Magento\Framework\View\Design\Theme\FlyweightFactory;
+use Magento\Framework\View\Design\Theme\ImageFactory;
+use Magento\Framework\View\Design\Theme\Validator;
+use Magento\Theme\Model\Config\Customization;
+use Magento\Theme\Model\ResourceModel\Theme\Collection;
 use Magento\Theme\Model\Theme\Data;
+use PHPUnit\Framework\TestCase;
 
-class DataTest extends \PHPUnit\Framework\TestCase
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class DataTest extends TestCase
 {
     /**
      * @var Data
      */
     protected $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $customizationConfig = $this->createMock(\Magento\Theme\Model\Config\Customization::class);
+        $customizationConfig = $this->createMock(Customization::class);
         $this->customizationFactory = $this->createPartialMock(
             \Magento\Framework\View\Design\Theme\CustomizationFactory::class,
             ['create']
         );
-        $this->resourceCollection = $this->createMock(\Magento\Theme\Model\ResourceModel\Theme\Collection::class);
+        $this->resourceCollection = $this->createMock(Collection::class);
         $this->_imageFactory = $this->createPartialMock(
-            \Magento\Framework\View\Design\Theme\ImageFactory::class,
+            ImageFactory::class,
             ['create']
         );
         $this->themeFactory = $this->createPartialMock(
-            \Magento\Framework\View\Design\Theme\FlyweightFactory::class,
+            FlyweightFactory::class,
             ['create']
         );
         $this->domainFactory = $this->createPartialMock(
-            \Magento\Framework\View\Design\Theme\Domain\Factory::class,
+            Factory::class,
             ['create']
         );
         $this->themeModelFactory = $this->createPartialMock(\Magento\Theme\Model\ThemeFactory::class, ['create']);
-        $this->validator = $this->createMock(\Magento\Framework\View\Design\Theme\Validator::class);
-        $this->appState = $this->createMock(\Magento\Framework\App\State::class);
+        $this->validator = $this->createMock(Validator::class);
+        $this->appState = $this->createMock(State::class);
 
         $objectManagerHelper = new ObjectManager($this);
         $arguments = $objectManagerHelper->getConstructArguments(
-            \Magento\Theme\Model\Theme\Data::class,
+            Data::class,
             [
                 'customizationFactory' => $this->customizationFactory,
                 'customizationConfig' => $customizationConfig,
@@ -56,7 +69,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $this->model = $objectManagerHelper->getObject(\Magento\Theme\Model\Theme\Data::class, $arguments);
+        $this->model = $objectManagerHelper->getObject(Data::class, $arguments);
     }
 
     /**

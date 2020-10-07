@@ -49,7 +49,7 @@ class DepersonalizePluginTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->layoutMock = $this->getMockForAbstractClass(LayoutInterface::class);
         $this->eventManagerMock = $this->createMock(Manager::class);
@@ -77,7 +77,7 @@ class DepersonalizePluginTest extends TestCase
     {
         $this->eventManagerMock->expects($this->once())
             ->method('dispatch')
-            ->with($this->equalTo('depersonalize_clear_session'));
+            ->with('depersonalize_clear_session');
         $this->messageSessionMock->expects($this->once())->method('clearStorage');
         $this->depersonalizeCheckerMock->expects($this->once())->method('checkIfDepersonalize')->willReturn(true);
 

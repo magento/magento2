@@ -10,9 +10,6 @@
 
 $finder = PhpCsFixer\Finder::create()
     ->name('*.phtml')
-    ->exclude('dev/tests/functional/generated')
-    ->exclude('dev/tests/functional/var')
-    ->exclude('dev/tests/functional/vendor')
     ->exclude('dev/tests/integration/tmp')
     ->exclude('dev/tests/integration/var')
     ->exclude('lib/internal/Cm')

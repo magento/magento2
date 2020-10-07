@@ -9,6 +9,6 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="StorefrontOnePageCheckoutPaymentSection">
-        <element name="saveForLaterUse" type="checkbox" selector="fieldset.payment > div.choice > input[name='vault[is_enabled]']"/>
+        <element name="saveForLaterUse" type="checkbox" selector="input[name='vault[is_enabled]']"/>
     </section>
 </sections>

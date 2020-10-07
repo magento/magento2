@@ -11,13 +11,13 @@
         <column xsi:type="text" name="additional_data" nullable="true" comment="Additional swatch attributes data"/>
     </table>
     <table name="eav_attribute_option_swatch" resource="default" engine="innodb" comment="Magento Swatches table">
-        <column xsi:type="int" name="swatch_id" padding="10" unsigned="true" nullable="false" identity="true"
+        <column xsi:type="int" name="swatch_id" unsigned="true" nullable="false" identity="true"
                 comment="Swatch ID"/>
-        <column xsi:type="int" name="option_id" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="option_id" unsigned="true" nullable="false" identity="false"
                 comment="Option ID"/>
-        <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="smallint" name="store_id" unsigned="true" nullable="false" identity="false"
                 comment="Store ID"/>
-        <column xsi:type="smallint" name="type" padding="5" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="smallint" name="type" unsigned="true" nullable="false" identity="false"
                 comment="Swatch type: 0 - text, 1 - visual color, 2 - visual image"/>
         <column xsi:type="varchar" name="value" nullable="true" length="255" comment="Swatch Value"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">

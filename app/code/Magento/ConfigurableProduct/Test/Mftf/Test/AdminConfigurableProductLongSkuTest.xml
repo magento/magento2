@@ -71,7 +71,7 @@
         </actionGroup>
 
          <!--See SKU length errors in Current Variations grid-->
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProductFail"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveProductFail"/>
         <seeInCurrentUrl url="{{AdminProductCreatePage.url(AddToDefaultSet.attributeSetId, 'configurable')}}" stepKey="seeRemainOnCreateProductPage"/>
         <see selector="{{AdminProductFormConfigurationsSection.variationsSkuInputErrorByRow('1')}}" userInput="Please enter less or equal than 64 symbols." stepKey="seeSkuTooLongError1"/>
         <see selector="{{AdminProductFormConfigurationsSection.variationsSkuInputErrorByRow('2')}}" userInput="Please enter less or equal than 64 symbols." stepKey="seeSkuTooLongError2"/>
@@ -79,7 +79,7 @@
         <fillField selector="{{AdminProductFormConfigurationsSection.variationsSkuInputByRow('1')}}" userInput="LongSku-$$getConfigAttributeOption1.label$$" stepKey="fixConfigurationSku1"/>
         <fillField selector="{{AdminProductFormConfigurationsSection.variationsSkuInputByRow('2')}}" userInput="LongSku-$$getConfigAttributeOption2.label$$" stepKey="fixConfigurationSku2"/>
         <!--Save product successfully-->
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProductSuccess"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveProductSuccess"/>
         <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeSaveProductMessage"/>
 
          <!--Assert configurations on the product edit pag-->
@@ -91,7 +91,9 @@
         <see selector="{{AdminProductFormConfigurationsSection.currentVariationsPriceCells}}" userInput="{{ProductWithLongNameSku.price}}" stepKey="seeConfigurationsPrice"/>
 
         <!--Run re-index task-->
-        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
 
          <!--Assert storefront category list page-->
         <amOnPage url="/" stepKey="amOnStorefront"/>

@@ -12,8 +12,8 @@ use Magento\Catalog\Model\Product;
 use Magento\Catalog\ViewModel\Product\Breadcrumbs;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Escaper;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Serialize\Serializer\JsonHexTag;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Model\ScopeInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -54,7 +54,7 @@ class BreadcrumbsTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp() : void
+    protected function setUp(): void
     {
         $this->catalogHelperMock = $this->getMockBuilder(CatalogHelper::class)
             ->setMethods(['getProduct'])

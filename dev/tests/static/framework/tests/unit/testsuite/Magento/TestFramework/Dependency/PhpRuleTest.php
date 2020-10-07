@@ -7,6 +7,7 @@ namespace Magento\TestFramework\Dependency;
 
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\TestFramework\Dependency\Reader\ClassScanner;
 use Magento\TestFramework\Exception\NoSuchActionException;
 
 /**
@@ -25,10 +26,15 @@ class PhpRuleTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
+     * @var ClassScanner
+     */
+    private $classScanner;
+
+    /**
      * @inheritDoc
      * @throws \Exception
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $mapRoutes = ['someModule' => ['Magento\SomeModule'], 'anotherModule' => ['Magento\OneModule']];
         $mapLayoutBlocks = ['area' => ['block.name' => ['Magento\SomeModule' => 'Magento\SomeModule']]];
@@ -39,6 +45,8 @@ class PhpRuleTest extends \PHPUnit\Framework\TestCase
         $whitelist = [];
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
+        $this->classScanner = $this->createMock(ClassScanner::class);
+
         $this->model = $this->objectManagerHelper->getObject(
             PhpRule::class,
             [
@@ -46,6 +54,7 @@ class PhpRuleTest extends \PHPUnit\Framework\TestCase
                 'mapLayoutBlocks' => $mapLayoutBlocks,
                 'pluginMap' => $pluginMap,
                 'whitelists' => $whitelist,
+                'classScanner' => $this->classScanner
             ]
         );
     }
@@ -62,14 +71,20 @@ class PhpRuleTest extends \PHPUnit\Framework\TestCase
     /**
      * @param string $class
      * @param string $content
+     * @param int $expectedScans
      * @param array $expected
-     * @dataProvider getDependencyInfoDataProvider
+     *
      * @throws \Exception
+     * @dataProvider getDependencyInfoDataProvider
      */
-    public function testGetDependencyInfo($class, $content, array $expected)
+    public function testGetDependencyInfo(string $class, string $content, int $expectedScans, array $expected): void
     {
         $file = $this->makeMockFilepath($class);
         $module = $this->getModuleFromClass($class);
+        $this->classScanner->expects($this->exactly($expectedScans))
+            ->method('getClassName')
+            ->with($file)
+            ->willReturn($class);
         $this->assertEquals($expected, $this->model->getDependencyInfo($module, 'php', $file, $content));
     }
 
@@ -82,14 +97,16 @@ class PhpRuleTest extends \PHPUnit\Framework\TestCase
             'Extend class in same module' => [
                 'Magento\SomeModule\SomeClass',
                 'something extends \Magento\SomeModule\Any\ClassName {',
+                0,
                 []
             ],
             'Extend class in different module' => [
                 'Magento\AnotherModule\SomeClass',
                 'something extends \Magento\SomeModule\Any\ClassName {',
+                1,
                 [
                     [
-                        'module' => 'Magento\SomeModule',
+                        'modules' => ['Magento\SomeModule'],
                         'type' => \Magento\TestFramework\Dependency\RuleInterface::TYPE_HARD,
                         'source' => 'Magento\SomeModule\Any\ClassName',
                     ]
@@ -98,14 +115,16 @@ class PhpRuleTest extends \PHPUnit\Framework\TestCase
             'getViewFileUrl in same module' => [
                 'Magento\SomeModule\SomeClass',
                 '$this->getViewFileUrl("Magento_SomeModule::js/order-by-sku-failure.js")',
+                0,
                 []
             ],
             'getViewFileUrl in different module' => [
                 'Magento\AnotherModule\SomeClass',
                 '$this->getViewFileUrl("Magento_SomeModule::js/order-by-sku-failure.js")',
+                1,
                 [
                     [
-                        'module' => 'Magento\SomeModule',
+                        'modules' => ['Magento\SomeModule'],
                         'type' => \Magento\TestFramework\Dependency\RuleInterface::TYPE_HARD,
                         'source' => 'Magento_SomeModule',
                     ]
@@ -114,14 +133,16 @@ class PhpRuleTest extends \PHPUnit\Framework\TestCase
             'Helper class from same module' => [
                 'Magento\SomeModule\SomeClass',
                 '$this->helper("Magento\SomeModule\Any\ClassName")',
+                0,
                 []
             ],
             'Helper class from another module' => [
                 'Magento\AnotherModule\SomeClass',
                 '$this->helper("Magento\SomeModule\Any\ClassName")',
+                1,
                 [
                     [
-                        'module' => 'Magento\SomeModule',
+                        'modules' => ['Magento\SomeModule'],
                         'type' => \Magento\TestFramework\Dependency\RuleInterface::TYPE_HARD,
                         'source' => 'Magento\SomeModule\Any\ClassName',
                     ]
@@ -129,14 +150,17 @@ class PhpRuleTest extends \PHPUnit\Framework\TestCase
             ],
             'getBlock from same module' => [
                 'Magento\SomeModule\SomeClass',
-                '$this->getLayout()->getBlock(\'block.name\');', []
+                '$this->getLayout()->getBlock(\'block.name\');',
+                0,
+                []
             ],
             'getBlock from another module' => [
                 'Magento\AnotherModule\SomeClass',
                 '$this->getLayout()->getBlock(\'block.name\');',
+                0,
                 [
                     [
-                        'module' => 'Magento\SomeModule',
+                        'modules' => ['Magento\SomeModule'],
                         'type' => \Magento\TestFramework\Dependency\RuleInterface::TYPE_HARD,
                         'source' => 'getBlock(\'block.name\')',
                     ]
@@ -145,19 +169,22 @@ class PhpRuleTest extends \PHPUnit\Framework\TestCase
             'Plugin on class in same module' => [
                 'Magento\Module1\Plugin1',
                 ', \Magento\Module1\Subject $variable',
+                0,
                 []
             ],
             'Plugin depends on arbitrary class in same module' => [
                 'Magento\Module1\Plugin1',
                 ', \Magento\Module1\NotSubject $variable',
+                0,
                 []
             ],
             'Plugin on class in different module' => [
                 'Magento\Module1\Plugin2',
                 'Magento\Module2\Subject',
+                1,
                 [
                     [
-                        'module' => 'Magento\Module2',
+                        'modules' => ['Magento\Module2'],
                         'type' => \Magento\TestFramework\Dependency\RuleInterface::TYPE_SOFT,
                         'source' => 'Magento\Module2\Subject',
                     ]
@@ -166,9 +193,10 @@ class PhpRuleTest extends \PHPUnit\Framework\TestCase
             'Plugin depends on arbitrary class in same module as subject' => [
                 'Magento\Module1\Plugin2',
                 'Magento\Module2\NotSubject',
+                1,
                 [
                     [
-                        'module' => 'Magento\Module2',
+                        'modules' => ['Magento\Module2'],
                         'type' => \Magento\TestFramework\Dependency\RuleInterface::TYPE_SOFT,
                         'source' => 'Magento\Module2\NotSubject',
                     ]
@@ -177,9 +205,10 @@ class PhpRuleTest extends \PHPUnit\Framework\TestCase
             'Plugin depends on arbitrary class in arbitrary module' => [
                 'Magento\Module1\Plugin2',
                 'Magento\OtherModule\NotSubject',
+                1,
                 [
                     [
-                        'module' => 'Magento\OtherModule',
+                        'modules' => ['Magento\OtherModule'],
                         'type' => \Magento\TestFramework\Dependency\RuleInterface::TYPE_HARD,
                         'source' => 'Magento\OtherModule\NotSubject',
                     ]
@@ -222,7 +251,7 @@ class PhpRuleTest extends \PHPUnit\Framework\TestCase
                 '$this->getUrl("cms/index/index")',
                 [
                     [
-                        'module' => 'Magento\Cms',
+                        'modules' => ['Magento\Cms'],
                         'type' => \Magento\TestFramework\Dependency\RuleInterface::TYPE_HARD,
                         'source' => 'getUrl("cms/index/index"',
                     ]
@@ -295,7 +324,7 @@ class PhpRuleTest extends \PHPUnit\Framework\TestCase
                 '$this->getLayout()->getBlock(\'block.name\');',
                 [
                     [
-                        'module' => 'Magento\SomeModule',
+                        'modules' => ['Magento\SomeModule'],
                         'type' => \Magento\TestFramework\Dependency\RuleInterface::TYPE_HARD,
                         'source' => 'getBlock(\'block.name\')',
                     ]
@@ -322,8 +351,9 @@ class PhpRuleTest extends \PHPUnit\Framework\TestCase
      * @param string $class
      * @return string
      */
-    private function getModuleFromClass($class)
+    private function getModuleFromClass(string $class): string
     {
-        return substr($class, 0, strpos($class, '\\', 9)); // (strlen('Magento\\') + 1) === 9
+        $moduleNameLength = strpos($class, '\\', strpos($class, '\\') + 1);
+        return substr($class, 0, $moduleNameLength);
     }
 }

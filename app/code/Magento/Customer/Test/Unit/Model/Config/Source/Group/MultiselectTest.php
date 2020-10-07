@@ -4,38 +4,46 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Test\Unit\Model\Config\Source\Group;
 
+use Magento\Customer\Api\GroupManagementInterface;
+use Magento\Customer\Model\Config\Source\Group\Multiselect;
 use Magento\Customer\Model\Customer\Attribute\Source\GroupSourceLoggedInOnlyInterface;
+use Magento\Framework\Convert\DataObject;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class MultiselectTest extends \PHPUnit\Framework\TestCase
+class MultiselectTest extends TestCase
 {
     /**
-     * @var \Magento\Customer\Model\Config\Source\Group\Multiselect
+     * @var Multiselect
      */
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $groupServiceMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $converterMock;
 
     /**
-     * @var GroupSourceLoggedInOnlyInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var GroupSourceLoggedInOnlyInterface|MockObject
      */
     private $groupSourceLoggedInOnly;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->groupServiceMock = $this->createMock(\Magento\Customer\Api\GroupManagementInterface::class);
-        $this->converterMock = $this->createMock(\Magento\Framework\Convert\DataObject::class);
-        $this->groupSourceLoggedInOnly = $this->getMockBuilder(GroupSourceLoggedInOnlyInterface::class)->getMock();
-        $this->model = new \Magento\Customer\Model\Config\Source\Group\Multiselect(
+        $this->groupServiceMock = $this->getMockForAbstractClass(GroupManagementInterface::class);
+        $this->converterMock = $this->createMock(DataObject::class);
+        $this->groupSourceLoggedInOnly = $this->getMockBuilder(GroupSourceLoggedInOnlyInterface::class)
+            ->getMock();
+        $this->model = new Multiselect(
             $this->groupServiceMock,
             $this->converterMock,
             $this->groupSourceLoggedInOnly

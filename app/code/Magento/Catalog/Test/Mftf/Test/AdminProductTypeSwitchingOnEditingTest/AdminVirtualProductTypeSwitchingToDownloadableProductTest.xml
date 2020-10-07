@@ -49,12 +49,20 @@
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveDownloadableProductForm"/>
         <!--Assert downloadable product on Admin product page grid-->
         <comment userInput="Assert configurable product in Admin product page grid" stepKey="commentAssertDownloadableProductOnAdmin"/>
-        <amOnPage url="{{AdminCatalogProductPage.url}}" stepKey="goToCatalogProductPage"/>
+        <actionGroup ref="AdminOpenCatalogProductPageActionGroup" stepKey="goToCatalogProductPage"/>
         <actionGroup ref="FilterProductGridBySku2ActionGroup" stepKey="filterProductGridBySku">
             <argument name="sku" value="$$createProduct.sku$$"/>
         </actionGroup>
-        <see selector="{{AdminProductGridSection.productGridCell('1', 'Name')}}" userInput="$$createProduct.name$$" stepKey="seeDownloadableProductNameInGrid"/>
-        <see selector="{{AdminProductGridSection.productGridCell('1', 'Type')}}" userInput="Downloadable Product" stepKey="seeDownloadableProductTypeInGrid"/>
+        <actionGroup ref="AssertAdminProductGridCellActionGroup" stepKey="seeDownloadableProductNameInGrid">
+            <argument name="row" value="1"/>
+            <argument name="column" value="Name"/>
+            <argument name="value" value="$$createProduct.name$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminProductGridCellActionGroup" stepKey="seeDownloadableProductTypeInGrid">
+            <argument name="row" value="1"/>
+            <argument name="column" value="Type"/>
+            <argument name="value" value="Downloadable Product"/>
+        </actionGroup>
         <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearDownloadableProductFilters"/>
         <!--Assert downloadable product on storefront-->
         <comment userInput="Assert downloadable product on storefront" stepKey="commentAssertDownloadableProductOnStorefront"/>

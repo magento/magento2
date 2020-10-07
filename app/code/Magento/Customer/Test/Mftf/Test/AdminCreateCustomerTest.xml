@@ -20,7 +20,9 @@
             <group value="create"/>
         </annotations>
         <before>
-            <magentoCLI command="indexer:reindex customer_grid" stepKey="reindexCustomerGrid"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexCustomerGrid">
+                <argument name="indices" value="customer_grid"/>
+            </actionGroup>
         </before>
         <after>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
@@ -35,7 +37,9 @@
         <fillField userInput="{{CustomerEntityOne.email}}" selector="{{AdminCustomerAccountInformationSection.email}}" stepKey="fillEmail"/>
         <click selector="{{AdminCustomerMainActionsSection.saveButton}}" stepKey="saveCustomer"/>
         <seeElement selector="{{AdminCustomerMessagesSection.successMessage}}" stepKey="assertSuccessMessage"/>
-        <magentoCLI stepKey="reindex" command="indexer:reindex"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
         <reloadPage stepKey="reloadPage"/>
         <waitForPageLoad stepKey="waitForLoad2"/>
         <click selector="{{AdminCustomerFiltersSection.filtersButton}}" stepKey="openFilter"/>

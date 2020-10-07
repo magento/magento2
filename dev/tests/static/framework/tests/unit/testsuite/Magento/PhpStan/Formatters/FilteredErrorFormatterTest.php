@@ -38,7 +38,7 @@ class FilteredErrorFormatterTest extends ErrorFormatterTestCase
         string $expected
     ): void {
         $formatter = new FilteredErrorFormatter(
-            new FuzzyRelativePathHelper(self::DIRECTORY_PATH, '/', []),
+            new FuzzyRelativePathHelper(self::DIRECTORY_PATH, [], '/'),
             false,
             false,
             false,
@@ -47,6 +47,7 @@ class FilteredErrorFormatterTest extends ErrorFormatterTestCase
 
         $analysisResult = new AnalysisResult(
             $fileErrors,
+            [],
             [],
             false,
             false,
