@@ -149,7 +149,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     public function toOptionArray($valueKey = 'value')
     {
-        return $this->_toOptionArray('option_id', $valueKey);
+        return $this->_toOptionArray('option_id', $valueKey, ['id' => 'option_id']);
     }
 
     /**

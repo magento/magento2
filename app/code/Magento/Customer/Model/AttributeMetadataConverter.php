@@ -7,9 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\Customer\Model;
 
+use Magento\Customer\Api\Data\AttributeMetadataInterfaceFactory;
 use Magento\Customer\Api\Data\OptionInterfaceFactory;
 use Magento\Customer\Api\Data\ValidationRuleInterfaceFactory;
-use Magento\Customer\Api\Data\AttributeMetadataInterfaceFactory;
 use Magento\Eav\Api\Data\AttributeDefaultValueInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
@@ -113,6 +113,9 @@ class AttributeMetadataConverter
                         $optionDataObject->setOptions($optionArray);
                     }
                     $optionDataObject->setLabel($option['label']);
+                    if (isset($option['id'])) {
+                        $optionDataObject->setId($option['id']);
+                    }
                     $options[] = $optionDataObject;
                 }
             }
@@ -152,7 +155,9 @@ class AttributeMetadataConverter
             ->setIsUsedInGrid($attribute->getIsUsedInGrid())
             ->setIsVisibleInGrid($attribute->getIsVisibleInGrid())
             ->setIsFilterableInGrid($attribute->getIsFilterableInGrid())
-            ->setIsSearchableInGrid($attribute->getIsSearchableInGrid());
+            ->setIsSearchableInGrid($attribute->getIsSearchableInGrid())
+            ->setAttributeId($attribute->getId())
+            ->setEntityTypeId($attribute->getEntityTypeId());
     }
 
     /**

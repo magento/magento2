@@ -17,6 +17,8 @@ interface AttributeMetadataInterface extends \Magento\Framework\Api\MetadataObje
      * Constants used as keys of data array
      */
     const ATTRIBUTE_CODE = 'attribute_code';
+    const ATTRIBUTE_ID = 'attribute_id';
+    const ENTITY_TYPE_ID = 'entity_type_id';
     const FRONTEND_INPUT = 'frontend_input';
     const INPUT_FILTER = 'input_filter';
     const STORE_LABEL = 'store_label';
@@ -338,4 +340,34 @@ interface AttributeMetadataInterface extends \Magento\Framework\Api\MetadataObje
      * @return $this
      */
     public function setIsSearchableInGrid($isSearchableInGrid);
+
+    /**
+     * Get attribute id
+     *
+     * @return int
+     */
+    public function getAttributeId();
+
+    /**
+     * Set attribute id
+     *
+     * @param int $attributeId
+     * @return $this
+     */
+    public function setAttributeId($attributeId);
+
+    /**
+     * Get entity type id
+     *
+     * @return int
+     */
+    public function getEntityTypeId();
+
+    /**
+     * Set entity type id
+     *
+     * @param int $entityTypeId
+     * @return $this
+     */
+    public function setEntityTypeId($entityTypeId);
 }

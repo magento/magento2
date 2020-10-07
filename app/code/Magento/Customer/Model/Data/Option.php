@@ -15,6 +15,27 @@ class Option extends \Magento\Framework\Api\AbstractSimpleObject implements
     \Magento\Customer\Api\Data\OptionInterface
 {
     /**
+     * Get option id
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->_get(self::ID);
+    }
+
+    /**
+     * Set option id
+     *
+     * @param int $id
+     * @return $this
+     */
+    public function setId($id)
+    {
+        return $this->setData(self::ID, $id);
+    }
+
+    /**
      * Get option label
      *
      * @return string

@@ -417,4 +417,36 @@ class AttributeMetadata extends \Magento\Framework\Api\AbstractSimpleObject impl
     {
         return $this->setData(self::DEFAULT_VALUE, $defaultValue);
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function getAttributeId()
+    {
+        return $this->_get(self::ATTRIBUTE_ID);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setAttributeId($attributeId)
+    {
+        return $this->setData(self::ATTRIBUTE_ID, $attributeId);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getEntityTypeId()
+    {
+        return $this->_get(self::ENTITY_TYPE_ID);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setEntityTypeId($entityTypeId)
+    {
+        return $this->setData(self::ENTITY_TYPE_ID, $entityTypeId);
+    }
 }

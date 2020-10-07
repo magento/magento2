@@ -48,7 +48,8 @@ class AttributeOptions
 
             $optionsData[] = [
                 'label' => $option->getLabel(),
-                'value' => $option->getValue()
+                'value' => $option->getValue(),
+                'model' => $option
             ];
         }
         return $optionsData;

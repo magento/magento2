@@ -17,10 +17,22 @@ interface OptionInterface
     /**#@+
      * Constants for keys of data array
      */
+    const ID = 'id';
     const LABEL = 'label';
     const VALUE = 'value';
     const OPTIONS = 'options';
     /**#@-*/
+
+    /**
+     * @return int|null
+     */
+    public function getId();
+
+    /**
+     * @param int $id
+     * @return $this
+     */
+    public function setId($id);
 
     /**
      * Get option label
