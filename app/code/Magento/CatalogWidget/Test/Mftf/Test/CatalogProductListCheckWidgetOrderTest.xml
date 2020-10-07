@@ -15,7 +15,7 @@
             <title value="Checking order of products in the 'catalog Products List' widget"/>
             <description value="Check that products are ordered with recently added products first"/>
             <severity value="MAJOR"/>
-            <testCaseId value="MC-13794"/>
+            <testCaseId value="MC-27616"/>
             <useCaseId value="MC-5905"/>
             <group value="catalogWidget"/>
             <group value="catalog"/>
@@ -46,7 +46,7 @@
             <deleteData createDataKey="createFirstProduct" stepKey="deleteFirstProduct"/>
             <deleteData createDataKey="createSecondProduct" stepKey="deleteSecondProduct"/>
             <deleteData createDataKey="createThirdProduct" stepKey="deleteThirdProduct"/>
-            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
         <!--Open created cms page-->
         <actionGroup ref="AdminOpenCmsPageActionGroup" stepKey="openEditPage">
@@ -57,10 +57,8 @@
         <!--Add widget to cms page-->
         <waitForElementVisible selector="{{TinyMCESection.InsertWidgetIcon}}" stepKey="waitInsertWidgetIconVisible"/>
         <click selector="{{TinyMCESection.InsertWidgetIcon}}" stepKey="clickInsertWidgetIcon" />
-        <waitForPageLoad stepKey="waitForPageLoad1" />
         <waitForElementVisible selector="{{WidgetSection.WidgetType}}" stepKey="waitForWidgetTypeSelectorVisible"/>
         <selectOption selector="{{WidgetSection.WidgetType}}" userInput="Catalog Products List" stepKey="selectCatalogProductsList" />
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskDisappear1" />
         <waitForElementVisible selector="{{WidgetSection.AddParam}}" stepKey="waitForAddParamBtnVisible"/>
         <click selector="{{WidgetSection.AddParam}}" stepKey="clickAddParamBtn" />
         <waitForElementVisible selector="{{WidgetSection.ConditionsDropdown}}" stepKey="waitForDropdownVisible"/>
@@ -70,11 +68,9 @@
         <click selector="{{WidgetSection.RuleParam}}" stepKey="clickRuleParam" />
         <waitForElementVisible selector="{{WidgetSection.Chooser}}" stepKey="waitForElement" />
         <click selector="{{WidgetSection.Chooser}}" stepKey="clickChooser" />
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskDisappear3" />
         <waitForElementVisible selector="{{WidgetSection.PreCreateCategory('$simplecategory.name$')}}" stepKey="waitForCategoryVisible" />
         <click selector="{{WidgetSection.PreCreateCategory('$simplecategory.name$')}}" stepKey="selectCategory" />
         <click selector="{{WidgetSection.InsertWidget}}" stepKey="clickInsertWidget" />
-        <waitForPageLoad stepKey="waitForPageLoad2" />
         <!--Save cms page and go to Storefront-->
         <actionGroup ref="SaveCmsPageActionGroup" stepKey="saveCmsPage"/>
         <actionGroup ref="NavigateToStorefrontForCreatedPageActionGroup" stepKey="navigateToTheStoreFront1">
@@ -83,9 +79,7 @@
         <!--Check order of products: recently added first-->
         <waitForElementVisible selector="{{InsertWidgetSection.checkElementStorefrontByName('1','$createThirdProduct.name$')}}" stepKey="waitForThirdProductVisible"/>
         <seeElement selector="{{InsertWidgetSection.checkElementStorefrontByName('1','$createThirdProduct.name$')}}" stepKey="seeElementByName1"/>
-        <waitForElementVisible selector="{{InsertWidgetSection.checkElementStorefrontByName('2','$createSecondProduct.name$')}}" stepKey="waitForSecondProductVisible"/>
         <seeElement selector="{{InsertWidgetSection.checkElementStorefrontByName('2','$createSecondProduct.name$')}}" stepKey="seeElementByName2"/>
-        <waitForElementVisible selector="{{InsertWidgetSection.checkElementStorefrontByName('3','$createFirstProduct.name$')}}" stepKey="waitForFirstProductVisible"/>
         <seeElement selector="{{InsertWidgetSection.checkElementStorefrontByName('3','$createFirstProduct.name$')}}" stepKey="seeElementByName3"/>
     </test>
 </tests>
