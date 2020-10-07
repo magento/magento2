@@ -16,6 +16,7 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Integration\Api\AdminTokenServiceInterface;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Bootstrap as TestBootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
@@ -113,13 +114,14 @@ QUERY;
     }
 
     /**
+     * @magentoApiDataFixture Magento/User/_files/user_with_role.php
      * @return void
      */
     public function testGetCustomerIfUserHasWrongType(): void
     {
         /** @var $adminTokenService AdminTokenServiceInterface */
         $adminTokenService = $this->objectManager->get(AdminTokenServiceInterface::class);
-        $adminToken = $adminTokenService->createAdminAccessToken('admin', '123123q');
+        $adminToken = $adminTokenService->createAdminAccessToken('adminUser', TestBootstrap::ADMIN_PASSWORD);
 
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('The current customer isn\'t authorized.');
