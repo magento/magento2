@@ -550,7 +550,8 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
             $options['onclick'] = sprintf('order.showQuoteItemConfiguration(%s)', $item->getId());
         } else {
             $options['class'] = ' disabled';
-            $options['title'] = __('This product does not have any configurable options');
+            $message = 'This product does not have any configurable options';
+            $options['title'] = $this->_escaper->escapeHtmlAttr(__($message));
         }
 
         return $this->getLayout()->createBlock(
