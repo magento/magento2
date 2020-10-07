@@ -13,7 +13,7 @@ use Magento\Framework\Stdlib\CookieManagerInterface;
 use Magento\SendFriend\Helper\Data as SendFriendHelper;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
-use Zend\Stdlib\Parameters;
+use Laminas\Stdlib\Parameters;
 
 /**
  * Class checks send friend model behavior
@@ -55,6 +55,7 @@ class SendFriendTest extends TestCase
      * @param array $sender
      * @param array $recipients
      * @param string|bool $expectedResult
+     *
      * @return void
      */
     public function testValidate(array $sender, array $recipients, $expectedResult): void
@@ -185,11 +186,11 @@ class SendFriendTest extends TestCase
      * @magentoDataFixture Magento/SendFriend/_files/sendfriend_log_record_half_hour_before.php
      *
      * @magentoDbIsolation disabled
+     *
      * @return void
      */
     public function testisExceedLimitByIp(): void
     {
-        $this->markTestSkipped('Blocked by MC-31968');
         $parameters = $this->objectManager->create(Parameters::class);
         $parameters->set('REMOTE_ADDR', '127.0.0.1');
         $this->request->setServer($parameters);
@@ -197,10 +198,11 @@ class SendFriendTest extends TestCase
     }
 
     /**
-     * Check result
+     * Check test result
      *
      * @param array|bool $expectedResult
      * @param array|bool $result
+     *
      * @return void
      */
     private function checkResult($expectedResult, $result): void
@@ -217,6 +219,7 @@ class SendFriendTest extends TestCase
      *
      * @param array $sender
      * @param array $recipients
+     *
      * @return void
      */
     private function prepareData(array $sender, array $recipients): void
