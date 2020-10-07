@@ -94,7 +94,7 @@ class CategoryTest extends TestCase
             ->setMethods(['getState', 'getProductCollection'])
             ->getMock();
 
-        $this->fulltextCollection = $this->fulltextCollection = $this->getMockBuilder(
+        $this->fulltextCollection = $this->getMockBuilder(
             Collection::class
         )
             ->disableOriginalConstructor()
