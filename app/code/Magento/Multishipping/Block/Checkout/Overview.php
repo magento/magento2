@@ -498,6 +498,7 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
             ScopeInterface::SCOPE_STORES
         );
 
+        $sorted = [];
         foreach ($sorts as $code => $sortOrder) {
             $sorted[$sortOrder] = $code;
         }
