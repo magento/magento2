@@ -250,10 +250,8 @@ class Indexer extends \Magento\Framework\DataObject implements IndexerInterface
      */
     public function getState()
     {
-        if (!$this->state) {
-            $this->state = $this->stateFactory->create();
-            $this->state->loadByIndexer($this->getId());
-        }
+        $this->state = $this->stateFactory->create();
+        $this->state->loadByIndexer($this->getId());
         return $this->state;
     }
 
