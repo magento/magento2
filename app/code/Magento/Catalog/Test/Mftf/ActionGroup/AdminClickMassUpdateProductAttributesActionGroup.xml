@@ -10,11 +10,10 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminClickMassUpdateProductAttributesActionGroup">
         <annotations>
-            <description>Clicks on 'Update attributes' on product grid page.</description>
+            <description>Clicks on 'Update attributes' from dropdown actions list on product grid page. Products should be selected via mass action before</description>
         </annotations>
         <click selector="{{AdminProductGridSection.bulkActionDropdown}}" stepKey="clickDropdown"/>
         <click selector="{{AdminProductGridSection.bulkActionOption('Update attributes')}}" stepKey="clickOption"/>
-        <waitForPageLoad stepKey="waitForBulkUpdatePage"/>
         <seeInCurrentUrl url="catalog/product_action_attribute/edit/" stepKey="seeInUrl"/>
     </actionGroup>
 </actionGroups>

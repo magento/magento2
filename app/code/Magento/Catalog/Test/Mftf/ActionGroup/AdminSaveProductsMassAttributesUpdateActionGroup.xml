@@ -14,5 +14,6 @@
         </annotations>
         <click selector="{{AdminEditProductAttributesSection.Save}}" stepKey="save"/>
         <waitForElementVisible selector="{{AdminMessagesSection.success}}" time="60" stepKey="waitForSuccessMessage"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="Message is added to queue" stepKey="assertSuccessMessage"/>
     </actionGroup>
 </actionGroups>

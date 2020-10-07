@@ -19,7 +19,6 @@
             <useCaseId value="MC-29179"/>
             <group value="catalog"/>
             <group value="asynchronousOperations"/>
-            <group value="productAttributes"/>
         </annotations>
         <before>
             <createData entity="ApiProductWithDescription" stepKey="createFirstProduct"/>
@@ -46,7 +45,6 @@
         <checkOption selector="{{AdminEditProductAttributesSection.changeAttributeShortDescriptionToggle}}" stepKey="toggleToChangeShortDescription"/>
         <fillField selector="{{AdminEditProductAttributesSection.attributeShortDescription}}" userInput="Test Update" stepKey="fillShortDescriptionField"/>
         <actionGroup ref="AdminSaveProductsMassAttributesUpdateActionGroup" stepKey="saveMassAttributeUpdate"/>
-        <see selector="{{AdminMessagesSection.success}}" userInput="Message is added to queue" stepKey="seeAttributeUpdateSuccessMsg"/>
         <see selector="{{AdminSystemMessagesSection.info}}" userInput="Task &quot;Update attributes for 3 selected products&quot;: 1 item(s) have been scheduled for update." stepKey="seeInfoMessage"/>
         <click selector="{{AdminSystemMessagesSection.viewDetailsLink}}" stepKey="seeDetails"/>
         <see selector="{{AdminBulkDetailsModalSection.descriptionValue}}" userInput="Update attributes for 3 selected products" stepKey="seeDescription"/>
