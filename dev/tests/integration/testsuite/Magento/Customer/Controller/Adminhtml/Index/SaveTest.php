@@ -8,11 +8,13 @@ declare(strict_types=1);
 namespace Magento\Customer\Controller\Adminhtml\Index;
 
 use Magento\Backend\Model\Session;
+use Magento\Customer\Api\CustomerMetadataInterface;
 use Magento\Customer\Api\CustomerNameGenerationInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Model\Data\Customer as CustomerData;
 use Magento\Customer\Model\EmailNotification;
+use Magento\Eav\Api\AttributeRepositoryInterface;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Locale\ResolverInterface;
@@ -23,6 +25,7 @@ use Magento\Newsletter\Model\Subscriber;
 use Magento\Newsletter\Model\SubscriberFactory;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\AbstractBackendController;
 use PHPUnit\Framework\MockObject\MockObject;
 
@@ -458,14 +461,13 @@ class SaveTest extends AbstractBackendController
             [
                 'customer' => [
                     CustomerData::DOB => '1990-10-24',
-                    CustomerData::GENDER => '0',
                 ],
             ]
         );
         unset($expectedData['customer']['sendemail_store_id']);
         $this->dispatchCustomerSave($postData);
         $this->assertSessionMessages(
-            $this->equalTo([(string)__('You saved the customer.')]),
+            $this->containsEqual((string)__('You saved the customer.')),
             MessageInterface::TYPE_SUCCESS
         );
         $this->assertRedirect($this->stringContains($this->baseControllerUrl . 'index/key/'));
@@ -496,7 +498,8 @@ class SaveTest extends AbstractBackendController
                 CustomerData::EMAIL => 'janedoe' . uniqid() . '@example.com',
                 CustomerData::DOB => '01/01/2000',
                 CustomerData::TAXVAT => '121212',
-                CustomerData::GENDER => 'Male',
+                CustomerData::GENDER => Bootstrap::getObjectManager()->get(AttributeRepositoryInterface::class)
+                    ->get(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER, 'gender')->getSource()->getOptionId('Male'),
                 'sendemail_store_id' => '1',
             ]
         ];
@@ -516,7 +519,6 @@ class SaveTest extends AbstractBackendController
             [
                 'customer' => [
                     CustomerData::DOB => '2000-01-01',
-                    CustomerData::GENDER => '0',
                     CustomerData::STORE_ID => 1,
                     CustomerData::CREATED_IN => 'Default Store View',
                 ],
