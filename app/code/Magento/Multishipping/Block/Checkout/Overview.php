@@ -10,6 +10,8 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Checkout\Helper\Data as CheckoutHelper;
 use Magento\Framework\App\ObjectManager;
+use Magento\Quote\Model\Quote\Address\Total\Collector;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * Multishipping checkout overview information
@@ -430,7 +432,7 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
     public function renderTotals($totals, $colspan = null)
     {
         //check if the shipment is multi shipment
-        $totals = $this->getMultishippingTotals($totals);
+        $totals = $this->sortTotals($this->getMultishippingTotals($totals));
 
         if ($colspan === null) {
             $colspan = 3;
@@ -480,5 +482,38 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
             $renderer->setTemplate($this->getRowRendererTemplate());
         }
         return $renderer;
+    }
+
+    /**
+     * Sort total information based on configuration settings.
+     *
+     * @param array $totals
+     * @return array
+     */
+    private function sortTotals($totals): array
+    {
+        $sortedTotals = [];
+        $sorts = $this->_scopeConfig->getValue(
+            Collector::XML_PATH_SALES_TOTALS_SORT,
+            ScopeInterface::SCOPE_STORES
+        );
+
+        foreach ($sorts as $code => $sortOrder) {
+            $sorted[$sortOrder] = $code;
+        }
+        ksort($sorted);
+
+        foreach ($sorted as $code) {
+            if (isset($totals[$code])) {
+                $sortedTotals[$code] = $totals[$code];
+            }
+        }
+
+        $notSorted = array_diff(array_keys($totals), array_keys($sortedTotals));
+        foreach ($notSorted as $code) {
+            $sortedTotals[$code] = $totals[$code];
+        }
+
+        return $sortedTotals;
     }
 }
