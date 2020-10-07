@@ -67,7 +67,7 @@
                             <argument name="type" xsi:type="string">country</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.customer.grid.columnSet.billing_region" as="billing_regione">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.customer.grid.columnSet.billing_region" as="billing_region">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">State/Province</argument>
                             <argument name="index" xsi:type="string">billing_region</argument>
