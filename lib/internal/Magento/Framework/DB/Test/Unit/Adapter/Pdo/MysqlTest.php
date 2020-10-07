@@ -503,6 +503,90 @@ class MysqlTest extends TestCase
     }
 
     /**
+     * @return array
+     */
+    public static function quoteProvider(): array
+    {
+        return [
+            [2006, 10],
+            [2006, 1],
+            [2013, 1],
+            [2013, 5],
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider quoteProvider
+     *
+     * @param $error
+     * @param $max
+     */
+    public function quoteRetry($error, $max)
+    {
+        $exception = new \PDOException();
+        $exception->errorInfo[1] = $error;
+        $adapter = $this->getMysqlPdoAdapterMock(['_connect']);
+        for ($i = 0; $i < $max; $i++) {
+            $adapter->expects($this->at($i))->method('_connect')->willThrowException($exception);
+        }
+        $this->assertEquals(0, $adapter->quote(0));
+    }
+
+    /**
+     * @test
+     */
+    public function quoteNoRetryMoreThen10Times()
+    {
+        $this->expectException(\PDOException::class);
+        $exception = new \PDOException();
+        $adapter = $this->getMysqlPdoAdapterMock(['_connect']);
+        $exception->errorInfo[1] = 2006;
+        for ($i = 0; $i < 11; $i++) {
+            $adapter->expects($this->at($i))->method('_connect')->willThrowException($exception);
+        }
+        $this->assertEquals(0, $adapter->quote(0));
+    }
+
+    /**
+     * @test
+     */
+    public function quoteNoRetryOnOtherErrors()
+    {
+        $this->expectException(\PDOException::class);
+        $exception = new \PDOException();
+        $exception->errorInfo[1] = 234234234;
+        $adapter = $this->getMysqlPdoAdapterMock(['_connect']);
+        $adapter->expects($this->at(0))->method('_connect')->willThrowException($exception);
+        $this->assertEquals(0, $adapter->quote(0));
+    }
+
+    /**
+     * @test
+     */
+    public function quoteNoRetryInTransaction()
+    {
+        $this->expectException(\PDOException::class);
+        $exception = new \PDOException();
+        $exception->errorInfo[1] = 2006;
+
+        $adapter = $this->getMysqlPdoAdapterMock(['_connect']);
+        $resourceProperty = new \ReflectionProperty(
+            get_class($adapter),
+            '_transactionLevel'
+        );
+        $resourceProperty->setAccessible(true);
+        $resourceProperty->setValue($adapter, 1);
+
+        $adapter->expects($this->at(0))->method('_connect')->willThrowException($exception);
+        try {
+            $this->assertEquals(0, $adapter->quote(0));
+        } finally {
+            $resourceProperty->setValue($adapter, 0);
+        }
+    }
+
+    /**
      * @param string $indexName
      * @param string $indexType
      * @param array $keyLists
@@ -517,8 +601,7 @@ class MysqlTest extends TestCase
         string $indexType,
         array $keyLists,
         string $query,
-        string $exceptionMessage,
-        array $ids
+        string $exceptionMessage
     ) {
         $tableName = 'core_table';
         $fields = ['sku', 'field2'];
@@ -541,7 +624,6 @@ class MysqlTest extends TestCase
             'quoteIdentifier',
             '_getTableName',
             'rawQuery',
-            '_removeDuplicateEntry',
             'resetDdlCache',
         ]);
         $this->addConnectionMock($adapter);
@@ -587,11 +669,7 @@ class MysqlTest extends TestCase
                 )
             )
             ->willThrowException($exception);
-        $adapter
-            ->expects($this->exactly((int)in_array(strtolower($indexType), ['primary', 'unique'])))
-            ->method('_removeDuplicateEntry')
-            ->with($tableName, $fields, $ids)
-            ->willThrowException($exception);
+
         $adapter
             ->expects($this->never())
             ->method('resetDdlCache');
@@ -619,44 +697,6 @@ class MysqlTest extends TestCase
                 'exceptionMessage' => 'SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry \'1-1-1\' '
                     . 'for key \'SOME_UNIQUE_INDEX\', query was: '
                     . 'ALTER TABLE `%s` ADD UNIQUE `SOME_UNIQUE_INDEX` (%s)',
-                'ids' => [1, 1, 1],
-            ],
-            'Existing unique index' => [
-                'indexName' => 'SOME_UNIQUE_INDEX',
-                'indexType' => AdapterInterface::INDEX_TYPE_UNIQUE,
-                'keyLists' => [
-                    'PRIMARY' => [
-                        'INDEX_TYPE' => [
-                            AdapterInterface::INDEX_TYPE_PRIMARY
-                        ]
-                    ],
-                    'SOME_UNIQUE_INDEX' => [
-                        'INDEX_TYPE' => [
-                            AdapterInterface::INDEX_TYPE_UNIQUE
-                        ]
-                    ],
-                ],
-                'query' => 'ALTER TABLE `%s` DROP INDEX `SOME_UNIQUE_INDEX`, ADD UNIQUE `SOME_UNIQUE_INDEX` (%s)',
-                'exceptionMessage' => 'SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry \'1-2-5\' '
-                    . 'for key \'SOME_UNIQUE_INDEX\', query was: '
-                    . 'ALTER TABLE `%s` DROP INDEX `SOME_UNIQUE_INDEX`, ADD UNIQUE `SOME_UNIQUE_INDEX` (%s)',
-                'ids' => [1, 2, 5],
-            ],
-            'New primary index' => [
-                'indexName' => 'PRIMARY',
-                'indexType' => AdapterInterface::INDEX_TYPE_PRIMARY,
-                'keyLists' => [
-                    'SOME_UNIQUE_INDEX' => [
-                        'INDEX_TYPE' => [
-                            AdapterInterface::INDEX_TYPE_UNIQUE
-                        ]
-                    ],
-                ],
-                'query' => 'ALTER TABLE `%s` ADD PRIMARY KEY (%s)',
-                'exceptionMessage' => 'SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry \'1-3-4\' '
-                    . 'for key \'PRIMARY\', query was: '
-                    . 'ALTER TABLE `%s` ADD PRIMARY KEY (%s)',
-                'ids' => [1, 3, 4],
             ],
         ];
     }

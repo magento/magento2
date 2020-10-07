@@ -66,6 +66,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
 
     /**
      * MEMORY engine type for MySQL tables
+     * @deprecated Use InnoDB/ExtraDB engine instead
      */
     public const ENGINE_MEMORY = 'MEMORY';
 
@@ -86,7 +87,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      *
      * @var int
      */
-    protected $_transactionLevel    = 0;
+    protected $_transactionLevel = 0;
 
     /**
      * Whether transaction was rolled back or not
@@ -100,28 +101,28 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      *
      * @var bool
      */
-    protected $_connectionFlagsSet  = false;
+    protected $_connectionFlagsSet = false;
 
     /**
      * Tables DDL cache
      *
      * @var array
      */
-    protected $_ddlCache            = [];
+    protected $_ddlCache = [];
 
     /**
      * SQL bind params. Used temporarily by regexp callback.
      *
      * @var array
      */
-    protected $_bindParams          = [];
+    protected $_bindParams = [];
 
     /**
      * Autoincrement for bind value. Used by regexp callback.
      *
      * @var int
      */
-    protected $_bindIncrement       = 0;
+    protected $_bindIncrement = 0;
 
     /**
      * Cache frontend adapter instance
@@ -467,6 +468,9 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     /**
      * Run RAW Query
      *
+     * @deprecated
+     *  Use \Magento\Framework\DB\Adapter\AdapterInterface::query instead
+     *
      * @param string $sql
      * @return \Zend_Db_Statement_Interface
      * @throws \PDOException
@@ -489,6 +493,9 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
 
     /**
      * Run RAW query and Fetch First row
+     *
+     * @deprecated
+     *  Use \Magento\Framework\DB\Adapter\AdapterInterface::fetchRow instead
      *
      * @param string $sql
      * @param string|int $field
@@ -581,11 +588,12 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
                 // Check to reconnect
                 if ($pdoException && $triesCount < self::MAX_CONNECTION_RETRIES
                     && in_array($pdoException->errorInfo[1], $connectionErrors)
+                    && $this->getTransactionLevel() == 0 // Connect retry doesn't make sense in transaction
                 ) {
                     $retry = true;
                     $triesCount++;
                     $this->closeConnection();
-
+                    usleep($triesCount * 100000);
                     $this->_connect();
                 }
 
@@ -736,6 +744,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * Normalizes mixed positional-named bind to positional bind, and replaces named placeholders in query to
      * '?' placeholders.
      *
+     * @deprecated It's not used now
      * @param string $sql
      * @param array $bind
      * @return $this
@@ -1462,42 +1471,6 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     }
 
     /**
-     * Remove duplicate entry for create key
-     *
-     * @param string $table
-     * @param array $fields
-     * @param string[] $ids
-     * @return $this
-     */
-    protected function _removeDuplicateEntry($table, $fields, $ids)
-    {
-        $where = [];
-        $i = 0;
-        foreach ($fields as $field) {
-            $where[] = $this->quoteInto($field . '=?', $ids[$i++]);
-        }
-
-        if (!$where) {
-            return $this;
-        }
-        $whereCond = implode(' AND ', $where);
-        $sql = sprintf('SELECT COUNT(*) as `cnt` FROM `%s` WHERE %s', $table, $whereCond);
-
-        $cnt = $this->rawFetchRow($sql, 'cnt');
-        if ($cnt > 1) {
-            $sql = sprintf(
-                'DELETE FROM `%s` WHERE %s LIMIT %d',
-                $table,
-                $whereCond,
-                $cnt - 1
-            );
-            $this->rawQuery($sql);
-        }
-
-        return $this;
-    }
-
-    /**
      * Creates and returns a new \Magento\Framework\DB\Select object for this adapter.
      *
      * @return Select
@@ -1871,47 +1844,51 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * Retrieve column data type by data from describe table
      *
      * @param array $column
-     * @return string|null
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @return string
+     * @throws \Zend_Db_Adapter_Exception
      */
     protected function _getColumnTypeByDdl($column)
     {
         // phpstan:ignore
-        switch ($column['DATA_TYPE']) {
-            case 'bool':
-                return Table::TYPE_BOOLEAN;
-            case 'tinytext':
-            case 'char':
-            case 'varchar':
-            case 'text':
-            case 'mediumtext':
-            case 'longtext':
-                return Table::TYPE_TEXT;
-            case 'blob':
-            case 'mediumblob':
-            case 'longblob':
-                return Table::TYPE_BLOB;
-            case 'tinyint':
-            case 'smallint':
-                return Table::TYPE_SMALLINT;
-            case 'mediumint':
-            case 'int':
-                return Table::TYPE_INTEGER;
-            case 'bigint':
-                return Table::TYPE_BIGINT;
-            case 'datetime':
-                return Table::TYPE_DATETIME;
-            case 'timestamp':
-                return Table::TYPE_TIMESTAMP;
-            case 'date':
-                return Table::TYPE_DATE;
-            case 'float':
-                return Table::TYPE_FLOAT;
-            case 'decimal':
-            case 'numeric':
-                return Table::TYPE_DECIMAL;
+        static $mapping = [
+            'bool' => Table::TYPE_BOOLEAN,
+
+            'tinytext' => Table::TYPE_TEXT,
+            'char' => Table::TYPE_TEXT,
+            'varchar' => Table::TYPE_TEXT,
+            'text' => Table::TYPE_TEXT,
+            'mediumtext' => Table::TYPE_TEXT,
+            'longtext' => Table::TYPE_TEXT,
+
+            'blob' => Table::TYPE_BLOB,
+            'mediumblob' => Table::TYPE_BLOB,
+            'longblob' => Table::TYPE_BLOB,
+
+            'tinyint' => Table::TYPE_SMALLINT,
+            'smallint' => Table::TYPE_SMALLINT,
+
+            'mediumint' => Table::TYPE_INTEGER,
+            'int' => Table::TYPE_INTEGER,
+
+            'bigint' => Table::TYPE_BIGINT,
+
+            'datetime' => Table::TYPE_DATETIME,
+
+            'timestamp' => Table::TYPE_TIMESTAMP,
+
+            'date' => Table::TYPE_DATE,
+
+            'float' => Table::TYPE_FLOAT,
+
+            'decimal' => Table::TYPE_DECIMAL,
+            'numeric' => Table::TYPE_DECIMAL,
+        ];
+
+        if (!isset($mapping[$column['DATA_TYPE']])) {
+            throw new \Zend_Db_Adapter_Exception('Unknown data type: ' . $column['DATA_TYPE']);
         }
-        return null;
+
+        return $mapping[$column['DATA_TYPE']];
     }
 
     /**
@@ -2798,24 +2775,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
 
         $query .= sprintf(' ADD %s (%s)', $condition, $fieldSql);
 
-        $cycle = true;
-        while ($cycle === true) {
-            try {
-                $result = $this->rawQuery($query);
-                $cycle  = false;
-            } catch (\Exception $e) {
-                if (in_array(strtolower($indexType), ['primary', 'unique'])) {
-                    $match = [];
-                    // phpstan:ignore
-                    if (preg_match('#SQLSTATE\[23000\]: [^:]+: 1062[^\']+\'([\d.-]+)\'#', $e->getMessage(), $match)) {
-                        $ids = explode('-', $match[1]);
-                        $this->_removeDuplicateEntry($tableName, $fields, $ids);
-                        continue;
-                    }
-                }
-                throw $e;
-            }
-        }
+        $result = $this->rawQuery($query);
 
         $this->resetDdlCache($tableName, $schemaName);
 
@@ -4119,5 +4079,34 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
             unset($this->_config['port']);
         }
         parent::closeConnection();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function quote($value, $type = null)
+    {
+        $connectionErrors = [
+            2006, // SQLSTATE[HY000]: General error: 2006 MySQL server has gone away
+            2013,  // SQLSTATE[HY000]: General error: 2013 Lost connection to MySQL server during query
+        ];
+        $triesCount = 0;
+        while (true) {
+            try {
+                return parent::quote($value, $type);
+            } catch (\PDOException $e) {
+                // Check to reconnect
+                if (in_array($e->errorInfo[1], $connectionErrors)
+                    && $this->getTransactionLevel() == 0
+                    && $triesCount < self::MAX_CONNECTION_RETRIES
+                ) {
+                    $triesCount++;
+                    $this->closeConnection();
+                    usleep($triesCount * 100000);
+                } else {
+                    throw $e;
+                }
+            }
+        }
     }
 }
