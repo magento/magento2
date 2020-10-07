@@ -11,6 +11,7 @@ use Magento\Sales\Model\Order\Email\Container\Template;
 use Magento\Sales\Model\Order\Address\Renderer;
 use Magento\Store\Model\App\Emulation;
 use Magento\Framework\App\Area;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Class Sender
@@ -74,7 +75,7 @@ abstract class Sender
         $this->senderBuilderFactory = $senderBuilderFactory;
         $this->logger = $logger;
         $this->addressRenderer = $addressRenderer;
-        $this->_appEmulation = $appEmulation ?: \Magento\Framework\App\ObjectManager::getInstance()->get(Emulation::class);
+        $this->appEmulation = $appEmulation ?: ObjectManager::getInstance()->get(Emulation::class);
     }
 
     /**
@@ -170,13 +171,12 @@ abstract class Sender
     protected function getFormattedShippingAddress($order)
     {
         try {
-            $this->_appEmulation->startEnvironmentEmulation($order->getStoreId(),\Magento\Framework\App\Area::AREA_FRONTEND,1);
-            $shippingAddress = $order->getIsVirtual()
-                ? null
-                : $this->addressRenderer->format($order->getShippingAddress(), 'html');
+            $this->appEmulation->startEnvironmentEmulation($order->getStoreId(), Area::AREA_FRONTEND, true);
+            $shippingAddress = $order->getIsVirtual() ? null : $this->addressRenderer->format($order->getShippingAddress(),
+                'html');
         } finally {
-            $this->_appEmulation->stopEnvironmentEmulation();
-        }  
+            $this->appEmulation->stopEnvironmentEmulation();
+        }
         return $shippingAddress;
     }
 
@@ -189,11 +189,10 @@ abstract class Sender
     protected function getFormattedBillingAddress($order)
     {
         try {
-            $this->_appEmulation->startEnvironmentEmulation($order->getStoreId(),Area::AREA_FRONTEND,true);
-            
-            $billingAddress =  $this->addressRenderer->format($order->getBillingAddress(), 'html'); 
+            $this->appEmulation->startEnvironmentEmulation($order->getStoreId(), Area::AREA_FRONTEND, true);
+            $billingAddress = $this->addressRenderer->format($order->getBillingAddress(), 'html');
         } finally {
-            $this->_appEmulation->stopEnvironmentEmulation();
+            $this->appEmulation->stopEnvironmentEmulation();
         }
         return $billingAddress;
     }
