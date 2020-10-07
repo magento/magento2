@@ -43,7 +43,7 @@ class SendFriend extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 AND  time>=:time
                 AND  website_id=:website_id'
         );
-        $bind = ['ip' => ip2long($ip), 'time' => $startTime, 'website_id' => (int)$websiteId];
+        $bind = ['ip' => $ip, 'time' => $startTime, 'website_id' => (int)$websiteId];
 
         $row = $connection->fetchRow($select, $bind);
         return $row['count'];

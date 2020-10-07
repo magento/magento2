@@ -28,6 +28,9 @@ class SendFriendTest extends TestCase
     /** @var SendFriend */
     private $sendFriend;
 
+    /** @var ResourceModel\SendFriend */
+    private $sendFriendResource;
+
     /** @var CookieManagerInterface */
     private $cookieManager;
 
@@ -43,6 +46,7 @@ class SendFriendTest extends TestCase
 
         $this->objectManager = Bootstrap::getObjectManager();
         $this->sendFriend = $this->objectManager->get(SendFriendFactory::class)->create();
+        $this->sendFriendResource = $this->objectManager->get(ResourceModel\SendFriend::class);
         $this->cookieManager = $this->objectManager->get(CookieManagerInterface::class);
         $this->request = $this->objectManager->get(RequestInterface::class);
     }
@@ -191,10 +195,21 @@ class SendFriendTest extends TestCase
      */
     public function testisExceedLimitByIp(): void
     {
+        $remoteAddr = '127.0.0.1';
         $parameters = $this->objectManager->create(Parameters::class);
-        $parameters->set('REMOTE_ADDR', '127.0.0.1');
+        $parameters->set('REMOTE_ADDR', $remoteAddr);
         $this->request->setServer($parameters);
         $this->assertTrue($this->sendFriend->isExceedLimit());
+        // Verify that ip is saved correctly as integer value
+        $this->assertEquals(
+            1,
+            (int)$this->sendFriendResource->getSendCount(
+                null,
+                ip2long($remoteAddr),
+                time() - (60 * 60 * 24 * 365),
+                1
+            )
+        );
     }
 
     /**
