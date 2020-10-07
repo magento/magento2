@@ -13,6 +13,7 @@
             <title value="SalesRule Discount Is Applied On PackageValue For TableRate"/>
             <description value="SalesRule Discount Is Applied On PackageValue For TableRate"/>
             <severity value="AVERAGE"/>
+            <testCaseId value="MC-38271"/>
             <group value="shipping"/>
         </annotations>
         <before>
