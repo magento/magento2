@@ -591,6 +591,7 @@ class Encryptor implements EncryptorInterface
         string $salt
     ): string {
         //phpcs:disable PHPCompatibility.Constants.NewConstants
+        //phpcs:disable PHPCompatibility.FunctionUse.NewFunctions
         if (strlen($salt) < SODIUM_CRYPTO_PWHASH_SALTBYTES) {
             $salt = str_pad($salt, SODIUM_CRYPTO_PWHASH_SALTBYTES, $salt);
         } elseif (strlen($salt) > SODIUM_CRYPTO_PWHASH_SALTBYTES) {
@@ -607,6 +608,7 @@ class Encryptor implements EncryptorInterface
                 SODIUM_CRYPTO_PWHASH_ALG_ARGON2ID13
             )
         );
+        //phpcs:enable PHPCompatibility.FunctionUse.NewFunctions
         //phpcs:enable PHPCompatibility.Constants.NewConstants
     }
 }
