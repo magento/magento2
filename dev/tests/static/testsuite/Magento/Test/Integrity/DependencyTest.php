@@ -369,7 +369,7 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
         );
 
         foreach ($configs as $file) {
-            $dbSchemaWhitelist = (array)json_decode(file_get_contents($file->getFullPath()));
+            $dbSchemaWhitelist = json_decode(file_get_contents($file->getFullPath()), true);
             $tables = array_keys($dbSchemaWhitelist);
             foreach ($tables as $table) {
                 $tableToAnyModuleMap[$table] = str_replace(
