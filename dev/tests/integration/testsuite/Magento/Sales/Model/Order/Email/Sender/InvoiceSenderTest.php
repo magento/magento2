@@ -8,13 +8,11 @@ declare(strict_types=1);
 namespace Magento\Sales\Model\Order\Email\Sender;
 
 use Magento\Customer\Api\CustomerRepositoryInterface;
-use Magento\Customer\Model\ResourceModel\CustomerRepository;
-use Magento\Framework\App\Area;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Sales\Api\Data\InvoiceInterface;
 use Magento\Sales\Api\Data\InvoiceInterfaceFactory;
+use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderInterfaceFactory;
-use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Email\Container\InvoiceIdentity;
 use Magento\Sales\Model\Order\Invoice;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -36,7 +34,7 @@ class InvoiceSenderTest extends TestCase
     /** @var ObjectManagerInterface */
     private $objectManager;
 
-    /** @var CustomerRepository */
+    /** @var CustomerRepositoryInterface */
     private $customerRepository;
 
     /** @var InvoiceSender */
@@ -71,11 +69,11 @@ class InvoiceSenderTest extends TestCase
 
     /**
      * @magentoDataFixture Magento/Sales/_files/order.php
+     * @magentoAppArea frontend
      * @return void
      */
     public function testSend(): void
     {
-        Bootstrap::getInstance()->loadArea(Area::AREA_FRONTEND);
         $order = $this->getOrder('100000001');
         $order->setCustomerEmail('customer@example.com');
         $invoice = $this->createInvoice($order);
@@ -183,10 +181,10 @@ class InvoiceSenderTest extends TestCase
     /**
      * Create invoice and set order
      *
-     * @param Order $order
-     * @return Invoice
+     * @param OrderInterface $order
+     * @return InvoiceInterface
      */
-    private function createInvoice(Order $order): Invoice
+    private function createInvoice(OrderInterface $order): InvoiceInterface
     {
         /** @var Invoice $invoice */
         $invoice = $this->invoiceFactory->create();
@@ -199,9 +197,9 @@ class InvoiceSenderTest extends TestCase
      * Get order by increment_id
      *
      * @param string $incrementId
-     * @return Order
+     * @return OrderInterface
      */
-    private function getOrder(string $incrementId): Order
+    private function getOrder(string $incrementId): OrderInterface
     {
         return $this->orderFactory->create()->loadByIncrementId($incrementId);
     }

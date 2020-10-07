@@ -12,7 +12,6 @@ use Magento\Sales\Api\Data\InvoiceInterface;
 use Magento\Sales\Api\Data\InvoiceSearchResultInterface;
 use Magento\Sales\Model\Order\Email\Container\InvoiceIdentity;
 use Magento\Sales\Model\Order\Email\Sender\InvoiceSender;
-use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\Spi\InvoiceResourceInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Mail\Template\TransportBuilderMock;
@@ -87,7 +86,7 @@ class InvoiceEmailSenderHandlerTest extends TestCase
 
     /**
      * @magentoDbIsolation disabled
-     * @magentoDataFixture Magento/Sales/_files/invoice_in_email_send_queue.php
+     * @magentoDataFixture Magento/Sales/_files/invoice_with_send_email_flag.php
      * @magentoConfigFixture default/sales_email/general/async_sending 1
      * @return void
      */
@@ -95,7 +94,7 @@ class InvoiceEmailSenderHandlerTest extends TestCase
     {
         $invoiceCollection = clone $this->entityCollection;
         $this->emailSenderHandler->sendEmails();
-        /** @var Invoice $invoice */
+        /** @var InvoiceInterface $invoice */
         $invoice = $invoiceCollection->getFirstItem();
         $this->assertNotNull($invoice->getId());
         $message = $this->transportBuilderMock->getSentMessage();
@@ -103,7 +102,11 @@ class InvoiceEmailSenderHandlerTest extends TestCase
         $subject = __('Invoice for your %1 order', $invoice->getStore()->getFrontendName())->render();
         $this->assertEquals($message->getSubject(), $subject);
         $this->assertStringContainsString(
-            "Your Invoice #{$invoice->getIncrementId()} for Order #{$invoice->getOrder()->getIncrementId()}",
+            sprintf(
+                "Your Invoice #%s for Order #%s",
+                $invoice->getIncrementId(),
+                $invoice->getOrder()->getIncrementId()
+            ),
             $message->getBody()->getParts()[0]->getRawContent()
         );
     }

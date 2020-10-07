@@ -13,7 +13,6 @@ use Magento\Sales\Model\Service\InvoiceService;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-Resolver::getInstance()->requireDataFixture('Magento/Sales/_files/default_rollback.php');
 Resolver::getInstance()->requireDataFixture('Magento/Sales/_files/order.php');
 
 $objectManager = Bootstrap::getObjectManager();
@@ -29,6 +28,5 @@ $order = $orderFactory->create()->loadByIncrementId('100000001');
 $invoice = $invoiceService->prepareInvoice($order);
 $invoice->register();
 $invoice->setSendEmail(true);
-//$order = $invoice->getOrder();
 $order->setIsInProcess(true);
 $transactionSave->addObject($invoice)->addObject($order)->save();
