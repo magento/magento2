@@ -1222,6 +1222,8 @@ class Product extends AbstractEntity
     protected function _initTypeModels()
     {
         $productTypes = $this->_importConfig->getEntityTypes($this->getEntityTypeCode());
+        $fieldsMap = [];
+        $specialAttributes = [];
         foreach ($productTypes as $productTypeName => $productTypeConfig) {
             $params = [$this, $productTypeName];
             if (!($model = $this->_productTypeFactory->create($productTypeConfig['model'], ['params' => $params]))
@@ -1241,14 +1243,13 @@ class Product extends AbstractEntity
             if ($model->isSuitable()) {
                 $this->_productTypeModels[$productTypeName] = $model;
             }
-            // phpcs:disable Magento2.Performance.ForeachArrayMerge.ForeachArrayMerge
-            $this->_fieldsMap = array_merge($this->_fieldsMap, $model->getCustomFieldsMapping());
-            $this->_specialAttributes = array_merge($this->_specialAttributes, $model->getParticularAttributes());
-            // phpcs:enable
+            $fieldsMap[] = $model->getCustomFieldsMapping();
+            $specialAttributes[] = $model->getParticularAttributes();
         }
+        $this->_fieldsMap = array_merge([], $this->_fieldsMap, ...$fieldsMap);
         $this->_initErrorTemplates();
         // remove doubles
-        $this->_specialAttributes = array_unique($this->_specialAttributes);
+        $this->_specialAttributes = array_unique(array_merge([], $this->_specialAttributes, ...$specialAttributes));
 
         return $this;
     }
