@@ -13,8 +13,6 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Catalog\Model\Indexer\Product\Flat\Action\Full as FlatIndexerFull;
 use Magento\Catalog\Helper\Product\Flat\Indexer;
-use Magento\Catalog\Model\Indexer\Product\Flat\TableBuilder;
-use Magento\Catalog\Model\Indexer\Product\Flat\FlatTableBuilder;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\TestFramework\Helper\Bootstrap;
 
@@ -59,10 +57,6 @@ class RelationTest extends \Magento\TestFramework\Indexer\TestCase
     {
         $objectManager = Bootstrap::getObjectManager();
 
-        $tableBuilderMock = $objectManager->get(TableBuilder::class);
-        $flatTableBuilderMock =
-            $objectManager->get(FlatTableBuilder::class);
-
         $this->productIndexerHelper = $objectManager->create(
             Indexer::class,
             ['addChildData' => true]
@@ -71,8 +65,6 @@ class RelationTest extends \Magento\TestFramework\Indexer\TestCase
             FlatIndexerFull::class,
             [
                 'productHelper' => $this->productIndexerHelper,
-                'tableBuilder' => $tableBuilderMock,
-                'flatTableBuilder' => $flatTableBuilderMock
             ]
         );
         $this->storeManager = $objectManager->get(StoreManagerInterface::class);
@@ -120,9 +112,9 @@ class RelationTest extends \Magento\TestFramework\Indexer\TestCase
     {
         foreach ($this->storeManager->getStores() as $store) {
             $flatTable = $this->productIndexerHelper->getFlatTableName($store->getId());
-            if ($this->connection->isTableExists($flatTable) &&
-                !$this->connection->tableColumnExists($flatTable, 'child_id') &&
-                !$this->connection->tableColumnExists($flatTable, 'is_child')
+            if ($this->connection->isTableExists($flatTable)
+                && !$this->connection->tableColumnExists($flatTable, 'child_id')
+                && !$this->connection->tableColumnExists($flatTable, 'is_child')
             ) {
                 $this->connection->addColumn(
                     $flatTable,
