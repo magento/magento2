@@ -6,7 +6,7 @@
 namespace Magento\MediaStorage\Model\ResourceModel\File\Storage\Directory;
 
 /**
- * Class Database
+ * Class responsible for database directory media storage CRUD operations.
  */
 class Database extends \Magento\MediaStorage\Model\ResourceModel\File\Storage\AbstractStorage
 {
@@ -44,13 +44,13 @@ class Database extends \Magento\MediaStorage\Model\ResourceModel\File\Storage\Ab
         )->addColumn(
             'name',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            100,
-            ['nullable' => false],
+            255,
+            ['default' => null],
             'Directory Name'
         )->addColumn(
             'path',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            255,
+            512,
             ['default' => null],
             'Path to the \Directory'
         )->addColumn(
@@ -101,7 +101,9 @@ class Database extends \Magento\MediaStorage\Model\ResourceModel\File\Storage\Ab
     {
         $connection = $this->getConnection();
 
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         $name = basename($path);
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         $path = dirname($path);
         if ($path == '.') {
             $path = '';
@@ -135,7 +137,9 @@ class Database extends \Magento\MediaStorage\Model\ResourceModel\File\Storage\Ab
     {
         $connection = $this->getConnection();
 
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         $name = basename($path);
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         $path = dirname($path);
         if ($path == '.') {
             $path = '';
