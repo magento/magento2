@@ -44,6 +44,9 @@ class IndexScopeResolver implements IndexScopeResolverInterface
     {
         $tableNameParts = [];
         foreach ($dimensions as $dimension) {
+            if (!$dimension->getValue()) {
+                continue;
+            }
             switch ($dimension->getName()) {
                 case 'scope':
                     $tableNameParts[$dimension->getName()] = $dimension->getName() . $this->getScopeId($dimension);
