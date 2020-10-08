@@ -46,11 +46,6 @@ class Images extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_directory;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\Read
-     */
-    protected $_readDirectory;
-
-    /**
      * Adminhtml data
      *
      * @var \Magento\Backend\Helper\Data
@@ -70,6 +65,11 @@ class Images extends \Magento\Framework\App\Helper\AbstractHelper
      * @var \Magento\Framework\Escaper
      */
     protected $escaper;
+
+    /**
+     * @var \Magento\Framework\Filesystem\Directory\Read
+     */
+    private $_readDirectory;
 
     /**
      * Construct
