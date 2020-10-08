@@ -418,48 +418,6 @@ class IndexTest extends TestCase
     }
 
     /**
-     * Test getCategoryProductIndexData method for all stores
-     */
-    public function testGetCategoryProductIndexDataForAllStores()
-    {
-        $connection = $this->connection;
-        $select = $this->select;
-
-        $connection->expects($this->any())
-            ->method('select')
-            ->willReturn($select);
-
-        $select->expects($this->any())
-            ->method('from')
-            ->with(
-                ['catalog_category_product_index'],
-                ['category_id', 'product_id', 'position', 'store_id']
-            )->willReturnSelf();
-
-        $select->expects($this->any())
-            ->method('where')
-            ->willReturnSelf();
-
-        $connection->expects($this->once())
-            ->method('fetchAll')
-            ->with($select)
-            ->willReturn([[
-                'product_id' => 1,
-                'category_id' => 1,
-                'position' => 1,
-            ]]);
-
-        $this->assertEquals(
-            [
-                1 => [
-                    1 => 1,
-                ],
-            ],
-            $this->model->getCategoryProductIndexData(0, [1])
-        );
-    }
-
-    /**
      * Test getMovedCategoryProductIds method
      */
     public function testGetMovedCategoryProductIds()
