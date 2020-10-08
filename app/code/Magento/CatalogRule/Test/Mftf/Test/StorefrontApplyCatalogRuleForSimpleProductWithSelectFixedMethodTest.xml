@@ -37,9 +37,7 @@
 
             <!-- Clear all catalog price rules and reindex before test -->
             <actionGroup ref="AdminCatalogPriceRuleDeleteAllActionGroup" stepKey="deleteAllCatalogRulesBeforeTest"/>
-            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-                <argument name="indices" value=""/>
-            </actionGroup>
+            <magentoCron groups="index" stepKey="fixInvalidatedIndicesBeforeTest"/>
         </before>
         <after>
             <!-- Delete products and category -->
@@ -48,6 +46,7 @@
 
             <!-- Delete the catalog price rule -->
             <actionGroup ref="AdminCatalogPriceRuleDeleteAllActionGroup" stepKey="deleteAllCatalogRulesAfterTest"/>
+            <magentoCron groups="index" stepKey="fixInvalidatedIndicesAfter"/>
             <!-- Logout -->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>

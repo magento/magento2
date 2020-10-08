@@ -44,6 +44,7 @@
 
             <!-- Clear all catalog price rules before test -->
             <actionGroup ref="AdminCatalogPriceRuleDeleteAllActionGroup" stepKey="deleteAllCatalogRulesBeforeTest"/>
+            <magentoCron groups="index" stepKey="fixInvalidatedIndicesBeforeTest"/>
         </before>
         <after>
             <!-- Delete products and category -->
@@ -54,7 +55,7 @@
 
             <!-- Delete the catalog price rule -->
             <actionGroup ref="AdminCatalogPriceRuleDeleteAllActionGroup" stepKey="deleteAllCatalogRulesAfterTest"/>
-            <magentoCron groups="index" stepKey="fixInvalidatedIndices"/>
+            <magentoCron groups="index" stepKey="fixInvalidatedIndicesAfterTest"/>
 
             <!-- Logout -->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
