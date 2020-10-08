@@ -34,6 +34,9 @@ class ValueTest extends TestCase
      */
     private $calculateCustomOptionCatalogRule;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $mockedResource = $this->getMockedResource();
@@ -49,7 +52,7 @@ class ValueTest extends TestCase
             [
                 'resource' => $mockedResource,
                 'valueCollectionFactory' => $mockedCollectionFactory,
-                'CalculateCustomOptionCatalogRule' => $this->calculateCustomOptionCatalogRule
+                'calculateCustomOptionCatalogRule' => $this->calculateCustomOptionCatalogRule
             ]
         );
         $this->model->setOption($this->getMockedOption());

@@ -14,7 +14,7 @@
             <title value="Admin should be able to apply the catalog price rule for simple product with custom options"/>
             <description value="Admin should be able to apply the catalog price rule for simple product with custom options"/>
             <severity value="CRITICAL"/>
-            <testCaseId value="MC-14771"/>
+            <testCaseId value="MC-28347"/>
             <group value="catalogRule"/>
             <group value="mtf_migrated"/>
             <group value="catalog"/>
@@ -24,13 +24,13 @@
             <createData entity="_defaultCategory" stepKey="createCategory"/>
 
             <!-- Create Simple Product -->
-            <createData entity="_defaultProduct" stepKey="createProduct1">
+            <createData entity="_defaultProduct" stepKey="createProduct">
                 <requiredEntity createDataKey="createCategory"/>
                 <field key="price">56.78</field>
             </createData>
 
             <!-- Update all products to have custom options -->
-            <updateData createDataKey="createProduct1" entity="productWithFixedOptions" stepKey="updateFirstProductWithOptions"/>
+            <updateData createDataKey="createProduct" entity="productWithFixedOptions" stepKey="updateProductWithOptions"/>
 
             <!-- Login as Admin -->
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
@@ -43,7 +43,7 @@
         </before>
         <after>
             <!-- Delete products and category -->
-            <deleteData createDataKey="createProduct1" stepKey="deleteProduct1"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
 
             <!-- Delete the catalog price rule -->
@@ -52,11 +52,11 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
         <!-- 1. Begin creating a new catalog price rule -->
-        <actionGroup ref="AdminOpenNewCatalogPriceRuleFormPageActionGroup" stepKey="startCreatingFirstPriceRule"/>
-        <actionGroup ref="AdminCatalogPriceRuleFillMainInfoActionGroup" stepKey="fillMainInfoForFirstPriceRule">
+        <actionGroup ref="AdminOpenNewCatalogPriceRuleFormPageActionGroup" stepKey="openNewCatalogPriceRulePage"/>
+        <actionGroup ref="AdminCatalogPriceRuleFillMainInfoActionGroup" stepKey="fillMainInfoForCatalogPriceRule">
             <argument name="groups" value="'NOT LOGGED IN'"/>
         </actionGroup>
-        <actionGroup ref="AdminFillCatalogRuleConditionActionGroup" stepKey="createCatalogPriceRule">
+        <actionGroup ref="AdminFillCatalogRuleConditionActionGroup" stepKey="fillConditionsForCatalogPriceRule">
             <argument name="conditionValue" value="$createCategory.id$"/>
         </actionGroup>
         <actionGroup ref="AdminCatalogPriceRuleFillActionsActionGroup" stepKey="fillActionsForCatalogPriceRule">
@@ -70,31 +70,31 @@
             <argument name="category" value="$createCategory$"/>
         </actionGroup>
 
-        <!-- Check product 1 name on store front category page -->
-        <actionGroup ref="AssertProductDetailsOnStorefrontActionGroup" stepKey="storefrontProduct1Name">
-            <argument name="productInfo" value="$createProduct1.name$"/>
+        <!-- Check product name on store front category page -->
+        <actionGroup ref="AssertProductDetailsOnStorefrontActionGroup" stepKey="assertStorefrontProductName">
+            <argument name="productInfo" value="$createProduct.name$"/>
             <argument name="productNumber" value="1"/>
         </actionGroup>
 
-        <!-- Check product 1 price on store front category page -->
-        <actionGroup ref="AssertProductDetailsOnStorefrontActionGroup" stepKey="storefrontProduct1Price">
+        <!-- Check product price on store front category page -->
+        <actionGroup ref="AssertProductDetailsOnStorefrontActionGroup" stepKey="assertStorefrontProductPrice">
             <argument name="productInfo" value="$44.48"/>
             <argument name="productNumber" value="1"/>
         </actionGroup>
 
-        <!-- Check product 1 regular price on store front category page -->
-        <actionGroup ref="AssertProductDetailsOnStorefrontActionGroup" stepKey="storefrontProduct1RegularPrice">
+        <!-- Check product regular price on store front category page -->
+        <actionGroup ref="AssertProductDetailsOnStorefrontActionGroup" stepKey="assertStorefrontProductRegularPrice">
             <argument name="productInfo" value="$56.78"/>
             <argument name="productNumber" value="1"/>
         </actionGroup>
 
         <!-- Navigate to product on store front -->
-        <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="goToProductPage1">
-            <argument name="productUrlKey" value="$createProduct1.custom_attributes[url_key]$"/>
+        <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="goToProductPage">
+            <argument name="productUrlKey" value="$createProduct.custom_attributes[url_key]$"/>
         </actionGroup>
 
         <!-- Assert regular and special price after selecting ProductOptionValueDropdown1 -->
-        <actionGroup ref="StorefrontSelectCustomOptionRadioAndAssertPricesActionGroup" stepKey="storefrontSelectCustomOptionAndAssertPrices1">
+        <actionGroup ref="StorefrontSelectCustomOptionRadioAndAssertPricesActionGroup" stepKey="storefrontSelectCustomOptionAndAssertPrices">
             <argument name="customOption" value="ProductOptionRadioButton2"/>
             <argument name="customOptionValue" value="ProductOptionValueRadioButtons1"/>
             <argument name="productPrice" value="$156.77"/>
@@ -102,8 +102,8 @@
         </actionGroup>
 
         <!-- Add product 1 to cart -->
-        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage1">
-            <argument name="productName" value="$createProduct1.name$"/>
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage">
+            <argument name="productName" value="$createProduct.name$"/>
         </actionGroup>
 
         <!-- Assert sub total on mini shopping cart -->

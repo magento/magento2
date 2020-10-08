@@ -84,7 +84,7 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @param CustomOptionPriceCalculator|null $customOptionPriceCalculator
-     * @param CalculateCustomOptionCatalogRule|null $CalculateCustomOptionCatalogRule
+     * @param CalculateCustomOptionCatalogRule|null $calculateCustomOptionCatalogRule
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -94,12 +94,12 @@ class Value extends AbstractModel implements \Magento\Catalog\Api\Data\ProductCu
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
         CustomOptionPriceCalculator $customOptionPriceCalculator = null,
-        CalculateCustomOptionCatalogRule $CalculateCustomOptionCatalogRule = null
+        CalculateCustomOptionCatalogRule $calculateCustomOptionCatalogRule = null
     ) {
         $this->_valueCollectionFactory = $valueCollectionFactory;
         $this->customOptionPriceCalculator = $customOptionPriceCalculator
             ?? ObjectManager::getInstance()->get(CustomOptionPriceCalculator::class);
-        $this->calculateCustomOptionCatalogRule = $CalculateCustomOptionCatalogRule
+        $this->calculateCustomOptionCatalogRule = $calculateCustomOptionCatalogRule
             ?? ObjectManager::getInstance()->get(CalculateCustomOptionCatalogRule::class);
 
         parent::__construct(
