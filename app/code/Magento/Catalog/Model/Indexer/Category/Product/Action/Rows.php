@@ -13,10 +13,11 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\DB\Query\Generator as QueryGenerator;
 use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Catalog\Model\Config;
 use Magento\Catalog\Model\Category;
-use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Catalog\Model\Indexer\Product\Category as ProductCategoryIndexer;
+use Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer;
 use Magento\Indexer\Model\WorkingStateProvider;
 
 /**
@@ -59,6 +60,7 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
      * @param Config $config
      * @param QueryGenerator|null $queryGenerator
      * @param MetadataPool|null $metadataPool
+     * @param TableMaintainer|null $tableMaintainer
      * @param CacheContext|null $cacheContext
      * @param EventManagerInterface|null $eventManager
      * @param IndexerRegistry|null $indexerRegistry
@@ -70,12 +72,13 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
         Config $config,
         QueryGenerator $queryGenerator = null,
         MetadataPool $metadataPool = null,
+        ?TableMaintainer $tableMaintainer = null,
         CacheContext $cacheContext = null,
         EventManagerInterface $eventManager = null,
         IndexerRegistry $indexerRegistry = null,
-        WorkingStateProvider $workingStateProvider = null
+        ?WorkingStateProvider $workingStateProvider = null
     ) {
-        parent::__construct($resource, $storeManager, $config, $queryGenerator, $metadataPool);
+        parent::__construct($resource, $storeManager, $config, $queryGenerator, $metadataPool, $tableMaintainer);
         $this->cacheContext = $cacheContext ?: ObjectManager::getInstance()->get(CacheContext::class);
         $this->eventManager = $eventManager ?: ObjectManager::getInstance()->get(EventManagerInterface::class);
         $this->indexerRegistry = $indexerRegistry ?: ObjectManager::getInstance()->get(IndexerRegistry::class);
