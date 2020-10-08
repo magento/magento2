@@ -11,7 +11,7 @@ use Magento\Customer\Model\CustomerFactory;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Integration\Model\Oauth\TokenFactory;
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Store\Api\Data\StoreInterface;
 use Exception;
 
 /**
@@ -32,22 +32,14 @@ class CreateCustomerToken
     private $tokenModelFactory;
 
     /**
-     * @var StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
      * CreateCustomerToken constructor.
-     * @param StoreManagerInterface $storeManager
      * @param TokenFactory $tokenModelFactory
      * @param CustomerFactory $customerFactory
      */
     public function __construct(
-        StoreManagerInterface $storeManager,
         TokenFactory $tokenModelFactory,
         CustomerFactory $customerFactory
     ) {
-        $this->storeManager = $storeManager;
         $this->tokenModelFactory = $tokenModelFactory;
         $this->customerFactory= $customerFactory;
     }
@@ -56,14 +48,14 @@ class CreateCustomerToken
      * Get admin user token
      *
      * @param string $email
+     * @param StoreInterface $store
      * @return array
+     * @throws GraphQlInputException
      * @throws LocalizedException
      */
-    public function execute(string $email): array
+    public function execute(string $email, StoreInterface $store): array
     {
-        $websiteID = $this->storeManager->getStore()->getWebsiteId();
-
-        $customer = $this->customerFactory->create()->setWebsiteId($websiteID)->loadByEmail($email);
+        $customer = $this->customerFactory->create()->setWebsiteId((int)$store->getId())->loadByEmail($email);
 
         /* Check if customer email exist */
         if (!$customer->getId()) {

@@ -81,9 +81,9 @@ class RequestCustomerToken implements ResolverInterface
 
         /* Get input params */
         try {
-            $args = $args['input'] ?: [];
+            $args = $args['input'];
         } catch (NoSuchEntityException $e) {
-            throw new GraphQlNoSuchEntityException(__('Check input params.'));
+            throw new GraphQlInputException(__('Check input params.'));
         }
 
         if (empty(trim($args['customer_email'], " "))) {
@@ -97,8 +97,10 @@ class RequestCustomerToken implements ResolverInterface
                 __('Login as Customer is disabled.')
             );
         }
-
-        return $this->createCustomerToken->execute($args['customer_email']);
+        return $this->createCustomerToken->execute(
+            $args['customer_email'],
+            $context->getExtensionAttributes()->getStore()
+        );
     }
 
     /**

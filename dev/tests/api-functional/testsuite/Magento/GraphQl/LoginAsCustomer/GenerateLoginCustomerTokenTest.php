@@ -84,8 +84,6 @@ class GenerateLoginCustomerTokenTest extends GraphQlAbstract
             '',
             $this->getAdminHeaderAuthentication('TestAdmin1', 'Zilker777')
         );
-        $this->assertArrayHasKey('generateCustomerTokenAsAdmin', $response);
-        $this->assertIsArray($response['generateCustomerTokenAsAdmin']);
     }
 
     /**
@@ -105,14 +103,12 @@ class GenerateLoginCustomerTokenTest extends GraphQlAbstract
 
         $mutation = $this->getQuery($customerEmail);
 
-        $response = $this->graphQlMutation(
+        $this->graphQlMutation(
             $mutation,
             [],
             '',
             $this->getCustomerHeaderAuthentication($customerEmail, $password)
         );
-        $this->assertArrayHasKey('generateCustomerTokenAsAdmin', $response);
-        $this->assertIsArray($response['generateCustomerTokenAsAdmin']);
     }
 
     /**
@@ -137,7 +133,7 @@ class GenerateLoginCustomerTokenTest extends GraphQlAbstract
         $this->expectExceptionMessage($message);
 
         $mutation = $this->getQuery($customerEmail);
-        $response = $this->graphQlMutation(
+        $this->graphQlMutation(
             $mutation,
             [],
             '',
@@ -218,7 +214,6 @@ MUTATION;
     {
         try {
             $adminAccessToken = $this->adminTokenService->createAdminAccessToken($userName, $password);
-
             return ['Authorization' => 'Bearer ' . $adminAccessToken];
         } catch (\Exception $e) {
             throw new AuthenticationException(
