@@ -72,8 +72,8 @@ class Indexer extends \Magento\Framework\DataObject implements IndexerInterface
      * @param StructureFactory $structureFactory
      * @param \Magento\Framework\Mview\ViewInterface $view
      * @param Indexer\StateFactory $stateFactory
-     * @param Indexer\CollectionFactory $indexersFactory,
-     * @param WorkingStateProvider $workingStateProvider,
+     * @param Indexer\CollectionFactory $indexersFactory
+     * @param WorkingStateProvider $workingStateProvider
      * @param array $data
      */
     public function __construct(
