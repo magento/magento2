@@ -15,6 +15,7 @@ use Magento\Indexer\Model\Indexer;
 use Magento\Indexer\Model\Indexer\Collection;
 use Magento\Indexer\Model\Indexer\CollectionFactory;
 use Magento\Indexer\Model\Indexer\State;
+use Magento\Indexer\Model\WorkingStateProvider;
 use Magento\Indexer\Model\Processor;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -46,8 +47,16 @@ class ProcessorTest extends TestCase
      */
     protected $viewProcessorMock;
 
+    /**
+     * @var WorkingStateProvider|MockObject
+     */
+    private $workingStateProvider;
+
     protected function setUp(): void
     {
+        $this->workingStateProvider = $this->getMockBuilder(WorkingStateProvider::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->configMock = $this->getMockForAbstractClass(
             ConfigInterface::class,
             [],
@@ -75,7 +84,8 @@ class ProcessorTest extends TestCase
             $this->configMock,
             $this->indexerFactoryMock,
             $this->indexersFactoryMock,
-            $this->viewProcessorMock
+            $this->viewProcessorMock,
+            $this->workingStateProvider
         );
     }
 
