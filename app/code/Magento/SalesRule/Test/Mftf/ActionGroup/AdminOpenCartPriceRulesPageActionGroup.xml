@@ -8,13 +8,12 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AssertAdminAdvancedReportingPageUrlActionGroup">
+    <actionGroup name="AdminOpenCartPriceRulesPageActionGroup">
         <annotations>
-            <description>Assert admin advanced reporting page url.</description>
+            <description>Open cart price rules page.</description>
         </annotations>
 
-        <switchToNextTab stepKey="switchToNewTab"/>
-        <waitForPageLoad stepKey="waitForAdvancedReportingPageLoad"/>
-        <seeInCurrentUrl url="reports/advanced-reporting" stepKey="seeAssertAdvancedReportingPageUrl"/>
+        <amOnPage url="{{AdminCartPriceRulesPage.url}}" stepKey="openCartPriceRulesPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
     </actionGroup>
 </actionGroups>
