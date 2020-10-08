@@ -62,12 +62,18 @@ class Indexer extends \Magento\Framework\DataObject implements IndexerInterface
     protected $indexersFactory;
 
     /**
+     * @var WorkingStateProvider
+     */
+    private $workingStateProvider;
+
+    /**
      * @param ConfigInterface $config
      * @param ActionFactory $actionFactory
      * @param StructureFactory $structureFactory
      * @param \Magento\Framework\Mview\ViewInterface $view
      * @param Indexer\StateFactory $stateFactory
-     * @param Indexer\CollectionFactory $indexersFactory
+     * @param Indexer\CollectionFactory $indexersFactory,
+     * @param WorkingStateProvider $workingStateProvider,
      * @param array $data
      */
     public function __construct(
@@ -77,6 +83,7 @@ class Indexer extends \Magento\Framework\DataObject implements IndexerInterface
         \Magento\Framework\Mview\ViewInterface $view,
         Indexer\StateFactory $stateFactory,
         Indexer\CollectionFactory $indexersFactory,
+        WorkingStateProvider $workingStateProvider,
         array $data = []
     ) {
         $this->config = $config;
@@ -85,6 +92,7 @@ class Indexer extends \Magento\Framework\DataObject implements IndexerInterface
         $this->view = $view;
         $this->stateFactory = $stateFactory;
         $this->indexersFactory = $indexersFactory;
+        $this->workingStateProvider = $workingStateProvider;
         parent::__construct($data);
     }
 
@@ -405,7 +413,7 @@ class Indexer extends \Magento\Framework\DataObject implements IndexerInterface
      */
     public function reindexAll()
     {
-        if ($this->getState()->getStatus() != StateInterface::STATUS_WORKING) {
+        if (!$this->workingStateProvider->isWorking($this->getId())) {
             $state = $this->getState();
             $state->setStatus(StateInterface::STATUS_WORKING);
             $state->save();
