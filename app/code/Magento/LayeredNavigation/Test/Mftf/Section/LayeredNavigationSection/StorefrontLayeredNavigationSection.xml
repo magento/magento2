@@ -9,5 +9,6 @@
 	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="StorefrontLayeredNavigationSection">
         <element name="shoppingOptionsByName" type="button" selector="//*[text()='Shopping Options']/..//*[contains(text(),'{{arg}}')]" parameterized="true"/>
+        <element name="nthSwatchOption" type="button" selector="div#layered-filter-block div.swatch-option:nth-of-type({{var}})" parameterized="true"/>
     </section>
 </sections>
