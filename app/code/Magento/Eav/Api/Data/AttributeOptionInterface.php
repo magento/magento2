@@ -17,6 +17,8 @@ interface AttributeOptionInterface
     /**
      * Constants used as data array keys
      */
+    const OPTION_ID = 'option_id';
+
     const LABEL = 'label';
 
     const VALUE = 'value';
@@ -26,6 +28,21 @@ interface AttributeOptionInterface
     const STORE_LABELS = 'store_labels';
 
     const IS_DEFAULT = 'is_default';
+
+    /**
+     * Get option id
+     *
+     * @return int|null
+     */
+    public function getOptionId();
+
+    /**
+     * Set option id
+     *
+     * @param int $id
+     * @return $this
+     */
+    public function setOptionId($id);
 
     /**
      * Get option label

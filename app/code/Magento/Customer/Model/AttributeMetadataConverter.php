@@ -7,12 +7,16 @@ declare(strict_types=1);
 
 namespace Magento\Customer\Model;
 
+use Magento\Customer\Api\Data\AttributeMetadataInterface;
 use Magento\Customer\Api\Data\AttributeMetadataInterfaceFactory;
+use Magento\Customer\Api\Data\OptionInterface;
 use Magento\Customer\Api\Data\OptionInterfaceFactory;
 use Magento\Customer\Api\Data\ValidationRuleInterfaceFactory;
 use Magento\Eav\Api\Data\AttributeDefaultValueInterface;
+use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Converter for AttributeMetadata
@@ -49,7 +53,7 @@ class AttributeMetadataConverter
     private $attributeMetadataFactory;
 
     /**
-     * @var \Magento\Framework\Api\DataObjectHelper
+     * @var DataObjectHelper
      */
     protected $dataObjectHelper;
 
@@ -64,14 +68,14 @@ class AttributeMetadataConverter
      * @param OptionInterfaceFactory $optionFactory
      * @param ValidationRuleInterfaceFactory $validationRuleFactory
      * @param AttributeMetadataInterfaceFactory $attributeMetadataFactory
-     * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
+     * @param DataObjectHelper $dataObjectHelper
      * @param ScopeConfigInterface $scopeConfig
      */
     public function __construct(
         OptionInterfaceFactory $optionFactory,
         ValidationRuleInterfaceFactory $validationRuleFactory,
         AttributeMetadataInterfaceFactory $attributeMetadataFactory,
-        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
+        DataObjectHelper $dataObjectHelper,
         ScopeConfigInterface $scopeConfig = null
     ) {
         $this->optionFactory = $optionFactory;
@@ -84,8 +88,9 @@ class AttributeMetadataConverter
     /**
      * Create AttributeMetadata Data object from the Attribute Model
      *
-     * @param \Magento\Customer\Model\Attribute $attribute
-     * @return \Magento\Customer\Api\Data\AttributeMetadataInterface
+     * @param Attribute $attribute
+     * @return AttributeMetadataInterface
+     * @throws LocalizedException
      */
     public function createMetadataAttribute($attribute)
     {
@@ -106,16 +111,13 @@ class AttributeMetadataConverter
                             $this->dataObjectHelper->populateWithArray(
                                 $optionObject,
                                 $optionArrayValues,
-                                \Magento\Customer\Api\Data\OptionInterface::class
+                                OptionInterface::class
                             );
                             $optionArray[] = $optionObject;
                         }
                         $optionDataObject->setOptions($optionArray);
                     }
                     $optionDataObject->setLabel($option['label']);
-                    if (isset($option['id'])) {
-                        $optionDataObject->setId($option['id']);
-                    }
                     $options[] = $optionDataObject;
                 }
             }
@@ -164,7 +166,7 @@ class AttributeMetadataConverter
      * Get option from System Config instead of Use Source (Prefix, Suffix)
      *
      * @param string $attributeCode
-     * @return \Magento\Customer\Api\Data\OptionInterface[]
+     * @return OptionInterface[]
      */
     private function getOptionFromConfig($attributeCode)
     {

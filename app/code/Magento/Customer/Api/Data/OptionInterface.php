@@ -17,22 +17,10 @@ interface OptionInterface
     /**#@+
      * Constants for keys of data array
      */
-    const ID = 'id';
     const LABEL = 'label';
     const VALUE = 'value';
     const OPTIONS = 'options';
     /**#@-*/
-
-    /**
-     * @return int|null
-     */
-    public function getId();
-
-    /**
-     * @param int $id
-     * @return $this
-     */
-    public function setId($id);
 
     /**
      * Get option label
@@ -67,14 +55,14 @@ interface OptionInterface
     /**
      * Get nested options
      *
-     * @return \Magento\Customer\Api\Data\OptionInterface[]|null
+     * @return OptionInterface[]|null
      */
     public function getOptions();
 
     /**
      * Set nested options
      *
-     * @param \Magento\Customer\Api\Data\OptionInterface[] $options
+     * @param OptionInterface[] $options
      * @return $this
      */
     public function setOptions(array $options = null);

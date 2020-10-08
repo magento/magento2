@@ -8,6 +8,9 @@ declare(strict_types=1);
 namespace Magento\EavGraphQl\Model\Resolver\DataProvider;
 
 use Magento\Eav\Api\AttributeOptionManagementInterface;
+use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\StateException;
+use Magento\Framework\GraphQl\Query\Uid;
 
 /**
  * Attribute Options data provider
@@ -20,12 +23,20 @@ class AttributeOptions
     private $optionManager;
 
     /**
+     * @var Uid
+     */
+    private $idEncoder;
+
+    /**
      * @param AttributeOptionManagementInterface $optionManager
+     * @param Uid $idEncoder
      */
     public function __construct(
-        AttributeOptionManagementInterface $optionManager
+        AttributeOptionManagementInterface $optionManager,
+        Uid $idEncoder
     ) {
         $this->optionManager = $optionManager;
+        $this->idEncoder = $idEncoder;
     }
 
     /**
@@ -34,6 +45,8 @@ class AttributeOptions
      * @param string $entityType
      * @param string $attributeCode
      * @return array
+     * @throws InputException
+     * @throws StateException
      */
     public function getData(string $entityType, string $attributeCode): array
     {
@@ -49,7 +62,7 @@ class AttributeOptions
             $optionsData[] = [
                 'label' => $option->getLabel(),
                 'value' => $option->getValue(),
-                'model' => $option
+                'uid' => $this->idEncoder->encode($option->getId())
             ];
         }
         return $optionsData;

@@ -31,6 +31,28 @@ class Option extends AbstractModel implements AttributeOptionInterface
     }
 
     /**
+     * Get option id
+     *
+     * @return int
+     */
+    public function getOptionId()
+    {
+        return $this->getData(self::OPTION_ID);
+    }
+
+    /**
+     * Set option id
+     *
+     * @param int $id
+     * @return $this
+     */
+    public function setOptionId($id)
+    {
+        return $this->setData(self::OPTION_ID, $id);
+    }
+
+
+    /**
      * {@inheritdoc}
      */
     public function getLabel()
