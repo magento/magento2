@@ -152,9 +152,9 @@ QUERY;
         $productSku = 'simple';
         /** @var ProductRepositoryInterface $productRepository */
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
-	    $storeId = ObjectManager::getInstance()->get(StoreManagerInterface::class)->getStore()->getId();
-        $product = $productRepository->get($productSku, false, $storeId, true);
+        $product = $productRepository->get($productSku, false, null, true);
         $summaryFactory = ObjectManager::getInstance()->get(SummaryFactory::class);
+	    $storeId = ObjectManager::getInstance()->get(StoreManagerInterface::class)->getStore()->getId();
         $summary = $summaryFactory->create()->setStoreId($storeId)->load($product->getId());
         $query
             = <<<QUERY
@@ -198,6 +198,63 @@ QUERY;
         self::assertArrayHasKey('items', $items[0]['reviews']);
         self::assertNotEmpty($items[0]['reviews']['items']);
     }
+
+	/**
+	 * @magentoApiDataFixture Magento/Review/_files/different_reviews.php
+	 * @magentoApiDataFixture Magento/Store/_files/second_store.php
+	 */
+	public function testProductReviewRatingsPerSpecificStore()
+	{
+		$productSku = 'simple';
+		$headerMapSecondStore['Store'] = 'fixture_second_store';
+		/** @var ProductRepositoryInterface $productRepository */
+		$productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
+		$product = $productRepository->get($productSku, false, null, true);
+		$summaryFactory = ObjectManager::getInstance()->get(SummaryFactory::class);
+		$storeId = ObjectManager::getInstance()->get(StoreManagerInterface::class)->getStore()->getId();
+		$summary = $summaryFactory->create()->setStoreId($storeId)->load($product->getId());
+		$query
+		                   = <<<QUERY
+{
+  products(filter: {
+      sku: {
+          eq: "$productSku"
+      }
+  }) {
+    items {
+      rating_summary
+      review_count
+      reviews {
+        items {
+          nickname
+          summary
+          text
+          average_rating
+          product {
+            sku
+            name
+          }
+          ratings_breakdown {
+            name
+            value
+          }
+        }
+      }
+    }
+  }
+}
+QUERY;
+		$response = $this->graphQlQuery($query, [], '', $headerMapSecondStore);
+		self::assertArrayHasKey('products', $response);
+		self::assertArrayHasKey('items', $response['products']);
+		self::assertNotEmpty($response['products']['items']);
+
+		$items = $response['products']['items'];
+		self::assertEquals($summary->getData('rating_summary'), $items[0]['rating_summary']);
+		self::assertEquals($summary->getData('reviews_count'), $items[0]['review_count']);
+		self::assertArrayHasKey('items', $items[0]['reviews']);
+		self::assertNotEmpty($items[0]['reviews']['items']);
+	}
 
     /**
      * @magentoApiDataFixture Magento/Review/_files/customer_review_with_rating.php
