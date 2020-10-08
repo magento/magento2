@@ -38,10 +38,3 @@ $config->clean();
 $observer = $objectManager->get(\Magento\Framework\Event\Observer::class);
 $objectManager->get(\Magento\Catalog\Observer\SwitchPriceAttributeScopeOnConfigChange::class)
     ->execute($observer);
-
-/** @var \Magento\Directory\Model\ResourceModel\Currency $rate */
-$rate = $objectManager->create(\Magento\Directory\Model\ResourceModel\Currency::class);
-$rate->saveRates([
-    'USD' => ['EUR' => 2],
-    'EUR' => ['USD' => 0.5]
-]);

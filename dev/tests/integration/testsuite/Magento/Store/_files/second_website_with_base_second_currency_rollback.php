@@ -3,9 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-$objectManager =  \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+$objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 /** @var \Magento\Config\Model\ResourceModel\Config $configResource */
 $configResource = $objectManager->get(\Magento\Config\Model\ResourceModel\Config::class);
 $configResource->deleteConfig(
