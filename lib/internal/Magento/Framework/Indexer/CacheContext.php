@@ -73,6 +73,6 @@ class CacheContext implements \Magento\Framework\DataObject\IdentityInterface
                 $identities[] = $cacheTag . '_' . $id;
             }
         }
-        return array_merge($identities, array_unique($this->tags));
+        return array_unique(array_merge($identities, array_unique($this->tags)));
     }
 }
