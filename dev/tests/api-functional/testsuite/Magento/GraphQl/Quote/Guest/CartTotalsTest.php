@@ -234,7 +234,7 @@ class CartTotalsTest extends GraphQlAbstract
     /**
      * The totals calculation with second currency.
      *
-     * @magentoApiDataFixture Magento/Store/_files/second_store_with_second_currency.php
+     * @magentoApiDataFixture Magento/CurrencySymbol/_files/second_currency.php
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
@@ -243,8 +243,7 @@ class CartTotalsTest extends GraphQlAbstract
     {
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
         $query = $this->getQuery($maskedQuoteId);
-        $storeCodeFromFixture = 'fixture_second_store';
-        $headerMap = ['Store' => $storeCodeFromFixture, 'Content-Currency' => 'EUR'];
+        $headerMap = ['Content-Currency' => 'EUR'];
         $response = $this->graphQlQuery($query, [], '', $headerMap);
 
         $cartItem = $response['cart']['items'][0];
