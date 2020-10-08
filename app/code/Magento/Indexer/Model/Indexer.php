@@ -322,10 +322,7 @@ class Indexer extends \Magento\Framework\DataObject implements IndexerInterface
      */
     public function isWorking()
     {
-        //retrieve actual state, not cached one
-        $state = $this->stateFactory->create();
-        $state->loadByIndexer($this->getId());
-        return $state->getStatus() == StateInterface::STATUS_WORKING;
+        return $this->getState()->getStatus() == StateInterface::STATUS_WORKING;
     }
 
     /**

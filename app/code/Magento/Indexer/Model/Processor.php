@@ -36,21 +36,29 @@ class Processor
     protected $mviewProcessor;
 
     /**
+     * @var WorkingStateProvider
+     */
+    private $workingStateProvider;
+
+    /**
      * @param ConfigInterface $config
      * @param IndexerInterfaceFactory $indexerFactory
      * @param Indexer\CollectionFactory $indexersFactory
      * @param \Magento\Framework\Mview\ProcessorInterface $mviewProcessor
+     * @param WorkingStateProvider $workingStateProvider
      */
     public function __construct(
         ConfigInterface $config,
         IndexerInterfaceFactory $indexerFactory,
         Indexer\CollectionFactory $indexersFactory,
-        \Magento\Framework\Mview\ProcessorInterface $mviewProcessor
+        \Magento\Framework\Mview\ProcessorInterface $mviewProcessor,
+        WorkingStateProvider $workingStateProvider
     ) {
         $this->config = $config;
         $this->indexerFactory = $indexerFactory;
         $this->indexersFactory = $indexersFactory;
         $this->mviewProcessor = $mviewProcessor;
+        $this->workingStateProvider = $workingStateProvider;
     }
 
     /**
@@ -72,7 +80,7 @@ class Processor
                 if (!in_array($sharedIndex, $sharedIndexesComplete)) {
                     $indexer->reindexAll();
                 } else {
-                    if (!$indexer->isWorking()) {
+                    if (!$this->workingStateProvider->isWorking($indexer->getId())) {
                         /** @var \Magento\Indexer\Model\Indexer\State $state */
                         $state = $indexer->getState();
                         $state->setStatus(StateInterface::STATUS_WORKING);
