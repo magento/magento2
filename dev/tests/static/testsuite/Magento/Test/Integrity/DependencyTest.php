@@ -328,7 +328,7 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
             true
         );
         foreach ($configs as $file) {
-            $dbSchemaWhitelist = json_decode(file_get_contents($file->getFullPath()), true);
+            $dbSchemaWhitelist = (array)json_decode(file_get_contents($file->getFullPath()));
             $isStagingModule = (substr_compare($file->getComponentName(), 'Staging', -strlen('Staging')) === 0);
             if ($isStagingModule) {
                 // even though staging modules modify the constraints, they almost never declare new tables
@@ -369,7 +369,7 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
         );
 
         foreach ($configs as $file) {
-            $dbSchemaWhitelist = json_decode(file_get_contents($file->getFullPath()), true);
+            $dbSchemaWhitelist = (array)json_decode(file_get_contents($file->getFullPath()));
             $tables = array_keys($dbSchemaWhitelist);
             foreach ($tables as $table) {
                 $tableToAnyModuleMap[$table] = str_replace(
