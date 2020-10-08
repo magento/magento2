@@ -20,7 +20,6 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class AttributeMetadataResolverTest
  *
  * Validate attributeMetadata contains correct values in meta data array
  */
@@ -69,7 +68,7 @@ class AttributeMetadataResolverTest extends TestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->countryWithWebsiteSource = $this->getMockBuilder(CountryWithWebsites::class)
             ->setMethods(['getAllOptions'])
@@ -85,7 +84,7 @@ class AttributeMetadataResolverTest extends TestCase
             ->getMock();
         $this->context =  $this->getMockBuilder(ContextInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->shareConfig =  $this->getMockBuilder(ShareConfig::class)
             ->disableOriginalConstructor()
             ->getMock();

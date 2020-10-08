@@ -21,7 +21,7 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
         </after>
 
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin1"/>
         <amOnPage url="{{AdminConfigPaymentMethodsPage.url}}" stepKey="navigateToConfigurationPage"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
         <seeElement selector="{{OtherPaymentsConfigSection.expandedTab}}" stepKey="seeSectionExpanded"/>

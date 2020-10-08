@@ -20,9 +20,8 @@
         </annotations>
         <!--Delete all created data during the test execution and assign Default Root Category to Store-->
         <after>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin2"/>
-            <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="amOnPageAdminSystemStore"/>
-            <waitForPageLoad stepKey="waitForPageAdminSystemStoreLoad" />
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin2"/>
+            <actionGroup ref="AdminSystemStoreOpenPageActionGroup" stepKey="amOnPageAdminSystemStore"/>
             <click selector="{{AdminStoresGridSection.resetButton}}" stepKey="clickOnResetButton"/>
             <waitForPageLoad  time="10" stepKey="waitForPageAdminStoresGridLoadAfterResetButton"/>
             <fillField selector="{{AdminStoresGridSection.storeGrpFilterTextField}}" userInput="Main Website Store"  stepKey="fillFieldOnWebsiteStore"/>
@@ -38,8 +37,8 @@
             </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout2"/>
         </after>
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
-        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="amOnAdminCategoryPage"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin1"/>
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="amOnAdminCategoryPage"/>
         <scrollToTopOfPage stepKey="scrollToTopOfPage1"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
         <!--Create new root category-->
@@ -58,8 +57,7 @@
             <argument name="categoryEntity" value="SubCategoryWithParent"/>
         </actionGroup>
         <!--Assign new created root category to store-->
-        <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="amOnPageAdminSystemStore"/>
-        <waitForPageLoad stepKey="waitForPageAdminSystemStoreLoad" />
+        <actionGroup ref="AdminSystemStoreOpenPageActionGroup" stepKey="amOnPageAdminSystemStore"/>
         <click selector="{{AdminStoresGridSection.resetButton}}" stepKey="clickOnResetButton"/>
         <waitForPageLoad  time="10" stepKey="waitForPageAdminStoresGridLoadAfterResetButton"/>
         <fillField selector="{{AdminStoresGridSection.storeGrpFilterTextField}}" userInput="Main Website Store"  stepKey="fillFieldOnWebsiteStore"/>
@@ -72,8 +70,7 @@
         <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="clickOkOnModalDialog1"/>
         <actionGroup ref="AdminLogoutActionGroup" stepKey="logout1"/>
         <!--Go to storefront and verify created subcategory on frontend-->
-        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToStorefrontPage"/>
-        <waitForPageLoad stepKey="waitForPageAdminSystemStoreLoad2"/>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomePage"/>
         <actionGroup ref="CheckCategoryOnStorefrontActionGroup" stepKey="checkCreatedSubcategory1OnFrontend">
             <argument name="categoryEntity" value="SimpleSubCategory"/>
         </actionGroup>

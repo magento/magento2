@@ -15,7 +15,7 @@
             <title value="Admin should be able to associate bundle product to websites"/>
             <description value="Admin should be able to associate bundle product to websites"/>
             <testCaseId value="MC-3344"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <group value="bundle"/>
             <group value="catalog"/>
         </annotations>
@@ -43,10 +43,12 @@
             </createData>
 
             <!-- Reindex -->
-            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
 
             <!-- Login as admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
             <!--Create website-->
             <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createSecondWebsite">

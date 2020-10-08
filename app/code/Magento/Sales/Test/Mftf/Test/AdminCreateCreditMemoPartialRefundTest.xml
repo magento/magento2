@@ -11,15 +11,15 @@
     <test name="AdminCreateCreditMemoPartialRefundTest">
         <annotations>
             <stories value="Credit memo entity"/>
-            <title value="Create Credit Memo for Offline Payment Methods"/>
+            <title value="Create Credit Memo for Offline Payment Methods (partial refund)"/>
             <description value="Assert items return to stock (partial refund)"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MC-15861"/>
             <group value="sales"/>
             <group value="mtf_migrated"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
 
             <!-- Create Data -->
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
@@ -58,13 +58,15 @@
 
         <!-- Create Invoice -->
         <actionGroup ref="StartCreateInvoiceFromOrderPageActionGroup" stepKey="startInvoice"/>
-        <click selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="clickSubmitInvoice"/>
+        <actionGroup ref="AdminInvoiceClickSubmitActionGroup" stepKey="clickSubmitInvoice"/>
         <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitForMessageAppears"/>
         <see selector="{{AdminMessagesSection.success}}" userInput="The invoice has been created." stepKey="seeInvoiceCreateSuccess"/>
 
         <!-- Go to Sales > Orders > find out placed order and open -->
         <grabTextFrom selector="|Order # (\d+)|" stepKey="grabOrderId" />
-        <assertNotEmpty actual="$grabOrderId" stepKey="assertOrderIdIsNotEmpty" after="grabOrderId"/>
+        <assertNotEmpty stepKey="assertOrderIdIsNotEmpty" after="grabOrderId">
+			<actualResult type="const">$grabOrderId</actualResult>
+        </assertNotEmpty>
         <actionGroup ref="OpenOrderByIdActionGroup" stepKey="openOrder">
             <argument name="orderId" value="{$grabOrderId}"/>
         </actionGroup>
@@ -90,7 +92,9 @@
         <click selector="{{AdminOrderDetailsOrderViewSection.creditMemos}}" stepKey="clickCreditMemoTab"/>
         <waitForPageLoad stepKey="waitForTabLoad"/>
         <grabTextFrom selector="{{AdminCreditMemosGridSection.memoId}}" stepKey="grabMemoId"/>
-        <assertNotEmpty actual="$grabMemoId" stepKey="assertMemoIdIsNotEmpty" after="grabMemoId"/>
+        <assertNotEmpty stepKey="assertMemoIdIsNotEmpty" after="grabMemoId">
+			<actualResult type="const">$grabMemoId</actualResult>
+        </assertNotEmpty>
         <click selector="{{AdminCreditMemosGridSection.memoId}}" stepKey="clickView"/>
         <waitForPageLoad stepKey="waitForCreditMemo"/>
         <scrollTo selector="{{AdminCreditMemoTotalSection.grandTotal}}" stepKey="scrollToTotal"/>
@@ -119,13 +123,11 @@
         </actionGroup>
 
         <!-- Assert refunded Grand Total on frontend -->
-        <amOnPage url="{{StorefrontCustomerDashboardPage.url}}" stepKey="onAccountPage"/>
-        <waitForPageLoad stepKey="waitForPage"/>
+        <actionGroup ref="StorefrontOpenMyAccountPageActionGroup" stepKey="onAccountPage"/>
         <scrollTo selector="{{StorefrontCustomerResentOrdersSection.blockResentOrders}}" stepKey="scrollToResent"/>
         <click selector="{{StorefrontCustomerResentOrdersSection.viewOrder({$grabOrderId})}}" stepKey="clickOnOrder"/>
         <waitForPageLoad stepKey="waitForViewOrder"/>
-        <click selector="{{StorefrontCustomerOrderSection.tabRefund}}" stepKey="clickRefund"/>
-        <waitForPageLoad stepKey="waitRefundsLoad"/>
+        <actionGroup ref="StorefrontClickRefundTabCustomerOrderViewActionGroup" stepKey="clickRefund"/>
         <scrollTo selector="{{StorefrontCustomerOrderSection.grandTotalRefund}}" stepKey="scrollToGrandTotal"/>
         <see selector="{{StorefrontCustomerOrderSection.grandTotalRefund}}" userInput="110.00" stepKey="seeGrandTotal"/>
 

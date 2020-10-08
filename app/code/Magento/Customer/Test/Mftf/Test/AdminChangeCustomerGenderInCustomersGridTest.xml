@@ -21,7 +21,7 @@
         </annotations>
         <before>
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
         </before>
         <after>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>

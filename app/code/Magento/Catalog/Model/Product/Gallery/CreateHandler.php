@@ -11,7 +11,6 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\EntityManager\Operation\ExtensionInterface;
-use Magento\Framework\Storage\StorageProvider;
 use Magento\MediaStorage\Model\File\Uploader as FileUploader;
 use Magento\Store\Model\StoreManagerInterface;
 
@@ -89,10 +88,6 @@ class CreateHandler implements ExtensionInterface
      * @var  \Magento\Store\Model\StoreManagerInterface
      */
     private $storeManager;
-    /**
-     * @var StorageProvider
-     */
-    private $storageProvider;
 
     /**
      * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
@@ -103,7 +98,6 @@ class CreateHandler implements ExtensionInterface
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\MediaStorage\Helper\File\Storage\Database $fileStorageDb
      * @param \Magento\Store\Model\StoreManagerInterface|null $storeManager
-     * @param StorageProvider $storageProvider
      * @throws \Magento\Framework\Exception\FileSystemException
      */
     public function __construct(
@@ -114,8 +108,7 @@ class CreateHandler implements ExtensionInterface
         \Magento\Catalog\Model\Product\Media\Config $mediaConfig,
         \Magento\Framework\Filesystem $filesystem,
         \Magento\MediaStorage\Helper\File\Storage\Database $fileStorageDb,
-        \Magento\Store\Model\StoreManagerInterface $storeManager = null,
-        StorageProvider $storageProvider = null
+        \Magento\Store\Model\StoreManagerInterface $storeManager = null
     ) {
         $this->metadata = $metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
         $this->attributeRepository = $attributeRepository;
@@ -125,7 +118,6 @@ class CreateHandler implements ExtensionInterface
         $this->mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         $this->fileStorageDb = $fileStorageDb;
         $this->storeManager = $storeManager ?: ObjectManager::getInstance()->get(StoreManagerInterface::class);
-        $this->storageProvider = $storageProvider ?: ObjectManager::getInstance()->get(StorageProvider::class);
     }
 
     /**
@@ -253,6 +245,7 @@ class CreateHandler implements ExtensionInterface
                 'media_gallery'
             );
         }
+
         return $this->attribute;
     }
 
@@ -297,8 +290,7 @@ class CreateHandler implements ExtensionInterface
                 $data['position'] = isset($image['position']) ? (int)$image['position'] : 0;
                 $data['disabled'] = isset($image['disabled']) ? (int)$image['disabled'] : 0;
                 $data['store_id'] = (int)$product->getStoreId();
-                $stat = $this->mediaDirectory->stat($this->mediaConfig->getMediaPath($image['file']));
-                $data['image_metadata']['size'] = $stat['size'];
+
                 $data[$this->metadata->getLinkField()] = (int)$product->getData($this->metadata->getLinkField());
 
                 $this->resourceModel->insertGalleryValueInStore($data);
@@ -374,20 +366,20 @@ class CreateHandler implements ExtensionInterface
         $file = $this->getFilenameFromTmp($this->getSafeFilename($file));
         $destinationFile = $this->getUniqueFileName($file);
 
-        $tmpMediaPath = $this->mediaConfig->getTmpMediaPath($file);
-        $mediaPath = $this->mediaConfig->getMediaPath($destinationFile);
-        $this->mediaDirectory->renameFile(
-            $tmpMediaPath,
-            $mediaPath
-        );
-        $this->fileStorageDb->renameFile(
-            $this->mediaConfig->getTmpMediaShortUrl($file),
-            $this->mediaConfig->getMediaShortUrl($destinationFile)
-        );
+        if ($this->fileStorageDb->checkDbUsage()) {
+            $this->fileStorageDb->renameFile(
+                $this->mediaConfig->getTmpMediaShortUrl($file),
+                $this->mediaConfig->getMediaShortUrl($destinationFile)
+            );
 
-        $storage = $this->storageProvider->get('media');
-        $content = $this->mediaDirectory->readFile($mediaPath);
-        $storage->put($mediaPath, $content);
+            $this->mediaDirectory->delete($this->mediaConfig->getTmpMediaPath($file));
+            $this->mediaDirectory->delete($this->mediaConfig->getMediaPath($destinationFile));
+        } else {
+            $this->mediaDirectory->renameFile(
+                $this->mediaConfig->getTmpMediaPath($file),
+                $this->mediaConfig->getMediaPath($destinationFile)
+            );
+        }
 
         return str_replace('\\', '/', $destinationFile);
     }
@@ -604,10 +596,21 @@ class CreateHandler implements ExtensionInterface
         $canRemoveImage = true;
         $gallery = $this->getImagesForAllStores($product);
         $storeId = $product->getStoreId();
+        $storeIds = [];
+        $storeIds[] = 0;
+        $websiteIds = array_map('intval', $product->getWebsiteIds() ?? []);
+        foreach ($this->storeManager->getStores() as $store) {
+            if (in_array((int) $store->getWebsiteId(), $websiteIds, true)) {
+                $storeIds[] = (int) $store->getId();
+            }
+        }
 
         if (!empty($gallery)) {
             foreach ($gallery as $image) {
-                if ($image['filepath'] === $imageFile && (int) $image['store_id'] !== $storeId) {
+                if (in_array((int) $image['store_id'], $storeIds)
+                    && $image['filepath'] === $imageFile
+                    && (int) $image['store_id'] !== $storeId
+                ) {
                     $canRemoveImage = false;
                 }
             }

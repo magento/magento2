@@ -17,7 +17,7 @@ class InitialTest extends \PHPUnit\Framework\TestCase
      */
     private $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
     }

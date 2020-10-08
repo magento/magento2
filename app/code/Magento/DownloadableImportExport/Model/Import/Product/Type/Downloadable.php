@@ -17,6 +17,7 @@ use \Magento\Store\Model\Store;
  *
  * phpcs:disable Magento2.Commenting.ConstantsPHPDocFormatting
  * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
 {
@@ -332,7 +333,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     {
         $this->rowNum = $rowNum;
         $error = false;
-        if (!$this->downloadableHelper->isRowDownloadableNoValid($rowData)) {
+        if (!$this->downloadableHelper->isRowDownloadableNoValid($rowData) && $isNewProduct) {
             $this->_entityModel->addRowError(self::ERROR_OPTIONS_NOT_FOUND, $this->rowNum);
             $error = true;
         }
@@ -888,8 +889,8 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         try {
             $uploader = $this->uploaderHelper->getUploader($type, $this->parameters);
             if (!$this->uploaderHelper->isFileExist($fileName)) {
-                $uploader->move($fileName, $renameFileOff);
-                $fileName = $uploader['file'];
+                $res = $uploader->move($fileName, $renameFileOff);
+                $fileName = $res['file'];
             }
         } catch (\Exception $e) {
             $this->_entityModel->addRowError(self::ERROR_MOVE_FILE, $this->rowNum);

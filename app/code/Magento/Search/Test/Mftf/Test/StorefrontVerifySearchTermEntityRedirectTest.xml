@@ -13,11 +13,12 @@
             <stories value="Search Term Redirect"/>
             <title value="Create Search Term Entity With Redirect. Check How Redirect is Working on Storefront"/>
             <description value="Storefront search by created search term with redirect. Verifying if created redirect is working"/>
+            <severity value="CRITICAL"/>
         </annotations>
 
         <before>
             <!-- Login As Admin User -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <!-- Navigate To Marketing Search Terms Grid -->
             <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToSearchTermPage">
                 <argument name="menuUiId" value="{{AdminMenuMarketing.dataUiId}}"/>
@@ -31,7 +32,7 @@
             </actionGroup>
         </before>
         <after>
-            <amOnPage url="{{AdminCatalogSearchTermIndexPage.url}}" stepKey="navigateToSearchTermPage"/>
+            <actionGroup ref="AdminOpenCatalogSearchTermIndexPageActionGroup" stepKey="navigateToSearchTermPage"/>
             <actionGroup ref="AdminSearchTermFilterBySearchQueryActionGroup" stepKey="findCreatedTerm">
                 <argument name="searchQuery" value="{{SearchTerm.query_text}}"/>
             </actionGroup>

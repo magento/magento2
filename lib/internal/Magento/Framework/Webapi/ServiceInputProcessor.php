@@ -21,13 +21,14 @@ use Magento\Framework\Reflection\MethodsMap;
 use Magento\Framework\Reflection\TypeProcessor;
 use Magento\Framework\Webapi\Exception as WebapiException;
 use Magento\Framework\Webapi\CustomAttribute\PreprocessorInterface;
-use Zend\Code\Reflection\ClassReflection;
+use Laminas\Code\Reflection\ClassReflection;
 
 /**
  * Deserialize arguments from API requests.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
+ * @since 100.0.2
  */
 class ServiceInputProcessor implements ServicePayloadConverterInterface
 {

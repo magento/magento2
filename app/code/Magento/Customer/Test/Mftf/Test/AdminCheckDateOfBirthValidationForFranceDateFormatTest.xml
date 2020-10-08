@@ -12,6 +12,8 @@
             <features value="Customer"/>
             <stories value="Checks 'Date of Birth' field validation for the France date format value"/>
             <title value="Checks 'Date of Birth' field validation for the France date format value"/>
+            <description value="Checks 'Date of Birth' field validation for the France date format value"/>
+            <severity value="MAJOR"/>
             <group value="customer"/>
             <group value="ui"/>
         </annotations>

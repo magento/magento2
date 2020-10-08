@@ -16,7 +16,7 @@ class OutputBambooTest extends \PHPUnit\Framework\TestCase
      */
     protected $_output;
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         stream_filter_register('dataCollectorFilter', \Magento\Test\Profiler\OutputBambooTestFilter::class);
     }
@@ -24,7 +24,7 @@ class OutputBambooTest extends \PHPUnit\Framework\TestCase
     /**
      * Reset collected data and prescribe to pass stream data through the collector filter
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         \Magento\Test\Profiler\OutputBambooTestFilter::resetCollectedData();
 

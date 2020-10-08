@@ -17,12 +17,12 @@
             <stories value="New products list widget"/>
             <title value="Admin should be able to set products as new so that they show up in the Catalog New Products List Widget"/>
             <description value="Admin should be able to set products as new so that they show up in the Catalog New Products List Widget"/>
-            <severity value="MAJOR"/>
+            <severity value="BLOCKER"/>
             <group value="Widget"/>
         </annotations>
 
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
         </before>
 

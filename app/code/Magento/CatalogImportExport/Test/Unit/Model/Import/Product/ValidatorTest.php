@@ -3,14 +3,21 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogImportExport\Test\Unit\Model\Import\Product;
 
 use Magento\CatalogImportExport\Model\Import\Product;
+use Magento\CatalogImportExport\Model\Import\Product\Type\Simple;
 use Magento\CatalogImportExport\Model\Import\Product\Validator;
+use Magento\CatalogImportExport\Model\Import\Product\Validator\Media;
+use Magento\CatalogImportExport\Model\Import\Product\Validator\Website;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\ImportExport\Model\Import;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ValidatorTest extends \PHPUnit\Framework\TestCase
+class ValidatorTest extends TestCase
 {
     /** @var Validator */
     protected $validator;
@@ -21,42 +28,42 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     /** @var array */
     protected $validators = [];
 
-    /** @var \Magento\CatalogImportExport\Model\Import\Product|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Product|MockObject */
     protected $context;
 
-    /** @var Validator\Media|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Validator\Media|MockObject */
     protected $validatorOne;
 
-    /** @var Validator\Website|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Validator\Website|MockObject */
     protected $validatorTwo;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $entityTypeModel = $this->createPartialMock(
-            \Magento\CatalogImportExport\Model\Import\Product\Type\Simple::class,
+            Simple::class,
             ['retrieveAttributeFromCache']
         );
         $entityTypeModel->expects($this->any())->method('retrieveAttributeFromCache')->willReturn([]);
         $this->context = $this->createPartialMock(
-            \Magento\CatalogImportExport\Model\Import\Product::class,
+            Product::class,
             ['retrieveProductTypeByName', 'retrieveMessageTemplate', 'getBehavior']
         );
         $this->context->expects($this->any())->method('retrieveProductTypeByName')->willReturn($entityTypeModel);
         $this->context->expects($this->any())->method('retrieveMessageTemplate')->willReturn('error message');
 
         $this->validatorOne = $this->createPartialMock(
-            \Magento\CatalogImportExport\Model\Import\Product\Validator\Media::class,
+            Media::class,
             ['init', 'isValid']
         );
         $this->validatorTwo = $this->createPartialMock(
-            \Magento\CatalogImportExport\Model\Import\Product\Validator\Website::class,
+            Website::class,
             ['init', 'isValid', 'getMessages']
         );
 
         $this->validators = [$this->validatorOne, $this->validatorTwo];
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->validator = $this->objectManagerHelper->getObject(
-            \Magento\CatalogImportExport\Model\Import\Product\Validator::class,
+            Validator::class,
             ['validators' => $this->validators]
         );
         $this->validator->init($this->context);

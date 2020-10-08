@@ -13,13 +13,13 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Model\ResourceModel;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Indexer\Category\Product\Processor;
+use Magento\Catalog\Setup\CategorySetup;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
 use Magento\Framework\EntityManager\EntityManager;
-use Magento\Catalog\Setup\CategorySetup;
 use Magento\Framework\EntityManager\MetadataPool;
-use Magento\Catalog\Api\Data\ProductInterface;
 
 /**
  * Resource model for category entity
@@ -469,10 +469,6 @@ class Category extends AbstractResource
 
         if (!empty($insert) || !empty($delete)) {
             $productIds = array_unique(array_merge(array_keys($insert), array_keys($delete)));
-            $this->_eventManager->dispatch(
-                'catalog_category_change_products',
-                ['category' => $category, 'product_ids' => $productIds]
-            );
 
             $category->setChangedProductIds($productIds);
         }
@@ -484,6 +480,10 @@ class Category extends AbstractResource
              * Setting affected products to category for third party engine index refresh
              */
             $productIds = array_keys($insert + $delete + $update);
+            $this->_eventManager->dispatch(
+                'catalog_category_change_products',
+                ['category' => $category, 'product_ids' => $productIds]
+            );
             $category->setAffectedProductIds($productIds);
         }
         return $this;
@@ -666,7 +666,8 @@ class Category extends AbstractResource
                 'ci.value = :value'
             )->where(
                 'ce.entity_id IN (?)',
-                $entityIdsFilter
+                $entityIdsFilter,
+                \Zend_Db::INT_TYPE
             );
             $this->entitiesWhereAttributesIs[$entityIdsFilterHash][$attribute->getId()][$expectedValue] =
                 $this->getConnection()->fetchCol($selectEntities, $bind);
@@ -1078,7 +1079,6 @@ class Category extends AbstractResource
      */
     public function load($object, $entityId, $attributes = [])
     {
-        $this->_attributes = [];
         $select = $this->_getLoadRowSelect($object, $entityId);
         $row = $this->getConnection()->fetchRow($select);
 

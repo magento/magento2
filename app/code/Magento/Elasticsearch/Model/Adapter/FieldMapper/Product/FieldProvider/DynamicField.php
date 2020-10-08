@@ -7,8 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider;
 
-use Magento\Catalog\Api\CategoryListInterface;
-use Magento\Catalog\Model\ResourceModel\Category\Collection;
 use Magento\Customer\Api\GroupRepositoryInterface;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeProvider;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldIndex\ConverterInterface
@@ -19,20 +17,13 @@ use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldT
     as FieldTypeConverterInterface;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProviderInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Catalog\Model\ResourceModel\Category\Collection;
 
 /**
  * Provide dynamic fields for product.
  */
 class DynamicField implements FieldProviderInterface
 {
-    /**
-     * Category list.
-     *
-     * @deprecated
-     * @var CategoryListInterface
-     */
-    private $categoryList;
-
     /**
      * Category collection.
      *
@@ -79,7 +70,6 @@ class DynamicField implements FieldProviderInterface
      * @param IndexTypeConverterInterface $indexTypeConverter
      * @param GroupRepositoryInterface $groupRepository
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
-     * @param CategoryListInterface $categoryList
      * @param FieldNameResolver $fieldNameResolver
      * @param AttributeProvider $attributeAdapterProvider
      * @param Collection $categoryCollection
@@ -89,7 +79,6 @@ class DynamicField implements FieldProviderInterface
         IndexTypeConverterInterface $indexTypeConverter,
         GroupRepositoryInterface $groupRepository,
         SearchCriteriaBuilder $searchCriteriaBuilder,
-        CategoryListInterface $categoryList,
         FieldNameResolver $fieldNameResolver,
         AttributeProvider $attributeAdapterProvider,
         Collection $categoryCollection
@@ -98,7 +87,6 @@ class DynamicField implements FieldProviderInterface
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->fieldTypeConverter = $fieldTypeConverter;
         $this->indexTypeConverter = $indexTypeConverter;
-        $this->categoryList = $categoryList;
         $this->fieldNameResolver = $fieldNameResolver;
         $this->attributeAdapterProvider = $attributeAdapterProvider;
         $this->categoryCollection = $categoryCollection;
