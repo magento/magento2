@@ -22,7 +22,6 @@ use Magento\Indexer\Model\WorkingStateProvider;
 /**
  * Reindex multiple rows action.
  *
- * @package Magento\Catalog\Model\Indexer\Category\Product\Action
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractAction
