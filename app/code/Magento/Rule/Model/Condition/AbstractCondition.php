@@ -908,7 +908,7 @@ abstract class AbstractCondition extends \Magento\Framework\DataObject implement
         if (!$model->hasData($this->getAttribute())) {
             $model->load($model->getId());
         }
-        $attributeValue = $model->getData($this->getAttribute());
+        $attributeValue = $model->getDataUsingMethod($this->getAttribute());
 
         return $this->validateAttribute($attributeValue);
     }
