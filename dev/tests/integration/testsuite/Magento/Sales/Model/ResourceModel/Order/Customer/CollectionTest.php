@@ -20,7 +20,7 @@ class CollectionTest extends TestCase
     /**
      * @inheritDoc
      */
-    public function setUp()
+    public function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->collection = $objectManager->get(Collection::class);
