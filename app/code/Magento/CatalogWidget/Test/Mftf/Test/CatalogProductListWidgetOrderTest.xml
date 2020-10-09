@@ -8,18 +8,18 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="CatalogProductListWidgetOrderTest">
+    <test name="CatalogProductListWidgetOrderTest" deprecated="Use CatalogProductListCheckWidgetOrderTest instead">
         <annotations>
             <features value="CatalogWidget"/>
             <stories value="MC-5905: Wrong sorting on Products component"/>
-            <title value="Checking order of products in the 'catalog Products List' widget"/>
+            <title value="Deprecated. Checking order of products in the 'catalog Products List' widget"/>
             <description value="Check that products are ordered with recently added products first"/>
             <severity value="MAJOR"/>
             <testCaseId value="MC-13794"/>
             <group value="CatalogWidget"/>
             <group value="WYSIWYGDisabled"/>
             <skip>
-                <issueId value="MC-13923"/>
+                <issueId value="DEPRECATED">Use CatalogProductListCheckWidgetOrderTest instead</issueId>
             </skip>
         </annotations>
         <before>
