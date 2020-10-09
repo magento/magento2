@@ -26,17 +26,17 @@
 
 //  Sizes
 @root__font-size: 62.5%; // Defines ratio between root font size and base font size, 1rem = 10px
-@font-size-ratio__base: 1.4; // Defines ratio of the root font-size to the base font-size
+@font-size-ratio__base: 1.6; // Defines ratio of the root font-size to the base font-size
 
 @font-size-unit: rem; // The unit to which most typography values will be converted by default
 @font-size-unit-ratio: unit(@root__font-size * 16/100); // Ratio of the root font-size to the font-size unit
 @font-size-unit-convert: true; // Controls whether font-size values are converted to the specified font-size unit
 
 @font-size__base: unit(@font-size-unit-ratio * @font-size-ratio__base, px); // Base font size value in <b>px</b>
-@font-size__xl: ceil(1.5 * @font-size__base); // 21px
-@font-size__l: ceil(1.25 * @font-size__base); // 18px
-@font-size__s: ceil(.85 * @font-size__base); // 12px
-@font-size__xs: floor(.75 * @font-size__base); // 11px
+@font-size__xl: ceil(1.5 * @font-size__base); // 24px
+@font-size__l: ceil(1.25 * @font-size__base); // 20px
+@font-size__s: ceil(.85 * @font-size__base); // 14px
+@font-size__xs: floor(.75 * @font-size__base); // 12px
 
 //  Weights
 @font-weight__light: 300;
@@ -65,12 +65,12 @@
 //  Indents
 //  ---------------------------------------------
 
-@indent__base: @line-height__computed; // 20px
-@indent__xl: @indent__base * 2; // 40px
-@indent__l: @indent__base * 1.5; // 30px
-@indent__m: @indent__base * 1.25; // 25px
-@indent__s: @indent__base / 2; // 10px
-@indent__xs: @indent__base / 4; // 5px
+@indent__base: @line-height__computed; // 22px
+@indent__xl: @indent__base * 2; // 44px
+@indent__l: @indent__base * 1.5; // 33px
+@indent__m: @indent__base * 1.25; // 27.5px
+@indent__s: @indent__base / 2; // 11px
+@indent__xs: @indent__base / 4; // 5.5px
 
 //
 //  Borders
@@ -143,7 +143,7 @@
 @heading__margin-top__base: @indent__base;
 @heading__margin-bottom__base: @indent__base;
 
-@h1__font-size: ceil((@font-size__base * 1.85)); // 26px
+@h1__font-size: ceil((@font-size__base * 1.625)); // 26px
 @h1__font-color: @heading__color__base;
 @h1__font-family: @heading__font-family__base;
 @h1__font-weight: @heading__font-weight__base;
@@ -151,9 +151,9 @@
 @h1__line-height: @heading__line-height__base;
 @h1__margin-top: 0;
 @h1__margin-bottom: @heading__margin-bottom__base;
-@h1__font-size-desktop: ceil((@font-size__base * 2.85)); // 40px
+@h1__font-size-desktop: ceil((@font-size__base * 2.85)); // 46px
 
-@h2__font-size: ceil((@font-size__base * 1.85)); // 26px
+@h2__font-size: ceil((@font-size__base * 1.625)); // 26px
 @h2__font-color: @heading__color__base;
 @h2__font-family: @heading__font-family__base;
 @h2__font-weight: @heading__font-weight__base;
@@ -162,7 +162,7 @@
 @h2__margin-top: @indent__m;
 @h2__margin-bottom: @heading__margin-bottom__base;
 
-@h3__font-size: ceil((@font-size__base * 1.28)); // 18px
+@h3__font-size: ceil((@font-size__base * 1.25)); // 20px
 @h3__font-color: @heading__color__base;
 @h3__font-family: @heading__font-family__base;
 @h3__font-weight: @heading__font-weight__base;
@@ -171,7 +171,7 @@
 @h3__margin-top: @indent__base * .75;
 @h3__margin-bottom: @indent__s;
 
-@h4__font-size: @font-size__base; // 14px
+@h4__font-size: @font-size__base; // 16px
 @h4__font-color: @heading__color__base;
 @h4__font-family: @heading__font-family__base;
 @h4__font-weight: @font-weight__bold;
@@ -180,7 +180,7 @@
 @h4__margin-top: @heading__margin-top__base;
 @h4__margin-bottom: @heading__margin-bottom__base;
 
-@h5__font-size: ceil((@font-size__base * .85)); // 12px
+@h5__font-size: ceil((@font-size__base * .875)); // 14px
 @h5__font-color: @heading__color__base;
 @h5__font-family: @heading__font-family__base;
 @h5__font-weight: @font-weight__bold;
@@ -189,7 +189,7 @@
 @h5__margin-top: @heading__margin-top__base;
 @h5__margin-bottom: @heading__margin-bottom__base;
 
-@h6__font-size: ceil((@font-size__base * .7)); // 10px
+@h6__font-size: ceil((@font-size__base * .75)); // 12px
 @h6__font-color: @heading__color__base;
 @h6__font-family: @heading__font-family__base;
 @h6__font-weight: @font-weight__bold;
@@ -242,3 +242,4 @@
 
 //  Disable filters output in css
 @disable-filters: false;
+
