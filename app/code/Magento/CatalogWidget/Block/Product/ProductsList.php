@@ -506,7 +506,7 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
      */
     public function getIdentities()
     {
-        $identities = [[]];
+        $identities = [];
         if ($this->getProductCollection()) {
             foreach ($this->getProductCollection() as $product) {
                 if ($product instanceof IdentityInterface) {
@@ -514,7 +514,7 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
                 }
             }
         }
-        $identities = array_merge(...$identities);
+        $identities = array_merge([], ...$identities);
 
         return $identities ?: [Product::CACHE_TAG];
     }
