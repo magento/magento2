@@ -119,6 +119,8 @@ define([
                     };
                 }
 
+                let wishListItemsToDel = {};
+
                 $.each(params.data, function (key, value) {
                     if (key.indexOf('option') === -1) {
                         return;
