@@ -36,6 +36,7 @@ class ProductReviewsDataProvider
      * @param int $productId
      * @param int $currentPage
      * @param int $pageSize
+     * @param int $storeId
      *
      * @return Collection
      */
@@ -43,7 +44,7 @@ class ProductReviewsDataProvider
     {
         /** @var Collection $reviewsCollection */
         $reviewsCollection = $this->collectionFactory->create()
-	        ->addStoreFilter($storeId)
+            ->addStoreFilter($storeId)
             ->addStatusFilter(Review::STATUS_APPROVED)
             ->addEntityFilter(Review::ENTITY_PRODUCT_CODE, $productId)
             ->setPageSize($pageSize)

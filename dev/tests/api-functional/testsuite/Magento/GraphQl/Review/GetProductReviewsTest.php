@@ -154,7 +154,7 @@ QUERY;
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
         $product = $productRepository->get($productSku, false, null, true);
         $summaryFactory = ObjectManager::getInstance()->get(SummaryFactory::class);
-	    $storeId = ObjectManager::getInstance()->get(StoreManagerInterface::class)->getStore()->getId();
+        $storeId = ObjectManager::getInstance()->get(StoreManagerInterface::class)->getStore()->getId();
         $summary = $summaryFactory->create()->setStoreId($storeId)->load($product->getId());
         $query
             = <<<QUERY
@@ -199,22 +199,22 @@ QUERY;
         self::assertNotEmpty($items[0]['reviews']['items']);
     }
 
-	/**
-	 * @magentoApiDataFixture Magento/Review/_files/different_reviews.php
-	 * @magentoApiDataFixture Magento/Store/_files/second_store.php
-	 */
-	public function testProductReviewRatingsPerSpecificStore()
-	{
-		$productSku = 'simple';
-		$headerMapSecondStore['Store'] = 'fixture_second_store';
-		/** @var ProductRepositoryInterface $productRepository */
-		$productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
-		$product = $productRepository->get($productSku, false, null, true);
-		$summaryFactory = ObjectManager::getInstance()->get(SummaryFactory::class);
-		$storeId = ObjectManager::getInstance()->get(StoreManagerInterface::class)->getStore()->getId();
-		$summary = $summaryFactory->create()->setStoreId($storeId)->load($product->getId());
-		$query
-		                   = <<<QUERY
+    /**
+     * @magentoApiDataFixture Magento/Review/_files/different_reviews_different_stores.php
+     * @magentoApiDataFixture Magento/Store/_files/second_store.php
+     */
+    public function testProductReviewRatingsPerSpecificStore()
+    {
+        $productSku = 'simple';
+        $headerMapSecondStore['Store'] = 'fixture_second_store';
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
+        $product = $productRepository->get($productSku, false, null, true);
+        $summaryFactory = ObjectManager::getInstance()->get(SummaryFactory::class);
+        $storeId = ObjectManager::getInstance()->get(StoreManagerInterface::class)->getStore()->getId();
+        $summary = $summaryFactory->create()->setStoreId($storeId)->load($product->getId());
+        $query
+                           = <<<QUERY
 {
   products(filter: {
       sku: {
@@ -244,17 +244,17 @@ QUERY;
   }
 }
 QUERY;
-		$response = $this->graphQlQuery($query, [], '', $headerMapSecondStore);
-		self::assertArrayHasKey('products', $response);
-		self::assertArrayHasKey('items', $response['products']);
-		self::assertNotEmpty($response['products']['items']);
+        $response = $this->graphQlQuery($query, [], '', $headerMapSecondStore);
+        self::assertArrayHasKey('products', $response);
+        self::assertArrayHasKey('items', $response['products']);
+        self::assertNotEmpty($response['products']['items']);
 
-		$items = $response['products']['items'];
-		self::assertEquals($summary->getData('rating_summary'), $items[0]['rating_summary']);
-		self::assertEquals($summary->getData('reviews_count'), $items[0]['review_count']);
-		self::assertArrayHasKey('items', $items[0]['reviews']);
-		self::assertNotEmpty($items[0]['reviews']['items']);
-	}
+        $items = $response['products']['items'];
+        self::assertEquals($summary->getData('rating_summary'), $items[0]['rating_summary']);
+        self::assertEquals($summary->getData('reviews_count'), $items[0]['review_count']);
+        self::assertArrayHasKey('items', $items[0]['reviews']);
+        self::assertNotEmpty($items[0]['reviews']['items']);
+    }
 
     /**
      * @magentoApiDataFixture Magento/Review/_files/customer_review_with_rating.php

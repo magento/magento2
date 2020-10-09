@@ -92,8 +92,8 @@ class Reviews implements ResolverInterface
             throw new GraphQlInputException(__('pageSize value must be greater than 0.'));
         }
 
-	    /** @var StoreInterface $store */
-	    $store = $context->getExtensionAttributes()->getStore();
+        /** @var StoreInterface $store */
+        $store = $context->getExtensionAttributes()->getStore();
 
         /** @var Product $product */
         $product = $value['model'];
@@ -101,7 +101,7 @@ class Reviews implements ResolverInterface
             (int) $product->getId(),
             $args['currentPage'],
             $args['pageSize'],
-	        (int) $store->getId()
+            (int) $store->getId()
         );
 
         return $this->aggregatedReviewsDataProvider->getData($reviewsCollection);
