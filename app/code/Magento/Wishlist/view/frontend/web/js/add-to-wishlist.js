@@ -107,7 +107,7 @@ define([
          * @private
          */
         _updateAddToWishlistButton: function (dataToAdd) {
-            var self = this;
+            var self = this,
                 wishListItemsToDel = {};
 
             $('[data-action="add-to-wishlist"]').each(function (index, element) {
@@ -118,8 +118,6 @@ define([
                         'data': {}
                     };
                 }
-
-                let wishListItemsToDel = {};
 
                 $.each(params.data, function (key, value) {
                     if (key.indexOf('option') === -1) {
