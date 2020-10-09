@@ -3004,8 +3004,8 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      */
     protected function _prepareQuotedSqlCondition($text, $value, $fieldName)
     {
+        $text = str_replace('{{fieldName}}', $fieldName, $text);
         $sql = $this->quoteInto($text, $value);
-        $sql = str_replace('{{fieldName}}', $fieldName, $sql);
         return $sql;
     }
 

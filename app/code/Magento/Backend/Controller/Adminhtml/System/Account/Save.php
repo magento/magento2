@@ -5,17 +5,21 @@
  */
 namespace Magento\Backend\Controller\Adminhtml\System\Account;
 
+use Magento\Backend\App\Action\Context;
+use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Validator\Exception as ValidatorException;
-use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\State\UserLockedException;
 use Magento\Security\Model\SecurityCookie;
 
 /**
+ * Saving an admin user info.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Save extends \Magento\Backend\Controller\Adminhtml\System\Account
+class Save extends \Magento\Backend\Controller\Adminhtml\System\Account implements HttpPostActionInterface
 {
     /**
      * @var SecurityCookie
@@ -23,17 +27,15 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Account
     private $securityCookie;
 
     /**
-     * Get security cookie
+     * Save controller constructor.
      *
-     * @return SecurityCookie
-     * @deprecated 100.1.0
+     * @param Context $context
+     * @param SecurityCookie|null $securityCookie
      */
-    private function getSecurityCookie()
+    public function __construct(Context $context, ?SecurityCookie $securityCookie = null)
     {
-        if (!($this->securityCookie instanceof SecurityCookie)) {
-            return \Magento\Framework\App\ObjectManager::getInstance()->get(SecurityCookie::class);
-        }
-        return $this->securityCookie;
+        parent::__construct($context);
+        $this->securityCookie = $securityCookie ?? ObjectManager::getInstance()->get(SecurityCookie::class);
     }
 
     /**
@@ -71,7 +73,7 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Account
             $user->performIdentityCheck($currentUserPassword);
             if ($password !== '') {
                 $user->setPassword($password);
-                $user->setPasswordConfirmation($passwordConfirmation);
+                $user->setData('password_confirmation', $passwordConfirmation);
             }
             $errors = $user->validate();
             if ($errors !== true && !empty($errors)) {
@@ -85,7 +87,7 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Account
             }
         } catch (UserLockedException $e) {
             $this->_auth->logout();
-            $this->getSecurityCookie()->setLogoutReasonCookie(
+            $this->securityCookie->setLogoutReasonCookie(
                 \Magento\Security\Model\AdminSessionsManager::LOGOUT_REASON_USER_LOCKED
             );
         } catch (ValidatorException $e) {
