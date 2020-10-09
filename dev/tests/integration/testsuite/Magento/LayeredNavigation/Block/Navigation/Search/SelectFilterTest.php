@@ -73,6 +73,25 @@ class SelectFilterTest extends CategorySelectFilterTest
     }
 
     /**
+     * @magentoDataFixture Magento/Catalog/_files/product_dropdown_attribute.php
+     * @magentoDataFixture Magento/Catalog/_files/category_with_different_price_products.php
+     * @dataProvider getActiveFiltersWithCustomAttributeDataProvider
+     * @param array $products
+     * @param array $expectation
+     * @param string $filterValue
+     * @param int $productsCount
+     * @return void
+     */
+    public function testGetActiveFiltersWithCustomAttribute(
+        array $products,
+        array $expectation,
+        string $filterValue,
+        int $productsCount
+    ): void {
+        $this->getSearchActiveFiltersAndAssert($products, $expectation, $filterValue, $productsCount);
+    }
+
+    /**
      * @inheritdoc
      */
     protected function getLayerType(): string
