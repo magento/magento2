@@ -304,7 +304,7 @@ class Dob extends AbstractWidget
      */
     public function getDateFormat()
     {
-        $dateFormat = $this->_localeDate->getDateFormatWithLongYear();
+        $dateFormat = $this->setTwoDayPlaces($this->_localeDate->getDateFormatWithLongYear());
         /** Escape RTL characters which are present in some locales and corrupt formatting */
         $escapedDateFormat = preg_replace('/[^MmDdYy\/\.\-]/', '', $dateFormat);
 
@@ -424,6 +424,21 @@ class Dob extends AbstractWidget
                 'dayNamesShort' => array_values(iterator_to_array($daysData['format']['abbreviated'])),
                 'dayNamesMin' => array_values(iterator_to_array($daysData['format']['short'])),
             ]
+        );
+    }
+
+    /**
+     * Set 2 places for day value in format string
+     *
+     * @param string $format
+     * @return string
+     */
+    private function setTwoDayPlaces(string $format): string
+    {
+        return preg_replace(
+            '/(?<!d)d(?!d)/',
+            'dd',
+            $format
         );
     }
 }

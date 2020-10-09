@@ -52,7 +52,7 @@ class DobTest extends TestCase
     const YEAR = '2014';
 
     // Value of date('Y', strtotime(self::DATE))
-    const DATE_FORMAT = 'M/d/y';
+    const DATE_FORMAT = 'M/dd/y';
 
     /** Constants used by Dob::setDateInput($code, $html) */
     const DAY_HTML =
@@ -373,11 +373,15 @@ class DobTest extends TestCase
             [
                 'ar_SA',
                 preg_replace(
-                    '/[^MmDdYy\/\.\-]/',
-                    '',
-                    (new DateFormatterFactory())
-                        ->create('ar_SA', \IntlDateFormatter::SHORT, \IntlDateFormatter::NONE)
-                        ->getPattern()
+                    '/(?<!d)d(?!d)/',
+                    'dd',
+                    preg_replace(
+                        '/[^MmDdYy\/\.\-]/',
+                        '',
+                        (new DateFormatterFactory())
+                            ->create('ar_SA', \IntlDateFormatter::SHORT, \IntlDateFormatter::NONE)
+                            ->getPattern()
+                    )
                 )
             ],
             [Resolver::DEFAULT_LOCALE, self::DATE_FORMAT],
