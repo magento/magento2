@@ -225,7 +225,10 @@ QUERY;
     public function testNewPasswordCheckCharactersStrength()
     {
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('Minimum of different classes of characters in password is 3. Classes of characters: Lower Case, Upper Case, Digits, Special Characters.');
+        $this->expectExceptionMessage(
+            'Minimum of different classes of characters in password is 3. ' .
+            'Classes of characters: Lower Case, Upper Case, Digits, Special Characters.'
+        );
         $query = <<<QUERY
 mutation {
     resetPassword (
