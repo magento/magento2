@@ -20,6 +20,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
 use Magento\Framework\EntityManager\EntityManager;
 use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Tests\NamingConvention\true\false;
 
 /**
  * Resource model for category entity
@@ -127,7 +128,8 @@ class Category extends AbstractResource
         $data = [],
         \Magento\Framework\Serialize\Serializer\Json $serializer = null,
         MetadataPool $metadataPool = null
-    ) {
+    )
+    {
         parent::__construct(
             $context,
             $storeManager,
@@ -137,7 +139,7 @@ class Category extends AbstractResource
         $this->_categoryTreeFactory = $categoryTreeFactory;
         $this->_categoryCollectionFactory = $categoryCollectionFactory;
         $this->_eventManager = $eventManager;
-        $this->connectionName  = 'catalog';
+        $this->connectionName = 'catalog';
         $this->indexerProcessor = $indexerProcessor;
         $this->serializer = $serializer ?: ObjectManager::getInstance()
             ->get(\Magento\Framework\Serialize\Serializer\Json::class);
@@ -289,7 +291,7 @@ class Category extends AbstractResource
                 $object->setPosition($this->_getMaxPosition($object->getPath()) + 1);
             }
             $path = explode('/', (string)$object->getPath());
-            $level = count($path)  - ($object->getId() ? 1 : 0);
+            $level = count($path) - ($object->getId() ? 1 : 0);
             $toUpdateChild = array_diff($path, [$object->getId()]);
 
             if (!$object->hasPosition()) {
@@ -696,7 +698,7 @@ class Category extends AbstractResource
         $bind = ['category_id' => (int)$category->getId()];
         $counts = $this->getConnection()->fetchOne($select, $bind);
 
-        return (int) $counts;
+        return (int)$counts;
     }
 
     /**
@@ -709,13 +711,14 @@ class Category extends AbstractResource
      * @param boolean $toLoad
      * @return \Magento\Framework\Data\Tree\Node\Collection|\Magento\Catalog\Model\ResourceModel\Category\Collection
      */
-    public function getCategories($parent, $recursionLevel = 0, $sorted = false, $asCollection = false, $toLoad = true)
+    public function getCategories($parent, $recursionLevel = 0, $sorted = false, $asCollection = false, $toLoad =
+    true)
     {
         $tree = $this->_categoryTreeFactory->create();
         /* @var $tree \Magento\Catalog\Model\ResourceModel\Category\Tree */
         $nodes = $tree->loadNode($parent)->loadChildren($recursionLevel)->getChildren();
 
-        $tree->addCollectionData(null, $sorted, $parent, $toLoad, true);
+        $tree->addCollectionData(null, $sorted, $parent, $toLoad, true, false);
 
         if ($asCollection) {
             return $tree->getCollection();
@@ -949,7 +952,8 @@ class Category extends AbstractResource
         \Magento\Catalog\Model\Category $category,
         \Magento\Catalog\Model\Category $newParent,
         $afterCategoryId = null
-    ) {
+    )
+    {
         $childrenCount = $this->getChildrenCount($category->getId()) + 1;
         $table = $this->getEntityTable();
         $connection = $this->getConnection();
@@ -1112,7 +1116,7 @@ class Category extends AbstractResource
     /**
      * Save entity's attributes into the object's resource
      *
-     * @param  \Magento\Framework\Model\AbstractModel $object
+     * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
      * @throws \Exception
      */
