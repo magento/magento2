@@ -70,6 +70,7 @@ class Items extends \Magento\Sales\Block\Items\AbstractItems
         $this->itemsPerPage = $this->_scopeConfig->getValue('sales/orders/items_per_page');
 
         $this->itemCollection = $this->itemCollectionFactory->create();
+        $this->itemCollection->addFieldToFilter('parent_item_id', ['null' => true]);
         $this->itemCollection->setOrderFilter($this->getOrder());
 
         /** @var \Magento\Theme\Block\Html\Pager $pagerBlock */
