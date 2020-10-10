@@ -68,7 +68,7 @@ abstract class ImportResult extends Import
             $message = '';
             $counter = 0;
             foreach ($this->getErrorMessages($errorAggregator) as $error) {
-                $message .= ++$counter . '. ' . $error . '<br>';
+                $message .= ++$counter . '. ' . $error . '</br>';
                 if ($counter >= self::LIMIT_ERRORS_MESSAGE) {
                     break;
                 }
@@ -83,11 +83,11 @@ abstract class ImportResult extends Import
             }
             try {
                 $resultBlock->addNotice(
-                    '<strong>' . __('Following Error(s) has been occurred during importing process:') . '</strong><br>'
+                    '<strong>' . __('Following Error(s) has been occurred during importing process:') . '</strong></br>'
                     . '<div class="import-error-wrapper">' . __('Only the first 100 errors are shown. ')
                     . '<a href="'
                     . $this->createDownloadUrlImportHistoryFile($this->createErrorReport($errorAggregator))
-                    . '">' . __('Download full report') . '</a><br>'
+                    . '">' . __('Download full report') . '</a></br>'
                     . '<div class="import-error-list">' . $message . '</div></div>'
                 );
             } catch (\Exception $e) {
