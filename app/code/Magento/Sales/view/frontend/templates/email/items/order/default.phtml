@@ -34,7 +34,7 @@ $_order = $_item->getOrder();
     </td>
     <td class="item-qty"><?= (float) $_item->getQtyOrdered() ?></td>
     <td class="item-price">
-        <?= /* @noEscape */ $block->getItemPrice($_item) ?>
+        <?= /* @noEscape */ $block->getItemPriceHtml() ?>
     </td>
 </tr>
 <?php if ($_item->getGiftMessageId()
