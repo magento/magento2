@@ -200,6 +200,21 @@
             }
         }
     }
+    
+    .toolbar {
+        &.wishlist-toolbar {
+            .limiter {
+                float: none;
+            }
+            
+            .toolbar-amount,
+            .limiter {
+                display: block;
+                z-index: 1;
+                text-align: center;
+            }
+        }
+    }
 }
 
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
