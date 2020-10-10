@@ -69,14 +69,21 @@
         }
 
         .count {
+            position: relative;
             .lib-css(color, @text__color__muted);
 
             &:before {
                 content: '(';
+                width: 5px;
+                position: absolute;
+                left: 0;
             }
 
             &:after {
                 content: ')';
+                width: 5px;
+                position: absolute;
+                right: -2px;
             }
         }
     }
