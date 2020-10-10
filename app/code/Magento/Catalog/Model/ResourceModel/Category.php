@@ -20,7 +20,6 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
 use Magento\Framework\EntityManager\EntityManager;
 use Magento\Framework\EntityManager\MetadataPool;
-use Magento\Tests\NamingConvention\true\false;
 
 /**
  * Resource model for category entity
