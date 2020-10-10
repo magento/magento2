@@ -121,7 +121,9 @@
             "vat_is_valid": true,
             "vat_request_id": true,
             "vat_request_date": true,
-            "vat_request_success": true
+            "vat_request_success": true,
+            "validated_country_code": true,
+            "validated_vat_number": true
         },
         "index": {
             "QUOTE_ADDRESS_QUOTE_ID": true
@@ -229,7 +231,9 @@
             "row_total_incl_tax": true,
             "base_row_total_incl_tax": true,
             "discount_tax_compensation_amount": true,
-            "base_discount_tax_compensation_amount": true
+            "base_discount_tax_compensation_amount": true,
+            "virtual_amount": true,
+            "base_virtual_amount": true
         },
         "index": {
             "QUOTE_ADDRESS_ITEM_QUOTE_ADDRESS_ID": true,

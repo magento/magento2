@@ -195,6 +195,10 @@
                 comment="Shipping Incl Tax"/>
         <column xsi:type="decimal" name="base_shipping_incl_tax" scale="4" precision="20" unsigned="false"
                 nullable="true" comment="Base Shipping Incl Tax"/>
+        <column xsi:type="decimal" name="virtual_amount" scale="4" precision="20" unsigned="false"
+                nullable="true" default="0" comment="Virtual Total" />
+        <column xsi:type="decimal" name="base_virtual_amount" scale="4" precision="20" unsigned="false"
+                nullable="true" default="0" comment="Base Virtual Total" />
         <column xsi:type="text" name="vat_id" nullable="true" comment="Vat ID"/>
         <column xsi:type="smallint" name="vat_is_valid" unsigned="false" nullable="true" identity="false"
                 comment="Vat Is Valid"/>
