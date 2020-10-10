@@ -789,9 +789,6 @@ abstract class AbstractType
     public function getSku($product)
     {
         $sku = $product->getData('sku');
-        if ($product->getCustomOption('option_ids')) {
-            $sku = $this->getOptionSku($product, $sku);
-        }
         return $sku;
     }
 
