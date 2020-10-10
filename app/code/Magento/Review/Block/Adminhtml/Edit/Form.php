@@ -69,7 +69,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $this->_systemStore = $systemStore;
         $this->urlEncoder = $urlEncoder;
         parent::__construct($context, $registry, $formFactory, $data);
-        
     }
 
     /**
