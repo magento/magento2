@@ -222,9 +222,12 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
            }
         ';
         if (!$this->_storeManager->hasSingleStore()) {
-            $this->_formInitScripts[] = 'Event.observe(window, \'load\', function(){
-                     Event.observe($("select_stores"), \'change\', review.updateRating);
-                });
+            $this->_formInitScripts[] = '
+                    require(["jquery","prototype"], function(jQuery){
+                        Event.observe(window, \'load\', function(){
+                        Event.observe($("select_stores"), \'change\', review.updateRating);
+                        });
+                      })
                  ';
         }
     }
