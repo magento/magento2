@@ -142,7 +142,7 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
     {
         $name = '';
         if ($this->getPrefix()) {
-            $name .= $this->getPrefix() . ' ';
+            $name .= __($this->getPrefix()) . ' ';
         }
         $name .= $this->getFirstname();
         if ($this->getMiddlename()) {
@@ -150,7 +150,7 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
         }
         $name .= ' ' . $this->getLastname();
         if ($this->getSuffix()) {
-            $name .= ' ' . $this->getSuffix();
+            $name .= ' ' . __($this->getSuffix());
         }
         return $name;
     }

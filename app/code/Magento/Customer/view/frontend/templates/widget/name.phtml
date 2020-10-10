@@ -48,7 +48,7 @@ $suffix = $block->showSuffix();
                             title="<?= $block->escapeHtmlAttr($block->getStoreLabel('prefix')) ?>"
                             class="<?= $block->escapeHtmlAttr($block->getAttributeValidationClass('prefix')) ?>" <?= $block->isPrefixRequired() ? ' data-validate="{required:true}"' : '' ?> >
                         <?php foreach ($block->getPrefixOptions() as $_option) : ?>
-                            <option value="<?= $block->escapeHtmlAttr($_option) ?>"<?php if ($block->getObject()->getPrefix() == $_option) : ?> selected="selected"<?php endif; ?>>
+                            <option value="<?= $block->escapeHtmlAttr(__($_option)) ?>"<?php if ($block->getObject()->getPrefix() == $_option) : ?> selected="selected"<?php endif; ?>>
                                 <?= $block->escapeHtml(__($_option)) ?>
                             </option>
                         <?php endforeach; ?>
@@ -106,7 +106,7 @@ $suffix = $block->showSuffix();
                             title="<?= $block->escapeHtmlAttr($block->getStoreLabel('suffix')) ?>"
                             class="<?= $block->escapeHtmlAttr($block->getAttributeValidationClass('suffix')) ?>" <?= $block->isSuffixRequired() ? ' data-validate="{required:true}"' : '' ?>>
                         <?php foreach ($block->getSuffixOptions() as $_option) : ?>
-                            <option value="<?= $block->escapeHtmlAttr($_option) ?>"<?php if ($block->getObject()->getSuffix() == $_option) : ?> selected="selected"<?php endif; ?>>
+                            <option value="<?= $block->escapeHtmlAttr(__($_option)) ?>"<?php if ($block->getObject()->getSuffix() == $_option) : ?> selected="selected"<?php endif; ?>>
                                 <?= $block->escapeHtml(__($_option)) ?>
                             </option>
                         <?php endforeach; ?>
