@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Review\Block\Adminhtml;
 
 /**
@@ -44,7 +45,8 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
         \Magento\Review\Helper\Action\Pager $reviewActionPager,
         \Magento\Framework\Registry $registry,
         array $data = []
-    ) {
+    )
+    {
         $this->_coreRegistry = $registry;
         $this->_reviewActionPager = $reviewActionPager;
         $this->_reviewFactory = $reviewFactory;
@@ -78,12 +80,12 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
                 [
                     'label' => __('Previous'),
                     'onclick' => 'setLocation(\'' . $this->getUrl(
-                        'review/*/*',
-                        [
-                            'id' => $prevId,
-                            'ret' => $this->getRequest()->getParam('ret'),
-                        ]
-                    ) . '\')'
+                            'review/*/*',
+                            [
+                                'id' => $prevId,
+                                'ret' => $this->getRequest()->getParam('ret'),
+                            ]
+                        ) . '\')'
                 ],
                 3,
                 10
@@ -139,12 +141,12 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
                 [
                     'label' => __('Next'),
                     'onclick' => 'setLocation(\'' . $this->getUrl(
-                        'review/*/*',
-                        [
-                            'id' => $nextId,
-                            'ret' => $this->getRequest()->getParam('ret'),
-                        ]
-                    ) . '\')'
+                            'review/*/*',
+                            [
+                                'id' => $nextId,
+                                'ret' => $this->getRequest()->getParam('ret'),
+                            ]
+                        ) . '\')'
                 ],
                 3,
                 105
@@ -220,10 +222,13 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
                         );
                     }
            }
-           Event.observe(window, \'load\', function(){
-                 Event.observe($("select_stores"), \'change\', review.updateRating);
-           });
         ';
+        if (!$this->_storeManager->hasSingleStore()) {
+            $this->_formInitScripts[] = 'Event.observe(window, \'load\', function(){
+                     Event.observe($("select_stores"), \'change\', review.updateRating);
+                });
+                 ';
+        }
     }
 
     /**
