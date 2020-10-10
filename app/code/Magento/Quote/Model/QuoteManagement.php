@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Quote\Model;
 
 use Magento\Authorization\Model\UserContextInterface;
+use Magento\Customer\Api\Data\GroupInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Event\ManagerInterface as EventManager;
 use Magento\Framework\Exception\CouldNotSaveException;
@@ -397,7 +398,8 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
                 }
             }
             $quote->setCustomerIsGuest(true);
-            $quote->setCustomerGroupId(\Magento\Customer\Api\Data\GroupInterface::NOT_LOGGED_IN_ID);
+            $groupId = $quote->getCustomer()->getGroupId() ?: GroupInterface::NOT_LOGGED_IN_ID;
+            $quote->setCustomerGroupId($groupId);
         }
 
         $remoteAddress = $this->remoteAddress->getRemoteAddress();
