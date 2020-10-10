@@ -220,8 +220,10 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
                         );
                     }
            }
+            require(["jquery","prototype"], function(jQuery){
            Event.observe(window, \'load\', function(){
                  Event.observe($("select_stores"), \'change\', review.updateRating);
+           });
            });
         ';
     }
