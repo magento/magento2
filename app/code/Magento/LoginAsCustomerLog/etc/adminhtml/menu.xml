@@ -11,7 +11,7 @@
         <add id="Magento_LoginAsCustomerLog::login_log"
              title="Login as Customer Log"
              module="Magento_LoginAsCustomerLog"
-             parent="Magento_Customer::customer"
+             parent="Magento_AsynchronousOperations::system_magento_logging"
              sortOrder="40"
              resource="Magento_LoginAsCustomerLog::login_log"
              action="loginascustomer_log/log/index"
