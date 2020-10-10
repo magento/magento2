@@ -72,7 +72,7 @@ define([
          */
         removeBundleItemsFromOption: function (index) {
             var bundleSelections = registry.get(this.name + '.' + index + '.' + this.bundleSelectionsName),
-                bundleSelectionsLength = (bundleSelections.elems() || []).length,
+                bundleSelectionsLength = bundleSelections ? (bundleSelections.elems() || []).length:[],
                 i;
 
             if (bundleSelectionsLength) {
