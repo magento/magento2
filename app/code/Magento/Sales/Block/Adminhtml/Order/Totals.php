@@ -42,16 +42,29 @@ class Totals extends \Magento\Sales\Block\Adminhtml\Totals//\Magento\Sales\Block
                 'area' => 'footer',
             ]
         );
-        $this->_totals['due'] = new \Magento\Framework\DataObject(
-            [
-                'code' => 'due',
-                'strong' => true,
-                'value' => $this->getSource()->getTotalDue(),
-                'base_value' => $this->getSource()->getBaseTotalDue(),
-                'label' => __('Total Due'),
-                'area' => 'footer',
-            ]
-        );
+        if ($this->getSource()->getTotalCanceled() > 0 && $this->getSource()->getBaseTotalCanceled() > 0) {
+                $this->_totals['canceled'] = new \Magento\Framework\DataObject(
+                [
+                    'code' => 'canceled',
+                    'strong' => true,
+                    'value' => $this->getSource()->getTotalCanceled(),
+                    'base_value' => $this->getSource()->getBaseTotalCanceled(),
+                    'label' => __('Total Canceled'),
+                    'area' => 'footer',
+                ]
+            );
+        } else {
+            $this->_totals['due'] = new \Magento\Framework\DataObject(
+                [
+                    'code' => 'due',
+                    'strong' => true,
+                    'value' => $this->getSource()->getTotalDue(),
+                    'base_value' => $this->getSource()->getBaseTotalDue(),
+                    'label' => __('Total Due'),
+                    'area' => 'footer',
+                ]
+            );
+        }
         return $this;
     }
 }
