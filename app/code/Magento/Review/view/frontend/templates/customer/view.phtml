@@ -42,14 +42,14 @@ $product = $block->getProductData();
                             <span class="rating-label">
                                 <span><?= $block->escapeHtml($_rating->getRatingCode()) ?></span>
                             </span>
-                            <div class="rating-result" title="<?= /* @noEscape */ $rating ?>%">
+                            <div class="rating-result" id="rating-result_<?= /* @noEscape */ $_rating->getRatingId() ?>" title="<?= $block->escapeHtmlAttr($rating); ?>%">
                                 <span>
                                     <span><?= /* @noEscape */ $rating ?>%</span>
                                 </span>
                             </div>
                             <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
-                                "width:" . /* @noEscape */ $rating . "%",
-                                'div.rating-result>span:first-child'
+                            'width:' . $block->escapeHtmlAttr($rating) . '%',
+                            '#rating-result_' . $_rating->getRatingId() . ' span'
                             ) ?>
                         </div>
                     <?php endif; ?>
