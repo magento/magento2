@@ -63,11 +63,20 @@ class FilterProcessor implements CollectionProcessorInterface
         FilterGroup $filterGroup,
         AbstractDb $collection
     ) {
-        $fields = [];
+        $fields = $customFilterArr = [];
         foreach ($filterGroup->getFilters() as $filter) {
             $isApplied = false;
             $customFilter = $this->getCustomFilterForField($filter->getField());
             if ($customFilter) {
+                if ($filter->getConditionType() == "eq") {
+                    $customFilterArr[$filter->getField()]['value'][] = $filter->getValue();
+                    /** @var \Magento\Framework\Api\Filter $newFilter */
+                    $newFilter = clone $filter;
+                    $newFilter->setValue($customFilterArr[$filter->getField()]['value']);
+                    $newFilter->setConditionType('in');
+                    $customFilterArr[$filter->getField()]['filter'] = $newFilter;
+                    continue;
+                }
                 $isApplied = $customFilter->apply($filter, $collection);
             }
 
@@ -77,7 +86,10 @@ class FilterProcessor implements CollectionProcessorInterface
                 $fields[] = ['attribute' => $field, $condition => $filter->getValue()];
             }
         }
-
+        foreach ($customFilterArr as $field => $val) {
+            $customFilter = $this->getCustomFilterForField($field);
+            $customFilter->apply($val['filter'], $collection);
+        }
         if ($fields) {
             $collection->addFieldToFilter($fields);
         }
