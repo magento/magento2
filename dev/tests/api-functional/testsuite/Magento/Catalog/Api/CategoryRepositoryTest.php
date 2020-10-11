@@ -593,13 +593,13 @@ class CategoryRepositoryTest extends WebapiAbstract
             $category,
             'is_active',
             Store::DISTRO_STORE_ID
-        ), 'is_active is overriden for default store');
+        ), 'is_active is overridden for default store');
         self::assertFalse($scopeOverriddenValue->containsValue(
             CategoryInterface::class,
             $category,
             'url_key',
             Store::DISTRO_STORE_ID
-        ), 'url_key is overriden for default store');
+        ), 'url_key is overridden for default store');
 
         $this->deleteCategory($categoryId);
     }

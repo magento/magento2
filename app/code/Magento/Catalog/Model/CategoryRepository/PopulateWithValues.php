@@ -10,7 +10,7 @@ namespace Magento\Catalog\Model\CategoryRepository;
 use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Catalog\Model\Attribute\ScopeOverriddenValue;
 use Magento\Catalog\Model\Category;
-use Magento\Eav\Api\AttributeRepositoryInterface as AttributeRepository;
+use Magento\Catalog\Api\CategoryAttributeRepositoryInterface as AttributeRepository;
 use Magento\Eav\Api\Data\AttributeInterface;
 use Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface;
 use Magento\Framework\Api\FilterBuilder;
