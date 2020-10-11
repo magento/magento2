@@ -9,7 +9,7 @@ use Magento\Customer\Api\CustomerMetadataInterface;
 use Magento\Framework\Api\ArrayObjectSearch;
 
 /**
- * Class Dob
+ * Customer date of birth attribute block
  *
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
@@ -267,7 +267,9 @@ class Dob extends AbstractWidget
         $validators['validate-date'] = [
             'dateFormat' => $this->getDateFormat()
         ];
-        $validators['validate-dob'] = true;
+        $validators['validate-dob'] = [
+            'dateFormat' => $this->getDateFormat()
+        ];
 
         return 'data-validate="' . $this->_escaper->escapeHtml(json_encode($validators)) . '"';
     }
@@ -279,7 +281,7 @@ class Dob extends AbstractWidget
      */
     public function getDateFormat()
     {
-        $dateFormat = $this->_localeDate->getDateFormatWithLongYear();
+        $dateFormat = $this->setTwoDayPlaces($this->_localeDate->getDateFormatWithLongYear());
         /** Escape RTL characters which are present in some locales and corrupt formatting */
         $escapedDateFormat = preg_replace('/[^MmDdYy\/\.\-]/', '', $dateFormat);
 
@@ -373,6 +375,21 @@ class Dob extends AbstractWidget
         return (int)$this->_scopeConfig->getValue(
             'general/locale/firstday',
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+    }
+
+    /**
+     * Set 2 places for day value in format string
+     *
+     * @param string $format
+     * @return string
+     */
+    private function setTwoDayPlaces(string $format): string
+    {
+        return preg_replace(
+            '/(?<!d)d(?!d)/',
+            'dd',
+            $format
         );
     }
 }

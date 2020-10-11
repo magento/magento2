@@ -29,7 +29,7 @@ class FilesTest extends \PHPUnit\Framework\TestCase
     /** @var string */
     protected $setupTestsDir = '#setup/src/Magento/Setup/Test#';
 
-    public function setUp()
+    protected function setUp(): void
     {
         $componentRegistrar = new ComponentRegistrar();
         $dirSearch = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()

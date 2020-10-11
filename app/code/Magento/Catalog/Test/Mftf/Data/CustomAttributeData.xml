@@ -31,6 +31,14 @@
         <data key="attribute_code">short_description</data>
         <data key="value" unique="suffix">API Product Short Description</data>
     </entity>
+    <entity name="ApiProductSpecialPrice" type="custom_attribute">
+        <data key="attribute_code">special_price</data>
+        <data key="value">51.51</data>
+    </entity>
+    <entity name="ApiProductCost" type="custom_attribute">
+        <data key="attribute_code">cost</data>
+        <data key="value">50.05</data>
+    </entity>
     <entity name="ApiProductNewsFromDate" type="custom_attribute">
         <data key="attribute_code">news_from_date</data>
         <data key="value">2018-05-17 00:00:00</data>

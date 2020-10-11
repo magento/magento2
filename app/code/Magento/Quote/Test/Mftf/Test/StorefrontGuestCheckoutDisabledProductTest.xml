@@ -75,7 +75,9 @@
             </createData>
             <magentoCLI command="config:set customer/online_customers/section_data_lifetime 1"
                         stepKey="setConfigForCartLifetime"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache" />
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
         </before>
         <after>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
@@ -85,11 +87,11 @@
             <deleteData createDataKey="createConfigChildProduct1" stepKey="deleteConfigChildProduct1"/>
             <deleteData createDataKey="createConfigChildProduct2" stepKey="deleteConfigChildProduct2"/>
             <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
-            <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductListing"/>
+            <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductListing"/>
             <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetGridToDefaultKeywordSearch"/>
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
         <!-- Step 1: Add simple product to shopping cart -->
         <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.name$$)}}" stepKey="amOnSimpleProductPage"/>
@@ -103,15 +105,14 @@
         <waitForElement selector="{{StorefrontMessagesSection.messageProductAddedToCart($$createConfigProduct.name$$)}}" time="30" stepKey="assertMessage"/>
         <!--Disabled via admin panel-->
         <openNewTab stepKey="openNewTab"/>
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         <!-- Find the first simple product that we just created using the product grid and go to its page-->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPage"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="visitAdminProductPage"/>
         <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="findCreatedProduct">
             <argument name="product" value="$$createConfigChildProduct1$$"/>
         </actionGroup>
         <waitForPageLoad stepKey="waitForFiltersToBeApplied"/>
-        <click selector="{{AdminProductGridSection.firstRow}}" stepKey="clickOnProductPage"/>
-        <waitForPageLoad stepKey="waitForProductPageLoad"/>
+        <actionGroup ref="AdminProductGridSectionClickFirstRowActionGroup" stepKey="clickOnProductPage"/>
         <!-- Disabled child configurable product -->
         <click selector="{{AdminProductFormSection.enableProductAttributeLabel}}" stepKey="clickDisableProduct"/>
         <actionGroup ref="SaveProductFormActionGroup" stepKey="clickSaveProduct"/>
@@ -125,24 +126,23 @@
         <wait time="60" stepKey="waitForCartToBeUpdated"/>
         <reloadPage stepKey="reloadPage"/>
         <waitForPageLoad stepKey="waitForCheckoutPageReload"/>
-        <click selector="{{StorefrontMiniCartSection.show}}" stepKey="clickMiniCart"/>
-        <dontSeeElement selector="{{StorefrontMiniCartSection.quantity}}" stepKey="dontSeeCartItem"/>
+        <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="clickMiniCart"/>
+        <dontSeeElement selector="{{StorefrontMinicartSection.quantity}}" stepKey="dontSeeCartItem"/>
         <!-- Add simple product to shopping cart -->
         <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct2.name$$)}}" stepKey="amOnSimpleProductPage2"/>
         <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="cartAddSimpleProductToCart2">
             <argument name="product" value="$$createSimpleProduct2$$"/>
             <argument name="productCount" value="1"/>
         </actionGroup>
-        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="goToCheckoutCartPage"/>
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToCheckoutCartPage"/>
         <!-- Disabled via admin panel -->
         <openNewTab stepKey="openNewTab2"/>
         <!-- Find the first simple product that we just created using the product grid and go to its page -->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPage2"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="visitAdminProductPage2"/>
         <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="findCreatedProduct2">
             <argument name="product" value="$$createSimpleProduct2$$"/>
         </actionGroup>
-        <click selector="{{AdminProductGridSection.firstRow}}" stepKey="clickOnProductPage2"/>
-        <waitForPageLoad stepKey="waitForProductPageLoad2"/>
+        <actionGroup ref="AdminProductGridSectionClickFirstRowActionGroup" stepKey="clickOnProductPage2"/>
         <!-- Disabled simple product from grid -->
         <actionGroup ref="ChangeStatusProductUsingProductGridActionGroup" stepKey="disabledProductFromGrid2">
             <argument name="product" value="$$createSimpleProduct2$$"/>
@@ -153,7 +153,7 @@
         <wait time="60" stepKey="waitForCartToBeUpdated2"/>
         <reloadPage stepKey="reloadPage2"/>
         <waitForPageLoad stepKey="waitForCheckoutPageReload2"/>
-        <click selector="{{StorefrontMiniCartSection.show}}" stepKey="clickMiniCart2"/>
-        <dontSeeElement selector="{{StorefrontMiniCartSection.quantity}}" stepKey="dontSeeCartItem2"/>
+        <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="clickMiniCart2"/>
+        <dontSeeElement selector="{{StorefrontMinicartSection.quantity}}" stepKey="dontSeeCartItem2"/>
     </test>
 </tests>

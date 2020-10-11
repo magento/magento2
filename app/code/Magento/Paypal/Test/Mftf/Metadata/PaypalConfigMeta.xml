@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<operations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataOperation.xsd">
+    <operation name="CreatePaypalConfigState" dataType="paypal_config_state" type="create" auth="adminFormKey" url="/admin/system_config/save/section/payment/" method="POST">
+        <object key="groups" dataType="paypal_config_state">
+            <object key="paypal_alternative_payment_methods" dataType="paypal_config_state">
+                <object key="groups" dataType="paypal_config_state">
+                    <object key="express_checkout_us" dataType="paypal_config_state">
+                        <object key="groups" dataType="paypal_config_state">
+                            <object key="express_checkout_required" dataType="paypal_config_state">
+                                <object key="groups" dataType="paypal_config_state">
+                                    <object key="express_checkout_required_express_checkout" dataType="paypal_config_state">
+                                        <object key="fields" dataType="paypal_config_state">
+                                            <object key="business_account" dataType="business_account">
+                                                <field key="value">string</field>
+                                            </object>
+                                            <object key="api_username" dataType="api_username">
+                                                <field key="value">string</field>
+                                            </object>
+                                            <object key="api_password" dataType="api_password">
+                                                <field key="value">string</field>
+                                            </object>
+                                            <object key="api_signature" dataType="api_signature">
+                                                <field key="value">string</field>
+                                            </object>
+                                            <object key="sandbox_flag" dataType="sandbox_flag">
+                                                <field key="value">string</field>
+                                            </object>
+                                            <object key="use_proxy" dataType="use_proxy">
+                                                <field key="value">string</field>
+                                            </object>
+                                            <object key="api_authentication" dataType="api_authentication">
+                                                <field key="value">string</field>
+                                            </object>
+                                        </object>
+                                    </object>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                </object>
+            </object>
+        </object>
+    </operation>
+    <operation name="CreatePaypalPayflowProConfigState" dataType="paypal_payflow_pro_config_state" type="create" auth="adminFormKey" url="/admin/system_config/save/section/payment/" method="POST">
+        <object key="groups" dataType="paypal_payflow_pro_config_state">
+            <object key="paypal_payment_gateways" dataType="paypal_payflow_pro_config_state">
+                <object key="groups" dataType="paypal_payflow_pro_config_state">
+                    <object key="paypal_payflowpro_with_express_checkout" dataType="paypal_payflow_pro_config_state">
+                        <object key="groups" dataType="paypal_payflow_pro_config_state">
+                            <object key="paypal_payflow_required" dataType="paypal_payflow_pro_config_state">
+                                <object key="groups" dataType="paypal_payflow_pro_config_state">
+                                    <object key="paypal_payflow_api_settings" dataType="paypal_payflow_pro_config_state">
+                                        <object key="fields" dataType="paypal_payflow_pro_config_state">
+                                            <object key="business_account" dataType="business_account">
+                                                <field key="value">string</field>
+                                            </object>
+                                            <object key="partner" dataType="partner">
+                                                <field key="value">string</field>
+                                            </object>
+                                            <object key="user" dataType="user">
+                                                <field key="value">string</field>
+                                            </object>
+                                            <object key="vendor" dataType="vendor">
+                                                <field key="value">string</field>
+                                            </object>
+                                            <object key="pwd" dataType="pwd">
+                                                <field key="value">string</field>
+                                            </object>
+                                            <object key="sandbox_flag" dataType="sandbox_flag">
+                                                <field key="value">string</field>
+                                            </object>
+                                            <object key="use_proxy" dataType="use_proxy">
+                                                <field key="value">string</field>
+                                            </object>
+
+                                        </object>
+                                    </object>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                </object>
+            </object>
+        </object>
+    </operation>
+    <operation name="CustomPaypalPayflowProConfigState" dataType="custom_paypal_payflow_pro_config_state" type="create" auth="adminFormKey" url="/admin/system_config/save/section/payment/" method="POST">
+        <object key="groups" dataType="custom_paypal_payflow_pro_config_state">
+            <object key="paypal_payment_gateways" dataType="custom_paypal_payflow_pro_config_state">
+                <object key="groups" dataType="custom_paypal_payflow_pro_config_state">
+                    <object key="paypal_payflowpro_with_express_checkout" dataType="custom_paypal_payflow_pro_config_state">
+                        <object key="groups" dataType="custom_paypal_payflow_pro_config_state">
+                            <object key="paypal_payflow_required" dataType="custom_paypal_payflow_pro_config_state">
+                                <object key="fields" dataType="custom_paypal_payflow_pro_config_state">
+                                    <object key="enable_paypal_payflow" dataType="enable_paypal_payflow">
+                                        <field key="value">string</field>
+                                    </object>
+                                    <object key="payflowpro_cc_vault_active" dataType="payflowpro_cc_vault_active">
+                                        <field key="value">string</field>
+                                    </object>
+                                </object>
+                            </object>
+                        </object>
+                    </object>
+                </object>
+            </object>
+        </object>
+    </operation>
+</operations>

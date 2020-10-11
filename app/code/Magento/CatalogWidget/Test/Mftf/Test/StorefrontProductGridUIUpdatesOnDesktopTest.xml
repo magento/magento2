@@ -36,7 +36,7 @@
             </createData>
             <!-- 2. Create new CMS page and add "Catalog Product List" widget type via content >insert  widget option -->
             <createData entity="_emptyCmsPage" stepKey="createCmsPage"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
             <actionGroup ref="NavigateToCreatedCMSPageActionGroup" stepKey="navigateToCreatedCmsPage">
                 <argument name="CMSPage" value="$createCmsPage$"/>
             </actionGroup>

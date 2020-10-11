@@ -25,8 +25,8 @@ class AddTest extends \PHPUnit\Framework\TestCase
         $childBlock->setForm($form);
 
         $expectedId = '12121212';
-        $this->assertNotContains($expectedId, $block->toHtml());
+        $this->assertStringNotContainsString($expectedId, $block->toHtml());
         $form->setId($expectedId);
-        $this->assertContains($expectedId, $block->toHtml());
+        $this->assertStringContainsString($expectedId, $block->toHtml());
     }
 }

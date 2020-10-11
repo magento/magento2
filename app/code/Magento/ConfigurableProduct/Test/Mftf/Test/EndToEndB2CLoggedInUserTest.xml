@@ -62,7 +62,7 @@
             </createData>
             <updateData entity="ApiSimpleProductUpdateDescription" stepKey="updateConfigProduct" createDataKey="createConfigProduct"/>
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </before>
         <after>
             <!-- @TODO: Uncomment once MQE-679 is fixed -->
@@ -77,7 +77,13 @@
             <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexAll">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
         </after>
 
         <!-- Verify Configurable Product in checkout cart items -->
@@ -96,7 +102,10 @@
         </actionGroup>
         <!-- @TODO: Move Image check to action group after MQE-697 is fixed -->
         <grabAttributeFrom selector="{{StorefrontCategoryProductSection.ProductImageByName($$createConfigProduct.name$$)}}" userInput="src" stepKey="browseGrabConfigProductImageSrc" after="browseAssertCategoryConfigProduct"/>
-        <assertNotRegExp expected="'/placeholder\/small_image\.jpg/'" actual="$browseGrabConfigProductImageSrc" stepKey="browseAssertConfigProductImageNotDefault" after="browseGrabConfigProductImageSrc"/>
+        <assertNotRegExp stepKey="browseAssertConfigProductImageNotDefault" after="browseGrabConfigProductImageSrc">
+			<actualResult type="const">$browseGrabConfigProductImageSrc</actualResult>
+			<expectedResult type="const">'/placeholder\/small_image\.jpg/'</expectedResult>
+        </assertNotRegExp>
 
         <!-- View Configurable Product -->
         <comment userInput="View Configurable Product" stepKey="commentViewConfigurableProduct" after="browseAssertSimpleProduct2PageImageNotDefault" />
@@ -109,7 +118,10 @@
         </actionGroup>
         <!-- @TODO: Move Image check to action group after MQE-697 is fixed -->
         <grabAttributeFrom selector="{{StorefrontProductInfoMainSection.productImage}}" userInput="src" stepKey="browseGrabConfigProductPageImageSrc" after="browseAssertConfigProductPage"/>
-        <assertNotRegExp expected="'/placeholder\/image\.jpg/'" actual="$browseGrabConfigProductPageImageSrc" stepKey="browseAssertConfigProductPageImageNotDefault" after="browseGrabConfigProductPageImageSrc"/>
+        <assertNotRegExp stepKey="browseAssertConfigProductPageImageNotDefault" after="browseGrabConfigProductPageImageSrc">
+			<actualResult type="const">$browseGrabConfigProductPageImageSrc</actualResult>
+			<expectedResult type="const">'/placeholder\/image\.jpg/'</expectedResult>
+        </assertNotRegExp>
 
         <!-- Add Configurable Product to cart -->
         <comment userInput="Add Configurable Product to cart" stepKey="commentAddConfigurableProductToCart" after="cartAddProduct2ToCart" />
@@ -125,7 +137,10 @@
         </actionGroup>
         <!-- @TODO: Move Image check to action group after MQE-697 is fixed -->
         <grabAttributeFrom selector="{{StorefrontCategoryProductSection.ProductImageByName($$createConfigProduct.name$$)}}" userInput="src" stepKey="cartGrabConfigProductImageSrc" after="cartAssertConfigProduct"/>
-        <assertNotRegExp expected="'/placeholder\/small_image\.jpg/'" actual="$cartGrabConfigProductImageSrc" stepKey="cartAssertConfigProductImageNotDefault" after="cartGrabConfigProductImageSrc"/>
+        <assertNotRegExp stepKey="cartAssertConfigProductImageNotDefault" after="cartGrabConfigProductImageSrc">
+			<actualResult type="const">$cartGrabConfigProductImageSrc</actualResult>
+			<expectedResult type="const">'/placeholder\/small_image\.jpg/'</expectedResult>
+        </assertNotRegExp>
         <click selector="{{StorefrontCategoryProductSection.ProductAddToCartByName($$createConfigProduct.name$$)}}" stepKey="cartClickCategoryConfigProductAddToCart" after="cartAssertConfigProductImageNotDefault"/>
         <waitForElement selector="{{StorefrontMessagesSection.message('You need to choose options for your item.')}}" time="30" stepKey="cartWaitForConfigProductPageLoad" after="cartClickCategoryConfigProductAddToCart"/>
         <actionGroup ref="StorefrontCheckConfigurableProductActionGroup" stepKey="cartAssertConfigProductPage" after="cartWaitForConfigProductPageLoad">
@@ -134,7 +149,10 @@
         </actionGroup>
         <!-- @TODO: Move Image check to action group after MQE-697 is fixed -->
         <grabAttributeFrom selector="{{StorefrontProductInfoMainSection.productImage}}" userInput="src" stepKey="cartGrabConfigProductPageImageSrc1" after="cartAssertConfigProductPage"/>
-        <assertNotRegExp expected="'/placeholder\/image\.jpg/'" actual="$cartGrabConfigProductPageImageSrc1" stepKey="cartAssertConfigProductPageImageNotDefault1" after="cartGrabConfigProductPageImageSrc1"/>
+        <assertNotRegExp stepKey="cartAssertConfigProductPageImageNotDefault1" after="cartGrabConfigProductPageImageSrc1">
+			<actualResult type="const">$cartGrabConfigProductPageImageSrc1</actualResult>
+			<expectedResult type="const">'/placeholder\/image\.jpg/'</expectedResult>
+        </assertNotRegExp>
         <selectOption userInput="$$createConfigProductAttributeOption2.option[store_labels][1][label]$$" selector="{{StorefrontProductInfoMainSection.optionByAttributeId($$createConfigProductAttribute.attribute_id$$)}}" stepKey="cartConfigProductFillOption" after="cartAssertConfigProductPageImageNotDefault1"/>
         <waitForLoadingMaskToDisappear stepKey="waitForConfigurableProductOptionloaded" after="cartConfigProductFillOption"/>
         <actionGroup ref="StorefrontCheckConfigurableProductActionGroup" stepKey="cartAssertConfigProductWithOptionPage" after="waitForConfigurableProductOptionloaded">
@@ -143,7 +161,10 @@
         </actionGroup>
         <!-- @TODO: Move Image check to action group after MQE-697 is fixed -->
         <grabAttributeFrom selector="{{StorefrontProductInfoMainSection.productImage}}" userInput="src" stepKey="cartGrabConfigProductPageImageSrc2" after="cartAssertConfigProductWithOptionPage"/>
-        <assertNotRegExp expected="'/placeholder\/image\.jpg/'" actual="$cartGrabConfigProductPageImageSrc2" stepKey="cartAssertConfigProductPageImageNotDefault2" after="cartGrabConfigProductPageImageSrc2"/>
+        <assertNotRegExp stepKey="cartAssertConfigProductPageImageNotDefault2" after="cartGrabConfigProductPageImageSrc2">
+			<actualResult type="const">$cartGrabConfigProductPageImageSrc2</actualResult>
+			<expectedResult type="const">'/placeholder\/image\.jpg/'</expectedResult>
+        </assertNotRegExp>
         <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="cartAddConfigProductToCart" after="cartAssertConfigProductPageImageNotDefault2">
             <argument name="product" value="$$createConfigProduct$$"/>
             <argument name="productCount" value="3"/>
@@ -157,7 +178,10 @@
         </actionGroup>
         <!-- @TODO: Move Image check to action group after MQE-697 is fixed -->
         <grabAttributeFrom selector="{{StorefrontMinicartSection.productImageByName($$createConfigProduct.name$$)}}" userInput="src" stepKey="cartMinicartGrabConfigProductImageSrc" after="cartOpenMinicartAndCheckConfigProduct"/>
-        <assertNotRegExp expected="'/placeholder\/thumbnail\.jpg/'" actual="$cartMinicartGrabConfigProductImageSrc" stepKey="cartMinicartAssertConfigProductImageNotDefault" after="cartMinicartGrabConfigProductImageSrc"/>
+        <assertNotRegExp stepKey="cartMinicartAssertConfigProductImageNotDefault" after="cartMinicartGrabConfigProductImageSrc">
+			<actualResult type="const">$cartMinicartGrabConfigProductImageSrc</actualResult>
+			<expectedResult type="const">'/placeholder\/thumbnail\.jpg/'</expectedResult>
+        </assertNotRegExp>
         <click selector="{{StorefrontMinicartSection.productOptionsDetailsByName($$createConfigProduct.name$$)}}" stepKey="cartMinicartClickConfigProductDetails" after="cartMinicartAssertConfigProductImageNotDefault"/>
         <see userInput="$$createConfigProductAttributeOption2.option[store_labels][1][label]$$" selector="{{StorefrontMinicartSection.productOptionByNameAndAttribute($$createConfigProduct.name$$, $$createConfigProductAttribute.attribute[frontend_labels][0][label]$$)}}" stepKey="cartMinicartCheckConfigProductOption" after="cartMinicartClickConfigProductDetails"/>
         <click selector="{{StorefrontMinicartSection.productLinkByName($$createConfigProduct.name$$)}}" stepKey="cartMinicartClickConfigProduct" after="cartMinicartCheckConfigProductOption"/>
@@ -168,7 +192,10 @@
         </actionGroup>
         <!-- @TODO: Move Image check to action group after MQE-697 is fixed -->
         <grabAttributeFrom selector="{{StorefrontProductInfoMainSection.productImage}}" userInput="src" stepKey="cartMinicartGrabConfigProductPageImageSrc" after="cartAssertMinicartConfigProductPage"/>
-        <assertNotRegExp expected="'/placeholder\/image\.jpg/'" actual="$cartMinicartGrabConfigProductPageImageSrc" stepKey="cartMinicartAssertConfigProductPageImageNotDefault" after="cartMinicartGrabConfigProductPageImageSrc"/>
+        <assertNotRegExp stepKey="cartMinicartAssertConfigProductPageImageNotDefault" after="cartMinicartGrabConfigProductPageImageSrc">
+			<actualResult type="const">$cartMinicartGrabConfigProductPageImageSrc</actualResult>
+			<expectedResult type="const">'/placeholder\/image\.jpg/'</expectedResult>
+        </assertNotRegExp>
 
         <!-- Check configurable product in cart -->
         <comment userInput="Check configurable product in cart" stepKey="commentCheckConfigurableProductInCart" after="cartCartAssertSimpleProduct2PageImageNotDefault2" />
@@ -181,7 +208,10 @@
         </actionGroup>
         <!-- @TODO: Move Image check to action group after MQE-697 is fixed -->
         <grabAttributeFrom selector="{{CheckoutCartProductSection.ProductImageByName($$createConfigProduct.name$$)}}" userInput="src" stepKey="cartCartGrabConfigProduct2ImageSrc" after="cartAssertCartConfigProduct"/>
-        <assertNotRegExp expected="'/placeholder\/small_image\.jpg/'" actual="$cartCartGrabConfigProduct2ImageSrc" stepKey="cartCartAssertConfigProduct2ImageNotDefault" after="cartCartGrabConfigProduct2ImageSrc"/>
+        <assertNotRegExp stepKey="cartCartAssertConfigProduct2ImageNotDefault" after="cartCartGrabConfigProduct2ImageSrc">
+			<actualResult type="const">$cartCartGrabConfigProduct2ImageSrc</actualResult>
+			<expectedResult type="const">'/placeholder\/small_image\.jpg/'</expectedResult>
+        </assertNotRegExp>
         <see userInput="$$createConfigProductAttributeOption2.option[store_labels][1][label]$$" selector="{{CheckoutCartProductSection.ProductOptionByNameAndAttribute($$createConfigProduct.name$$, $$createConfigProductAttribute.attribute[frontend_labels][0][label]$$)}}" stepKey="cartCheckConfigProductOption" after="cartCartAssertConfigProduct2ImageNotDefault"/>
         <click selector="{{CheckoutCartProductSection.ProductLinkByName($$createConfigProduct.name$$)}}" stepKey="cartClickCartConfigProduct" after="cartCheckConfigProductOption"/>
         <waitForLoadingMaskToDisappear stepKey="waitForCartConfigProductloaded" after="cartClickCartConfigProduct"/>
@@ -191,7 +221,10 @@
         </actionGroup>
         <!-- @TODO: Move Image check to action group after MQE-697 is fixed -->
         <grabAttributeFrom selector="{{StorefrontProductInfoMainSection.productImage}}" userInput="src" stepKey="cartCartGrabConfigProductPageImageSrc" after="cartAssertCartConfigProductPage"/>
-        <assertNotRegExp expected="'/placeholder\/image\.jpg/'" actual="$cartCartGrabConfigProductPageImageSrc" stepKey="cartCartAssertConfigProductPageImageNotDefault" after="cartCartGrabConfigProductPageImageSrc"/>
+        <assertNotRegExp stepKey="cartCartAssertConfigProductPageImageNotDefault" after="cartCartGrabConfigProductPageImageSrc">
+			<actualResult type="const">$cartCartGrabConfigProductPageImageSrc</actualResult>
+			<expectedResult type="const">'/placeholder\/image\.jpg/'</expectedResult>
+        </assertNotRegExp>
 
         <!-- Add Configurable Product to comparison -->
         <comment userInput="Add Configurable Product to comparison" stepKey="commentAddConfigurableProductToComparison" after="compareAddSimpleProduct2ToCompare" />
@@ -201,7 +234,10 @@
         </actionGroup>
         <!-- @TODO: Move Image check to action group after MQE-697 is fixed -->
         <grabAttributeFrom selector="{{StorefrontCategoryProductSection.ProductImageByName($$createConfigProduct.name$$)}}" userInput="src" stepKey="compareGrabConfigProductImageSrc" after="compareAssertConfigProduct"/>
-        <assertNotRegExp expected="'/placeholder\/small_image\.jpg/'" actual="$compareGrabConfigProductImageSrc" stepKey="compareAssertConfigProductImageNotDefault" after="compareGrabConfigProductImageSrc"/>
+        <assertNotRegExp stepKey="compareAssertConfigProductImageNotDefault" after="compareGrabConfigProductImageSrc">
+			<actualResult type="const">$compareGrabConfigProductImageSrc</actualResult>
+			<expectedResult type="const">'/placeholder\/small_image\.jpg/'</expectedResult>
+        </assertNotRegExp>
         <actionGroup ref="StorefrontAddCategoryProductToCompareActionGroup" stepKey="compareAddConfigProductToCompare" after="compareAssertConfigProductImageNotDefault">
             <argument name="productVar" value="$$createConfigProduct$$"/>
         </actionGroup>
@@ -220,6 +256,9 @@
         </actionGroup>
         <!-- @TODO: Move Image check to action group after MQE-697 is fixed -->
         <grabAttributeFrom selector="{{StorefrontProductCompareMainSection.ProductImageByName($$createConfigProduct.name$$)}}" userInput="src" stepKey="compareGrabConfigProductImageSrcInComparison" after="compareAssertConfigProductInComparison"/>
-        <assertNotRegExp expected="'/placeholder\/small_image\.jpg/'" actual="$compareGrabConfigProductImageSrcInComparison" stepKey="compareAssertConfigProductImageNotDefaultInComparison" after="compareGrabConfigProductImageSrcInComparison"/>
+        <assertNotRegExp stepKey="compareAssertConfigProductImageNotDefaultInComparison" after="compareGrabConfigProductImageSrcInComparison">
+			<actualResult type="const">$compareGrabConfigProductImageSrcInComparison</actualResult>
+			<expectedResult type="const">'/placeholder\/small_image\.jpg/'</expectedResult>
+        </assertNotRegExp>
     </test>
 </tests>

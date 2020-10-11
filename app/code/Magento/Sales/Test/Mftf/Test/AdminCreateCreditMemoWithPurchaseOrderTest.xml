@@ -13,13 +13,13 @@
             <stories value="Credit memo entity"/>
             <title value="Create Credit Memo with purchase order payment method"/>
             <description value="Create Credit Memo with purchase order payment payment and assert 0 shipping refund"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MC-15864"/>
             <group value="sales"/>
             <group value="mtf_migrated"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
 
             <!-- Create Data -->
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
@@ -61,19 +61,20 @@
         <fillField selector="{{AdminOrderFormPaymentSection.fieldPurchaseOrderNumber}}" userInput="123456" stepKey="fillPONumber"/>
         <click selector="{{AdminOrderFormPaymentSection.blockPayment}}" stepKey="unfocus"/>
         <waitForPageLoad stepKey="waitForJavascriptToFinish"/>
-        <click selector="{{AdminOrderFormActionSection.submitOrder}}" stepKey="submitOrder"/>
-        <waitForPageLoad stepKey="waitForSubmitOrderPage"/>
+        <actionGroup ref="AdminOrderClickSubmitOrderActionGroup" stepKey="submitOrder" />
         <see stepKey="seeSuccessMessageForOrder" selector="{{AdminIndexManagementSection.successMessage}}" userInput="You created the order."/>
 
         <!-- Create Invoice -->
         <actionGroup ref="StartCreateInvoiceFromOrderPageActionGroup" stepKey="startInvoice"/>
-        <click selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="clickSubmitInvoice"/>
+        <actionGroup ref="AdminInvoiceClickSubmitActionGroup" stepKey="clickSubmitInvoice"/>
         <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitForMessageAppears"/>
         <see selector="{{AdminMessagesSection.success}}" userInput="The invoice has been created." stepKey="seeInvoiceCreateSuccess"/>
 
         <!-- Go to Sales > Orders > find out placed order and open -->
         <grabTextFrom selector="|Order # (\d+)|" stepKey="grabOrderId" />
-        <assertNotEmpty actual="$grabOrderId" stepKey="assertOrderIdIsNotEmpty" after="grabOrderId"/>
+        <assertNotEmpty stepKey="assertOrderIdIsNotEmpty" after="grabOrderId">
+			<actualResult type="const">$grabOrderId</actualResult>
+        </assertNotEmpty>
         <actionGroup ref="OpenOrderByIdActionGroup" stepKey="openOrder">
             <argument name="orderId" value="{$grabOrderId}"/>
         </actionGroup>
@@ -97,7 +98,9 @@
         <click selector="{{AdminOrderDetailsOrderViewSection.creditMemos}}" stepKey="clickCreditMemoTab"/>
         <waitForPageLoad stepKey="waitForTabLoad"/>
         <grabTextFrom selector="{{AdminCreditMemosGridSection.memoId}}" stepKey="grabMemoId"/>
-        <assertNotEmpty actual="$grabMemoId" stepKey="assertMemoIdIsNotEmpty" after="grabMemoId"/>
+        <assertNotEmpty stepKey="assertMemoIdIsNotEmpty" after="grabMemoId">
+			<actualResult type="const">$grabMemoId</actualResult>
+        </assertNotEmpty>
         <click selector="{{AdminCreditMemosGridSection.memoId}}" stepKey="clickView"/>
         <waitForPageLoad stepKey="waitForCreditMemo"/>
         <scrollTo selector="{{AdminCreditMemoViewTotalSection.subtotal}}" stepKey="scrollToTotal"/>
@@ -112,13 +115,11 @@
         </actionGroup>
 
         <!-- Assert refunded Grand Total on frontend -->
-        <amOnPage url="{{StorefrontCustomerDashboardPage.url}}" stepKey="onAccountPage"/>
-        <waitForPageLoad stepKey="waitForPage"/>
+        <actionGroup ref="StorefrontOpenMyAccountPageActionGroup" stepKey="onAccountPage"/>
         <scrollTo selector="{{StorefrontCustomerResentOrdersSection.blockResentOrders}}" stepKey="scrollToResent"/>
         <click selector="{{StorefrontCustomerResentOrdersSection.viewOrder({$grabOrderId})}}" stepKey="clickOnOrder"/>
         <waitForPageLoad stepKey="waitForViewOrder"/>
-        <click selector="{{StorefrontCustomerOrderSection.tabRefund}}" stepKey="clickRefund"/>
-        <waitForPageLoad stepKey="waitRefundsLoad"/>
+        <actionGroup ref="StorefrontClickRefundTabCustomerOrderViewActionGroup" stepKey="clickRefund"/>
         <scrollTo selector="{{StorefrontCustomerOrderSection.grandTotalRefund}}" stepKey="scrollToGrandTotal"/>
         <see selector="{{StorefrontCustomerOrderSection.grandTotalRefund}}" userInput="555.00" stepKey="seeGrandTotal"/>
     </test>

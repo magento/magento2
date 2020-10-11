@@ -13,7 +13,7 @@ Price,Price
 "Add to Cart","Add to Cart"
 "Minimum Advertised Price","Minimum Advertised Price"
 "Enable MAP","Enable MAP"
-"<strong style=""color:red"">Warning!</strong> Enabling MAP by default will hide all product prices on Storefront.","<strong style=""color:red"">Warning!</strong> Enabling MAP by default will hide all product prices on Storefront."
+"<strong class=""colorRed"">Warning!</strong> Enabling MAP by default will hide all product prices on Storefront.","<strong class=""colorRed"">Warning!</strong> Enabling MAP by default will hide all product prices on Storefront."
 "Display Actual Price","Display Actual Price"
 "Default Popup Text Message","Default Popup Text Message"
 "Default ""What's This"" Text Message","Default ""What's This"" Text Message"

@@ -13,7 +13,7 @@
             <stories value="Edit attribute set"/>
             <title value="Admin should be able to create new group in an Attribute Set"/>
             <description value="The test verifies creating a new group in an attribute set and a validation message in case of empty group name"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MC-170"/>
             <group value="Catalog"/>
         </annotations>
@@ -23,7 +23,7 @@
             <createData entity="productAttributeWithTwoOptions" stepKey="createConfigProductAttribute"/>
 
             <!-- Login to Admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
         </before>
         <after>
             <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
@@ -31,7 +31,7 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
 
         <!-- Navigate to Stores > Attributes > Attribute Set -->
@@ -91,8 +91,7 @@
         <dontSeeElement selector="{{AdminProductAttributeSetEditSection.attributesInGroup(emptyGroup.name)}}" stepKey="seeNoAttributes"/>
 
         <!-- Navigate to Catalog > Products -->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductPage"/>
-        <waitForPageLoad stepKey="waitForProductPageLoad"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="amOnProductPage"/>
 
         <!-- Start to create a new simple product with the custom attribute set from the preconditions -->
         <click selector="{{AdminProductGridActionSection.addProductBtn}}" stepKey="clickAddProduct"/>

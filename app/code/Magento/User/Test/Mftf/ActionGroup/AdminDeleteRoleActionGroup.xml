@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminDeleteRoleActionGroup">
+        <annotations>
+            <description>Deletes a User Role.</description>
+        </annotations>
+        <arguments>
+            <argument name="role" defaultValue=""/>
+        </arguments>
+
+        <click stepKey="clickResetFilterButtonBefore" selector="{{AdminRoleGridSection.resetButton}}"/>
+        <waitForPageLoad stepKey="waitForRolesGridFilterResetBefore" time="10"/>
+        <fillField stepKey="TypeRoleFilter" selector="{{AdminRoleGridSection.roleNameFilterTextField}}" userInput="{{role.name}}"/>
+        <waitForElementVisible stepKey="waitForFilterSearchButtonBefore" selector="{{AdminRoleGridSection.searchButton}}" time="10"/>
+        <click stepKey="clickFilterSearchButton" selector="{{AdminRoleGridSection.searchButton}}"/>
+        <waitForPageLoad stepKey="waitForUserRoleFilter" time="10"/>
+        <waitForElementVisible stepKey="waitForRoleInRoleGrid" selector="{{AdminDeleteRoleSection.role(role.name)}}" time="10"/>
+        <click stepKey="clickOnRole" selector="{{AdminDeleteRoleSection.role(role.name)}}"/>
+        <waitForPageLoad stepKey="waitForRolePageToLoad" time="10"/>
+        <fillField stepKey="TypeCurrentPassword" selector="{{AdminDeleteRoleSection.current_pass}}" userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}"/>
+        <waitForElementVisible stepKey="waitForDeleteRoleButton" selector="{{AdminDeleteRoleSection.delete}}" time="10"/>
+        <click stepKey="clickToDeleteRole" selector="{{AdminDeleteRoleSection.delete}}"/>
+        <waitForPageLoad stepKey="waitForDeleteConfirmationPopup" time="5"/>
+        <waitForElementVisible stepKey="waitForConfirmButton" selector="{{AdminDeleteRoleSection.confirm}}" time="10"/>
+        <click stepKey="clickToConfirm" selector="{{AdminDeleteRoleSection.confirm}}"/>
+        <waitForPageLoad stepKey="waitForPageLoad" time="10"/>
+        <see stepKey="seeSuccessMessage" userInput="You deleted the role."/>
+        <waitForPageLoad stepKey="waitForRolesGridLoad" />
+        <waitForElementVisible stepKey="waitForResetFilterButtonAfter" selector="{{AdminRoleGridSection.resetButton}}" time="10"/>
+        <click stepKey="clickResetFilterButtonAfter" selector="{{AdminRoleGridSection.resetButton}}"/>
+        <waitForPageLoad stepKey="waitForRolesGridFilterResetAfter" time="10"/>
+    </actionGroup>
+</actionGroups>

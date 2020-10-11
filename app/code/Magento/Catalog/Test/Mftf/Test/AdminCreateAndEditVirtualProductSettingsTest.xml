@@ -29,7 +29,7 @@
             <createData entity="secondCustomWebsite" stepKey="createWebsite"/>
 
             <!-- Login as admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <!-- Delete created virtual product -->

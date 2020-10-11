@@ -14,13 +14,13 @@
             <stories value="Create Order"/>
             <title value="Create order from edit customer page and add products to wish list and shopping cart"/>
             <description value="Create an order from edit customer page and add products to the wish list and shopping cart "/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MC-16161"/>
             <group value="mtf_migrated"/>
         </annotations>
 
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <createData entity="FreeShippingMethodsSettingConfig" stepKey="freeShippingMethodsSettingConfig"/>
 
             <!--Create simple customer-->
@@ -75,8 +75,12 @@
                 <requiredEntity createDataKey="createConfigProduct"/>
                 <requiredEntity createDataKey="createConfigChildProduct1"/>
             </createData>
-            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
         </before>
         <after>
             <createData entity="DisableFreeShippingConfig" stepKey="disableFreeShippingConfig"/>
@@ -92,7 +96,7 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
 
         <!--Filter and Open the customer edit page -->
@@ -182,10 +186,7 @@
         <waitForPageLoad stepKey="waitForShippingMethods"/>
         <click selector="{{AdminOrderFormPaymentSection.freeShippingOption}}" stepKey="chooseShippingMethod"/>
         <waitForPageLoad stepKey="waitForPageToLoad"/>
-
-        <!-- Submit order -->
-        <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" stepKey="submitOrder"/>
-        <waitForPageLoad stepKey="waitForAdminOrderFormLoad"/>
+        <actionGroup ref="AdminOrderClickSubmitOrderActionGroup" stepKey="submitOrder" />
 
         <!-- Verify order information -->
         <actionGroup ref="VerifyCreatedOrderInformationActionGroup" stepKey="verifyCreatedOrderInformation"/>

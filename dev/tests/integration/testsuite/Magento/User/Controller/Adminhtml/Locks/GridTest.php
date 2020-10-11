@@ -25,16 +25,16 @@ class GridTest extends AbstractBackendController
         $this->dispatch('backend/admin/locks/grid');
 
         $body = $this->getResponse()->getBody();
-        $this->assertContains('data-column="username"', $body);
-        $this->assertContains('data-column="last_login"', $body);
-        $this->assertContains('data-column="last_login"', $body);
-        $this->assertContains('data-column="failures_num"', $body);
-        $this->assertContains('data-column="lock_expires"', $body);
-        $this->assertRegExp(
+        $this->assertStringContainsString('data-column="username"', $body);
+        $this->assertStringContainsString('data-column="last_login"', $body);
+        $this->assertStringContainsString('data-column="last_login"', $body);
+        $this->assertStringContainsString('data-column="failures_num"', $body);
+        $this->assertStringContainsString('data-column="lock_expires"', $body);
+        $this->assertMatchesRegularExpression(
             '/<td data-column\="username"\s*class\="[^"]*col-name[^"]*col-username[^"]*"\s*>\s*adminUser1\s*<\/td>/',
             $body
         );
-        $this->assertRegExp(
+        $this->assertMatchesRegularExpression(
             '/<td data-column\="username"\s*class\="[^"]*col-name[^"]*col-username[^"]*"\s*>\s*adminUser2\s*<\/td>/',
             $body
         );

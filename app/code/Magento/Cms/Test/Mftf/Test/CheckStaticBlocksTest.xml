@@ -14,27 +14,37 @@
             <stories value="MAGETWO-91559 - Static blocks with same ID appear in place of correct block"/>
             <title value="Check static blocks: ID should be unique per Store View"/>
             <description value="Check static blocks: ID should be unique per Store View"/>
-            <severity value="CRITICAL"/>
-            <testCaseId value="MAGETWO-94229"/>
+            <severity value="BLOCKER"/>
+            <testCaseId value="MC-25828"/>
             <group value="Cms"/>
+            <group value="WYSIWYGDisabled"/>
         </annotations>
+
         <before>
-            <magentoCLI command="config:set cms/wysiwyg/enabled disabled" stepKey="disableWYSIWYG"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
-            <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="AdminCreateWebsite">
-                <argument name="newWebsiteName" value="secondWebsite"/>
-                <argument name="websiteCode" value="second_website"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+
+            <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createAdditionalWebsite">
+                <argument name="newWebsiteName" value="{{customWebsite.name}}"/>
+                <argument name="websiteCode" value="{{customWebsite.code}}"/>
             </actionGroup>
-            <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="AdminCreateStore">
-                <argument name="website" value="secondWebsite"/>
+            <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="createNewStore">
+                <argument name="website" value="{{customWebsite.name}}"/>
                 <argument name="storeGroupName" value="{{customStoreGroup.name}}"/>
                 <argument name="storeGroupCode" value="{{customStoreGroup.code}}"/>
             </actionGroup>
-            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="AdminCreateStoreView">
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createNewStoreView">
                 <argument name="StoreGroup" value="customStoreGroup"/>
                 <argument name="customStore" value="customStore"/>
             </actionGroup>
         </before>
+
+        <after>
+            <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="DeleteWebsite">
+                <argument name="websiteName" value="{{customWebsite.name}}"/>
+            </actionGroup>
+            <actionGroup ref="DeleteCMSBlockActionGroup" stepKey="DeleteCMSBlockActionGroup"/>
+            <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearFilters"/>
+        </after>
 
         <!--Go to Cms blocks page-->
         <amOnPage url="{{CmsBlocksPage.url}}" stepKey="navigateToCMSPagesGrid"/>
@@ -73,13 +83,5 @@
         <click selector="{{BlockNewPagePageActionsSection.saveBlock}}" stepKey="ClickToSaveBlock2"/>
         <waitForPageLoad stepKey="waitForPageLoad9"/>
         <see userInput="You saved the block." stepKey="VerifyBlockIsSaved2"/>
-
-        <after>
-            <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="DeleteWebsite">
-                <argument name="websiteName" value="secondWebsite"/>
-            </actionGroup>
-            <actionGroup ref="DeleteCMSBlockActionGroup" stepKey="DeleteCMSBlockActionGroup"/>
-            <magentoCLI command="config:set cms/wysiwyg/enabled enabled" stepKey="enableWYSIWYG"/>
-        </after>
     </test>
 </tests>
