@@ -744,7 +744,7 @@ class Processor
      */
     protected function _setSkin($value, \stdClass $config = null)
     {
-        if (preg_match('/^[a-z0-9_]+$/i', $value) && is_dir($this->errorDirectory . $value)) {
+        if (preg_match('/^[a-z0-9_]+$/i', $value) && is_dir($this->errorDir . $value)) {
             if (!$config) {
                 if ($this->_config) {
                     $config = $this->_config;
