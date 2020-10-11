@@ -466,7 +466,7 @@ class Processor
     protected function _getFilePath($file, $directories = null)
     {
         if ($directories === null) {
-            $directories[] = $this->errorDirectory;
+            $directories[] = $this->errorDir;
         }
 
         foreach ($directories as $directory) {
