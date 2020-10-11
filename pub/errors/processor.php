@@ -484,7 +484,7 @@ class Processor
      */
     protected function _getTemplatePath($template)
     {
-        $directories[] = $this->errorDirectory . $this->_config->skin . '/';
+        $directories[] = $this->errorDir . $this->_config->skin . '/';
 
         if ($this->_config->skin != self::DEFAULT_SKIN) {
             $directories[] = $this->errorDirectory . self::DEFAULT_SKIN . '/';
