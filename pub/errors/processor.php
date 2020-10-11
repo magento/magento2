@@ -487,7 +487,7 @@ class Processor
         $directories[] = $this->errorDir . $this->_config->skin . '/';
 
         if ($this->_config->skin != self::DEFAULT_SKIN) {
-            $directories[] = $this->errorDirectory . self::DEFAULT_SKIN . '/';
+            $directories[] = $this->errorDir . self::DEFAULT_SKIN . '/';
         }
 
         return $this->_getFilePath($template, $directories);
