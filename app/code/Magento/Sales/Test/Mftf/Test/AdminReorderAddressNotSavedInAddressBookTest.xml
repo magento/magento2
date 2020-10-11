@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminReorderAddressNotSavedInAddressBookTest">
+        <annotations>
+            <title value="Same shipping address is repeating multiple times in storefront checkout when Reordered"/>
+            <stories value="MC-38113: Same shipping address is repeating multiple times in storefront checkout when Reordered"/>
+            <description value="Same shipping address is repeating multiple times in storefront checkout when Reordered"/>
+            <features value="Sales"/>
+            <testCaseId value="MC-38113"/>
+            <severity value="MAJOR"/>
+            <group value="Sales"/>
+        </annotations>
+        <before>
+            <createData entity="ApiCategory" stepKey="Category"/>
+            <createData entity="ApiSimpleProduct" stepKey="Product">
+                <requiredEntity createDataKey="Category"/>
+            </createData>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="StorefrontOpenCustomerAccountCreatePageActionGroup" stepKey="openCreateAccountPage"/>
+            <actionGroup ref="StorefrontFillCustomerAccountCreationFormActionGroup" stepKey="fillCreateAccountForm">
+                <argument name="customer" value="CustomerEntityOne"/>
+            </actionGroup>
+            <actionGroup ref="StorefrontClickCreateAnAccountCustomerAccountCreationFormActionGroup" stepKey="submitCreateAccountForm"/>
+        </before>
+        <after>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
+            <actionGroup ref="DeleteCustomerFromAdminActionGroup" stepKey="deleteCustomer"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+            <deleteData createDataKey="Product" stepKey="deleteProduct"/>
+            <deleteData createDataKey="Category" stepKey="deleteCategory"/>
+        </after>
+
+        <!-- Create order for registered customer -->
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addSimpleProductToOrder">
+            <argument name="product" value="$Product$"/>
+        </actionGroup>
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="openCheckoutPage"/>
+        <actionGroup ref="LoggedInUserCheckoutFillingShippingSectionActionGroup" stepKey="fillAddressForm"/>
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickPlaceOrder"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
+
+        <!-- Reorder created order -->
+        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="openOrderById">
+            <argument name="orderId" value="$grabOrderNumber"/>
+        </actionGroup>
+        <actionGroup ref="AdminReorderActionGroup" stepKey="reorder"/>
+
+        <!-- Assert no additional addresses saved -->
+        <actionGroup ref="AssertCustomerHasNoOtherAddressesActionGroup" stepKey="assertAddresses"/>
+    </test>
+</tests>
