@@ -20,7 +20,7 @@
     },
     "suggest": {
         "magento/module-admin-notification": "100.3.*",
-        "magento/module-logging": "*"
+        "magento/module-logging": "101.1.*"
     },
     "autoload": {
         "files": [
