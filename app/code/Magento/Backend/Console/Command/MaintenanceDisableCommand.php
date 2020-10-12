@@ -3,8 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-namespace Magento\Setup\Console\Command;
+namespace Magento\Backend\Console\Command;
 
 /**
  * Command for disabling maintenance mode
@@ -19,6 +18,7 @@ class MaintenanceDisableCommand extends AbstractMaintenanceCommand
     protected function configure()
     {
         $this->setName('maintenance:disable')->setDescription('Disables maintenance mode');
+
         parent::configure();
     }
 
@@ -27,7 +27,7 @@ class MaintenanceDisableCommand extends AbstractMaintenanceCommand
      *
      * @return bool
      */
-    protected function isEnable()
+    protected function isEnable(): bool
     {
         return false;
     }
@@ -37,7 +37,7 @@ class MaintenanceDisableCommand extends AbstractMaintenanceCommand
      *
      * @return string
      */
-    protected function getDisplayString()
+    protected function getDisplayString(): string
     {
         return '<info>Disabled maintenance mode</info>';
     }
@@ -47,7 +47,7 @@ class MaintenanceDisableCommand extends AbstractMaintenanceCommand
      *
      * @return bool
      */
-    public function isSetAddressInfo()
+    public function isSetAddressInfo(): bool
     {
         return count($this->maintenanceMode->getAddressInfo()) > 0;
     }

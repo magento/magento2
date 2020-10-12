@@ -6,9 +6,9 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <type name="Magento\RemoteStorage\Driver\DriverPool">
+    <type name="Magento\RemoteStorage\Driver\DriverFactoryPool">
         <arguments>
-            <argument name="remotePool" xsi:type="array">
+            <argument name="pool" xsi:type="array">
                 <item name="aws-s3" xsi:type="object">Magento\AwsS3\Driver\AwsS3Factory</item>
             </argument>
         </arguments>

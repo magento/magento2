@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Setup\Validator;
+namespace Magento\Backend\Model\Validator;
 
 /**
  * Class to validate list of IPs for maintenance commands

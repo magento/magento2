@@ -5,11 +5,14 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Setup\Test\Unit\Validator;
+namespace Magento\Backend\Test\Unit\Model\Validator;
 
-use Magento\Setup\Validator\IpValidator;
+use Magento\Backend\Model\Validator\IpValidator;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @see IpValidator
+ */
 class IpValidatorTest extends TestCase
 {
     /**
@@ -17,6 +20,9 @@ class IpValidatorTest extends TestCase
      */
     private $ipValidator;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->ipValidator = new IpValidator();
@@ -27,15 +33,15 @@ class IpValidatorTest extends TestCase
      * @param string[] $ips
      * @param string[] $expectedMessages
      */
-    public function testValidateIpsNoneAllowed($ips, $expectedMessages)
+    public function testValidateIpsNoneAllowed(array $ips, array $expectedMessages): void
     {
-        $this->assertEquals($expectedMessages, $this->ipValidator->validateIps($ips, true));
+        self::assertEquals($expectedMessages, $this->ipValidator->validateIps($ips, true));
     }
 
     /**
      * @return array
      */
-    public function validateIpsNoneAllowedDataProvider()
+    public function validateIpsNoneAllowedDataProvider(): array
     {
         return [
             [['127.0.0.1', '127.0.0.2'], []],
@@ -54,9 +60,9 @@ class IpValidatorTest extends TestCase
      * @param string[] $ips
      * @param string[] $expectedMessages
      */
-    public function testValidateIpsNoneNotAllowed($ips, $expectedMessages)
+    public function testValidateIpsNoneNotAllowed($ips, $expectedMessages): void
     {
-        $this->assertEquals($expectedMessages, $this->ipValidator->validateIps($ips, false));
+        self::assertEquals($expectedMessages, $this->ipValidator->validateIps($ips, false));
     }
 
     /**

@@ -9,7 +9,10 @@ namespace Magento\RemoteStorage\Console\Command;
 
 use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\Config\File\ConfigFilePool;
+use Magento\Framework\Console\Cli;
 use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Filesystem\DriverPool;
+use Magento\RemoteStorage\Driver\DriverFactoryPool;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -23,11 +26,11 @@ class RemoteStorageEnableCommand extends Command
 {
     private const NAME = 'remote-storage:enable';
     private const ARG_DRIVER = 'driver';
-    private const OPTION_BUCKET = 'bucket';
-    private const OPTION_REGION = 'region';
-    private const OPTION_ACCESS_KEY = 'access-key';
-    private const OPTION_SECRET_KEY = 'secret-key';
-    private const OPTION_PREFIX = 'prefix';
+    private const ARGUMENT_BUCKET = 'bucket';
+    private const ARGUMENT_REGION = 'region';
+    private const ARGUMENT_ACCESS_KEY = 'access-key';
+    private const ARGUMENT_SECRET_KEY = 'secret-key';
+    private const ARGUMENT_PREFIX = 'prefix';
     private const OPTION_IS_PUBLIC = 'is-public';
 
     /**
@@ -36,11 +39,18 @@ class RemoteStorageEnableCommand extends Command
     private $writer;
 
     /**
-     * @param Writer $writer
+     * @var DriverFactoryPool
      */
-    public function __construct(Writer $writer)
+    private $driverFactoryPool;
+
+    /**
+     * @param Writer $writer
+     * @param DriverFactoryPool $driverFactoryPool
+     */
+    public function __construct(Writer $writer, DriverFactoryPool $driverFactoryPool)
     {
         $this->writer = $writer;
+        $this->driverFactoryPool = $driverFactoryPool;
 
         parent::__construct();
     }
@@ -52,13 +62,13 @@ class RemoteStorageEnableCommand extends Command
     {
         $this->setName(self::NAME)
             ->setDescription('Enable remote storage integration')
-            ->addArgument(self::ARG_DRIVER, InputArgument::REQUIRED, 'Remote driver')
-            ->addOption(self::OPTION_BUCKET, null, InputOption::VALUE_REQUIRED, 'Bucket')
-            ->addOption(self::OPTION_REGION, null, InputOption::VALUE_REQUIRED, 'Region')
-            ->addOption(self::OPTION_ACCESS_KEY, null, InputOption::VALUE_REQUIRED, 'Access key')
-            ->addOption(self::OPTION_SECRET_KEY, null, InputOption::VALUE_REQUIRED, 'Secret key')
-            ->addOption(self::OPTION_PREFIX, null, InputOption::VALUE_REQUIRED, 'Prefix', '')
-            ->addOption(self::OPTION_IS_PUBLIC, null, InputOption::VALUE_NONE, 'Is public');
+            ->addArgument(self::ARG_DRIVER, InputArgument::OPTIONAL, 'Remote driver', DriverPool::FILE)
+            ->addArgument(self::ARGUMENT_BUCKET, InputArgument::OPTIONAL, 'Bucket')
+            ->addArgument(self::ARGUMENT_REGION, InputArgument::OPTIONAL, 'Region')
+            ->addArgument(self::ARGUMENT_PREFIX, InputArgument::OPTIONAL, 'Prefix', '')
+            ->addArgument(self::ARGUMENT_ACCESS_KEY, InputArgument::OPTIONAL, 'Access key')
+            ->addArgument(self::ARGUMENT_SECRET_KEY, InputArgument::OPTIONAL, 'Secret key')
+            ->addOption(self::OPTION_IS_PUBLIC, null, InputOption::VALUE_REQUIRED, 'Is public', false);
     }
 
     /**
@@ -66,25 +76,69 @@ class RemoteStorageEnableCommand extends Command
      *
      * @param InputInterface $input
      * @param OutputInterface $output
-     * @return void
+     * @return int
      * @throws FileSystemException
      */
-    public function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $driver = $input->getArgument(self::ARG_DRIVER);
+
+        if ($driver === DriverPool::FILE) {
+            $output->writeln(sprintf(
+                'Driver "%s" was specified. Skipping',
+                $driver
+            ));
+
+            return Cli::RETURN_SUCCESS;
+        }
+
+        if (!$this->driverFactoryPool->has($driver)) {
+            $output->writeln('Driver %s was not found', $driver);
+
+            return Cli::RETURN_FAILURE;
+        }
+
+        $prefix = (string)$input->getArgument(self::ARGUMENT_PREFIX);
+        $config = [
+            'bucket' => (string)$input->getArgument(self::ARGUMENT_BUCKET),
+            'region' => (string)$input->getArgument(self::ARGUMENT_REGION),
+        ];
+        $isPublic = (bool)$input->getOption(self::OPTION_IS_PUBLIC);
+
+        if (($key = (string)$input->getArgument(self::ARGUMENT_ACCESS_KEY))
+            && ($secret = (string)$input->getArgument(self::ARGUMENT_SECRET_KEY))
+        ) {
+            $config['credentials']['key'] = $key;
+            $config['credentials']['secret'] = $secret;
+        }
+
+        try {
+            $this->driverFactoryPool->get($driver)->create($config, $prefix);
+        } catch (\Exception $exception) {
+            $output->writeln(sprintf(
+                '<error>Config cannot be set: %s</error>',
+                $exception->getMessage()
+            ));
+
+            return Cli::RETURN_FAILURE;
+        }
+
         $this->writer->saveConfig([
             ConfigFilePool::APP_ENV => [
                 'remote_storage' => [
-                    'driver' => (string)$input->getArgument(self::ARG_DRIVER),
-                    'bucket' => (string)$input->getOption(self::OPTION_BUCKET),
-                    'region' => (string)$input->getOption(self::OPTION_REGION),
-                    'access_key' => (string)$input->getOption(self::OPTION_ACCESS_KEY),
-                    'secret_key' => (string)$input->getOption(self::OPTION_SECRET_KEY),
-                    'prefix' => (string)$input->getOption(self::OPTION_PREFIX),
-                    'is_public' => (bool)$input->getOption(self::OPTION_IS_PUBLIC)
+                    'driver' => $driver,
+                    'prefix' => $prefix,
+                    'is_public' => $isPublic,
+                    'config' => $config
                 ]
             ]
         ], true);
 
-        $output->writeln('<info>Config was saved.</info>');
+        $output->writeln(sprintf(
+            '<info>Config for driver "%s" was saved.</info>',
+            $driver
+        ));
+
+        return Cli::RETURN_SUCCESS;
     }
 }

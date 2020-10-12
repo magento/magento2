@@ -5,10 +5,10 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Setup\Test\Unit\Console\Command;
+namespace Magento\Backend\Test\Unit\Console\Command;
 
+use Magento\Backend\Console\Command\MaintenanceStatusCommand;
 use Magento\Framework\App\MaintenanceMode;
-use Magento\Setup\Console\Command\MaintenanceStatusCommand;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;

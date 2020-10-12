@@ -3,12 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-namespace Magento\Setup\Console\Command;
+namespace Magento\Backend\Console\Command;
 
 use Magento\Framework\App\MaintenanceMode;
-use Magento\Framework\Module\ModuleList;
-use Magento\Setup\Validator\IpValidator;
+use Magento\Framework\Console\Cli;
+use Magento\Setup\Console\Command\AbstractSetupCommand;
+use Magento\Backend\Model\Validator\IpValidator;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
@@ -37,8 +37,6 @@ class MaintenanceAllowIpsCommand extends AbstractSetupCommand
     private $ipValidator;
 
     /**
-     * Constructor
-     *
      * @param MaintenanceMode $maintenanceMode
      * @param IpValidator $ipValidator
      */
@@ -46,6 +44,7 @@ class MaintenanceAllowIpsCommand extends AbstractSetupCommand
     {
         $this->maintenanceMode = $maintenanceMode;
         $this->ipValidator = $ipValidator;
+
         parent::__construct();
     }
 
@@ -54,7 +53,7 @@ class MaintenanceAllowIpsCommand extends AbstractSetupCommand
      *
      * @return void
      */
-    protected function configure()
+    protected function configure(): void
     {
         $arguments = [
             new InputArgument(
@@ -80,19 +79,21 @@ class MaintenanceAllowIpsCommand extends AbstractSetupCommand
         $this->setName('maintenance:allow-ips')
             ->setDescription('Sets maintenance mode exempt IPs')
             ->setDefinition(array_merge($arguments, $options));
+
         parent::configure();
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         if (!$input->getOption(self::INPUT_KEY_NONE)) {
             $addresses = $input->getArgument(self::INPUT_KEY_IP);
             $messages = $this->validate($addresses);
             if (!empty($messages)) {
                 $output->writeln('<error>' . implode('</error>' . PHP_EOL . '<error>', $messages));
+
                 // we must have an exit code higher than zero to indicate something was wrong
                 return \Magento\Framework\Console\Cli::RETURN_FAILURE;
             }
@@ -111,7 +112,8 @@ class MaintenanceAllowIpsCommand extends AbstractSetupCommand
             $this->maintenanceMode->setAddresses('');
             $output->writeln('<info>Set exempt IP-addresses: none</info>');
         }
-        return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
+
+        return Cli::RETURN_SUCCESS;
     }
 
     /**
@@ -120,7 +122,7 @@ class MaintenanceAllowIpsCommand extends AbstractSetupCommand
      * @param string[] $addresses
      * @return string[]
      */
-    protected function validate(array $addresses)
+    protected function validate(array $addresses): array
     {
         return $this->ipValidator->validateIps($addresses, false);
     }

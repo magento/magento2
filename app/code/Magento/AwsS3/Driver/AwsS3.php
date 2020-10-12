@@ -195,9 +195,40 @@ class AwsS3 implements DriverInterface
      */
     public function getRealPathSafety($path)
     {
-        return $this->normalizeAbsolutePath(
-            $this->normalizeRelativePath($path)
+        if (strpos($path, '/.') === false) {
+            return $path;
+        }
+
+        $isAbsolute = strpos($path, $this->normalizeAbsolutePath()) === 0;
+        $path = $this->normalizeRelativePath($path);
+
+        //Removing redundant directory separators.
+        $path = preg_replace(
+            '/\\/\\/+/',
+            '/',
+            $path
         );
+        $pathParts = explode('/', $path);
+        if (end($pathParts) === '.') {
+            $pathParts[count($pathParts) - 1] = '';
+        }
+        $realPath = [];
+        foreach ($pathParts as $pathPart) {
+            if ($pathPart === '.') {
+                continue;
+            }
+            if ($pathPart === '..') {
+                array_pop($realPath);
+                continue;
+            }
+            $realPath[] = $pathPart;
+        }
+
+        if ($isAbsolute) {
+            return $this->normalizeAbsolutePath(implode('/', $realPath));
+        }
+
+        return implode('/', $realPath);
     }
 
     /**
@@ -227,6 +258,14 @@ class AwsS3 implements DriverInterface
     private function normalizeAbsolutePath(string $path = '.'): string
     {
         $path = ltrim($path, '/');
+        $path = str_replace(
+            $this->adapter->getClient()->getObjectUrl(
+                $this->adapter->getBucket(),
+                $this->adapter->applyPathPrefix('.')
+            ),
+            '',
+            $path
+        );
 
         if (!$path) {
             $path = '.';
@@ -317,7 +356,7 @@ class AwsS3 implements DriverInterface
     public function getParentDirectory($path): string
     {
         //phpcs:ignore Magento2.Functions.DiscouragedFunction
-        return dirname($this->normalizeAbsolutePath($path));
+        return rtrim(dirname($this->normalizeAbsolutePath($path)), '/') . '/';
     }
 
     /**

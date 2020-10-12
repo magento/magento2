@@ -5,16 +5,16 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Setup\Test\Unit\Console\Command;
+namespace Magento\Backend\Test\Unit\Console\Command;
 
+use Magento\Backend\Console\Command\MaintenanceEnableCommand;
 use Magento\Framework\App\MaintenanceMode;
-use Magento\Setup\Console\Command\MaintenanceDisableCommand;
-use Magento\Setup\Validator\IpValidator;
+use Magento\Backend\Model\Validator\IpValidator;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class MaintenanceDisableCommandTest extends TestCase
+class MaintenanceEnableCommandTest extends TestCase
 {
     /**
      * @var MaintenanceMode|MockObject
@@ -27,7 +27,7 @@ class MaintenanceDisableCommandTest extends TestCase
     private $ipValidator;
 
     /**
-     * @var MaintenanceDisableCommand
+     * @var MaintenanceEnableCommand
      */
     private $command;
 
@@ -35,7 +35,7 @@ class MaintenanceDisableCommandTest extends TestCase
     {
         $this->maintenanceMode = $this->createMock(MaintenanceMode::class);
         $this->ipValidator = $this->createMock(IpValidator::class);
-        $this->command = new MaintenanceDisableCommand($this->maintenanceMode, $this->ipValidator);
+        $this->command = new MaintenanceEnableCommand($this->maintenanceMode, $this->ipValidator);
     }
 
     /**
@@ -66,56 +66,24 @@ class MaintenanceDisableCommandTest extends TestCase
             [
                 ['--ip' => ['127.0.0.1', '127.0.0.2']],
                 [],
-                'Disabled maintenance mode' . PHP_EOL .
+                'Enabled maintenance mode' . PHP_EOL .
                 'Set exempt IP-addresses: 127.0.0.1, 127.0.0.2' . PHP_EOL
             ],
             [
                 ['--ip' => ['none']],
                 [],
-                'Disabled maintenance mode' . PHP_EOL .
+                'Enabled maintenance mode' . PHP_EOL .
                 'Set exempt IP-addresses: none' . PHP_EOL
             ],
             [
                 [],
                 [],
-                'Disabled maintenance mode' . PHP_EOL
+                'Enabled maintenance mode' . PHP_EOL
             ],
             [
                 ['--ip' => ['127.0']],
                 ['Invalid IP 127.0'],
                 'Invalid IP 127.0' . PHP_EOL
-            ],
-        ];
-    }
-
-    /**
-     * @dataProvider isSetAddressInfoDataProvider
-     * @param array $ip
-     * @param bool $expected
-     */
-    public function testIsSetAddressInfo($ip, $expected)
-    {
-        $this->maintenanceMode
-            ->expects($this->any())
-            ->method('getAddressInfo')
-            ->willReturn($ip);
-
-        $this->assertEquals($expected, $this->command->isSetAddressInfo());
-    }
-
-    /**
-     * return array
-     */
-    public function isSetAddressInfoDataProvider()
-    {
-        return [
-            [
-                'ip' => ['127.0.0.1', '127.0.0.2'],
-                'expected' => true
-            ],
-            [
-                'ip' => [],
-                'expected' => false
             ],
         ];
     }

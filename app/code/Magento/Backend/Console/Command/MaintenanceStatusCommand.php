@@ -3,11 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-namespace Magento\Setup\Console\Command;
+namespace Magento\Backend\Console\Command;
 
 use Magento\Framework\App\MaintenanceMode;
-use Magento\Framework\Module\ModuleList;
+use Magento\Framework\Console\Cli;
+use Magento\Setup\Console\Command\AbstractSetupCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -29,6 +29,7 @@ class MaintenanceStatusCommand extends AbstractSetupCommand
     public function __construct(MaintenanceMode $maintenanceMode)
     {
         $this->maintenanceMode = $maintenanceMode;
+
         parent::__construct();
     }
 
@@ -37,17 +38,18 @@ class MaintenanceStatusCommand extends AbstractSetupCommand
      *
      * @return void
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this->setName('maintenance:status')
             ->setDescription('Displays maintenance mode status');
+
         parent::configure();
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $output->writeln(
             '<info>Status: maintenance mode is ' .
@@ -56,6 +58,7 @@ class MaintenanceStatusCommand extends AbstractSetupCommand
         $addressInfo = $this->maintenanceMode->getAddressInfo();
         $addresses = implode(' ', $addressInfo);
         $output->writeln('<info>List of exempt IP-addresses: ' . ($addresses ? $addresses : 'none') . '</info>');
-        return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
+
+        return Cli::RETURN_SUCCESS;
     }
 }

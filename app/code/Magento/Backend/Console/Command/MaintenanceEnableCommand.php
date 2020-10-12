@@ -3,8 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-namespace Magento\Setup\Console\Command;
+namespace Magento\Backend\Console\Command;
 
 /**
  * Command for enabling maintenance mode
@@ -16,9 +15,10 @@ class MaintenanceEnableCommand extends AbstractMaintenanceCommand
      *
      * @return void
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this->setName('maintenance:enable')->setDescription('Enables maintenance mode');
+
         parent::configure();
     }
 
@@ -27,7 +27,7 @@ class MaintenanceEnableCommand extends AbstractMaintenanceCommand
      *
      * @return bool
      */
-    protected function isEnable()
+    protected function isEnable(): bool
     {
         return true;
     }
@@ -37,7 +37,7 @@ class MaintenanceEnableCommand extends AbstractMaintenanceCommand
      *
      * @return string
      */
-    protected function getDisplayString()
+    protected function getDisplayString(): string
     {
         return '<info>Enabled maintenance mode</info>';
     }

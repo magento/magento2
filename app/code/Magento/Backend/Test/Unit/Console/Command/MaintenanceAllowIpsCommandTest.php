@@ -5,11 +5,11 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Setup\Test\Unit\Console\Command;
+namespace Magento\Backend\Test\Unit\Console\Command;
 
+use Magento\Backend\Console\Command\MaintenanceAllowIpsCommand;
 use Magento\Framework\App\MaintenanceMode;
-use Magento\Setup\Console\Command\MaintenanceAllowIpsCommand;
-use Magento\Setup\Validator\IpValidator;
+use Magento\Backend\Model\Validator\IpValidator;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;

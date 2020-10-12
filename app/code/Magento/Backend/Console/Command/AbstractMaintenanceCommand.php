@@ -3,14 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Setup\Console\Command;
+namespace Magento\Backend\Console\Command;
 
 use Magento\Framework\App\MaintenanceMode;
-use Magento\Setup\Validator\IpValidator;
+use Magento\Framework\Console\Cli;
+use Magento\Setup\Console\Command\AbstractSetupCommand;
+use Magento\Backend\Model\Validator\IpValidator;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * General maintenance command.
+ */
 abstract class AbstractMaintenanceCommand extends AbstractSetupCommand
 {
     /**
@@ -38,6 +43,7 @@ abstract class AbstractMaintenanceCommand extends AbstractSetupCommand
     {
         $this->maintenanceMode = $maintenanceMode;
         $this->ipValidator = $ipValidator;
+
         parent::__construct();
     }
 
@@ -57,6 +63,7 @@ abstract class AbstractMaintenanceCommand extends AbstractSetupCommand
             ),
         ];
         $this->setDefinition($options);
+
         parent::configure();
     }
 
@@ -75,16 +82,18 @@ abstract class AbstractMaintenanceCommand extends AbstractSetupCommand
     abstract protected function getDisplayString();
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $addresses = $input->getOption(self::INPUT_KEY_IP);
         $messages = $this->validate($addresses);
+
         if (!empty($messages)) {
             $output->writeln('<error>' . implode('</error>' . PHP_EOL . '<error>', $messages));
-            // we must have an exit code higher than zero to indicate something was wrong
-            return \Magento\Framework\Console\Cli::RETURN_FAILURE;
+
+            // We must have an exit code higher than zero to indicate something was wrong
+            return Cli::RETURN_FAILURE;
         }
 
         $this->maintenanceMode->set($this->isEnable());
@@ -92,14 +101,15 @@ abstract class AbstractMaintenanceCommand extends AbstractSetupCommand
 
         if (!empty($addresses)) {
             $addresses = implode(',', $addresses);
-            $addresses = ('none' == $addresses) ? '' : $addresses;
+            $addresses = ('none' === $addresses) ? '' : $addresses;
             $this->maintenanceMode->setAddresses($addresses);
             $output->writeln(
                 '<info>Set exempt IP-addresses: ' . (implode(', ', $this->maintenanceMode->getAddressInfo()) ?: 'none')
                 . '</info>'
             );
         }
-        return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
+
+        return Cli::RETURN_SUCCESS;
     }
 
     /**

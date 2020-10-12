@@ -17,7 +17,9 @@ interface DriverFactoryInterface
     /**
      * Creates pre-configured driver.
      *
+     * @param array $config
+     * @param string $prefix
      * @return DriverInterface
      */
-    public function create(): DriverInterface;
+    public function create(array $config, string $prefix): DriverInterface;
 }

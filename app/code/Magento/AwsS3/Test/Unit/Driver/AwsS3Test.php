@@ -59,9 +59,7 @@ class AwsS3Test extends TestCase
                 return self::URL . $path;
             });
 
-        $this->driver = new AwsS3(
-            $this->adapterMock
-        );
+        $this->driver = new AwsS3($this->adapterMock);
     }
 
     /**
@@ -116,6 +114,11 @@ class AwsS3Test extends TestCase
                 self::URL . 'media/',
                 '/catalog/test.png',
                 self::URL . 'media/catalog/test.png'
+            ],
+            [
+                '',
+                self::URL . 'media/catalog/test.png',
+                self::URL . 'media/catalog/test.png'
             ]
         ];
     }
@@ -137,7 +140,7 @@ class AwsS3Test extends TestCase
      */
     public function getRelativePathDataProvider(): array
     {
-        return  [
+        return [
             [
                 '',
                 'test/test.txt',
@@ -321,6 +324,42 @@ class AwsS3Test extends TestCase
                 false,
                 [],
                 false
+            ]
+        ];
+    }
+
+    /**
+     * @param string $path
+     * @param string $expected
+     *
+     * @dataProvider getRealPathSafetyDataProvider
+     */
+    public function testGetRealPathSafety(string $path, string $expected): void
+    {
+        self::assertSame($expected, $this->driver->getRealPathSafety($path));
+    }
+
+    /**
+     * @return array
+     */
+    public function getRealPathSafetyDataProvider(): array
+    {
+        return [
+            [
+                self::URL,
+                self::URL
+            ],
+            [
+                'test.txt',
+                'test.txt'
+            ],
+            [
+                self::URL . 'test/test/../test.txt',
+                self::URL . 'test/test.txt'
+            ],
+            [
+                'test/test/../test.txt',
+                'test/test.txt'
             ]
         ];
     }

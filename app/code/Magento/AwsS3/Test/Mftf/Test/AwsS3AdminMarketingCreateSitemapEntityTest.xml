@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    <!--
+     /**
+      * Copyright © Magento, Inc. All rights reserved.
+      * See COPYING.txt for license details.
+      */
+    -->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AwsS3AdminMarketingCreateSitemapEntityTest">
+        <annotations>
+            <features value="Sitemap"/>
+            <stories value="AWS S3 Admin Creates Sitemap Entity"/>
+            <title value="AWS S3 Sitemap Creation"/>
+            <description value="Sitemap Entity Creation"/>
+            <testCaseId value="MC-38319"/>
+            <severity value="MAJOR"/>
+            <group value="sitemap"/>
+            <group value="mtf_migrated"/>
+            <group value="remote_storage_aws_s3"/>
+        </annotations>
+        <before>
+            <magentoCLI command="remote-storage:enable {{RemoteStorageAwsS3ConfigData.driver}} {{RemoteStorageAwsS3ConfigData.bucket}} {{RemoteStorageAwsS3ConfigData.region}} {{RemoteStorageAwsS3ConfigData.prefix}} {{RemoteStorageAwsS3ConfigData.access_key}} {{RemoteStorageAwsS3ConfigData.secret_key}}" stepKey="enableRemoteStorage"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminMarketingSiteDeleteByNameActionGroup" stepKey="deleteCreatedSitemap">
+                <argument name="filename" value="sitemap.xml"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+            <magentoCLI command="remote-storage:disable" stepKey="disableRemoteStorage"/>
+        </after>
+
+        <!--TEST BODY -->
+        <!--Navigate to Marketing->Sitemap Page -->
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToMarketingSiteMapPage">
+            <argument name="menuUiId" value="{{AdminMenuMarketing.dataUiId}}"/>
+            <argument name="submenuUiId" value="{{AdminMenuSEOAndSearchSiteMap.dataUiId}}"/>
+        </actionGroup>
+        <!-- Navigate to New Sitemap Creation Page -->
+        <actionGroup ref="AdminMarketingNavigateToNewSitemapPageActionGroup" stepKey="navigateToAddNewSitemap"/>
+        <!-- Create Sitemap Entity -->
+        <actionGroup ref="AdminMarketingCreateSitemapEntityActionGroup" stepKey="createSitemap">
+            <argument name="filename" value="sitemap.xml"/>
+            <argument name="path" value="/"/>
+        </actionGroup>
+        <!-- Assert Success Message -->
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="seeSuccessMessage">
+            <argument name="message" value="You saved the sitemap."/>
+            <argument name="messageType" value="success"/>
+        </actionGroup>
+        <!-- Find Created Sitemap On Grid -->
+        <actionGroup ref="AdminMarketingSearchSitemapActionGroup" stepKey="findCreatedSitemapInGrid">
+            <argument name="name" value="sitemap.xml"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminSitemapInGridActionGroup" stepKey="assertSitemapInGrid">
+            <argument name="name" value="sitemap.xml"/>
+        </actionGroup>
+        <!--END TEST BODY -->
+    </test>
+</tests>

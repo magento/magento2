@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    <!--
+     /**
+      * Copyright © Magento, Inc. All rights reserved.
+      * See COPYING.txt for license details.
+      */
+    -->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AwsS3AdminMarketingSiteMapCreateNewTest">
+        <annotations>
+            <features value="Sitemap"/>
+            <stories value="AWS S3 Create Site Map"/>
+            <title value="AWS S3 Create New Site Map with valid data"/>
+            <description value="Create New Site Map with valid data"/>
+            <testCaseId value="MC-38320" />
+            <severity value="CRITICAL"/>
+            <group value="sitemap"/>
+            <group value="remote_storage_aws_s3"/>
+        </annotations>
+        <before>
+            <magentoCLI command="remote-storage:enable {{RemoteStorageAwsS3ConfigData.driver}} {{RemoteStorageAwsS3ConfigData.bucket}} {{RemoteStorageAwsS3ConfigData.region}} {{RemoteStorageAwsS3ConfigData.prefix}} {{RemoteStorageAwsS3ConfigData.access_key}} {{RemoteStorageAwsS3ConfigData.secret_key}}" stepKey="enableRemoteStorage"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminMarketingSiteDeleteByNameActionGroup" stepKey="deleteSiteMap">
+                <argument name="filename" value="{{DefaultSiteMap.filename}}" />
+            </actionGroup>
+            <actionGroup ref="AssertSiteMapDeleteSuccessActionGroup" stepKey="assertDeleteSuccessMessage"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <magentoCLI command="remote-storage:disable" stepKey="disableRemoteStorage"/>
+        </after>
+        <actionGroup ref="AdminMarketingSiteMapNavigateNewActionGroup" stepKey="navigateNewSiteMap"/>
+        <actionGroup ref="AdminMarketingSiteMapFillFormActionGroup" stepKey="fillSiteMapForm">
+            <argument name="sitemap" value="DefaultSiteMap" />
+        </actionGroup>
+        <actionGroup ref="AssertSiteMapCreateSuccessActionGroup" stepKey="seeSuccessMessage"/>
+    </test>
+</tests>

@@ -9,7 +9,6 @@ namespace Magento\AwsS3\Driver;
 
 use Aws\S3\S3Client;
 use League\Flysystem\AwsS3v3\AwsS3Adapter;
-use Magento\AwsS3\Model\Config;
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\RemoteStorage\Driver\DriverFactoryInterface;
@@ -25,41 +24,25 @@ class AwsS3Factory implements DriverFactoryInterface
     private $objectManager;
 
     /**
-     * @var Config
-     */
-    private $config;
-
-    /**
      * @param ObjectManagerInterface $objectManager
-     * @param Config $config
      */
-    public function __construct(ObjectManagerInterface $objectManager, Config $config)
+    public function __construct(ObjectManagerInterface $objectManager)
     {
         $this->objectManager = $objectManager;
-        $this->config = $config;
     }
 
     /**
      * Creates an instance of AWS S3 driver.
      *
+     * @param array $config
+     * @param string $prefix
      * @return DriverInterface
      */
-    public function create(): DriverInterface
+    public function create(array $config, string $prefix): DriverInterface
     {
-        $config = [
-            'region' => $this->config->getRegion(),
+        $config += [
             'version' => 'latest'
         ];
-
-        $key = $this->config->getAccessKey();
-        $secret = $this->config->getSecretKey();
-
-        if ($key && $secret) {
-            $config['credentials'] = [
-                'key' => $key,
-                'secret' => $secret,
-            ];
-        }
 
         return $this->objectManager->create(
             AwsS3::class,
@@ -68,8 +51,8 @@ class AwsS3Factory implements DriverFactoryInterface
                     AwsS3Adapter::class,
                     [
                         'client' => $this->objectManager->create(S3Client::class, ['args' => $config]),
-                        'bucket' => $this->config->getBucket(),
-                        'prefix' => $this->config->getPrefix()
+                        'bucket' => $config['bucket'],
+                        'prefix' => $prefix
                     ]
                 )
             ]

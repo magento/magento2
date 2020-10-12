@@ -21,22 +21,13 @@ class DriverPool implements DriverPoolInterface
 {
     public const PATH_DRIVER = 'remote_storage/driver';
     public const PATH_IS_PUBLIC = 'remote_storage/is_public';
+    public const PATH_PREFIX = 'remote_storage/prefix';
+    public const PATH_CONFIG = 'remote_storage/config';
+
+    /**
+     * Driver name.
+     */
     public const REMOTE = 'remote';
-
-    /**
-     * @var DriverPool
-     */
-    private $driverPool;
-
-    /**
-     * @var DriverInterface[]
-     */
-    private $pool = [];
-
-    /**
-     * @var DriverFactoryInterface[]
-     */
-    private $remotePool;
 
     /**
      * @var Config
@@ -44,15 +35,33 @@ class DriverPool implements DriverPoolInterface
     private $config;
 
     /**
-     * @param BaseDriverPool $driverPool
-     * @param Config $config
-     * @param array $remotePool
+     * @var DriverFactoryPool
      */
-    public function __construct(BaseDriverPool $driverPool, Config $config, array $remotePool = [])
-    {
-        $this->driverPool = $driverPool;
+    private $driverFactoryPool;
+
+    /**
+     * @var DriverPool
+     */
+    private $driverPool;
+
+    /**
+     * @var array
+     */
+    private $pool = [];
+
+    /**
+     * @param Config $config
+     * @param DriverFactoryPool $driverFactoryPool
+     * @param BaseDriverPool $driverPool
+     */
+    public function __construct(
+        Config $config,
+        DriverFactoryPool $driverFactoryPool,
+        BaseDriverPool $driverPool
+    ) {
         $this->config = $config;
-        $this->remotePool = $remotePool;
+        $this->driverFactoryPool = $driverFactoryPool;
+        $this->driverPool = $driverPool;
     }
 
     /**
@@ -60,7 +69,6 @@ class DriverPool implements DriverPoolInterface
      *
      * @param string $code
      * @return DriverInterface
-     *
      * @throws RuntimeException
      * @throws FileSystemException
      */
@@ -73,8 +81,11 @@ class DriverPool implements DriverPoolInterface
 
             $driver = $this->config->getDriver();
 
-            if ($driver && isset($this->remotePool[$driver])) {
-                return $this->pool[$code] = $this->remotePool[$driver]->create();
+            if ($driver && $this->driverFactoryPool->has($driver)) {
+                return $this->pool[$code] = $this->driverFactoryPool->get($driver)->create(
+                    $this->config->getConfig(),
+                    $this->config->getPrefix()
+                );
             }
 
             throw new RuntimeException(__('Remote driver is not available.'));

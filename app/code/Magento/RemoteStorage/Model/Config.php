@@ -11,6 +11,7 @@ use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\RuntimeException;
 use Magento\RemoteStorage\Driver\DriverPool;
+use Magento\Framework\Filesystem\DriverPool as BaseDriverPool;
 
 /**
  * Configuration for remote storage.
@@ -51,7 +52,9 @@ class Config
      */
     public function isEnabled(): bool
     {
-        return $this->config->get(DriverPool::PATH_DRIVER) !== null;
+        $driver = $this->config->get(DriverPool::PATH_DRIVER);
+
+        return $driver && $driver !== BaseDriverPool::FILE;
     }
 
     /**
@@ -64,5 +67,29 @@ class Config
     public function isPublic(): bool
     {
         return (bool)$this->config->get(DriverPool::PATH_IS_PUBLIC, false);
+    }
+
+    /**
+     * Retrieves config.
+     *
+     * @return array
+     * @throws FileSystemException
+     * @throws RuntimeException
+     */
+    public function getConfig(): array
+    {
+        return (array)$this->config->get(DriverPool::PATH_CONFIG, []);
+    }
+
+    /**
+     * Retrieves prefix.
+     *
+     * @return string
+     * @throws FileSystemException
+     * @throws RuntimeException
+     */
+    public function getPrefix(): string
+    {
+        return (string)$this->config->get(DriverPool::PATH_PREFIX, '');
     }
 }

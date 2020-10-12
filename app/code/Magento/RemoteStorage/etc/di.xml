@@ -65,7 +65,13 @@
         <arguments>
             <argument name="commands" xsi:type="array">
                 <item name="remoteStorageEnable" xsi:type="object">Magento\RemoteStorage\Console\Command\RemoteStorageEnableCommand</item>
+                <item name="remoteStorageDisable" xsi:type="object">Magento\RemoteStorage\Console\Command\RemoteStorageDisableCommand</item>
             </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\App\MaintenanceMode">
+        <arguments>
+            <argument name="filesystem" xsi:type="object">fullRemoteFilesystem</argument>
         </arguments>
     </type>
 </config>
