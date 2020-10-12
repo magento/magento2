@@ -51,7 +51,7 @@ class SaveCategoryTest extends AbstractSaveCategoryTest
      */
     protected function tearDown(): void
     {
-        if(!empty($this->createdCategoryId)) {
+        if (!empty($this->createdCategoryId)) {
             try {
                 $this->categoryRepository->deleteByIdentifier($this->createdCategoryId);
             } catch (NoSuchEntityException $e) {
