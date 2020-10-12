@@ -29,16 +29,16 @@ class Config implements ConfigInterface
     const PARAM_SESSION_CACHE_LIMITER = 'session/cache_limiter';
 
     /** Configuration path for session garbage collection probability */
-    const PARAM_SESSION_GC_PROBABILITY = 'session/gc_probability';
+    private const PARAM_SESSION_GC_PROBABILITY = 'session/gc_probability';
 
     /** Configuration path for session garbage collection divisor */
-    const PARAM_SESSION_GC_DIVISOR = 'session/gc_divisor';
+    private const PARAM_SESSION_GC_DIVISOR = 'session/gc_divisor';
 
     /**
      * Configuration path for session garbage collection max lifetime.
      * The number of seconds after which data will be seen as 'garbage'.
      */
-    const PARAM_SESSION_GC_MAXLIFETIME = 'session/gc_maxlifetime';
+    private const PARAM_SESSION_GC_MAXLIFETIME = 'session/gc_maxlifetime';
 
     /** Configuration path for cookie domain */
     const XML_PATH_COOKIE_DOMAIN = 'web/cookie/cookie_domain';
