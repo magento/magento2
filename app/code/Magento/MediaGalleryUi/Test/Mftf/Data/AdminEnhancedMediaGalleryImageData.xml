@@ -24,7 +24,7 @@
         <data key="fileName">png</data>
         <data key="extension">png</data>
      </entity>
-          <entity name="ImageUploadGif" type="uploadImage">
+    <entity name="ImageUploadGif" type="uploadImage">
         <data key="title" unique="suffix">Image1</data>
         <data key="file_type">Upload File</data>
         <data key="value">gif.gif</data>

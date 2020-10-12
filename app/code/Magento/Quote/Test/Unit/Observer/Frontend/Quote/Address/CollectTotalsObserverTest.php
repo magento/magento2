@@ -13,7 +13,7 @@ use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Api\Data\CustomerInterfaceFactory;
 use Magento\Customer\Api\Data\GroupInterface;
 use Magento\Customer\Api\GroupManagementInterface;
-use Magento\Customer\Helper\Address;
+use Magento\Customer\Helper\Address as CustomerAddress;
 use Magento\Customer\Model\Session;
 use Magento\Customer\Model\Vat;
 use Magento\Framework\Event\Observer;
@@ -21,10 +21,11 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Quote\Api\Data\ShippingAssignmentInterface;
 use Magento\Quote\Api\Data\ShippingInterface;
 use Magento\Quote\Model\Quote;
+use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Observer\Frontend\Quote\Address\CollectTotalsObserver;
 use Magento\Quote\Observer\Frontend\Quote\Address\VatValidator;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Class CollectTotalsTest
@@ -124,7 +125,7 @@ class CollectTotalsObserverTest extends TestCase
             true,
             ['getStoreId', 'getCustomAttribute', 'getId', '__wakeup']
         );
-        $this->customerAddressMock = $this->createMock(Address::class);
+        $this->customerAddressMock = $this->createMock(CustomerAddress::class);
         $this->customerVatMock = $this->createMock(Vat::class);
         $this->customerDataFactoryMock = $this->getMockBuilder(CustomerInterfaceFactory::class)
             ->addMethods(['mergeDataObjectWithArray'])
@@ -174,6 +175,7 @@ class CollectTotalsObserverTest extends TestCase
 
         $shippingAssignmentMock = $this->getMockForAbstractClass(ShippingAssignmentInterface::class);
         $shippingMock = $this->getMockForAbstractClass(ShippingInterface::class);
+
         $shippingAssignmentMock->expects($this->once())->method('getShipping')->willReturn($shippingMock);
         $shippingMock->expects($this->once())->method('getAddress')->willReturn($this->quoteAddressMock);
 
@@ -185,7 +187,6 @@ class CollectTotalsObserverTest extends TestCase
         $this->quoteMock->expects($this->any())
             ->method('getCustomer')
             ->willReturn($this->customerMock);
-
         $this->addressRepository = $this->getMockForAbstractClass(AddressRepositoryInterface::class);
         $this->customerSession = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
@@ -266,26 +267,20 @@ class CollectTotalsObserverTest extends TestCase
             ->willReturn('customerCountryCode');
         $this->quoteAddressMock->expects($this->once())->method('getVatId')->willReturn(null);
 
-        $this->quoteMock->expects($this->once())
+        $this->quoteMock->expects($this->exactly(2))
             ->method('getCustomerGroupId')
             ->willReturn('customerGroupId');
         $this->customerMock->expects($this->once())->method('getId')->willReturn('1');
-        $this->groupManagementMock->expects($this->once())
-            ->method('getDefaultGroup')
-            ->willReturn($this->groupInterfaceMock);
-        $this->groupInterfaceMock->expects($this->once())
-            ->method('getId')->willReturn('defaultCustomerGroupId');
+
         /** Assertions */
         $this->quoteAddressMock->expects($this->once())
             ->method('setPrevQuoteCustomerGroupId')
             ->with('customerGroupId');
-        $this->quoteMock->expects($this->once())->method('setCustomerGroupId')->with('defaultCustomerGroupId');
         $this->customerDataFactoryMock->expects($this->any())
             ->method('create')
             ->willReturn($this->customerMock);
 
         $this->quoteMock->expects($this->once())->method('setCustomer')->with($this->customerMock);
-
         /** SUT execution */
         $this->model->execute($this->observerMock);
     }
@@ -343,7 +338,7 @@ class CollectTotalsObserverTest extends TestCase
         $customerVat = "123123123";
         $defaultShipping = 1;
 
-        $customerAddress = $this->createMock(\Magento\Quote\Model\Quote\Address::class);
+        $customerAddress = $this->createMock(Address::class);
         $customerAddress->expects($this->any())
             ->method("getVatId")
             ->willReturn($customerVat);
@@ -379,8 +374,8 @@ class CollectTotalsObserverTest extends TestCase
         $customerCountryCode = "DE";
         $customerVat = "123123123";
         $defaultShipping = 1;
-
         $customerAddress = $this->getMockForAbstractClass(AddressInterface::class);
+
         $customerAddress->expects($this->once())
             ->method("getCountryId")
             ->willReturn($customerCountryCode);
