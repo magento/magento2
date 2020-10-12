@@ -12,12 +12,13 @@ use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Catalog\Model\Category;
 use Magento\Cms\Api\GetBlockByIdentifierInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Test cases for save category controller.
  *
  * @magentoAppArea adminhtml
- * @magentoDbIsolation disabled
+ * @magentoDbIsolation enabled
  */
 class SaveCategoryTest extends AbstractSaveCategoryTest
 {
@@ -30,6 +31,9 @@ class SaveCategoryTest extends AbstractSaveCategoryTest
     /** @var string */
     private $createdCategoryId;
 
+    /** @var StoreManagerInterface */
+    private $storeManager;
+
     /**
      * @inheritdoc
      */
@@ -39,6 +43,7 @@ class SaveCategoryTest extends AbstractSaveCategoryTest
 
         $this->categoryRepository = $this->_objectManager->get(CategoryRepositoryInterface::class);
         $this->getBlockByIdentifier = $this->_objectManager->get(GetBlockByIdentifierInterface::class);
+        $this->storeManager = $this->_objectManager->get(StoreManagerInterface::class);
     }
 
     /**
@@ -46,12 +51,14 @@ class SaveCategoryTest extends AbstractSaveCategoryTest
      */
     protected function tearDown(): void
     {
-        try {
-            $this->categoryRepository->deleteByIdentifier($this->createdCategoryId);
-        } catch (NoSuchEntityException $e) {
-            //Category already deleted.
+        if(!empty($this->createdCategoryId)) {
+            try {
+                $this->categoryRepository->deleteByIdentifier($this->createdCategoryId);
+            } catch (NoSuchEntityException $e) {
+                //Category already deleted.
+            }
+            $this->createdCategoryId = null;
         }
-        $this->createdCategoryId = null;
 
         parent::tearDown();
     }
@@ -63,15 +70,16 @@ class SaveCategoryTest extends AbstractSaveCategoryTest
      */
     public function testCreateCategoryWithCmsBlock(): void
     {
-        $blockId = $this->getBlockByIdentifier->execute('fixture_block', 1)->getId();
+        $storeId = (int)$this->storeManager->getStore('default')->getId();
+        $blockId = $this->getBlockByIdentifier->execute('fixture_block', $storeId)->getId();
         $postData = [
             CategoryInterface::KEY_NAME => 'Category with cms block',
             CategoryInterface::KEY_IS_ACTIVE => 1,
             CategoryInterface::KEY_INCLUDE_IN_MENU => 1,
             'display_mode' => Category::DM_MIXED,
             'landing_page' => $blockId,
-            'available_sort_by' => 1,
-            'default_sort_by' => 1,
+            CategoryInterface::KEY_AVAILABLE_SORT_BY => ['position'],
+            'default_sort_by' => 'position',
         ];
         $responseData = $this->performSaveCategoryRequest($postData);
         $this->assertRequestIsSuccessfullyPerformed($responseData);

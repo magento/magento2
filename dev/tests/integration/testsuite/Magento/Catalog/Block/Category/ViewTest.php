@@ -12,6 +12,7 @@ use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\View\LayoutInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Catalog\Model\GetCategoryByName;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
@@ -39,6 +40,9 @@ class ViewTest extends TestCase
     /** @var LayoutInterface */
     private $layout;
 
+    /** @var StoreManagerInterface */
+    private $storeManager;
+
     /**
      * @inheritdoc
      */
@@ -51,6 +55,7 @@ class ViewTest extends TestCase
         $this->getCategoryByName = $this->objectManager->get(GetCategoryByName::class);
         $this->categoryRepository = $this->objectManager->get(CategoryRepositoryInterface::class);
         $this->layout = $this->objectManager->get(LayoutInterface::class);
+        $this->storeManager = $this->objectManager->get(StoreManagerInterface::class);
     }
 
     /**
@@ -70,8 +75,9 @@ class ViewTest extends TestCase
      */
     public function testCmsBlockDisplayedOnCategory(): void
     {
+        $storeId = (int)$this->storeManager->getStore('default')->getId();
         $categoryId = $this->getCategoryByName->execute('Category with cms block')->getId();
-        $category = $this->categoryRepository->get($categoryId, 1);
+        $category = $this->categoryRepository->get($categoryId, $storeId);
         $this->registerCategory($category);
         $block = $this->layout->createBlock(View::class)->setTemplate('Magento_Catalog::category/cms.phtml');
         $this->assertStringContainsString('<h1>Fixture Block Title</h1>', $block->toHtml());

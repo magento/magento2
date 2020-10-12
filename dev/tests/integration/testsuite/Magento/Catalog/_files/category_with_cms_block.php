@@ -31,7 +31,6 @@ $currentStoreId = (int)$storeManager->getStore()->getId();
 $getBlockByIdentifier = $objectManager->get(GetBlockByIdentifierInterface::class);
 $block = $getBlockByIdentifier->execute('fixture_block', $currentStoreId);
 
-$storeManager->setCurrentStore(Store::DEFAULT_STORE_ID);
 $category = $categoryFactory->create();
 $category->setName('Category with cms block')
     ->setParentId($categoryHelper->getId())
@@ -42,5 +41,9 @@ $category->setName('Category with cms block')
     ->setPosition(1)
     ->setDisplayMode(Category::DM_MIXED)
     ->setLandingPage($block->getId());
-$categoryRepository->save($category);
-$storeManager->setCurrentStore($currentStoreId);
+try {
+    $storeManager->setCurrentStore(Store::DEFAULT_STORE_ID);
+    $categoryRepository->save($category);
+} finally {
+    $storeManager->setCurrentStore($currentStoreId);
+}
