@@ -87,17 +87,7 @@ class GetCartForUser
             throw new GraphQlNoSuchEntityException(__('The cart isn\'t active.'));
         }
 
-        if ((int)$cart->getStoreId() !== $storeId) {
-            $cartStore = $this->storeRepository->getById($cart->getStoreId());
-            $newStore = $this->storeRepository->getById($storeId);
-            if ($cartStore->getWebsite() !== $newStore->getWebsite()) {
-                throw new GraphQlInputException(
-                    __('Can\'t assign cart to store in different website.')
-                );
-            }
-            $cart->setStoreId($storeId);
-            $this->cartRepository->save($cart);
-        }
+        $this->updateCartCurrency($cart, $storeId);
 
         $cartCustomerId = (int)$cart->getCustomerId();
 
@@ -115,5 +105,32 @@ class GetCartForUser
             );
         }
         return $cart;
+    }
+
+    /**
+     * Sets cart currency based on specified store.
+     *
+     * @param Quote $cart
+     * @param int $storeId
+     * @throws GraphQlInputException
+     * @throws NoSuchEntityException
+     */
+    private function updateCartCurrency(Quote $cart, int $storeId)
+    {
+        $cartStore = $this->storeRepository->getById($cart->getStoreId());
+        if ((int)$cart->getStoreId() !== $storeId) {
+            $newStore = $this->storeRepository->getById($storeId);
+            if ($cartStore->getWebsite() !== $newStore->getWebsite()) {
+                throw new GraphQlInputException(
+                    __('Can\'t assign cart to store in different website.')
+                );
+            }
+            $cart->setStoreId($storeId);
+            $cart->setStoreCurrencyCode($newStore->getCurrentCurrency());
+            $cart->setQuoteCurrencyCode($newStore->getCurrentCurrency());
+        } else {
+            $cart->setQuoteCurrencyCode($cartStore->getCurrentCurrency());
+        }
+        $this->cartRepository->save($cart);
     }
 }
