@@ -63,8 +63,17 @@ class ReviewDataProvider extends AbstractDataProvider
      */
     public function getData()
     {
+        $params = $this->request->getParams();
         $this->getCollection()->addEntityFilter($this->request->getParam('current_product_id', 0))
             ->addStoreData();
+
+        if (isset($params['sorting'])) {
+            $sorting = $this->request->getParam('sorting');
+            $field = $sorting['field'];
+            $direction = $sorting['direction'];
+
+            $this->getCollection()->getSelect()->order($field . ' ' . $direction);
+        }
 
         $arrItems = [
             'totalRecords' => $this->getCollection()->getSize(),
@@ -77,7 +86,6 @@ class ReviewDataProvider extends AbstractDataProvider
 
         return $arrItems;
     }
-
     /**
      * {@inheritdoc}
      * @since 100.1.0
