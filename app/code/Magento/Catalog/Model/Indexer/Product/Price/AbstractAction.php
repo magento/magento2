@@ -387,8 +387,11 @@ abstract class AbstractAction
         $parentProductsTypes = $this->getParentProductsTypes($changedIds);
 
         $changedIds = array_unique(array_merge($changedIds, ...array_values($parentProductsTypes)));
-        $pendingDeleteIds = $changedIds;
         $productsTypes = array_merge_recursive($productsTypes, $parentProductsTypes);
+
+        if (!empty($changedIds)) {
+            $this->deleteIndexData($changedIds);
+        }
 
         $typeIndexers = $this->getTypeIndexers();
         foreach ($typeIndexers as $productType => $indexer) {
@@ -416,11 +419,6 @@ abstract class AbstractAction
                 $indexer->reindexEntity($entityIds);
                 $this->_syncData($entityIds);
             }
-            $pendingDeleteIds = array_diff($pendingDeleteIds, $entityIds);
-        }
-
-        if (!empty($pendingDeleteIds)) {
-            $this->deleteIndexData($pendingDeleteIds);
         }
 
         return $changedIds;
@@ -472,9 +470,7 @@ abstract class AbstractAction
         if (!empty($excludeIds)) {
             $select->where('child_id NOT IN(?)', $excludeIds);
         }
-
         $children = $this->getConnection()->fetchCol($select);
-
         if ($children) {
             foreach ($this->dimensionCollectionFactory->create() as $dimensions) {
                 $select = $this->getConnection()->select()->from(
