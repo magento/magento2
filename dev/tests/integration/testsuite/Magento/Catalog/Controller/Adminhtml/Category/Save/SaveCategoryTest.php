@@ -14,7 +14,7 @@ use Magento\Cms\Api\GetBlockByIdentifierInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
- * Test cases related to save category with enabled category flat.
+ * Test cases for save category controller.
  *
  * @magentoAppArea adminhtml
  * @magentoDbIsolation disabled
@@ -54,7 +54,6 @@ class SaveCategoryTest extends AbstractSaveCategoryTest
         $this->createdCategoryId = null;
 
         parent::tearDown();
-
     }
 
     /**
