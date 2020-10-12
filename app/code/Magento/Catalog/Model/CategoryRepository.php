@@ -113,10 +113,14 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
         $category->addData($existingData);
         try {
             $this->validateCategory($category);
-            foreach ($existingData as $attribute => $value) {
-                if (!in_array($attribute, ['entity_id', 'id', 'store_id'])) {
-                    $this->categoryResource->saveAttribute($category, $attribute);
+            if ($category->getId()) {
+                foreach ($existingData as $attribute => $value) {
+                    if (!in_array($attribute, ['entity_id', 'id', 'store_id'])) {
+                        $this->categoryResource->saveAttribute($category, $attribute);
+                    }
                 }
+            } else {
+                $this->categoryResource->save($category);
             }
         } catch (\Exception $e) {
             throw new CouldNotSaveException(
