@@ -86,7 +86,7 @@ class Wishlist implements SectionSourceInterface
      */
     protected function getCounter()
     {
-        return $this->wishlistHelper->getItemCount();
+        return (string) $this->wishlistHelper->getItemCount();
     }
 
     /**
