@@ -127,8 +127,7 @@ class Category extends AbstractResource
         $data = [],
         \Magento\Framework\Serialize\Serializer\Json $serializer = null,
         MetadataPool $metadataPool = null
-    )
-    {
+    ){
         parent::__construct(
             $context,
             $storeManager,
@@ -710,8 +709,7 @@ class Category extends AbstractResource
      * @param boolean $toLoad
      * @return \Magento\Framework\Data\Tree\Node\Collection|\Magento\Catalog\Model\ResourceModel\Category\Collection
      */
-    public function getCategories($parent, $recursionLevel = 0, $sorted = false, $asCollection = false, $toLoad =
-    true)
+    public function getCategories($parent, $recursionLevel = 0, $sorted = false, $asCollection = false, $toLoad = true)
     {
         $tree = $this->_categoryTreeFactory->create();
         /* @var $tree \Magento\Catalog\Model\ResourceModel\Category\Tree */
@@ -951,8 +949,7 @@ class Category extends AbstractResource
         \Magento\Catalog\Model\Category $category,
         \Magento\Catalog\Model\Category $newParent,
         $afterCategoryId = null
-    )
-    {
+    ){
         $childrenCount = $this->getChildrenCount($category->getId()) + 1;
         $table = $this->getEntityTable();
         $connection = $this->getConnection();
