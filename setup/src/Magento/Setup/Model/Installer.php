@@ -1047,7 +1047,7 @@ class Installer
             }
             $schemaListener->setModuleName($moduleName);
             $this->log->log("Module '{$moduleName}':");
-            $configVer = $this->moduleList->getOne($moduleName)['setup_version'];
+            $configVer = ($moduleConfig = $this->moduleList->getOne($moduleName)) ? $moduleConfig['setup_version'] : null;
             $currentVersion = $moduleContextList[$moduleName]->getVersion();
             // Schema/Data is installed
             if ($currentVersion !== '') {
