@@ -6,14 +6,16 @@
  */
 namespace Magento\Theme\Controller\Adminhtml\System\Design\Theme;
 
+use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Theme\Controller\Adminhtml\System\Design\Theme;
 
 /**
- * Class DownloadCss
+ * Class for Download Css.
  * @deprecated 100.2.0
  */
-class DownloadCss extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
+class DownloadCss extends Theme implements HttpGetActionInterface
 {
     /**
      * Download css file
@@ -27,7 +29,7 @@ class DownloadCss extends \Magento\Theme\Controller\Adminhtml\System\Design\Them
 
         /** @var $urlDecoder \Magento\Framework\Url\DecoderInterface */
         $urlDecoder = $this->_objectManager->get(\Magento\Framework\Url\DecoderInterface::class);
-        $fileId = $urlDecoder->decode($file);
+        $fileId = $this->escaper->escapeHtml($urlDecoder->decode($file));
         try {
             /** @var $theme \Magento\Framework\View\Design\ThemeInterface */
             $theme = $this->_objectManager->create(

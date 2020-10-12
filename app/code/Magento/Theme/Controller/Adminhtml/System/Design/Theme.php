@@ -9,6 +9,9 @@
  */
 namespace Magento\Theme\Controller\Adminhtml\System\Design;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Escaper;
+
 abstract class Theme extends \Magento\Backend\App\Action
 {
     /**
@@ -41,23 +44,31 @@ abstract class Theme extends \Magento\Backend\App\Action
     protected $_appFileSystem;
 
     /**
+     * @var Escaper
+     */
+    protected $escaper;
+
+    /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param \Magento\Framework\Filesystem $appFileSystem
+     * @param Escaper|null $escaper
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Framework\App\Response\Http\FileFactory $fileFactory,
         \Magento\Framework\View\Asset\Repository $assetRepo,
-        \Magento\Framework\Filesystem $appFileSystem
+        \Magento\Framework\Filesystem $appFileSystem,
+        Escaper $escaper = null
     ) {
         $this->_coreRegistry = $coreRegistry;
         $this->_fileFactory = $fileFactory;
         $this->_assetRepo = $assetRepo;
         $this->_appFileSystem = $appFileSystem;
+        $this->escaper = $escaper ?? ObjectManager::getInstance()->get(Escaper::class);
         parent::__construct($context);
     }
 }
