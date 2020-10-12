@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Magento\RedislMq\Model\Driver;
+namespace Magento\RedisMq\Model\Driver;
 
 class ExtClient implements RedisClientInterface
 {

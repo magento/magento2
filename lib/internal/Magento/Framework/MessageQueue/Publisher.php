@@ -83,7 +83,7 @@ class Publisher implements PublisherInterface
                 'body' => $data,
                 'properties' => [
                     'delivery_mode' => 2,
-                    'message_id' => md5(uniqid($topicName))
+                    'message_id' => md5(microtime(true) . uniqid($topicName, true))
                 ]
             ]
         );
