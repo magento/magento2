@@ -31,8 +31,6 @@ class InvoiceCommentSenderTest extends AbstractSenderTest
         $this->stepMockSetup();
         $this->paymentHelper = $this->createPartialMock(Data::class, ['getInfoBlockHtml']);
 
-        $this->invoiceResource = $this->createMock(Invoice::class);
-
         $this->stepIdentityContainerInit(InvoiceCommentIdentity::class);
 
         $this->addressRenderer->expects($this->any())->method('format')->willReturn(1);
