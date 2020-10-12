@@ -28,7 +28,8 @@ $urlForm = $block->getReviewsUrl() . '#review-form';
                  </span>
              </div>
          </div>
-              <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
+            <?= /* @noEscape */
+            $secureRenderer->renderStyleAsTag(
                 'width:' . $block->escapeHtmlAttr($rating) . '%',
                 '#rating-result_' . $block->getProduct()->getId() . ' span'
             ) ?>
