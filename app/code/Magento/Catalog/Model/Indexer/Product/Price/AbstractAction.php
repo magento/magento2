@@ -387,11 +387,8 @@ abstract class AbstractAction
         $parentProductsTypes = $this->getParentProductsTypes($changedIds);
 
         $changedIds = array_unique(array_merge($changedIds, ...array_values($parentProductsTypes)));
+        $pendingDeleteIds = $changedIds;
         $productsTypes = array_merge_recursive($productsTypes, $parentProductsTypes);
-
-        if ($changedIds) {
-            $this->deleteIndexData($changedIds);
-        }
 
         $typeIndexers = $this->getTypeIndexers();
         foreach ($typeIndexers as $productType => $indexer) {
@@ -419,6 +416,11 @@ abstract class AbstractAction
                 $indexer->reindexEntity($entityIds);
                 $this->_syncData($entityIds);
             }
+            $pendingDeleteIds = array_diff($pendingDeleteIds, $entityIds);
+        }
+
+        if (!empty($pendingDeleteIds)) {
+            $this->deleteIndexData($pendingDeleteIds);
         }
 
         return $changedIds;
