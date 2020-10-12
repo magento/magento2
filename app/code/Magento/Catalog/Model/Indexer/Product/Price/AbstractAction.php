@@ -389,7 +389,7 @@ abstract class AbstractAction
         $changedIds = array_unique(array_merge($changedIds, ...array_values($parentProductsTypes)));
         $productsTypes = array_merge_recursive($productsTypes, $parentProductsTypes);
 
-        if (!empty($changedIds)) {
+        if ($changedIds) {
             $this->deleteIndexData($changedIds);
         }
 
@@ -470,7 +470,9 @@ abstract class AbstractAction
         if (!empty($excludeIds)) {
             $select->where('child_id NOT IN(?)', $excludeIds);
         }
+
         $children = $this->getConnection()->fetchCol($select);
+
         if ($children) {
             foreach ($this->dimensionCollectionFactory->create() as $dimensions) {
                 $select = $this->getConnection()->select()->from(
