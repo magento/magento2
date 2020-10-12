@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Model\Product\Gallery;
 
+use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
@@ -352,6 +353,23 @@ class UpdateHandlerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @magentoDataFixture Magento/Catalog/_files/product_with_image.php
+     * @magentoDataFixture Magento/Catalog/_files/second_product_simple.php
+     *
+     * @return void
+     */
+    public function testDeleteSharedImage(): void
+    {
+        $product = $this->getProduct(null, 'simple');
+        $this->duplicateMediaGalleryForProduct('/m/a/magento_image.jpg', 'simple2');
+        $secondProduct = $this->getProduct(null, 'simple2');
+        $this->updateHandler->execute($this->prepareRemoveImage($product), []);
+        $product = $this->getProduct(null, 'simple');
+        $this->assertEmpty($product->getMediaGalleryImages()->getItems());
+        $this->checkProductImageExist($secondProduct, '/m/a/magento_image.jpg');
+    }
+
+    /**
      * @inheritdoc
      */
     protected function tearDown(): void
@@ -371,11 +389,13 @@ class UpdateHandlerTest extends \PHPUnit\Framework\TestCase
      * Returns current product.
      *
      * @param int|null $storeId
+     * @param string|null $sku
      * @return ProductInterface|Product
      */
-    private function getProduct(?int $storeId = null): ProductInterface
+    private function getProduct(?int $storeId = null, ?string $sku = null): ProductInterface
     {
-        return $this->productRepository->get('simple', false, $storeId, true);
+        $sku = $sku ?: 'simple';
+        return $this->productRepository->get($sku, false, $storeId, true);
     }
 
     /**
@@ -462,6 +482,84 @@ class UpdateHandlerTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('no_selection', $imageRolesPerStore[$globalScopeId]['thumbnail']);
         $this->assertArrayNotHasKey($defaultStoreId, $imageRolesPerStore);
         $this->assertArrayNotHasKey($secondStoreId, $imageRolesPerStore);
+    }
+
+    /**
+     * Check product image link and product image exist
+     *
+     * @param ProductInterface $product
+     * @param string $imagePath
+     * @return void
+     */
+    private function checkProductImageExist(ProductInterface $product, string $imagePath): void
+    {
+        $productImageItem = $product->getMediaGalleryImages()->getFirstItem();
+        $this->assertEquals($imagePath, $productImageItem->getFile());
+        $productImageFile = $productImageItem->getPath();
+        $this->assertNotEmpty($productImageFile);
+        $this->assertTrue($this->mediaDirectory->getDriver()->isExists($productImageFile));
+        $this->fileName = $productImageFile;
+    }
+
+    /**
+     * Prepare the product to remove image
+     *
+     * @param ProductInterface $product
+     * @return ProductInterface
+     */
+    private function prepareRemoveImage(ProductInterface $product): ProductInterface
+    {
+        $item = $product->getMediaGalleryImages()->getFirstItem();
+        $item->setRemoved('1');
+        $galleryData = [
+            'images' => [
+                (int)$item->getValueId() => $item->getData(),
+            ]
+        ];
+        $product->setData(ProductInterface::MEDIA_GALLERY, $galleryData);
+        $product->setStoreId(0);
+
+        return $product;
+    }
+
+    /**
+     * Duplicate media gallery entries for a product
+     *
+     * @param string $imagePath
+     * @param string $productSku
+     * @return void
+     */
+    private function duplicateMediaGalleryForProduct(string $imagePath, string $productSku): void
+    {
+        $product = $this->getProduct(null, $productSku);
+        $connect = $this->galleryResource->getConnection();
+        $select = $connect->select()->from($this->galleryResource->getMainTable())->where('value = ?', $imagePath);
+        $res = $connect->fetchRow($select);
+        $value_id = $res['value_id'];
+        unset($res['value_id']);
+        $rows = [
+            'attribute_id' => $res['attribute_id'],
+            'value' => $res['value'],
+            ProductAttributeMediaGalleryEntryInterface::MEDIA_TYPE => $res['media_type'],
+            ProductAttributeMediaGalleryEntryInterface::DISABLED => $res['disabled'],
+        ];
+        $connect->insert($this->galleryResource->getMainTable(), $rows);
+        $select = $connect->select()
+            ->from($this->galleryResource->getTable(Gallery::GALLERY_VALUE_TABLE))
+            ->where('value_id = ?', $value_id);
+        $res = $connect->fetchRow($select);
+        $newValueId = (int)$value_id + 1;
+        $rows = [
+            'value_id' => $newValueId,
+            'store_id' => $res['store_id'],
+            ProductAttributeMediaGalleryEntryInterface::LABEL => $res['label'],
+            ProductAttributeMediaGalleryEntryInterface::POSITION => $res['position'],
+            ProductAttributeMediaGalleryEntryInterface::DISABLED => $res['disabled'],
+            'row_id' => $product->getRowId(),
+        ];
+        $connect->insert($this->galleryResource->getTable(Gallery::GALLERY_VALUE_TABLE), $rows);
+        $rows = ['value_id' => $newValueId, 'row_id' => $product->getRowId()];
+        $connect->insert($this->galleryResource->getTable(Gallery::GALLERY_VALUE_TO_ENTITY_TABLE), $rows);
     }
 
     /**
