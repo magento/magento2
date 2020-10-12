@@ -22,19 +22,18 @@
             <createData entity="ApiSimpleProduct" stepKey="Product">
                 <requiredEntity createDataKey="Category"/>
             </createData>
+            <createData entity="Simple_Customer_Without_Address" stepKey="Customer"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
-            <actionGroup ref="StorefrontOpenCustomerAccountCreatePageActionGroup" stepKey="openCreateAccountPage"/>
-            <actionGroup ref="StorefrontFillCustomerAccountCreationFormActionGroup" stepKey="fillCreateAccountForm">
-                <argument name="customer" value="CustomerEntityOne"/>
+            <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefrontAccount">
+                <argument name="Customer" value="$Customer$"/>
             </actionGroup>
-            <actionGroup ref="StorefrontClickCreateAnAccountCustomerAccountCreationFormActionGroup" stepKey="submitCreateAccountForm"/>
         </before>
         <after>
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
-            <actionGroup ref="DeleteCustomerFromAdminActionGroup" stepKey="deleteCustomer"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
             <deleteData createDataKey="Product" stepKey="deleteProduct"/>
             <deleteData createDataKey="Category" stepKey="deleteCategory"/>
+            <deleteData createDataKey="Customer" stepKey="deleteCustomer"/>
         </after>
 
         <!-- Create order for registered customer -->
@@ -53,6 +52,6 @@
         <actionGroup ref="AdminReorderActionGroup" stepKey="reorder"/>
 
         <!-- Assert no additional addresses saved -->
-        <actionGroup ref="AssertCustomerHasNoOtherAddressesActionGroup" stepKey="assertAddresses"/>
+        <actionGroup ref="AssertStoreFrontCustomerHasNoOtherAddressesActionGroup" stepKey="assertAddresses"/>
     </test>
 </tests>
