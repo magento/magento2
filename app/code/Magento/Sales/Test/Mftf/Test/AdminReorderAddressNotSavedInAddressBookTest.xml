@@ -9,36 +9,37 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminReorderAddressNotSavedInAddressBookTest">
         <annotations>
-            <title value="Same shipping address is repeating multiple times in storefront checkout when Reordered"/>
-            <stories value="MC-38113: Same shipping address is repeating multiple times in storefront checkout when Reordered"/>
-            <description value="Same shipping address is repeating multiple times in storefront checkout when Reordered"/>
             <features value="Sales"/>
-            <testCaseId value="MC-38113"/>
+            <stories value="Reorder"/>
+            <title value="Same shipping address is not repeating multiple times in storefront checkout when Reordered"/>
+            <description value="Same shipping address is not repeating multiple times in storefront checkout when Reordered"/>
+            <testCaseId value="MC-38412"/>
+            <useCaseId value="MC-38113"/>
             <severity value="MAJOR"/>
-            <group value="Sales"/>
+            <group value="sales"/>
         </annotations>
         <before>
-            <createData entity="ApiCategory" stepKey="Category"/>
-            <createData entity="ApiSimpleProduct" stepKey="Product">
-                <requiredEntity createDataKey="Category"/>
+            <createData entity="ApiCategory" stepKey="category"/>
+            <createData entity="ApiSimpleProduct" stepKey="product">
+                <requiredEntity createDataKey="category"/>
             </createData>
-            <createData entity="Simple_Customer_Without_Address" stepKey="Customer"/>
+            <createData entity="Simple_Customer_Without_Address" stepKey="customer"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefrontAccount">
-                <argument name="Customer" value="$Customer$"/>
+                <argument name="Customer" value="$customer$"/>
             </actionGroup>
         </before>
         <after>
+            <deleteData createDataKey="product" stepKey="deleteProduct"/>
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
+            <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
-            <deleteData createDataKey="Product" stepKey="deleteProduct"/>
-            <deleteData createDataKey="Category" stepKey="deleteCategory"/>
-            <deleteData createDataKey="Customer" stepKey="deleteCustomer"/>
         </after>
 
         <!-- Create order for registered customer -->
         <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addSimpleProductToOrder">
-            <argument name="product" value="$Product$"/>
+            <argument name="product" value="$product$"/>
         </actionGroup>
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="openCheckoutPage"/>
         <actionGroup ref="LoggedInUserCheckoutFillingShippingSectionActionGroup" stepKey="fillAddressForm"/>
@@ -47,11 +48,12 @@
 
         <!-- Reorder created order -->
         <actionGroup ref="OpenOrderByIdActionGroup" stepKey="openOrderById">
-            <argument name="orderId" value="$grabOrderNumber"/>
+            <argument name="orderId" value="{$grabOrderNumber}"/>
         </actionGroup>
-        <actionGroup ref="AdminReorderActionGroup" stepKey="reorder"/>
+        <actionGroup ref="AdminStartReorderFromOrderPageActionGroup" stepKey="startReorder"/>
+        <actionGroup ref="AdminSubmitOrderActionGroup" stepKey="submitOrder"/>
 
         <!-- Assert no additional addresses saved -->
-        <actionGroup ref="AssertStoreFrontCustomerHasNoOtherAddressesActionGroup" stepKey="assertAddresses"/>
+        <actionGroup ref="AssertStorefrontCustomerHasNoOtherAddressesActionGroup" stepKey="assertAddresses"/>
     </test>
 </tests>

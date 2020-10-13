@@ -7,16 +7,14 @@
 -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminReorderActionGroup">
+    <actionGroup name="AdminStartReorderFromOrderPageActionGroup">
         <annotations>
             <description>Reorder existing order. Requires admin order page to be opened.</description>
         </annotations>
 
         <click selector="{{AdminOrderDetailsMainActionsSection.reorder}}" stepKey="clickReorder"/>
         <waitForPageLoad stepKey="waitPageLoad"/>
-
-        <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" stepKey="clickSubmit"/>
-        <waitForPageLoad stepKey="waitOrderCreated"/>
-        <waitForText selector="{{AdminMessagesSection.success}}" userInput="You created the order." stepKey="seeOrderCreatedMessage"/>
+        <waitForElementVisible selector="{{AdminHeaderSection.pageTitle}}" stepKey="waitForPageTitle"/>
+        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="Create New Order" stepKey="seeCreateNewOrderPageTitle"/>
     </actionGroup>
 </actionGroups>
