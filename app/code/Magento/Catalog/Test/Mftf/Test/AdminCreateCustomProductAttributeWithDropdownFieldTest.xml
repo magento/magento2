@@ -8,16 +8,16 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminCreateCustomProductAttributeWithDropdownFieldTest">
+    <test name="AdminCreateCustomProductAttributeWithDropdownFieldTest" deprecated="Use AdminVerifyCreateCustomProductAttributeTest">
         <annotations>
             <stories value="Create product Attribute"/>
-            <title value="Create Custom Product Attribute Dropdown Field (Not Required) from Product Page"/>
+            <title value="DEPRECATED: Create Custom Product Attribute Dropdown Field (Not Required) from Product Page"/>
             <description value="login as admin and create configurable product attribute with Dropdown field"/>
             <severity value="BLOCKER"/>
             <testCaseId value="MC-10905"/>
             <group value="mtf_migrated"/>
             <skip>
-                <issueId value="MC-15474"/>
+                <issueId value="DEPRECATED">Use AdminVerifyCreateCustomProductAttributeTest</issueId>
             </skip>
         </annotations>
 
