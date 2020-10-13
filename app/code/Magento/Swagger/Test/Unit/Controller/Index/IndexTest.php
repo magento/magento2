@@ -8,7 +8,9 @@ declare(strict_types=1);
 
 namespace Magento\Swagger\Test\Unit\Controller\Index;
 
+use Magento\Csp\Model\Policy\FetchPolicy;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Page\Config as PageConfig;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Swagger\Controller\Index\Index;
@@ -17,6 +19,16 @@ use PHPUnit\Framework\TestCase;
 
 class IndexTest extends TestCase
 {
+    /**
+     * @var ObjectManager
+     */
+    protected $objectManager;
+
+    protected function setUp(): void
+    {
+        $this->objectManager = new ObjectManager($this);
+    }
+
     public function testExecute()
     {
         /** @var MockObject|Context $pageConfigMock */
@@ -36,5 +48,38 @@ class IndexTest extends TestCase
 
         $indexAction = new Index($contextMock, $pageConfigMock, $resultPageFactory);
         $indexAction->execute();
+    }
+
+    public function testModifiyCsp()
+    {
+        /** @var Index $controller */
+        $controller = $this->objectManager->getObject(Index::class);
+
+        $return = $controller->modifyCsp([]);
+
+        $this->assertIsArray($return);
+
+        $this->assertNotEmpty($return);
+
+        /** @var FetchPolicy $fetchPolicy */
+        $fetchPolicy = $return[0];
+
+        $this->assertInstanceOf(FetchPolicy::class, $fetchPolicy);
+
+        $this->assertObjectHasAttribute('id', $fetchPolicy);
+
+        $this->assertEquals('img-src', $fetchPolicy->getId());
+
+        $this->assertObjectHasAttribute('hostSources', $fetchPolicy);
+
+        $this->assertIsArray($fetchPolicy->getHostSources());
+
+        $this->assertEquals('online.swagger.io', $fetchPolicy->getHostSources()[0]);
+
+        $this->assertObjectHasAttribute('schemeSources', $fetchPolicy);
+
+        $this->assertIsArray($fetchPolicy->getSchemeSources());
+
+        $this->assertEquals('https', $fetchPolicy->getSchemeSources()[0]);
     }
 }
