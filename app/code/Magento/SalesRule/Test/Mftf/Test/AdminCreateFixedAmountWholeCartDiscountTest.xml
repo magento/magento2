@@ -34,8 +34,7 @@
         </after>
 
         <!-- Create a cart price rule for Fixed amount discount for whole cart -->
-        <amOnPage url="{{AdminCartPriceRulesPage.url}}" stepKey="amOnCartPriceList"/>
-        <waitForPageLoad stepKey="waitForRulesPage"/>
+        <actionGroup ref="AdminOpenCartPriceRulesPageActionGroup" stepKey="amOnCartPriceList"/>
         <click selector="{{AdminCartPriceRulesSection.addNewRuleButton}}" stepKey="clickAddNewRule"/>
         <fillField selector="{{AdminCartPriceRulesFormSection.ruleName}}" userInput="{{SimpleSalesRule.name}}" stepKey="fillRuleName"/>
         <selectOption selector="{{AdminCartPriceRulesFormSection.websites}}" userInput="Main Website" stepKey="selectWebsites"/>
