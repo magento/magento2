@@ -12,5 +12,6 @@
         <waitForElementVisible selector="{{AdminMediaGalleryHeaderButtonsSection.addSelected}}" stepKey="waitForAddSelectedButton"/>
         <click selector="{{AdminMediaGalleryHeaderButtonsSection.addSelected}}" stepKey="ClickAddSelected"/>
         <wait time="5" stepKey="waitForImageToBeAdded"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskDisappear"/>
     </actionGroup>
 </actionGroups>
