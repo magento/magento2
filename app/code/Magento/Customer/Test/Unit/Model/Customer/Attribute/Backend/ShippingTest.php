@@ -23,10 +23,7 @@ class ShippingTest extends TestCase
 
     protected function setUp(): void
     {
-        $logger = $this->getMockBuilder(LoggerInterface::class)
-            ->getMock();
-        /** @var LoggerInterface $logger */
-        $this->testable = new Shipping($logger);
+        $this->testable = new Shipping();
     }
 
     public function testBeforeSave()

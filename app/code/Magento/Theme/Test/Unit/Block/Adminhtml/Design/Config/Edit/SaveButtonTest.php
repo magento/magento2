@@ -20,16 +20,9 @@ class SaveButtonTest extends TestCase
      */
     protected $block;
 
-    /**
-     * @var Context|MockObject
-     */
-    protected $context;
-
     protected function setUp(): void
     {
-        $this->initContext();
-
-        $this->block = new SaveButton($this->context);
+        $this->block = new SaveButton();
     }
 
     public function testGetButtonData()
@@ -40,19 +33,5 @@ class SaveButtonTest extends TestCase
         $this->assertEquals($result['label'], __('Save Configuration'));
         $this->assertArrayHasKey('data_attribute', $result);
         $this->assertIsArray($result['data_attribute']);
-    }
-
-    protected function initContext()
-    {
-        $this->urlBuilder = $this->getMockBuilder(UrlInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-
-        $this->context = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->context->expects($this->any())
-            ->method('getUrlBuilder')
-            ->willReturn($this->urlBuilder);
     }
 }

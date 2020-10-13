@@ -23,10 +23,7 @@ class BillingTest extends TestCase
 
     protected function setUp(): void
     {
-        $logger = $this->getMockBuilder(LoggerInterface::class)
-            ->getMock();
-        /** @var LoggerInterface $logger */
-        $this->testable = new Billing($logger);
+        $this->testable = new Billing();
     }
 
     public function testBeforeSave()
