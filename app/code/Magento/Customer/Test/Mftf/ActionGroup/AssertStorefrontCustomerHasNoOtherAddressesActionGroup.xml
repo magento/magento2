@@ -11,7 +11,7 @@
         <annotations>
             <description>Verifies customer has no additional address in address book</description>
         </annotations>
-        <amOnPage url="customer/address/" stepKey="goToAddressPage"/>
+        <amOnPage url="{{StorefrontCustomerAddressesPage.url}}" stepKey="goToAddressPage"/>
         <waitForText userInput="You have no other address entries in your address book." selector=".block-addresses-list" stepKey="assertOtherAddresses"/>
     </actionGroup>
 </actionGroups>
