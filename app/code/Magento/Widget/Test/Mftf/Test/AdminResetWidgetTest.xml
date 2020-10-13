@@ -42,7 +42,7 @@
         <click selector="{{AdminNewWidgetSection.continue}}" stepKey="clickContinue"/>
         <actionGroup ref="AdminSetWidgetNameAndStoreActionGroup" stepKey="setNameAndStore">
             <argument name="widgetName" value="{{ProductsListWidget.name}}"/>
-            <argument name="widgetStore" value="{{ProductsListWidget.store_ids}}"/>
+            <argument name="widgetStoreIds" value="{{ProductsListWidget.store_ids}}"/>
             <argument name="widgetSortOrder" value="{{ProductsListWidget.sort_order}}"/>
         </actionGroup>
         <click selector="{{AdminNewWidgetSection.resetBtn}}" stepKey="resetNameAndStore"/>
@@ -51,7 +51,7 @@
         <dontSeeInField userInput="{{ProductsListWidget.sort_order}}" selector="{{AdminNewWidgetSection.widgetSortOrder}}" stepKey="dontSeeSortOrderAfterReset"/>
         <actionGroup ref="AdminSetWidgetNameAndStoreActionGroup" stepKey="setNameAndStoreAfterReset">
             <argument name="widgetName" value="{{ProductsListWidget.name}}"/>
-            <argument name="widgetStore" value="{{ProductsListWidget.store_ids}}"/>
+            <argument name="widgetStoreIds" value="{{ProductsListWidget.store_ids}}"/>
             <argument name="widgetSortOrder" value="{{ProductsListWidget.sort_order}}"/>
         </actionGroup>
         <actionGroup ref="AdminSaveAndContinueWidgetActionGroup" stepKey="saveWidget"/>

@@ -14,11 +14,11 @@
         </annotations>
         <arguments>
             <argument name="widgetName" defaultValue="{{ProductsListWidget.name}}" type="string"/>
-            <argument name="widgetStore" defaultValue="{{ProductsListWidget.store_ids}}"  type="string"/>
+            <argument name="widgetStoreIds" defaultValue="{{ProductsListWidget.store_ids}}"  type="string"/>
             <argument name="widgetSortOrder" defaultValue="{{ProductsListWidget.sort_order}}" type="string"/>
         </arguments>
         <fillField selector="{{AdminNewWidgetSection.widgetTitle}}" userInput="{{widgetName}}" stepKey="fillTitle"/>
-        <selectOption selector="{{AdminNewWidgetSection.widgetStoreIds}}" parameterArray="[{{widgetStore}}]" stepKey="setWidgetStoreId"/>
+        <selectOption selector="{{AdminNewWidgetSection.widgetStoreIds}}" parameterArray="{{widgetStoreIds}}" stepKey="setWidgetStoreId"/>
         <fillField selector="{{AdminNewWidgetSection.widgetSortOrder}}" userInput="{{widgetSortOrder}}" stepKey="fillSortOrder"/>
     </actionGroup>
 </actionGroups>

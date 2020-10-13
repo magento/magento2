@@ -17,5 +17,3 @@
         <see selector="{{AdminMessagesSection.success}}" userInput="The widget instance has been saved" stepKey="seeSuccess"/>
     </actionGroup>
 </actionGroups>
-
-
