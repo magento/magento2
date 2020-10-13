@@ -16,6 +16,7 @@ use Magento\Catalog\Model\Product\Media\Config;
 use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
 use Magento\Catalog\Model\ResourceModel\Product\Gallery;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\ObjectManagerInterface;
@@ -90,6 +91,9 @@ class UpdateHandlerTest extends \PHPUnit\Framework\TestCase
      */
     private $currentStoreId;
 
+    /** @var MetadataPool */
+    private $metadataPool;
+
     /**
      * @inheritdoc
      */
@@ -109,6 +113,7 @@ class UpdateHandlerTest extends \PHPUnit\Framework\TestCase
         $this->mediaDirectory = $this->objectManager->get(Filesystem::class)
             ->getDirectoryWrite(DirectoryList::MEDIA);
         $this->mediaDirectory->writeFile($this->fileName, 'Test');
+        $this->metadataPool = $this->objectManager->get(MetadataPool::class);
     }
 
     /**
@@ -534,28 +539,30 @@ class UpdateHandlerTest extends \PHPUnit\Framework\TestCase
         $product = $this->getProduct(null, $productSku);
         $connect = $this->galleryResource->getConnection();
         $select = $connect->select()->from($this->galleryResource->getMainTable())->where('value = ?', $imagePath);
-        $res = $connect->fetchRow($select);
-        $value_id = $res['value_id'];
-        unset($res['value_id']);
+        $result = $connect->fetchRow($select);
+        $value_id = $result['value_id'];
+        unset($result['value_id']);
         $rows = [
-            'attribute_id' => $res['attribute_id'],
-            'value' => $res['value'],
-            ProductAttributeMediaGalleryEntryInterface::MEDIA_TYPE => $res['media_type'],
-            ProductAttributeMediaGalleryEntryInterface::DISABLED => $res['disabled'],
+            'attribute_id' => $result['attribute_id'],
+            'value' => $result['value'],
+            ProductAttributeMediaGalleryEntryInterface::MEDIA_TYPE => $result['media_type'],
+            ProductAttributeMediaGalleryEntryInterface::DISABLED => $result['disabled'],
         ];
         $connect->insert($this->galleryResource->getMainTable(), $rows);
         $select = $connect->select()
             ->from($this->galleryResource->getTable(Gallery::GALLERY_VALUE_TABLE))
             ->where('value_id = ?', $value_id);
-        $res = $connect->fetchRow($select);
+        $result = $connect->fetchRow($select);
         $newValueId = (int)$value_id + 1;
+        $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
+        $linkField = $metadata->getLinkField();
         $rows = [
             'value_id' => $newValueId,
-            'store_id' => $res['store_id'],
-            ProductAttributeMediaGalleryEntryInterface::LABEL => $res['label'],
-            ProductAttributeMediaGalleryEntryInterface::POSITION => $res['position'],
-            ProductAttributeMediaGalleryEntryInterface::DISABLED => $res['disabled'],
-            'row_id' => $product->getRowId(),
+            'store_id' => $result['store_id'],
+            ProductAttributeMediaGalleryEntryInterface::LABEL => $result['label'],
+            ProductAttributeMediaGalleryEntryInterface::POSITION => $result['position'],
+            ProductAttributeMediaGalleryEntryInterface::DISABLED => $result['disabled'],
+            $linkField => $product->getData($linkField),
         ];
         $connect->insert($this->galleryResource->getTable(Gallery::GALLERY_VALUE_TABLE), $rows);
         $rows = ['value_id' => $newValueId, 'row_id' => $product->getRowId()];
