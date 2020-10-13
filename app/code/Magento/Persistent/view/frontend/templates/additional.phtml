@@ -5,9 +5,8 @@
  */
 ?>
 <script type="application/javascript">
-    window.persistent = <?= /* @noEscape */ $block->getConfig(); ?>;
-    window.notYou = '<span> <a <?= /* @noEscape */ $block->getLinkAttributes()?>>'
-    + '<?= $block->escapeHtml(__("Not you?"));?></a></span>';
+    window.persistent = <?=/* @noEscape */ $block->getConfig()?>;
+    window.notYouLink = '<?=/* @noEscape */ $block->getLinkAttributes()?>';
 </script>
 <script type="text/x-magento-init">
     {
