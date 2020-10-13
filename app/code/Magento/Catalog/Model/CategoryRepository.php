@@ -111,22 +111,7 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
             $existingData['level'] = null;
         }
         $category->addData($existingData);
-        try {
-            $this->validateCategory($category);
-            if ($category->getId()) {
-                $this->saveCategoryByAttributes($existingData);
-            } else {
-                $this->categoryResource->save($category);
-            }
-        } catch (\Exception $e) {
-            throw new CouldNotSaveException(
-                __(
-                    'Could not save category: %1',
-                    $e->getMessage()
-                ),
-                $e
-            );
-        }
+        $this->saveCategoryData($category, $existingData);
         unset($this->instances[$category->getId()]);
         return $this->get($category->getId(), $storeId);
     }
@@ -245,18 +230,34 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
     }
 
     /**
-     * Save category attribute
+     * Save category data
      *
-     * @param string[] $availableSortBy
+     * @param  Category $category
+     * @param string[] $dataToSave
      * @return void
-     * 
+     * @throws CouldNotSaveException
      */
-    protected function saveCategoryByAttributes($dataToSave)
+    protected function saveCategoryData(Category $category, $dataToSave)
     {
-        foreach (array_keys($dataToSave) as $attribute) {
-            if (!in_array($attribute, ['entity_id', 'id', 'store_id'])) {
-                $this->categoryResource->saveAttribute($category, $attribute);
+        try {
+            $this->validateCategory($category);
+            if ($category->getId()) {
+                foreach (array_keys($dataToSave) as $attribute) {
+                    if (!in_array($attribute, ['entity_id', 'id', 'store_id'])) {
+                        $this->categoryResource->saveAttribute($category, $attribute);
+                    }
+                }
+            } else {
+                $this->categoryResource->save($category);
             }
+        } catch (\Exception $e) {
+            throw new CouldNotSaveException(
+                __(
+                    'Could not save category: %1',
+                    $e->getMessage()
+                ),
+                $e
+            );
         }
     }
 }
