@@ -12,7 +12,7 @@ use Magento\Review\Model\ResourceModel\Review\Product\Collection;
 use Magento\Review\Model\Review;
 
 /**
- * Class ReviewDataProvider
+ * DataProvider Product ReviewDataProvider
  *
  * @api
  *
@@ -58,13 +58,21 @@ class ReviewDataProvider extends AbstractDataProvider
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @since 100.1.0
      */
     public function getData()
     {
         $this->getCollection()->addEntityFilter($this->request->getParam('current_product_id', 0))
             ->addStoreData();
+
+        $params = $this->request->getParams();
+        if (isset($params['sorting'])) {
+            $sorting = $params['sorting'];
+            $field = $sorting['field'];
+            $direction = $sorting['direction'];
+            $this->getCollection()->getSelect()->order($field . ' ' . $direction);
+        }
 
         $arrItems = [
             'totalRecords' => $this->getCollection()->getSize(),
@@ -79,7 +87,7 @@ class ReviewDataProvider extends AbstractDataProvider
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @since 100.1.0
      */
     public function addFilter(\Magento\Framework\Api\Filter $filter)
