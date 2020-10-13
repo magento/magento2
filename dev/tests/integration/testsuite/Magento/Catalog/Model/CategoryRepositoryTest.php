@@ -24,6 +24,7 @@ use PHPUnit\Framework\TestCase;
  * Provide tests for CategoryRepository model.
  *
  * @magentoDbIsolation enabled
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CategoryRepositoryTest extends TestCase
 {

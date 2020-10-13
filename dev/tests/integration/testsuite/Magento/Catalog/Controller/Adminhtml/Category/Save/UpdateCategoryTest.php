@@ -45,7 +45,7 @@ class UpdateCategoryTest extends AbstractSaveCategoryTest
      * @param array $postData
      * @return void
      */
-    public function testUpdateCategoryForDefaultStoreView($postData): void
+    public function testUpdateCategoryForDefaultStoreView(array $postData): void
     {
         $storeId = (int)$this->storeManager->getStore('default')->getId();
         $postData = array_merge($postData, ['store_id' => $storeId]);
