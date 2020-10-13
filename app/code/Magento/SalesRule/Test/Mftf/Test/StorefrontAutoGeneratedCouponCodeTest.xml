@@ -40,8 +40,7 @@
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
         <!-- Search Cart Price Rule and go to edit Cart Price Rule -->
-        <amOnPage url="{{AdminCartPriceRulesPage.url}}" stepKey="amOnCartPriceList"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <actionGroup ref="AdminOpenCartPriceRulesPageActionGroup" stepKey="amOnCartPriceList"/>
         <fillField selector="{{AdminCartPriceRulesSection.filterByNameInput}}" userInput="$$createSalesRule.name$$"
                    stepKey="fillFieldFilterByName"/>
         <click selector="{{AdminCartPriceRulesSection.searchButton}}" stepKey="clickSearchButton"/>
