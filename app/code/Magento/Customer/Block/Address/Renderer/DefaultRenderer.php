@@ -189,8 +189,9 @@ class DefaultRenderer extends AbstractBlock implements RendererInterface
                         $data[$key] = $v;
                     }
                 }
-                if (in_array($attributeCode, ['prefix','suffix']))
+                if (in_array($attributeCode, ['prefix','suffix'])) {
                     $value = __($value);
+                }
                 $data[$attributeCode] = $value;
             }
         }
