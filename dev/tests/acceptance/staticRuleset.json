@@ -1,7 +1,8 @@
 {
-    "tests": [
-        "actionGroupArguments",
-        "deprecatedEntityUsage",
-        "annotations"
-    ]
+  "tests": [
+    "actionGroupArguments",
+    "deprecatedEntityUsage",
+    "annotations",
+    "pauseActionUsage"
+  ]
 }

@@ -96,8 +96,7 @@
         </after>
 
         <!-- Create the rule -->
-        <amOnPage url="{{AdminCartPriceRulesPage.url}}" stepKey="amOnCartPriceList"/>
-        <waitForPageLoad stepKey="waitForRulesPage"/>
+        <actionGroup ref="AdminOpenCartPriceRulesPageActionGroup" stepKey="amOnCartPriceList"/>
         <click selector="{{AdminCartPriceRulesSection.addNewRuleButton}}" stepKey="clickAddNewRule"/>
         <fillField selector="{{AdminCartPriceRulesFormSection.ruleName}}" userInput="{{SimpleSalesRule.name}}" stepKey="fillRuleName"/>
         <selectOption selector="{{AdminCartPriceRulesFormSection.websites}}" userInput="Main Website" stepKey="selectWebsites"/>
@@ -126,15 +125,11 @@
         <!-- Add the first product to the cart -->
         <amOnPage url="$$createConfigChildProduct1.sku$$.html" stepKey="goToProductPage1"/>
         <waitForPageLoad stepKey="waitForProductPageLoad1"/>
-        <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="addProductToCart1"/>
-        <waitForPageLoad stepKey="waitForAddToCart1"/>
-        <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" stepKey="waitForSuccessMessage"/>
+        <actionGroup ref="StorefrontClickAddToCartOnProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage"/>
         <!-- Add the second product to the cart -->
         <amOnPage url="$$createConfigChildProduct2.sku$$.html" stepKey="goToProductPage2"/>
         <waitForPageLoad stepKey="waitForProductPageLoad2"/>
-        <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="addProductToCart2"/>
-        <waitForPageLoad stepKey="waitForAddToCart2"/>
-        <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" stepKey="waitForSuccessMessage2"/>
+        <actionGroup ref="StorefrontClickAddToCartOnProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage2"/>
 
         <!--View and edit cart-->
         <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="clickViewAndEditCartFromMiniCart"/>

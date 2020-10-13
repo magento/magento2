@@ -10,6 +10,7 @@
     <section name="CatalogSection">
         <element name="storefront" type="select" selector="#catalog_frontend-head"/>
         <element name="CheckIfTabExpand" type="button" selector="#catalog_frontend-head:not(.open)"/>
+        <element name="CheckIfTabIsExpanded" type="button" selector="#catalog_frontend-head.open"/>
         <element name="price" type="button" selector="#catalog_price-head"/>
         <element name="checkIfPriceExpand" type="button" selector="//a[@id='catalog_price-head' and @class='open']"/>
         <element name="catalogPriceScope" type="select" selector="#catalog_price_scope"/>
@@ -23,5 +24,6 @@
         <element name="CheckIfSeoTabExpand" type="button" selector="#catalog_seo-head:not(.open)"/>
         <element name="GenerateUrlRewrites" type="select" selector="#catalog_seo_generate_category_product_rewrites"/>
         <element name="successMessage" type="text" selector="#messages"/>
+        <element name="productsPerPageOnGridAllowedValues" type="input" selector="//input[@id='catalog_frontend_grid_per_page_values']"/>
     </section>
 </sections>

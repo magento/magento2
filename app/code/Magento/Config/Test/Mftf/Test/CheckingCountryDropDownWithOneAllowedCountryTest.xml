@@ -22,7 +22,9 @@
             <createData entity="EnableAdminAccountAllowCountry" stepKey="setAllowedCountries"/>
         </before>
         <after>
-            <magentoCLI stepKey="flushCache" command="cache:flush"/>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
             <createData entity="DisableAdminAccountAllowCountry" stepKey="setDefaultValueForAllowCountries"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="AdminDeleteCustomerActionGroup" stepKey="deleteCustomer">
@@ -33,7 +35,9 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
          <!--Flush Magento Cache-->
-        <magentoCLI stepKey="flushCache" command="cache:flush"/>
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+            <argument name="tags" value=""/>
+        </actionGroup>
          <!--Create a customer account from Storefront-->
         <actionGroup ref="StorefrontOpenCustomerAccountCreatePageActionGroup" stepKey="openCreateAccountPage"/>
         <actionGroup ref="StorefrontFillCustomerAccountCreationFormActionGroup" stepKey="fillCreateAccountForm">

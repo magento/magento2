@@ -36,7 +36,9 @@
             <magentoCLI command="config:set {{StorefrontPaypalCheckoutPageButtonVerticalLayoutConfigData.path}} {{StorefrontPaypalCheckoutPageButtonVerticalLayoutConfigData.value}}" stepKey="setLayoutForPayPalSmartButton"/>
             <magentoCLI command="config:set {{StorefrontPaypalCheckoutPageButtonPillShapeConfigData.path}} {{StorefrontPaypalCheckoutPageButtonPillShapeConfigData.value}}" stepKey="setShapeForPayPalSmartButton"/>
             <magentoCLI command="config:set {{StorefrontPaypalCheckoutPageButtonBlueColorConfigData.path}} {{StorefrontPaypalCheckoutPageButtonBlueColorConfigData.value}}" stepKey="setColorForPayPalSmartButton"/>
-            <magentoCLI command="cache:clean" arguments="full_page" stepKey="cleanFullPageCache"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanFullPageCache">
+                <argument name="tags" value="full_page"/>
+            </actionGroup>
         </before>
         <after>
             <magentoCLI command="config:set {{StorefrontPaypalCheckoutPageDisableCustomizeButtonConfigData.path}} {{StorefrontPaypalCheckoutPageDisableCustomizeButtonConfigData.value}}" stepKey="disableCustomizeButton"/>

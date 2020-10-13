@@ -71,6 +71,11 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
     private $writer;
 
     /**
+     * @var string
+     */
+    private $csvFile;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -89,6 +94,11 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
     protected function tearDown(): void
     {
         $this->executeFixtures($this->fixtures, true);
+
+        if ($this->csvFile !== null) {
+            $directoryWrite = $this->fileSystem->getDirectoryWrite(DirectoryList::VAR_DIR);
+            $directoryWrite->delete($this->csvFile);
+        }
     }
 
     /**
@@ -106,6 +116,7 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
      */
     public function testImportExport(array $fixtures, array $skus, array $skippedAttributes = []): void
     {
+        $this->csvFile = null;
         $this->fixtures = $fixtures;
         $this->executeFixtures($fixtures);
         $this->modifyData($skus);
@@ -381,6 +392,7 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
     private function exportProducts(\Magento\CatalogImportExport\Model\Export\Product $exportProduct = null)
     {
         $csvfile = uniqid('importexport_') . '.csv';
+        $this->csvFile = $csvfile;
 
         $exportProduct = $exportProduct ?: $this->objectManager->create(
             \Magento\CatalogImportExport\Model\Export\Product::class

@@ -57,7 +57,7 @@
                     <depends>
                         <field id="enable">1</field>
                     </depends>
-                    <frontend_class>required-entry</frontend_class>
+                    <frontend_class>required-entry validate-range range-1-8</frontend_class>
                 </field>
                 <field id="symbols" translate="label comment" type="text" sortOrder="8" showInDefault="1" canRestore="1">
                     <label>Symbols Used in CAPTCHA</label>

@@ -99,7 +99,7 @@ class PriceTest extends TestCase
             ->method('getState')
             ->willReturn($this->state);
 
-        $this->fulltextCollection = $this->fulltextCollection = $this->getMockBuilder(
+        $this->fulltextCollection = $this->getMockBuilder(
             Collection::class
         )
             ->disableOriginalConstructor()
