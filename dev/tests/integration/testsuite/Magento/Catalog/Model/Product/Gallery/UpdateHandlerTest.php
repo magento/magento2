@@ -565,7 +565,7 @@ class UpdateHandlerTest extends \PHPUnit\Framework\TestCase
             $linkField => $product->getData($linkField),
         ];
         $connect->insert($this->galleryResource->getTable(Gallery::GALLERY_VALUE_TABLE), $rows);
-        $rows = ['value_id' => $newValueId, 'row_id' => $product->getRowId()];
+        $rows = ['value_id' => $newValueId, $linkField => $product->getData($linkField)];
         $connect->insert($this->galleryResource->getTable(Gallery::GALLERY_VALUE_TO_ENTITY_TABLE), $rows);
     }
 
