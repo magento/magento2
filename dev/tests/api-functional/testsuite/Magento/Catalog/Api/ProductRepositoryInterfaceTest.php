@@ -922,6 +922,120 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     }
 
     /**
+     * Test getList() method with 'OR' criteria.
+     *
+     * @param array $searchCriteria
+     * @param int $totalCount
+     * @magentoApiDataFixture Magento/Catalog/_files/categories.php
+     * @dataProvider getListOrCriteriaDataProvider
+     */
+    public function testGetListOrCriteria(array $searchCriteria, int $totalCount)
+    {
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH . '?' . http_build_query($searchCriteria),
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'GetList',
+            ],
+        ];
+
+        $response = $this->_webApiCall($serviceInfo, $searchCriteria);
+
+        $this->assertArrayHasKey('search_criteria', $response);
+        $this->assertArrayHasKey('total_count', $response);
+        $this->assertArrayHasKey('items', $response);
+
+        $this->assertEquals($searchCriteria['searchCriteria'], $response['search_criteria']);
+        $this->assertEquals($response['total_count'], $totalCount);
+        $this->assertEquals(count($response['items']), $totalCount);
+    }
+
+    /**
+     * Data provider for testGetListOrCriteria.
+     *
+     * @return array
+     */
+    public function getListOrCriteriaDataProvider(): array
+    {
+        return [
+            [
+                [
+                    'searchCriteria' => [
+                        'filter_groups' => [
+                            [
+                                'filters' => [
+                                    [
+                                        'field' => 'category_id',
+                                        'value' => '12',
+                                        'condition_type' => 'eq',
+                                    ],
+                                ],
+                            ],
+                        ],
+                        'current_page' => 1,
+                        'page_size' => 10,
+                    ],
+                ],
+                2,
+            ],
+            [
+                [
+                    'searchCriteria' => [
+                        'filter_groups' => [
+                            [
+                                'filters' => [
+                                    [
+                                        'field' => 'category_id',
+                                        'value' => '12',
+                                        'condition_type' => 'eq',
+                                    ],
+                                    [
+                                        'field' => 'category_id',
+                                        'value' => '13',
+                                        'condition_type' => 'eq',
+                                    ],
+                                ],
+                            ],
+                        ],
+                        'current_page' => 1,
+                        'page_size' => 10,
+                    ],
+                ],
+                3,
+            ],
+            [
+                [
+                    'searchCriteria' => [
+                        'filter_groups' => [
+                            [
+                                'filters' => [
+                                    [
+                                        'field' => 'category_id',
+                                        'value' => '12',
+                                        'condition_type' => 'eq',
+                                    ],
+                                    [
+                                        'field' => 'sku',
+                                        'value' => 'simple',
+                                        'condition_type' => 'eq',
+                                    ],
+                                ],
+                            ],
+                        ],
+                        'current_page' => 1,
+                        'page_size' => 10,
+                    ],
+                ],
+                3,
+            ],
+        ];
+    }
+
+    /**
      * Test getList() method with additional params
      *
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
