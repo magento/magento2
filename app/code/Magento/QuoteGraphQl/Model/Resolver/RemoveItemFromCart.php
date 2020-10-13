@@ -51,7 +51,8 @@ class RemoveItemFromCart implements ResolverInterface
     ) {
         $this->getCartForUser = $getCartForUser;
         $this->cartItemRepository = $cartItemRepository;
-        $this->maskedQuoteIdToQuoteId = $maskedQuoteIdToQuoteId ?: ObjectManager::getInstance()->get(MaskedQuoteIdToQuoteId::class);
+        $this->maskedQuoteIdToQuoteId =
+            $maskedQuoteIdToQuoteId ?: ObjectManager::getInstance()->get(MaskedQuoteIdToQuoteId::class);
     }
 
     /**
