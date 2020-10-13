@@ -13,7 +13,6 @@ use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice;
 use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\Factory;
 use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\TierPrice;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Store\Model\StoreManagerInterface;
