@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminSetWidgetNameAndStoreActionGroup">
+        <annotations>
+            <description>On the widget creation page page set widget name, store add sort order.</description>
+        </annotations>
+        <arguments>
+            <argument name="widgetName" defaultValue="{{ProductsListWidget.name}}" type="string"/>
+            <argument name="widgetStore" defaultValue="{{ProductsListWidget.store_ids}}"  type="string"/>
+            <argument name="widgetSortOrder" defaultValue="{{ProductsListWidget.sort_order}}" type="string"/>
+        </arguments>
+        <fillField selector="{{AdminNewWidgetSection.widgetTitle}}" userInput="{{widgetName}}" stepKey="fillTitle"/>
+        <selectOption selector="{{AdminNewWidgetSection.widgetStoreIds}}" parameterArray="[{{widgetStore}}]" stepKey="setWidgetStoreId"/>
+        <fillField selector="{{AdminNewWidgetSection.widgetSortOrder}}" userInput="{{widgetSortOrder}}" stepKey="fillSortOrder"/>
+    </actionGroup>
+</actionGroups>
