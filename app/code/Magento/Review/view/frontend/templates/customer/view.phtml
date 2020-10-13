@@ -41,9 +41,11 @@ $product = $block->getProductData();
                         <?php $ratingCode = $block->escapeHtml($_rating->getRatingCode()) ?>
                         <div class="rating-summary item">
                             <span class="rating-label">
-                                <span><?= $ratingCode ?></span>
+                                <span><?= /* @noEscape */ $ratingCode ?></span>
                             </span>
-                            <div class="rating-result <?= $ratingCode ?>" title="<?= /* @noEscape */ $rating ?>%">
+                            <div class="rating-result <?= /* @noEscape */ $ratingCode ?>"
+                                 title="<?= /* @noEscape */ $rating ?>%"
+                            >
                                 <span>
                                     <span><?= /* @noEscape */ $rating ?>%</span>
                                 </span>
