@@ -7,8 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Api;
 
+use Magento\Catalog\Api\Data\ProductAttributeInterface;
+use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\Product\Type;
+use Magento\Catalog\Model\Product\Visibility;
 use Magento\Catalog\Model\ResourceModel\Product\Website\Link;
+use Magento\Eav\Model\Config;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\Webapi\Rest\Request;
@@ -48,14 +52,18 @@ class ProductRepositoryAllStoreViewsTest extends WebapiAbstract
     private $storeManager;
 
     /**
-     * @var string
-     */
-    private $productSku = 'simple';
-
-    /**
      * @var Link
      */
     private $productWebsiteLink;
+    /**
+     * @var Config
+     */
+    private $eavConfig;
+
+    /**
+     * @var string
+     */
+    private $productSku = 'simple';
 
     /**
      * @inheritdoc
@@ -66,6 +74,7 @@ class ProductRepositoryAllStoreViewsTest extends WebapiAbstract
         $this->objectManager = Bootstrap::getObjectManager();
         $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
         $this->productRepository->cleanCache();
+        $this->eavConfig = $this->objectManager->get(Config::class);
         $this->registry = $this->objectManager->get(Registry::class);
         $this->storeManager = $this->objectManager->get(StoreManagerInterface::class);
         $this->productWebsiteLink = $this->objectManager->get(Link::class);
@@ -137,15 +146,18 @@ class ProductRepositoryAllStoreViewsTest extends WebapiAbstract
      */
     private function getProductData(): array
     {
+        $setId =(int)$this->eavConfig->getEntityType(ProductAttributeInterface::ENTITY_TYPE_CODE)
+            ->getDefaultAttributeSetId();
+
         return [
                 'sku' => $this->productSku,
                 'name' => 'simple',
                 'type_id' => Type::TYPE_SIMPLE,
                 'weight' => 1,
-                'attribute_set_id' => 4,
+                'attribute_set_id' => $setId,
                 'price' => 10,
-                'status' => 1,
-                'visibility' => 4,
+                'status' => Status::STATUS_ENABLED,
+                'visibility' => Visibility::VISIBILITY_BOTH,
                 'extension_attributes' => [
                     'stock_item' => ['is_in_stock' => true, 'qty' => 1000]
                 ],
