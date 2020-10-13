@@ -18,6 +18,6 @@
 
         <waitForElement selector="{{AdminCategorySidebarTreeSection.categoryHighlighted(parenCategoryName)}}" stepKey="waitForTopMenuLoaded"/>
         <moveMouseOver selector="{{AdminCategorySidebarTreeSection.categoryHighlighted(parenCategoryName)}}" stepKey="moveMouseToParentCategory"/>
-        <seeElement selector="{{AdminCategorySidebarTreeSection.categoryHighlighted(childCategoryName)}}" stepKey="seeCategoryUpdated"/>
+        <seeElement selector="{{AdminCategorySidebarTreeSection.categoryHighlighted(childCategoryName)}}" stepKey="seeSubcategoryInTree"/>
     </actionGroup>
 </actionGroups>
