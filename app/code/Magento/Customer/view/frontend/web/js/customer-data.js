@@ -408,5 +408,21 @@ define([
         }
     });
 
+    /**
+     * Check quote was updated after page is loaded, if yes, invalidate and reload cart cache
+     */
+    $(document).ready(function () {
+        $.getJSON(options.sectionLoadUrl, {'sections': 'cart'}).done(function (json) {
+            let cartData = customerData.get('cart')();
+
+            if (json.cart.updated_at.length > 0 &&
+                cartData.updated_at.length > 0 &&
+                json.cart.updated_at > cartData.updated_at) {
+                customerData.invalidate(['cart']);
+                customerData.reload(['cart'], true);
+            }
+        });
+    });
+
     return customerData;
 });

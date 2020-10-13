@@ -101,7 +101,9 @@ class Cart extends \Magento\Framework\DataObject implements SectionSourceInterfa
             'extra_actions' => $this->layout->createBlock(\Magento\Catalog\Block\ShortcutButtons::class)->toHtml(),
             'isGuestCheckoutAllowed' => $this->isGuestCheckoutAllowed(),
             'website_id' => $this->getQuote()->getStore()->getWebsiteId(),
-            'storeId' => $this->getQuote()->getStore()->getStoreId()
+            'storeId' => $this->getQuote()->getStore()->getStoreId(),
+            'updated_at' => $this->getQuote()->getUpdatedAt() ?
+                (string)\strtotime($this->getQuote()->getUpdatedAt()) : ''
         ];
     }
 
