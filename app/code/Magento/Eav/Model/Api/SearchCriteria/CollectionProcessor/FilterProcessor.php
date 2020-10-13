@@ -115,7 +115,9 @@ class FilterProcessor implements CollectionProcessorInterface
         $whereParts = $collection->getSelect()->getPart(Select::WHERE);
         $whereSql = $this->applyFilters($collection, $fields, $customFilters);
         $collection->getSelect()->setPart(Select::WHERE, $whereParts);
-        $collection->getSelect()->where($whereSql);
+        if ($whereSql) {
+            $collection->getSelect()->where($whereSql);
+        }
     }
 
     /**
