@@ -186,8 +186,8 @@ class Collection
                         = $this->selectionUidFormatter->encode((int)$attribute->getId(), (int)$value['value_index']);
                     $this->attributeMap[$productId][$attribute->getId()]['values'][$index]
                         ['is_available_for_selection'] =
-                        isset($options[$attribute['attribute_id']][$value['value_index']])
-                        && $options[$attribute['attribute_id']][$value['value_index']];
+                        isset($options[$attribute->getAttributeId()][$value['value_index']])
+                        && $options[$attribute->getAttributeId()][$value['value_index']];
                 }
             }
         }
@@ -196,16 +196,21 @@ class Collection
     }
 
     /**
-     * Load products by entity ids
+     * Load products by link field ids
      *
      * @param int[] $productIds
      * @return ProductInterface[]
      */
     private function getProducts($productIds)
     {
-        $this->searchCriteriaBuilder->addFilter('entity_id', $productIds, 'in');
+        $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
+        $this->searchCriteriaBuilder->addFilter($linkField, $productIds, 'in');
         $searchCriteria = $this->searchCriteriaBuilder->create();
         $products = $this->productRepository->getList($searchCriteria)->getItems();
-        return $products;
+        $productsLinkFieldMap = [];
+        foreach ($products as $product) {
+            $productsLinkFieldMap[$product->getData($linkField)] = $product;
+        }
+        return $productsLinkFieldMap;
     }
 }
