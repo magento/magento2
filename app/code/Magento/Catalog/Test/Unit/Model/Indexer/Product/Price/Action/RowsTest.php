@@ -25,6 +25,11 @@ use Magento\Framework\Indexer\MultiDimensionProvider;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 
+/**
+ * Test coverage for the rows action
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects) to preserve compatibility with parent class
+ */
 class RowsTest extends TestCase
 {
     /**
@@ -172,13 +177,16 @@ class RowsTest extends TestCase
         $this->dimensionCollectionFactory->expects($this->exactly(2))
             ->method('create')
             ->willReturn($multiDimensionProvider);
-        $iterator = new \ArrayObject([]);
+        $iterator = new \ArrayIterator([]);
         $multiDimensionProvider->expects($this->exactly(2))
             ->method('getIterator')
             ->willReturn($iterator);
         $this->catalogProductType->expects($this->any())
             ->method('getTypesByPriority')
             ->willReturn([]);
+        $adapter->expects($this->any())
+            ->method('getPrimaryKeyName')
+            ->willReturn(['COLUMNS_LIST'=>['entity_id']]);
         $this->actionRows->execute($ids);
     }
 }
