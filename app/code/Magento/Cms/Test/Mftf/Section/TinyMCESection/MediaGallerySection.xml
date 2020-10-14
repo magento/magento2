@@ -17,7 +17,8 @@
         <element name="imageSelected" type="text" selector="//small[text()='{{var1}}']/parent::*[@class='filecnt selected']" parameterized="true"/>
         <element name="ImageSource" type="input" selector=".mce-combobox.mce-abs-layout-item.mce-last.mce-has-open"/>
         <element name="ImageDescription" type="input" selector=".mce-textbox.mce-abs-layout-item.mce-last"/>
-        <element name="ImageDescriptionTinyMCE3" type="input" selector="#alt"/>
+        <element name="ImageDescriptionTinyMCE3" type="input" selector="#alt" deprecated="Deprecated New element was introduced. Please use 'ImageDescriptionTinyMCE4'"/>
+        <element name="ImageDescriptionTinyMCE4" type="input" selector="#alt" />
         <element name="Height" type="input" selector=".mce-textbox.mce-abs-layout-item.mce-first"/>
         <element name="UploadImage" type="file" selector=".fileupload"/>
         <element name="OkBtn" type="button" selector="//span[text()='Ok']"/>

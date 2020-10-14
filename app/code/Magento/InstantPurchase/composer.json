@@ -6,6 +6,7 @@
         "OSL-3.0",
         "AFL-3.0"
     ],
+    "version": "100.4.0",
     "require": {
         "php": "~7.3.0||~7.4.0",
         "magento/module-store": "101.1.*",
@@ -24,6 +25,6 @@
         "psr-4": {
             "Magento\\InstantPurchase\\": ""
         }
-    },
-    "version": "100.4.0"
+    }
 }
+

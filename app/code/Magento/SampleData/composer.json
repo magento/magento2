@@ -1,9 +1,15 @@
 {
     "name": "magento/module-sample-data",
     "description": "Sample Data fixtures",
+    "type": "magento2-module",
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
     "config": {
         "sort-packages": true
     },
+    "version": "100.4.0",
     "require": {
         "php": "~7.3.0||~7.4.0",
         "magento/framework": "103.0.*"
@@ -11,11 +17,6 @@
     "suggest": {
         "magento/sample-data-media": "Sample Data version: 100.4.*"
     },
-    "type": "magento2-module",
-    "license": [
-        "OSL-3.0",
-        "AFL-3.0"
-    ],
     "autoload": {
         "files": [
             "cli_commands.php",
@@ -24,6 +25,6 @@
         "psr-4": {
             "Magento\\SampleData\\": ""
         }
-    },
-    "version": "100.4.0"
+    }
 }
+

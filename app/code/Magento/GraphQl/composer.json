@@ -2,6 +2,11 @@
     "name": "magento/module-graph-ql",
     "description": "N/A",
     "type": "magento2-module",
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
+    "version": "100.4.0",
     "require": {
         "php": "~7.3.0||~7.4.0",
         "magento/module-eav": "102.1.*",
@@ -11,10 +16,6 @@
         "magento/module-webapi": "100.4.*",
         "magento/module-graph-ql-cache": "100.4.*"
     },
-    "license": [
-        "OSL-3.0",
-        "AFL-3.0"
-    ],
     "autoload": {
         "files": [
             "registration.php"
@@ -22,6 +23,6 @@
         "psr-4": {
             "Magento\\GraphQl\\": ""
         }
-    },
-    "version": "100.4.0"
+    }
 }
+

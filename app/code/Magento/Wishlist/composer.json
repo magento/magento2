@@ -1,9 +1,15 @@
 {
     "name": "magento/module-wishlist",
     "description": "N/A",
+    "type": "magento2-module",
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
     "config": {
         "sort-packages": true
     },
+    "version": "101.2.0",
     "require": {
         "php": "~7.3.0||~7.4.0",
         "magento/framework": "103.0.*",
@@ -27,11 +33,6 @@
         "magento/module-grouped-product": "100.4.*",
         "magento/module-wishlist-sample-data": "Sample Data version: 100.4.*"
     },
-    "type": "magento2-module",
-    "license": [
-        "OSL-3.0",
-        "AFL-3.0"
-    ],
     "autoload": {
         "files": [
             "registration.php"
@@ -39,6 +40,6 @@
         "psr-4": {
             "Magento\\Wishlist\\": ""
         }
-    },
-    "version": "101.2.0"
+    }
 }
+

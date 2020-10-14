@@ -1,9 +1,15 @@
 {
     "name": "magento/module-catalog-widget",
     "description": "N/A",
+    "type": "magento2-module",
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
     "config": {
         "sort-packages": true
     },
+    "version": "100.4.0",
     "require": {
         "php": "~7.3.0||~7.4.0",
         "magento/framework": "103.0.*",
@@ -17,11 +23,6 @@
         "magento/module-wishlist": "101.2.*",
         "magento/module-theme": "101.1.*"
     },
-    "type": "magento2-module",
-    "license": [
-        "OSL-3.0",
-        "AFL-3.0"
-    ],
     "autoload": {
         "files": [
             "registration.php"
@@ -29,6 +30,6 @@
         "psr-4": {
             "Magento\\CatalogWidget\\": ""
         }
-    },
-    "version": "100.4.0"
+    }
 }
+

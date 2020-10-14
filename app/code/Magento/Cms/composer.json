@@ -1,9 +1,15 @@
 {
     "name": "magento/module-cms",
     "description": "N/A",
+    "type": "magento2-module",
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
     "config": {
         "sort-packages": true
     },
+    "version": "104.0.0-p1",
     "require": {
         "php": "~7.3.0||~7.4.0",
         "magento/framework": "103.0.*",
@@ -20,11 +26,6 @@
     "suggest": {
         "magento/module-cms-sample-data": "Sample Data version: 100.4.*"
     },
-    "type": "magento2-module",
-    "license": [
-        "OSL-3.0",
-        "AFL-3.0"
-    ],
     "autoload": {
         "files": [
             "registration.php"
@@ -32,6 +33,6 @@
         "psr-4": {
             "Magento\\Cms\\": ""
         }
-    },
-    "version": "104.0.0"
+    }
 }
+

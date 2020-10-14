@@ -2,6 +2,11 @@
     "name": "magento/module-catalog-url-rewrite-graph-ql",
     "description": "N/A",
     "type": "magento2-module",
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
+    "version": "100.4.0",
     "require": {
         "php": "~7.3.0||~7.4.0",
         "magento/module-store": "101.1.*",
@@ -13,10 +18,6 @@
         "magento/module-catalog-graph-ql": "100.4.*",
         "magento/module-url-rewrite-graph-ql": "100.4.*"
     },
-    "license": [
-        "OSL-3.0",
-        "AFL-3.0"
-    ],
     "autoload": {
         "files": [
             "registration.php"
@@ -24,6 +25,6 @@
         "psr-4": {
             "Magento\\CatalogUrlRewriteGraphQl\\": ""
         }
-    },
-    "version": "100.4.0"
+    }
 }
+

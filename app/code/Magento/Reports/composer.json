@@ -1,9 +1,15 @@
 {
     "name": "magento/module-reports",
     "description": "N/A",
+    "type": "magento2-module",
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
     "config": {
         "sort-packages": true
     },
+    "version": "100.4.0",
     "require": {
         "php": "~7.3.0||~7.4.0",
         "magento/framework": "103.0.*",
@@ -24,11 +30,6 @@
         "magento/module-widget": "101.2.*",
         "magento/module-wishlist": "101.2.*"
     },
-    "type": "magento2-module",
-    "license": [
-        "OSL-3.0",
-        "AFL-3.0"
-    ],
     "autoload": {
         "files": [
             "registration.php"
@@ -36,6 +37,6 @@
         "psr-4": {
             "Magento\\Reports\\": ""
         }
-    },
-    "version": "100.4.0"
+    }
 }
+

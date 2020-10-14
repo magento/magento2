@@ -1,9 +1,15 @@
 {
     "name": "magento/module-catalog-search",
     "description": "Catalog search",
+    "type": "magento2-module",
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
     "config": {
         "sort-packages": true
     },
+    "version": "102.0.0",
     "require": {
         "php": "~7.3.0||~7.4.0",
         "magento/framework": "103.0.*",
@@ -22,11 +28,6 @@
     "suggest": {
         "magento/module-config": "101.2.*"
     },
-    "type": "magento2-module",
-    "license": [
-        "OSL-3.0",
-        "AFL-3.0"
-    ],
     "autoload": {
         "files": [
             "registration.php"
@@ -34,6 +35,6 @@
         "psr-4": {
             "Magento\\CatalogSearch\\": ""
         }
-    },
-    "version": "102.0.0"
+    }
 }
+

@@ -1,9 +1,15 @@
 {
     "name": "magento/module-paypal",
     "description": "N/A",
+    "type": "magento2-module",
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
     "config": {
         "sort-packages": true
     },
+    "version": "101.0.0",
     "require": {
         "php": "~7.3.0||~7.4.0",
         "lib-libxml": "*",
@@ -28,11 +34,6 @@
     "suggest": {
         "magento/module-checkout-agreements": "100.4.*"
     },
-    "type": "magento2-module",
-    "license": [
-        "OSL-3.0",
-        "AFL-3.0"
-    ],
     "autoload": {
         "files": [
             "registration.php"
@@ -40,6 +41,6 @@
         "psr-4": {
             "Magento\\Paypal\\": ""
         }
-    },
-    "version": "101.0.0"
+    }
 }
+

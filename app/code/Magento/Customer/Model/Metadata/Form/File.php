@@ -13,6 +13,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\File\UploaderFactory;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Validation\ValidationException;
 
 /**
  * Processes files that are save for customer.
@@ -111,6 +112,7 @@ class File extends AbstractData
         $extend = $this->_getRequestValue($request);
 
         $attrCode = $this->getAttribute()->getAttributeCode();
+        // phpcs:disable Magento2.Security.Superglobal
         if ($this->_requestScope || !isset($_FILES[$attrCode])) {
             $value = [];
             if (strpos($this->_requestScope, '/') !== false) {
@@ -153,6 +155,7 @@ class File extends AbstractData
                 $value = [];
             }
         }
+        // phpcs:enable Magento2.Security.Superglobal
 
         if (!empty($extend['delete'])) {
             $value['delete'] = true;
@@ -171,7 +174,9 @@ class File extends AbstractData
     {
         $label = $value['name'];
         $rules = $this->getAttribute()->getValidationRules();
+        // phpcs:disable Magento2.Functions.DiscouragedFunction
         $extension = pathinfo($value['name'], PATHINFO_EXTENSION);
+        // phpcs:enable Magento2.Functions.DiscouragedFunction
         $fileExtensions = ArrayObjectSearch::getArrayElementByName(
             $rules,
             'file_extensions'
@@ -219,12 +224,14 @@ class File extends AbstractData
      */
     protected function _isUploadedFile($filename)
     {
+        // phpcs:disable Magento2.Functions.DiscouragedFunction
         if (is_uploaded_file($filename)) {
             return true;
         }
 
         // This case is required for file uploader UI component
         $temporaryFile = FileProcessor::TMP_DIR . '/' . pathinfo($filename)['basename'];
+        // phpcs:enable Magento2.Functions.DiscouragedFunction
         if ($this->fileProcessor->isExist($temporaryFile)) {
             return true;
         }
@@ -319,6 +326,9 @@ class File extends AbstractData
      *
      * @param string $value
      * @return bool|int|string
+     * @throws ValidationException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function processInputFieldValue($value)
     {
@@ -343,6 +353,14 @@ class File extends AbstractData
         }
 
         if (!empty($value['tmp_name'])) {
+            $errors = $this->_validateByRules($value);
+            if (is_array($errors) && count($errors) > 0) {
+                foreach (array_keys($errors) as $key) {
+                    $this->_logger->critical($errors[$key]);
+                    throw new ValidationException(__($errors[$key]));
+                }
+            }
+
             try {
                 $uploader = $this->uploaderFactory->create(['fileId' => $value]);
                 $uploader->setFilesDispersion(true);

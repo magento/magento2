@@ -1,9 +1,15 @@
 {
     "name": "magento/module-robots",
     "description": "N/A",
+    "type": "magento2-module",
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
     "config": {
         "sort-packages": true
     },
+    "version": "101.1.0",
     "require": {
         "php": "~7.3.0||~7.4.0",
         "magento/framework": "103.0.*",
@@ -12,11 +18,6 @@
     "suggest": {
         "magento/module-theme": "101.1.*"
     },
-    "type": "magento2-module",
-    "license": [
-        "OSL-3.0",
-        "AFL-3.0"
-    ],
     "autoload": {
         "files": [
             "registration.php"
@@ -24,6 +25,6 @@
         "psr-4": {
             "Magento\\Robots\\": ""
         }
-    },
-    "version": "101.1.0"
+    }
 }
+

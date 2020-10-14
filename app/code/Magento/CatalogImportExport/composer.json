@@ -1,9 +1,15 @@
 {
     "name": "magento/module-catalog-import-export",
     "description": "N/A",
+    "type": "magento2-module",
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
     "config": {
         "sort-packages": true
     },
+    "version": "101.1.0",
     "require": {
         "php": "~7.3.0||~7.4.0",
         "ext-ctype": "*",
@@ -19,11 +25,6 @@
         "magento/module-tax": "100.4.*",
         "magento/module-authorization": "100.4.*"
     },
-    "type": "magento2-module",
-    "license": [
-        "OSL-3.0",
-        "AFL-3.0"
-    ],
     "autoload": {
         "files": [
             "registration.php"
@@ -31,6 +32,6 @@
         "psr-4": {
             "Magento\\CatalogImportExport\\": ""
         }
-    },
-    "version": "101.1.0"
+    }
 }
+

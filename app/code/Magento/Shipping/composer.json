@@ -1,9 +1,15 @@
 {
     "name": "magento/module-shipping",
     "description": "N/A",
+    "type": "magento2-module",
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
     "config": {
         "sort-packages": true
     },
+    "version": "100.4.0",
     "require": {
         "php": "~7.3.0||~7.4.0",
         "ext-gd": "*",
@@ -27,11 +33,6 @@
         "magento/module-ups": "100.4.*",
         "magento/module-config": "101.2.*"
     },
-    "type": "magento2-module",
-    "license": [
-        "OSL-3.0",
-        "AFL-3.0"
-    ],
     "autoload": {
         "files": [
             "registration.php"
@@ -39,6 +40,6 @@
         "psr-4": {
             "Magento\\Shipping\\": ""
         }
-    },
-    "version": "100.4.0"
+    }
 }
+
