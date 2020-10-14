@@ -472,7 +472,7 @@ class WishlistTest extends TestCase
         $items = [];
 
         $result = [
-            'counter' =>  null,
+            'counter' =>  0,
             'items' => [],
         ];
 
