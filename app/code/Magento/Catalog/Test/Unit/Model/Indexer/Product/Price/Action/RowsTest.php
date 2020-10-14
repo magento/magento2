@@ -184,9 +184,12 @@ class RowsTest extends TestCase
         $this->catalogProductType->expects($this->any())
             ->method('getTypesByPriority')
             ->willReturn([]);
-        $adapter->expects($this->any())
+        $adapter->expects($this->once())
+            ->method('getIndexList')
+            ->willReturn(['entity_id'=>['COLUMNS_LIST'=>['test']]]);
+        $adapter->expects($this->once())
             ->method('getPrimaryKeyName')
-            ->willReturn(['COLUMNS_LIST'=>['entity_id']]);
+            ->willReturn('entity_id');
         $this->actionRows->execute($ids);
     }
 }
