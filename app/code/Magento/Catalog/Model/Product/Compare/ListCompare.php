@@ -61,11 +61,6 @@ class ListCompare extends \Magento\Framework\DataObject
     private $productRepository;
 
     /**
-     * @var CompareList
-     */
-    private $compareList;
-
-    /**
      * Constructor
      *
      * @param \Magento\Catalog\Model\Product\Compare\ItemFactory $compareItemFactory
@@ -73,7 +68,6 @@ class ListCompare extends \Magento\Framework\DataObject
      * @param \Magento\Catalog\Model\ResourceModel\Product\Compare\Item $catalogProductCompareItem
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Customer\Model\Visitor $customerVisitor
-     * @param \Magento\Catalog\Model\Product\Compare\CompareList $compareList
      * @param array $data
      * @param ProductRepository|null $productRepository
      */
@@ -83,7 +77,6 @@ class ListCompare extends \Magento\Framework\DataObject
         \Magento\Catalog\Model\ResourceModel\Product\Compare\Item $catalogProductCompareItem,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Customer\Model\Visitor $customerVisitor,
-        \Magento\Catalog\Model\Product\Compare\CompareList $compareList,
         array $data = [],
         ProductRepository $productRepository = null
     ) {
@@ -92,7 +85,6 @@ class ListCompare extends \Magento\Framework\DataObject
         $this->_catalogProductCompareItem = $catalogProductCompareItem;
         $this->_customerSession = $customerSession;
         $this->_customerVisitor = $customerVisitor;
-        $this->compareList = $compareList;
         $this->productRepository = $productRepository ?: ObjectManager::getInstance()->create(ProductRepository::class);
         parent::__construct($data);
     }
@@ -110,11 +102,9 @@ class ListCompare extends \Magento\Framework\DataObject
         $item = $this->_compareItemFactory->create();
         $this->_addVisitorToItem($item);
         $item->loadByProduct($product);
-        $listId = $this->compareList->getListId($item);
 
         if (!$item->getId() && $this->productExists($product)) {
             $item->addProductData($product);
-            $item->setListId($listId);
             $item->save();
         }
 
