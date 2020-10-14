@@ -20,6 +20,7 @@ use Magento\Store\Model\StoreManagerInterface;
 /**
  * Class Rows reindex action for mass actions
  *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects) to preserve compatibility with parent class
  */
 class Rows extends \Magento\Catalog\Model\Indexer\Product\Price\AbstractAction
 {
