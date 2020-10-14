@@ -87,7 +87,6 @@ class ViewTest extends TestCase
      */
     protected $pageTitleMock;
 
-
     /**
      * @var \Magento\Shipping\Controller\Adminhtml\Order\Shipment\View
      * @var RedirectFactory|MockObject
@@ -103,7 +102,6 @@ class ViewTest extends TestCase
      * @var OrderShipmentView
      */
     protected $controller;
-
 
     protected function setUp(): void
     {

@@ -183,7 +183,7 @@ class CreditmemoLoader extends DataObject
         if ($creditmemoId) {
             try {
                 $creditmemo = $this->creditmemoRepository->get($creditmemoId);
-            } catch (\Exception $e) {    
+            } catch (\Exception $e) {
                 $this->messageManager->addErrorMessage(__('This creditmemo no longer exists.'));
                 return false;
             }
