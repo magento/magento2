@@ -12,11 +12,12 @@ use Magento\Catalog\Model\Product\Compare\Item;
 use Magento\Catalog\Model\Product\Compare\ItemFactory;
 use Magento\Catalog\Model\ProductRepository;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Tests\NamingConvention\true\string;
 
 /**
  * Service add product to compare list
  */
-class AddToCompareListService
+class AddProductsToCompareList
 {
     /**
      * Compare item factory
@@ -43,14 +44,14 @@ class AddToCompareListService
     }
 
     /**
-     * Add to compare list
+     * Add products to compare list
      *
-     * @param int $listId
-     * @param array $items
+     * @param string $listId
+     * @param array $products
      */
-    public function addToCompareList(int $listId, array $items)
+    public function execute(string $listId, array $products)
     {
-        foreach ($items['items'] as $key) {
+        foreach ($products as $key) {
             /* @var $item Item */
             $item = $this->compareItemFactory->create();
             $item->loadByProduct($key);

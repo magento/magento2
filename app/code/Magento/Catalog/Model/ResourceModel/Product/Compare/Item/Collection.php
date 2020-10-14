@@ -268,6 +268,26 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     }
 
     /**
+     * Get products ids by for compare list
+     *
+     * @param int $listId
+     *
+     * @return array
+     */
+    public function getProductsByListId(int $listId)
+    {
+        $select = $this->getConnection()->select()->
+        from(
+            $this->getTable('catalog_compare_item'),
+            'product_id'
+        )->where(
+            'list_id = ?',
+            $listId
+        );
+        return $this->getConnection()->fetchCol($select);
+    }
+
+    /**
      * Retrieve comapre products attribute set ids
      *
      * @return array

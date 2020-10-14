@@ -19,6 +19,6 @@ class CompareList extends AbstractModel
      */
     protected function _construct()
     {
-        $this->_init(\Magento\Catalog\Model\ResourceModel\CompareList::class);
+        $this->_init(ResourceModel\Product\Compare\CompareList::class);
     }
 }

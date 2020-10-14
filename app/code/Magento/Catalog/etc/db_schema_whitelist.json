@@ -1127,18 +1127,30 @@
     },
     "catalog_compare_list": {
         "column": {
-            "id": true,
             "list_id": true,
-            "visitor_id": true,
             "customer_id": true
         },
         "index": {
-            "CATALOG_COMPARE_LIST_LIST_ID": true,
-            "CATALOG_COMPARE_LIST_VISITOR_ID_CUSTOMER_ID": true
+            "CATALOG_COMPARE_LIST_CUSTOMER_ID": true
         },
         "constraint": {
             "PRIMARY": true,
             "CATALOG_COMPARE_LIST_CUSTOMER_ID_CUSTOMER_ENTITY_ENTITY_ID": true
+        }
+    },
+    "list_id_mask": {
+        "column": {
+            "entity_id": true,
+            "list_id": true,
+            "masked_id": true
+        },
+        "index": {
+            "LIST_ID_MASK_LIST_ID": true,
+            "LIST_ID_MASK_MASKED_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "LIST_ID_MASK_LIST_ID_CATALOG_COMPARE_LIST_LIST_ID": true
         }
     }
 }

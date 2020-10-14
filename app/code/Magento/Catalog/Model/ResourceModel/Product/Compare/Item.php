@@ -5,10 +5,6 @@
  */
 namespace Magento\Catalog\Model\ResourceModel\Product\Compare;
 
-use Magento\Catalog\Model\CompareListFactory;
-use Magento\Catalog\Model\ResourceModel\CompareList as CompareListResource;
-use Magento\Framework\Model\ResourceModel\Db\Context;
-
 /**
  * Catalog compare item resource model
  *
@@ -17,16 +13,6 @@ use Magento\Framework\Model\ResourceModel\Db\Context;
 class Item extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
-     * @var CompareListFactory
-     */
-    private $compareListFactory;
-
-    /**
-     * @var CompareListResource
-     */
-    private $compareListResource;
-
-    /**
      * Initialize connection
      *
      * @return void
@@ -34,23 +20,6 @@ class Item extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected function _construct()
     {
         $this->_init('catalog_compare_item', 'catalog_compare_item_id');
-    }
-
-    /**
-     * @param CompareListFactory $compareListFactory
-     * @param CompareListResource $compareListResource
-     * @param Context $context
-     * @param null $connectionName
-     */
-    public function __construct(
-        CompareListFactory $compareListFactory,
-        CompareListResource $compareListResource,
-        Context $context,
-        $connectionName = null
-    ) {
-        $this->compareListFactory = $compareListFactory;
-        $this->compareListResource = $compareListResource;
-        parent::__construct($context, $connectionName);
     }
 
     /**
@@ -244,7 +213,6 @@ class Item extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                     $this->getConnection()->quoteInto($this->getIdFieldName() . '=?', $itemId)
                 );
             }
-            $this->setCustomerFromVisitor($object);
         }
 
         return $this;
@@ -272,30 +240,6 @@ class Item extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             return $this;
         }
         $this->getConnection()->delete($this->getMainTable(), $where);
-        return $this;
-    }
-
-    /**
-     * Set customer from visitor in catalog_compare_list table
-     *
-     * @param \Magento\Catalog\Model\Product\Compare\Item  $item
-     *
-     * @return $this
-     */
-    private function setCustomerFromVisitor($item)
-    {
-        $customerId = $item->getCustomerId();
-
-        if (!$customerId) {
-            return $this;
-        }
-
-        $visitorId = $item->getVisitorId();
-        $compareListModel = $this->compareListFactory->create();
-        $this->compareListResource->load($compareListModel, $visitorId, 'visitor_id');
-        $compareListModel->setCustomerId($customerId);
-        $compareListModel->save();
-
         return $this;
     }
 }

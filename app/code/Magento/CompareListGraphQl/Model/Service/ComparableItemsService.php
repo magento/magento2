@@ -10,7 +10,7 @@ namespace Magento\CompareListGraphQl\Model\Service;
 use Magento\Catalog\Block\Product\Compare\ListCompare;
 use Magento\Catalog\Model\CompareList;
 use Magento\Catalog\Model\Product;
-use Magento\Catalog\Model\ResourceModel\CompareList as ResourceCompareList;
+use Magento\Catalog\Model\ResourceModel\Product\Compare\CompareList as ResourceCompareList;
 use Magento\CatalogGraphQl\Model\Resolver\Product\Price\Discount;
 use Magento\CatalogGraphQl\Model\Resolver\Product\Price\ProviderPool as PriceProviderPool;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
