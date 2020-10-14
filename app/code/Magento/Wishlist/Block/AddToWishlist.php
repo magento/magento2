@@ -34,9 +34,10 @@ class AddToWishlist extends Template
 
     /**
      * AddToWishlist constructor.
-     * @param ProductTypeListInterface $productTypeList
+     *
      * @param Context $context
      * @param array $data
+     * @param ProductTypeListInterface|null $productTypeList
      */
     public function __construct(
         Context $context,

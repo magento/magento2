@@ -77,7 +77,7 @@ define([
                 return;
             }
 
-            handleObjSelector = $(event.currentTarget).closest('form').find(event.handleObj.selector)
+            handleObjSelector = $(event.currentTarget).closest('form').find(event.handleObj.selector);
 
             handleObjSelector.each(function (index, element) {
                 if ($(element).is('input[type=text]') ||
