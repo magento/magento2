@@ -7,13 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\CompareListGraphQl\Model\Service;
 
-use Magento\CompareListGraphQl\Model\Service\Collection\ComparableItems as ComparableItemsCollection;
+use Magento\CompareListGraphQl\Model\Service\Collection\GetComparableItemsCollection as ComparableItemsCollection;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 
 /**
  * Get comparable attributes
  */
-class ComparableAttributesService
+class GetComparableAttributes
 {
     /**
      * @var ComparableItemsCollection
@@ -37,10 +37,10 @@ class ComparableAttributesService
      *
      * @return array
      */
-    public function getComparableAttributes(int $listId, ContextInterface $context): array
+    public function execute(int $listId, ContextInterface $context): array
     {
         $attributes = [];
-        $itemsCollection = $this->comparableItemsCollection->getCollectionComparableItems($listId, $context);
+        $itemsCollection = $this->comparableItemsCollection->execute($listId, $context);
         foreach ($itemsCollection->getComparableAttributes() as $item) {
             $attributes[] = [
                 'code' => $item->getAttributeCode(),

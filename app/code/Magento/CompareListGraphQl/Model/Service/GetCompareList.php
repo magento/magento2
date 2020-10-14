@@ -16,12 +16,12 @@ use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 class GetCompareList
 {
     /**
-     * @var ComparableItemsService
+     * @var GetComparableItems
      */
     private $comparableItemsService;
 
     /**
-     * @var ComparableAttributesService
+     * @var GetComparableAttributes
      */
     private $comparableAttributesService;
 
@@ -31,13 +31,13 @@ class GetCompareList
     private $compareListIdToMaskedListId;
 
     /**
-     * @param ComparableItemsService $comparableItemsService
-     * @param ComparableAttributesService $comparableAttributesService
+     * @param GetComparableItems $comparableItemsService
+     * @param GetComparableAttributes $comparableAttributesService
      * @param CompareListIdToMaskedListId $compareListIdToMaskedListId
      */
     public function __construct(
-        ComparableItemsService $comparableItemsService,
-        ComparableAttributesService $comparableAttributesService,
+        GetComparableItems $comparableItemsService,
+        GetComparableAttributes $comparableAttributesService,
         CompareListIdToMaskedListId $compareListIdToMaskedListId
     ) {
         $this->comparableItemsService = $comparableItemsService;
@@ -60,7 +60,7 @@ class GetCompareList
         return [
             'uid' => $maskedListId,
             'items' => $this->comparableItemsService->getComparableItems($listId, $context, $store),
-            'attributes' => $this->comparableAttributesService->getComparableAttributes($listId, $context)
+            'attributes' => $this->comparableAttributesService->execute($listId, $context)
         ];
     }
 }

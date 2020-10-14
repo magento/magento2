@@ -7,10 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\CompareListGraphQl\Model\Resolver;
 
-use Magento\Catalog\Model\CompareList;
-use Magento\Catalog\Model\CompareListFactory;
-use Magento\Catalog\Model\MaskedListIdToCompareListId;
-use Magento\Catalog\Model\Product\Compare\ItemFactory;
 use Magento\CompareListGraphQl\Model\Service\AddToCompareList;
 use Magento\CompareListGraphQl\Model\Service\CreateCompareList as CreateCompareListService;
 use Magento\CompareListGraphQl\Model\Service\CustomerService;
@@ -27,45 +23,49 @@ use Magento\Framework\Math\Random;
  */
 class CreateCompareList implements ResolverInterface
 {
-    private $compareItemFactory;
-
-    /**
-     * @var CompareListFactory
-     */
-    private $compareListFactory;
-
     /**
      * @var Random
      */
     private $mathRandom;
 
+    /**
+     * @var CustomerService
+     */
     private $customerService;
 
+    /**
+     * @var AddToCompareList
+     */
     private $addProductToCompareList;
 
+    /**
+     * @var GetCompareList
+     */
     private $getCompareList;
 
-    private $maskedListIdToCompareListId;
-
+    /**
+     * @var CreateCompareListService
+     */
     private $createCompareList;
 
+    /**
+     * @param Random $mathRandom
+     * @param CustomerService $customerService
+     * @param AddToCompareList $addProductToCompareList
+     * @param GetCompareList $getCompareList
+     * @param CreateCompareListService $createCompareList
+     */
     public function __construct(
-        ItemFactory $compareItemFactory,
-        CompareListFactory $compareListFactory,
         Random $mathRandom,
         CustomerService $customerService,
         AddToCompareList $addProductToCompareList,
         GetCompareList $getCompareList,
-        MaskedListIdToCompareListId $maskedListIdToCompareListId,
         CreateCompareListService $createCompareList
     ) {
-        $this->compareItemFactory = $compareItemFactory;
-        $this->compareListFactory = $compareListFactory;
         $this->mathRandom = $mathRandom;
         $this->customerService = $customerService;
         $this->addProductToCompareList = $addProductToCompareList;
         $this->getCompareList = $getCompareList;
-        $this->maskedListIdToCompareListId = $maskedListIdToCompareListId;
         $this->createCompareList = $createCompareList;
     }
 

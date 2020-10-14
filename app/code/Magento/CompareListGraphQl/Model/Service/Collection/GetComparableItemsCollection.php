@@ -17,7 +17,7 @@ use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 /**
  * Get collection with comparable items
  */
-class ComparableItems
+class GetComparableItemsCollection
 {
     /**
      * @var Collection
@@ -70,7 +70,7 @@ class ComparableItems
      *
      * @return Collection
      */
-    public function getCollectionComparableItems(int $listId, ContextInterface $context): Collection
+    public function execute(int $listId, ContextInterface $context): Collection
     {
         $this->compareProduct->setAllowUsedFlat(false);
         /** @var Collection $comparableItems */

@@ -16,13 +16,13 @@ use Magento\CatalogGraphQl\Model\Resolver\Product\Price\ProviderPool as PricePro
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Framework\Pricing\SaleableInterface;
 use Magento\Store\Api\Data\StoreInterface;
-use Magento\CompareListGraphQl\Model\Service\Collection\ComparableItems as ComparableItemsCollection;
+use Magento\CompareListGraphQl\Model\Service\Collection\GetComparableItemsCollection as ComparableItemsCollection;
 
 
 /**
  * Get comparable items
  */
-class ComparableItemsService
+class GetComparableItems
 {
     /**
      * @var Discount
@@ -90,7 +90,7 @@ class ComparableItemsService
     public function getComparableItems(int $listId, ContextInterface $context, StoreInterface $store)
     {
         $items = [];
-        foreach ($this->comparableItemsCollection->getCollectionComparableItems($listId, $context) as $item) {
+        foreach ($this->comparableItemsCollection->execute($listId, $context) as $item) {
             /** @var Product $item */
             $items[] = [
                 'productId' => $item->getId(),
@@ -127,7 +127,7 @@ class ComparableItemsService
     private function getProductComparableAttributes(int $listId, Product $product, ContextInterface $context): array
     {
         $attributes = [];
-        $itemsCollection = $this->comparableItemsCollection->getCollectionComparableItems($listId, $context);
+        $itemsCollection = $this->comparableItemsCollection->execute($listId, $context);
         foreach ($itemsCollection->getComparableAttributes() as $item) {
             $attributes[] = [
                 'code' =>  $item->getAttributeCode(),
