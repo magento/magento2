@@ -49,7 +49,7 @@ class DataTest extends TestCase
             ->getMock();
         $this->_imageHelperMock = $this->createMock(Image::class);
         $this->_productMock = $this->createMock(Product::class);
-
+        $this->_productMock->setTypeId(Configurable::TYPE_CODE);
         $this->_model = $objectManager->getObject(
             Data::class,
             [
@@ -65,6 +65,10 @@ class DataTest extends TestCase
         $typeInstanceMock->expects($this->once())
             ->method('getConfigurableAttributes')
             ->with($this->_productMock);
+
+        $this->_productMock->expects($this->once())
+            ->method('getTypeId')
+            ->willReturn(Configurable::TYPE_CODE);
 
         $this->_productMock->expects($this->once())
             ->method('getTypeInstance')
@@ -119,7 +123,10 @@ class DataTest extends TestCase
     {
         $currentProductMock = $this->createPartialMock(
             Product::class,
-            ['getTypeInstance']
+            [
+                'getTypeInstance',
+                'getTypeId'
+            ]
         );
         $provider = [];
         $provider[] = [
@@ -156,6 +163,9 @@ class DataTest extends TestCase
         $typeInstanceMock->expects($this->any())
             ->method('getConfigurableAttributes')
             ->willReturn($attributes);
+        $currentProductMock->expects($this->any())
+            ->method('getTypeId')
+            ->willReturn(Configurable::TYPE_CODE);
         $currentProductMock->expects($this->any())
             ->method('getTypeInstance')
             ->willReturn($typeInstanceMock);
