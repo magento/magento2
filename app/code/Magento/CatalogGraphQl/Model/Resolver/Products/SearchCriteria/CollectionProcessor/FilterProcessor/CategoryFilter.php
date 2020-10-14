@@ -51,6 +51,11 @@ class CategoryFilter implements CustomFilterInterface
      */
     public function apply(Filter $filter, AbstractDb $collection)
     {
+        $conditionType = $filter->getConditionType();
+        if ($conditionType !== 'eq') {
+            return true;
+        }
+
         $categoryIds = $filter->getValue();
         if (!is_array($categoryIds)) {
             $categoryIds = [$categoryIds];
@@ -61,6 +66,7 @@ class CategoryFilter implements CustomFilterInterface
             $category = $this->categoryFactory->create();
             $this->categoryResourceModel->load($category, $categoryId);
             $categoryProducts[$categoryId] = $category->getProductCollection()->getAllIds();
+            $collection->addCategoryFilter($category);
         }
 
         $categoryProductIds = array_unique(array_merge(...$categoryProducts));
