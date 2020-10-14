@@ -16,7 +16,7 @@
             <argument name="identifier" type="string"/>
         </arguments>
 
-        <amOnPage url="{{AdminCreditmemoViewPage.url}}/{{identifier}}" stepKey="amOnCreditmemoViewPage"/>
+        <amOnPage url="{{AdminCreditMemoViewPage.url}}/{{identifier}}" stepKey="amOnCreditmemoViewPage"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
     </actionGroup>
 </actionGroups>
