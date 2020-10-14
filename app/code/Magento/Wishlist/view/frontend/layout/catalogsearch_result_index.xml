@@ -17,12 +17,7 @@
         <referenceBlock name="wishlist_page_head_components">
             <block class="Magento\Wishlist\Block\AddToWishlist"
                 name="catalogsearch.wishlist_addto"
-                template="Magento_Wishlist::addto.phtml">
-                <arguments>
-                    <argument name="is_product_list" xsi:type="boolean">true</argument>
-                    <argument name="product_list_block" xsi:type="string">search_result_list</argument>
-                </arguments>
-            </block>
+                template="Magento_Wishlist::addto.phtml"/>
         </referenceBlock>
     </body>
 </page>

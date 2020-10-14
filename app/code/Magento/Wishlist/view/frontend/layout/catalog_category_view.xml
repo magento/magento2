@@ -23,11 +23,7 @@
             <referenceContainer name="category.product.list.additional">
                 <block class="Magento\Wishlist\Block\AddToWishlist"
                     name="category.product.list.additional.wishlist_addto"
-                    template="Magento_Wishlist::addto.phtml">
-                    <arguments>
-                        <argument name="is_product_list" xsi:type="boolean">true</argument>
-                    </arguments>
-                </block>
+                    template="Magento_Wishlist::addto.phtml"/>
             </referenceContainer>
         </referenceContainer>
     </body>
