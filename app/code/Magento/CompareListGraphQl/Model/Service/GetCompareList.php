@@ -7,13 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\CompareListGraphQl\Model\Service;
 
+use Magento\Catalog\Model\CompareListIdToMaskedListId;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
-use Magento\Store\Api\Data\StoreInterface;
 
 /**
  * Get compare list
  */
-class CompareListService
+class GetCompareList
 {
     /**
      * @var ComparableItemsService
@@ -26,30 +26,39 @@ class CompareListService
     private $comparableAttributesService;
 
     /**
+     * @var CompareListIdToMaskedListId
+     */
+    private $compareListIdToMaskedListId;
+
+    /**
      * @param ComparableItemsService $comparableItemsService
      * @param ComparableAttributesService $comparableAttributesService
+     * @param CompareListIdToMaskedListId $compareListIdToMaskedListId
      */
     public function __construct(
         ComparableItemsService $comparableItemsService,
-        ComparableAttributesService $comparableAttributesService
+        ComparableAttributesService $comparableAttributesService,
+        CompareListIdToMaskedListId $compareListIdToMaskedListId
     ) {
         $this->comparableItemsService = $comparableItemsService;
         $this->comparableAttributesService = $comparableAttributesService;
+        $this->compareListIdToMaskedListId = $compareListIdToMaskedListId;
     }
 
     /**
-     * Get compare list
+     * Get compare list information
      *
      * @param int $listId
      * @param ContextInterface $context
-     * @param StoreInterface $store
      *
      * @return array
      */
-    public function getCompareList(int $listId, ContextInterface $context, StoreInterface $store)
+    public function execute(int $listId, ContextInterface $context)
     {
+        $store = $context->getExtensionAttributes()->getStore();
+        $maskedListId = $this->compareListIdToMaskedListId->execute($listId);
         return [
-            'list_id' => $listId,
+            'uid' => $maskedListId,
             'items' => $this->comparableItemsService->getComparableItems($listId, $context, $store),
             'attributes' => $this->comparableAttributesService->getComparableAttributes($listId, $context)
         ];

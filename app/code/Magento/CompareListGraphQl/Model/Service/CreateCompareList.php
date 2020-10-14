@@ -7,14 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\CompareListGraphQl\Model\Service;
 
-use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Catalog\Model\CompareList as CatalogCompareList;
 use Magento\Catalog\Model\CompareListFactory;
-use Magento\Catalog\Model\Product\Compare\Item;
-use Magento\Catalog\Model\ResourceModel\CompareList as CompareListResource;
-use Magento\Customer\Model\Visitor;
+use Magento\Catalog\Model\ListIdMaskFactory;
+use Magento\Catalog\Model\ResourceModel\Product\Compare\CompareList as CompareListResource;
+use Magento\Catalog\Model\ResourceModel\Product\Compare\ListIdMask as ListIdMaskResource;
 
-class CompareList
+class CreateCompareList
 {
     /**
      * @var CompareListFactory
@@ -27,41 +25,52 @@ class CompareList
     private $compareListResource;
 
     /**
-     * @var Visitor
+     * @var ListIdMaskFactory
      */
-    private $customerVisitor;
+    private $maskedListIdFactory;
+
+    /**
+     * @var ListIdMaskResource
+     */
+    private $maskedListIdResource;
 
     /**
      * @param CompareListFactory $compareListFactory
      * @param CompareListResource $compareListResource
-     * @param Visitor $customerVisitor
+     * @param ListIdMaskFactory $maskedListIdFactory
+     * @param ListIdMaskResource $maskedListIdResource
      */
     public function __construct(
         CompareListFactory $compareListFactory,
         CompareListResource $compareListResource,
-        Visitor $customerVisitor
+        ListIdMaskFactory $maskedListIdFactory,
+        ListIdMaskResource $maskedListIdResource
     ) {
         $this->compareListFactory = $compareListFactory;
         $this->compareListResource = $compareListResource;
-        $this->customerVisitor = $customerVisitor;
+        $this->maskedListIdFactory = $maskedListIdFactory;
+        $this->maskedListIdResource = $maskedListIdResource;
     }
 
-    public function createCompareList(string $listId, int $customerId)
+    /**
+     * Created new compare list
+     *
+     * @param string $maskedId
+     * @param int $customerId
+     *
+     * @return int
+     */
+    public function execute(string $maskedId, ?int $customerId = null): int
     {
-        /* @var $compareListModel CatalogCompareList */
-        $compareListModel = $this->compareListFactory->create();
-        $compareListModel->setListId($listId);
-        $this->addVisitorToItem($compareListModel, $customerId);
-        $compareListModel->save();
-    }
+        $compareList = $this->compareListFactory->create();
+        $compareList->setCustomerId($customerId);
+        $this->compareListResource->save($compareList);
 
-    private function addVisitorToItem($model,int $customerId)
-    {
-        $model->setVisitorId($this->customerVisitor->getId());
-        if ($customerId) {
-            $model->setCustomerId($customerId);
-        }
+        $maskedListId = $this->maskedListIdFactory->create();
+        $maskedListId->setListId($compareList->getListId());
+        $maskedListId->setMaskedId($maskedId);
+        $this->maskedListIdResource->save($maskedListId);
 
-        return $this;
+        return (int)$compareList->getListId();
     }
 }

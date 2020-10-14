@@ -7,6 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\CompareListGraphQl\Model\Service;
 
+use Magento\Catalog\Model\CompareList;
+use Magento\Catalog\Model\CompareListFactory;
+use Magento\Catalog\Model\ResourceModel\Product\Compare\CompareList as ResourceCompareList;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
@@ -38,18 +41,53 @@ class CustomerService
     private $accountManagement;
 
     /**
+     * @var ResourceCompareList
+     */
+    private $resourceCompareList;
+
+    /**
+     * @var CompareListFactory
+     */
+    private $compareListFactory;
+
+    /**
      * @param AuthenticationInterface $authentication
      * @param CustomerRepositoryInterface $customerRepository
      * @param AccountManagementInterface $accountManagement
+     * @param ResourceCompareList  $resourceCompareList
+     * @param CompareListFactory   $compareListFactory
      */
     public function __construct(
         AuthenticationInterface $authentication,
         CustomerRepositoryInterface $customerRepository,
-        AccountManagementInterface $accountManagement
+        AccountManagementInterface $accountManagement,
+        ResourceCompareList $resourceCompareList,
+        CompareListFactory $compareListFactory
     ) {
         $this->authentication = $authentication;
         $this->customerRepository = $customerRepository;
         $this->accountManagement = $accountManagement;
+        $this->resourceCompareList = $resourceCompareList;
+        $this->compareListFactory = $compareListFactory;
+    }
+
+    /**
+     * Get listId by Customer ID
+     *
+     * @param $customerId
+     *
+     * @return int|null
+     */
+    public function getListIdByCustomerId($customerId)
+    {
+        if ($customerId) {
+            /** @var CompareList $compareListModel */
+            $compareListModel = $this->compareListFactory->create();
+            $this->resourceCompareList->load($compareListModel, $customerId, 'customer_id');
+            return (int)$compareListModel->getListId();
+        }
+
+        return null;
     }
 
     /**
