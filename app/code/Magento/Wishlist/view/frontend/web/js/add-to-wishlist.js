@@ -68,7 +68,7 @@ define([
                 self = this;
 
             if (event.handleObj.selector == this.options.qtyInfo) { //eslint-disable-line eqeqeq
-                this._updateQTY();
+                this._updateQty();
                 event.stopPropagation();
 
                 return;
@@ -142,11 +142,10 @@ define([
             });
         },
 
-        /** Update only QTY
-         *
+        /**
          * @private
          */
-        _updateQTY: function () {
+        _updateQty: function () {
             var self = this;
 
             $('[data-action="add-to-wishlist"]').each(function (index, element) {
