@@ -61,7 +61,7 @@ class CreateHandlerTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->createHandler = $this->objectManager->create(CreateHandler::class);
@@ -102,14 +102,15 @@ class CreateHandlerTest extends \PHPUnit\Framework\TestCase
      * Check sanity of posted image file name.
      *
      * @param string $imageFileName
-     * @expectedException \Magento\Framework\Exception\FileSystemException
-     * @expectedExceptionMessageRegExp ".+ file doesn't exist."
-     * @expectedExceptionMessageRegExp "/^((?!\.\.\/).)*$/"
      * @dataProvider illegalFilenameDataProvider
      * @return void
      */
     public function testExecuteWithIllegalFilename(string $imageFileName): void
     {
+        $this->expectException(\Magento\Framework\Exception\FileSystemException::class);
+        $this->expectExceptionMessageMatches('".+ file doesn\'t exist."');
+        $this->expectExceptionMessageMatches('/^((?!\.\.\/).)*$/');
+
         $data = [
             'media_gallery' => ['images' => ['image' => ['file' => $imageFileName, 'label' => 'New image']]],
         ];
@@ -249,6 +250,32 @@ class CreateHandlerTest extends \PHPUnit\Framework\TestCase
             ['position', '1', '1'],
             ['position', '2', '2'],
         ];
+    }
+
+    /**
+     * @magentoDataFixture Magento/Catalog/_files/product_image_attribute.php
+     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoDataFixture Magento/Catalog/_files/product_image.php
+     * @return void
+     */
+    public function testExecuteWithCustomMediaAttribute(): void
+    {
+        $data = [
+            'media_gallery' => ['images' => ['image' => ['file' => $this->fileName, 'label' => '']]],
+            'image' => 'no_selection',
+            'small_image' => 'no_selection',
+            'swatch_image' => 'no_selection',
+            'thumbnail' => 'no_selection',
+            'image_attribute' => $this->fileName
+        ];
+        $product = $this->initProduct($data);
+        $this->createHandler->execute($product);
+        $mediaAttributeValue = $this->productResource->getAttributeRawValue(
+            $product->getId(),
+            ['image_attribute'],
+            $product->getStoreId()
+        );
+        $this->assertEquals($this->fileName, $mediaAttributeValue);
     }
 
     /**

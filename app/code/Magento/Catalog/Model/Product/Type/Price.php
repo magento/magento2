@@ -262,7 +262,7 @@ class Price
 
         $tierPrice = $product->getTierPrice($qty);
         if (is_numeric($tierPrice)) {
-            $finalPrice = min($finalPrice, $tierPrice);
+            $finalPrice = min($finalPrice, (float) $tierPrice);
         }
         return $finalPrice;
     }
@@ -484,6 +484,7 @@ class Price
      * @param   Product $product
      *
      * @return  array|float
+     * @since 102.0.6
      */
     public function getFormattedTierPrice($qty, $product)
     {
@@ -509,7 +510,7 @@ class Price
      *
      * @return array|float
      *
-     * @deprecated
+     * @deprecated 102.0.6
      * @see getFormattedTierPrice()
      */
     public function getFormatedTierPrice($qty, $product)
@@ -522,6 +523,7 @@ class Price
      *
      * @param   Product $product
      * @return  array|float
+     * @since 102.0.6
      */
     public function getFormattedPrice($product)
     {
@@ -534,7 +536,7 @@ class Price
      * @param Product $product
      * @return array || float
      *
-     * @deprecated
+     * @deprecated 102.0.6
      * @see getFormattedPrice()
      */
     public function getFormatedPrice($product)
@@ -645,7 +647,7 @@ class Price
     ) {
         if ($specialPrice !== null && $specialPrice != false) {
             if ($this->_localeDate->isScopeDateInInterval($store, $specialPriceFrom, $specialPriceTo)) {
-                $finalPrice = min($finalPrice, $specialPrice);
+                $finalPrice = min($finalPrice, (float) $specialPrice);
             }
         }
         return $finalPrice;

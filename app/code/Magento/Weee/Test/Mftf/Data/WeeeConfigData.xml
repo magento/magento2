@@ -22,4 +22,18 @@
     <entity name="DisableFPT" type="disableFPT">
         <data key="value">0</data>
     </entity>
+    <!-- Apply Tax To FPT Enable -->
+    <entity name="WeeeConfigApplyTaxToFptEnable" type="weee_config">
+        <requiredEntity type="applyVat">ApplyVat</requiredEntity>
+    </entity>
+    <entity name="ApplyVat" type="applyVat">
+        <data key="value">1</data>
+    </entity>
+    <!-- Apply Tax To FPT Disable-->
+    <entity name="WeeeConfigApplyTaxToFptDisable" type="weee_config_default">
+        <requiredEntity type="disableVat">DisableVat</requiredEntity>
+    </entity>
+    <entity name="DisableVat" type="disableVat">
+        <data key="value">0</data>
+    </entity>
 </entities>

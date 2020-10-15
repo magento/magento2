@@ -96,12 +96,7 @@ class UpdateHandler extends AbstractHandler
             $productId = (int)$entity->getData($identifierField);
 
             // prepare original data to compare
-            $origPrices = [];
-            $originalId = $entity->getOrigData($identifierField);
-            if (empty($originalId) || $entity->getData($identifierField) == $originalId) {
-                $origPrices = $entity->getOrigData($attribute->getName());
-            }
-
+            $origPrices = $entity->getOrigData($attribute->getName());
             $old = $this->prepareOldTierPriceToCompare($origPrices);
             // prepare data for save
             $new = $this->prepareNewDataForSave($priceRows, $isGlobal);
@@ -134,7 +129,7 @@ class UpdateHandler extends AbstractHandler
     {
         $isChanged = false;
         foreach ($valuesToUpdate as $key => $value) {
-            if ((!empty($value['value'])
+            if ((($value['value'])!== null
                     && (float)$oldValues[$key]['price'] !== $this->localeFormat->getNumber($value['value'])
                 ) || $this->getPercentage($oldValues[$key]) !== $this->getPercentage($value)
             ) {

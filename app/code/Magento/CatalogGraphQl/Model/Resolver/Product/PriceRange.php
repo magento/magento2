@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver\Product;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\CatalogGraphQl\Model\Resolver\Product\Price\Discount;
 use Magento\CatalogGraphQl\Model\Resolver\Product\Price\ProviderPool as PriceProviderPool;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
@@ -66,10 +67,12 @@ class PriceRange implements ResolverInterface
         $returnArray = [];
 
         if (isset($requestedFields['minimum_price'])) {
-            $returnArray['minimum_price'] =  $this->getMinimumProductPrice($product, $store);
+            $returnArray['minimum_price'] =  $this->canShowPrice($product) ?
+                $this->getMinimumProductPrice($product, $store) : $this->formatEmptyResult();
         }
         if (isset($requestedFields['maximum_price'])) {
-            $returnArray['maximum_price'] =  $this->getMaximumProductPrice($product, $store);
+            $returnArray['maximum_price'] =  $this->canShowPrice($product) ?
+                $this->getMaximumProductPrice($product, $store) : $this->formatEmptyResult();
         }
         return $returnArray;
     }
@@ -86,7 +89,7 @@ class PriceRange implements ResolverInterface
         $priceProvider = $this->priceProviderPool->getProviderByProductType($product->getTypeId());
         $regularPrice = $priceProvider->getMinimalRegularPrice($product)->getValue();
         $finalPrice = $priceProvider->getMinimalFinalPrice($product)->getValue();
-        $minPriceArray = $this->formatPrice($regularPrice, $finalPrice, $store);
+        $minPriceArray = $this->formatPrice((float) $regularPrice, (float) $finalPrice, $store);
         $minPriceArray['model'] = $product;
         return $minPriceArray;
     }
@@ -103,7 +106,7 @@ class PriceRange implements ResolverInterface
         $priceProvider = $this->priceProviderPool->getProviderByProductType($product->getTypeId());
         $regularPrice = $priceProvider->getMaximalRegularPrice($product)->getValue();
         $finalPrice = $priceProvider->getMaximalFinalPrice($product)->getValue();
-        $maxPriceArray = $this->formatPrice($regularPrice, $finalPrice, $store);
+        $maxPriceArray = $this->formatPrice((float) $regularPrice, (float) $finalPrice, $store);
         $maxPriceArray['model'] = $product;
         return $maxPriceArray;
     }
@@ -128,6 +131,41 @@ class PriceRange implements ResolverInterface
                 'currency' => $store->getCurrentCurrencyCode()
             ],
             'discount' => $this->discount->getDiscountByDifference($regularPrice, $finalPrice),
+        ];
+    }
+
+    /**
+     * Check if the product is allowed to show price
+     *
+     * @param ProductInterface $product
+     * @return bool
+     */
+    private function canShowPrice($product): bool
+    {
+        if ($product->hasData('can_show_price') && $product->getData('can_show_price') === false) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Format empty result
+     *
+     * @return array
+     */
+    private function formatEmptyResult(): array
+    {
+        return [
+            'regular_price' => [
+                'value' => null,
+                'currency' => null
+            ],
+            'final_price' => [
+                'value' => null,
+                'currency' => null
+            ],
+            'discount' => null
         ];
     }
 }

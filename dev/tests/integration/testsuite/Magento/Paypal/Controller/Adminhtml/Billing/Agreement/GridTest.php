@@ -12,7 +12,7 @@ use Magento\TestFramework\Helper\Bootstrap;
  */
 class GridTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
-    public function setUp()
+    protected function setUp(): void
     {
         $this->resource = 'Magento_Paypal::billing_agreement_actions_view';
         $this->uri = 'backend/paypal/billing_agreement/grid';

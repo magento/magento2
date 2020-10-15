@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Elasticsearch\Model\Adapter\BatchDataMapper;
 
 use Magento\CatalogSearch\Model\Indexer\Fulltext\Action\DataProvider;
@@ -74,18 +75,30 @@ class ProductDataMapper implements BatchDataMapperInterface
     private $attributesExcludedFromMerge = [
         'status',
         'visibility',
-        'tax_class_id'
+        'tax_class_id',
     ];
 
     /**
-     * Construction for DocumentDataMapper
-     *
+     * @var string[]
+     */
+    private $sortableAttributesValuesToImplode = [
+        'name',
+    ];
+
+    /**
+     * @var string[]
+     */
+    private $filterableAttributeTypes;
+
+    /**
      * @param Builder $builder
      * @param FieldMapperInterface $fieldMapper
      * @param DateFieldType $dateFieldType
      * @param AdditionalFieldsProviderInterface $additionalFieldsProvider
      * @param DataProvider $dataProvider
      * @param array $excludedAttributes
+     * @param array $sortableAttributesValuesToImplode
+     * @param array $filterableAttributeTypes
      */
     public function __construct(
         Builder $builder,
@@ -93,15 +106,22 @@ class ProductDataMapper implements BatchDataMapperInterface
         DateFieldType $dateFieldType,
         AdditionalFieldsProviderInterface $additionalFieldsProvider,
         DataProvider $dataProvider,
-        array $excludedAttributes = []
+        array $excludedAttributes = [],
+        array $sortableAttributesValuesToImplode = [],
+        array $filterableAttributeTypes = []
     ) {
         $this->builder = $builder;
         $this->fieldMapper = $fieldMapper;
         $this->dateFieldType = $dateFieldType;
         $this->excludedAttributes = array_merge($this->defaultExcludedAttributes, $excludedAttributes);
+        $this->sortableAttributesValuesToImplode = array_merge(
+            $this->sortableAttributesValuesToImplode,
+            $sortableAttributesValuesToImplode
+        );
         $this->additionalFieldsProvider = $additionalFieldsProvider;
         $this->dataProvider = $dataProvider;
         $this->attributeOptionsCache = [];
+        $this->filterableAttributeTypes = $filterableAttributeTypes;
     }
 
     /**
@@ -177,7 +197,7 @@ class ProductDataMapper implements BatchDataMapperInterface
                 $attributeValues = [$productId => $attributeValues];
             }
             $attributeValues = $this->prepareAttributeValues($productId, $attribute, $attributeValues, $storeId);
-            $productAttributes += $this->convertAttribute($attribute, $attributeValues);
+            $productAttributes += $this->convertAttribute($attribute, $attributeValues, $storeId);
         }
 
         return $productAttributes;
@@ -188,18 +208,19 @@ class ProductDataMapper implements BatchDataMapperInterface
      *
      * @param Attribute $attribute
      * @param array $attributeValues
+     * @param int $storeId
      * @return array
      */
-    private function convertAttribute(Attribute $attribute, array $attributeValues): array
+    private function convertAttribute(Attribute $attribute, array $attributeValues, int $storeId): array
     {
         $productAttributes = [];
 
         $retrievedValue = $this->retrieveFieldValue($attributeValues);
-        if ($retrievedValue) {
+        if ($retrievedValue !== null) {
             $productAttributes[$attribute->getAttributeCode()] = $retrievedValue;
 
-            if ($attribute->getIsSearchable()) {
-                $attributeLabels = $this->getValuesLabels($attribute, $attributeValues);
+            if ($this->isAttributeLabelsShouldBeMapped($attribute)) {
+                $attributeLabels = $this->getValuesLabels($attribute, $attributeValues, $storeId);
                 $retrievedLabel = $this->retrieveFieldValue($attributeLabels);
                 if ($retrievedLabel) {
                     $productAttributes[$attribute->getAttributeCode() . '_value'] = $retrievedLabel;
@@ -208,6 +229,26 @@ class ProductDataMapper implements BatchDataMapperInterface
         }
 
         return $productAttributes;
+    }
+
+    /**
+     * Check if an attribute has one of the next storefront properties enabled for mapping labels:
+     * - "Use in Search" (is_searchable)
+     * - "Visible in Advanced Search" (is_visible_in_advanced_search)
+     * - "Use in Layered Navigation" (is_filterable)
+     * - "Use in Search Results Layered Navigation" (is_filterable_in_search)
+     *
+     * @param Attribute $attribute
+     * @return bool
+     */
+    private function isAttributeLabelsShouldBeMapped(Attribute $attribute): bool
+    {
+        return (
+            $attribute->getIsSearchable()
+            || $attribute->getIsVisibleInAdvancedSearch()
+            || $attribute->getIsFilterable()
+            || $attribute->getIsFilterableInSearch()
+        );
     }
 
     /**
@@ -235,10 +276,26 @@ class ProductDataMapper implements BatchDataMapperInterface
             $attributeValues = $this->prepareMultiselectValues($attributeValues);
         }
 
+        if (in_array($attribute->getFrontendInput(), $this->filterableAttributeTypes)) {
+            $attributeValues = array_map(
+                function (string $valueId) {
+                    return (int)$valueId;
+                },
+                $attributeValues
+            );
+        }
+
         if ($this->isAttributeDate($attribute)) {
             foreach ($attributeValues as $key => $attributeValue) {
                 $attributeValues[$key] = $this->dateFieldType->formatDate($storeId, $attributeValue);
             }
+        }
+
+        if ($attribute->getUsedForSortBy()
+            && in_array($attribute->getAttributeCode(), $this->sortableAttributesValuesToImplode)
+            && count($attributeValues) > 1
+        ) {
+            $attributeValues = [$productId => implode(' ', $attributeValues)];
         }
 
         return $attributeValues;
@@ -252,9 +309,14 @@ class ProductDataMapper implements BatchDataMapperInterface
      */
     private function prepareMultiselectValues(array $values): array
     {
-        return \array_merge(...\array_map(function (string $value) {
-            return \explode(',', $value);
-        }, $values));
+        return \array_merge(
+            ...\array_map(
+                function (string $value) {
+                    return \explode(',', $value);
+                },
+                $values
+            )
+        );
     }
 
     /**
@@ -274,20 +336,21 @@ class ProductDataMapper implements BatchDataMapperInterface
      *
      * @param Attribute $attribute
      * @param array $attributeValues
+     * @param int $storeId
      * @return array
      */
-    private function getValuesLabels(Attribute $attribute, array $attributeValues): array
+    private function getValuesLabels(Attribute $attribute, array $attributeValues, int $storeId): array
     {
         $attributeLabels = [];
 
-        $options = $this->getAttributeOptions($attribute);
+        $options = $this->getAttributeOptions($attribute, $storeId);
         if (empty($options)) {
             return $attributeLabels;
         }
 
         foreach ($options as $option) {
-            if (\in_array($option->getValue(), $attributeValues)) {
-                $attributeLabels[] = $option->getLabel();
+            if (\in_array($option['value'], $attributeValues)) {
+                $attributeLabels[] = $option['label'];
             }
         }
 
@@ -298,16 +361,23 @@ class ProductDataMapper implements BatchDataMapperInterface
      * Retrieve options for attribute
      *
      * @param Attribute $attribute
+     * @param int $storeId
      * @return array
      */
-    private function getAttributeOptions(Attribute $attribute): array
+    private function getAttributeOptions(Attribute $attribute, int $storeId): array
     {
-        if (!isset($this->attributeOptionsCache[$attribute->getId()])) {
-            $options = $attribute->getOptions() ?? [];
-            $this->attributeOptionsCache[$attribute->getId()] = $options;
+        if (!isset($this->attributeOptionsCache[$storeId][$attribute->getId()])) {
+            $attributeStoreId = $attribute->getStoreId();
+            /**
+             * Load array format of options.
+             * $attribute->getOptions() loads options into data objects which can be costly.
+             */
+            $options = $attribute->usesSource() ? $attribute->setStoreId($storeId)->getSource()->getAllOptions() : [];
+            $this->attributeOptionsCache[$storeId][$attribute->getId()] = $options;
+            $attribute->setStoreId($attributeStoreId);
         }
 
-        return $this->attributeOptionsCache[$attribute->getId()];
+        return $this->attributeOptionsCache[$storeId][$attribute->getId()];
     }
 
     /**
@@ -320,7 +390,7 @@ class ProductDataMapper implements BatchDataMapperInterface
      */
     private function retrieveFieldValue(array $values)
     {
-        $values = \array_filter(\array_unique($values));
+        $values = \array_unique($values);
 
         return count($values) === 1 ? \array_shift($values) : \array_values($values);
     }

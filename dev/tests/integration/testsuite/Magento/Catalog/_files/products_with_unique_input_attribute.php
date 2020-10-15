@@ -3,9 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-require __DIR__ . '/unique_input_attribute.php';
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Eav\Model\Config;
+use Magento\Catalog\Model\Product;
+
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/unique_input_attribute.php');
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+$eavConfig = $objectManager->get(Config::class);
+$attribute = $eavConfig->getAttribute(Product::ENTITY, 'unique_input_attribute');
 
 /** @var $product \Magento\Catalog\Model\Product */
 $product = $objectManager->create(\Magento\Catalog\Model\Product::class);

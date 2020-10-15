@@ -3,13 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 /**
  * Event manager stub
  */
 namespace Magento\Framework\Event\Test\Unit;
 
-class ManagerStub implements \Magento\Framework\Event\ManagerInterface
+use Magento\Framework\Event\ManagerInterface;
+
+class ManagerStub implements ManagerInterface
 {
     /**
      * Stub dispatch event

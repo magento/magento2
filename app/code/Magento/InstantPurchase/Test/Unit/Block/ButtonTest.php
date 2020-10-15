@@ -8,52 +8,54 @@ declare(strict_types=1);
 
 namespace Magento\InstantPurchase\Test\Unit\Block;
 
+use Magento\Framework\View\Element\Template\Context;
 use Magento\InstantPurchase\Block\Button;
 use Magento\InstantPurchase\Model\Config;
-use Magento\Framework\View\Element\Template\Context;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for button block
  *
  * Class \Magento\InstantPurchase\Test\Unit\Block\ButtonTest
  */
-class ButtonTest extends \PHPUnit\Framework\TestCase
+class ButtonTest extends TestCase
 {
     /**
-     * @var Button | \PHPUnit_Framework_MockObject_MockObject
+     * @var Button|MockObject
      */
     private $block;
 
     /**
-     * @var Config | \PHPUnit_Framework_MockObject_MockObject
+     * @var Config|MockObject
      */
     private $config;
 
     /**
-     * @var StoreManagerInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface|MockObject
      */
     private $storeManager;
 
     /**
-     * @var StoreInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var StoreInterface|MockObject
      */
     private $store;
 
     /**
-     * @var Context | \PHPUnit_Framework_MockObject_MockObject
+     * @var Context|MockObject
      */
     private $context;
 
     /**
      * Setup environment for testing
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->context = $this->createMock(Context::class);
-        $this->storeManager = $this->createMock(StoreManagerInterface::class);
-        $this->store = $this->createMock(StoreInterface::class);
+        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->store = $this->getMockForAbstractClass(StoreInterface::class);
 
         $this->storeManager->expects($this->any())->method('getStore')
             ->willReturn($this->store);

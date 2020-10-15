@@ -2,10 +2,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+/* eslint-disable no-undef */
 define([
     'jquery',
-    'Magento_Ui/js/grid/columns/column'
-], function ($, Column) {
+    'Magento_Ui/js/grid/columns/column',
+    'Magento_Ui/js/lib/key-codes'
+], function ($, Column, keyCodes) {
     'use strict';
 
     return Column.extend({
@@ -15,7 +17,7 @@ define([
             visibleRecord: null,
             height: 0,
             displayedRecord: {},
-            lastOpenedImage: null,
+            lastOpenedImage: false,
             fields: {
                 previewUrl: 'preview_url',
                 title: 'title'
@@ -30,11 +32,44 @@ define([
             },
             listens: {
                 '${ $.provider }:params.filters': 'hide',
-                '${ $.provider }:params.search': 'hide'
+                '${ $.provider }:params.search': 'hide',
+                '${ $.provider }:params.paging': 'hide',
+                '${ $.provider }:data.items': 'updateDisplayedRecord'
             },
             exports: {
                 height: '${ $.parentName }.thumbnail_url:previewHeight'
             }
+        },
+
+        /**
+         * Initialize image preview component
+         *
+         * @returns {Object}
+         */
+        initialize: function () {
+            this._super();
+            $(document).on('keydown', this.handleKeyDown.bind(this));
+
+            this.lastOpenedImage.subscribe(function (newValue) {
+
+                if (newValue === false && _.isNull(this.visibleRecord())) {
+                    return;
+                }
+
+                if (newValue === this.visibleRecord()) {
+                    return;
+                }
+
+                if (newValue === false) {
+                    this.hide();
+
+                    return;
+                }
+
+                this.show(this.masonry().rows()[newValue]);
+            }.bind(this));
+
+            return this;
         },
 
         /**
@@ -59,8 +94,13 @@ define([
          * @param {Object} record
          */
         next: function (record) {
-            var recordToShow = this.getRecord(record._rowIndex + 1);
+            var recordToShow;
 
+            if (record._rowIndex + 1 === this.masonry().rows().length) {
+                return;
+            }
+
+            recordToShow = this.getRecord(record._rowIndex + 1);
             recordToShow.rowNumber = record.lastInRow ? record.rowNumber + 1 : record.rowNumber;
             this.show(recordToShow);
         },
@@ -71,7 +111,12 @@ define([
          * @param {Object} record
          */
         prev: function (record) {
-            var recordToShow = this.getRecord(record._rowIndex - 1);
+            var recordToShow;
+
+            if (record._rowIndex === 0) {
+                return;
+            }
+            recordToShow = this.getRecord(record._rowIndex - 1);
 
             recordToShow.rowNumber = record.firstInRow ? record.rowNumber - 1 : record.rowNumber;
             this.show(recordToShow);
@@ -104,16 +149,32 @@ define([
          * @param {Object} record
          */
         show: function (record) {
-            var img;
+            if (record._rowIndex === this.visibleRecord()) {
+                this.hide();
+
+                return;
+            }
 
             this.hide();
             this.displayedRecord(record);
             this._selectRow(record.rowNumber || null);
             this.visibleRecord(record._rowIndex);
 
-            img = $(this.previewImageSelector + ' img');
+            this.lastOpenedImage(record._rowIndex);
+            this.updateImageData();
+        },
 
-            if (img.get(0).complete) {
+        /**
+         * Update image data when image preview is opened
+         */
+        updateImageData: function () {
+            var img = $(this.previewImageSelector + ' img');
+
+            if (!img.get(0)) {
+                setTimeout(function () {
+                    this.updateImageData();
+                }.bind(this), 100);
+            } else if (img.get(0).complete) {
                 this.updateHeight();
                 this.scrollToPreview();
             } else {
@@ -122,8 +183,17 @@ define([
                     this.scrollToPreview();
                 }.bind(this));
             }
+        },
 
-            this.lastOpenedImage(record._rowIndex);
+        /**
+         * Update preview displayed record data from the new items data if the preview is expanded
+         *
+         * @param {Array} items
+         */
+        updateDisplayedRecord: function (items) {
+            if (!_.isNull(this.visibleRecord())) {
+                this.displayedRecord(items[this.visibleRecord()]);
+            }
         },
 
         /**
@@ -137,7 +207,7 @@ define([
          * Close image preview
          */
         hide: function () {
-            this.lastOpenedImage(null);
+            this.lastOpenedImage(false);
             this.visibleRecord(null);
             this.height(0);
             this._selectRow(null);
@@ -199,6 +269,23 @@ define([
                 block: 'center',
                 inline: 'nearest'
             });
+        },
+
+        /**
+         * Handle keyboard navigation for image preview
+         *
+         * @param {Object} e
+         */
+        handleKeyDown: function (e) {
+            var key = keyCodes[e.keyCode];
+
+            if (this.visibleRecord() !== null && document.activeElement.tagName !== 'INPUT') {
+                if (key === 'pageLeftKey') {
+                    this.prev(this.displayedRecord());
+                } else if (key === 'pageRightKey') {
+                    this.next(this.displayedRecord());
+                }
+            }
         }
     });
 });

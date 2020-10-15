@@ -5,18 +5,23 @@
  */
 
 use Magento\Framework\DB\Transaction;
+use Magento\Sales\Api\Data\OrderInterfaceFactory;
 use Magento\Sales\Api\InvoiceCommentRepositoryInterface;
 use Magento\Sales\Api\InvoiceManagementInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\Order\Invoice\Comment;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-require 'default_rollback.php';
-require __DIR__ . '/order.php';
+Resolver::getInstance()->requireDataFixture('Magento/Sales/_files/default_rollback.php');
+Resolver::getInstance()->requireDataFixture('Magento/Sales/_files/order.php');
 
+$objectManager = Bootstrap::getObjectManager();
+/** @var \Magento\Sales\Model\Order $order */
+$order = $objectManager->get(OrderInterfaceFactory::class)->create()->loadByIncrementId('100000001');
 /** @var InvoiceManagementInterface $orderService */
-$orderService = Bootstrap::getObjectManager()->create(InvoiceManagementInterface::class);
+$orderService = $objectManager->create(InvoiceManagementInterface::class);
 /** @var Invoice $invoice */
 $invoice = $orderService->prepareInvoice($order);
 $invoice->register();
@@ -24,7 +29,7 @@ $invoice->register();
 $order = $invoice->getOrder();
 $order->setIsInProcess(true);
 /** @var Transaction $transactionSave */
-$transactionSave = Bootstrap::getObjectManager()->create(Transaction::class);
+$transactionSave = $objectManager->create(Transaction::class);
 $transactionSave->addObject($invoice)->addObject($order)->save();
 
 $comments = [
@@ -56,11 +61,11 @@ $comments = [
 ];
 
 /** @var InvoiceCommentRepositoryInterface $commentRepository */
-$commentRepository = Bootstrap::getObjectManager()->get(InvoiceCommentRepositoryInterface::class);
+$commentRepository = $objectManager->get(InvoiceCommentRepositoryInterface::class);
 
 foreach ($comments as $data) {
     /** @var $comment Comment */
-    $comment = Bootstrap::getObjectManager()->create(Comment::class);
+    $comment = $objectManager->create(Comment::class);
     $comment->setParentId($invoice->getId());
     $comment->setComment($data['comment']);
     $comment->setIsVisibleOnFront($data['is_visible_on_front']);

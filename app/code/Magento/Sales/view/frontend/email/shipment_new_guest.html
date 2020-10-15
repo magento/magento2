@@ -7,7 +7,7 @@
 <!--@subject {{trans "Your %store_name order has shipped" store_name=$store.frontend_name}} @-->
 <!--@vars {
 "var formattedBillingAddress|raw":"Billing Address",
-"var billing.name":"Guest Customer Name",
+"var order_data.customer_name":"Guest Customer Name",
 "var order.increment_id":"Order Id",
 "var payment_html|raw":"Payment Details",
 "var comment|escape|nl2br":"Shipment Comment",
@@ -22,14 +22,16 @@
 "var store_hours":"Store Hours",
 "var order_data.is_not_virtual": "Order Type",
 "var shipment": "Shipment",
-"var order": "Order"
+"var order": "Order",
+"var order_id": "Order DB Id",
+"var shipment_id": "Shipment DB Id"
 } @-->
 {{template config_path="design/email/header_template"}}
 
 <table>
     <tr class="email-intro">
         <td>
-            <p class="greeting">{{trans "%name," name=$billing.name}}</p>
+            <p class="greeting">{{trans "%name," name=$order_data.customer_name}}</p>
             <p>
                 {{trans "Thank you for your order from %store_name." store_name=$store.frontend_name}}
                 {{trans 'If you have questions about your order, you can email us at <a href="mailto:%store_email">%store_email</a>' store_email=$store_email |raw}}{{depend store_phone}} {{trans 'or call us at <a href="tel:%store_phone">%store_phone</a>' store_phone=$store_phone |raw}}{{/depend}}.
@@ -57,7 +59,7 @@
                 </tr>
             </table>
             {{/depend}}
-            {{layout handle="sales_email_order_shipment_track" shipment=$shipment order=$order}}
+            {{layout handle="sales_email_order_shipment_track" shipment_id=$shipment_id order_id=$order_id}}
             <table class="order-details">
                 <tr>
                     <td class="address-details">
@@ -84,7 +86,7 @@
                     {{/depend}}
                 </tr>
             </table>
-            {{layout handle="sales_email_order_shipment_items" shipment=$shipment order=$order}}
+            {{layout handle="sales_email_order_shipment_items" shipment_id=$shipment_id order_id=$order_id}}
         </td>
     </tr>
 </table>

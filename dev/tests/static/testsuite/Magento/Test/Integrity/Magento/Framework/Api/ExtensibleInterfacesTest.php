@@ -155,7 +155,7 @@ class ExtensibleInterfacesTest extends \PHPUnit\Framework\TestCase
     /**
      * Ensure that all classes extended from extensible classes implement getter and setter for extension attributes.
      */
-    public function testExtensibleClassesWithMissingInterface()
+    public function testExtensibleClassesWithMissingInterface() //phpcs:ignore Generic.Metrics.NestingLevel
     {
         $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
         $invoker(
@@ -170,7 +170,7 @@ class ExtensibleInterfacesTest extends \PHPUnit\Framework\TestCase
                 if (preg_match('/' . $extensibleClassPattern . '/', $fileContent) &&
                     !preg_match('/' . $abstractExtensibleClassPattern . '/', $fileContent)
                 ) {
-                    $fileReflection = new \Zend\Code\Reflection\FileReflection($filename, true);
+                    $fileReflection = new \Laminas\Code\Reflection\FileReflection($filename, true);
                     foreach ($fileReflection->getClasses() as $classReflection) {
                         if ($classReflection->isSubclassOf(self::EXTENSIBLE_DATA_INTERFACE)) {
                             $methodsToCheck = ['setExtensionAttributes', 'getExtensionAttributes'];
@@ -239,11 +239,11 @@ class ExtensibleInterfacesTest extends \PHPUnit\Framework\TestCase
      */
     protected function getFiles($dir, $pattern)
     {
-        $files = glob($dir . '/' . $pattern, GLOB_NOSORT);
+        $files = [glob($dir . '/' . $pattern, GLOB_NOSORT)];
         foreach (glob($dir . '/*', GLOB_ONLYDIR | GLOB_NOSORT) as $newDir) {
-            $files = array_merge($files, $this->getFiles($newDir, $pattern));
+            $files[] = $this->getFiles($newDir, $pattern);
         }
-        return $files;
+        return array_merge([], ...$files);
     }
 
     /**

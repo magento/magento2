@@ -12,7 +12,7 @@ class DefaultTest extends \PHPUnit\Framework\TestCase
      */
     protected $_block;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             \Magento\Framework\View\LayoutInterface::class
@@ -27,6 +27,6 @@ class DefaultTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetRefreshUrlWhenFrontendStore()
     {
-        $this->assertContains('captcha/refresh', $this->_block->getRefreshUrl());
+        $this->assertStringContainsString('captcha/refresh', $this->_block->getRefreshUrl());
     }
 }

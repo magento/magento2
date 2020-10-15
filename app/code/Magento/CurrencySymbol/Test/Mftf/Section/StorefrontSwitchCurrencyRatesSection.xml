@@ -10,7 +10,6 @@
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="StorefrontSwitchCurrencyRatesSection">
         <element name="currencyToggle" type="select" selector="#switcher-currency-trigger" timeout="30"/>
-        <element name="currencyTrigger" type="select" selector="#switcher-currency-trigger" timeout="30"/>
         <element name="currency" type="button" selector="//div[@id='switcher-currency-trigger']/following-sibling::ul//a[contains(text(), '{{currency}}')]" parameterized="true" timeout="10"/>
         <element name="selectedCurrency" type="text" selector="#switcher-currency-trigger span"/>
     </section>

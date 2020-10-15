@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="CheckAttributeNotInMoreInformationTabActionGroup">
+        <annotations>
+            <description>Validate that the More Information area does not contain the provided Text.</description>
+        </annotations>
+        <arguments>
+            <argument name="attributeLabel" type="string"/>
+        </arguments>
+
+        <click selector="{{StorefrontProductMoreInformationSection.moreInformation}}" stepKey="clickTab"/>
+        <dontSee userInput="{{attributeLabel}}" selector="{{StorefrontProductMoreInformationSection.moreInformationTextArea}}" stepKey="seeAttributeLabel"/>
+    </actionGroup>
+</actionGroups>

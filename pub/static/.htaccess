@@ -72,7 +72,7 @@ AddType application/xml xml
 
 <IfModule mod_headers.c>
 
-    <FilesMatch .*\.(ico|jpg|jpeg|png|gif|svg|js|css|swf|eot|ttf|otf|woff|woff2|json)$>
+    <FilesMatch .*\.(ico|jpg|jpeg|png|gif|svg|js|css|swf|eot|ttf|otf|woff|woff2|html|json)$>
         Header append Cache-Control public
     </FilesMatch>
 

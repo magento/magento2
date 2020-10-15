@@ -9,6 +9,7 @@ namespace Magento\Setup\Fixtures;
 use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\CategoryFactory;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
+use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManager;
 
 /**
@@ -82,7 +83,7 @@ class CategoriesFixture extends Fixture
     protected $priority = 20;
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function execute()
     {
@@ -97,7 +98,7 @@ class CategoriesFixture extends Fixture
             $category = $this->categoryFactory->create();
             $category->load($parentCategoryId);
             // Need for generation url rewrites per all category store view
-            $category->setStoreId(\Magento\Store\Model\Store::DEFAULT_STORE_ID);
+            $category->setStoreId(Store::DEFAULT_STORE_ID);
             $categoryIndex = 1;
             $this->generateCategories(
                 $category,
@@ -130,6 +131,7 @@ class CategoriesFixture extends Fixture
                 $category->setId(null)
                     ->setUrlKey(null)
                     ->setUrlPath(null)
+                    ->setStoreId(Store::DEFAULT_STORE_ID)
                     ->setName($this->getCategoryName($parentCategory, $nestingLevel, $i))
                     ->setParentId($parentCategory->getId())
                     ->setLevel($parentCategory->getLevel() + 1)
@@ -237,7 +239,7 @@ class CategoriesFixture extends Fixture
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getActionTitle()
     {
@@ -245,7 +247,7 @@ class CategoriesFixture extends Fixture
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function introduceParamLabels()
     {

@@ -1,0 +1,32 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+use Magento\Backend\ViewModel\ChartsPeriod;
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+
+/**
+ * @var Template $block
+ * @var Escaper $escaper
+ * @var ChartsPeriod $viewModel
+ */
+$viewModel = $block->getViewModel();
+?>
+<div class="dashboard-diagram-switcher">
+    <label for="dashboard_chart_period" class="label"><?= $escaper->escapeHtml(__('Select Range:')) ?></label>
+    <select name="period" id="dashboard_chart_period" class="admin__control-select">
+        <?php foreach ($viewModel->getDatePeriods() as $value => $label): ?>
+            <?php
+            if ($value === 'custom') {
+                continue;
+            }
+            ?>
+            <option value="<?= $escaper->escapeHtmlAttr($value) ?>"
+                <?php if ($block->getRequest()->getParam('period') === $value): ?> selected="selected"<?php endif; ?>
+            ><?= $escaper->escapeHtml($label) ?></option>
+        <?php endforeach; ?>
+    </select>
+</div>

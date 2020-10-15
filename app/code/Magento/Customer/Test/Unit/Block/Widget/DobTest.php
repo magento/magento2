@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Customer\Test\Unit\Block\Widget;
 
@@ -16,19 +17,22 @@ use Magento\Framework\Cache\FrontendInterface;
 use Magento\Framework\Data\Form\FilterFactory;
 use Magento\Framework\Escaper;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Json\EncoderInterface;
 use Magento\Framework\Locale\Resolver;
 use Magento\Framework\Locale\ResolverInterface;
+use Magento\Framework\Stdlib\DateTime\Intl\DateFormatterFactory;
 use Magento\Framework\Stdlib\DateTime\Timezone;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Element\Html\Date;
 use Magento\Framework\View\Element\Template\Context;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Zend_Cache_Backend_BlackHole;
 use Zend_Cache_Core;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  */
 class DobTest extends TestCase
 {
@@ -48,7 +52,7 @@ class DobTest extends TestCase
     const YEAR = '2014';
 
     // Value of date('Y', strtotime(self::DATE))
-    const DATE_FORMAT = 'M/d/Y';
+    const DATE_FORMAT = 'M/dd/y';
 
     /** Constants used by Dob::setDateInput($code, $html) */
     const DAY_HTML =
@@ -89,9 +93,19 @@ class DobTest extends TestCase
     private $_locale;
 
     /**
+     * @var EncoderInterface
+     */
+    private $encoder;
+
+    /**
+     * @var ResolverInterface
+     */
+    private $localeResolver;
+
+    /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $zendCacheCore = new Zend_Cache_Core();
         $zendCacheCore->setBackend(new Zend_Cache_Backend_BlackHole());
@@ -102,32 +116,33 @@ class DobTest extends TestCase
             '',
             false
         );
-        $frontendCache->expects($this->any())->method('getLowLevelFrontend')->will($this->returnValue($zendCacheCore));
-        $cache = $this->createMock(CacheInterface::class);
-        $cache->expects($this->any())->method('getFrontend')->will($this->returnValue($frontendCache));
+        $frontendCache->expects($this->any())->method('getLowLevelFrontend')->willReturn($zendCacheCore);
+        $cache = $this->getMockForAbstractClass(CacheInterface::class);
+        $cache->expects($this->any())->method('getFrontend')->willReturn($frontendCache);
 
         $objectManager = new ObjectManager($this);
-        $localeResolver = $this->createMock(ResolverInterface::class);
-        $localeResolver->expects($this->any())
+        $this->localeResolver = $this->getMockForAbstractClass(ResolverInterface::class);
+        $this->localeResolver->expects($this->any())
             ->method('getLocale')
             ->willReturnCallback(
                 function () {
                     return $this->_locale;
                 }
             );
+        $localeResolver = $this->localeResolver;
         $timezone = $objectManager->getObject(
             Timezone::class,
-            ['localeResolver' => $localeResolver]
+            ['localeResolver' => $localeResolver, 'dateFormatterFactory' => new DateFormatterFactory()]
         );
 
         $this->_locale = Resolver::DEFAULT_LOCALE;
         $this->context = $this->createMock(Context::class);
-        $this->context->expects($this->any())->method('getLocaleDate')->will($this->returnValue($timezone));
+        $this->context->expects($this->any())->method('getLocaleDate')->willReturn($timezone);
         $this->escaper = $this->getMockBuilder(Escaper::class)
             ->disableOriginalConstructor()
             ->setMethods(['escapeHtml'])
             ->getMock();
-        $this->context->expects($this->any())->method('getEscaper')->will($this->returnValue($this->escaper));
+        $this->context->expects($this->any())->method('getEscaper')->willReturn($this->escaper);
 
         $this->attribute = $this->getMockBuilder(AttributeMetadataInterface::class)
             ->getMockForAbstractClass();
@@ -139,7 +154,7 @@ class DobTest extends TestCase
             ->getMockForAbstractClass();
         $this->customerMetadata->expects($this->any())
             ->method('getAttributeMetadata')
-            ->will($this->returnValue($this->attribute));
+            ->willReturn($this->attribute);
 
         $this->filterFactory = $this->createMock(FilterFactory::class);
         $this->filterFactory
@@ -154,12 +169,17 @@ class DobTest extends TestCase
                 }
             );
 
+        $this->encoder = $this->getMockForAbstractClass(EncoderInterface::class);
+
         $this->_block = new Dob(
             $this->context,
             $this->createMock(Address::class),
             $this->customerMetadata,
             $this->createMock(Date::class),
-            $this->filterFactory
+            $this->filterFactory,
+            [],
+            $this->encoder,
+            $this->localeResolver
         );
     }
 
@@ -171,7 +191,7 @@ class DobTest extends TestCase
      */
     public function testIsEnabled($isVisible, $expectedValue)
     {
-        $this->attribute->expects($this->once())->method('isVisible')->will($this->returnValue($isVisible));
+        $this->attribute->expects($this->once())->method('isVisible')->willReturn($isVisible);
         $this->assertSame($expectedValue, $this->_block->isEnabled());
     }
 
@@ -190,17 +210,15 @@ class DobTest extends TestCase
     {
         $this->customerMetadata->expects($this->any())
             ->method('getAttributeMetadata')
-            ->will(
-                $this->throwException(
-                    new NoSuchEntityException(
-                        __(
-                            'No such entity with %fieldName = %fieldValue',
-                            ['fieldName' => 'field', 'fieldValue' => 'value']
-                        )
+            ->willThrowException(
+                new NoSuchEntityException(
+                    __(
+                        'No such entity with %fieldName = %fieldValue',
+                        ['fieldName' => 'field', 'fieldValue' => 'value']
                     )
                 )
             );
-        $this->assertSame(false, $this->_block->isEnabled());
+        $this->assertFalse($this->_block->isEnabled());
     }
 
     /**
@@ -211,7 +229,7 @@ class DobTest extends TestCase
      */
     public function testIsRequired($isRequired, $expectedValue)
     {
-        $this->attribute->expects($this->once())->method('isRequired')->will($this->returnValue($isRequired));
+        $this->attribute->expects($this->once())->method('isRequired')->willReturn($isRequired);
         $this->assertSame($expectedValue, $this->_block->isRequired());
     }
 
@@ -219,17 +237,15 @@ class DobTest extends TestCase
     {
         $this->customerMetadata->expects($this->any())
             ->method('getAttributeMetadata')
-            ->will(
-                $this->throwException(
-                    new NoSuchEntityException(
-                        __(
-                            'No such entity with %fieldName = %fieldValue',
-                            ['fieldName' => 'field', 'fieldValue' => 'value']
-                        )
+            ->willThrowException(
+                new NoSuchEntityException(
+                    __(
+                        'No such entity with %fieldName = %fieldValue',
+                        ['fieldName' => 'field', 'fieldValue' => 'value']
                     )
                 )
             );
-        $this->assertSame(false, $this->_block->isRequired());
+        $this->assertFalse($this->_block->isRequired());
     }
 
     /**
@@ -354,7 +370,20 @@ class DobTest extends TestCase
     public function getDateFormatDataProvider(): array
     {
         return [
-            ['ar_SA', 'd/M/y'],
+            [
+                'ar_SA',
+                preg_replace(
+                    '/(?<!d)d(?!d)/',
+                    'dd',
+                    preg_replace(
+                        '/[^MmDdYy\/\.\-]/',
+                        '',
+                        (new DateFormatterFactory())
+                            ->create('ar_SA', \IntlDateFormatter::SHORT, \IntlDateFormatter::NONE)
+                            ->getPattern()
+                    )
+                )
+            ],
             [Resolver::DEFAULT_LOCALE, self::DATE_FORMAT],
         ];
     }
@@ -398,7 +427,7 @@ class DobTest extends TestCase
     {
         $this->attribute->expects($this->once())
             ->method('getValidationRules')
-            ->will($this->returnValue($validationRules));
+            ->willReturn($validationRules);
         $this->assertEquals($expectedValue, $this->_block->getMinDateRange());
     }
 
@@ -418,10 +447,10 @@ class DobTest extends TestCase
             ->getMockForAbstractClass();
         $validationRule->expects($this->any())
             ->method('getName')
-            ->will($this->returnValue(Dob::MIN_DATE_RANGE_KEY));
+            ->willReturn(Dob::MIN_DATE_RANGE_KEY);
         $validationRule->expects($this->any())
             ->method('getValue')
-            ->will($this->returnValue(strtotime(self::MIN_DATE)));
+            ->willReturn(strtotime(self::MIN_DATE));
 
         return [
             [
@@ -446,13 +475,11 @@ class DobTest extends TestCase
     {
         $this->customerMetadata->expects($this->any())
             ->method('getAttributeMetadata')
-            ->will(
-                $this->throwException(
-                    new NoSuchEntityException(
-                        __(
-                            'No such entity with %fieldName = %fieldValue',
-                            ['fieldName' => 'field', 'fieldValue' => 'value']
-                        )
+            ->willThrowException(
+                new NoSuchEntityException(
+                    __(
+                        'No such entity with %fieldName = %fieldValue',
+                        ['fieldName' => 'field', 'fieldValue' => 'value']
                     )
                 )
             );
@@ -469,7 +496,7 @@ class DobTest extends TestCase
     {
         $this->attribute->expects($this->once())
             ->method('getValidationRules')
-            ->will($this->returnValue($validationRules));
+            ->willReturn($validationRules);
         $this->assertEquals($expectedValue, $this->_block->getMaxDateRange());
     }
 
@@ -489,10 +516,10 @@ class DobTest extends TestCase
             ->getMockForAbstractClass();
         $validationRule->expects($this->any())
             ->method('getName')
-            ->will($this->returnValue(Dob::MAX_DATE_RANGE_KEY));
+            ->willReturn(Dob::MAX_DATE_RANGE_KEY);
         $validationRule->expects($this->any())
             ->method('getValue')
-            ->will($this->returnValue(strtotime(self::MAX_DATE)));
+            ->willReturn(strtotime(self::MAX_DATE));
         return [
             [
                 [
@@ -516,13 +543,11 @@ class DobTest extends TestCase
     {
         $this->customerMetadata->expects($this->any())
             ->method('getAttributeMetadata')
-            ->will(
-                $this->throwException(
-                    new NoSuchEntityException(
-                        __(
-                            'No such entity with %fieldName = %fieldValue',
-                            ['fieldName' => 'field', 'fieldValue' => 'value']
-                        )
+            ->willThrowException(
+                new NoSuchEntityException(
+                    __(
+                        'No such entity with %fieldName = %fieldValue',
+                        ['fieldName' => 'field', 'fieldValue' => 'value']
                     )
                 )
             );
@@ -534,18 +559,30 @@ class DobTest extends TestCase
      */
     public function testGetHtmlExtraParamsWithoutRequiredOption()
     {
+        $validation = json_encode(
+            [
+                'validate-date' => [
+                    'dateFormat' => self::DATE_FORMAT
+                ],
+                'validate-dob' => [
+                    'dateFormat' => self::DATE_FORMAT
+                ],
+            ]
+        );
         $this->escaper->expects($this->any())
             ->method('escapeHtml')
-            ->with('{"validate-date":{"dateFormat":"M\/d\/Y"},"validate-dob":true}')
-            ->will($this->returnValue('{"validate-date":{"dateFormat":"M\/d\/Y"},"validate-dob":true}'));
+            ->with($validation)
+            ->willReturn(
+                $validation
+            );
 
         $this->attribute->expects($this->once())
             ->method("isRequired")
             ->willReturn(false);
 
         $this->assertEquals(
-            $this->_block->getHtmlExtraParams(),
-            'data-validate="{"validate-date":{"dateFormat":"M\/d\/Y"},"validate-dob":true}"'
+            "data-validate=\"$validation\"",
+            $this->_block->getHtmlExtraParams()
         );
     }
 
@@ -554,23 +591,108 @@ class DobTest extends TestCase
      */
     public function testGetHtmlExtraParamsWithRequiredOption()
     {
+        $validation = json_encode(
+            [
+                'required' => true,
+                'validate-date' => [
+                    'dateFormat' => self::DATE_FORMAT
+                ],
+                'validate-dob' => [
+                    'dateFormat' => self::DATE_FORMAT
+                ],
+            ]
+        );
         $this->attribute->expects($this->once())
             ->method("isRequired")
             ->willReturn(true);
         $this->escaper->expects($this->any())
             ->method('escapeHtml')
-            ->with('{"required":true,"validate-date":{"dateFormat":"M\/d\/Y"},"validate-dob":true}')
-            ->will(
-                $this->returnValue(
-                    '{"required":true,"validate-date":{"dateFormat":"M\/d\/Y"},"validate-dob":true}'
-                )
+            ->with($validation)
+            ->willReturn(
+                $validation
             );
 
-        $this->context->expects($this->any())->method('getEscaper')->will($this->returnValue($this->escaper));
+        $this->context->expects($this->any())->method('getEscaper')->willReturn($this->escaper);
 
         $this->assertEquals(
-            'data-validate="{"required":true,"validate-date":{"dateFormat":"M\/d\/Y"},"validate-dob":true}"',
+            "data-validate=\"$validation\"",
             $this->_block->getHtmlExtraParams()
         );
+    }
+
+    /**
+     * Tests getTranslatedCalendarConfigJson()
+     *
+     * @param string $locale
+     * @param array $expectedArray
+     * @param string $expectedJson
+     * @dataProvider getTranslatedCalendarConfigJsonDataProvider
+     * @return void
+     */
+    public function testGetTranslatedCalendarConfigJson(
+        string $locale,
+        array $expectedArray,
+        string $expectedJson
+    ): void {
+        $this->_locale = $locale;
+
+        $this->encoder->expects($this->once())
+            ->method('encode')
+            ->with($expectedArray)
+            ->willReturn($expectedJson);
+
+        $this->assertEquals(
+            $expectedJson,
+            $this->_block->getTranslatedCalendarConfigJson()
+        );
+    }
+
+    /**
+     * Provider for testGetTranslatedCalendarConfigJson
+     *
+     * @return array
+     */
+    public function getTranslatedCalendarConfigJsonDataProvider()
+    {
+        return [
+            [
+                'locale' => 'en_US',
+                'expectedArray' => [
+                    'closeText' => 'Done',
+                    'prevText' => 'Prev',
+                    'nextText' => 'Next',
+                    'currentText' => 'Today',
+                    'monthNames' => ['January', 'February', 'March', 'April', 'May', 'June',
+                        'July', 'August', 'September', 'October', 'November', 'December'],
+                    'monthNamesShort' => ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                        'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    'dayNames' => ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+                    'dayNamesShort' => ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+                    'dayNamesMin' => ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
+                ],
+                // phpcs:disable Generic.Files.LineLength.TooLong
+                'expectedJson' => '{"closeText":"Done","prevText":"Prev","nextText":"Next","currentText":"Today","monthNames":["January","February","March","April","May","June","July","August","September","October","November","December"],"monthNamesShort":["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"dayNames":["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],"dayNamesShort":["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],"dayNamesMin":["Su","Mo","Tu","We","Th","Fr","Sa"]}'
+                // phpcs:enable Generic.Files.LineLength.TooLong
+            ],
+            [
+                'locale' => 'de_DE',
+                'expectedArray' => [
+                    'closeText' => 'Done',
+                    'prevText' => 'Prev',
+                    'nextText' => 'Next',
+                    'currentText' => 'Today',
+                    'monthNames' => ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni',
+                        'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'],
+                    'monthNamesShort' => ['Jan.', 'Feb.', 'März', 'Apr.', 'Mai', 'Juni',
+                        'Juli', 'Aug.', 'Sept.', 'Okt.', 'Nov.', 'Dez.'],
+                    'dayNames' => ['Sonntag', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag'],
+                    'dayNamesShort' => ['So.', 'Mo.', 'Di.', 'Mi.', 'Do.', 'Fr.', 'Sa.'],
+                    'dayNamesMin' => ['So.', 'Mo.', 'Di.', 'Mi.', 'Do.', 'Fr.', 'Sa.'],
+                ],
+                // phpcs:disable Generic.Files.LineLength.TooLong
+                'expectedJson' => '{"closeText":"Done","prevText":"Prev","nextText":"Next","currentText":"Today","monthNames":["Januar","Februar","M\u00e4rz","April","Mai","Juni","Juli","August","September","Oktober","November","Dezember"],"monthNamesShort":["Jan.","Feb.","M\u00e4rz","Apr.","Mai","Juni","Juli","Aug.","Sept.","Okt.","Nov.","Dez."],"dayNames":["Sonntag","Montag","Dienstag","Mittwoch","Donnerstag","Freitag","Samstag"],"dayNamesShort":["So.","Mo.","Di.","Mi.","Do.","Fr.","Sa."],"dayNamesMin":["So.","Mo.","Di.","Mi.","Do.","Fr.","Sa."]}'
+                // phpcs:enable Generic.Files.LineLength.TooLong
+            ],
+        ];
     }
 }

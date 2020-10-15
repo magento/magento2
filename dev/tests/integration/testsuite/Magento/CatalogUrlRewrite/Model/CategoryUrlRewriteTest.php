@@ -66,7 +66,7 @@ class CategoryUrlRewriteTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -311,6 +311,7 @@ class CategoryUrlRewriteTest extends TestCase
 
     /**
      * @magentoDataFixture Magento/Catalog/_files/category.php
+     * @magentoAppArea adminhtml
      * @return void
      */
     public function testUrlRewritesAfterCategoryDelete(): void

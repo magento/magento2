@@ -6,7 +6,16 @@
  */
 declare(strict_types=1);
 
-require_once __DIR__ . '/website.php';
+use Magento\Store\Api\WebsiteRepositoryInterface;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
+
+Resolver::getInstance()->requireDataFixture('Magento/Store/_files/website.php');
+
+$objectManager = Bootstrap::getObjectManager();
+/** @var WebsiteRepositoryInterface $websiteRepository */
+$websiteRepository = $objectManager->get(WebsiteRepositoryInterface::class);
+$website = $websiteRepository->get('test');
 
 /**
  * @var \Magento\Store\Model\Group $storeGroup
