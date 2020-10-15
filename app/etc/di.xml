@@ -320,6 +320,11 @@
             <argument name="defaultScope" xsi:type="string">global</argument>
         </arguments>
     </virtualType>
+    <virtualType name="adminhtmlConfigScope" type="Magento\Framework\Config\Scope">
+        <arguments>
+            <argument name="defaultScope" xsi:type="string">adminhtml</argument>
+        </arguments>
+    </virtualType>
     <type name="Magento\Framework\App\State">
         <arguments>
             <argument name="mode" xsi:type="init_parameter">Magento\Framework\App\State::PARAM_MODE</argument>
