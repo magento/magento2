@@ -34,6 +34,7 @@ use Magento\TestFramework\TestCase\WebapiAbstract;
  *
  * @magentoAppIsolation enabled
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class ProductRepositoryInterfaceTest extends WebapiAbstract
 {
@@ -211,6 +212,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     private function loadWebsiteByCode($websiteCode)
     {
         $websiteRepository = Bootstrap::getObjectManager()->get(WebsiteRepository::class);
+        $website = null;
         try {
             $website = $websiteRepository->get($websiteCode);
         } catch (NoSuchEntityException $e) {
