@@ -222,7 +222,11 @@ class EmailMessage extends Message implements EmailMessageInterface
     {
         $laminasAddressList = new AddressList();
         foreach ($arrayList as $address) {
-            $laminasAddressList->add($address->getEmail(), $address->getName());
+            try {
+                $laminasAddressList->add($address->getEmail(), $address->getName());
+            } catch (\InvalidArgumentException $e) {
+                continue;
+            }
         }
 
         return $laminasAddressList;
