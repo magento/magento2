@@ -16,8 +16,8 @@
             <argument name="childCategoryName" type="string"/>
         </arguments>
 
-        <waitForElement selector="{{AdminCategorySidebarTreeSection.categoryHighlighted(parenCategoryName)}}" stepKey="waitForTopMenuLoaded"/>
-        <moveMouseOver selector="{{AdminCategorySidebarTreeSection.categoryHighlighted(parenCategoryName)}}" stepKey="moveMouseToParentCategory"/>
-        <seeElement selector="{{AdminCategorySidebarTreeSection.categoryHighlighted(childCategoryName)}}" stepKey="seeSubcategoryInTree"/>
+        <waitForElementVisible selector="{{StorefrontHeaderSection.NavigationCategoryByName(parenCategoryName)}}" stepKey="waitForTopMenuLoaded"/>
+        <moveMouseOver selector="{{StorefrontHeaderSection.NavigationCategoryByName(parenCategoryName)}}" stepKey="moveMouseToParentCategory"/>
+        <seeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName(childCategoryName)}}" stepKey="seeSubcategoryInTree"/>
     </actionGroup>
 </actionGroups>
