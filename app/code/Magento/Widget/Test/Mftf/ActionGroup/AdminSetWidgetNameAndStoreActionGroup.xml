@@ -10,14 +10,15 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminSetWidgetNameAndStoreActionGroup">
         <annotations>
-            <description>On the widget creation page page set widget name, store add sort order.</description>
+            <description>Set widget name, store IDs and sort order on Widget edit page</description>
         </annotations>
         <arguments>
-            <argument name="widgetName" defaultValue="{{ProductsListWidget.name}}" type="string"/>
+            <argument name="widgetTitle" defaultValue="{{ProductsListWidget.name}}" type="string"/>
             <argument name="widgetStoreIds" defaultValue="{{ProductsListWidget.store_ids}}"  type="string"/>
             <argument name="widgetSortOrder" defaultValue="{{ProductsListWidget.sort_order}}" type="string"/>
         </arguments>
-        <fillField selector="{{AdminNewWidgetSection.widgetTitle}}" userInput="{{widgetName}}" stepKey="fillTitle"/>
+        <waitForElementVisible selector="{{AdminNewWidgetSection.widgetTitle}}" stepKey="waitForWidgetTitleInputVisible"/>
+        <fillField selector="{{AdminNewWidgetSection.widgetTitle}}" userInput="{{widgetTitle}}" stepKey="fillTitle"/>
         <selectOption selector="{{AdminNewWidgetSection.widgetStoreIds}}" parameterArray="{{widgetStoreIds}}" stepKey="setWidgetStoreId"/>
         <fillField selector="{{AdminNewWidgetSection.widgetSortOrder}}" userInput="{{widgetSortOrder}}" stepKey="fillSortOrder"/>
     </actionGroup>
