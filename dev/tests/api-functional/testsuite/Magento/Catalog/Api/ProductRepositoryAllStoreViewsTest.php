@@ -8,11 +8,13 @@ declare(strict_types=1);
 namespace Magento\Catalog\Api;
 
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\Product\Type;
 use Magento\Catalog\Model\Product\Visibility;
 use Magento\Catalog\Model\ResourceModel\Product\Website\Link;
 use Magento\Eav\Model\Config;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\Webapi\Rest\Request;
@@ -24,6 +26,7 @@ use Magento\TestFramework\TestCase\WebapiAbstract;
  * Tests for products creation for all store views.
  *
  * @magentoAppIsolation enabled
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ProductRepositoryAllStoreViewsTest extends WebapiAbstract
 {
@@ -55,6 +58,7 @@ class ProductRepositoryAllStoreViewsTest extends WebapiAbstract
      * @var Link
      */
     private $productWebsiteLink;
+
     /**
      * @var Config
      */
@@ -87,9 +91,11 @@ class ProductRepositoryAllStoreViewsTest extends WebapiAbstract
     {
         $this->registry->unregister('isSecureArea');
         $this->registry->register('isSecureArea', true);
-        $this->productRepository->delete(
-            $this->productRepository->get($this->productSku)
-        );
+        try {
+            $this->productRepository->deleteById($this->productSku);
+        } catch (NoSuchEntityException $e) {
+            //already deleted
+        }
         $this->registry->unregister('isSecureArea');
         $this->registry->register('isSecureArea', false);
 
@@ -98,6 +104,7 @@ class ProductRepositoryAllStoreViewsTest extends WebapiAbstract
 
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/category.php
+     * @return void
      */
     public function testCreateProduct(): void
     {
@@ -110,6 +117,7 @@ class ProductRepositoryAllStoreViewsTest extends WebapiAbstract
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/category.php
      * @magentoApiDataFixture Magento/Store/_files/second_website_with_store_group_and_store.php
+     * @return void
      */
     public function testCreateProductOnMultipleWebsites(): void
     {
@@ -120,12 +128,12 @@ class ProductRepositoryAllStoreViewsTest extends WebapiAbstract
     }
 
     /**
-     * Saves Product via API.
+     * Saves product via API.
      *
-     * @param $product
+     * @param array $product
      * @return array
      */
-    private function saveProduct($product): array
+    private function saveProduct(array $product): array
     {
         $serviceInfo = [
             'rest' => ['resourcePath' =>self::PRODUCTS_RESOURCE_PATH, 'httpMethod' => Request::HTTP_METHOD_POST],
@@ -146,22 +154,22 @@ class ProductRepositoryAllStoreViewsTest extends WebapiAbstract
      */
     private function getProductData(): array
     {
-        $setId =(int)$this->eavConfig->getEntityType(ProductAttributeInterface::ENTITY_TYPE_CODE)
+        $setId = (int)$this->eavConfig->getEntityType(ProductAttributeInterface::ENTITY_TYPE_CODE)
             ->getDefaultAttributeSetId();
 
         return [
-                'sku' => $this->productSku,
-                'name' => 'simple',
-                'type_id' => Type::TYPE_SIMPLE,
-                'weight' => 1,
-                'attribute_set_id' => $setId,
-                'price' => 10,
-                'status' => Status::STATUS_ENABLED,
-                'visibility' => Visibility::VISIBILITY_BOTH,
-                'extension_attributes' => [
+                ProductInterface::SKU => $this->productSku,
+                ProductInterface::NAME => 'simple',
+                ProductInterface::TYPE_ID => Type::TYPE_SIMPLE,
+                ProductInterface::WEIGHT => 1,
+                ProductInterface::ATTRIBUTE_SET_ID => $setId,
+                ProductInterface::PRICE => 10,
+                ProductInterface::STATUS => Status::STATUS_ENABLED,
+                ProductInterface::VISIBILITY => Visibility::VISIBILITY_BOTH,
+                ProductInterface::EXTENSION_ATTRIBUTES_KEY => [
                     'stock_item' => ['is_in_stock' => true, 'qty' => 1000]
                 ],
-                'custom_attributes' => [
+                ProductInterface::CUSTOM_ATTRIBUTES => [
                     ['attribute_code' => 'url_key', 'value' => 'simple'],
                     ['attribute_code' => 'tax_class_id', 'value' => 2],
                     ['attribute_code' => 'category_ids', 'value' => [333]]
@@ -219,8 +227,7 @@ class ProductRepositoryAllStoreViewsTest extends WebapiAbstract
     private function getAllWebsiteIds(): array
     {
         $websiteIds = [];
-        $websites = $this->storeManager->getWebsites();
-        foreach ($websites as $website) {
+        foreach ($this->storeManager->getWebsites() as $website) {
             $websiteIds[] = $website->getId();
         }
 
