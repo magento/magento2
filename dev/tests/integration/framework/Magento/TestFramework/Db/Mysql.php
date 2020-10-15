@@ -125,7 +125,7 @@ class Mysql extends \Magento\TestFramework\Db\AbstractDb
         $format = sprintf(
             '%s %s %s %s',
             'mysqldump --defaults-file=%s --host=%s --port=%s',
-            '--no-tablespaces'
+            '--no-tablespaces',
             $additionalArguments,
             '%s > %s'
         );
