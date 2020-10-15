@@ -86,12 +86,15 @@ class UpdateHandlerTest extends \PHPUnit\Framework\TestCase
      * @var StoreManagerInterface
      */
     private $storeManager;
+
     /**
      * @var int
      */
     private $currentStoreId;
 
-    /** @var MetadataPool */
+    /**
+     * @var MetadataPool
+     */
     private $metadataPool;
 
     /**

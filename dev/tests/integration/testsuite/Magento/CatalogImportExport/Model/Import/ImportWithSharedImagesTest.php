@@ -10,6 +10,7 @@ namespace Magento\CatalogImportExport\Model\Import;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product as ProductEntity;
 use Magento\Catalog\Model\Product\Media\ConfigInterface;
+use Magento\Framework\App\Bootstrap as AppBootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Filesystem;
@@ -82,7 +83,7 @@ class ImportWithSharedImagesTest extends TestCase
         $this->csvFactory = $this->objectManager->get(CsvFactory::class);
         $this->importDataResource = $this->objectManager->get(Data::class);
         $this->appParams = Bootstrap::getInstance()->getBootstrap()->getApplication()
-            ->getInitParams()[\Magento\Framework\App\Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS];
+            ->getInitParams()[AppBootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS];
     }
 
     /**
