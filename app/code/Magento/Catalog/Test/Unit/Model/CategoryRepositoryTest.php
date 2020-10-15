@@ -65,10 +65,13 @@ class CategoryRepositoryTest extends TestCase
     protected $metadataPoolMock;
 
     /**
-     * @var MockObject
+     * @var PopulateWithValues|MockObject
      */
-    protected $populateWithValuesMock;
+    private $populateWithValuesMock;
 
+    /**
+     * @inheridoc
+     */
     protected function setUp(): void
     {
         $this->categoryFactoryMock = $this->createPartialMock(
@@ -102,7 +105,7 @@ class CategoryRepositoryTest extends TestCase
 
         $this->populateWithValuesMock = $this
             ->getMockBuilder(PopulateWithValues::class)
-            ->setMethods(['execute'])
+            ->onlyMethods(['execute'])
             ->disableOriginalConstructor()
             ->getMock();
 

@@ -69,30 +69,46 @@ class PopulateWithValues
     public function execute(CategoryInterface $category, array $existingData): void
     {
         $storeId = $existingData['store_id'];
-        $overriddenValues = array_filter($category->getData(), function ($key) use ($category, $storeId) {
-            /** @var Category $category */
-            return $this->scopeOverriddenValue->containsValue(
-                CategoryInterface::class,
-                $category,
-                $key,
-                $storeId
-            );
-        }, ARRAY_FILTER_USE_KEY);
+        $overriddenValues = array_filter(
+            $category->getData(),
+            function ($key) use ($category, $storeId) {
+                /** @var Category $category */
+                return $this->scopeOverriddenValue->containsValue(
+                    CategoryInterface::class,
+                    $category,
+                    $key,
+                    $storeId
+                );
+            },
+            ARRAY_FILTER_USE_KEY
+        );
         $defaultValues = array_diff_key($category->getData(), $overriddenValues);
-        array_walk($defaultValues, function (&$value, $key) {
-            $attributes = $this->getAttributes();
-            if (isset($attributes[$key]) && !$attributes[$key]->isStatic()) {
-                $value = null;
+        array_walk(
+            $defaultValues,
+            function (&$value, $key) {
+                $attributes = $this->getAttributes();
+                if (isset($attributes[$key]) && !$attributes[$key]->isStatic()) {
+                    $value = null;
+                }
             }
-        });
+        );
         $category->addData($defaultValues);
         $category->addData($existingData);
-        $useDefaultAttributes = array_filter($category->getData(), function ($attributeValue) {
-            return null === $attributeValue;
-        });
-        $category->setData('use_default', array_map(function () {
-            return true;
-        }, $useDefaultAttributes));
+        $useDefaultAttributes = array_filter(
+            $category->getData(),
+            function ($attributeValue) {
+                return null === $attributeValue;
+            }
+        );
+        $category->setData(
+            'use_default',
+            array_map(
+                function () {
+                    return true;
+                },
+                $useDefaultAttributes
+            )
+        );
     }
 
     /**

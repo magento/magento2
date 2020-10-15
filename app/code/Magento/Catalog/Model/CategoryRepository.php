@@ -71,13 +71,13 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
      * @param CategoryFactory $categoryFactory
      * @param CategoryResource $categoryResource
      * @param StoreManagerInterface $storeManager
-     * @param PopulateWithValues $populateWithValues
+     * @param PopulateWithValues|null $populateWithValues
      */
     public function __construct(
         CategoryFactory $categoryFactory,
         CategoryResource $categoryResource,
         StoreManagerInterface $storeManager,
-        PopulateWithValues $populateWithValues
+        ?PopulateWithValues $populateWithValues
     ) {
         $this->categoryFactory = $categoryFactory;
         $this->categoryResource = $categoryResource;

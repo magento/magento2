@@ -12,6 +12,7 @@ use Magento\Authorization\Model\Rules;
 use Magento\Authorization\Model\RulesFactory;
 use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Catalog\Model\Attribute\ScopeOverriddenValue;
+use Magento\Catalog\Model\Category;
 use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
 use Magento\Integration\Api\AdminTokenServiceInterface;
 use Magento\Store\Model\Store;
@@ -193,7 +194,7 @@ class CategoryRepositoryTest extends WebapiAbstract
     public function deleteSystemOrRootDataProvider()
     {
         return [
-            [\Magento\Catalog\Model\Category::TREE_ROOT_ID],
+            [Category::TREE_ROOT_ID],
             [2] //Default root category
         ];
     }
@@ -216,8 +217,8 @@ class CategoryRepositoryTest extends WebapiAbstract
         ];
         $result = $this->updateCategory($categoryId, $categoryData);
         $this->assertEquals($categoryId, $result['id']);
-        /** @var \Magento\Catalog\Model\Category $model */
-        $model = Bootstrap::getObjectManager()->get(\Magento\Catalog\Model\Category::class);
+        /** @var Category $model */
+        $model = Bootstrap::getObjectManager()->get(Category::class);
         $category = $model->load($categoryId);
         $this->assertFalse((bool)$category->getIsActive(), 'Category "is_active" must equal to false');
         $this->assertEquals("Update Category Test", $category->getName());
@@ -244,8 +245,8 @@ class CategoryRepositoryTest extends WebapiAbstract
         ];
         $result = $this->updateCategory($categoryId, $categoryData);
         $this->assertEquals($categoryId, $result['id']);
-        /** @var \Magento\Catalog\Model\Category $model */
-        $model = Bootstrap::getObjectManager()->get(\Magento\Catalog\Model\Category::class);
+        /** @var Category $model */
+        $model = Bootstrap::getObjectManager()->get(Category::class);
         $category = $model->load($categoryId);
         $this->assertTrue((bool)$category->getIsActive(), 'Category "is_active" must equal to true');
         $this->assertEquals("Update Category Test With default_sort_by Attribute", $category->getName());
@@ -288,8 +289,8 @@ class CategoryRepositoryTest extends WebapiAbstract
         ];
         $result = $this->updateCategory($categoryId, $categoryData);
         $this->assertEquals($categoryId, $result['id']);
-        /** @var \Magento\Catalog\Model\Category $model */
-        $model = Bootstrap::getObjectManager()->get(\Magento\Catalog\Model\Category::class);
+        /** @var Category $model */
+        $model = Bootstrap::getObjectManager()->get(Category::class);
         $category = $model->load($categoryId);
         $this->assertEquals("Update Category Test New Name", $category->getName());
 
@@ -564,7 +565,6 @@ class CategoryRepositoryTest extends WebapiAbstract
     /**
      * Check if repository does not override default values for attributes out of request
      *
-     * @throws \Exception
      * @magentoApiDataFixture Magento/Catalog/_files/category.php
      */
     public function testUpdateScopeAttribute()
@@ -576,8 +576,8 @@ class CategoryRepositoryTest extends WebapiAbstract
         $result = $this->updateCategoryForSpecificStore($categoryId, $categoryData);
         $this->assertEquals($categoryId, $result['id']);
 
-        /** @var \Magento\Catalog\Model\Category $model */
-        $model = Bootstrap::getObjectManager()->get(\Magento\Catalog\Model\Category::class);
+        /** @var Category $model */
+        $model = Bootstrap::getObjectManager()->get(Category::class);
         $category = $model->load($categoryId);
 
         /** @var ScopeOverriddenValue $scopeOverriddenValue */
