@@ -18,6 +18,7 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Catalog\Model\Indexer\Category\Product as CategoryProductIndexer;
+use Magento\Indexer\Model\WorkingStateProvider;
 
 /**
  * Category rows indexer.
@@ -49,6 +50,11 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
     private $indexerRegistry;
 
     /**
+     * @var WorkingStateProvider
+     */
+    private $workingStateProvider;
+
+    /**
      * @param ResourceConnection $resource
      * @param StoreManagerInterface $storeManager
      * @param Config $config
@@ -57,6 +63,7 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
      * @param CacheContext|null $cacheContext
      * @param EventManagerInterface|null $eventManager
      * @param IndexerRegistry|null $indexerRegistry
+     * @param WorkingStateProvider|null $workingStateProvider
      */
     public function __construct(
         ResourceConnection $resource,
@@ -66,12 +73,15 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
         MetadataPool $metadataPool = null,
         CacheContext $cacheContext = null,
         EventManagerInterface $eventManager = null,
-        IndexerRegistry $indexerRegistry = null
+        IndexerRegistry $indexerRegistry = null,
+        ?WorkingStateProvider $workingStateProvider = null
     ) {
         parent::__construct($resource, $storeManager, $config, $queryGenerator, $metadataPool);
         $this->cacheContext = $cacheContext ?: ObjectManager::getInstance()->get(CacheContext::class);
         $this->eventManager = $eventManager ?: ObjectManager::getInstance()->get(EventManagerInterface::class);
         $this->indexerRegistry = $indexerRegistry ?: ObjectManager::getInstance()->get(IndexerRegistry::class);
+        $this->workingStateProvider = $workingStateProvider ?:
+            ObjectManager::getInstance()->get(WorkingStateProvider::class);
     }
 
     /**
@@ -90,7 +100,7 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
         $this->limitationByProducts = $idsToBeReIndexed;
         $this->useTempTable = $useTempTable;
         $indexer = $this->indexerRegistry->get(CategoryProductIndexer::INDEXER_ID);
-        $workingState = $indexer->isWorking();
+        $workingState = $this->workingStateProvider->isWorking($indexer->getId());
 
         $affectedCategories = $this->getCategoryIdsFromIndex($idsToBeReIndexed);
 
