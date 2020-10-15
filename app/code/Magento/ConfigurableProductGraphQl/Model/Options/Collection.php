@@ -183,7 +183,10 @@ class Collection
                 );
                 foreach ($attributeData['options'] as $index => $value) {
                     $this->attributeMap[$productId][$attribute->getId()]['values'][$index]['uid']
-                        = $this->selectionUidFormatter->encode((int)$attribute->getId(), (int)$value['value_index']);
+                        = $this->selectionUidFormatter->encode(
+                            (int)$attribute->getAttributeId(),
+                            (int)$value['value_index']
+                        );
                     $this->attributeMap[$productId][$attribute->getId()]['values'][$index]
                         ['is_available_for_selection'] =
                         isset($options[$attribute->getAttributeId()][$value['value_index']])
@@ -198,13 +201,13 @@ class Collection
     /**
      * Load products by link field ids
      *
-     * @param int[] $productIds
+     * @param int[] $productLinkIds
      * @return ProductInterface[]
      */
-    private function getProducts($productIds)
+    private function getProducts($productLinkIds)
     {
         $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
-        $this->searchCriteriaBuilder->addFilter($linkField, $productIds, 'in');
+        $this->searchCriteriaBuilder->addFilter($linkField, $productLinkIds, 'in');
         $searchCriteria = $this->searchCriteriaBuilder->create();
         $products = $this->productRepository->getList($searchCriteria)->getItems();
         $productsLinkFieldMap = [];
