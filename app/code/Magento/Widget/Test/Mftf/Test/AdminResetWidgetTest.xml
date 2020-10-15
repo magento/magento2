@@ -23,7 +23,7 @@
         </before>
         <after>
             <actionGroup ref="AdminDeleteWidgetActionGroup" stepKey="deleteWidget">
-                <argument name="widget" value="{{ProductsListWidget}}"/>
+                <argument name="widget" value="ProductsListWidget"/>
             </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>

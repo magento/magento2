@@ -12,7 +12,7 @@
         <element name="widgetType" type="select" selector="#code"/>
         <element name="widgetDesignTheme" type="select" selector="#theme_id"/>
         <element name="continue" type="button" timeout="30" selector="#continue_button"/>
-        <element name="resetBtn" type="button" selector="//*[@class='page-actions-buttons']/button[@id='reset']" timeout="30"/>
+        <element name="resetBtn" type="button" selector=".page-actions-buttons .reset" timeout="30"/>
         <element name="widgetTitle" type="input" selector="#title"/>
         <element name="widgetStoreIds" type="select" selector="#store_ids"/>
         <element name="widgetSortOrder" type="input" selector="#sort_order"/>
@@ -43,7 +43,7 @@
         <element name="displayMode" type="select" selector="select[id*='display_mode']"/>
         <element name="restrictTypes" type="select" selector="select[id*='types']"/>
         <element name="saveAndContinue" type="button" selector="#save_and_edit_button" timeout="30"/>
-        <element name="widgetInstanceType" type="select" selector="//*[@class='admin__field-control control']/select[@id='instance_code']" />
+        <element name="widgetInstanceType" type="select" selector=".admin__field-control .admin__control-select" />
         <!-- Catalog Product List Widget Options -->
         <element name="title" type="input" selector="[name='parameters[title]']"/>
         <element name="displayPageControl" type="select" selector="[name='parameters[show_pager]']"/>
@@ -51,3 +51,4 @@
         <element name="cacheLifetime" type="input" selector="[name='parameters[cache_lifetime]']"/>
     </section>
 </sections>
+
