@@ -133,8 +133,7 @@
         <waitForPageLoad stepKey="waitForFiltersClear"/>
 
         <!--Create Cart Price Rule-->
-        <amOnPage url="{{AdminCartPriceRulesPage.url}}" stepKey="amOnCartPriceList"/>
-        <waitForPageLoad stepKey="waitForPriceList"/>
+        <actionGroup ref="AdminOpenCartPriceRulesPageActionGroup" stepKey="amOnCartPriceList"/>
         <click selector="{{AdminCartPriceRulesSection.addNewRuleButton}}" stepKey="clickAddNewRule"/>
         <waitForPageLoad stepKey="waitForPageDiscountPageIsLoaded"/>
         <fillField selector="{{AdminCartPriceRulesFormSection.ruleName}}" userInput="ship" stepKey="fillRuleName"/>
