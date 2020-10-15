@@ -70,6 +70,8 @@ class CreateCompareList implements ResolverInterface
     }
 
     /**
+     * Create compare list
+     *
      * @param Field $field
      * @param ContextInterface $context
      * @param ResolveInfo $info
@@ -77,6 +79,8 @@ class CreateCompareList implements ResolverInterface
      * @param array|null $args
      *
      * @return Value|mixed|void
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function resolve(
         Field $field,

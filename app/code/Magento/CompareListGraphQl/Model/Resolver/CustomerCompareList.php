@@ -7,16 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\CompareListGraphQl\Model\Resolver;
 
-use Magento\Catalog\Model\CompareList;
-use Magento\Catalog\Model\CompareListFactory;
-use Magento\Catalog\Model\ResourceModel\CompareList as ResourceCompareList;
-use Magento\CompareListGraphQl\Model\Service\CompareListService;
+use Magento\CompareListGraphQl\Model\Service\CustomerService;
+use Magento\CompareListGraphQl\Model\Service\GetCompareList;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Framework\GraphQl\Query\Resolver\Value;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\Store\Api\Data\StoreInterface;
 
 /**
  * Get customer compare list
@@ -24,33 +21,25 @@ use Magento\Store\Api\Data\StoreInterface;
 class CustomerCompareList implements ResolverInterface
 {
     /**
-     * @var ResourceCompareList
+     * @var GetCompareList
      */
-    private $resourceCompareList;
+    private $getCompareList;
 
     /**
-     * @var CompareListFactory
+     * @var CustomerService
      */
-    private $compareListFactory;
+    private $customerService;
 
     /**
-     * @var CompareListService
-     */
-    private $compareListService;
-
-    /**
-     * @param ResourceCompareList        $resourceCompareList
-     * @param CompareListFactory         $compareListFactory
-     * @param CompareListService     $compareListService
+     * @param GetCompareList     $getCompareList
+     * @param CustomerService    $customerService
      */
     public function __construct(
-        ResourceCompareList $resourceCompareList,
-        CompareListFactory $compareListFactory,
-        CompareListService $compareListService
+        GetCompareList $getCompareList,
+        CustomerService $customerService
     ) {
-        $this->resourceCompareList = $resourceCompareList;
-        $this->compareListFactory = $compareListFactory;
-        $this->compareListService = $compareListService;
+        $this->getCompareList = $getCompareList;
+        $this->customerService = $customerService;
     }
 
     /**
@@ -73,33 +62,12 @@ class CustomerCompareList implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        /** @var StoreInterface $store */
-        $store = $context->getExtensionAttributes()->getStore();
-        $listId = (int)$this->getListIdByCustomerId($context->getUserId());
+        $listId = $this->customerService->getListIdByCustomerId($context->getUserId());
 
         if (!$listId) {
             return null;
         }
 
-        return $this->compareListService->getCompareList($listId, $context, $store);
-    }
-
-    /**
-     * Get listId by Customer ID
-     *
-     * @param $customerId
-     *
-     * @return int|null
-     */
-    private function getListIdByCustomerId($customerId)
-    {
-        if ($customerId) {
-            /** @var CompareList $compareListModel */
-            $compareListModel = $this->compareListFactory->create();
-            $this->resourceCompareList->load($compareListModel, $customerId, 'customer_id');
-            return (int)$compareListModel->getId();
-        }
-
-        return null;
+        return $this->getCompareList->execute($listId, $context);
     }
 }

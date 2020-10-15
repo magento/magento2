@@ -7,9 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CompareListGraphQl\Model\Resolver;
 
-use Magento\Catalog\Model\CompareList as ModelCompareList;
-use Magento\Catalog\Model\CompareListFactory;
-use Magento\Catalog\Model\ResourceModel\CompareList as ResourceCompareList;
+use Magento\Catalog\Model\MaskedListIdToCompareListId;
 use Magento\CompareListGraphQl\Model\Service\CustomerService;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
@@ -24,33 +22,25 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 class AssignCompareListToCustomer implements ResolverInterface
 {
     /**
-     * @var CompareListFactory
-     */
-    private $compareListFactory;
-
-    /**
-     * @var ResourceCompareList
-     */
-    private $resourceCompareList;
-
-    /**
      * @var CustomerService
      */
     private $customerService;
 
     /**
-     * @param CompareListFactory $compareListFactory
-     * @param ResourceCompareList $resourceCompareList
+     * @var MaskedListIdToCompareListId
+     */
+    private $maskedListIdToCompareListId;
+
+    /**
      * @param CustomerService $customerService
+     * @param MaskedListIdToCompareListId $maskedListIdToCompareListId
      */
     public function __construct(
-        CompareListFactory $compareListFactory,
-        ResourceCompareList $resourceCompareList,
-        CustomerService $customerService
+        CustomerService $customerService,
+        MaskedListIdToCompareListId $maskedListIdToCompareListId
     ) {
-        $this->compareListFactory = $compareListFactory;
-        $this->resourceCompareList = $resourceCompareList;
         $this->customerService = $customerService;
+        $this->maskedListIdToCompareListId = $maskedListIdToCompareListId;
     }
 
     /**
@@ -65,6 +55,7 @@ class AssignCompareListToCustomer implements ResolverInterface
      * @return Value|mixed|void
      *
      * @throws GraphQlInputException
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function resolve(
         Field $field,
@@ -73,27 +64,16 @@ class AssignCompareListToCustomer implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        if (!isset($args['customerId'])) {
-            throw new GraphQlInputException(__('"customerId" value must be specified'));
+        if (!isset($args['uid'])) {
+            throw new GraphQlInputException(__('"uid" value must be specified'));
         }
 
-        if (!isset($args['listId'])) {
-            throw new GraphQlInputException(__('"listId" value must be specified'));
+        if (!$context->getUserId()) {
+            throw new GraphQlInputException(__('Customer must be logged'));
         }
 
-        $customer = $this->customerService->validateCustomer($args['customerId']);
+        $listId = $this->maskedListIdToCompareListId->execute($args['uid']);
 
-        /** @var  $compareListModel ModelCompareList*/
-        $compareListModel = $this->compareListFactory->create();
-        $this->resourceCompareList->load($compareListModel, $args['listId']);
-
-        if (!$compareListModel->getId()) {
-            return false;
-        }
-
-        $compareListModel->setCustomerId($customer->getId());
-        $this->resourceCompareList->save($compareListModel);
-
-        return true;
+        return $this->customerService->setCustomerToCompareList($listId, $context->getUserId());
     }
 }

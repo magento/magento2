@@ -26,6 +26,7 @@ class DeleteCompareList implements ResolverInterface
      * @param array|null $args
      *
      * @return Value|mixed|void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function resolve(
         Field $field,

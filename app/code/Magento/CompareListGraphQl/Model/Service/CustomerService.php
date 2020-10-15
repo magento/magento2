@@ -12,7 +12,6 @@ use Magento\Catalog\Model\CompareListFactory;
 use Magento\Catalog\Model\ResourceModel\Product\Compare\CompareList as ResourceCompareList;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
-use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Model\AuthenticationInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -74,34 +73,60 @@ class CustomerService
     /**
      * Get listId by Customer ID
      *
-     * @param $customerId
+     * @param int $customerId
      *
      * @return int|null
      */
-    public function getListIdByCustomerId($customerId)
+    public function getListIdByCustomerId(int $customerId)
     {
         if ($customerId) {
-            /** @var CompareList $compareListModel */
-            $compareListModel = $this->compareListFactory->create();
-            $this->resourceCompareList->load($compareListModel, $customerId, 'customer_id');
-            return (int)$compareListModel->getListId();
+            /** @var CompareList $compareList */
+            $compareList = $this->compareListFactory->create();
+            $this->resourceCompareList->load($compareList, $customerId, 'customer_id');
+            return (int)$compareList->getListId();
         }
 
         return null;
     }
 
     /**
-     * Customer validate
+     * Set customer to compare list
      *
-     * @param $customerId
+     * @param int $listId
+     * @param int $customerId
      *
-     * @return CustomerInterface
+     * @return bool
      *
      * @throws GraphQlAuthenticationException
      * @throws GraphQlInputException
      * @throws GraphQlNoSuchEntityException
      */
-    public function validateCustomer($customerId)
+    public function setCustomerToCompareList(int $listId, int $customerId): bool
+    {
+        if ($this->validateCustomer($customerId)) {
+            /** @var CompareList $compareListModel */
+            $compareList = $this->compareListFactory->create();
+            $this->resourceCompareList->load($compareList, $listId, 'list_id');
+            $compareList->setCustomerId($customerId);
+            $this->resourceCompareList->save($compareList);
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Customer validate
+     *
+     * @param int $customerId
+     *
+     * @return int
+     *
+     * @throws GraphQlAuthenticationException
+     * @throws GraphQlInputException
+     * @throws GraphQlNoSuchEntityException
+     */
+    public function validateCustomer(int $customerId): int
     {
         try {
             $customer = $this->customerRepository->getById($customerId);
@@ -128,6 +153,6 @@ class CustomerService
             throw new GraphQlAuthenticationException(__("This account isn't confirmed. Verify and try again."));
         }
 
-        return $customer;
+        return (int)$customer->getId();
     }
 }

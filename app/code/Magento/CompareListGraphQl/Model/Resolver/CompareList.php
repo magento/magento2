@@ -7,16 +7,14 @@ declare(strict_types=1);
 
 namespace Magento\CompareListGraphQl\Model\Resolver;
 
-use Magento\Catalog\Model\ResourceModel\CompareList as ResourceCompareList;
-use Magento\CompareListGraphQl\Model\Service\CompareListService;
+use Magento\Catalog\Model\MaskedListIdToCompareListId;
+use Magento\CompareListGraphQl\Model\Service\GetCompareList;
 use Magento\Framework\GraphQl\Config\Element\Field;
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Framework\GraphQl\Query\Resolver\Value;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\Catalog\Model\CompareList as ModelCompareList;
-use Magento\Catalog\Model\CompareListFactory;
-use Magento\Store\Api\Data\StoreInterface;
 
 /**
  * Get compare list
@@ -24,33 +22,25 @@ use Magento\Store\Api\Data\StoreInterface;
 class CompareList implements ResolverInterface
 {
     /**
-     * @var CompareListFactory
+     * @var GetCompareList
      */
-    private $compareListFactory;
+    private $getCompareList;
 
     /**
-     * @var ResourceCompareList
+     * @var MaskedListIdToCompareListId
      */
-    private $resourceCompareList;
+    private $maskedListIdToCompareListId;
 
     /**
-     * @var CompareListService
-     */
-    private $compareListService;
-
-    /**
-     * @param CompareListFactory $compareListFactory
-     * @param ResourceCompareList $resourceCompareList
-     * @param CompareListService $compareListService
+     * @param GetCompareList $getCompareList
+     * @param MaskedListIdToCompareListId $maskedListIdToCompareListId
      */
     public function __construct(
-        CompareListFactory $compareListFactory,
-        ResourceCompareList $resourceCompareList,
-        CompareListService $compareListService
+        GetCompareList $getCompareList,
+        MaskedListIdToCompareListId $maskedListIdToCompareListId
     ) {
-        $this->compareListFactory = $compareListFactory;
-        $this->resourceCompareList = $resourceCompareList;
-        $this->compareListService = $compareListService;
+        $this->getCompareList = $getCompareList;
+        $this->maskedListIdToCompareListId = $maskedListIdToCompareListId;
     }
 
     /**
@@ -66,6 +56,7 @@ class CompareList implements ResolverInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      *
+     * @throws GraphQlInputException
      */
     public function resolve(
         Field $field,
@@ -74,17 +65,16 @@ class CompareList implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        /** @var StoreInterface $store */
-        $store = $context->getExtensionAttributes()->getStore();
-        /** @var  $compareListModel ModelCompareList*/
-        $compareListModel = $this->compareListFactory->create();
-        $this->resourceCompareList->load($compareListModel, $args['id']);
-        $listId = (int)$compareListModel->getId();
+        if (!isset($args['uid'])) {
+            throw new GraphQlInputException(__('"uid" value must be specified'));
+        }
+
+        $listId = $this->maskedListIdToCompareListId->execute($args['uid']);
 
         if (!$listId) {
             return null;
         }
 
-        return $this->compareListService->getCompareList($listId, $context, $store);
+        return $this->getCompareList->execute($listId, $context);
     }
 }
