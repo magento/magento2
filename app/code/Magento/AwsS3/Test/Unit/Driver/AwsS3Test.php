@@ -363,4 +363,55 @@ class AwsS3Test extends TestCase
             ]
         ];
     }
+
+    /**
+     * @throws FileSystemException
+     */
+    public function testSearchDirectory(): void
+    {
+        $expression = '/*';
+        $path = 'path/';
+        $subPaths = [
+            ['path' => 'path/1'],
+            ['path' => 'path/2']
+        ];
+        $expectedResult = ['path/1', 'path/2'];
+        $this->adapterMock->expects(self::atLeastOnce())->method('has')
+            ->willReturnMap([
+                [$path, true]
+            ]);
+        $this->adapterMock->expects(self::atLeastOnce())->method('getMetadata')
+            ->willReturnMap([
+                [$path, ['type' => AwsS3::TYPE_DIR]]
+            ]);
+        $this->adapterMock->expects(self::atLeastOnce())->method('listContents')->with($path, false)
+            ->willReturn($subPaths);
+        self::assertEquals($expectedResult, $this->driver->search($expression, $path));
+    }
+
+    /**
+     * @throws FileSystemException
+     */
+    public function testSearchFiles(): void
+    {
+        $expression = "/*";
+        $path = 'path/';
+        $subPaths = [
+            ['path' => 'path/1.jpg'],
+            ['path' => 'path/2.png']
+        ];
+        $expectedResult = ['path/1.jpg', 'path/2.png'];
+
+        $this->adapterMock->expects(self::atLeastOnce())->method('has')
+            ->willReturnMap([
+                [$path, true],
+            ]);
+        $this->adapterMock->expects(self::atLeastOnce())->method('getMetadata')
+            ->willReturnMap([
+                [$path, ['type' => AwsS3::TYPE_DIR]],
+            ]);
+        $this->adapterMock->expects(self::atLeastOnce())->method('listContents')->with($path, false)
+            ->willReturn($subPaths);
+        self::assertEquals($expectedResult, $this->driver->search($expression, $path));
+    }
 }

@@ -6,6 +6,9 @@
 
 namespace Magento\Framework\File;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem;
+
 /**
  * Utility for mime type retrieval
  */
@@ -91,6 +94,20 @@ class Mime
     ];
 
     /**
+     * @var Filesystem
+     */
+    private $filesystem;
+
+    /**
+     * Mime constructor.
+     * @param Filesystem $filesystem
+     */
+    public function __construct(Filesystem $filesystem = null)
+    {
+        $this->filesystem = $filesystem;
+    }
+
+    /**
      * Get mime type of a file
      *
      * @param string $file
@@ -99,14 +116,16 @@ class Mime
      */
     public function getMimeType($file)
     {
-        if (!file_exists($file)) {
+        $directoryRead = $this->filesystem->getDirectoryRead(DirectoryList::ROOT);
+        $fileExistsLocally = file_exists($file);
+        if (!$fileExistsLocally && !$directoryRead->isExist($file)) {
             throw new \InvalidArgumentException("File '$file' doesn't exist");
         }
 
         $result = null;
         $extension = $this->getFileExtension($file);
 
-        if (function_exists('mime_content_type')) {
+        if (function_exists('mime_content_type') && $fileExistsLocally) {
             $result = $this->getNativeMimeType($file);
         } else {
             $imageInfo = getimagesize($file);

@@ -369,9 +369,11 @@ class Storage extends \Magento\Framework\DataObject
             $item->setName($item->getBasename());
             $item->setShortName($this->_cmsWysiwygImages->getShortFilename($item->getBasename()));
             $item->setUrl($this->_cmsWysiwygImages->getCurrentUrl() . $item->getBasename());
-            $itemStats = $this->file->stat($item->getFilename());
+            $driver = $this->_directory->getDriver();
+            $itemStats = $driver->stat($item->getFilename());
             $item->setSize($itemStats['size']);
-            $item->setMimeType($this->mime->getMimeType($item->getFilename()));
+            $mimeType = $itemStats['mimetype'] ?? $this->mime->getMimeType($item->getFilename());
+            $item->setMimeType($mimeType);
 
             if ($this->isImage($item->getBasename())) {
                 $thumbUrl = $this->getThumbnailUrl($item->getFilename(), true);
@@ -438,7 +440,7 @@ class Storage extends \Magento\Framework\DataObject
             $path = $this->_cmsWysiwygImages->getStorageRoot();
         }
 
-        $newPath = $path . '/' . $name;
+        $newPath = rtrim($path, '/') . '/' . $name;
         $relativeNewPath = $this->_directory->getRelativePath($newPath);
         if ($this->_directory->isDirectory($relativeNewPath)) {
             throw new \Magento\Framework\Exception\LocalizedException(
@@ -571,7 +573,7 @@ class Storage extends \Magento\Framework\DataObject
         }
 
         // create thumbnail
-        $this->resizeFile($targetPath . '/' . $uploader->getUploadedFileName(), true);
+        $this->resizeFile($targetPath . '/' . ltrim($uploader->getUploadedFileName(), '/'), true);
 
         return $result;
     }
@@ -759,7 +761,7 @@ class Storage extends \Magento\Framework\DataObject
      */
     public function getThumbnailRoot()
     {
-        return $this->_cmsWysiwygImages->getStorageRoot() . '/' . self::THUMBS_DIRECTORY_NAME;
+        return rtrim($this->_cmsWysiwygImages->getStorageRoot(), '/') . '/' . self::THUMBS_DIRECTORY_NAME;
     }
 
     /**
@@ -844,7 +846,7 @@ class Storage extends \Magento\Framework\DataObject
     {
         return rtrim(
             preg_replace(
-                '~[/\\\]+~',
+                '~[/\\\]+(?<![htps?]://)~',
                 '/',
                 $this->_directory->getDriver()->getRealPathSafety(
                     $this->_directory->getAbsolutePath($path)

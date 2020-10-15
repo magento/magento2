@@ -41,10 +41,11 @@ class Collection extends \Magento\Framework\Data\Collection\Filesystem
      */
     protected function _generateRow($filename)
     {
-        $filename = preg_replace('~[/\\\]+~', '/', $filename);
+        $filename = preg_replace('~[/\\\]+(?<![htps?]://)~', '/', $filename);
         $path = $this->_filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         return [
-            'filename' => $filename,
+            'filename' => rtrim($filename, '/'),
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             'basename' => basename($filename),
             'mtime' => $path->stat($path->getRelativePath($filename))['mtime']
         ];

@@ -7,7 +7,9 @@
     },
     "suggest": {
         "magento/module-backend": "*",
-        "magento/module-sitemap": "*"
+        "magento/module-sitemap": "*",
+        "magento/module-cms": "*",
+        "magento/module-downloadable": "*"
     },
     "type": "magento2-module",
     "license": [

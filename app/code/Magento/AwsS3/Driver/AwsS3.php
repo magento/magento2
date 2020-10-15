@@ -14,6 +14,8 @@ use Magento\Framework\Filesystem\DriverInterface;
 
 /**
  * Driver for AWS S3 IO operations.
+ *
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class AwsS3 implements DriverInterface
 {
@@ -173,10 +175,7 @@ class AwsS3 implements DriverInterface
      */
     public function readDirectoryRecursively($path = null): array
     {
-        return $this->adapter->listContents(
-            $this->normalizeRelativePath($path),
-            true
-        );
+        return $this->readPath($path, true);
     }
 
     /**
@@ -184,10 +183,7 @@ class AwsS3 implements DriverInterface
      */
     public function readDirectory($path): array
     {
-        return $this->adapter->listContents(
-            $this->normalizeRelativePath($path),
-            false
-        );
+        return $this->readPath($path, false);
     }
 
     /**
@@ -402,11 +398,11 @@ class AwsS3 implements DriverInterface
             'ctime' => 0,
             'blksize' => 0,
             'blocks' => 0,
-            'size' => $metaInfo['size'],
-            'type' => $metaInfo['type'],
-            'mtime' => $metaInfo['timestamp'],
+            'size' => $metaInfo['size'] ?? 0,
+            'type' => $metaInfo['type'] ?? 0,
+            'mtime' => $metaInfo['timestamp'] ?? 0,
             'disposition' => null,
-            'mimetype' => $metaInfo['mimetype']
+            'mimetype' => $metaInfo['mimetype'] ?? 0
         ];
     }
 
@@ -415,7 +411,36 @@ class AwsS3 implements DriverInterface
      */
     public function search($pattern, $path): array
     {
-        throw new FileSystemException(__('Method %1 is not supported', __METHOD__));
+        return $this->glob(rtrim($path, '/') . '/' . ltrim($pattern, '/'));
+    }
+
+    /**
+     * Emulate php glob function for AWS S3 storage
+     *
+     * @param string $pattern
+     * @return array
+     * @throws FileSystemException
+     */
+    private function glob(string $pattern): array
+    {
+        $directoryContent = [];
+
+        $patternFound = preg_match('(\*|\?|\[.+\])', $pattern, $parentPattern, PREG_OFFSET_CAPTURE);
+        if ($patternFound) {
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
+            $parentDirectory = \dirname(substr($pattern, 0, $parentPattern[0][1] + 1));
+            $leftover = substr($pattern, $parentPattern[0][1]);
+            $index = strpos($leftover, '/');
+            $searchPattern = $this->getSearchPattern($pattern, $parentPattern, $parentDirectory, $index);
+
+            if ($this->isDirectory($parentDirectory . '/')) {
+                $directoryContent = $this->getDirectoryContent($parentDirectory, $searchPattern, $leftover, $index);
+            }
+        } elseif ($this->isDirectory($pattern) || $this->isFile($pattern)) {
+            $directoryContent[] = $pattern;
+        }
+
+        return $directoryContent;
     }
 
     /**
@@ -629,5 +654,99 @@ class AwsS3 implements DriverInterface
         }
 
         return null;
+    }
+
+    /**
+     * Read directory by path and is recursive flag
+     *
+     * @param string $path
+     * @param bool $isRecursive
+     * @return array
+     */
+    private function readPath(string $path, $isRecursive = false): array
+    {
+        $relativePath = $this->normalizeRelativePath($path);
+        $contentsList = $this->adapter->listContents(
+            $relativePath,
+            $isRecursive
+        );
+        $itemsList = [];
+        foreach ($contentsList as $item) {
+            if (isset($item['path'])
+                && $item['path'] !== $relativePath
+                && strpos($item['path'], $relativePath) === 0) {
+                $itemsList[] = $item['path'];
+            }
+        }
+
+        return $itemsList;
+    }
+
+    /**
+     * Get search pattern for directory
+     *
+     * @param string $pattern
+     * @param array $parentPattern
+     * @param string $parentDirectory
+     * @param int|bool $index
+     * @return string
+     */
+    private function getSearchPattern(string $pattern, array $parentPattern, string $parentDirectory, $index): string
+    {
+        $parentLength = \strlen($parentDirectory);
+        if ($index !== false) {
+            $searchPattern = substr(
+                $pattern,
+                $parentLength + 1,
+                $parentPattern[0][1] - $parentLength + $index - 1
+            );
+        } else {
+            $searchPattern = substr($pattern, $parentLength + 1);
+        }
+
+        $replacement = [
+            '/\*/' => '.*',
+            '/\?/' => '.',
+            '/\//' => '\/'
+        ];
+        return preg_replace(array_keys($replacement), array_values($replacement), $searchPattern);
+    }
+
+    /**
+     * Get directory content by given search pattern
+     *
+     * @param string $parentDirectory
+     * @param string $searchPattern
+     * @param string $leftover
+     * @param int|bool $index
+     * @return array
+     * @throws FileSystemException
+     */
+    private function getDirectoryContent(
+        string $parentDirectory,
+        string $searchPattern,
+        string $leftover,
+        $index
+    ): array {
+        $items = $this->readDirectory($parentDirectory . '/');
+        $directoryContent = [];
+        foreach ($items as $item) {
+            if (preg_match('/' . $searchPattern . '$/', $item)
+                // phpcs:ignore Magento2.Functions.DiscouragedFunction
+                && strpos(basename($item), '.') !== 0) {
+                if ($index === false || \strlen($leftover) === $index + 1) {
+                    $directoryContent[] = $this->isDirectory($item)
+                        ? rtrim($item, '/') . '/'
+                        : $item;
+                } elseif (strlen($leftover) > $index + 1) {
+                    // phpcs:ignore Magento2.Performance.ForeachArrayMerge
+                    $directoryContent = array_merge(
+                        $directoryContent,
+                        $this->glob("{$parentDirectory}/{$item}" . substr($leftover, $index))
+                    );
+                }
+            }
+        }
+        return $directoryContent;
     }
 }

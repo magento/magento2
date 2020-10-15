@@ -7,7 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\Framework\File\Test\Unit;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\File\Mime;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\ReadInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -21,14 +25,28 @@ class MimeTest extends TestCase
     private $object;
 
     /**
+     * @var ReadInterface|MockObject
+     */
+    private $readInterface;
+
+    /**
      * @inheritDoc
      */
     protected function setUp(): void
     {
-        $this->object = new Mime();
+        $this->readInterface = $this->getMockBuilder(ReadInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        /** @var Filesystem|MockObject $filesystem */
+        $filesystem = $this->getMockBuilder(Filesystem::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $filesystem->expects(self::any())->method('getDirectoryRead')->with(DirectoryList::ROOT)
+            ->willReturn($this->readInterface);
+        $this->object = new Mime($filesystem);
     }
 
-    public function testGetMimeTypeNonexistentFileException()
+    public function testGetMimeTypeNonexistentFileException(): void
     {
         $this->expectException('InvalidArgumentException');
         $this->expectExceptionMessage('File \'nonexistent.file\' doesn\'t exist');
@@ -42,10 +60,10 @@ class MimeTest extends TestCase
      *
      * @dataProvider getMimeTypeDataProvider
      */
-    public function testGetMimeType($file, $expectedType)
+    public function testGetMimeType($file, $expectedType): void
     {
         $actualType = $this->object->getMimeType($file);
-        $this->assertSame($expectedType, $actualType);
+        self::assertSame($expectedType, $actualType);
     }
 
     /**

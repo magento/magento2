@@ -7,7 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Data\Collection;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Config\DocumentRoot;
 use Magento\Framework\Data\Collection;
+use Magento\Framework\Filesystem\Directory\TargetDirectory;
 
 /**
  * Filesystem items collection
@@ -127,6 +130,32 @@ class Filesystem extends \Magento\Framework\Data\Collection
     protected $_collectedFiles = [];
 
     /**
+     * @var TargetDirectory|null
+     */
+    private $targetDirectory;
+
+    /**
+     * @var DocumentRoot|null
+     */
+    private $documentRoot;
+
+    /**
+     * @param EntityFactoryInterface|null $_entityFactory
+     * @param TargetDirectory|null $targetDirectory
+     * @param DocumentRoot|null $documentRoot
+     */
+    public function __construct(
+        EntityFactoryInterface $_entityFactory = null,
+        TargetDirectory $targetDirectory = null,
+        DocumentRoot $documentRoot = null
+    ) {
+        $this->_entityFactory = $_entityFactory ?? ObjectManager::getInstance()->get(EntityFactoryInterface::class);
+        $this->targetDirectory = $targetDirectory ?? ObjectManager::getInstance()->get(TargetDirectory::class);
+        $this->documentRoot = $documentRoot ?? ObjectManager::getInstance()->get(DocumentRoot::class);
+        parent::__construct($this->_entityFactory);
+    }
+
+    /**
      * Allowed dirs mask setter. Set empty to not filter.
      *
      * @param string $regex
@@ -208,7 +237,9 @@ class Filesystem extends \Magento\Framework\Data\Collection
     public function addTargetDir($value)
     {
         $value = (string)$value;
-        if (!is_dir($value)) {
+        $directory = $this->targetDirectory->getDirectoryWrite($this->documentRoot->getPath());
+
+        if (!$directory->isDirectory($value)) {
             // phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \Exception('Unable to set target directory.');
         }
@@ -235,17 +266,19 @@ class Filesystem extends \Magento\Framework\Data\Collection
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @throws \Magento\Framework\Exception\FileSystemException
      */
     protected function _collectRecursive($dir)
     {
+        $directory = $this->targetDirectory->getDirectoryRead($this->documentRoot->getPath());
         $collectedResult = [];
         if (!is_array($dir)) {
             $dir = [$dir];
         }
         foreach ($dir as $folder) {
-            if ($nodes = glob($folder . '/*', GLOB_NOSORT)) {
+            if ($nodes = $directory->search('/*', $folder)) {
                 foreach ($nodes as $node) {
-                    $collectedResult[] = $node;
+                    $collectedResult[] = $directory->getAbsolutePath($node);
                 }
             }
         }
@@ -254,7 +287,9 @@ class Filesystem extends \Magento\Framework\Data\Collection
         }
 
         foreach ($collectedResult as $item) {
-            if (is_dir($item) && (!$this->_allowedDirsMask || preg_match($this->_allowedDirsMask, basename($item)))) {
+            if ($directory->isDirectory($item)
+                && (!$this->_allowedDirsMask || preg_match($this->_allowedDirsMask, basename($item)))
+            ) {
                 if ($this->_collectDirs) {
                     if ($this->_dirsFirst) {
                         $this->_collectedDirs[] = $item;
@@ -265,7 +300,7 @@ class Filesystem extends \Magento\Framework\Data\Collection
                 if ($this->_collectRecursively) {
                     $this->_collectRecursive($item);
                 }
-            } elseif ($this->_collectFiles && is_file(
+            } elseif ($this->_collectFiles && $directory->isFile(
                 $item
             ) && (!$this->_allowedFilesMask || preg_match(
                 $this->_allowedFilesMask,
@@ -369,7 +404,7 @@ class Filesystem extends \Magento\Framework\Data\Collection
      *
      * @param array $a
      * @param array $b
-     * @return int
+     * @return int|void
      */
     protected function _usort($a, $b)
     {
