@@ -122,7 +122,8 @@ class RollbackCommand extends AbstractSetupCommand
             // we must have an exit code higher than zero to indicate something was wrong
             return \Magento\Framework\Console\Cli::RETURN_FAILURE;
         }
-        $returnValue = $this->maintenanceModeEnabler->executeInMaintenanceMode(
+
+        return $this->maintenanceModeEnabler->executeInMaintenanceMode(
             function () use ($input, $output) {
                 try {
                     $helper = $this->getHelper('question');
@@ -152,7 +153,6 @@ class RollbackCommand extends AbstractSetupCommand
             $output,
             false
         );
-        return $returnValue;
     }
 
     /**
