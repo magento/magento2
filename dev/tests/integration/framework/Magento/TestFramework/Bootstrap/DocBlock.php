@@ -5,7 +5,9 @@
  */
 namespace Magento\TestFramework\Bootstrap;
 
+use Magento\TestFramework\Annotation;
 use Magento\TestFramework\Application;
+use Magento\TestFramework\ObjectManager;
 
 /**
  * Bootstrap of the custom DocBlock annotations
@@ -58,24 +60,28 @@ class DocBlock
             new \Magento\TestFramework\Isolation\WorkingDirectory(),
             new \Magento\TestFramework\Isolation\DeploymentConfig(),
             new \Magento\TestFramework\Workaround\Override\Fixture\Resolver\TestSetter(),
-            new \Magento\TestFramework\Annotation\AppIsolation($application),
-            new \Magento\TestFramework\Annotation\IndexerDimensionMode(),
+            new Annotation\AppIsolation($application),
+            new Annotation\IndexerDimensionMode(),
             new \Magento\TestFramework\Isolation\AppConfig(),
-            new \Magento\TestFramework\Annotation\ConfigFixture(),
-            new \Magento\TestFramework\Annotation\DataFixtureBeforeTransaction(),
+            new Annotation\ConfigFixture(),
+            new Annotation\DataFixtureBeforeTransaction(),
             new \Magento\TestFramework\Event\Transaction(
                 new \Magento\TestFramework\EventManager(
                     [
-                        new \Magento\TestFramework\Annotation\DbIsolation(),
-                        new \Magento\TestFramework\Annotation\DataFixture(),
+                        new Annotation\DbIsolation(),
+                        new Annotation\DataFixture(),
                     ]
                 )
             ),
-            new \Magento\TestFramework\Annotation\ComponentRegistrarFixture($this->_fixturesBaseDir),
-            new \Magento\TestFramework\Annotation\AppArea($application),
-            new \Magento\TestFramework\Annotation\Cache(),
-            new \Magento\TestFramework\Annotation\AdminConfigFixture(),
-            new \Magento\TestFramework\Annotation\ConfigFixture(),
+            new Annotation\ComponentRegistrarFixture(
+                $this->_fixturesBaseDir,
+                $application,
+                ObjectManager::getInstance()->get(\Magento\Framework\Component\ComponentRegistrar)
+            ),
+            new Annotation\AppArea($application),
+            new Annotation\Cache(),
+            new Annotation\AdminConfigFixture(),
+            new Annotation\ConfigFixture(),
         ];
     }
 }

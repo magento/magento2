@@ -6,6 +6,7 @@
 
 namespace Magento\TestFramework\Annotation;
 
+use Magento\Framework\Component\ComponentRegistrar;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use RegexIterator;
@@ -42,13 +43,29 @@ class ComponentRegistrarFixture
     private $origComponents = null;
 
     /**
+     * @var \Magento\TestFramework\Application
+     */
+    private $application;
+
+    /**
+     * @var ComponentRegistrar
+     */
+    private $registrar;
+
+    /**
      * Constructor
      *
      * @param string $fixtureBaseDir
+     * @param \Magento\TestFramework\Application $application
      */
-    public function __construct($fixtureBaseDir)
-    {
+    public function __construct(
+        $fixtureBaseDir,
+        \Magento\TestFramework\Application $application,
+        \Magento\Framework\Component\ComponentRegistrar $registrar
+    ) {
         $this->fixtureBaseDir = $fixtureBaseDir;
+        $this->application = $application;
+        $this->registrar = $registrar;
     }
 
     /**
@@ -100,10 +117,17 @@ class ComponentRegistrarFixture
         $this->origComponents = $paths->getValue();
         $paths->setAccessible(false);
         foreach ($componentAnnotations as $fixturePath) {
-            $fixturesDir = $this->fixtureBaseDir . '/' . $fixturePath;
+            if (strpos($fixturePath, '::') !== false) {
+                list($module, $path) = explode('::', $fixturePath);
+                $fixturesDir = $this->registrar->getPath(ComponentRegistrar::MODULE, $module)
+                    . "/Test/Integration/" . $path;
+            } else {
+                $fixturesDir = $this->fixtureBaseDir . '/' . $fixturePath;
+            }
+
             if (!file_exists($fixturesDir)) {
                 throw new \InvalidArgumentException(
-                    self::ANNOTATION_NAME . " fixture '$fixturePath' does not exist"
+                    self::ANNOTATION_NAME . " fixture '$fixturesDir' does not exist"
                 );
             }
             $iterator = new RegexIterator(
@@ -119,6 +143,7 @@ class ComponentRegistrarFixture
                 require $registrationFile->getRealPath();
             }
         }
+        $this->application->reinitialize();
     }
 
     /**
@@ -133,6 +158,7 @@ class ComponentRegistrarFixture
             $paths->setValue($this->origComponents);
             $paths->setAccessible(false);
             $this->origComponents = null;
+            $this->application->reinitialize();
         }
     }
 }

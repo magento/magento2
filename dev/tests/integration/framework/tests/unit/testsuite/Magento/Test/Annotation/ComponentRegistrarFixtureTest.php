@@ -21,9 +21,23 @@ class ComponentRegistrarFixtureTest extends \PHPUnit\Framework\TestCase
     const THEME_NAME = 'frontend/Magento/theme';
     const LANGUAGE_NAME = 'magento_language';
 
+    /**
+     * @var \Magento\TestFramework\Application|\PHPUnit\Framework\MockObject\MockObject
+     */
+    private $application;
+
     protected function setUp(): void
     {
         $this->componentRegistrar = new ComponentRegistrar();
+        $this->application = $this->getMockBuilder(\Magento\TestFramework\Application::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->registrar = $this->getMockBuilder(\Magento\Framework\Component\ComponentRegistrar::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+
+
     }
 
     /**
@@ -32,7 +46,7 @@ class ComponentRegistrarFixtureTest extends \PHPUnit\Framework\TestCase
     public function testStartEndTest()
     {
         $this->assertFixturesNotRegistered();
-        $object = new ComponentRegistrarFixture(__DIR__ . '/_files');
+        $object = new ComponentRegistrarFixture(__DIR__ . '/_files', $this->application, $this->registrar);
         $object->startTest($this);
         $this->assertFixturesRegistered();
         $object->endTest($this);
@@ -65,5 +79,17 @@ class ComponentRegistrarFixtureTest extends \PHPUnit\Framework\TestCase
             __DIR__ . '/_files/components/a/aa',
             $this->componentRegistrar->getPath(ComponentRegistrar::LANGUAGE, self::LANGUAGE_NAME)
         );
+    }
+
+    /**
+     * @magentoComponentsDir Test_Module::components
+     */
+    public function testStartEndTestForModule()
+    {
+        $this->assertFixturesNotRegistered();
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage("magentoComponentsDir fixture '/Test/Integration/components' does not exist");
+        $object = new ComponentRegistrarFixture(__DIR__ . '/_files', $this->application, $this->registrar);
+        $object->startTest($this);
     }
 }
