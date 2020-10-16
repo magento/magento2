@@ -30,7 +30,7 @@ class DownloadCss extends Theme implements HttpGetActionInterface
     /**
      * @var Escaper
      */
-    protected $escaper;
+    private $escaper;
 
     /**
      * DownloadCss constructor.
