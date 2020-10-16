@@ -12,16 +12,20 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\CategoryRepository;
 use Magento\Catalog\Model\ResourceModel\Category\Collection as CategoryCollection;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DataObject;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQl\ResponseContainsErrorsException;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
  * Test loading of category tree
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CategoryTest extends GraphQlAbstract
 {
@@ -47,7 +51,7 @@ class CategoryTest extends GraphQlAbstract
 
     protected function setUp(): void
     {
-        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $this->objectManager = Bootstrap::getObjectManager();
         $this->categoryRepository = $this->objectManager->get(CategoryRepository::class);
         $this->store = $this->objectManager->get(Store::class);
         $this->metadataPool = $this->objectManager->get(MetadataPool::class);
@@ -587,9 +591,12 @@ QUERY;
             ->getFirstItem();
         $categoryId = $categoryModel->getId();
 
+        /** @var ResourceConnection $resourceConnection */
+        $resourceConnection = Bootstrap::getObjectManager()->create(ResourceConnection::class);
+        $connection = $resourceConnection->getConnection();
+
         if ($imagePrefix !== null) {
-            // update image to account for different stored image formats
-            $connection = $categoryCollection->getConnection();
+            // update image to account for different stored image format
             $productLinkField = $this->metadataPool
                 ->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class)
                 ->getLinkField();
@@ -599,20 +606,20 @@ QUERY;
             $imageAttributeValue = $imagePrefix . basename($categoryModel->getImage());
 
             if (!empty($imageAttributeValue)) {
-                $query = sprintf(
+                $sqlQuery = sprintf(
                     'UPDATE %s SET `value` = "%s" ' .
                     'WHERE `%s` = %d ' .
                     'AND `store_id`= %d ' .
                     'AND `attribute_id` = ' .
                     '(SELECT `ea`.`attribute_id` FROM %s ea WHERE `ea`.`attribute_code` = "image" LIMIT 1)',
-                    $connection->getTableName('catalog_category_entity_varchar'),
+                    $resourceConnection->getTableName('catalog_category_entity_varchar'),
                     $imageAttributeValue,
                     $productLinkField,
                     $categoryModel->getData($productLinkField),
                     $defaultStoreId,
-                    $connection->getTableName('eav_attribute')
+                    $resourceConnection->getTableName('eav_attribute')
                 );
-                $connection->query($query);
+                $connection->query($sqlQuery);
             }
         }
 

@@ -12,7 +12,10 @@
 
 namespace Magento\Catalog\Block\Product\View\Options;
 
+use Magento\Catalog\Pricing\Price\BasePrice;
+use Magento\Catalog\Pricing\Price\CalculateCustomOptionCatalogRule;
 use Magento\Catalog\Pricing\Price\CustomOptionPriceInterface;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Product options section abstract block.
@@ -48,19 +51,28 @@ abstract class AbstractOptions extends \Magento\Framework\View\Element\Template
     protected $_catalogHelper;
 
     /**
+     * @var CalculateCustomOptionCatalogRule
+     */
+    private $calculateCustomOptionCatalogRule;
+
+    /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Framework\Pricing\Helper\Data $pricingHelper
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param array $data
+     * @param CalculateCustomOptionCatalogRule|null $calculateCustomOptionCatalogRule
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Framework\Pricing\Helper\Data $pricingHelper,
         \Magento\Catalog\Helper\Data $catalogData,
-        array $data = []
+        array $data = [],
+        CalculateCustomOptionCatalogRule $calculateCustomOptionCatalogRule = null
     ) {
         $this->pricingHelper = $pricingHelper;
         $this->_catalogHelper = $catalogData;
+        $this->calculateCustomOptionCatalogRule = $calculateCustomOptionCatalogRule
+            ?? ObjectManager::getInstance()->get(CalculateCustomOptionCatalogRule::class);
         parent::__construct($context, $data);
     }
 
@@ -162,6 +174,19 @@ abstract class AbstractOptions extends \Magento\Framework\View\Element\Template
         $priceStr = $sign;
 
         $customOptionPrice = $this->getProduct()->getPriceInfo()->getPrice('custom_option_price');
+        $isPercent = (bool) $value['is_percent'];
+
+        if (!$isPercent) {
+            $catalogPriceValue = $this->calculateCustomOptionCatalogRule->execute(
+                $this->getProduct(),
+                (float)$value['pricing_value'],
+                $isPercent
+            );
+            if ($catalogPriceValue !== null) {
+                $value['pricing_value'] = $catalogPriceValue;
+            }
+        }
+
         $context = [CustomOptionPriceInterface::CONFIGURATION_OPTION_FLAG => true];
         $optionAmount = $customOptionPrice->getCustomAmount($value['pricing_value'], null, $context);
         $priceStr .= $this->getLayout()->getBlock('product.price.render.default')->renderAmount(
