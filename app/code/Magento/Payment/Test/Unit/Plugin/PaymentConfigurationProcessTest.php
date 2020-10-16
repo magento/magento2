@@ -108,12 +108,6 @@ class PaymentConfigurationProcessTest extends TestCase
     {
         $jsLayout['components']['checkout']['children']['steps']['children']['billing-step']
         ['children']['payment']['children']['renders']['children'] = [
-            'braintree' => [
-                'methods' => [
-                    'braintree_paypal' => [],
-                    'braintree' => []
-                ]
-            ],
             'paypal-payments' => [
                 'methods' => [
                     'payflowpro' => [],
@@ -125,31 +119,31 @@ class PaymentConfigurationProcessTest extends TestCase
         ['children']['payment']['children']['renders']['children'] = [];
         $result2['components']['checkout']['children']['steps']['children']['billing-step']
         ['children']['payment']['children']['renders']['children'] = [
-            'braintree' => [
+            'paypal-payments' => [
                 'methods' => [
-                    'braintree' => [],
-                    'braintree_paypal' => []
+                    'payflowpro' => [],
+                    'payflow_link' => []
                 ]
             ]
         ];
 
-        $braintreePaymentMethod = $this
+        $payflowproPaymentMethod = $this
             ->getMockBuilder(PaymentMethodInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getCode'])
             ->getMockForAbstractClass();
-        $braintreePaypalPaymentMethod = $this
+        $payflowproLinkPaymentMethod = $this
             ->getMockBuilder(PaymentMethodInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getCode'])
             ->getMockForAbstractClass();
 
-        $braintreePaymentMethod->expects($this->any())->method('getCode')->willReturn('braintree');
-        $braintreePaypalPaymentMethod->expects($this->any())->method('getCode')->willReturn('braintree_paypal');
+        $payflowproPaymentMethod->expects($this->any())->method('getCode')->willReturn('payflowpro');
+        $payflowproLinkPaymentMethod->expects($this->any())->method('getCode')->willReturn('payflow_link');
 
         return [
             [$jsLayout, [], $result1],
-            [$jsLayout, [$braintreePaymentMethod, $braintreePaypalPaymentMethod], $result2]
+            [$jsLayout, [$payflowproPaymentMethod, $payflowproLinkPaymentMethod], $result2]
         ];
     }
 }

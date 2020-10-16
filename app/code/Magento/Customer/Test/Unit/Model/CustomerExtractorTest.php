@@ -121,14 +121,27 @@ class CustomerExtractorTest extends TestCase
         );
     }
 
-    public function testExtract()
+    /**
+     * @param int $storeId
+     * @param int $websiteId
+     * @param array $customerData
+     * @dataProvider getDataProvider
+     * @return void
+     */
+    public function testExtract(int $storeId, int $websiteId, array $customerData)
     {
-        $customerData = [
-            'firstname' => 'firstname',
-            'lastname' => 'firstname',
-            'email' => 'email.example.com',
-        ];
+        $this->initializeExpectation($storeId, $websiteId, $customerData);
 
+        $this->assertSame($this->customerData, $this->customerExtractor->extract('form-code', $this->request));
+    }
+
+    /**
+     * @param int $storeId
+     * @param int $websiteId
+     * @param array $customerData
+     */
+    private function initializeExpectation(int $storeId, int $websiteId, array $customerData): void
+    {
         $this->formFactory->expects($this->once())
             ->method('create')
             ->with('customer', 'form-code')
@@ -156,17 +169,54 @@ class CustomerExtractorTest extends TestCase
             ->willReturn($this->store);
         $this->store->expects($this->once())
             ->method('getId')
-            ->willReturn(1);
+            ->willReturn($storeId);
         $this->store->expects($this->once())
             ->method('getWebsiteId')
-            ->willReturn(1);
+            ->willReturn($websiteId);
         $this->customerData->expects($this->once())
             ->method('setWebsiteId')
-            ->with(1);
+            ->with($websiteId);
         $this->customerData->expects($this->once())
             ->method('setStoreId')
-            ->with(1);
+            ->with($storeId);
+    }
 
-        $this->assertSame($this->customerData, $this->customerExtractor->extract('form-code', $this->request));
+    /**
+     * @return array
+     */
+    public function getDataProvider()
+    {
+        return [
+            'extract data when group id is null' => [
+                1,
+                1,
+                [
+                    'firstname' => 'firstname-1',
+                    'lastname' => 'firstname-1',
+                    'email' => 'email-1.example.com',
+                    'group_id' => null
+                ]
+            ],
+            'extract data when group id is not null and default' => [
+                1,
+                2,
+                [
+                    'firstname' => 'firstname-2',
+                    'lastname' => 'firstname-3',
+                    'email' => 'email-2.example.com',
+                    'group_id' => 1
+                ]
+            ],
+            'extract data when group id is different from default' => [
+                1,
+                1,
+                [
+                    'firstname' => 'firstname-3',
+                    'lastname' => 'firstname-3',
+                    'email' => 'email-3.example.com',
+                    'group_id' => 2
+                ]
+            ],
+        ];
     }
 }

@@ -22,7 +22,7 @@ class Validator implements ValidatorInterface
     /**
      * @var array
      */
-    private $engineBlacklist = ['mysql' => 'MySQL'];
+    private $excludedEngineList = ['mysql' => 'MySQL'];
 
     /**
      * @var ValidatorInterface[]
@@ -32,16 +32,16 @@ class Validator implements ValidatorInterface
     /**
      * @param ScopeConfigInterface $scopeConfig
      * @param array $engineValidators
-     * @param array $engineBlacklist
+     * @param array $excludedEngineList
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
         array $engineValidators = [],
-        array $engineBlacklist = []
+        array $excludedEngineList = []
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->engineValidators = $engineValidators;
-        $this->engineBlacklist = array_merge($this->engineBlacklist, $engineBlacklist);
+        $this->excludedEngineList = array_merge($this->excludedEngineList, $excludedEngineList);
     }
 
     /**
@@ -51,9 +51,9 @@ class Validator implements ValidatorInterface
     {
         $errors = [];
         $currentEngine = $this->scopeConfig->getValue('catalog/search/engine');
-        if (isset($this->engineBlacklist[$currentEngine])) {
-            $blacklistedEngine = $this->engineBlacklist[$currentEngine];
-            $errors[] = "Your current search engine, '{$blacklistedEngine}', is not supported."
+        if (isset($this->excludedEngineList[$currentEngine])) {
+            $excludedEngine = $this->excludedEngineList[$currentEngine];
+            $errors[] = "Your current search engine, '{$excludedEngine}', is not supported."
                 . " You must install a supported search engine before upgrading."
                 . " See the System Upgrade Guide for more information.";
         }

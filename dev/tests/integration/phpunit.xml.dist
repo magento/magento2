@@ -12,17 +12,23 @@
          beStrictAboutTestsThatDoNotTestAnything="false"
          bootstrap="./framework/bootstrap.php"
          stderr="true"
+         testSuiteLoaderClass="Magento\TestFramework\SuiteLoader"
+         testSuiteLoaderFile="framework/Magento/TestFramework/SuiteLoader.php"
 >
     <!-- Test suites definition -->
     <testsuites>
+        <testsuite name="Magento Integration Tests">
+            <file>testsuite/Magento/IntegrationTest.php</file>
+        </testsuite>
         <!-- Memory tests run first to prevent influence of other tests on accuracy of memory measurements -->
         <testsuite name="Memory Usage Tests">
             <file>testsuite/Magento/MemoryUsageTest.php</file>
         </testsuite>
-        <testsuite name="Magento Integration Tests">
+        <testsuite name="Magento Integration Tests Real Suite">
             <directory>testsuite</directory>
             <directory>../../../app/code/*/*/Test/Integration</directory>
             <exclude>testsuite/Magento/MemoryUsageTest.php</exclude>
+            <exclude>testsuite/Magento/IntegrationTest.php</exclude>
         </testsuite>
     </testsuites>
     <!-- Code coverage filters -->
@@ -75,6 +81,7 @@
         <!-- Connection parameters for RabbitMQ tests -->
         <!--<const name="RABBITMQ_MANAGEMENT_PORT" value="15672"/>-->
         <!--<const name="TESTS_PARALLEL_RUN" value="1"/>-->
+        <const name="USE_OVERRIDE_CONFIG" value="enabled"/>
     </php>
     <!-- Test listeners -->
     <listeners>

@@ -41,8 +41,8 @@ class CurrencyTest extends TestCase
     const TEST_NONCACHED_CURRENCY_LOCALE = 'en_US';
     const TEST_CACHED_CURRENCY = 'CAD';
     const TEST_CACHED_CURRENCY_LOCALE = 'en_CA';
-    const TEST_NONEXISTANT_CURRENCY = 'QQQ';
-    const TEST_NONEXISTANT_CURRENCY_LOCALE = 'fr_FR';
+    const TEST_NONEXISTENT_CURRENCY = 'QQQ';
+    const TEST_NONEXISTENT_CURRENCY_LOCALE = 'fr_FR';
     const TEST_EXCEPTION_CURRENCY = 'ZZZ';
     const TEST_EXCEPTION_CURRENCY_LOCALE = 'es_ES';
 
@@ -146,9 +146,9 @@ class CurrencyTest extends TestCase
         $this->assertEquals([self::TEST_CACHED_CURRENCY], $retrievedCurrencyObject->getCurrencyList());
     }
 
-    public function testGetNonExistantCurrency()
+    public function testGetNonExistentCurrency()
     {
-        $options = new \Zend_Currency(null, self::TEST_NONEXISTANT_CURRENCY_LOCALE);
+        $options = new \Zend_Currency(null, self::TEST_NONEXISTENT_CURRENCY_LOCALE);
 
         $this->mockCurrencyFactory
             ->expects($this->once())
@@ -164,10 +164,10 @@ class CurrencyTest extends TestCase
             ->method('dispatch');
 
         $retrievedCurrencyObject = $this->testCurrencyObject
-            ->getCurrency(self::TEST_NONEXISTANT_CURRENCY);
+            ->getCurrency(self::TEST_NONEXISTENT_CURRENCY);
 
         $this->assertInstanceOf('Zend_Currency', $retrievedCurrencyObject);
-        $this->assertEquals(self::TEST_NONEXISTANT_CURRENCY_LOCALE, $retrievedCurrencyObject->getLocale());
+        $this->assertEquals(self::TEST_NONEXISTENT_CURRENCY_LOCALE, $retrievedCurrencyObject->getLocale());
         $this->assertEquals('euro', $retrievedCurrencyObject->getName());
         $this->assertEquals(['EUR'], $retrievedCurrencyObject->getCurrencyList());
     }

@@ -76,7 +76,7 @@ class ImageMagickTest extends TestCase
     /**
      * @return array
      */
-    public function watermarkDataProvider()
+    public function watermarkDataProvider(): array
     {
         return [
             ['', ImageMagick::ERROR_WATERMARK_IMAGE_ABSENT],
@@ -98,5 +98,15 @@ class ImageMagickTest extends TestCase
         $this->writeMock->method('create')->willThrowException($exception);
         $this->loggerMock->expects($this->once())->method('critical')->with($exception);
         $this->imageMagic->save('product/cache', 'sample.jpg');
+    }
+
+    /**
+     * Test open() with invalid URL.
+     */
+    public function testOpenInvalidUrl()
+    {
+        $this->expectException(\InvalidArgumentException::class);
+
+        $this->imageMagic->open('bar://foo.bar');
     }
 }

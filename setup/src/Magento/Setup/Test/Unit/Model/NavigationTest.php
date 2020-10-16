@@ -42,10 +42,10 @@ class NavigationTest extends TestCase
             ->with('config')
             ->willReturn(
                 [
-                    'navInstallerTitles' => [
+                    'navLandingTitles' => [
                         'install' => 'SomeTitle'
                     ],
-                    'navInstaller' => [
+                    'navLanding' => [
                         ['key1' => 'value1'],
                         ['key2' => 'value2'],
                         ['nav' => 'abc', 'key3' => 'value3'],
@@ -63,7 +63,7 @@ class NavigationTest extends TestCase
 
     public function testGetType()
     {
-        $this->assertEquals(Navigation::NAV_INSTALLER, $this->navigation->getType());
+        $this->assertEquals(Navigation::NAV_LANDING, $this->navigation->getType());
     }
 
     public function testGetData()

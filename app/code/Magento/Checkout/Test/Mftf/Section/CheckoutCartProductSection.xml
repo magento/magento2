@@ -48,6 +48,9 @@
         <element name="checkoutCartProductPrice" type="text" selector="//td[@class='col price']//span[@class='price']"/>
         <element name="checkoutCartSubtotal" type="text" selector="//td[@class='col subtotal']//span[@class='price']"/>
         <element name="emptyCart" selector=".cart-empty" type="text"/>
+        <element name="emptyCartButton" type="button" selector="#empty_cart_button" timeout="30"/>
+        <element name="modalMessage" type="text" selector=".modal-popup.confirm._show .modal-content" timeout="30"/>
+        <element name="modalConfirmButton" type="button" selector=".modal-popup.confirm._show .action-accept" timeout="30"/>
         <!-- Required attention section -->
         <element name="removeProductBySku" type="button" selector="//div[contains(., '{{sku}}')]/ancestor::tbody//button" parameterized="true" timeout="30"/>
         <element name="failedItemBySku" type="block" selector="//div[contains(.,'{{sku}}')]/ancestor::tbody" parameterized="true" timeout="30"/>

@@ -9,6 +9,8 @@ use Magento\Framework\App\ResourceConnection;
 
 /**
  * Test Class for \Magento\Framework\Mview\View\Changelog
+ *
+ * @magentoDbIsolation disabled
  */
 class ChangelogTest extends \PHPUnit\Framework\TestCase
 {

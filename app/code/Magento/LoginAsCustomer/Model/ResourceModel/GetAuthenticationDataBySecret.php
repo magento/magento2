@@ -61,7 +61,7 @@ class GetAuthenticationDataBySecret implements GetAuthenticationDataBySecretInte
     /**
      * @inheritdoc
      */
-    public function execute(string $secretKey): AuthenticationDataInterface
+    public function execute(string $secret): AuthenticationDataInterface
     {
         $connection = $this->resourceConnection->getConnection();
         $tableName = $this->resourceConnection->getTableName('login_as_customer');
@@ -73,7 +73,7 @@ class GetAuthenticationDataBySecret implements GetAuthenticationDataBySecretInte
 
         $select = $connection->select()
             ->from(['main_table' => $tableName])
-            ->where('main_table.secret = ?', $secretKey)
+            ->where('main_table.secret = ?', $secret)
             ->where('main_table.created_at > ?', $timePoint);
 
         $data = $connection->fetchRow($select);

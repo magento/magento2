@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Framework\ObjectManager\Test\Unit\Factory;
 
+use Magento\Framework\Exception\RuntimeException;
 use Magento\Framework\ObjectManager\ConfigInterface;
 use Magento\Framework\ObjectManager\DefinitionInterface;
 use Magento\Framework\ObjectManager\Factory\Compiled;
@@ -19,6 +20,8 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
+ * Test for \Magento\Framework\ObjectManager\Factory\Compiled.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CompiledTest extends TestCase
@@ -114,6 +117,27 @@ class CompiledTest extends TestCase
         $this->assertEquals(['default_value1', 'default_value2'], $result->getValueArray());
         $this->assertEquals('GLOBAL_ARGUMENT', $result->getGlobalValue());
         $this->assertNull($result->getNullValue());
+    }
+
+    /**
+     * Create class with exception
+     *
+     * @return void
+     */
+    public function testCreateSimpleWithException(): void
+    {
+        $requestedType = 'requestedType';
+        $className = SimpleClassTesting::class;
+
+        $this->config->expects($this->atLeastOnce())
+            ->method('getInstanceType')
+            ->willReturn($className);
+
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage(
+            'Type Error occurred when creating object: ' . $className . ', Too few arguments to function ' . $className
+        );
+        $this->factory->create($requestedType, []);
     }
 
     /**
