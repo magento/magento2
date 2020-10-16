@@ -18,7 +18,7 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 
 /**
- * Class add products to compare list
+ * Add products item to compare list
  */
 class AddProductsToCompareList implements ResolverInterface
 {

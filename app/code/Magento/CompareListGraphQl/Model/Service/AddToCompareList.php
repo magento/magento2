@@ -61,7 +61,7 @@ class AddToCompareList
         if (count($products)) {
             $existedProducts = $this->itemCollection->getProductsByListId($listId);
             foreach ($products as $productId) {
-                if (!array_search($productId, $existedProducts)) {
+                if (array_search($productId, $existedProducts) === false) {
                     if ($this->productExists($productId)) {
                         $item = $this->compareItemFactory->create();
                         $item->addProductData($productId);

@@ -19,7 +19,7 @@ use Magento\Store\Api\Data\StoreInterface;
 use Magento\CompareListGraphQl\Model\Service\Collection\GetComparableItemsCollection as ComparableItemsCollection;
 
 /**
- * Get comparable items
+ * Get comparable products
  */
 class GetComparableItems
 {

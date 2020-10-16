@@ -11,7 +11,7 @@ use Magento\CompareListGraphQl\Model\Service\Collection\GetComparableItemsCollec
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 
 /**
- * Get comparable attributes
+ * Get products comparable attributes
  */
 class GetComparableAttributes
 {

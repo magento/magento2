@@ -11,7 +11,7 @@ use Magento\Catalog\Model\CompareListIdToMaskedListId;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 
 /**
- * Get compare list
+ * Get products compare list
  */
 class GetCompareList
 {
