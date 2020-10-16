@@ -334,7 +334,7 @@ class Wishlist extends AbstractModel implements IdentityInterface
     {
         $item = null;
         foreach ($this->getItemCollection() as $_item) {
-            if ($_item->getProduct()->getId() === $product->getId()) {
+            if ($_item->representProduct($product)) {
                 $item = $_item;
                 break;
             }
@@ -356,7 +356,6 @@ class Wishlist extends AbstractModel implements IdentityInterface
             }
         } else {
             $qty = $forciblySetQty ? $qty : $item->getQty() + $qty;
-            $item->setOptions($product->getCustomOptions());
             $item->setQty($qty)->save();
         }
 

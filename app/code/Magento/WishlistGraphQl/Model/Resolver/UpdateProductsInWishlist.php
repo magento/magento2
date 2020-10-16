@@ -20,6 +20,9 @@ use Magento\Wishlist\Model\Wishlist\Data\WishlistItemFactory;
 use Magento\Wishlist\Model\Wishlist\UpdateProductsInWishlist as UpdateProductsInWishlistModel;
 use Magento\Wishlist\Model\WishlistFactory;
 use Magento\WishlistGraphQl\Mapper\WishlistDataMapper;
+use Magento\Framework\DataObject;
+use Magento\Wishlist\Model\Wishlist\Data\WishlistOutput;
+use Magento\Wishlist\Model\Wishlist\BuyRequest\BuyRequestBuilder;
 
 /**
  * Update wishlist items resolver
@@ -52,24 +55,48 @@ class UpdateProductsInWishlist implements ResolverInterface
     private $wishlistFactory;
 
     /**
+     * Catalog product
+     *
+     * @var \Magento\Catalog\Helper\Product
+     */
+    protected $catalogProduct;
+
+    /**
+     * @var array
+     */
+    private $errors = [];
+
+    /**
+     * BuyRequestBuilder
+     * @var BuyRequestBuilder $buyRequestBuilder
+     */
+    private $buyRequestBuilder;
+
+    /**
      * @param WishlistResourceModel $wishlistResource
      * @param WishlistFactory $wishlistFactory
      * @param WishlistConfig $wishlistConfig
      * @param UpdateProductsInWishlistModel $updateProductsInWishlist
      * @param WishlistDataMapper $wishlistDataMapper
+     * @param \Magento\Catalog\Helper\Product $catalogProduct
+     * @param BuyRequestBuilder $buyRequestBuilder
      */
     public function __construct(
         WishlistResourceModel $wishlistResource,
         WishlistFactory $wishlistFactory,
         WishlistConfig $wishlistConfig,
         UpdateProductsInWishlistModel $updateProductsInWishlist,
-        WishlistDataMapper $wishlistDataMapper
+        WishlistDataMapper $wishlistDataMapper,
+        \Magento\Catalog\Helper\Product $catalogProduct,
+        BuyRequestBuilder $buyRequestBuilder
     ) {
         $this->wishlistResource = $wishlistResource;
         $this->wishlistFactory = $wishlistFactory;
         $this->wishlistConfig = $wishlistConfig;
         $this->updateProductsInWishlist = $updateProductsInWishlist;
         $this->wishlistDataMapper = $wishlistDataMapper;
+        $this->catalogProduct = $catalogProduct;
+        $this->buyRequestBuilder = $buyRequestBuilder;
     }
 
     /**
@@ -95,22 +122,22 @@ class UpdateProductsInWishlist implements ResolverInterface
 
         $wishlistId = ((int) $args['wishlistId']) ?: null;
         $wishlist = $this->getWishlist($wishlistId, $customerId);
-
         if (null === $wishlist->getId() || $customerId !== (int) $wishlist->getCustomerId()) {
             throw new GraphQlInputException(__('The wishlist was not found.'));
         }
 
-        $wishlistItems = $args['wishlistItems'];
-        $wishlistItems = $this->getWishlistItems($wishlistItems);
-        $wishlistOutput = $this->updateProductsInWishlist->execute($wishlist, $wishlistItems);
-
+        $wishlistItems  = $args['wishlistItems'];
+        $wishlistItems  = $this->getWishlistItems($wishlistItems);
+        foreach ($wishlistItems as $wishlistItem) {
+            $options = $this->buyRequestBuilder->build($wishlistItem);
+            $wishlistOutput = $this->updateItem($wishlistItem->getId(), $options, $wishlist);
+        }
         if (count($wishlistOutput->getErrors()) !== count($wishlistItems)) {
             $this->wishlistResource->save($wishlist);
         }
 
         return [
-            'wishlist' => $this->wishlistDataMapper->map($wishlistOutput->getWishlist()),
-            'user_errors' => \array_map(
+            'wishlist' => $this->wishlistDataMapper->map($wishlistOutput->getWishlist()),            'user_errors' => \array_map(
                 function (Error $error) {
                     return [
                         'code' => $error->getCode(),
@@ -132,11 +159,9 @@ class UpdateProductsInWishlist implements ResolverInterface
     private function getWishlistItems(array $wishlistItemsData): array
     {
         $wishlistItems = [];
-
         foreach ($wishlistItemsData as $wishlistItemData) {
             $wishlistItems[] = (new WishlistItemFactory())->create($wishlistItemData);
         }
-
         return $wishlistItems;
     }
 
@@ -160,4 +185,110 @@ class UpdateProductsInWishlist implements ResolverInterface
 
         return $wishlist;
     }
+
+    /**
+     * Update wishlist Item and set data from request
+     *
+     * @param int|Item $itemId
+     * @param DataObject $buyRequest
+     * @param wishlistFactory $wishlist
+     * @param null|array|DataObject $params
+     *
+     * @return $this
+     */
+    public function updateItem($itemId, $buyRequest,$wishlist,$params = null)
+    {
+        $item = null;
+        if ($itemId instanceof Item) {
+            $item = $itemId;
+            $itemId = $item->getId();
+        } else {
+            $item = $wishlist->getItem((int)$itemId);
+        }
+        if (!$item) {
+            throw new GraphQlInputException(__('We can\'t specify a wish list item.'));
+        }
+
+        try {
+            $product = $item->getProduct();
+            $productId = $product->getId();
+            if ($productId) {
+                if (!$params) {
+                    $params = new DataObject();
+                } elseif (is_array($params)) {
+                    $params = new DataObject($params);
+                }
+                $params->setCurrentConfig($item->getBuyRequest());
+                $buyRequest = $this->catalogProduct->addParamsToBuyRequest($buyRequest, $params);
+                $buyRequest->setData('action', 'updateItem');
+                $product->setWishlistStoreId($item->getStoreId());
+                $cartCandidates = $product->getTypeInstance()->processConfiguration($buyRequest, clone $product);
+                /**
+                 * Error message
+                 */
+                if (is_string($cartCandidates)) {
+                    return $cartCandidates;
+                }
+
+                /**
+                 * If prepare process return one object
+                 */
+                if (!is_array($cartCandidates)) {
+                    $cartCandidates = [$cartCandidates];
+                }
+
+                foreach ($cartCandidates as $candidate) {
+                    if ($candidate->getParentProductId()) {
+                        continue;
+                    }
+                    $candidate->setWishlistStoreId($item->getStoreId());
+
+                    $qty = $buyRequest->getData('qty') ? $buyRequest->getData('qty') : 1;
+                    $item->setOptions($candidate->getCustomOptions());
+                    $item->setQty($qty)->save();
+                }
+                $wishlist->save();
+            } else {
+                throw new GraphQlInputException(__('The product does not exist.'));
+            }
+
+            if (is_string($item)) {
+                $this->addError($item);
+            }
+        } catch (GraphQlInputException $exception) {
+            $this->addError($exception->getMessage());
+        }
+        return $this->prepareOutput($wishlist);
+    }
+    /**
+     * Add wishlist line item error
+     *
+     * @param string $message
+     * @param string|null $code
+     *
+     * @return void
+     */
+    private function addError(string $message, string $code = null): void
+    {
+        $this->errors[] = new Data\Error(
+            $message,
+            $code ?? self::ERROR_UNDEFINED
+        );
+    }
+
+    /**
+     * Prepare output
+     *
+     * @param Wishlist $wishlist
+     *
+     * @return WishlistOutput
+     */
+    private function prepareOutput(Wishlist $wishlist): WishlistOutput
+    {
+        $output = new WishlistOutput($wishlist, $this->errors);
+        $this->errors = [];
+
+        return $output;
+    }
 }
+
