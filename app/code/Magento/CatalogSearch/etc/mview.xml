@@ -19,6 +19,7 @@
             <table name="catalog_product_bundle_selection" entity_column="parent_product_id" />
             <table name="catalog_product_super_link" entity_column="product_id" />
             <table name="catalog_product_link" entity_column="product_id" />
+            <table name="catalog_category_product" entity_column="product_id" />
         </subscriptions>
     </view>
 </config>

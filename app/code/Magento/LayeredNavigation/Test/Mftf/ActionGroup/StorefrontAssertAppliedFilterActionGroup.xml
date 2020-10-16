@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontAssertAppliedFilterActionGroup">
+        <annotations>
+            <description>Asserts applied filter label and value on storefront category page.</description>
+        </annotations>
+        <arguments>
+            <argument name="attributeLabel" type="string"/>
+            <argument name="attributeOptionLabel" type="string"/>
+        </arguments>
+        <see selector="{{StorefrontLayeredNavigationSection.appliedFilterLabel('1')}}" userInput="{{attributeLabel}}" stepKey="seeAppliedFilterLabel"/>
+        <see selector="{{StorefrontLayeredNavigationSection.appliedFilterValue('1')}}" userInput="{{attributeOptionLabel}}" stepKey="seeAppliedFilterValue"/>
+    </actionGroup>
+</actionGroups>
