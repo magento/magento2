@@ -161,4 +161,9 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
         return $select;
     }
+
+    public function getAttributeByOptionValue(string $option)
+    {
+
+    }
 }

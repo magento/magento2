@@ -19,6 +19,8 @@ interface AttributeOptionInterface
      */
     const OPTION_ID = 'option_id';
 
+    const VALUE_ID = 'value_id';
+
     const LABEL = 'label';
 
     const VALUE = 'value';
@@ -43,6 +45,21 @@ interface AttributeOptionInterface
      * @return $this
      */
     public function setOptionId($id);
+
+    /**
+     * Get value id
+     *
+     * @return int|null
+     */
+    public function getValueId();
+
+    /**
+     * Set value id
+     *
+     * @param int $id
+     * @return $this
+     */
+    public function setValueId($id);
 
     /**
      * Get option label

@@ -31,9 +31,7 @@ class Option extends AbstractModel implements AttributeOptionInterface
     }
 
     /**
-     * Get option id
-     *
-     * @return int
+     * {@inheritdoc}
      */
     public function getOptionId()
     {
@@ -41,16 +39,28 @@ class Option extends AbstractModel implements AttributeOptionInterface
     }
 
     /**
-     * Set option id
-     *
-     * @param int $id
-     * @return $this
+     * {@inheritdoc}
      */
     public function setOptionId($id)
     {
         return $this->setData(self::OPTION_ID, $id);
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function getValueId()
+    {
+        return $this->getData(self::VALUE_ID);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setValueId($id)
+    {
+        return $this->setData(self::VALUE_ID, $id);
+    }
 
     /**
      * {@inheritdoc}
