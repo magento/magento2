@@ -15,6 +15,7 @@ use Magento\Eav\Api\Data\AttributeInterface;
 use Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Store\Model\Store;
 
 /**
  * Add data to category entity and populate with default values
@@ -68,31 +69,34 @@ class PopulateWithValues
      */
     public function execute(CategoryInterface $category, array $existingData): void
     {
-        $storeId = $existingData['store_id'];
-        $overriddenValues = array_filter(
-            $category->getData(),
-            function ($key) use ($category, $storeId) {
-                /** @var Category $category */
-                return $this->scopeOverriddenValue->containsValue(
-                    CategoryInterface::class,
-                    $category,
-                    $key,
-                    $storeId
-                );
-            },
-            ARRAY_FILTER_USE_KEY
-        );
-        $defaultValues = array_diff_key($category->getData(), $overriddenValues);
-        array_walk(
-            $defaultValues,
-            function (&$value, $key) {
-                $attributes = $this->getAttributes();
-                if (isset($attributes[$key]) && !$attributes[$key]->isStatic()) {
-                    $value = null;
+        $storeId = $existingData['store_id'] ?? Store::DEFAULT_STORE_ID;
+        if ((int)$storeId !== Store::DEFAULT_STORE_ID) {
+            $overriddenValues = array_filter(
+                $category->getData(),
+                function ($key) use ($category, $storeId) {
+                    /** @var Category $category */
+                    return $this->scopeOverriddenValue->containsValue(
+                        CategoryInterface::class,
+                        $category,
+                        $key,
+                        $storeId
+                    );
+                },
+                ARRAY_FILTER_USE_KEY
+            );
+            $defaultValues = array_diff_key($category->getData(), $overriddenValues);
+            array_walk(
+                $defaultValues,
+                function (&$value, $key) {
+                    $attributes = $this->getAttributes();
+                    if (isset($attributes[$key]) && !$attributes[$key]->isStatic()) {
+                        $value = null;
+                    }
                 }
-            }
-        );
-        $category->addData($defaultValues);
+            );
+            $category->addData($defaultValues);
+        }
+
         $category->addData($existingData);
         $useDefaultAttributes = array_filter(
             $category->getData(),
