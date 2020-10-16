@@ -418,6 +418,10 @@ class Storage extends \Magento\Framework\DataObject
      */
     public function createDirectory($name, $path)
     {
+        $path = $this->_directory->getDriver()->getRealPathSafety(
+            $this->_directory->getAbsolutePath($path)
+        );
+
         if (!preg_match(self::DIRECTORY_NAME_REGEXP, $name)) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('Please rename the folder using only letters, numbers, underscores and dashes.')
@@ -539,11 +543,14 @@ class Storage extends \Magento\Framework\DataObject
      */
     public function uploadFile($targetPath, $type = null)
     {
-        if (!$this->isPathAllowed($targetPath, $this->getConditionsForExcludeDirs())) {
+        $targetPath = $this->file->getRealPathSafety($targetPath);
+
+        if (!$this->isPathAllowed($targetPath, $this->getConditionsForExcludeDirs()) || strlen($targetPath) > 255) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('We can\'t upload the file to current folder right now. Please try another folder.')
             );
         }
+
         /** @var \Magento\MediaStorage\Model\File\Uploader $uploader */
         $uploader = $this->_uploaderFactory->create(['fileId' => 'image']);
         $allowed = $this->getAllowedExtensions($type);

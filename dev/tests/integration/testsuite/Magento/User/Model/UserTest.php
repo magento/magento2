@@ -356,9 +356,6 @@ class UserTest extends \PHPUnit\Framework\TestCase
      */
     public function testBeforeSavePasswordHash()
     {
-        $pattern = $this->encryptor->getLatestHashVersion() === Encryptor::HASH_VERSION_ARGON2ID13 ?
-            '/^[0-9a-f]+:[0-9a-zA-Z]{16}:[0-9]+$/' :
-            '/^[0-9a-f]+:[0-9a-zA-Z]{32}:[0-9]+$/';
         $this->_model->setUsername(
             'john.doe'
         )->setFirstname(
@@ -373,7 +370,7 @@ class UserTest extends \PHPUnit\Framework\TestCase
         $this->_model->save();
         $this->assertNotContains('123123q', $this->_model->getPassword(), 'Password is expected to be hashed');
         $this->assertRegExp(
-            $pattern,
+            '/^[^\:]+\:[^\:]+\:/i',
             $this->_model->getPassword(),
             'Salt is expected to be saved along with the password'
         );

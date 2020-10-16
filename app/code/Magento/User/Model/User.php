@@ -38,19 +38,19 @@ use Magento\Framework\App\DeploymentConfig;
 class User extends AbstractModel implements StorageInterface, UserInterface
 {
     /**
-     * @deprecated New functionality has been added. It isn't used anymore
+     * @deprecated Notificator is now responsible for sending messages to admin users.
      * @see \Magento\User\Model\Spi\NotificatorInterface
      */
     const XML_PATH_FORGOT_EMAIL_TEMPLATE = 'admin/emails/forgot_email_template';
 
     /**
-     * @deprecated New functionality has been added. It isn't used anymore
+     * @deprecated Notificator is now responsible for sending messages to admin users.
      * @see \Magento\User\Model\Spi\NotificatorInterface
      */
     const XML_PATH_FORGOT_EMAIL_IDENTITY = 'admin/emails/forgot_email_identity';
 
     /**
-     * @deprecated New functionality has been added. It isn't used anymore
+     * @deprecated Notificator is now responsible for sending messages to admin users.
      * @see \Magento\User\Model\Spi\NotificatorInterface
      */
     const XML_PATH_USER_NOTIFICATION_TEMPLATE = 'admin/emails/user_notification_template';
@@ -58,7 +58,8 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     /**
      * Configuration paths for admin user reset password email template
      *
-     * @deprecated New functionality has been added. It isn't used anymore
+     * @deprecated Notificator is now responsible for sending messages to admin users.
+     * @see \Magento\User\Model\Spi\NotificatorInterface
      */
     const XML_PATH_RESET_PASSWORD_TEMPLATE = 'admin/emails/reset_password_template';
 
@@ -342,9 +343,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      */
     public function validate()
     {
-        /** @var $validator \Magento\Framework\Validator\DataObject */
-        $validator = $this->_validatorObject->create();
-        $this->validationRules->addUserInfoRules($validator);
+        $validator = $this->_getValidationRulesBeforeSave();
 
         if (!$validator->isValid($this)) {
             return $validator->getMessages();
