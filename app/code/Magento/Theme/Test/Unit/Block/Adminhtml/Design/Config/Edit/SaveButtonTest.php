@@ -7,10 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Theme\Test\Unit\Block\Adminhtml\Design\Config\Edit;
 
-use Magento\Backend\Block\Widget\Context;
-use Magento\Framework\UrlInterface;
 use Magento\Theme\Block\Adminhtml\Design\Config\Edit\SaveButton;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class SaveButtonTest extends TestCase
