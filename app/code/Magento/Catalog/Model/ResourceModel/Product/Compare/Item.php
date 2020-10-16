@@ -45,6 +45,10 @@ class Item extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $select->where('visitor_id = ?', (int)$object->getVisitorId());
         }
 
+        if ($object->getListId()) {
+            $select->where('list_id = ?', (int)$object->getListId());
+        }
+
         $data = $connection->fetchRow($select);
 
         if (!$data) {

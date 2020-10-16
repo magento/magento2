@@ -9,6 +9,7 @@ namespace Magento\CompareListGraphQl\Model\Resolver;
 
 use Magento\Catalog\Model\MaskedListIdToCompareListId;
 use Magento\CompareListGraphQl\Model\Service\CustomerService;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
@@ -73,7 +74,18 @@ class AssignCompareListToCustomer implements ResolverInterface
         }
 
         $listId = $this->maskedListIdToCompareListId->execute($args['uid']);
+        $result = false;
 
-        return $this->customerService->setCustomerToCompareList($listId, $context->getUserId());
+        if ($listId) {
+            try {
+                $result = $this->customerService->setCustomerToCompareList($listId, $context->getUserId());
+            } catch (LocalizedException $exception) {
+                throw new GraphQlInputException(
+                    __('Something was wrong during assigning customer.')
+                );
+            }
+        }
+
+        return $result;
     }
 }

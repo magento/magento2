@@ -11,7 +11,9 @@ use Magento\CompareListGraphQl\Model\Service\AddToCompareList;
 use Magento\CompareListGraphQl\Model\Service\CreateCompareList as CreateCompareListService;
 use Magento\CompareListGraphQl\Model\Service\CustomerService;
 use Magento\CompareListGraphQl\Model\Service\GetCompareList;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Framework\GraphQl\Query\Resolver\Value;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
@@ -81,6 +83,8 @@ class CreateCompareList implements ResolverInterface
      * @return Value|mixed|void
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @throws GraphQlInputException
+     * @throws LocalizedException
      */
     public function resolve(
         Field $field,
@@ -94,19 +98,25 @@ class CreateCompareList implements ResolverInterface
         $storeId = (int)$context->getExtensionAttributes()->getStore()->getStoreId();
         $generatedListId = $this->mathRandom->getUniqueHash();
 
-        if ((0 === $customerId || null === $customerId)) {
-            $listId = $this->createCompareList->execute($generatedListId);
-            $this->addProductToCompareList->execute($listId, $products, $storeId);
-        }
-
-        if ($customerId) {
-            $listId = $this->customerService->getListIdByCustomerId($customerId);
-            if ($listId) {
-                $this->addProductToCompareList->execute($listId, $products, $storeId);
-            } else {
-                $listId = $this->createCompareList->execute($generatedListId, $customerId);
+        try {
+            if ((0 === $customerId || null === $customerId)) {
+                $listId = $this->createCompareList->execute($generatedListId);
                 $this->addProductToCompareList->execute($listId, $products, $storeId);
             }
+
+            if ($customerId) {
+                $listId = $this->customerService->getListIdByCustomerId($customerId);
+                if ($listId) {
+                    $this->addProductToCompareList->execute($listId, $products, $storeId);
+                } else {
+                    $listId = $this->createCompareList->execute($generatedListId, $customerId);
+                    $this->addProductToCompareList->execute($listId, $products, $storeId);
+                }
+            }
+        } catch (LocalizedException $exception) {
+            throw new GraphQlInputException(
+                __('Something was wrong during creating compare list')
+            );
         }
 
         return $this->getCompareList->execute($listId, $context);

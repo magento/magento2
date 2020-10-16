@@ -7,7 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\CompareListGraphQl\Model\Resolver;
 
+use Magento\Catalog\Model\CompareListFactory;
+use Magento\Catalog\Model\MaskedListIdToCompareListId;
+use Magento\Catalog\Model\ResourceModel\Product\Compare\CompareList as CompareListResource;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Framework\GraphQl\Query\Resolver\Value;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
@@ -19,6 +24,36 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 class DeleteCompareList implements ResolverInterface
 {
     /**
+     * @var CompareListFactory
+     */
+    private $compareListFactory;
+
+    /**
+     * @var CompareListResource
+     */
+    private $compareListResource;
+
+    /**
+     * @var MaskedListIdToCompareListId
+     */
+    private $maskedListIdToCompareListId;
+
+    /**
+     * @param CompareListFactory $compareListFactory
+     * @param CompareListResource $compareListResource
+     * @param MaskedListIdToCompareListId $maskedListIdToCompareListId
+     */
+    public function __construct(
+        CompareListFactory $compareListFactory,
+        CompareListResource $compareListResource,
+        MaskedListIdToCompareListId $maskedListIdToCompareListId
+    ) {
+        $this->compareListFactory = $compareListFactory;
+        $this->compareListResource = $compareListResource;
+        $this->maskedListIdToCompareListId = $maskedListIdToCompareListId;
+    }
+
+    /**
      * @param Field $field
      * @param ContextInterface $context
      * @param ResolveInfo $info
@@ -26,7 +61,9 @@ class DeleteCompareList implements ResolverInterface
      * @param array|null $args
      *
      * @return Value|mixed|void
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @throws GraphQlInputException
      */
     public function resolve(
         Field $field,
@@ -35,6 +72,26 @@ class DeleteCompareList implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        // TODO: Implement resolve() method.
+        if (!isset($args['uid'])) {
+            throw new GraphQlInputException(__('"uid" value must be specified'));
+        }
+
+        $listId = $this->maskedListIdToCompareListId->execute($args['uid']);
+        $removed = ['result' => false];
+
+        if ($listId) {
+            try {
+                $compareList = $this->compareListFactory->create();
+                $compareList->setListId($listId);
+                $this->compareListResource->delete($compareList);
+                $removed['result'] = true;
+            } catch (LocalizedException $exception) {
+                throw new GraphQlInputException(
+                    __('Something was wrong during removing compare list')
+                );
+            }
+        }
+
+        return $removed;
     }
 }

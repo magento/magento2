@@ -73,7 +73,6 @@ class GetComparableItemsCollection
     public function execute(int $listId, ContextInterface $context): Collection
     {
         $this->compareProduct->setAllowUsedFlat(false);
-        /** @var Collection $comparableItems */
         $this->items = $this->itemCollectionFactory->create();
         $this->items->setListId($listId);
         $this->items->useProductItem()->setStoreId($context->getExtensionAttributes()->getStore()->getStoreId());

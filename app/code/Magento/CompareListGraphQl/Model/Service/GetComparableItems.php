@@ -18,7 +18,6 @@ use Magento\Framework\Pricing\SaleableInterface;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\CompareListGraphQl\Model\Service\Collection\GetComparableItemsCollection as ComparableItemsCollection;
 
-
 /**
  * Get comparable items
  */

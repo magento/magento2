@@ -12,6 +12,9 @@ use Magento\Catalog\Model\ListIdMaskFactory;
 use Magento\Catalog\Model\ResourceModel\Product\Compare\CompareList as CompareListResource;
 use Magento\Catalog\Model\ResourceModel\Product\Compare\ListIdMask as ListIdMaskResource;
 
+/**
+ * Create new Compare List
+ */
 class CreateCompareList
 {
     /**

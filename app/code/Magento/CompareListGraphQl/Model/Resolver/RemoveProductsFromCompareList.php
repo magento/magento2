@@ -7,19 +7,16 @@ declare(strict_types=1);
 
 namespace Magento\CompareListGraphQl\Model\Resolver;
 
-use Magento\Catalog\Model\CompareList as ModelCompareList;
-use Magento\Catalog\Model\CompareListFactory;
-use Magento\Catalog\Model\Product\Compare\Item;
-use Magento\Catalog\Model\Product\Compare\ItemFactory;
-use Magento\Catalog\Model\ResourceModel\CompareList as ResourceCompareList;
-use Magento\CompareListGraphQl\Model\Service\CompareListService;
+use Magento\Catalog\Model\MaskedListIdToCompareListId;
+use Magento\CompareListGraphQl\Model\Service\GetCompareList;
+use Magento\CompareListGraphQl\Model\Service\RemoveFromCompareList;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Framework\GraphQl\Query\Resolver\Value;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\Store\Api\Data\StoreInterface;
 
 /**
  * Remove items from compare list
@@ -27,47 +24,37 @@ use Magento\Store\Api\Data\StoreInterface;
 class RemoveProductsFromCompareList implements ResolverInterface
 {
     /**
-     * @var CompareListFactory
+     * @var GetCompareList
      */
-    private $compareListFactory;
+    private $getCompareList;
 
     /**
-     * @var ResourceCompareList
+     * @var RemoveFromCompareList
      */
-    private $resourceCompareList;
+    private $removeFromCompareList;
 
     /**
-     * Compare item factory
-     *
-     * @var ItemFactory
+     * @var MaskedListIdToCompareListId
      */
-    private $compareItemFactory;
+    private $maskedListIdToCompareListId;
 
     /**
-     * @var CompareListService
-     */
-    private $compareListService;
-
-    /**
-     * @param CompareListFactory $compareListFactory
-     * @param ResourceCompareList $resourceCompareList
-     * @param ItemFactory $compareItemFactory
-     * @param CompareListService $compareListService
+     * @param GetCompareList $getCompareList
+     * @param RemoveFromCompareList $removeFromCompareList
+     * @param MaskedListIdToCompareListId $maskedListIdToCompareListId
      */
     public function __construct(
-        CompareListFactory $compareListFactory,
-        ResourceCompareList $resourceCompareList,
-        ItemFactory $compareItemFactory,
-        CompareListService $compareListService
+        GetCompareList $getCompareList,
+        RemoveFromCompareList $removeFromCompareList,
+        MaskedListIdToCompareListId $maskedListIdToCompareListId
     ) {
-        $this->compareListFactory = $compareListFactory;
-        $this->resourceCompareList = $resourceCompareList;
-        $this->compareItemFactory = $compareItemFactory;
-        $this->compareListService = $compareListService;
+        $this->getCompareList = $getCompareList;
+        $this->removeFromCompareList = $removeFromCompareList;
+        $this->maskedListIdToCompareListId = $maskedListIdToCompareListId;
     }
 
     /**
-     * Remove items from compare list
+     * Remove products from compare list
      *
      * @param Field $field
      * @param ContextInterface $context
@@ -88,28 +75,28 @@ class RemoveProductsFromCompareList implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        $listId = (int)$args['id'];
-        /** @var StoreInterface $store */
-        $store = $context->getExtensionAttributes()->getStore();
-        /** @var  $compareListModel ModelCompareList*/
-        $compareListModel = $this->compareListFactory->create();
-        $this->resourceCompareList->load($compareListModel, $args['id']);
-
-        if (!$compareListModel->getId()) {
-            throw new GraphQlInputException(__('Can\'t load compare list.'));
+        if (!isset($args['input']['products'])) {
+            throw new GraphQlInputException(__('"products" value must be specified.'));
         }
 
-        foreach ($args['items'] as $key) {
-            /* @var $item Item */
-            $item = $this->compareItemFactory->create();
-            $item->setListId($listId);
-            $item->loadByProduct($key);
-
-            if ($item->getId()) {
-                $item->delete();
-            }
+        if (!isset($args['input']['uid'])) {
+            throw new GraphQlInputException(__('"uid" value must be specified.'));
         }
 
-        return $this->compareListService->getCompareList($listId, $context, $store);
+        $listId = $this->maskedListIdToCompareListId->execute($args['input']['uid']);
+
+        if (!$listId) {
+            throw new GraphQlInputException(__('"uid" value does not exist'));
+        }
+
+        try {
+            $this->removeFromCompareList->execute($listId, $args['input']['products']);
+        } catch (LocalizedException $exception) {
+            throw new GraphQlInputException(
+                __('Something was wrong during removing products from compare list')
+            );
+        }
+
+        return $this->getCompareList->execute($listId, $context);
     }
 }
