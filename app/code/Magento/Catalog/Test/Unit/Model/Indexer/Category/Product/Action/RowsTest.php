@@ -31,6 +31,8 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Test for Rows action
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects) to preserve compatibility with tested class
  */
 class RowsTest extends TestCase
 {

@@ -66,6 +66,7 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
      * @param EventManagerInterface|null $eventManager
      * @param IndexerRegistry|null $indexerRegistry
      * @param WorkingStateProvider|null $workingStateProvider
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList) Preserve compatibility with the parent class
      */
     public function __construct(
         ResourceConnection $resource,
