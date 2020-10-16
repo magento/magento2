@@ -35,8 +35,6 @@ type ConfigurableProductOptions @doc(description: "ConfigurableProductOptions de
 }
 
 type ConfigurableProductOptionsValues @doc(description: "ConfigurableProductOptionsValues contains the index number assigned to a configurable product option") {
-    uid: ID!
-    is_available_for_selection: Boolean!
     value_index: Int @doc(description: "A unique index number assigned to the configurable product option")
     label: String @doc(description: "The label of the product")
     default_label: String @doc(description: "The label of the product on the default store")
