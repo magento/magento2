@@ -6,6 +6,10 @@
 
 namespace Magento\TestFramework\Annotation;
 
+use Magento\Framework\Component\ComponentRegistrar;
+use Magento\TestFramework\Application;
+use Magento\TestFramework\ObjectManager;
+use PHPUnit\Framework\TestCase;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use RegexIterator;
@@ -23,7 +27,7 @@ class ComponentRegistrarFixture
     /**#@+
      * Properties of components registrar
      */
-    const REGISTRAR_CLASS = \Magento\Framework\Component\ComponentRegistrar::class;
+    const REGISTRAR_CLASS = ComponentRegistrar::class;
     const PATHS_FIELD = 'paths';
     /**#@-*/
 
@@ -42,22 +46,39 @@ class ComponentRegistrarFixture
     private $origComponents = null;
 
     /**
+     * @var Application
+     */
+    private $application;
+
+    /**
+     * @var ComponentRegistrar
+     */
+    private $registrar;
+
+    /**
      * Constructor
      *
      * @param string $fixtureBaseDir
+     * @param Application $application
+     * @param ComponentRegistrar|null $registrar
      */
-    public function __construct($fixtureBaseDir)
-    {
+    public function __construct(
+        $fixtureBaseDir,
+        Application $application,
+        ComponentRegistrar $registrar = null
+    ) {
         $this->fixtureBaseDir = $fixtureBaseDir;
+        $this->application = $application;
+        $this->registrar = $registrar;
     }
 
     /**
      * Handler for 'startTest' event
      *
-     * @param \PHPUnit\Framework\TestCase $test
+     * @param TestCase $test
      * @return void
      */
-    public function startTest(\PHPUnit\Framework\TestCase $test)
+    public function startTest(TestCase $test)
     {
         $this->registerComponents($test);
     }
@@ -65,12 +86,12 @@ class ComponentRegistrarFixture
     /**
      * Handler for 'endTest' event
      *
-     * @param \PHPUnit\Framework\TestCase $test
+     * @param TestCase $test
      * @return void
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function endTest(\PHPUnit\Framework\TestCase $test)
+    public function endTest(TestCase $test)
     {
         $this->restoreComponents();
     }
@@ -78,9 +99,9 @@ class ComponentRegistrarFixture
     /**
      * Register fixture components
      *
-     * @param \PHPUnit\Framework\TestCase $test
+     * @param TestCase $test
      */
-    private function registerComponents(\PHPUnit\Framework\TestCase $test)
+    private function registerComponents(TestCase $test)
     {
         $annotations = $test->getAnnotations();
         $componentAnnotations = [];
@@ -99,11 +120,19 @@ class ComponentRegistrarFixture
         $paths->setAccessible(true);
         $this->origComponents = $paths->getValue();
         $paths->setAccessible(false);
+        $registrar = $this->registrar ?: ObjectManager::getInstance()->get(ComponentRegistrar::class);
         foreach ($componentAnnotations as $fixturePath) {
-            $fixturesDir = $this->fixtureBaseDir . '/' . $fixturePath;
+            if (strpos($fixturePath, '::') !== false) {
+                list($module, $path) = explode('::', $fixturePath);
+                $fixturesDir = $registrar->getPath(ComponentRegistrar::MODULE, $module)
+                    . "/Test/Integration/" . $path;
+            } else {
+                $fixturesDir = $this->fixtureBaseDir . '/' . $fixturePath;
+            }
+
             if (!file_exists($fixturesDir)) {
                 throw new \InvalidArgumentException(
-                    self::ANNOTATION_NAME . " fixture '$fixturePath' does not exist"
+                    self::ANNOTATION_NAME . " fixture '$fixturesDir' does not exist"
                 );
             }
             $iterator = new RegexIterator(
@@ -119,6 +148,7 @@ class ComponentRegistrarFixture
                 require $registrationFile->getRealPath();
             }
         }
+        $this->application->reinitialize();
     }
 
     /**
@@ -133,6 +163,7 @@ class ComponentRegistrarFixture
             $paths->setValue($this->origComponents);
             $paths->setAccessible(false);
             $this->origComponents = null;
+            $this->application->reinitialize();
         }
     }
 }
