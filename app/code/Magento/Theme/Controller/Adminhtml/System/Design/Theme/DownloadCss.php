@@ -24,6 +24,7 @@ use Psr\Log\LoggerInterface;
  * Class for Download Css.
  * @deprecated 100.2.0
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.Superglobals)
  */
 class DownloadCss extends Theme implements HttpGetActionInterface
 {
