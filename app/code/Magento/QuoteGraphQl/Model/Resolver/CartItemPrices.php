@@ -60,7 +60,7 @@ class CartItemPrices implements ResolverInterface
         return [
             'price' => [
                 'currency' => $currencyCode,
-                'value' => $cartItem->getConvertedPrice(),
+                'value' => $cartItem->getCalculationPrice(),
             ],
             'row_total' => [
                 'currency' => $currencyCode,
