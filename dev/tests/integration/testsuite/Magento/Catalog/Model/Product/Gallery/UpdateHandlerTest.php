@@ -483,7 +483,7 @@ class UpdateHandlerTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param Product $product
-     * @paarm array $roles
+     * @param array $roles
      * @return array
      */
     private function getProductStoreImageRoles(Product $product, array $roles = []): array

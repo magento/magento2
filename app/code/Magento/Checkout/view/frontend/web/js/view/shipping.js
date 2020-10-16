@@ -121,7 +121,9 @@ define([
                     );
                 }
                 checkoutProvider.on('shippingAddress', function (shippingAddrsData) {
-                    checkoutData.setShippingAddressFromData(shippingAddrsData);
+                    if (shippingAddrsData.street && !_.isEmpty(shippingAddrsData.street[0])) {
+                        checkoutData.setShippingAddressFromData(shippingAddrsData);
+                    }
                 });
                 shippingRatesValidator.initFields(fieldsetName);
             });
