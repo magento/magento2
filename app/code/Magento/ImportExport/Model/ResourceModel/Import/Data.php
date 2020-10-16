@@ -201,7 +201,8 @@ class Data extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
      */
     private function prepareSelect(Select $select): Select
     {
-        $select->where('user_id=?', $this->getCurrentUserId() ?? self::DEFAULT_USER_ID);
+        // user_id is NULL part is for backward compatibility
+        $select->where('user_id=? OR user_id is NULL', $this->getCurrentUserId() ?? self::DEFAULT_USER_ID);
 
         return $select;
     }
@@ -227,7 +228,8 @@ class Data extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
      */
     private function prepareDelete(array $where): array
     {
-        $where['user_id=?'] = $this->getCurrentUserId() ?? self::DEFAULT_USER_ID;
+        // user_id is NULL part is for backward compatibility
+        $where['user_id=? OR user_id is NULL'] = $this->getCurrentUserId() ?? self::DEFAULT_USER_ID;
 
         return $where;
     }
