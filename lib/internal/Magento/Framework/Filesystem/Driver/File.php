@@ -8,7 +8,6 @@
 
 namespace Magento\Framework\Filesystem\Driver;
 
-use Magento\Framework\Data\Argument\Interpreter\Boolean;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\Filesystem\Glob;
@@ -30,13 +29,13 @@ class File implements DriverInterface
 
     /**
      * Flag for checking whether or not to be the behavior of statefulFile
-     * @var Boolean
+     * @var bool
      */
     private $stateful;
 
     /**
      * File constructor.
-     * @param Boolean $stateful
+     * @param bool $stateful
      */
     public function __construct($stateful = null)
     {
