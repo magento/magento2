@@ -43,6 +43,11 @@ class PopulateWithValues
     private $filterBuilder;
 
     /**
+     * @var AttributeInterface[]
+     */
+    private $attributes;
+
+    /**
      * @param ScopeOverriddenValue $scopeOverriddenValue
      * @param AttributeRepository $attributeRepository
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
@@ -120,8 +125,12 @@ class PopulateWithValues
      *
      * @return AttributeInterface[]
      */
-    private function getAttributes()
+    private function getAttributes(): array
     {
+        if ($this->attributes) {
+            return $this->attributes;
+        }
+
         $searchResult = $this->attributeRepository->getList(
             $this->searchCriteriaBuilder->addFilters(
                 [
@@ -133,11 +142,12 @@ class PopulateWithValues
                 ]
             )->create()
         );
-        $result = [];
+
+        $this->attributes = [];
         foreach ($searchResult->getItems() as $attribute) {
-            $result[$attribute->getAttributeCode()] = $attribute;
+            $this->attributes[$attribute->getAttributeCode()] = $attribute;
         }
 
-        return $result;
+        return $this->attributes;
     }
 }
