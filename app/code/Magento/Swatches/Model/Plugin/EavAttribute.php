@@ -352,7 +352,7 @@ class EavAttribute
                 }
                 $defaultSwatchValue = reset($storeValues);
                 foreach ($storeValues as $storeId => $value) {
-                    if (!$value) {
+                    if ($value === null || $value === '') {
                         $value = $defaultSwatchValue;
                     }
                     $swatch = $this->loadSwatchIfExists($optionId, $storeId);
