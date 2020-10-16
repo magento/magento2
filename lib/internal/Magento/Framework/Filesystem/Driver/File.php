@@ -975,10 +975,6 @@ class File implements DriverInterface
      */
     public function getRealPathSafety($path)
     {
-        if (strpos($path, DIRECTORY_SEPARATOR . '.') === false) {
-            return $path;
-        }
-
         //Check backslashes
         $path = preg_replace(
             '/\\\\+/',
@@ -992,6 +988,11 @@ class File implements DriverInterface
             DIRECTORY_SEPARATOR,
             $path
         );
+
+        if (strpos($path, DIRECTORY_SEPARATOR . '.') === false) {
+            return $path;
+        }
+
         $pathParts = explode(DIRECTORY_SEPARATOR, $path);
         if (end($pathParts) == '.') {
             $pathParts[count($pathParts) - 1] = '';
