@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="DisplayRefreshCacheAfterChangingCategoryPageLayoutTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Category Layout Change"/>
+            <title value="'Refresh cache' admin notification is displayed when changing category page layout"/>
+            <description value="'Refresh cache' message is not displayed when changing category page layout"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-17031"/>
+            <useCaseId value="MAGETWO-45666"/>
+            <group value="catalog"/>
+        </annotations>
+        <before>
+            <!-- Create category, flush cache and log in -->
+            <comment userInput="Create category, flush cache and log in" stepKey="createCategoryAndLogIn"/>
+            <createData entity="SimpleSubCategory" stepKey="simpleCategory"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="logInAsAdmin"/>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
+        </before>
+        <after>
+            <!-- Delete category and log out -->
+            <comment userInput="Delete category and log out" stepKey="deleteCategoryAndLogOut"/>
+            <deleteData createDataKey="simpleCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logOutFromAdmin"/>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
+        </after>
+        <!-- Navigate to category details page -->
+        <comment userInput="Navigate to category details page" stepKey="navigateToAdminCategoryPage"/>
+        <actionGroup ref="GoToAdminCategoryPageByIdActionGroup" stepKey="goToAdminCategoryPage">
+            <argument name="id" value="$$simpleCategory.id$$"/>
+        </actionGroup>
+        <!-- Open design tab and set layout -->
+        <comment userInput="Open design tab and set layout" stepKey="setLayoutAndSave"/>
+        <click selector="{{CategoryDesignSection.DesignTab}}" stepKey="clickOnDesignTab"/>
+        <waitForElementVisible selector="{{CategoryDesignSection.LayoutDropdown}}" stepKey="waitForLayoutDropDown" />
+        <selectOption selector="{{CategoryDesignSection.LayoutDropdown}}" userInput="2 columns with right bar" stepKey="selectAnOption" />
+        <click selector="{{ContentManagementSection.Save}}" stepKey="clickSaveConfig" />
+        <waitForPageLoad stepKey="waitSaveToApply"/>
+        <!-- See if warning message displays -->
+        <actionGroup ref="AdminSystemMessagesWarningActionGroup" stepKey="seeWarningMessage">
+            <argument name="message" value="Please go to Cache Management and refresh cache types"/>
+        </actionGroup>
+    </test>
+</tests>

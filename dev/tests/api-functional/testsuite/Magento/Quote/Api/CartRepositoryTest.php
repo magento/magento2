@@ -42,7 +42,10 @@ class CartRepositoryTest extends WebapiAbstract
      */
     private $filterBuilder;
 
-    protected function setUp()
+    /**
+     * @inheritdoc
+     */
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->filterBuilder = $this->objectManager->create(
@@ -56,11 +59,13 @@ class CartRepositoryTest extends WebapiAbstract
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         try {
+            /** @var CartRepositoryInterface $quoteRepository */
+            $quoteRepository = $this->objectManager->get(CartRepositoryInterface::class);
             $cart = $this->getCart('test01');
-            $cart->delete();
+            $quoteRepository->delete($cart);
         } catch (\InvalidArgumentException $e) {
             // Do nothing if cart fixture was not used
         }
@@ -74,18 +79,27 @@ class CartRepositoryTest extends WebapiAbstract
      * @return \Magento\Quote\Model\Quote
      * @throws \InvalidArgumentException
      */
-    protected function getCart($reservedOrderId)
+    private function getCart($reservedOrderId)
     {
-        /** @var $cart \Magento\Quote\Model\Quote */
-        $cart = $this->objectManager->get(\Magento\Quote\Model\Quote::class);
-        $cart->load($reservedOrderId, 'reserved_order_id');
-        if (!$cart->getId()) {
+        /** @var SearchCriteriaBuilder $searchCriteriaBuilder */
+        $searchCriteriaBuilder = $this->objectManager->get(SearchCriteriaBuilder::class);
+        $searchCriteria = $searchCriteriaBuilder->addFilter('reserved_order_id', $reservedOrderId)
+            ->create();
+
+        /** @var CartRepositoryInterface $quoteRepository */
+        $quoteRepository = $this->objectManager->get(CartRepositoryInterface::class);
+        $items = $quoteRepository->getList($searchCriteria)->getItems();
+
+        if (empty($items)) {
             throw new \InvalidArgumentException('There is no quote with provided reserved order ID.');
         }
-        return $cart;
+
+        return array_pop($items);
     }
 
     /**
+     * Tests successfull get cart web-api call.
+     *
      * @magentoApiDataFixture Magento/Sales/_files/quote.php
      */
     public function testGetCart()
@@ -116,9 +130,9 @@ class CartRepositoryTest extends WebapiAbstract
         $this->assertEquals($cart->getItemsCount(), $cartData['items_count']);
         $this->assertEquals($cart->getItemsQty(), $cartData['items_qty']);
         //following checks will be uncommented when all cart related services are ready
-        $this->assertContains('customer', $cartData);
-        $this->assertEquals(true, $cartData['customer_is_guest']);
-        $this->assertContains('currency', $cartData);
+        $this->assertArrayHasKey('customer', $cartData);
+        $this->assertTrue($cartData['customer_is_guest']);
+        $this->assertArrayHasKey('currency', $cartData);
         $this->assertEquals($cart->getGlobalCurrencyCode(), $cartData['currency']['global_currency_code']);
         $this->assertEquals($cart->getBaseCurrencyCode(), $cartData['currency']['base_currency_code']);
         $this->assertEquals($cart->getQuoteCurrencyCode(), $cartData['currency']['quote_currency_code']);
@@ -130,11 +144,14 @@ class CartRepositoryTest extends WebapiAbstract
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage No such entity with
+     * Tests exception when cartId is not provided.
+     *
      */
     public function testGetCartThrowsExceptionIfThereIsNoCartWithProvidedId()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('No such entity with');
+
         $cartId = 9999;
 
         $serviceInfo = [
@@ -154,6 +171,8 @@ class CartRepositoryTest extends WebapiAbstract
     }
 
     /**
+     * Tests carts search.
+     *
      * @magentoApiDataFixture Magento/Sales/_files/quote.php
      */
     public function testGetList()
@@ -184,6 +203,7 @@ class CartRepositoryTest extends WebapiAbstract
         $this->searchCriteriaBuilder->addFilters([$grandTotalFilter, $subtotalFilter]);
         $this->searchCriteriaBuilder->addFilters([$minCreatedAtFilter]);
         $this->searchCriteriaBuilder->addFilters([$maxCreatedAtFilter]);
+        $this->searchCriteriaBuilder->addFilter('reserved_order_id', 'test01');
         /** @var SortOrder $sortOrder */
         $sortOrder = $this->sortOrderBuilder->setField('subtotal')->setDirection(SortOrder::SORT_ASC)->create();
         $this->searchCriteriaBuilder->setSortOrders([$sortOrder]);
@@ -213,15 +233,16 @@ class CartRepositoryTest extends WebapiAbstract
         $this->assertEquals($cart->getUpdatedAt(), $cartData['updated_at']);
         $this->assertEquals($cart->getIsActive(), $cartData['is_active']);
 
-        $this->assertContains('customer_is_guest', $cartData);
+        $this->assertArrayHasKey('customer_is_guest', $cartData);
         $this->assertEquals(1, $cartData['customer_is_guest']);
     }
 
     /**
-     * @expectedException \Exception
      */
     public function testGetListThrowsExceptionIfProvidedSearchFieldIsInvalid()
     {
+        $this->expectException(\Exception::class);
+
         $serviceInfo = [
             'soap' => [
                 'service' => 'quoteCartRepositoryV1',
@@ -248,13 +269,14 @@ class CartRepositoryTest extends WebapiAbstract
     /**
      * Saving quote - negative case, attempt to change customer id in the active quote for the user with Customer role.
      *
-     * @expectedException \Exception
-     * @expectedExceptionMessage Invalid state change requested
      * @dataProvider customerIdDataProvider
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_shipping_method.php
      */
     public function testSaveQuoteException($customerId)
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Invalid state change requested');
+
         $token = $this->getToken();
 
         /** @var Quote $quote */

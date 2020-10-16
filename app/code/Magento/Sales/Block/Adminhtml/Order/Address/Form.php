@@ -108,6 +108,7 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\Address
     {
         parent::_prepareForm();
         $this->_form->setId('edit_form');
+        $this->_form->setClass('admin__fieldset');
         $this->_form->setMethod('post');
         $this->_form->setAction(
             $this->getUrl('sales/*/addressSave', ['address_id' => $this->_getAddress()->getId()])
@@ -135,5 +136,13 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\Address
     public function getFormValues()
     {
         return $this->_getAddress()->getData();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function getAddressStoreId()
+    {
+        return $this->_getAddress()->getOrder()->getStoreId();
     }
 }

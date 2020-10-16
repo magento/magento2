@@ -15,9 +15,6 @@
             <testCaseId value="MC-14719"/>
             <severity value="CRITICAL"/>
             <group value="mtf_migrated"/>
-            <skip>
-                <issueId value="MC-16684"/>
-            </skip>
         </annotations>
 
         <before>
@@ -52,8 +49,12 @@
                 <requiredEntity createDataKey="createBundleOption1_1"/>
                 <requiredEntity createDataKey="simpleProduct2"/>
             </createData>
-            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
         </before>
         <after>
             <deleteData createDataKey="simpleProduct1" stepKey="deleteProduct1"/>
@@ -64,7 +65,7 @@
         </after>
 
         <!--Open Product page in StoreFront and assert product and price range -->
-        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKey" stepKey="openProductPageAndVerifyProduct">
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKeyActionGroup" stepKey="openProductPageAndVerifyProduct">
             <argument name="product" value="$$createBundleProduct$$"/>
         </actionGroup>
         <actionGroup ref="AssertStorefrontElementVisibleActionGroup" stepKey="seePriceRangeIsVisible">
@@ -112,9 +113,11 @@
             <argument name="total" value="110.00"/>
         </actionGroup>
 
-        <!--Enabled Shopping Cart Sidebar -->
+        <!--Enabled Mini Cart -->
         <magentoCLI stepKey="enableShoppingCartSidebar" command="config:set checkout/sidebar/display 1"/>
-        <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+            <argument name="tags" value=""/>
+        </actionGroup>
         <reloadPage stepKey="reloadThePage"/>
 
         <!--Click on mini cart-->

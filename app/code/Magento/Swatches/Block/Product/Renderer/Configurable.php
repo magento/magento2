@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types = 1);
 namespace Magento\Swatches\Block\Product\Renderer;
 
 use Magento\Catalog\Block\Product\Context;
@@ -58,6 +59,11 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
     const SWATCH_THUMBNAIL_NAME = 'swatchThumb';
 
     /**
+     * Config path which contains number of swatches per product
+     */
+    private const XML_PATH_SWATCHES_PER_PRODUCT = 'catalog/frontend/swatches_per_product';
+
+    /**
      * @var Product
      */
     protected $product;
@@ -75,7 +81,7 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
     /**
      * Indicate if product has one or more Swatch attributes
      *
-     * @deprecated 100.1.5 unused
+     * @deprecated 100.1.0 unused
      *
      * @var boolean
      */
@@ -200,7 +206,7 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
     public function getNumberSwatchesPerProduct()
     {
         return $this->_scopeConfig->getValue(
-            'catalog/frontend/swatches_per_product',
+            self::XML_PATH_SWATCHES_PER_PRODUCT,
             ScopeInterface::SCOPE_STORE
         );
     }
@@ -244,7 +250,7 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
     /**
      * Init isProductHasSwatchAttribute.
      *
-     * @deprecated 100.1.5 Method isProductHasSwatchAttribute() is used instead of this.
+     * @deprecated 100.2.0 Method isProductHasSwatchAttribute() is used instead of this.
      *
      * @codeCoverageIgnore
      * @return void
@@ -504,6 +510,7 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
      * Get Swatch image size config data.
      *
      * @return string
+     * @since 100.2.5
      */
     public function getJsonSwatchSizeConfig()
     {

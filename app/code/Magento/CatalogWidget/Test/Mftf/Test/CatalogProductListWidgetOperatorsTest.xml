@@ -37,12 +37,12 @@
 
             <createData entity="_defaultBlock" stepKey="createPreReqBlock"/>
             <!--User log in on back-end as admin-->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
-            <actionGroup ref="EnabledWYSIWYG" stepKey="enableWYSIWYG"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
         </before>
 
         <!--Open block with widget.-->
-        <actionGroup ref="navigateToCreatedCMSBlockPage" stepKey="navigateToCreatedCMSBlockPage1">
+        <actionGroup ref="NavigateToCreatedCMSBlockPageActionGroup" stepKey="navigateToCreatedCMSBlockPage1">
             <argument name="CMSBlockPage" value="$$createPreReqBlock$$"/>
         </actionGroup>
 
@@ -71,9 +71,8 @@
         <conditionalClick selector="{{AdminCategoryDisplaySettingsSection.settingsHeader}}" dependentSelector="{{AdminCategoryDisplaySettingsSection.displayMode}}" visible="false" stepKey="openDisplaySettingsSection"/>
         <waitForPageLoad stepKey="waitForDisplaySettingsLoad"/>
         <selectOption stepKey="selectStaticBlockOnlyOption" userInput="Static block only" selector="{{AdminCategoryDisplaySettingsSection.displayMode}}"/>
-        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveCategoryWithProducts"/>
-        <waitForPageLoad stepKey="waitForCategorySaved"/>
-        <see userInput="You saved the category." stepKey="seeSuccessMessage"/>
+        <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveCategoryWithProducts"/>
+        <actionGroup ref="AssertAdminCategorySaveSuccessMessageActionGroup" stepKey="seeSuccessMessage"/>
 
         <!--Go to Storefront > category-->
         <amOnPage url="$$simplecategory.name$$.html" stepKey="goToStorefrontCategoryPage"/>
@@ -85,7 +84,7 @@
         <seeElement selector="{{InsertWidgetSection.checkElementStorefrontByPrice('100')}}" stepKey="seeElementByPrice100"/>
 
         <!--Open block with widget.-->
-        <actionGroup ref="navigateToCreatedCMSBlockPage" stepKey="navigateToCreatedCMSBlockPage2">
+        <actionGroup ref="NavigateToCreatedCMSBlockPageActionGroup" stepKey="navigateToCreatedCMSBlockPage2">
             <argument name="CMSBlockPage" value="$$createPreReqBlock$$"/>
         </actionGroup>
 
@@ -105,7 +104,7 @@
         <dontSeeElement selector="{{InsertWidgetSection.checkElementStorefrontByPrice('100')}}" stepKey="dontSeeElementByPrice100"/>
 
         <!--Open block with widget.-->
-        <actionGroup ref="navigateToCreatedCMSBlockPage" stepKey="navigateToCreatedCMSBlockPage3">
+        <actionGroup ref="NavigateToCreatedCMSBlockPageActionGroup" stepKey="navigateToCreatedCMSBlockPage3">
             <argument name="CMSBlockPage" value="$$createPreReqBlock$$"/>
         </actionGroup>
 
@@ -125,7 +124,7 @@
         <seeElement selector="{{InsertWidgetSection.checkElementStorefrontByPrice('100')}}" stepKey="seeElementByPrice100s"/>
 
         <!--Open block with widget.-->
-        <actionGroup ref="navigateToCreatedCMSBlockPage" stepKey="navigateToCreatedCMSBlockPage4">
+        <actionGroup ref="NavigateToCreatedCMSBlockPageActionGroup" stepKey="navigateToCreatedCMSBlockPage4">
             <argument name="CMSBlockPage" value="$$createPreReqBlock$$"/>
         </actionGroup>
 
@@ -145,13 +144,13 @@
         <dontSeeElement selector="{{InsertWidgetSection.checkElementStorefrontByPrice('100')}}" stepKey="dontSeeElementByPrice100s"/>
 
         <after>
-            <actionGroup ref="DisabledWYSIWYG" stepKey="disableWYSIWYG"/>
+            <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
             <deleteData createDataKey="createPreReqBlock" stepKey="deletePreReqBlock" />
             <deleteData createDataKey="simplecategory" stepKey="deleteSimpleCategory"/>
             <deleteData createDataKey="createFirstProduct" stepKey="deleteFirstProduct"/>
             <deleteData createDataKey="createSecondProduct" stepKey="deleteSecondProduct"/>
             <deleteData createDataKey="createThirdProduct" stepKey="deleteThirdProduct"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
     </test>
 </tests>

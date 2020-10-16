@@ -6,6 +6,7 @@
 namespace Magento\CatalogUrlRewrite\Model\Product;
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
+use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\Product;
 use Magento\CatalogUrlRewrite\Model\ObjectRegistry;
 use Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator;
@@ -66,7 +67,10 @@ class AnchorUrlRewriteGenerator
             $anchorCategoryIds = $category->getAnchorsAbove();
             if ($anchorCategoryIds) {
                 foreach ($anchorCategoryIds as $anchorCategoryId) {
-                    $anchorCategory = $this->categoryRepository->get($anchorCategoryId);
+                    $anchorCategory = $this->categoryRepository->get($anchorCategoryId, $storeId);
+                    if ((int)$anchorCategory->getParentId() === Category::TREE_ROOT_ID) {
+                        continue;
+                    }
                     $urls[] = $this->urlRewriteFactory->create()
                         ->setEntityType(ProductUrlRewriteGenerator::ENTITY_TYPE)
                         ->setEntityId($product->getId())

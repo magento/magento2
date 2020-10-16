@@ -8,35 +8,36 @@ declare(strict_types=1);
 namespace Magento\Search\Test\Unit\Model;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Search\Model\SynonymAnalyzer;
+use Magento\Search\Model\SynonymReader;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class SynonymAnalyzerTest
- */
-class SynonymAnalyzerTest extends \PHPUnit\Framework\TestCase
+class SynonymAnalyzerTest extends TestCase
 {
     /**
-     * @var \Magento\Search\Model\SynonymAnalyzer
+     * @var SynonymAnalyzer
      */
     private $synonymAnalyzer;
 
     /**
-     * @var \Magento\Search\Model\SynonymReader |\PHPUnit_Framework_MockObject_MockObject
+     * @var SynonymReader|MockObject
      */
     private $synReaderModel;
 
     /**
      * Test set up
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $helper = new ObjectManager($this);
 
-        $this->synReaderModel = $this->getMockBuilder(\Magento\Search\Model\SynonymReader::class)
+        $this->synReaderModel = $this->getMockBuilder(SynonymReader::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->synonymAnalyzer = $helper->getObject(
-            \Magento\Search\Model\SynonymAnalyzer::class,
+            SynonymAnalyzer::class,
             [
                 'synReader' => $this->synReaderModel,
             ]
@@ -48,9 +49,9 @@ class SynonymAnalyzerTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetSynonymsForPhrase()
     {
-        $phrase = 'Elizabeth is the british queen';
+        $phrase = 'Elizabeth/Angela is the british queen';
         $expected = [
-            0 => [ 0 => "Elizabeth" ],
+            0 => [ 0 => "Elizabeth/Angela" ],
             1 => [ 0 => "is" ],
             2 => [ 0 => "the" ],
             3 => [ 0 => "british", 1 => "english" ],
@@ -59,15 +60,13 @@ class SynonymAnalyzerTest extends \PHPUnit\Framework\TestCase
         $this->synReaderModel->expects($this->once())
             ->method('loadByPhrase')
             ->with($phrase)
-            ->willReturnSelf()
-        ;
+            ->willReturnSelf();
         $this->synReaderModel->expects($this->once())
             ->method('getData')
             ->willReturn([
                 ['synonyms' => 'british,english'],
                 ['synonyms' => 'queen,monarch'],
-            ])
-        ;
+            ]);
 
         $actual = $this->synonymAnalyzer->getSynonymsForPhrase($phrase);
         $this->assertEquals($expected, $actual);

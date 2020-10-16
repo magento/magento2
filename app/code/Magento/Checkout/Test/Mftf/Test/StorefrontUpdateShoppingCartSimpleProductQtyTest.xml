@@ -15,7 +15,7 @@
             <title value="Check updating shopping cart while updating items qty"/>
             <description value="Check updating shopping cart while updating items qty"/>
             <testCaseId value="MC-14731" />
-            <severity value="AVERAGE"/>
+            <severity value="BLOCKER"/>
             <group value="shoppingCart"/>
             <group value="mtf_migrated"/>
         </annotations>
@@ -26,7 +26,7 @@
             </createData>
 
             <!-- Add the newly created product to the shopping cart -->
-            <actionGroup ref="AddSimpleProductToCart" stepKey="addToCartFromStorefrontProductPage">
+            <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addToCartFromStorefrontProductPage">
                 <argument name="product" value="$$createProduct$$"/>
             </actionGroup>
         </before>
@@ -36,8 +36,7 @@
         </after>
 
         <!-- Go to the shopping cart -->
-        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="amOnPageShoppingCart"/>
-        <waitForPageLoad stepKey="waitForCheckoutPageLoad1"/>
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="amOnPageShoppingCart"/>
 
         <!-- Change the product QTY -->
         <fillField selector="{{CheckoutCartProductSection.ProductQuantityByName($$createProduct.name$$)}}"  userInput="{{quoteQty3Price123.qty}}" stepKey="changeCartQty"/>
@@ -56,7 +55,7 @@
         <see userInput="{{quoteQty3Price123.currency}}{{quoteQty3Price123.subtotal}}" selector="{{CheckoutCartSummarySection.subtotal}}" stepKey="assertCartSubtotal"/>
 
         <!-- Minicart product price and subtotal should be updated -->
-        <actionGroup ref="clickViewAndEditCartFromMiniCart" stepKey="openMinicart"/>
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="openMinicart"/>
         <grabValueFrom selector="{{StorefrontMinicartSection.itemQuantity($$createProduct.name$$)}}" stepKey="grabProductQtyInMinicart"/>
         <assertEquals stepKey="assertProductQtyInMinicart">
             <actualResult type="variable">grabProductQtyInMinicart</actualResult>

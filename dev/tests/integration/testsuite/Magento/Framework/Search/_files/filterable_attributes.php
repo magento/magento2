@@ -78,6 +78,7 @@ $dateAttribute->setData(
         'entity_type_id' => $productEntityTypeId,
         'is_global' => 1,
         'is_filterable' => 1,
+        'is_user_defined' => 1,
         'backend_type' => 'datetime',
         'frontend_input' => 'date',
         'frontend_label' => 'Test Date',

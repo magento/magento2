@@ -19,7 +19,7 @@ use Magento\Setup\Model\ConfigOptionsList\DriverOptions;
 /**
  * Creates deployment config data based on user input array
  *
- * This class introduced to break down {@see Magento\Setup\Model\ConfigOptionsList::createConfig}
+ * This class introduced to break down {@see \Magento\Setup\Model\ConfigOptionsList::createConfig}
  */
 class ConfigGenerator
 {
@@ -140,7 +140,7 @@ class ConfigGenerator
      * Creates definitions config data
      *
      * @param array $data
-     * @return ConfigData
+     * @return ConfigData|null
      * @deprecated 2.2.0
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */

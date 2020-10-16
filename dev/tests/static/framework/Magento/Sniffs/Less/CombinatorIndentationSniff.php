@@ -13,7 +13,7 @@ use PHP_CodeSniffer\Files\File;
  *
  * Ensure that spaces are used before and after combinators
  *
- * @link https://devdocs.magento.com/guides/v2.0/coding-standards/code-standard-less.html#combinator-indents
+ * @link https://devdocs.magento.com/guides/v2.3/coding-standards/code-standard-less.html#combinator-indents
  */
 class CombinatorIndentationSniff implements Sniff
 {

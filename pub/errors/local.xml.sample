@@ -27,5 +27,22 @@
             value "delete" is for cleaning
         -->
         <trash>leave</trash>
+        <!--
+            The number of subdirectories that will be created to save the report.
+            Valid Values: Integers from 0 to 32
+
+            Example:
+            If we have the report name as hash sha256('') = 44ffb1087a44e61b018b3cdee72284d017f22e52755c24e5c85cbac1647ae7a7
+
+            dir_nesting_level=0 -> <magento_root>/var/report/44ffb1087a44e61b018b3cdee72284d017f22e52755c24e5c85cbac1647ae7a7
+            dir_nesting_level=1 -> <magento_root>/var/report/44/44ffb1087a44e61b018b3cdee72284d017f22e52755c24e5c85cbac1647ae7a7
+            dir_nesting_level=2 -> <magento_root>/var/report/44/ff/44ffb1087a44e61b018b3cdee72284d017f22e52755c24e5c85cbac1647ae7a7
+            ...
+            dir_nesting_level=32 -> <magento_root>/var/report/44/ff/b1/08/7a/44/e6/1b/01/8b/3c/de/e7/22/84/d0/17/f2/2e/52/75/5c/24/e5/c8/5c/ba/c1/64/7a/e7/a7/44ffb1087a44e61b018b3cdee72284d017f22e52755c24e5c85cbac1647ae7a7
+
+            If you use an environment variable MAGE_ERROR_REPORT_DIR_NESTING_LEVEL, this property will be ignored.
+            Environment variable has a higher priority.
+        -->
+        <dir_nesting_level>0</dir_nesting_level>
     </report>
 </config>

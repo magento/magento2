@@ -5,10 +5,13 @@
  */
 namespace Magento\Tax\Observer;
 
-use Magento\Framework\Event\ObserverInterface;
 use Magento\Catalog\Pricing\Price\BasePrice;
 use Magento\Catalog\Pricing\Price\RegularPrice;
+use Magento\Framework\Event\ObserverInterface;
 
+/**
+ * Modifies the bundle config for the front end to resemble the tax included price when tax included prices.
+ */
 class GetPriceConfigurationObserver implements ObserverInterface
 {
     /**
@@ -22,6 +25,11 @@ class GetPriceConfigurationObserver implements ObserverInterface
      * @var \Magento\Framework\Registry
      */
     protected $registry;
+
+    /**
+     * @var array Cache of the current bundle selection items
+     */
+    private $selectionCache = [];
 
     /**
      * @param \Magento\Framework\Registry $registry
@@ -44,6 +52,7 @@ class GetPriceConfigurationObserver implements ObserverInterface
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
+        $this->selectionCache = [];
         if ($this->taxData->displayPriceIncludingTax()) {
             /** @var \Magento\Catalog\Model\Product $product */
             $product = $this->registry->registry('current_product');
@@ -78,12 +87,11 @@ class GetPriceConfigurationObserver implements ObserverInterface
                 if (is_array($el)) {
                     $holder[$key] =
                         $this->recurConfigAndUpdatePrice($el, $searchKey);
-                    if ($key === $searchKey) {
-                        if ((array_key_exists('basePrice', $holder[$key]))) {
-                            if (array_key_exists('optionId', $input)) {
-                                $holder = $this->updatePriceForBundle($holder, $key);
-                            }
-                        }
+                    if ($key === $searchKey
+                        && array_key_exists('optionId', $input)
+                        && array_key_exists('basePrice', $holder[$key])
+                    ) {
+                        $holder = $this->updatePriceForBundle($holder, $key);
                     }
                 } else {
                     $holder[$key] = $el;
@@ -102,11 +110,12 @@ class GetPriceConfigurationObserver implements ObserverInterface
      */
     private function updatePriceForBundle($holder, $key)
     {
-        if (array_key_exists($key, $holder)) {
-            if (array_key_exists('basePrice', $holder[$key])) {
-                /** @var \Magento\Catalog\Model\Product $product */
-                $product = $this->registry->registry('current_product');
-                if ($product->getTypeId() == \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE) {
+        if (array_key_exists($key, $holder)
+            && array_key_exists('basePrice', $holder[$key])) {
+            /** @var \Magento\Catalog\Model\Product $product */
+            $product = $this->registry->registry('current_product');
+            if ($product->getTypeId() == \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE) {
+                if (!isset($this->selectionCache[$product->getId()])) {
                     $typeInstance = $product->getTypeInstance();
                     $typeInstance->setStoreFilter($product->getStoreId(), $product);
 
@@ -114,20 +123,22 @@ class GetPriceConfigurationObserver implements ObserverInterface
                         $typeInstance->getOptionsIds($product),
                         $product
                     );
+                    $this->selectionCache[$product->getId()] = $selectionCollection->getItems();
+                }
+                $arrSelections = $this->selectionCache[$product->getId()];
 
-                    foreach ($selectionCollection->getItems() as $selectionItem) {
-                        if ($holder['optionId'] == $selectionItem->getId()) {
-                            /** @var \Magento\Framework\Pricing\Amount\Base $baseAmount */
-                            $baseAmount = $selectionItem->getPriceInfo()->getPrice(BasePrice::PRICE_CODE)->getAmount();
-                            /** @var \Magento\Framework\Pricing\Amount\Base $oldAmount */
-                            $oldAmount =
+                foreach ($arrSelections as $selectionItem) {
+                    if ($holder['optionId'] == $selectionItem->getId()) {
+                        /** @var \Magento\Framework\Pricing\Amount\Base $baseAmount */
+                        $baseAmount = $selectionItem->getPriceInfo()->getPrice(BasePrice::PRICE_CODE)->getAmount();
+                        /** @var \Magento\Framework\Pricing\Amount\Base $oldAmount */
+                        $oldAmount =
                                 $selectionItem->getPriceInfo()->getPrice(RegularPrice::PRICE_CODE)->getAmount();
-                            if ($baseAmount->hasAdjustment('tax')) {
-                                $holder[$key]['basePrice']['amount'] =
+                        if ($baseAmount->hasAdjustment('tax')) {
+                            $holder[$key]['basePrice']['amount'] =
                                     $baseAmount->getBaseAmount() + $baseAmount->getAdjustmentAmount('tax');
-                                $holder[$key]['oldPrice']['amount'] =
+                            $holder[$key]['oldPrice']['amount'] =
                                     $oldAmount->getBaseAmount() + $oldAmount->getAdjustmentAmount('tax');
-                            }
                         }
                     }
                 }

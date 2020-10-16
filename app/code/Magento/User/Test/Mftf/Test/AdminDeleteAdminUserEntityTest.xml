@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminDeleteAdminUserEntityTest">
+        <annotations>
+            <features value="User"/>
+            <stories value="Delete Admin User"/>
+            <title value="Admin user is able to delete a user account"/>
+            <description value="Admin user is able to delete a user account"/>
+            <testCaseId value="MC-14270"/>
+            <group value="user"/>
+            <group value="mtf_migrated"/>
+            <severity value="MAJOR"/>
+        </annotations>
+
+        <before>
+            <!--Create New Admin User-->
+            <createData entity="NewAdminUser" stepKey="user">
+                <field key="current_password">{{DefaultAdminUser.password}}</field>
+            </createData>
+
+            <actionGroup ref="AdminLoginActionGroup" stepKey="logIn"/>
+        </before>
+
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logOut"/>
+        </after>
+
+        <!--Delete New Admin User-->
+        <actionGroup ref="AdminDeleteCustomUserActionGroup" stepKey="deleteNewUser">
+            <argument name="user" value="$$user$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="assertSuccessMessage">
+            <argument name="message" value="You deleted the user."/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminUserNotInGridActionGroup" stepKey="assertUserNotInGrid">
+            <argument name="userName" value="$$user.username$$"/>
+        </actionGroup>
+    </test>
+</tests>

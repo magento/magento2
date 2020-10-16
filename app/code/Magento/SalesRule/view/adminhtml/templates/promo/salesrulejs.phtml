@@ -3,8 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
-<script>
+<?php $scriptString = <<<script
 require([
     'jquery',
     "uiRegistry",
@@ -20,10 +22,19 @@ function refreshCouponCodesGrid(grid, gridMassAction, transport) {
 
 function generateCouponCodes(idPrefix, generateUrl, grid) {
     $(idPrefix + 'information_fieldset').removeClassName('ignore-validate');
+    var listInvalidElement = [];
     var validationResult = $(idPrefix + 'information_fieldset').select('input',
             'select', 'textarea').collect( function(elm) {
-        return jQuery.validator.validateElement(elm);
+        var validateOneElementResult = jQuery.validator.validateSingleElement(elm);
+        if (!validateOneElementResult) {
+            listInvalidElement.push(elm);
+        }
+        return validateOneElementResult;
     }).all();
+    if (listInvalidElement.length) {
+        listInvalidElement[0].focus();
+    }
+
     $(idPrefix + 'information_fieldset').addClassName('ignore-validate');
 
     if (!validationResult) {
@@ -32,15 +43,15 @@ function generateCouponCodes(idPrefix, generateUrl, grid) {
     var elements = $(idPrefix + 'information_fieldset').select('input', 'select', 'textarea');
 
     elements = elements.concat(
-        $$('#rule_uses_per_coupon'),
-        $$('#rule_uses_per_customer'),
-        $$('#rule_to_date')
+        \$$('#rule_uses_per_coupon'),
+        \$$('#rule_uses_per_customer'),
+        \$$('#rule_to_date')
     );
 
     var params = Form.serializeElements(elements, true);
     params.form_key = FORM_KEY;
-    if ($$('#'+idPrefix + 'information_fieldset .messages')) {
-        $$('#'+idPrefix + 'information_fieldset .messages')[0].update();
+    if (\$$('#'+idPrefix + 'information_fieldset .messages')) {
+        \$$('#'+idPrefix + 'information_fieldset .messages')[0].update();
     }
     if ($('messages')) {
         $('messages').update();
@@ -55,15 +66,15 @@ function generateCouponCodes(idPrefix, generateUrl, grid) {
                 try {
                     response = JSON.parse(transport.responseText);
                 } catch (e) {
-                    console.warn('An error occured while parsing response');
+                    console.warn('An error occurred while parsing response');
                 }
             }
             if (couponCodesGrid) {
                 couponCodesGrid.reload();
             }
             if (response && response.messages) {
-                if ($$('#'+idPrefix + 'information_fieldset .messages')) {
-                    $$('#'+idPrefix + 'information_fieldset .messages')[0].update(response.messages);
+                if (\$$('#'+idPrefix + 'information_fieldset .messages')) {
+                    \$$('#'+idPrefix + 'information_fieldset .messages')[0].update(response.messages);
                 } else if ($('messages')) {
                     $('messages').update(response.messages);
                 }
@@ -77,7 +88,14 @@ function generateCouponCodes(idPrefix, generateUrl, grid) {
     });
 }
 
+function validateCouponGenerate(elm) {
+    jQuery.validator.validateSingleElement(elm);
+}
+
+window.validateCouponGenerate = validateCouponGenerate;
 window.generateCouponCodes = generateCouponCodes;
 window.refreshCouponCodesGrid = refreshCouponCodesGrid;
 });
-</script>
+script;
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>

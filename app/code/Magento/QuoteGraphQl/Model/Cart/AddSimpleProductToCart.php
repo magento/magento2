@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\QuoteGraphQl\Model\Cart;
 
+use Exception;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
@@ -46,24 +47,22 @@ class AddSimpleProductToCart
      *
      * @param Quote $cart
      * @param array $cartItemData
-     * @return void
-     * @throws GraphQlNoSuchEntityException
      * @throws GraphQlInputException
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws GraphQlNoSuchEntityException
      */
     public function execute(Quote $cart, array $cartItemData): void
     {
         $sku = $this->extractSku($cartItemData);
 
         try {
-            $product = $this->productRepository->get($sku);
+            $product = $this->productRepository->get($sku, false, null, true);
         } catch (NoSuchEntityException $e) {
             throw new GraphQlNoSuchEntityException(__('Could not find a product with SKU "%sku"', ['sku' => $sku]));
         }
 
         try {
             $result = $cart->addProduct($product, $this->buyRequestBuilder->build($cartItemData));
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw new GraphQlInputException(
                 __(
                     'Could not add the product with SKU %sku to the shopping cart: %message',
@@ -73,7 +72,12 @@ class AddSimpleProductToCart
         }
 
         if (is_string($result)) {
-            throw new GraphQlInputException(__($result));
+            $e = new GraphQlInputException(__('Cannot add product to cart'));
+            $errors = array_unique(explode("\n", $result));
+            foreach ($errors as $error) {
+                $e->addError(new GraphQlInputException(__($error)));
+            }
+            throw $e;
         }
     }
 

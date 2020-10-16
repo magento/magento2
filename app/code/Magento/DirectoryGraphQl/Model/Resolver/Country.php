@@ -15,6 +15,7 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Directory\Api\CountryInformationAcquirerInterface;
 use Magento\Directory\Api\Data\CountryInformationInterface;
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 
 /**
  * Country field resolver, used for GraphQL request processing.
@@ -53,6 +54,10 @@ class Country implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
+        if (empty($args['id'])) {
+            throw new GraphQlInputException(__('Country "id" value should be specified'));
+        }
+
         try {
             $country = $this->countryInformationAcquirer->getCountryInfo($args['id']);
         } catch (NoSuchEntityException $exception) {

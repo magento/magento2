@@ -13,7 +13,7 @@ use PHP_CodeSniffer\Files\File;
  *
  * Property should have a semicolon at the end of line
  *
- * @link https://devdocs.magento.com/guides/v2.0/coding-standards/code-standard-less.html#end-of-the-property-line
+ * @link https://devdocs.magento.com/guides/v2.3/coding-standards/code-standard-less.html#end-of-the-property-line
  */
 class SemicolonSpacingSniff implements Sniff
 {

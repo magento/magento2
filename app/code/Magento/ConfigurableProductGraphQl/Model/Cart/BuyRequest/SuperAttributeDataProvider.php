@@ -9,6 +9,7 @@ namespace Magento\ConfigurableProductGraphQl\Model\Cart\BuyRequest;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\Stdlib\ArrayManager;
 use Magento\QuoteGraphQl\Model\Cart\BuyRequest\BuyRequestDataProviderInterface;
@@ -75,6 +76,10 @@ class SuperAttributeDataProvider implements BuyRequestDataProviderInterface
             $product = $this->productRepository->get($sku);
         } catch (NoSuchEntityException $e) {
             throw new GraphQlNoSuchEntityException(__('Could not find specified product.'));
+        }
+        $configurableProductLinks = $parentProduct->getExtensionAttributes()->getConfigurableProductLinks();
+        if (!in_array($product->getId(), $configurableProductLinks)) {
+            throw new GraphQlInputException(__('Could not find specified product.'));
         }
         $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
         $this->optionCollection->addProductId((int)$parentProduct->getData($linkField));

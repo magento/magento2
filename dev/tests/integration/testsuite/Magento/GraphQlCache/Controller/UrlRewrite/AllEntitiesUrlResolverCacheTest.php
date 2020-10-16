@@ -9,7 +9,7 @@ namespace Magento\GraphQlCache\Controller\UrlRewrite;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
-use Magento\GraphQl\Controller\GraphQl;
+use Magento\Framework\App\Response\HttpInterface as HttpResponse;
 use Magento\GraphQlCache\Controller\AbstractGraphqlCacheTest;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\Cms\Api\Data\PageInterface;
@@ -24,143 +24,61 @@ use Magento\Cms\Api\GetPageByIdentifierInterface;
  */
 class AllEntitiesUrlResolverCacheTest extends AbstractGraphqlCacheTest
 {
-    /**
-     * @var GraphQl
-     */
-    private $graphqlController;
-
-    /**
-     * @inheritdoc
-     */
-    protected function setUp(): void
+    private function assertCacheMISSWithTagsForCategory(string $categoryId, HttpResponse $response): void
     {
-        parent::setUp();
-        $this->graphqlController = $this->objectManager->get(GraphQl::class);
+        $this->assertCacheMISS($response);
+        $this->assertCacheTags($categoryId, 'cat_c', $response);
     }
 
-    /**
-     * Tests that X-Magento-tags and cache debug headers are correct for category urlResolver
-     *
-     * @magentoDataFixture Magento/CatalogUrlRewrite/_files/product_with_category.php
-     * @magentoDataFixture Magento/Cms/_files/pages.php
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     */
-    public function testAllEntitiesUrlResolverRequestHasCorrectTags()
+    private function assertCacheMISSWithTagsForProduct(string $productId, HttpResponse $response): void
     {
-        $categoryUrlKey = 'cat-1.html';
-        $productUrlKey = 'p002.html';
-        $productSku = 'p002';
-        /** @var ProductRepositoryInterface $productRepository */
-        $productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
-        /** @var Product $product */
-        $product = $productRepository->get($productSku, false, null, true);
-        $storeId = $product->getStoreId();
+        $this->assertCacheMISS($response);
+        $this->assertCacheTags($productId, 'cat_p', $response);
+    }
 
-        /** @var  UrlFinderInterface $urlFinder */
-        $urlFinder = $this->objectManager->get(UrlFinderInterface::class);
-        $actualUrls = $urlFinder->findOneByData(
-            [
-                'request_path' => $categoryUrlKey,
-                'store_id' => $storeId
-            ]
-        );
-        $categoryId = $actualUrls->getEntityId();
-        $categoryQuery = $this->getQuery($categoryUrlKey);
+    private function assertCacheMISSWithTagsForCmsPage(string $pageId, HttpResponse $response): void
+    {
+        $this->assertCacheMISS($response);
+        $this->assertCacheTags($pageId, 'cms_p', $response);
+    }
 
-        $productQuery = $this->getQuery($productUrlKey);
+    private function assertCacheHITWithTagsForCategory(string $categoryId, HttpResponse $response): void
+    {
+        $this->assertCacheHIT($response);
+        $this->assertCacheTags($categoryId, 'cat_c', $response);
+    }
 
-        /** @var GetPageByIdentifierInterface $page */
-        $page = $this->objectManager->get(GetPageByIdentifierInterface::class);
-        /** @var PageInterface $cmsPage */
-        $cmsPage = $page->execute('page100', 0);
-        $cmsPageId = $cmsPage->getId();
-        $requestPath = $cmsPage->getIdentifier();
-        $pageQuery = $this->getQuery($requestPath);
+    private function assertCacheHITWithTagsForProduct(string $productId, HttpResponse $response): void
+    {
+        $this->assertCacheHIT($response);
+        $this->assertCacheTags($productId, 'cat_p', $response);
+    }
 
-        // query category for MISS
-        $request = $this->prepareRequest($categoryQuery);
-        $response = $this->graphqlController->dispatch($request);
+    private function assertCacheHITWithTagsForCmsPage(string $pageId, HttpResponse $response): void
+    {
+        $this->assertCacheHIT($response);
+        $this->assertCacheTags($pageId, 'cms_p', $response);
+    }
+
+    private function assertCacheMISS(HttpResponse $response): void
+    {
         $this->assertEquals('MISS', $response->getHeader('X-Magento-Cache-Debug')->getFieldValue());
-        $expectedCacheTags = ['cat_c','cat_c_' . $categoryId, 'FPC'];
-        $rawActualCacheTags = $response->getHeader('X-Magento-Tags')->getFieldValue();
-        $actualCacheTags = explode(',', $rawActualCacheTags);
-        $this->assertEquals($expectedCacheTags, $actualCacheTags);
+    }
 
-        // query product for MISS
-        $request = $this->prepareRequest($productQuery);
-        $response = $this->graphqlController->dispatch($request);
-        $this->assertEquals('MISS', $response->getHeader('X-Magento-Cache-Debug')->getFieldValue());
-        $expectedCacheTags = ['cat_p', 'cat_p_' . $product->getId(), 'FPC'];
-        $rawActualCacheTags = $response->getHeader('X-Magento-Tags')->getFieldValue();
-        $actualCacheTags = explode(',', $rawActualCacheTags);
-        $this->assertEquals($expectedCacheTags, $actualCacheTags);
-
-        // query page for MISS
-        $request = $this->prepareRequest($pageQuery);
-        $response = $this->graphqlController->dispatch($request);
-        $this->assertEquals('MISS', $response->getHeader('X-Magento-Cache-Debug')->getFieldValue());
-        $expectedCacheTags = ['cms_p','cms_p_' . $cmsPageId,'FPC'];
-        $rawActualCacheTags = $response->getHeader('X-Magento-Tags')->getFieldValue();
-        $actualCacheTags = explode(',', $rawActualCacheTags);
-        $this->assertEquals($expectedCacheTags, $actualCacheTags);
-
-        // query category for HIT
-        $request = $this->prepareRequest($categoryQuery);
-        $response = $this->graphqlController->dispatch($request);
+    private function assertCacheHIT(HttpResponse $response): void
+    {
         $this->assertEquals('HIT', $response->getHeader('X-Magento-Cache-Debug')->getFieldValue());
-        $expectedCacheTags = ['cat_c','cat_c_' . $categoryId, 'FPC'];
-        $rawActualCacheTags = $response->getHeader('X-Magento-Tags')->getFieldValue();
-        $actualCacheTags = explode(',', $rawActualCacheTags);
-        $this->assertEquals($expectedCacheTags, $actualCacheTags);
+    }
 
-        // query product for HIT
-        $request = $this->prepareRequest($productQuery);
-        $response = $this->graphqlController->dispatch($request);
-        $this->assertEquals('HIT', $response->getHeader('X-Magento-Cache-Debug')->getFieldValue());
-        $expectedCacheTags = ['cat_p', 'cat_p_' . $product->getId(), 'FPC'];
+    private function assertCacheTags(string $entityId, string $entityCacheTag, HttpResponse $response)
+    {
+        $expectedCacheTags  = [$entityCacheTag, $entityCacheTag . '_' . $entityId, 'FPC'];
         $rawActualCacheTags = $response->getHeader('X-Magento-Tags')->getFieldValue();
-        $actualCacheTags = explode(',', $rawActualCacheTags);
-        $this->assertEquals($expectedCacheTags, $actualCacheTags);
-
-        // query product for HIT
-        $request = $this->prepareRequest($pageQuery);
-        $response = $this->graphqlController->dispatch($request);
-        $this->assertEquals('HIT', $response->getHeader('X-Magento-Cache-Debug')->getFieldValue());
-        $expectedCacheTags = ['cms_p','cms_p_' . $cmsPageId,'FPC'];
-        $rawActualCacheTags = $response->getHeader('X-Magento-Tags')->getFieldValue();
-        $actualCacheTags = explode(',', $rawActualCacheTags);
-        $this->assertEquals($expectedCacheTags, $actualCacheTags);
-
-        $product->setUrlKey('something-else-that-invalidates-the-cache');
-        $productRepository->save($product);
-        $productQuery = $this->getQuery('something-else-that-invalidates-the-cache.html');
-
-        // query category for MISS
-        $request = $this->prepareRequest($categoryQuery);
-        $response = $this->graphqlController->dispatch($request);
-        $this->assertEquals('MISS', $response->getHeader('X-Magento-Cache-Debug')->getFieldValue());
-        $expectedCacheTags = ['cat_c','cat_c_' . $categoryId, 'FPC'];
-        $rawActualCacheTags = $response->getHeader('X-Magento-Tags')->getFieldValue();
-        $actualCacheTags = explode(',', $rawActualCacheTags);
-        $this->assertEquals($expectedCacheTags, $actualCacheTags);
-
-        // query product for HIT
-        $request = $this->prepareRequest($productQuery);
-        $response = $this->graphqlController->dispatch($request);
-        $this->assertEquals('MISS', $response->getHeader('X-Magento-Cache-Debug')->getFieldValue());
-        $expectedCacheTags = ['cat_p', 'cat_p_' . $product->getId(), 'FPC'];
-        $rawActualCacheTags = $response->getHeader('X-Magento-Tags')->getFieldValue();
-        $actualCacheTags = explode(',', $rawActualCacheTags);
+        $actualCacheTags    = explode(',', $rawActualCacheTags);
         $this->assertEquals($expectedCacheTags, $actualCacheTags);
     }
 
-    /**
-     * Get urlResolver query
-     *
-     * @param string $id
-     * @return string
-     */
-    private function getQuery(string $requestPath) : string
+    private function buildQuery(string $requestPath): string
     {
         $resolverQuery = <<<QUERY
 {
@@ -174,5 +92,85 @@ class AllEntitiesUrlResolverCacheTest extends AbstractGraphqlCacheTest
 }
 QUERY;
         return $resolverQuery;
+    }
+
+    /**
+     * Tests that X-Magento-Tags and cache debug headers are correct for category urlResolver
+     *
+     * @magentoDataFixture Magento/CatalogUrlRewrite/_files/product_with_category.php
+     * @magentoDataFixture Magento/Cms/_files/pages.php
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function testAllEntitiesUrlResolverRequestHasCorrectTags(): void
+    {
+        $categoryUrlKey = 'cat-1.html';
+        $productUrlKey  = 'p002.html';
+        $productSku     = 'p002';
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
+        /** @var Product $product */
+        $product = $productRepository->get($productSku, false, null, true);
+        $storeId = (string) $product->getStoreId();
+
+        /** @var  UrlFinderInterface $urlFinder */
+        $urlFinder     = $this->objectManager->get(UrlFinderInterface::class);
+        $actualUrls    = $urlFinder->findOneByData(
+            [
+                'request_path' => $categoryUrlKey,
+                'store_id' => $storeId
+            ]
+        );
+        $categoryId    = (string) $actualUrls->getEntityId();
+        $categoryQuery = $this->buildQuery($categoryUrlKey);
+
+        $productQuery = $this->buildQuery($productUrlKey);
+
+        /** @var GetPageByIdentifierInterface $page */
+        $page = $this->objectManager->get(GetPageByIdentifierInterface::class);
+        /** @var PageInterface $cmsPage */
+        $cmsPage     = $page->execute('page100', 0);
+        $cmsPageId   = (string) $cmsPage->getId();
+        $requestPath = $cmsPage->getIdentifier();
+        $pageQuery   = $this->buildQuery($requestPath);
+
+        // query category for MISS
+        $response = $this->dispatchGraphQlGETRequest(['query' => $categoryQuery]);
+        $this->assertCacheMISSWithTagsForCategory($categoryId, $response);
+
+        // query product for MISS
+        $response = $this->dispatchGraphQlGETRequest(['query' => $productQuery]);
+        $this->assertCacheMISSWithTagsForProduct((string) $product->getId(), $response);
+
+        // query page for MISS
+        $response = $this->dispatchGraphQlGETRequest(['query' => $pageQuery]);
+        $this->assertCacheMISSWithTagsForCmsPage($cmsPageId, $response);
+
+        // query category for HIT
+        $response = $this->dispatchGraphQlGETRequest(['query' => $categoryQuery]);
+        $this->assertCacheHITWithTagsForCategory($categoryId, $response);
+
+        // query product for HIT
+        $response = $this->dispatchGraphQlGETRequest(['query' => $productQuery]);
+        $this->assertCacheHITWithTagsForProduct((string) $product->getId(), $response);
+
+        // query page for HIT
+        $response = $this->dispatchGraphQlGETRequest(['query' => $pageQuery]);
+        $this->assertCacheHITWithTagsForCmsPage($cmsPageId, $response);
+
+        $product->setUrlKey('something-else-that-invalidates-the-cache');
+        $productRepository->save($product);
+        $productQuery = $this->buildQuery('something-else-that-invalidates-the-cache.html');
+
+        // query category for MISS
+        $response = $this->dispatchGraphQlGETRequest(['query' => $categoryQuery]);
+        $this->assertCacheMISSWithTagsForCategory($categoryId, $response);
+
+        // query product for MISS
+        $response = $this->dispatchGraphQlGETRequest(['query' => $productQuery]);
+        $this->assertCacheMISSWithTagsForProduct((string) $product->getId(), $response);
+
+        // query page for HIT
+        $response = $this->dispatchGraphQlGETRequest(['query' => $pageQuery]);
+        $this->assertCacheHITWithTagsForCmsPage($cmsPageId, $response);
     }
 }

@@ -31,14 +31,14 @@ class FileResolverTest extends \PHPUnit\Framework\TestCase
      */
     protected $originalPath;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->model = Bootstrap::getObjectManager()->create(\Magento\Framework\Filesystem\FileResolver::class);
         $this->originalPath = get_include_path();
         set_include_path('/pre/existing/paths/');
     }
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         set_include_path($this->originalPath);
     }

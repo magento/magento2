@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminNewsletterGridMainActionsSection">
+        <element name="newsletterGrid" type="text" selector="table.data-grid"/>
+        <element name="add" type="button" selector=".page-actions .page-actions-buttons .add"/>
+        <element name="name" type="input" selector="[id$='filter_code']"/>
+        <element name="subject" type="input" selector="[id$='filter_subject']"/>
+        <element name="search" type="button" selector=".action-default.scalable.action-secondary"/>
+        <element name="resetFilter" type="button" selector=".action-default.scalable.action-reset.action-tertiary"/>
+        <element name="searchResultFirstRow" type="text" selector=".data-grid>tbody>tr"/>
+        <element name="messageByType" type="block" selector="#messages .message-{{messageType}}" parameterized="true"/>
+    </section>
+</sections>

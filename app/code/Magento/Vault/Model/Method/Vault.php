@@ -5,6 +5,7 @@
  */
 namespace Magento\Vault\Model\Method;
 
+use Exception;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Payment\Gateway\Command;
@@ -21,6 +22,7 @@ use Magento\Vault\Api\Data\PaymentTokenInterface;
 use Magento\Vault\Api\PaymentTokenManagementInterface;
 use Magento\Vault\Block\Form;
 use Magento\Vault\Model\VaultPaymentInterface;
+use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * Class Vault
@@ -104,6 +106,11 @@ class Vault implements VaultPaymentInterface
     private $code;
 
     /**
+     * @var Json
+     */
+    private $jsonSerializer;
+
+    /**
      * Constructor
      *
      * @param ConfigInterface $config
@@ -116,6 +123,7 @@ class Vault implements VaultPaymentInterface
      * @param PaymentTokenManagementInterface $tokenManagement
      * @param OrderPaymentExtensionInterfaceFactory $paymentExtensionFactory
      * @param string $code
+     * @param Json|null $jsonSerializer
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -129,7 +137,8 @@ class Vault implements VaultPaymentInterface
         Command\CommandManagerPoolInterface $commandManagerPool,
         PaymentTokenManagementInterface $tokenManagement,
         OrderPaymentExtensionInterfaceFactory $paymentExtensionFactory,
-        $code
+        $code,
+        Json $jsonSerializer = null
     ) {
         $this->config = $config;
         $this->configFactory = $configFactory;
@@ -141,21 +150,14 @@ class Vault implements VaultPaymentInterface
         $this->tokenManagement = $tokenManagement;
         $this->paymentExtensionFactory = $paymentExtensionFactory;
         $this->code = $code;
-    }
-
-    /**
-     * @return MethodInterface
-     */
-    private function getVaultProvider()
-    {
-        return $this->vaultProvider;
+        $this->jsonSerializer = $jsonSerializer ?: $this->objectManager->get(Json::class);
     }
 
     /**
      * Unifies configured value handling logic
      *
      * @param string $field
-     * @param null $storeId
+     * @param int|null $storeId
      * @return mixed
      */
     private function getConfiguredValue($field, $storeId = null)
@@ -226,8 +228,8 @@ class Vault implements VaultPaymentInterface
      */
     public function canAuthorize()
     {
-        return $this->getVaultProvider()->canAuthorize()
-        && $this->getVaultProvider()->getConfigData(static::CAN_AUTHORIZE);
+        return $this->vaultProvider->canAuthorize()
+        && $this->vaultProvider->getConfigData(static::CAN_AUTHORIZE);
     }
 
     /**
@@ -236,8 +238,8 @@ class Vault implements VaultPaymentInterface
      */
     public function canCapture()
     {
-        return $this->getVaultProvider()->canCapture()
-        && $this->getVaultProvider()->getConfigData(static::CAN_CAPTURE);
+        return $this->vaultProvider->canCapture()
+        && $this->vaultProvider->getConfigData(static::CAN_CAPTURE);
     }
 
     /**
@@ -255,7 +257,7 @@ class Vault implements VaultPaymentInterface
      */
     public function canCaptureOnce()
     {
-        return $this->getVaultProvider()->canCaptureOnce();
+        return $this->vaultProvider->canCaptureOnce();
     }
 
     /**
@@ -294,7 +296,7 @@ class Vault implements VaultPaymentInterface
         $isInternalAllowed = $this->getConfiguredValue('can_use_internal');
         // if config has't been specified for Vault, need to check payment provider option
         if ($isInternalAllowed === null) {
-            return $this->getVaultProvider()->canUseInternal();
+            return $this->vaultProvider->canUseInternal();
         }
         return (bool) $isInternalAllowed;
     }
@@ -305,7 +307,7 @@ class Vault implements VaultPaymentInterface
      */
     public function canUseCheckout()
     {
-        return $this->getVaultProvider()->canUseCheckout();
+        return $this->vaultProvider->canUseCheckout();
     }
 
     /**
@@ -314,7 +316,7 @@ class Vault implements VaultPaymentInterface
      */
     public function canEdit()
     {
-        return $this->getVaultProvider()->canEdit();
+        return $this->vaultProvider->canEdit();
     }
 
     /**
@@ -341,7 +343,7 @@ class Vault implements VaultPaymentInterface
      */
     public function isGateway()
     {
-        return $this->getVaultProvider()->isGateway();
+        return $this->vaultProvider->isGateway();
     }
 
     /**
@@ -350,7 +352,7 @@ class Vault implements VaultPaymentInterface
      */
     public function isOffline()
     {
-        return $this->getVaultProvider()->isOffline();
+        return $this->vaultProvider->isOffline();
     }
 
     /**
@@ -359,7 +361,7 @@ class Vault implements VaultPaymentInterface
      */
     public function isInitializeNeeded()
     {
-        return $this->getVaultProvider()->isInitializeNeeded();
+        return $this->vaultProvider->isInitializeNeeded();
     }
 
     /**
@@ -368,7 +370,7 @@ class Vault implements VaultPaymentInterface
      */
     public function canUseForCountry($country)
     {
-        return $this->getVaultProvider()->canUseForCountry($country);
+        return $this->vaultProvider->canUseForCountry($country);
     }
 
     /**
@@ -377,7 +379,7 @@ class Vault implements VaultPaymentInterface
      */
     public function canUseForCurrency($currencyCode)
     {
-        return $this->getVaultProvider()->canUseForCurrency($currencyCode);
+        return $this->vaultProvider->canUseForCurrency($currencyCode);
     }
 
     /**
@@ -386,7 +388,7 @@ class Vault implements VaultPaymentInterface
      */
     public function getInfoBlockType()
     {
-        return $this->getVaultProvider()->getInfoBlockType();
+        return $this->vaultProvider->getInfoBlockType();
     }
 
     /**
@@ -395,7 +397,7 @@ class Vault implements VaultPaymentInterface
      */
     public function getInfoInstance()
     {
-        return $this->getVaultProvider()->getInfoInstance();
+        return $this->vaultProvider->getInfoInstance();
     }
 
     /**
@@ -404,7 +406,7 @@ class Vault implements VaultPaymentInterface
      */
     public function setInfoInstance(InfoInterface $info)
     {
-        $this->getVaultProvider()->setInfoInstance($info);
+        $this->vaultProvider->setInfoInstance($info);
     }
 
     /**
@@ -413,7 +415,7 @@ class Vault implements VaultPaymentInterface
      */
     public function validate()
     {
-        return $this->getVaultProvider()->validate();
+        return $this->vaultProvider->validate();
     }
 
     /**
@@ -437,9 +439,10 @@ class Vault implements VaultPaymentInterface
         /** @var $payment OrderPaymentInterface */
 
         $this->attachTokenExtensionAttribute($payment);
+        $this->attachCreditCardInfo($payment);
 
         $commandExecutor = $this->commandManagerPool->get(
-            $this->getVaultProvider()->getCode()
+            $this->vaultProvider->getCode()
         );
 
         $commandExecutor->executeByCode(
@@ -450,7 +453,7 @@ class Vault implements VaultPaymentInterface
             ]
         );
 
-        $payment->setMethod($this->getVaultProvider()->getCode());
+        $payment->setMethod($this->vaultProvider->getCode());
 
         return $this;
     }
@@ -473,7 +476,7 @@ class Vault implements VaultPaymentInterface
         $this->attachTokenExtensionAttribute($payment);
 
         $commandExecutor = $this->commandManagerPool->get(
-            $this->getVaultProvider()->getCode()
+            $this->vaultProvider->getCode()
         );
 
         $commandExecutor->executeByCode(
@@ -484,10 +487,12 @@ class Vault implements VaultPaymentInterface
             ]
         );
 
-        $payment->setMethod($this->getVaultProvider()->getCode());
+        $payment->setMethod($this->vaultProvider->getCode());
     }
 
     /**
+     * Attaches token extension attribute.
+     *
      * @param OrderPaymentInterface $orderPayment
      * @return void
      */
@@ -514,6 +519,8 @@ class Vault implements VaultPaymentInterface
     }
 
     /**
+     * Returns Payment's extension attributes.
+     *
      * @param OrderPaymentInterface $payment
      * @return \Magento\Sales\Api\Data\OrderPaymentExtensionInterface
      */
@@ -526,6 +533,33 @@ class Vault implements VaultPaymentInterface
         }
 
         return $extensionAttributes;
+    }
+
+    /**
+     * Attaches credit card info.
+     *
+     * @param OrderPaymentInterface $payment
+     * @return void
+     */
+    private function attachCreditCardInfo(OrderPaymentInterface $payment): void
+    {
+        $paymentToken = $payment->getExtensionAttributes()
+            ->getVaultPaymentToken();
+        if ($paymentToken === null) {
+            return;
+        }
+
+        $tokenDetails = $paymentToken->getTokenDetails();
+        if ($tokenDetails === null) {
+            return;
+        }
+
+        if (is_string($tokenDetails)) {
+            $tokenDetails = $this->jsonSerializer->unserialize($paymentToken->getTokenDetails());
+        }
+        if (is_array($tokenDetails)) {
+            $payment->addData($tokenDetails);
+        }
     }
 
     /**
@@ -615,7 +649,7 @@ class Vault implements VaultPaymentInterface
             ]
         );
 
-        return $this->getVaultProvider()->assignData($data);
+        return $this->vaultProvider->assignData($data);
     }
 
     /**
@@ -624,7 +658,7 @@ class Vault implements VaultPaymentInterface
      */
     public function isAvailable(\Magento\Quote\Api\Data\CartInterface $quote = null)
     {
-        return $this->getVaultProvider()->isAvailable($quote)
+        return $this->vaultProvider->isAvailable($quote)
             && $this->config->getValue(self::$activeKey, $this->getStore() ?: ($quote ? $quote->getStoreId() : null));
     }
 
@@ -634,7 +668,7 @@ class Vault implements VaultPaymentInterface
      */
     public function isActive($storeId = null)
     {
-        return $this->getVaultProvider()->isActive($storeId)
+        return $this->vaultProvider->isActive($storeId)
             && $this->config->getValue(self::$activeKey, $this->getStore() ?: $storeId);
     }
 
@@ -653,7 +687,7 @@ class Vault implements VaultPaymentInterface
      */
     public function getConfigPaymentAction()
     {
-        return $this->getVaultProvider()->getConfigPaymentAction();
+        return $this->vaultProvider->getConfigPaymentAction();
     }
 
     /**
@@ -662,6 +696,6 @@ class Vault implements VaultPaymentInterface
      */
     public function getProviderCode()
     {
-        return $this->getVaultProvider()->getCode();
+        return $this->vaultProvider->getCode();
     }
 }

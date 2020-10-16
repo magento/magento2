@@ -6,16 +6,16 @@
 
 namespace Magento\Indexer\Console\Command;
 
+use Magento\Framework\App\ObjectManagerFactory;
 use Magento\Framework\Console\Cli;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Indexer\Config\DependencyInfoProvider;
+use Magento\Framework\Indexer\ConfigInterface;
 use Magento\Framework\Indexer\IndexerInterface;
 use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Framework\Indexer\StateInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Magento\Framework\Indexer\ConfigInterface;
-use Magento\Framework\App\ObjectManagerFactory;
 
 /**
  * Command to run indexers
@@ -74,13 +74,16 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $returnValue = Cli::RETURN_FAILURE;
+        $returnValue = Cli::RETURN_SUCCESS;
         foreach ($this->getIndexers($input) as $indexer) {
             try {
                 $this->validateIndexerStatus($indexer);
+
+                $output->write($indexer->getTitle() . ' index ');
+
                 $startTime = microtime(true);
                 $indexerConfig = $this->getConfig()->getIndexer($indexer->getId());
-                $sharedIndex = $indexerConfig['shared_index'];
+                $sharedIndex = $indexerConfig['shared_index'] ?? null;
 
                 // Skip indexers having shared index that was already complete
                 if (!in_array($sharedIndex, $this->sharedIndexesComplete)) {
@@ -90,17 +93,22 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
                     }
                 }
                 $resultTime = microtime(true) - $startTime;
+
                 $output->writeln(
-                    $indexer->getTitle() . ' index has been rebuilt successfully in ' . gmdate('H:i:s', $resultTime)
+                    __('has been rebuilt successfully in %time', ['time' => gmdate('H:i:s', $resultTime)])
                 );
-                $returnValue = Cli::RETURN_SUCCESS;
             } catch (LocalizedException $e) {
-                $output->writeln($e->getMessage());
+                $output->writeln(__('exception: %message', ['message' => $e->getMessage()]));
+                $returnValue = Cli::RETURN_FAILURE;
             } catch (\Exception $e) {
-                $output->writeln($indexer->getTitle() . ' indexer process unknown error:');
+                $output->writeln('process unknown error:');
                 $output->writeln($e->getMessage());
+
+                $output->writeln($e->getTraceAsString(), OutputInterface::VERBOSITY_DEBUG);
+                $returnValue = Cli::RETURN_FAILURE;
             }
         }
+
         return $returnValue;
     }
 
@@ -111,7 +119,7 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
      */
     protected function getIndexers(InputInterface $input)
     {
-        $indexers =  parent::getIndexers($input);
+        $indexers = parent::getIndexers($input);
         $allIndexers = $this->getAllIndexers();
         if (!array_diff_key($allIndexers, $indexers)) {
             return $indexers;
@@ -119,19 +127,17 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
 
         $relatedIndexers = [];
         $dependentIndexers = [];
+
         foreach ($indexers as $indexer) {
-            $relatedIndexers = array_merge(
-                $relatedIndexers,
-                $this->getRelatedIndexerIds($indexer->getId())
-            );
-            $dependentIndexers = array_merge(
-                $dependentIndexers,
-                $this->getDependentIndexerIds($indexer->getId())
-            );
+            $relatedIndexers[] = $this->getRelatedIndexerIds($indexer->getId());
+            $dependentIndexers[] = $this->getDependentIndexerIds($indexer->getId());
         }
 
+        $relatedIndexers = array_unique(array_merge([], ...$relatedIndexers));
+        $dependentIndexers = array_merge([], ...$dependentIndexers);
+
         $invalidRelatedIndexers = [];
-        foreach (array_unique($relatedIndexers) as $relatedIndexer) {
+        foreach ($relatedIndexers as $relatedIndexer) {
             if ($allIndexers[$relatedIndexer]->isInvalid()) {
                 $invalidRelatedIndexers[] = $relatedIndexer;
             }
@@ -157,18 +163,16 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
      * @param string $indexerId
      * @return array
      */
-    private function getRelatedIndexerIds(string $indexerId)
+    private function getRelatedIndexerIds(string $indexerId): array
     {
         $relatedIndexerIds = [];
         foreach ($this->getDependencyInfoProvider()->getIndexerIdsToRunBefore($indexerId) as $relatedIndexerId) {
-            $relatedIndexerIds = array_merge(
-                $relatedIndexerIds,
-                [$relatedIndexerId],
-                $this->getRelatedIndexerIds($relatedIndexerId)
-            );
+            $relatedIndexerIds[] = [$relatedIndexerId];
+            $relatedIndexerIds[] = $this->getRelatedIndexerIds($relatedIndexerId);
         }
+        $relatedIndexerIds = array_unique(array_merge([], ...$relatedIndexerIds));
 
-        return array_unique($relatedIndexerIds);
+        return $relatedIndexerIds;
     }
 
     /**
@@ -177,21 +181,19 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
      * @param string $indexerId
      * @return array
      */
-    private function getDependentIndexerIds(string $indexerId)
+    private function getDependentIndexerIds(string $indexerId): array
     {
         $dependentIndexerIds = [];
         foreach (array_keys($this->getConfig()->getIndexers()) as $id) {
             $dependencies = $this->getDependencyInfoProvider()->getIndexerIdsToRunBefore($id);
             if (array_search($indexerId, $dependencies) !== false) {
-                $dependentIndexerIds = array_merge(
-                    $dependentIndexerIds,
-                    [$id],
-                    $this->getDependentIndexerIds($id)
-                );
+                $dependentIndexerIds[] = [$id];
+                $dependentIndexerIds[] = $this->getDependentIndexerIds($id);
             }
         }
+        $dependentIndexerIds = array_unique(array_merge([], ...$dependentIndexerIds));
 
-        return array_unique($dependentIndexerIds);
+        return $dependentIndexerIds;
     }
 
     /**
@@ -252,6 +254,8 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
             $indexer = $this->getIndexerRegistry()->get($indexerId);
             /** @var \Magento\Indexer\Model\Indexer\State $state */
             $state = $indexer->getState();
+            $state->setStatus(StateInterface::STATUS_WORKING);
+            $state->save();
             $state->setStatus(StateInterface::STATUS_VALID);
             $state->save();
         }

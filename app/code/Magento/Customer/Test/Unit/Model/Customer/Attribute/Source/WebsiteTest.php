@@ -3,36 +3,42 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Test\Unit\Model\Customer\Attribute\Source;
 
 use Magento\Customer\Model\Customer\Attribute\Source\Website;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory;
+use Magento\Store\Model\System\Store;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class WebsiteTest extends \PHPUnit\Framework\TestCase
+class WebsiteTest extends TestCase
 {
     /** @var Website */
     protected $model;
 
-    /** @var CollectionFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var CollectionFactory|MockObject */
     protected $collectionFactoryMock;
 
-    /** @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var OptionFactory|MockObject */
     protected $optionFactoryMock;
 
-    /** @var \Magento\Store\Model\System\Store|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Store|MockObject */
     protected $storeMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->collectionFactoryMock =
-            $this->getMockBuilder(\Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+            $this->getMockBuilder(CollectionFactory::class)
+                ->disableOriginalConstructor()
+                ->getMock();
         $this->optionFactoryMock =
-            $this->getMockBuilder(\Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->storeMock = $this->getMockBuilder(\Magento\Store\Model\System\Store::class)
+            $this->getMockBuilder(OptionFactory::class)
+                ->disableOriginalConstructor()
+                ->getMock();
+        $this->storeMock = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -89,6 +95,6 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
     {
         $this->mockOptions();
 
-        $this->assertEquals(false, $this->model->getOptionText('value'));
+        $this->assertFalse($this->model->getOptionText('value'));
     }
 }

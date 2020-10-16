@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Setup\Model;
 
@@ -11,7 +12,6 @@ use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Encryption\KeyValidator;
 use Magento\Framework\Setup\ConfigOptionsListInterface;
 use Magento\Framework\Setup\Option\FlagConfigOption;
-use Magento\Framework\Setup\Option\SelectConfigOption;
 use Magento\Framework\Setup\Option\TextConfigOption;
 use Magento\Setup\Model\ConfigOptionsList\DriverOptions;
 use Magento\Setup\Validator\DbValidator;
@@ -53,6 +53,7 @@ class ConfigOptionsList implements ConfigOptionsListInterface
         \Magento\Setup\Model\ConfigOptionsList\Cache::class,
         \Magento\Setup\Model\ConfigOptionsList\PageCache::class,
         \Magento\Setup\Model\ConfigOptionsList\Lock::class,
+        \Magento\Setup\Model\ConfigOptionsList\Directory::class,
     ];
 
     /**
@@ -178,7 +179,7 @@ class ConfigOptionsList implements ConfigOptionsListInterface
                 ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT_DRIVER_OPTIONS .
                 '/' . ConfigOptionsListConstants::KEY_MYSQL_SSL_KEY,
                 'Full path of client key file in order to establish db connection through SSL',
-                null
+                ''
             ),
             new TextConfigOption(
                 ConfigOptionsListConstants::INPUT_KEY_DB_SSL_CERT,
@@ -186,7 +187,7 @@ class ConfigOptionsList implements ConfigOptionsListInterface
                 ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT_DRIVER_OPTIONS .
                 '/' . ConfigOptionsListConstants::KEY_MYSQL_SSL_CERT,
                 'Full path of client certificate file in order to establish db connection through SSL',
-                null
+                ''
             ),
             new TextConfigOption(
                 ConfigOptionsListConstants::INPUT_KEY_DB_SSL_CA,
@@ -194,7 +195,7 @@ class ConfigOptionsList implements ConfigOptionsListInterface
                 ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT_DRIVER_OPTIONS .
                 '/' . ConfigOptionsListConstants::KEY_MYSQL_SSL_CA,
                 'Full path of server certificate file in order to establish db connection through SSL',
-                null
+                ''
             ),
             new FlagConfigOption(
                 ConfigOptionsListConstants::INPUT_KEY_DB_SSL_VERIFY,
@@ -204,11 +205,12 @@ class ConfigOptionsList implements ConfigOptionsListInterface
             ),
         ];
 
+        $options = [$options];
         foreach ($this->configOptionsCollection as $configOptionsList) {
-            $options = array_merge($options, $configOptionsList->getOptions());
+            $options[] = $configOptionsList->getOptions();
         }
 
-        return $options;
+        return array_merge([], ...$options);
     }
 
     /**
@@ -243,33 +245,24 @@ class ConfigOptionsList implements ConfigOptionsListInterface
         $errors = [];
 
         if (isset($options[ConfigOptionsListConstants::INPUT_KEY_CACHE_HOSTS])) {
-            $errors = array_merge(
-                $errors,
-                $this->validateHttpCacheHosts($options[ConfigOptionsListConstants::INPUT_KEY_CACHE_HOSTS])
-            );
+            $errors[] = $this->validateHttpCacheHosts($options[ConfigOptionsListConstants::INPUT_KEY_CACHE_HOSTS]);
         }
 
         if (isset($options[ConfigOptionsListConstants::INPUT_KEY_DB_PREFIX])) {
-            $errors = array_merge(
-                $errors,
-                $this->validateDbPrefix($options[ConfigOptionsListConstants::INPUT_KEY_DB_PREFIX])
-            );
+            $errors[] = $this->validateDbPrefix($options[ConfigOptionsListConstants::INPUT_KEY_DB_PREFIX]);
         }
 
         if (!$options[ConfigOptionsListConstants::INPUT_KEY_SKIP_DB_VALIDATION]) {
-            $errors = array_merge($errors, $this->validateDbSettings($options, $deploymentConfig));
+            $errors[] = $this->validateDbSettings($options, $deploymentConfig);
         }
 
         foreach ($this->configOptionsCollection as $configOptionsList) {
-            $errors = array_merge($errors, $configOptionsList->validate($options, $deploymentConfig));
+            $errors[] = $configOptionsList->validate($options, $deploymentConfig);
         }
 
-        $errors = array_merge(
-            $errors,
-            $this->validateEncryptionKey($options)
-        );
+        $errors[] = $this->validateEncryptionKey($options);
 
-        return $errors;
+        return array_merge([], ...$errors);
     }
 
     /**

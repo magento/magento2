@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminSetUpWatermarkForSwatchImageTest">
+        <annotations>
+            <features value="Swatches"/>
+            <stories value="Product Swatches Images"/>
+            <title value="Possibility to set up watermark for a swatch image type"/>
+            <description value="Possibility to set up watermark for a swatch image type"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-17607"/>
+            <useCaseId value="MC-15523"/>
+            <severity value="MAJOR"/>
+            <group value="swatches"/>
+        </annotations>
+        <before>
+            <!-- Login as Admin -->
+            <comment userInput="Login as Admin" stepKey="commentLoginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!-- Log out -->
+            <comment userInput="Log out" stepKey="commentLogOut"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!-- Go to Admin > Content > Configuration	page -->
+        <comment userInput="Go to Configuration Page" stepKey="commentOpenConfigurationPage"/>
+        <amOnPage url="{{DesignConfigPage.url}}" stepKey="navigateToDesignConfigPage"/>
+        <actionGroup ref="AdminFilterStoreViewActionGroup" stepKey="filterDefaultStoreView">
+            <argument name="customStore" value="'Default'" />
+        </actionGroup>
+        <!-- Select Edit next to the Default Store View -->
+        <comment userInput="Select Edit next to the Default Store View" stepKey="commentEditDefaultView"/>
+        <actionGroup ref="AdminClickFirstRowEditLinkOnCustomerGridActionGroup" stepKey="clickToEditDefaultStoreView"/>
+        <!-- Expand the Product Image Watermarks section-->
+        <comment userInput="Expand the Product Image Watermarks section" stepKey="commentOpenWatermarksSection"/>
+        <click selector="{{AdminDesignConfigSection.watermarkSectionHeader}}" stepKey="clickToProductImageWatermarks"/>
+        <waitForPageLoad stepKey="waitForWatermarksPage"/>
+        <!-- See Base, Thumbnail, Small image types are displayed -->
+        <comment userInput="See Base, Thumbnail, Small image types are displayed" stepKey="commentSeeImageTypes"/>
+        <seeElement selector="{{AdminDesignConfigSection.imageWatermarkType('Base')}}" stepKey="seeElementBaseWatermark"/>
+        <waitForElementVisible selector="{{AdminDesignConfigSection.imageWatermarkType('Thumbnail')}}" stepKey="waitForThumbnailVisible" />
+        <seeElement selector="{{AdminDesignConfigSection.imageWatermarkType('Thumbnail')}}" stepKey="seeElementThumbnailWatermark"/>
+        <waitForElementVisible selector="{{AdminDesignConfigSection.imageWatermarkType('Small')}}" stepKey="waitForSmallVisible" />
+        <seeElement selector="{{AdminDesignConfigSection.imageWatermarkType('Small')}}" stepKey="seeElementSmallWatermark"/>
+        <!-- See Swatch Image type is absent -->
+        <comment userInput="See Swatch Image type is absent" stepKey="commentSeeTypeAbsent"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <dontSeeElement selector="{{AdminDesignConfigSection.imageWatermarkType('Swatch')}}" stepKey="dontSeeImageWatermarkSwatchImage"/>
+    </test>
+</tests>

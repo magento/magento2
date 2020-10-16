@@ -7,24 +7,23 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Stdlib;
 
-use Zend\Stdlib\Parameters as ZendParameters;
+use Laminas\Stdlib\Parameters as LaminasParameters;
 
 /**
- * Class Parameters
+ * Stdlib parameters
  */
 class Parameters
 {
     /**
-     * @var ZendParameters
+     * @var LaminasParameters
      */
     private $parameters;
 
     /**
-     * @param ZendParameters $parameters
+     * @param LaminasParameters $parameters
      */
-    public function __construct(
-        ZendParameters $parameters
-    ) {
+    public function __construct(LaminasParameters $parameters)
+    {
         $this->parameters = $parameters;
     }
 
@@ -100,7 +99,7 @@ class Parameters
      *
      * @param string $name
      * @param mixed $value
-     * @return \Zend\Stdlib\Parameters
+     * @return \Laminas\Stdlib\Parameters
      */
     public function set($name, $value)
     {

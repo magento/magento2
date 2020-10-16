@@ -7,6 +7,8 @@ namespace Magento\CatalogImportExport\Model\Import;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\ValidatorException;
+use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\DriverPool;
 
 /**
@@ -33,13 +35,6 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
      * @var string
      */
     protected $_tmpDir = '';
-
-    /**
-     * Download directory for url-based resources.
-     *
-     * @var string
-     */
-    private $downloadDir;
 
     /**
      * Destination directory.
@@ -112,12 +107,22 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
     private $random;
 
     /**
+     * @var Filesystem
+     */
+    private $fileSystem;
+
+    /**
+     * Directory and filename must be no more than 255 characters in length
+     */
+    private $maxFilenameLength = 255;
+
+    /**
      * @param \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDb
      * @param \Magento\MediaStorage\Helper\File\Storage $coreFileStorage
      * @param \Magento\Framework\Image\AdapterFactory $imageFactory
      * @param \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension $validator
-     * @param \Magento\Framework\Filesystem $filesystem
-     * @param \Magento\Framework\Filesystem\File\ReadFactory $readFactory
+     * @param Filesystem $filesystem
+     * @param Filesystem\File\ReadFactory $readFactory
      * @param string|null $filePath
      * @param \Magento\Framework\Math\Random|null $random
      * @throws \Magento\Framework\Exception\FileSystemException
@@ -128,8 +133,8 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
         \Magento\MediaStorage\Helper\File\Storage $coreFileStorage,
         \Magento\Framework\Image\AdapterFactory $imageFactory,
         \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension $validator,
-        \Magento\Framework\Filesystem $filesystem,
-        \Magento\Framework\Filesystem\File\ReadFactory $readFactory,
+        Filesystem $filesystem,
+        Filesystem\File\ReadFactory $readFactory,
         $filePath = null,
         \Magento\Framework\Math\Random $random = null
     ) {
@@ -137,13 +142,13 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
         $this->_coreFileStorageDb = $coreFileStorageDb;
         $this->_coreFileStorage = $coreFileStorage;
         $this->_validator = $validator;
+        $this->fileSystem = $filesystem;
         $this->_directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
         $this->_readFactory = $readFactory;
         if ($filePath !== null) {
             $this->_setUploadFile($filePath);
         }
         $this->random = $random ?: ObjectManager::getInstance()->get(\Magento\Framework\Math\Random::class);
-        $this->downloadDir = DirectoryList::getDefaultConfig()[DirectoryList::TMP][DirectoryList::PATH];
     }
 
     /**
@@ -179,8 +184,7 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
             $driver = ($matches[0] === $this->httpScheme) ? DriverPool::HTTP : DriverPool::HTTPS;
             $tmpFilePath = $this->downloadFileFromUrl($url, $driver);
         } else {
-            $tmpDir = $this->getTmpDir() ? ($this->getTmpDir() . '/') : '';
-            $tmpFilePath = $this->_directory->getRelativePath($tmpDir . $fileName);
+            $tmpFilePath = $this->_directory->getRelativePath($this->getTempFilePath($fileName));
         }
 
         $this->_setUploadFile($tmpFilePath);
@@ -188,6 +192,13 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
         $result = $this->save($destDir);
         unset($result['path']);
         $result['name'] = self::getCorrectFileName($result['name']);
+
+        // Directory and filename must be no more than 255 characters in length
+        if (strlen($result['file']) > $this->maxFilenameLength) {
+            throw new \LengthException(
+                __('Filename is too long; must be %1 characters or less', $this->maxFilenameLength)
+            );
+        }
 
         return $result;
     }
@@ -217,8 +228,13 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
         $tmpFileName = str_replace(".$fileExtension", '', $fileName);
         $tmpFileName .= '_' . $this->random->getRandomString(16);
         $tmpFileName .= $fileExtension ? ".$fileExtension" : '';
-        $tmpFilePath = $this->_directory->getRelativePath($this->downloadDir . '/' . $tmpFileName);
+        $tmpFilePath = $this->_directory->getRelativePath($this->getTempFilePath($tmpFileName));
 
+        if (!$this->_directory->isWritable($this->getTmpDir())) {
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Import images directory must be writable in order to process remote images.')
+            );
+        }
         $this->_directory->writeFile(
             $tmpFilePath,
             $this->_readFactory->create($url, $driver)->readAll()
@@ -236,7 +252,20 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
      */
     protected function _setUploadFile($filePath)
     {
-        if (!$this->_directory->isReadable($filePath)) {
+        try {
+            $fullPath = $this->_directory->getAbsolutePath($filePath);
+            if ($this->getTmpDir()) {
+                $tmpDir = $this->fileSystem->getDirectoryReadByPath(
+                    $this->_directory->getAbsolutePath($this->getTmpDir())
+                );
+            } else {
+                $tmpDir = $this->_directory;
+            }
+            $readable = $tmpDir->isReadable($fullPath);
+        } catch (ValidatorException $exception) {
+            $readable = false;
+        }
+        if (!$readable) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('File \'%1\' was not found or has read restriction.', $filePath)
             );
@@ -379,6 +408,19 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
         } else {
             return false;
         }
+    }
+
+    /**
+     * Append temp path to filename
+     *
+     * @param string $filename
+     * @return string
+     */
+    private function getTempFilePath(string $filename): string
+    {
+        return $this->getTmpDir()
+            ? rtrim($this->getTmpDir(), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $filename
+            : $filename;
     }
 
     /**

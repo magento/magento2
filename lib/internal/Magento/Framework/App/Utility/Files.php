@@ -24,44 +24,20 @@ use Magento\Framework\View\Design\Theme\ThemePackageList;
  */
 class Files
 {
-    /**
-     * Include app code
-     */
     const INCLUDE_APP_CODE = 1;
 
-    /**
-     * Include tests
-     */
     const INCLUDE_TESTS = 2;
 
-    /**
-     * Include dev tools
-     */
     const INCLUDE_DEV_TOOLS = 4;
 
-    /**
-     * Include templates
-     */
     const INCLUDE_TEMPLATES = 8;
 
-    /**
-     * Include lib files
-     */
     const INCLUDE_LIBS = 16;
 
-    /**
-     * Include pub code
-     */
     const INCLUDE_PUB_CODE = 32;
 
-    /**
-     * Include non classes
-     */
     const INCLUDE_NON_CLASSES = 64;
 
-    /**
-     * Include setup
-     */
     const INCLUDE_SETUP = 128;
 
     /**
@@ -397,9 +373,9 @@ class Files
             $configXmlPaths = array_merge($globPaths, $configXmlPaths);
             $files = [];
             foreach ($configXmlPaths as $xmlPath) {
-                $files = array_merge($files, glob($xmlPath, GLOB_NOSORT));
+                $files[] = glob($xmlPath, GLOB_NOSORT);
             }
-            self::$_cache[$cacheKey] = $files;
+            self::$_cache[$cacheKey] = array_merge([], ...$files);
         }
         if ($asDataSet) {
             return self::composeDataSets(self::$_cache[$cacheKey]);
@@ -668,22 +644,19 @@ class Files
                         $regex = '#^' . $modulePath . '/view/(?P<area>[a-z]+)/layout/(?P<path>.+)$#i';
                         if (preg_match($regex, $moduleFile, $matches)) {
                             $files[] = [
-                                $matches['area'],
-                                '',
-                                $moduleName,
-                                $matches['path'],
-                                $moduleFile,
+                                [$matches['area'], '', $moduleName, $matches['path'], $moduleFile]
                             ];
                         } else {
                             throw new \UnexpectedValueException("Could not parse modular layout file '$moduleFile'");
                         }
                     }
                 } else {
-                    $files = array_merge($files, $moduleFiles);
+                    $files[] = $moduleFiles;
                 }
             }
         }
-        return $files;
+
+        return array_merge([], ...$files);
     }
 
     /**
@@ -713,13 +686,15 @@ class Files
                 );
 
                 if ($params['with_metainfo']) {
-                    $files = array_merge($this->parseThemeFiles($themeFiles, $currentThemePath, $theme));
+                    // phpcs:ignore Magento2.Performance.ForeachArrayMerge
+                    $files[] = [array_merge($this->parseThemeFiles($themeFiles, $currentThemePath, $theme))];
                 } else {
-                    $files = array_merge($files, $themeFiles);
+                    $files[] = $themeFiles;
                 }
             }
         }
-        return $files;
+
+        return array_merge([], ...$files);
     }
 
     /**
@@ -925,14 +900,12 @@ class Files
         $area = '*';
         $locale = '*';
         $result = [];
-        $moduleWebPath = [];
         $moduleLocalePath = [];
         foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleDir) {
-            $moduleWebPath[] = $moduleDir . "/view/{$area}/web";
             $moduleLocalePath[] = $moduleDir . "/view/{$area}/web/i18n/{$locale}";
         }
 
-        $this->_accumulateFilesByPatterns($moduleWebPath, $filePattern, $result, '_parseModuleStatic');
+        $this->accumulateStaticFiles($area, $filePattern, $result);
         $this->_accumulateFilesByPatterns($moduleLocalePath, $filePattern, $result, '_parseModuleLocaleStatic');
         $this->accumulateThemeStaticFiles($area, $locale, $filePattern, $result);
         self::$_cache[$key] = $result;
@@ -1043,6 +1016,8 @@ class Files
     /**
      * Parse meta-info of a static file in module
      *
+     * @deprecated 102.0.4 Replaced with method accumulateStaticFiles()
+     *
      * @param string $file
      * @return array
      */
@@ -1060,6 +1035,29 @@ class Files
             }
         }
         return [];
+    }
+
+    /**
+     * Search static files from all modules by the specified pattern and accumulate meta-info
+     *
+     * @param string $area
+     * @param string $filePattern
+     * @param array $result
+     * @return void
+     */
+    private function accumulateStaticFiles($area, $filePattern, array &$result)
+    {
+        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleName => $moduleDir) {
+            $moduleWebPath = $moduleDir . "/view/{$area}/web";
+
+            foreach (self::getFiles([$moduleWebPath], $filePattern) as $absolutePath) {
+                $localPath = substr($absolutePath, strlen($moduleDir) + 1);
+                if (preg_match('/^view\/([a-z]+)\/web\/(.+)$/i', $localPath, $matches) === 1) {
+                    list(, $parsedArea, $parsedPath) = $matches;
+                    $result[] = [$parsedArea, '', '', $moduleName, $parsedPath, $absolutePath];
+                }
+            }
+        }
     }
 
     /**
@@ -1114,7 +1112,7 @@ class Files
         } else {
             $frontendPaths = [BP . "/lib/web/mage"];
             /* current structure of /lib/web/mage directory contains frontend javascript in the root,
-               backend javascript in subdirectories. That's why script shouldn't go recursive throught subdirectories
+               backend javascript in subdirectories. That's why script shouldn't go recursive through subdirectories
                to get js files for frontend */
             $files = array_merge($files, self::getFiles($frontendPaths, '*.js', false));
         }
@@ -1408,9 +1406,6 @@ class Files
             '/dev/tests/integration/testsuite/Magento/Test/Integrity',
             '/dev/tests/static/framework',
             '/dev/tests/static/testsuite',
-            '/dev/tests/functional/tests/app',
-            '/dev/tests/functional/lib',
-            '/dev/tests/functional/vendor/magento/mtf',
             '/setup/src'
         ];
         foreach ($directories as $key => $dir) {

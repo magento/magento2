@@ -3,9 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Indexer\Test\Unit\Block\Backend\Grid\Column\Renderer;
 
-class StatusTest extends \PHPUnit\Framework\TestCase
+use Magento\Backend\Block\Context;
+use Magento\Framework\DataObject;
+use Magento\Framework\Indexer\StateInterface;
+use Magento\Indexer\Block\Backend\Grid\Column\Renderer\Status;
+use PHPUnit\Framework\TestCase;
+
+class StatusTest extends TestCase
 {
     /**
      * @param array $indexValues
@@ -14,11 +22,11 @@ class StatusTest extends \PHPUnit\Framework\TestCase
      */
     public function testRender($indexValues, $expectedResult)
     {
-        $context = $this->getMockBuilder(\Magento\Backend\Block\Context::class)
+        $context = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $model = new \Magento\Indexer\Block\Backend\Grid\Column\Renderer\Status($context);
-        $obj = new \Magento\Framework\DataObject();
+        $model = new Status($context);
+        $obj = new DataObject();
         $obj->setGetter(null);
         $obj->setDefault('');
         $obj->setValue('');
@@ -40,16 +48,16 @@ class StatusTest extends \PHPUnit\Framework\TestCase
     {
         return [
             'set1' => [
-                [\Magento\Framework\Indexer\StateInterface::STATUS_INVALID],
+                [StateInterface::STATUS_INVALID],
                 ['class' => 'grid-severity-critical', 'text' => 'Reindex required']
             ],
             'set2' => [
-                [\Magento\Framework\Indexer\StateInterface::STATUS_VALID],
+                [StateInterface::STATUS_VALID],
                 ['class' => 'grid-severity-notice', 'text' => 'Ready']
             ],
             'set3' => [
-                [\Magento\Framework\Indexer\StateInterface::STATUS_WORKING],
-                ['class' => 'grid-severity-major', 'text' => 'Processing']
+                [StateInterface::STATUS_WORKING],
+                ['class' => 'grid-severity-minor', 'text' => 'Processing']
             ]
         ];
     }

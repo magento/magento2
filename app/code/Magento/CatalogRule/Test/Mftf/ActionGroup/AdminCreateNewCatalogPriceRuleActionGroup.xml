@@ -21,7 +21,6 @@
         <waitForPageLoad stepKey="waitForPageToLoad"/>
         <fillField stepKey="fillName" selector="{{AdminNewCatalogPriceRule.ruleName}}" userInput="{{catalogRule.name}}"/>
         <fillField stepKey="fillDescription" selector="{{AdminNewCatalogPriceRule.description}}" userInput="{{catalogRule.description}}"/>
-        <selectOption selector="{{AdminNewCatalogPriceRule.status}}" userInput="{{catalogRule.is_active}}" stepKey="selectStatus"/>
         <selectOption stepKey="selectWebSite" selector="{{AdminNewCatalogPriceRule.websites}}" userInput="{{catalogRule.website_ids[0]}}"/>
         <selectOption selector="{{AdminNewCatalogPriceRule.customerGroups}}" userInput="{{customerGroup}}" stepKey="selectCustomerGroup"/>
         <scrollTo selector="{{AdminNewCatalogPriceRule.actionsTab}}" stepKey="scrollToActionTab"/>

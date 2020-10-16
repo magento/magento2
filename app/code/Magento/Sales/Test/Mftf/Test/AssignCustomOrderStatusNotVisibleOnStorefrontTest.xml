@@ -27,7 +27,7 @@
             <createData entity="SimpleProduct2" stepKey="createSimpleProduct"/>
 
             <!-- Login as admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <!-- Disable created order status -->
@@ -43,7 +43,7 @@
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
 
             <!-- Log out -->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Create order status -->
@@ -85,9 +85,8 @@
         <grabTextFrom selector="|Order # (\d+)|" stepKey="getOrderId"/>
 
         <!-- Assert order status is correct -->
-        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="goToOrdersPage"/>
-        <waitForPageLoad stepKey="waitForOrdersPageLoad"/>
-        <actionGroup ref="filterOrderGridById" stepKey="filterOrdersGridById">
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="goToOrdersPage"/>
+        <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrdersGridById">
             <argument name="orderId" value="$getOrderId"/>
         </actionGroup>
         <click selector="{{AdminDataGridTableSection.firstRow}}" stepKey="clickCreatedOrderInGrid"/>
@@ -100,8 +99,7 @@
         <waitForPageLoad stepKey="waitForCustomerLogin"/>
 
         <!-- Open My Orders -->
-        <amOnPage url="{{StorefrontCustomerDashboardPage.url}}" stepKey="goToCustomerDashboardPage"/>
-        <waitForPageLoad stepKey="waitForCustomerDashboardPageLoad"/>
+        <actionGroup ref="StorefrontOpenMyAccountPageActionGroup" stepKey="goToCustomerDashboardPage"/>
         <actionGroup ref="StorefrontCustomerGoToSidebarMenu" stepKey="goToMyOrdersPage">
             <argument name="menu" value="My Orders"/>
         </actionGroup>
@@ -110,9 +108,8 @@
         <see selector="{{StorefrontOrderInformationMainSection.emptyMessage}}" userInput="You have placed no orders." stepKey="seeEmptyMessage"/>
 
         <!-- Cancel order -->
-        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="goToAdminOrdersPage"/>
-        <waitForPageLoad stepKey="waitForAdminOrdersPageLoad"/>
-        <actionGroup ref="filterOrderGridById" stepKey="filterOrdersGridByOrderId">
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="goToAdminOrdersPage"/>
+        <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrdersGridByOrderId">
             <argument name="orderId" value="$getOrderId"/>
         </actionGroup>
         <checkOption selector="{{AdminOrdersGridSection.checkOrder}}" stepKey="selectOrder"/>

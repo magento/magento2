@@ -13,6 +13,6 @@
         <label translate="true">Admin 1column</label>
     </layout>
     <layout id="admin-2columns-left">
-        <label translate="true">Admin 1column</label>
+        <label translate="true">Admin 2 columns with left bar</label>
     </layout>
 </page_layouts>

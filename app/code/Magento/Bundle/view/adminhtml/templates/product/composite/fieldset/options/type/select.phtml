@@ -12,7 +12,7 @@
 <?php $_skipSaleableCheck = $this->helper(Magento\Catalog\Helper\Product::class)->getSkipSaleableCheck(); ?>
 <?php list($_defaultQty, $_canChangeQty) = $block->getDefaultValues(); ?>
 
-<div class="field admin__field option<?php if ($_option->getDecoratedIsLast()) :?> last<?php endif; ?><?php if ($_option->getRequired()) { echo ' required _required'; } ?>">
+<div class="field admin__field option<?php if ($_option->getDecoratedIsLast()) :?> last<?php endif; ?><?php if ($_option->getRequired()) { echo ' _required'; } ?>">
     <label class="label admin__field-label"><span><?= $block->escapeHtml($_option->getTitle()) ?></span></label>
     <div class="control admin__field-control">
         <?php if ($block->showSingle()) : ?>
@@ -49,7 +49,7 @@
                 <div class="control admin__field-control">
                     <input <?php if (!$_canChangeQty) { echo ' disabled="disabled"'; } ?>
                         id="bundle-option-<?= $block->escapeHtmlAttr($_option->getId()) ?>-qty-input"
-                        class="input-text admin__control-text qty<?php if (!$_canChangeQty) { echo ' qty-disabled'; } ?>"
+                        class="input-text admin__control-text qty validate-greater-than-zero<?php if (!$_canChangeQty) { echo ' qty-disabled'; } ?>"
                         type="text"
                         name="bundle_option_qty[<?= $block->escapeHtmlAttr($_option->getId()) ?>]"
                         value="<?= $block->escapeHtmlAttr($_defaultQty) ?>" />

@@ -213,31 +213,29 @@ class Image extends AbstractHelper implements ArgumentInterface
 
         // Set 'keep frame' flag
         $frame = $this->getFrame();
-        if (!empty($frame)) {
-            $this->_getModel()->setKeepFrame($frame);
-        }
+        $this->_getModel()->setKeepFrame($frame);
 
         // Set 'constrain only' flag
         $constrain = $this->getAttribute('constrain');
-        if (!empty($constrain)) {
+        if (null !== $constrain) {
             $this->_getModel()->setConstrainOnly($constrain);
         }
 
         // Set 'keep aspect ratio' flag
         $aspectRatio = $this->getAttribute('aspect_ratio');
-        if (!empty($aspectRatio)) {
+        if (null !== $aspectRatio) {
             $this->_getModel()->setKeepAspectRatio($aspectRatio);
         }
 
         // Set 'transparency' flag
         $transparency = $this->getAttribute('transparency');
-        if (!empty($transparency)) {
+        if (null !== $transparency) {
             $this->_getModel()->setKeepTransparency($transparency);
         }
 
         // Set background color
         $background = $this->getAttribute('background');
-        if (!empty($background)) {
+        if (null !== $background) {
             $this->_getModel()->setBackgroundColor($background);
         }
 
@@ -299,7 +297,7 @@ class Image extends AbstractHelper implements ArgumentInterface
      *
      * @param int $quality
      * @return $this
-     * @deprecated
+     * @deprecated 103.0.1
      */
     public function setQuality($quality)
     {
@@ -386,7 +384,9 @@ class Image extends AbstractHelper implements ArgumentInterface
     {
         // assume that 3 params were given instead of array
         if (!is_array($colorRGB)) {
+            //phpcs:disable
             $colorRGB = func_get_args();
+            //phpcs:enabled
         }
         $this->_getModel()->setBackgroundColor($colorRGB);
         return $this;
@@ -448,7 +448,7 @@ class Image extends AbstractHelper implements ArgumentInterface
      * @param null|string $placeholder
      * @return string
      *
-     * @deprecated 101.1.0 Returns only default placeholder.
+     * @deprecated 102.0.0 Returns only default placeholder.
      * Does not take into account custom placeholders set in Configuration.
      */
     public function getPlaceholder($placeholder = null)
@@ -500,7 +500,11 @@ class Image extends AbstractHelper implements ArgumentInterface
             if ($this->getImageFile()) {
                 $model->setBaseFile($this->getImageFile());
             } else {
-                $model->setBaseFile($this->getProduct()->getData($model->getDestinationSubdir()));
+                $model->setBaseFile(
+                    $this->getProduct()
+                        ? $this->getProduct()->getData($model->getDestinationSubdir())
+                        : ''
+                );
             }
         }
         return $this;

@@ -33,12 +33,8 @@ class Generator extends AbstractSchemaGenerator
      */
     const ERROR_SCHEMA = '#/definitions/error-response';
 
-    /**
-     * Unauthorized description
-     */
     const UNAUTHORIZED_DESCRIPTION = '401 Unauthorized';
 
-    /** Array signifier */
     const ARRAY_SIGNIFIER = '[0]';
 
     /**
@@ -738,7 +734,8 @@ class Generator extends AbstractSchemaGenerator
      */
     private function handleComplex($name, $type, $prefix, $isArray)
     {
-        $parameters = $this->typeProcessor->getTypeData($type)['parameters'];
+        $typeData = $this->typeProcessor->getTypeData($type);
+        $parameters = $typeData['parameters'] ?? [];
         $queryNames = [];
         foreach ($parameters as $subParameterName => $subParameterInfo) {
             $subParameterType = $subParameterInfo['type'];
@@ -758,7 +755,8 @@ class Generator extends AbstractSchemaGenerator
                 $subPrefix
             );
         }
-        return array_merge(...$queryNames);
+
+        return array_merge([], ...$queryNames);
     }
 
     /**

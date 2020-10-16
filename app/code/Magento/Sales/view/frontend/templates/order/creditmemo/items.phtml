@@ -7,8 +7,9 @@
 <?php $_order = $block->getOrder() ?>
 <div class="actions-toolbar">
     <a href="<?= $block->escapeUrl($block->getPrintAllCreditmemosUrl($_order)) ?>"
-       onclick="this.target='_blank'"
-       class="action print">
+       class="action print"
+       target="_blank"
+       rel="noopener">
         <span><?= $block->escapeHtml(__('Print All Refunds')) ?></span>
     </a>
 </div>
@@ -16,8 +17,9 @@
     <div class="order-title">
         <strong><?= $block->escapeHtml(__('Refund #')) ?><?= $block->escapeHtml($_creditmemo->getIncrementId()) ?> </strong>
         <a href="<?= $block->escapeUrl($block->getPrintCreditmemoUrl($_creditmemo)) ?>"
-           onclick="this.target='_blank'"
-           class="action print">
+           class="action print"
+           target="_blank"
+           rel="noopener">
             <span><?= $block->escapeHtml(__('Print Refund')) ?></span>
         </a>
     </div>

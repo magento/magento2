@@ -17,6 +17,9 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Message\MessageInterface;
 use Magento\Captcha\Helper\Data as CaptchaHelper;
 
+/**
+ * Class CustomerSendmailTest
+ */
 class CustomerSendmailTest extends AbstractController
 {
     /**
@@ -42,12 +45,12 @@ class CustomerSendmailTest extends AbstractController
     /**
      * @throws LocalizedException
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->accountManagement = $this->_objectManager->create(AccountManagementInterface::class);
         $this->formKey = $this->_objectManager->create(FormKey::class);
-        $logger = $this->createMock(LoggerInterface::class);
+        $logger = $this->getMockForAbstractClass(LoggerInterface::class);
         $this->session = $this->_objectManager->create(
             Session::class,
             [$logger]
@@ -58,6 +61,7 @@ class CustomerSendmailTest extends AbstractController
     }
 
     /**
+     * @magentoConfigFixture default_store sendfriend/email/enabled 1
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      */
@@ -95,6 +99,7 @@ class CustomerSendmailTest extends AbstractController
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      * @magentoConfigFixture default_store customer/captcha/forms product_sendtofriend_form
+     * @magentoConfigFixture default_store sendfriend/email/enabled 1
      */
     public function testWithCaptchaFailed()
     {
@@ -133,7 +138,7 @@ class CustomerSendmailTest extends AbstractController
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      * @magentoConfigFixture default_store customer/captcha/forms product_sendtofriend_form
-     *
+     * @magentoConfigFixture default_store sendfriend/email/enabled 1
      */
     public function testWithCaptchaSuccess()
     {

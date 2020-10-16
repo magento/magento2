@@ -18,6 +18,7 @@ use Magento\Framework\View\Model\Layout\Update\Validator;
  * Layout merge model
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
 {
@@ -45,6 +46,11 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      * Cache id suffix for page layout
      */
     const PAGE_LAYOUT_CACHE_SUFFIX = 'page_layout_merged';
+
+    /**
+     * Default cache life time
+     */
+    private const DEFAULT_CACHE_LIFETIME = 31536000;
 
     /**
      * @var \Magento\Framework\View\Design\ThemeInterface
@@ -168,6 +174,10 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      * @var ReadFactory
      */
     private $readFactory;
+    /**
+     * @var int
+     */
+    private $cacheLifetime;
 
     /**
      * Init merge model
@@ -181,10 +191,11 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      * @param \Magento\Framework\View\Model\Layout\Update\Validator $validator
      * @param \Psr\Log\LoggerInterface $logger
      * @param ReadFactory $readFactory
-     * @param \Magento\Framework\View\Design\ThemeInterface $theme Non-injectable theme instance
+     * @param \Magento\Framework\View\Design\ThemeInterface|null $theme Non-injectable theme instance
      * @param string $cacheSuffix
-     * @param LayoutCacheKeyInterface $layoutCacheKey
+     * @param LayoutCacheKeyInterface|null $layoutCacheKey
      * @param SerializerInterface|null $serializer
+     * @param int|null $cacheLifetime
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -200,7 +211,8 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
         \Magento\Framework\View\Design\ThemeInterface $theme = null,
         $cacheSuffix = '',
         LayoutCacheKeyInterface $layoutCacheKey = null,
-        SerializerInterface $serializer = null
+        SerializerInterface $serializer = null,
+        ?int $cacheLifetime = null
     ) {
         $this->theme = $theme ?: $design->getDesignTheme();
         $this->scope = $scopeResolver->getScope();
@@ -215,6 +227,7 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
         $this->layoutCacheKey = $layoutCacheKey
             ?: \Magento\Framework\App\ObjectManager::getInstance()->get(LayoutCacheKeyInterface::class);
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
+        $this->cacheLifetime = $cacheLifetime ?? self::DEFAULT_CACHE_LIFETIME;
     }
 
     /**
@@ -382,6 +395,21 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
     }
 
     /**
+     * List of all available layout handles.
+     *
+     * @return string[]
+     */
+    public function getAvailableHandles(): array
+    {
+        $handles = [];
+        $nodes = $this->getFileLayoutUpdatesXml()->xpath('/layouts/handle[@id]');
+        foreach ($nodes as $node) {
+            $handles[] = (string)$node->attributes()->id;
+        }
+        return $handles;
+    }
+
+    /**
      * Retrieve all design abstractions that exist in the system.
      *
      * Result format:
@@ -461,6 +489,8 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
             }
             return $this;
         }
+
+        $this->extractHandlers();
 
         foreach ($this->getHandles() as $handle) {
             $this->_merge($handle);
@@ -731,7 +761,7 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      */
     protected function _saveCache($data, $cacheId, array $cacheTags = [])
     {
-        $this->cache->save($data, $cacheId, $cacheTags, null);
+        $this->cache->save($data, $cacheId, $cacheTags, $this->cacheLifetime);
     }
 
     /**
@@ -950,5 +980,26 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
         $layoutCacheKeys = $this->layoutCacheKey->getCacheKeys();
         // phpcs:ignore Magento2.Security.InsecureFunction
         return $this->generateCacheId(md5(implode('|', array_merge($this->getHandles(), $layoutCacheKeys))));
+    }
+
+    /**
+     * Walk all updates and extract handles before the merge step.
+     */
+    private function extractHandlers(): void
+    {
+        foreach ($this->updates as $update) {
+            $updateXml = null;
+
+            try {
+                $updateXml = $this->_loadXmlString($update);
+                // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
+            } catch (\Exception $exception) {
+                // ignore invalid
+            }
+
+            if ($updateXml && strtolower($updateXml->getName()) == 'update' && isset($updateXml['handle'])) {
+                $this->addHandle((string)$updateXml['handle']);
+            }
+        }
     }
 }

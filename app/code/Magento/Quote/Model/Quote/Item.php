@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Quote\Model\Quote;
 
 use Magento\Framework\Api\AttributeValueFactory;
@@ -171,7 +173,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
 
     /**
      * @var \Magento\CatalogInventory\Api\StockRegistryInterface
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      */
     protected $stockRegistry;
 
@@ -607,7 +609,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
     /**
      * Add option to item
      *
-     * @param \Magento\Quote\Model\Quote\Item\Option|\Magento\Framework\DataObject $option
+     * @param \Magento\Quote\Model\Quote\Item\Option|\Magento\Framework\DataObject|array $option
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
      */

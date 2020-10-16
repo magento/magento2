@@ -80,7 +80,7 @@ class ProcessFrontFinalPriceObserver implements ObserverInterface
         if ($observer->hasDate()) {
             $date = new \DateTime($observer->getEvent()->getDate());
         } else {
-            $date = $this->localeDate->date(null, null, false);
+            $date = $this->localeDate->scopeDate($storeId);
         }
 
         if ($observer->hasWebsiteId()) {

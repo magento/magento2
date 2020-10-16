@@ -17,9 +17,6 @@
             <severity value="CRITICAL"/>
             <group value="tax"/>
             <group value="mtf_migrated"/>
-            <skip>
-                <issueId value="MC-16684"/>
-            </skip>
         </annotations>
 
         <before>
@@ -35,7 +32,7 @@
             </getData>
             <createData entity="ApiSimplePrice100Qty100v2" stepKey="simpleProduct"/>
             <createData entity="Simple_US_Utah_Customer" stepKey="customer" />
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <deleteData stepKey="deleteTaxRule" createDataKey="initialTaxRule" />
@@ -46,8 +43,7 @@
             <deleteData stepKey="deleteCustomer" createDataKey="customer" />
         </after>
 
-        <amOnPage url="{{AdminTaxRuleGridPage.url}}" stepKey="goToTaxRuleIndex1"/>
-        <waitForPageLoad stepKey="waitForTaxRuleIndex1"/>
+        <actionGroup ref="AdminTaxRuleGridOpenPageActionGroup" stepKey="goToTaxRuleIndex1"/>
         <click selector="{{AdminDataGridHeaderSection.clearFilters}}" stepKey="clickClearFilters1"/>
         <fillField selector="{{AdminTaxRuleGridSection.code}}" userInput="$$initialTaxRule.code$$" stepKey="fillTaxCodeSearch"/>
         <click selector="{{AdminTaxRuleGridSection.search}}" stepKey="clickSearch1"/>

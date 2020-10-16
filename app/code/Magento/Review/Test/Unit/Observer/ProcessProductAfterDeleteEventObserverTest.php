@@ -13,12 +13,9 @@ use Magento\Framework\Event\Observer;
 use Magento\Review\Model\ResourceModel\Rating;
 use Magento\Review\Model\ResourceModel\Review;
 use Magento\Review\Observer\ProcessProductAfterDeleteEventObserver;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_MockObject_MockObject;
 
-/**
- * Class ProcessProductAfterDeleteEventObserverTest
- */
 class ProcessProductAfterDeleteEventObserverTest extends TestCase
 {
     /**
@@ -29,19 +26,19 @@ class ProcessProductAfterDeleteEventObserverTest extends TestCase
     private $observer;
 
     /**
-     * @var Review|PHPUnit_Framework_MockObject_MockObject
+     * @var Review|MockObject
      */
     private $resourceReviewMock;
 
     /**
-     * @var Rating|PHPUnit_Framework_MockObject_MockObject
+     * @var Rating|MockObject
      */
     private $resourceRatingMock;
 
     /**
      * Set up
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->resourceReviewMock = $this->createMock(Review::class);
         $this->resourceRatingMock = $this->createMock(Rating::class);

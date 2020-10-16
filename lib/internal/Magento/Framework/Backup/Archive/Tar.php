@@ -15,6 +15,9 @@ use Magento\Framework\Backup\Filesystem\Iterator\Filter;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 
+/**
+ * Class to work with tar archives
+ */
 class Tar extends \Magento\Framework\Archive\Tar
 {
     /**
@@ -25,8 +28,7 @@ class Tar extends \Magento\Framework\Archive\Tar
     protected $_skipFiles = [];
 
     /**
-     * Overridden \Magento\Framework\Archive\Tar::_createTar method that does the same actions as it's parent but
-     * filters files using \Magento\Framework\Backup\Filesystem\Iterator\Filter
+     *  Method same as it's parent but filters files using \Magento\Framework\Backup\Filesystem\Iterator\Filter
      *
      * @param bool $skipRoot
      * @param bool $finalize
@@ -38,9 +40,8 @@ class Tar extends \Magento\Framework\Archive\Tar
     protected function _createTar($skipRoot = false, $finalize = false)
     {
         $path = $this->_getCurrentFile();
-
         $filesystemIterator = new RecursiveIteratorIterator(
-            new RecursiveDirectoryIterator($path),
+            new RecursiveDirectoryIterator($path, RecursiveDirectoryIterator::FOLLOW_SYMLINKS),
             RecursiveIteratorIterator::SELF_FIRST
         );
 
@@ -50,6 +51,10 @@ class Tar extends \Magento\Framework\Archive\Tar
         );
 
         foreach ($iterator as $item) {
+            // exclude symlinks to do not get duplicates after follow symlinks in RecursiveDirectoryIterator
+            if ($item->isLink()) {
+                continue;
+            }
             $this->_setCurrentFile($item->getPathname());
             $this->_packAndWriteCurrentFile();
         }

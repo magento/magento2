@@ -5,8 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceBlock name="items">
             <block class="Magento\Tax\Block\Item\Price\Renderer" name="item_price" template="Magento_Tax::email/items/price/row.phtml">
@@ -17,10 +16,3 @@
         </referenceBlock>
     </body>
 </page>
-
-
-
-
-
-
-

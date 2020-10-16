@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminNewIntegrationSection">
+        <element name="name" type="input" selector="#integration_properties_name"/>
+        <element name="password" type="input" selector="#integration_properties_current_password"/>
+        <element name="saveButton" type="button" selector=".page-actions #save-split-button-button"/>
+        <element name="endpoint" type="input" selector="#integration_properties_endpoint"/>
+        <element name="linkUrl" type="input" selector="#integration_properties_identity_link_url"/>
+        <element name="save" type="button" selector=".page-actions-buttons .save"/>
+        <element name="allow" type="button" selector=".page-actions-buttons .action-primary"/>
+        <element name="resourcesPopup" type="block" selector="#modal-content-17 #integration-popup-container"/>
+        <element name="consumerKey" type="input" selector=".admin__field-control.control #integration_token_consumer_key"/>
+        <element name="consumerSecret" type="input" selector=".admin__field-control.control #integration_token_consumer_secret"/>
+        <element name="accessToken" type="input" selector=".admin__field-control.control #integration_token_token"/>
+        <element name="accessTokenSecret" type="input" selector=".admin__field-control.control #integration_token_token_secret"/>
+    </section>
+</sections>

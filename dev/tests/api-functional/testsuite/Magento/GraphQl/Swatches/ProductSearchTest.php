@@ -30,7 +30,7 @@ class ProductSearchTest extends GraphQlAbstract
     products (
         filter:{
             sku:{
-                like:"%simple%"
+                in:["simple1", "simple2", "simple3"]
             }
         }
         pageSize: 4
@@ -156,7 +156,7 @@ QUERY;
     private function assertFilters($response, $expectedFilters, $message = '')
     {
         $this->assertArrayHasKey('filters', $response['products'], 'Product has filters');
-        $this->assertTrue(is_array(($response['products']['filters'])), 'Product filters is array');
+        $this->assertIsArray(($response['products']['filters']), 'Product filters is array');
         $this->assertTrue(count($response['products']['filters']) > 0, 'Product filters is not empty');
         foreach ($expectedFilters as $expectedFilter) {
             $found = false;
