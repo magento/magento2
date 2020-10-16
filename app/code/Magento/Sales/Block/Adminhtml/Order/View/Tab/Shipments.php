@@ -5,8 +5,13 @@
  */
 namespace Magento\Sales\Block\Adminhtml\Order\View\Tab;
 
+use Magento\Backend\Block\Widget\Tab\TabInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\AuthorizationInterface;
+use Magento\Framework\Registry;
+use Magento\Framework\View\Element\Context;
+use Magento\Framework\View\Element\Text\ListText;
+use Magento\Sales\Model\Order;
 
 /**
  * Order Shipments grid
@@ -14,13 +19,12 @@ use Magento\Framework\AuthorizationInterface;
  * @api
  * @since 100.0.2
  */
-class Shipments extends \Magento\Framework\View\Element\Text\ListText implements
-    \Magento\Backend\Block\Widget\Tab\TabInterface
+class Shipments extends ListText implements TabInterface
 {
     /**
      * Core registry
      *
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     protected $_coreRegistry = null;
 
@@ -32,14 +36,14 @@ class Shipments extends \Magento\Framework\View\Element\Text\ListText implements
     /**
      * Collection factory
      *
-     * @param \Magento\Framework\View\Element\Context $context
-     * @param \Magento\Framework\Registry $coreRegistry
+     * @param Context $context
+     * @param Registry $coreRegistry
      * @param array $data
      * @param AuthorizationInterface|null $authorization
      */
     public function __construct(
-        \Magento\Framework\View\Element\Context $context,
-        \Magento\Framework\Registry $coreRegistry,
+        Context $context,
+        Registry $coreRegistry,
         array $data = [],
         ?AuthorizationInterface $authorization = null
     ) {
@@ -51,7 +55,7 @@ class Shipments extends \Magento\Framework\View\Element\Text\ListText implements
     /**
      * Retrieve order model instance
      *
-     * @return \Magento\Sales\Model\Order
+     * @return Order
      */
     public function getOrder()
     {
@@ -79,7 +83,7 @@ class Shipments extends \Magento\Framework\View\Element\Text\ListText implements
      */
     public function canShowTab()
     {
-        return $this->authorization->isAllowed('Magento_Sales::ship') && !$this->getOrder()->getIsVirtual();
+        return $this->authorization->isAllowed('Magento_Sales::shipment') && !$this->getOrder()->getIsVirtual();
     }
 
     /**

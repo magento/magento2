@@ -5,9 +5,11 @@
  */
 namespace Magento\Sales\Block\Adminhtml\Order\View\Tab;
 
+use Magento\Backend\Block\Widget\Tab\TabInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\View\Element\Context;
+use Magento\Framework\View\Element\Text\ListText;
 
 /**
  * Order Invoices grid
@@ -15,8 +17,7 @@ use Magento\Framework\View\Element\Context;
  * @api
  * @since 100.0.2
  */
-class Invoices extends \Magento\Framework\View\Element\Text\ListText implements
-    \Magento\Backend\Block\Widget\Tab\TabInterface
+class Invoices extends ListText implements TabInterface
 {
     /**
      * @var AuthorizationInterface
@@ -60,7 +61,7 @@ class Invoices extends \Magento\Framework\View\Element\Text\ListText implements
      */
     public function canShowTab()
     {
-        return $this->authorization->isAllowed('Magento_Sales::invoice');
+        return $this->authorization->isAllowed('Magento_Sales::sales_invoice');
     }
 
     /**

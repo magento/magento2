@@ -5,9 +5,11 @@
  */
 namespace Magento\Sales\Block\Adminhtml\Order\View\Tab;
 
+use Magento\Backend\Block\Widget\Tab\TabInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\View\Element\Context;
+use Magento\Framework\View\Element\Text\ListText;
 
 /**
  * Order Credit Memos grid
@@ -15,12 +17,11 @@ use Magento\Framework\View\Element\Context;
  * @api
  * @since 100.0.2
  */
-class Creditmemos extends \Magento\Framework\View\Element\Text\ListText implements
-    \Magento\Backend\Block\Widget\Tab\TabInterface
+class Creditmemos extends ListText implements TabInterface
 {
-     /**
-      * @var AuthorizationInterface
-      */
+    /**
+     * @var AuthorizationInterface
+     */
     private $authorization;
 
     /**
@@ -60,7 +61,7 @@ class Creditmemos extends \Magento\Framework\View\Element\Text\ListText implemen
      */
     public function canShowTab()
     {
-        return $this->authorization->isAllowed('Magento_Sales::creditmemo');
+        return $this->authorization->isAllowed('Magento_Sales::sales_creditmemo');
     }
 
     /**
