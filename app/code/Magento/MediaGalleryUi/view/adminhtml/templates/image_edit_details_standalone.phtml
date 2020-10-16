@@ -20,15 +20,8 @@ use Magento\Backend\Block\Template;
             title: '<?= $escaper->escapeHtmlAttr(__('Edit Image')); ?>'
         }
      }">
-    <div class="page-main-actions">
-        <div class="page-actions">
-            <div class="page-actions-inner">
-                <div class="page-action-buttons" id="media-gallery-edit-image-actions"
-                     data-bind="scope: 'mediaGalleryImageEditActions'">
-                    <!-- ko template: getTemplate() --><!-- /ko -->
-                </div>
-            </div>
-        </div>
+    <div class="page-main-actions" data-bind="scope: 'mediaGalleryImageEditActions'">
+        <!-- ko template: getTemplate() --><!-- /ko -->
     </div>
     <div id="media-gallery-image-edit-details-messages" data-bind="scope: 'mediaGalleryEditDetailsMessages'">
         <!-- ko template: getTemplate() --><!-- /ko -->
@@ -50,25 +43,10 @@ use Magento\Backend\Block\Template;
                         "imageEditDetailsUrl": "<?= $escaper->escapeJs($block->getData('imageEditDetailsUrl')); ?>",
                         "saveDetailsUrl": "<?= $escaper->escapeJs($block->getData('saveDetailsUrl')); ?>",
                         "mediaGridMessages": "standalone_media_gallery_listing.standalone_media_gallery_listing.messages"
-                    }
-                }
-            },
-            "Magento_MediaGalleryUi/js/validation/validate-image-title": {},
-            "Magento_MediaGalleryUi/js/validation/validate-image-description": {},
-            "Magento_MediaGalleryUi/js/validation/validate-image-keyword": {}
-        },
-        "#media-gallery-image-edit-details-messages": {
-            "Magento_Ui/js/core/app": {
-                "components": {
+                    },
                     "mediaGalleryEditDetailsMessages": {
                         "component": "Magento_MediaGalleryUi/js/grid/messages"
-                    }
-                }
-            }
-        },
-        "#media-gallery-edit-image-actions": {
-            "Magento_Ui/js/core/app": {
-                "components": {
+                    },
                     "mediaGalleryImageEditActions": {
                         "component": "Magento_MediaGalleryUi/js/image/image-actions",
                         "modalSelector": ".media-gallery-edit-image-details-modal",
@@ -91,7 +69,10 @@ use Magento\Backend\Block\Template;
                         ]
                     }
                 }
-            }
+            },
+            "Magento_MediaGalleryUi/js/validation/validate-image-title": {},
+            "Magento_MediaGalleryUi/js/validation/validate-image-description": {},
+            "Magento_MediaGalleryUi/js/validation/validate-image-keyword": {}
         }
     }
 </script>
