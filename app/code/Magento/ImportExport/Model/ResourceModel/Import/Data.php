@@ -200,8 +200,11 @@ class Data extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
      */
     private function prepareSelect(Select $select): Select
     {
-        // user_id is NULL part is for backward compatibility
-        $select->where('user_id=? OR user_id is NULL', $this->getCurrentUserId() ?? self::DEFAULT_USER_ID);
+        // check if the table has not been overridden for backward compatibility
+        if ($this->getMainTable() === $this->getTable('importexport_importdata')) {
+            // user_id is NULL part is for backward compatibility
+            $select->where('user_id=? OR user_id is NULL', $this->getCurrentUserId() ?? self::DEFAULT_USER_ID);
+        }
 
         return $select;
     }
@@ -214,7 +217,10 @@ class Data extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
      */
     private function prepareInsert(array $data): array
     {
-        $data['user_id'] = $this->getCurrentUserId() ?? self::DEFAULT_USER_ID;
+        // check if the table has not been overridden for backward compatibility
+        if ($this->getMainTable() === $this->getTable('importexport_importdata')) {
+            $data['user_id'] = $this->getCurrentUserId() ?? self::DEFAULT_USER_ID;
+        }
 
         return $data;
     }
@@ -227,8 +233,11 @@ class Data extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
      */
     private function prepareDelete(array $where): array
     {
-        // user_id is NULL part is for backward compatibility
-        $where['user_id=? OR user_id is NULL'] = $this->getCurrentUserId() ?? self::DEFAULT_USER_ID;
+        // check if the table has not been overridden for backward compatibility
+        if ($this->getMainTable() === $this->getTable('importexport_importdata')) {
+            // user_id is NULL part is for backward compatibility
+            $where['user_id=? OR user_id is NULL'] = $this->getCurrentUserId() ?? self::DEFAULT_USER_ID;
+        }
 
         return $where;
     }
