@@ -122,13 +122,6 @@ sub vcl_hash {
         hash_data(regsub(req.http.cookie, "^.*?X-Magento-Vary=([^;]+);*.*$", "\1"));
     }
 
-    # For multi site configurations to not cache each other's content
-    if (req.http.host) {
-        hash_data(req.http.host);
-    } else {
-        hash_data(server.ip);
-    }
-
     # To make sure http users don't see ssl warning
     if (req.http./* {{ ssl_offloaded_header }} */) {
         hash_data(req.http./* {{ ssl_offloaded_header }} */);
