@@ -89,8 +89,7 @@ abstract class AbstractLikedProducts implements BatchResolverInterface
         if (!$relations) {
             return [];
         }
-        $relatedIds = array_values($relations);
-        $relatedIds = array_unique(array_merge(...$relatedIds));
+        $relatedIds = array_unique(array_merge([], ...array_values($relations)));
         //Loading products data.
         $this->searchCriteriaBuilder->addFilter('entity_id', $relatedIds, 'in');
         $relatedSearchResult = $this->productDataProvider->getList(
@@ -142,7 +141,7 @@ abstract class AbstractLikedProducts implements BatchResolverInterface
             $products[] = $request->getValue()['model'];
             $fields[] = $this->productFieldsSelector->getProductFieldsFromInfo($request->getInfo(), $this->getNode());
         }
-        $fields = array_unique(array_merge(...$fields));
+        $fields = array_unique(array_merge([], ...$fields));
 
         //Finding relations.
         $related = $this->findRelations($products, $fields, $this->getLinkType());
