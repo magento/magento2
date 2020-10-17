@@ -178,8 +178,7 @@
 
         <!--Select Free Shipping and proceed to checkout -->
         <click selector="{{AdminOrderFormPaymentSection.freeShippingOption}}" stepKey="selectFlatRateShippingMethod"/>
-        <click selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="goToCheckout"/>
-        <waitForPageLoad stepKey="waitForPageToLoad"/>
+        <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="goToCheckout"/>
 
         <!-- Fill Guest form -->
         <actionGroup ref="FillGuestCheckoutShippingAddressFormActionGroup" stepKey="fillTheSignInForm">

@@ -94,8 +94,7 @@
         </assertStringContainsString>
 
         <!--Proceed to checkout and check product name in Order Summary area-->
-        <click selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="proceedToCheckout"/>
-        <waitForPageLoad stepKey="waitForShippingPageLoad"/>
+        <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="proceedToCheckout"/>
         <click selector="{{CheckoutShippingGuestInfoSection.itemInCart}}" stepKey="clickItemInCart"/>
         <grabTextFrom selector="{{CheckoutShippingGuestInfoSection.productName}}" stepKey="grabProductNameShipping"/>
         <assertStringContainsString stepKey="assertProductNameShipping">
