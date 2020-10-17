@@ -547,7 +547,7 @@
                 default="0" comment="Product ID"/>
         <column xsi:type="smallint" name="store_id" unsigned="true" nullable="true" identity="false"
                 comment="Store ID"/>
-        <column xsi:type="int" name="list_id" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="list_id" padding="10" unsigned="true" nullable="true" identity="false"
                 comment="List ID"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="catalog_compare_item_id"/>
