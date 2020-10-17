@@ -32,9 +32,9 @@
         </after>
 
         <actionGroup ref="AdminProductCatalogPageOpenActionGroup" stepKey="openProductCatalogPage"/>
-        <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickAddProductToggle"/>
-        <waitForPageLoad stepKey="waitForProductToggleToSelectProduct"/>
-        <click selector="{{AdminProductGridActionSection.addVirtualProduct}}" stepKey="clickVirtualProduct"/>
+        <actionGroup ref="AdminClickAddProductToggleAndSelectProductTypeActionGroup" stepKey="clickVirtualProduct">
+            <argument name="productType" value="virtual"/>
+        </actionGroup>
 
         <!-- Create virtual product out of stock with tier price -->
         <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{virtualProductOutOfStock.name}}" stepKey="fillProductName"/>

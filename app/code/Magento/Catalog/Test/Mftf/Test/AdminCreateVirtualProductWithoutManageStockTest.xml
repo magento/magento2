@@ -28,9 +28,9 @@
         </after>
 
         <actionGroup ref="AdminProductCatalogPageOpenActionGroup" stepKey="openProductCatalogPage"/>
-        <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickAddProductToggle"/>
-        <waitForPageLoad stepKey="waitForProductToggleToSelectProduct"/>
-        <click selector="{{AdminProductGridActionSection.addVirtualProduct}}" stepKey="clickVirtualProduct"/>
+        <actionGroup ref="AdminClickAddProductToggleAndSelectProductTypeActionGroup" stepKey="clickVirtualProduct">
+            <argument name="productType" value="virtual"/>
+        </actionGroup>
 
         <!-- Create virtual product without manage stock  -->
         <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{virtualProductWithoutManageStock.name}}" stepKey="fillProductName"/>
