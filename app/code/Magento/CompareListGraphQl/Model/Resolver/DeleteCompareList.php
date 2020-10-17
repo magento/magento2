@@ -54,6 +54,8 @@ class DeleteCompareList implements ResolverInterface
     }
 
     /**
+     * Remove compare list
+     *
      * @param Field $field
      * @param ContextInterface $context
      * @param ResolveInfo $info

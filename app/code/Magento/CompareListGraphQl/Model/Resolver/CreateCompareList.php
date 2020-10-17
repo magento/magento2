@@ -97,6 +97,7 @@ class CreateCompareList implements ResolverInterface
         $products = !empty($args['input']['products']) ? $args['input']['products'] : [];
         $storeId = (int)$context->getExtensionAttributes()->getStore()->getStoreId();
         $generatedListId = $this->mathRandom->getUniqueHash();
+        $listId = 0;
 
         try {
             if ((0 === $customerId || null === $customerId)) {

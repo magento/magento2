@@ -51,23 +51,23 @@ class CustomerService
 
     /**
      * @param AuthenticationInterface $authentication
-     * @param CustomerRepositoryInterface $customerRepository
      * @param AccountManagementInterface $accountManagement
-     * @param ResourceCompareList  $resourceCompareList
-     * @param CompareListFactory   $compareListFactory
+     * @param CustomerRepositoryInterface $customerRepository
+     * @param CompareListFactory $compareListFactory
+     * @param ResourceCompareList $resourceCompareList
      */
     public function __construct(
         AuthenticationInterface $authentication,
-        CustomerRepositoryInterface $customerRepository,
         AccountManagementInterface $accountManagement,
-        ResourceCompareList $resourceCompareList,
-        CompareListFactory $compareListFactory
+        CustomerRepositoryInterface $customerRepository,
+        CompareListFactory $compareListFactory,
+        ResourceCompareList $resourceCompareList
     ) {
         $this->authentication = $authentication;
-        $this->customerRepository = $customerRepository;
         $this->accountManagement = $accountManagement;
-        $this->resourceCompareList = $resourceCompareList;
+        $this->customerRepository = $customerRepository;
         $this->compareListFactory = $compareListFactory;
+        $this->resourceCompareList = $resourceCompareList;
     }
 
     /**

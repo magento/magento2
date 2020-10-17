@@ -166,13 +166,13 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     /**
      * Set listId filter to collection
      *
-     * @param $listId
+     * @param int $listId
      *
      * @return $this
      */
-    public function setListId($listId)
+    public function setListId(int $listId)
     {
-        $this->listId = (int)$listId;
+        $this->listId = $listId;
         $this->_addJoinToSelect();
         return $this;
     }

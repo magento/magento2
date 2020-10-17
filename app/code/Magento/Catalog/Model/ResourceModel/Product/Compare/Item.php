@@ -144,6 +144,7 @@ class Item extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
     /**
      * Update (Merge) customer data from visitor
+     *
      * After Login process
      *
      * @param \Magento\Catalog\Model\Product\Compare\Item $object
