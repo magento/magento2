@@ -49,8 +49,7 @@
             <argument name="classPrefix" value="._show"/>
         </actionGroup>
         <!--Click "Save Addresses" -->
-        <click selector="{{CheckoutShippingSection.saveAddress}}" stepKey="saveAddress"/>
-        <waitForPageLoad stepKey="waitForAddressSaved"/>
+        <actionGroup ref="StorefrontCheckoutClickSaveAddressButtonActionGroup" stepKey="saveAddress"/>
         <dontSeeElement selector="{{StorefrontCheckoutAddressPopupSection.newAddressModalPopup}}" stepKey="dontSeeModalPopup"/>
         <!--Select Shipping Rate "Flat Rate" and click "Next" button-->
         <actionGroup ref="CheckoutSelectFlatRateShippingMethodActionGroup" stepKey="selectFlatRateShipping"/>

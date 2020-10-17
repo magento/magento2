@@ -69,8 +69,7 @@
         <actionGroup ref="FillShippingAddressOneStreetActionGroup" stepKey="changeAddress">
             <argument name="address" value="UK_Not_Default_Address"/>
         </actionGroup>
-        <click selector="{{CheckoutShippingSection.saveAddress}}" stepKey="saveNewAddress"/>
-        <waitForPageLoad stepKey="waitForAddressSaving"/>
+        <actionGroup ref="StorefrontCheckoutClickSaveAddressButtonActionGroup" stepKey="saveNewAddress"/>
 
         <!-- Click next button to open payment section -->
         <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="clickNext"/>
