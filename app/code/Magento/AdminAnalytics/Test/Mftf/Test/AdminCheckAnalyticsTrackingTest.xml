@@ -22,13 +22,14 @@
             <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
                 <argument name="tags" value="config full_page"/>
             </actionGroup>
+            <reloadPage stepKey="pageReload"/>
         </before>
         <after>
             <magentoCLI command="config:set admin/usage/enabled 0" stepKey="disableAdminUsageTracking"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
-        <actionGroup ref="ReloadPageActionGroup" stepKey="pageReload"/>
+        <waitForPageLoad stepKey="waitForPageReloaded"/>
         <seeInPageSource html="var adminAnalyticsMetadata =" stepKey="seeInPageSource"/>
     </test>
 </tests>
