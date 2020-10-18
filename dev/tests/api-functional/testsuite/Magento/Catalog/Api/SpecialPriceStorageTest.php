@@ -8,6 +8,7 @@ namespace Magento\Catalog\Api;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
 use Magento\Framework\Webapi\Rest\Request;
@@ -133,12 +134,14 @@ class SpecialPriceStorageTest extends WebapiAbstract
      * Test delete method.
      *
      * @magentoApiDataFixture Magento/Catalog/_files/product_two_websites.php
+     * @magentoConfigFixture catalog/price/scope 1
      * @dataProvider deleteData
      * @param array $data
      * @throws CouldNotSaveException
      * @throws InputException
      * @throws NoSuchEntityException
      * @throws StateException
+     * @throws LocalizedException
      */
     public function testDelete(array $data)
     {
@@ -171,17 +174,21 @@ class SpecialPriceStorageTest extends WebapiAbstract
                 'operation' => self::SERVICE_NAME . 'Delete',
             ],
         ];
+
         $response = $this->_webApiCall(
             $serviceInfo,
             [
                 'prices' => [
-                        $data
+                    $data
                 ]
             ]
         );
-        $product = $productRepository->get($data['sku'], false, 0, true);
+
         $this->assertEmpty($response);
+
+        $product = $productRepository->get($data['sku'], false, $data['store_id'], true);
         $this->assertNull($product->getSpecialPrice());
+
         $product = $productRepository->get($data['sku'], false, 1, true);
         $this->assertNotNull($product->getSpecialPrice());
     }
