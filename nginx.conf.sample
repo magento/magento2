@@ -177,6 +177,10 @@ location /errors/ {
     }
 }
 
+location /vendor/ {
+    deny all;
+}
+
 # PHP entry point for main application
 location ~ ^/(index|get|static|errors/report|errors/404|errors/503|health_check)\.php$ {
     try_files $uri =404;
