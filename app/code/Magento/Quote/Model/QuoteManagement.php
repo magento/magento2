@@ -494,12 +494,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
      */
     protected function submitQuote(QuoteEntity $quote, $orderData = [])
     {
-        if ($quote->getCustomer()->getId()) {
-            $quote->setCustomerIsGuest(0);
-        } else {
-            $quote->setCustomerIsGuest(1);
-        }
-        
+        $quote->setCustomerIsGuest((int)!$quote->getCustomer()->getId());
         $order = $this->orderFactory->create();
         $this->submitQuoteValidator->validateQuote($quote);
         if (!$quote->getCustomerIsGuest()) {
