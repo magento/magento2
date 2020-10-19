@@ -112,7 +112,6 @@ class GuestTest extends TestCase
             ->setMethods(['getTotalCount', 'getItems'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $this->searchCriteriaBuilder->method('addFilter')->willReturnSelf();
         $resultRedirectFactory =
             $this->getMockBuilder(RedirectFactory::class)
                 ->setMethods(['create'])
@@ -148,29 +147,45 @@ class GuestTest extends TestCase
         );
     }
 
-    public function testLoadValidOrderNotEmptyPost()
+    /**
+     * Test load valid order with non empty post data.
+     *
+     * @param array $post
+     * @dataProvider loadValidOrderNotEmptyPostDataProvider
+     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Stdlib\Cookie\CookieSizeLimitReachedException
+     * @throws \Magento\Framework\Stdlib\Cookie\FailureToSendException
+     */
+    public function testLoadValidOrderNotEmptyPost($post)
     {
-        $post = [
-            'oar_order_id' => 1,
-            'oar_type' => 'email',
-            'oar_billing_lastname' => 'oar_billing_lastname',
-            'oar_email' => 'oar_email',
-            'oar_zip' => 'oar_zip',
-
-        ];
         $incrementId = $post['oar_order_id'];
         $protectedCode = 'protectedCode';
         $this->sessionMock->expects($this->once())->method('isLoggedIn')->willReturn(false);
         $requestMock = $this->createMock(Http::class);
         $requestMock->expects($this->once())->method('getPostValue')->willReturn($post);
+
+        $this->searchCriteriaBuilder
+            ->expects($this->at(0))
+            ->method('addFilter')
+            ->with('increment_id', trim($incrementId))
+            ->willReturnSelf();
+
+        $this->searchCriteriaBuilder
+            ->expects($this->at(1))
+            ->method('addFilter')
+            ->with('store_id', $this->storeModelMock->getId())
+            ->willReturnSelf();
+
         $this->salesOrderMock->expects($this->any())->method('getId')->willReturn($incrementId);
 
         $billingAddressMock = $this->createPartialMock(
             Address::class,
-            ['getLastname', 'getEmail']
+            ['getLastname', 'getEmail', 'getPostcode']
         );
-        $billingAddressMock->expects($this->once())->method('getLastname')->willReturn(($post['oar_billing_lastname']));
-        $billingAddressMock->expects($this->once())->method('getEmail')->willReturn(($post['oar_email']));
+        $billingAddressMock->expects($this->once())->method('getLastname')
+            ->willReturn(trim($post['oar_billing_lastname']));
+        $billingAddressMock->expects($this->any())->method('getEmail')->willReturn(trim($post['oar_email']));
+        $billingAddressMock->expects($this->any())->method('getPostcode')->willReturn(trim($post['oar_zip']));
         $this->salesOrderMock->expects($this->once())->method('getBillingAddress')->willReturn($billingAddressMock);
         $this->salesOrderMock->expects($this->once())->method('getProtectCode')->willReturn($protectedCode);
         $metaDataMock = $this->createMock(PublicCookieMetadata::class);
@@ -190,10 +205,49 @@ class GuestTest extends TestCase
         $this->assertTrue($this->guest->loadValidOrder($requestMock));
     }
 
+    /**
+     * Load valid order with non empty post data provider.
+     *
+     * @return array
+     */
+    public function loadValidOrderNotEmptyPostDataProvider()
+    {
+        return [
+            [
+                [
+                    'oar_order_id' => '1',
+                    'oar_type' => 'email',
+                    'oar_billing_lastname' => 'White',
+                    'oar_email' => 'test@magento-test.com',
+                    'oar_zip' => '',
+
+                ]
+            ],
+            [
+                [
+                    'oar_order_id' => ' 14  ',
+                    'oar_type' => 'email',
+                    'oar_billing_lastname' => 'Black  ',
+                    'oar_email' => '        test1@magento-test.com  ',
+                    'oar_zip' => '',
+                ]
+            ],
+            [
+                [
+                    'oar_order_id' => ' 14  ',
+                    'oar_type' => 'zip',
+                    'oar_billing_lastname' => 'Black  ',
+                    'oar_email' => '        test1@magento-test.com  ',
+                    'oar_zip' => '123456  ',
+                ]
+            ]
+        ];
+    }
+
     public function testLoadValidOrderStoredCookie()
     {
         $protectedCode = 'protectedCode';
-        $incrementId = 1;
+        $incrementId = '1';
         $cookieData = $protectedCode . ':' . $incrementId;
         $cookieDataHash = base64_encode($cookieData);
         $this->sessionMock->expects($this->once())->method('isLoggedIn')->willReturn(false);
@@ -201,6 +255,19 @@ class GuestTest extends TestCase
             ->method('getCookie')
             ->with(Guest::COOKIE_NAME)
             ->willReturn($cookieDataHash);
+
+        $this->searchCriteriaBuilder
+            ->expects($this->at(0))
+            ->method('addFilter')
+            ->with('increment_id', trim($incrementId))
+            ->willReturnSelf();
+
+        $this->searchCriteriaBuilder
+            ->expects($this->at(1))
+            ->method('addFilter')
+            ->with('store_id', $this->storeModelMock->getId())
+            ->willReturnSelf();
+
         $this->salesOrderMock->expects($this->any())->method('getId')->willReturn($incrementId);
         $this->salesOrderMock->expects($this->once())->method('getProtectCode')->willReturn($protectedCode);
         $metaDataMock = $this->createMock(PublicCookieMetadata::class);
