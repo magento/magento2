@@ -59,7 +59,7 @@ class DataTest extends TestCase
         $objectManager->setBackwardCompatibleProperty($this->_model, 'imageUrlBuilder', $this->imageUrlBuilder);
     }
 
-    public function testGetAllowAttributes(): void
+    public function testGetAllowAttributes()
     {
         $typeInstanceMock = $this->createMock(Configurable::class);
         $typeInstanceMock->expects($this->once())
@@ -82,7 +82,7 @@ class DataTest extends TestCase
      * @param array $data
      * @dataProvider getOptionsDataProvider
      */
-    public function testGetOptions(array $expected, array $data): array
+    public function testGetOptions(array $expected, array $data)
     {
         if (count($data['allowed_products'])) {
             $imageHelper1 = $this->getMockBuilder(Image::class)
