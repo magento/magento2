@@ -1071,7 +1071,7 @@ class File implements DriverInterface
         );
 
         if (strpos($path, DIRECTORY_SEPARATOR . '.') === false) {
-            return $path;
+            return rtrim($path, DIRECTORY_SEPARATOR);
         }
 
         $pathParts = explode(DIRECTORY_SEPARATOR, $path);
