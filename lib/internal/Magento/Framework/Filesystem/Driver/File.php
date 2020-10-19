@@ -37,7 +37,7 @@ class File implements DriverInterface
      * File constructor.
      * @param bool $stateful
      */
-    public function __construct($stateful = null)
+    public function __construct(bool $stateful = false)
     {
         $this->stateful = $stateful ?? false;
     }
