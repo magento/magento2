@@ -64,7 +64,8 @@
 
         <!-- Create Invoice -->
         <actionGroup ref="StartCreateInvoiceFromOrderPageActionGroup" stepKey="startInvoice"/>
-        <click selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="clickSubmitInvoice"/>
+        <actionGroup ref="AdminInvoiceClickSubmitActionGroup" stepKey="clickSubmitInvoice"/>
+
         <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitForMessageAppears"/>
         <see selector="{{AdminMessagesSection.success}}" userInput="The invoice has been created." stepKey="seeInvoiceCreateSuccess"/>
 
@@ -115,13 +116,11 @@
         </actionGroup>
 
         <!-- Assert refunded Grand Total on frontend -->
-        <amOnPage url="{{StorefrontCustomerDashboardPage.url}}" stepKey="onAccountPage"/>
-        <waitForPageLoad stepKey="waitForPage"/>
+        <actionGroup ref="StorefrontOpenMyAccountPageActionGroup" stepKey="onAccountPage"/>
         <scrollTo selector="{{StorefrontCustomerResentOrdersSection.blockResentOrders}}" stepKey="scrollToResent"/>
         <click selector="{{StorefrontCustomerResentOrdersSection.viewOrder({$grabOrderId})}}" stepKey="clickOnOrder"/>
         <waitForPageLoad stepKey="waitForViewOrder"/>
-        <click selector="{{StorefrontCustomerOrderSection.tabRefund}}" stepKey="clickRefund"/>
-        <waitForPageLoad stepKey="waitRefundsLoad"/>
+        <actionGroup ref="StorefrontClickRefundTabCustomerOrderViewActionGroup" stepKey="clickRefund"/>
         <scrollTo selector="{{StorefrontCustomerOrderSection.grandTotalRefund}}" stepKey="scrollToGrandTotal"/>
         <see selector="{{StorefrontCustomerOrderSection.grandTotalRefund}}" userInput="555.00" stepKey="seeGrandTotal"/>
     </test>

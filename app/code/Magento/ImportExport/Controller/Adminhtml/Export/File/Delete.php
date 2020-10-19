@@ -11,9 +11,11 @@ use Magento\Backend\App\Action;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Exception\ValidatorException;
 use Magento\ImportExport\Controller\Adminhtml\Export as ExportController;
 use Magento\Framework\Filesystem;
-use Magento\Framework\Filesystem\DriverInterface;
+use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\Filesystem\Directory\WriteFactory;
 
 /**
  * Controller that delete file by name.
@@ -31,54 +33,58 @@ class Delete extends ExportController implements HttpPostActionInterface
     private $filesystem;
 
     /**
-     * @var DriverInterface
+     * @var WriteFactory
      */
-    private $file;
+    private $writeFactory;
 
     /**
      * Delete constructor.
+     *
      * @param Action\Context $context
      * @param Filesystem $filesystem
-     * @param DriverInterface $file
+     * @param WriteFactory $writeFactory
      */
     public function __construct(
         Action\Context $context,
         Filesystem $filesystem,
-        DriverInterface $file
+        WriteFactory $writeFactory
     ) {
         $this->filesystem = $filesystem;
-        $this->file = $file;
+        $this->writeFactory = $writeFactory;
         parent::__construct($context);
     }
 
     /**
      * Controller basic method implementation.
      *
-     * @return \Magento\Framework\Controller\ResultInterface
+     * @return ResultInterface
      */
     public function execute()
     {
         /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
         $resultRedirect->setPath('adminhtml/export/index');
-        $fileName = $this->getRequest()->getParam('filename');
-        if (empty($fileName) || preg_match('/\.\.(\\\|\/)/', $fileName) !== 0) {
-            $this->messageManager->addErrorMessage(__('Please provide valid export file name'));
-
-            return $resultRedirect;
-        }
         try {
-            $directory = $this->filesystem->getDirectoryRead(DirectoryList::VAR_DIR);
-            $path = $directory->getAbsolutePath() . 'export/' . $fileName;
+            if (empty($fileName = $this->getRequest()->getParam('filename'))) {
+                $this->messageManager->addErrorMessage(__('Please provide valid export file name'));
 
-            if ($directory->isFile($path)) {
-                $this->file->deleteFile($path);
+                return $resultRedirect;
+            }
+            $directoryWrite = $this->filesystem->getDirectoryWrite(DirectoryList::VAR_EXPORT);
+            try {
+                $directoryWrite->delete($directoryWrite->getAbsolutePath($fileName));
                 $this->messageManager->addSuccessMessage(__('File %1 deleted', $fileName));
-            } else {
-                $this->messageManager->addErrorMessage(__('%1 is not a valid file', $fileName));
+            } catch (ValidatorException $exception) {
+                $this->messageManager->addErrorMessage(
+                    __('Sorry, but the data is invalid or the file is not uploaded.')
+                );
+            } catch (FileSystemException $exception) {
+                $this->messageManager->addErrorMessage(
+                    __('Sorry, but the data is invalid or the file is not uploaded.')
+                );
             }
         } catch (FileSystemException $exception) {
-            $this->messageManager->addErrorMessage($exception->getMessage());
+            $this->messageManager->addErrorMessage(__('There are no export file with such name %1', $fileName));
         }
 
         return $resultRedirect;

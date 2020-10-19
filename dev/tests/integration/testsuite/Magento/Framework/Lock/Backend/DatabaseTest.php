@@ -11,7 +11,7 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\App\DeploymentConfig;
 
 /**
- * \Magento\Framework\Lock\Backend\Database test case
+ * \Magento\Framework\Lock\Backend\Database test case.
  */
 class DatabaseTest extends \PHPUnit\Framework\TestCase
 {

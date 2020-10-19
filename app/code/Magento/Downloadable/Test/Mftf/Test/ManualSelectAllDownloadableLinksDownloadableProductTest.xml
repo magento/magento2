@@ -28,8 +28,7 @@
             <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
 
             <!-- Create downloadable product -->
-            <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductGridPage"/>
-            <waitForPageLoad stepKey="waitForProductGridPageLoad"/>
+            <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="amOnProductGridPage"/>
             <actionGroup ref="GoToSpecifiedCreateProductPageActionGroup" stepKey="createProduct">
                 <argument name="productType" value="downloadable"/>
             </actionGroup>

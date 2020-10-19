@@ -114,8 +114,12 @@
             </createData>
 
             <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
-            <magentoCLI command="indexer:reindex" arguments="catalogsearch_fulltext" stepKey="performReindex"/>
-            <magentoCLI command="cache:clean" arguments="full_page" stepKey="cleanFullPageCache"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="performReindex">
+                <argument name="indices" value="catalogsearch_fulltext"/>
+            </actionGroup>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanFullPageCache">
+                <argument name="tags" value="full_page"/>
+            </actionGroup>
         </before>
 
         <after>

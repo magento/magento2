@@ -84,6 +84,9 @@ class StaticResourceTest extends TestCase
      */
     private $object;
 
+    /**
+     * @inheridoc
+     */
     protected function setUp(): void
     {
         $this->stateMock = $this->createMock(State::class);
@@ -109,6 +112,9 @@ class StaticResourceTest extends TestCase
         );
     }
 
+    /**
+     * Test to lunch on production mode
+     */
     public function testLaunchProductionMode()
     {
         $this->stateMock->expects($this->once())
@@ -249,6 +255,9 @@ class StaticResourceTest extends TestCase
         ];
     }
 
+    /**
+     * Test to lunch with wrong path on developer mode
+     */
     public function testLaunchWrongPath()
     {
         $this->expectException('InvalidArgumentException');
@@ -263,6 +272,28 @@ class StaticResourceTest extends TestCase
         $this->object->launch();
     }
 
+    /**
+     * Test to lunch with wrong path on production mode
+     */
+    public function testLaunchWrongPathProductionMode()
+    {
+        $mode = State::MODE_PRODUCTION;
+        $path = 'wrong/path.js';
+
+        $this->stateMock->method('getMode')->willReturn($mode);
+        $this->deploymentConfigMock->method('getConfigData')
+            ->with(ConfigOptionsListConstants::CONFIG_PATH_SCD_ON_DEMAND_IN_PRODUCTION)
+            ->willReturn(true);
+        $this->requestMock->method('get')->with('resource')->willReturn($path);
+        $this->responseMock->expects($this->once())
+            ->method('setHttpResponseCode')
+            ->with(404);
+        $this->object->launch();
+    }
+
+    /**
+     * Test to Ability to handle exceptions on developer mode
+     */
     public function testCatchExceptionDeveloperMode()
     {
         $this->objectManagerMock->expects($this->once())
@@ -286,6 +317,9 @@ class StaticResourceTest extends TestCase
         $this->assertTrue($this->object->catchException($bootstrap, $exception));
     }
 
+    /**
+     * Test to lunch with wrong path
+     */
     public function testLaunchPathAbove()
     {
         $this->expectException('InvalidArgumentException');

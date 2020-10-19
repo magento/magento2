@@ -6,7 +6,8 @@
         "php": "~7.3.0||~7.4.0",
         "magento/framework": "*",
         "magento/module-cms": "*",
-        "magento/module-widget": "*"
+        "magento/module-widget": "*",
+        "magento/module-store": "*"
     },
     "suggest": {
         "magento/module-graph-ql": "*",

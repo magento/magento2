@@ -3,13 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-// phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
+
 /** @var $block \Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Variations\Config\Matrix */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
 <?php
 $productMatrix = $block->getProductMatrix();
 $attributes = $block->getProductAttributes();
 $currencySymbol = $block->getCurrencySymbol();
+
+/** @var \Magento\Framework\Json\Helper\Data $jsonHelper */
+$jsonHelper = $block->getData('jsonHelper');
 ?>
 
 <div id="product-variations-matrix" data-role="product-variations-matrix">
@@ -26,15 +30,25 @@ $currencySymbol = $block->getCurrencySymbol();
                 <div data-role="configurable-attributes-container">
                     <!-- ko foreach: {data: attributes, as: 'attribute'} -->
                         <div data-role="attribute-info">
-                            <input name="attributes[]" data-bind="value: attribute.id, attr:{id: 'configurable_attribute_' + attribute.id}" type="hidden"/>
-                            <input data-bind="value: attribute.id, attr: {name: $parent.getAttributeRowName(attribute, 'attribute_id')}" type="hidden"/>
-                            <input data-bind="value: attribute.code, attr: {name: $parent.getAttributeRowName(attribute, 'code')}" type="hidden"/>
-                            <input data-bind="value: attribute.label, attr: {name: $parent.getAttributeRowName(attribute, 'label')}" type="hidden"/>
-                            <input data-bind="value: $index(), attr: {name: $parent.getAttributeRowName(attribute, 'position')}" type="hidden"/>
+                            <input name="attributes[]"
+                                   data-bind="value: attribute.id, attr:{id: 'configurable_attribute_' + attribute.id}"
+                                   type="hidden"/>
+                            <input data-bind="value: attribute.id,
+                             attr: {name: $parent.getAttributeRowName(attribute, 'attribute_id')}" type="hidden"/>
+                            <input data-bind="value: attribute.code,
+                             attr: {name: $parent.getAttributeRowName(attribute, 'code')}" type="hidden"/>
+                            <input data-bind="value: attribute.label,
+                             attr: {name: $parent.getAttributeRowName(attribute, 'label')}" type="hidden"/>
+                            <input data-bind="value: $index(),
+                             attr: {name: $parent.getAttributeRowName(attribute, 'position')}" type="hidden"/>
                             <!-- ko foreach: {data: attribute.chosen, as: 'option'} -->
                                 <div data-role="option-info">
-                                    <input value="1" data-bind="attr: {name: $parents[1].getOptionRowName(attribute, option, 'include')}" type="hidden"/>
-                                    <input data-bind="value: option.value, attr: {name: $parents[1].getOptionRowName(attribute, option, 'value_index')}" type="hidden"/>
+                                    <input value="1"
+                                           data-bind="attr: {name: $parents[1].getOptionRowName(attribute, option,
+                                            'include')}" type="hidden"/>
+                                    <input data-bind="value: option.value,
+                                    attr: {name: $parents[1].getOptionRowName(attribute, option, 'value_index')}"
+                                           type="hidden"/>
                                 </div>
                             <!-- /ko -->
                         </div>
@@ -104,7 +118,9 @@ $currencySymbol = $block->getCurrencySymbol();
                                         </button>
                                         <ul class="dropdown">
                                             <li>
-                                                <a class="item" data-action="no-image"><?= $block->escapeHtml(__('No Image')) ?></a>
+                                                <a class="item" data-action="no-image">
+                                                    <?= $block->escapeHtml(__('No Image')) ?>
+                                                </a>
                                             </li>
                                         </ul>
                                     </div>
@@ -167,7 +183,8 @@ $currencySymbol = $block->getCurrencySymbol();
                                         <input type="text"
                                                class="validate-zero-or-greater"
                                                data-bind="attr: {id: $parent.getRowId(variation, 'qty'),
-                                                name: $parent.getVariationRowName(variation, 'quantity_and_stock_status/qty'),
+                                                name: $parent.getVariationRowName(variation,
+                                                 'quantity_and_stock_status/qty'),
                                                 value: variation.quantity}"/>
                                     <!-- /ko -->
                                 </td>
@@ -187,17 +204,20 @@ $currencySymbol = $block->getCurrencySymbol();
                                 <td data-bind="text: label"></td>
                                 <!-- /ko -->
                                 <td class="data-grid-actions-cell">
-                                    <input type="hidden" name="associated_product_ids[]" data-bind="value: variation.productId" data-column="entity_id"/>
+                                    <input type="hidden" name="associated_product_ids[]"
+                                           data-bind="value: variation.productId" data-column="entity_id"/>
                                     <div class="action-select-wrap" data-bind="
                                             css : {
                                                 '_active' : $parent.opened() === $index()
                                             },
                                             outerClick: $parent.closeList.bind($parent, $index)"
                                     >
-                                        <button class="action-select" data-bind="click: $parent.toggleList.bind($parent, $index())">
+                                        <button class="action-select"
+                                                data-bind="click: $parent.toggleList.bind($parent, $index())">
                                             <span data-bind="i18n: 'Select'"></span>
                                         </button>
-                                        <ul class="action-menu _active" data-bind="css: {'_active': $parent.opened() === $index()}">
+                                        <ul class="action-menu _active"
+                                            data-bind="css: {'_active': $parent.opened() === $index()}">
                                             <li>
                                                 <a class="action-menu-item"
                                                    data-bind="
@@ -211,12 +231,14 @@ $currencySymbol = $block->getCurrencySymbol();
                                             </li>
                                             <li>
                                                 <a class="action-menu-item" data-bind="
-                                                    text: variation.status == 1 ? $t('Disable Product') : $t('Enable Product'),
+                                                    text: variation.status == 1 ? $t('Disable Product') :
+                                                     $t('Enable Product'),
                                                     click: $parent.toggleProduct.bind($parent, $index())">
                                                 </a>
                                             </li>
                                             <li>
-                                                <a class="action-menu-item" data-bind="click: $parent.removeProduct.bind($parent, $index())">
+                                                <a class="action-menu-item"
+                                                   data-bind="click: $parent.removeProduct.bind($parent, $index())">
                                                     <?= $block->escapeHtml(__('Remove Product')) ?>
                                                 </a>
                                             </li>
@@ -231,7 +253,8 @@ $currencySymbol = $block->getCurrencySymbol();
         <!-- /ko -->
     </div>
     <div data-role="step-wizard-dialog"
-         data-mage-init='{"Magento_Ui/js/modal/modal":{"type":"slide","title":"<?= $block->escapeJs(__('Create Product Configurations')) ?>",
+         data-mage-init='{"Magento_Ui/js/modal/modal":{"type":"slide","title":"<?=
+            $block->escapeJs(__('Create Product Configurations')) ?>",
          "buttons":[]}}'
          class="no-display">
         <?= /* @noEscape */ $block->getVariationWizard([
@@ -249,8 +272,8 @@ $currencySymbol = $block->getCurrencySymbol();
                 "components": {
                     "configurableVariations": {
                         "component": "Magento_ConfigurableProduct/js/variations/variations",
-                        "variations": <?= /* @noEscape */ $this->helper(Magento\Framework\Json\Helper\Data::class)->jsonEncode($productMatrix) ?>,
-                        "productAttributes": <?= /* @noEscape */ $this->helper(Magento\Framework\Json\Helper\Data::class)->jsonEncode($attributes) ?>,
+                        "variations": <?= /* @noEscape */ $jsonHelper->jsonEncode($productMatrix) ?>,
+                        "productAttributes":<?=/* @noEscape */ $jsonHelper->jsonEncode($attributes)?>,
                         "productUrl": "<?= /* @noEscape */ $block->getUrl('catalog/product/edit', ['id' => '%id%']) ?>",
                         "currencySymbol": "<?= /* @noEscape */ $currencySymbol ?>",
                         "configurableProductGrid": "configurableProductGrid"
@@ -260,9 +283,11 @@ $currencySymbol = $block->getCurrencySymbol();
         }
     }
 </script>
-<script>
+<?php $scriptString = <<<script
     require(['jquery'], function ($) {
         $('body').trigger('contentUpdated');
         $('[data-panel=product-variations]').applyBindings();
     })
-</script>
+script;
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>

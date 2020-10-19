@@ -98,13 +98,12 @@
     .product-image-photo {
         bottom: 0;
         display: block;
-        height: auto;
         left: 0;
         margin: auto;
-        max-width: 100%;
         position: absolute;
         right: 0;
         top: 0;
+        width: auto;
     }
 
     //
@@ -998,6 +997,15 @@
                 }
             }
         }
+
+        .block-compare {
+            .action {
+                &.delete {
+                    left: 0;
+                    right: initial;
+                }
+            }
+        }
     }
 }
 
@@ -1005,6 +1013,7 @@
     .compare.wrapper {
         display: none;
     }
+
     .catalog-product_compare-index {
         .columns {
             .column {
