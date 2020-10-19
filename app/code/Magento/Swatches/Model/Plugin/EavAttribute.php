@@ -223,13 +223,13 @@ class EavAttribute
      */
     protected function prepareOptionIds(array $optionsArray)
     {
-        if (isset($optionsArray['value']) && is_array($optionsArray['value'])) {
-            foreach (array_keys($optionsArray['value']) as $optionId) {
-                if (isset($optionsArray['delete']) && isset($optionsArray['delete'][$optionId])
-                    && $optionsArray['delete'][$optionId] == 1
-                ) {
-                    unset($optionsArray['value'][$optionId]);
-                }
+        if (!is_array($optionsArray['value'] ?? null)) {
+            return $optionsArray;
+        }
+
+        foreach (array_keys($optionsArray['value']) as $optionId) {
+            if (isset($optionsArray['delete'][$optionId]) && (int)$optionsArray['delete'][$optionId] === 1) {
+                unset($optionsArray['value'][$optionId]);
             }
         }
 
@@ -396,9 +396,8 @@ class EavAttribute
      */
     protected function getAttributeOptionId($optionId)
     {
-        if (strpos((string)$optionId, self::BASE_OPTION_TITLE) === 0 ||
-            strpos((string)$optionId, self::API_OPTION_PREFIX) === 0) {
-            $optionId = $this->dependencyArray[$optionId] ?? null;
+        if (substr($optionId, 0, 6) == self::BASE_OPTION_TITLE || substr($optionId, 0, 3) == self::API_OPTION_PREFIX) {
+            $optionId = isset($this->dependencyArray[$optionId]) ? $this->dependencyArray[$optionId] : null;
         }
 
         return $optionId;
