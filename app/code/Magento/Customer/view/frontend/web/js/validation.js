@@ -11,7 +11,7 @@ define([
     $.validator.addMethod(
         'validate-date',
         function (value, element, params) {
-            var dateFormat = utils.convertToMomentFormat(params.dateFormat);
+            var dateFormat = utils.normalizeDate(params.dateFormat);
 
             if (value === '') {
                 return true;

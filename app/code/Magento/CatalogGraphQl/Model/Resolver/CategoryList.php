@@ -65,7 +65,7 @@ class CategoryList implements ResolverInterface
             $args['filters']['ids'] = ['eq' => $store->getRootCategoryId()];
         }
         try {
-            $filterResults = $this->categoryFilter->getResult($args, $store);
+            $filterResults = $this->categoryFilter->getResult($args, $store, [], $context);
             $rootCategoryIds = $filterResults['category_ids'];
         } catch (InputException $e) {
             throw new GraphQlInputException(__($e->getMessage()));
