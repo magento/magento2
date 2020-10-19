@@ -21,7 +21,7 @@ define([
             jasmine.DEFAULT_TIMEOUT_INTERVAL = originalTimeout;
         });
 
-        it('SIGNIFYD_GLOBAL object initialization check', function (done) {
+        xit('SIGNIFYD_GLOBAL object initialization check', function (done) {
             var script = document.createElement('script');
 
             script.setAttribute('src', 'https://cdn-scripts.signifyd.com/api/script-tag.js');
