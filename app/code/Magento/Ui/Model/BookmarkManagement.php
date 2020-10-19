@@ -65,10 +65,10 @@ class BookmarkManagement implements BookmarkManagementInterface
     /**
      * Create search criteria builder with namespace and user filters
      *
-     * @param $namespace
+     * @param string $namespace
      * @return void
      */
-    private function prepareSearchCriteriaBuilderByNamespace($namespace): void
+    private function prepareSearchCriteriaBuilderByNamespace(string $namespace): void
     {
         $userIdFilter = $this->filterBuilder
             ->setField('user_id')
@@ -86,7 +86,7 @@ class BookmarkManagement implements BookmarkManagementInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function loadByNamespace($namespace)
     {
@@ -96,7 +96,7 @@ class BookmarkManagement implements BookmarkManagementInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getByIdentifierNamespace($identifier, $namespace)
     {

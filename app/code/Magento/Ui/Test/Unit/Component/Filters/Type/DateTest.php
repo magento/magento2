@@ -57,7 +57,7 @@ class DateTest extends TestCase
     private $bookmarkManagementMock;
 
     /**
-     * @var MockObject
+     * @var RequestInterface|MockObject
      */
     private $requestMock;
 
