@@ -3,14 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Swatches\Model\Plugin;
 
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Swatches\Helper\Data;
 use Magento\Swatches\Model\ResourceModel\Swatch as SwatchResource;
+use Magento\Swatches\Model\ResourceModel\Swatch\CollectionFactory;
 use Magento\Swatches\Model\Swatch;
+use Magento\Swatches\Model\SwatchFactory;
 
 /**
  * Plugin model for Catalog Resource Attribute
@@ -20,11 +26,6 @@ use Magento\Swatches\Model\Swatch;
 class EavAttribute
 {
     const DEFAULT_STORE_ID = 0;
-
-    /**
-     * @var SwatchResource
-     */
-    private $swatchResource;
 
     /**
      * Base option title used for string operations to detect is option already exists or new
@@ -37,19 +38,29 @@ class EavAttribute
     private const API_OPTION_PREFIX = 'id_';
 
     /**
-     * @var \Magento\Swatches\Model\ResourceModel\Swatch\CollectionFactory
+     * @var CollectionFactory
      */
     protected $swatchCollectionFactory;
 
     /**
-     * @var \Magento\Swatches\Model\SwatchFactory
+     * @var SwatchFactory
      */
     protected $swatchFactory;
 
     /**
-     * @var \Magento\Swatches\Helper\Data
+     * @var Data
      */
     protected $swatchHelper;
+
+    /**
+     * @var Json
+     */
+    private $serializer;
+
+    /**
+     * @var SwatchResource
+     */
+    private $swatchResource;
 
     /**
      * Array which contains links for new created attributes for swatches
@@ -66,23 +77,16 @@ class EavAttribute
     protected $isSwatchExists;
 
     /**
-     * Serializer from arrays to string.
-     *
-     * @var Json
-     */
-    private $serializer;
-
-    /**
-     * @param \Magento\Swatches\Model\ResourceModel\Swatch\CollectionFactory $collectionFactory
-     * @param \Magento\Swatches\Model\SwatchFactory $swatchFactory
-     * @param \Magento\Swatches\Helper\Data $swatchHelper
+     * @param CollectionFactory $collectionFactory
+     * @param SwatchFactory $swatchFactory
+     * @param Data $swatchHelper
      * @param Json|null $serializer
      * @param SwatchResource|null $swatchResource
      */
     public function __construct(
-        \Magento\Swatches\Model\ResourceModel\Swatch\CollectionFactory $collectionFactory,
-        \Magento\Swatches\Model\SwatchFactory $swatchFactory,
-        \Magento\Swatches\Helper\Data $swatchHelper,
+        CollectionFactory $collectionFactory,
+        SwatchFactory $swatchFactory,
+        Data $swatchHelper,
         Json $serializer = null,
         SwatchResource $swatchResource = null
     ) {
@@ -97,6 +101,7 @@ class EavAttribute
      * Set base data to Attribute
      *
      * @param Attribute $attribute
+     *
      * @return void
      */
     public function beforeBeforeSave(Attribute $attribute)
@@ -113,8 +118,9 @@ class EavAttribute
      * Swatch save operations
      *
      * @param Attribute $attribute
-     * @throws \Magento\Framework\Exception\LocalizedException
+     *
      * @return void
+     * @throws LocalizedException
      */
     public function afterAfterSave(Attribute $attribute)
     {
@@ -129,6 +135,7 @@ class EavAttribute
      * Substitute suitable options and swatches arrays
      *
      * @param Attribute $attribute
+     *
      * @return void
      */
     protected function setProperOptionsArray(Attribute $attribute)
@@ -164,8 +171,9 @@ class EavAttribute
      * Prepare attribute for conversion from any swatch type to dropdown
      *
      * @param Attribute $attribute
-     * @throws \Magento\Framework\Exception\LocalizedException
+     *
      * @return void
+     * @throws LocalizedException
      */
     protected function convertSwatchToDropdown(Attribute $attribute)
     {
@@ -187,8 +195,9 @@ class EavAttribute
      * Creates array which link new option ids
      *
      * @param Attribute $attribute
+     *
      * @return Attribute
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     protected function processSwatchOptions(Attribute $attribute)
     {
@@ -209,19 +218,21 @@ class EavAttribute
      * Get options array without deleted items
      *
      * @param array $optionsArray
+     *
      * @return array
      */
     protected function prepareOptionIds(array $optionsArray)
     {
-        if (isset($optionsArray['value']) && is_array($optionsArray['value'])) {
-            foreach (array_keys($optionsArray['value']) as $optionId) {
-                if (isset($optionsArray['delete']) && isset($optionsArray['delete'][$optionId])
-                    && $optionsArray['delete'][$optionId] == 1
-                ) {
-                    unset($optionsArray['value'][$optionId]);
-                }
+        if (!is_array($optionsArray['value'] ?? null)) {
+            return $optionsArray;
+        }
+
+        foreach (array_keys($optionsArray['value']) as $optionId) {
+            if (isset($optionsArray['delete'][$optionId]) && (int)$optionsArray['delete'][$optionId] === 1) {
+                unset($optionsArray['value'][$optionId]);
             }
         }
+
         return $optionsArray;
     }
 
@@ -230,6 +241,7 @@ class EavAttribute
      *
      * @param array $optionsArray
      * @param array $attributeSavedOptions
+     *
      * @return void
      */
     protected function prepareOptionLinks(array $optionsArray, array $attributeSavedOptions)
@@ -249,6 +261,7 @@ class EavAttribute
      * Save all Swatches data
      *
      * @param Attribute $attribute
+     *
      * @return void
      */
     protected function saveSwatchParams(Attribute $attribute)
@@ -266,6 +279,7 @@ class EavAttribute
      * Save Visual Swatch data
      *
      * @param Attribute $attribute
+     *
      * @return void
      */
     protected function processVisualSwatch(Attribute $attribute)
@@ -294,7 +308,7 @@ class EavAttribute
      *
      * @param array $attributeOptions
      * @param int|null $swatchType
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     private function cleanEavAttributeOptionSwatchValues(array $attributeOptions, int $swatchType = null)
     {
@@ -309,7 +323,7 @@ class EavAttribute
      * Cleaning the text type of swatch option values after switching.
      *
      * @param array $attributeOptions
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     private function cleanTextSwatchValuesAfterSwitch(array $attributeOptions)
     {
@@ -320,6 +334,7 @@ class EavAttribute
      * Get the visual swatch type based on its value
      *
      * @param string $value
+     *
      * @return int
      */
     private function determineSwatchType($value)
@@ -330,6 +345,7 @@ class EavAttribute
         } elseif (!empty($value) && $value[0] == '/') {
             $swatchType = Swatch::SWATCH_TYPE_VISUAL_IMAGE;
         }
+
         return $swatchType;
     }
 
@@ -337,6 +353,7 @@ class EavAttribute
      * Save Textual Swatch data
      *
      * @param Attribute $attribute
+     *
      * @return void
      */
     protected function processTextualSwatch(Attribute $attribute)
@@ -361,7 +378,7 @@ class EavAttribute
                         $swatch,
                         $optionId,
                         $storeId,
-                        \Magento\Swatches\Model\Swatch::SWATCH_TYPE_TEXTUAL,
+                        Swatch::SWATCH_TYPE_TEXTUAL,
                         $value
                     );
                     $this->isSwatchExists = null;
@@ -374,13 +391,16 @@ class EavAttribute
      * Get option id. If it not exist get it from dependency link array
      *
      * @param integer $optionId
+     *
      * @return int
      */
     protected function getAttributeOptionId($optionId)
     {
-        if (substr($optionId, 0, 6) == self::BASE_OPTION_TITLE || substr($optionId, 0, 3) == self::API_OPTION_PREFIX) {
-            $optionId = isset($this->dependencyArray[$optionId]) ? $this->dependencyArray[$optionId] : null;
+        if (strpos((string)$optionId, self::BASE_OPTION_TITLE) === 0 ||
+            strpos((string)$optionId, self::API_OPTION_PREFIX) === 0) {
+            $optionId = $this->dependencyArray[$optionId] ?? null;
         }
+
         return $optionId;
     }
 
@@ -389,11 +409,13 @@ class EavAttribute
      *
      * @param Attribute $attribute
      * @param integer $optionId
+     *
      * @return bool
      */
     protected function isOptionForDelete(Attribute $attribute, $optionId)
     {
         $isOptionForDelete = $attribute->getData('option/delete/' . $optionId);
+
         return isset($isOptionForDelete) && $isOptionForDelete;
     }
 
@@ -402,6 +424,7 @@ class EavAttribute
      *
      * @param int $optionId
      * @param int $storeId
+     *
      * @return Swatch
      */
     protected function loadSwatchIfExists($optionId, $storeId)
@@ -415,6 +438,7 @@ class EavAttribute
         if ($loadedSwatch->getId()) {
             $this->isSwatchExists = true;
         }
+
         return $loadedSwatch;
     }
 
@@ -426,6 +450,7 @@ class EavAttribute
      * @param integer $storeId
      * @param integer $type
      * @param string $value
+     *
      * @return void
      */
     protected function saveSwatchData($swatch, $optionId, $storeId, $type, $value)
@@ -446,6 +471,7 @@ class EavAttribute
      * Save default swatch value using Swatch model instead of Eav model
      *
      * @param Attribute $attribute
+     *
      * @return void
      */
     protected function saveDefaultSwatchOptionValue(Attribute $attribute)
@@ -455,7 +481,7 @@ class EavAttribute
         }
         $defaultValue = $attribute->getData('default/0');
         if (!empty($defaultValue)) {
-            /** @var \Magento\Swatches\Model\Swatch $swatch */
+            /** @var Swatch $swatch */
             $swatch = $this->swatchFactory->create();
             $swatch->getResource()->saveDefaultSwatchOption(
                 $attribute->getId(),
@@ -468,6 +494,7 @@ class EavAttribute
      * Validate that attribute options exist
      *
      * @param Attribute $attribute
+     *
      * @return bool
      * @throws InputException
      */
@@ -482,6 +509,7 @@ class EavAttribute
         if ($options && !$this->isOptionsValid($options, $attribute)) {
             throw new InputException(__('Admin is a required field in each row'));
         }
+
         return true;
     }
 
@@ -490,6 +518,7 @@ class EavAttribute
      *
      * @param array $options
      * @param Attribute $attribute
+     *
      * @return bool
      */
     protected function isOptionsValid(array $options, Attribute $attribute)
@@ -497,15 +526,18 @@ class EavAttribute
         if (!isset($options['value'])) {
             return false;
         }
+
         foreach ($options['value'] as $optionId => $option) {
             // do not validate options marked as deleted
             if ($this->isOptionForDelete($attribute, $optionId)) {
                 continue;
             }
+
             if (!isset($option[0]) || $option[0] === '') {
                 return false;
             }
         }
+
         return true;
     }
 
@@ -516,6 +548,7 @@ class EavAttribute
      *
      * @param Attribute $attribute
      * @param bool $result
+     *
      * @return bool
      */
     public function afterUsesSource(Attribute $attribute, $result)
@@ -523,6 +556,7 @@ class EavAttribute
         if ($this->swatchHelper->isSwatchAttribute($attribute)) {
             return true;
         }
+
         return $result;
     }
 }
