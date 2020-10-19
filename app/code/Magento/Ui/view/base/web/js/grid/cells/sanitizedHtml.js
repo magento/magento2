@@ -20,7 +20,7 @@ define([
          * @param {String} label
          * @returns {String}
          */
-        getUnsanitizedHtml: function (label) {
+        getSanitizedHtml: function (label) {
             return escaper.escapeHtml(label, this.allowedTags);
         }
     });
