@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Cron\Setup;
 
+use Magento\Cron\Model\ResourceModel\Schedule as ResourceModelSchedule;
+use Magento\Cron\Model\Schedule;
 use Magento\Framework\Setup\InstallSchemaInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
@@ -17,16 +19,16 @@ use Magento\Framework\Setup\SchemaSetupInterface;
 class Recurring implements InstallSchemaInterface
 {
     /**
-     * @var \Magento\Cron\Model\ResourceModel\Schedule
+     * @var ResourceModelSchedule
      */
     private $schedule;
 
     /**
      * Recurring constructor.
-     * @param \Magento\Cron\Model\ResourceModel\Schedule $schedule
+     * @param ResourceModelSchedule $schedule
      */
     public function __construct(
-        \Magento\Cron\Model\ResourceModel\Schedule $schedule
+        ResourceModelSchedule $schedule
     ) {
         $this->schedule = $schedule;
     }
@@ -40,10 +42,10 @@ class Recurring implements InstallSchemaInterface
         $connection->update(
             $this->schedule->getMainTable(),
             [
-                'status' => \Magento\Cron\Model\Schedule::STATUS_ERROR,
+                'status' => Schedule::STATUS_ERROR,
                 'messages' => 'The job is terminated due to system upgrade'
             ],
-            $connection->quoteInto('status = ?', \Magento\Cron\Model\Schedule::STATUS_RUNNING)
+            $connection->quoteInto('status = ?', Schedule::STATUS_RUNNING)
         );
     }
 }
