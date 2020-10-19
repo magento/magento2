@@ -4,6 +4,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Catalog\Api;
 
 use Magento\Authorization\Model\Role;
@@ -157,7 +158,7 @@ class CategoryRepositoryTest extends WebapiAbstract
             UrlRewrite::ENTITY_ID => $categoryId,
             UrlRewrite::ENTITY_TYPE => CategoryUrlRewriteGenerator::ENTITY_TYPE
         ];
-        /** @var \Magento\UrlRewrite\Service\V1\Data\UrlRewrite $urlRewrite*/
+        /** @var \Magento\UrlRewrite\Service\V1\Data\UrlRewrite $urlRewrite */
         $urlRewrite = $storage->findOneByData($data);
 
         // Assert that a url rewrite is auto-generated for the category created from the data fixture
@@ -432,14 +433,9 @@ class CategoryRepositoryTest extends WebapiAbstract
         if ($token) {
             $serviceInfo['rest']['token'] = $serviceInfo['soap']['token'] = $token;
         }
+        $data['id'] = $id;
 
-        if (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
-            $data['id'] = $id;
-            return $this->_webApiCall($serviceInfo, ['id' => $id, 'category' => $data]);
-        } else {
-            $data['id'] = $id;
-            return $this->_webApiCall($serviceInfo, ['id' => $id, 'category' => $data]);
-        }
+        return $this->_webApiCall($serviceInfo, ['id' => $id, 'category' => $data]);
     }
 
     /**
@@ -619,31 +615,23 @@ class CategoryRepositoryTest extends WebapiAbstract
         ?string $token = null,
         string $storeCode = 'default'
     ) {
-        $serviceInfo =
-            [
-                'rest' => [
-                    'resourcePath' => self::RESOURCE_PATH . '/' . $id,
-                    'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
-                ],
-                'soap' => [
-                    'service' => self::SERVICE_NAME,
-                    'serviceVersion' => 'V1',
-                    'operation' => self::SERVICE_NAME . 'Save',
-                ],
-            ];
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH . '/' . $id,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => 'V1',
+                'operation' => self::SERVICE_NAME . 'Save',
+            ],
+        ];
         if ($token) {
             $serviceInfo['rest']['token'] = $serviceInfo['soap']['token'] = $token;
         }
+        $data['id'] = $id;
 
-        if (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
-            $data['id'] = $id;
-
-            return $this->_webApiCall($serviceInfo, ['id' => $id, 'category' => $data], null, $storeCode);
-        } else {
-            $data['id'] = $id;
-
-            return $this->_webApiCall($serviceInfo, ['id' => $id, 'category' => $data], null, $storeCode);
-        }
+        return $this->_webApiCall($serviceInfo, ['id' => $id, 'category' => $data], null, $storeCode);
     }
 
     /**
