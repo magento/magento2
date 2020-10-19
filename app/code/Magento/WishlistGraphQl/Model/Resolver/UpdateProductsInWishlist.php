@@ -23,6 +23,7 @@ use Magento\WishlistGraphQl\Mapper\WishlistDataMapper;
 use Magento\Framework\DataObject;
 use Magento\Wishlist\Model\Wishlist\Data\WishlistOutput;
 use Magento\Wishlist\Model\Wishlist\BuyRequest\BuyRequestBuilder;
+use Magento\Catalog\Helper\Product;
 
 /**
  * Update wishlist items resolver
@@ -57,9 +58,9 @@ class UpdateProductsInWishlist implements ResolverInterface
     /**
      * Catalog product
      *
-     * @var \Magento\Catalog\Helper\Product
+     * @var Product
      */
-    protected $catalogProduct;
+    private $catalogProduct;
 
     /**
      * @var array
@@ -78,7 +79,7 @@ class UpdateProductsInWishlist implements ResolverInterface
      * @param WishlistConfig $wishlistConfig
      * @param UpdateProductsInWishlistModel $updateProductsInWishlist
      * @param WishlistDataMapper $wishlistDataMapper
-     * @param \Magento\Catalog\Helper\Product $catalogProduct
+     * @param Product $catalogProduct
      * @param BuyRequestBuilder $buyRequestBuilder
      */
     public function __construct(
@@ -87,7 +88,7 @@ class UpdateProductsInWishlist implements ResolverInterface
         WishlistConfig $wishlistConfig,
         UpdateProductsInWishlistModel $updateProductsInWishlist,
         WishlistDataMapper $wishlistDataMapper,
-        \Magento\Catalog\Helper\Product $catalogProduct,
+        Product $catalogProduct,
         BuyRequestBuilder $buyRequestBuilder
     ) {
         $this->wishlistResource = $wishlistResource;
@@ -137,7 +138,7 @@ class UpdateProductsInWishlist implements ResolverInterface
         }
 
         return [
-            'wishlist' => $this->wishlistDataMapper->map($wishlistOutput->getWishlist()),            'user_errors' => \array_map(
+            'wishlist' => $this->wishlistDataMapper->map($wishlistOutput->getWishlist()),'user_errors' => \array_map(
                 function (Error $error) {
                     return [
                         'code' => $error->getCode(),
@@ -189,19 +190,20 @@ class UpdateProductsInWishlist implements ResolverInterface
     /**
      * Update wishlist Item and set data from request
      *
-     * @param int|Item $itemId
+     * @param int $itemId
      * @param DataObject $buyRequest
      * @param wishlistFactory $wishlist
-     * @param null|array|DataObject $params
+     * @param null $params
      *
-     * @return $this
+     * @return WishlistOutput
+     * @throws GraphQlInputException
+     * @throws \Magento\Framework\Exception\AlreadyExistsException
      */
-    public function updateItem($itemId, $buyRequest,$wishlist,$params = null)
+    private function updateItem($itemId, $buyRequest, $wishlist, $params = null)
     {
         $item = null;
         if ($itemId instanceof Item) {
             $item = $itemId;
-            $itemId = $item->getId();
         } else {
             $item = $wishlist->getItem((int)$itemId);
         }
@@ -209,62 +211,59 @@ class UpdateProductsInWishlist implements ResolverInterface
             throw new GraphQlInputException(__('We can\'t specify a wish list item.'));
         }
 
-        try {
-            $product = $item->getProduct();
-            $productId = $product->getId();
-            if ($productId) {
-                if (!$params) {
-                    $params = new DataObject();
-                } elseif (is_array($params)) {
-                    $params = new DataObject($params);
-                }
-                $params->setCurrentConfig($item->getBuyRequest());
-                $buyRequest = $this->catalogProduct->addParamsToBuyRequest($buyRequest, $params);
-                $buyRequest->setData('action', 'updateItem');
-                $product->setWishlistStoreId($item->getStoreId());
-                $cartCandidates = $product->getTypeInstance()->processConfiguration($buyRequest, clone $product);
-                /**
-                 * Error message
-                 */
-                if (is_string($cartCandidates)) {
-                    return $cartCandidates;
-                }
-
-                /**
-                 * If prepare process return one object
-                 */
-                if (!is_array($cartCandidates)) {
-                    $cartCandidates = [$cartCandidates];
-                }
-
-                foreach ($cartCandidates as $candidate) {
-                    if ($candidate->getParentProductId()) {
-                        continue;
-                    }
-                    $candidate->setWishlistStoreId($item->getStoreId());
-
-                    $qty = $buyRequest->getData('qty') ? $buyRequest->getData('qty') : 1;
-                    $item->setOptions($candidate->getCustomOptions());
-                    $item->setQty($qty)->save();
-                }
-                $wishlist->save();
-            } else {
-                throw new GraphQlInputException(__('The product does not exist.'));
+        $product = $item->getProduct();
+        $productId = $product->getId();
+        if ($productId) {
+            if (!$params) {
+                $params = new DataObject();
+            } elseif (is_array($params)) {
+                $params = new DataObject($params);
+            }
+            $params->setCurrentConfig($item->getBuyRequest());
+            $buyRequest = $this->catalogProduct->addParamsToBuyRequest($buyRequest, $params);
+            $buyRequest->setData('action', 'updateItem');
+            $product->setWishlistStoreId($item->getStoreId());
+            $cartCandidates = $product->getTypeInstance()->processConfiguration($buyRequest, clone $product);
+            /**
+             * Error message
+             */
+            if (is_string($cartCandidates)) {
+                return $cartCandidates;
             }
 
-            if (is_string($item)) {
-                $this->addError($item);
+            /**
+             * If prepare process return one object
+             */
+            if (!is_array($cartCandidates)) {
+                $cartCandidates = [$cartCandidates];
             }
-        } catch (GraphQlInputException $exception) {
-            $this->addError($exception->getMessage());
+
+            foreach ($cartCandidates as $candidate) {
+                if ($candidate->getParentProductId()) {
+                    continue;
+                }
+                $candidate->setWishlistStoreId($item->getStoreId());
+
+                $qty = $buyRequest->getData('qty') ? $buyRequest->getData('qty') : 1;
+                $item->setOptions($candidate->getCustomOptions());
+                $item->setQty($qty)->save();
+            }
+            $this->wishlistResource->save($wishlist);
+        } else {
+            throw new GraphQlInputException(__('The product does not exist.'));
+        }
+
+        if (is_string($item)) {
+            $this->addError($item);
         }
         return $this->prepareOutput($wishlist);
     }
+
     /**
      * Add wishlist line item error
      *
      * @param string $message
-     * @param string|null $code
+     * @param string $code
      *
      * @return void
      */
@@ -291,4 +290,3 @@ class UpdateProductsInWishlist implements ResolverInterface
         return $output;
     }
 }
-
