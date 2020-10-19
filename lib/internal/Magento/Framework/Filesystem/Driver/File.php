@@ -1089,6 +1089,7 @@ class File implements DriverInterface
             }
             $realPath[] = $pathPart;
         }
-        return implode(DIRECTORY_SEPARATOR, $realPath);
+
+        return rtrim(implode(DIRECTORY_SEPARATOR, $realPath), DIRECTORY_SEPARATOR);
     }
 }
