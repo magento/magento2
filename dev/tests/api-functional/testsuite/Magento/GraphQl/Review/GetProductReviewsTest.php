@@ -19,6 +19,7 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use Magento\Store\Api\StoreRepositoryInterface;
 
 /**
  * Test coverage for product reviews queries
@@ -229,7 +230,8 @@ QUERY;
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
         $product           = $productRepository->get($productSku, false, null, true);
         $summaryFactory    = ObjectManager::getInstance()->get(SummaryFactory::class);
-        $storeId           = ObjectManager::getInstance()->get(StoreManagerInterface::class)->getStore()->getId();
+        $storeRepository   = ObjectManager::getInstance()->get(StoreRepositoryInterface::class);
+        $storeId           = $storeRepository->get($headerMapSecondStore['Store'])->getId();
         $summary           = $summaryFactory->create()->setStoreId($storeId)->load($product->getId());
         $query
                            = <<<QUERY
