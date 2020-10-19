@@ -84,7 +84,7 @@ abstract class AbstractFilter extends AbstractComponent
         $request = $request ?: ObjectManager::getInstance()->get(RequestInterface::class);
 
         $filterData = $this->getContext()->getFiltersParams();
-        if (!$request->isAjax()) {
+        if (null === $filterData) {
             $bookmark = $bookmarkManagement->getByIdentifierNamespace(
                 'current',
                 $context->getNamespace()
@@ -98,6 +98,10 @@ abstract class AbstractFilter extends AbstractComponent
                         'paging' => $bookmarkConfig['current']['paging'] ?? []
                     ]
                 );
+
+                if (isset($bookmarkConfig['current']['request_params'])) {
+                    $request->setParams($bookmarkConfig['current']['request_params']);
+                }
             }
         }
 

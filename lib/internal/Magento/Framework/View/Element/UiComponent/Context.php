@@ -225,7 +225,7 @@ class Context implements ContextInterface
      */
     public function getFiltersParams()
     {
-        return $this->getRequestParam(self::FILTER_VAR, []);
+        return $this->getRequestParam(self::FILTER_VAR);
     }
 
     /**
@@ -233,7 +233,7 @@ class Context implements ContextInterface
      */
     public function getFilterParam($key, $defaultValue = null)
     {
-        $filter = $this->getFiltersParams();
+        $filter = $this->getFiltersParams() ?? [];
         return $filter[$key] ?? $defaultValue;
     }
 

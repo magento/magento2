@@ -36,7 +36,15 @@
         </dataProvider>
     </dataSource>
     <listingToolbar name="listing_top">
-        <bookmark name="bookmarks"/>
+        <bookmark name="bookmarks">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="imports" xsi:type="array">
+                        <item name="current.request_params.parent_id" xsi:type="string">${ $.provider }:params.parent_id</item>
+                    </item>
+                </item>
+            </argument>
+        </bookmark>
         <columnsControls name="columns_controls"/>
         <filterSearch name="fulltext"/>
         <filters name="listing_filters" component="Magento_Customer/js/grid/filters/filters">
