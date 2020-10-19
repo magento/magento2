@@ -48,6 +48,7 @@ class EmailMessage extends Message implements EmailMessageInterface
      * @param string|null $subject
      * @param string|null $encoding
      * @param LoggerInterface|null $logger
+     * @throws InvalidArgumentException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
