@@ -17,6 +17,8 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Magento Framework Email message
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class EmailMessage extends Message implements EmailMessageInterface
 {
@@ -52,7 +54,6 @@ class EmailMessage extends Message implements EmailMessageInterface
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
      */
     public function __construct(
         MimeMessageInterface $body,
