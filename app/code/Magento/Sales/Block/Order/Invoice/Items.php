@@ -12,6 +12,8 @@
 namespace Magento\Sales\Block\Order\Invoice;
 
 /**
+ * Sales order invoice items block
+ *
  * @api
  * @since 100.0.2
  */
@@ -49,7 +51,7 @@ class Items extends \Magento\Sales\Block\Items\AbstractItems
     }
 
     /**
-     * Print Invoice Url
+     * Get Print Invoice url
      *
      * @param object $invoice
      * @return string
@@ -60,7 +62,7 @@ class Items extends \Magento\Sales\Block\Items\AbstractItems
     }
 
     /**
-     * Print All Invoices Url
+     * Get PrintAll Invoice url
      *
      * @param object $order
      * @return string
@@ -98,8 +100,7 @@ class Items extends \Magento\Sales\Block\Items\AbstractItems
         $html = '';
         $comments = $this->getChildBlock('invoice_comments');
         if ($comments) {
-            $message = 'About Your Invoice';
-            $comments->setEntity($invoice)->setTitle($this->_escaper->escapeHtmlAttr(__($message)));
+            $comments->setEntity($invoice)->setTitle($this->escapeHtmlAttr(__('About Your Invoice')));
             $html = $comments->toHtml();
         }
         return $html;
