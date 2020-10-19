@@ -826,10 +826,9 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
                 $fullItems[] = array_fill(0, $qty, $this->_getWeight($itemWeight));
             }
         }
-        if ($fullItems) {
-            $fullItems = array_merge(...$fullItems);
-            sort($fullItems);
-        }
+
+        $fullItems = array_merge([], ...$fullItems);
+        sort($fullItems);
 
         return $fullItems;
     }
