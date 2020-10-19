@@ -59,7 +59,7 @@ class DataTest extends TestCase
         $objectManager->setBackwardCompatibleProperty($this->_model, 'imageUrlBuilder', $this->imageUrlBuilder);
     }
 
-    public function testGetAllowAttributes()
+    public function testGetAllowAttributes(): void
     {
         $typeInstanceMock = $this->createMock(Configurable::class);
         $typeInstanceMock->expects($this->once())
@@ -82,7 +82,7 @@ class DataTest extends TestCase
      * @param array $data
      * @dataProvider getOptionsDataProvider
      */
-    public function testGetOptions(array $expected, array $data)
+    public function testGetOptions(array $expected, array $data): array
     {
         if (count($data['allowed_products'])) {
             $imageHelper1 = $this->getMockBuilder(Image::class)
@@ -118,8 +118,9 @@ class DataTest extends TestCase
 
     /**
      * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function getOptionsDataProvider()
+    public function getOptionsDataProvider(): array
     {
         $currentProductMock = $this->createPartialMock(
             Product::class,
@@ -225,7 +226,7 @@ class DataTest extends TestCase
      * @param string $key
      * @return string
      */
-    public function getDataCallback($key)
+    public function getDataCallback($key): string
     {
         $map = [];
         for ($k = 1; $k < 3; $k++) {
@@ -289,7 +290,7 @@ class DataTest extends TestCase
     /**
      * @return Collection
      */
-    private function getImagesCollection()
+    private function getImagesCollection(): MockObject
     {
         $collectionMock = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
