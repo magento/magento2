@@ -3,9 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Api;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;
@@ -25,7 +28,6 @@ class SpecialPriceStorageTest extends WebapiAbstract
     const SERVICE_VERSION = 'V1';
     const SIMPLE_PRODUCT_SKU = 'simple';
     const VIRTUAL_PRODUCT_SKU = 'virtual-product';
-    private const SIMPLE_PRODUCT_SKU_TWO_WEBSITES = 'simple-on-two-websites';
 
     /**
      * @var ObjectManager
@@ -133,35 +135,33 @@ class SpecialPriceStorageTest extends WebapiAbstract
     /**
      * Test delete method.
      *
-     * @magentoApiDataFixture Magento/Catalog/_files/product_two_websites.php
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
      * @magentoConfigFixture catalog/price/scope 1
      * @dataProvider deleteData
      * @param array $data
-     * @throws CouldNotSaveException
-     * @throws InputException
      * @throws NoSuchEntityException
-     * @throws StateException
      * @throws LocalizedException
      */
     public function testDelete(array $data)
     {
         /** @var ProductRepositoryInterface $productRepository */
         $productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
+        /** @var ProductResource $productResource */
+        $productResource = $this->objectManager->create(ProductResource::class);
         $product = $productRepository->get($data['sku'], true, $data['store_id'], true);
         $product->setData('special_price', $data['price']);
         $product->setData('special_from_date', $data['price_from']);
         if ($data['price_to']) {
             $product->setData('special_to_date', $data['price_to']);
         }
-        $productRepository->save($product);
+        $productResource->saveAttribute($product, 'special_price');
+        $productResource->saveAttribute($product, 'special_from_date');
+        $productResource->saveAttribute($product, 'special_to_date');
 
-        $product = $productRepository->get($data['sku'], true, 1, true);
-        $product->setData('special_price', $data['price']);
-        $product->setData('special_from_date', $data['price_from']);
-        if ($data['price_to']) {
-            $product->setData('special_to_date', $data['price_to']);
-        }
-        $productRepository->save($product);
+        $product->setData('store_id', 1);
+        $productResource->saveAttribute($product, 'special_price');
+        $productResource->saveAttribute($product, 'special_from_date');
+        $productResource->saveAttribute($product, 'special_to_date');
 
         $serviceInfo = [
             'rest' => [
@@ -243,7 +243,7 @@ class SpecialPriceStorageTest extends WebapiAbstract
                 [
                     'price' => 3057,
                     'store_id' => 0,
-                    'sku' => self::SIMPLE_PRODUCT_SKU_TWO_WEBSITES,
+                    'sku' => self::SIMPLE_PRODUCT_SKU,
                     'price_from' => $fromDate,
                     'price_to' => $toDate
                 ]
@@ -253,7 +253,7 @@ class SpecialPriceStorageTest extends WebapiAbstract
                 [
                     'price' => 3057,
                     'store_id' => 0,
-                    'sku' => self::SIMPLE_PRODUCT_SKU_TWO_WEBSITES,
+                    'sku' => self::SIMPLE_PRODUCT_SKU,
                     'price_from' => $fromDate,
                     'price_to' => false
                 ]
