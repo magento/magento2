@@ -72,6 +72,52 @@ class SwatchVisualFilterTest extends AbstractFiltersTest
     }
 
     /**
+     * @magentoDataFixture Magento/Swatches/_files/product_visual_swatch_attribute.php
+     * @magentoDataFixture Magento/Catalog/_files/category_with_different_price_products.php
+     * @dataProvider getActiveFiltersWithCustomAttributeDataProvider
+     * @param array $products
+     * @param array $expectation
+     * @param string $filterValue
+     * @param int $productsCount
+     * @return void
+     */
+    public function testGetActiveFiltersWithCustomAttribute(
+        array $products,
+        array $expectation,
+        string $filterValue,
+        int $productsCount
+    ): void {
+        $this->getCategoryActiveFiltersAndAssert($products, $expectation, 'Category 999', $filterValue, $productsCount);
+    }
+
+    /**
+     * @return array
+     */
+    public function getActiveFiltersWithCustomAttributeDataProvider(): array
+    {
+        return [
+            'filter_by_first_option_in_products_with_first_option' => [
+                'products_data' => ['simple1000' => 'option 1', 'simple1001' => 'option 1'],
+                'expectation' => ['label' =>  'option 1', 'count' => 0],
+                'filter_value' =>  'option 1',
+                'products_count' => 2,
+            ],
+            'filter_by_first_option_in_products_with_different_options' => [
+                'products_data' => ['simple1000' => 'option 1', 'simple1001' => 'option 2'],
+                'expectation' => ['label' =>  'option 1', 'count' => 0],
+                'filter_value' =>  'option 1',
+                'products_count' => 1,
+            ],
+            'filter_by_second_option_in_products_with_different_options' => [
+                'products_data' => ['simple1000' => 'option 1', 'simple1001' => 'option 2'],
+                'expectation' => ['label' => 'option 2', 'count' => 0],
+                'filter_value' => 'option 2',
+                'products_count' => 1,
+            ],
+        ];
+    }
+
+    /**
      * @inheritdoc
      */
     protected function getLayerType(): string

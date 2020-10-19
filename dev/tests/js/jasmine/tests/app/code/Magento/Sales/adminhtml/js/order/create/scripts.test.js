@@ -14,6 +14,7 @@ define([
     var formEl,
         jQueryAjax,
         order,
+        confirmSpy = jasmine.createSpy('confirm'),
         tmpl = '<form id="edit_form" action="/">' +
                 '<section id="order-methods">' +
                     '<div id="order-billing_method"></div>' +
@@ -129,7 +130,7 @@ define([
             mocks = {
                 'jquery': $,
                 'Magento_Catalog/catalog/product/composite/configure': jasmine.createSpy(),
-                'Magento_Ui/js/modal/confirm': jasmine.createSpy(),
+                'Magento_Ui/js/modal/confirm': confirmSpy,
                 'Magento_Ui/js/modal/alert': jasmine.createSpy(),
                 'Magento_Ui/js/lib/view/utils/async': jasmine.createSpy()
             };
@@ -157,6 +158,22 @@ define([
             order = undefined;
             $.ajax = jQueryAjax;
             jQueryAjax = undefined;
+        });
+
+        describe('Testing the process customer group change', function () {
+            it('and confirm method is called', function () {
+                init();
+                spyOn(window, '$$').and.returnValue(['testing']);
+                order.processCustomerGroupChange(
+                    1,
+                    'testMsg',
+                    'customerGroupMsg',
+                    'errorMsg',
+                    1,
+                    'change'
+                );
+                expect(confirmSpy).toHaveBeenCalledTimes(1);
+            });
         });
 
         describe('submit()', function () {
