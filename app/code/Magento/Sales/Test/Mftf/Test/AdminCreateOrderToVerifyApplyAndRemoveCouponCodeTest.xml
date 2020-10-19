@@ -36,15 +36,24 @@
             </createData>
 
             <!-- Enable Bank Transfer payment -->
-            <magentoCLI command="config:set {{EnablePaymentBankTransferConfigData.path}} {{EnablePaymentBankTransferConfigData.value}}" stepKey="enableBankTransferPayment"/>
+            <magentoCLI
+                command="config:set {{EnablePaymentBankTransferConfigData.path}} {{EnablePaymentBankTransferConfigData.value}}"
+                stepKey="enableBankTransferPayment"/>
 
             <!--Set default flat rate shipping method settings-->
-            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}"
+                        stepKey="enableFlatRate"/>
         </before>
         <after>
             <!-- Disable Bank Transfer payment -->
-            <magentoCLI command="config:set {{DisablePaymentBankTransferConfigData.path}} {{DisablePaymentBankTransferConfigData.value}}" stepKey="disableBankTransferPayment"/>
-            
+            <magentoCLI
+                command="config:set {{DisablePaymentBankTransferConfigData.path}} {{DisablePaymentBankTransferConfigData.value}}"
+                stepKey="disableBankTransferPayment"/>
+
+            <!--Disable flat rate shipping method-->
+            <magentoCLI command="config:set {{DisableFlatRateConfigData.path}} {{DisableFlatRateConfigData.value}}"
+                        stepKey="disableFlatRate"/>
+
             <!-- Delete sales rule -->
             <deleteData createDataKey="createCartPriceRule" stepKey="deleteCartPriceRule"/>
 
@@ -72,7 +81,7 @@
         <actionGroup ref="AdminApplyCouponToOrderActionGroup" stepKey="applyCoupon">
             <argument name="couponCode" value="$$createCouponForCartPriceRule.code$$"/>
         </actionGroup>
-        
+
         <!-- Remove coupon from the order -->
         <actionGroup ref="AdminRemoveCouponFromOrderActionGroup" stepKey="removeCoupon"/>
 
@@ -80,9 +89,12 @@
         <actionGroup ref="AdminSelectFlatRateShippingMethodActionGroup" stepKey="selectFlatRateShippingMethod"/>
 
         <!-- Select bank Transfer payment method -->
-        <waitForElementVisible selector="{{AdminOrderFormPaymentSection.paymentBlock}}" stepKey="waitForPaymentOptions"/>
-        <conditionalClick selector="{{AdminOrderFormPaymentSection.bankTransferOption}}" dependentSelector="{{AdminOrderFormPaymentSection.bankTransferOption}}" visible="true" stepKey="checkBankTransferOption"/>
-        
+        <waitForElementVisible selector="{{AdminOrderFormPaymentSection.paymentBlock}}"
+                               stepKey="waitForPaymentOptions"/>
+        <conditionalClick selector="{{AdminOrderFormPaymentSection.bankTransferOption}}"
+                          dependentSelector="{{AdminOrderFormPaymentSection.bankTransferOption}}" visible="true"
+                          stepKey="checkBankTransferOption"/>
+
         <!-- Submit order -->
         <actionGroup ref="AdminSubmitOrderActionGroup" stepKey="submitOrder"/>
 

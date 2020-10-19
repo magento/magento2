@@ -11,6 +11,7 @@
     <actionGroup name="AdminRemoveCouponFromOrderActionGroup">
         <click selector="{{AdminOrderFormItemsSection.removeCoupon}}" stepKey="removeCoupon"/>
         <waitForPageLoad stepKey="waitForRemovingCoupon"/>
+        <dontSee selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="The coupon code has been accepted." stepKey="dontSeePreviousMessage"/>
         <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="The coupon code has been removed." stepKey="seeSuccessMessage"/>
     </actionGroup>
 </actionGroups>
