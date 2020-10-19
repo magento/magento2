@@ -223,13 +223,13 @@ class EavAttribute
      */
     protected function prepareOptionIds(array $optionsArray)
     {
-        if (!is_array($optionsArray['value'] ?? null)) {
-            return $optionsArray;
-        }
-
-        foreach (array_keys($optionsArray['value']) as $optionId) {
-            if (isset($optionsArray['delete'][$optionId]) && (int)$optionsArray['delete'][$optionId] === 1) {
-                unset($optionsArray['value'][$optionId]);
+        if (isset($optionsArray['value']) && is_array($optionsArray['value'])) {
+            foreach (array_keys($optionsArray['value']) as $optionId) {
+                if (isset($optionsArray['delete']) && isset($optionsArray['delete'][$optionId])
+                    && $optionsArray['delete'][$optionId] == 1
+                ) {
+                    unset($optionsArray['value'][$optionId]);
+                }
             }
         }
 
