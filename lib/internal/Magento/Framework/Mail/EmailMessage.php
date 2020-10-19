@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Framework\Mail;
 
 use Laminas\Mail\Exception\InvalidArgumentException as LaminasInvalidArgumentException;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Mail\Exception\InvalidArgumentException;
 use Laminas\Mail\Address as LaminasAddress;
 use Laminas\Mail\AddressList;
@@ -30,7 +31,7 @@ class EmailMessage extends Message implements EmailMessageInterface
     private $addressFactory;
 
     /**
-     * @var LoggerInterface
+     * @var LoggerInterface|null
      */
     private $logger;
 
@@ -46,7 +47,7 @@ class EmailMessage extends Message implements EmailMessageInterface
      * @param Address|null $sender
      * @param string|null $subject
      * @param string|null $encoding
-     * @param LoggerInterface $logger
+     * @param LoggerInterface|null $logger
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -63,11 +64,11 @@ class EmailMessage extends Message implements EmailMessageInterface
         ?Address $sender = null,
         ?string $subject = '',
         ?string $encoding = 'utf-8',
-        LoggerInterface $logger
+        ?LoggerInterface $logger = null
     ) {
         parent::__construct($encoding);
         $mimeMessage = new LaminasMimeMessage();
-        $this->logger = $logger;
+        $this->logger = $logger ?: ObjectManager::getInstance()->get(LoggerInterface::class);
         $mimeMessage->setParts($body->getParts());
         $this->zendMessage->setBody($mimeMessage);
         if ($subject) {
