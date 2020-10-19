@@ -34,6 +34,6 @@
                 <block class="Magento\CheckoutAgreements\Block\Agreements" name="paypal.express.review.details.agreements" as="agreements" template="Magento_CheckoutAgreements::additional_agreements.phtml"/>
             </block>
         </referenceContainer>
-        <block class="Magento\Framework\View\Element\Template" name="additional.product.info" template="Magento_Theme::template.phtml"/>
+        <block name="additional.product.info" template="Magento_Theme::template.phtml"/>
     </body>
 </page>

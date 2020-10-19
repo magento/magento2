@@ -18,6 +18,6 @@
                 <block class="Magento\Tax\Block\Sales\Order\Tax" name="tax" template="Magento_Tax::order/tax.phtml"/>
             </block>
         </block>
-        <block class="Magento\Framework\View\Element\Template" name="additional.product.info" template="Magento_Theme::template.phtml"/>
+        <block name="additional.product.info" template="Magento_Theme::template.phtml"/>
     </body>
 </page>

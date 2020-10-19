@@ -8,7 +8,7 @@
 <page layout="3columns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <update handle="default_head_blocks"/>
     <body>
-        <block name="require.js" class="Magento\Framework\View\Element\Template" template="Magento_Theme::page/js/require_js.phtml" />
+        <block name="require.js" template="Magento_Theme::page/js/require_js.phtml" />
         <referenceContainer name="after.body.start">
             <block class="Magento\RequireJs\Block\Html\Head\Config" name="requirejs-config"/>
             <block class="Magento\Framework\View\Element\Js\Cookie" name="js_cookies" template="Magento_Theme::js/cookie.phtml"/>
@@ -22,7 +22,7 @@
             </block>
         </referenceBlock>
         <referenceContainer name="main.content">
-            <block class="Magento\Framework\View\Element\Template" name="skip_to_content.target" before="-" template="Magento_Theme::html/skiptarget.phtml">
+            <block name="skip_to_content.target" before="-" template="Magento_Theme::html/skiptarget.phtml">
                 <arguments>
                     <argument name="target_id" xsi:type="string">contentarea</argument>
                 </arguments>
@@ -31,7 +31,7 @@
         <referenceContainer name="header.container">
             <container name="header.panel.wrapper" htmlClass="panel wrapper" htmlTag="div" before="-">
                 <container name="header.panel" label="Page Header Panel" htmlTag="div" htmlClass="panel header">
-                    <block class="Magento\Framework\View\Element\Template" name="skip_to_content" template="Magento_Theme::html/skip.phtml">
+                    <block name="skip_to_content" template="Magento_Theme::html/skip.phtml">
                         <arguments>
                             <argument name="target" xsi:type="string">contentarea</argument>
                             <argument name="label" translate="true" xsi:type="string">Skip to Content</argument>
@@ -54,12 +54,12 @@
             </container>
         </referenceContainer>
         <referenceContainer name="page.top">
-            <block class="Magento\Framework\View\Element\Template" name="navigation.sections" before="-" template="Magento_Theme::html/sections.phtml">
+            <block name="navigation.sections" before="-" template="Magento_Theme::html/sections.phtml">
                 <arguments>
                     <argument name="group_name" xsi:type="string">navigation-sections</argument>
                     <argument name="group_css" xsi:type="string">nav-sections</argument>
                 </arguments>
-                <block class="Magento\Framework\View\Element\Template" name="store.menu" group="navigation-sections" template="Magento_Theme::html/container.phtml">
+                <block name="store.menu" group="navigation-sections" template="Magento_Theme::html/container.phtml">
                     <arguments>
                         <argument name="title" translate="true" xsi:type="string">Menu</argument>
                     </arguments>
@@ -72,7 +72,7 @@
                         <argument name="text" xsi:type="string"><![CDATA[<!-- Account links -->]]></argument>
                     </arguments>
                 </block>
-                <block class="Magento\Framework\View\Element\Template" name="store.settings" group="navigation-sections" template="Magento_Theme::html/container.phtml">
+                <block name="store.settings" group="navigation-sections" template="Magento_Theme::html/container.phtml">
                     <arguments>
                         <argument name="title" translate="true" xsi:type="string">Settings</argument>
                     </arguments>
@@ -95,7 +95,7 @@
         <referenceContainer name="columns.top">
             <block class="Magento\Theme\Block\Html\Title" name="page.main.title" template="Magento_Theme::html/title.phtml"/>
             <container name="page.messages" htmlTag="div" htmlClass="page messages">
-                <block class="Magento\Framework\View\Element\Template" name="ajax.message.placeholder" template="Magento_Theme::html/messages.phtml"/>
+                <block name="ajax.message.placeholder" template="Magento_Theme::html/messages.phtml"/>
                 <block class="Magento\Framework\View\Element\Messages" name="messages" as="messages" template="Magento_Theme::messages.phtml"/>
             </container>
         </referenceContainer>
@@ -119,7 +119,7 @@
                     </arguments>
                 </block>
                 <block class="Magento\Theme\Block\Html\Footer" name="copyright" template="Magento_Theme::html/copyright.phtml"/>
-                <block class="Magento\Framework\View\Element\Template" name="report.bugs" template="Magento_Theme::html/bugreport.phtml" ifconfig="design/footer/report_bugs"/>
+                <block name="report.bugs" template="Magento_Theme::html/bugreport.phtml" ifconfig="design/footer/report_bugs"/>
             </container>
         </referenceContainer>
         <referenceContainer name="before.body.end">

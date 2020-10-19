@@ -17,7 +17,7 @@
                     <container name="checkout.cart.container" htmlTag="div" htmlClass="cart-container" before="-">
                         <container name="checkout.cart.form.before" as="form_before" label="Shopping Cart Items Before" htmlTag="div" htmlClass="rewards"/>
                         <container name="cart.summary" label="Cart Summary Container" htmlTag="div" htmlClass="cart-summary" after="-">
-                            <block class="Magento\Framework\View\Element\Template" name="checkout.cart.summary.title" before="-" template="Magento_Theme::text.phtml">
+                            <block name="checkout.cart.summary.title" before="-" template="Magento_Theme::text.phtml">
                                 <arguments>
                                     <argument translate="true" name="text" xsi:type="string">Summary</argument>
                                     <argument name="tag" xsi:type="string">strong</argument>
