@@ -39,8 +39,7 @@
         </after>
 
         <!-- Create a cart price rule for $10 Fixed amount discount -->
-        <amOnPage url="{{AdminCartPriceRulesPage.url}}" stepKey="amOnCartPriceList"/>
-        <waitForPageLoad stepKey="waitForRulesPage"/>
+        <actionGroup ref="AdminOpenCartPriceRulesPageActionGroup" stepKey="amOnCartPriceList"/>
         <click selector="{{AdminCartPriceRulesSection.addNewRuleButton}}" stepKey="clickAddNewRule"/>
         <fillField selector="{{AdminCartPriceRulesFormSection.ruleName}}" userInput="{{ApiSalesRule.name}}" stepKey="fillRuleName"/>
         <selectOption selector="{{AdminCartPriceRulesFormSection.websites}}" userInput="Main Website" stepKey="selectWebsite"/>
@@ -64,7 +63,7 @@
         <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="onCategoryPage"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
         <moveMouseOver selector="{{StorefrontCategoryMainSection.ProductItemInfo}}" stepKey="hoverOverProduct"/>
-        <click selector="{{StorefrontCategoryMainSection.AddToCartBtn}}" stepKey="addToCart"/>
+        <actionGroup ref="StorefrontClickAddToCartButtonActionGroup" stepKey="addToCart"/>
         <waitForElementVisible selector="{{StorefrontCategoryMainSection.SuccessMsg}}" time="30" stepKey="waitForProductToAdd"/>
         <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="clickCart"/>
         <click selector="{{StorefrontMinicartSection.goToCheckout}}" stepKey="goToCheckout"/>
@@ -102,8 +101,7 @@
 
         <!-- Create invoice -->
         <actionGroup ref="AdminOrderGridClickFirstRowActionGroup" stepKey="clickOrderRow"/>
-        <click selector="{{AdminOrderDetailsMainActionsSection.invoice}}" stepKey="clickInvoiceButton"/>
-        <waitForPageLoad stepKey="waitForNewInvoicePageToLoad"/>
+        <actionGroup ref="AdminClickInvoiceButtonOrderViewActionGroup" stepKey="clickInvoiceButton"/>
         <see selector="{{AdminHeaderSection.pageTitle}}" userInput="New Invoice" stepKey="seeNewInvoiceInPageTitle" after="clickInvoiceButton"/>
 
         <!-- Verify Invoice Totals including subTotal Shipping  Discount and GrandTotal -->

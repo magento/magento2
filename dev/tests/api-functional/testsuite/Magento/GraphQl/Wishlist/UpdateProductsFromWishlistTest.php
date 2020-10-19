@@ -58,6 +58,37 @@ class UpdateProductsFromWishlistTest extends GraphQlAbstract
     }
 
     /**
+     * Test updating the wishlist item of another customer
+     *
+     * @magentoConfigFixture default_store wishlist/general/active 1
+     * @magentoApiDataFixture Magento/Customer/_files/two_customers.php
+     * @magentoApiDataFixture Magento/Wishlist/_files/two_wishlists_for_two_diff_customers.php
+     */
+    public function testUnauthorizedWishlistItemUpdate()
+    {
+        $wishlist = $this->getWishlist();
+        $wishlistItem = $wishlist['customer']['wishlist']['items_v2'][0];
+        $wishlist2 = $this->getWishlist('customer_two@example.com');
+        $wishlist2Id = $wishlist2['customer']['wishlist']['id'];
+        $qty = 2;
+        $description = 'New Description';
+        $updateWishlistQuery = $this->getQuery((int) $wishlist2Id, (int) $wishlistItem['id'], $qty, $description);
+        $response = $this->graphQlMutation(
+            $updateWishlistQuery,
+            [],
+            '',
+            $this->getHeaderMap('customer_two@example.com')
+        );
+        self::assertEquals(1, $response['updateProductsInWishlist']['wishlist']['items_count']);
+        self::assertNotEmpty($response['updateProductsInWishlist']['wishlist']['items_v2'], 'empty wish list items');
+        self::assertCount(1, $response['updateProductsInWishlist']['wishlist']['items_v2']);
+        self::assertEquals(
+            'The wishlist item with ID "'.$wishlistItem['id'].'" does not belong to the wishlist',
+            $response['updateProductsInWishlist']['user_errors'][0]['message']
+        );
+    }
+
+    /**
      * Authentication header map
      *
      * @param string $username
@@ -124,13 +155,14 @@ MUTATION;
     /**
      * Get wishlist result
      *
+     * @param string $username
      * @return array
      *
      * @throws Exception
      */
-    public function getWishlist(): array
+    public function getWishlist(string $username = 'customer@example.com'): array
     {
-        return $this->graphQlQuery($this->getCustomerWishlistQuery(), [], '', $this->getHeaderMap());
+        return $this->graphQlQuery($this->getCustomerWishlistQuery(), [], '', $this->getHeaderMap($username));
     }
 
     /**
