@@ -51,18 +51,18 @@ class PositionResolver extends \Magento\Framework\Model\ResourceModel\Db\Abstrac
     }
 
     /**
-     * Get category product positions
+     * Get category product minimum position
      *
      * @param int $categoryId
      * @return int
      */
-    public function getLastPosition(int $categoryId): int
+    public function getMinPosition(int $categoryId): int
     {
         $connection = $this->getConnection();
 
         $select = $connection->select()->from(
             ['cpe' => $this->getTable('catalog_product_entity')],
-            ['position' => new \Zend_Db_Expr('MAX(position)')]
+            ['position' => new \Zend_Db_Expr('MIN(position)')]
         )->joinLeft(
             ['ccp' => $this->getTable('catalog_category_product')],
             'ccp.product_id=cpe.entity_id'
