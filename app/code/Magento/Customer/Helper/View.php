@@ -34,7 +34,7 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper implements Custo
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getCustomerName(CustomerInterface $customerData)
     {
