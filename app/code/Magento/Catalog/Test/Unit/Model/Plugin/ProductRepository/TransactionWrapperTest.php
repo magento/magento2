@@ -62,7 +62,7 @@ class TransactionWrapperTest extends TestCase
         $this->closureMock = function () use ($productMock) {
             return $productMock;
         };
-        $this->rollbackClosureMock = function () use ($productMock) {
+        $this->rollbackClosureMock = function () {
             throw new \Exception(self::ERROR_MSG);
         };
 
