@@ -193,42 +193,32 @@ class UpdateProductsInWishlist implements ResolverInterface
      * @param int $itemId
      * @param DataObject $buyRequest
      * @param wishlistFactory $wishlist
-     * @param null $params
      *
      * @return WishlistOutput
      * @throws GraphQlInputException
      * @throws \Magento\Framework\Exception\AlreadyExistsException
      */
-    private function updateItem($itemId, $buyRequest, $wishlist, $params = null)
+    private function updateItem($itemId, $buyRequest, $wishlist)
     {
-        $item = null;
-        if ($itemId instanceof Item) {
-            $item = $itemId;
-        } else {
-            $item = $wishlist->getItem((int)$itemId);
-        }
+        $item = $wishlist->getItem((int)$itemId);
+
         if (!$item) {
             throw new GraphQlInputException(__('We can\'t specify a wish list item.'));
         }
 
         $product = $item->getProduct();
         $productId = $product->getId();
+
         if ($productId) {
-            if (!$params) {
-                $params = new DataObject();
-            } elseif (is_array($params)) {
-                $params = new DataObject($params);
-            }
-            $params->setCurrentConfig($item->getBuyRequest());
-            $buyRequest = $this->catalogProduct->addParamsToBuyRequest($buyRequest, $params);
             $buyRequest->setData('action', 'updateItem');
             $product->setWishlistStoreId($item->getStoreId());
             $cartCandidates = $product->getTypeInstance()->processConfiguration($buyRequest, clone $product);
+
             /**
-             * Error message
+             * If the product with options existed or not
              */
             if (is_string($cartCandidates)) {
-                return $cartCandidates;
+                throw new GraphQlInputException(__('The product with options does not exist.'));
             }
 
             /**
@@ -243,7 +233,6 @@ class UpdateProductsInWishlist implements ResolverInterface
                     continue;
                 }
                 $candidate->setWishlistStoreId($item->getStoreId());
-
                 $qty = $buyRequest->getData('qty') ? $buyRequest->getData('qty') : 1;
                 $item->setOptions($candidate->getCustomOptions());
                 $item->setQty($qty)->save();
@@ -252,27 +241,7 @@ class UpdateProductsInWishlist implements ResolverInterface
         } else {
             throw new GraphQlInputException(__('The product does not exist.'));
         }
-
-        if (is_string($item)) {
-            $this->addError($item);
-        }
         return $this->prepareOutput($wishlist);
-    }
-
-    /**
-     * Add wishlist line item error
-     *
-     * @param string $message
-     * @param string $code
-     *
-     * @return void
-     */
-    private function addError(string $message, string $code = null): void
-    {
-        $this->errors[] = new Data\Error(
-            $message,
-            $code ?? self::ERROR_UNDEFINED
-        );
     }
 
     /**
