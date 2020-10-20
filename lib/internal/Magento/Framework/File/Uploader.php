@@ -21,6 +21,7 @@ use Magento\Framework\Validation\ValidationException;
  * validation by protected file extension list to extended class
  *
  * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  *
  * @api
  * @since 100.0.2

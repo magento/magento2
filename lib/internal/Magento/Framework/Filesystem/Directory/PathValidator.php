@@ -45,7 +45,7 @@ class PathValidator implements PathValidatorInterface
         if (!$absolutePath) {
             $actualPath = $this->driver->getRealPathSafety(
                 $this->driver->getAbsolutePath(
-                    $realDirectoryPath,
+                    $realDirectoryPath . DIRECTORY_SEPARATOR,
                     $path,
                     $scheme
                 )

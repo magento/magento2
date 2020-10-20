@@ -160,7 +160,7 @@ class StatefulFile implements DriverInterface
      */
     public function createDirectory($path, $permissions = 0777)
     {
-        return $this->driverFile->createDirectory($path, 0777);
+        return $this->driverFile->createDirectory($path, $permissions);
     }
 
     /**
