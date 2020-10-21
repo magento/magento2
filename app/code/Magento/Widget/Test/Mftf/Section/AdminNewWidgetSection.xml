@@ -40,9 +40,7 @@
         <element name="displayMode" type="select" selector="select[id*='display_mode']"/>
         <element name="restrictTypes" type="select" selector="select[id*='types']"/>
         <element name="saveAndContinue" type="button" selector="#save_and_edit_button" timeout="30"/>
-        <element name="deleteActionFirst" type="button" selector="#page_group_container_0 > div.fieldset-wrapper-title > div > .action-default.action-delete"/>
-        <element name="deleteActionSecond" type="button" selector="#page_group_container_1 > div.fieldset-wrapper-title > div > .action-default.action-delete"/>
-        <element name="deleteActionThird" type="button" selector="#page_group_container_2 > div.fieldset-wrapper-title > div > .action-default.action-delete"/>
+        <element name="deleteWidgetLayoutAction" type="button" selector="#page_group_container > div:first-of-type > div.fieldset-wrapper-title > div > .action-default.action-delete"/> 
         <element name="CountDeleteButtons" type="button" selector="#page_group_container > .fieldset-wrapper.page_group_container > div.fieldset-wrapper-title > div > .action-default.action-delete"/>
     </section>
 </sections>

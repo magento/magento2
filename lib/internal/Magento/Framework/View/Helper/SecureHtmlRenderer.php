@@ -112,7 +112,7 @@ class SecureHtmlRenderer
                 {$attributeJavascript};
             }
             var {$elementName}Array = document.querySelectorAll("{$elementSelector}");
-            if({$elementName}Array.lenght !== 'undefined'){
+            if({$elementName}Array.length !== 'undefined'){
                 {$elementName}Array.forEach(function(element){
                     if (element) {
                         element.{$eventName} = function (event) {
