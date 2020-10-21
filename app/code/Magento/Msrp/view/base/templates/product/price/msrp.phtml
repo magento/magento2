@@ -4,19 +4,28 @@
  * See COPYING.txt for license details.
  */
 
+use Magento\Catalog\Block\Product\AbstractProduct;
+use Magento\Catalog\Model\Product;
+use Magento\Framework\App\ActionInterface;
+use Magento\Framework\Pricing\Render;
+use Magento\Framework\Url\Helper\Data;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+use Magento\Msrp\Pricing\Price\MsrpPriceInterface;
+use Magento\Msrp\Pricing\Render\PriceBox;
+
 /**
  * Template for displaying product price at product view page, gift registry and wish-list
  *
- * @var $block \Magento\Msrp\Pricing\Render\PriceBox
- * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ * @var $block PriceBox
+ * @var SecureHtmlRenderer $secureRenderer
  */
 ?>
 <?php
 
-/** @var Magento\Msrp\Pricing\Price\MsrpPriceInterface $priceType */
+/** @var MsrpPriceInterface $priceType */
 $priceType = $block->getPrice();
 
-/** @var $product \Magento\Catalog\Model\Product */
+/** @var $product Product */
 $product = $block->getSaleableItem();
 $productId = $product->getId();
 
@@ -25,12 +34,12 @@ $amount = $block->getMsrpPriceCalculator()->getMsrpPriceValue($product);
 $msrpPrice = $block->renderAmount(
     $priceType->getCustomAmount($amount),
     [
-        'price_id' => $block->getPriceId() ? $block->getPriceId() : 'old-price-' . $productId,
+        'price_id' => $block->getPriceId() ?: 'old-price-' . $productId,
         'include_container' => false,
         'skip_adjustments' => true
     ]
 );
-$priceElementIdPrefix = $block->getPriceElementIdPrefix() ? $block->getPriceElementIdPrefix() : 'product-price-';
+$priceElementIdPrefix = $block->getPriceElementIdPrefix() ?: 'product-price-';
 ?>
 
 <?php if ($amount): ?>
@@ -44,17 +53,14 @@ $priceElementIdPrefix = $block->getPriceElementIdPrefix() ? $block->getPriceElem
     $addToCartUrl = '';
     if ($product->isSaleable()) {
         /** @var Magento\Catalog\Block\Product\AbstractProduct $addToCartUrlGenerator */
-        $addToCartUrlGenerator = $block->getLayout()->getBlockSingleton(
-            \Magento\Catalog\Block\Product\AbstractProduct::class
-        );
+        $addToCartUrlGenerator = $block->getLayout()->getBlockSingleton(AbstractProduct::class);
         // phpcs:disable
         $addToCartUrl = $addToCartUrlGenerator->getAddToCartUrl(
             $product,
             ['_query' => [
-                \Magento\Framework\App\ActionInterface::PARAM_NAME_URL_ENCODED =>
-                    $this->helper(\Magento\Framework\Url\Helper\Data::class)->getEncodedUrl(
-                        $addToCartUrlGenerator->getAddToCartUrl($product)
-                    ),
+                ActionInterface::PARAM_NAME_URL_ENCODED => $this->helper(Data::class)->getEncodedUrl(
+                    $addToCartUrlGenerator->getAddToCartUrl($product)
+                ),
             ]]
         );
         // phpcs:enable
@@ -79,10 +85,12 @@ $priceElementIdPrefix = $block->getPriceElementIdPrefix() ? $block->getPriceElem
     if ($block->getRequest()->getFullActionName() === 'catalog_product_view') {
         $data['addToCartButton'] = '#product_addtocart_form [type=submit]';
     } else {
-        $data['addToCartButton'] = sprintf('form:has(input[type="hidden"][name="product"][value="%1$s"], .block.widget .price-box[data-product-id=%1$s]+.product-item-actions button.tocart) button[type="submit"]', (int)$productId);
+        $buttonData = 'form:has(input[type="hidden"][name="product"][value="%1$s"], .block.widget .price-box';
+        $buttonData .= '[data-product-id=%1$s]+.product-item-actions button.tocart) button[type="submit"]';
+        $data['addToCartButton'] = sprintf($buttonData, (int)$productId);
     }
     ?>
-    <?php $priceId = $block->escapeHtmlAttr($block->getPriceId() ? $block->getPriceId() : $priceElementId); ?>
+    <?php $priceId = $block->escapeHtmlAttr($block->getPriceId() ?: $priceElementId); ?>
     <span id="s_<?= /* @noEscape*/ $priceId ?>"></span>
     <?= /* @noEscape */ $secureRenderer->renderStyleAsTag("display:none", 'span#s_' . $priceId) ?>
     <a href="#"
@@ -102,7 +110,7 @@ $priceElementIdPrefix = $block->getPriceElementIdPrefix() ? $block->getPriceElem
     </span>
 <?php endif; ?>
 
-<?php if ($block->getZone() == \Magento\Framework\Pricing\Render::ZONE_ITEM_VIEW): ?>
+<?php if ($block->getZone() === Render::ZONE_ITEM_VIEW): ?>
     <?php $helpLinkId = 'msrp-help-' . $productId . $block->getRandomString(20); ?>
     <a href="#"
        id="<?= /* @noEscape */ $helpLinkId ?>"
