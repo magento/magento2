@@ -37,8 +37,7 @@
         </after>
 
         <!-- Create the rule... -->
-        <amOnPage url="{{AdminCartPriceRulesPage.url}}" stepKey="amOnCartPriceList"/>
-        <waitForPageLoad stepKey="waitForRulesPage"/>
+        <actionGroup ref="AdminOpenCartPriceRulesPageActionGroup" stepKey="amOnCartPriceList"/>
         <click selector="{{AdminCartPriceRulesSection.addNewRuleButton}}" stepKey="clickAddNewRule"/>
         <fillField selector="{{AdminCartPriceRulesFormSection.ruleName}}" userInput="{{SimpleSalesRule.name}}" stepKey="fillRuleName"/>
         <selectOption selector="{{AdminCartPriceRulesFormSection.websites}}" userInput="Main Website" stepKey="selectWebsites"/>
@@ -70,9 +69,7 @@
         <amOnPage url="$$createPreReqProduct.name$$.html" stepKey="goToProductPage"/>
         <waitForPageLoad stepKey="waitForProductPageLoad"/>
         <fillField selector="{{StorefrontProductActionSection.quantity}}" userInput="1" stepKey="fillQuantity"/>
-        <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="addProductToCart"/>
-        <waitForPageLoad stepKey="waitForAddToCart"/>
-        <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" stepKey="waitForSuccessMessage"/>
+        <actionGroup ref="StorefrontClickAddToCartOnProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage"/>
 
         <!-- Should not see the discount yet because we have not filled in postcode -->
         <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToCartPage"/>

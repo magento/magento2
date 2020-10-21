@@ -3,16 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Console\Command;
 
+use Magento\Framework\App\MaintenanceMode;
 use Magento\Setup\Console\Command\MaintenanceStatusCommand;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class MaintenanceStatusCommandTest extends \PHPUnit\Framework\TestCase
+class MaintenanceStatusCommandTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\App\MaintenanceMode|\PHPUnit_Framework_MockObject_MockObject
+     * @var MaintenanceMode|MockObject
      */
     private $maintenanceMode;
 
@@ -21,9 +25,9 @@ class MaintenanceStatusCommandTest extends \PHPUnit\Framework\TestCase
      */
     private $command;
 
-    public function setUp()
+    protected function setUp(): void
     {
-        $this->maintenanceMode = $this->createMock(\Magento\Framework\App\MaintenanceMode::class);
+        $this->maintenanceMode = $this->createMock(MaintenanceMode::class);
         $this->command = new MaintenanceStatusCommand($this->maintenanceMode);
     }
 

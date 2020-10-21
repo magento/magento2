@@ -43,7 +43,7 @@ class ControllerAclTest extends \PHPUnit\Framework\TestCase
     /**
      * Set up before test execution.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $whitelistedClasses = [];
         $path = sprintf('%s/_files/controller_acl_test_whitelist_*.txt', __DIR__);

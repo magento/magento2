@@ -3,12 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\Image\Adapter;
 
 use Magento\Framework\Exception\LocalizedException;
 
 /**
- * Image adapter from ImageMagick
+ * Image adapter from ImageMagick.
  */
 class ImageMagick extends AbstractAdapter
 {
@@ -34,6 +35,18 @@ class ImageMagick extends AbstractAdapter
         'small_image' => ['width' => 300, 'height' => 300],
         'sharpen' => ['radius' => 4, 'deviation' => 1],
     ];
+
+    /**
+     * @var \Imagick
+     */
+    protected $_imageHandler;
+
+    /**
+     * Colorspace of the image
+     *
+     * @var int
+     */
+    private $colorspace = -1;
 
     /**
      * Set/get background color. Check Imagick::COLOR_* constants
@@ -75,6 +88,10 @@ class ImageMagick extends AbstractAdapter
      */
     public function open($filename)
     {
+        if (!empty($filename) && !$this->validateURLScheme($filename)) {
+            throw new \InvalidArgumentException('Wrong file');
+        }
+
         $this->_fileName = $filename;
         $this->_checkCanProcess();
         $this->_getFileAttributes();
@@ -82,6 +99,7 @@ class ImageMagick extends AbstractAdapter
         try {
             $this->_imageHandler = new \Imagick($this->_fileName);
         } catch (\ImagickException $e) {
+            //phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new LocalizedException(
                 __('Unsupported image format. File: %1', $this->_fileName),
                 $e,
@@ -89,8 +107,27 @@ class ImageMagick extends AbstractAdapter
             );
         }
 
+        $this->getColorspace();
+        $this->maybeConvertColorspace();
         $this->backgroundColor();
         $this->getMimeType();
+    }
+
+    /**
+     * Checks for invalid URL schema if it exists
+     *
+     * @param string $filename
+     * @return bool
+     */
+    private function validateURLScheme(string $filename) : bool
+    {
+        $allowed_schemes = ['ftp', 'ftps', 'http', 'https'];
+        $url = parse_url($filename);
+        if ($url && isset($url['scheme']) && !in_array($url['scheme'], $allowed_schemes)) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -136,8 +173,8 @@ class ImageMagick extends AbstractAdapter
     /**
      * Render image and return its binary contents
      *
-     * @see \Magento\Framework\Image\Adapter\AbstractAdapter::getImage
      * @return string
+     * @see \Magento\Framework\Image\Adapter\AbstractAdapter::getImage
      */
     public function getImage()
     {
@@ -146,11 +183,12 @@ class ImageMagick extends AbstractAdapter
     }
 
     /**
-     * Change the image size
+     * Change the image size.
      *
      * @param null|int $frameWidth
      * @param null|int $frameHeight
      * @return void
+     * @throws \ImagickException
      */
     public function resize($frameWidth = null, $frameHeight = null)
     {
@@ -265,7 +303,7 @@ class ImageMagick extends AbstractAdapter
         $this->_checkCanProcess();
 
         $opacity = $this->getWatermarkImageOpacity() ? $this->getWatermarkImageOpacity() : $opacity;
-        $opacity = (double)number_format($opacity / 100, 1);
+        $opacity = (double) number_format($opacity / 100, 1);
 
         $watermark = new \Imagick($imagePath);
 
@@ -308,6 +346,7 @@ class ImageMagick extends AbstractAdapter
                 $this->addSingleWatermark($positionX, $positionY, $watermark, $compositeChannels);
             }
         } catch (\ImagickException $e) {
+            //phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new LocalizedException(
                 __('Unable to create watermark.'),
                 $e,
@@ -395,8 +434,8 @@ class ImageMagick extends AbstractAdapter
     /**
      * Check whether the adapter can work with the image
      *
-     * @throws \LogicException
      * @return true
+     * @throws \LogicException
      */
     protected function _checkCanProcess()
     {
@@ -561,5 +600,32 @@ class ImageMagick extends AbstractAdapter
             $positionY,
             $compositeChannels
         );
+    }
+
+    /**
+     * Get and store the image colorspace.
+     *
+     * @return int
+     */
+    private function getColorspace(): int
+    {
+        if ($this->colorspace === -1) {
+            $this->colorspace = $this->_imageHandler->getImageColorspace();
+        }
+
+        return $this->colorspace;
+    }
+
+    /**
+     * Convert colorspace to SRGB if current colorspace is COLORSPACE_CMYK or COLORSPACE_UNDEFINED.
+     *
+     * @return void
+     */
+    private function maybeConvertColorspace(): void
+    {
+        if ($this->colorspace === \Imagick::COLORSPACE_CMYK || $this->colorspace === \Imagick::COLORSPACE_UNDEFINED) {
+            $this->_imageHandler->transformImageColorspace(\Imagick::COLORSPACE_SRGB);
+            $this->colorspace = $this->_imageHandler->getImageColorspace();
+        }
     }
 }

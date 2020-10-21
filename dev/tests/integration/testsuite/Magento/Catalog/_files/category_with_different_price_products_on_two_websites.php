@@ -5,13 +5,18 @@
  */
 declare(strict_types=1);
 
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Store\Api\WebsiteRepositoryInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-require __DIR__ . '/category_with_different_price_products.php';
-require __DIR__ . '/../../Store/_files/second_website_with_two_stores.php';
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/category_with_different_price_products.php');
+Resolver::getInstance()->requireDataFixture('Magento/Store/_files/second_website_with_two_stores.php');
 
 $objectManager =  Bootstrap::getObjectManager();
+/** @var ProductRepositoryInterface $productRepository */
+$productRepository = $objectManager->get(ProductRepositoryInterface::class);
+$productRepository->cleanCache();
 /** @var WebsiteRepositoryInterface $websiteRepository */
 $websiteRepository = $objectManager->get(WebsiteRepositoryInterface::class);
 $defaultWebsiteId = $websiteRepository->get('base')->getId();

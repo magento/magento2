@@ -17,18 +17,18 @@
         <executeJS function="return window.getComputedStyle(document.querySelector('{{elementSelector}}')).getPropertyValue('outline-style')" stepKey="getBorderType"/>
         <executeJS function="return window.getComputedStyle(document.querySelector('{{elementSelector}}')).getPropertyValue('outline-width')" stepKey="getBorderWidth"/>
 
-        <assertContains stepKey="assertBorderColor">
+        <assertStringContainsString stepKey="assertBorderColor">
 			<actualResult type="const">$getBorderColor</actualResult>
 			<expectedResult type="string">{{TranslateInlineModeStyleData.borderColor}}</expectedResult>
-        </assertContains>
-        <assertContains stepKey="assertBorderType">
+        </assertStringContainsString>
+        <assertStringContainsString stepKey="assertBorderType">
 			<actualResult type="const">$getBorderType</actualResult>
 			<expectedResult type="string">{{TranslateInlineModeStyleData.borderType}}</expectedResult>
-        </assertContains>
-        <assertContains stepKey="assertBorderWidth">
+        </assertStringContainsString>
+        <assertStringContainsString stepKey="assertBorderWidth">
 			<actualResult type="const">$getBorderWidth</actualResult>
 			<expectedResult type="string">{{TranslateInlineModeStyleData.borderWidth}}</expectedResult>
-        </assertContains>
+        </assertStringContainsString>
 
     </actionGroup>
 </actionGroups>

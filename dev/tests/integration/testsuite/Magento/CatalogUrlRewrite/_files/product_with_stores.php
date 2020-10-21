@@ -5,12 +5,14 @@
  */
 declare(strict_types=1);
 
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
+
+Resolver::getInstance()->requireDataFixture('Magento/CatalogUrlRewrite/_files/categories_with_stores.php');
+
 /** @var \Magento\Catalog\Setup\CategorySetup $installer */
 $installer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
     \Magento\Catalog\Setup\CategorySetup::class
 );
-
-require __DIR__ . '/categories_with_stores.php';
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 $productRepository = $objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);

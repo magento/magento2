@@ -18,7 +18,7 @@ class ProductCustomAttributeWrongTypeTest extends WebapiAbstract
     /**
      * Execute per test cleanup
      */
-    public function tearDown()
+    protected function tearDown(): void
     {
         $this->deleteProductBySku(self::SIMPLE_PRODUCT_SKU);
         parent::tearDown();
@@ -26,10 +26,11 @@ class ProductCustomAttributeWrongTypeTest extends WebapiAbstract
 
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/products_new.php
-     * @expectedException \Exception
      */
     public function testCustomAttributeWrongType()
     {
+        $this->expectException(\Exception::class);
+
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . 'simple',

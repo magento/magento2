@@ -3,16 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogSearch\Test\Unit\Model\Indexer\Fulltext\Plugin\Product;
 
-use Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Product\Action as ProductActionIndexerPlugin;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Framework\Indexer\IndexerRegistry;
-use Magento\Framework\Indexer\IndexerInterface;
 use Magento\Catalog\Model\Product\Action as ProductAction;
 use Magento\CatalogSearch\Model\Indexer\Fulltext as FulltextIndexer;
+use Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Product\Action as ProductActionIndexerPlugin;
+use Magento\Framework\Indexer\IndexerInterface;
+use Magento\Framework\Indexer\IndexerRegistry;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ActionTest extends \PHPUnit\Framework\TestCase
+class ActionTest extends TestCase
 {
     /**
      * @var ProductActionIndexerPlugin
@@ -25,21 +29,21 @@ class ActionTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
+     * @var IndexerRegistry|MockObject
      */
     private $indexerRegistryMock;
 
     /**
-     * @var IndexerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var IndexerInterface|MockObject
      */
     private $indexerMock;
 
     /**
-     * @var ProductAction|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductAction|MockObject
      */
     private $subjectMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->indexerRegistryMock = $this->getMockBuilder(IndexerRegistry::class)
             ->disableOriginalConstructor()

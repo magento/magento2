@@ -99,7 +99,7 @@ class PaymentVaultAttributesLoadTest extends TestCase
     {
         $this->paymentExtensionMock->expects($this->once())
             ->method('getVaultPaymentToken')
-            ->willReturn($this->createMock(PaymentTokenInterface::class));
+            ->willReturn($this->getMockForAbstractClass(PaymentTokenInterface::class));
         $this->paymentTokenManagementMock->expects($this->never())->method('getByPaymentId');
         $this->paymentMock->expects($this->never())->method('setExtensionAttributes');
         $this->assertSame(
@@ -115,7 +115,7 @@ class PaymentVaultAttributesLoadTest extends TestCase
     {
         $this->paymentExtensionMock->expects($this->once())->method('getVaultPaymentToken')->willReturn(null);
 
-        $paymentTokenMock = $this->createMock(PaymentTokenInterface::class);
+        $paymentTokenMock = $this->getMockForAbstractClass(PaymentTokenInterface::class);
         $this->paymentTokenManagementMock->expects($this->once())
             ->method('getByPaymentId')
             ->willReturn($paymentTokenMock);

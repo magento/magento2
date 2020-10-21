@@ -3,12 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Paypal\Test\Unit\Model\Config\Structure;
 
 use Magento\Paypal\Model\Config\Structure\PaymentSectionModifier;
+use PHPUnit\Framework\TestCase;
 
-class PaymentSectionModifierTest extends \PHPUnit\Framework\TestCase
+class PaymentSectionModifierTest extends TestCase
 {
     private static $specialGroups = [
         'account',
@@ -162,14 +164,12 @@ class PaymentSectionModifierTest extends \PHPUnit\Framework\TestCase
     {
         $availableGroups = [];
         foreach ($structure as $group => $data) {
-            $availableGroups[] = $group;
+            $availableGroups[] = [$group];
             if (isset($data['children'])) {
-                $availableGroups = array_merge(
-                    $availableGroups,
-                    $this->fetchAllAvailableGroups($data['children'])
-                );
+                $availableGroups[] = $this->fetchAllAvailableGroups($data['children']);
             }
         }
+        $availableGroups = array_merge([], ...$availableGroups);
         $availableGroups = array_values(array_unique($availableGroups));
         sort($availableGroups);
         return $availableGroups;

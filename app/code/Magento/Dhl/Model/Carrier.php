@@ -676,6 +676,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
             'H' => __('Economy select'),
             'J' => __('Jumbo box'),
             'M' => __('Express 10:30'),
+            'N' => __('Domestic express'),
             'V' => __('Europack'),
             'Y' => __('Express 12:00'),
         ];
@@ -825,10 +826,9 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
                 $fullItems[] = array_fill(0, $qty, $this->_getWeight($itemWeight));
             }
         }
-        if ($fullItems) {
-            $fullItems = array_merge(...$fullItems);
-            sort($fullItems);
-        }
+
+        $fullItems = array_merge([], ...$fullItems);
+        sort($fullItems);
 
         return $fullItems;
     }
@@ -1084,7 +1084,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      *
      * @param string $request
      * @return string
-     * @deprecated Use asynchronous client.
+     * @deprecated 100.3.3 Use asynchronous client.
      * @see _getQuotes()
      */
     protected function _getQuotesFromServer($request)
@@ -1396,7 +1396,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      *
      * @param \Magento\Framework\DataObject $request
      * @return $this|\Magento\Framework\DataObject|boolean
-     * @deprecated
+     * @deprecated 100.2.3
      */
     public function proccessAdditionalValidation(\Magento\Framework\DataObject $request)
     {
@@ -1767,9 +1767,8 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
          */
         $nodeShipmentDetails->addChild('DoorTo', 'DD');
         $nodeShipmentDetails->addChild('DimensionUnit', substr($this->_getDimensionUnit(), 0, 1));
-        if ($package['params']['container'] == self::DHL_CONTENT_TYPE_NON_DOC) {
-            $packageType = 'CP';
-        }
+        $contentType = isset($package['params']['container']) ? $package['params']['container'] : '';
+        $packageType = $contentType === self::DHL_CONTENT_TYPE_NON_DOC ? 'CP' : '';
         $nodeShipmentDetails->addChild('PackageType', $packageType);
         if ($this->isDutiable($rawRequest->getOrigCountryId(), $rawRequest->getDestCountryId())) {
             $nodeShipmentDetails->addChild('IsDutiable', 'Y');

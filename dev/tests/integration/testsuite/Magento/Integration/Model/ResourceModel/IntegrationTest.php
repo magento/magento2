@@ -20,7 +20,7 @@ class IntegrationTest extends \PHPUnit\Framework\TestCase
      */
     protected $consumer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->consumer = $objectManager->create(\Magento\Integration\Model\Oauth\Consumer::class);
