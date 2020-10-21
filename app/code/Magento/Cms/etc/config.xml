@@ -24,6 +24,7 @@
             <wysiwyg>
                 <enabled>enabled</enabled>
                 <editor>mage/adminhtml/wysiwyg/tiny_mce/tinymce4Adapter</editor>
+                <force_valid>0</force_valid>
             </wysiwyg>
         </cms>
         <system>
