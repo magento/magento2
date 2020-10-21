@@ -19,6 +19,7 @@ use Magento\Eav\Api\Data\AttributeOptionInterface;
 use Magento\Eav\Model\Config;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\DataObject;
+use Magento\TestFramework\Catalog\Model\GetCategoryByName;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\CacheCleaner;
 use Magento\TestFramework\ObjectManager;
@@ -67,14 +68,11 @@ QUERY;
      * Verify that layered navigation filters and aggregations are correct for product query
      *
      * Filter products by an array of skus
-     * @magentoApiDataFixture Magento/Catalog/_files/category.php
      * @magentoApiDataFixture Magento/Catalog/_files/products_with_layered_navigation_attribute.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testFilterLn()
     {
-        $this->markTestSkipped('MC-36768: Custom attribute value created in integration tests'
-            . 'fixtures product not appears in elasticsearch');
         $query = <<<QUERY
 {
     products (
@@ -149,14 +147,12 @@ QUERY;
      *  Layered navigation for Configurable products with out of stock options
      * Two configurable products each having two variations and one of the child products of one Configurable set to OOS
      *
-     * @magentoApiDataFixture Magento/Catalog/_files/category.php
      * @magentoApiDataFixture Magento/Catalog/_files/configurable_products_with_custom_attribute_layered_navigation.php
+     * @magentoApiDataFixture Magento/Indexer/_files/reindex_all_invalid.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testLayeredNavigationForConfigurableProducts()
     {
-        $this->markTestSkipped('MC-36768: Custom attribute value created in integration tests'
-            . 'fixtures product not appears in elasticsearch');
         CacheCleaner::cleanAll();
         $attributeCode = 'test_configurable';
 
@@ -256,12 +252,11 @@ QUERY;
      * Filter products by custom attribute of dropdown type and filterTypeInput eq
      *
      * @magentoApiDataFixture Magento/Catalog/_files/products_with_layered_navigation_custom_attribute.php
+     * @magentoApiDataFixture Magento/Indexer/_files/reindex_all_invalid.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testFilterProductsByDropDownCustomAttribute()
     {
-        $this->markTestSkipped('MC-36768: Custom attribute value created in integration tests'
-            . 'fixtures product not appears in elasticsearch');
         CacheCleaner::cleanAll();
         $attributeCode = 'second_test_configurable';
         $optionValue = $this->getDefaultAttributeOptionValue($attributeCode);
@@ -455,12 +450,11 @@ QUERY;
      * Full text search for Products and then filter the results by custom attribute (default sort is relevance)
      *
      * @magentoApiDataFixture Magento/Catalog/_files/products_with_layered_navigation_custom_attribute.php
+     * @magentoApiDataFixture Magento/Indexer/_files/reindex_all_invalid.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testSearchAndFilterByCustomAttribute()
     {
-        $this->markTestSkipped('MC-36768: Custom attribute value created in integration tests'
-            . 'fixtures product not appears in elasticsearch');
         $attribute_code = 'second_test_configurable';
         $optionValue = $this->getDefaultAttributeOptionValue($attribute_code);
 
@@ -603,18 +597,19 @@ QUERY;
      *  Filter by category and custom attribute
      *
      * @magentoApiDataFixture Magento/Catalog/_files/products_with_layered_navigation_custom_attribute.php
+     * @magentoApiDataFixture Magento/Indexer/_files/reindex_all_invalid.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testFilterByCategoryIdAndCustomAttribute()
     {
-        $this->markTestSkipped('MC-36768: Custom attribute value created in integration tests'
-            . 'fixtures product not appears in elasticsearch');
-        $categoryId = 13;
+        /** @var GetCategoryByName $getCategoryByName */
+        $getCategoryByName = Bootstrap::getObjectManager()->get(GetCategoryByName::class);
+        $category = $getCategoryByName->execute('Category 1.2');
         $optionValue = $this->getDefaultAttributeOptionValue('second_test_configurable');
         $query = <<<QUERY
 {
   products(filter:{
-                   category_id : {eq:"{$categoryId}"}
+                   category_id : {eq:"{$category->getId()}"}
                    second_test_configurable: {eq: "{$optionValue}"}
                    },
                    pageSize: 3
@@ -2368,7 +2363,6 @@ QUERY;
     /**
      * Verify that invalid current page return an error
      *
-     * @magentoApiDataFixture Magento/Catalog/_files/category.php
      * @magentoApiDataFixture Magento/Catalog/_files/products_with_layered_navigation_attribute.php
      */
     public function testInvalidCurrentPage()
@@ -2399,7 +2393,6 @@ QUERY;
     /**
      * Verify that invalid page size returns an error.
      *
-     * @magentoApiDataFixture Magento/Catalog/_files/category.php
      * @magentoApiDataFixture Magento/Catalog/_files/products_with_layered_navigation_attribute.php
      */
     public function testInvalidPageSize()
