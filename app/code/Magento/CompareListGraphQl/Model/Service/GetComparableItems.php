@@ -95,7 +95,7 @@ class GetComparableItems
                 'productId' => $item->getId(),
                 'name' => $item->getName(),
                 'sku' => $item->getSku(),
-                'priceRange' => [
+                'price_range' => [
                     'minimum_price' => $this->getMinimumProductPrice($item, $store),
                     'maximum_price' => $this->getMaximumProductPrice($item, $store)
                 ],

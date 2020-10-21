@@ -44,7 +44,7 @@ class GetComparableAttributes
         foreach ($itemsCollection->getComparableAttributes() as $item) {
             $attributes[] = [
                 'code' => $item->getAttributeCode(),
-                'title' => $item->getStoreLabel()
+                'label' => $item->getStoreLabel()
             ];
         }
 
