@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontAddProductWithMapToCartTest">
+        <annotations>
+            <features value="Msrp"/>
+            <stories value="Minimum advertised price"/>
+            <title value="Add product minimum advertised price to cart on storefront"/>
+            <description value="Add product with minimum advertised price to cart on storefront"/>
+            <severity value="MAJOR"/>
+            <group value="Msrp"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <createData entity="ApiSimpleProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="MsrpEnableMAP" stepKey="enableMAP"/>
+
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToFirstChildProductEditPage">
+                <argument name="productId" value="$$createProduct.id$$"/>
+            </actionGroup>
+            <waitForPageLoad stepKey="waitForProductPageLoad"/>
+            <actionGroup ref="AdminSetAdvancedPricingActionGroup" stepKey="setAdvancedPricingFirst">
+                <argument name="advancedPrice" value="150"/>
+            </actionGroup>
+        </before>
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteSimpleProduct"/>
+
+            <createData entity="MsrpDisableMAP" stepKey="disableMAP"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
+        </after>
+
+        <!--Go to category-->
+        <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="navigateToCategoryPage">
+            <argument name="category" value="$$createCategory$$"/>
+        </actionGroup>
+
+        <!--Add to cart from MAP popup-->
+        <actionGroup ref="StorefrontAddProductMapFromCategoryToCartActionGroup" stepKey="addToCartFromMapPopup"/>
+
+        <!--Assert Product in Mini Cart-->
+        <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="clickOnMiniCart"/>
+        <actionGroup ref="AssertStorefrontMiniCartItemsActionGroup" stepKey="assertSimpleProductInMiniCart">
+            <argument name="productName" value="$$createProduct.name$$"/>
+            <argument name="productPrice" value="$$$createProduct.price$$"/>
+            <argument name="cartSubtotal" value="$$$createProduct.price$$" />
+            <argument name="qty" value="1"/>
+        </actionGroup>
+    </test>
+</tests>
