@@ -17,6 +17,9 @@
             <description value="User filters assets used in blocks"/>
             <severity value="CRITICAL"/>
             <group value="media_gallery_ui"/>
+            <skip>
+                <issueId value="DEPRECATED">Use AdminMediaGalleryAssertImageUsedInLinkBlocksGridTest instead</issueId>
+            </skip>
         </annotations>
         <before>
             <createData entity="_defaultBlock" stepKey="block" />
