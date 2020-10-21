@@ -17,7 +17,7 @@ use Magento\Framework\Filesystem\DriverInterface;
  *
  * Assumed that stat cache is cleanup by data modification methods
  *
- * @deprecated
+ * @deprecated moved most of the functionality back to File
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class StatefulFile implements DriverInterface
@@ -28,10 +28,14 @@ class StatefulFile implements DriverInterface
     protected $scheme = '';
 
     /**
-    * @var File
-    */
+     * @var File
+     */
     private $driverFile;
 
+    /**
+     * StatefulFile constructor.
+     * @param File $driverFile
+     */
     public function __construct(File $driverFile = null)
     {
         $this->driverFile = $driverFile ?? ObjectManager::getInstance()->create(
