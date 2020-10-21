@@ -32,6 +32,8 @@
         <actionGroup ref="StorefrontEnterProductQuantityAndAddToTheCartActionGroup" stepKey="enterProductQuantityAndAddToTheCart">
             <argument name="quantity" value="1"/>
         </actionGroup>
+        <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="clickOnMiniCart"/>
+        <see selector="{{StorefrontMinicartSection.productCountLabel}}" userInput="Item in Cart" stepKey="seeProductCountLabel"/>
         <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="openCheckoutPage"/>
         <waitForPageLoad stepKey="waitForBundleProductCreatePageToLoad"/>
         <see selector="{{CheckoutCartSummarySection.itemsInCartLabel}}" userInput="Item in Cart" stepKey="seeFirstProductInList"/>
@@ -41,6 +43,8 @@
         <actionGroup ref="StorefrontEnterProductQuantityAndAddToTheCartActionGroup" stepKey="enterProductQuantityAndAddToTheCartAgain">
             <argument name="quantity" value="4"/>
         </actionGroup>
+        <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="clickOnMiniCartAgain"/>
+        <see selector="{{StorefrontMinicartSection.productCountLabel}}" userInput="Items in Cart" stepKey="seeProductCountLabelAgain"/>
         <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="openCheckoutPageAgain"/>
         <waitForPageLoad stepKey="waitForBundleProductCreatePageToLoadAgain"/>
         <see selector="{{CheckoutCartSummarySection.itemsInCartLabel}}" userInput="Items in Cart" stepKey="seeFirstProductInListAgain"/>
