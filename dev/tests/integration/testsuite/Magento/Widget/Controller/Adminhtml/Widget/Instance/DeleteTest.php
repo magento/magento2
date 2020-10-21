@@ -10,6 +10,7 @@ namespace Magento\Widget\Controller\Adminhtml\Widget\Instance;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\Message\MessageInterface;
 use Magento\TestFramework\TestCase\AbstractBackendController;
+use Magento\Widget\Model\ResourceModel\Widget\Instance\Collection;
 use Magento\Widget\Model\ResourceModel\Widget\Instance\CollectionFactory;
 
 /**
@@ -21,8 +22,8 @@ use Magento\Widget\Model\ResourceModel\Widget\Instance\CollectionFactory;
  */
 class DeleteTest extends AbstractBackendController
 {
-    /** @var CollectionFactory */
-    private $collectionFactory;
+    /** @var Collection */
+    private $widgetCollection;
 
     /**
      * @inheritdoc
@@ -31,7 +32,7 @@ class DeleteTest extends AbstractBackendController
     {
         parent::setUp();
 
-        $this->collectionFactory = $this->_objectManager->get(CollectionFactory::class);
+        $this->widgetCollection = $this->_objectManager->get(CollectionFactory::class)->create();
     }
 
     /**
@@ -41,8 +42,7 @@ class DeleteTest extends AbstractBackendController
      */
     public function testDeleteWidget(): void
     {
-        $widget = $this->collectionFactory->create()
-            ->addFieldToFilter('title', 'New Sample widget title')->getFirstItem();
+        $widget = $this->widgetCollection->addFieldToFilter('title', 'New Sample widget title')->getFirstItem();
         $this->assertNotNull($widget->getInstanceId());
         $this->getRequest()->setMethod(Http::METHOD_POST);
         $this->getRequest()->setParams(['instance_id' => $widget->getInstanceId()]);
