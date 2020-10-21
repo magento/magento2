@@ -19,7 +19,7 @@ use Magento\Framework\Filesystem;
  * custom view models in block arguments in layout handle file.
  *
  * Example:
- * <block name="my.block" class="Magento\Backend\Block\Template" template="My_Module::template.phtml" >
+ * <block name="my.block" class="Magento\Framework\View\Element\Template" template="My_Module::template.phtml" >
  *      <arguments>
  *          <argument name="viewModel" xsi:type="object">My\Module\ViewModel\Custom</argument>
  *      </arguments>
