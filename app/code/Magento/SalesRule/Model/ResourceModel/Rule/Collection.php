@@ -30,6 +30,20 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
     protected $_associatedEntitiesMap;
 
     /**
+     * Event prefix
+     *
+     * @var string
+     */
+    protected $_eventPrefix = 'salesrule_rule_collection';
+
+    /**
+     * Event object
+     *
+     * @var string
+     */
+    protected $_eventObject = 'rule_collection';
+
+    /**
      * @var \Magento\SalesRule\Model\ResourceModel\Rule\DateApplier
      * @since 100.1.0
      */
