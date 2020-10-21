@@ -140,7 +140,7 @@ class Address extends AbstractAddress implements
 
     const ADDRESS_TYPE_SHIPPING = 'shipping';
     
-    const CACHED_ITEMS_ALL = 'cached_items_all';
+    private const CACHED_ITEMS_ALL = 'cached_items_all';
 
     /**
      * Prefix of model events
