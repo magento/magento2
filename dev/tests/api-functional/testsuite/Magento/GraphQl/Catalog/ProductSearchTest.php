@@ -1492,7 +1492,7 @@ QUERY;
                 $actualProducts[$linkProduct->getSku()] = $product->getName();
             }
         }
-        $expectedProducts = array_column($response['products']['items'],"name","sku");
+        $expectedProducts = array_column($response['products']['items'], "name", "sku");
         $this->assertEquals($expectedProducts, $actualProducts);
     }
 
