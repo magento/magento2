@@ -13,7 +13,7 @@
         <referenceBlock name="top.links">
             <block class="Magento\Wishlist\Block\Link" name="wish-list-link" after="my-account-link">
                 <arguments>
-                    <argument name="sortOrder" xsi:type="number">60</argument>
+                    <argument name="sortOrder" xsi:type="number">30</argument>
                 </arguments>
             </block>
         </referenceBlock>

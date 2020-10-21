@@ -8,10 +8,10 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceBlock name="top.links">
-            <block class="Magento\Customer\Block\Account\Link" name="my-account-link">
+            <block class="Magento\Customer\Block\Account\Link" name="my-account-link" template="Magento_Customer::account/link/my-account.phtml">
                 <arguments>
                     <argument name="label" xsi:type="string" translate="true">My Account</argument>
-                    <argument name="sortOrder" xsi:type="number">110</argument>
+                    <argument name="sortOrder" xsi:type="number">1</argument>
                 </arguments>
             </block>
             <block class="Magento\Customer\Block\Account\RegisterLink" name="register-link">
@@ -20,7 +20,11 @@
                 </arguments>
             </block>
             <block class="Magento\Customer\Block\Account\AuthorizationLink" name="authorization-link"
-                   template="Magento_Customer::account/link/authorization.phtml"/>
+                   template="Magento_Customer::account/link/authorization.phtml">
+                <arguments>
+                    <argument name="sortOrder" xsi:type="number">30</argument>
+                </arguments>
+            </block>
         </referenceBlock>
         <referenceContainer name="content">
             <block class="Magento\Customer\Block\Account\AuthenticationPopup" name="authentication-popup" as="authentication-popup" template="Magento_Customer::account/authentication-popup.phtml">
