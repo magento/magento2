@@ -12,6 +12,7 @@ use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Model\Category as CategoryModel;
 use Magento\Catalog\Model\ResourceModel\Category as CategoryResource;
 use Magento\Catalog\Model\ResourceModel\Category\Collection as CategoryCollection;
+use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
@@ -64,7 +65,7 @@ class CategoryTest extends TestCase
         $this->categoryRepository = $this->objectManager->get(CategoryRepositoryInterface::class);
         $this->categoryResource = $this->objectManager->get(CategoryResource::class);
         $this->storeManager = $this->objectManager->get(StoreManagerInterface::class);
-        $this->categoryCollection = $this->objectManager->get(CategoryCollection::class);
+        $this->categoryCollection = $this->objectManager->get(CategoryCollectionFactory::class)->create();
         $this->filesystem = $this->objectManager->get(Filesystem::class);
         $this->mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
     }
@@ -92,8 +93,8 @@ class CategoryTest extends TestCase
             'type' => 'image/jpg',
             'tmp_name' => '/tmp/phpDstnAx',
             'file' => 'magento_small_image.jpg',
+            'url' => $this->prepareDataImageUrl('magento_small_image.jpg'),
         ];
-        $this->prepareDataImageUrl($dataImage);
         $imageRelativePath = self::BASE_PATH . DIRECTORY_SEPARATOR . $dataImage['file'];
         $expectedImage = DIRECTORY_SEPARATOR . $this->storeManager->getStore()->getBaseMediaDir()
             . DIRECTORY_SEPARATOR . $imageRelativePath;
@@ -116,14 +117,14 @@ class CategoryTest extends TestCase
     }
 
     /**
-     * Add image url to image data
+     * Prepare image url for image data
      *
-     * @param array $dataImage
-     * @return void
+     * @param string $file
+     * @return string
      */
-    private function prepareDataImageUrl(array &$dataImage): void
+    private function prepareDataImageUrl(string $file): string
     {
-        $dataImage['url'] = $this->storeManager->getStore()->getBaseUrl(UrlInterface::URL_TYPE_MEDIA)
-            . self::BASE_TMP_PATH . DIRECTORY_SEPARATOR . $dataImage['file'];
+        return $this->storeManager->getStore()->getBaseUrl(UrlInterface::URL_TYPE_MEDIA)
+            . self::BASE_TMP_PATH . DIRECTORY_SEPARATOR . $file;
     }
 }
