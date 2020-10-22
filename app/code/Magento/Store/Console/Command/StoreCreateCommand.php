@@ -22,19 +22,10 @@ class StoreCreateCommand extends Command
     const INPUT_OPTION_GROUP = 'group_id';
 
     /**
-     * @var \Magento\Store\Model\WebsiteFactory
+     *
+     * @var \Magento\Store\Model\StoreCreateManagement
      */
-    private $websiteFactory;
-
-    /**
-     * @var \Magento\Store\Model\GroupFactory
-     */
-    private $groupFactory;
-
-    /**
-     * @var \Magento\Store\Model\StoreFactory
-     */
-    private $storeFactory;
+    private $storeCreateManagement;
 
     /**
      * @var \Magento\Framework\Filter\FilterManager
@@ -43,22 +34,16 @@ class StoreCreateCommand extends Command
 
     /**
      *
-     * @param \Magento\Store\Model\WebsiteFactory     $websiteFactory
-     * @param \Magento\Store\Model\GroupFactory       $groupFactory
-     * @param \Magento\Store\Model\StoreFactory       $storeFactory
+     * @param \Magento\Store\Model\StoreCreateManagement $storetoreCreateManagement
      * @param \Magento\Framework\Filter\FilterManager $filterManager
      * @param string                                  $name
      */
     public function __construct(
-        \Magento\Store\Model\WebsiteFactory $websiteFactory,
-        \Magento\Store\Model\GroupFactory $groupFactory,
-        \Magento\Store\Model\StoreFactory $storeFactory,
+        \Magento\Store\Model\StoreCreateManagement $storeCreateManagement,
         \Magento\Framework\Filter\FilterManager $filterManager,
         $name = null
     ) {
-        $this->websiteFactory = $websiteFactory;
-        $this->groupFactory = $groupFactory;
-        $this->storeFactory = $storeFactory;
+        $this->storeCreateManagement = $storeCreateManagement;
         $this->filterManager = $filterManager;
         parent::__construct($name);
     }
@@ -85,8 +70,7 @@ class StoreCreateCommand extends Command
                 0
             )
         ;
-        $groups = $this->getStoreGroups();
-        $defaultGroup = current($groups);
+        $defaultGroup = $this->storeCreateManagement->getDefaultGroupId();
 
         $this->addOption(
             self::INPUT_OPTION_GROUP,
@@ -108,8 +92,8 @@ class StoreCreateCommand extends Command
 
         try {
             $groupId = (int) $input->getOption(self::INPUT_OPTION_GROUP);
-            $storeViewName = $input->getArgument(self::INPUT_ARGUMENT_NAME);
-            $storeViewCode = $input->getArgument(self::INPUT_ARGUMENT_CODE);
+            $storeViewName = (string) $input->getArgument(self::INPUT_ARGUMENT_NAME);
+            $storeViewCode = (string) $input->getArgument(self::INPUT_ARGUMENT_CODE);
             $isActive = (bool) $input->getArgument(self::INPUT_ARGUMENT_IS_ACTIVE);
             $sortOrder = (int) $input->getArgument(self::INPUT_ARGUMENT_SORT_ORDER);
 
@@ -120,8 +104,6 @@ class StoreCreateCommand extends Command
                 self::INPUT_ARGUMENT_IS_ACTIVE  => $isActive,
                 self::INPUT_ARGUMENT_SORT_ORDER => $sortOrder
             ];
-            /** @var \Magento\Store\Model\Store $storeModel */
-            $storeModel = $this->storeFactory->create();
             $data[self::INPUT_ARGUMENT_NAME] = $this->filterManager->removeTags(
                 $data[self::INPUT_ARGUMENT_NAME]
             );
@@ -129,12 +111,8 @@ class StoreCreateCommand extends Command
                 $data[self::INPUT_ARGUMENT_CODE]
             );
 
-            $storeModel->setData($data);
-            $groupModel = $this->groupFactory->create()->load(
-                $storeModel->getGroupId()
-            );
-            $storeModel->setWebsiteId($groupModel->getWebsiteId());
-            $storeModel->save();
+            $this->storeCreateManagement->create($data);
+
             $io->success('You created the store view.');
 
             return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
@@ -146,26 +124,5 @@ class StoreCreateCommand extends Command
 
             return \Magento\Framework\Console\Cli::RETURN_FAILURE;
         }
-    }
-
-    /**
-     * Retrieve list of store groups
-     *
-     * @return array
-     */
-    private function getStoreGroups()
-    {
-        $websites = $this->websiteFactory->create()->getCollection();
-        $allgroups = $this->groupFactory->create()->getCollection();
-        $groups = [];
-        foreach ($websites as $website) {
-            foreach ($allgroups as $group) {
-                if ($group->getWebsiteId() == $website->getId()) {
-                    $groups[$group->getWebsiteId() . '-' . $group->getId()] = $group->getId();
-                }
-            }
-        }
-
-        return $groups;
     }
 }
