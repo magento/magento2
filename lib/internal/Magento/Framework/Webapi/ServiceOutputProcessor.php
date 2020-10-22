@@ -112,13 +112,13 @@ class ServiceOutputProcessor implements ServicePayloadConverterInterface
         if (is_array($data)) {
             $result = [];
             $arrayElementType = substr($type, 0, -2);
-            foreach ($data as $datum) {
+            foreach ($data as $key => $datum) {
                 if (is_object($datum)) {
                     $datum = $this->processDataObject(
                         $this->dataObjectProcessor->buildOutputDataArray($datum, $arrayElementType)
                     );
                 }
-                $result[] = $datum;
+                $result[$key] = $datum;
             }
             return $result;
         } elseif (is_object($data)) {
