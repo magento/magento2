@@ -107,7 +107,8 @@ class Collection extends AbstractCollection
                 ['tdv' => $this->_optionValueTable],
                 'tdv.option_id = main_table.option_id',
                 [
-                    'value' => 'tdv.value'
+                    'value' => 'tdv.value',
+                    'value_id' => 'tdv.value_id'
                 ]
             )->join(
                 ['ea' => $connection->getTableName('eav_attribute')],
