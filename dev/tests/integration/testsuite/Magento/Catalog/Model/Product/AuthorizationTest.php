@@ -19,6 +19,8 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Verify additional authorization for product operations
+ *
+ * @magentoAppArea adminhtml
  */
 class AuthorizationTest extends TestCase
 {
@@ -43,7 +45,7 @@ class AuthorizationTest extends TestCase
     private $productRepository;
 
     /**
-     * @inheridoc
+     * @inheritdoc
      */
     protected function setUp(): void
     {
@@ -103,7 +105,7 @@ class AuthorizationTest extends TestCase
                         'custom_design_to' => '1',
                         'custom_layout_update_file' => '1',
                     ],
-                ]
+                ],
             ],
             [
                 [
@@ -118,7 +120,7 @@ class AuthorizationTest extends TestCase
                         'custom_layout_update_file' => '__no_update__',
                     ],
                     'use_default' => null,
-                ]
+                ],
             ],
         ];
     }
@@ -130,7 +132,6 @@ class AuthorizationTest extends TestCase
      * @param array $data
      *
      * @dataProvider postRequestDataException
-     * @throws AuthorizationException
      */
     public function testAuthorizedSavingOfWithException(array $data): void
     {
