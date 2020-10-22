@@ -106,6 +106,7 @@ class PhpRule implements RuleInterface
      * @param array $pluginMap
      * @param array $whitelists
      * @param ClassScanner|null $classScanner
+     * @param RouteMapper|null $routeMapper
      */
     public function __construct(
         array $mapRouters,
@@ -113,15 +114,16 @@ class PhpRule implements RuleInterface
         ConfigReader $configReader,
         array $pluginMap = [],
         array $whitelists = [],
-        ClassScanner $classScanner = null
+        ClassScanner $classScanner = null,
+        RouteMapper $routeMapper = null
     ) {
         $this->_mapRouters = $mapRouters;
         $this->_mapLayoutBlocks = $mapLayoutBlocks;
         $this->configReader = $configReader;
         $this->pluginMap = $pluginMap ?: null;
-        $this->routeMapper = new RouteMapper();
         $this->whitelists = $whitelists;
         $this->classScanner = $classScanner ?? new ClassScanner();
+        $this->routeMapper = $routeMapper ?? new RouteMapper();
     }
 
     /**
@@ -388,9 +390,9 @@ class PhpRule implements RuleInterface
         }
 
         return $this->routeMapper->getDependencyByRoutePath(
-            $routeId,
-            $controllerName,
-            $actionName
+            strtolower($routeId),
+            strtolower($controllerName),
+            strtolower($actionName)
         );
     }
 
