@@ -455,7 +455,7 @@
             <resource>Magento_Config::web</resource>
             <group id="url" translate="label" type="text" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Url Options</label>
-                <field id="use_store" translate="label comment" type="select" sortOrder="10" showInDefault="1" canRestore="1">
+                <field id="use_store" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" canRestore="1">
                     <label>Add Store Code to Urls</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <backend_model>Magento\Config\Model\Config\Backend\Store</backend_model>
