@@ -6,18 +6,12 @@
  */
 namespace Magento\Theme\Controller\Adminhtml\System\Design\Theme;
 
-use Magento\Backend\App\Action\Context;
 use Magento\Framework\App\Action\HttpGetActionInterface;
-use Magento\Framework\App\Response\Http\FileFactory;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Escaper;
-use Magento\Framework\Filesystem;
-use Magento\Framework\Registry;
-use Magento\Framework\Url\DecoderInterface;
-use Magento\Framework\View\Asset\Repository;
-use Magento\Framework\View\Design\ThemeInterface;
 use Magento\Theme\Controller\Adminhtml\System\Design\Theme;
+use Magento\Framework\Url\DecoderInterface;
+use Magento\Framework\View\Design\ThemeInterface;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -28,32 +22,6 @@ use Psr\Log\LoggerInterface;
  */
 class DownloadCss extends Theme implements HttpGetActionInterface
 {
-    /**
-     * @var Escaper
-     */
-    private $escaper;
-
-    /**
-     * DownloadCss constructor.
-     * @param Context $context
-     * @param Registry $coreRegistry
-     * @param FileFactory $fileFactory
-     * @param Repository $assetRepo
-     * @param Filesystem $appFileSystem
-     * @param Escaper|null $escaper
-     */
-    public function __construct(
-        Context $context,
-        Registry $coreRegistry,
-        FileFactory $fileFactory,
-        Repository $assetRepo,
-        Filesystem $appFileSystem,
-        Escaper $escaper = null
-    ) {
-        $this->escaper = $escaper ?? $context->getObjectManager()->get(Escaper::class);
-        parent::__construct($context, $coreRegistry, $fileFactory, $assetRepo, $appFileSystem);
-    }
-
     /**
      * Download css file
      *
@@ -86,11 +54,11 @@ class DownloadCss extends Theme implements HttpGetActionInterface
                 DirectoryList::ROOT
             );
         } catch (\InvalidArgumentException $e) {
-            $this->messageManager->addException($e, __('Theme not found: "%1".', $this->escaper->escapeHtml($themeId)));
+            $this->messageManager->addException($e, sprintf('Theme not found: "%d".', $themeId));
             $this->getResponse()->setRedirect($this->_redirect->getRefererUrl());
             $this->_objectManager->get(LoggerInterface::class)->critical($e);
         } catch (\Exception $e) {
-            $this->messageManager->addException($e, __('File not found: "%1".', $this->escaper->escapeHtml($fileId)));
+            $this->messageManager->addException($e, sprintf('File not found: "%d".', $fileId));
             $this->getResponse()->setRedirect($this->_redirect->getRefererUrl());
             $this->_objectManager->get(LoggerInterface::class)->critical($e);
         }
