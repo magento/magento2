@@ -13,8 +13,10 @@
             <description>Fill widget main fields and widget layout by index for anchor categories DisplayOn option</description>
         </annotations>
         <selectOption selector="{{AdminNewWidgetSection.specificEntitySelectContainer}}" userInput="{{widget.container}}" stepKey="setContainer"/>
-        <click selector="{{AdminNewWidgetSection.specificEntitySelectRadio}}" stepKey="clickSpecificEntityRadio" after="waitForPageLoad"/>
-        <click selector="{{AdminNewWidgetSection.specificEntityOptionsChooser}}" stepKey="clickChooserTrigger" after="clickSpecificEntityRadio"/>
+        <seeElement selector="{{AdminNewWidgetSection.specificEntitySelectRadio}}" stepKey="seeSpecificEntityRadio" after="waitForPageLoad"/>
+        <click selector="{{AdminNewWidgetSection.specificEntitySelectRadio}}" stepKey="clickSpecificEntityRadio" after="seeSpecificEntityRadio"/>
+        <seeElement selector="{{AdminNewWidgetSection.specificEntityOptionsChooser}}" stepKey="seeChooserTrigger" after="clickSpecificEntityRadio"/>
+        <click selector="{{AdminNewWidgetSection.specificEntityOptionsChooser}}" stepKey="clickChooserTrigger" after="seeChooserTrigger"/>
         <waitForAjaxLoad stepKey="waitForAjaxCategoryLoad" after="clickChooserTrigger"/>
     </actionGroup>
 </actionGroups>
