@@ -5,13 +5,22 @@
  */
 declare(strict_types=1);
 
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Sales\Api\Data\OrderInterfaceFactory;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Item as OrderItem;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-require __DIR__ . '/../../../Magento/Sales/_files/order.php';
-/** @var \Magento\Catalog\Model\Product $product */
+Resolver::getInstance()->requireDataFixture('Magento/Sales/_files/order.php');
 
+$objectManager = Bootstrap::getObjectManager();
+/** @var ProductRepositoryInterface $productRepository */
+$productRepository = $objectManager->create(ProductRepositoryInterface::class);
+$product = $productRepository->get('simple');
+/** @var Order $order */
+$order = $objectManager->get(OrderInterfaceFactory::class)->create()->loadByIncrementId('100000001');
 /** @var OrderItem $orderItem */
 $orderItem = $objectManager->create(OrderItem::class);
 $orderItem->setProductId($product->getId())

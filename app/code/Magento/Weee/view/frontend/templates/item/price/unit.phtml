@@ -4,33 +4,37 @@
  * See COPYING.txt for license details.
  */
 
-// phpcs:disable Magento2.Templates.ThisInTemplate
+/**
+ * @var $block \Magento\Weee\Block\Item\Price\Renderer
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ */
 
-/** @var $block \Magento\Weee\Block\Item\Price\Renderer */
+/** @var \Magento\Weee\Helper\Data $weeeHelper */
+$weeeHelper = $block->getData('weeeHelper');
 
 $item = $block->getItem();
 ?>
-<?php if ($block->displayPriceInclTax() || $block->displayBothPrices()) : ?>
+<?php if ($block->displayPriceInclTax() || $block->displayBothPrices()): ?>
     <span class="price-including-tax" data-label="<?= $block->escapeHtmlAttr(__('Incl. Tax')) ?>">
-        <?php if ($block->displayPriceWithWeeeDetails()) : ?>
+        <?php if ($block->displayPriceWithWeeeDetails()): ?>
             <span class="cart-tax-total"
                 data-mage-init='{"taxToggle": {"itemTaxId" : "#unit-item-tax-details<?= (int) $item->getId() ?>"}}'>
-        <?php else : ?>
+        <?php else: ?>
             <span class="cart-price">
         <?php endif; ?>
             <?= /* @noEscape */ $block->formatPrice($block->getUnitDisplayPriceInclTax()) ?>
             </span>
 
-        <?php if ($this->helper(\Magento\Weee\Helper\Data::class)->getApplied($item)) : ?>
-            <span class="cart-tax-info" id="unit-item-tax-details<?= (int) $item->getId() ?>" style="display: none;">
-                <?php foreach ($this->helper(\Magento\Weee\Helper\Data::class)->getApplied($item) as $tax) : ?>
+        <?php if ($weeeHelper->getApplied($item)): ?>
+            <span class="cart-tax-info no-display" id="unit-item-tax-details<?= (int) $item->getId() ?>">
+                <?php foreach ($weeeHelper->getApplied($item) as $tax): ?>
                     <span class="weee" data-label="<?= $block->escapeHtmlAttr($tax['title']) ?>">
                         <?= /* @noEscape */ $block->formatPrice($tax['amount_incl_tax'], true, true) ?>
                     </span>
                 <?php endforeach; ?>
             </span>
 
-            <?php if ($block->displayFinalPrice()) : ?>
+            <?php if ($block->displayFinalPrice()): ?>
                 <span class="cart-tax-total"
                     data-mage-init='{"taxToggle": {"itemTaxId" : "#unit-item-tax-details<?= (int) $item->getId() ?>"}}'>
                     <span class="weee" data-label="<?= $block->escapeHtmlAttr(__('Total Incl. Tax')) ?>">
@@ -42,30 +46,28 @@ $item = $block->getItem();
     </span>
 <?php endif; ?>
 
-<?php if ($block->displayPriceExclTax() || $block->displayBothPrices()) : ?>
+<?php if ($block->displayPriceExclTax() || $block->displayBothPrices()): ?>
     <span class="price-excluding-tax" data-label="<?= $block->escapeHtmlAttr(__('Excl. Tax')) ?>">
-        <?php if ($block->displayPriceWithWeeeDetails()) : ?>
+        <?php if ($block->displayPriceWithWeeeDetails()): ?>
             <span class="cart-tax-total"
                 data-mage-init='{"taxToggle": {"itemTaxId" : "#eunit-item-tax-details<?= (int) $item->getId() ?>"}}'>
-        <?php else : ?>
+        <?php else: ?>
             <span class="cart-price">
         <?php endif; ?>
                 <?= /* @noEscape */ $block->formatPrice($block->getUnitDisplayPriceExclTax()) ?>
             </span>
 
-        <?php if ($this->helper(\Magento\Weee\Helper\Data::class)->getApplied($item)) : ?>
-            <span class="cart-tax-info" id="eunit-item-tax-details<?= (int) $item->getId() ?>"
-                style="display: none;">
-                <?php foreach ($this->helper(\Magento\Weee\Helper\Data::class)->getApplied($item) as $tax) : ?>
+        <?php if ($weeeHelper->getApplied($item)): ?>
+            <span class="cart-tax-info no-display" id="eunit-item-tax-details<?= (int) $item->getId() ?>">
+                <?php foreach ($weeeHelper->getApplied($item) as $tax): ?>
                     <span class="weee" data-label="<?= $block->escapeHtmlAttr($tax['title']) ?>">
                         <?= /* @noEscape */ $block->formatPrice($tax['amount'], true, true) ?>
                     </span>
                 <?php endforeach; ?>
             </span>
-
-            <?php if ($block->displayFinalPrice()) : ?>
+            <?php if ($block->displayFinalPrice()): ?>
                 <span class="cart-tax-total"
-                      data-mage-init='{"taxToggle": {"itemTaxId" : "#eunit-item-tax-details<?= (int) $item->getId() ?>"}}'>
+                      data-mage-init='{"taxToggle": {"itemTaxId" : "#eunit-item-tax-details<?=(int)$item->getId()?>"}}'>
                     <span class="weee" data-label="<?= $block->escapeHtmlAttr(__('Total')) ?>">
                         <?= /* @noEscape */ $block->formatPrice($block->getFinalUnitDisplayPriceExclTax()) ?>
                     </span>

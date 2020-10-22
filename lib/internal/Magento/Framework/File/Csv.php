@@ -130,7 +130,7 @@ class Csv
      * @param array $data
      * @return $this
      * @throws \Magento\Framework\Exception\FileSystemException
-     * @deprecated
+     * @deprecated 102.0.0
      * @see appendData
      */
     public function saveData($file, $data)

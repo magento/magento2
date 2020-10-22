@@ -32,6 +32,6 @@
         <waitForElementVisible selector="{{AdminUrlRewriteEditSection.okButton}}" stepKey="waitForOkButtonToVisible"/>
         <click selector="{{AdminUrlRewriteEditSection.okButton}}" stepKey="clickOnOkButton"/>
         <waitForPageLoad stepKey="waitForPageToLoad3"/>
-        <see selector="{{AdminMessagesSection.successMessage}}" userInput="You deleted the URL rewrite." stepKey="seeSuccessMessage"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You deleted the URL rewrite." stepKey="seeSuccessMessage"/>
     </actionGroup>
 </actionGroups>

@@ -32,7 +32,7 @@ class ProductTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->wishlistCleaner = $this->createMock(WishlistCleaner::class);
         $this->model = new Plugin($this->wishlistCleaner);
@@ -45,7 +45,7 @@ class ProductTest extends TestCase
      */
     public function testExecute()
     {
-        $product = $this->createMock(ProductInterface::class);
+        $product = $this->getMockForAbstractClass(ProductInterface::class);
         $productResourceModel = $this->createMock(ProductResourceModel::class);
         $this->wishlistCleaner->expects($this->once())->method('execute')->with($product);
         $this->model->beforeDelete($productResourceModel, $product);

@@ -16,7 +16,6 @@ use Magento\AdminNotification\Model\Inbox;
 use Magento\Backend\Block\Context;
 use Magento\Backend\Block\Widget\Grid\Column;
 use Magento\Framework\DataObject;
-use Magento\Framework\Escaper;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -29,15 +28,15 @@ class SeverityTest extends TestCase
      */
     private $sut;
 
-    protected function setUp() : void
+    protected function setUp(): void
     {
         parent::setUp();
 
         /** @var Inbox|MockObject $inboxMock */
-        $inboxMock = $this->getMockBuilder(Inbox::class)->disableOriginalConstructor()->getMock();
+        $inboxMock = $this->createMock(Inbox::class);
 
         /** @var Context|MockObject $contextMock */
-        $contextMock = $this->getMockBuilder(Context::class)->disableOriginalConstructor()->getMock();
+        $contextMock = $this->createMock(Context::class);
 
         $this->sut = new Severity($contextMock, $inboxMock);
     }

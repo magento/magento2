@@ -12,6 +12,7 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\CatalogCustomerGraphQl\Model\Resolver\Product\Price\Tiers;
 use Magento\CatalogCustomerGraphQl\Model\Resolver\Product\Price\TiersFactory;
 use Magento\CatalogCustomerGraphQl\Model\Resolver\Customer\GetCustomerGroup;
@@ -61,24 +62,32 @@ class PriceTiers implements ResolverInterface
     private $priceProviderPool;
 
     /**
+     * @var PriceCurrencyInterface
+     */
+    private $priceCurrency;
+
+    /**
      * @param ValueFactory $valueFactory
      * @param TiersFactory $tiersFactory
      * @param GetCustomerGroup $getCustomerGroup
      * @param Discount $discount
      * @param PriceProviderPool $priceProviderPool
+     * @param PriceCurrencyInterface $priceCurrency
      */
     public function __construct(
         ValueFactory $valueFactory,
         TiersFactory $tiersFactory,
         GetCustomerGroup $getCustomerGroup,
         Discount $discount,
-        PriceProviderPool $priceProviderPool
+        PriceProviderPool $priceProviderPool,
+        PriceCurrencyInterface $priceCurrency
     ) {
         $this->valueFactory = $valueFactory;
         $this->tiersFactory = $tiersFactory;
         $this->getCustomerGroup = $getCustomerGroup;
         $this->discount = $discount;
         $this->priceProviderPool = $priceProviderPool;
+        $this->priceCurrency = $priceCurrency;
     }
 
     /**
@@ -101,6 +110,11 @@ class PriceTiers implements ResolverInterface
         }
 
         $product = $value['model'];
+
+        if ($product->hasData('can_show_price') && $product->getData('can_show_price') === false) {
+            return [];
+        }
+
         $productId = $product->getId();
         $this->tiers->addProductFilter($productId);
 
@@ -130,6 +144,7 @@ class PriceTiers implements ResolverInterface
         $tiers = [];
 
         foreach ($tierPrices as $tierPrice) {
+            $tierPrice->setValue($this->priceCurrency->convertAndRound($tierPrice->getValue()));
             $percentValue = $tierPrice->getExtensionAttributes()->getPercentageValue();
             if ($percentValue && is_numeric($percentValue)) {
                 $discount = $this->discount->getDiscountByPercent($productPrice, (float)$percentValue);

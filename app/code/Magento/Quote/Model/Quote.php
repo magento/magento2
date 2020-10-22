@@ -10,6 +10,7 @@ use Magento\Customer\Api\Data\GroupInterface;
 use Magento\Directory\Model\AllowedCountries;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Model\AbstractExtensibleModel;
 use Magento\Quote\Api\Data\PaymentInterface;
 use Magento\Quote\Model\Quote\Address;
@@ -873,7 +874,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      * Loading quote data by customer
      *
      * @param \Magento\Customer\Model\Customer|int $customer
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      * @return $this
      */
     public function loadByCustomer($customer)
@@ -1104,7 +1105,22 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         //if (!$this->getData('customer_group_id') && !$this->getData('customer_tax_class_id')) {
         $groupId = $this->getCustomerGroupId();
         if ($groupId !== null) {
-            $taxClassId = $this->groupRepository->getById($this->getCustomerGroupId())->getTaxClassId();
+            $taxClassId = null;
+            try {
+                $taxClassId = $this->groupRepository->getById($this->getCustomerGroupId())->getTaxClassId();
+            } catch (NoSuchEntityException $e) {
+                /**
+                 * A customer MAY create a quote and AFTER that customer group MAY be deleted.
+                 * That breaks a quote because it still refers no a non-existent customer group.
+                 * In such a case we should load a new customer group id from the current customer
+                 * object and use it to retrieve tax class and update quote.
+                 */
+                $groupId = $this->getCustomer()->getGroupId();
+                $this->setCustomerGroupId($groupId);
+                if ($groupId !== null) {
+                    $taxClassId = $this->groupRepository->getById($groupId)->getTaxClassId();
+                }
+            }
             $this->setCustomerTaxClassId($taxClassId);
         }
 
