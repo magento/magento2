@@ -116,7 +116,7 @@ class Write extends Read implements WriteInterface
         }
         $absolutePath = $this->driver->getAbsolutePath($this->path, $path);
         $absoluteNewPath = $targetDirectory->getAbsolutePath($newPath);
-        return $this->driver->rename($absolutePath, $absoluteNewPath, $targetDirectory->driver);
+        return $this->driver->rename($absolutePath, $absoluteNewPath, $targetDirectory->getDriver());
     }
 
     /**

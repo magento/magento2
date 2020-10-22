@@ -9,7 +9,8 @@
         "magento/module-backend": "*",
         "magento/module-sitemap": "*",
         "magento/module-cms": "*",
-        "magento/module-downloadable": "*"
+        "magento/module-downloadable": "*",
+        "magento/module-media-storage": "*"
     },
     "type": "magento2-module",
     "license": [

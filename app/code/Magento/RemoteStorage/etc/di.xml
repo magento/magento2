@@ -74,6 +74,9 @@
             <argument name="filesystem" xsi:type="object">fullRemoteFilesystem</argument>
         </arguments>
     </type>
+    <type name="Magento\MediaStorage\Model\File\Storage\Synchronization">
+        <plugin name="remote_media" type="Magento\RemoteStorage\Plugin\MediaStorage" />
+    </type>
     <type name="Magento\Framework\Data\Collection\Filesystem">
         <arguments>
             <argument name="filesystem" xsi:type="object">fullRemoteFilesystem</argument>

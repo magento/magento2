@@ -106,14 +106,44 @@ class AwsS3Test extends TestCase
                 self::URL . 'test/test.png'
             ],
             [
+                self::URL,
+                self::URL . 'media/catalog/test.png',
+                self::URL . 'media/catalog/test.png'
+            ],
+            [
+                '',
+                self::URL . 'media/catalog/test.png',
+                self::URL . 'media/catalog/test.png'
+            ],
+            [
                 self::URL . 'test/',
                 'test.txt',
                 self::URL . 'test/test.txt'
             ],
             [
                 self::URL . 'media/',
+                'media/image.jpg',
+                self::URL . 'media/image.jpg'
+            ],
+            [
+                self::URL . 'media/',
                 '/catalog/test.png',
                 self::URL . 'media/catalog/test.png'
+            ],
+            [
+                self::URL,
+                'var/import/images',
+                self::URL . 'var/import/images'
+            ],
+            [
+                self::URL . 'export/',
+                null,
+                self::URL . 'export/'
+            ],
+            [
+                self::URL . 'var/import/images/product_images/',
+                self::URL . 'var/import/images/product_images/1.png',
+                self::URL . 'var/import/images/product_images/1.png'
             ],
             [
                 '',

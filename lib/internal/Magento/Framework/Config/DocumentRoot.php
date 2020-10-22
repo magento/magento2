@@ -10,7 +10,7 @@ use Magento\Framework\App\DeploymentConfig;
 
 /**
  * Document root detector.
- *
+ * @deprecared Magento always uses the pub directory
  * @api
  */
 class DocumentRoot
@@ -35,7 +35,7 @@ class DocumentRoot
      */
     public function getPath(): string
     {
-        return $this->isPub() ? DirectoryList::PUB : DirectoryList::ROOT;
+        return DirectoryList::PUB;
     }
 
     /**
@@ -45,6 +45,6 @@ class DocumentRoot
      */
     public function isPub(): bool
     {
-        return (bool)$this->config->get(ConfigOptionsListConstants::CONFIG_PATH_DOCUMENT_ROOT_IS_PUB);
+        return true;
     }
 }

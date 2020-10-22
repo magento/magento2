@@ -9,6 +9,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Config\DocumentRoot;
 use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\TargetDirectory;
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\Filesystem\DriverPool;
@@ -46,8 +47,7 @@ class Uploader
 
     /**
      * Upload type. Used to right handle $_FILES array.
-     *
-     * @var \Magento\Framework\File\Uploader::SINGLE_STYLE|\Magento\Framework\File\Uploader::MULTIPLE_STYLE
+     * @var Uploader::SINGLE_STYLE|\Magento\Framework\File\Uploader::MULTIPLE_STYLE
      * @access protected
      */
     protected $_uploadType;
@@ -212,7 +212,7 @@ class Uploader
         TargetDirectory $targetDirectory = null,
         DocumentRoot $documentRoot = null
     ) {
-        $this->directoryList= $directoryList ?: ObjectManager::getInstance()->get(DirectoryList::class);
+        $this->directoryList = $directoryList ?: ObjectManager::getInstance()->get(DirectoryList::class);
 
         $this->_setUploadFileId($fileId);
         if (!file_exists($this->_file['tmp_name'])) {
@@ -741,7 +741,7 @@ class Uploader
      * Create destination folder
      *
      * @param string $destinationFolder
-     * @return \Magento\Framework\File\Uploader
+     * @return Uploader
      * @throws FileSystemException
      */
     private function createDestinationFolder(string $destinationFolder)
@@ -774,20 +774,24 @@ class Uploader
      */
     public static function getNewFileName($destinationFile)
     {
+        /** @var Filesystem $fileSystem */
+        $fileSystem = ObjectManager::getInstance()->get(Filesystem::class);
+        $local = $fileSystem->getDirectoryRead(DirectoryList::ROOT);
+        /** @var TargetDirectory $targetDirectory */
+        $targetDirectory = ObjectManager::getInstance()->get(TargetDirectory::class);
+        $remote = $targetDirectory->getDirectoryRead(DirectoryList::ROOT);
+
+        $fileExists = function ($path) use ($local, $remote) {
+            return $local->isExist($path) || $remote->isExist($path);
+        };
+
         $fileInfo = pathinfo($destinationFile);
-        if (file_exists($destinationFile)) {
-            $index = 1;
-            $baseName = $fileInfo['filename'] . '.' . $fileInfo['extension'];
-            while (file_exists($fileInfo['dirname'] . '/' . $baseName)) {
-                $baseName = $fileInfo['filename'] . '_' . $index . '.' . $fileInfo['extension'];
-                $index++;
-            }
-            $destFileName = $baseName;
-        } else {
-            return $fileInfo['basename'];
+        $index = 1;
+        while ($fileExists($fileInfo['dirname'] . '/' . $fileInfo['basename'])) {
+            $fileInfo['basename'] = $fileInfo['filename'] . '_' . $index++ . '.' . $fileInfo['extension'];
         }
 
-        return $destFileName;
+        return $fileInfo['basename'];
     }
 
     /**

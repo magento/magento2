@@ -37,7 +37,7 @@ class ImagesGenerator
     /**
      * Generates image from $data and puts its to /tmp folder
      *
-     * @param string $config
+     * @param array $config
      * @return string $imagePath
      */
     public function generate($config)

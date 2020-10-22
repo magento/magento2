@@ -217,7 +217,7 @@ class DefaultTest extends TestCase
     {
         $this->assertEquals(
             $this->_object->getImgSrc(),
-            'http://localhost/pub/media/captcha/base/' . $this->_object->getId() . '.png'
+            'http://localhost/media/captcha/base/' . $this->_object->getId() . '.png'
         );
     }
 
@@ -310,7 +310,7 @@ class DefaultTest extends TestCase
         )->method(
             'getImgUrl'
         )->willReturn(
-            'http://localhost/pub/media/captcha/base/'
+            'http://localhost/media/captcha/base/'
         );
 
         return $helper;
@@ -365,7 +365,7 @@ class DefaultTest extends TestCase
             ->onlyMethods(['getBaseUrl'])
             ->disableOriginalConstructor()
             ->getMock();
-        $store->expects($this->any())->method('getBaseUrl')->willReturn('http://localhost/pub/media/');
+        $store->expects($this->any())->method('getBaseUrl')->willReturn('http://localhost/media/');
         $store->expects($this->any())->method('isAdmin')->willReturn(false);
         return $store;
     }

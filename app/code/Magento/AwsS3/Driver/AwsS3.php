@@ -11,6 +11,7 @@ use League\Flysystem\AwsS3v3\AwsS3Adapter;
 use League\Flysystem\Config;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem\DriverInterface;
+use Magento\Framework\Phrase;
 
 /**
  * Driver for AWS S3 IO operations.
@@ -232,14 +233,14 @@ class AwsS3 implements DriverInterface
      */
     public function getAbsolutePath($basePath, $path, $scheme = null)
     {
+        $basePath = $this->normalizeRelativePath((string)$basePath);
+        $path = $this->normalizeRelativePath((string)$path);
         if ($basePath && $path && 0 === strpos($path, $basePath)) {
-            return $this->normalizeAbsolutePath(
-                $this->normalizeRelativePath($path)
-            );
+            return $this->normalizeAbsolutePath($path);
         }
 
         if ($basePath && $basePath !== '/') {
-            return $basePath . ltrim((string)$path, '/');
+            $path = $basePath . ltrim((string)$path, '/');
         }
 
         return $this->normalizeAbsolutePath($path);
@@ -328,7 +329,10 @@ class AwsS3 implements DriverInterface
 
         $path = rtrim($path, '/') . '/';
 
-        return $this->adapter->has($path) && $this->adapter->getMetadata($path)['type'] === self::TYPE_DIR;
+        if ($this->adapter->has($path) && ($meta = $this->adapter->getMetadata($path))) {
+            return ($meta['type'] ?? null) === self::TYPE_DIR;
+        }
+        return false;
     }
 
     /**
@@ -383,7 +387,7 @@ class AwsS3 implements DriverInterface
         $metaInfo = $this->adapter->getMetadata($path);
 
         if (!$metaInfo) {
-            throw new FileSystemException(__('Cannot gather stats! %1', (array)$path));
+            throw new FileSystemException(__('Cannot gather stats! %1', [$this->getWarningMessage()]));
         }
 
         return [
@@ -486,7 +490,16 @@ class AwsS3 implements DriverInterface
      */
     public function fileReadLine($resource, $length, $ending = null): string
     {
-        throw new FileSystemException(__('Method %1 is not supported', __METHOD__));
+        // phpcs:disable
+        $result = @stream_get_line($resource, $length, $ending);
+        // phpcs:enable
+        if (false === $result) {
+            throw new FileSystemException(
+                new Phrase('File cannot be read %1', [$this->getWarningMessage()])
+            );
+        }
+
+        return $result;
     }
 
     /**
@@ -521,7 +534,13 @@ class AwsS3 implements DriverInterface
      */
     public function fileTell($resource): int
     {
-        throw new FileSystemException(__('Method %1 is not supported', __METHOD__));
+        $result = @ftell($resource);
+        if ($result === null) {
+            throw new FileSystemException(
+                new Phrase('An error occurred during "%1" execution.', [$this->getWarningMessage()])
+            );
+        }
+        return $result;
     }
 
     /**
@@ -529,7 +548,16 @@ class AwsS3 implements DriverInterface
      */
     public function fileSeek($resource, $offset, $whence = SEEK_SET): int
     {
-        throw new FileSystemException(__('Method %1 is not supported', __METHOD__));
+        $result = @fseek($resource, $offset, $whence);
+        if ($result === -1) {
+            throw new FileSystemException(
+                new Phrase(
+                    'An error occurred during "%1" fileSeek execution.',
+                    [$this->getWarningMessage()]
+                )
+            );
+        }
+        return $result;
     }
 
     /**
@@ -537,7 +565,7 @@ class AwsS3 implements DriverInterface
      */
     public function endOfFile($resource): bool
     {
-        throw new FileSystemException(__('Method %1 is not supported', __METHOD__));
+        return feof($resource);
     }
 
     /**
@@ -554,7 +582,16 @@ class AwsS3 implements DriverInterface
      */
     public function fileFlush($resource): bool
     {
-        throw new FileSystemException(__('Method %1 is not supported', __METHOD__));
+        $result = @fflush($resource);
+        if (!$result) {
+            throw new FileSystemException(
+                new Phrase(
+                    'An error occurred during "%1" fileFlush execution.',
+                    [$this->getWarningMessage()]
+                )
+            );
+        }
+        return $result;
     }
 
     /**
@@ -562,7 +599,16 @@ class AwsS3 implements DriverInterface
      */
     public function fileLock($resource, $lockMode = LOCK_EX): bool
     {
-        throw new FileSystemException(__('Method %1 is not supported', __METHOD__));
+        $result = @flock($resource, $lockMode);
+        if (!$result) {
+            throw new FileSystemException(
+                new Phrase(
+                    'An error occurred during "%1" fileLock execution.',
+                    [$this->getWarningMessage()]
+                )
+            );
+        }
+        return $result;
     }
 
     /**
@@ -570,7 +616,16 @@ class AwsS3 implements DriverInterface
      */
     public function fileUnlock($resource): bool
     {
-        throw new FileSystemException(__('Method %1 is not supported', __METHOD__));
+        $result = @flock($resource, LOCK_UN);
+        if (!$result) {
+            throw new FileSystemException(
+                new Phrase(
+                    'An error occurred during "%1" fileUnlock execution.',
+                    [$this->getWarningMessage()]
+                )
+            );
+        }
+        return $result;
     }
 
     /**
@@ -627,15 +682,11 @@ class AwsS3 implements DriverInterface
         if (!isset($this->streams[$path])) {
             $this->streams[$path] = tmpfile();
             if ($this->adapter->has($path)) {
-                $file = tmpfile();
                 //phpcs:ignore Magento2.Functions.DiscouragedFunction
-                fwrite($file, $this->adapter->read($path)['contents']);
+                fwrite($this->streams[$path], $this->adapter->read($path)['contents']);
                 //phpcs:ignore Magento2.Functions.DiscouragedFunction
-                fseek($file, 0);
-            } else {
-                $file = tmpfile();
+                rewind($this->streams[$path]);
             }
-            $this->streams[$path] = $file;
         }
 
         return $this->streams[$path];

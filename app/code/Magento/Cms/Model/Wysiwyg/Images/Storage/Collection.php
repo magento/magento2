@@ -30,7 +30,7 @@ class Collection extends \Magento\Framework\Data\Collection\Filesystem
         \Magento\Framework\Filesystem $filesystem
     ) {
         $this->_filesystem = $filesystem;
-        parent::__construct($entityFactory);
+        parent::__construct($entityFactory, $filesystem);
     }
 
     /**

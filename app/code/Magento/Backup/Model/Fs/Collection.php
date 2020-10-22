@@ -6,8 +6,6 @@
 namespace Magento\Backup\Model\Fs;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Config\DocumentRoot;
-use Magento\Framework\Filesystem\Directory\TargetDirectory;
 
 /**
  * Backup data collection
@@ -52,20 +50,16 @@ class Collection extends \Magento\Framework\Data\Collection\Filesystem
      * @param \Magento\Backup\Helper\Data $backupData
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Backup\Model\Backup $backup
-     * @param TargetDirectory|null $targetDirectory
-     * @param DocumentRoot|null $documentRoot
      * @throws \Magento\Framework\Exception\FileSystemException
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
         \Magento\Backup\Helper\Data $backupData,
         \Magento\Framework\Filesystem $filesystem,
-        \Magento\Backup\Model\Backup $backup,
-        TargetDirectory $targetDirectory = null,
-        DocumentRoot $documentRoot = null
+        \Magento\Backup\Model\Backup $backup
     ) {
         $this->_backupData = $backupData;
-        parent::__construct($entityFactory, $targetDirectory, $documentRoot);
+        parent::__construct($entityFactory, $filesystem);
 
         $this->_filesystem = $filesystem;
         $this->_backup = $backup;
