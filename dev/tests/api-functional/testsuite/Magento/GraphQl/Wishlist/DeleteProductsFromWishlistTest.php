@@ -56,6 +56,34 @@ class DeleteProductsFromWishlistTest extends GraphQlAbstract
     }
 
     /**
+     * Test deleting the wishlist item of another customer
+     *
+     * @magentoConfigFixture default_store wishlist/general/active 1
+     * @magentoApiDataFixture Magento/Wishlist/_files/two_wishlists_for_two_diff_customers.php
+     */
+    public function testUnauthorizedWishlistItemDelete()
+    {
+        $wishlist = $this->getWishlist();
+        $wishlistItem = $wishlist['customer']['wishlist']['items_v2'][0];
+        $wishlist2 = $this->getWishlist('customer_two@example.com');
+        $wishlist2Id = $wishlist2['customer']['wishlist']['id'];
+        $query = $this->getQuery((int) $wishlist2Id, (int) $wishlistItem['id']);
+        $response = $this->graphQlMutation(
+            $query,
+            [],
+            '',
+            $this->getHeaderMap('customer_two@example.com')
+        );
+        self::assertEquals(1, $response['removeProductsFromWishlist']['wishlist']['items_count']);
+        self::assertNotEmpty($response['removeProductsFromWishlist']['wishlist']['items_v2'], 'empty wish list items');
+        self::assertCount(1, $response['removeProductsFromWishlist']['wishlist']['items_v2']);
+        self::assertEquals(
+            'The wishlist item with ID "'.$wishlistItem['id'].'" does not belong to the wishlist',
+            $response['removeProductsFromWishlist']['user_errors'][0]['message']
+        );
+    }
+
+    /**
      * Authentication header map
      *
      * @param string $username
@@ -116,9 +144,9 @@ MUTATION;
      *
      * @throws Exception
      */
-    public function getWishlist(): array
+    public function getWishlist(string $username = 'customer@example.com'): array
     {
-        return $this->graphQlQuery($this->getCustomerWishlistQuery(), [], '', $this->getHeaderMap());
+        return $this->graphQlQuery($this->getCustomerWishlistQuery(), [], '', $this->getHeaderMap($username));
     }
 
     /**

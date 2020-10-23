@@ -17,6 +17,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\EntityManager\HydratorInterface;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Store\Model\StoreManagerInterface;
@@ -133,15 +134,21 @@ class PageRepository implements PageRepositoryInterface
     private function validateLayoutUpdate(Data\PageInterface $page): void
     {
         //Persisted data
-        $savedPage = $page->getId() ? $this->getById($page->getId()) : null;
+        $oldData = null;
+        if ($page->getId() && $page instanceof Page) {
+            $oldData = $page->getOrigData();
+        }
         //Custom layout update can be removed or kept as is.
         if ($page->getCustomLayoutUpdateXml()
-            && (!$savedPage || $page->getCustomLayoutUpdateXml() !== $savedPage->getCustomLayoutUpdateXml())
+            && (
+                !$oldData
+                || $page->getCustomLayoutUpdateXml() !== $oldData[Data\PageInterface::CUSTOM_LAYOUT_UPDATE_XML]
+            )
         ) {
             throw new \InvalidArgumentException('Custom layout updates must be selected from a file');
         }
         if ($page->getLayoutUpdateXml()
-            && (!$savedPage || $page->getLayoutUpdateXml() !== $savedPage->getLayoutUpdateXml())
+            && (!$oldData || $page->getLayoutUpdateXml() !== $oldData[Data\PageInterface::LAYOUT_UPDATE_XML])
         ) {
             throw new \InvalidArgumentException('Custom layout updates must be selected from a file');
         }
@@ -156,22 +163,26 @@ class PageRepository implements PageRepositoryInterface
      */
     public function save(\Magento\Cms\Api\Data\PageInterface $page)
     {
-        if ($page->getStoreId() === null) {
-            $storeId = $this->storeManager->getStore()->getId();
-            $page->setStoreId($storeId);
-        }
-        $pageId = $page->getId();
-
         try {
-            $this->validateLayoutUpdate($page);
-            if ($pageId) {
+            $pageId = $page->getId();
+            if ($pageId && !($page instanceof Page && $page->getOrigData())) {
                 $page = $this->hydrator->hydrate($this->getById($pageId), $this->hydrator->extract($page));
             }
+            if ($page->getStoreId() === null) {
+                $storeId = $this->storeManager->getStore()->getId();
+                $page->setStoreId($storeId);
+            }
+            $this->validateLayoutUpdate($page);
             $this->resource->save($page);
             $this->identityMap->add($page);
-        } catch (\Exception $exception) {
+        } catch (LocalizedException $exception) {
             throw new CouldNotSaveException(
                 __('Could not save the page: %1', $exception->getMessage()),
+                $exception
+            );
+        } catch (\Throwable $exception) {
+            throw new CouldNotSaveException(
+                __('Could not save the page: %1', __('Something went wrong while saving the page.')),
                 $exception
             );
         }
