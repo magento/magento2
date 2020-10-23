@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontAddOptionsOfBundleProductToWishlistTest">
+        <annotations>
+            <features value="Wishlist"/>
+            <stories value="StorefrontAddOptionsOfBundleProductToWishlistTest"/>
+            <title value="StorefrontAddOptionsOfBundleProductToWishlistTest"/>
+            <description value="fill... "/>
+            <severity value="AVERAGE"/>
+            <group value="wishlist"/>
+            <testCaseId value="MC-7277"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct1"/>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct2"/>
+            <magentoCron stepKey="runCronIndex" groups="index"/>
+            <createData stepKey="customer" entity="Simple_US_Customer"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
+            <deleteData createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
+            <deleteData createDataKey="simpleProduct2" stepKey="deleteSimpleProduct2"/>
+            <deleteData stepKey="deleteCustomer" createDataKey="customer"/>
+        </after>
+
+        <!-- Create a bundle product -->
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="visitAdminProductPageBundle"/>
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateBundleProduct">
+            <argument name="product" value="BundleProduct"/>
+        </actionGroup>
+
+        <actionGroup ref="FillProductNameAndSkuInProductFormActionGroup" stepKey="fillBundleProductNameAndSku">
+            <argument name="product" value="BundleProduct"/>
+        </actionGroup>
+
+        <!-- Add two bundle items -->
+        <conditionalClick selector="{{AdminProductFormBundleSection.bundleItemsToggle}}" dependentSelector="{{AdminProductFormBundleSection.bundleItemsToggle}}" visible="false" stepKey="conditionallyOpenSectionBundleItems"/>
+        <!-- scrollTo before click to fix flaky failure -->
+        <scrollTo selector="{{AdminProductFormBundleSection.addOption}}" stepKey="scrollToAddOption"/>
+        <click selector="{{AdminProductFormBundleSection.addOption}}" stepKey="clickAddOption3"/>
+        <waitForElementVisible selector="{{AdminProductFormBundleSection.bundleOptionXTitle('0')}}" stepKey="waitForBundleOptions"/>
+        <fillField selector="{{AdminProductFormBundleSection.bundleOptionXTitle('0')}}" userInput="{{BundleProduct.optionTitle1}}" stepKey="fillOptionTitle"/>
+        <selectOption selector="{{AdminProductFormBundleSection.bundleOptionXInputType('0')}}" userInput="{{BundleProduct.optionInputType1}}" stepKey="selectInputType"/>
+        <actionGroup ref="AdminClickAddProductToOptionActionGroup" stepKey="clickAddProductsToOption"/>
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterBundleProductOptions">
+            <argument name="product" value="$$simpleProduct1$$"/>
+        </actionGroup>
+        <checkOption selector="{{AdminAddProductsToOptionPanel.firstCheckbox}}" stepKey="selectFirstGridRow"/>
+        <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterBundleProductOptions2">
+            <argument name="product" value="$$simpleProduct2$$"/>
+        </actionGroup>
+        <checkOption selector="{{AdminAddProductsToOptionPanel.firstCheckbox}}" stepKey="selectFirstGridRow2"/>
+        <click selector="{{AdminAddProductsToOptionPanel.addSelectedProducts}}" stepKey="clickAddSelectedBundleProducts"/>
+        <fillField selector="{{AdminProductFormBundleSection.bundleOptionXProductYQuantity('0', '0')}}" userInput="{{BundleProduct.defaultQuantity}}" stepKey="fillProductDefaultQty1"/>
+        <fillField selector="{{AdminProductFormBundleSection.bundleOptionXProductYQuantity('0', '1')}}" userInput="{{BundleProduct.defaultQuantity}}" stepKey="fillProductDefaultQty2"/>
+
+        <!--Save product-->
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
+
+<!--        &lt;!&ndash; Assert product image in admin product form &ndash;&gt;-->
+<!--        <actionGroup ref="AssertProductImageAdminProductPageActionGroup" stepKey="assertProductImageAdminProductPage"/>-->
+
+
+        <actionGroup ref="StorefrontOpenCustomerLoginPageActionGroup" stepKey="goToSignInPage"/>
+        <actionGroup ref="StorefrontFillCustomerLoginFormActionGroup" stepKey="fillLoginFormWithCorrectCredentials">
+            <argument name="customer" value="$$customer$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontClickSignOnCustomerLoginFormActionGroup" stepKey="clickSignInAccountButton"/>
+        <see stepKey="seeFirstName" userInput="$$customer.firstname$$"
+             selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}"/>
+        <see stepKey="seeLastName" userInput="$$customer.lastname$$"
+             selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}"/>
+        <see stepKey="seeEmail" userInput="$$customer.email$$"
+             selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}"/>
+
+
+        <!-- Assert product in storefront product page -->
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageActionGroup" stepKey="AssertProductInStorefrontProductPage">
+            <argument name="product" value="BundleProduct"/>
+        </actionGroup>
+
+
+        <waitForElementVisible selector ="{{StorefrontBundleProductSection.CustomizeAndAddToCartButton($$product.name$$)}}"
+                               stepKey="CustomizeAndAddToCartButton"/>
+        <moveMouseOver stepKey="mouseOver1" selector="{{StorefrontBundleProductSection.CustomizeAndAddToCartButton($$product.name$$)}}"/>
+        <click stepKey="clickButton" selector="{{StorefrontBundleProductSection.CustomizeAndAddToCartButton($$product.name$$)}}"/>
+
+
+        <waitForElementVisible selector =".options-list:first-child" stepKey="BundleOption1"/>
+        <moveMouseOver stepKey="mouseOver2" selector=".options-list:first-child"/>
+        <checkOption selector=".options-list:first-child" stepKey="checkCheckbox1"/>
+
+
+<!--        <waitForElementVisible selector ="{{StorefrontBundleProductSection.checkOptionOfBundleProduct2($$product.name$$)}}" stepKey="2"/>-->
+<!--        <moveMouseOver stepKey="mouseOver3" selector="{{StorefrontBundleProductSection.checkOptionOfBundleProduct2($$product.name$$)}}"/>-->
+<!--        <checkOption selector="{{StorefrontBundleProductSection.checkOptionOfBundleProduct2($$product.name$$)}}" stepKey="checkCheckbox3"/>-->
+
+<!--        <waitForElementVisible selector ="{{StorefrontBundleProductSection.checkOptionOfBundleProduct3($$product.name$$)}}" stepKey="3"/>-->
+<!--        <moveMouseOver stepKey="mouseOver4" selector="{{StorefrontBundleProductSection.checkOptionOfBundleProduct3($$product.name$$)}}"/>-->
+<!--        <checkOption selector="{{StorefrontBundleProductSection.checkOptionOfBundleProduct3($$product.name$$)}}" stepKey="checkCheckbox4"/>-->
+
+        <moveMouseOver stepKey="mouseOver5" selector="{{StorefrontBundleProductSection.addToWishList($$product.name$$)}}"/>
+        <click stepKey="clickButton5" selector="{{StorefrontBundleProductSection.addToWishList($$product.name$$)}}"/>
+
+        <see stepKey="see1EmptyWishlist" userInput="You have no-->
+                items in your wish list"
+                             selector="{{StorefrontCustomerWishlistSection.emptyWishlistText}}"/>
+    </test>
+</tests>
