@@ -366,6 +366,8 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
         if (is_array($value)) {
             if (isset($value['from']) && isset($value['to'])) {
                 if (!empty($value['from']) || !empty($value['to'])) {
+                    $from = '';
+                    $to = '';
                     if (isset($value['currency'])) {
                         /** @var $currencyModel Currency */
                         $currencyModel = $this->_currencyFactory->create()->load($value['currency']);

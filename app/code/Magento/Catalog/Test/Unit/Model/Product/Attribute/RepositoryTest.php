@@ -84,11 +84,6 @@ class RepositoryTest extends TestCase
     protected $searchResultMock;
 
     /**
-     * @var AttributeOptionManagementInterface|MockObject
-     */
-    private $optionManagementMock;
-
-    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -116,8 +111,6 @@ class RepositoryTest extends TestCase
                     ['getItems', 'getSearchCriteria', 'getTotalCount', 'setItems', 'setSearchCriteria', 'setTotalCount']
                 )
                 ->getMockForAbstractClass();
-        $this->optionManagementMock =
-            $this->getMockForAbstractClass(ProductAttributeOptionManagementInterface::class);
 
         $this->model = new Repository(
             $this->attributeResourceMock,
@@ -293,7 +286,6 @@ class RepositoryTest extends TestCase
         // Attribute code must not be changed after attribute creation
         $attributeMock->expects($this->once())->method('setAttributeCode')->with($attributeCode);
         $this->attributeResourceMock->expects($this->once())->method('save')->with($attributeMock);
-        $this->optionManagementMock->expects($this->never())->method('add');
 
         $this->model->save($attributeMock);
     }
