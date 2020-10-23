@@ -10,7 +10,6 @@ namespace Magento\MediaGalleryUi\Model\Directories;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\ValidatorException;
 use Magento\Framework\Filesystem;
-use Magento\Framework\Filesystem\Directory\Read;
 use Magento\MediaGalleryApi\Api\IsPathExcludedInterface;
 
 /**
@@ -74,15 +73,13 @@ class GetFolderTree
     {
         $directories = [];
 
-        /** @var Read $directory */
-        $directory = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA);
+        $mediaPath = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA)->getAbsolutePath();
+        $directoryList = $this->recursiveRead($mediaPath . '*', GLOB_BRACE | GLOB_ONLYDIR);
 
-        if (!$directory->isDirectory()) {
-            return $directories;
-        }
+        foreach ($directoryList as $path) {
+            $path = str_replace($mediaPath, '', $path);
 
-        foreach ($directory->readRecursively() as $path) {
-            if (!$directory->isDirectory($path) || $this->isPathExcluded->execute($path)) {
+            if ($this->isPathExcluded->execute($path)) {
                 continue;
             }
 
@@ -97,6 +94,23 @@ class GetFolderTree
             ];
         }
         return $directories;
+    }
+
+    /**
+     * Read only directories from file system
+     *
+     * @param string $pattern
+     * @param int $flags
+     */
+    private function recursiveRead(string $pattern, int $flags = 0)
+    {
+        $files = glob($pattern, $flags);
+
+        foreach (glob(dirname($pattern).'/*', GLOB_ONLYDIR|GLOB_NOSORT) as $dir) {
+            $files = array_merge($files, $this->recursiveRead($dir.'/'.basename($pattern), $flags));
+        }
+
+        return $files;
     }
 
     /**
