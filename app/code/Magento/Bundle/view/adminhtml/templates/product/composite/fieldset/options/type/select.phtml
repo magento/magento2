@@ -12,35 +12,35 @@
 <?php $_skipSaleableCheck = $this->helper(Magento\Catalog\Helper\Product::class)->getSkipSaleableCheck(); ?>
 <?php list($_defaultQty, $_canChangeQty) = $block->getDefaultValues(); ?>
 
-<div class="field admin__field option<?php if ($_option->getDecoratedIsLast()) :?> last<?php endif; ?>
-<?php if ($_option->getRequired()) : ?>
+<div class="field admin__field option<?php if ($_option->getDecoratedIsLast()): ?> last<?php endif; ?>
+<?php if ($_option->getRequired()): ?>
     <?= ' _required' ?>
 <?php endif; ?>">
     <label class="label admin__field-label"><span><?= $block->escapeHtml($_option->getTitle()) ?></span></label>
     <div class="control admin__field-control">
-        <?php if ($block->showSingle()) : ?>
+        <?php if ($block->showSingle()): ?>
             <?= /* @noEscape */ $block->getSelectionTitlePrice($_selections[0]) ?>
             <input type="hidden"
                    name="bundle_option[<?= $block->escapeHtmlAttr($_option->getId()) ?>]"
                    value="<?= $block->escapeHtmlAttr($_selections[0]->getSelectionId()) ?>"
                    price="<?= $block->escapeHtmlAttr($block->getSelectionPrice($_selections[0])) ?>" />
-        <?php else :?>
+        <?php else: ?>
             <select id="bundle-option-<?= $block->escapeHtmlAttr($_option->getId()) ?>"
                     name="bundle_option[<?= $block->escapeHtmlAttr($_option->getId()) ?>]"
                     class="bundle-option-<?= $block->escapeHtmlAttr($_option->getId()) ?>
 
-        <?php if ($_option->getRequired()) : ?>
+            <?php if ($_option->getRequired()): ?>
                         <?= ' required-entry' ?>
                     <?php endif; ?> select admin__control-select change-container-classname"
                     onchange="ProductConfigure.bundleControl.changeSelection(this)">
                 <option value=""><?= $block->escapeHtml(__('Choose a selection...')) ?></option>
-                <?php foreach ($_selections as $_selection) : ?>
+                <?php foreach ($_selections as $_selection): ?>
                     <option
                         value="<?= $block->escapeHtmlAttr($_selection->getSelectionId()) ?>"
-                        <?php if ($block->isSelected($_selection)) : ?>
+                        <?php if ($block->isSelected($_selection)): ?>
                             <?= ' selected="selected"' ?>
                         <?php endif; ?>
-                        <?php if (!$_selection->isSaleable() && !$_skipSaleableCheck) : ?>
+                        <?php if (!$_selection->isSaleable() && !$_skipSaleableCheck): ?>
                             <?= ' disabled="disabled"' ?>
                         <?php endif; ?>
                         price="<?= $block->escapeHtmlAttr($block->getSelectionPrice($_selection)) ?>"
@@ -59,15 +59,15 @@
             <span><?= $block->escapeHtml(__('Quantity:')) ?></span>
         </label>
         <div class="control admin__field-control">
-            <input <?php if (!$_canChangeQty) : ?>
+            <input <?php if (!$_canChangeQty): ?>
                 <?= ' disabled="disabled"' ?>
             <?php endif; ?>
                 id="bundle-option-<?= $block->escapeHtmlAttr($_option->getId()) ?>-qty-input"
                 class="input-text admin__control-text qty
                         validate-greater-than-zero
-                        <?php if (!$_canChangeQty) : ?>
-                    <?= ' qty-disabled' ?>
-                <?php endif; ?>"
+                        <?php if (!$_canChangeQty): ?>
+                            <?= ' qty-disabled' ?>
+                        <?php endif; ?>"
                 type="text"
                 name="bundle_option_qty[<?= $block->escapeHtmlAttr($_option->getId()) ?>]"
                 value="<?= $block->escapeHtmlAttr($_defaultQty) ?>" />
