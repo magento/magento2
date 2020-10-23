@@ -141,9 +141,11 @@ class CollectTotalsObserver implements ObserverInterface
             $address->setPrevQuoteCustomerGroupId($quote->getCustomerGroupId());
             $quote->setCustomerGroupId($groupId);
             $this->customerSession->setCustomerGroupId($groupId);
-            $customer->setGroupId($groupId);
-            $customer->setEmail($customer->getEmail() ?: $quote->getCustomerEmail());
-            $quote->setCustomer($customer);
+            if ($customer->getId() !== null) {
+                $customer->setGroupId($groupId);
+                $customer->setEmail($customer->getEmail() ?: $quote->getCustomerEmail());
+                $quote->setCustomer($customer);
+            }
         }
     }
 }

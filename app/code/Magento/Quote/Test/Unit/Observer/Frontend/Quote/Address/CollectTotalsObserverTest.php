@@ -270,8 +270,12 @@ class CollectTotalsObserverTest extends TestCase
         $this->quoteMock->expects($this->exactly(2))
             ->method('getCustomerGroupId')
             ->willReturn('customerGroupId');
-        $this->customerMock->expects($this->once())->method('getId')->willReturn('1');
-
+        $this->customerMock->expects($this->exactly(2))->method('getId')->willReturn('1');
+        $this->groupManagementMock->expects($this->once())
+            ->method('getDefaultGroup')
+            ->willReturn($this->groupInterfaceMock);
+        $this->groupInterfaceMock->expects($this->once())
+            ->method('getId')->willReturn('defaultCustomerGroupId');
         /** Assertions */
         $this->quoteAddressMock->expects($this->once())
             ->method('setPrevQuoteCustomerGroupId')
@@ -324,6 +328,7 @@ class CollectTotalsObserverTest extends TestCase
             ->method('setPrevQuoteCustomerGroupId')
             ->with('customerGroupId');
 
+        $this->customerMock->expects($this->once())->method('getId')->willReturn('1');
         $this->quoteMock->expects($this->once())->method('setCustomerGroupId')->with('customerGroupId');
         $this->quoteMock->expects($this->once())->method('setCustomer')->with($this->customerMock);
         $this->customerDataFactoryMock->expects($this->any())
@@ -430,6 +435,8 @@ class CollectTotalsObserverTest extends TestCase
         $this->quoteAddressMock->expects($this->once())
             ->method('setPrevQuoteCustomerGroupId')
             ->with('customerGroupId');
+
+        $this->customerMock->expects($this->once())->method('getId')->willReturn('1');
 
         $this->quoteMock->expects($this->once())->method('setCustomerGroupId')->with('customerGroupId');
         $this->quoteMock->expects($this->once())->method('setCustomer')->with($this->customerMock);

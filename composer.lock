@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a03edc1c8ee05f82886eebd6ed288df8",
+    "content-hash": "aadcf8a265dd7ecbb86dd3dd4e49bc28",
     "packages": [
         {
             "name": "colinmollenhour/cache-backend-file",
@@ -8120,12 +8120,6 @@
                 "sftp",
                 "storage"
             ],
-            "funding": [
-                {
-                    "url": "https://offset.earth/frankdejonge",
-                    "type": "other"
-                }
-            ],
             "time": "2020-05-18T15:13:39+00:00"
         },
         {
@@ -8236,16 +8230,16 @@
         },
         {
             "name": "magento/magento2-functional-testing-framework",
-            "version": "3.1.1",
+            "version": "3.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/magento2-functional-testing-framework.git",
-                "reference": "c6760313811f2c04545a261c706d2a73dd727b9a"
+                "reference": "8a106ea029f222f4354854636861273c7577bee9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/c6760313811f2c04545a261c706d2a73dd727b9a",
-                "reference": "c6760313811f2c04545a261c706d2a73dd727b9a",
+                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/8a106ea029f222f4354854636861273c7577bee9",
+                "reference": "8a106ea029f222f4354854636861273c7577bee9",
                 "shasum": ""
             },
             "require": {
@@ -8323,7 +8317,7 @@
                 "magento",
                 "testing"
             ],
-            "time": "2020-09-28T18:26:59+00:00"
+            "time": "2020-08-19T19:57:27+00:00"
         },
         {
             "name": "mikey179/vfsstream",
