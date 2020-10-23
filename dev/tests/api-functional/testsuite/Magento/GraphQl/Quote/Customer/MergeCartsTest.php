@@ -192,9 +192,6 @@ class MergeCartsTest extends GraphQlAbstract
      */
     public function testMergeCartsWithEmptyDestinationCartId()
     {
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('Required parameter "destination_cart_id" is missing');
-
         $guestQuote = $this->quoteFactory->create();
         $this->quoteResource->load(
             $guestQuote,
