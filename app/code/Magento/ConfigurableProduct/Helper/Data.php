@@ -7,9 +7,11 @@
 namespace Magento\ConfigurableProduct\Helper;
 
 use Magento\Catalog\Model\Product\Image\UrlBuilder;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Framework\App\ObjectManager;
 use Magento\Catalog\Helper\Image as ImageHelper;
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Image;
 
 /**
@@ -73,7 +75,7 @@ class Data
     /**
      * Get Options for Configurable Product Options
      *
-     * @param \Magento\Catalog\Model\Product $currentProduct
+     * @param Product $currentProduct
      * @param array $allowedProducts
      * @return array
      */
@@ -100,11 +102,13 @@ class Data
     /**
      * Get allowed attributes
      *
-     * @param \Magento\Catalog\Model\Product $product
+     * @param Product $product
      * @return array
      */
     public function getAllowAttributes($product)
     {
-        return $product->getTypeInstance()->getConfigurableAttributes($product);
+        return ($product->getTypeId() == Configurable::TYPE_CODE)
+            ? $product->getTypeInstance()->getConfigurableAttributes($product)
+            : [];
     }
 }

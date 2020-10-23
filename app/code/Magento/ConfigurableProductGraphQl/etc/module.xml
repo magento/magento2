@@ -12,6 +12,7 @@
             <module name="Magento_ConfigurableProduct"/>
             <module name="Magento_GraphQl"/>
             <module name="Magento_CatalogGraphQl"/>
+            <module name="Magento_CatalogInventory"/>
             <module name="Magento_QuoteGraphQl"/>
         </sequence>
     </module>
