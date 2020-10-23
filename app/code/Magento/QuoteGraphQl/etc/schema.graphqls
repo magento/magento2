@@ -350,6 +350,7 @@ type CartItemPrices {
 type SelectedCustomizableOption {
     id: Int!
     label: String!
+    type: String!
     is_required: Boolean!
     values: [SelectedCustomizableOptionValue!]!
     sort_order: Int!
