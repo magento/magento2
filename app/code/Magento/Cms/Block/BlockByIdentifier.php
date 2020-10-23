@@ -85,7 +85,7 @@ class BlockByIdentifier extends AbstractBlock implements IdentityInterface
      */
     private function getIdentifier(): ?string
     {
-        return $this->getdata('identifier') ?: null;
+        return $this->getData('identifier') ?: null;
     }
 
     /**
