@@ -14,6 +14,7 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address\Total;
 use Magento\Quote\Model\Quote\TotalsCollector;
+use Magento\SalesRule\Model\Spi\QuoteResetAppliedRulesInterface;
 
 /**
  * @inheritdoc
@@ -26,12 +27,20 @@ class CartPrices implements ResolverInterface
     private $totalsCollector;
 
     /**
+     * @var QuoteResetAppliedRulesInterface
+     */
+    private $resetAppliedRules;
+
+    /**
      * @param TotalsCollector $totalsCollector
+     * @param QuoteResetAppliedRulesInterface $resetAppliedRules
      */
     public function __construct(
-        TotalsCollector $totalsCollector
+        TotalsCollector $totalsCollector,
+        QuoteResetAppliedRulesInterface $resetAppliedRules
     ) {
         $this->totalsCollector = $totalsCollector;
+        $this->resetAppliedRules = $resetAppliedRules;
     }
 
     /**
@@ -45,6 +54,12 @@ class CartPrices implements ResolverInterface
 
         /** @var Quote $quote */
         $quote = $value['model'];
+        /**
+         * To calculate a right discount value
+         * before calculate totals
+         * need to reset Cart Fixed Rules in the quote
+         */
+        $this->resetAppliedRules->execute($quote);
         $cartTotals = $this->totalsCollector->collectQuoteTotals($quote);
         $currency = $quote->getQuoteCurrencyCode();
 
