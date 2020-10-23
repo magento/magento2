@@ -7,7 +7,7 @@
         "magento/framework-bulk": "*",
         "magento/module-media-content-synchronization-api": "*",
         "magento/module-media-content-api": "*",
-        "magento/framework-message-queue": "*"
+        "magento/module-asynchronous-operations": "*"
     },
     "suggest": {
         "magento/module-media-gallery-synchronization": "*"
