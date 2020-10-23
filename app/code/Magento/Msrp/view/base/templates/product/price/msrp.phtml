@@ -85,9 +85,7 @@ $priceElementIdPrefix = $block->getPriceElementIdPrefix() ?: 'product-price-';
     if ($block->getRequest()->getFullActionName() === 'catalog_product_view') {
         $data['addToCartButton'] = '#product_addtocart_form [type=submit]';
     } else {
-        $buttonData = 'form:has(input[type="hidden"][name="product"][value="%1$s"], .block.widget .price-box';
-        $buttonData .= '[data-product-id=%1$s]+.product-item-actions button.tocart) button[type="submit"]';
-        $data['addToCartButton'] = sprintf($buttonData, (int)$productId);
+        $data['addToCartButton'] = sprintf('form:has(input[type="hidden"][name="product"][value="%1$s"]) button[type="submit"], form:has(.block.widget .price-box[data-product-id=%1$s]+.product-item-actions button.tocart) button[type="submit"], form:has(.price-box[data-product-id="%1$s"]+.product-item-inner .product-item-actions) button.tocart, [wishlistItemId="%1$s"]+.product-item-actions button.tocart ', $productId);
     }
     ?>
     <?php $priceId = $block->escapeHtmlAttr($block->getPriceId() ?: $priceElementId); ?>

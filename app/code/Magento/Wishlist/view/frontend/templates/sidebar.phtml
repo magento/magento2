@@ -32,7 +32,7 @@ $wishlistHelper = $this->helper(\Magento\Wishlist\Helper\Data::class);
                                         <span data-bind="html: product_name"></span>
                                     </a>
                                 </strong>
-                                <div data-bind="html: product_price"></div>
+                                <div data-bind="html: product_price, attr: { wishlistItemId: product_id"></div>
                                 <div class="product-item-actions">
                                     <!-- ko if: product_is_saleable_and_visible -->
                                     <div class="actions-primary">
