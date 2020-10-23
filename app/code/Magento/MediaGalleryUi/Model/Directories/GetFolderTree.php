@@ -11,6 +11,8 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\ValidatorException;
 use Magento\Framework\Filesystem;
 use Magento\MediaGalleryApi\Api\IsPathExcludedInterface;
+use Magento\Framework\Filesystem\Driver\File;
+use Magento\Framework\Filesystem\Io\File as FileIo;
 
 /**
  * Build media gallery folder tree structure by path
@@ -28,14 +30,30 @@ class GetFolderTree
     private $isPathExcluded;
 
     /**
+     * @var File
+     */
+    private $driver;
+
+    /**
+     * @var FileIo
+     */
+    private $file;
+
+    /**
      * @param Filesystem $filesystem
+     * @param File $driver
+     * @param FileIo $file
      * @param IsPathExcludedInterface $isPathExcluded
      */
     public function __construct(
         Filesystem $filesystem,
+        File $driver,
+        FileIo $file,
         IsPathExcludedInterface $isPathExcluded
     ) {
         $this->filesystem = $filesystem;
+        $this->driver = $driver;
+        $this->file = $file;
         $this->isPathExcluded = $isPathExcluded;
     }
 
@@ -102,15 +120,18 @@ class GetFolderTree
      * @param string $pattern
      * @param int $flags
      */
-    private function recursiveRead(string $pattern, int $flags = 0)
+    private function recursiveRead(string $pattern, int $flags = 0): array
     {
-        $files = glob($pattern, $flags);
+        $directories = glob($pattern, $flags);
 
-        foreach (glob(dirname($pattern).'/*', GLOB_ONLYDIR|GLOB_NOSORT) as $dir) {
-            $files = array_merge($files, $this->recursiveRead($dir.'/'.basename($pattern), $flags));
+        foreach (glob($this->driver->getParentDirectory($pattern).'/*', GLOB_ONLYDIR|GLOB_NOSORT) as $dir) {
+            $directories = array_merge(
+                $directories,
+                $this->recursiveRead($dir.'/'.  $this->file->getPathInfo($pattern)['basename'], $flags)
+            );
         }
 
-        return $files;
+        return $directories;
     }
 
     /**
