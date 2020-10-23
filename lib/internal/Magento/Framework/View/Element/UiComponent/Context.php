@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\View\Element\UiComponent;
 
 use Magento\Framework\App\ObjectManager;
@@ -386,7 +387,7 @@ class Context implements ContextInterface
      * @param UiComponentInterface $component
      * @return void
      */
-    protected function prepareDataSource(array & $data, UiComponentInterface $component)
+    protected function prepareDataSource(array &$data, UiComponentInterface $component)
     {
         $childComponents = $component->getChildComponents();
         if (!empty($childComponents)) {

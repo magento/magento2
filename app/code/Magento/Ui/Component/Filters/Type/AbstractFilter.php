@@ -16,6 +16,7 @@ use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Ui\Component\Filters\FilterModifier;
 
+//phpcs:disable Magento2.Classes.AbstractApi
 /**
  * Abstract class AbstractFilter
  * @api
