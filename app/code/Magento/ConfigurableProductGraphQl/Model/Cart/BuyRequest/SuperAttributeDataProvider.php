@@ -8,17 +8,17 @@ declare(strict_types=1);
 namespace Magento\ConfigurableProductGraphQl\Model\Cart\BuyRequest;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\CatalogInventory\Api\StockStateInterface;
+use Magento\ConfigurableProductGraphQl\Model\Options\Collection as OptionCollection;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\Stdlib\ArrayManager;
-use Magento\QuoteGraphQl\Model\Cart\BuyRequest\BuyRequestDataProviderInterface;
-use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\ConfigurableProductGraphQl\Model\Options\Collection as OptionCollection;
-use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Quote\Model\Quote;
+use Magento\QuoteGraphQl\Model\Cart\BuyRequest\BuyRequestDataProviderInterface;
 
 /**
  * DataProvider for building super attribute options in buy requests
@@ -76,7 +76,6 @@ class SuperAttributeDataProvider implements BuyRequestDataProviderInterface
      */
     public function execute(array $cartItemData): array
     {
-
         $parentSku = $this->arrayManager->get('parent_sku', $cartItemData);
         if ($parentSku === null) {
             return [];
@@ -94,17 +93,7 @@ class SuperAttributeDataProvider implements BuyRequestDataProviderInterface
             throw new GraphQlNoSuchEntityException(__('Could not find specified product.'));
         }
 
-
-        // Child stock check has to be performed a catalog by default would not show/check it
-        $childProduct = $this->productRepository->get($sku, false, null, true);
-
-        $result = $this->stockState->checkQuoteItemQty($childProduct->getId(), $qty, $qty, $qty, $cart->getStoreId());
-
-        if ($result->getHasError() ) {
-            throw new LocalizedException(
-                __($result->getMessage())
-            );
-        }
+        $this->checkProductStock($sku, (float) $qty, (int) $cart->getStoreId());
 
         $configurableProductLinks = $parentProduct->getExtensionAttributes()->getConfigurableProductLinks();
         if (!in_array($product->getId(), $configurableProductLinks)) {
@@ -124,12 +113,47 @@ class SuperAttributeDataProvider implements BuyRequestDataProviderInterface
                 }
             }
         }
-        // Some options might be disabled and/or available when parent and child sku are provided
+        $this->checkSuperAttributeData($parentSku, $superAttributesData);
+
+        return ['super_attribute' => $superAttributesData];
+    }
+
+    /**
+     * Stock check for a product
+     *
+     * @param string $sku
+     * @param float $qty
+     * @param int $scopeId
+     */
+    private function checkProductStock(string $sku, float $qty, int $scopeId): void
+    {
+        // Child stock check has to be performed a catalog by default would not show/check it
+        $childProduct = $this->productRepository->get($sku, false, null, true);
+
+        $result = $this->stockState->checkQuoteItemQty($childProduct->getId(), $qty, $qty, $qty, $scopeId);
+
+        if ($result->getHasError()) {
+            throw new LocalizedException(
+                __($result->getMessage())
+            );
+        }
+    }
+
+    /**
+     * Check super attribute data.
+     *
+     * Some options might be disabled and/or available when parent and child sku are provided.
+     *
+     * @param string $parentSku
+     * @param array $superAttributesData
+     * @throws LocalizedException
+     */
+    private function checkSuperAttributeData(string $parentSku, array $superAttributesData): void
+    {
         if (empty($superAttributesData)) {
             throw new LocalizedException(
                 __('The product with SKU %sku is out of stock.', ['sku' => $parentSku])
             );
         }
-        return ['super_attribute' => $superAttributesData];
     }
 }
