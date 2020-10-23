@@ -122,9 +122,12 @@ class GetFolderTree
      */
     private function recursiveRead(string $pattern, int $flags = 0): array
     {
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         $directories = glob($pattern, $flags);
 
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         foreach (glob($this->driver->getParentDirectory($pattern) . '/*', $flags) as $dir) {
+            //phpcs:ignore Magento2.Performance.ForeachArrayMerge
             $directories = array_merge(
                 $directories,
                 $this->recursiveRead($dir . '/' .  $this->file->getPathInfo($pattern)['basename'], $flags)
