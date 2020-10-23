@@ -11,10 +11,10 @@
     <test name="AdminVerifyCreateCloseCreateCustomProductAttributeTest">
         <annotations>
             <features value="Catalog"/>
-            <stories value="Create product Attribute"/>
-            <title value="Create Custom Product Attribute Dropdown Field (Not Required) from Product Page"/>
+            <stories value="Create product Attribute after closing the new attribute window multiple times"/>
+            <title value="Create Custom Product Attribute Dropdown Field (Not Required) from Product Page after closing the new attribute window multiple times"/>
             <description
-                value="login as admin and create simple product attribute Dropdown field after closing the new attribute window"/>
+                value="login as admin and create simple product attribute Dropdown field after closing the new attribute window multiple times"/>
             <severity value="MAJOR"/>
             <testCaseId value="MC-30362"/>
             <group value="catalog"/>
