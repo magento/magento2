@@ -68,7 +68,7 @@ define([
                 self = this;
 
             if (event.handleObj.selector == this.options.qtyInfo) { //eslint-disable-line eqeqeq
-                this._updateQTY();
+                this._updateQty();
                 event.stopPropagation();
 
                 return;
@@ -107,7 +107,8 @@ define([
          * @private
          */
         _updateAddToWishlistButton: function (dataToAdd) {
-            var self = this;
+            var self = this,
+                wishListItemsToDel = {};
 
             $('[data-action="add-to-wishlist"]').each(function (index, element) {
                 var params = $(element).data('post');
@@ -117,8 +118,6 @@ define([
                         'data': {}
                     };
                 }
-
-                let wishListItemsToDel = {};
 
                 $.each(params.data, function (key, value) {
                     if (key.indexOf('option') === -1) {
@@ -143,11 +142,10 @@ define([
             });
         },
 
-        /** Update only QTY
-         *
+        /**
          * @private
          */
-        _updateQTY: function () {
+        _updateQty: function () {
             var self = this;
 
             $('[data-action="add-to-wishlist"]').each(function (index, element) {
