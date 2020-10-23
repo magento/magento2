@@ -51,7 +51,7 @@
 
         <!-- Step 1. Log in as main admin -->
 
-        <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
         <!-- Step 2. Create cart price rule in en_US admin locale. -->
 
