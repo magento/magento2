@@ -15,5 +15,6 @@
                 <block class="Magento\Bundle\Block\Adminhtml\Catalog\Product\Composite\Fieldset\Options\Type\Checkbox" name="product.info.bundle.options.checkbox" as="checkbox"/>
             </block>
         </referenceBlock>
+        <referenceBlock name="product.composite.fieldset.qty" remove="true"/>
     </body>
 </page>
