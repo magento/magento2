@@ -30,7 +30,7 @@
         <after>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAdmin"/>
 
-            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="AdminDeleteUserActionGroup" stepKey="deleteUser">
                 <argument name="user" value="dutchActiveAdmin"/>
             </actionGroup>
