@@ -327,7 +327,12 @@ class UiComponentFactory extends DataObject
         $dataProvider = $this->getDataProvider($identifier, $bundleComponents);
         if ($dataProvider instanceof DataProviderInterface) {
             //Dynamic meta from data providers should not contain templates.
-            $dataProvider->setNamespace($identifier);
+            $dataProvider->setConfigData($this->sanitizer->sanitize(array_merge(
+                $dataProvider->getConfigData(),
+                [
+                    'namespace' => $identifier
+                ]
+            )));
             $metadata = $dataProvider->getMeta();
             $metadata = [
                 $identifier => $this->sanitizer->sanitizeComponentMetadata(['children' => $metadata])

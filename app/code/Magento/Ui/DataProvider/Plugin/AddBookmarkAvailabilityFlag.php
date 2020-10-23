@@ -47,13 +47,14 @@ class AddBookmarkAvailabilityFlag
         $configData = $dataProvider->getConfigData();
         if (!isset($configData['component'])
             || $configData['component'] !== 'Magento_Ui/js/grid/provider'
+            || !isset($configData['namespace'])
         ) {
             return;
         }
 
         $bookmark = $this->bookmarkManagement->getByIdentifierNamespace(
             'current',
-            $dataProvider->getNamespace()
+            $configData['namespace']
         );
 
         $dataProvider->setConfigData($this->sanitizer->sanitize(

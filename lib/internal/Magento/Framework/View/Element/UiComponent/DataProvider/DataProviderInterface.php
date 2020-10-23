@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Framework\View\Element\UiComponent\DataProvider;
 
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
@@ -122,19 +121,4 @@ interface DataProviderInterface
      * @return \Magento\Framework\Api\Search\SearchResultInterface
      */
     public function getSearchResult();
-
-    /**
-     * Get namespace
-     *
-     * @return string
-     */
-    public function getNamespace();
-
-    /**
-     * Set namespace
-     *
-     * @param string $namespace
-     * @return void
-     */
-    public function setNamespace(string $namespace);
 }
