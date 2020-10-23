@@ -85,7 +85,6 @@ class DateTest extends TestCase
         $this->bookmarkManagementMock = $this->getMockForAbstractClass(
             BookmarkManagementInterface::class
         );
-        $this->bookmarkManagementMock->expects($this->never())->method('getByIdentifierNamespace');
 
         $this->requestMock = $this->getMockBuilder(RequestInterface::class)
             ->getMockForAbstractClass();
@@ -99,6 +98,9 @@ class DateTest extends TestCase
     public function testGetComponentName()
     {
         $this->contextMock->expects(static::never())->method('getProcessor');
+        $this->bookmarkManagementMock->expects($this->once())
+            ->method('getByIdentifierNamespace')
+            ->willReturn(null);
         $date = new Date(
             $this->contextMock,
             $this->uiComponentFactory,
@@ -152,6 +154,8 @@ class DateTest extends TestCase
         $this->contextMock->expects($this->any())
             ->method('getDataProvider')
             ->willReturn($this->dataProviderMock);
+
+        $this->bookmarkManagementMock->expects($this->never())->method('getByIdentifierNamespace');
 
         if ($expectedCondition !== null) {
             $this->processFilters($name, $showsTime, $filterData, $expectedCondition, $uiComponent);

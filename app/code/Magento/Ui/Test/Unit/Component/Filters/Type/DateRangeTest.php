@@ -59,7 +59,7 @@ class DateRangeTest extends TestCase
     protected function setUp(): void
     {
         $this->contextMock = $this->getMockForAbstractClass(
-            \Magento\Framework\View\Element\UiComponent\ContextInterface::class,
+            UiContext::class,
             [],
             '',
             false
@@ -77,7 +77,9 @@ class DateRangeTest extends TestCase
         $this->bookmarkManagementMock = $this->getMockForAbstractClass(
             BookmarkManagementInterface::class
         );
-        $this->bookmarkManagementMock->expects($this->never())->method('getByIdentifierNamespace');
+        $this->bookmarkManagementMock->expects($this->once())
+            ->method('getByIdentifierNamespace')
+            ->willReturn(null);
 
         $this->requestMock = $this->getMockBuilder(RequestInterface::class)
             ->getMockForAbstractClass();

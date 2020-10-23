@@ -72,7 +72,6 @@ class RangeTest extends TestCase
         $this->bookmarkManagementMock = $this->getMockForAbstractClass(
             BookmarkManagementInterface::class
         );
-        $this->bookmarkManagementMock->expects($this->never())->method('getByIdentifierNamespace');
 
         $this->requestMock = $this->getMockBuilder(RequestInterface::class)
             ->getMockForAbstractClass();
@@ -86,6 +85,9 @@ class RangeTest extends TestCase
     public function testGetComponentName()
     {
         $this->contextMock->expects($this->never())->method('getProcessor');
+        $this->bookmarkManagementMock->expects($this->once())
+            ->method('getByIdentifierNamespace')
+            ->willReturn(null);
         $range = new Range(
             $this->contextMock,
             $this->uiComponentFactory,
@@ -154,6 +156,8 @@ class RangeTest extends TestCase
         $dataProvider->expects($this->exactly($expectedCalls))
             ->method('addFilter')
             ->with($filter);
+
+        $this->bookmarkManagementMock->expects($this->never())->method('getByIdentifierNamespace');
 
         $range = new Range(
             $this->contextMock,

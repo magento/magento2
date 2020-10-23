@@ -77,7 +77,6 @@ class InputTest extends TestCase
         $this->bookmarkManagementMock = $this->getMockForAbstractClass(
             BookmarkManagementInterface::class
         );
-        $this->bookmarkManagementMock->expects($this->never())->method('getByIdentifierNamespace');
 
         $this->requestMock = $this->getMockBuilder(RequestInterface::class)
             ->getMockForAbstractClass();
@@ -91,6 +90,9 @@ class InputTest extends TestCase
     public function testGetComponentName(): void
     {
         $this->contextMock->expects($this->never())->method('getProcessor');
+        $this->bookmarkManagementMock->expects($this->once())
+            ->method('getByIdentifierNamespace')
+            ->willReturn(null);
         $date = new Input(
             $this->contextMock,
             $this->uiComponentFactory,
@@ -151,6 +153,8 @@ class InputTest extends TestCase
         $this->contextMock->expects($this->any())
             ->method('getDataProvider')
             ->willReturn($dataProvider);
+
+        $this->bookmarkManagementMock->expects($this->never())->method('getByIdentifierNamespace');
 
         $this->uiComponentFactory->expects($this->any())
             ->method('create')
