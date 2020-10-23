@@ -6,12 +6,18 @@
 -->
 <div class="block-title">
     <strong>
-        <span class="text" translate="'My Cart'"/>
+        <span class="text" data-bind="i18n: 'My Cart'"/>
         <span
             class="qty empty"
-            text="getCartParam('summary_count')"
-            data-bind="css: { empty: !!getCartParam('summary_count') == false },
-                       attr: { title: $t('Items in Cart') }">
+            data-bind="
+                css: {
+                    empty: !!getCartParam('summary_count') == false
+                },
+                attr: {
+                    title: $t('Items in Cart')
+                },
+                text: getCartParam('summary_count')
+            ">
         </span>
     </strong>
 </div>
@@ -27,26 +33,29 @@
                 },
                 click: closeMinicart()
             ">
-        <span translate="'Close'"/>
+        <span data-bind="i18n: 'Close'"/>
     </button>
 
-    <if args="getCartParam('summary_count')">
+    <!-- ko if: getCartParam('summary_count') -->
         <div class="items-total">
-            <span class="count" if="maxItemsToDisplay < getCartLineItemsCount()" text="maxItemsToDisplay"/>
-            <translate args="'of'" if="maxItemsToDisplay < getCartLineItemsCount()"/>
-            <span class="count" text="getCartParam('summary_count')"/>
-                <!-- ko if: (getCartLineItemsCount() === 1) -->
-                    <span translate="'Item in Cart'"/>
-                <!--/ko-->
-                <!-- ko if: (getCartLineItemsCount() > 1) -->
-                    <span translate="'Items in Cart'"/>
-                <!--/ko-->
+            <!-- ko if: maxItemsToDisplay < getCartLineItemsCount() -->
+            <span class="count" data-bind="text: maxItemsToDisplay"/>
+            <!-- /ko -->
+            <!-- ko if: maxItemsToDisplay < getCartLineItemsCount() --><!-- ko i18n: 'of' --><!-- /ko --><!-- /ko -->
+            <span class="count" data-bind="text: getCartParam('summary_count')"/>
+            <!-- ko if: (getCartParam('summary_count') === 1) -->
+                <span data-bind="i18n: 'Item in Cart'"/>
+            <!-- /ko -->
+            <!-- ko if: (getCartParam('summary_count') > 1) -->
+                <span data-bind="i18n: 'Items in Cart'"/>
+            <!-- /ko -->
         </div>
 
-        <each args="getRegion('subtotalContainer')" render=""/>
-        <each args="getRegion('extraInfo')" render=""/>
+        <!-- ko foreach: getRegion('subtotalContainer') --><!-- ko template: getTemplate() --><!-- /ko --><!-- /ko -->
+        <!-- ko foreach: getRegion('extraInfo') --><!-- ko template: getTemplate() --><!-- /ko --><!-- /ko -->
 
-        <div class="actions" if="getCartParam('possible_onepage_checkout')">
+        <!-- ko if: getCartParam('possible_onepage_checkout') -->
+        <div class="actions">
             <div class="primary">
                 <button
                         id="top-cart-btn-checkout"
@@ -57,52 +66,57 @@
                             attr: {
                                 title: $t('Proceed to Checkout')
                             },
-                            click: closeMinicart()
+                            click: closeMinicart(),
+                            i18n: 'Proceed to Checkout'
                         "
-                        translate="'Proceed to Checkout'"
                 />
                 <div data-bind="html: getCartParamUnsanitizedHtml('extra_actions')"></div>
             </div>
         </div>
-    </if>
+        <!-- /ko -->
+    <!-- /ko -->
 
-    <if args="getCartParam('summary_count')">
-        <strong class="subtitle" translate="'Recently added item(s)'"/>
+    <!-- ko if: getCartParam('summary_count') -->
+        <strong class="subtitle" data-bind="i18n: 'Recently added item(s)'"/>
         <div data-action="scroll" class="minicart-items-wrapper">
             <ol id="mini-cart" class="minicart-items" data-bind="foreach: { data: getCartItems(), as: 'item' }">
-                <each args="$parent.getRegion($parent.getItemRenderer(item.product_type))"
-                      render="{name: getTemplate(), data: item, afterRender: function() {$parents[1].initSidebar()}}"
-                />
+                <!-- ko foreach: $parent.getRegion($parent.getItemRenderer(item.product_type)) -->
+                    <!-- ko template: {name: getTemplate(), data: item, afterRender: function() {$parents[1].initSidebar()}} --><!-- /ko -->
+                <!-- /ko -->
             </ol>
         </div>
-    </if>
+    <!-- /ko -->
 
-    <ifnot args="getCartParam('summary_count')">
+    <!-- ko ifnot: getCartParam('summary_count') -->
         <strong class="subtitle empty"
-                translate="'You have no items in your shopping cart.'"
+                data-bind="i18n: 'You have no items in your shopping cart.'"
         />
-        <if args="getCartParam('cart_empty_message')">
-            <p class="minicart empty text" text="getCartParam('cart_empty_message')"/>
+        <!-- ko if: getCartParam('cart_empty_message') -->
+            <p class="minicart empty text" data-bind="text: getCartParam('cart_empty_message')"/>
             <div class="actions">
                 <div class="secondary">
                     <a class="action viewcart" data-bind="attr: {href: shoppingCartUrl}">
-                        <span translate="'View and Edit Cart'"/>
+                        <span data-bind="i18n: 'View and Edit Cart'"/>
                     </a>
                 </div>
             </div>
-        </if>
-    </ifnot>
+        <!-- /ko -->
+    <!-- /ko -->
 
-    <div class="actions" if="getCartParam('summary_count')">
+    <!-- ko if: getCartParam('summary_count') -->
+    <div class="actions">
         <div class="secondary">
             <a class="action viewcart" data-bind="attr: {href: shoppingCartUrl}">
-                <span translate="'View and Edit Cart'"/>
+                <span data-bind="i18n: 'View and Edit Cart'"/>
             </a>
         </div>
     </div>
+    <!-- /ko -->
 
-    <div id="minicart-widgets" class="minicart-widgets" if="regionHasElements('promotion')">
-        <each args="getRegion('promotion')" render=""/>
+    <!-- ko if: regionHasElements('promotion') -->
+    <div id="minicart-widgets" class="minicart-widgets">
+        <!-- ko foreach: getRegion('promotion') --><!-- ko template: getTemplate() --><!-- /ko --><!-- /ko -->
     </div>
+    <!-- /ko -->
 </div>
-<each args="getRegion('sign-in-popup')" render=""/>
+<!-- ko foreach: getRegion('sign-in-popup') --><!-- ko template: getTemplate() --><!-- /ko --><!-- /ko -->
