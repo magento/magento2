@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminLoginAsCustomerLoggingFilterTest">
+        <annotations>
+            <features value="Login as Customer logs"/>
+            <stories value="Filter by date login as customer logs"/>
+            <title value="Filter by date login as customer logs"/>
+            <description value="Filter by date should be from/to"/>
+            <severity value="MAJOR"/>
+            <group value="login_as_customer"/>
+            <testCaseId value="MC-"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set {{LoginAsCustomerConfigDataEnabled.path}} 1"
+                        stepKey="enableLoginAsCustomer"/>
+            <magentoCLI command="config:set {{LoginAsCustomerStoreViewLogin.path}} 0"
+                        stepKey="enableLoginAsCustomerAutoDetection"/>
+            <magentoCLI command="cache:flush config" stepKey="flushCacheBeforeTestRun"/>
+            <createData entity="Simple_US_Customer_Assistance_Allowed" stepKey="createFirstCustomer"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsDefaultUser"/>
+        </before>
+        <after>
+            <!--Clean filters -->
+            <click selector="{{AdminLoginAsCustomerLogToolbarSection.resetFilter}}" stepKey="CleanFiltersAfter"/>
+            <!-- Log out as Default Admin User -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAsDefaultAdmin"/>
+            <!-- Remove created data-->
+            <deleteData createDataKey="createFirstCustomer" stepKey="deleteFirstCustomer"/>
+            <!-- Set config back-->
+            <magentoCLI command="config:set {{LoginAsCustomerConfigDataEnabled.path}} 0"
+                        stepKey="disableLoginAsCustomer"/>
+            <magentoCLI command="cache:flush config" stepKey="flushCacheAfterTestRun"/>
+        </after>
+        <!-- Login into First Customer account -->
+        <actionGroup ref="AdminLoginAsCustomerLoginFromCustomerPageActionGroup"
+                     stepKey="loginAsFirstCustomerByDefaultAdmin">
+            <argument name="customerId" value="$$createFirstCustomer.id$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontSignOutAndCloseTabActionGroup" stepKey="signOutFirstCustomerDefaultAdmin"/>
+        <!-- Navigate to Login as Customer Log page -->
+        <actionGroup ref="AdminOpenLoginAsCustomerLogActionGroup" stepKey="gotoLoginAsCustomerLog"/>
+        <!-- Setup date filters -->
+        <conditionalClick selector="{{AdminLoginAsCustomerLogToolbarSection.resetFilter}}"
+                          dependentSelector="{{AdminLoginAsCustomerLogToolbarSection.resetFilter}}"
+                          visible="true" stepKey="CleanFiltersBefore"/>
+        <click selector="{{AdminLoginAsCustomerLogToolbarSection.filters}}" stepKey="clickFilters"/>
+        <click selector="{{AdminLoginAsCustomerLogToolbarSection.DatePickerFrom}}" stepKey="clickFromDate"/>
+        <click selector="{{AdminLoginAsCustomerLogToolbarSection.todayDate}}" stepKey="clickToToday"/>
+        <click selector="{{AdminLoginAsCustomerLogToolbarSection.DatePickerTo}}" stepKey="clickToDate"/>
+        <click selector="{{AdminLoginAsCustomerLogToolbarSection.todayDate}}" stepKey="clickTodayDateAgain"/>
+        <click selector="{{AdminProductGridFilterSection.applyFilters}}" stepKey="clickApplyFilters"/>
+        <!-- Perform assertions -->
+        <actionGroup ref="AdminAssertLoginAsCustomerLogRecordActionGroup" stepKey="verifyDefaultAdminFirstCustomerLogRecord">
+            <argument name="rowNumber" value="1"/>
+            <argument name="adminId" value="1"/>
+            <argument name="customerId" value="$$createFirstCustomer.id$$"/>
+        </actionGroup>
+    </test>
+</tests>
