@@ -228,7 +228,6 @@ class PhpRuleTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-
     /**
      * @param string $class
      * @param string $content
@@ -313,7 +312,6 @@ class PhpRuleTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-
     /**
      * @param string $template
      * @param string $content
@@ -331,11 +329,14 @@ class PhpRuleTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $this->model->getDependencyInfo($module, 'php', $template, $content));
     }
 
+    /**
+     * @return array[]
+     */
     public function getDependencyInfoDataCaseGetTemplateUrlDataProvider()
     {
         return [ 'getUrl from ignore template' => [
             'app/code/Magento/Backend/view/adminhtml/templates/dashboard/totalbar/script.phtml',
-            '$getUrl("adminhtml/*/ajaxBlock"',
+            '$getUrl("adminhtml/*/ajaxBlock")',
             []]];
     }
 
@@ -373,6 +374,9 @@ class PhpRuleTest extends \PHPUnit\Framework\TestCase
         $phpRule->getDependencyInfo($module, 'php', $file, $content);
     }
 
+    /**
+     * @return array[]
+     */
     public function processWildcardUrlDataProvider()
     {
         return [
