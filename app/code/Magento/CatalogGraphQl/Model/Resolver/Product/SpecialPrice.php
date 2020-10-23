@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver\Product;
 
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
@@ -25,6 +26,11 @@ class SpecialPrice implements ResolverInterface
     {
         /** @var ProductInterface $product */
         $product = $value['model'];
+
+        if (!isset($value['model'])) {
+            throw new LocalizedException(__('"model" value should be specified'));
+        }
+
         /** @var PricingSpecialPrice $specialPrice */
         $specialPrice = $product->getPriceInfo()->getPrice(PricingSpecialPrice::PRICE_CODE);
 
