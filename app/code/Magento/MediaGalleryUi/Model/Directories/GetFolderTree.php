@@ -124,10 +124,10 @@ class GetFolderTree
     {
         $directories = glob($pattern, $flags);
 
-        foreach (glob($this->driver->getParentDirectory($pattern).'/*', GLOB_ONLYDIR|GLOB_NOSORT) as $dir) {
+        foreach (glob($this->driver->getParentDirectory($pattern) . '/*', $flags) as $dir) {
             $directories = array_merge(
                 $directories,
-                $this->recursiveRead($dir.'/'.  $this->file->getPathInfo($pattern)['basename'], $flags)
+                $this->recursiveRead($dir . '/' .  $this->file->getPathInfo($pattern)['basename'], $flags)
             );
         }
 
