@@ -119,8 +119,10 @@ class SecureHtmlRenderer
                         targetElement = event.target;
                     }
                     {$listenerFunction}.apply(targetElement);
-                }
+		    event.preventDefault();
+		}
             }
+	
 script;
 
         return $this->renderTag('script', ['type' => 'text/javascript'], $script, false);
