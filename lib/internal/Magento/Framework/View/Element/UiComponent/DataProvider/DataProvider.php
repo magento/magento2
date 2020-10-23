@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\View\Element\UiComponent\DataProvider;
 
 use Magento\Framework\Api\FilterBuilder;
@@ -12,9 +14,6 @@ use Magento\Framework\Api\Search\SearchCriteriaBuilder;
 use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\App\RequestInterface;
 
-/**
- * Class DataProvider
- */
 class DataProvider implements DataProviderInterface
 {
     /**
@@ -74,6 +73,13 @@ class DataProvider implements DataProviderInterface
      * @var SearchCriteria
      */
     protected $searchCriteria;
+
+    /**
+     * Namespace
+     *
+     * @var string
+     */
+    protected $namespace;
 
     /**
      * @param string $name
@@ -311,5 +317,22 @@ class DataProvider implements DataProviderInterface
     public function getSearchResult()
     {
         return $this->reporting->search($this->getSearchCriteria());
+    }
+
+    /**
+     * @inheridoc
+     */
+    public function getNamespace()
+    {
+        return $this->namespace;
+    }
+
+    /**
+     * @inheridoc
+     * @param string $namespace
+     */
+    public function setNamespace(string $namespace)
+    {
+        $this->namespace = $namespace;
     }
 }

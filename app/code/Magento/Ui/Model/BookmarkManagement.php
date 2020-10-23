@@ -114,10 +114,11 @@ class BookmarkManagement implements BookmarkManagementInterface
             if ($searchResults->getTotalCount() > 0) {
                 $items = $searchResults->getItems();
                 $this->bookmarkRegistry[$identifier . $namespace] = array_shift($items);
-                return $this->bookmarkRegistry[$identifier . $namespace];
+            } else {
+                $this->bookmarkRegistry[$identifier . $namespace] = null;
             }
         }
 
-        return $this->bookmarkRegistry[$identifier . $namespace] ?? null;
+        return $this->bookmarkRegistry[$identifier . $namespace];
     }
 }

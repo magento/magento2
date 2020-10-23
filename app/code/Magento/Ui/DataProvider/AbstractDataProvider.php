@@ -3,12 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Ui\DataProvider;
 
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
 
- // phpcs:disable Magento2.Classes.AbstractApi
+// phpcs:disable Magento2.Classes.AbstractApi
+
 /**
  * @inheritdoc
  *
@@ -54,6 +56,13 @@ abstract class AbstractDataProvider implements DataProviderInterface, \Countable
      * @var AbstractCollection
      */
     protected $collection;
+
+    /**
+     * Namespace
+     *
+     * @var string
+     */
+    protected $namespace;
 
     /**
      * @param string $name
@@ -301,6 +310,23 @@ abstract class AbstractDataProvider implements DataProviderInterface, \Countable
      */
     public function getAllIds()
     {
-        return  $this->getCollection()->getAllIds();
+        return $this->getCollection()->getAllIds();
+    }
+
+    /**
+     * @inheridoc
+     */
+    public function getNamespace()
+    {
+        return $this->namespace;
+    }
+
+    /**
+     * @inheridoc
+     * @param string $namespace
+     */
+    public function setNamespace(string $namespace)
+    {
+        $this->namespace = $namespace;
     }
 }

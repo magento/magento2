@@ -159,9 +159,9 @@ class UiComponentFactory extends DataObject
         $components = array_filter($components);
         $componentArguments['components'] = $components;
 
-       /**
-        * Prevent passing ACL restricted blocks to htmlContent constructor
-        */
+        /**
+         * Prevent passing ACL restricted blocks to htmlContent constructor
+         */
         if (isset($componentArguments['block']) && !$componentArguments['block']) {
             return null;
         }
@@ -235,7 +235,7 @@ class UiComponentFactory extends DataObject
             list($className, $componentArguments) = $this->argumentsResolver($identifier, $rawComponentData);
             $componentArguments = array_replace_recursive($componentArguments, $arguments);
             $children = isset($componentArguments['data']['config']['children']) ?
-                        $componentArguments['data']['config']['children'] : [];
+                $componentArguments['data']['config']['children'] : [];
             $children = $this->getBundleChildren($children);
         }
 
@@ -280,7 +280,7 @@ class UiComponentFactory extends DataObject
         foreach ($children as $identifier => $config) {
             if (!isset($config['componentType'])) {
                 throw new LocalizedException(
-                    new Phrase(
+                    __(
                         'The "componentType" configuration parameter is required for the "%1" component.',
                         $identifier
                     )
@@ -289,7 +289,7 @@ class UiComponentFactory extends DataObject
 
             if (!isset($componentArguments['context'])) {
                 throw new LocalizedException(
-                    new \Magento\Framework\Phrase(
+                    __(
                         'An error occurred with the UI component. Each component needs context. Verify and try again.'
                     )
                 );
@@ -327,6 +327,7 @@ class UiComponentFactory extends DataObject
         $dataProvider = $this->getDataProvider($identifier, $bundleComponents);
         if ($dataProvider instanceof DataProviderInterface) {
             //Dynamic meta from data providers should not contain templates.
+            $dataProvider->setNamespace($identifier);
             $metadata = $dataProvider->getMeta();
             $metadata = [
                 $identifier => $this->sanitizer->sanitizeComponentMetadata(['children' => $metadata])

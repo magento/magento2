@@ -61,4 +61,7 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface">
+        <plugin name="addBookmarkAvailabilityFlag" type="Magento\Ui\DataProvider\Plugin\AddBookmarkAvailabilityFlag" sortOrder="50"/>
+    </type>
 </config>

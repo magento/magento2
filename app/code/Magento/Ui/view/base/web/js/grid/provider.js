@@ -20,6 +20,7 @@ define([
 
     return Element.extend({
         defaults: {
+            initialized: false,
             firstLoad: true,
             lastError: false,
             storageConfig: {
@@ -49,10 +50,17 @@ define([
             this._super()
                 .initStorage();
 
-            /* Call set data with predefined data for correct rendering action column */
-            this.setData(this.data);
+            if (this.firstLoad) {
+                this.clearData();
+                // Load data when there will
+                // be no more pending assets.
+                resolver(this.reload, this);
+            } else {
+                /* Call set data with predefined data for correct rendering action column */
+                this.setData(this.data);
 
-            resolver(this.triggerReloaded, this);
+                resolver(this.triggerReloaded, this);
+            }
 
             return this;
         },
@@ -61,7 +69,7 @@ define([
          * Trigger reloaded event
          */
         triggerReloaded: function () {
-            this.firstLoad = false;
+            this.initialized = true;
             this.trigger('reloaded');
         },
 
@@ -143,7 +151,7 @@ define([
         onParamsChange: function () {
             // It's necessary to make a reload only
             // after the initial loading has been made.
-            if (!this.firstLoad) {
+            if (this.initialized) {
                 this.reload();
             }
         },
@@ -158,7 +166,7 @@ define([
 
             this.set('lastError', true);
 
-            this.firstLoad = false;
+            this.initialized = true;
 
             alert({
                 content: $t('Something went wrong.')
@@ -171,7 +179,7 @@ define([
          * @param {Object} data - Retrieved data object.
          */
         onReload: function (data) {
-            this.firstLoad = false;
+            this.initialized = true;
 
             this.set('lastError', false);
 

@@ -58,6 +58,13 @@ class NotificationDataProvider implements DataProviderInterface
     private $meta;
 
     /**
+     * Namespace
+     *
+     * @var string
+     */
+    private $namespace;
+
+    /**
      * @param string $name
      * @param SearchResultInterface $searchResult
      * @param SearchCriteriaInterface $searchCriteria
@@ -210,5 +217,22 @@ class NotificationDataProvider implements DataProviderInterface
     public function getSearchResult()
     {
         return $this->searchResult;
+    }
+
+    /**
+     * @inheridoc
+     */
+    public function getNamespace()
+    {
+        return $this->namespace;
+    }
+
+    /**
+     * @inheridoc
+     * @param string $namespace
+     */
+    public function setNamespace(string $namespace)
+    {
+        $this->namespace = $namespace;
     }
 }
