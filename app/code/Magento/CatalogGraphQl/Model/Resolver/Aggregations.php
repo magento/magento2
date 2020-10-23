@@ -74,7 +74,9 @@ class Aggregations implements ResolverInterface
             if (isset($results['price_bucket'])) {
                 foreach ($results['price_bucket']['options'] as &$value) {
                     list($from, $to) = explode('-', $value['label']);
-                    $newLabel = $this->priceCurrency->convertAndRound($from) . '-' . $this->priceCurrency->convertAndRound($to);
+                    $newLabel = $this->priceCurrency->convertAndRound($from)
+                        . '-'
+                        . $this->priceCurrency->convertAndRound($to);
                     $value['label'] = $newLabel;
                     $value['value'] = str_replace('-', '_', $newLabel);
                 }
