@@ -403,20 +403,4 @@ class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
         }
         return $this;
     }
-
-    /**
-     * @param int $customerId
-     * @param string $column
-     * @param string $value
-     */
-    public function updateColumn($customerId, $column, $value)
-    {
-        $this->getConnection()->update(
-            $this->getTable('customer_entity'),
-            [$column => $value],
-            [$this->getEntityIdField() . ' = ?' => $customerId]
-        );
-
-        return $this;
-    }
 }

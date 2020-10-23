@@ -7,7 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\Customer\Model\ForgotPasswordToken;
 
-use Magento\Customer\Model\ResourceModel\Customer as CustomerResource;
+use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Confirm customer by reset password token
@@ -20,37 +22,47 @@ class ConfirmCustomerByToken
     private $getByToken;
 
     /**
-     * @var CustomerResource
+     * @var CustomerRepositoryInterface
      */
-    private $customerResource;
+    private $customerRepository;
 
     /**
-     * ConfirmByToken constructor.
-     *
      * @param GetCustomerByToken $getByToken
-     * @param CustomerResource $customerResource
+     * @param CustomerRepositoryInterface $customerRepository
      */
-    public function __construct(
-        GetCustomerByToken $getByToken,
-        CustomerResource $customerResource
-    ) {
+    public function __construct(GetCustomerByToken $getByToken, CustomerRepositoryInterface $customerRepository)
+    {
         $this->getByToken = $getByToken;
-        $this->customerResource = $customerResource;
+        $this->customerRepository = $customerRepository;
     }
 
     /**
      * Confirm customer account my rp_token
      *
      * @param string $resetPasswordToken
-     *
      * @return void
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function execute(string $resetPasswordToken): void
     {
         $customer = $this->getByToken->execute($resetPasswordToken);
         if ($customer->getConfirmation()) {
-            $this->customerResource->updateColumn($customer->getId(), 'confirmation', null);
+            $this->resetConfirmation($customer);
         }
+    }
+
+    /**
+     * Reset customer confirmation
+     *
+     * @param CustomerInterface $customer
+     * @return void
+     */
+    private function resetConfirmation(CustomerInterface $customer): void
+    {
+        // skip unnecessary address and customer validation
+        $customer->setData('ignore_validation_flag', true);
+        $customer->setConfirmation(null);
+
+        $this->customerRepository->save($customer);
     }
 }

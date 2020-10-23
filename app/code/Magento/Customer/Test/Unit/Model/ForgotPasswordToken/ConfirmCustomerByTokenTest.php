@@ -7,11 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\Customer\Test\Unit\Model\ForgotPasswordToken;
 
+use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
-use Magento\Customer\Model\ForgotPasswordToken\GetCustomerByToken;
-use Magento\Customer\Model\ResourceModel\Customer as CustomerResource;
-use Magento\Customer\Model\ResourceModel\Customer;
 use Magento\Customer\Model\ForgotPasswordToken\ConfirmCustomerByToken;
+use Magento\Customer\Model\ForgotPasswordToken\GetCustomerByToken;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -33,22 +32,26 @@ class ConfirmCustomerByTokenTest extends TestCase
     private $customerMock;
 
     /**
-     * @var CustomerResource|MockObject
+     * @var CustomerRepositoryInterface|MockObject
      */
-    private $customerResourceMock;
+    private $customerRepositoryMock;
 
     /**
      * @inheritDoc
      */
     protected function setUp(): void
     {
-        $this->customerMock = $this->getMockForAbstractClass(CustomerInterface::class);
-        $this->customerResourceMock = $this->createMock(CustomerResource::class);
+        $this->customerMock = $this->getMockBuilder(CustomerInterface::class)
+            ->disableOriginalConstructor()
+            ->addMethods(['setData'])
+            ->getMockForAbstractClass();
+
+        $this->customerRepositoryMock = $this->createMock(CustomerRepositoryInterface::class);
 
         $getCustomerByTokenMock = $this->createMock(GetCustomerByToken::class);
         $getCustomerByTokenMock->method('execute')->willReturn($this->customerMock);
 
-        $this->model = new ConfirmCustomerByToken($getCustomerByTokenMock, $this->customerResourceMock);
+        $this->model = new ConfirmCustomerByToken($getCustomerByTokenMock, $this->customerRepositoryMock);
     }
 
     /**
@@ -58,17 +61,18 @@ class ConfirmCustomerByTokenTest extends TestCase
      */
     public function testExecuteWithConfirmation(): void
     {
-        $customerId = 777;
-
         $this->customerMock->expects($this->once())
             ->method('getConfirmation')
             ->willReturn('GWz2ik7Kts517MXAgrm4DzfcxKayGCm4');
         $this->customerMock->expects($this->once())
-            ->method('getId')
-            ->willReturn($customerId);
-        $this->customerResourceMock->expects($this->once())
-            ->method('updateColumn')
-            ->with($customerId, 'confirmation', null);
+            ->method('setData')
+            ->with('ignore_validation_flag', true);
+        $this->customerMock->expects($this->once())
+            ->method('setConfirmation')
+            ->with(null);
+        $this->customerRepositoryMock->expects($this->once())
+            ->method('save')
+            ->with($this->customerMock);
 
         $this->model->execute(self::STUB_RESET_PASSWORD_TOKEN);
     }
@@ -83,8 +87,8 @@ class ConfirmCustomerByTokenTest extends TestCase
         $this->customerMock->expects($this->once())
             ->method('getConfirmation')
             ->willReturn(null);
-        $this->customerResourceMock->expects($this->never())
-            ->method('updateColumn');
+        $this->customerRepositoryMock->expects($this->never())
+            ->method('save');
 
         $this->model->execute(self::STUB_RESET_PASSWORD_TOKEN);
     }
