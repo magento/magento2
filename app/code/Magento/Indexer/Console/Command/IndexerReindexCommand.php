@@ -74,7 +74,7 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $returnValue = Cli::RETURN_FAILURE;
+        $returnValue = Cli::RETURN_SUCCESS;
         foreach ($this->getIndexers($input) as $indexer) {
             try {
                 $this->validateIndexerStatus($indexer);
@@ -97,14 +97,15 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
                 $output->writeln(
                     __('has been rebuilt successfully in %time', ['time' => gmdate('H:i:s', $resultTime)])
                 );
-                $returnValue = Cli::RETURN_SUCCESS;
             } catch (LocalizedException $e) {
                 $output->writeln(__('exception: %message', ['message' => $e->getMessage()]));
+                $returnValue = Cli::RETURN_FAILURE;
             } catch (\Exception $e) {
                 $output->writeln('process unknown error:');
                 $output->writeln($e->getMessage());
 
                 $output->writeln($e->getTraceAsString(), OutputInterface::VERBOSITY_DEBUG);
+                $returnValue = Cli::RETURN_FAILURE;
             }
         }
 
@@ -124,16 +125,16 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
             return $indexers;
         }
 
-        $relatedIndexers = [[]];
-        $dependentIndexers = [[]];
+        $relatedIndexers = [];
+        $dependentIndexers = [];
 
         foreach ($indexers as $indexer) {
             $relatedIndexers[] = $this->getRelatedIndexerIds($indexer->getId());
             $dependentIndexers[] = $this->getDependentIndexerIds($indexer->getId());
         }
 
-        $relatedIndexers = $relatedIndexers ? array_unique(array_merge(...$relatedIndexers)) : [];
-        $dependentIndexers = $dependentIndexers ? array_merge(...$dependentIndexers) : [];
+        $relatedIndexers = array_unique(array_merge([], ...$relatedIndexers));
+        $dependentIndexers = array_merge([], ...$dependentIndexers);
 
         $invalidRelatedIndexers = [];
         foreach ($relatedIndexers as $relatedIndexer) {
@@ -164,12 +165,12 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
      */
     private function getRelatedIndexerIds(string $indexerId): array
     {
-        $relatedIndexerIds = [[]];
+        $relatedIndexerIds = [];
         foreach ($this->getDependencyInfoProvider()->getIndexerIdsToRunBefore($indexerId) as $relatedIndexerId) {
             $relatedIndexerIds[] = [$relatedIndexerId];
             $relatedIndexerIds[] = $this->getRelatedIndexerIds($relatedIndexerId);
         }
-        $relatedIndexerIds = $relatedIndexerIds ? array_unique(array_merge(...$relatedIndexerIds)) : [];
+        $relatedIndexerIds = array_unique(array_merge([], ...$relatedIndexerIds));
 
         return $relatedIndexerIds;
     }
@@ -182,7 +183,7 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
      */
     private function getDependentIndexerIds(string $indexerId): array
     {
-        $dependentIndexerIds = [[]];
+        $dependentIndexerIds = [];
         foreach (array_keys($this->getConfig()->getIndexers()) as $id) {
             $dependencies = $this->getDependencyInfoProvider()->getIndexerIdsToRunBefore($id);
             if (array_search($indexerId, $dependencies) !== false) {
@@ -190,7 +191,7 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
                 $dependentIndexerIds[] = $this->getDependentIndexerIds($id);
             }
         }
-        $dependentIndexerIds = $dependentIndexerIds ? array_unique(array_merge(...$dependentIndexerIds)) : [];
+        $dependentIndexerIds = array_unique(array_merge([], ...$dependentIndexerIds));
 
         return $dependentIndexerIds;
     }

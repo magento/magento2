@@ -371,11 +371,11 @@ class Files
             }
             $globPaths = [BP . '/app/etc/config.xml', BP . '/app/etc/*/config.xml'];
             $configXmlPaths = array_merge($globPaths, $configXmlPaths);
-            $files = [[]];
+            $files = [];
             foreach ($configXmlPaths as $xmlPath) {
                 $files[] = glob($xmlPath, GLOB_NOSORT);
             }
-            self::$_cache[$cacheKey] = array_merge(...$files);
+            self::$_cache[$cacheKey] = array_merge([], ...$files);
         }
         if ($asDataSet) {
             return self::composeDataSets(self::$_cache[$cacheKey]);
@@ -644,23 +644,19 @@ class Files
                         $regex = '#^' . $modulePath . '/view/(?P<area>[a-z]+)/layout/(?P<path>.+)$#i';
                         if (preg_match($regex, $moduleFile, $matches)) {
                             $files[] = [
-                                $matches['area'],
-                                '',
-                                $moduleName,
-                                $matches['path'],
-                                $moduleFile,
+                                [$matches['area'], '', $moduleName, $matches['path'], $moduleFile]
                             ];
                         } else {
                             throw new \UnexpectedValueException("Could not parse modular layout file '$moduleFile'");
                         }
                     }
                 } else {
-                    // phpcs:ignore Magento2.Performance.ForeachArrayMerge
-                    $files = array_merge($files, $moduleFiles);
+                    $files[] = $moduleFiles;
                 }
             }
         }
-        return $files;
+
+        return array_merge([], ...$files);
     }
 
     /**
@@ -691,14 +687,14 @@ class Files
 
                 if ($params['with_metainfo']) {
                     // phpcs:ignore Magento2.Performance.ForeachArrayMerge
-                    $files = array_merge($this->parseThemeFiles($themeFiles, $currentThemePath, $theme));
+                    $files[] = [array_merge($this->parseThemeFiles($themeFiles, $currentThemePath, $theme))];
                 } else {
-                    // phpcs:ignore Magento2.Performance.ForeachArrayMerge
-                    $files = array_merge($files, $themeFiles);
+                    $files[] = $themeFiles;
                 }
             }
         }
-        return $files;
+
+        return array_merge([], ...$files);
     }
 
     /**
