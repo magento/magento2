@@ -66,10 +66,6 @@
         <!--Save product-->
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
 
-<!--        &lt;!&ndash; Assert product image in admin product form &ndash;&gt;-->
-<!--        <actionGroup ref="AssertProductImageAdminProductPageActionGroup" stepKey="assertProductImageAdminProductPage"/>-->
-
-
         <actionGroup ref="StorefrontOpenCustomerLoginPageActionGroup" stepKey="goToSignInPage"/>
         <actionGroup ref="StorefrontFillCustomerLoginFormActionGroup" stepKey="fillLoginFormWithCorrectCredentials">
             <argument name="customer" value="$$customer$$"/>
@@ -82,31 +78,19 @@
         <see stepKey="seeEmail" userInput="$$customer.email$$"
              selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}"/>
 
-
         <!-- Assert product in storefront product page -->
         <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageActionGroup" stepKey="AssertProductInStorefrontProductPage">
             <argument name="product" value="BundleProduct"/>
         </actionGroup>
-
 
         <waitForElementVisible selector ="{{StorefrontBundleProductSection.CustomizeAndAddToCartButton($$product.name$$)}}"
                                stepKey="CustomizeAndAddToCartButton"/>
         <moveMouseOver stepKey="mouseOver1" selector="{{StorefrontBundleProductSection.CustomizeAndAddToCartButton($$product.name$$)}}"/>
         <click stepKey="clickButton" selector="{{StorefrontBundleProductSection.CustomizeAndAddToCartButton($$product.name$$)}}"/>
 
-
         <waitForElementVisible selector =".options-list:first-child" stepKey="BundleOption1"/>
         <moveMouseOver stepKey="mouseOver2" selector=".options-list:first-child"/>
         <checkOption selector=".options-list:first-child" stepKey="checkCheckbox1"/>
-
-
-<!--        <waitForElementVisible selector ="{{StorefrontBundleProductSection.checkOptionOfBundleProduct2($$product.name$$)}}" stepKey="2"/>-->
-<!--        <moveMouseOver stepKey="mouseOver3" selector="{{StorefrontBundleProductSection.checkOptionOfBundleProduct2($$product.name$$)}}"/>-->
-<!--        <checkOption selector="{{StorefrontBundleProductSection.checkOptionOfBundleProduct2($$product.name$$)}}" stepKey="checkCheckbox3"/>-->
-
-<!--        <waitForElementVisible selector ="{{StorefrontBundleProductSection.checkOptionOfBundleProduct3($$product.name$$)}}" stepKey="3"/>-->
-<!--        <moveMouseOver stepKey="mouseOver4" selector="{{StorefrontBundleProductSection.checkOptionOfBundleProduct3($$product.name$$)}}"/>-->
-<!--        <checkOption selector="{{StorefrontBundleProductSection.checkOptionOfBundleProduct3($$product.name$$)}}" stepKey="checkCheckbox4"/>-->
 
         <moveMouseOver stepKey="mouseOver5" selector="{{StorefrontBundleProductSection.addToWishList($$product.name$$)}}"/>
         <click stepKey="clickButton5" selector="{{StorefrontBundleProductSection.addToWishList($$product.name$$)}}"/>

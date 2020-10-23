@@ -143,6 +143,8 @@ define([
         },
 
         /**
+         * Update only QTY when it changed (bundle options keep the same)
+         *
          * @private
          */
         _updateQty: function () {
