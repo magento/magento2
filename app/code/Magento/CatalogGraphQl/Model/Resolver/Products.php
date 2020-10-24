@@ -80,7 +80,8 @@ class Products implements ResolverInterface
         ];
 
         if (isset($args['filter'])) {
-            $data['categories'] = [$args['filter']['category_id']['eq'] ?? $args['filter']['category_id']['in']];
+            $data['categories'] = $args['filter']['category_id']['eq'] ?? $args['filter']['category_id']['in'];
+            $data['categories'] = is_array($data['categories']) ? $data['categories'] : [$data['categories']];
         }
 
         return $data;
