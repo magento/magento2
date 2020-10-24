@@ -54,6 +54,6 @@ QUERY;
         $out = '';
         // phpcs:ignore Magento2.Security.InsecureFunction
         exec("php -f {$appDir}/bin/magento indexer:reindex", $out);
-        $this->cleanCache();
+        CacheCleaner::clean(['eav', 'config', 'collections']);
     }
 }
