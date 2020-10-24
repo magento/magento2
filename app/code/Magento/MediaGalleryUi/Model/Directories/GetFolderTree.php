@@ -13,6 +13,7 @@ use Magento\Framework\Filesystem;
 use Magento\MediaGalleryApi\Api\IsPathExcludedInterface;
 use Magento\Framework\Filesystem\Driver\File;
 use Magento\Framework\Filesystem\Io\File as FileIo;
+use Magento\Framework\Filesystem\Glob;
 
 /**
  * Build media gallery folder tree structure by path
@@ -40,20 +41,28 @@ class GetFolderTree
     private $file;
 
     /**
+     * @var Glob
+     */
+    private $glob;
+
+    /**
      * @param Filesystem $filesystem
      * @param File $driver
      * @param FileIo $file
+     * @param Glob $glob
      * @param IsPathExcludedInterface $isPathExcluded
      */
     public function __construct(
         Filesystem $filesystem,
         File $driver,
         FileIo $file,
+        Glob $glob,
         IsPathExcludedInterface $isPathExcluded
     ) {
         $this->filesystem = $filesystem;
         $this->driver = $driver;
         $this->file = $file;
+        $this->glob = $glob;
         $this->isPathExcluded = $isPathExcluded;
     }
 
@@ -65,6 +74,7 @@ class GetFolderTree
      */
     public function execute(): array
     {
+        ini_set('memory_limit', '100M');
         $tree = [
             'name' => 'root',
             'path' => '/',
@@ -92,7 +102,7 @@ class GetFolderTree
         $directories = [];
 
         $mediaPath = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA)->getAbsolutePath();
-        $directoryList = $this->recursiveRead($mediaPath . '*', GLOB_BRACE | GLOB_ONLYDIR);
+        $directoryList = $this->recursiveRead($mediaPath . '*', Glob::GLOB_ONLYDIR);
 
         foreach ($directoryList as $path) {
             $path = str_replace($mediaPath, '', $path);
@@ -122,12 +132,9 @@ class GetFolderTree
      */
     private function recursiveRead(string $pattern, int $flags = 0): array
     {
-        // phpcs:ignore Magento2.Functions.DiscouragedFunction
-        $directories = glob($pattern, $flags);
+        $directories = $this->glob->glob($pattern, $flags);
 
-        // phpcs:ignore Magento2.Functions.DiscouragedFunction
-        foreach (glob($this->driver->getParentDirectory($pattern) . '/*', $flags) as $dir) {
-            //phpcs:ignore Magento2.Performance.ForeachArrayMerge
+        foreach ($this->glob->glob($this->driver->getParentDirectory($pattern) . '/*', $flags) as $dir) {
             $directories = array_merge(
                 $directories,
                 $this->recursiveRead($dir . '/' .  $this->file->getPathInfo($pattern)['basename'], $flags)
