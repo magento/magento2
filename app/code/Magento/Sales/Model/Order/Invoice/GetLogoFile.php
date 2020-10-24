@@ -48,15 +48,17 @@ class GetLogoFile
      */
     public function execute(): ?string
     {
-        $result = null;
-
         $invoiceLogoPath = $this->getIdentityLogoHtml();
-        if ($invoiceLogoPath) {
-            $mediaBaseUrl = $this->urlBuilder->getBaseUrl(['_type' => UrlInterface::URL_TYPE_MEDIA]);
-            $result = sprintf('%s%s%s', $mediaBaseUrl, $this->getLogoBaseDir(), $invoiceLogoPath);
+        if (!$invoiceLogoPath) {
+            return null;
         }
 
-        return $result;
+        return sprintf(
+            "%s%s%s",
+            $this->urlBuilder->getBaseUrl(['_type' => UrlInterface::URL_TYPE_MEDIA]),
+            $this->getLogoBaseDir(),
+            $invoiceLogoPath
+        );
     }
 
     /**
