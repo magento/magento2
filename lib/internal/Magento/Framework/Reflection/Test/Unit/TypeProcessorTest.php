@@ -221,9 +221,9 @@ class TypeProcessorTest extends TestCase
      */
     public function testProcessSimpleTypeException($value, $type)
     {
-        $this->expectException(
-            SerializationException::class,
-            'Invalid type for value: "' . $value . '". Expected Type: "' . $type . '"'
+        $this->expectException(SerializationException::class);
+        $this->expectExceptionMessage(
+            "The \"$value\" value's type is invalid. The \"$type\" type was expected. Verify and try again."
         );
         $this->typeProcessor->processSimpleAndAnyType($value, $type);
     }
