@@ -16,14 +16,14 @@
             <severity value="MINOR"/>
         </annotations>
         <before>
+            <createData entity="_defaultBlock" stepKey="createPreReqBlock" />
             <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
         </before>
         <after>
-            <actionGroup ref="DeleteCMSBlockActionGroup" stepKey="removeBlock"/>
+            <deleteData createDataKey="createPreReqBlock" stepKey="deletePreReqBlock" />
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
-        <actionGroup ref="AdminCreateNewCMSBlockActionGroup" stepKey="addNewBlock"/>
         <actionGroup ref="AdminOpenCmsBlocksGridActionGroup" stepKey="openCmsBlocksGrid"/>
 
         <actionGroup ref="AdminClickTableGridRowBySelectorActionGroup" stepKey="clickTableRow">
