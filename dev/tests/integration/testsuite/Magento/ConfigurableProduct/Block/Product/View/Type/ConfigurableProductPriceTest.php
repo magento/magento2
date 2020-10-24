@@ -14,13 +14,16 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\View\Result\Page;
+use Magento\Framework\View\Result\PageFactory;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Store\ExecuteInStoreContext;
 use PHPUnit\Framework\TestCase;
 
 /**
  * Check configurable product price displaying
  *
- * @magentoDbIsolation enabled
+ * @magentoDbIsolation disabled
  * @magentoAppIsolation enabled
  * @magentoAppArea frontend
  */
@@ -44,6 +47,12 @@ class ConfigurableProductPriceTest extends TestCase
     /** @var SerializerInterface */
     private $json;
 
+    /** @var StoreManagerInterface */
+    private $storeManager;
+
+    /** @var ExecuteInStoreContext */
+    private $executeInStoreContext;
+
     /**
      * @inheritdoc
      */
@@ -53,11 +62,13 @@ class ConfigurableProductPriceTest extends TestCase
 
         $this->objectManager = Bootstrap::getObjectManager();
         $this->registry = $this->objectManager->get(Registry::class);
-        $this->page = $this->objectManager->get(Page::class);
+        $this->page = $this->objectManager->get(PageFactory::class)->create();
         $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
         $this->productRepository->cleanCache();
         $this->productCustomOption = $this->objectManager->get(ProductCustomOptionInterface::class);
         $this->json = $this->objectManager->get(SerializerInterface::class);
+        $this->storeManager = $this->objectManager->get(StoreManagerInterface::class);
+        $this->executeInStoreContext = $this->objectManager->get(ExecuteInStoreContext::class);
     }
 
     /**
@@ -78,7 +89,20 @@ class ConfigurableProductPriceTest extends TestCase
      */
     public function testConfigurablePrice(): void
     {
-        $this->assertPrice($this->processPriceView('configurable'), 10.00);
+        $this->assertPrice('configurable', 10.00);
+    }
+
+    /**
+     * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_product_with_price_on_second_website.php
+     * @magentoDbIsolation disabled
+     *
+     * @return void
+     */
+    public function testConfigurablePriceOnSecondWebsite(): void
+    {
+        $this->executeInStoreContext->execute('fixture_second_store', [$this, 'assertPrice'], 'configurable', 10.00);
+        $this->resetPageLayout();
+        $this->assertPrice('configurable', 150.00);
     }
 
     /**
@@ -88,7 +112,7 @@ class ConfigurableProductPriceTest extends TestCase
      */
     public function testConfigurablePriceWithDisabledFirstChild(): void
     {
-        $this->assertPrice($this->processPriceView('configurable'), 20.00);
+        $this->assertPrice('configurable', 20.00);
     }
 
     /**
@@ -98,7 +122,7 @@ class ConfigurableProductPriceTest extends TestCase
      */
     public function testConfigurablePriceWithOutOfStockFirstChild(): void
     {
-        $this->assertPrice($this->processPriceView('configurable'), 20.00);
+        $this->assertPrice('configurable', 20.00);
     }
 
     /**
@@ -110,7 +134,7 @@ class ConfigurableProductPriceTest extends TestCase
      */
     public function testConfigurablePriceWithCatalogRule(): void
     {
-        $this->assertPrice($this->processPriceView('configurable'), 9.00);
+        $this->assertPrice('configurable', 9.00);
     }
 
     /**
@@ -120,7 +144,7 @@ class ConfigurableProductPriceTest extends TestCase
      */
     public function testConfigurablePriceWithCustomOption(): void
     {
-        $product = $this->productRepository->get('configurable');
+        $product = $this->getProduct('configurable');
         $this->registerProduct($product);
         $this->preparePageLayout();
         $customOptionsBlock = $this->page->getLayout()
@@ -163,6 +187,16 @@ class ConfigurableProductPriceTest extends TestCase
     }
 
     /**
+     * Reset layout page to get new block html.
+     *
+     * @return void
+     */
+    private function resetPageLayout(): void
+    {
+        $this->page = $this->objectManager->get(PageFactory::class)->create();
+    }
+
+    /**
      * Process view product final price block html.
      *
      * @param string $sku
@@ -170,7 +204,7 @@ class ConfigurableProductPriceTest extends TestCase
      */
     private function processPriceView(string $sku): string
     {
-        $product = $this->productRepository->get($sku);
+        $product = $this->getProduct($sku);
         $this->registerProduct($product);
         $this->preparePageLayout();
 
@@ -180,12 +214,13 @@ class ConfigurableProductPriceTest extends TestCase
     /**
      * Assert that html contain price label and expected final price amount.
      *
-     * @param string $priceBlockHtml
+     * @param string $sku
      * @param float $expectedPrice
      * @return void
      */
-    private function assertPrice(string $priceBlockHtml, float $expectedPrice): void
+    public function assertPrice(string $sku, float $expectedPrice): void
     {
+        $priceBlockHtml = $this->processPriceView($sku);
         $regexp = '/<span class="price-label">As low as<\/span>.*';
         $regexp .= '<span.*data-price-amount="%s".*<span class="price">\$%.2f<\/span><\/span>/';
         $this->assertMatchesRegularExpression(
@@ -207,5 +242,16 @@ class ConfigurableProductPriceTest extends TestCase
         $price = $this->json->unserialize($config)[$optionId]['prices']['finalPrice']['amount'] ?? null;
         $this->assertNotNull($price);
         $this->assertEquals($expectedPrice, $price);
+    }
+
+    /**
+     * Loads product by sku.s
+     *
+     * @param string $sku
+     * @return ProductInterface
+     */
+    private function getProduct(string $sku): ProductInterface
+    {
+        return $this->productRepository->get($sku, false, $this->storeManager->getStore()->getId(), true);
     }
 }

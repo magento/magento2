@@ -550,6 +550,9 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
 
         $quote = $this->getQuote();
         if (!$quote->isVirtual() && $this->getShippingAddress()->getSameAsBilling()) {
+            $quote->getBillingAddress()->setCustomerAddressId(
+                $quote->getShippingAddress()->getCustomerAddressId()
+            );
             $this->setShippingAsBilling(1);
         }
 
@@ -642,6 +645,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      * @param \Magento\Sales\Model\Order\Item $orderItem
      * @param int $qty
      * @return \Magento\Quote\Model\Quote\Item|string|$this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function initFromOrderItem(\Magento\Sales\Model\Order\Item $orderItem, $qty = null)
     {
@@ -666,10 +670,17 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
             $productOptions = $orderItem->getProductOptions();
             if ($productOptions !== null && !empty($productOptions['options'])) {
                 $formattedOptions = [];
+                $useFrontendCalendar = $this->useFrontendCalendar();
                 foreach ($productOptions['options'] as $option) {
+                    if (in_array($option['option_type'], ['date', 'date_time']) && $useFrontendCalendar) {
+                        $product->setSkipCheckRequiredOption(false);
+                        break;
+                    }
                     $formattedOptions[$option['option_id']] = $option['option_value'];
                 }
-                $buyRequest->setData('options', $formattedOptions);
+                if (!empty($formattedOptions)) {
+                    $buyRequest->setData('options', $formattedOptions);
+                }
             }
             $item = $this->getQuote()->addProduct($product, $buyRequest);
             if (is_string($item)) {
@@ -745,10 +756,12 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
             try {
                 $this->_cart = $this->quoteRepository->getForCustomer($customerId, [$storeId]);
             } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
-                $this->_cart->setStore($this->getSession()->getStore());
-                $customerData = $this->customerRepository->getById($customerId);
-                $this->_cart->assignCustomer($customerData);
-                $this->quoteRepository->save($this->_cart);
+                if ($this->getQuote()->hasItems()) {
+                    $this->_cart->setStore($this->getSession()->getStore());
+                    $customerData = $this->customerRepository->getById($customerId);
+                    $this->_cart->assignCustomer($customerData);
+                    $this->quoteRepository->save($this->_cart);
+                }
             }
         }
 
@@ -785,6 +798,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
     public function getCustomerGroupId()
     {
         $groupId = $this->getQuote()->getCustomerGroupId();
+        // @phpstan-ignore-next-line
         if (!isset($groupId)) {
             $groupId = $this->getSession()->getCustomerGroupId();
         }
@@ -1159,7 +1173,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
      *
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      */
     protected function _parseOptions(\Magento\Quote\Model\Quote\Item $item, $additionalOptions)
     {
@@ -1229,7 +1243,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      * @param array $options
      * @return $this
      *
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      */
     protected function _assignOptionsToItem(\Magento\Quote\Model\Quote\Item $item, $options)
     {
@@ -1443,9 +1457,10 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
              */
             $saveInAddressBook = (int)(!empty($address['save_in_address_book']));
             $shippingAddress->setData('save_in_address_book', $saveInAddressBook);
-        }
-        if ($address instanceof \Magento\Quote\Model\Quote\Address) {
+        } elseif ($address instanceof \Magento\Quote\Model\Quote\Address) {
             $shippingAddress = $address;
+        } else {
+            $shippingAddress = null;
         }
 
         $this->setRecollect(true);
@@ -1995,14 +2010,16 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
             $this->_errors[] = __('Please specify order items.');
         }
 
+        $errors = [];
         foreach ($items as $item) {
             /** @var \Magento\Quote\Model\Quote\Item $item */
             $messages = $item->getMessage(false);
             if ($item->getHasError() && is_array($messages) && !empty($messages)) {
-                // phpcs:ignore Magento2.Performance.ForeachArrayMerge
-                $this->_errors = array_merge($this->_errors, $messages);
+                $errors[] = $messages;
             }
         }
+
+        $this->_errors = array_merge([], $this->_errors, ...$errors);
 
         if (!$this->getQuote()->isVirtual()) {
             if (!$this->getQuote()->getShippingAddress()->getShippingMethod()) {
@@ -2106,7 +2123,23 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
             $billingData['address_type'],
             $billingData['entity_id']
         );
+        if (isset($shippingData['customer_address_id']) && !isset($billingData['customer_address_id'])) {
+            unset($shippingData['customer_address_id']);
+        }
 
         return $shippingData == $billingData;
+    }
+
+    /**
+     * Use Calendar on frontend or not
+     *
+     * @return bool
+     */
+    private function useFrontendCalendar(): bool
+    {
+        return (bool)$this->_scopeConfig->getValue(
+            'catalog/custom_options/use_calendar',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
     }
 }

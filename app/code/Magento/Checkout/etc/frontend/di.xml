@@ -99,4 +99,18 @@
     <type name="Magento\Quote\Model\Quote">
         <plugin name="clear_addresses_after_product_delete" type="Magento\Checkout\Plugin\Model\Quote\ResetQuoteAddresses"/>
     </type>
+    <type name="Magento\Store\Model\StoreSwitcher\RedirectDataPreprocessorComposite">
+        <arguments>
+            <argument name="processors" xsi:type="array">
+                <item name="checkout_session" xsi:type="object">Magento\Checkout\Model\StoreSwitcher\RedirectDataPreprocessor</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Store\Model\StoreSwitcher\RedirectDataPostprocessorComposite">
+        <arguments>
+            <argument name="processors" xsi:type="array">
+                <item name="checkout_session" xsi:type="object">Magento\Checkout\Model\StoreSwitcher\RedirectDataPostprocessor</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-declare(strict_types=1);
 
 namespace Magento\Catalog\Model\Product\Option\Type;
 
@@ -11,6 +10,7 @@ use Magento\Catalog\Model\Product\Option\Value;
 use Magento\Catalog\Pricing\Price\CalculateCustomOptionCatalogRule;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Catalog\Model\Product\Option;
 
 /**
  * Catalog product option select type
@@ -53,7 +53,7 @@ class Select extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      * @param \Magento\Framework\Escaper $escaper
      * @param array $data
      * @param array $singleSelectionTypes
-     * @param CalculateCustomOptionCatalogRule $calculateCustomOptionCatalogRule
+     * @param CalculateCustomOptionCatalogRule|null $calculateCustomOptionCatalogRule
      */
     public function __construct(
         \Magento\Checkout\Model\Session $checkoutSession,
@@ -261,11 +261,7 @@ class Select extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
             foreach (explode(',', $optionValue) as $value) {
                 $_result = $option->getValueById($value);
                 if ($_result) {
-                    $result += $this->calculateCustomOptionCatalogRule->execute(
-                        $option->getProduct(),
-                        (float)$_result->getPrice(),
-                        $_result->getPriceType() === Value::TYPE_PERCENT
-                    );
+                    $result += $this->getCalculatedOptionValue($option, $_result, $basePrice);
                 } else {
                     if ($this->getListener()) {
                         $this->getListener()->setHasError(true)->setMessage($this->_getWrongConfigurationMessage());
@@ -276,11 +272,20 @@ class Select extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
         } elseif ($this->_isSingleSelection()) {
             $_result = $option->getValueById($optionValue);
             if ($_result) {
-                $result = $this->calculateCustomOptionCatalogRule->execute(
+                $catalogPriceValue = $this->calculateCustomOptionCatalogRule->execute(
                     $option->getProduct(),
                     (float)$_result->getPrice(),
                     $_result->getPriceType() === Value::TYPE_PERCENT
                 );
+                if ($catalogPriceValue !== null) {
+                    $result = $catalogPriceValue;
+                } else {
+                    $result = $this->_getChargeableOptionPrice(
+                        $_result->getPrice(),
+                        $_result->getPriceType() == 'percent',
+                        $basePrice
+                    );
+                }
             } else {
                 if ($this->getListener()) {
                     $this->getListener()->setHasError(true)->setMessage($this->_getWrongConfigurationMessage());
@@ -341,5 +346,32 @@ class Select extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
     protected function _isSingleSelection()
     {
         return in_array($this->getOption()->getType(), $this->singleSelectionTypes, true);
+    }
+
+    /**
+     * Returns calculated price of option
+     *
+     * @param Option $option
+     * @param Option\Value $result
+     * @param float $basePrice
+     * @return float
+     */
+    protected function getCalculatedOptionValue(Option $option, Value $result, float $basePrice) : float
+    {
+        $catalogPriceValue = $this->calculateCustomOptionCatalogRule->execute(
+            $option->getProduct(),
+            (float)$result->getPrice(),
+            $result->getPriceType() === Value::TYPE_PERCENT
+        );
+        if ($catalogPriceValue !== null) {
+            $optionCalculatedValue = $catalogPriceValue;
+        } else {
+            $optionCalculatedValue = $this->_getChargeableOptionPrice(
+                $result->getPrice(),
+                $result->getPriceType() === Value::TYPE_PERCENT,
+                $basePrice
+            );
+        }
+        return $optionCalculatedValue;
     }
 }

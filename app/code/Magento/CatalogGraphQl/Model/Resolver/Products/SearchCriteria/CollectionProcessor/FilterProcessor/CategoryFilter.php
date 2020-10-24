@@ -64,7 +64,7 @@ class CategoryFilter implements CustomFilterInterface
             $collection->addCategoryFilter($category);
         }
 
-        $categoryProductIds = array_unique(array_merge(...$categoryProducts));
+        $categoryProductIds = array_unique(array_merge([], ...$categoryProducts));
         $collection->addIdFilter($categoryProductIds);
         return true;
     }

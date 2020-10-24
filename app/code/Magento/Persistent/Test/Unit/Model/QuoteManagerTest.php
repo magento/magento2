@@ -9,6 +9,8 @@ declare(strict_types=1);
 namespace Magento\Persistent\Test\Unit\Model;
 
 use Magento\Checkout\Model\Session;
+use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Customer\Api\Data\CustomerInterfaceFactory;
 use Magento\Customer\Model\GroupManagement;
 use Magento\Eav\Model\Entity\Collection\AbstractCollection;
 use Magento\Persistent\Helper\Data;
@@ -78,6 +80,11 @@ class QuoteManagerTest extends TestCase
      */
     private $shippingAssignmentProcessor;
 
+    /**
+     * @var CustomerInterfaceFactory|MockObject
+     */
+    private $customerDataFactory;
+
     protected function setUp(): void
     {
         $this->persistentSessionMock = $this->createMock(\Magento\Persistent\Helper\Session::class);
@@ -124,13 +131,15 @@ class QuoteManagerTest extends TestCase
                 'getItemsQty',
                 'getExtensionAttributes',
                 'setExtensionAttributes',
-                '__wakeup'
+                '__wakeup',
+                'setCustomer'
             ])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->cartExtensionFactory = $this->createPartialMock(CartExtensionFactory::class, ['create']);
         $this->shippingAssignmentProcessor = $this->createPartialMock(ShippingAssignmentProcessor::class, ['create']);
+        $this->customerDataFactory = $this->createMock(CustomerInterfaceFactory::class);
 
         $this->model = new QuoteManager(
             $this->persistentSessionMock,
@@ -138,7 +147,8 @@ class QuoteManagerTest extends TestCase
             $this->checkoutSessionMock,
             $this->quoteRepositoryMock,
             $this->cartExtensionFactory,
-            $this->shippingAssignmentProcessor
+            $this->shippingAssignmentProcessor,
+            $this->customerDataFactory
         );
     }
 
@@ -189,6 +199,7 @@ class QuoteManagerTest extends TestCase
 
     public function testSetGuest()
     {
+        $customerId = 22;
         $this->checkoutSessionMock->expects($this->once())
             ->method('getQuote')->willReturn($this->quoteMock);
         $this->quoteMock->expects($this->once())->method('getId')->willReturn(11);
@@ -220,6 +231,7 @@ class QuoteManagerTest extends TestCase
             ->method('getShippingAddress')->willReturn($quoteAddressMock);
         $this->quoteMock->expects($this->once())
             ->method('getBillingAddress')->willReturn($quoteAddressMock);
+        $this->quoteMock->method('getCustomerId')->willReturn($customerId);
         $this->quoteMock->expects($this->once())->method('collectTotals')->willReturn($this->quoteMock);
         $this->quoteRepositoryMock->expects($this->once())->method('save')->with($this->quoteMock);
         $this->persistentSessionMock->expects($this->once())
@@ -228,13 +240,8 @@ class QuoteManagerTest extends TestCase
             ->method('removePersistentCookie')->willReturn($this->sessionMock);
         $this->quoteMock->expects($this->once())->method('isVirtual')->willReturn(false);
         $this->quoteMock->expects($this->once())->method('getItemsQty')->willReturn(1);
-        $extensionAttributes = $this->createPartialMock(
-            CartExtensionInterface::class,
-            [
-                'setShippingAssignments',
-                'getShippingAssignments'
-            ]
-        );
+        $extensionAttributes = $this->getMockBuilder(CartExtensionInterface::class)
+            ->getMockForAbstractClass();
         $shippingAssignment = $this->createMock(ShippingAssignmentInterface::class);
         $extensionAttributes->expects($this->once())
             ->method('setShippingAssignments')
@@ -252,6 +259,11 @@ class QuoteManagerTest extends TestCase
         $this->quoteMock->expects($this->once())
             ->method('setExtensionAttributes')
             ->with($extensionAttributes);
+        $customerMock = $this->createMock(CustomerInterface::class);
+        $this->customerDataFactory->method('create')->willReturn($customerMock);
+        $this->quoteMock->expects($this->once())
+            ->method('setCustomer')
+            ->with($customerMock);
         $this->model->setGuest(false);
     }
 
