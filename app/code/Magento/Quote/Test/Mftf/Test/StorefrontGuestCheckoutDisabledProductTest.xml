@@ -125,6 +125,7 @@
         <!-- Check cart -->
         <wait time="60" stepKey="waitForCartToBeUpdated"/>
         <actionGroup ref="ReloadPageActionGroup" stepKey="reloadPage"/>
+        <comment userInput="Replacing reload action and preserve Backward Compatibility" stepKey="waitForCheckoutPageReload"/>
         <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="clickMiniCart"/>
         <dontSeeElement selector="{{StorefrontMinicartSection.quantity}}" stepKey="dontSeeCartItem"/>
         <!-- Add simple product to shopping cart -->
@@ -151,6 +152,8 @@
         <!--Check cart-->
         <wait time="60" stepKey="waitForCartToBeUpdated2"/>
         <actionGroup ref="ReloadPageActionGroup" stepKey="reloadPage2"/>
+        <comment userInput="Replacing reload action and preserve Backward Compatibility" stepKey="waitForCheckoutPageReload2"/>
+
         <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="clickMiniCart2"/>
         <dontSeeElement selector="{{StorefrontMinicartSection.quantity}}" stepKey="dontSeeCartItem2"/>
     </test>

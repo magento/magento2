@@ -121,6 +121,7 @@
 
         <!-- 3. Go to storefront and click on cart button on the top -->
         <actionGroup ref="ReloadPageActionGroup" stepKey="reloadPage"/>
+        <comment userInput="Replacing reload action and preserve Backward Compatibility" stepKey="waitForReload"/>
         <actionGroup ref="StorefrontOpenMiniCartActionGroup" stepKey="openMiniCart"/>
 
         <!-- Check button "Proceed to Checkout". There must be red borders and "book" icons on labels that can be translated. -->
@@ -490,6 +491,8 @@
 
         <!-- Reload page after full clear -->
         <actionGroup ref="ReloadPageActionGroup" stepKey="reloadPageAfterFullClean"/>
+        <comment userInput="Replacing reload action and preserve Backward Compatibility" stepKey="waitForPageLoadAfterFullClean"/>
+
 
         <!-- Add product to cart and go through Checkout process like you did in steps ##3-6 and check translation you maid. -->
         <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="openProductPage1">

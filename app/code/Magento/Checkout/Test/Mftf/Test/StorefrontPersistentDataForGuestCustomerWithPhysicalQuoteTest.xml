@@ -50,6 +50,7 @@
         <see selector="{{CheckoutCartSummarySection.total}}" userInput="15" stepKey="assertOrderTotalField"/>
         <!-- 5. Refresh browser page (F5) -->
         <actionGroup ref="ReloadPageActionGroup" stepKey="reloadPage"/>
+        <comment userInput="Replacing reload action and preserve Backward Compatibility" stepKey="waitForPageLoad"/>
         <actionGroup ref="StorefrontAssertCartEstimateShippingAndTaxActionGroup" stepKey="assertCartEstimateShippingAndTaxAfterPageReload"/>
         <actionGroup ref="StorefrontAssertCartShippingMethodSelectedActionGroup" stepKey="assertFlatRateShippingMethodIsChecked">
             <argument name="carrierCode" value="flatrate"/>
@@ -71,6 +72,8 @@
         <actionGroup ref="StorefrontFillGuestShippingInfoActionGroup" stepKey="fillOtherFieldsInCheckoutShippingSection"/>
         <!-- 10. Refresh browser page(F5) -->
         <actionGroup ref="ReloadPageActionGroup" stepKey="reloadCheckoutPage"/>
+        <comment userInput="Replacing reload action and preserve Backward Compatibility" stepKey="waitForCheckoutPageLoad"/>
+
         <actionGroup ref="StorefrontAssertGuestShippingInfoActionGroup" stepKey="assertGuestShippingPersistedInfoAfterReloadingCheckoutShippingPage"/>
         <actionGroup ref="StorefrontAssertCheckoutShippingMethodSelectedActionGroup" stepKey="assertFreeShippingShippingMethodIsChecked">
             <argument name="shippingMethod" value="Free Shipping"/>
