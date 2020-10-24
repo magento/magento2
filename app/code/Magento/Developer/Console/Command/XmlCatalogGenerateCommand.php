@@ -116,7 +116,7 @@ class XmlCatalogGenerateCommand extends Command
         $files = $this->filesUtility->getXmlCatalogFiles('*.xml');
         $files = array_merge($files, $this->filesUtility->getXmlCatalogFiles('*.xsd'));
 
-        $urns = [[]];
+        $urns = [];
         foreach ($files as $file) {
             // phpcs:ignore Magento2.Functions.DiscouragedFunction
             $fileDir = dirname($file[0]);
@@ -130,7 +130,7 @@ class XmlCatalogGenerateCommand extends Command
                 $urns[] = $matches[1];
             }
         }
-        $urns = array_unique(array_merge(...$urns));
+        $urns = array_unique(array_merge([], ...$urns));
         $paths = [];
         foreach ($urns as $urn) {
             try {
