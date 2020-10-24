@@ -37,13 +37,11 @@
     </dataSource>
     <listingToolbar name="listing_top">
         <bookmark name="bookmarks">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="imports" xsi:type="array">
-                        <item name="current.request_params.parent_id" xsi:type="string">${ $.provider }:params.parent_id</item>
-                    </item>
-                </item>
-            </argument>
+            <settings>
+                <imports>
+                    <link name="current.request_params.parent_id">${ $.provider }:params.parent_id</link>
+                </imports>
+            </settings>
         </bookmark>
         <columnsControls name="columns_controls"/>
         <filterSearch name="fulltext"/>
