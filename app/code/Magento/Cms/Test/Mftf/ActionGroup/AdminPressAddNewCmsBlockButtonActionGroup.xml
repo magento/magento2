@@ -8,11 +8,12 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminOpenCmsBlocksGridActionGroup">
+    <actionGroup name="AdminPressAddNewCmsBlockButtonActionGroup">
         <annotations>
-            <description>Open grid of CMS Blocks.</description>
+            <description>Press Add new block button on Cms Blocks gid page</description>
         </annotations>
-        <amOnPage url="{{CmsBlocksPage.url}}" stepKey="navigateToCMSBlocksGrid"/>
+
+        <click selector="{{BlockPageActionsSection.addNewBlock}}" stepKey="clickOnAddNewBlockButton"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
     </actionGroup>
 </actionGroups>

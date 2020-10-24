@@ -8,11 +8,14 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminOpenCmsBlocksGridActionGroup">
+    <actionGroup name="AssertAdminProperUrlIsShownActionGroup">
         <annotations>
-            <description>Open grid of CMS Blocks.</description>
+            <description>Assert current page has proper URL</description>
         </annotations>
-        <amOnPage url="{{CmsBlocksPage.url}}" stepKey="navigateToCMSBlocksGrid"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <arguments>
+            <argument name="target_path" type="string"/>
+        </arguments>
+
+        <seeInCurrentUrl url="{{target_path}}" stepKey="seePropertUrl"/>
     </actionGroup>
 </actionGroups>

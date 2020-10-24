@@ -8,11 +8,11 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminOpenCmsBlocksGridActionGroup">
-        <annotations>
-            <description>Open grid of CMS Blocks.</description>
-        </annotations>
-        <amOnPage url="{{CmsBlocksPage.url}}" stepKey="navigateToCMSBlocksGrid"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
+    <actionGroup name="AdminSelectCMSBlockStoreViewActionGroup">
+        <arguments>
+            <argument name="storeViewName" type="string"/>
+        </arguments>
+
+        <selectOption selector="{{BlockNewPageBasicFieldsSection.storeView}}" userInput="{{storeViewName}}" stepKey="selectStoreView"/>
     </actionGroup>
 </actionGroups>
