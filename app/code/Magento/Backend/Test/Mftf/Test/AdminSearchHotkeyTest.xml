@@ -26,8 +26,7 @@
         </after>
 
         <pressKey selector="body" parameterArray="[/]" stepKey="pressForwardslashKey"/>
-        <waitForElementVisible selector="{{AdminHeaderSection.globalSearchInput}}" stepKey="waitForGlobalSearchInput"/>
-        <seeElement selector="{{AdminHeaderSection.globalSearchInput}}" stepKey="seeGlobalSearchInput"/>
+        <seeElement selector="{{AdminHeaderSection.globalSearchInputVisible}}" stepKey="seeActiveGlobalSearchInput"/>
         <seeInField userInput="" selector="{{AdminHeaderSection.globalSearchInput}}" stepKey="seeEmptyGlobalSearchInput"/>
         <pressKey selector="{{AdminHeaderSection.globalSearchInput}}" parameterArray="[/]" stepKey="pressForwardslashKeyAgain"/>
         <seeInField userInput="/" selector="{{AdminHeaderSection.globalSearchInput}}" stepKey="seeForwardSlashInGlobalSearchInput"/>
