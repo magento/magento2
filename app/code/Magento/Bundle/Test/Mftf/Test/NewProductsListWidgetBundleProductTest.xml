@@ -36,6 +36,7 @@
         <!-- Create a product to appear in the widget, fill in basic info first -->
 
         <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="amOnProductList"/>
+        <comment userInput="StepKey Backward Compatibility" stepKey="clickAddProductToggle"/>
         <actionGroup ref="AdminClickAddProductToggleAndSelectProductTypeActionGroup" stepKey="clickAddBundleProduct">
             <argument name="productType" value="bundle"/>
         </actionGroup>

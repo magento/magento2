@@ -32,6 +32,8 @@
         </after>
 
         <actionGroup ref="AdminProductCatalogPageOpenActionGroup" stepKey="openProductCatalogPage"/>
+        <comment userInput="StepKey Backward Compatibility" stepKey="clickAddProductToggle"/>
+        <comment userInput="StepKey Backward Compatibility" stepKey="waitForProductToggleToSelectSimpleProduct"/>
         <actionGroup ref="AdminClickAddProductToggleAndSelectProductTypeActionGroup" stepKey="clickSimpleProductFromDropDownList">
             <argument name="productType" value="simple"/>
         </actionGroup>

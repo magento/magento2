@@ -28,6 +28,7 @@
 
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
+        <comment userInput="StepKey Backward Compatibility" stepKey="clickAddProductDropdown"/>
         <actionGroup ref="AdminClickAddProductToggleAndSelectProductTypeActionGroup" stepKey="clickAddSimpleProduct">
             <argument name="productType" value="simple"/>
         </actionGroup>

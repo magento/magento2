@@ -32,6 +32,7 @@
         <!-- Create a Downloadable product to appear in the widget -->
 
         <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="amOnProductList"/>
+        <comment userInput="StepKey Backward Compatibility" stepKey="clickAddProduct"/>
         <actionGroup ref="AdminClickAddProductToggleAndSelectProductTypeActionGroup" stepKey="clickAddDownloadableProduct">
             <argument name="productType" value="downloadable"/>
         </actionGroup>

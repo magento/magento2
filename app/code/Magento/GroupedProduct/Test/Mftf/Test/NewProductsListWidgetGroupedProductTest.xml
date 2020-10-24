@@ -41,6 +41,7 @@
         <!-- Create a grouped product to appear in the widget -->
 
         <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="amOnProductList"/>
+        <comment userInput="StepKey Backward Compatibility" stepKey="toggleAddProductButton"/>
         <actionGroup ref="AdminClickAddProductToggleAndSelectProductTypeActionGroup" stepKey="clickAddGroupedProduct">
             <argument name="productType" value="grouped"/>
         </actionGroup>
