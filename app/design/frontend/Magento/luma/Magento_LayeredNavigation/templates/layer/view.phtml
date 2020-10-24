@@ -9,6 +9,7 @@
  * Category layered navigation
  *
  * @var $block \Magento\LayeredNavigation\Block\Navigation
+ * @var \Magento\Framework\Escaper $escaper
  */
 ?>
 
@@ -29,15 +30,15 @@
     }'>
         <?php $filtered = count($block->getLayer()->getState()->getFilters()) ?>
         <div class="block-title filter-title" data-count="<?= /* @noEscape */ $filtered ?>">
-            <strong data-role="title"><?= $block->escapeHtml(__('Shop By')); ?></strong>
+            <strong data-role="title"><?= $escaper->escapeHtml(__('Shop By')); ?></strong>
         </div>
         <div class="block-content filter-content">
             <?= $block->getChildHtml('state') ?>
 
             <?php if ($block->getLayer()->getState()->getFilters()) : ?>
                 <div class="block-actions filter-actions">
-                    <a href="<?= $block->escapeUrl($block->getClearUrl()) ?>" class="action clear filter-clear">
-                        <span><?= $block->escapeHtml(__('Clear All')) ?></span>
+                    <a href="<?= $escaper->escapeUrl($block->getClearUrl()) ?>" class="action clear filter-clear">
+                        <span><?= $escaper->escapeHtml(__('Clear All')) ?></span>
                     </a>
                 </div>
             <?php endif; ?>
@@ -45,7 +46,7 @@
             <?php foreach ($block->getFilters() as $filter) : ?>
                 <?php if ($filter->getItemsCount()) : ?>
                     <?php if (!$wrapOptions) : ?>
-                        <strong role="heading" aria-level="2" class="block-subtitle filter-subtitle"><?= $block->escapeHtml(__('Shopping Options')) ?></strong>
+                        <strong role="heading" aria-level="2" class="block-subtitle filter-subtitle"><?= $escaper->escapeHtml(__('Shopping Options')) ?></strong>
                         <div class="filter-options" id="narrow-by-list" data-role="content" data-mage-init='
                         {
                             "accordion":
@@ -59,7 +60,7 @@
                         <?php $wrapOptions = true;
                         endif; ?>
                     <div data-role="collapsible" class="filter-options-item">
-                        <div data-role="title" class="filter-options-title"><?= $block->escapeHtml(__($filter->getName())) ?></div>
+                        <div data-role="title" class="filter-options-title"><?= $escaper->escapeHtml(__($filter->getName())) ?></div>
                         <div data-role="content" class="filter-options-content"><?= /* @noEscape */ $block->getChildBlock('renderer')->render($filter) ?></div>
                     </div>
                 <?php endif; ?>
