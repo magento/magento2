@@ -14,7 +14,7 @@
         <referenceContainer name="header-wrapper">
             <referenceBlock name="logo">
                 <arguments>
-                    <argument name="logo_src" xsi:type="helper" helper="Magento\Sales\Helper\Invoice\Logo::getLogoFile"/>
+                    <argument name="logo_src" xsi:type="helper" helper="Magento\Sales\Model\Order\Invoice\GetLogoFile::execute"/>
                 </arguments>
             </referenceBlock>
         </referenceContainer>
