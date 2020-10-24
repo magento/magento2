@@ -53,6 +53,7 @@
 
         <!--Click "Save Addresses" -->
         <actionGroup ref="StorefrontCheckoutClickSaveAddressButtonActionGroup" stepKey="saveAddress"/>
+        <comment userInput="StepKey Backward Compatibility" stepKey="waitForAddressSaved"/>
         <dontSeeElement selector="{{StorefrontCheckoutAddressPopupSection.newAddressModalPopup}}" stepKey="dontSeeModalPopup"/>
 
         <!--Select Shipping Rate "Flat Rate"-->
