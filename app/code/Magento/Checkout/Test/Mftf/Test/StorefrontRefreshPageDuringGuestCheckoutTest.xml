@@ -43,6 +43,7 @@
         <!-- Go to Checkout page -->
         <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="goToShoppingCartFromMinicart"/>
         <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="clickProceedToCheckout"/>
+        <comment userInput="StepKey Backward Compatibility" stepKey="waitForProceedToCheckout"/>
 
         <!-- Fill email field and addresses form and go next -->
         <actionGroup ref="GuestCheckoutFillingShippingSectionActionGroup" stepKey="guestCheckoutFillingShipping">

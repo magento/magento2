@@ -78,6 +78,7 @@
         <waitForElementVisible selector="{{CheckoutCartSummarySection.discountAmount}}" stepKey="waitForDiscountElement"/>
         <see selector="{{CheckoutCartSummarySection.discountAmount}}" userInput="-$15.00" stepKey="seeDiscountTotal"/>
         <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="goToCheckout"/>
+        <comment userInput="StepKey Backward Compatibility" stepKey="waitForPageToLoad1"/>
 
         <!--Fill the pop up sign form -->
         <actionGroup ref="StorefrontCustomerSignInPopUpActionGroup" stepKey="customerSignIn">
@@ -85,6 +86,7 @@
             <argument name="customerPwd" value="$$createCustomer.password$$"/>
         </actionGroup>
         <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="goToCheckout1"/>
+        <comment userInput="StepKey Backward Compatibility" stepKey="waitForShippingMethodSectionToLoad"/>
 
         <!-- Click and open order summary tab-->
         <conditionalClick selector="{{CheckoutOrderSummarySection.miniCartTab}}" dependentSelector="{{CheckoutOrderSummarySection.miniCartTabClosed}}" visible="true" stepKey="clickOnOrderSummaryTab"/>

@@ -67,6 +67,7 @@
             <argument name="address" value="US_Address_CA"/>
         </actionGroup>
         <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="clickProceedToCheckout"/>
+        <comment userInput="StepKey Backward Compatibility" stepKey="waitForProceedToCheckout"/>
 
         <!-- Check that error does not appear and shipping methods are available to select -->
         <dontSee selector="{{CheckoutCartMessageSection.errorMessage}}" userInput="No such entity with id = $$createCustomerGroup.id$$" stepKey="assertErrorMessage"/>

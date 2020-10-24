@@ -135,6 +135,7 @@
         <!-- Fill the Estimate Shipping and Tax section -->
         <actionGroup ref="CheckoutFillEstimateShippingAndTaxActionGroup" stepKey="fillEstimateShippingAndTaxFields"/>
         <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="goToCheckout"/>
+        <comment userInput="StepKey Backward Compatibility" stepKey="waitForPageToLoad"/>
 
         <!-- Sign in using already existed customer details -->
         <fillField selector="{{CheckoutShippingSection.emailAddress}}" userInput="$$createCustomer.email$$" stepKey="fillEmailAddress"/>

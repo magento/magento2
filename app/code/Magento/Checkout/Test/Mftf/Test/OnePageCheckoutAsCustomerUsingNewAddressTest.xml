@@ -55,7 +55,7 @@
             <argument name="address" value="US_Address_CA"/>
         </actionGroup>
         <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="clickProceedToCheckout"/>
-
+        <comment userInput="StepKey Backward Compatibility" stepKey="waitForProceedToCheckout"/>
         <!-- Login using Sign In link from checkout page -->
         <actionGroup ref="LoginAsCustomerUsingSignInLinkActionGroup" stepKey="customerLogin">
             <argument name="customer" value="$$createCustomer$$"/>

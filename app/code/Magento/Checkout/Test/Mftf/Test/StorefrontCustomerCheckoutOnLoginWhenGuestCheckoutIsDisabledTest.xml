@@ -63,6 +63,7 @@
         <waitForElementVisible selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="waitProceedToCheckout"/>
         <scrollTo selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="scrollToGoToCheckout"/>
         <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="goToCheckout1"/>
+        <comment userInput="StepKey Backward Compatibility" stepKey="waitForShippingMethodSectionToLoad"/>
         <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickOnNextButton"/>
 
         <!-- Verify order summary on payment page -->
