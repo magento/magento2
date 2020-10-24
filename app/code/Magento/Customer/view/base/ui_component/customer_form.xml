@@ -11,7 +11,6 @@
             <item name="provider" xsi:type="string">customer_form.customer_form_data_source</item>
         </item>
         <item name="label" xsi:type="string" translate="true">Customer Information</item>
-        <item name="reverseMetadataMerge" xsi:type="boolean">true</item>
     </argument>
     <settings>
         <buttons>

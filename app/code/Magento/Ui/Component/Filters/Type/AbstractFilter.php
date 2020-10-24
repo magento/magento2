@@ -88,30 +88,27 @@ abstract class AbstractFilter extends AbstractComponent
             ->get(BookmarkManagementInterface::class);
         $request = $request ?: ObjectManager::getInstance()->get(RequestInterface::class);
 
-        $filterData = $this->getContext()->getFiltersParams();
-        if (null === $filterData) {
-            $bookmark = $bookmarkManagement->getByIdentifierNamespace(
-                'current',
-                $context->getNamespace()
-            );
-
-            if (null !== $bookmark) {
-                $bookmarkConfig = $bookmark->getConfig();
-                $filterData = $bookmarkConfig['current']['filters']['applied'] ?? [];
-
-                $request->setParams(
-                    [
-                        'paging' => $bookmarkConfig['current']['paging'] ?? []
-                    ]
-                );
-
-                if (isset($bookmarkConfig['current']['request_params'])) {
-                    $request->setParams($bookmarkConfig['current']['request_params']);
-                }
-            }
+        $this->filterData = $this->getContext()->getFiltersParams();
+        if ($this->filterData !== null) {
+            return;
         }
 
-        $this->filterData = $filterData;
+        $bookmark = $bookmarkManagement->getByIdentifierNamespace(
+            'current',
+            $context->getNamespace()
+        );
+
+        if ($bookmark !== null) {
+            $bookmarkConfig = $bookmark->getConfig();
+            $this->filterData = $bookmarkConfig['current']['filters']['applied'] ?? [];
+
+            $request->setParams(
+                [
+                    'paging' => $bookmarkConfig['current']['paging'] ?? [],
+                    'search' => $bookmarkConfig['current']['search']['value'] ?? ''
+                ]
+            );
+        }
     }
 
     /**
