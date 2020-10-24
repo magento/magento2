@@ -13,7 +13,6 @@ use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\ProductSearch;
 use Magento\CatalogGraphQl\Model\Resolver\Products\SearchResult;
 use Magento\CatalogGraphQl\Model\Resolver\Products\SearchResultFactory;
 use Magento\Framework\Api\Search\SearchCriteriaInterface;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\Phrase;
@@ -170,7 +169,7 @@ class Search implements ProductQueryInterface
      *
      * @return string|null
      */
-    private function getAttributeValue(Product $product, array $productArray, string $field)
+    private function getAttributeValue(Product $product, array $productArray, string $field): ?string
     {
         if ($attribute = $product->getResource()->getAttribute($field)) {
             $attributeValue =  $attribute->getFrontend()->getValue($product);

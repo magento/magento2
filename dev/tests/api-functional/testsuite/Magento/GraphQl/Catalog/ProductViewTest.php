@@ -916,7 +916,7 @@ QUERY;
                 'expected_value' => $expectedAttribute ? $expectedAttribute->getValue() : null
             ];
         }
-        if ($assertionMap[4]['expected_value'] == "US") {
+        if ($assertionMap[4]['expected_value'] === "US") {
             $assertionMap[4]['expected_value'] = 'United States';
         }
         $this->assertResponseFields($actualResponse, $assertionMap);
