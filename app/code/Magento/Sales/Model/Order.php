@@ -42,17 +42,17 @@ use Magento\Store\Model\ScopeInterface;
  *
  * @api
  * @method int getGiftMessageId()
- * @method \Magento\Sales\Model\Order setGiftMessageId(int $value)
+ * @method Order setGiftMessageId(int $value)
  * @method bool hasBillingAddressId()
- * @method \Magento\Sales\Model\Order unsBillingAddressId()
+ * @method Order unsBillingAddressId()
  * @method bool hasShippingAddressId()
- * @method \Magento\Sales\Model\Order unsShippingAddressId()
+ * @method Order unsShippingAddressId()
  * @method int getShippigAddressId()
  * @method bool hasCustomerNoteNotify()
  * @method bool hasForcedCanCreditmemo()
  * @method bool getIsInProcess()
  * @method \Magento\Customer\Model\Customer|null getCustomer()
- * @method \Magento\Sales\Model\Order setSendEmail(bool $value)
+ * @method Order setSendEmail(bool $value)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
@@ -494,7 +494,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      * Load order by system increment identifier
      *
      * @param string $incrementId
-     * @return \Magento\Sales\Model\Order
+     * @return Order
      */
     public function loadByIncrementId($incrementId)
     {
@@ -506,7 +506,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      *
      * @param string $incrementId
      * @param string $storeId
-     * @return \Magento\Sales\Model\Order
+     * @return Order
      */
     public function loadByIncrementIdAndStoreId($incrementId, $storeId)
     {
@@ -716,7 +716,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         $hasDueAmount = $this->canInvoice() && ($checkAmtTotalPaid);
         //case when paid amount is refunded and order has creditmemo created
         $creditmemos = ($this->getCreditmemosCollection() === false) ?
-             true : (count($this->getCreditmemosCollection()) > 0);
+             true : ($this->_memoCollectionFactory->create()->setOrderFilter($this)->getTotalCount() > 0);
         $paidAmtIsRefunded = $this->getTotalRefunded() == $totalPaid && $creditmemos;
         if (($hasDueAmount || $paidAmtIsRefunded) ||
             (!$checkAmtTotalPaid &&
@@ -1818,7 +1818,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         $total = $this->priceCurrency->round($total);
         return max($total, 0);
     }
-    
+
     /**
      * Retrieve order total due value
      *
@@ -2052,7 +2052,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     {
         $storeId = $this->getStoreId();
         if ($storeId === null) {
-            return $this->getStoreName(1);
+            return $this->getStoreName();
         }
         return $this->getStore()->getGroup()->getName();
     }

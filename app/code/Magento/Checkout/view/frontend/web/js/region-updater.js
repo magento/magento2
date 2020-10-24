@@ -56,6 +56,9 @@ define([
             if (this.options.isMultipleCountriesAllowed) {
                 this.element.parents('div.field').show();
                 this.element.on('change', $.proxy(function (e) {
+                    // clear region inputs on country change
+                    $(this.options.regionListId).val('');
+                    $(this.options.regionInputId).val('');
                     this._updateRegion($(e.target).val());
                 }, this));
 
@@ -164,9 +167,6 @@ define([
 
             this._clearError();
             this._checkRegionRequired(country);
-
-            $(regionList).find('option:selected').removeAttr('selected');
-            regionInput.val('');
 
             // Populate state/province dropdown list if available or use input box
             if (this.options.regionJson[country]) {

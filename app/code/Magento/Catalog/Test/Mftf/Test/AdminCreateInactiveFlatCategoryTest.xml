@@ -65,8 +65,7 @@
         <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(SimpleSubCategory.name)}}" stepKey="selectCreatedCategory"/>
         <waitForPageLoad stepKey="waitForCategoryPageToLoad"/>
         <click selector="{{AdminCategoryBasicFieldSection.enableCategoryLabel}}" stepKey="disableActiveCategory"/>
-        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveSubCategory"/>
-        <waitForPageLoad stepKey="waitForSecondCategoryToSave"/>
+        <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveSubCategory"/>
         <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="seeSuccessMessage"/>
         <see selector="{{AdminCategoryContentSection.categoryPageTitle}}" userInput="{{SimpleSubCategory.name}}" stepKey="seeUpdatedCategoryTitle"/>
         <dontSeeCheckboxIsChecked selector="{{AdminCategoryBasicFieldSection.enableCategoryLabel}}"  stepKey="verifyInactiveIncludeInMenu"/>
@@ -77,9 +76,7 @@
         <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
             <argument name="tags" value=""/>
         </actionGroup>
-        <!--Open Index Management Page -->
-        <amOnPage url="{{AdminIndexManagementPage.url}}" stepKey="openIndexManagementPage"/>
-        <waitForPageLoad stepKey="waitForIndexPageToBeLoaded"/>
+        <actionGroup ref="AdminOpenIndexManagementPageActionGroup" stepKey="openIndexManagementPage"/>
         <see stepKey="seeIndexStatus"  selector="{{AdminIndexManagementSection.indexerStatus('Category Flat Data')}}" userInput="Ready"/>
         <!--Verify Category In Store Front-->
         <amOnPage url="/$$createCategory.name$$.html"  stepKey="openCategoryPage1"/>
