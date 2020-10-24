@@ -24,6 +24,8 @@ class AddBookmarkAvailabilityFlag
     private $sanitizer;
 
     /**
+     * AddBookmarkAvailabilityFlag constructor
+     *
      * @param BookmarkManagementInterface $bookmarkManagement
      * @param Sanitizer $sanitizer
      */
@@ -35,6 +37,13 @@ class AddBookmarkAvailabilityFlag
         $this->sanitizer = $sanitizer;
     }
 
+    /**
+     * Modify provider configuration and return meta
+     *
+     * @param DataProviderInterface $subject
+     * @param $meta
+     * @return mixed
+     */
     public function afterGetMeta(DataProviderInterface $subject, $meta)
     {
         $this->modifyProviderConfigData($subject);
@@ -42,6 +51,11 @@ class AddBookmarkAvailabilityFlag
         return $meta;
     }
 
+    /**
+     * Modify provider configuration
+     *
+     * @param DataProviderInterface $dataProvider
+     */
     private function modifyProviderConfigData(DataProviderInterface $dataProvider)
     {
         $configData = $dataProvider->getConfigData();

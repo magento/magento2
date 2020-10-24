@@ -17,6 +17,7 @@ use Magento\Framework\Api\FilterBuilder;
 use Magento\Ui\Component\Filters\FilterModifier;
 
 //phpcs:disable Magento2.Classes.AbstractApi
+
 /**
  * Abstract class AbstractFilter
  * @api
@@ -57,6 +58,8 @@ abstract class AbstractFilter extends AbstractComponent
     protected $filterModifier;
 
     /**
+     * AbstractFilter constructor
+     *
      * @param ContextInterface $context
      * @param UiComponentFactory $uiComponentFactory
      * @param FilterBuilder $filterBuilder
@@ -122,6 +125,8 @@ abstract class AbstractFilter extends AbstractComponent
     }
 
     /**
+     * Prepare filter component
+     *
      * @inheridoc
      */
     public function prepare()

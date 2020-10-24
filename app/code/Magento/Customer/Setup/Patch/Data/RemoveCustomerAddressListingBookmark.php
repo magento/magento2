@@ -18,6 +18,8 @@ class RemoveCustomerAddressListingBookmark implements DataPatchInterface
     private $moduleDataSetup;
 
     /**
+     * RemoveCustomerAddressListingBookmark constructor
+     *
      * @param ModuleDataSetupInterface $moduleDataSetup
      */
     public function __construct(
@@ -26,11 +28,21 @@ class RemoveCustomerAddressListingBookmark implements DataPatchInterface
         $this->moduleDataSetup = $moduleDataSetup;
     }
 
+    /**
+     * Retrieve patch dependencies
+     *
+     * @return array|string[]
+     */
     public static function getDependencies()
     {
         return [];
     }
 
+    /**
+     * Retrieve patch aliases
+     *
+     * @return array|string[]
+     */
     public function getAliases()
     {
         return [];
