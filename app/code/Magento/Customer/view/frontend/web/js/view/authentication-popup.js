@@ -43,6 +43,20 @@ define([
 
         /** Init popup login window */
         setModalElement: function (element) {
+            var cart = customerData.get('cart');
+
+            if (cart().isGuestCheckoutAllowed === false) {
+                this.createPopup(element);
+            } else {
+                cart.subscribe(function(cartData) {
+                    if (cartData.isGuestCheckoutAllowed === false) {
+                        this.createPopup(element);
+                    }
+                }, this);
+            }
+        },
+
+        createPopup: function(element) {
             if (authenticationPopup.modalWindow == null) {
                 authenticationPopup.createPopUp(element);
             }
