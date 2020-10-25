@@ -46,10 +46,10 @@ class GetProductReviewsTest extends GraphQlAbstract
      */
     protected function setUp(): void
     {
-        $objectManager                 = Bootstrap::getObjectManager();
-        $this->customerTokenService    = $objectManager->get(CustomerTokenServiceInterface::class);
+        $objectManager = Bootstrap::getObjectManager();
+        $this->customerTokenService = $objectManager->get(CustomerTokenServiceInterface::class);
         $this->reviewCollectionFactory = $objectManager->get(ReviewCollectionFactory::class);
-        $this->registry                = $objectManager->get(Registry::class);
+        $this->registry = $objectManager->get(Registry::class);
     }
 
     /**
@@ -57,8 +57,7 @@ class GetProductReviewsTest extends GraphQlAbstract
      */
     public function testProductReviewRatingsMetadata()
     {
-        $query
-                             = <<<QUERY
+        $query = <<<QUERY
 {
   productReviewRatingsMetadata {
     items {
@@ -74,85 +73,71 @@ class GetProductReviewsTest extends GraphQlAbstract
 QUERY;
         $expectedRatingItems = [
         [
-        'id'     => 'Mw==',
-        'name'   => 'Price',
+        'id' => 'Mw==',
+        'name' => 'Price',
         'values' => [
-        [
-         'value_id' => 'MTE=',
-         'value'    => "1"
-        ],
-        [
-         'value_id' => 'MTI=',
-         'value'    => "2"
-        ],
-        [
-         'value_id' => 'MTM=',
-         'value'    => "3"
-        ],
-        [
-         'value_id' => 'MTQ=',
-         'value'    => "4"
-        ],
-        [
-         'value_id' => 'MTU=',
-         'value'    => "5"
+                    [
+                        'value_id' => 'MTE=',
+                        'value' => "1"
+                    ],[
+                        'value_id' => 'MTI=',
+                        'value' => "2"
+                    ],[
+                        'value_id' => 'MTM=',
+                        'value' => "3"
+                    ],[
+                        'value_id' => 'MTQ=',
+                        'value' => "4"
+                    ],[
+                        'value_id' => 'MTU=',
+                        'value' => "5"
+                    ]
         ]
-        ]
-        ],
-        [
-        'id'     => 'MQ==',
-        'name'   => 'Quality',
+        ], [
+        'id' => 'MQ==',
+        'name' => 'Quality',
         'values' => [
                     [
                         'value_id' => 'MQ==',
-                        'value'    => "1"
-                    ],
-                    [
+                        'value' => "1"
+                    ],[
                         'value_id' => 'Mg==',
-                        'value'    => "2"
-                    ],
-                    [
+                        'value' => "2"
+                    ],[
                         'value_id' => 'Mw==',
-                        'value'    => "3"
-                    ],
-                    [
+                        'value' => "3"
+                    ],[
                         'value_id' => 'NA==',
-                        'value'    => "4"
-                    ],
-                    [
+                        'value' => "4"
+                    ],[
                         'value_id' => 'NQ==',
-                        'value'    => "5"
+                        'value' => "5"
                     ]
         ]
-        ],
-        [
-        'id'     => 'Mg==',
-        'name'   => 'Value',
+        ], [
+        'id' => 'Mg==',
+        'name' => 'Value',
         'values' => [
                     [
                         'value_id' => 'Ng==',
-                        'value'    => "1"
-                    ],
-                    [
+                        'value' => "1"
+                    ],[
                         'value_id' => 'Nw==',
-                        'value'    => "2"
-                    ],
-                    [
+                        'value' => "2"
+                    ],[
                         'value_id' => 'OA==',
-                        'value'    => "3"
-                    ],
-                    [
+                        'value' => "3"
+                    ],[
                         'value_id' => 'OQ==',
-                        'value'    => "4"
-                    ],
-                    [
+                        'value' => "4"
+                    ],[
                         'value_id' => 'MTA=',
-                        'value'    => "5"
+                        'value' => "5"
                     ]
         ]
         ]
         ];
-        $response            = $this->graphQlQuery($query);
+        $response = $this->graphQlQuery($query);
         self::assertArrayHasKey('productReviewRatingsMetadata', $response);
         self::assertArrayHasKey('items', $response['productReviewRatingsMetadata']);
         self::assertNotEmpty($response['productReviewRatingsMetadata']['items']);
@@ -169,12 +154,11 @@ QUERY;
          * @var ProductRepositoryInterface $productRepository
          */
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
-        $product           = $productRepository->get($productSku, false, null, true);
-        $summaryFactory    = ObjectManager::getInstance()->get(SummaryFactory::class);
-        $storeId           = ObjectManager::getInstance()->get(StoreManagerInterface::class)->getStore()->getId();
-        $summary           = $summaryFactory->create()->setStoreId($storeId)->load($product->getId());
-        $query
-                           = <<<QUERY
+        $product = $productRepository->get($productSku, false, null, true);
+        $summaryFactory = ObjectManager::getInstance()->get(SummaryFactory::class);
+        $storeId = ObjectManager::getInstance()->get(StoreManagerInterface::class)->getStore()->getId();
+        $summary = $summaryFactory->create()->setStoreId($storeId)->load($product->getId());
+        $query = <<<QUERY
 {
   products(filter: {
       sku: {
@@ -204,7 +188,7 @@ QUERY;
   }
 }
 QUERY;
-        $response          = $this->graphQlQuery($query);
+        $response = $this->graphQlQuery($query);
         self::assertArrayHasKey('products', $response);
         self::assertArrayHasKey('items', $response['products']);
         self::assertNotEmpty($response['products']['items']);
@@ -222,19 +206,18 @@ QUERY;
      */
     public function testProductReviewRatingsPerSpecificStore()
     {
-        $productSku                    = 'simple';
+        $productSku = 'simple';
         $headerMapSecondStore['Store'] = 'fixture_second_store';
         /**
          * @var ProductRepositoryInterface $productRepository
          */
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
-        $product           = $productRepository->get($productSku, false, null, true);
-        $summaryFactory    = ObjectManager::getInstance()->get(SummaryFactory::class);
-        $storeRepository   = ObjectManager::getInstance()->get(StoreRepositoryInterface::class);
-        $storeId           = $storeRepository->get($headerMapSecondStore['Store'])->getId();
-        $summary           = $summaryFactory->create()->setStoreId($storeId)->load($product->getId());
-        $query
-                           = <<<QUERY
+        $product = $productRepository->get($productSku, false, null, true);
+        $summaryFactory = ObjectManager::getInstance()->get(SummaryFactory::class);
+        $storeRepository = ObjectManager::getInstance()->get(StoreRepositoryInterface::class);
+        $storeId = $storeRepository->get($headerMapSecondStore['Store'])->getId();
+        $summary = $summaryFactory->create()->setStoreId($storeId)->load($product->getId());
+        $query = <<<QUERY
 {
   products(filter: {
       sku: {
@@ -264,7 +247,7 @@ QUERY;
   }
 }
 QUERY;
-        $response          = $this->graphQlQuery($query, [], '', $headerMapSecondStore);
+        $response = $this->graphQlQuery($query, [], '', $headerMapSecondStore);
         self::assertArrayHasKey('products', $response);
         self::assertArrayHasKey('items', $response['products']);
         self::assertNotEmpty($response['products']['items']);
@@ -281,7 +264,7 @@ QUERY;
      */
     public function testCustomerReviewsAddedToProduct()
     {
-        $query             = <<<QUERY
+        $query = <<<QUERY
 {
   customer {
     reviews {
@@ -300,22 +283,21 @@ QUERY;
 }
 QUERY;
         $expectedFirstItem = [
-        'nickname'          => 'Nickname',
-        'summary'           => 'Review Summary',
-        'text'              => 'Review text',
-        'average_rating'    => 40,
+        'nickname' => 'Nickname',
+        'summary' => 'Review Summary',
+        'text' => 'Review text',
+        'average_rating' => 40,
         'ratings_breakdown' => [
         [
-        'name'  => 'Quality',
-        'value' => 2
-        ],
-        [
-                    'name'  => 'Value',
+                    'name' => 'Quality',
+                    'value' => 2
+        ],[
+                    'name' => 'Value',
                     'value' => 2
         ]
         ]
         ];
-        $response          = $this->graphQlQuery($query, [], '', $this->getHeaderMap());
+        $response = $this->graphQlQuery($query, [], '', $this->getHeaderMap());
 
         self::assertArrayHasKey('customer', $response);
         self::assertArrayHasKey('reviews', $response['customer']);
