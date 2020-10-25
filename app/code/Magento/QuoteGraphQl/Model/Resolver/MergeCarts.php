@@ -89,7 +89,7 @@ class MergeCarts implements ResolverInterface
         }
         $currentUserId = $context->getUserId();
 
-        if (empty($args['destination_cart_id'])) {
+        if (!isset($args['destination_cart_id'])) {
             try {
                 $cart = $this->customerCartResolver->resolve($currentUserId);
             } catch (CouldNotSaveException $exception) {
@@ -101,6 +101,12 @@ class MergeCarts implements ResolverInterface
             $customerMaskedCartId = $this->quoteIdToMaskedQuoteId->execute(
                 (int) $cart->getId()
             );
+        } else {
+            if (empty($args['destination_cart_id'])) {
+                throw new GraphQlInputException(__(
+                    'The parameter "destination_cart_id" cannot be empty'
+                ));
+            }
         }
 
         $guestMaskedCartId = $args['source_cart_id'];
