@@ -45,6 +45,9 @@
         <actionGroup ref="AssertMessageCustomerChangeAccountInfoActionGroup" stepKey="seeSuccessMessage">
             <argument name="message" value="You saved the account information."/>
         </actionGroup>
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefrontAccountAfterEmailChange">
+            <argument name="Customer" value="$$customer$$"/>
+        </actionGroup>
         <!-- Navigate to "Account Information" tab Second Time-->
         <actionGroup ref="StorefrontOpenCustomerAccountInfoEditPageActionGroup" stepKey="goToCustomerEditPageSecondTime" />
         <!-- Checking Email checkbox, entering new email, saving with incorrect password -->
