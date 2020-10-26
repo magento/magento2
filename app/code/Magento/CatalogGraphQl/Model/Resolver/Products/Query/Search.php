@@ -169,7 +169,7 @@ class Search implements ProductQueryInterface
      *
      * @return string|null
      */
-    private function getAttributeValue(Product $product, array $productArray, string $field): ?string
+    private function getAttributeValue(Product $product, array $productArray, string $field)
     {
         if ($attribute = $product->getResource()->getAttribute($field)) {
             $attributeValue =  $attribute->getFrontend()->getValue($product);
