@@ -4,16 +4,34 @@
  * See COPYING.txt for license details.
  */
 
- /** @var \Magento\Cms\Block\Adminhtml\Wysiwyg\Images\Tree $block */
+/** @var \Magento\Cms\Block\Adminhtml\Wysiwyg\Images\Tree $block */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+?>
+
+<?php
+/** Magento\Framework\Json\Helper\Data $jsonHelper */
+$jsonHelper = $block->getData('jsonHelper');
 ?>
 <div class="tree-panel" >
     <div class="categories-side-col">
         <div class="tree-actions">
-            <a onclick="jQuery('[data-role=tree]').jstree('close_all');"><?= $block->escapeHtml(__('Collapse All')) ?></a>
+            <a id="collapseAll"><?= $block->escapeHtml(__('Collapse All')) ?></a>
             <span class="separator">|</span>
-            <a onclick="jQuery('[data-role=tree]').jstree('open_all');"><?= $block->escapeHtml(__('Expand All')) ?></a>
+            <a id="expandAll"><?= $block->escapeHtml(__('Expand All')) ?></a>
         </div>
+        <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
+            'onclick',
+            "jQuery('[data-role=tree]').jstree('close_all');",
+            '#div.tree-actions a#collapseAll'
+        ) ?>
+        <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
+            'onclick',
+            "jQuery('[data-role=tree]').jstree('open_all');",
+            '#div.tree-actions a#expandAll'
+        ) ?>
     </div>
-    <div data-role="tree" data-mage-init='<?= $block->escapeHtml($this->helper(\Magento\Framework\Json\Helper\Data::class)->jsonEncode($block->getTreeWidgetOptions())) ?>'>
+    <div data-role="tree" data-mage-init='<?= $block->escapeHtml(
+        $jsonHelper->jsonEncode($block->getTreeWidgetOptions())
+    ) ?>'>
     </div>
 </div>

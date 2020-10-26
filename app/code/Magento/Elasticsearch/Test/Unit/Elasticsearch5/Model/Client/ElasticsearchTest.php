@@ -69,6 +69,7 @@ class ElasticsearchTest extends TestCase
                     'create',
                     'delete',
                     'putMapping',
+                    'getMapping',
                     'deleteMapping',
                     'stats',
                     'updateAliases',
@@ -340,7 +341,7 @@ class ElasticsearchTest extends TestCase
                                         'match_mapping_type' => 'string',
                                         'mapping' => [
                                             'type' => 'integer',
-                                            'index' => true
+                                            'index' => true,
                                         ],
                                     ],
                                 ],
@@ -351,6 +352,14 @@ class ElasticsearchTest extends TestCase
                                         'mapping' => [
                                             'type' => 'text',
                                             'index' => true,
+                                        ],
+                                    ],
+                                ],
+                                [
+                                    'integer_mapping' => [
+                                        'match_mapping_type' => 'long',
+                                        'mapping' => [
+                                            'type' => 'integer',
                                         ],
                                     ],
                                 ],
@@ -424,7 +433,15 @@ class ElasticsearchTest extends TestCase
                                             'index' => true,
                                         ],
                                     ],
-                                ]
+                                ],
+                                [
+                                    'integer_mapping' => [
+                                        'match_mapping_type' => 'long',
+                                        'mapping' => [
+                                            'type' => 'integer',
+                                        ],
+                                    ],
+                                ],
                             ],
                         ],
                     ],
@@ -515,6 +532,22 @@ class ElasticsearchTest extends TestCase
             'indexName',
             'product'
         );
+    }
+
+    /**
+     * Test get Elasticsearch mapping process.
+     *
+     * @return void
+     */
+    public function testGetMapping(): void
+    {
+        $params = ['index' => 'indexName'];
+        $this->indicesMock->expects($this->once())
+            ->method('getMapping')
+            ->with($params)
+            ->willReturn([]);
+
+        $this->model->getMapping($params);
     }
 
     /**

@@ -30,27 +30,35 @@
         <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openAdminCategoryIndexPage"/>
 
         <!--Update category and make category inactive-->
-        <click selector="{{AdminCategorySidebarTreeSection.expandAll}}" stepKey="clickOnExpandTree"/>
-        <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(_defaultCategory.name)}}" stepKey="selectCreatedCategory"/>
-        <click selector="{{AdminCategoryBasicFieldSection.enableCategoryLabel}}" stepKey="disableCategory"/>
-        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="clickSaveButton"/>
-        <waitForPageLoad stepKey="waitForCategorySaved"/>
+        <actionGroup ref="NavigateToCreatedCategoryActionGroup" stepKey="navigateToCreatedCategory">
+            <argument name="Category" value="$$createDefaultCategory$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminDisableActiveCategoryActionGroup" stepKey="disableCategory"/>
+        <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="clickSaveButton"/>
         <actionGroup ref="AssertAdminCategorySaveSuccessMessageActionGroup" stepKey="assertSuccessMessage"/>
-        <see selector="{{AdminCategoryContentSection.categoryPageTitle}}" userInput="{{_defaultCategory.name}}" stepKey="seePageTitle" />
-        <dontSeeCheckboxIsChecked selector="{{AdminCategoryBasicFieldSection.EnableCategory}}" stepKey="dontCategoryIsChecked"/>
+        <actionGroup ref="AssertAdminCategoryPageTitleActionGroup" stepKey="seePageTitle">
+            <argument name="categoryName" value="$$createDefaultCategory.name$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminCategoryIsInactiveActionGroup" stepKey="seeDisabledCategory"/>
 
         <!--Verify Inactive Category is store front page-->
-        <amOnPage url="{{StorefrontCategoryPage.url(_defaultCategory.name)}}"  stepKey="amOnCategoryPage"/>
-        <waitForPageLoad stepKey="waitForPageToBeLoaded"/>
-        <dontSeeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName(_defaultCategory.name)}}" stepKey="dontSeeCategoryOnStoreNavigationBar"/>
-        <waitForPageLoad time="15" stepKey="wait"/>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStoreFront"/>
+        <actionGroup ref="StorefrontAssertCategoryNameIsNotShownInMenuActionGroup" stepKey="doNotSeeCategoryNameInMenu">
+            <argument name="categoryName" value="$$createDefaultCategory.name$$"/>
+        </actionGroup>
 
         <!--Verify Inactive Category in category page -->
-        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openAdminCategoryIndexPage1"/>
-        <click selector="{{AdminCategorySidebarTreeSection.expandAll}}" stepKey="clickOnExpandTree1"/>
-        <seeElement  selector="{{AdminCategoryContentSection.categoryInTree(_defaultCategory.name)}}" stepKey="assertCategoryInTree" />
-        <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(_defaultCategory.name)}}" stepKey="selectCreatedCategory1"/>
-        <see selector="{{AdminCategoryContentSection.categoryPageTitle}}" userInput="{{_defaultCategory.name}}" stepKey="seeCategoryPageTitle1" />
-        <dontSeeCheckboxIsChecked selector="{{AdminCategoryBasicFieldSection.EnableCategory}}" stepKey="assertCategoryIsInactive"/>
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="goToAdminCategoryIndexPage"/>
+        <actionGroup ref="AdminExpandCategoryTreeActionGroup" stepKey="expandCategoryTree"/>
+        <actionGroup ref="AssertAdminCategoryIsListedInCategoriesTreeActionGroup" stepKey="seeCategoryInTree">
+            <argument name="categoryName" value="$$createDefaultCategory.name$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminCategoriesOpenCategoryActionGroup" stepKey="openCategory">
+            <argument name="category" value="$$createDefaultCategory$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminCategoryPageTitleActionGroup" stepKey="seeCategoryPageTitle">
+            <argument name="categoryName" value="$$createDefaultCategory.name$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminCategoryIsInactiveActionGroup" stepKey="assertCategoryIsInactive"/>
     </test>
 </tests>

@@ -16,10 +16,10 @@
             <description value="Users are able to place order using Paypal Smart Button on Checkout Page, payment action is Sale"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-13690"/>
-            <group value="paypalExpress"/>
             <skip>
-                <issueId value="MC-33951"/>
+                <issueId value="MC-37236"/>
             </skip>
+            <group value="paypalExpress"/>
         </annotations>
         <before>
             <!-- Login -->
@@ -64,9 +64,7 @@
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
         <click selector="{{CheckoutShippingMethodsSection.checkShippingMethodByName('Free Shipping')}}" stepKey="selectFlatShippingMethod"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask2"/>
-
-        <waitForElement selector="{{CheckoutShippingMethodsSection.next}}" time="30" stepKey="waitForNextButton"/>
-        <click selector="{{CheckoutShippingMethodsSection.next}}" stepKey="clickNext"/>
+        <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickNext"/>
 
         <!--Assert grand total-->
         <actionGroup ref="VerifyCheckoutPaymentOrderSummaryActionGroup" stepKey="verifyCheckoutPaymentOrderSummary">

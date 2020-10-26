@@ -23,6 +23,8 @@ use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Pricing\Render;
 use Magento\Framework\Url\Helper\Data;
+use Magento\Framework\App\ObjectManager;
+use Magento\Catalog\Helper\Output as OutputHelper;
 
 /**
  * Product list
@@ -75,6 +77,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
      * @param CategoryRepositoryInterface $categoryRepository
      * @param Data $urlHelper
      * @param array $data
+     * @param OutputHelper|null $outputHelper
      */
     public function __construct(
         Context $context,
@@ -82,12 +85,14 @@ class ListProduct extends AbstractProduct implements IdentityInterface
         Resolver $layerResolver,
         CategoryRepositoryInterface $categoryRepository,
         Data $urlHelper,
-        array $data = []
+        array $data = [],
+        ?OutputHelper $outputHelper = null
     ) {
         $this->_catalogLayer = $layerResolver->get();
         $this->_postDataHelper = $postDataHelper;
         $this->categoryRepository = $categoryRepository;
         $this->urlHelper = $urlHelper;
+        $data['outputHelper'] = $outputHelper ?? ObjectManager::getInstance()->get(OutputHelper::class);
         parent::__construct(
             $context,
             $data
@@ -353,18 +358,16 @@ class ListProduct extends AbstractProduct implements IdentityInterface
 
         $category = $this->getLayer()->getCurrentCategory();
         if ($category) {
-            $identities[] = Product::CACHE_PRODUCT_CATEGORY_TAG . '_' . $category->getId();
+            $identities[] = [Product::CACHE_PRODUCT_CATEGORY_TAG . '_' . $category->getId()];
         }
 
         //Check if category page shows only static block (No products)
-        if ($category->getData('display_mode') == Category::DM_PAGE) {
-            return $identities;
+        if ($category->getData('display_mode') != Category::DM_PAGE) {
+            foreach ($this->_getProductCollection() as $item) {
+                $identities[] = $item->getIdentities();
+            }
         }
-
-        foreach ($this->_getProductCollection() as $item) {
-            // phpcs:ignore Magento2.Performance.ForeachArrayMerge
-            $identities = array_merge($identities, $item->getIdentities());
-        }
+        $identities = array_merge([], ...$identities);
 
         return $identities;
     }
@@ -377,7 +380,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
      */
     public function getAddToCartPostParams(Product $product)
     {
-        $url = $this->getAddToCartUrl($product);
+        $url = $this->getAddToCartUrl($product, ['_escape' => false]);
         return [
             'action' => $url,
             'data' => [

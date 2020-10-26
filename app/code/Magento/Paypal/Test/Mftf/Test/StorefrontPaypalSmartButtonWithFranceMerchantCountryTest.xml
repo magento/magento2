@@ -16,17 +16,20 @@
             <description value="Users are able to place order using Paypal Smart Button using Euro currency and merchant country is France"/>
             <severity value="MAJOR"/>
             <testCaseId value="MC-33274"/>
-            <group value="paypalExpress"/>
             <skip>
-                <issueId value="MC-33951"/>
+                <issueId value="MC-37236"/>
             </skip>
+            <group value="paypalExpress"/>
         </annotations>
         <before>
+            <!--Set price scope global-->
+            <magentoCLI command="config:set {{CatalogPriceScopeGlobalConfigData.path}} {{CatalogPriceScopeGlobalConfigData.value}}" stepKey="setCatalogPriceScopeWebsite"/>
             <!--Set merchant country-->
             <magentoCLI command="config:set {{MerchantFrance.path}} {{MerchantFrance.value}}" stepKey="setMerchantCountryUK"/>
             <!--Enable Advanced Setting-->
             <magentoCLI command="config:set {{StorefrontPaypalEnableSkipOrderReviewStepConfigData.path}} {{StorefrontPaypalEnableSkipOrderReviewStepConfigData.value}}" stepKey="enableSkipOrderReview"/>
             <createData entity="FreeShippinMethodConfig" stepKey="enableFreeShipping"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </before>
         <after>
             <magentoCLI command="config:set {{StorefrontPaypalDisableSkipOrderReviewStepConfigData.path}} {{StorefrontPaypalDisableSkipOrderReviewStepConfigData.value}}" stepKey="disableSkipOrderReview"/>
@@ -34,6 +37,11 @@
             <magentoCLI command="config:set {{MerchantUnitedStates.path}} {{MerchantUnitedStates.value}}" stepKey="setMerchantCountryDefault"/>
             <createData entity="FreeShippinMethodDefault" stepKey="disableFreeShippingMethod"/>
         </after>
+        <!-- Switch to USD-US Dollar-->
+        <actionGroup ref="StorefrontSwitchCurrencyActionGroup" after="waitForProductPagePageLoad" stepKey="switchCurrency">
+            <argument name="currency" value="USD"/>
+        </actionGroup>
+
         <!-- click on PayPal payment radio button -->
         <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" after="guestCheckoutFillingShippingSection" stepKey="waitForPlaceOrderButton"/>
         <click selector="{{CheckoutPaymentSection.PayPalPaymentRadio}}" stepKey="guestSelectCheckMoneyOrderPayment"/>
@@ -52,5 +60,10 @@
         <actionGroup ref="StorefrontPaypalSwitchBackToMagentoFromCheckoutPageActionGroup" after="LoginToPayPal" stepKey="submitPayment"/>
 
         <waitForElement after="submitPayment" selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="waitForOrderNumber"/>
+        <see selector="{{AdminOrderDetailsInformationSection.orderInformationTable}}" userInput="USD / EUR rate" stepKey="seeEURandUSDRate"/>
+        <assertEquals stepKey="assertSelectedCategories">
+            <actualResult type="variable">grabRate</actualResult>
+            <expectedResult type="array">[USD / EUR rate:]</expectedResult>
+        </assertEquals>
     </test>
 </tests>

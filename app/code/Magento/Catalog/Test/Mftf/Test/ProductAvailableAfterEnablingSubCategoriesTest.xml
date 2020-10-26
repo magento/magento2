@@ -49,7 +49,9 @@
         <actionGroup ref="AssertAdminCategorySaveSuccessMessageActionGroup" stepKey="seeSuccessMessage"/>
 
         <!--Run re-index task-->
-        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
 
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomepage"/>
         <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="openEnabledCategory">
