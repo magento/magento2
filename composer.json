@@ -136,7 +136,7 @@
         "magento/module-checkout-agreements-graph-ql": "*",
         "magento/module-cms": "*",
         "magento/module-cms-url-rewrite": "*",
-        "magento/compare-list-graph-ql": "*",
+        "magento/module-compare-list-graph-ql": "*",
         "magento/module-config": "*",
         "magento/module-configurable-import-export": "*",
         "magento/module-configurable-product": "*",

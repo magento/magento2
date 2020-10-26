@@ -2,13 +2,9 @@
 # See COPYING.txt for license details.
 
 type ComparableItem {
-    productId: ID! @doc(description: "Product Id")
-    name: String! @doc(description: "Product name")
-    sku: String! @doc(description: "Product SKU")
-    price_range: PriceRange! @doc(description: "Product prices")
-    canonical_url: String @doc(description: "Product URL")
-    images: [ProductImage]! @doc(description: "Product Images")
-    values: [ProductAttribute]! @doc(description: "Product comparable attributes")
+    uid: ID!
+    product: ProductInterface!
+    attributes: [ProductAttribute]! @doc(description: "Product comparable attributes")
 }
 
 type ProductAttribute {
