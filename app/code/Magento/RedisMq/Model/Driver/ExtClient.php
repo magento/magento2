@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Magento\RedisMq\Model\Driver;
 
+use Magento\Framework\App\DeploymentConfig;
+
 class ExtClient implements RedisClientInterface
 {
     /**
@@ -11,134 +13,83 @@ class ExtClient implements RedisClientInterface
     private $redis;
 
     /**
-     * @var array
+     * @var DeploymentConfig
      */
     private $config;
 
     /**
-     * @see https://github.com/phpredis/phpredis#parameters
+     *
      */
-    public function __construct(array $config)
+    public function __construct(DeploymentConfig $config)
     {
         if (false == class_exists(\Redis::class)) {
             throw new \LogicException('You must install the redis extension to use phpredis');
         }
 
+        if (version_compare(phpversion('redis'), '4.3.0', '<')) {
+            throw new \LogicException('The redis transport requires php-redis 4.3.0 or higher.');
+        }
+
         $this->config = $config;
     }
 
-    public function eval(string $script, array $keys = [], array $args = [])
+    public function __call($name, $arguments)
     {
-        try {
-            return $this->redis->eval($script, array_merge($keys, $args), count($keys));
-        } catch (\RedisException $e) {
-            throw new ServerException('eval command has failed', 0, $e);
-        }
+        return $this->getClient()->$name(...$arguments);
     }
 
-    public function zadd(string $key, string $value, float $score): int
+    private function getClient(): \Redis
     {
-        try {
-            return $this->redis->zAdd($key, $score, $value);
-        } catch (\RedisException $e) {
-            throw new ServerException('zadd command has failed', 0, $e);
-        }
-    }
-
-    public function zrem(string $key, string $value): int
-    {
-        try {
-            return $this->redis->zRem($key, $value);
-        } catch (\RedisException $e) {
-            throw new ServerException('zrem command has failed', 0, $e);
-        }
-    }
-
-    public function lpush(string $key, string $value): int
-    {
-        try {
-            return $this->redis->lPush($key, $value);
-        } catch (\RedisException $e) {
-            throw new ServerException('lpush command has failed', 0, $e);
-        }
-    }
-
-    public function brpop(array $keys, int $timeout): ?RedisResult
-    {
-        try {
-            if ($result = $this->redis->brPop($keys, $timeout)) {
-                return new RedisResult($result[0], $result[1]);
+        if (!$this->redis) {
+            $config = $this->config->get('queue/redis');
+            if (empty($config)) {
+                throw new \LogicException('No configuration defined for Redis queue');
+            }
+            $supportedSchemes = ['redis', 'tcp', 'unix'];
+            $scheme = $config['scheme'] ?? 'redis';
+            if (false == in_array($scheme, $supportedSchemes, true)) {
+                throw new \LogicException(sprintf(
+                    'The given scheme protocol "%s" is not supported by php extension. It must be one of "%s"',
+                    $config['scheme'],
+                    implode('", "', $supportedSchemes)
+                ));
             }
 
-            return null;
-        } catch (\RedisException $e) {
-            throw new ServerException('brpop command has failed', 0, $e);
-        }
-    }
+            $this->redis = new \Redis();
+            $connectionMethod = empty($config['persistent']) ? 'connect' : 'pconnect';
 
-    public function rpop(string $key): ?RedisResult
-    {
-        try {
-            if ($message = $this->redis->rPop($key)) {
-                return new RedisResult($key, $message);
+            $result = $this->redis->$connectionMethod(
+                'unix' === $scheme ? $config['path'] : $config['host'],
+                (int)($config['port'] ?? 6379),
+                $config['timeout'] ?? 0,
+                !empty($config['persistent']) ? ($config['persistent_id'] ?? null) : null,
+                $config['retry_interval'] ?? 0,
+                $config['read_write_timeout'] ?? 0.0
+            );
+
+            if (false == $result) {
+                throw new ServerException('Failed to connect.');
             }
 
-            return null;
-        } catch (\RedisException $e) {
-            throw new ServerException('rpop command has failed', 0, $e);
+            if (!empty($config['password'])) {
+                $this->getClient()->auth($config['password']);
+            }
+
+            if (!empty($config['database'])) {
+                $this->getClient()->select($this->config['database']);
+            }
+
         }
+        return $this->redis;
     }
 
-    private function connect(): void
-    {
-        if ($this->redis) {
-            return;
-        }
-
-        $supportedSchemes = ['redis', 'tcp', 'unix'];
-        if (false == in_array($this->config['scheme'], $supportedSchemes, true)) {
-            throw new \LogicException(sprintf(
-                'The given scheme protocol "%s" is not supported by php extension. It must be one of "%s"',
-                $this->config['scheme'],
-                implode('", "', $supportedSchemes)
-            ));
-        }
-
-        $this->redis = new \Redis();
-
-        $connectionMethod = $this->config['persistent'] ? 'pconnect' : 'connect';
-
-        $result = call_user_func(
-            [$this->redis, $connectionMethod],
-            'unix' === $this->config['scheme'] ? $this->config['path'] : $this->config['host'],
-            $this->config['port'],
-            $this->config['timeout'],
-            $this->config['persistent'] ? ($this->config['phpredis_persistent_id'] ?? null) : null,
-            $this->config['phpredis_retry_interval'] ?? null,
-            $this->config['read_write_timeout']
-        );
-
-        if (false == $result) {
-            throw new ServerException('Failed to connect.');
-        }
-
-        if ($this->config['password']) {
-            $this->redis->auth($this->config['password']);
-        }
-
-        if (null !== $this->config['database']) {
-            $this->redis->select($this->config['database']);
-        }
-    }
-
-    public function del(string $key): void
-    {
-        $this->redis->del($key);
-    }
-
+    /**
+     * Handle connection
+     */
     public function __destruct()
     {
-        if ($this->redis) {
+        if ($this->redis && $this->redis->isConnected() && empty($this->redis->getPersistentID())) {
+            // disconnect if connected and not persistent
             $this->redis->close();
         }
     }

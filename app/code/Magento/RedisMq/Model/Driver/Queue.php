@@ -8,7 +8,6 @@ namespace Magento\RedisMq\Model\Driver;
 use Magento\Framework\MessageQueue\EnvelopeFactory;
 use Magento\Framework\MessageQueue\EnvelopeInterface;
 use Magento\Framework\MessageQueue\QueueInterface;
-use Magento\RedisMq\Model\QueueManagement;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -17,9 +16,26 @@ use Psr\Log\LoggerInterface;
 class Queue implements QueueInterface
 {
     /**
-     * @var QueueManagement
+     * MILLISECONDS in one SECOND
      */
-    private $queueManagement;
+    private const MILLISECONDS = 1000;
+
+    /**
+     * Default group name
+     *
+     */
+    private const GROUP_NAME = 'magento';
+
+    /**
+     * message id
+     */
+    private const FIELD_ID = "#id";
+
+    /**
+     * message payload
+     */
+    private const FIELD_PAYLOAD = "#p";
+
 
     /**
      * @var EnvelopeFactory
@@ -34,12 +50,9 @@ class Queue implements QueueInterface
     /**
      * @var int
      */
-    private $interval;
+    private $interval = 200; //ms
 
-    /**
-     * @var int
-     */
-    private $maxNumberOfTrials;
+    private $visibilityWindow = 2; //s
 
     /**
      * @var LoggerInterface $logger
@@ -47,29 +60,58 @@ class Queue implements QueueInterface
     private $logger;
 
     /**
+     * @var ExtClient
+     */
+    private $connection;
+
+    /**
+     * @var string
+     */
+    private $groupName;
+
+    /**
+     * @var null
+     */
+    private $group = null;
+
+    /**
      * Queue constructor.
-     *
-     * @param QueueManagement $queueManagement
+     * @param string $queueName
+     * @param ExtClient $redisClient
      * @param EnvelopeFactory $envelopeFactory
      * @param LoggerInterface $logger
-     * @param string $queueName
-     * @param int $interval
-     * @param int $maxNumberOfTrials
+     * @param string $groupName
      */
     public function __construct(
-        QueueManagement $queueManagement,
+        string $queueName,
+        ExtClient $redisClient,
         EnvelopeFactory $envelopeFactory,
         LoggerInterface $logger,
-        $queueName,
-        $interval = 5,
-        $maxNumberOfTrials = 3
+        string $groupName = self::GROUP_NAME
     ) {
-        $this->queueManagement = $queueManagement;
+        $this->connection = $redisClient;
         $this->envelopeFactory = $envelopeFactory;
         $this->queueName = $queueName;
-        $this->interval = $interval;
-        $this->maxNumberOfTrials = $maxNumberOfTrials;
         $this->logger = $logger;
+        $this->groupName = $groupName;
+    }
+
+    private function getGroup()
+    {
+        if ($this->group === null) {
+            try {
+                $this->connection->xGroup('CREATE', $this->queueName, $this->groupName, '0', true);
+            } catch (\RedisException $e) {
+                throw new TransportException($e->getMessage(), 0, $e);
+            }
+
+            // group might already exist, ignore
+            if ($this->connection->getLastError()) {
+                $this->connection->clearLastError();
+            }
+            $this->group = $this->groupName;
+        }
+        return $this->group;
     }
 
     /**
@@ -77,18 +119,68 @@ class Queue implements QueueInterface
      */
     public function dequeue()
     {
-        $envelope = null;
-        $envelopes = $this->queueManagement->readMessages($this->queueName, 1);
-        if (isset($envelopes[0])) {
-            $properties = $envelopes[0];
-
-            $body = $properties[QueueManagement::MESSAGE_BODY];
-            unset($properties[QueueManagement::MESSAGE_BODY]);
-
-            $envelope = $this->envelopeFactory->create(['body' => $body, 'properties' => $properties]);
+        if ($this->connection->xLen($this->queueName) === 0) {
+            return null;
         }
+        $consumerName = $this->getConsumerName();
+        $messages = $this->connection->xReadGroup(
+            $this->getGroup(),
+            $this->getConsumerName(),
+            [$this->queueName => '>'],
+            1
+        );
 
-        return $envelope;
+        if (isset($messages[$this->queueName])) {
+            foreach ($messages[$this->queueName] as $id => $message) {
+                $body = $message[self::FIELD_PAYLOAD];
+                unset($message[self::FIELD_PAYLOAD]);
+                $message[self::FIELD_ID] = $id;
+
+                return $this->envelopeFactory->create(['body' => $body, 'properties' => $message]);
+            }
+        } else {
+            // try reprocess pending element
+            if ($this->connection->xLen($this->queueName) > 0) {
+                $pendingMessages = $this->connection->xPending(
+                    $this->queueName,
+                    $this->getGroup(),
+                    '-',
+                    '+', //(time() - $this->visibilityWindow) * 1000, // in ms
+                    1
+                );
+
+
+                $claimableIds = [];
+                foreach ($pendingMessages as $pendingMessage) {
+                    list($id, $pendingConsumer, $idleTimeout, $countCount) = $pendingMessage;
+
+                    if ($idleTimeout > $this->visibilityWindow) {
+                        $claimableIds[] = $id;
+                    }
+                }
+
+                if (\count($claimableIds) > 0) {
+                    $messages = $this->connection->xclaim(
+                        $this->queueName,
+                        $this->getGroup(),
+                        $consumerName,
+                        $this->visibilityWindow * self::MILLISECONDS,
+                        $claimableIds
+                    );
+
+                    if (!empty($messages)) {
+                        foreach ($messages as $id => $message) {
+                            $body = $message[self::FIELD_PAYLOAD];
+                            unset($message[self::FIELD_PAYLOAD]);
+                            $message[self::FIELD_ID] = $id;
+
+                            return $this->envelopeFactory->create(['body' => $body, 'properties' => $message]);
+                        }
+                    }
+                }
+            }
+        }
+        return null;
     }
 
     /**
@@ -96,7 +188,20 @@ class Queue implements QueueInterface
      */
     public function acknowledge(EnvelopeInterface $envelope)
     {
-        $this->getRedis()->zrem($this->queueName . ':reserved', $envelope->getReservedKey());
+        $id = $envelope->getProperties()[self::FIELD_ID];
+        try {
+            $acknowledged = $this->connection->xAck($this->queueName, $this->getGroup(), [$id]);
+            $acknowledged &= $this->connection->xDel($this->queueName, [$id]);
+        } catch (\RedisException $e) {
+            throw new TransportException($e->getMessage(), 0, $e);
+        }
+
+        if (!$acknowledged) {
+            if ($error = $this->connection->getLastError() ?: null) {
+                $this->connection->clearLastError();
+            }
+            throw new TransportException($error ?? sprintf('Could not acknowledge redis message "%s".', $id));
+        }
     }
 
     /**
@@ -104,32 +209,14 @@ class Queue implements QueueInterface
      */
     public function reject(EnvelopeInterface $envelope, $requeue = true, $rejectionMessage = null)
     {
-//        $properties = $envelope->getProperties();
-//        $relationId = $properties[QueueManagement::MESSAGE_QUEUE_RELATION_ID];
-//
-//        if ($properties[QueueManagement::MESSAGE_NUMBER_OF_TRIALS] < $this->maxNumberOfTrials && $requeue) {
-//            $this->queueManagement->pushToQueueForRetry($relationId);
-//        } else {
-//            $this->queueManagement->changeStatus([$relationId], QueueManagement::MESSAGE_STATUS_ERROR);
-//            if ($rejectionMessage !== null) {
-//                $this->logger->critical(__('Message has been rejected: %1', $rejectionMessage));
-//            }
-//        }
-
-        $this->acknowledge($envelope);
-
+        $id = $envelope->getProperties()[self::FIELD_ID];
         if ($requeue) {
-            $envelope = $this->getContext()->getSerializer()->toMessage($envelope->getReservedKey());
-            $envelope->setHeader('attempts', 0);
 
-            if ($envelope->getTimeToLive()) {
-                $envelope->setHeader('expires_at', time() + $envelope->getTimeToLive());
-            }
-
-            $payload = $this->getContext()->getSerializer()->toString($envelope);
-
-            $this->getRedis()->lpush($this->queueName, $payload);
+        } else {
+            $this->connection->xDel($this->queueName, [$id]);
+            $this->connection->xAck($this->queueName, $this->getGroup(), [$id]);
         }
+        // todo verify xclaim for reject
     }
 
     /**
@@ -140,14 +227,13 @@ class Queue implements QueueInterface
         while (true) {
             while ($envelope = $this->dequeue()) {
                 try {
-                    // phpcs:ignore Magento2.Functions.DiscouragedFunction
-                    call_user_func($callback, $envelope);
+                    $callback($envelope);
                 } catch (\Exception $e) {
                     $this->reject($envelope);
                 }
             }
             // phpcs:ignore Magento2.Functions.DiscouragedFunction
-            sleep($this->interval);
+            usleep($this->interval * 1000000);
         }
     }
 
@@ -156,35 +242,19 @@ class Queue implements QueueInterface
      */
     public function push(EnvelopeInterface $envelope)
     {
-//        $properties = $envelope->getProperties();
-//        $this->queueManagement->addMessageToQueues(
-//            $properties[QueueManagement::MESSAGE_TOPIC],
-//            $envelope->getBody(),
-//            [$this->queueName]
-//        );
+        $message = array_replace($envelope->getProperties(), [
+            self::FIELD_PAYLOAD => $envelope->getBody(),
+        ]);
 
-        $envelope->setMessageId(Uuid::uuid4()->toString());
-        $envelope->setHeader('attempts', 0);
+        return $this->connection->xAdd($this->queueName, '*', $message);
+    }
 
-        if (null !== $this->timeToLive && null === $envelope->getTimeToLive()) {
-            $envelope->setTimeToLive($this->timeToLive);
-        }
-
-        if (null !== $this->deliveryDelay && null === $envelope->getDeliveryDelay()) {
-            $envelope->setDeliveryDelay($this->deliveryDelay);
-        }
-
-        if ($envelope->getTimeToLive()) {
-            $envelope->setHeader('expires_at', time() + $envelope->getTimeToLive());
-        }
-
-        $payload = $this->context->getSerializer()->toString($envelope);
-
-        if ($envelope->getDeliveryDelay()) {
-            $deliveryAt = time() + $envelope->getDeliveryDelay() / 1000;
-            $this->context->getRedis()->zadd($destination->getName() . ':delayed', $payload, $deliveryAt);
-        } else {
-            $this->context->getRedis()->lpush($destination->getName(), $payload);
-        }
+    /**
+     * @return string
+     */
+    private function getConsumerName(): string
+    {
+        //@todo use $this->connection->rawCommand('CLIENT' 'ID')
+        return \gethostname() . ':' . getmypid();
     }
 }

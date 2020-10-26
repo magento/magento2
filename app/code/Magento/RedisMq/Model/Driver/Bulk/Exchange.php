@@ -9,10 +9,10 @@ namespace Magento\RedisMq\Model\Driver\Bulk;
 use Magento\Framework\MessageQueue\Bulk\ExchangeInterface;
 use Magento\Framework\MessageQueue\Topology\ConfigInterface as MessageQueueConfig;
 use Magento\RedisMq\Model\ConnectionTypeResolver;
-use Magento\RedisMq\Model\QueueManagement;
+use Magento\RedisMq\Model\Driver\QueueFactory;
 
 /**
- * Used to send messages in bulk in MySQL queue.
+ * Class Exchange
  */
 class Exchange implements ExchangeInterface
 {
@@ -27,54 +27,55 @@ class Exchange implements ExchangeInterface
     private $messageQueueConfig;
 
     /**
-     * @var QueueManagement
+     * @var QueueFactory
      */
-    private $queueManagement;
+    private $queueFactory;
 
     /**
-     * Initialize dependencies.
-     *
+     * Exchange constructor.
      * @param ConnectionTypeResolver $connectionTypeResolver
      * @param MessageQueueConfig $messageQueueConfig
-     * @param QueueManagement $queueManagement
+     * @param QueueFactory $queueFactory
      */
     public function __construct(
         ConnectionTypeResolver $connectionTypeResolver,
         MessageQueueConfig $messageQueueConfig,
-        QueueManagement $queueManagement
+        QueueFactory $queueFactory
     ) {
         $this->messageQueueConfig = $messageQueueConfig;
-        $this->queueManagement = $queueManagement;
         $this->connectionTypeResolver = $connectionTypeResolver;
+        $this->queueFactory = $queueFactory;
     }
 
     /**
-     * @inheritdoc
+     * @param string $topic
+     * @param array $envelopes
+     * @return mixed|void
      */
     public function enqueue($topic, array $envelopes)
     {
-        $queueNames = [];
-        $exchanges = $this->messageQueueConfig->getExchanges();
-        foreach ($exchanges as $exchange) {
+        $isMatchedBindings = false;
+        foreach ($this->messageQueueConfig->getExchanges() as $exchange) {
             $connection = $exchange->getConnection();
             if ($this->connectionTypeResolver->getConnectionType($connection)) {
                 foreach ($exchange->getBindings() as $binding) {
-                    // This only supports exact matching of topics.
-                    if ($binding->getTopic() === $topic) {
-                        $queueNames[] = $binding->getDestination();
+                    if ($binding->getTopic() == $topic) {
+                        $isMatchedBindings = true;
+                        $queue = $this->queueFactory->create($binding->getDestination(), $connection);
+                        array_map(function ($envelope) use ($queue) {
+                            $queue->push($envelope);
+                        }, $envelopes);
                     }
                 }
             }
         }
+        if (!$isMatchedBindings) {
+            $queue = $this->queueFactory->create($topic, 'redis');//todo get default
+            array_map(function ($envelope) use ($queue) {
+                $queue->push($envelope);
+            }, $envelopes);
+        }
 
-        $messages = array_map(
-            function ($envelope) {
-                return $envelope->getBody();
-            },
-            $envelopes
-        );
-        $this->queueManagement->addMessagesToQueues($topic, $messages, $queueNames);
-
-        return null;
+        // throw new \Exception('No binding');
     }
 }

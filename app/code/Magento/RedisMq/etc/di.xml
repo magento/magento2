@@ -57,4 +57,5 @@
             <argument name="instanceName" xsi:type="string">\Magento\RedisMq\Model\Driver\Bulk\Exchange</argument>
         </arguments>
     </virtualType>
+    <type name="Magento\RedisMq\Model\Driver\ExtClient" shared="false" />
 </config>
