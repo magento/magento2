@@ -30,7 +30,7 @@ class Image
     /**
      * @var Filesystem\Directory\WriteInterface
      */
-    private $targetDirectoryWrite;
+    private $remoteDirectoryWrite;
 
     /**
      * @var array
@@ -69,7 +69,7 @@ class Image
         LoggerInterface $logger
     ) {
         $this->tmpDirectoryWrite = $filesystem->getDirectoryWrite(DirectoryList::TMP);
-        $this->targetDirectoryWrite = $targetDirectory->getDirectoryWrite(DirectoryList::ROOT);
+        $this->remoteDirectoryWrite = $targetDirectory->getDirectoryWrite(DirectoryList::ROOT);
         $this->isEnabled = $config->isEnabled();
         $this->ioFile = $ioFile;
         $this->logger = $logger;
@@ -94,6 +94,42 @@ class Image
     }
 
     /**
+     * Copy import file locally to validate
+     *
+     * @param AbstractAdapter $subject
+     * @param string $filePath
+     * @return string[]
+     * @throws FileSystemException
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function beforeValidateUploadFile(AbstractAdapter $subject, $filePath): array
+    {
+        if ($this->isEnabled) {
+            $filePath = $this->copyFileToTmp($filePath);
+        }
+        return [$filePath];
+    }
+
+    /**
+     * Copy watermark locally before adding it an image
+     *
+     * @param AbstractAdapter $subject
+     * @param string $filePath
+     * @return string[]
+     * @throws FileSystemException
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function beforeWatermark(AbstractAdapter $subject, $filePath): array
+    {
+        if ($this->isEnabled) {
+            $filePath = $this->copyFileToTmp($filePath);
+        }
+        return [$filePath];
+    }
+
+    /**
      * Get filesystem tmp path for file and provide it to save() function
      *
      * @param AbstractAdapter $subject
@@ -110,16 +146,15 @@ class Image
         $newName = null
     ): void {
         if ($this->isEnabled) {
-            $relativePath = $this->targetDirectoryWrite->getRelativePath($destination);
+            $relativePath = $this->remoteDirectoryWrite->getRelativePath($destination);
             $tmpPath = $this->tmpDirectoryWrite->getAbsolutePath($relativePath);
 
             $proceed($tmpPath, $newName);
 
-            $destination = $this->prepareDestination($subject, $destination, $newName);
             $this->tmpDirectoryWrite->getDriver()->rename(
-                $tmpPath,
-                $destination,
-                $this->targetDirectoryWrite->getDriver()
+                $this->prepareDestination($subject, $tmpPath, $newName),
+                $this->prepareDestination($subject, $destination, $newName),
+                $this->remoteDirectoryWrite->getDriver()
             );
         } else {
             $proceed($destination, $newName);
@@ -149,13 +184,14 @@ class Image
      */
     private function copyFileToTmp($filePath): string
     {
-        $absolutePath = $this->targetDirectoryWrite->getAbsolutePath($filePath);
-        if ($this->targetDirectoryWrite->isFile($absolutePath)) {
+        if ($this->fileExistsInTmp($filePath)) {
+            return $filePath;
+        }
+        $absolutePath = $this->remoteDirectoryWrite->getAbsolutePath($filePath);
+        if ($this->remoteDirectoryWrite->isFile($absolutePath)) {
             $this->tmpDirectoryWrite->create();
-            // phpcs:ignore Magento2.Functions.DiscouragedFunction
-            $tmpPath = $this->tmpDirectoryWrite->getAbsolutePath() . basename($filePath);
-            $this->storeTmpName($tmpPath);
-            $content = $this->targetDirectoryWrite->getDriver()->fileGetContents($filePath);
+            $tmpPath = $this->storeTmpName($filePath);
+            $content = $this->remoteDirectoryWrite->getDriver()->fileGetContents($filePath);
             $filePath = $this->tmpDirectoryWrite->getDriver()->filePutContents($tmpPath, $content)
                 ? $tmpPath
                 : $filePath;
@@ -166,11 +202,28 @@ class Image
     /**
      * Store created tmp image path
      *
-     * @param string $path
+     * @param string $filePath
+     * @return string
      */
-    private function storeTmpName(string $path): void
+    private function storeTmpName(string $filePath): string
     {
-        $this->tmpFiles[] = $path;
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
+        $tmpPath = $this->tmpDirectoryWrite->getAbsolutePath() . basename($filePath);
+
+        $this->tmpFiles[$filePath] = $tmpPath;
+
+        return $tmpPath;
+    }
+
+    /**
+     * Check is file exist in tmp folder
+     *
+     * @param string $filePath
+     * @return bool
+     */
+    private function fileExistsInTmp(string $filePath): bool
+    {
+        return in_array($filePath, $this->tmpFiles, true);
     }
 
     /**

@@ -12,6 +12,7 @@ use League\Flysystem\Config;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\Phrase;
+use Psr\Log\LoggerInterface;
 
 /**
  * Driver for AWS S3 IO operations.
@@ -36,22 +37,34 @@ class AwsS3 implements DriverInterface
     private $streams = [];
 
     /**
-     * @param AwsS3Adapter $adapter
+     * @var LoggerInterface
      */
-    public function __construct(AwsS3Adapter $adapter)
-    {
+    private $logger;
+
+    /**
+     * @param AwsS3Adapter $adapter
+     * @param LoggerInterface $logger
+     */
+    public function __construct(
+        AwsS3Adapter $adapter,
+        LoggerInterface $logger
+    ) {
         $this->adapter = $adapter;
+        $this->logger = $logger;
     }
 
     /**
      * Destroy opened streams.
-     *
-     * @throws FileSystemException
      */
     public function __destruct()
     {
-        foreach ($this->streams as $stream) {
-            $this->fileClose($stream);
+        try {
+            foreach ($this->streams as $stream) {
+                $this->fileClose($stream);
+            }
+        } catch (\Exception $e) {
+            // log exception as throwing an exception from a destructor causes a fatal error
+            $this->logger->critical($e);
         }
     }
 
@@ -521,12 +534,17 @@ class AwsS3 implements DriverInterface
      */
     public function fileGetCsv($resource, $length = 0, $delimiter = ',', $enclosure = '"', $escape = '\\')
     {
-        //phpcs:disable
-        $metadata = stream_get_meta_data($resource);
-        //phpcs:enable
-        $file = $this->adapter->read($metadata['uri'])['contents'];
-
-        return str_getcsv($file, $delimiter, $enclosure, $escape);
+        //phpcs:ignore Magento2.Functions.DiscouragedFunction
+        $result = fgetcsv($resource, $length, $delimiter, $enclosure, $escape);
+        if ($result === null) {
+            throw new FileSystemException(
+                new Phrase(
+                    'The "%1" CSV handle is incorrect. Verify the handle and try again.',
+                    [$this->getWarningMessage()]
+                )
+            );
+        }
+        return $result;
     }
 
     /**

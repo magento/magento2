@@ -349,7 +349,11 @@ class Write extends Read implements WriteInterface
      */
     public function writeFile($path, $content, $mode = 'w+')
     {
-        return $this->openFile($path, $mode)->write($content);
+         $file = $this->openFile($path, $mode);
+         $result = $file->write($content);
+         $file->close();
+
+         return $result;
     }
 
     /**

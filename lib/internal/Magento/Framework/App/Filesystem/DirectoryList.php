@@ -63,6 +63,11 @@ class DirectoryList extends \Magento\Framework\Filesystem\DirectoryList
     const VAR_EXPORT = 'var_export';
 
     /**
+     * Storage of files which were imported.
+     */
+    const VAR_IMPORT = 'var_import';
+
+    /**
      * Temporary files
      */
     const TMP = 'tmp';
@@ -151,7 +156,7 @@ class DirectoryList extends \Magento\Framework\Filesystem\DirectoryList
             self::CONFIG => [parent::PATH => 'app/etc'],
             self::LIB_INTERNAL => [parent::PATH => 'lib/internal'],
             self::VAR_DIR => [parent::PATH => 'var'],
-            self::VAR_EXPORT => [parent::PATH => 'var/export'],
+            self::VAR_EXPORT => [parent::PATH => 'var/export', parent::URL_PATH => 'export'],
             self::CACHE => [parent::PATH => 'var/cache'],
             self::LOG => [parent::PATH => 'var/log'],
             self::DI => [parent::PATH => 'generated/metadata'],
@@ -170,6 +175,7 @@ class DirectoryList extends \Magento\Framework\Filesystem\DirectoryList
             self::GENERATED => [parent::PATH => 'generated'],
             self::GENERATED_CODE => [parent::PATH => Io::DEFAULT_DIRECTORY],
             self::GENERATED_METADATA => [parent::PATH => 'generated/metadata'],
+            self::VAR_IMPORT => [parent::PATH => 'var/import', parent::URL_PATH => 'var/import'],
         ];
         return parent::getDefaultConfig() + $result;
     }

@@ -26,6 +26,8 @@
         <arguments>
             <argument name="directoryCodes" xsi:type="array">
                 <item name="media" xsi:type="const">Magento\Framework\App\Filesystem\DirectoryList::MEDIA</item>
+                <item name="var_export" xsi:type="const">Magento\Framework\App\Filesystem\DirectoryList::VAR_EXPORT</item>
+                <item name="var_import" xsi:type="string">Magento\Framework\App\Filesystem\DirectoryList::VAR_IMPORT</item>
             </argument>
         </arguments>
     </virtualType>
@@ -94,5 +96,35 @@
     </type>
     <type name="Magento\Framework\Image\Adapter\AbstractAdapter">
         <plugin name="remoteImageFile" type="Magento\RemoteStorage\Plugin\Image" sortOrder="10"/>
+    </type>
+    <type name="Magento\ImportExport\Model\Import">
+        <arguments>
+            <argument name="filesystem" xsi:type="object">fullRemoteFilesystem</argument>
+        </arguments>
+    </type>
+    <type name="Magento\ImportExport\Model\Import\ImageDirectoryBaseProvider">
+        <arguments>
+            <argument name="filesystem" xsi:type="object">fullRemoteFilesystem</argument>
+        </arguments>
+    </type>
+    <type name="Magento\ImportExport\Helper\Report">
+        <arguments>
+            <argument name="filesystem" xsi:type="object">fullRemoteFilesystem</argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogImportExport\Model\Import\Product">
+        <arguments>
+            <argument name="filesystem" xsi:type="object">fullRemoteFilesystem</argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogImportExport\Model\Import\Uploader">
+        <arguments>
+            <argument name="filesystem" xsi:type="object">fullRemoteFilesystem</argument>
+        </arguments>
+    </type>
+    <type name="Magento\DownloadableImportExport\Helper\Uploader">
+        <arguments>
+            <argument name="filesystem" xsi:type="object">fullRemoteFilesystem</argument>
+        </arguments>
     </type>
 </config>

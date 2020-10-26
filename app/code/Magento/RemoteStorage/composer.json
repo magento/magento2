@@ -10,7 +10,10 @@
         "magento/module-sitemap": "*",
         "magento/module-cms": "*",
         "magento/module-downloadable": "*",
-        "magento/module-media-storage": "*"
+        "magento/module-media-storage": "*",
+        "magento/module-import-export": "*",
+        "magento/module-catalog-import-export": "*",
+        "magento/module-downloadable-import-export": "*"
     },
     "type": "magento2-module",
     "license": [

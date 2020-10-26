@@ -13,6 +13,7 @@ use Magento\AwsS3\Driver\AwsS3;
 use Magento\Framework\Exception\FileSystemException;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
 /**
  * @see AwsS3
@@ -37,12 +38,18 @@ class AwsS3Test extends TestCase
     private $clientMock;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @inheritDoc
      */
     protected function setUp(): void
     {
         $this->adapterMock = $this->createMock(AwsS3Adapter::class);
         $this->clientMock = $this->getMockForAbstractClass(S3ClientInterface::class);
+        $this->logger = $this->getMockForAbstractClass(LoggerInterface::class);
 
         $this->adapterMock->method('applyPathPrefix')
             ->willReturnArgument(0);
@@ -59,7 +66,7 @@ class AwsS3Test extends TestCase
                 return self::URL . $path;
             });
 
-        $this->driver = new AwsS3($this->adapterMock);
+        $this->driver = new AwsS3($this->adapterMock, $this->logger);
     }
 
     /**
@@ -149,6 +156,16 @@ class AwsS3Test extends TestCase
                 '',
                 self::URL . 'media/catalog/test.png',
                 self::URL . 'media/catalog/test.png'
+            ],
+            [
+                self::URL,
+                'var/import/images',
+                self::URL . 'var/import/images'
+            ],
+            [
+                self::URL . 'var/import/images/product_images/',
+                self::URL . 'var/import/images/product_images/1.png',
+                self::URL . 'var/import/images/product_images/1.png'
             ]
         ];
     }

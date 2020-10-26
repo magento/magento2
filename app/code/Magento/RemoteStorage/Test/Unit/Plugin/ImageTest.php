@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\RemoteStorage\Test\Unit\Plugin;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -41,8 +42,8 @@ class ImageTest extends TestCase
     private $targetDirectoryWrite;
 
     /**
-     * @throws \Magento\Framework\Exception\FileSystemException
      * @return void
+     * @throws \Magento\Framework\Exception\FileSystemException
      */
     protected function setUp(): void
     {
@@ -80,11 +81,16 @@ class ImageTest extends TestCase
      * @param string $destination
      * @param string $newDestination
      * @param string|null $newName
+     * @param string|null $oldName
      * @return void
      * @throws \Magento\Framework\Exception\FileSystemException
      */
-    public function testAroundSaveWithNewName(string $destination, string $newDestination, ?string $newName): void
-    {
+    public function testAroundSaveWithNewName(
+        string $destination,
+        string $newDestination,
+        ?string $newName,
+        ?string $oldName
+    ): void {
         $tmpDestination = '/tmp/' . $destination;
         /** @var AbstractAdapter $subject */
         $subject = $this->getMockBuilder(AbstractAdapter::class)
@@ -96,7 +102,7 @@ class ImageTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->targetDirectoryWrite->expects(self::atLeastOnce())->method('getRelativePath')
-            ->willReturn($destination);
+            ->willReturn($destination . $oldName);
         $this->targetDirectoryWrite->expects(self::atLeastOnce())->method('getDriver')
             ->willReturn($targetDriver);
         $this->tmpDirectoryWrite->expects(self::atLeastOnce())->method('getAbsolutePath')
@@ -104,12 +110,18 @@ class ImageTest extends TestCase
         $driver = $this->getMockBuilder(DriverInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $actualName = $newName ?? $oldName;
         $driver->expects(self::atLeastOnce())->method('rename')
-            ->with($tmpDestination, $newDestination, $driver);
+            ->with($tmpDestination . $actualName, $newDestination, $driver);
         $this->tmpDirectoryWrite->expects(self::atLeastOnce())->method('getDriver')->willReturn($driver);
-        $this->ioFile->expects(self::any())->method('getPathInfo')->with($destination)
-            ->willReturn(['dirname' => 'destination/', 'basename' => 'old_name.file']);
-        $this->plugin->aroundSave($subject, $proceed, $destination, $newName);
+        $this->ioFile->method('getPathInfo')
+            ->willReturnMap(
+                [
+                    [$tmpDestination, ['dirname' => $tmpDestination, 'basename' => 'old_name.file']],
+                    [$destination . $oldName, ['dirname' => $destination, 'basename' => 'old_name.file']]
+                ]
+            );
+        $this->plugin->aroundSave($subject, $proceed, $destination . $oldName, $newName);
     }
 
     /**
@@ -121,12 +133,14 @@ class ImageTest extends TestCase
             'with_new_name' => [
                 'destination' => 'destination/',
                 'new_destination' => 'destination/new_name.file',
-                'new_name' => 'new_name.file'
+                'new_name' => 'new_name.file',
+                'old_name' => null
             ],
             'with_old_name' => [
-                'destination' => 'destination/old_name.file',
+                'destination' => 'destination/',
                 'new_destination' => 'destination/old_name.file',
-                'new_name' => null
+                'new_name' => null,
+                'old_name' => 'old_name.file'
             ]
         ];
     }

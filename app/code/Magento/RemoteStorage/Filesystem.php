@@ -105,4 +105,19 @@ class Filesystem extends BaseFilesystem
 
         return parent::getDirectoryWrite($directoryCode);
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function getDirectoryReadByPath($path, $driverCode = DriverPool::REMOTE)
+    {
+        if ($driverCode === DriverPool::REMOTE && $this->isEnabled) {
+            return $this->readFactory->create(
+                $this->driverPool->getDriver()->getAbsolutePath('', $path),
+                $driverCode
+            );
+        }
+
+        return parent::getDirectoryReadByPath($path);
+    }
 }
