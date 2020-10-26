@@ -74,7 +74,6 @@ class GetFolderTree
      */
     public function execute(): array
     {
-        ini_set('memory_limit', '100M');
         $tree = [
             'name' => 'root',
             'path' => '/',
@@ -135,6 +134,7 @@ class GetFolderTree
         $directories = $this->glob->glob($pattern, $flags);
 
         foreach ($this->glob->glob($this->driver->getParentDirectory($pattern) . '/*', $flags) as $dir) {
+            // phpcs:ignore Magento2.Performance.ForeachArrayMerge
             $directories = array_merge(
                 $directories,
                 $this->recursiveRead($dir . '/' .  $this->file->getPathInfo($pattern)['basename'], $flags)
