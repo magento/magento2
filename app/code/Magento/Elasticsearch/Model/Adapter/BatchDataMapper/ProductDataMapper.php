@@ -272,6 +272,9 @@ class ProductDataMapper implements BatchDataMapperInterface
      * @param array $attributeValues
      * @param int $storeId
      * @return array
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     private function prepareAttributeValues(
         int $productId,
