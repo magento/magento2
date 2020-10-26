@@ -89,8 +89,13 @@ class SaveImageInformation
             return $result;
         }
 
+        if ($result['path'] !== $this->filesystem->getDirectoryRead(DirectoryList::MEDIA)->getAbsolutePath()) {
+            return $result;
+        }
+
         $path = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA)
             ->getRelativePath(rtrim($result['path'], '/') . '/' . ltrim($result['file'], '/'));
+
         if (!$this->isApplicable($path)) {
             return $result;
         }
