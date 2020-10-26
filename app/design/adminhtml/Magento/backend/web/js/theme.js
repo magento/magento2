@@ -347,7 +347,7 @@ define('globalSearch', [
                 self.field.addClass(self.options.fieldActiveClass);
             });
 
-            $(document).keydown(function (event) {
+            $(document).on('keydown.activateGlobalSearchForm', function (event) {
                 var inputs = [
                     'input',
                     'select',
