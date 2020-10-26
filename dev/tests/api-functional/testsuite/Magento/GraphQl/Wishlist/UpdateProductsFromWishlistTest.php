@@ -99,14 +99,14 @@ class UpdateProductsFromWishlistTest extends GraphQlAbstract
     {
         $wishlist = $this->getWishlist();
         $wishlistId = $wishlist['customer']['wishlist']['id'];
-        $wishlistItem = $wishlist['customer']['wishlist']['items'][0];
+        $wishlistItem = $wishlist['customer']['wishlist']['items_v2'][0];
         $qty = 0;
         $description = 'Description for zero quantity';
         $updateWishlistQuery = $this->getQuery((int) $wishlistId, (int) $wishlistItem['id'], $qty, $description);
         $response = $this->graphQlMutation($updateWishlistQuery, [], '', $this->getHeaderMap());
         self::assertEquals(1, $response['updateProductsInWishlist']['wishlist']['items_count']);
-        self::assertNotEmpty($response['updateProductsInWishlist']['wishlist']['items'], 'empty wish list items');
-        self::assertCount(1, $response['updateProductsInWishlist']['wishlist']['items']);
+        self::assertNotEmpty($response['updateProductsInWishlist']['wishlist']['items_v2'], 'empty wish list items');
+        self::assertCount(1, $response['updateProductsInWishlist']['wishlist']['items_v2']);
         self::assertArrayHasKey('user_errors', $response['updateProductsInWishlist']);
         self::assertCount(1, $response['updateProductsInWishlist']['user_errors']);
         $message = 'The quantity of a wish list item cannot be 0';
@@ -127,7 +127,7 @@ class UpdateProductsFromWishlistTest extends GraphQlAbstract
     {
         $wishlist = $this->getWishlist();
         $wishlistId = $wishlist['customer']['wishlist']['id'];
-        $wishlistItem = $wishlist['customer']['wishlist']['items'][0];
+        $wishlistItem = $wishlist['customer']['wishlist']['items_v2'][0];
         $qty = 2;
         $updateWishlistQuery = $this->getQueryWithNoDescription((int) $wishlistId, (int) $wishlistItem['id'], $qty);
         $response = $this->graphQlMutation($updateWishlistQuery, [], '', $this->getHeaderMap());
