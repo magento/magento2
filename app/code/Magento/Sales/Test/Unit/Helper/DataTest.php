@@ -9,8 +9,6 @@ namespace Magento\Sales\Test\Unit\Helper;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Helper\Context;
-use Magento\Framework\App\State;
-use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Sales\Helper\Data;
 use Magento\Sales\Model\Order\Email\Container\CreditmemoCommentIdentity;
 use Magento\Sales\Model\Order\Email\Container\CreditmemoIdentity;
@@ -21,7 +19,7 @@ use Magento\Sales\Model\Order\Email\Container\OrderIdentity;
 use Magento\Sales\Model\Order\Email\Container\ShipmentCommentIdentity;
 use Magento\Sales\Model\Order\Email\Container\ShipmentIdentity;
 use Magento\Store\Model\ScopeInterface;
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Store\Model\Store;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -41,7 +39,7 @@ class DataTest extends TestCase
     protected $scopeConfigMock;
 
     /**
-     * @var MockObject|\Magento\Sales\Model\Store
+     * @var MockObject|Store
      */
     protected $storeMock;
 
@@ -60,26 +58,9 @@ class DataTest extends TestCase
             ->method('getScopeConfig')
             ->willReturn($this->scopeConfigMock);
 
-        $storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+        $this->helper = new Data($contextMock);
 
-        $appStateMock = $this->getMockBuilder(State::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $pricingCurrencyMock = $this->getMockBuilder(PriceCurrencyInterface::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-
-        $this->helper = new Data(
-            $contextMock,
-            $storeManagerMock,
-            $appStateMock,
-            $pricingCurrencyMock
-        );
-
-        $this->storeMock = $this->getMockBuilder(\Magento\Sales\Model\Store::class)
+        $this->storeMock = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
             ->getMock();
     }

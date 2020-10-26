@@ -59,8 +59,8 @@ class ValidatorComposite extends AbstractValidator
     public function validate(array $validationSubject)
     {
         $isValid = true;
-        $failsDescriptionAggregate = [[]];
-        $errorCodesAggregate = [[]];
+        $failsDescriptionAggregate = [];
+        $errorCodesAggregate = [];
         foreach ($this->validators as $key => $validator) {
             $result = $validator->validate($validationSubject);
             if (!$result->isValid()) {
@@ -76,8 +76,8 @@ class ValidatorComposite extends AbstractValidator
 
         return $this->createResult(
             $isValid,
-            array_merge(...$failsDescriptionAggregate),
-            array_merge(...$errorCodesAggregate)
+            array_merge([], ...$failsDescriptionAggregate),
+            array_merge([], ...$errorCodesAggregate)
         );
     }
 }

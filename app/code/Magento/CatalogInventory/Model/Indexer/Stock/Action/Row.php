@@ -1,7 +1,5 @@
 <?php
 /**
- * @category    Magento
- * @package     Magento_CatalogInventory
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -10,8 +8,6 @@ namespace Magento\CatalogInventory\Model\Indexer\Stock\Action;
 
 /**
  * Class Row reindex action
- *
- * @package Magento\CatalogInventory\Model\Indexer\Stock\Action
  */
 class Row extends \Magento\CatalogInventory\Model\Indexer\Stock\AbstractAction
 {
