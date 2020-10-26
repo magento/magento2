@@ -167,7 +167,7 @@ class Search implements ProductQueryInterface
      * @param array $productArray
      * @param string $field
      *
-     * @return string|null
+     * @return string|null|int|bool
      */
     private function getAttributeValue(Product $product, array $productArray, string $field)
     {
