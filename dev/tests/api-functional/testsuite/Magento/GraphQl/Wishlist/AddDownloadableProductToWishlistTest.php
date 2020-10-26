@@ -121,29 +121,6 @@ class AddDownloadableProductToWishlistTest extends GraphQlAbstract
     }
 
     /**
-     * @magentoConfigFixture default_store wishlist/general/active 0
-     * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @magentoApiDataFixture Magento/Downloadable/_files/product_downloadable_with_custom_options.php
-     */
-    public function testAddDownloadableProductOnDisabledWishlist(): void
-    {
-        $qty = 2;
-        $sku = 'downloadable-product-with-purchased-separately-links';
-        $links = $this->getProductsLinks($sku);
-        $linkId = key($links);
-        $itemOptions = $this->getCustomOptionsWithIDV2ForQueryBySku->execute($sku);
-        $itemOptions['selected_options'][] = $this->generateProductLinkSelectedOptions($linkId);
-        $productOptionsQuery = trim(preg_replace(
-            '/"([^"]+)"\s*:\s*/',
-            '$1:',
-            json_encode($itemOptions)
-        ), '{}');
-        $query = $this->getQuery($qty, $sku, $productOptionsQuery);
-        $this->expectExceptionMessage('The wishlist configuration is currently disabled.');
-        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
-    }
-
-    /**
      * Function returns array of all product's links
      *
      * @param string $sku

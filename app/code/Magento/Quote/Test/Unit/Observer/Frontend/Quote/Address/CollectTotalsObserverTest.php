@@ -271,11 +271,6 @@ class CollectTotalsObserverTest extends TestCase
             ->method('getCustomerGroupId')
             ->willReturn('customerGroupId');
         $this->customerMock->expects($this->exactly(2))->method('getId')->willReturn('1');
-        $this->groupManagementMock->expects($this->once())
-            ->method('getDefaultGroup')
-            ->willReturn($this->groupInterfaceMock);
-        $this->groupInterfaceMock->expects($this->once())
-            ->method('getId')->willReturn('defaultCustomerGroupId');
         /** Assertions */
         $this->quoteAddressMock->expects($this->once())
             ->method('setPrevQuoteCustomerGroupId')
