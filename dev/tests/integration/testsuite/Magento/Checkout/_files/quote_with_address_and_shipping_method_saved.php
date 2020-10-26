@@ -18,7 +18,9 @@ $objectManager = Bootstrap::getObjectManager();
 $quoteRepository = $objectManager->get(CartRepositoryInterface::class);
 /** @var CartManagementInterface $quoteManagement */
 $quoteManagement = $objectManager->get(CartManagementInterface::class);
-$quote = $objectManager->get(GetQuoteByReservedOrderId::class)->execute('test_order_1');
+/** @var GetQuoteByReservedOrderId $getQuoteByReservedOrderId */
+$getQuoteByReservedOrderId = $objectManager->get(GetQuoteByReservedOrderId::class);
+$quote = $getQuoteByReservedOrderId->execute('test_order_1');
 $quote->setIsActive(true);
 $quote->getShippingAddress()->setShippingMethod('flatrate_flatrate');
 $quote->getShippingAddress()->setCollectShippingRates(true);
