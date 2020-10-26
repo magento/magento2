@@ -56,19 +56,9 @@ class GetLogoFile
         return sprintf(
             "%s%s%s",
             $this->urlBuilder->getBaseUrl(['_type' => UrlInterface::URL_TYPE_MEDIA]),
-            $this->getLogoBaseDir(),
+            self::LOGO_BASE_DIR,
             $invoiceLogoPath
         );
-    }
-
-    /**
-     * Get base directory for Custom Invoice Logo
-     *
-     * @return string
-     */
-    private function getLogoBaseDir(): string
-    {
-        return self::LOGO_BASE_DIR;
     }
 
     /**
