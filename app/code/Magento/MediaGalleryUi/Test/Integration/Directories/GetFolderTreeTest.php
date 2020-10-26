@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\MediaGallerySynchronization\Test\Integration\Model\Filesystem;
+namespace Magento\MediaGalleryUi\Test\Integration\Model\Filesystem;
 
 use Magento\MediaGalleryUi\Model\Directories\GetFolderTree;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -37,7 +37,6 @@ class GetFolderTreeTest extends TestCase
     {
         require __DIR__ . '/../Fixtures/EmptyFilesRollback.php';
     }
-
 
     /**
      * Verify Folder tree data Performance
