@@ -10,6 +10,8 @@ namespace Magento\Catalog\Controller\Adminhtml;
 use Magento\Framework\Acl\Builder;
 use Magento\Backend\App\Area\FrontNameResolver;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
+use Magento\Framework\App\ProductMetadata;
+use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Message\MessageInterface;
 use Magento\Framework\Registry;
@@ -270,7 +272,7 @@ class CategoryTest extends AbstractBackendController
      */
     public function saveActionDataProvider(): array
     {
-        return [
+        $result = [
             'default values' => [
                 [
                     'id' => '2',
@@ -390,6 +392,20 @@ class CategoryTest extends AbstractBackendController
                 ],
             ],
         ];
+
+        $productMetadataInterface = Bootstrap::getObjectManager()->get(ProductMetadataInterface::class);
+        if ($productMetadataInterface->getEdition() !== ProductMetadata::EDITION_NAME) {
+            /**
+             * Skip save custom_design_from and custom_design_to attributes,
+             * because this logic is rewritten on EE by Catalog Schedule
+             */
+            foreach (array_keys($result['custom values']) as $index) {
+                unset($result['custom values'][$index]['custom_design_from']);
+                unset($result['custom values'][$index]['custom_design_to']);
+            }
+        }
+
+        return $result;
     }
 
     /**
@@ -398,6 +414,11 @@ class CategoryTest extends AbstractBackendController
      */
     public function testIncorrectDateFrom(): void
     {
+        $productMetadataInterface = Bootstrap::getObjectManager()->get(ProductMetadataInterface::class);
+        if ($productMetadataInterface->getEdition() !== ProductMetadata::EDITION_NAME) {
+            $this->markTestSkipped('Skipped, because this logic is rewritten on EE by Catalog Schedule');
+        }
+
         $data = [
             'name' => 'Test Category',
             'attribute_set_id' => '3',
