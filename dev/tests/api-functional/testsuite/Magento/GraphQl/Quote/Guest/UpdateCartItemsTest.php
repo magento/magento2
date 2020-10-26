@@ -115,6 +115,63 @@ class UpdateCartItemsTest extends GraphQlAbstract
     }
 
     /**
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_multiple_products_saved.php
+     */
+    public function testRemoveMultipleCartItemsIfQuantityIsZero()
+    {
+        $quote = $this->quoteFactory->create();
+        $this->quoteResource->load($quote, 'test_order_with_multiple_products_without_address', 'reserved_order_id');
+        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$quote->getId());
+        $itemId1 = (int)$quote->getItemByProduct($this->productRepository->get('simple1'))->getId();
+        $itemId2 = (int)$quote->getItemByProduct($this->productRepository->get('simple2'))->getId();
+        $quantity = 0;
+
+        $query = <<<QUERY
+mutation {
+  updateCartItems(input: {
+    cart_id: "{$maskedQuoteId}"
+    cart_items:[
+      {
+        cart_item_id: {$itemId1}
+        quantity: {$quantity}
+      },
+      {
+        cart_item_id: {$itemId2}
+        quantity: {$quantity}
+      }
+    ]
+  }) {
+    cart {
+      items {
+        id
+        product {
+          name
+        }
+        quantity
+      }
+    }
+  }
+}
+QUERY;
+        $response = $this->graphQlMutation($query);
+
+        $this->assertArrayHasKey('updateCartItems', $response);
+        $this->assertArrayHasKey('cart', $response['updateCartItems']);
+
+        $responseCart = $response['updateCartItems']['cart'];
+        $this->assertCount(0, $responseCart['items']);
+
+        //Check that update is correctly reflected in cart
+        $cartQuery = $this->getCartQuery($maskedQuoteId);
+        $response = $this->graphQlQuery($cartQuery);
+
+        $this->assertArrayHasKey('cart', $response);
+
+        $responseCart = $response['cart'];
+        $this->assertCount(0, $responseCart['items']);
+    }
+
+    /**
      */
     public function testUpdateItemInNonExistentCart()
     {
