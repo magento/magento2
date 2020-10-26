@@ -313,7 +313,7 @@ define('globalNavigation', [
 define('globalSearch', [
     'jquery',
     'Magento_Ui/js/lib/key-codes',
-    'jquery/ui'
+    'jquery-ui-modules/widget'
 ], function ($, keyCodes) {
     'use strict';
 
