@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\MediaGalleryUi\Test\Integration\Model\Filesystem;
+namespace Magento\MediaGalleryUi\Test\Integration\Directories;
 
 use Magento\MediaGalleryUi\Model\Directories\GetFolderTree;
 use Magento\TestFramework\Helper\Bootstrap;
