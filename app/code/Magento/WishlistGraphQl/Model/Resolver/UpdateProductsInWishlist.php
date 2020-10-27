@@ -23,7 +23,6 @@ use Magento\WishlistGraphQl\Mapper\WishlistDataMapper;
 use Magento\Framework\DataObject;
 use Magento\Wishlist\Model\Wishlist\Data\WishlistOutput;
 use Magento\Wishlist\Model\Wishlist\BuyRequest\BuyRequestBuilder;
-use Magento\Catalog\Helper\Product;
 
 /**
  * Update wishlist items resolver
@@ -56,13 +55,6 @@ class UpdateProductsInWishlist implements ResolverInterface
     private $wishlistFactory;
 
     /**
-     * Catalog product
-     *
-     * @var Product
-     */
-    private $catalogProduct;
-
-    /**
      * @var array
      */
     private $errors = [];
@@ -79,7 +71,6 @@ class UpdateProductsInWishlist implements ResolverInterface
      * @param WishlistConfig $wishlistConfig
      * @param UpdateProductsInWishlistModel $updateProductsInWishlist
      * @param WishlistDataMapper $wishlistDataMapper
-     * @param Product $catalogProduct
      * @param BuyRequestBuilder $buyRequestBuilder
      */
     public function __construct(
@@ -88,7 +79,6 @@ class UpdateProductsInWishlist implements ResolverInterface
         WishlistConfig $wishlistConfig,
         UpdateProductsInWishlistModel $updateProductsInWishlist,
         WishlistDataMapper $wishlistDataMapper,
-        Product $catalogProduct,
         BuyRequestBuilder $buyRequestBuilder
     ) {
         $this->wishlistResource = $wishlistResource;
@@ -96,7 +86,6 @@ class UpdateProductsInWishlist implements ResolverInterface
         $this->wishlistConfig = $wishlistConfig;
         $this->updateProductsInWishlist = $updateProductsInWishlist;
         $this->wishlistDataMapper = $wishlistDataMapper;
-        $this->catalogProduct = $catalogProduct;
         $this->buyRequestBuilder = $buyRequestBuilder;
     }
 
@@ -192,13 +181,14 @@ class UpdateProductsInWishlist implements ResolverInterface
      *
      * @param int $itemId
      * @param DataObject $buyRequest
-     * @param wishlistFactory $wishlist
+     * @param Wishlist $wishlist
      *
      * @return WishlistOutput
      * @throws GraphQlInputException
      * @throws \Magento\Framework\Exception\AlreadyExistsException
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    private function updateItem($itemId, $buyRequest, $wishlist)
+    private function updateItem(int $itemId, DataObject $buyRequest, Wishlist $wishlist)
     {
         $item = $wishlist->getItem((int)$itemId);
 
@@ -235,7 +225,7 @@ class UpdateProductsInWishlist implements ResolverInterface
                 $candidate->setWishlistStoreId($item->getStoreId());
                 $qty = $buyRequest->getData('qty') ? $buyRequest->getData('qty') : 1;
                 $item->setOptions($candidate->getCustomOptions());
-                $item->setQty($qty)->save();
+                $item->setQty($qty);
             }
             $this->wishlistResource->save($wishlist);
         } else {
