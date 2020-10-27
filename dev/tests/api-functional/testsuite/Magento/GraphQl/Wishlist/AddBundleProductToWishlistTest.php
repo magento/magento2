@@ -99,6 +99,46 @@ class AddBundleProductToWishlistTest extends GraphQlAbstract
     }
 
     /**
+     * @magentoApiDataFixture Magento/Bundle/_files/product_with_multiple_options_and_custom_quantity.php
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     *
+     * @throws Exception
+     */
+    public function testAddingBundleItemWithCustomOptionQuantity()
+    {
+        $response = $this->graphQlQuery($this->getProductQuery("bundle-product"));
+        $bundleItem = $response['products']['items'][0];
+        $sku = $bundleItem['sku'];
+        $bundleOptions = $bundleItem['items'];
+        $customerId = 1;
+        $uId0 = $bundleOptions[0]['options'][0]['uid'];
+        $uId1 = $bundleOptions[1]['options'][0]['uid'];
+        $query= $this->getQueryWithCustomOptionQuantity($sku, 5, $uId0, $uId1);
+        $response = $this->graphQlMutation($query, [], '', $this->getHeaderMap());
+        $wishlist = $this->wishlistFactory->create()->loadByCustomerId($customerId, true);
+        /** @var Item $item */
+        $item = $wishlist->getItemCollection()->getFirstItem();
+
+        $this->assertArrayHasKey('addProductsToWishlist', $response);
+        $this->assertArrayHasKey('wishlist', $response['addProductsToWishlist']);
+        $response = $response['addProductsToWishlist']['wishlist'];
+        $this->assertEquals($wishlist->getItemsCount(), $response['items_count']);
+        $this->assertEquals($wishlist->getSharingCode(), $response['sharing_code']);
+        $this->assertEquals($wishlist->getUpdatedAt(), $response['updated_at']);
+        $this->assertEquals($item->getData('qty'), $response['items_v2'][0]['quantity']);
+        $this->assertEquals($item->getDescription(), $response['items_v2'][0]['description']);
+        $this->assertEquals($item->getAddedAt(), $response['items_v2'][0]['added_at']);
+        $this->assertNotEmpty($response['items_v2'][0]['bundle_options']);
+        $bundleOptions = $response['items_v2'][0]['bundle_options'];
+        $this->assertEquals('Option 1', $bundleOptions[0]['label']);
+        $bundleOptionOneValues = $bundleOptions[0]['values'];
+        $this->assertEquals(7, $bundleOptionOneValues[0]['quantity']);
+        $this->assertEquals('Option 2', $bundleOptions[1]['label']);
+        $bundleOptionTwoValues = $bundleOptions[1]['values'];
+        $this->assertEquals(1, $bundleOptionTwoValues[0]['quantity']);
+    }
+
+    /**
      * Authentication header map
      *
      * @param string $username
@@ -177,6 +217,118 @@ mutation {
   }
 }
 MUTATION;
+    }
+
+    /**
+     * Query with custom option quantity
+     *
+     * @param string $sku
+     * @param int $qty
+     * @param string $uId0
+     * @param string $uId1
+     * @param int $wishlistId
+     * @return string
+     */
+    private function getQueryWithCustomOptionQuantity(
+        string $sku,
+        int $qty,
+        string $uId0,
+        string $uId1,
+        int $wishlistId = 0
+    ): string {
+        return <<<MUTATION
+mutation {
+  addProductsToWishlist(
+    wishlistId: {$wishlistId},
+    wishlistItems: [
+      {
+        sku: "{$sku}"
+        quantity: {$qty}
+        entered_options: [
+            {
+              uid:"{$uId0}",
+              value:"7"
+            },
+            {
+              uid:"{$uId1}",
+              value:"7"
+            }
+        ]
+      }
+    ]
+) {
+    user_errors {
+      code
+      message
+    }
+    wishlist {
+      id
+      sharing_code
+      items_count
+      updated_at
+      items_v2 {
+        id
+        description
+        quantity
+        added_at
+        ... on BundleWishlistItem {
+          bundle_options {
+            id
+            label
+            type
+            values {
+              id
+              label
+              quantity
+              price
+            }
+          }
+        }
+      }
+    }
+  }
+}
+MUTATION;
+    }
+
+    /**
+     * Returns GraphQL query for retrieving a product with customizable options
+     *
+     * @param string $sku
+     * @return string
+     */
+    private function getProductQuery(string $sku): string
+    {
+        return <<<QUERY
+{
+  products(search: "{$sku}") {
+    items {
+      sku
+       ... on BundleProduct {
+              items {
+                sku
+                option_id
+                required
+                type
+                title
+                options {
+                  uid
+                  label
+                  product {
+                    sku
+                  }
+                  can_change_quantity
+                  id
+                  price
+
+                  quantity
+                }
+              }
+       }
+    }
+  }
+}
+QUERY;
     }
 
     /**
