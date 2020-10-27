@@ -26,15 +26,11 @@ class ResetPassword extends \Magento\User\Controller\Adminhtml\Auth implements H
         try {
             $this->_validateResetPasswordLinkToken($userId, $passwordResetToken);
 
-            try {
-                // Extend token validity to avoid expiration while this form is
-                // being completed by the user.
-                $user = $this->_userFactory->create()->load($userId);
-                $user->changeResetPasswordLinkToken($passwordResetToken);
-                $user->save();
-            } catch (\Exception $exception) {
-                // Intentionally ignoring failures here
-            }
+            // Extend token validity to avoid expiration while this form is
+            // being completed by the user.
+            $user = $this->_userFactory->create()->load($userId);
+            $user->changeResetPasswordLinkToken($passwordResetToken);
+            $user->save();
 
             $this->_view->loadLayout();
 
