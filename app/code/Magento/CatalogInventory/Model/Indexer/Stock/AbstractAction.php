@@ -1,7 +1,5 @@
 <?php
 /**
- * @category    Magento
- * @package     Magento_CatalogInventory
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -14,8 +12,6 @@ use Magento\Framework\EntityManager\MetadataPool;
 
 /**
  * Abstract action reindex class
- *
- * @package Magento\CatalogInventory\Model\Indexer\Stock
  */
 abstract class AbstractAction
 {
@@ -283,6 +279,8 @@ abstract class AbstractAction
     }
 
     /**
+     * Get cache cleaner object
+     *
      * @return CacheCleaner
      */
     private function getCacheCleaner()
