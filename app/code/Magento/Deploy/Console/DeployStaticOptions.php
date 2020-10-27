@@ -334,7 +334,7 @@ class DeployStaticOptions
                 self::NO_PARENT,
                 null,
                 InputOption::VALUE_NONE,
-                'Do not compile parent themes. Supported only in quick strategy.'
+                'Do not compile parent themes. Supported only in quick and standard strategies.'
             ),
         ];
     }
