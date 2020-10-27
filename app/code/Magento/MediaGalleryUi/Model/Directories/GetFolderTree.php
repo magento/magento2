@@ -105,11 +105,6 @@ class GetFolderTree
 
         foreach ($directoryList as $path) {
             $path = str_replace($mediaPath, '', $path);
-
-            if ($this->isPathExcluded->execute($path)) {
-                continue;
-            }
-
             $pathArray = explode('/', $path);
             $directories[] = [
                 'data' => count($pathArray) > 0 ? end($pathArray) : $path,
@@ -132,12 +127,17 @@ class GetFolderTree
     private function recursiveRead(string $pattern, int $flags = 0): array
     {
         $directories = $this->glob->glob($pattern, $flags);
+        $mediaPath = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA)->getAbsolutePath();
 
-        foreach ($this->glob->glob($this->driver->getParentDirectory($pattern) . '/*', $flags) as $dir) {
+        foreach ($this->glob->glob($this->driver->getParentDirectory($pattern) . '/*', $flags) as $key => $path) {
+            if ($this->isPathExcluded->execute(str_replace($mediaPath, '', $path))) {
+                unset($directories[array_search($path, $directories)]);
+            }
+
             // phpcs:ignore Magento2.Performance.ForeachArrayMerge
             $directories = array_merge(
                 $directories,
-                $this->recursiveRead($dir . '/' .  $this->file->getPathInfo($pattern)['basename'], $flags)
+                $this->recursiveRead($path . '/' .  $this->file->getPathInfo($pattern)['basename'], $flags)
             );
         }
 
