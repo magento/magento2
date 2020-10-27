@@ -196,7 +196,7 @@ class TranslatedLists implements ListsInterface
         foreach ($option as $item) {
             $data[$item['value']] = $item['label'];
         }
-        asort($data);
+        asort($data, SORT_LOCALE_STRING);
         $option = [];
         foreach ($data as $key => $label) {
             $option[] = ['value' => $key, 'label' => $label];
