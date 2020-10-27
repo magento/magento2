@@ -55,17 +55,13 @@ class GiftMessage implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        if (!isset($value['id'])) {
-            throw new GraphQlInputException(__('"id" value should be specified'));
-        }
-
         try {
             $orderGiftMessage = $this->orderRepository->get($value['id']);
         } catch (LocalizedException $e) {
-            throw new GraphQlInputException(__('Can\'t load gift message for order'));
+            return null;
         }
 
-        if (!isset($orderGiftMessage)) {
+        if (!$orderGiftMessage->getGiftMessageId()) {
             return null;
         }
 
