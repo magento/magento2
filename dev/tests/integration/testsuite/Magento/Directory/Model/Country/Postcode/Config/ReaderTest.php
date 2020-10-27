@@ -49,5 +49,13 @@ class ReaderTest extends TestCase
         $this->assertEquals('^[0-9]{4}$', $result['AR']['pattern_1']['pattern']);
         $this->assertEquals('A1234BCD', $result['AR']['pattern_2']['example']);
         $this->assertEquals('^[a-zA-z]{1}[0-9]{4}[a-zA-z]{3}$', $result['AR']['pattern_2']['pattern']);
+
+        $this->assertArrayHasKey('KR', $result);
+        $this->assertArrayHasKey('pattern_1', $result['KR']);
+        $this->assertArrayHasKey('pattern_2', $result['KR']);
+        $this->assertEquals('123-456', $result['KR']['pattern_1']['example']);
+        $this->assertEquals('^[0-9]{3}-[0-9]{3}$', $result['KR']['pattern_1']['pattern']);
+        $this->assertEquals('12345', $result['KR']['pattern_2']['example']);
+        $this->assertEquals('^[0-9]{5}$', $result['KR']['pattern_2']['pattern']);
     }
 }
