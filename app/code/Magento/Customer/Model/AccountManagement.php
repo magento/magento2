@@ -1605,7 +1605,7 @@ class AccountManagement implements AccountManagementInterface
             $customerSecureData = $this->customerRegistry->retrieveSecureData($customerId);
             $token = $customerSecureData->getRpToken();
             return $this->validateResetPasswordToken($customerId, $token);
-        } catch (\Exception $exception) {
+        } catch (NoSuchEntityException $exception) {
             return false;
         }
     }
