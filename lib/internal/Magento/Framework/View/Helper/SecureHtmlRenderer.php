@@ -119,7 +119,7 @@ class SecureHtmlRenderer
                         targetElement = event.target;
                     }
                     {$listenerFunction}.apply(targetElement);
-		    event.preventDefault();
+                    event.preventDefault();
 		}
             }
 	
