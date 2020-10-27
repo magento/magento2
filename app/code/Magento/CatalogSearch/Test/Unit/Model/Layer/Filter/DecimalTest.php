@@ -84,7 +84,7 @@ class DecimalTest extends TestCase
             ->method('create')
             ->willReturn($this->filterItem);
 
-        $this->fulltextCollection = $this->fulltextCollection = $this->getMockBuilder(
+        $this->fulltextCollection = $this->getMockBuilder(
             Collection::class
         )
             ->disableOriginalConstructor()
