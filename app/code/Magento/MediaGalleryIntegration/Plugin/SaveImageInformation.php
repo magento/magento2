@@ -85,15 +85,12 @@ class SaveImageInformation
      */
     public function afterSave(Uploader $subject, array $result): array
     {
-        $mediaFolder = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA)->getAbsolutePath();
-
-        if (!$this->config->isEnabled() || substr($result['path'], 0, strlen($mediaFolder)) !== $mediaFolder) {
+        if (!$this->config->isEnabled()) {
             return $result;
         }
 
         $path = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA)
             ->getRelativePath(rtrim($result['path'], '/') . '/' . ltrim($result['file'], '/'));
-
         if (!$this->isApplicable($path)) {
             return $result;
         }
