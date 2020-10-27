@@ -185,7 +185,7 @@ class TranslatedLists implements ListsInterface
     }
 
     /**
-     * Sort option array.
+     * Sort option array by localized labels
      *
      * @param array $option
      * @return array
