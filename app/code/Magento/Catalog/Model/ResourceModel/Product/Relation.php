@@ -152,7 +152,7 @@ class Relation extends AbstractDb
             )->join(
                 ['relation' => $this->getTable('catalog_product_relation')],
                 'relation.parent_id = cpe.' . $linkField
-            )->where('child_id IN(?)', $childrenIds);
+            )->where('relation.child_id IN(?)', $childrenIds);
 
         return $connection->fetchCol($select);
     }
