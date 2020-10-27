@@ -82,19 +82,19 @@
         <waitForPageLoad stepKey="waitForOrderPageLoad"/>
 
         <!-- Assert Storefront Order page contains message about Order created by a Store Administrator -->
-        <actionGroup ref="StorefrontAssertContainsMessageOrderCreatedByAdminActionGroup" stepKey="verifyStorefrontMessageFirstOrder">
+        <actionGroup ref="AssertStorefrontContainsMessageOrderCreatedByAdminActionGroup" stepKey="verifyStorefrontMessageFirstOrder">
             <argument name="orderId" value="{$getFirstOrderIdPlaceOrder}"/>
         </actionGroup>
-        <actionGroup ref="StorefrontAssertContainsMessageOrderCreatedByAdminActionGroup" stepKey="verifyStorefrontMessageSecondOrder">
+        <actionGroup ref="AssertStorefrontContainsMessageOrderCreatedByAdminActionGroup" stepKey="verifyStorefrontMessageSecondOrder">
             <argument name="orderId" value="{$getSecondOrderIdPlaceOrder}"/>
         </actionGroup>
 
         <!-- Assert Admin Order page contains message about Order created by a Store Administrator -->
-        <actionGroup ref="AdminAssertContainsMessageOrderCreatedByAdminActionGroup" stepKey="verifyAdminMessageFirstOrder">
+        <actionGroup ref="AssertAdminContainsMessageOrderCreatedByAdminActionGroup" stepKey="verifyAdminMessageFirstOrder">
             <argument name="orderId" value="{$getFirstOrderIdPlaceOrder}"/>
             <argument name="adminUserFullName" value="Magento User"/>
         </actionGroup>
-        <actionGroup ref="AdminAssertContainsMessageOrderCreatedByAdminActionGroup" stepKey="verifyAdminMessageSecondOrder">
+        <actionGroup ref="AssertAdminContainsMessageOrderCreatedByAdminActionGroup" stepKey="verifyAdminMessageSecondOrder">
             <argument name="orderId" value="{$getSecondOrderIdPlaceOrder}"/>
             <argument name="adminUserFullName" value="Magento User"/>
         </actionGroup>

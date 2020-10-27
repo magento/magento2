@@ -43,7 +43,7 @@
         </actionGroup>
 
         <!-- Assert correctly logged in as Customer -->
-        <actionGroup ref="StorefrontAssertLoginAsCustomerLoggedInActionGroup" stepKey="assertLoggedInFromCustomerPage">
+        <actionGroup ref="AssertStorefrontLoginAsCustomerLoggedInActionGroup" stepKey="assertLoggedInFromCustomerPage">
             <argument name="customerFullName" value="$$createCustomer.firstname$$ $$createCustomer.lastname$$"/>
             <argument name="customerEmail" value="$$createCustomer.email$$"/>
         </actionGroup>
