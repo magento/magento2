@@ -10,10 +10,11 @@ namespace Magento\MediaGalleryUi\Model\Directories;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\ValidatorException;
 use Magento\Framework\Filesystem;
-use Magento\MediaGalleryApi\Api\IsPathExcludedInterface;
+use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Framework\Filesystem\Driver\File;
-use Magento\Framework\Filesystem\Io\File as FileIo;
 use Magento\Framework\Filesystem\Glob;
+use Magento\Framework\Filesystem\Io\File as FileIo;
+use Magento\MediaGalleryApi\Api\IsPathExcludedInterface;
 
 /**
  * Build media gallery folder tree structure by path
@@ -100,11 +101,9 @@ class GetFolderTree
     {
         $directories = [];
 
-        $mediaPath = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA)->getAbsolutePath();
-        $directoryList = $this->recursiveRead($mediaPath . '*', Glob::GLOB_ONLYDIR);
+        $directoryList = $this->recursiveRead($this->getMediaDirectory()->getAbsolutePath(), Glob::GLOB_ONLYDIR);
 
         foreach ($directoryList as $path) {
-            $path = str_replace($mediaPath, '', $path);
             $pathArray = explode('/', $path);
             $directories[] = [
                 'data' => count($pathArray) > 0 ? end($pathArray) : $path,
@@ -121,28 +120,36 @@ class GetFolderTree
     /**
      * Read only directories from file system
      *
-     * @param string $pattern
+     * @param string $path
      * @param int $flags
      */
-    private function recursiveRead(string $pattern, int $flags = 0): array
+    private function recursiveRead(string $path, int $flags = 0): array
     {
-        $directories = $this->glob->glob($pattern, $flags);
-        $mediaPath = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA)->getAbsolutePath();
+        $directories = [];
 
-        foreach ($this->glob->glob($this->driver->getParentDirectory($pattern) . '/*', $flags) as $key => $path) {
-            if ($this->isPathExcluded->execute(str_replace($mediaPath, '', $path))) {
-                unset($directories[array_search($path, $directories)]);
+        foreach ($this->glob->glob(rtrim($path, '/') . '/*', $flags) as $childPath) {
+            $relativePath = $this->getMediaDirectory()->getRelativePath($childPath);
+            if ($this->isPathExcluded->execute($relativePath)) {
                 continue;
             }
 
+            $directories[] = $relativePath;
+
             // phpcs:ignore Magento2.Performance.ForeachArrayMerge
-            $directories = array_merge(
-                $directories,
-                $this->recursiveRead($path . '/' .  $this->file->getPathInfo($pattern)['basename'], $flags)
-            );
+            $directories = array_merge($directories, $this->recursiveRead($childPath, $flags));
         }
 
         return $directories;
+    }
+
+    /**
+     * Retrieve media directory with read access
+     *
+     * @return ReadInterface
+     */
+    private function getMediaDirectory(): ReadInterface
+    {
+        return $this->filesystem->getDirectoryRead(DirectoryList::MEDIA);
     }
 
     /**
