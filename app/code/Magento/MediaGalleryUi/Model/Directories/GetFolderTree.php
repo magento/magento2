@@ -132,6 +132,7 @@ class GetFolderTree
         foreach ($this->glob->glob($this->driver->getParentDirectory($pattern) . '/*', $flags) as $key => $path) {
             if ($this->isPathExcluded->execute(str_replace($mediaPath, '', $path))) {
                 unset($directories[array_search($path, $directories)]);
+                continue;
             }
 
             // phpcs:ignore Magento2.Performance.ForeachArrayMerge
