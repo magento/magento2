@@ -205,6 +205,7 @@ class InputValidator
     {
         $supportedStrategies = [
             'quick' => true,
+            'standard' => true,
         ];
 
         if ($noParent && !array_key_exists($strategy, $supportedStrategies)) {
