@@ -301,6 +301,11 @@ class EmailSenderTest extends TestCase
             ->method('setSendEmail')
             ->with($emailSendingResult);
 
+        $this->orderMock->method('getCustomerName')->willReturn('Customer name');
+        $this->orderMock->method('getIsNotVirtual')->willReturn(true);
+        $this->orderMock->method('getEmailCustomerNote')->willReturn(null);
+        $this->orderMock->method('getFrontendStatusLabel')->willReturn('Pending');
+
         if (!$configValue || $forceSyncMode) {
             $transport = [
                 'order' => $this->orderMock,
@@ -318,7 +323,7 @@ class EmailSenderTest extends TestCase
                     'is_not_virtual' => $orderData['is_not_virtual'],
                     'email_customer_note' => $orderData['email_customer_note'],
                     'frontend_status_label' => $orderData['frontend_status_label']
-                ]
+                ],
             ];
             $transport = new DataObject($transport);
 
