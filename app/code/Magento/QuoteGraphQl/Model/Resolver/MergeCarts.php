@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\QuoteGraphQl\Model\Resolver;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
@@ -50,19 +51,21 @@ class MergeCarts implements ResolverInterface
     /**
      * @param GetCartForUser $getCartForUser
      * @param CartRepositoryInterface $cartRepository
-     * @param CustomerCartResolver $customerCartResolver
-     * @param QuoteIdToMaskedQuoteIdInterface $quoteIdToMaskedQuoteId
+     * @param CustomerCartResolver|null $customerCartResolver
+     * @param QuoteIdToMaskedQuoteIdInterface|null $quoteIdToMaskedQuoteId
      */
     public function __construct(
         GetCartForUser $getCartForUser,
         CartRepositoryInterface $cartRepository,
-        CustomerCartResolver $customerCartResolver,
-        QuoteIdToMaskedQuoteIdInterface $quoteIdToMaskedQuoteId
+        CustomerCartResolver $customerCartResolver = null,
+        QuoteIdToMaskedQuoteIdInterface $quoteIdToMaskedQuoteId = null
     ) {
         $this->getCartForUser = $getCartForUser;
         $this->cartRepository = $cartRepository;
-        $this->customerCartResolver = $customerCartResolver;
-        $this->quoteIdToMaskedQuoteId = $quoteIdToMaskedQuoteId;
+        $this->customerCartResolver = $customerCartResolver
+            ?: ObjectManager::getInstance()->get(CustomerCartResolver::class);
+        $this->quoteIdToMaskedQuoteId = $quoteIdToMaskedQuoteId
+            ?: ObjectManager::getInstance()->get(QuoteIdToMaskedQuoteIdInterface::class);
     }
 
     /**
