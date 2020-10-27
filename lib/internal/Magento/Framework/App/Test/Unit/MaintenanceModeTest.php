@@ -11,6 +11,7 @@ use Magento\Framework\App\MaintenanceMode;
 use Magento\Framework\Event\Manager;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
+use Magento\Framework\HTTP\IpChecker;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -33,6 +34,11 @@ class MaintenanceModeTest extends TestCase
     private $eventManager;
 
     /**
+     * @var object
+     */
+    private $ipChecker;
+
+    /**
      * @inheritdoc
      */
     protected function setup(): void
@@ -44,9 +50,11 @@ class MaintenanceModeTest extends TestCase
         $this->eventManager = $this->createMock(Manager::class);
 
         $objectManager = new ObjectManager($this);
+        $this->ipChecker = $objectManager->getObject(IpChecker::class);
         $this->model = $objectManager->getObject(MaintenanceMode::class, [
             'filesystem' => $filesystem,
             'eventManager' => $this->eventManager,
+            'ipChecker' => $this->ipChecker,
         ]);
     }
 
@@ -95,7 +103,7 @@ class MaintenanceModeTest extends TestCase
         $this->flagDir->expects($this->exactly(2))
             ->method('isExist')
             ->willReturnMap($mapisExist);
-        $this->assertFalse($this->model->isOn());
+        $this->assertTrue($this->model->isOn());
     }
 
     /**
@@ -178,7 +186,7 @@ class MaintenanceModeTest extends TestCase
             ->willReturn('');
 
         $this->model->setAddresses('');
-        $this->assertEquals([''], $this->model->getAddressInfo());
+        $this->assertEquals([], $this->model->getAddressInfo());
     }
 
     /**
@@ -229,13 +237,23 @@ class MaintenanceModeTest extends TestCase
 
         $this->flagDir->method('readFile')
             ->with(MaintenanceMode::IP_FILENAME)
-            ->willReturn('address1,10.50.60.123');
+            ->willReturn('address1,10.50.60.123,192.168.0.0/16,2620:0:2d0:200::7/32,1620:0:2d0:200::7');
 
-        $expectedArray = ['address1', '10.50.60.123'];
-        $this->model->setAddresses('address1,10.50.60.123');
+        $expectedArray = ['address1', '10.50.60.123', '192.168.0.0/16', '2620:0:2d0:200::7/32', '1620:0:2d0:200::7'];
+        $this->model->setAddresses('address1,10.50.60.123,192.168.0.0/16,2620:0:2d0:200::7/32,1620:0:2d0:200::7');
         $this->assertEquals($expectedArray, $this->model->getAddressInfo());
-        $this->assertFalse($this->model->isOn('address1'));
-        $this->assertTrue($this->model->isOn('address3'));
+        $this->assertTrue($this->model->isOn('address1')); // not a valid IPv4 or IPv6 Address
+        $this->assertTrue($this->model->isOn('address3')); // not a valid IPv4 or IPv6 Address
+        $this->assertFalse($this->model->isOn('10.50.60.123')); // exact match
+        $this->assertTrue($this->model->isOn('10.50.60.125')); // exact mismatch
+        $this->assertFalse($this->model->isOn('192.168.22.1')); // range match
+        $this->assertTrue($this->model->isOn('192.22.1.1')); // range mismatch
+        $this->assertTrue($this->model->isOn('address1')); // not an IP address
+        $this->assertTrue($this->model->isOn('172.16.0.4')); // complete mismatch
+        $this->assertFalse($this->model->isOn('1620:0:2d0:200::7')); // ipv6 match
+        $this->assertFalse($this->model->isOn('1620:0:2d0:200:0:0:0:7')); // ipv6 expanded match
+        $this->assertFalse($this->model->isOn('2620::ff43:0:ff')); // ipv6 range match
+        $this->assertTrue($this->model->isOn('2720::ff43:0:ff')); // ipv6 range mismatch
     }
 
     /**
@@ -256,12 +274,22 @@ class MaintenanceModeTest extends TestCase
 
         $this->flagDir->method('readFile')
             ->with(MaintenanceMode::IP_FILENAME)
-            ->willReturn('address1,10.50.60.123');
+            ->willReturn('address1,10.50.60.123,192.168.0.0/16,2620:0:2d0:200::7/32,1620:0:2d0:200::7');
 
-        $expectedArray = ['address1', '10.50.60.123'];
-        $this->model->setAddresses('address1,10.50.60.123');
+        $expectedArray = ['address1', '10.50.60.123', '192.168.0.0/16', '2620:0:2d0:200::7/32', '1620:0:2d0:200::7'];
+        $this->model->setAddresses('address1,10.50.60.123,192.168.0.0/16,2620:0:2d0:200::7/32,1620:0:2d0:200::7');
         $this->assertEquals($expectedArray, $this->model->getAddressInfo());
         $this->assertFalse($this->model->isOn('address1'));
         $this->assertFalse($this->model->isOn('address3'));
+        $this->assertFalse($this->model->isOn('10.50.60.123')); // exact match
+        $this->assertFalse($this->model->isOn('10.50.60.125')); // exact mismatch
+        $this->assertFalse($this->model->isOn('192.168.22.1')); // range match
+        $this->assertFalse($this->model->isOn('192.22.1.1')); // range mismatch
+        $this->assertFalse($this->model->isOn('address1')); // not an IP address
+        $this->assertFalse($this->model->isOn('172.16.0.4')); // complete mismatch
+        $this->assertFalse($this->model->isOn('1620:0:2d0:200::7')); // ipv6 match
+        $this->assertFalse($this->model->isOn('1620:0:2d0:200:0:0:0:7')); // ipv6 expanded match
+        $this->assertFalse($this->model->isOn('2620::ff43:0:ff')); // ipv6 range match
+        $this->assertFalse($this->model->isOn('2720::ff43:0:ff')); // ipv6 range mismatch
     }
 }
