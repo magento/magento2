@@ -11,6 +11,8 @@ use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/multiple_products.php');
 
 $objectManager = Bootstrap::getObjectManager();
+/** @var \Magento\Quote\Api\CartRepositoryInterface $quoteRepository */
+$quoteRepository = $objectManager->create(\Magento\Quote\Api\CartRepositoryInterface::class);
 /** @var ProductRepositoryInterface $productRepository */
 $productRepository = $objectManager->create(ProductRepositoryInterface::class);
 $product1 = $productRepository->get('simple1');
@@ -24,10 +26,12 @@ $quote->setStoreId(1)
     ->setEmail('store@example.com')
     ->addProduct($product1->load($product1->getId()), 1);
 
-$quote->collectTotals()->save();
+$quote->collectTotals();
+$quoteRepository->save($quote);
 
 $quote->addProduct($product2->load($product2->getId()), 1);
-$quote->collectTotals()->save();
+$quote->collectTotals();
+$quoteRepository->save($quote);
 
 /** @var \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
 $quoteIdMask = $objectManager
@@ -35,4 +39,7 @@ $quoteIdMask = $objectManager
     ->create();
 $quoteIdMask->setQuoteId($quote->getId());
 $quoteIdMask->setDataChanges(true);
-$quoteIdMask->save();
+
+/** @var ProductRepositoryInterface $productRepository */
+$quoteIdMaskResource = $objectManager->create(\Magento\Quote\Model\ResourceModel\Quote\QuoteIdMask::class);
+$quoteIdMaskResource->save($quoteIdMask);
