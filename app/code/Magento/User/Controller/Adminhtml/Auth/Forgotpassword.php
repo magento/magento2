@@ -160,6 +160,8 @@ class Forgotpassword extends Auth implements HttpGetActionInterface, HttpPostAct
             $this->_validateResetPasswordLinkToken((int) $user->getId(), $newPassResetToken);
             return true;
         } catch (LocalizedException $exception) {
+            // Catching LocalizedException as this is the exception that is thrown
+            // to indicate failure within Auth::_validateResetPasswordLinkToken()
             return false;
         }
     }
