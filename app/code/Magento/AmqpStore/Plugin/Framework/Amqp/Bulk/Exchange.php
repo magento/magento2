@@ -83,9 +83,6 @@ class Exchange
         $updatedEnvelopes = [];
         foreach ($envelopes as $envelope) {
             $properties = $envelope->getProperties();
-            if (!isset($properties)) {
-                $properties = [];
-            }
             if (isset($properties['application_headers'])) {
                 $headers = $properties['application_headers'];
                 if ($headers instanceof AMQPTable) {
