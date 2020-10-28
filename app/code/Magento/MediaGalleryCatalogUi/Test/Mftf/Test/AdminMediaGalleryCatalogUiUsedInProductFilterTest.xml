@@ -58,8 +58,11 @@
             <argument name="entityName" value="Products"/>
         </actionGroup>
 
-        <actionGroup ref="AdminAssertMediaGalleryFilterPlaceHolderGridActionGroup" stepKey="assertFilterApplied">
-            <argument name="filterPlaceholder" value="{{ImageMetadata.title}}"/>
+        <wait time="10" stepKey="waitForBookmarkToSaveView"/>
+        <reloadPage stepKey="reloadPage"/>
+        <waitForPageLoad stepKey="waitForGridReloaded"/>
+        <actionGroup ref="AdminAssertMediaGalleryFilterPlaceholderActionGroup" stepKey="assertFilterApplied">
+            <argument name="filterPlaceholder" value="$$product.name$$"/>
         </actionGroup>
         <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearFiltersOnProductGrid"/>
 
@@ -76,6 +79,5 @@
         </actionGroup>
         <actionGroup ref="AdminEnhancedMediaGalleryClickDeleteImagesButtonActionGroup" stepKey="clickDeleteSelectedButton"/>
         <actionGroup ref="AdminEnhancedMediaGalleryConfirmDeleteImagesActionGroup" stepKey="deleteImages"/>
-
    </test>
 </tests>
