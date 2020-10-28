@@ -10,6 +10,7 @@
         "magento/module-sitemap": "*",
         "magento/module-cms": "*",
         "magento/module-downloadable": "*",
+        "magento/module-catalog": "*",
         "magento/module-media-storage": "*",
         "magento/module-import-export": "*",
         "magento/module-catalog-import-export": "*",

@@ -28,8 +28,8 @@ class RemoteStorageEnableCommand extends Command
     private const ARG_DRIVER = 'driver';
     private const ARGUMENT_BUCKET = 'bucket';
     private const ARGUMENT_REGION = 'region';
-    private const ARGUMENT_ACCESS_KEY = 'access-key';
-    private const ARGUMENT_SECRET_KEY = 'secret-key';
+    private const OPTION_ACCESS_KEY = 'access-key';
+    private const OPTION_SECRET_KEY = 'secret-key';
     private const ARGUMENT_PREFIX = 'prefix';
     private const OPTION_IS_PUBLIC = 'is-public';
 
@@ -66,8 +66,8 @@ class RemoteStorageEnableCommand extends Command
             ->addArgument(self::ARGUMENT_BUCKET, InputArgument::OPTIONAL, 'Bucket')
             ->addArgument(self::ARGUMENT_REGION, InputArgument::OPTIONAL, 'Region')
             ->addArgument(self::ARGUMENT_PREFIX, InputArgument::OPTIONAL, 'Prefix', '')
-            ->addArgument(self::ARGUMENT_ACCESS_KEY, InputArgument::OPTIONAL, 'Access key')
-            ->addArgument(self::ARGUMENT_SECRET_KEY, InputArgument::OPTIONAL, 'Secret key')
+            ->addOption(self::OPTION_ACCESS_KEY, null, InputOption::VALUE_OPTIONAL, 'Access key')
+            ->addOption(self::OPTION_SECRET_KEY, null, InputOption::VALUE_OPTIONAL, 'Secret key')
             ->addOption(self::OPTION_IS_PUBLIC, null, InputOption::VALUE_REQUIRED, 'Is public', false);
     }
 
@@ -105,8 +105,8 @@ class RemoteStorageEnableCommand extends Command
         ];
         $isPublic = (bool)$input->getOption(self::OPTION_IS_PUBLIC);
 
-        if (($key = (string)$input->getArgument(self::ARGUMENT_ACCESS_KEY))
-            && ($secret = (string)$input->getArgument(self::ARGUMENT_SECRET_KEY))
+        if (($key = (string)$input->getOption(self::OPTION_ACCESS_KEY))
+            && ($secret = (string)$input->getOption(self::OPTION_SECRET_KEY))
         ) {
             $config['credentials']['key'] = $key;
             $config['credentials']['secret'] = $secret;

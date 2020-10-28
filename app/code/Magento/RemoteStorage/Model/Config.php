@@ -34,13 +34,13 @@ class Config
     /**
      * Retrieve driver name.
      *
-     * @return string|null
+     * @return string
      * @throws FileSystemException
      * @throws RuntimeException
      */
-    public function getDriver(): ?string
+    public function getDriver(): string
     {
-        return $this->config->get(DriverPool::PATH_DRIVER, null);
+        return $this->config->get(DriverPool::PATH_DRIVER, BaseDriverPool::FILE);
     }
 
     /**
@@ -52,21 +52,9 @@ class Config
      */
     public function isEnabled(): bool
     {
-        $driver = $this->config->get(DriverPool::PATH_DRIVER);
+        $driver = $this->getDriver();
 
         return $driver && $driver !== BaseDriverPool::FILE;
-    }
-
-    /**
-     * Use remote URL for public URLs.
-     *
-     * @return bool
-     * @throws FileSystemException
-     * @throws RuntimeException
-     */
-    public function isPublic(): bool
-    {
-        return (bool)$this->config->get(DriverPool::PATH_IS_PUBLIC, false);
     }
 
     /**
@@ -85,11 +73,24 @@ class Config
      * Retrieves prefix.
      *
      * @return string
+     *
      * @throws FileSystemException
      * @throws RuntimeException
      */
     public function getPrefix(): string
     {
         return (string)$this->config->get(DriverPool::PATH_PREFIX, '');
+    }
+
+    /**
+     * Retrieves value for exposing URLs.
+     *
+     * @return bool
+     * @throws FileSystemException
+     * @throws RuntimeException
+     */
+    public function getExposeUrls(): bool
+    {
+        return (bool)$this->config->get(DriverPool::PATH_EXPOSE_URLS, false);
     }
 }

@@ -13,5 +13,7 @@
         <data key="bucket">{{_ENV.REMOTE_STORAGE_AWSS3_BUCKET}}</data>
         <data key="access_key">{{_ENV.REMOTE_STORAGE_AWSS3_ACCESS_KEY}}</data>
         <data key="secret_key">{{_ENV.REMOTE_STORAGE_AWSS3_SECRET_KEY}}</data>
+        <data key="enable_options">--remote-storage-driver={{_ENV.REMOTE_STORAGE_AWSS3_DRIVER}} --remote-storage-bucket={{_ENV.REMOTE_STORAGE_AWSS3_BUCKET}} --remote-storage-region={{_ENV.REMOTE_STORAGE_AWSS3_REGION}} --remote-storage-prefix={{_ENV.REMOTE_STORAGE_AWSS3_PREFIX}} --remote-storage-key={{_ENV.REMOTE_STORAGE_AWSS3_ACCESS_KEY}} --remote-storage-secret={{_ENV.REMOTE_STORAGE_AWSS3_SECRET_KEY}} -n</data>
+        <data key="disable_options">--remote-storage-driver=file -n</data>
     </entity>
 </entities>

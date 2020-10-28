@@ -10,7 +10,7 @@ use Magento\Framework\App\DeploymentConfig;
 
 /**
  * Document root detector.
- * @deprecared Magento always uses the pub directory
+ * @deprecated Magento always uses the pub directory
  * @api
  */
 class DocumentRoot

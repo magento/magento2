@@ -24,6 +24,11 @@ use Magento\RemoteStorage\Filesystem;
 class MediaStorage
 {
     /**
+     * @var Filesystem
+     */
+    private $filesystem;
+
+    /**
      * @var bool
      */
     private $isEnabled;
@@ -31,12 +36,12 @@ class MediaStorage
     /**
      * @var WriteInterface
      */
-    private $remoteDir;
+    private $remoteDirectory;
 
     /**
      * @var WriteInterface
      */
-    private $localDir;
+    private $localDirectory;
 
     /**
      * @param Config $config
@@ -47,12 +52,13 @@ class MediaStorage
     public function __construct(Config $config, Filesystem $filesystem)
     {
         $this->isEnabled = $config->isEnabled();
-        $this->remoteDir = $filesystem->getDirectoryWrite(DirectoryList::PUB, RemoteDriverPool::REMOTE);
-        $this->localDir = $filesystem->getDirectoryWrite(DirectoryList::PUB, LocalDriverPool::FILE);
+        $this->remoteDirectory = $filesystem->getDirectoryWrite(DirectoryList::PUB, RemoteDriverPool::REMOTE);
+        $this->localDirectory = $filesystem->getDirectoryWrite(DirectoryList::PUB, LocalDriverPool::FILE);
     }
 
     /**
      * Download remote file
+     *
      * @param Synchronization $subject
      * @param string $relativeFileName
      * @return null
@@ -60,21 +66,18 @@ class MediaStorage
      * @throws ValidatorException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function beforeSynchronize(Synchronization $subject, string $relativeFileName)
+    public function beforeSynchronize(Synchronization $subject, string $relativeFileName): void
     {
-        if ($this->isEnabled) {
-            if ($this->remoteDir->isExist($relativeFileName)) {
-                $file = $this->localDir->openFile($relativeFileName, 'w');
-                try {
-                    $file->lock();
-                    $file->write($this->remoteDir->readFile($relativeFileName));
-                    $file->unlock();
-                    $file->close();
-                } catch (FileSystemException $e) {
-                    $file->close();
-                }
+        if ($this->isEnabled && $this->remoteDirectory->isExist($relativeFileName)) {
+            $file = $this->localDirectory->openFile($relativeFileName, 'w');
+            try {
+                $file->lock();
+                $file->write($this->remoteDirectory->readFile($relativeFileName));
+                $file->unlock();
+                $file->close();
+            } catch (FileSystemException $e) {
+                $file->close();
             }
         }
-        return null;
     }
 }

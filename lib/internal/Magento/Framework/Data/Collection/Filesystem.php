@@ -132,11 +132,6 @@ class Filesystem extends \Magento\Framework\Data\Collection
     protected $_collectedFiles = [];
 
     /**
-     * @var \Magento\Framework\Filesystem
-     */
-    private $filesystem;
-
-    /**
      * @var WriteInterface
      */
     private $rootDirectory;
@@ -150,7 +145,8 @@ class Filesystem extends \Magento\Framework\Data\Collection
         \Magento\Framework\Filesystem $filesystem = null
     ) {
         $this->_entityFactory = $_entityFactory ?? ObjectManager::getInstance()->get(EntityFactoryInterface::class);
-        $this->filesystem = $filesystem ?? ObjectManager::getInstance()->get(\Magento\Framework\Filesystem::class);
+
+        $filesystem = $filesystem ?? ObjectManager::getInstance()->get(\Magento\Framework\Filesystem::class);
         $this->rootDirectory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
         parent::__construct($this->_entityFactory);
     }

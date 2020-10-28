@@ -9,9 +9,9 @@ namespace Magento\AwsS3\Driver;
 
 use Aws\S3\S3Client;
 use League\Flysystem\AwsS3v3\AwsS3Adapter;
-use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\RemoteStorage\Driver\DriverFactoryInterface;
+use Magento\RemoteStorage\Driver\RemoteDriverInterface;
 
 /**
  * Creates a pre-configured instance of AWS S3 driver.
@@ -36,13 +36,15 @@ class AwsS3Factory implements DriverFactoryInterface
      *
      * @param array $config
      * @param string $prefix
-     * @return DriverInterface
+     * @return RemoteDriverInterface
      */
-    public function create(array $config, string $prefix): DriverInterface
+    public function create(array $config, string $prefix): RemoteDriverInterface
     {
-        $config += [
-            'version' => 'latest'
-        ];
+        $config['version'] = 'latest';
+
+        if (empty($config['credentials']['key']) || empty($config['credentials']['secret'])) {
+            unset($config['credentials']);
+        }
 
         return $this->objectManager->create(
             AwsS3::class,

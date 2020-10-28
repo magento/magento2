@@ -7,8 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\RemoteStorage\Driver;
 
-use Magento\Framework\Filesystem\DriverInterface;
-
 /**
  * Factory for drivers with additional configuration.
  */
@@ -19,7 +17,7 @@ interface DriverFactoryInterface
      *
      * @param array $config
      * @param string $prefix
-     * @return DriverInterface
+     * @return RemoteDriverInterface
      */
-    public function create(array $config, string $prefix): DriverInterface;
+    public function create(array $config, string $prefix): RemoteDriverInterface;
 }

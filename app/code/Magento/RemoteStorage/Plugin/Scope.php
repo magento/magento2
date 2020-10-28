@@ -36,7 +36,7 @@ class Scope
      */
     public function __construct(Config $config, Filesystem $filesystem)
     {
-        $this->isEnabled = $config->isEnabled() && $config->isPublic();
+        $this->isEnabled = $config->isEnabled() && $config->getExposeUrls();
         $this->filesystem = $filesystem;
     }
 

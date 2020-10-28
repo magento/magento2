@@ -22,7 +22,7 @@ class DriverFactoryPool
     /**
      * @param DriverFactoryInterface[] $pool
      */
-    public function __construct(array $pool)
+    public function __construct(array $pool = [])
     {
         $this->pool = $pool;
     }
@@ -49,7 +49,7 @@ class DriverFactoryPool
     public function get(string $name): DriverFactoryInterface
     {
         if (!$this->has($name)) {
-            throw new RuntimeException(__('Factory %1 does not exist', $name));
+            throw new RuntimeException(__('Driver "%1" does not exist', $name));
         }
 
         return $this->pool[$name];

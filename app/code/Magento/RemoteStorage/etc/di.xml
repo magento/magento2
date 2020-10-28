@@ -43,7 +43,6 @@
         <arguments>
             <argument name="filesystem" xsi:type="object">fullRemoteFilesystem</argument>
         </arguments>
-        <plugin name="remote_sitemap" type="Magento\RemoteStorage\Plugin\Sitemap" />
     </type>
     <type name="Magento\Sitemap\Controller\Adminhtml\Sitemap\Save">
         <arguments>
@@ -60,9 +59,6 @@
             <argument name="filesystem" xsi:type="object">fullRemoteFilesystem</argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\Url\ScopeInterface">
-        <plugin name="remote_url" type="Magento\RemoteStorage\Plugin\Scope" />
-    </type>
     <type name="Magento\Framework\Console\CommandListInterface">
         <arguments>
             <argument name="commands" xsi:type="array">
@@ -77,7 +73,7 @@
         </arguments>
     </type>
     <type name="Magento\MediaStorage\Model\File\Storage\Synchronization">
-        <plugin name="remote_media" type="Magento\RemoteStorage\Plugin\MediaStorage" />
+        <plugin name="remoteMedia" type="Magento\RemoteStorage\Plugin\MediaStorage" />
     </type>
     <type name="Magento\Framework\Data\Collection\Filesystem">
         <arguments>
@@ -96,6 +92,14 @@
     </type>
     <type name="Magento\Framework\Image\Adapter\AbstractAdapter">
         <plugin name="remoteImageFile" type="Magento\RemoteStorage\Plugin\Image" sortOrder="10"/>
+    </type>
+    <type name="Magento\Catalog\Model\Category\FileInfo">
+        <arguments>
+            <argument name="filesystem" xsi:type="object">fullRemoteFilesystem</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Url\ScopeInterface">
+        <plugin name="remoteUrl" type="Magento\RemoteStorage\Plugin\Scope"/>
     </type>
     <type name="Magento\ImportExport\Model\Import">
         <arguments>

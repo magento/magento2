@@ -1,6 +1,9 @@
 {
     "name": "magento/module-aws-s-3",
     "description": "N/A",
+    "config": {
+        "sort-packages": true
+    },
     "require": {
         "php": "~7.3.0||~7.4.0",
         "magento/framework": "^100.0.2",

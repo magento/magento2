@@ -145,6 +145,7 @@ location /media/ {
 #
 #       # Replace placeholders and uncomment the line below to serve product images from public S3
 #       # See examples of S3 authentication at https://github.com/anomalizer/ngx_aws_auth
+#       # resolver 8.8.8.8;
 #       # proxy_pass https://<bucket-name>.<region-name>.amazonaws.com;
 #
 #       set $width "-";

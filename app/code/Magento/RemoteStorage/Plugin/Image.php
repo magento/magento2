@@ -182,7 +182,7 @@ class Image
      * @return string
      * @throws FileSystemException
      */
-    private function copyFileToTmp($filePath): string
+    private function copyFileToTmp(string $filePath): string
     {
         if ($this->fileExistsInTmp($filePath)) {
             return $filePath;

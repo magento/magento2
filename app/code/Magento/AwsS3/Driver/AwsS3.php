@@ -7,24 +7,29 @@ declare(strict_types=1);
 
 namespace Magento\AwsS3\Driver;
 
+use Exception;
 use League\Flysystem\AwsS3v3\AwsS3Adapter;
 use League\Flysystem\Config;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\Phrase;
 use Psr\Log\LoggerInterface;
+use Magento\RemoteStorage\Driver\DriverException;
+use Magento\RemoteStorage\Driver\RemoteDriverInterface;
 
 /**
  * Driver for AWS S3 IO operations.
  *
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
-class AwsS3 implements DriverInterface
+class AwsS3 implements RemoteDriverInterface
 {
     public const TYPE_DIR = 'dir';
     public const TYPE_FILE = 'file';
 
-    private const CONFIG = ['ACL' => 'public-read'];
+    private const TEST_FLAG = 'storage.flag';
+
+    private const CONFIG = ['ACL' => 'private'];
 
     /**
      * @var AwsS3Adapter
@@ -65,6 +70,18 @@ class AwsS3 implements DriverInterface
         } catch (\Exception $e) {
             // log exception as throwing an exception from a destructor causes a fatal error
             $this->logger->critical($e);
+        }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function test(): void
+    {
+        try {
+            $this->adapter->write(self::TEST_FLAG, '', new Config(self::CONFIG));
+        } catch (Exception $exception) {
+            throw new DriverException(__($exception->getMessage()), $exception);
         }
     }
 
@@ -177,7 +194,7 @@ class AwsS3 implements DriverInterface
     /**
      * @inheritDoc
      */
-    public function filePutContents($path, $content, $mode = null, $context = null): int
+    public function filePutContents($path, $content, $mode = null): int
     {
         $path = $this->normalizeRelativePath($path);
 
@@ -345,6 +362,7 @@ class AwsS3 implements DriverInterface
         if ($this->adapter->has($path) && ($meta = $this->adapter->getMetadata($path))) {
             return ($meta['type'] ?? null) === self::TYPE_DIR;
         }
+
         return false;
     }
 
@@ -416,10 +434,44 @@ class AwsS3 implements DriverInterface
             'blksize' => 0,
             'blocks' => 0,
             'size' => $metaInfo['size'] ?? 0,
-            'type' => $metaInfo['type'] ?? 0,
+            'type' => $metaInfo['type'] ?? '',
             'mtime' => $metaInfo['timestamp'] ?? 0,
-            'disposition' => null,
-            'mimetype' => $metaInfo['mimetype'] ?? 0
+            'disposition' => null
+        ];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getMetadata(string $path): array
+    {
+        $path = $this->normalizeRelativePath($path);
+        $metaInfo = $this->adapter->getMetadata($path);
+
+        if (!$metaInfo) {
+            throw new FileSystemException(__('Cannot gather meta info! %1', [$this->getWarningMessage()]));
+        }
+
+        $extra = [
+            'image-width' => 0,
+            'image-height' => 0
+        ];
+
+        if (isset($metaInfo['image-width'], $metaInfo['image-height'])) {
+            $extra['image-width'] = $metaInfo['image-width'];
+            $extra['image-height'] = $metaInfo['image-height'];
+        }
+
+        return [
+            'path' => $metaInfo['path'],
+            'dirname' => $metaInfo['dirname'],
+            'basename' => $metaInfo['basename'],
+            'extension' => $metaInfo['extension'],
+            'filename' => $metaInfo['filename'],
+            'timestamp' => $metaInfo['timestamp'],
+            'size' => $metaInfo['size'],
+            'mimetype' => $metaInfo['mimetype'],
+            'extra' => $extra
         ];
     }
 
@@ -778,6 +830,7 @@ class AwsS3 implements DriverInterface
             '/\?/' => '.',
             '/\//' => '\/'
         ];
+
         return preg_replace(array_keys($replacement), array_values($replacement), $searchPattern);
     }
 
@@ -816,6 +869,7 @@ class AwsS3 implements DriverInterface
                 }
             }
         }
+
         return $directoryContent;
     }
 }

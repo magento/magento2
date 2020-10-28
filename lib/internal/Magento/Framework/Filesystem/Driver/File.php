@@ -9,7 +9,9 @@
 namespace Magento\Framework\Filesystem\Driver;
 
 use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Filesystem\Driver\File\Mime;
 use Magento\Framework\Filesystem\DriverInterface;
+use Magento\Framework\Filesystem\ExtendedDriverInterface;
 use Magento\Framework\Filesystem\Glob;
 use Magento\Framework\Phrase;
 
@@ -20,7 +22,7 @@ use Magento\Framework\Phrase;
  *
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
-class File implements DriverInterface
+class File implements ExtendedDriverInterface
 {
     /**
      * @var string
@@ -79,6 +81,26 @@ class File implements DriverInterface
             );
         }
         return $result;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getMetadata(string $path): array
+    {
+        $fileInfo = new \SplFileInfo($path);
+        $mime = new Mime();
+
+        return [
+            'path' => $fileInfo->getPath(),
+            'basename' => $fileInfo->getBasename('.' . $fileInfo->getExtension()),
+            'extension' => $fileInfo->getExtension(),
+            'filename' => $fileInfo->getFilename(),
+            'dirname' => dirname($fileInfo->getFilename()),
+            'timestamp' => $fileInfo->getMTime(),
+            'size' => $fileInfo->getSize(),
+            'mimetype' => $mime->getMimeType($path)
+        ];
     }
 
     /**
@@ -300,12 +322,13 @@ class File implements DriverInterface
     {
         $result = false;
         $targetDriver = $targetDriver ?: $this;
-        if (get_class($targetDriver) == get_class($this)) {
+        if (get_class($targetDriver) === get_class($this)) {
             $result = @rename($this->getScheme() . $oldPath, $newPath);
+            $this->changePermissions($newPath, 0777 & ~umask());
         } else {
             $content = $this->fileGetContents($oldPath);
             if (false !== $targetDriver->filePutContents($newPath, $content)) {
-                $result = $this->deleteFile($oldPath);
+                $result = $this->isFile($oldPath) ? $this->deleteFile($oldPath) : true;
             }
         }
         if (!$result) {

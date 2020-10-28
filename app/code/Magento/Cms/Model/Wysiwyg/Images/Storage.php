@@ -363,7 +363,6 @@ class Storage extends \Magento\Framework\DataObject
             $collection->setFilesFilter('/\.(' . implode('|', $allowed) . ')$/i');
         }
 
-        // prepare items
         foreach ($collection as $item) {
             $item->setId($this->_cmsWysiwygImages->idEncode($item->getBasename()));
             $item->setName($item->getBasename());
@@ -383,7 +382,9 @@ class Storage extends \Magento\Framework\DataObject
                 }
 
                 try {
-                    $size = getimagesize($item->getFilename());
+                    $size = getimagesizefromstring(
+                        $driver->fileGetContents($item->getFilename())
+                    );
 
                     if (is_array($size)) {
                         $item->setWidth($size[0]);
@@ -657,7 +658,7 @@ class Storage extends \Magento\Framework\DataObject
 
         $image->keepAspectRatio($keepRatio);
 
-        list($imageWidth, $imageHeight) = $this->getResizedParams($source);
+        [$imageWidth, $imageHeight] = $this->getResizedParams($source);
 
         $image->resize($imageWidth, $imageHeight);
         $dest = $targetDir . '/' . $this->ioFile->getPathInfo($source)['basename'];
@@ -680,7 +681,7 @@ class Storage extends \Magento\Framework\DataObject
         $configHeight = $this->_resizeParameters['height'];
 
         //phpcs:ignore Generic.PHP.NoSilencedErrors
-        list($imageWidth, $imageHeight) = @getimagesize($source);
+        [$imageWidth, $imageHeight] = @getimagesize($source);
 
         if ($imageWidth && $imageHeight) {
             $imageWidth = $configWidth > $imageWidth ? $imageWidth : $configWidth;

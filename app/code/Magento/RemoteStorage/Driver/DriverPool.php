@@ -20,7 +20,7 @@ use Magento\RemoteStorage\Model\Config;
 class DriverPool implements DriverPoolInterface
 {
     public const PATH_DRIVER = 'remote_storage/driver';
-    public const PATH_IS_PUBLIC = 'remote_storage/is_public';
+    public const PATH_EXPOSE_URLS = 'remote_storage/expose_urls';
     public const PATH_PREFIX = 'remote_storage/prefix';
     public const PATH_CONFIG = 'remote_storage/config';
 
@@ -68,7 +68,7 @@ class DriverPool implements DriverPoolInterface
      * Retrieves remote driver.
      *
      * @param string $code
-     * @return DriverInterface
+     * @return RemoteDriverInterface
      * @throws RuntimeException
      * @throws FileSystemException
      */
