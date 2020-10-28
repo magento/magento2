@@ -107,7 +107,7 @@ class GetFolderTree
      * @return array
      * @throws ValidatorException
      */
-    private function getTreeNode(string $path)
+    private function getTreeNode(string $path): array
     {
         $pathArray = explode('/', $path);
         return [
