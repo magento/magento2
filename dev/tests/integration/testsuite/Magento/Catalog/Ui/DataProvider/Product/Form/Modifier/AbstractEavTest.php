@@ -37,7 +37,7 @@ abstract class AbstractEavTest extends TestCase
     protected $eavModifier;
 
     /**
-     * @var LocatorInterface|PHPUnit_Framework_MockObject_MockObject
+     * @var LocatorInterface|PHPUnit\Framework\MockObject\MockObject
      */
     protected $locatorMock;
 
@@ -79,7 +79,7 @@ abstract class AbstractEavTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $mappings = [
@@ -92,7 +92,7 @@ abstract class AbstractEavTest extends TestCase
             'gallery' => 'image'
         ];
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->locatorMock = $this->createMock(LocatorInterface::class);
+        $this->locatorMock = $this->getMockForAbstractClass(LocatorInterface::class);
         $this->locatorMock->expects($this->any())->method('getStore')->willReturn(
             $this->objectManager->get(StoreInterface::class)
         );
@@ -220,11 +220,13 @@ abstract class AbstractEavTest extends TestCase
     /**
      * Returns product for testing.
      *
+     * @param bool $forceReload
      * @return ProductInterface
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    protected function getProduct(): ProductInterface
+    protected function getProduct($forceReload = false): ProductInterface
     {
-        return $this->productRepository->get('simple', false, Store::DEFAULT_STORE_ID);
+        return $this->productRepository->get('simple', false, Store::DEFAULT_STORE_ID, $forceReload);
     }
 
     /**

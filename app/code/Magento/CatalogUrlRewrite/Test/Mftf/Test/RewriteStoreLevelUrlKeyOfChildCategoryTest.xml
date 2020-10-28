@@ -15,7 +15,6 @@
             <severity value="BLOCKER"/>
             <testCaseId value="MAGETWO-94934"/>
             <group value="CatalogUrlRewrite"/>
-            <group value="urlRewrite"/>
         </annotations>
 
         <before>

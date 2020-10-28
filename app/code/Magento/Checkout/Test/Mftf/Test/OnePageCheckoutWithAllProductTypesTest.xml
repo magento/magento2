@@ -88,7 +88,9 @@
             <!-- Create customer -->
             <createData entity="Simple_Customer_Without_Address" stepKey="createCustomer"/>
 
-            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </before>
         <after>
             <magentoCLI stepKey="removeDownloadableDomain" command="downloadable:domains:remove static.magento.com"/>
@@ -198,8 +200,7 @@
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
         <!-- Open created order -->
-        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="goToOrders"/>
-        <waitForPageLoad stepKey="waitForOrderPageLoad"/>
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="goToOrders"/>
         <actionGroup ref="OpenOrderByIdActionGroup" stepKey="filterOrderGridById">
             <argument name="orderId" value="$grabOrderNumber"/>
         </actionGroup>
@@ -213,8 +214,7 @@
         </assertEquals>
 
         <!-- Assert order total -->
-        <amOnPage url="{{StorefrontCustomerDashboardPage.url}}" stepKey="navigateToCustomerDashboardPage"/>
-        <waitForPageLoad stepKey="waitForCustomerDashboardPageLoad"/>
+        <actionGroup ref="StorefrontOpenMyAccountPageActionGroup" stepKey="navigateToCustomerDashboardPage"/>
         <see selector="{{StorefrontCustomerRecentOrdersSection.orderTotal}}" userInput="$613.23" stepKey="checkOrderTotalInStorefront"/>
 
         <!-- Go to Address Book -->

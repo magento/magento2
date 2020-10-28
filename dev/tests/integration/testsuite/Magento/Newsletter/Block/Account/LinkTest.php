@@ -30,7 +30,7 @@ class LinkTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -47,7 +47,7 @@ class LinkTest extends TestCase
         $block = $this->page->getLayout()->getBlock('customer-account-navigation-newsletter-subscriptions-link');
         $this->assertNotFalse($block);
         $html = $block->toHtml();
-        $this->assertContains('newsletter/manage/', $html);
+        $this->assertStringContainsString('newsletter/manage/', $html);
         $this->assertEquals('Newsletter Subscriptions', strip_tags($html));
     }
 

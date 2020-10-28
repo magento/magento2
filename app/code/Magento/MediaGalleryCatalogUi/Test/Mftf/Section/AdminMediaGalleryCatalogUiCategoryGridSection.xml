@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminMediaGalleryCatalogUiCategoryGridSection">
+        <element name="clearFilters" type="button" selector=".admin__data-grid-header [data-action='grid-filter-reset']" timeout="30"/>
+        <element name="activeFilterPlaceholder" type="text" selector="//div[@class='admin__current-filters-list-wrap']//li//span[contains(text(), '{{filterPlaceholder}}')]" parameterized="true"/>
+        <element name="image" type="text" selector="//tr//td[count(//div[@data-role='grid-wrapper']//tr//th[contains(., 'Image')]/preceding-sibling::th) +1]//img"/>
+        <element name="columnValue" type="text" selector="//tr//td[count(//div[@data-role='grid-wrapper']//tr//th[contains(., '{{columnName}}')]/preceding-sibling::th) +1 ]//div" parameterized="true"/>
+        <element name="edit" type="button" selector="//tr[td//text()[contains(., '{{categoryName}}')]]//td[count(//div[@data-role='grid-wrapper']//tr//th[contains(., 'Action')]/preceding-sibling::th) +1 ]//*[text()='{{actionButton}}']" parameterized="true"/>
+    </section>
+</sections>

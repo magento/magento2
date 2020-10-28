@@ -3,30 +3,34 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Analytics\Test\Unit\Model\Config;
 
 use Magento\Analytics\Model\Config\Mapper;
 use Magento\Analytics\Model\Config\Reader;
 use Magento\Framework\Config\ReaderInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ReaderTest extends \PHPUnit\Framework\TestCase
+class ReaderTest extends TestCase
 {
     /**
-     * @var Mapper|\PHPUnit_Framework_MockObject_MockObject
+     * @var Mapper|MockObject
      */
     private $mapperMock;
 
     /**
-     * @var ReaderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ReaderInterface|MockObject
      */
     private $readerXmlMock;
 
     /**
-     * @var ReaderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ReaderInterface|MockObject
      */
     private $readerDbMock;
 
@@ -43,19 +47,13 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->mapperMock = $this->getMockBuilder(Mapper::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->mapperMock = $this->createMock(Mapper::class);
 
-        $this->readerXmlMock = $this->getMockBuilder(ReaderInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->readerXmlMock = $this->getMockForAbstractClass(ReaderInterface::class);
 
-        $this->readerDbMock = $this->getMockBuilder(ReaderInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->readerDbMock = $this->getMockForAbstractClass(ReaderInterface::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 

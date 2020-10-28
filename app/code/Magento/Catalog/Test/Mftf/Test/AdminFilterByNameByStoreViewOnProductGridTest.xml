@@ -15,33 +15,39 @@
             <title value="Product grid filtering by store view level attribute"/>
             <description value="Verify that products grid can be filtered on all store view level by attribute"/>
             <severity value="MAJOR"/>
-            <testCaseId value="MAGETWO-98755"/>
-            <useCaseId value="MAGETWO-98335"/>
+            <testCaseId value="MC-28534"/>
+            <useCaseId value="MC-37347"/>
             <group value="catalog"/>
         </annotations>
+
         <before>
-            <createData entity="SimpleProduct2" stepKey="createSimpleProduct"/>
+            <createData entity="SimpleProduct2" stepKey="createSimpleProduct1"/>
+            <createData entity="SimpleProduct2" stepKey="createSimpleProduct2"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
+
         <after>
-            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="createSimpleProduct1" stepKey="deleteSimpleProduct1"/>
+            <deleteData createDataKey="createSimpleProduct2" stepKey="deleteSimpleProduct2"/>
             <actionGroup ref="ClearProductsFilterActionGroup" stepKey="clearProductsFilter"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
+
         <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToEditPage">
-            <argument name="productId" value="$$createSimpleProduct.id$$"/>
+            <argument name="productId" value="$$createSimpleProduct1.id$$"/>
         </actionGroup>
         <actionGroup ref="AdminSwitchStoreViewActionGroup" stepKey="switchToDefaultStoreView">
             <argument name="storeView" value="_defaultStore.name"/>
         </actionGroup>
         <scrollToTopOfPage stepKey="scrollToTopOfAdminProductFormSection"/>
         <click selector="{{AdminProductFormSection.productNameUseDefault}}" stepKey="uncheckUseDefault"/>
-        <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{SimpleProduct.name}}" stepKey="fillNewName"/>
+        <fillField selector="{{AdminProductFormSection.productName}}" userInput="$$createSimpleProduct2.name$$" stepKey="fillNewName"/>
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveSimpleProduct"/>
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
-        <actionGroup ref="FilterProductGridByNameActionGroup" stepKey="filterGridByName">
-            <argument name="product" value="SimpleProduct"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
+        <actionGroup ref="FilterProductGridByName2ActionGroup" stepKey="filterGridByName">
+            <argument name="name" value="$$createSimpleProduct2.name$$"/>
         </actionGroup>
-        <see selector="{{AdminProductGridSection.firstProductRow}}" userInput="{{SimpleProduct2.name}}" stepKey="seeProductNameInGrid"/>
+        <seeElement selector="{{AdminProductGridSection.productRowBySku('$$createSimpleProduct2.sku$$')}}" stepKey="seeProduct2InGrid"/>
+        <dontSeeElement selector="{{AdminProductGridSection.productRowBySku('$$createSimpleProduct1.sku$$')}}" stepKey="dontSeeProduct1InGrid"/>
     </test>
 </tests>
