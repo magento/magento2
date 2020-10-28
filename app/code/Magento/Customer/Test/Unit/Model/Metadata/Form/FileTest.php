@@ -13,6 +13,7 @@ use Magento\Customer\Model\Metadata\ElementFactory;
 use Magento\Customer\Model\Metadata\Form\File;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\Request\Http;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\File\Uploader;
 use Magento\Framework\File\UploaderFactory;
 use Magento\Framework\Filesystem;
@@ -403,6 +404,11 @@ class FileTest extends AbstractFormTestCase
             ->method('create')
             ->with(['fileId' => $value])
             ->willReturn($uploaderMock);
+        $uploaderMock->expects($this->once())->method('getFileExtension')->willReturn('file');
+        $this->fileValidatorMock->expects($this->once())
+            ->method('isValid')
+            ->with('file')
+            ->willReturn(true);
         $uploaderMock->expects($this->once())
             ->method('setFilesDispersion')
             ->with(true);
@@ -630,6 +636,11 @@ class FileTest extends AbstractFormTestCase
             Uploader::class
         )->disableOriginalConstructor()
             ->getMock();
+        $uploaderMock->expects($this->once())->method('getFileExtension')->willReturn('ext1');
+        $this->fileValidatorMock->expects($this->once())
+            ->method('isValid')
+            ->with('ext1')
+            ->willReturn(true);
         $uploaderMock->expects($this->once())
             ->method('setFilesDispersion')
             ->with(true)
@@ -687,9 +698,31 @@ class FileTest extends AbstractFormTestCase
 
         $exception = new \Exception('Error');
 
+        $uploaderMock = $this->createMock(Uploader::class);
         $this->uploaderFactoryMock->expects($this->once())
             ->method('create')
             ->with(['fileId' => $value])
+            ->willReturn($uploaderMock);
+        $uploaderMock->expects($this->once())->method('getFileExtension')->willReturn('ext1');
+        $this->fileValidatorMock->expects($this->once())
+            ->method('isValid')
+            ->with('ext1')
+            ->willReturn(true);
+        $uploaderMock->expects($this->once())
+            ->method('setFilesDispersion')
+            ->with(true)
+            ->willReturnSelf();
+        $uploaderMock->expects($this->once())
+            ->method('setFilenamesCaseSensitivity')
+            ->with(false)
+            ->willReturnSelf();
+        $uploaderMock->expects($this->once())
+            ->method('setAllowRenameFiles')
+            ->with(true)
+            ->willReturnSelf();
+        $uploaderMock->expects($this->once())
+            ->method('save')
+            ->with(self::ENTITY_TYPE, $value['name'])
             ->willThrowException($exception);
 
         $this->loggerMock->expects($this->once())
@@ -702,6 +735,58 @@ class FileTest extends AbstractFormTestCase
             'isAjax' => false,
             'entityTypeCode' => self::ENTITY_TYPE,
         ]);
+
+        $this->assertEquals('', $model->compactValue($value));
+    }
+
+    /**
+     * @return void
+     */
+    public function testCompactValueWithProtectedExtension(): void
+    {
+        $value = [
+            'name' => 'filename.php',
+            'tmp_name' => 'tmpfilename.php',
+        ];
+
+        $originValue = 'origin';
+
+        $mediaDirectoryMock = $this->getMockBuilder(
+            WriteInterface::class
+        )->getMockForAbstractClass();
+        $mediaDirectoryMock->expects($this->once())
+            ->method('delete')
+            ->with(self::ENTITY_TYPE . '/' . $originValue);
+
+        $this->fileSystemMock->expects($this->once())
+            ->method('getDirectoryWrite')
+            ->with(DirectoryList::MEDIA)
+            ->willReturn($mediaDirectoryMock);
+
+        $uploaderMock = $this->createMock(Uploader::class);
+        $this->uploaderFactoryMock->expects($this->once())
+            ->method('create')
+            ->with(['fileId' => $value])
+            ->willReturn($uploaderMock);
+        $uploaderMock->expects($this->once())->method('getFileExtension')->willReturn('php');
+        $this->fileValidatorMock->expects($this->once())
+            ->method('isValid')
+            ->with('php')
+            ->willReturn(false);
+        $this->fileValidatorMock->expects($this->once())
+            ->method('getMessages')
+            ->willReturn([
+                'php' => __('File with an extension php is protected and cannot be uploaded'),
+            ]);
+
+        $model = $this->initialize([
+            'value' => $originValue,
+            'isAjax' => false,
+            'entityTypeCode' => self::ENTITY_TYPE,
+        ]);
+
+        $this->expectException(LocalizedException::class);
+        $this->expectExceptionMessage('File with an extension php is protected and cannot be uploaded');
 
         $this->assertEquals('', $model->compactValue($value));
     }
