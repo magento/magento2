@@ -115,7 +115,7 @@ class UpdateCartItemsTest extends GraphQlAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_multiple_products_saved.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/quote_with_multiple_products_saved.php
      */
     public function testRemoveMultipleCartItemsIfQuantityIsZero()
     {

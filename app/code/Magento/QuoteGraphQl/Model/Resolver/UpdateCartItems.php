@@ -77,7 +77,7 @@ class UpdateCartItems implements ResolverInterface
         try {
             $this->updateCartItems->processCartItems($cart, $cartItems);
             $this->cartRepository->save($cart);
-            $cart = $this->getCartForUser->execute($maskedCartId, $context->getUserId(), $storeId);
+            $cart = $this->cartRepository->get($cart->getId());
         } catch (NoSuchEntityException $e) {
             throw new GraphQlNoSuchEntityException(__($e->getMessage()), $e);
         } catch (LocalizedException $e) {
