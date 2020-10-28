@@ -11,9 +11,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\ValidatorException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
-use Magento\Framework\Filesystem\Driver\File;
 use Magento\Framework\Filesystem\Glob;
-use Magento\Framework\Filesystem\Io\File as FileIo;
 use Magento\MediaGalleryApi\Api\IsPathExcludedInterface;
 
 /**
@@ -32,37 +30,21 @@ class GetFolderTree
     private $isPathExcluded;
 
     /**
-     * @var File
-     */
-    private $driver;
-
-    /**
-     * @var FileIo
-     */
-    private $file;
-
-    /**
      * @var Glob
      */
     private $glob;
 
     /**
      * @param Filesystem $filesystem
-     * @param File $driver
-     * @param FileIo $file
      * @param Glob $glob
      * @param IsPathExcludedInterface $isPathExcluded
      */
     public function __construct(
         Filesystem $filesystem,
-        File $driver,
-        FileIo $file,
         Glob $glob,
         IsPathExcludedInterface $isPathExcluded
     ) {
         $this->filesystem = $filesystem;
-        $this->driver = $driver;
-        $this->file = $file;
         $this->glob = $glob;
         $this->isPathExcluded = $isPathExcluded;
     }
