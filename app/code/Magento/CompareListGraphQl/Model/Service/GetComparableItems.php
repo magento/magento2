@@ -65,12 +65,11 @@ class GetComparableItems
      *
      * @param int $listId
      * @param ContextInterface $context
-     * @param StoreInterface $store
      *
      * @return array
      * @throws GraphQlInputException
      */
-    public function getComparableItems(int $listId, ContextInterface $context, StoreInterface $store)
+    public function getComparableItems(int $listId, ContextInterface $context)
     {
         $items = [];
         $maskedListId = $this->compareListIdToMaskedListId->execute($listId);

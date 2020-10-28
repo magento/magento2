@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\CompareListGraphQl\Model\Service;
 
 use Magento\Catalog\Model\CompareListIdToMaskedListId;
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 
 /**
@@ -52,14 +53,14 @@ class GetCompareList
      * @param ContextInterface $context
      *
      * @return array
+     * @throws GraphQlInputException
      */
     public function execute(int $listId, ContextInterface $context)
     {
-        $store = $context->getExtensionAttributes()->getStore();
         $maskedListId = $this->compareListIdToMaskedListId->execute($listId);
         return [
             'uid' => $maskedListId,
-            'items' => $this->comparableItemsService->getComparableItems($listId, $context, $store),
+            'items' => $this->comparableItemsService->getComparableItems($listId, $context),
             'attributes' => $this->comparableAttributesService->execute($listId, $context)
         ];
     }

@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\GraphQl\CompareList;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
@@ -20,14 +21,20 @@ class CompareListTest extends GraphQlAbstract
     private const PRODUCT_SKU_2 = 'simple2';
 
     /**
-     * @var mixed
+     * @var ProductRepositoryInterface
      */
     private $productRepository;
+
+    /**
+     * @var CustomerTokenServiceInterface
+     */
+    private $customerTokenService;
 
     protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->productRepository = $objectManager->get(ProductRepositoryInterface::class);
+        $this->customerTokenService = Bootstrap::getObjectManager()->get(CustomerTokenServiceInterface::class);
     }
     /**
      * Create compare list without product
@@ -164,6 +171,85 @@ MUTATION;
         $this->assertTrue($response['deleteCompareList']['result']);
         $response1 = $this->graphQlMutation($deleteCompareList);
         $this->assertFalse($response1['deleteCompareList']['result']);
+    }
+
+    /**
+     * Assign compare list to customer
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/multiple_products.php
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     */
+    public function testAssignCompareListToCustomer()
+    {
+        $compareList = $this->createCompareList();
+        $uid = $compareList['createCompareList']['uid'];
+        $this->uidAssertion($uid);
+        $addProducts = $this->addProductsToCompareList($uid);
+        $this->itemsAssertion($addProducts['addProductsToCompareList']['items']);
+        $currentEmail = 'customer@example.com';
+        $currentPassword = 'password';
+        $customerQuery = <<<QUERY
+{
+  customer {
+    firstname
+    lastname
+    compare_list {
+      uid
+      items {
+        product {
+            sku 
+        }
+      }
+    }
+  }
+}
+QUERY;
+        $customerResponse = $this->graphQlQuery(
+            $customerQuery,
+            [],
+            '',
+            $this->getCustomerAuthHeaders($currentEmail, $currentPassword)
+        );
+        $this->assertArrayHasKey('compare_list', $customerResponse['customer']);
+        $this->assertNull($customerResponse['customer']['compare_list']);
+
+        $assignCompareListToCustomer = <<<MUTATION
+mutation {
+  assignCompareListToCustomer(uid: "{$uid}")
+}
+MUTATION;
+        $assignResponse = $this->graphQlMutation(
+            $assignCompareListToCustomer,
+            [],
+            '',
+            $this->getCustomerAuthHeaders($currentEmail, $currentPassword)
+        );
+        $this->assertTrue($assignResponse['assignCompareListToCustomer']);
+
+        $customerAssignedResponse = $this->graphQlQuery(
+            $customerQuery,
+            [],
+            '',
+            $this->getCustomerAuthHeaders($currentEmail, $currentPassword)
+        );
+
+        $this->assertArrayHasKey('compare_list', $customerAssignedResponse['customer']);
+        $this->uidAssertion($customerAssignedResponse['customer']['compare_list']['uid']);
+        $this->itemsAssertion($customerAssignedResponse['customer']['compare_list']['items']);
+    }
+
+    /**
+     * Get customer Header
+     *
+     * @param string $email
+     * @param string $password
+     *
+     * @return array
+     */
+    private function getCustomerAuthHeaders(string $email, string $password): array
+    {
+        $customerToken = $this->customerTokenService->createCustomerAccessToken($email, $password);
+        return ['Authorization' => 'Bearer ' . $customerToken];
     }
 
     /**
