@@ -36,6 +36,7 @@ class UpdateWishlistItem
 
     /**
      * @param WishlistResourceModel $wishlistResource
+     * @param BuyRequestBuilder $buyRequestBuilder
      */
     public function __construct(
         WishlistResourceModel $wishlistResource,
