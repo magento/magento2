@@ -85,7 +85,12 @@ $priceElementIdPrefix = $block->getPriceElementIdPrefix() ?: 'product-price-';
     if ($block->getRequest()->getFullActionName() === 'catalog_product_view') {
         $data['addToCartButton'] = '#product_addtocart_form [type=submit]';
     } else {
-        $data['addToCartButton'] = sprintf('form:has(input[type="hidden"][name="product"][value="%1$s"]) button[type="submit"], form:has(.block.widget .price-box[data-product-id=%1$s]+.product-item-actions button.tocart) button[type="submit"], form:has(.price-box[data-product-id="%1$s"]+.product-item-inner .product-item-actions) button.tocart, [wishlistItemId="%1$s"]+.product-item-actions button.tocart ', $productId);
+        $buttonData = 'form:has(input[type="hidden"][name="product"][value="%1$s"]) button[type="submit"], ';
+        $buttonData .= 'form:has(.block.widget .price-box[data-product-id=%1$s]+.product-item-actions button.tocart) ';
+        $buttonData .= 'button[type="submit"], form:has(.price-box[data-product-id="%1$s"]+.product-item-inner ';
+        $buttonData .= '.product-item-actions) button.tocart, [wishlistItemId="%1$s"]+.product-item-actions ';
+        $buttonData .= 'button.tocart ';
+        $data['addToCartButton'] = sprintf($buttonData, $productId);
     }
     ?>
     <?php $priceId = $block->escapeHtmlAttr($block->getPriceId() ?: $priceElementId); ?>
