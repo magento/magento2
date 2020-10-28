@@ -84,4 +84,18 @@ class Reorder extends \Magento\Framework\App\Helper\AbstractHelper
             return true;
         }
     }
+
+    /**
+     * Check is it possible to reorder one item.
+     *
+     * @param \Magento\Sales\Model\Order\Item $item
+     * @param \Magento\Catalog\Model\Product $product
+     * @return bool
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function canReorderItem($item, $product)
+    {
+        return true;
+    }
 }

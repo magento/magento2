@@ -205,6 +205,9 @@ class Reorder
             }
             $product = $products[$productId];
             foreach ($orderItems as $orderItem) {
+                if (!$this->reorderHelper->canReorderItem($orderItem, $product)) {
+                    continue;
+                }
                 $this->addItemToCart($orderItem, $cart, clone $product);
             }
         }
