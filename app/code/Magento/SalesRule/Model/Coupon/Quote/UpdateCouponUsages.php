@@ -8,9 +8,9 @@ declare(strict_types=1);
 namespace Magento\SalesRule\Model\Coupon\Quote;
 
 use Magento\Quote\Api\Data\CartInterface;
-use Magento\SalesRule\Model\Coupon\Usage\Processor as CouponUsageProcessor;
 use Magento\SalesRule\Model\Coupon\Usage\UpdateInfo;
 use Magento\SalesRule\Model\Coupon\Usage\UpdateInfoFactory;
+use Magento\SalesRule\Model\Service\CouponUsageScheduler;
 
 /**
  * Updates the coupon usages from quote
@@ -18,24 +18,24 @@ use Magento\SalesRule\Model\Coupon\Usage\UpdateInfoFactory;
 class UpdateCouponUsages
 {
     /**
-     * @var CouponUsageProcessor
-     */
-    private $couponUsageProcessor;
-
-    /**
      * @var UpdateInfoFactory
      */
     private $updateInfoFactory;
 
     /**
-     * @param CouponUsageProcessor $couponUsageProcessor
+     * @var CouponUsageScheduler
+     */
+    private $couponUsageScheduler;
+
+    /**
+     * @param CouponUsageScheduler $couponUsageScheduler
      * @param UpdateInfoFactory $updateInfoFactory
      */
     public function __construct(
-        CouponUsageProcessor $couponUsageProcessor,
+        CouponUsageScheduler $couponUsageScheduler,
         UpdateInfoFactory $updateInfoFactory
     ) {
-        $this->couponUsageProcessor = $couponUsageProcessor;
+        $this->couponUsageScheduler = $couponUsageScheduler;
         $this->updateInfoFactory = $updateInfoFactory;
     }
 
@@ -59,6 +59,6 @@ class UpdateCouponUsages
         $updateInfo->setCustomerId((int)$quote->getCustomerId());
         $updateInfo->setIsIncrement($increment);
 
-        $this->couponUsageProcessor->process($updateInfo);
+        $this->couponUsageScheduler->schedule($updateInfo);
     }
 }
