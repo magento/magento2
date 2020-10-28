@@ -53,11 +53,6 @@ class UpdateProductsInWishlist implements ResolverInterface
     private $wishlistFactory;
 
     /**
-     * @var array
-     */
-    private $errors = [];
-
-    /**
      * BuyRequestBuilder
      * @var BuyRequestBuilder $buyRequestBuilder
      */
