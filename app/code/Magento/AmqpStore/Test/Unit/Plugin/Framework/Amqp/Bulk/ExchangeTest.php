@@ -19,7 +19,6 @@ use PhpAmqpLib\Exception\AMQPInvalidArgumentException;
 use PhpAmqpLib\Wire\AMQPTable;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Psr\Log\LoggerInterface;
 
 class ExchangeTest extends TestCase
 {
@@ -39,7 +38,7 @@ class ExchangeTest extends TestCase
     private $storeManagerMock;
 
     /**
-     * @var MockObject|LoggerInterface
+     * @var \Psr\Log\LoggerInterface|MockObject
      */
     private $loggerMock;
 
@@ -60,7 +59,7 @@ class ExchangeTest extends TestCase
 
         $this->envelopeFactoryMock = $this->createMock(EnvelopeFactory::class);
         $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
-        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->loggerMock = $this->getMockForAbstractClass(\Psr\Log\LoggerInterface::class);
 
         $objectManager = new ObjectManager($this);
         $this->exchangePlugin = $objectManager->getObject(
