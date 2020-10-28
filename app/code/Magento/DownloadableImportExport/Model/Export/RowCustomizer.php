@@ -83,37 +83,32 @@ class RowCustomizer implements RowCustomizerInterface
         // set global scope during export
         $this->storeManager->setCurrentStore(Store::DEFAULT_STORE_ID);
 
-        $collection->setPageSize(100);
-        $pages = $collection->getLastPageNumber();
-        for ($pageNum = 1; $pageNum <= $pages; $pageNum++) {
-            $collection->setCurPage($pageNum);
-            foreach ($collection as $product) {
-                $productLinks = $this->linkRepository->getLinksByProduct($product);
-                $productSamples = $this->sampleRepository->getSamplesByProduct($product);
-                $this->downloadableData[$product->getId()] = [];
-                $linksData = [];
-                $samplesData = [];
-                foreach ($productLinks as $linkId => $link) {
-                    $linkData = $link->getData();
-                    $linkData['group_title'] = $product->getData('links_title');
-                    $linksData[$linkId] = $this->optionRowToCellString($linkData);
-                }
-                foreach ($productSamples as $sampleId => $sample) {
-                    $sampleData = $sample->getData();
-                    $sampleData['group_title'] = $product->getData('samples_title');
-                    $samplesData[$sampleId] = $this->optionRowToCellString($sampleData);
-                }
-                $this->downloadableData[$product->getId()] = [
-                    Downloadable::COL_DOWNLOADABLE_LINKS => implode(
-                        ImportProduct::PSEUDO_MULTI_LINE_SEPARATOR,
-                        $linksData
-                    ),
-                    Downloadable::COL_DOWNLOADABLE_SAMPLES => implode(
-                        Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR,
-                        $samplesData
-                    )];
+        while ($product = $productCollection->fetchItem()) {
+            /** @var $product \Magento\Catalog\Api\Data\ProductInterface */
+            $productLinks = $this->linkRepository->getLinksByProduct($product);
+            $productSamples = $this->sampleRepository->getSamplesByProduct($product);
+            $this->downloadableData[$product->getId()] = [];
+            $linksData = [];
+            $samplesData = [];
+            foreach ($productLinks as $linkId => $link) {
+                $linkData = $link->getData();
+                $linkData['group_title'] = $product->getData('links_title');
+                $linksData[$linkId] = $this->optionRowToCellString($linkData);
             }
-            $collection->clear();
+            foreach ($productSamples as $sampleId => $sample) {
+                $sampleData = $sample->getData();
+                $sampleData['group_title'] = $product->getData('samples_title');
+                $samplesData[$sampleId] = $this->optionRowToCellString($sampleData);
+            }
+            $this->downloadableData[$product->getId()] = [
+                Downloadable::COL_DOWNLOADABLE_LINKS => implode(
+                    ImportProduct::PSEUDO_MULTI_LINE_SEPARATOR,
+                    $linksData
+                ),
+                Downloadable::COL_DOWNLOADABLE_SAMPLES => implode(
+                    Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR,
+                    $samplesData
+                )];
         }
     }
 
