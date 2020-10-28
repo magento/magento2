@@ -45,9 +45,7 @@ class ProductViewTest extends GraphQlAbstract
     products(filter: {sku: {eq: "{$productSku}"}})
     {
         items {
-            attribute_set_id
             country_of_manufacture
-            created_at
             gift_message_available
             id
             categories {
@@ -86,8 +84,6 @@ class ProductViewTest extends GraphQlAbstract
                 }
             }
             name
-            new_from_date
-            new_to_date
             options_container
             ... on CustomizableProductInterface {
               options {
@@ -229,10 +225,9 @@ class ProductViewTest extends GraphQlAbstract
             sku
             small_image{ url, label }
             thumbnail { url, label }
-            special_from_date
             special_price
             special_to_date
-            swatch_image            
+            swatch_image
             tier_price
             tier_prices
             {
@@ -243,11 +238,9 @@ class ProductViewTest extends GraphQlAbstract
                 website_id
             }
             type_id
-            updated_at
             url_key
             url_path
             canonical_url
-            websites { id name code sort_order default_group_id is_default }
             ... on PhysicalProductInterface {
                 weight
             }
@@ -276,8 +269,6 @@ QUERY;
         $this->assertBaseFields($product, $response['products']['items'][0]);
         $this->assertEavAttributes($product, $response['products']['items'][0]);
         $this->assertOptions($product, $response['products']['items'][0]);
-        $this->assertArrayHasKey('websites', $response['products']['items'][0]);
-        $this->assertWebsites($product, $response['products']['items'][0]['websites']);
         self::assertEquals(
             'Movable Position 2',
             $responseObject->getData('products/items/0/categories/0/name')
@@ -303,13 +294,11 @@ QUERY;
     products(filter: {sku: {eq: "{$productSku}"}})
     {
         items{
-            attribute_set_id
             categories
             {
                 id
             }
             country_of_manufacture
-            created_at
             gift_message_available
             id
             image {url, label}
@@ -342,8 +331,6 @@ QUERY;
                 }
             }
             name
-            new_from_date
-            new_to_date
             options_container
             ... on CustomizableProductInterface {
               field_options: options {
@@ -462,7 +449,6 @@ QUERY;
             }
             sku
             small_image { url, label }
-            special_from_date
             special_price
             special_to_date
             swatch_image
@@ -477,10 +463,8 @@ QUERY;
                 website_id
             }
             type_id
-            updated_at
             url_key
             url_path
-            websites { id name code sort_order default_group_id is_default }
             ... on PhysicalProductInterface {
                 weight
             }
@@ -501,8 +485,6 @@ QUERY;
         $this->assertCount(1, $response['products']['items']);
         $this->assertArrayHasKey(0, $response['products']['items']);
         $this->assertMediaGalleryEntries($product, $response['products']['items'][0]);
-        $this->assertArrayHasKey('websites', $response['products']['items'][0]);
-        $this->assertWebsites($product, $response['products']['items'][0]['websites']);
     }
 
     /**
@@ -548,7 +530,6 @@ QUERY;
            products(filter: {sku: {eq: "{$productSku}"}})
            {
                items {
-                   attribute_set_id
                    type_id
                    product_links
                    {
@@ -585,8 +566,6 @@ QUERY;
            products(filter: {price: {from: "150.0", to: "250.0"}})
            {
                items {
-                   attribute_set_id
-                   created_at
                    id
                    name
                    price {
@@ -635,7 +614,6 @@ QUERY;
                     }
                    sku
                    type_id
-                   updated_at
                    ... on PhysicalProductInterface {
                         weight
                    }
@@ -815,8 +793,6 @@ QUERY;
     {
 
         $assertionMap = [
-            ['response_field' => 'attribute_set_id', 'expected_value' => $product->getAttributeSetId()],
-            ['response_field' => 'created_at', 'expected_value' => $product->getCreatedAt()],
             ['response_field' => 'id', 'expected_value' => $product->getId()],
             ['response_field' => 'name', 'expected_value' => $product->getName()],
             ['response_field' => 'price', 'expected_value' =>
@@ -846,31 +822,10 @@ QUERY;
             ],
             ['response_field' => 'sku', 'expected_value' => $product->getSku()],
             ['response_field' => 'type_id', 'expected_value' => $product->getTypeId()],
-            ['response_field' => 'updated_at', 'expected_value' => $product->getUpdatedAt()],
             ['response_field' => 'weight', 'expected_value' => $product->getWeight()],
         ];
 
         $this->assertResponseFields($actualResponse, $assertionMap);
-    }
-
-    /**
-     * @param ProductInterface $product
-     * @param array $actualResponse
-     */
-    private function assertWebsites($product, $actualResponse)
-    {
-        $assertionMap = [
-            [
-                'id' => current($product->getExtensionAttributes()->getWebsiteIds()),
-                'name' => 'Main Website',
-                'code' => 'base',
-                'sort_order' => 0,
-                'default_group_id' => '1',
-                'is_default' => true,
-            ]
-        ];
-
-        $this->assertEquals($actualResponse, $assertionMap);
     }
 
     /**
@@ -905,10 +860,8 @@ QUERY;
             'meta_title',
             'country_of_manufacture',
             'gift_message_available',
-            'news_from_date',
             'options_container',
             'special_price',
-            'special_from_date',
             'special_to_date',
         ];
         $assertionMap = [];
@@ -930,14 +883,6 @@ QUERY;
      */
     private function eavAttributesToGraphQlSchemaFieldTranslator(string $eavAttributeCode)
     {
-        switch ($eavAttributeCode) {
-            case 'news_from_date':
-                $eavAttributeCode = 'new_from_date';
-                break;
-            case 'news_to_date':
-                $eavAttributeCode = 'new_to_date';
-                break;
-        }
         return $eavAttributeCode;
     }
 
@@ -1054,7 +999,7 @@ QUERY;
 
         $query = <<<QUERY
 {
-    products(filter: 
+    products(filter:
              {
              sku: {in:["12345"]}
              }

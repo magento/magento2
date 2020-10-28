@@ -333,9 +333,7 @@ QUERY;
         page_size
       }
       items {
-        attribute_set_id
         country_of_manufacture
-        created_at
         description {
             html
         }
@@ -374,8 +372,6 @@ QUERY;
           }
         }
         name
-        new_from_date
-        new_to_date
         options_container
         price {
           minimalPrice {
@@ -434,7 +430,6 @@ QUERY;
         sku
         small_image { url, label }
         thumbnail { url, label }
-        special_from_date
         special_price
         special_to_date
         swatch_image
@@ -447,17 +442,8 @@ QUERY;
           website_id
         }
         type_id
-        updated_at
         url_key
         url_path
-        websites {
-          id
-          name
-          code
-          sort_order
-          default_group_id
-          is_default
-        }
       }
     }
   }
@@ -478,7 +464,6 @@ QUERY;
         $firstProduct = $productRepository->get($firstProductSku, false, null, true);
         $this->assertBaseFields($firstProduct, $response['category']['products']['items'][0]);
         $this->assertAttributes($response['category']['products']['items'][0]);
-        $this->assertWebsites($firstProduct, $response['category']['products']['items'][0]['websites']);
     }
 
     /**
@@ -688,8 +673,6 @@ QUERY;
     private function assertBaseFields($product, $actualResponse)
     {
         $assertionMap = [
-            ['response_field' => 'attribute_set_id', 'expected_value' => $product->getAttributeSetId()],
-            ['response_field' => 'created_at', 'expected_value' => $product->getCreatedAt()],
             ['response_field' => 'name', 'expected_value' => $product->getName()],
             ['response_field' => 'price', 'expected_value' => [
                     'minimalPrice' => [
@@ -717,28 +700,8 @@ QUERY;
             ],
             ['response_field' => 'sku', 'expected_value' => $product->getSku()],
             ['response_field' => 'type_id', 'expected_value' => $product->getTypeId()],
-            ['response_field' => 'updated_at', 'expected_value' => $product->getUpdatedAt()],
         ];
         $this->assertResponseFields($actualResponse, $assertionMap);
-    }
-
-    /**
-     * @param ProductInterface $product
-     * @param array $actualResponse
-     */
-    private function assertWebsites($product, $actualResponse)
-    {
-        $assertionMap = [
-            [
-                'id' => current($product->getExtensionAttributes()->getWebsiteIds()),
-                'name' => 'Main Website',
-                'code' => 'base',
-                'sort_order' => 0,
-                'default_group_id' => '1',
-                'is_default' => true,
-            ]
-        ];
-        $this->assertEquals($actualResponse, $assertionMap);
     }
 
     /**
@@ -755,12 +718,8 @@ QUERY;
             'short_description',
             'country_of_manufacture',
             'gift_message_available',
-            'new_from_date',
-            'new_to_date',
             'options_container',
-            'special_price',
-            'special_from_date',
-            'special_to_date',
+            'special_price'
         ];
         foreach ($eavAttributes as $eavAttribute) {
             $this->assertArrayHasKey($eavAttribute, $actualResponse);
