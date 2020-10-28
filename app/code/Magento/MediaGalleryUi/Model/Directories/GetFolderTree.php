@@ -17,7 +17,7 @@ use Magento\Framework\Filesystem\Io\File as FileIo;
 use Magento\MediaGalleryApi\Api\IsPathExcludedInterface;
 
 /**
- * Build media gallery folder tree structure by path
+ * Build media gallery folder tree structure
  */
 class GetFolderTree
 {
@@ -75,71 +75,52 @@ class GetFolderTree
      */
     public function execute(): array
     {
-        $tree = [
-            'name' => 'root',
-            'path' => '/',
-            'children' => []
-        ];
-        $directories = $this->getDirectories();
-        foreach ($directories as $idx => &$node) {
-            $node['children'] = [];
-            $result = $this->findParent($node, $tree);
-            $parent = &$result['treeNode'];
-
-            $parent['children'][] = &$directories[$idx];
-        }
-        return $tree['children'];
+        return $this->getDirectories();
     }
 
     /**
-     * Build directory tree array in format for jstree strandart
+     * Read media directories recursively and build directory tree array in the jstree format
      *
+     * @param string $path
      * @return array
      * @throws ValidatorException
      */
-    private function getDirectories(): array
+    private function getDirectories(string $path = ''): array
     {
         $directories = [];
 
-        $directoryList = $this->recursiveRead($this->getMediaDirectory()->getAbsolutePath(), Glob::GLOB_ONLYDIR);
-
-        foreach ($directoryList as $path) {
-            $pathArray = explode('/', $path);
-            $directories[] = [
-                'data' => count($pathArray) > 0 ? end($pathArray) : $path,
-                'attr' => ['id' => $path],
-                'metadata' => [
-                    'path' => $path
-                ],
-                'path_array' => $pathArray
-            ];
+        $absolutePath = $this->getMediaDirectory()->getAbsolutePath($path);
+        foreach ($this->glob->glob(rtrim($absolutePath, '/') . '/*', Glob::GLOB_ONLYDIR) as $childPath) {
+            $relativePath = $this->getMediaDirectory()->getRelativePath($childPath);
+            if (!$this->isPathExcluded->execute($relativePath)) {
+                $directories[] = $this->getTreeNode($relativePath);
+            }
         }
+
         return $directories;
     }
 
     /**
-     * Read only directories from file system
+     * Format tree node based on path (relative to media directory)
      *
      * @param string $path
-     * @param int $flags
+     * @return array
+     * @throws ValidatorException
      */
-    private function recursiveRead(string $path, int $flags = 0): array
+    private function getTreeNode(string $path)
     {
-        $directories = [];
-
-        foreach ($this->glob->glob(rtrim($path, '/') . '/*', $flags) as $childPath) {
-            $relativePath = $this->getMediaDirectory()->getRelativePath($childPath);
-            if ($this->isPathExcluded->execute($relativePath)) {
-                continue;
-            }
-
-            $directories[] = $relativePath;
-
-            // phpcs:ignore Magento2.Performance.ForeachArrayMerge
-            $directories = array_merge($directories, $this->recursiveRead($childPath, $flags));
-        }
-
-        return $directories;
+        $pathArray = explode('/', $path);
+        return [
+            'data' => count($pathArray) > 0 ? end($pathArray) : $path,
+            'attr' => [
+                'id' => $path
+            ],
+            'metadata' => [
+                'path' => $path
+            ],
+            'path_array' => $pathArray,
+            'children' => $this->getDirectories($path)
+        ];
     }
 
     /**
@@ -150,32 +131,5 @@ class GetFolderTree
     private function getMediaDirectory(): ReadInterface
     {
         return $this->filesystem->getDirectoryRead(DirectoryList::MEDIA);
-    }
-
-    /**
-     * Find parent directory
-     *
-     * @param array $node
-     * @param array $treeNode
-     * @param int $level
-     * @return array
-     */
-    private function findParent(array &$node, array &$treeNode, int $level = 0): array
-    {
-        $nodePathLength = count($node['path_array']);
-        $treeNodeParentLevel = $nodePathLength - 1;
-
-        $result = ['treeNode' => &$treeNode];
-
-        if ($nodePathLength <= 1 || $level > $treeNodeParentLevel) {
-            return $result;
-        }
-
-        foreach ($treeNode['children'] as &$tnode) {
-            if ($node['path_array'][$level] === $tnode['path_array'][$level]) {
-                return $this->findParent($node, $tnode, $level + 1);
-            }
-        }
-        return $result;
     }
 }

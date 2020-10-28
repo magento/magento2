@@ -19,7 +19,8 @@ use PHPUnit\Framework\TestCase;
  */
 class GetFolderTreeTest extends TestCase
 {
-    private const TEST_FOLDER_NAME = 'fixturefolder';
+    private const TEST_FOLDER_NAME = 'folder-tree-fixture-folder';
+    private const TEST_SUB_FOLDER_NAME = 'folder-tree-fixture-subfolder';
 
     /**
      * @var GetFolderTree
@@ -32,7 +33,7 @@ class GetFolderTreeTest extends TestCase
     protected function setUp(): void
     {
         $this->getFolderTree = Bootstrap::getObjectManager()->get(GetFolderTree::class);
-        $this->getMediaDirectory()->create(self::TEST_FOLDER_NAME);
+        $this->getMediaDirectory()->create(self::TEST_FOLDER_NAME . '/' . self::TEST_SUB_FOLDER_NAME);
     }
 
     /**
@@ -44,11 +45,57 @@ class GetFolderTreeTest extends TestCase
     }
 
     /**
-     * Verify Folder tree data Performance
+     * Verify generated folder tree
      */
-    public function testPerformanceExecute(): void
+    public function testExecute(): void
     {
-        $this->assertEquals(self::TEST_FOLDER_NAME, $this->getFolderTree->execute()[0]['data']);
+        $nodeIsCreated = false;
+
+        foreach ($this->getFolderTree->execute() as $node) {
+            if ($node['data'] === self::TEST_FOLDER_NAME) {
+                $nodeIsCreated = true;
+                $this->assertEquals($this->getExpectedTreeNode(), $node);
+            }
+        }
+
+        $this->assertTrue($nodeIsCreated, 'Test folder is not included in generated folder tree.');
+    }
+
+    /**
+     * Get formatted expected tree node
+     *
+     * @return array
+     */
+    private function getExpectedTreeNode(): array
+    {
+        return [
+            'data' => self::TEST_FOLDER_NAME,
+            'attr' => [
+                'id' => self::TEST_FOLDER_NAME,
+            ],
+            'metadata' => [
+                'path' => self::TEST_FOLDER_NAME,
+            ],
+            'path_array' => [
+                self::TEST_FOLDER_NAME
+            ],
+            'children' => [
+                [
+                    'data' => self::TEST_SUB_FOLDER_NAME,
+                    'attr' => [
+                        'id' => self::TEST_FOLDER_NAME . '/' . self::TEST_SUB_FOLDER_NAME,
+                    ],
+                    'metadata' => [
+                        'path' => self::TEST_FOLDER_NAME . '/' . self::TEST_SUB_FOLDER_NAME,
+                    ],
+                    'path_array' => [
+                        self::TEST_FOLDER_NAME,
+                        self::TEST_SUB_FOLDER_NAME
+                    ],
+                    'children' => []
+                ]
+            ]
+        ];
     }
 
     /**
