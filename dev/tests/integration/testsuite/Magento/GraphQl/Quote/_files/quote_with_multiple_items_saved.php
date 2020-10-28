@@ -34,5 +34,6 @@ $quoteIdMask->setQuoteId($quote->getId());
 $quoteIdMask->setDataChanges(true);
 
 /** @var ProductRepositoryInterface $productRepository */
-$quoteIdMaskResource = Bootstrap::getObjectManager()->create(\Magento\Quote\Model\ResourceModel\Quote\QuoteIdMask::class);
+$quoteIdMaskResource = Bootstrap::getObjectManager()
+    ->create(\Magento\Quote\Model\ResourceModel\Quote\QuoteIdMask::class);
 $quoteIdMaskResource->save($quoteIdMask);
