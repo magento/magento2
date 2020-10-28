@@ -55,6 +55,10 @@ class ConfigurableCartItemOptions implements ResolverInterface
 
         $result = [];
         foreach ($this->configurationHelper->getOptions($cartItem) as $option) {
+            if (isset($option['option_type'])) {
+                //Don't return customizable options in this resolver
+                continue;
+            }
             $result[] = [
                 'id' => $option['option_id'],
                 'option_label' => $option['label'],
