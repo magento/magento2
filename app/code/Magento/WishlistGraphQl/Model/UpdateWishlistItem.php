@@ -10,8 +10,8 @@ namespace Magento\WishlistGraphQl\Model;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Wishlist\Model\ResourceModel\Wishlist as WishlistResourceModel;
 use Magento\Wishlist\Model\Wishlist;
-use Magento\Framework\DataObject;
 use Magento\Wishlist\Model\Wishlist\Data\WishlistOutput;
+use Magento\Wishlist\Model\Wishlist\BuyRequest\BuyRequestBuilder;
 
 /**
  * Update wishlist items helper
@@ -29,27 +29,36 @@ class UpdateWishlistItem
     private $errors = [];
 
     /**
+     * BuyRequestBuilder
+     * @var BuyRequestBuilder $buyRequestBuilder
+     */
+    private $buyRequestBuilder;
+
+    /**
      * @param WishlistResourceModel $wishlistResource
      */
     public function __construct(
-        WishlistResourceModel $wishlistResource
+        WishlistResourceModel $wishlistResource,
+        BuyRequestBuilder $buyRequestBuilder
     ) {
         $this->wishlistResource = $wishlistResource;
+        $this->buyRequestBuilder = $buyRequestBuilder;
     }
 
     /**
      * Update wishlist Item and set data from request
      *
      * @param int $itemId
-     * @param DataObject $buyRequest
+     * @param object $options
      * @param Wishlist $wishlist
      *
      * @return WishlistOutput
      * @throws GraphQlInputException
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function execute(int $itemId, DataObject $buyRequest, Wishlist $wishlist)
+    public function execute(int $itemId, object $options, Wishlist $wishlist)
     {
+        $buyRequest = $this->buyRequestBuilder->build($options);
         $item = $wishlist->getItem((int)$itemId);
 
         if (!$item) {

@@ -20,7 +20,6 @@ use Magento\Wishlist\Model\Wishlist\Data\WishlistItemFactory;
 use Magento\Wishlist\Model\WishlistFactory;
 use Magento\WishlistGraphQl\Mapper\WishlistDataMapper;
 use Magento\WishlistGraphQl\Model\UpdateWishlistItem;
-use Magento\Wishlist\Model\Wishlist\BuyRequest\BuyRequestBuilder;
 
 /**
  * Update wishlist items resolver
@@ -53,33 +52,24 @@ class UpdateProductsInWishlist implements ResolverInterface
     private $wishlistFactory;
 
     /**
-     * BuyRequestBuilder
-     * @var BuyRequestBuilder $buyRequestBuilder
-     */
-    private $buyRequestBuilder;
-
-    /**
      * @param WishlistResourceModel $wishlistResource
      * @param WishlistFactory $wishlistFactory
      * @param WishlistConfig $wishlistConfig
      * @param UpdateWishlistItem $updateWishlistItem
      * @param WishlistDataMapper $wishlistDataMapper
-     * @param BuyRequestBuilder $buyRequestBuilder
      */
     public function __construct(
         WishlistResourceModel $wishlistResource,
         WishlistFactory $wishlistFactory,
         WishlistConfig $wishlistConfig,
         UpdateWishlistItem $updateWishlistItem,
-        WishlistDataMapper $wishlistDataMapper,
-        BuyRequestBuilder $buyRequestBuilder
+        WishlistDataMapper $wishlistDataMapper
     ) {
         $this->wishlistResource = $wishlistResource;
         $this->wishlistFactory = $wishlistFactory;
         $this->wishlistConfig = $wishlistConfig;
         $this->updateWishlistItem = $updateWishlistItem;
         $this->wishlistDataMapper = $wishlistDataMapper;
-        $this->buyRequestBuilder = $buyRequestBuilder;
     }
 
     /**
@@ -113,8 +103,7 @@ class UpdateProductsInWishlist implements ResolverInterface
         $wishlistItems  = $this->getWishlistItems($wishlistItems);
         $wishlistOutput = "";
         foreach ($wishlistItems as $wishlistItem) {
-            $options = $this->buyRequestBuilder->build($wishlistItem);
-            $wishlistOutput = $this->updateWishlistItem->execute($wishlistItem->getId(), $options, $wishlist);
+            $wishlistOutput = $this->updateWishlistItem->execute($wishlistItem->getId(), $wishlistItem, $wishlist);
         }
         if (count($wishlistOutput->getErrors()) !== count($wishlistItems)) {
             $this->wishlistResource->save($wishlist);
