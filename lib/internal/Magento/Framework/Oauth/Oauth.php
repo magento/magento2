@@ -154,7 +154,7 @@ class Oauth implements OauthInterface
         ];
         $headerParameters = array_merge($headerParameters, $params);
         $headerParameters['oauth_signature'] = $this->_httpUtility->sign(
-            $params,
+            $headerParameters,
             $signatureMethod,
             $headerParameters['oauth_consumer_secret'],
             $headerParameters['oauth_token_secret'],
