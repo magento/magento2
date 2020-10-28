@@ -24,14 +24,14 @@ use Psr\Log\LoggerInterface;
 class Exchange
 {
     /**
-     * @var StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
      * @var EnvelopeFactory
      */
     private $envelopeFactory;
+
+    /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
 
     /**
      * @var LoggerInterface
@@ -49,8 +49,8 @@ class Exchange
         StoreManagerInterface $storeManager,
         LoggerInterface $logger
     ) {
-        $this->storeManager = $storeManager;
         $this->envelopeFactory = $envelopeFactory;
+        $this->storeManager = $storeManager;
         $this->logger = $logger;
     }
 

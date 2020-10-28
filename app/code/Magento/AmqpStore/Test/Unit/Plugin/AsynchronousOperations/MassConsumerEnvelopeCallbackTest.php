@@ -9,8 +9,10 @@ namespace Magento\AmqpStore\Test\Unit\Plugin\AsynchronousOperations;
 
 use Magento\AmqpStore\Plugin\AsynchronousOperations\MassConsumerEnvelopeCallback;
 use Magento\AsynchronousOperations\Model\MassConsumerEnvelopeCallback as SubjectMassConsumerEnvelopeCallback;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\MessageQueue\EnvelopeFactory;
 use Magento\Framework\MessageQueue\EnvelopeInterface;
+use Magento\Framework\MessageQueue\QueueInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
@@ -60,9 +62,7 @@ class MassConsumerEnvelopeCallbackTest extends TestCase
     {
         $this->subjectMassConsumerEnvelopeCallbackMock = $this->createMock(SubjectMassConsumerEnvelopeCallback::class);
         $this->messageMock = $this->getMockForAbstractClass(EnvelopeInterface::class);
-        $this->storeMock = $this->getMockBuilder(Store::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->storeMock = $this->createMock(Store::class);
 
         $this->envelopeFactoryMock = $this->createMock(EnvelopeFactory::class);
         $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
@@ -86,9 +86,8 @@ class MassConsumerEnvelopeCallbackTest extends TestCase
             ->willReturn(null);
 
         $isProceedCalled = false;
-        // @SuppressWarnings(PHPMD.UnusedFormalParameter)
-        $proceed = function ($attributeId) use (&$isProceedCalled) {
-            $isProceedCalled = true;
+        $proceed = function ($message) use (&$isProceedCalled) {
+            $isProceedCalled = !!$message;
         };
 
         $this->massConsumerEnvelopeCallbackPlugin->aroundExecute(
@@ -100,12 +99,62 @@ class MassConsumerEnvelopeCallbackTest extends TestCase
         $this->assertTrue($isProceedCalled);
     }
 
-    public function testAroundExecuteWhenApplicationHeadersExist()
+    public function testAroundExecuteWhenCanNotGetCurrentStoreId()
     {
         $storeId = 333;
-        $currentStoreId = 99;
         $headers = ['store_id' => $storeId];
 
+        $amqpProperties = ['application_headers' => $headers];
+        $this->messageMock->expects($this->once())
+            ->method('getProperties')
+            ->willReturn($amqpProperties);
+
+        $message = 'no_such_entity_exception';
+        $this->storeManagerMock
+            ->expects($this->once())
+            ->method('getStore')
+            ->willThrowException(new NoSuchEntityException(__($message)));
+
+        $this->loggerMock
+            ->expects($this->once())
+            ->method('error')
+            ->with("Can't set currentStoreId during processing queue. Message rejected. Error $message.");
+
+        $queue = $this->getMockBuilder(QueueInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $this->subjectMassConsumerEnvelopeCallbackMock
+            ->expects($this->once())
+            ->method('getQueue')
+            ->willReturn($queue);
+        $queue
+            ->expects($this->once())
+            ->method('reject')
+            ->with($this->messageMock, false, $message);
+
+        $isProceedCalled = false;
+        $proceed = function ($message) use (&$isProceedCalled) {
+            $isProceedCalled = !!$message;
+        };
+
+        $this->massConsumerEnvelopeCallbackPlugin->aroundExecute(
+            $this->subjectMassConsumerEnvelopeCallbackMock,
+            $proceed,
+            $this->messageMock
+        );
+
+        $this->assertFalse($isProceedCalled);
+    }
+
+    /**
+     * @dataProvider provideApplicationHeadersForAroundExecuteSuccess
+     *
+     * @param $headers
+     * @param int $storeId
+     * @param int $currentStoreId
+     */
+    public function testAroundExecuteWhenSuccess($headers, int $storeId, int $currentStoreId)
+    {
         $amqpProperties = ['application_headers' => $headers];
         $this->messageMock->expects($this->once())
             ->method('getProperties')
@@ -119,12 +168,15 @@ class MassConsumerEnvelopeCallbackTest extends TestCase
             ->willReturn($currentStoreId);
 
         $this->storeManagerMock->expects($this->exactly(2))
-            ->method('setCurrentStore');
+            ->method('setCurrentStore')
+            ->withConsecutive(
+                [$storeId],
+                [$currentStoreId]
+            );
 
         $isProceedCalled = false;
-        // @SuppressWarnings(PHPMD.UnusedFormalParameter)
-        $proceed = function ($attributeId) use (&$isProceedCalled) {
-            $isProceedCalled = true;
+        $proceed = function ($message) use (&$isProceedCalled) {
+            $isProceedCalled = !!$message;
         };
 
         $this->massConsumerEnvelopeCallbackPlugin->aroundExecute(
@@ -134,5 +186,16 @@ class MassConsumerEnvelopeCallbackTest extends TestCase
         );
 
         $this->assertTrue($isProceedCalled);
+    }
+
+    public function provideApplicationHeadersForAroundExecuteSuccess()
+    {
+        $storeId = 123;
+        $currentStoreId = 99;
+
+        return [
+            [['store_id' => 123], $storeId, $currentStoreId],
+            [new AMQPTable(['store_id' => 123]), $storeId, $currentStoreId],
+        ];
     }
 }
