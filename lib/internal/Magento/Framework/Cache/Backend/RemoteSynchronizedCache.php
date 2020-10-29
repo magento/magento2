@@ -238,10 +238,6 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
         $dataToSave = $data;
         $remHash = $this->loadRemoteDataVersion($id);
 
-        if ($this->checkLocalCacheSpace()) {
-            $this->local->clean();
-        }
-
         if ($remHash !== false && $this->getDataVersion($data) === $remHash) {
             $dataToSave = $this->remote->load($id);
         } else {
@@ -253,6 +249,10 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
             $this->unlock($id);
         }
 
+        if (!mt_rand(0, 100) && $this->checkIfLocalCacheSpaceExceeded()) {
+            $this->local->clean();
+        }
+
         return $this->local->save($dataToSave, $id, [], $specificLifetime);
     }
 
@@ -261,34 +261,9 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
      *
      * @return bool
      */
-    private function checkLocalCacheSpace()
+    private function checkIfLocalCacheSpaceExceeded()
     {
-        return
-            (
-                $this->getDirectorySize($this->_options['local_backend_options']['cache_dir'])
-            ) / 1024 / 1024 >=
-            $this->_options['local_backend_max_size'];
-    }
-
-    /**
-     * Get directory size
-     *
-     * @param $directory
-     * @return int
-     */
-    private function getDirectorySize($directory)
-    {
-        $it = new \RecursiveDirectoryIterator($directory, \RecursiveDirectoryIterator::SKIP_DOTS);
-        $ri = new \RecursiveIteratorIterator($it, \RecursiveIteratorIterator::CHILD_FIRST);
-
-        $size = 0;
-        foreach ($ri as $file) {
-            if ($file->isFile()) {
-                $size += $file->getSize();
-            }
-        }
-
-        return $size;
+        return $this->getFillingPercentage() >= $this->_options['local_backend_max_size'];
     }
 
     /**
