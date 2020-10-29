@@ -325,17 +325,32 @@ class FileTest extends AbstractFormTestCase
         return [
             'notValid' => [
                 ['Validation error message.'],
-                ['tmp_name' => 'tempName_0001.bin', 'name' => 'realFileName.bin', 'extension' => 'bin'],
+                [
+                    'tmp_name' => 'tempName_0001.bin',
+                    'name' => 'realFileName.bin',
+                    'extension' => 'bin',
+                    'basename' => 'realFileName.bin',
+                ],
                 ['valid' => false],
             ],
             'notUploaded' => [
                 ['"realFileName.bin" is not a valid file.'],
-                ['tmp_name' => 'tempName_0001.bin', 'name' => 'realFileName.bin', 'extension' => 'bin'],
+                [
+                    'tmp_name' => 'tempName_0001.bin',
+                    'name' => 'realFileName.bin',
+                    'extension' => 'bin',
+                    'basename' => 'realFileName.bin',
+                ],
                 ['uploaded' => false],
             ],
             'isValid' => [
                 true,
-                ['tmp_name' => 'tempName_0001.txt', 'name' => 'realFileName.txt', 'extension' => 'txt']
+                [
+                    'tmp_name' => 'tempName_0001.txt',
+                    'name' => 'realFileName.txt',
+                    'extension' => 'txt',
+                    'basename' => 'realFileName.txt',
+                ],
             ],
         ];
     }
