@@ -10,8 +10,8 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminMediaGalleryClickAddSelectedActionGroup">
         <waitForElementVisible selector="{{AdminMediaGalleryHeaderButtonsSection.addSelected}}" stepKey="waitForAddSelectedButton"/>
-        <click selector="{{AdminMediaGalleryHeaderButtonsSection.addSelected}}" stepKey="clickAddSelected"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
-        <waitForElementVisible selector="{{MediaGallerySection.insertEditImageModalWindow}}" stepKey="waitForInsertEditImageWindow"/>
+        <click selector="{{AdminMediaGalleryHeaderButtonsSection.addSelected}}" stepKey="ClickAddSelected"/>
+        <waitForPageLoad stepKey="waitForImageToBeAdded"/>
+        <waitForElementVisible selector="{{MediaGallerySection.insertEditImageModalWindow}}" stepKey="waitForLoadingMaskDisappear"/>
     </actionGroup>
 </actionGroups>
