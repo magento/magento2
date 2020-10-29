@@ -75,8 +75,6 @@ class CouponUsageConsumer
      */
     public function process(OperationInterface $operation): void
     {
-        $q = 2;
-
         try {
             $serializedData = $operation->getSerializedData();
             $data = $this->serializer->unserialize($serializedData);
