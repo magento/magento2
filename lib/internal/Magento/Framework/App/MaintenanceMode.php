@@ -141,7 +141,9 @@ class MaintenanceMode
     }
 
     /**
-     * Take a string of IP addresses or ranges (comma separated) and return a
+     * Normalise / canonicalise list of IP addresses / ranges
+     *
+     * Takes a string of IP addresses or ranges (comma separated) and returns a
      * string of IP ranges with no overlaps nor duplicates (comma separated).
      *
      * @param  string $addresses
