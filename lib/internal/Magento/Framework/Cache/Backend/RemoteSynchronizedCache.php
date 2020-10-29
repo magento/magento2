@@ -61,6 +61,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
         'remote_backend_options' => [],
         'local_backend' => '',
         'local_backend_options' => [],
+        'local_backend_max_size' => 500,
         'local_backend_custom_naming' => true,
         'local_backend_autoload' => true,
         'use_stale_cache' => false,
@@ -237,6 +238,10 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
         $dataToSave = $data;
         $remHash = $this->loadRemoteDataVersion($id);
 
+        if ($this->checkLocalCacheSpace()) {
+            $this->local->clean();
+        }
+
         if ($remHash !== false && $this->getDataVersion($data) === $remHash) {
             $dataToSave = $this->remote->load($id);
         } else {
@@ -249,6 +254,41 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
         }
 
         return $this->local->save($dataToSave, $id, [], $specificLifetime);
+    }
+
+    /**
+     * Check if local cache space bigger that configure amount
+     *
+     * @return bool
+     */
+    private function checkLocalCacheSpace()
+    {
+        return
+            (
+                $this->getDirectorySize($this->_options['local_backend_options']['cache_dir'])
+            ) / 1024 / 1024 >=
+            $this->_options['local_backend_max_size'];
+    }
+
+    /**
+     * Get directory size
+     *
+     * @param $directory
+     * @return int
+     */
+    private function getDirectorySize($directory)
+    {
+        $it = new \RecursiveDirectoryIterator($directory, \RecursiveDirectoryIterator::SKIP_DOTS);
+        $ri = new \RecursiveIteratorIterator($it, \RecursiveIteratorIterator::CHILD_FIRST);
+
+        $size = 0;
+        foreach ($ri as $file) {
+            if ($file->isFile()) {
+                $size += $file->getSize();
+            }
+        }
+
+        return $size;
     }
 
     /**
@@ -266,7 +306,8 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
      */
     public function clean($mode = \Zend_Cache::CLEANING_MODE_ALL, $tags = [])
     {
-        return $this->remote->clean($mode, $tags);
+        return $this->remote->clean($mode, $tags) &&
+            $this->local->clean($mode, $tags);
     }
 
     /**
