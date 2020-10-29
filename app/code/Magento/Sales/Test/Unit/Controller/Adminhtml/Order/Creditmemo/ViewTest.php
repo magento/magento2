@@ -108,7 +108,7 @@ class ViewTest extends TestCase
     protected $pageTitleMock;
 
     /**
-     * @var \Magento\Shipping\Controller\Adminhtml\Order\Creditmemo\View
+     * @var \Magento\Sales\Controller\Adminhtml\Order\Creditmemo\View
      * @var RedirectFactory|MockObject
      */
     protected $resultRedirectFactoryMock;
