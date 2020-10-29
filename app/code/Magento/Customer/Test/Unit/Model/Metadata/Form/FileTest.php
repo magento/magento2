@@ -297,6 +297,13 @@ class FileTest extends AbstractFormTestCase
             $parameters['valid']
         );
 
+        $this->fileProcessorMock->expects($this->at(0))
+            ->method('getStat')
+            ->with($value['name'])
+            ->willReturn([
+                'extension' => $value['extension'],
+            ]);
+
         $this->fileProcessorMock->expects($this->any())
             ->method('isExist')
             ->willReturn($parameters['uploaded']);
@@ -318,15 +325,18 @@ class FileTest extends AbstractFormTestCase
         return [
             'notValid' => [
                 ['Validation error message.'],
-                ['tmp_name' => 'tempName_0001.bin', 'name' => 'realFileName.bin'],
+                ['tmp_name' => 'tempName_0001.bin', 'name' => 'realFileName.bin', 'extension' => 'bin'],
                 ['valid' => false],
             ],
             'notUploaded' => [
                 ['"realFileName.bin" is not a valid file.'],
-                ['tmp_name' => 'tempName_0001.bin', 'name' => 'realFileName.bin'],
+                ['tmp_name' => 'tempName_0001.bin', 'name' => 'realFileName.bin', 'extension' => 'bin'],
                 ['uploaded' => false],
             ],
-            'isValid' => [true, ['tmp_name' => 'tempName_0001.txt', 'name' => 'realFileName.txt']]
+            'isValid' => [
+                true,
+                ['tmp_name' => 'tempName_0001.txt', 'name' => 'realFileName.txt', 'extension' => 'txt']
+            ],
         ];
     }
 
