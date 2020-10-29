@@ -74,6 +74,7 @@
         "phpseclib/mcrypt_compat": "1.0.8",
         "phpseclib/phpseclib": "2.0.*",
         "ramsey/uuid": "~3.8.0",
+        "s1lentium/iptools": "^1.1",
         "symfony/console": "~4.4.0",
         "symfony/event-dispatcher": "~4.4.0",
         "symfony/process": "~4.4.0",

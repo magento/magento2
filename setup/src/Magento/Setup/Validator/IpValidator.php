@@ -5,6 +5,8 @@
  */
 namespace Magento\Setup\Validator;
 
+use IPTools\Network;
+
 /**
  * Class to validate list of IPs for maintenance commands
  */
@@ -72,7 +74,13 @@ class IpValidator
             } elseif ($ip == 'none') {
                 $this->none[] = $ip;
             } else {
-                $this->invalidIps[] = $ip;
+                try {
+                    $network = Network::parse($ip);
+                    $this->validIps[] = (string) $network;
+                } catch (\Exception $e) {
+                    // Network::parse will throw an \Exception on error
+                    $this->invalidIps[] = $ip;
+                }
             }
         }
     }

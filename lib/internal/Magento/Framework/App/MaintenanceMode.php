@@ -5,9 +5,12 @@
  */
 namespace Magento\Framework\App;
 
+use IPTools\IP;
+use IPTools\Network;
+use IPTools\Range;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Filesystem;
 use Magento\Framework\Event\Manager;
+use Magento\Framework\Filesystem;
 
 /**
  * Application Maintenance Mode
@@ -17,7 +20,7 @@ class MaintenanceMode
     /**
      * Maintenance flag file name
      *
-     * DO NOT consolidate this file and the IP white list into one.
+     * DO NOT consolidate this file and the IP allow list into one.
      * It is going to work much faster in 99% of cases: the isOn() will return false whenever file doesn't exist.
      */
     const FLAG_FILENAME = '.maintenance.flag';
@@ -45,7 +48,7 @@ class MaintenanceMode
     private $eventManager;
 
     /**
-     * @param \Magento\Framework\Filesystem $filesystem
+     * @param Filesystem $filesystem
      * @param Manager|null $eventManager
      */
     public function __construct(Filesystem $filesystem, ?Manager $eventManager = null)
@@ -57,7 +60,7 @@ class MaintenanceMode
     /**
      * Checks whether mode is on
      *
-     * Optionally specify an IP-address to compare against the white list
+     * Optionally specify an IP-address to compare against the allow list
      *
      * @param string $remoteAddr
      * @return bool
@@ -67,8 +70,16 @@ class MaintenanceMode
         if (!$this->flagDir->isExist(self::FLAG_FILENAME)) {
             return false;
         }
-        $info = $this->getAddressInfo();
-        return !in_array($remoteAddr, $info);
+        if ($remoteAddr) {
+            $allowedAddresses = $this->getAddressInfo();
+            $remoteAddress = new IP($remoteAddr);
+            foreach ($allowedAddresses as $allowed) {
+                if (Range::parse($allowed)->contains($remoteAddress)) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     /**
@@ -106,6 +117,7 @@ class MaintenanceMode
             }
             return true;
         }
+        $addresses = $this->normaliseIPAddresses($addresses);
         if (!preg_match('/^[^\s,]+(,[^\s,]+)*$/', $addresses)) {
             throw new \InvalidArgumentException("One or more IP-addresses is expected (comma-separated)\n");
         }
@@ -126,5 +138,61 @@ class MaintenanceMode
         } else {
             return [];
         }
+    }
+
+    /**
+     * Take a string of IP addresses or ranges (comma separated) and return a
+     * string of IP ranges with no overlaps nor duplicates (comma separated).
+     *
+     * @param  string $addresses
+     * @return string
+     */
+    private function normaliseIPAddresses(string $addresses): string
+    {
+        $addresses = explode(',', $addresses);
+        $addresses = array_filter($addresses); // remove empty strings
+        $networks = [];
+        foreach ($addresses as $address) {
+            $networks[] = Network::parse(trim($address));
+        }
+        $networks = array_unique($networks); // remove obvious duplicates
+
+        // Combine adjacent ranges where feasible
+        if (count($networks) > 1) {
+            // Sort the list so we can compare each item with the following to
+            // determine if they are adjacent.
+            sort($networks, SORT_NATURAL);
+
+            // Define end point here as we expect the array to grow within the loop
+            $penultimate = count($networks) - 1;
+            for ($i = 0; $i < $penultimate; $i++) {
+                $a = $networks[$i];
+                $b = $networks[$i + 1];
+                if ($a->getLastIP()->next() == $b->getFirstIP()) {
+                    $range = new Range($a->getFirstIP(), $b->getLastIP());
+                    foreach ($range->getNetworks() as $network) {
+                        $networks[] = $network;
+                    }
+                }
+            }
+        }
+
+        // Remove overlapping entries from the list
+        if (count($networks) > 1) {
+            // Sort the list so we can compare each item with the following to
+            // determine if the former includes the latter.
+            sort($networks, SORT_NATURAL);
+
+            $lastRange = null;
+            $networks = array_filter($networks, function ($network) use (&$lastRange) {
+                if ($lastRange && $lastRange->contains($network)) {
+                    return false;
+                }
+                $lastRange = Range::parse($network);
+                return true;
+            });
+        }
+
+        return implode(',', $networks);
     }
 }
