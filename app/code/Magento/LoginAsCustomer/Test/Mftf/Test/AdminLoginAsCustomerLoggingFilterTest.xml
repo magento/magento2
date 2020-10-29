@@ -29,7 +29,7 @@
         </before>
         <after>
             <!--Clean filters -->
-            <click selector="{{AdminLoginAsCustomerLogToolbarSection.resetFilter}}" stepKey="CleanFiltersAfter"/>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilterAfter"/>
             <!-- Log out as Default Admin User -->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAsDefaultAdmin"/>
             <!-- Remove created data-->
@@ -48,9 +48,7 @@
         <!-- Navigate to Login as Customer Log page -->
         <actionGroup ref="AdminOpenLoginAsCustomerLogActionGroup" stepKey="gotoLoginAsCustomerLog"/>
         <!-- Setup date filters -->
-        <conditionalClick selector="{{AdminLoginAsCustomerLogToolbarSection.resetFilter}}"
-                          dependentSelector="{{AdminLoginAsCustomerLogToolbarSection.resetFilter}}"
-                          visible="true" stepKey="CleanFiltersBefore"/>
+        <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilter"/>
         <click selector="{{AdminLoginAsCustomerLogToolbarSection.filters}}" stepKey="clickFilters"/>
         <click selector="{{AdminLoginAsCustomerLogToolbarSection.DatePickerFrom}}" stepKey="clickFromDate"/>
         <click selector="{{AdminLoginAsCustomerLogToolbarSection.todayDate}}" stepKey="clickToToday"/>
