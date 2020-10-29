@@ -263,7 +263,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
      */
     private function checkIfLocalCacheSpaceExceeded()
     {
-        return $this->getFillingPercentage() >= $this->_options['local_backend_max_size'];
+        return $this->getFillingPercentage() >= 95;
     }
 
     /**
