@@ -7,12 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Catalog;
 
-use Magento\Config\App\Config\Type\System;
-use Magento\Config\Model\ResourceModel\Config;
-use Magento\Directory\Model\Currency;
-use Magento\Store\Model\ScopeInterface;
-use Magento\Store\Model\Store;
-use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 class ProductSearchAggregationsTest extends GraphQlAbstract
