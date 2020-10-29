@@ -125,7 +125,7 @@ QUERY;
         $optionQty = 1;
         $optionId = $wishlist['customer']['wishlists'][0]['items_v2'][0]['bundle_options'][0]['id'];
 
-        $sku = 'bundle-test';
+        $sku = 'bundle-product';
         $product = $this->productRepository->get($sku);
         /** @var Type $typeInstance */
         $typeInstance = $product->getTypeInstance();
