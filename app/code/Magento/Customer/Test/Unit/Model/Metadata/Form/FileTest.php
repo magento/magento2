@@ -297,11 +297,11 @@ class FileTest extends AbstractFormTestCase
             $parameters['valid']
         );
 
-        $this->fileProcessorMock->expects($this->at(0))
+        $this->fileProcessorMock->expects($this->any())
             ->method('getStat')
-            ->with($value['name'])
             ->willReturn([
                 'extension' => $value['extension'],
+                'basename' => $value['basename']
             ]);
 
         $this->fileProcessorMock->expects($this->any())
