@@ -13,6 +13,7 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\CategoryLinkManagement;
+use Magento\Catalog\Model\Indexer\Product\Category\Processor;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Category\Collection;
 use Magento\Eav\Api\Data\AttributeOptionInterface;
@@ -1169,6 +1170,11 @@ QUERY;
 
         $category->setPostedProducts($productPositions);
         $category->save();
+
+        // Reindex products from the result to invalidate query cache.
+        /** @var $indexer Processor */
+        $indexer = Bootstrap::getObjectManager()->get(Processor::class);
+        $indexer->reindexList(array_keys($productPositions));
 
         $queryDesc = <<<QUERY
 {

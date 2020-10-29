@@ -30,7 +30,7 @@
             <deleteData createDataKey="thirdCustomer" stepKey="deleteThirdCustomer"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
-        <amOnPage url="{{AdminCustomerPage.url}}" stepKey="openCustomerPage"/>
+        <actionGroup ref="AdminOpenCustomersGridActionGroup" stepKey="openCustomerPage"/>
         <!-- Select all from dropdown -->
         <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilters" />
         <actionGroup ref="AdminGridSelectAllActionGroup" stepKey="selectAllCustomers"/>
