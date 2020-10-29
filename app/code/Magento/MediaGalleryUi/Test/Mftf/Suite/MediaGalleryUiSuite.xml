@@ -11,12 +11,16 @@
     <suite name="MediaGalleryUiSuite">
         <before>
             <actionGroup ref="AdminDisableWYSIWYGActionGroup" stepKey="disableWYSIWYG" />
-            <magentoCLI command="config:set {{MediaGalleryConfigDataEnabled.path}} {{MediaGalleryConfigDataEnabled.value}}" stepKey="enableEnhancedMediaGallery"/>
-            <magentoCLI command="config:set {{MediaGalleryRenditionsDataEnabled.path}} {{MediaGalleryRenditionsDataEnabled.value}}" stepKey="enableMediaGalleryRenditions"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminMediaGalleryEnhancedEnableActionGroup" stepKey="enableEnhancedMediaGallery">
+                <argument name="enabled" value="1"/>
+            </actionGroup>
+            <actionGroup ref="AdminMediaGalleryRenditionsEnableActionGroup" stepKey="enableMediaGalleryRenditions"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </before>
         <after>
-            <magentoCLI command="config:set {{MediaGalleryRenditionsDataDisabled.path}} {{MediaGalleryRenditionsDataDisabled.value}}" stepKey="disableMediaGalleryRenditions"/>
-            <magentoCLI command="config:set {{MediaGalleryConfigDataDisabled.path}} {{MediaGalleryConfigDataDisabled.value}}" stepKey="disableEnhancedMediaGallery"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminMediaGalleryEnhancedEnableActionGroup" stepKey="disableEnhancedMediaGallery"/>
             <actionGroup ref="AdminEnableWYSIWYGActionGroup" stepKey="enableWYSIWYG" />
         </after>
         <include>
