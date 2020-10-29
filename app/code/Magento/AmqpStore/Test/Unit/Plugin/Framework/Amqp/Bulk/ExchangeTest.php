@@ -82,7 +82,6 @@ class ExchangeTest extends TestCase
             ->expects($this->once())
             ->method('getStore')
             ->willThrowException(new NoSuchEntityException(__($message)));
-
         $this->loggerMock
             ->expects($this->once())
             ->method('error')
@@ -105,14 +104,7 @@ class ExchangeTest extends TestCase
         $envelopes = [$envelope_1];
         $storeId = 123;
 
-        $this->storeManagerMock
-            ->expects($this->once())
-            ->method('getStore')
-            ->willReturn($this->storeMock);
-        $this->storeMock
-            ->expects($this->once())
-            ->method('getId')
-            ->willReturn($storeId);
+        $this->prepareMocksToGetStoreId($storeId);
 
         $envelope_1
             ->expects($this->once())
@@ -147,23 +139,14 @@ class ExchangeTest extends TestCase
 
     public function testBeforeEnqueueWhenHeaderIsAmqpTableButCanNotSetStoreId()
     {
-        $topic = 'test_topic';
+        $topic = 'test_topic_xxx';
         $envelope_1 = $this->getMockForAbstractClass(EnvelopeInterface::class);
         $envelopes = [$envelope_1];
         $storeId = 123;
         $headers = $this->createMock(AMQPTable::class);
-        $properties = [
-            'application_headers' => $headers
-        ];
+        $properties = ['application_headers' => $headers];
 
-        $this->storeManagerMock
-            ->expects($this->once())
-            ->method('getStore')
-            ->willReturn($this->storeMock);
-        $this->storeMock
-            ->expects($this->once())
-            ->method('getId')
-            ->willReturn($storeId);
+        $this->prepareMocksToGetStoreId($storeId);
 
         $envelope_1
             ->expects($this->once())
@@ -180,6 +163,8 @@ class ExchangeTest extends TestCase
             ->expects($this->once())
             ->method('error')
             ->with("Can't set storeId to amqp message. Error $exceptionMessage.");
+
+        $this->expectException(AMQPInvalidArgumentException::class);
         $this->expectExceptionMessage("Can't set storeId to amqp message. Error $exceptionMessage.");
 
         $this->exchangePlugin->beforeEnqueue(
@@ -194,26 +179,16 @@ class ExchangeTest extends TestCase
         $topic = 'test_topic';
         $envelope_1 = $this->getMockForAbstractClass(EnvelopeInterface::class);
         $envelopes = [$envelope_1];
-        $storeId = 123;
+        $storeId = 999;
         $headers = $this->createMock(AMQPTable::class);
-        $properties = [
-            'application_headers' => $headers
-        ];
+        $properties = ['application_headers' => $headers];
 
-        $this->storeManagerMock
-            ->expects($this->once())
-            ->method('getStore')
-            ->willReturn($this->storeMock);
-        $this->storeMock
-            ->expects($this->once())
-            ->method('getId')
-            ->willReturn($storeId);
+        $this->prepareMocksToGetStoreId($storeId);
 
         $envelope_1
             ->expects($this->once())
             ->method('getProperties')
             ->willReturn($properties);
-
         $headers
             ->expects($this->once())
             ->method('set')
@@ -244,5 +219,18 @@ class ExchangeTest extends TestCase
 
         $this->assertSame($topic, $actualResult[0]);
         $this->assertSame($newEnvelope, $actualResult[1][0]);
+        $this->assertSame(1, count($actualResult[1]));
+    }
+
+    private function prepareMocksToGetStoreId(int $storeId)
+    {
+        $this->storeManagerMock
+            ->expects($this->once())
+            ->method('getStore')
+            ->willReturn($this->storeMock);
+        $this->storeMock
+            ->expects($this->once())
+            ->method('getId')
+            ->willReturn($storeId);
     }
 }

@@ -19,7 +19,6 @@ use Magento\Store\Model\StoreManagerInterface;
 use PhpAmqpLib\Wire\AMQPTable;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Psr\Log\LoggerInterface;
 
 class MassConsumerEnvelopeCallbackTest extends TestCase
 {
@@ -39,7 +38,7 @@ class MassConsumerEnvelopeCallbackTest extends TestCase
     private $storeManagerMock;
 
     /**
-     * @var MockObject|LoggerInterface
+     * @var \Psr\Log\LoggerInterface|MockObject
      */
     private $loggerMock;
 
@@ -61,12 +60,12 @@ class MassConsumerEnvelopeCallbackTest extends TestCase
     protected function setUp(): void
     {
         $this->subjectMassConsumerEnvelopeCallbackMock = $this->createMock(SubjectMassConsumerEnvelopeCallback::class);
-        $this->messageMock = $this->getMockForAbstractClass(EnvelopeInterface::class);
         $this->storeMock = $this->createMock(Store::class);
+        $this->messageMock = $this->getMockForAbstractClass(EnvelopeInterface::class);
 
         $this->envelopeFactoryMock = $this->createMock(EnvelopeFactory::class);
         $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
-        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->loggerMock = $this->getMockForAbstractClass(\Psr\Log\LoggerInterface::class);
 
         $objectManager = new ObjectManager($this);
         $this->massConsumerEnvelopeCallbackPlugin = $objectManager->getObject(
@@ -149,7 +148,7 @@ class MassConsumerEnvelopeCallbackTest extends TestCase
     /**
      * @dataProvider provideApplicationHeadersForAroundExecuteSuccess
      *
-     * @param $headers
+     * @param mixed $headers
      * @param int $storeId
      * @param int $currentStoreId
      */
