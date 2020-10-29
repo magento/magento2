@@ -10,20 +10,20 @@ namespace Magento\MediaGalleryUi\Test\Integration\Directories;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
-use Magento\MediaGalleryUi\Model\Directories\GetFolderTree;
+use Magento\MediaGalleryUi\Model\Directories\GetDirectoryTree;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Integration test for GetFolderTree
+ * Integration test for GetDirectoryTree
  */
-class GetFolderTreeTest extends TestCase
+class GetDirectoryTreeTest extends TestCase
 {
     private const TEST_FOLDER_NAME = 'folder-tree-fixture-folder';
     private const TEST_SUB_FOLDER_NAME = 'folder-tree-fixture-subfolder';
 
     /**
-     * @var GetFolderTree
+     * @var GetDirectoryTree
      */
     private $getFolderTree;
 
@@ -32,7 +32,7 @@ class GetFolderTreeTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->getFolderTree = Bootstrap::getObjectManager()->get(GetFolderTree::class);
+        $this->getFolderTree = Bootstrap::getObjectManager()->get(GetDirectoryTree::class);
         $this->getMediaDirectory()->create(self::TEST_FOLDER_NAME . '/' . self::TEST_SUB_FOLDER_NAME);
     }
 
