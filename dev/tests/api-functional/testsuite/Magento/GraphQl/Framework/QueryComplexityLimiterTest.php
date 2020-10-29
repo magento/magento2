@@ -302,6 +302,24 @@ class QueryComplexityLimiterTest extends GraphQlAbstract
                                         percentage_value
                                         website_id
                                       }
+                                      tier_prices {
+                                        customer_group_id
+                                        qty
+                                        percentage_value
+                                        website_id
+                                      }
+                                      tier_prices {
+                                        customer_group_id
+                                        qty
+                                        percentage_value
+                                        website_id
+                                      }
+                                      tier_prices {
+                                        customer_group_id
+                                        qty
+                                        percentage_value
+                                        website_id
+                                      }
                                       tier_price
                                       manufacturer
                                       sku
@@ -316,6 +334,16 @@ class QueryComplexityLimiterTest extends GraphQlAbstract
                                       canonical_url
                                       categories {
                                         id
+                                        position
+                                        position
+                                        position
+                                        position
+                                        position
+                                        position
+                                        position
+                                        position
+                                        position
+                                        position
                                         position
                                         position
                                         position
