@@ -89,31 +89,12 @@ class ProductSearchAggregationsTest extends GraphQlAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/Store/_files/second_store_with_second_currency.php
      * @magentoApiDataFixture Magento/Catalog/_files/products_for_search.php
+     * @magentoConfigFixture default_store currency/options/allow EUR,USD
      */
     public function testAggregationPriceRangesWithCurrencyHeader()
     {
-        // add USD as allowed (not default) currency
-        $objectManager = Bootstrap::getObjectManager();
-        /* @var Store $store */
-        $store = $objectManager->create(Store::class);
-        $store->load('fixture_second_store');
-        /** @var Config $configResource */
-        $configResource = $objectManager->get(Config::class);
-        $configResource->saveConfig(
-            Currency::XML_PATH_CURRENCY_ALLOW,
-            'USD',
-            ScopeInterface::SCOPE_STORES,
-            $store->getId()
-        );
-        // Configuration cache clean is required to reload currency setting
-        /** @var System $config */
-        $config = $objectManager->get(System::class);
-        $config->clean();
-
-        $headerMap['Store'] = 'fixture_second_store';
-        $headerMap['Content-Currency'] = 'USD';
+        $headerMap['Content-Currency'] = 'EUR';
         $query = $this->getGraphQlQuery(
             '"search_product_1", "search_product_2", "search_product_3", "search_product_4" ,"search_product_5"'
         );
@@ -131,10 +112,10 @@ class ProductSearchAggregationsTest extends GraphQlAbstract
         $this->assertEquals('Price', $priceAggregation['label']);
         $this->assertEquals(4, $priceAggregation['count']);
         $expectedOptions = [
-            ['label' => '10-20', 'value'=> '10_20', 'count' => '2'],
-            ['label' => '20-30', 'value'=> '20_30', 'count' => '1'],
-            ['label' => '30-40', 'value'=> '30_40', 'count' => '1'],
-            ['label' => '40-50', 'value'=> '40_50', 'count' => '1']
+            ['label' => '20-40', 'value'=> '20_40', 'count' => '2'],
+            ['label' => '40-60', 'value'=> '40_60', 'count' => '1'],
+            ['label' => '60-80', 'value'=> '60_80', 'count' => '1'],
+            ['label' => '80-100', 'value'=> '80_100', 'count' => '1']
         ];
         $this->assertEquals($expectedOptions, $priceAggregation['options']);
     }
