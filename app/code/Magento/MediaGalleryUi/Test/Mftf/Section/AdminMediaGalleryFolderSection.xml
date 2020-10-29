@@ -21,6 +21,6 @@
         <element name="folderNameValidationMessage" type="block" selector="label.mage-error"/>
         <element name="folderArrow" type="button" selector="#{{id}} &gt; .jstree-icon" parameterized="true"/>
         <element name="checkIfFolderArrowExpand" type="button" selector="//li[@id='{{id}}' and contains(@class,'jstree-closed')]" parameterized="true"/>
-        <element name="folderInTree" type="text" selector="//div[contains(@class, 'media-directory-container')]//ul//li//a[contains(text(), '{{name}}')]" parameterized="true"/>
+        <element name="folderInTree" type="text" selector="//div[contains(@class, 'media-directory-container')]//ul//li//a[normalize-space(text())='{{name}}']" parameterized="true"/>
     </section>
 </sections>
