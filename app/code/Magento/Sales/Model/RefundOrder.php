@@ -125,7 +125,8 @@ class RefundOrder implements RefundOrderInterface
         \Magento\Sales\Api\Data\CreditmemoCreationArgumentsInterface $arguments = null
     ) {
         $connection = $this->resourceConnection->getConnection('sales');
-        $order = $this->orderRepository->get($orderId);
+        $connection->beginTransaction();
+        $order = $this->orderRepository->getForUpdate($orderId);
         $creditmemo = $this->creditmemoDocumentFactory->createFromOrder(
             $order,
             $items,
@@ -142,13 +143,13 @@ class RefundOrder implements RefundOrderInterface
             $comment,
             $arguments
         );
-        if ($validationMessages->hasMessages()) {
-            throw new \Magento\Sales\Exception\DocumentValidationException(
-                __("Creditmemo Document Validation Error(s):\n" . implode("\n", $validationMessages->getMessages()))
-            );
-        }
-        $connection->beginTransaction();
         try {
+            if ($validationMessages->hasMessages()) {
+                throw new \Magento\Sales\Exception\DocumentValidationException(
+                    __("Creditmemo Document Validation Error(s):\n" . implode("\n", $validationMessages->getMessages()))
+                );
+            }
+
             $creditmemo->setState(\Magento\Sales\Model\Order\Creditmemo::STATE_REFUNDED);
             $order->setCustomerNoteNotify($notify);
             $order = $this->refundAdapter->refund($creditmemo, $order);

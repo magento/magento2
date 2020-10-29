@@ -358,13 +358,48 @@ abstract class AbstractDb extends AbstractResource
             }
         }
 
+        $this->_afterObjectLoad($object);
+        return $this;
+    }
+
+    /**
+     * Load an object for update (locks record)
+     *
+     * @param \Magento\Framework\Model\AbstractModel $object
+     * @param mixed $value
+     * @return $this
+     * @throws LocalizedException
+     */
+    public function loadForUpdate(\Magento\Framework\Model\AbstractModel $object, $value)
+    {
+        $field = $this->getIdFieldName();
+        $object->beforeLoad($value, $field);
+
+        if($field !== $this->getIdFieldName()) {
+            throw new LocalizedException(__('Unable to lock record. The field passed is not a primary key "%"', $field));
+        }
+
+        $connection = $this->getConnection();
+        if ($connection && $value !== null) {
+            $select = $this->_getLoadSelectForUpdate($field, $value, $object);
+            $data = $connection->fetchRow($select);
+
+            if ($data) {
+                $object->setData($data);
+            }
+        }
+
+        $this->_afterObjectLoad($object);
+        return $this;
+    }
+
+    protected function _afterObjectLoad(\Magento\Framework\Model\AbstractModel $object)
+    {
         $this->unserializeFields($object);
         $this->_afterLoad($object);
         $object->afterLoad();
         $object->setOrigData();
         $object->setHasDataChanges(false);
-
-        return $this;
     }
 
     /**
@@ -374,6 +409,7 @@ abstract class AbstractDb extends AbstractResource
      * @param mixed $value
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return \Magento\Framework\DB\Select
+     * @throws LocalizedException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function _getLoadSelect($field, $value, $object)
@@ -381,6 +417,23 @@ abstract class AbstractDb extends AbstractResource
         $field = $this->getConnection()->quoteIdentifier(sprintf('%s.%s', $this->getMainTable(), $field));
         $select = $this->getConnection()->select()->from($this->getMainTable())->where($field . '=?', $value);
         return $select;
+    }
+
+    /**
+     * Retrieve select object for load object data (locks record)
+     *
+     * NOTE: $field MUST be a primary key
+     *
+     * @param string $field
+     * @param mixed $value
+     * @param \Magento\Framework\Model\AbstractModel $object
+     * @return \Magento\Framework\DB\Select
+     * @throws LocalizedException
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    protected function _getLoadSelectForUpdate($field, $value, $object)
+    {
+        return $this->_getLoadSelect($field, $value, $object)->forUpdate();
     }
 
     /**

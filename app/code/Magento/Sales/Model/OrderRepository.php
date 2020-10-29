@@ -11,6 +11,7 @@ use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Sales\Api\Data\OrderExtensionFactory;
 use Magento\Sales\Api\Data\OrderExtensionInterface;
@@ -135,6 +136,43 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
         if (!isset($this->registry[$id])) {
             /** @var OrderInterface $entity */
             $entity = $this->metadata->getNewInstance()->load($id);
+            if (!$entity->getEntityId()) {
+                throw new NoSuchEntityException(
+                    __("The entity that was requested doesn't exist. Verify the entity and try again.")
+                );
+            }
+            $this->setOrderTaxDetails($entity);
+            $this->setShippingAssignments($entity);
+            $this->setPaymentAdditionalInfo($entity);
+            $this->registry[$id] = $entity;
+        }
+        return  $this->registry[$id];
+    }
+
+    /**
+     * Load entity for update (locks record)
+     *
+     * @param int $id
+     * @return \Magento\Sales\Api\Data\OrderInterface
+     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function getForUpdate($id)
+    {
+        if (!$id) {
+            throw new InputException(__('An ID is needed. Set the ID and try again.'));
+        }
+        if (!isset($this->registry[$id])) {
+            try {
+                /** @var Order $metadata */
+                $metadata = $this->metadata->getNewInstance();
+                /** @var OrderInterface $entity */
+                $entity = $metadata->loadForUpdate($id);
+            }
+            catch(\Magento\Framework\DB\Adapter\LockWaitException $e) {
+                throw new LocalizedException(__('Database lock wait timeout exceeded. Please retry the transaction.'), $e, $e->getCode());
+            }
             if (!$entity->getEntityId()) {
                 throw new NoSuchEntityException(
                     __("The entity that was requested doesn't exist. Verify the entity and try again.")
