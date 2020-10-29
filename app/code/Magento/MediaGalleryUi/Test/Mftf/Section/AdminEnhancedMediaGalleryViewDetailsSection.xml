@@ -19,8 +19,8 @@
         <element name="delete" type="button" selector="//div[@class='media-gallery-image-details-modal']//button[contains(@class, 'delete')]"/>
         <element name="confirmDelete" type="button" selector=".action-accept"/>
         <element name="createdAtDate" type="button" selector="//div[@class='attribute']/span[contains(text(), 'Created')]/following-sibling::div"/>
-        <element name="usedIn" type="button" selector="//div[@class='attribute']/span[contains(text(), 'Used In')]"/>
         <element name="updatedAtDate" type="button" selector="//div[@class='attribute']/span[contains(text(), 'Modified')]/following-sibling::div"/>
+        <element name="usedIn" type="button" selector="//div[@class='attribute']/span[contains(text(), 'Used In')]"/>
         <element name="addImage" type="button" selector=".add-image-action"/>
         <element name="cancel" type="button" selector="#image-details-action-cancel"/>
         <element name="usedInLink" type="button" parameterized="true" selector="//div[@class='attribute']/span[contains(text(), 'Used In')]/following-sibling::div/a[contains(text(), '{{entityName}}')]"/>
