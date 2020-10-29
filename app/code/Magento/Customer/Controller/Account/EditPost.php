@@ -7,7 +7,6 @@
 
 namespace Magento\Customer\Controller\Account;
 
-use Exception;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Api\SessionCleanerInterface;
 use Magento\Customer\Model\AddressRegistry;
@@ -245,7 +244,7 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
                 }
             } catch (LocalizedException $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 $this->messageManager->addException($e, __('We can\'t save the customer.'));
             }
 
