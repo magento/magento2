@@ -90,11 +90,12 @@ class ProductSearchAggregationsTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/products_for_search.php
-     * @magentoConfigFixture default_store currency/options/allow EUR,USD
+     * @magentoApiDataFixture Magento/Directory/_files/usd_cny_rate.php
+     * @magentoConfigFixture default_store currency/options/allow CNY,USD
      */
     public function testAggregationPriceRangesWithCurrencyHeader()
     {
-        $headerMap['Content-Currency'] = 'EUR';
+        $headerMap['Content-Currency'] = 'CNY';
         $query = $this->getGraphQlQuery(
             '"search_product_1", "search_product_2", "search_product_3", "search_product_4" ,"search_product_5"'
         );
@@ -112,10 +113,10 @@ class ProductSearchAggregationsTest extends GraphQlAbstract
         $this->assertEquals('Price', $priceAggregation['label']);
         $this->assertEquals(4, $priceAggregation['count']);
         $expectedOptions = [
-            ['label' => '20-40', 'value'=> '20_40', 'count' => '2'],
-            ['label' => '40-60', 'value'=> '40_60', 'count' => '1'],
-            ['label' => '60-80', 'value'=> '60_80', 'count' => '1'],
-            ['label' => '80-100', 'value'=> '80_100', 'count' => '1']
+            ['label' => '70-140', 'value'=> '70_140', 'count' => '2'],
+            ['label' => '140-210', 'value'=> '140_210', 'count' => '1'],
+            ['label' => '210-280', 'value'=> '210_280', 'count' => '1'],
+            ['label' => '280-350', 'value'=> '280_350', 'count' => '1']
         ];
         $this->assertEquals($expectedOptions, $priceAggregation['options']);
     }

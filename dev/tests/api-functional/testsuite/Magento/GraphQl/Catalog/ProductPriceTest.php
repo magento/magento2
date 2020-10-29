@@ -80,14 +80,15 @@ class ProductPriceTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/products.php
-     * @magentoConfigFixture default_store currency/options/allow EUR,USD
+     * @magentoApiDataFixture Magento/Directory/_files/usd_cny_rate.php
+     * @magentoConfigFixture default_store currency/options/allow CNY,USD
      */
     public function testProductWithSinglePriceNonDefaultCurrency()
     {
         $skus = ['simple'];
         $query = $this->getProductQuery($skus);
         $headerMap = [
-            'Content-Currency' => 'EUR'
+            'Content-Currency' => 'CNY'
         ];
         $result = $this->graphQlQuery($query, [], '', $headerMap);
 
@@ -99,10 +100,10 @@ class ProductPriceTest extends GraphQlAbstract
         $expectedPriceRange = [
             "minimum_price" => [
                 "regular_price" => [
-                    "value" => 20
+                    "value" => 70
                 ],
                 "final_price" => [
-                    "value" => 20
+                    "value" => 70
                 ],
                 "discount" => [
                     "amount_off" => 0,
@@ -111,10 +112,10 @@ class ProductPriceTest extends GraphQlAbstract
             ],
             "maximum_price" => [
                 "regular_price" => [
-                    "value" => 20
+                    "value" => 70
                 ],
                 "final_price" => [
-                    "value" => 20
+                    "value" => 70
                 ],
                 "discount" => [
                     "amount_off" => 0,
@@ -123,7 +124,7 @@ class ProductPriceTest extends GraphQlAbstract
             ]
         ];
 
-        $this->assertPrices($expectedPriceRange, $product['price_range'], 'EUR');
+        $this->assertPrices($expectedPriceRange, $product['price_range'], 'CNY');
     }
 
     /**
