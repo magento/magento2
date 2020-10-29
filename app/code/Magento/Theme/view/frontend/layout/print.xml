@@ -16,6 +16,5 @@
         <referenceContainer name="before.body.end">
             <block class="Magento\Framework\View\Element\Template" name="sales.order.print.js" template="Magento_Theme::html/print.phtml" />
         </referenceContainer>
-        <referenceBlock name="authentication-popup" remove="true"/>
     </body>
 </page>
