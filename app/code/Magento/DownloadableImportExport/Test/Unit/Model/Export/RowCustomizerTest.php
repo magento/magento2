@@ -92,8 +92,8 @@ class RowCustomizerTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $collection->expects($this->atLeastOnce())
-        ->method('getIterator')
-        ->willReturn(new \ArrayIterator([$product1, $product2]));
+            ->method('fetchItem')
+            ->willReturn($product1, $product2);
 
         $collection->expects($this->exactly(2))
             ->method('addAttributeToFilter')
@@ -101,19 +101,6 @@ class RowCustomizerTest extends TestCase
         $collection->expects($this->exactly(2))
             ->method('addAttributeToSelect')
             ->willReturnSelf();
-        $collection->expects($this->once())
-            ->method('setPageSize')
-            ->willReturnSelf();
-        $collection->expects($this->once())
-            ->method('getLastPageNumber')
-            ->willReturn(1);
-        $collection->expects($this->atLeastOnce())
-            ->method('setCurPage')
-            ->willReturnSelf();
-        $collection->expects($this->once())
-            ->method('clear')
-            ->willReturnSelf();
-
         $this->linkRepositoryMock->expects($this->exactly(2))
             ->method('getLinksByProduct')
             ->will($this->returnValue([]));
