@@ -37,6 +37,7 @@
         "magento/zendframework1": "~1.14.2",
         "monolog/monolog": "^1.17",
         "ramsey/uuid": "~3.8.0",
+        "s1lentium/iptools": "^1.1",
         "symfony/console": "~4.4.0",
         "symfony/process": "~4.4.0",
         "tedivm/jshrink": "~1.3.0",
