@@ -61,7 +61,6 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
         'remote_backend_options' => [],
         'local_backend' => '',
         'local_backend_options' => [],
-        'local_backend_max_size' => 500,
         'local_backend_custom_naming' => true,
         'local_backend_autoload' => true,
         'use_stale_cache' => false,
