@@ -60,6 +60,8 @@
             <argument name="customerEmail" value="$$createCustomer.email$$"/>
             <argument name="customerPwd" value="$$createCustomer.password$$"/>
         </actionGroup>
+        <waitForElementVisible selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="waitProceedToCheckout"/>
+        <scrollTo selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="scrollToGoToCheckout"/>
         <click selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="goToCheckout1"/>
         <waitForPageLoad stepKey="waitForShippingMethodSectionToLoad"/>
         <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickOnNextButton"/>
