@@ -18,7 +18,7 @@ use Magento\SalesRule\Model\Coupon\Usage\UpdateInfo;
 /**
  * Scheduler for coupon usage queue
  */
-class CouponUsageScheduler
+class CouponUsagePublisher
 {
     private const TOPIC_NAME = 'sales.rule.update.coupon.usage';
 
@@ -69,12 +69,12 @@ class CouponUsageScheduler
     }
 
     /**
-     * Schedule sales rule usage info
+     * Publish sales rule usage info into the queue
      *
      * @param string $updateInfo
      * @return boolean
      */
-    public function schedule(UpdateInfo $updateInfo): bool
+    public function publish(UpdateInfo $updateInfo): bool
     {
         $bulkUuid = $this->identityService->generateId();
         $bulkDescription = __('Rule processing: %1', implode(',', $updateInfo->getAppliedRuleIds()));

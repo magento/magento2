@@ -10,7 +10,7 @@ namespace Magento\SalesRule\Model\Coupon\Quote;
 use Magento\Quote\Api\Data\CartInterface;
 use Magento\SalesRule\Model\Coupon\Usage\UpdateInfo;
 use Magento\SalesRule\Model\Coupon\Usage\UpdateInfoFactory;
-use Magento\SalesRule\Model\Service\CouponUsageScheduler;
+use Magento\SalesRule\Model\Service\CouponUsagePublisher;
 
 /**
  * Updates the coupon usages from quote
@@ -23,19 +23,19 @@ class UpdateCouponUsages
     private $updateInfoFactory;
 
     /**
-     * @var CouponUsageScheduler
+     * @var CouponUsagePublisher
      */
-    private $couponUsageScheduler;
+    private $couponUsagePublisher;
 
     /**
-     * @param CouponUsageScheduler $couponUsageScheduler
+     * @param CouponUsagePublisher $couponUsagePublisher
      * @param UpdateInfoFactory $updateInfoFactory
      */
     public function __construct(
-        CouponUsageScheduler $couponUsageScheduler,
+        CouponUsagePublisher $couponUsagePublisher,
         UpdateInfoFactory $updateInfoFactory
     ) {
-        $this->couponUsageScheduler = $couponUsageScheduler;
+        $this->couponUsagePublisher = $couponUsagePublisher;
         $this->updateInfoFactory = $updateInfoFactory;
     }
 
@@ -59,6 +59,6 @@ class UpdateCouponUsages
         $updateInfo->setCustomerId((int)$quote->getCustomerId());
         $updateInfo->setIsIncrement($increment);
 
-        $this->couponUsageScheduler->schedule($updateInfo);
+        $this->couponUsagePublisher->publish($updateInfo);
     }
 }

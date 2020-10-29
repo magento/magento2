@@ -14,6 +14,9 @@ use Magento\Sales\Model\Service\OrderService;
 use Magento\SalesRule\Model\Coupon;
 use Magento\SalesRule\Model\ResourceModel\Coupon\Usage;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\MessageQueue\EnvironmentPreconditionException;
+use Magento\TestFramework\MessageQueue\PreconditionFailedException;
+use Magento\TestFramework\MessageQueue\PublisherConsumerController;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -26,6 +29,16 @@ use PHPUnit\Framework\TestCase;
  */
 class CouponUsagesTest extends TestCase
 {
+    /**
+     * @var PublisherConsumerController
+     */
+    private $publisherConsumerController;
+
+    /**
+     * @var array
+     */
+    private $consumers = ['sales.rule.update.coupon.usage'];
+
     /**
      * @var ObjectManagerInterface
      */
@@ -61,6 +74,35 @@ class CouponUsagesTest extends TestCase
         $this->couponUsage = $this->objectManager->get(DataObject::class);
         $this->quoteManagement = $this->objectManager->get(QuoteManagement::class);
         $this->orderService = $this->objectManager->get(OrderService::class);
+
+        $this->publisherConsumerController = Bootstrap::getObjectManager()->create(
+            PublisherConsumerController::class,
+            [
+                'consumers' => $this->consumers,
+                'logFilePath' => TESTS_TEMP_DIR . "/MessageQueueTestLog.txt",
+                'maxMessages' => null,
+                'appInitParams' => Bootstrap::getInstance()->getAppInitParams()
+            ]
+        );
+        try {
+            $this->publisherConsumerController->startConsumers();
+        } catch (EnvironmentPreconditionException $e) {
+            $this->markTestSkipped($e->getMessage());
+        } catch (PreconditionFailedException $e) {
+            $this->fail(
+                $e->getMessage()
+            );
+        }
+        parent::setUp();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function tearDown(): void
+    {
+        $this->publisherConsumerController->stopConsumers();
+        parent::tearDown();
     }
 
     /**
@@ -74,6 +116,11 @@ class CouponUsagesTest extends TestCase
         $couponCode = 'one_usage';
         $reservedOrderId = 'test01';
 
+        $binDirectory = realpath(INTEGRATION_TESTS_DIR . '/bin/');
+        $magentoCli = $binDirectory . '/magento';
+        $consumerStartCommand = "php {$magentoCli} queue:consumers:start sales.rule.update.coupon.usage &";
+        exec($consumerStartCommand);
+
         /** @var Coupon $coupon */
         $coupon = $this->objectManager->get(Coupon::class);
         $coupon->loadByCode($couponCode);
@@ -83,6 +130,9 @@ class CouponUsagesTest extends TestCase
 
         // Make sure coupon usages value is incremented then order is placed.
         $order = $this->quoteManagement->submit($quote);
+
+
+        sleep(15); // timeout to processing Magento queue
         $this->usage->loadByCustomerCoupon($this->couponUsage, $customerId, $coupon->getId());
         $coupon->loadByCode($couponCode);
 
