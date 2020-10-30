@@ -186,6 +186,33 @@ class MaintenanceModeTest extends TestCase
      *
      * @return void
      */
+    public function testSetSingleAddressV4Legacy()
+    {
+        $mapisExist = [
+            [MaintenanceMode::FLAG_FILENAME, true],
+            [MaintenanceMode::IP_FILENAME, true],
+        ];
+        $this->flagDir->method('isExist')
+            ->willReturnMap($mapisExist);
+        $this->flagDir->method('delete')
+            ->willReturnMap($mapisExist);
+
+        $this->flagDir->method('writeFile')
+            ->willReturn(10);
+
+        $this->flagDir->method('readFile')
+            ->with(MaintenanceMode::IP_FILENAME)
+            ->willReturn('198.51.100.3');
+
+        $this->model->setAddresses('198.51.100.3');
+        $this->assertEquals(['198.51.100.3'], $this->model->getAddressInfo());
+    }
+
+    /**
+     * Set single IPv4 address test
+     *
+     * @return void
+     */
     public function testSetSingleAddressV4()
     {
         $mapisExist = [
@@ -206,6 +233,33 @@ class MaintenanceModeTest extends TestCase
 
         $this->model->setAddresses('198.51.100.1');
         $this->assertEquals(['198.51.100.1/32'], $this->model->getAddressInfo());
+    }
+
+    /**
+     * Set single IPv6 address test
+     *
+     * @return void
+     */
+    public function testSetSingleAddressV6Legacy()
+    {
+        $mapisExist = [
+            [MaintenanceMode::FLAG_FILENAME, true],
+            [MaintenanceMode::IP_FILENAME, true],
+        ];
+        $this->flagDir->method('isExist')
+            ->willReturnMap($mapisExist);
+        $this->flagDir->method('delete')
+            ->willReturnMap($mapisExist);
+
+        $this->flagDir->method('writeFile')
+            ->willReturn(10);
+
+        $this->flagDir->method('readFile')
+            ->with(MaintenanceMode::IP_FILENAME)
+            ->willReturn('2001:db8::6');
+
+        $this->model->setAddresses('2001:db8::6');
+        $this->assertEquals(['2001:db8::6'], $this->model->getAddressInfo());
     }
 
     /**
@@ -313,7 +367,7 @@ class MaintenanceModeTest extends TestCase
             ->willReturn('203.0.113.71/32,10.50.60.123/32');
 
         $expectedArray = ['203.0.113.71/32', '10.50.60.123/32'];
-        $this->model->setAddresses('203.0.113.71, 10.50.60.123');
+        $this->model->setAddresses('203.0.113.71,10.50.60.123');
         $this->assertEquals($expectedArray, $this->model->getAddressInfo());
         $this->assertFalse($this->model->isOn('203.0.113.71'));
         $this->assertTrue($this->model->isOn('198.51.100.85'));
@@ -343,7 +397,7 @@ class MaintenanceModeTest extends TestCase
             ->willReturn('2001:db8::1/128,2001:db8::ae/128');
 
         $expectedArray = ['2001:db8::1/128', '2001:db8::ae/128'];
-        $this->model->setAddresses('2001:db8::1, 2001:db8::ae');
+        $this->model->setAddresses('2001:db8::1,2001:db8::ae');
         $this->assertEquals($expectedArray, $this->model->getAddressInfo());
         $this->assertFalse($this->model->isOn('2001:db8::1'));
         $this->assertTrue($this->model->isOn('2001:db8::ff'));
@@ -373,7 +427,7 @@ class MaintenanceModeTest extends TestCase
             ->willReturn('203.0.113.71/32,2001:db8::ae/128');
 
         $expectedArray = ['203.0.113.71/32', '2001:db8::ae/128'];
-        $this->model->setAddresses('203.0.113.71, 2001:db8::ae');
+        $this->model->setAddresses('203.0.113.71,2001:db8::ae');
         $this->assertEquals($expectedArray, $this->model->getAddressInfo());
         $this->assertFalse($this->model->isOn('203.0.113.71'));
         $this->assertFalse($this->model->isOn('2001:db8::ae'));
@@ -405,7 +459,7 @@ class MaintenanceModeTest extends TestCase
             ->willReturn('203.0.113.68/30,10.50.60.64/26');
 
         $expectedArray = ['203.0.113.68/30', '10.50.60.64/26'];
-        $this->model->setAddresses('203.0.113.68/30, 10.50.60.64/26');
+        $this->model->setAddresses('203.0.113.68/30,10.50.60.64/26');
         $this->assertEquals($expectedArray, $this->model->getAddressInfo());
         $this->assertFalse($this->model->isOn('203.0.113.71'));
         $this->assertTrue($this->model->isOn('198.51.100.85'));
@@ -435,7 +489,7 @@ class MaintenanceModeTest extends TestCase
             ->willReturn('2001:db8::/96,2001:db8::ae/116');
 
         $expectedArray = ['2001:db8::/96', '2001:db8::ae/116'];
-        $this->model->setAddresses('2001:db8::/96, 2001:db8::ae/116');
+        $this->model->setAddresses('2001:db8::/96,2001:db8::ae/116');
         $this->assertEquals($expectedArray, $this->model->getAddressInfo());
         $this->assertFalse($this->model->isOn('2001:db8::1'));
         $this->assertTrue($this->model->isOn('2001:db8:ff::54b1'));
@@ -465,7 +519,7 @@ class MaintenanceModeTest extends TestCase
             ->willReturn('203.0.113.64/28,2001:db8:ae::/108');
 
         $expectedArray = ['203.0.113.64/28', '2001:db8:ae::/108'];
-        $this->model->setAddresses('203.0.113.64/28, 2001:db8:ae::/108');
+        $this->model->setAddresses('203.0.113.64/28,2001:db8:ae::/108');
         $this->assertEquals($expectedArray, $this->model->getAddressInfo());
         $this->assertFalse($this->model->isOn('203.0.113.71'));
         $this->assertFalse($this->model->isOn('2001:db8:ae::ce51'));
@@ -494,7 +548,7 @@ class MaintenanceModeTest extends TestCase
             ->willReturn('203.0.113.71/32,10.50.60.123/32');
 
         $expectedArray = ['203.0.113.71/32', '10.50.60.123/32'];
-        $this->model->setAddresses('203.0.113.71, 10.50.60.123');
+        $this->model->setAddresses('203.0.113.71,10.50.60.123');
         $this->assertEquals($expectedArray, $this->model->getAddressInfo());
         $this->assertFalse($this->model->isOn('203.0.113.71'));
         $this->assertFalse($this->model->isOn('198.51.100.85'));
