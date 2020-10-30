@@ -49,7 +49,8 @@
 
                 .lac-notification-close-link {
                     &:after {
-                        background: url('../Magento_LoginAsCustomerFrontendUi/images/close.svg');
+                        .lib-url('images/close.svg', 'Magento_LoginAsCustomerFrontendUi');
+                        background:url("@{url}");
                         content: ' ';
                         display: inline-block;
                         height: 12px;

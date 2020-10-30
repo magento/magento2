@@ -43,7 +43,8 @@
         z-index: @data-grid-overlay__z-index;
 
         .grid-loader {
-            background: url('@{baseDir}images/loader-2.gif') 50% 50% no-repeat;
+            .lib-url('images/loader-2.gif');
+            background:url("@{url}") 50% 50% no-repeat;
             bottom: 0;
             height: 149px;
             left: 0;

@@ -116,7 +116,8 @@
 }
 
 .file-uploader-spinner {
-    background-image: url('@{baseDir}images/loader-1.gif');
+    .lib-url('images/loader-1.gif');
+    background-image:url("@{url}");
     background-position: 50%;
     background-repeat: no-repeat;
     background-size: @file-uploader-spinner-dimensions;

@@ -63,7 +63,8 @@
 
 .field-summary-rating {
     .rating-box {
-        background: url('@{baseDir}images/rating-bg.png') repeat-x 0 0;
+        .lib-url('images/rating-bg.png');
+        background:url("@{url}") repeat-x 0 0;
         font-size: 0;
         height: @rating-star__height;
         line-height: 0;
@@ -72,7 +73,8 @@
         width: @rating-star__width*5;
 
         .rating {
-            background: url('@{baseDir}images/rating-bg.png') repeat-x 0 -@rating-star__height;
+            .lib-url('images/rating-bg.png');
+            background:url("@{url}") repeat-x 0 -@rating-star__height;
             height: @rating-star__height;
         }
     }

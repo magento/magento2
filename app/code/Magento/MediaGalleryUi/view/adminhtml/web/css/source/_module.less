@@ -166,7 +166,8 @@
         }
 
         .jstree-default ins {
-            background-image: url("@{baseDir}Magento_MediaGalleryUi/images/d.png");
+            .lib-url('images/d.png', 'Magento_MediaGalleryUi');
+            background-image:url("@{url}");
         }
 
         .jstree a {
@@ -249,7 +250,8 @@
 
             .three-dots {
                 &:before {
-                    content: url("@{baseDir}Magento_MediaGalleryUi/images/3-dots.png");
+                    .lib-url('images/3-dots.png', 'Magento_MediaGalleryUi');
+                    content:url("@{url}");
                     cursor: pointer;
                 }
             }
