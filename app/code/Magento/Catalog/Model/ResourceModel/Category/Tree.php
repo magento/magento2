@@ -161,6 +161,26 @@ class Tree extends Dbp
         }
         return $this->_storeId;
     }
+     /**
+     * Add data to collection
+     * @param Collection $collection
+     * @param boolean $sorted
+     * @param array $exclude
+     * @param boolean $toLoad
+     * @param boolean $onlyActive
+     * @return $this
+     - @deprecated This method is not intended for usage in child classes
+     - @see addCollectionDataWithIncludeMenu($collection, $sorted, $exclude, $toLoad, $onlyActive, $onlyIncludeInMenu)
+     */
+    public function addCollectionData(
+        $collection = null,
+        $sorted = false,
+        $exclude = [],
+        $toLoad = true,
+        $onlyActive = false
+    ) {
+        $this->addCollectionDataWithIncludeMenu($collection, $sorted, $exclude, $toLoad, $onlyActive, true);
+    }
 
     /**
      * Add data to collection
@@ -175,7 +195,7 @@ class Tree extends Dbp
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function addCollectionData(
+    private function addCollectionDataWithIncludeMenu(
         $collection = null,
         $sorted = false,
         $exclude = [],
