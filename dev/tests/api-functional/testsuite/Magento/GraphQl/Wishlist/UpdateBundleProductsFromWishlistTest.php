@@ -59,7 +59,7 @@ class UpdateBundleProductsFromWishlistTest extends GraphQlAbstract
      */
     public function testUpdateBundleProductWithOptions(): void
     {
-        $qty = 2;
+        $qty = 5;
         $optionQty = 1;
         $sku = 'bundle-product';
         $product = $this->productRepository->get($sku);
@@ -84,7 +84,6 @@ class UpdateBundleProductsFromWishlistTest extends GraphQlAbstract
 
         $query = $this->getBundleQuery((int)$wishlistItemId, $qty, $bundleOptions, (int)$wishlistId);
         $response = $this->graphQlMutation($query, [], '', $this->getHeaderMap());
-
         $this->assertArrayHasKey('updateProductsInWishlist', $response);
         $this->assertArrayHasKey('wishlist', $response['updateProductsInWishlist']);
         $response = $response['updateProductsInWishlist']['wishlist'];
@@ -198,7 +197,6 @@ mutation {
       updated_at
       items_v2 {
         id
-        description
         quantity
         ... on BundleWishlistItem {
           bundle_options {
@@ -223,7 +221,6 @@ MUTATION;
     /**
      * @param int $optionId
      * @param int $selectionId
-     *
      * @param int $quantity
      *
      * @return string
@@ -303,7 +300,6 @@ mutation {
       updated_at
       items_v2 {
         id
-        description
         quantity
         added_at
         ... on BundleWishlistItem {
@@ -327,3 +323,4 @@ MUTATION;
     }
 
 }
+
