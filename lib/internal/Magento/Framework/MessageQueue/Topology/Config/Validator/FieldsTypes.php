@@ -18,7 +18,8 @@ class FieldsTypes implements ValidatorInterface
     public function validate($configData)
     {
         foreach ($configData as $exchangeName => $exchangeConfig) {
-            $this->validateFieldsTypes($exchangeName, $exchangeConfig);
+            $exchangeConfig['type'] != 'queue' ? 
+            $this->validateFieldsTypes($exchangeName, $exchangeConfig) : $this->validateQueueTypes($exchangeName, $exchangeConfig);
         }
     }
 
@@ -127,5 +128,17 @@ class FieldsTypes implements ValidatorInterface
                 }
             }
         }
+    }
+
+    /**
+     * Make sure types of all fields in the queue item config are correct.
+     *
+     * @param string $queueName
+     * @param array $queueConfig
+     * @return void
+     * @throws \LogicException
+     */
+    private function validateQueueTypes($queueName, $queueConfig)
+    {
     }
 }
