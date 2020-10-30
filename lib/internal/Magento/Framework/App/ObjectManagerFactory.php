@@ -27,6 +27,7 @@ use Magento\Framework\Data\Argument\Interpreter\Boolean;
 use Magento\Framework\Data\Argument\Interpreter\Composite;
 use Magento\Framework\Data\Argument\Interpreter\Constant;
 use Magento\Framework\Data\Argument\Interpreter\DataObject;
+use Magento\Framework\Data\Argument\Interpreter\Integer;
 use Magento\Framework\Data\Argument\Interpreter\NullType;
 use Magento\Framework\Data\Argument\Interpreter\Number;
 use Magento\Framework\Data\Argument\InterpreterInterface;
@@ -284,6 +285,7 @@ class ObjectManagerFactory
                 'boolean' => new Boolean($booleanUtils),
                 'string' => new BaseStringUtils($booleanUtils),
                 'number' => new Number(),
+                'int' => new Integer(),
                 'null' => new NullType(),
                 'object' => new DataObject($booleanUtils),
                 'const' => $constInterpreter,

@@ -73,6 +73,12 @@
         </xs:complexContent>
     </xs:complexType>
 
+    <xs:complexType name="int">
+        <xs:complexContent>
+            <xs:extension base="argumentType"/>
+        </xs:complexContent>
+    </xs:complexType>
+
     <xs:complexType name="null">
         <xs:complexContent>
             <xs:restriction base="argumentType"/>

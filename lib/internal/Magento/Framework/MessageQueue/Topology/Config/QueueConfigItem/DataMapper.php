@@ -68,11 +68,13 @@ class DataMapper
     public function getMappedData(): array
     {
         if (null === $this->mappedData) {
-            $mappedData = [];
-            foreach ($this->configData->get() as $exchange) {
+            $mappedData = [$this->createQueueItemsFromQueues($this->configData->getQueues())];
+            foreach ($this->configData->getExchanges() as $exchange) {
                 $connection = $exchange['connection'];
                 foreach ($exchange['bindings'] as $binding) {
-                    if ($binding['destinationType'] === 'queue') {
+                    if ($binding['destinationType'] === 'queue'
+                        && !isset($mappedData[0][$binding['destination'] . '--' . $connection])
+                    ) {
                         $queueItems = $this->createQueueItems(
                             (string)$binding['destination'],
                             (string)$binding['topic'],
@@ -87,6 +89,33 @@ class DataMapper
         }
 
         return $this->mappedData;
+    }
+
+    private function createQueueItemsFromQueues(array $queues)
+    {
+        $output = [];
+        foreach ($queues as $queue) {
+            $output[$queue['name'] . '--' . $queue['connection']] =
+                $this->createQueue(
+                    $queue['name'],
+                    $queue['connection'],
+                    $queue['arguments'],
+                    $queue['durable'],
+                    $queue['autoDelete']
+                );
+        }
+        return $output;
+    }
+
+    private function createQueue($name, $connection, $arguments = [], $durable = true, $autoDelete = false)
+    {
+        return [
+            'name' => $name,
+            'connection' => $connection,
+            'durable' => isset($durable) ? $durable : true,
+            'autoDelete' => isset($autoDelete) ? $autoDelete : false,
+            'arguments' => isset($arguments) ? $arguments : [],
+        ];
     }
 
     /**
