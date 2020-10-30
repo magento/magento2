@@ -9,6 +9,7 @@ namespace Magento\Analytics\Cron;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
@@ -28,8 +29,8 @@ class CollectDataTest extends TestCase
     /** @var CollectData */
     private $collectDataService;
 
-    /** @var Filesystem */
-    private $fileSystem;
+    /** @var WriteInterface */
+    private $mediaDirectory;
 
     /**
      * @inheritdoc
@@ -40,7 +41,7 @@ class CollectDataTest extends TestCase
 
         $this->objectManager = Bootstrap::getObjectManager();
         $this->collectDataService = $this->objectManager->get(CollectData::class);
-        $this->fileSystem = $this->objectManager->get(Filesystem::class);
+        $this->mediaDirectory = $this->objectManager->get(Filesystem::class)->getDirectoryWrite(DirectoryList::MEDIA);
         $this->removeAnalyticsDirectory();
     }
 
@@ -63,12 +64,12 @@ class CollectDataTest extends TestCase
     public function testExecute(): void
     {
         $this->collectDataService->execute();
-        $mediaDirectory = $this->fileSystem->getDirectoryWrite(DirectoryList::MEDIA);
         $this->assertTrue(
-            $mediaDirectory->isDirectory('analytics'),
+            $this->mediaDirectory->isDirectory('analytics'),
             'Analytics was not created'
         );
-        $files = $mediaDirectory->getDriver()->readDirectoryRecursively($mediaDirectory->getAbsolutePath('analytics'));
+        $files = $this->mediaDirectory->getDriver()
+            ->readDirectoryRecursively($this->mediaDirectory->getAbsolutePath('analytics'));
         $file = array_filter($files, function ($element) {
             return substr($element, -8) === 'data.tgz';
         });
@@ -82,10 +83,9 @@ class CollectDataTest extends TestCase
      */
     private function removeAnalyticsDirectory(): void
     {
-        $mediaDirectory = $this->fileSystem->getDirectoryWrite(DirectoryList::MEDIA);
-        $directoryToRemove = $mediaDirectory->getAbsolutePath('analytics');
-        if ($mediaDirectory->isDirectory($directoryToRemove)) {
-            $mediaDirectory->delete($directoryToRemove);
+        $directoryToRemove = $this->mediaDirectory->getAbsolutePath('analytics');
+        if ($this->mediaDirectory->isDirectory($directoryToRemove)) {
+            $this->mediaDirectory->delete($directoryToRemove);
         }
     }
 }
