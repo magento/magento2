@@ -179,7 +179,7 @@ class Tree extends Dbp
         $toLoad = true,
         $onlyActive = false
     ) {
-        $this->addCollectionDataWithIncludeMenu($collection, $sorted, $exclude, $toLoad, $onlyActive, true);
+       return $this->addCollectionDataWithIncludeMenu($collection, $sorted, $exclude, $toLoad, $onlyActive, true);
     }
 
     /**
