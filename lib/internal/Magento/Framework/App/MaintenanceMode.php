@@ -6,11 +6,11 @@
 namespace Magento\Framework\App;
 
 use IPTools\IP;
-use IPTools\Network;
 use IPTools\Range;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Event\Manager;
 use Magento\Framework\Filesystem;
+use Magento\Setup\Validator\IpValidator;
 
 /**
  * Application Maintenance Mode
@@ -48,13 +48,23 @@ class MaintenanceMode
     private $eventManager;
 
     /**
+     * @var IpValidator
+     */
+    private $ipValidator;
+
+    /**
      * @param Filesystem $filesystem
      * @param Manager|null $eventManager
+     * @param IpValidator $ipValidator
      */
-    public function __construct(Filesystem $filesystem, ?Manager $eventManager = null)
-    {
+    public function __construct(
+        Filesystem $filesystem,
+        ?Manager $eventManager = null,
+        IpValidator $ipValidator = null
+    ) {
         $this->flagDir = $filesystem->getDirectoryWrite(self::FLAG_DIR);
         $this->eventManager = $eventManager ?: ObjectManager::getInstance()->get(Manager::class);
+        $this->ipValidator = $ipValidator ?: ObjectManager::getInstance()->get(IpValidator::class);
     }
 
     /**
@@ -117,10 +127,12 @@ class MaintenanceMode
             }
             return true;
         }
-        $addresses = $this->normaliseIPAddresses($addresses);
         if (!preg_match('/^[^\s,]+(,[^\s,]+)*$/', $addresses)) {
             throw new \InvalidArgumentException("One or more IP-addresses is expected (comma-separated)\n");
         }
+        $addressList = explode(',', $addresses);
+        $addressList = $this->ipValidator->normaliseIPAddresses($addressList);
+        $addresses = implode(',', $addressList);
         $result = $this->flagDir->writeFile(self::IP_FILENAME, $addresses);
         return false !== $result;
     }
@@ -138,63 +150,5 @@ class MaintenanceMode
         } else {
             return [];
         }
-    }
-
-    /**
-     * Normalise / canonicalise list of IP addresses / ranges
-     *
-     * Takes a string of IP addresses or ranges (comma separated) and returns a
-     * string of IP ranges with no overlaps nor duplicates (comma separated).
-     *
-     * @param  string $addresses
-     * @return string
-     */
-    private function normaliseIPAddresses(string $addresses): string
-    {
-        $addresses = explode(',', $addresses);
-        $addresses = array_filter($addresses); // remove empty strings
-        $networks = [];
-        foreach ($addresses as $address) {
-            $networks[] = Network::parse(trim($address));
-        }
-        $networks = array_unique($networks); // remove obvious duplicates
-
-        // Combine adjacent ranges where feasible
-        if (count($networks) > 1) {
-            // Sort the list so we can compare each item with the following to
-            // determine if they are adjacent.
-            sort($networks, SORT_NATURAL);
-
-            // Define end point here as we expect the array to grow within the loop
-            $penultimate = count($networks) - 1;
-            for ($i = 0; $i < $penultimate; $i++) {
-                $a = $networks[$i];
-                $b = $networks[$i + 1];
-                if ($a->getLastIP()->next() == $b->getFirstIP()) {
-                    $range = new Range($a->getFirstIP(), $b->getLastIP());
-                    foreach ($range->getNetworks() as $network) {
-                        $networks[] = $network;
-                    }
-                }
-            }
-        }
-
-        // Remove overlapping entries from the list
-        if (count($networks) > 1) {
-            // Sort the list so we can compare each item with the following to
-            // determine if the former includes the latter.
-            sort($networks, SORT_NATURAL);
-
-            $lastRange = null;
-            $networks = array_filter($networks, function ($network) use (&$lastRange) {
-                if ($lastRange && $lastRange->contains($network)) {
-                    return false;
-                }
-                $lastRange = Range::parse($network);
-                return true;
-            });
-        }
-
-        return implode(',', $networks);
     }
 }
