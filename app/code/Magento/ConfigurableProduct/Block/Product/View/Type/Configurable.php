@@ -206,12 +206,24 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
 
     /**
      * Returns additional values for js config, con be overridden by descendants
+     * @deprecared Use composition approach to extend the Configuration (plugin for getAdditionalerConfig method)
+     * @see getAdditionalConfig to apply `after` plugin and extend an array
      *
      * @return array
      */
     protected function _getAdditionalConfig()
     {
         return [];
+    }
+
+    /**
+     * Returns additional values for js config, con be overridden by descendants
+     *
+     * @return array
+     */
+    public function getAdditionalConfig()
+    {
+        return $this->_getAdditionalConfig();
     }
 
     /**
@@ -244,7 +256,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
             $config['defaultValues'] = $attributesData['defaultValues'];
         }
 
-        $config = array_merge($config, $this->_getAdditionalConfig());
+        $config = array_merge($config, $this->getAdditionalConfig());
 
         return $this->jsonEncoder->encode($config);
     }
