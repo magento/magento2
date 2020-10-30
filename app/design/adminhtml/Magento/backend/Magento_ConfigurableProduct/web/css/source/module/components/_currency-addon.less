@@ -25,18 +25,13 @@
     width: 100%;
 
     .admin__control-text {
-        -ms-flex-order: 1;
-        -webkit-appearance: none;
-        -webkit-flex-grow: 1;
-        -webkit-flex-shrink: 1;
-        -webkit-order: 1;
-        appearance: none;
+        .lib-vendor-prefix-appearance(none);
+        .lib-vendor-prefix-flex-grow(1);
+        .lib-vendor-prefix-flex-shrink(1);
+        .lib-vendor-prefix-order(1);
         background-color: transparent;
         border-color: transparent;
         box-shadow: none;
-        flex-grow: 1;
-        flex-shrink: 1;
-        order: 1;
         vertical-align: top;
 
         &:focus {
@@ -53,18 +48,15 @@
     }
 
     .currency-symbol {
-        -webkit-flex-basis: auto;
-        -webkit-flex-grow: 0;
-        -webkit-flex-shrink: 0;
+        .lib-vendor-prefix-flex-basis(auto);
+        .lib-vendor-prefix-flex-grow(0);
+        .lib-vendor-prefix-flex-shrink(0);
         border: solid @currency-addon-symbol__border-color;
         border-width: 0;
         box-sizing: border-box;
         color: @currency-addon-symbol__color;
-        flex-basis: auto;
-        flex-grow: 0;
-        flex-shrink: 0;
         height: @currency-addon-symbol__height;
-        order: 0;
+        .lib-vendor-prefix-order(0);
         padding: 7px 0 0 @indent__xs;
         position: static;
         transition: @smooth__border-color;
