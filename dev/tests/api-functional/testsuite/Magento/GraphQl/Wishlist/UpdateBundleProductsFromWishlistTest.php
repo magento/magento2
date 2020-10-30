@@ -51,6 +51,52 @@ class UpdateBundleProductsFromWishlistTest extends GraphQlAbstract
     }
 
     /**
+     * @magentoConfigFixture default_store wishlist/general/active 1
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/Bundle/_files/product_1.php
+     *
+     * @throws Exception
+     */
+    public function testUpdateBundleProductWithOptions(): void
+    {
+        $qty = 2;
+        $optionQty = 1;
+        $sku = 'bundle-product';
+        $product = $this->productRepository->get($sku);
+        /** @var Type $typeInstance */
+        $typeInstance = $product->getTypeInstance();
+        $typeInstance->setStoreFilter($product->getStoreId(), $product);
+        /** @var Option $option */
+        $option = $typeInstance->getOptionsCollection($product)->getLastItem();
+        /** @var Product $selection */
+        $selection = $typeInstance->getSelectionsCollection([$option->getId()], $product)->getLastItem();
+        $optionId = $option->getId();
+        $selectionId = $selection->getSelectionId();
+        $bundleOptions = $this->generateBundleOptionUid((int) $optionId, (int) $selectionId, $optionQty);
+
+        // Add product to wishlist
+        $this->addProductToWishlist();
+
+        $wishlist = $this->getBundleWishlist();
+        $wishlistId = $wishlist['customer']['wishlists'][0]['id'];
+        $wishlistItemId = $wishlist['customer']['wishlists'][0]['items_v2'][0]['id'];
+        $itemsCount = $wishlist['customer']['wishlists'][0]['items_count'];
+
+        $query = $this->getBundleQuery((int)$wishlistItemId, $qty, $bundleOptions, (int)$wishlistId);
+        $response = $this->graphQlMutation($query, [], '', $this->getHeaderMap());
+
+        $this->assertArrayHasKey('updateProductsInWishlist', $response);
+        $this->assertArrayHasKey('wishlist', $response['updateProductsInWishlist']);
+        $response = $response['updateProductsInWishlist']['wishlist'];
+        $this->assertEquals($itemsCount, $response['items_count']);
+        $this->assertEquals($qty, $response['items_v2'][0]['quantity']);
+        $this->assertNotEmpty($response['items_v2'][0]['bundle_options']);
+        $bundleOptions = $response['items_v2'][0]['bundle_options'];
+        $this->assertEquals('Bundle Product Items', $bundleOptions[0]['label']);
+        $this->assertEquals(Select::NAME, $bundleOptions[0]['type']);
+    }
+
+    /**
      * Authentication header map
      *
      * @param string $username
@@ -109,50 +155,6 @@ query {
     }
 }
 QUERY;
-    }
-
-    /**
-     * @magentoConfigFixture default_store wishlist/general/active 1
-     * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @magentoApiDataFixture Magento/Bundle/_files/product_1.php
-     *
-     * @throws Exception
-     */
-    public function testUpdateBundleProductWithOptions(): void
-    {
-        $wishlist = $this->getBundleWishlist();
-        $qty = 2;
-        $optionQty = 1;
-        $optionId = $wishlist['customer']['wishlists'][0]['items_v2'][0]['bundle_options'][0]['id'];
-
-        $sku = 'bundle-product';
-        $product = $this->productRepository->get($sku);
-        /** @var Type $typeInstance */
-        $typeInstance = $product->getTypeInstance();
-        $typeInstance->setStoreFilter($product->getStoreId(), $product);
-        /** @var Option $option */
-        $option = $typeInstance->getOptionsCollection($product)->getLastItem();
-        /** @var Product $selection */
-        $selection = $typeInstance->getSelectionsCollection([$option->getId()], $product)->getLastItem();
-        $optionId = $option->getId();
-        $selectionId = $selection->getSelectionId();
-        $bundleOptions = $this->generateBundleOptionUid((int) $optionId, (int) $selectionId, $optionQty);
-
-        $wishlistId = $wishlist['customer']['wishlists'][0]['id'];
-        $wishlistItemId = $wishlist['customer']['wishlists'][0]['items_v2'][0]['id'];
-        $itemsCount = $wishlist['customer']['wishlists'][0]['items_count'];
-        $query = $this->getBundleQuery((int)$wishlistItemId, $qty, $bundleOptions, (int)$wishlistId);
-        $response = $this->graphQlMutation($query, [], '', $this->getHeaderMap());
-
-        $this->assertArrayHasKey('updateProductsInWishlist', $response);
-        $this->assertArrayHasKey('wishlist', $response['updateProductsInWishlist']);
-        $response = $response['updateProductsInWishlist']['wishlist'];
-        $this->assertEquals($itemsCount, $response['items_count']);
-        $this->assertEquals($qty, $response['items_v2'][0]['quantity']);
-        $this->assertNotEmpty($response['items_v2'][0]['bundle_options']);
-        $bundleOptions = $response['items_v2'][0]['bundle_options'];
-        $this->assertEquals('Bundle Product Items', $bundleOptions[0]['label']);
-        $this->assertEquals(Select::NAME, $bundleOptions[0]['type']);
     }
 
     /**
@@ -230,4 +232,98 @@ MUTATION;
     {
         return base64_encode("bundle/$optionId/$selectionId/$quantity");
     }
+
+    /**
+     * @magentoConfigFixture default_store wishlist/general/active 1
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/Bundle/_files/product_1.php
+     *
+     * @throws Exception
+     */
+    private function addProductToWishlist(): void
+    {
+        $sku = 'bundle-product';
+        $product = $this->productRepository->get($sku);
+        $qty = 2;
+        $optionQty = 1;
+
+        /** @var Type $typeInstance */
+        $typeInstance = $product->getTypeInstance();
+        $typeInstance->setStoreFilter($product->getStoreId(), $product);
+        /** @var Option $option */
+        $option = $typeInstance->getOptionsCollection($product)->getFirstItem();
+        /** @var Product $selection */
+        $selection = $typeInstance->getSelectionsCollection([$option->getId()], $product)->getFirstItem();
+        $optionId = $option->getId();
+        $selectionId = $selection->getSelectionId();
+        $bundleOptions = $this->generateBundleOptionUid((int) $optionId, (int) $selectionId, $optionQty);
+
+        $query = $this->addQuery($sku, $qty, $bundleOptions);
+        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
+    }
+
+    /**
+     * Returns GraphQl add mutation string
+     *
+     * @param string $sku
+     * @param int $qty
+     * @param string $bundleOptions
+     * @param int $wishlistId
+     *
+     * @return string
+     */
+    private function addQuery(
+        string $sku,
+        int $qty,
+        string $bundleOptions,
+        int $wishlistId = 0
+    ): string {
+        return <<<MUTATION
+mutation {
+  addProductsToWishlist(
+    wishlistId: {$wishlistId},
+    wishlistItems: [
+      {
+        sku: "{$sku}"
+        quantity: {$qty}
+        selected_options: [
+          "{$bundleOptions}"
+        ]
+      }
+    ]
+) {
+    user_errors {
+      code
+      message
+    }
+    wishlist {
+      id
+      sharing_code
+      items_count
+      updated_at
+      items_v2 {
+        id
+        description
+        quantity
+        added_at
+        ... on BundleWishlistItem {
+          bundle_options {
+            id
+            label
+            type
+            values {
+              id
+              label
+              quantity
+              price
+            }
+          }
+        }
+      }
+    }
+  }
+}
+MUTATION;
+    }
+
 }
