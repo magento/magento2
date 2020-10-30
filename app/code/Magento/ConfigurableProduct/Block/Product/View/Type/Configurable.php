@@ -206,7 +206,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
 
     /**
      * Returns additional values for js config, con be overridden by descendants
-     * @deprecared Use composition approach to extend the Configuration (plugin for getAdditionalerConfig method)
+     * @deprecated Use composition approach to extend the Configuration (plugin for getAdditionalerConfig method)
      * @see getAdditionalConfig to apply `after` plugin and extend an array
      *
      * @return array
