@@ -127,7 +127,7 @@ class Category extends AbstractResource
         $data = [],
         \Magento\Framework\Serialize\Serializer\Json $serializer = null,
         MetadataPool $metadataPool = null
-    ){
+    ) {
         parent::__construct(
             $context,
             $storeManager,
@@ -715,7 +715,7 @@ class Category extends AbstractResource
         /* @var $tree \Magento\Catalog\Model\ResourceModel\Category\Tree */
         $nodes = $tree->loadNode($parent)->loadChildren($recursionLevel)->getChildren();
 
-        $tree->addCollectionData(null, $sorted, $parent, $toLoad, true, false);
+        $tree->addCollectionData(null, $sorted, $parent, $toLoad, true);
 
         if ($asCollection) {
             return $tree->getCollection();
