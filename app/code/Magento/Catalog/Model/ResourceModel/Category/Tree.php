@@ -195,7 +195,7 @@ class Tree extends Dbp
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    private function addCollectionDataWithIncludeMenu(
+    public function addCollectionDataWithIncludeMenu(
         $collection = null,
         $sorted = false,
         $exclude = [],
