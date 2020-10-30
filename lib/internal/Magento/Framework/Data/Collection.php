@@ -404,10 +404,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
 
         if ($itemId !== null) {
             if (isset($this->_items[$itemId])) {
-                //phpcs:ignore Magento2.Exceptions.DirectThrow
-                throw new \Exception(
-                    'Item (' . get_class($item) . ') with the same ID "' . $item->getId() . '" already exists.'
-                );
+                return $this;
             }
             $this->_items[$itemId] = $item;
         } else {

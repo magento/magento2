@@ -61,7 +61,7 @@ abstract class AbstractSearchResult extends AbstractDataObject implements Search
      * @var \Magento\Framework\DB\QueryInterface
      */
     protected $query;
-    
+
     /**
      * @var \Magento\Framework\DB\Select
      * @deprecated 101.0.0
@@ -266,9 +266,7 @@ abstract class AbstractSearchResult extends AbstractDataObject implements Search
         $itemId = $this->getItemId($item);
         if ($itemId !== null) {
             if (isset($this->data['items'][$itemId])) {
-                throw new \Exception(
-                    'Item (' . get_class($item) . ') with the same ID "' . $item->getId() . '" already exists.'
-                );
+                return $this;
             }
             $this->data['items'][$itemId] = $item;
         } else {
