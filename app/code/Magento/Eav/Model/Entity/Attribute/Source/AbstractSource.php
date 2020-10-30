@@ -74,10 +74,12 @@ abstract class AbstractSource implements
             }
         }
         // End
-        if (is_scalar($value) && isset($options[$value]) && !is_array($options[$value])) {
-            return $options[$value];
+        $result = false;
+        if (is_scalar($value) && isset($options[$value]) && is_string($options[$value])) {
+            $result = $options[$value];
         }
-        return false;
+
+        return $result;
     }
 
     /**
