@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Eav\Model;
 
 use Magento\Framework\App\RequestInterface;
@@ -10,6 +11,7 @@ use Magento\Framework\App\RequestInterface;
 /**
  * EAV Entity Form Model
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -274,8 +276,8 @@ abstract class Form
     /**
      * Return current form code
      *
-     * @throws \Magento\Framework\Exception\LocalizedException
      * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getFormCode()
     {
@@ -303,8 +305,8 @@ abstract class Form
     /**
      * Return current entity instance
      *
-     * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Magento\Framework\Model\AbstractModel
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getEntity()
     {
@@ -487,9 +489,9 @@ abstract class Form
         if (!$validator->isValid($this->getEntity())) {
             $messages = [];
             foreach ($validator->getMessages() as $errorMessages) {
-                $messages = array_merge($messages, (array)$errorMessages);
+                $messages[] = (array)$errorMessages;
             }
-            return $messages;
+            return array_merge([], ...$messages);
         }
         return true;
     }

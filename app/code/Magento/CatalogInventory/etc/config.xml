@@ -22,6 +22,7 @@
                 <min_sale_qty>1</min_sale_qty>
                 <min_qty>0</min_qty>
                 <notify_stock_qty>1</notify_stock_qty>
+                <auto_return>0</auto_return>
                 <enable_qty_increments>0</enable_qty_increments>
                 <qty_increments>1</qty_increments>
             </item_options>

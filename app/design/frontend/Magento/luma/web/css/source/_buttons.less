@@ -17,7 +17,7 @@
 
     button {
         &:not(.primary) {
-            .lib-css(box-shadow, @button__shadow);
+            .lib-css(box-shadow, none);
 
             &:active {
                 .lib-css(box-shadow, @button__shadow-active);
@@ -39,7 +39,8 @@
         .lib-link-as-button();
     }
 
-    .action.primary {
+    .action.primary,
+    .action-primary {
         .lib-button-primary();
     }
 }

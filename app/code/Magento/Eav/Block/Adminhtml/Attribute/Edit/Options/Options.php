@@ -155,7 +155,7 @@ class Options extends \Magento\Backend\Block\Template
         $values = [];
         $isSystemAttribute = is_array($optionCollection);
         if ($isSystemAttribute) {
-            $values = $this->getPreparedValues($optionCollection, $isSystemAttribute, $inputType, $defaultValues);
+            $values[] = $this->getPreparedValues($optionCollection, $isSystemAttribute, $inputType, $defaultValues);
         } else {
             $optionCollection->setPageSize(200);
             $pageCount = $optionCollection->getLastPageNumber();
@@ -163,15 +163,12 @@ class Options extends \Magento\Backend\Block\Template
             while ($currentPage <= $pageCount) {
                 $optionCollection->clear();
                 $optionCollection->setCurPage($currentPage);
-                $values = array_merge(
-                    $values,
-                    $this->getPreparedValues($optionCollection, $isSystemAttribute, $inputType, $defaultValues)
-                );
+                $values[] = $this->getPreparedValues($optionCollection, $isSystemAttribute, $inputType, $defaultValues);
                 $currentPage++;
             }
         }
 
-        return $values;
+        return array_merge([], ...$values);
     }
 
     /**

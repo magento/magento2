@@ -10,6 +10,8 @@ namespace Magento\Framework\Code\Reader;
  */
 class ClassReader implements ClassReaderInterface
 {
+    private $parentsCache = [];
+
     /**
      * Read class constructor signature
      *
@@ -35,7 +37,11 @@ class ClassReader implements ClassReaderInterface
                         $parameter->isVariadic(),
                     ];
                 } catch (\ReflectionException $e) {
-                    $message = $e->getMessage();
+                    $message = sprintf(
+                        'Impossible to process constructor argument %s of %s class',
+                        $parameter->__toString(),
+                        $className
+                    );
                     throw new \ReflectionException($message, 0, $e);
                 }
             }
@@ -73,6 +79,10 @@ class ClassReader implements ClassReaderInterface
      */
     public function getParents($className)
     {
+        if (isset($this->parentsCache[$className])) {
+            return $this->parentsCache[$className];
+        }
+
         $parentClass = get_parent_class($className);
         if ($parentClass) {
             $result = [];
@@ -94,6 +104,9 @@ class ClassReader implements ClassReaderInterface
                 $result = [];
             }
         }
+
+        $this->parentsCache[$className] = $result;
+
         return $result;
     }
 }

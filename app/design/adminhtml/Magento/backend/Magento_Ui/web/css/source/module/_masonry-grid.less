@@ -1,0 +1,129 @@
+// /**
+//  * Copyright © Magento, Inc. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+@admin__masonry_grid_image__space: 20px;
+@admin__masonry_grid_background_color: #fff;
+@admin__masonry_overlay_background_color: #507dc8;
+@admin__masonry_grid_active_image_border_color: #558dd6;
+
+& when (@media-common = true) {
+    .masonry-image {
+        &-grid {
+            margin: @admin__masonry_grid_image__space/2 -(@admin__masonry_grid_image__space/2);
+            overflow: hidden;
+            position: relative;
+
+            .no-data-message-container,
+            .error-message-container {
+                font-size: @data-grid__no-records__font-size;
+                padding: @data-grid__no-records__padding;
+                text-align: center;
+            }
+        }
+
+        &-column {
+            background-color: @admin__masonry_grid_background_color;
+            float: left;
+            margin: @admin__masonry_grid_image__space/2;
+            overflow: hidden;
+
+            .masonry-image-block {
+                &.active {
+                    img {
+                        border: 2px @admin__masonry_grid_active_image_border_color solid;
+                        padding: 1px;
+                    }
+                }
+            }
+
+            img {
+                cursor: pointer;
+                height: 100%;
+                width: 100%;
+            }
+        }
+
+        &-overlay {
+            background-color: @admin__masonry_overlay_background_color;
+            color: @admin__masonry_grid_background_color;
+            opacity: 1;
+            padding: .5rem;
+            position: absolute;
+            text-align: center;
+            width: 80px;
+            z-index: 10;
+        }
+
+        &-preview {
+            background-color: @admin__masonry_grid_background_color;
+            display: table;
+            left: 0;
+            position: absolute;
+            right: 0;
+            width: 100%;
+
+            .container {
+                margin: auto;
+                max-width: 880px;
+                padding-top: 10px;
+
+                .action-buttons {
+                    text-align: right;
+
+                    .action {
+                        &-close {
+                            padding: 30px;
+                            position: static;
+                        }
+
+                        &-previous,
+                        &-next {
+                            background: transparent;
+                            border: none;
+                            margin: 0;
+                            white-space: nowrap;
+                        }
+
+                        &-close,
+                        &-previous,
+                        &-next {
+                            font-size: 2rem;
+                        }
+                    }
+                }
+
+                .preview-row-content {
+                    display: flex;
+
+                    &:after {
+                        clear: both;
+                        content: '';
+                        display: table;
+                    }
+
+                    img.preview {
+                        display: block;
+                        flex-basis: 300px;
+                        float: left;
+                        margin-bottom: 20px;
+                        max-height: 500px;
+                        max-width: 60%;
+                        width: auto;
+                    }
+                }
+            }
+        }
+
+        &-sortby {
+            select {
+                background-image: url(../images/arrows-bg.svg);
+                border: none;
+                padding-right: 3.2rem;
+                &:active {
+                    background-image+: url('../images/arrows-bg.svg');
+                }
+            }
+        }
+    }
+}

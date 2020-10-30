@@ -3,6 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+/**
+ * @deprecated dashboard graphs were migrated to dynamic chart.js solution
+ * @see Magento_Backend::dashboard/chart/disabled.phtml
+ * @phpcs:ignoreFile
+ */
 ?>
 <div class="dashboard-diagram-disabled">
     <?= /* @noEscape */ __('Chart is disabled. To enable the chart, click <a href="%1">here</a>.', $block->escapeUrl($block->getConfigUrl())) ?>

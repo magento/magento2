@@ -15,6 +15,7 @@ use Magento\Framework\DB\Select;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Store\Model\Store;
 
+// phpcs:disable Magento2.Classes.AbstractApi
 /**
  * Class AbstractAction
  *
@@ -42,7 +43,7 @@ abstract class AbstractAction
 
     /**
      * Suffix for table to show it is temporary
-     * @deprecated
+     * @deprecated see getIndexTable
      */
     const TEMPORARY_TABLE_SUFFIX = '_tmp';
 
@@ -109,6 +110,7 @@ abstract class AbstractAction
 
     /**
      * @var TableMaintainer
+     * @since 102.0.5
      */
     protected $tableMaintainer;
 
@@ -195,7 +197,7 @@ abstract class AbstractAction
      * The name is switched between 'catalog_category_product_index' and 'catalog_category_product_index_replica'
      *
      * @return string
-     * @deprecated
+     * @deprecated 102.0.5
      */
     protected function getMainTable()
     {
@@ -206,7 +208,7 @@ abstract class AbstractAction
      * Return temporary index table name
      *
      * @return string
-     * @deprecated
+     * @deprecated 102.0.5
      */
     protected function getMainTmpTable()
     {
@@ -220,6 +222,7 @@ abstract class AbstractAction
      *
      * @param int $storeId
      * @return string
+     * @since 102.0.5
      */
     protected function getIndexTable($storeId)
     {
@@ -502,10 +505,11 @@ abstract class AbstractAction
             []
         )->joinInner(
             ['cc2' => $temporaryTreeTable],
-            'cc2.parent_id = cc.entity_id AND cc.entity_id NOT IN (' . implode(
-                ',',
-                $rootCatIds
-            ) . ')',
+            $this->connection->quoteInto(
+                'cc2.parent_id = cc.entity_id AND cc.entity_id NOT IN (?)',
+                $rootCatIds,
+                \Zend_Db::INT_TYPE
+            ),
             []
         )->joinInner(
             ['ccp' => $this->getTable('catalog_category_product')],

@@ -19,7 +19,7 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->processor = $this->createProcessor();
     }
@@ -28,10 +28,13 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
      * {@inheritdoc}
      * @throws \Exception
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $reportDir = $this->processor->_reportDir;
-        $this->removeDirRecursively($reportDir);
+
+        if (is_dir($reportDir)) {
+            $this->removeDirRecursively($reportDir);
+        }
     }
 
     /**
@@ -136,5 +139,17 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
                 : unlink("$dir/$file");
         }
         return rmdir($dir);
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetViewFileUrl(): void
+    {
+        $this->processor->_indexDir = __DIR__ . '/version1/magento2';
+        $this->processor->_errorDir = __DIR__ . '/version2/magento2';
+
+        $this->assertStringNotContainsString('version2/magento2', $this->processor->getViewFileUrl());
+        $this->assertStringContainsString('pub/errors/', $this->processor->getViewFileUrl());
     }
 }

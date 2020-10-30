@@ -129,7 +129,9 @@ define([
              * Abstract destroying command
              */
             destroy: function () {
-                this._player.destroy();
+                if (this._player) {
+                    this._player.destroy();
+                }
             },
 
             /**
@@ -288,7 +290,10 @@ define([
              */
             destroy: function () {
                 this.stop();
-                this._player.destroy();
+
+                if (this._player) {
+                    this._player.destroy();
+                }
             }
         });
 
@@ -520,7 +525,7 @@ define([
                 if (type === 'youtube') {
                     googleapisUrl = 'https://www.googleapis.com/youtube/v3/videos?id=' +
                         id +
-                        '&part=snippet,contentDetails,statistics,status&key=' +
+                        '&part=snippet,contentDetails&key=' +
                         this.options.youtubeKey + '&alt=json&callback=?';
                     $.getJSON(googleapisUrl,
                         {

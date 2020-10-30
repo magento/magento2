@@ -16,7 +16,7 @@ use Magento\Quote\Model\Quote;
 use Magento\QuoteGraphQl\Model\Cart\BuyRequest\BuyRequestBuilder;
 
 /**
- * Add simple product to cart
+ * Add simple product to cart mutation
  */
 class AddSimpleProductToCart
 {
@@ -52,6 +52,7 @@ class AddSimpleProductToCart
      */
     public function execute(Quote $cart, array $cartItemData): void
     {
+        $cartItemData['model'] = $cart;
         $sku = $this->extractSku($cartItemData);
 
         try {
@@ -72,7 +73,12 @@ class AddSimpleProductToCart
         }
 
         if (is_string($result)) {
-            throw new GraphQlInputException(__($result));
+            $e = new GraphQlInputException(__('Cannot add product to cart'));
+            $errors = array_unique(explode("\n", $result));
+            foreach ($errors as $error) {
+                $e->addError(new GraphQlInputException(__($error)));
+            }
+            throw $e;
         }
     }
 

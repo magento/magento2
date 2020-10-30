@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Quote\Model;
 
 use Magento\Authorization\Model\UserContextInterface;
+use Magento\Customer\Api\Data\GroupInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Event\ManagerInterface as EventManager;
 use Magento\Framework\Exception\CouldNotSaveException;
@@ -24,7 +25,7 @@ use Magento\Sales\Api\OrderManagementInterface as OrderManagement;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
- * Class QuoteManagement
+ * Class for managing quote
  *
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -250,6 +251,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
 
         $quote->setBillingAddress($this->quoteAddressFactory->create());
         $quote->setShippingAddress($this->quoteAddressFactory->create());
+        $quote->setCustomerIsGuest(1);
 
         try {
             $quote->getShippingAddress()->setCollectShippingRates(true);
@@ -298,22 +300,28 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
             );
         }
         try {
-            $this->quoteRepository->getForCustomer($customerId);
-            throw new StateException(
-                __("The customer can't be assigned to the cart because the customer already has an active cart.")
-            );
+            $customerActiveQuote = $this->quoteRepository->getForCustomer($customerId);
+
+            $quote->merge($customerActiveQuote);
+            $customerActiveQuote->setIsActive(0);
+            $this->quoteRepository->save($customerActiveQuote);
+
         // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
         } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
         }
 
         $quote->setCustomer($customer);
         $quote->setCustomerIsGuest(0);
+        $quote->setIsActive(1);
+
         /** @var \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
         $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'quote_id');
         if ($quoteIdMask->getId()) {
             $quoteIdMask->delete();
         }
+
         $this->quoteRepository->save($quote);
+
         return true;
     }
 
@@ -389,7 +397,8 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
                 }
             }
             $quote->setCustomerIsGuest(true);
-            $quote->setCustomerGroupId(\Magento\Customer\Api\Data\GroupInterface::NOT_LOGGED_IN_ID);
+            $groupId = $quote->getCustomer()->getGroupId() ?: GroupInterface::NOT_LOGGED_IN_ID;
+            $quote->setCustomerGroupId($groupId);
         }
 
         $remoteAddress = $this->remoteAddress->getRemoteAddress();

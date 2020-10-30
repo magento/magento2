@@ -21,7 +21,7 @@
 
         <before>
             <!-- log in as admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
             <!-- create new product -->
             <createData entity="_defaultCategory" stepKey="createCategory"/>
@@ -37,7 +37,7 @@
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
 
@@ -47,10 +47,9 @@
             <argument name="customer" value="$$createCustomer$$"/>
         </actionGroup>
 
-        <click selector="{{AdminOrderDetailsMainActionsSection.invoice}}" stepKey="clickInvoiceAction"/>
+        <actionGroup ref="AdminClickInvoiceButtonOrderViewActionGroup" stepKey="clickInvoiceAction"/>
         <see selector="{{AdminHeaderSection.pageTitle}}" userInput="New Invoice" stepKey="seePageNameNewInvoicePage"/>
-        <click selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="clickSubmitInvoice"/>
-
+        <actionGroup ref="AdminInvoiceClickSubmitActionGroup" stepKey="clickSubmitInvoice"/>
         <click selector="{{AdminOrderDetailsMainActionsSection.ship}}" stepKey="clickShipAction"/>
         <seeInCurrentUrl url="{{AdminShipmentNewPage.url}}" stepKey="seeOrderShipmentUrl"/>
         <click selector="{{AdminShipmentMainActionsSection.submitShipment}}" stepKey="clickSubmitShipment"/>
@@ -62,7 +61,7 @@
         </actionGroup>
 
         <!-- Cancel order -->
-        <actionGroup ref="cancelPendingOrder" stepKey="cancelOrder"/>
+        <actionGroup ref="CancelPendingOrderActionGroup" stepKey="cancelOrder"/>
 
         <!-- Generate Order report for statuses  -->
         <amOnPage url="{{OrdersReportPage.url}}" stepKey="goToOrdersReportPage1"/>
@@ -89,6 +88,9 @@
         <grabTextFrom selector="{{GeneratedReportSection.ordersCount}}" stepKey="grabCanceledOrdersAny"/>
 
         <!-- Compare canceled orders price -->
-        <assertEquals expected="{$grabCanceledOrdersSpecified}" expectedType="string" actual="{$grabCanceledOrdersAny}" actualType="string"  stepKey="assertEquals"/>
+        <assertEquals stepKey="assertEquals">
+			<actualResult type="string">{$grabCanceledOrdersAny}</actualResult>
+			<expectedResult type="string">{$grabCanceledOrdersSpecified}</expectedResult>
+        </assertEquals>
     </test>
 </tests>

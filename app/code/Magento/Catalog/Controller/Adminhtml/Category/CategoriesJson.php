@@ -1,13 +1,16 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Adminhtml\Category;
 
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
+use Magento\Framework\App\ObjectManager;
 
+/**
+ * Class CategoriesJson
+ */
 class CategoriesJson extends \Magento\Catalog\Controller\Adminhtml\Category implements HttpPostActionInterface
 {
     /**
@@ -21,18 +24,27 @@ class CategoriesJson extends \Magento\Catalog\Controller\Adminhtml\Category impl
     protected $layoutFactory;
 
     /**
+     * @var \Magento\Backend\Model\Auth\Session
+     */
+    private $authSession;
+
+    /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
+     * @param \Magento\Backend\Model\Auth\Session $authSession
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
-        \Magento\Framework\View\LayoutFactory $layoutFactory
+        \Magento\Framework\View\LayoutFactory $layoutFactory,
+        \Magento\Backend\Model\Auth\Session $authSession = null
     ) {
         parent::__construct($context);
         $this->resultJsonFactory = $resultJsonFactory;
         $this->layoutFactory = $layoutFactory;
+        $this->authSession = $authSession ?: ObjectManager::getInstance()
+            ->get(\Magento\Backend\Model\Auth\Session::class);
     }
 
     /**
@@ -43,9 +55,9 @@ class CategoriesJson extends \Magento\Catalog\Controller\Adminhtml\Category impl
     public function execute()
     {
         if ($this->getRequest()->getParam('expand_all')) {
-            $this->_objectManager->get(\Magento\Backend\Model\Auth\Session::class)->setIsTreeWasExpanded(true);
+            $this->authSession->setIsTreeWasExpanded(true);
         } else {
-            $this->_objectManager->get(\Magento\Backend\Model\Auth\Session::class)->setIsTreeWasExpanded(false);
+            $this->authSession->setIsTreeWasExpanded(false);
         }
         $categoryId = (int)$this->getRequest()->getPost('id');
         if ($categoryId) {

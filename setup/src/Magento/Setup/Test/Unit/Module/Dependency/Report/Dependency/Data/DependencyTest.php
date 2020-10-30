@@ -3,24 +3,27 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Setup\Test\Unit\Module\Dependency\Report\Dependency\Data;
 
-use \Magento\Setup\Module\Dependency\Report\Dependency\Data\Dependency;
-
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Setup\Module\Dependency\Report\Dependency\Data\Dependency;
 
-class DependencyTest extends \PHPUnit\Framework\TestCase
+use PHPUnit\Framework\TestCase;
+
+class DependencyTest extends TestCase
 {
     /**
      * @param string $module
      * @param string|null $type One of \Magento\Setup\Module\Dependency\Dependency::TYPE_ const
-     * @return \Magento\Setup\Module\Dependency\Report\Dependency\Data\Dependency
+     * @return Dependency
      */
     protected function createDependency($module, $type = null)
     {
         $objectManagerHelper = new ObjectManager($this);
         return $objectManagerHelper->getObject(
-            \Magento\Setup\Module\Dependency\Report\Dependency\Data\Dependency::class,
+            Dependency::class,
             ['module' => $module, 'type' => $type]
         );
     }

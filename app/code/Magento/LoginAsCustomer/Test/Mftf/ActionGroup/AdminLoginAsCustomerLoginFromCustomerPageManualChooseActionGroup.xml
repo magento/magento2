@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminLoginAsCustomerLoginFromCustomerPageManualChooseActionGroup">
+        <annotations>
+            <description>Verify Login as Customer Login action is works properly from Customer page with manual Store View choose.</description>
+        </annotations>
+        <arguments>
+            <argument name="customerId" type="string"/>
+            <argument name="storeName" type="string" defaultValue="default"/>
+        </arguments>
+
+        <amOnPage url="{{AdminEditCustomerPage.url(customerId)}}" stepKey="gotoCustomerPage"/>
+        <waitForPageLoad stepKey="waitForCustomerPageLoad"/>
+        <click selector="{{AdminCustomerMainActionsSection.loginAsCustomer}}" stepKey="clickLoginAsCustomerLink"/>
+        <see selector="{{AdminConfirmationModalSection.title}}" userInput="Login as Customer: Select Store" stepKey="seeModal"/>
+        <see selector="{{AdminConfirmationModalSection.message}}" userInput="Actions taken while in &quot;Login as Customer&quot; will affect actual customer data." stepKey="seeModalMessage"/>
+        <selectOption selector="{{AdminLoginAsCustomerConfirmationModalSection.store}}" userInput="{{storeName}}" stepKey="selectStore"/>
+        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="clickLogin"/>
+        <switchToNextTab stepKey="switchToNewTab"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+    </actionGroup>
+</actionGroups>

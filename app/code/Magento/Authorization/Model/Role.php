@@ -34,6 +34,11 @@ class Role extends \Magento\Framework\Model\AbstractModel
     protected $_eventPrefix = 'authorization_roles';
 
     /**
+     * @var string
+     */
+    protected $_cacheTag = 'user_assigned_role';
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Authorization\Model\ResourceModel\Role $resource
@@ -52,9 +57,6 @@ class Role extends \Magento\Framework\Model\AbstractModel
 
     /**
      * @inheritDoc
-     *
-     * @SuppressWarnings(PHPMD.SerializationAware)
-     * @deprecated Do not use PHP serialization.
      */
     public function __sleep()
     {
@@ -64,9 +66,6 @@ class Role extends \Magento\Framework\Model\AbstractModel
 
     /**
      * @inheritDoc
-     *
-     * @SuppressWarnings(PHPMD.SerializationAware)
-     * @deprecated Do not use PHP serialization.
      */
     public function __wakeup()
     {

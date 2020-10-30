@@ -8,7 +8,7 @@
 //  _____________________________________________
 
 @account-title-border-color: @color-gray-middle2;
-@account-table-border-bottom-color: @color-gray-middle1;
+@account-table-border-bottom-color: @color-gray_light;
 @account-table-action-delete: @color-red12;
 
 @_password-default: @color-gray-light01;
@@ -83,6 +83,11 @@
         .fieldset.password {
             display: none;
         }
+        fieldset {
+            &.additional_info {
+                clear: both;
+            }
+        }
     }
 
     .form-create-account {
@@ -126,6 +131,7 @@
     .box-information,
     .box-newsletter {
         .box-content {
+            .lib-wrap-words();
             &:extend(.abs-account-block-line-height all);
         }
     }
@@ -345,6 +351,12 @@
         }
         .pages {
             position: relative;
+        }
+    }
+
+    .additional-addresses {
+        table > thead > tr > th {
+            white-space: nowrap;
         }
     }
 }

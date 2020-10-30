@@ -26,4 +26,7 @@
     <entity name="EavStock777" type="product_extension_attribute">
         <requiredEntity type="stock_item">Qty_777</requiredEntity>
     </entity>
+    <entity name="EavStock25" type="product_extension_attribute">
+        <requiredEntity type="stock_item">Qty_25</requiredEntity>
+    </entity>
 </entities>

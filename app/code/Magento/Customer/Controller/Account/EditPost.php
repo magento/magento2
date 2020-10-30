@@ -33,7 +33,8 @@ use Magento\Customer\Controller\AbstractAccount;
 use Magento\Framework\Phrase;
 
 /**
- * Class EditPost
+ * Customer edit account information controller
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class EditPost extends AbstractAccount implements CsrfAwareActionInterface, HttpPostActionInterface
@@ -185,6 +186,7 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
      * Change customer email or password action
      *
      * @return \Magento\Framework\Controller\Result\Redirect
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function execute()
     {
@@ -216,7 +218,13 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
                     $isPasswordChanged
                 );
                 $this->dispatchSuccessEvent($customerCandidateDataObject);
-                $this->messageManager->addSuccess(__('You saved the account information.'));
+                $this->messageManager->addSuccessMessage(__('You saved the account information.'));
+                // logout from current session if password changed.
+                if ($isPasswordChanged) {
+                    $this->session->logout();
+                    $this->session->start();
+                    return $resultRedirect->setPath('customer/account/login');
+                }
                 return $resultRedirect->setPath('customer/account');
             } catch (InvalidEmailOrPasswordException $e) {
                 $this->messageManager->addErrorMessage($this->escaper->escapeHtml($e->getMessage()));
@@ -227,7 +235,7 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
                 );
                 $this->session->logout();
                 $this->session->start();
-                $this->messageManager->addError($message);
+                $this->messageManager->addErrorMessage($message);
                 return $resultRedirect->setPath('customer/account/login');
             } catch (InputException $e) {
                 $this->messageManager->addErrorMessage($this->escaper->escapeHtml($e->getMessage()));
@@ -235,7 +243,7 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
                     $this->messageManager->addErrorMessage($this->escaper->escapeHtml($error->getMessage()));
                 }
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
             } catch (\Exception $e) {
                 $this->messageManager->addException($e, __('We can\'t save the customer.'));
             }

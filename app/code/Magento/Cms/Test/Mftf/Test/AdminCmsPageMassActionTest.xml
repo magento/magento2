@@ -10,6 +10,7 @@
     <test name="AdminCmsPageMassActionTest">
         <annotations>
             <features value="CmsPage"/>
+            <stories value="Create CMS Page"/>
             <title value="Create two CMS Pages and perform mass disable action"/>
             <description value="Admin should be able to perform mass actions to CMS pages"/>
             <stories value="Admin Grid Mass Action" />
@@ -20,14 +21,16 @@
             <group value="mtf_migrated"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <createData entity="_defaultCmsPage" stepKey="firstCMSPage" />
             <createData entity="_duplicatedCMSPage" stepKey="secondCMSPage" />
         </before>
         <after>
             <deleteData createDataKey="firstCMSPage" stepKey="deleteFirstCMSPage" />
             <deleteData createDataKey="secondCMSPage" stepKey="deleteSecondCMSPage" />
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminOpenCMSPagesGridActionGroup" stepKey="navigateToCMSPageGrid"/>
+            <actionGroup ref="AdminGridFilterResetActionGroup" stepKey="clearPossibleGridFilters"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Go to Grid page-->

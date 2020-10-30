@@ -20,7 +20,7 @@ class ProductInMultipleStoresCacheTest extends GraphQlAbstract
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         /** @var \Magento\Store\Model\Store $store */
         $store =  ObjectManager::getInstance()->get(\Magento\Store\Model\Store::class);
@@ -59,7 +59,7 @@ class ProductInMultipleStoresCacheTest extends GraphQlAbstract
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         /** @var \Magento\Config\App\Config\Type\System $config */
         $config = ObjectManager::getInstance()->get(\Magento\Config\App\Config\Type\System::class);

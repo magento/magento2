@@ -3,42 +3,48 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Ui\Test\Unit\Component\Filters\Type;
 
+use Magento\Framework\Api\Filter;
+use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
+use Magento\Framework\View\Element\UiComponent\Processor;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponentInterface;
+use Magento\Ui\Component\Filters\FilterModifier;
 use Magento\Ui\Component\Filters\Type\Input;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class InputTest
- */
-class InputTest extends \PHPUnit\Framework\TestCase
+class InputTest extends TestCase
 {
     /**
-     * @var ContextInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ContextInterface|MockObject
      */
     protected $contextMock;
 
     /**
-     * @var UiComponentFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var UiComponentFactory|MockObject
      */
     protected $uiComponentFactory;
 
     /**
-     * @var \Magento\Framework\Api\FilterBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var FilterBuilder|MockObject
      */
     protected $filterBuilderMock;
 
     /**
-     * @var \Magento\Ui\Component\Filters\FilterModifier|\PHPUnit_Framework_MockObject_MockObject
+     * @var FilterModifier|MockObject
      */
     protected $filterModifierMock;
 
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->contextMock = $this->getMockForAbstractClass(
             ContextInterface::class,
@@ -50,9 +56,9 @@ class InputTest extends \PHPUnit\Framework\TestCase
             UiComponentFactory::class,
             ['create']
         );
-        $this->filterBuilderMock = $this->createMock(\Magento\Framework\Api\FilterBuilder::class);
+        $this->filterBuilderMock = $this->createMock(FilterBuilder::class);
         $this->filterModifierMock = $this->createPartialMock(
-            \Magento\Ui\Component\Filters\FilterModifier::class,
+            FilterModifier::class,
             ['applyFilterModifier']
         );
     }
@@ -73,7 +79,7 @@ class InputTest extends \PHPUnit\Framework\TestCase
             []
         );
 
-        $this->assertTrue($date->getComponentName() === Input::NAME);
+        $this->assertSame(Input::NAME, $date->getComponentName());
     }
 
     /**
@@ -87,7 +93,7 @@ class InputTest extends \PHPUnit\Framework\TestCase
      */
     public function testPrepare(string $name, array $filterData, ?array $expectedCondition): void
     {
-        $processor = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\Processor::class)
+        $processor = $this->getMockBuilder(Processor::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->contextMock->expects($this->atLeastOnce())->method('getProcessor')->willReturn($processor);
@@ -113,7 +119,7 @@ class InputTest extends \PHPUnit\Framework\TestCase
             ->method('getFiltersParams')
             ->willReturn($filterData);
         $dataProvider = $this->getMockForAbstractClass(
-            \Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface::class,
+            DataProviderInterface::class,
             [],
             '',
             false
@@ -144,7 +150,7 @@ class InputTest extends \PHPUnit\Framework\TestCase
                 ->with($expectedCondition['like'])
                 ->willReturnSelf();
 
-            $filterMock = $this->getMockBuilder(\Magento\Framework\Api\Filter::class)
+            $filterMock = $this->getMockBuilder(Filter::class)
                 ->disableOriginalConstructor()
                 ->getMock();
 

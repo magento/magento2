@@ -36,13 +36,6 @@
         <selectOption userInput="{{role.resourceAccess}}" selector="{{AdminCreateRoleSection.roleResourceNew}}" stepKey="selectResourceAccess"/>
         <click selector="{{AdminCreateRoleSection.save}}" stepKey="saveUserRole"/>
         <waitForPageLoad stepKey="waitForSaving"/>
-        <see userInput="You saved the role." selector="{{AdminMessagesSection.successMessage}}" stepKey="seeMessage"/>
-    </actionGroup>
-
-    <actionGroup name="AdminAddNewUserRoleWithCustomRoleScopes" extends="AdminAddNewUserRoleActionGroup">
-        <arguments>
-            <argument name="customWebsiteName" type="string"/>
-        </arguments>
-        <checkOption selector="{{AdminCreateRoleSection.selectWebsite(customWebsiteName)}}" stepKey="checkWebsite" after="selectRoleResources"/>
+        <see userInput="You saved the role." selector="{{AdminMessagesSection.success}}" stepKey="seeMessage"/>
     </actionGroup>
 </actionGroups>

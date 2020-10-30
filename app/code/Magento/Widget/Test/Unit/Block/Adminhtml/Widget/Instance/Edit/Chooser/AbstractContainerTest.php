@@ -3,54 +3,68 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Widget\Test\Unit\Block\Adminhtml\Widget\Instance\Edit\Chooser;
 
+use Magento\Backend\Block\Context;
+use Magento\Framework\App\Config;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Escaper;
+use Magento\Framework\Event\Manager;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\View\Layout\ProcessorFactory;
+use Magento\Framework\View\Model\Layout\Merge;
+use Magento\Theme\Model\ResourceModel\Theme\Collection;
+use Magento\Theme\Model\ResourceModel\Theme\CollectionFactory;
+use Magento\Theme\Model\Theme;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-abstract class AbstractContainerTest extends \PHPUnit\Framework\TestCase
+abstract class AbstractContainerTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Event\Manager|\PHPUnit_Framework_MockObject_MockObject
+     * @var Manager|MockObject
      */
     protected $eventManagerMock;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|MockObject
      */
     protected $scopeConfigMock;
 
     /**
-     * @var \Magento\Backend\Block\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|MockObject
      */
     protected $contextMock;
 
     /**
-     * @var \Magento\Theme\Model\ResourceModel\Theme\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var Collection|MockObject
      */
     protected $themeCollectionMock;
 
     /**
-     * @var \Magento\Theme\Model\ResourceModel\Theme\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionFactory|MockObject
      */
     protected $themeCollectionFactoryMock;
 
     /**
-     * @var \Magento\Theme\Model\Theme|\PHPUnit_Framework_MockObject_MockObject
+     * @var Theme|MockObject
      */
     protected $themeMock;
 
     /**
-     * @var \Magento\Framework\View\Layout\ProcessorFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProcessorFactory|MockObject
      */
     protected $layoutProcessorFactoryMock;
 
     /**
-     * @var \Magento\Framework\View\Model\Layout\Merge|\PHPUnit_Framework_MockObject_MockObject
+     * @var Merge|MockObject
      */
     protected $layoutMergeMock;
 
     /**
-     * @var \Magento\Framework\Escaper|\PHPUnit_Framework_MockObject_MockObject
+     * @var Escaper|MockObject
      */
     protected $escaperMock;
 
@@ -62,48 +76,49 @@ abstract class AbstractContainerTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
-        $this->eventManagerMock = $this->getMockBuilder(\Magento\Framework\Event\Manager::class)
+        $this->eventManagerMock = $this->getMockBuilder(Manager::class)
             ->setMethods(['dispatch'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->scopeConfigMock = $this->getMockBuilder(\Magento\Framework\App\Config::class)
+        $this->scopeConfigMock = $this->getMockBuilder(Config::class)
             ->setMethods(['getValue'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->themeCollectionFactoryMock = $this->createPartialMock(
-            \Magento\Theme\Model\ResourceModel\Theme\CollectionFactory::class,
+            CollectionFactory::class,
             ['create']
         );
-        $this->themeCollectionMock = $this->getMockBuilder(\Magento\Theme\Model\ResourceModel\Theme\Collection::class)
+        $this->themeCollectionMock = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->setMethods(['getItemById'])
             ->getMock();
         $this->themeMock = $this->getMockBuilder(
-            \Magento\Theme\Model\Theme::class
-        )->disableOriginalConstructor()->getMock();
+            Theme::class
+        )->disableOriginalConstructor()
+            ->getMock();
 
         $this->layoutProcessorFactoryMock = $this->createPartialMock(
-            \Magento\Framework\View\Layout\ProcessorFactory::class,
+            ProcessorFactory::class,
             ['create']
         );
 
-        $this->layoutMergeMock = $this->getMockBuilder(\Magento\Framework\View\Model\Layout\Merge::class)
+        $this->layoutMergeMock = $this->getMockBuilder(Merge::class)
             ->setMethods(['addPageHandles', 'load', 'getContainers', 'addHandle'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->escaperMock = $this->createPartialMock(
-            \Magento\Framework\Escaper::class,
+            Escaper::class,
             ['escapeHtml', 'escapeHtmlAttr']
         );
         $this->escaperMock->expects($this->any())->method('escapeHtmlAttr')->willReturnArgument(0);
 
-        $this->contextMock = $this->getMockBuilder(\Magento\Backend\Block\Context::class)
+        $this->contextMock = $this->getMockBuilder(Context::class)
             ->setMethods(['getEventManager', 'getScopeConfig', 'getEscaper'])
             ->disableOriginalConstructor()
             ->getMock();

@@ -55,11 +55,15 @@ class DependencyDecorator implements IndexerInterface
      */
     public function __call(string $method, array $args)
     {
+        //phpcs:ignore Magento2.Functions.DiscouragedFunction
         return call_user_func_array([$this->indexer, $method], $args);
     }
 
     /**
+     * Sleep magic.
+     *
      * @return array
+     * @SuppressWarnings(PHPMD.SerializationAware)
      */
     public function __sleep()
     {
@@ -218,9 +222,16 @@ class DependencyDecorator implements IndexerInterface
     public function invalidate()
     {
         $this->indexer->invalidate();
-        $dependentIndexerIds = $this->dependencyInfoProvider->getIndexerIdsToRunAfter($this->indexer->getId());
-        foreach ($dependentIndexerIds as $indexerId) {
-            $this->indexerRegistry->get($indexerId)->invalidate();
+        $currentIndexerId = $this->indexer->getId();
+        $idsToRunBefore = $this->dependencyInfoProvider->getIndexerIdsToRunBefore($currentIndexerId);
+        $idsToRunAfter = $this->dependencyInfoProvider->getIndexerIdsToRunAfter($currentIndexerId);
+
+        $indexersToInvalidate = array_unique(array_merge($idsToRunBefore, $idsToRunAfter));
+        foreach ($indexersToInvalidate as $indexerId) {
+            $indexer = $this->indexerRegistry->get($indexerId);
+            if (!$indexer->isInvalid()) {
+                $indexer->invalidate();
+            }
         }
     }
 

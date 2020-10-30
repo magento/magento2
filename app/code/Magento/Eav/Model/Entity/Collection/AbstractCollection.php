@@ -24,7 +24,7 @@ use Magento\Framework\Exception\LocalizedException;
 abstract class AbstractCollection extends AbstractDb implements SourceProviderInterface
 {
     /**
-     * Attribute table alias prefix
+     * Define default prefix for attribute table alias
      */
     const ATTRIBUTE_TABLE_ALIAS_PREFIX = 'at_';
 
@@ -495,7 +495,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
             $entity = clone $this->getEntity();
             $attributes = $entity->loadAllAttributes()->getAttributesByCode();
             foreach ($attributes as $attrCode => $attr) {
-                $this->_selectAttributes[$attrCode] = $attr->getId();
+                $this->_selectAttributes[$attrCode] = (int) $attr->getId();
             }
         } else {
             if (isset($this->_joinAttributes[$attribute])) {
@@ -511,7 +511,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
                     )
                 );
             }
-            $this->_selectAttributes[$attrInstance->getAttributeCode()] = $attrInstance->getId();
+            $this->_selectAttributes[$attrInstance->getAttributeCode()] = (int) $attrInstance->getId();
         }
         return $this;
     }
@@ -678,6 +678,9 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
         if (!$bindAttribute || !$bindAttribute->isStatic() && !$bindAttribute->getId()) {
             throw new LocalizedException(__('The foreign key is invalid. Verify the foreign key and try again.'));
         }
+
+        $entity = null;
+        $attrArr = [];
 
         // try to explode combined entity/attribute if supplied
         if (is_string($attribute)) {
@@ -1121,12 +1124,13 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
 
         $this->printLogQuery($printQuery, $logQuery);
 
+        /**
+         * Prepare select query
+         * @var string|\Magento\Framework\DB\Select $query
+         */
+        $query = $this->getSelect();
+
         try {
-            /**
-             * Prepare select query
-             * @var string $query
-             */
-            $query = $this->getSelect();
             $rows = $this->_fetchAll($query);
         } catch (\Exception $e) {
             $this->printLogQuery(false, true, $query);
@@ -1173,7 +1177,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
             }
             $attribute = $this->_eavConfig->getAttribute($entity->getType(), $attributeCode);
             if ($attribute && !$attribute->isStatic()) {
-                $tableAttributes[$attribute->getBackendTable()][] = $attributeId;
+                $tableAttributes[$attribute->getBackendTable()][] = (int) $attributeId;
                 if (!isset($attributeTypes[$attribute->getBackendTable()])) {
                     $attributeTypes[$attribute->getBackendTable()] = $attribute->getBackendType();
                 }
@@ -1192,12 +1196,12 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
         $selectGroups = $this->_resourceHelper->getLoadAttributesSelectGroups($selects);
         foreach ($selectGroups as $selects) {
             if (!empty($selects)) {
+                if (is_array($selects)) {
+                    $select = implode(' UNION ALL ', $selects);
+                } else {
+                    $select = $selects;
+                }
                 try {
-                    if (is_array($selects)) {
-                        $select = implode(' UNION ALL ', $selects);
-                    } else {
-                        $select = $selects;
-                    }
                     $values = $this->getConnection()->fetchAll($select);
                 } catch (\Exception $e) {
                     $this->printLogQuery(true, true, $select);
@@ -1238,10 +1242,12 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
                 ['t_d.attribute_id']
             )->where(
                 " e.entity_id IN (?)",
-                array_keys($this->_itemsById)
+                array_keys($this->_itemsById),
+                \Zend_Db::INT_TYPE
             )->where(
                 't_d.attribute_id IN (?)',
-                $attributeIds
+                $attributeIds,
+                \Zend_Db::INT_TYPE
             );
 
         if ($entity->getEntityTable() == \Magento\Eav\Model\Entity::DEFAULT_ENTITY_TABLE && $entity->getTypeId()) {
@@ -1604,6 +1610,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      *
      * @param string $attributeCode
      * @return bool
+     * @since 102.0.0
      */
     public function isAttributeAdded($attributeCode) : bool
     {

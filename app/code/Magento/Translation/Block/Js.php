@@ -14,6 +14,10 @@ use Magento\Translation\Model\Js\Config;
  *
  * @api
  * @since 100.0.2
+ * @deprecated logic was refactored in order to not use localstorage at all.
+ *
+ * You can see details in app/code/Magento/Translation/view/base/web/js/mage-translation-dictionary.js
+ * These block and view file were left in order to keep backward compatibility
  */
 class Js extends Template
 {
@@ -78,6 +82,7 @@ class Js extends Template
      * Gets current version of the translation file.
      *
      * @return string
+     * @since 100.3.0
      */
     public function getTranslationFileVersion()
     {

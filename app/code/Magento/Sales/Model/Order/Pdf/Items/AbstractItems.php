@@ -6,41 +6,54 @@
 namespace Magento\Sales\Model\Order\Pdf\Items;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Data\Collection\AbstractDb;
+use Magento\Framework\DataObject;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\ReadInterface;
+use Magento\Framework\Filter\FilterManager;
+use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Model\Context;
+use Magento\Framework\Model\ResourceModel\AbstractResource;
+use Magento\Framework\Registry;
+use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Pdf\AbstractPdf;
+use Magento\Tax\Helper\Data as TaxHelper;
 
 /**
  * Sales Order Pdf Items renderer Abstract
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
  */
-abstract class AbstractItems extends \Magento\Framework\Model\AbstractModel
+abstract class AbstractItems extends AbstractModel
 {
     /**
      * Order model
      *
-     * @var \Magento\Sales\Model\Order
+     * @var Order
      */
     protected $_order;
 
     /**
      * Source model (invoice, shipment, creditmemo)
      *
-     * @var \Magento\Framework\Model\AbstractModel
+     * @var AbstractModel
      */
     protected $_source;
 
     /**
      * Item object
      *
-     * @var \Magento\Framework\DataObject
+     * @var DataObject
      */
     protected $_item;
 
     /**
      * Pdf object
      *
-     * @var \Magento\Sales\Model\Order\Pdf\AbstractPdf
+     * @var AbstractPdf
      */
     protected $_pdf;
 
@@ -54,38 +67,38 @@ abstract class AbstractItems extends \Magento\Framework\Model\AbstractModel
     /**
      * Tax data
      *
-     * @var \Magento\Tax\Helper\Data
+     * @var TaxHelper
      */
     protected $_taxData;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\ReadInterface
+     * @var ReadInterface
      */
     protected $_rootDirectory;
 
     /**
-     * @var \Magento\Framework\Filter\FilterManager
+     * @var FilterManager
      */
     protected $filterManager;
 
     /**
-     * @param \Magento\Framework\Model\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Tax\Helper\Data $taxData
-     * @param \Magento\Framework\Filesystem $filesystem ,
-     * @param \Magento\Framework\Filter\FilterManager $filterManager
-     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
+     * @param Context $context
+     * @param Registry $registry
+     * @param TaxHelper $taxData
+     * @param Filesystem $filesystem ,
+     * @param FilterManager $filterManager
+     * @param AbstractResource $resource
+     * @param AbstractDb $resourceCollection
      * @param array $data
      */
     public function __construct(
-        \Magento\Framework\Model\Context $context,
-        \Magento\Framework\Registry $registry,
-        \Magento\Tax\Helper\Data $taxData,
-        \Magento\Framework\Filesystem $filesystem,
-        \Magento\Framework\Filter\FilterManager $filterManager,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        Context $context,
+        Registry $registry,
+        TaxHelper $taxData,
+        Filesystem $filesystem,
+        FilterManager $filterManager,
+        AbstractResource $resource = null,
+        AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->filterManager = $filterManager;
@@ -97,10 +110,10 @@ abstract class AbstractItems extends \Magento\Framework\Model\AbstractModel
     /**
      * Set order model
      *
-     * @param  \Magento\Sales\Model\Order $order
+     * @param  Order $order
      * @return $this
      */
-    public function setOrder(\Magento\Sales\Model\Order $order)
+    public function setOrder(Order $order)
     {
         $this->_order = $order;
         return $this;
@@ -109,10 +122,10 @@ abstract class AbstractItems extends \Magento\Framework\Model\AbstractModel
     /**
      * Set Source model
      *
-     * @param  \Magento\Framework\Model\AbstractModel $source
+     * @param  AbstractModel $source
      * @return $this
      */
-    public function setSource(\Magento\Framework\Model\AbstractModel $source)
+    public function setSource(AbstractModel $source)
     {
         $this->_source = $source;
         return $this;
@@ -121,10 +134,10 @@ abstract class AbstractItems extends \Magento\Framework\Model\AbstractModel
     /**
      * Set item object
      *
-     * @param  \Magento\Framework\DataObject $item
+     * @param  DataObject $item
      * @return $this
      */
-    public function setItem(\Magento\Framework\DataObject $item)
+    public function setItem(DataObject $item)
     {
         $this->_item = $item;
         return $this;
@@ -133,10 +146,10 @@ abstract class AbstractItems extends \Magento\Framework\Model\AbstractModel
     /**
      * Set Pdf model
      *
-     * @param  \Magento\Sales\Model\Order\Pdf\AbstractPdf $pdf
+     * @param  AbstractPdf $pdf
      * @return $this
      */
-    public function setPdf(\Magento\Sales\Model\Order\Pdf\AbstractPdf $pdf)
+    public function setPdf(AbstractPdf $pdf)
     {
         $this->_pdf = $pdf;
         return $this;
@@ -317,16 +330,16 @@ abstract class AbstractItems extends \Magento\Framework\Model\AbstractModel
         $options = $this->getItem()->getOrderItem()->getProductOptions();
         if ($options) {
             if (isset($options['options'])) {
-                $result = array_merge($result, $options['options']);
+                $result[] = $options['options'];
             }
             if (isset($options['additional_options'])) {
-                $result = array_merge($result, $options['additional_options']);
+                $result[] = $options['additional_options'];
             }
             if (isset($options['attributes_info'])) {
-                $result = array_merge($result, $options['attributes_info']);
+                $result[] = $options['attributes_info'];
             }
         }
-        return $result;
+        return array_merge([], ...$result);
     }
 
     /**

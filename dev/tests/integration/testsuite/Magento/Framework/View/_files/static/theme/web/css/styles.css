@@ -6071,7 +6071,7 @@ table tfoot tr td:last-child {
   clear: both;
 }
 .test-content {
-  width: calc(20px + 100*0.2);
+  width: calc(20px + 100 * 0.2);
 }
 .test-content:before {
   content: '.test {\A    ' attr(data-attribute) ': 0.2em;' '\A    content:\'';

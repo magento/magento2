@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="ChangeShippingMethodActionGroup">
+        <annotations>
+            <description>Change Shipping Method on the Admin 'Create New Order for' page.</description>
+        </annotations>
+        <arguments>
+            <argument name="shippingMethod" defaultValue="flatrate_flatrate" type="string"/>
+        </arguments>
+        <click selector="{{AdminOrderFormPaymentSection.header}}" stepKey="unfocus"/>
+        <waitForPageLoad stepKey="waitForJavascriptToFinish"/>
+        <click selector="{{AdminOrderFormPaymentSection.getShippingMethods}}" stepKey="clickShippingMethods1"/>
+        <waitForElementVisible selector="{{AdminOrderFormPaymentSection.getShippingMethods}}" stepKey="waitForChangeShippingMethod"/>
+        <click selector="{{AdminOrderFormPaymentSection.getShippingMethods}}" stepKey="clickShippingMethods2"/>
+        <waitForElementVisible selector="{{AdminOrderFormPaymentSection.shippingMethod}}" stepKey="waitForShippingOptions2"/>
+        <selectOption selector="{{AdminOrderFormPaymentSection.shippingMethod}}" userInput="{{shippingMethod}}" stepKey="checkFlatRate"/>
+    </actionGroup>
+</actionGroups>

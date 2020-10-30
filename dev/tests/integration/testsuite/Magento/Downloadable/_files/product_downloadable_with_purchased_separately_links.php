@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-use Magento\TestFramework\Helper\Bootstrap as Bootstrap;
+use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
 use Magento\Downloadable\Model\Product\Type as ProductType;
 use Magento\Catalog\Model\Product\Visibility as ProductVisibility;

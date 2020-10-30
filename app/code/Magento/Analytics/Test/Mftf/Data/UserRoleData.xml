@@ -9,6 +9,7 @@
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
     <entity name="adminNoReportRole" type="user_role">
+        <data key="all">0</data>
         <data key="rolename" unique="suffix">noreport</data>
         <data key="current_password">123123q</data>
         <array key="resource">
@@ -148,7 +149,6 @@
             <item>Magento_Backend::custom</item>
             <item>Magento_Backend::tools</item>
             <item>Magento_Backend::cache</item>
-            <item>Magento_Backend::setup_wizard</item>
             <item>Magento_Backup::backup</item>
             <item>Magento_Backup::rollback</item>
             <item>Magento_Indexer::index</item>

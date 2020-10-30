@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontRedirectToOrderHistoryTest">
+        <annotations>
+            <features value="Redirection Rules"/>
+            <stories value="Create Invoice"/>
+            <title value="Create Invoice"/>
+            <description
+                    value="Check while order printing URL with an id of not relevant order redirects to order history"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MAGETWO-92854"/>
+            <group value="sales"/>
+            <skip>
+                <issueId value="MQE-2288" />
+            </skip>
+        </annotations>
+        <before>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer2"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="createCustomer2" stepKey="deleteCustomer2"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+        </after>
+
+        <!--Log in to Storefront as Customer 1 -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="signUp">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+
+        <!--Create an order at Storefront as Customer 1 -->
+        <actionGroup ref="CreateOrderToPrintPageWithSelectedPaymentMethodActionGroup" stepKey="createOrderToPrint">
+            <argument name="Category" value="$$createCategory$$"/>
+        </actionGroup>
+
+        <!--Go to 'print order' page by grabbed order id-->
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="grabOrderIdFromURL"/>
+        <wait time="5" stepKey="waitForPrintWindowToOpen" />
+        <switchToWindow stepKey="switchToPrintPage"/>
+        <waitForElement selector="{{SalesOrderPrintSection.isOrderPrintPage}}" stepKey="checkPrintPage"/>
+        <openNewTab stepKey="openNewTab"/>
+        <wait time="5" stepKey="waitForNewTabToOpen" />
+        <switchToNextTab stepKey="switchForward"/>
+        <waitForElement selector="body" stepKey="waitForNewTab3HTML" />
+        <amOnPage url="{{StorefrontSalesOrderPrintPage.url({$grabOrderIdFromURL})}}" stepKey="duplicatePrintPage"/>
+
+        <wait time="5" stepKey="waitForDuplicatePrintWindowToOpen" />
+        <switchToWindow stepKey="switchToDuplicatePrintPage"/>
+        <waitForElement selector="{{SalesOrderPrintSection.isOrderPrintPage}}" stepKey="checkDuplicatePrintPage"/>
+
+        <!--Log out as customer 1-->
+        <openNewTab stepKey="openNewTab2"/>
+        <wait time="5" stepKey="waitForNewTabToOpen1" />
+        <switchToNextTab stepKey="switchForward2"/>
+        <waitForElement selector="body" stepKey="waitForNewTab2HTML" />
+
+        <amOnPage url="{{StorefrontCustomerSignOutPage.url}}" stepKey="signOut"/>
+        <waitForLoadingMaskToDisappear stepKey="waitSignOutPage"/>
+
+        <!--Log in to Storefront as Customer 2 -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="signUp2">
+            <argument name="Customer" value="$$createCustomer2$$"/>
+        </actionGroup>
+
+        <!--Create an order at Storefront as Customer 2 -->
+        <actionGroup ref="CreateOrderToPrintPageWithSelectedPaymentMethodActionGroup" stepKey="createOrderToPrint2">
+            <argument name="Category" value="$$createCategory$$"/>
+        </actionGroup>
+
+        <!--Try to load 'print order' page with not relevant order id to be redirected to 'order history' page-->
+        <wait time="5" stepKey="waitForPrintWindowToOpen2" />
+        <switchToWindow stepKey="switchToPrintPage2"/>
+        <waitForElement selector="{{SalesOrderPrintSection.isOrderPrintPage}}" stepKey="checkPrintPage2"/>
+
+        <openNewTab stepKey="openNewTab3"/>
+        <wait time="5" stepKey="waitForNewTabToOpen2" />
+        <switchToNextTab stepKey="switchForward4"/>
+        <waitForElement selector="body" stepKey="waitForNewTabHTML" />
+        <amOnPage url="{{StorefrontSalesOrderPrintPage.url({$grabOrderIdFromURL})}}" stepKey="duplicatePrintPage2"/>
+        <seeElement selector="{{StorefrontCustomerOrderSection.isMyOrdersSection}}" stepKey="waitOrderHistoryPage"/>
+    </test>
+</tests>
