@@ -10,7 +10,6 @@ use IPTools\Range;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Event\Manager;
 use Magento\Framework\Filesystem;
-use Magento\Setup\Validator\IpValidator;
 
 /**
  * Application Maintenance Mode
@@ -48,23 +47,24 @@ class MaintenanceMode
     private $eventManager;
 
     /**
-     * @var IpValidator
+     * @var Utility\IPAddressNormaliser
      */
-    private $ipValidator;
+    private $ipAddressNormaliser;
 
     /**
      * @param Filesystem $filesystem
      * @param Manager|null $eventManager
-     * @param IpValidator $ipValidator
+     * @param Utility\IPAddressNormaliser $ipAddressNormaliser
      */
     public function __construct(
         Filesystem $filesystem,
         ?Manager $eventManager = null,
-        IpValidator $ipValidator = null
+        Utility\IPAddressNormaliser $ipAddressNormaliser = null
     ) {
         $this->flagDir = $filesystem->getDirectoryWrite(self::FLAG_DIR);
         $this->eventManager = $eventManager ?: ObjectManager::getInstance()->get(Manager::class);
-        $this->ipValidator = $ipValidator ?: ObjectManager::getInstance()->get(IpValidator::class);
+        $this->ipAddressNormaliser = $ipAddressNormaliser ?:
+            ObjectManager::getInstance()->get(Utility\IPAddressNormaliser::class);
     }
 
     /**
@@ -131,7 +131,7 @@ class MaintenanceMode
             throw new \InvalidArgumentException("One or more IP-addresses is expected (comma-separated)\n");
         }
         $addressList = explode(',', $addresses);
-        $addressList = $this->ipValidator->normaliseIPAddresses($addressList);
+        $addressList = $this->ipAddressNormaliser->execute($addressList);
         $addresses = implode(',', $addressList);
         $result = $this->flagDir->writeFile(self::IP_FILENAME, $addresses);
         return false !== $result;
