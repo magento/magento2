@@ -3409,7 +3409,7 @@ For terms of use, see http://www.unicode.org/copyright.html
 				<symbol alt="narrow">$</symbol>
 			</currency>
 			<currency type="SRD">
-				<symbol alt="narrow">$</symbol>
+				<symbol alt="narrow">SRD</symbol>
 			</currency>
 			<currency type="SSP">
 				<symbol alt="narrow">£</symbol>
