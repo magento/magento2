@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /** @var \Magento\Wishlist\Block\Customer\Sharing $block */
 ?>
 <form class="form wishlist share"
@@ -29,7 +27,7 @@
                 <textarea id="message" name="message" cols="60" rows="5"><?= /* @noEscape */ $block->getEnteredData('message') ?></textarea>
             </div>
         </div>
-        <?php if ($this->helper('Magento\Wishlist\Helper\Rss')->isRssAllow()): ?>
+        <?php if ($this->helper(\Magento\Wishlist\Helper\Rss::class)->isRssAllow()) : ?>
             <div class="field choice rss">
                 <input type="checkbox" name="rss_url" id="rss_url" value="1" title="<?= $block->escapeHtmlAttr(__('Check here to link an RSS feed to your Wish List.')) ?>" class="checkbox">
                 <label class="label" for="rss_url">

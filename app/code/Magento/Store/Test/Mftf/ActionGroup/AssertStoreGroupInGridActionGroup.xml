@@ -5,13 +5,18 @@
   * See COPYING.txt for license details.
   */
 -->
-<!-- Admin creates new Store group -->
+
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AssertStoreGroupInGridActionGroup">
+        <!-- Admin creates new Store group -->
+        <annotations>
+            <description>Goes to the Admin Stores grid page. Searches the grid for the provided Store Group Name. Validates that the provided Store Group Name is present and correct in the grid.</description>
+        </annotations>
         <arguments>
             <argument name="storeGroupName" type="string"/>
         </arguments>
+        
         <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="amOnAdminSystemStorePage"/>
         <waitForPageLoad stepKey="waitForAdminSystemStorePageLoad"/>
         <click selector="{{AdminStoresGridSection.resetButton}}" stepKey="resetSearchFilter"/>

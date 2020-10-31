@@ -3,20 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Interception\Code\Generator;
 
-/**
- * Class Interceptor
- ˚*
- * @package Magento\Framework\Interception\Code\Generator
- */
-class Interceptor extends \Magento\Framework\Code\Generator\EntityAbstract
+use Magento\Framework\Code\Generator\EntityAbstract;
+
+class Interceptor extends EntityAbstract
 {
-    /**
-     * Entity type
-     */
-    const ENTITY_TYPE = 'interceptor';
+    public const ENTITY_TYPE = 'interceptor';
 
     /**
      * Returns default result class name
@@ -51,13 +46,13 @@ class Interceptor extends \Magento\Framework\Code\Generator\EntityAbstract
         $parameters = [];
         $body = "\$this->___init();\n";
         if ($constructor) {
-            foreach ($constructor->getParameters() as $parameter) {
-                $parameters[] = $this->_getMethodParameterInfo($parameter);
-            }
+            $parameters = array_map([$this, '_getMethodParameterInfo'], $constructor->getParameters());
+
             $body .= count($parameters)
                 ? "parent::__construct({$this->_getParameterList($parameters)});"
                 : "parent::__construct();";
         }
+
         return [
             'name' => '__construct',
             'parameters' => $parameters,
@@ -68,7 +63,7 @@ class Interceptor extends \Magento\Framework\Code\Generator\EntityAbstract
     /**
      * Returns list of methods for class generator
      *
-     * @return mixed
+     * @return array
      */
     protected function _getClassMethods()
     {
@@ -81,6 +76,7 @@ class Interceptor extends \Magento\Framework\Code\Generator\EntityAbstract
                 $methods[] = $this->_getMethodInfo($method);
             }
         }
+
         return $methods;
     }
 
@@ -104,37 +100,30 @@ class Interceptor extends \Magento\Framework\Code\Generator\EntityAbstract
      */
     protected function _getMethodInfo(\ReflectionMethod $method)
     {
-        $parameters = [];
-        foreach ($method->getParameters() as $parameter) {
-            $parameters[] = $this->_getMethodParameterInfo($parameter);
-        }
+        $parameters = array_map([$this, '_getMethodParameterInfo'], $method->getParameters());
 
-        $returnTypeValue = $this->getReturnTypeValue($method->getReturnType());
+        $returnTypeValue = $this->getReturnTypeValue($method);
         $methodInfo = [
             'name' => ($method->returnsReference() ? '& ' : '') . $method->getName(),
             'parameters' => $parameters,
             'body' => str_replace(
                 [
-                    '%methodName%',
+                    '%method%',
                     '%return%',
                     '%parameters%'
                 ],
                 [
                     $method->getName(),
-                    $returnTypeValue === 'void' ? '' : ' return',
+                    $returnTypeValue === 'void' ? '' : 'return ',
                     $this->_getParameterList($parameters)
                 ],
                 <<<'METHOD_BODY'
-$pluginInfo = $this->pluginList->getNext($this->subjectType, '%methodName%');
-if (!$pluginInfo) {
-   %return% parent::%methodName%(%parameters%);
-} else {
-   %return% $this->___callPlugins('%methodName%', func_get_args(), $pluginInfo);
-}
+$pluginInfo = $this->pluginList->getNext($this->subjectType, '%method%');
+%return%$pluginInfo ? $this->___callPlugins('%method%', func_get_args(), $pluginInfo) : parent::%method%(%parameters%);
 METHOD_BODY
             ),
-            'returnType' => $returnTypeValue,
-            'docblock' => ['shortDescription' => '{@inheritdoc}'],
+                'returnType' => $returnTypeValue,
+                'docblock' => ['shortDescription' => '{@inheritdoc}'],
         ];
 
         return $methodInfo;
@@ -184,6 +173,7 @@ METHOD_BODY
         $this->_classGenerator->addTrait('\\' . \Magento\Framework\Interception\Interceptor::class);
         $interfaces[] = '\\' . \Magento\Framework\Interception\InterceptorInterface::class;
         $this->_classGenerator->setImplementedInterfaces($interfaces);
+
         return parent::_generateCode();
     }
 
@@ -202,33 +192,32 @@ METHOD_BODY
 
             if ($resultClassName !== $sourceClassName . '\\Interceptor') {
                 $this->_addError(
-                    'Invalid Interceptor class name [' .
-                    $resultClassName .
-                    ']. Use ' .
-                    $sourceClassName .
-                    '\\Interceptor'
+                    'Invalid Interceptor class name ' . $resultClassName . '. Use ' . $sourceClassName . '\\Interceptor'
                 );
                 $result = false;
             }
         }
+
         return $result;
     }
 
     /**
      * Returns return type
      *
-     * @param mixed $returnType
+     * @param \ReflectionMethod $method
      * @return null|string
      */
-    private function getReturnTypeValue($returnType): ?string
+    private function getReturnTypeValue(\ReflectionMethod $method): ?string
     {
         $returnTypeValue = null;
+        $returnType = $method->getReturnType();
         if ($returnType) {
             $returnTypeValue = ($returnType->allowsNull() ? '?' : '');
             $returnTypeValue .= ($returnType->getName() === 'self')
-                ? $this->getSourceClassName()
+                ? $this->_getFullyQualifiedClassName($method->getDeclaringClass()->getName())
                 : $returnType->getName();
         }
+
         return $returnTypeValue;
     }
 }

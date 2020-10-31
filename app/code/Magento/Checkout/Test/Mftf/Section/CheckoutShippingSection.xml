@@ -37,8 +37,11 @@
         <element name="stateInput" type="input" selector="input[name=region]"/>
         <element name="regionOptions" type="select" selector="select[name=region_id] option"/>
         <element name="editActiveAddress" type="button" selector="//div[@class='shipping-address-item selected-item']//span[text()='Edit']" timeout="30"/>
-        <element name="loginButton" type="button" selector=".action.login" timeout="30"/>
+        <element name="loginButton" type="button" selector="//button[@data-action='checkout-method-login']" timeout="30"/>
+        <element name="editActiveAddressButton" type="button" selector="//div[contains(@class,'payment-method _active')]//button[contains(@class,'action action-edit-address')]" timeout="30"/>
+        <element name="emailAddress" type="input" selector="#customer-email"/>
         <element name="shipHereButton" type="button" selector="//div[text()='{{street}}']/button[@class='action action-select-shipping-item']" parameterized="true" timeout="30"/>
+        <element name="addressFieldValidationError" type="text" selector="div.address div.field .field-error"/>
         <element name="textFieldAttrRequireMessage" type="text" selector="//input[@name='custom_attributes[{{attribute}}]']/ancestor::div[contains(@class, 'control')]/div/span" parameterized="true" timeout="30"/>
         <element name="textFieldAttribute" type="input" selector="[name*='custom_attributes[{{attribute}}]']" parameterized="true" timeout="30"/>
     </section>

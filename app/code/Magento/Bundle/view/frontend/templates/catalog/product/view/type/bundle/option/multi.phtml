@@ -16,7 +16,8 @@
             <?= /* @noEscape */ $block->getSelectionQtyTitlePrice($_selections[0]) ?>
             <input type="hidden"
                    name="bundle_option[<?= $block->escapeHtmlAttr($_option->getId()) ?>]"
-                   value="<?= $block->escapeHtmlAttr($_selections[0]->getSelectionId()) ?>"/>
+                   value="<?= $block->escapeHtmlAttr($_selections[0]->getSelectionId()) ?>" 
+                   class="bundle-option-<?= $block->escapeHtmlAttr($_option->getId()) ?> bundle option"/>
         <?php else : ?>
             <select multiple="multiple"
                     size="5"

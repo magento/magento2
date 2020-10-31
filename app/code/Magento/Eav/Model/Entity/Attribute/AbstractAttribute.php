@@ -13,6 +13,7 @@ use Magento\Framework\Serialize\Serializer\Json;
 
 /**
  * Entity/Attribute/Model - attribute abstract
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
@@ -129,7 +130,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
      * Serializer Instance.
      *
      * @var Json
-     * @since 100.2.0
+     * @since 101.0.0
      */
     protected $serializer;
 
@@ -218,10 +219,10 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
     /**
      * Get Serializer instance.
      *
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      *
      * @return Json
-     * @since 100.2.0
+     * @since 101.0.0
      */
     protected function getSerializer()
     {
@@ -328,7 +329,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
     }
 
     /**
-     * Set attribute model
+     * Set attribute model class.
      *
      * @param array $data
      * @return $this
@@ -928,7 +929,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
      *
      * Used in database compatible mode
      *
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
@@ -1404,14 +1405,9 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
     /**
      * @inheritdoc
      * @since 100.0.7
-     *
-     * @SuppressWarnings(PHPMD.SerializationAware)
-     * @deprecated Do not use PHP serialization.
      */
     public function __sleep()
     {
-        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
-
         return array_diff(
             parent::__sleep(),
             [
@@ -1434,14 +1430,9 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
     /**
      * @inheritdoc
      * @since 100.0.7
-     *
-     * @SuppressWarnings(PHPMD.SerializationAware)
-     * @deprecated Do not use PHP serialization.
      */
     public function __wakeup()
     {
-        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
-
         parent::__wakeup();
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $this->_eavConfig = $objectManager->get(\Magento\Eav\Model\Config::class);

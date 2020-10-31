@@ -10,10 +10,10 @@ use Magento\Framework\UrlInterface;
 use Magento\TestFramework\ObjectManager;
 
 $url = ObjectManager::getInstance()->get(UrlInterface::class);
-$baseUrl = $url->getBaseUrl();
+$notifyUrl = $url->getUrl('paypal/ipn/');
 
 $productMetadata = ObjectManager::getInstance()->get(ProductMetadataInterface::class);
-$button = 'Magento_Cart_' . $productMetadata->getEdition();
+$button = 'Magento_2_' . $productMetadata->getEdition();
 
 return [
     'TOKEN' => $token,
@@ -22,7 +22,7 @@ return [
     'AMT' => '30.00',
     'CURRENCYCODE' => 'USD',
     'BUTTONSOURCE' => $button,
-    'NOTIFYURL' => $baseUrl . 'paypal/ipn/',
+    'NOTIFYURL' => $notifyUrl,
     'RETURNFMFDETAILS' => 1,
     'SHIPPINGAMT' => '10.00',
     'ITEMAMT' => '20.00',

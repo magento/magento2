@@ -9,10 +9,6 @@
  */
 
 /**
- * @codingStandardsIgnoreFile
- */
-
-/**
  * @var $block \Magento\Reports\Block\Product\Viewed
  */
 ?>
@@ -28,7 +24,7 @@
             <li class="product-item">
                 <strong class="product-item-name">
                     <a href="<?= $block->escapeUrl($_product->getProductUrl()) ?>" class="product-item-link">
-                        <?= $block->escapeHtml($this->helper('Magento\Catalog\Helper\Output')->productAttribute($_product, $_product->getName(), 'name')) ?>
+                        <?= $block->escapeHtml($this->helper(\Magento\Catalog\Helper\Output::class)->productAttribute($_product, $_product->getName(), 'name')) ?>
                     </a>
                 </strong>
             </li>

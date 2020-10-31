@@ -14,6 +14,9 @@ use Magento\Framework\GraphQl\Query\Resolver\IdentityInterface;
  */
 class Identity implements IdentityInterface
 {
+    /** @var string */
+    private $cacheTag = \Magento\Catalog\Model\Product::CACHE_TAG;
+
     /**
      * Get product ids for cache tag
      *
@@ -25,7 +28,10 @@ class Identity implements IdentityInterface
         $ids = [];
         $items = $resolvedData['items'] ?? [];
         foreach ($items as $item) {
-            $ids[] = $item['entity_id'];
+            $ids[] = sprintf('%s_%s', $this->cacheTag, $item['entity_id']);
+        }
+        if (!empty($ids)) {
+            array_unshift($ids, $this->cacheTag);
         }
 
         return $ids;

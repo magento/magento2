@@ -42,7 +42,7 @@ class IdentityPool
     public function get(string $identityClass): IdentityInterface
     {
         if (!isset($this->identityInstances[$identityClass])) {
-            $this->identityInstances[$identityClass] = $this->objectManager->create($identityClass);
+            $this->identityInstances[$identityClass] = $this->objectManager->get($identityClass);
         }
         return $this->identityInstances[$identityClass];
     }

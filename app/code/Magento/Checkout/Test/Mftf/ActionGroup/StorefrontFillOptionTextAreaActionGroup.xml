@@ -8,10 +8,14 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="StorefrontFillOptionTextAreaActionGroup">
+        <annotations>
+            <description>Fills in the provided Option Title with the provided Value on a Storefront product page.</description>
+        </annotations>
         <arguments>
             <argument name="optionTitle" defaultValue="ProductOptionArea"/>
             <argument name="fieldInput" type="string"/>
         </arguments>
+
         <fillField selector="{{StorefrontProductInfoMainSection.productOptionAreaInput(optionTitle.title)}}" userInput="{{fieldInput}}" stepKey="fillOptionTextArea"/>
     </actionGroup>
 </actionGroups>

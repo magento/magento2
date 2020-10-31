@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCheckInputFieldsDisabledAfterAppConfigDumpTest">
+        <!--Assert configuration are disabled in DHL section-->
+        <comment userInput="Assert configuration are disabled in DHL section" stepKey="commentSeeDisabledDHLConfigs"/>
+        <actionGroup ref="AdminOpenShippingMethodsConfigPageActionGroup" stepKey="openShippingMethodConfigPage"/>
+        <conditionalClick selector="{{AdminShippingMethodDHLSection.carriersDHLTab}}" dependentSelector="{{AdminShippingMethodDHLSection.carriersDHLActive}}" visible="false" stepKey="expandDHLTab"/>
+        <waitForElementVisible selector="{{AdminShippingMethodDHLSection.carriersDHLActive}}" stepKey="waitDHLTabOpen"/>
+        <grabAttributeFrom selector="{{AdminShippingMethodDHLSection.carriersDHLActive}}" userInput="disabled" stepKey="grabDHLActiveDisabled"/>
+        <assertEquals stepKey="assertDHLActiveDisabled">
+			<actualResult type="const">$grabDHLActiveDisabled</actualResult>
+			<expectedResult type="string">true</expectedResult>
+        </assertEquals>
+        <grabAttributeFrom selector="{{AdminShippingMethodDHLSection.carriersDHLTitle}}" userInput="disabled" stepKey="grabDHLTitleDisabled"/>
+        <assertEquals stepKey="assertDHLTitleDisabled">
+			<actualResult type="const">$grabDHLTitleDisabled</actualResult>
+			<expectedResult type="string">true</expectedResult>
+        </assertEquals>
+        <grabAttributeFrom selector="{{AdminShippingMethodDHLSection.carriersDHLAccessId}}" userInput="disabled" stepKey="grabDHLAccessIdDisabled"/>
+        <assertEquals stepKey="assertDHLAccessIdDisabled">
+			<actualResult type="const">$grabDHLAccessIdDisabled</actualResult>
+			<expectedResult type="string">true</expectedResult>
+        </assertEquals>
+        <grabAttributeFrom selector="{{AdminShippingMethodDHLSection.carriersDHLPassword}}" userInput="disabled" stepKey="grabDHLPasswordDisabled"/>
+        <assertEquals stepKey="assertDHLPasswordDisabled">
+			<actualResult type="const">$grabDHLPasswordDisabled</actualResult>
+			<expectedResult type="string">true</expectedResult>
+        </assertEquals>
+        <grabAttributeFrom selector="{{AdminShippingMethodDHLSection.carriersDHLAccount}}" userInput="disabled" stepKey="grabDHLAccountDisabled"/>
+        <assertEquals stepKey="assertDHLAccountDisabled">
+			<actualResult type="const">$grabDHLAccountDisabled</actualResult>
+			<expectedResult type="string">true</expectedResult>
+        </assertEquals>
+        <grabAttributeFrom selector="{{AdminShippingMethodDHLSection.carriersDHLContentType}}" userInput="disabled" stepKey="grabDHLContentTypeDisabled"/>
+        <assertEquals stepKey="assertDHLContentTypeDisabled">
+			<actualResult type="const">$grabDHLContentTypeDisabled</actualResult>
+			<expectedResult type="string">true</expectedResult>
+        </assertEquals>
+        <grabAttributeFrom selector="{{AdminShippingMethodDHLSection.carriersDHLHandlingType}}" userInput="disabled" stepKey="grabDHLHandlingTypeDisabled"/>
+        <assertEquals stepKey="assertDHLHandlingTypeDisabled">
+			<actualResult type="const">$grabDHLHandlingTypeDisabled</actualResult>
+			<expectedResult type="string">true</expectedResult>
+        </assertEquals>
+        <grabAttributeFrom selector="{{AdminShippingMethodDHLSection.carriersDHLHandlingAction}}" userInput="disabled" stepKey="grabDHLHandlingDisabled"/>
+        <assertEquals stepKey="assertDHLHandlingDisabled">
+			<actualResult type="const">$grabDHLHandlingDisabled</actualResult>
+			<expectedResult type="string">true</expectedResult>
+        </assertEquals>
+        <grabAttributeFrom selector="{{AdminShippingMethodDHLSection.carriersDHLDivideOrderWeight}}" userInput="disabled" stepKey="grabDHLDivideOrderWeightDisabled"/>
+        <assertEquals stepKey="assertDHLDivideOrderWeightDisabled">
+			<actualResult type="const">$grabDHLDivideOrderWeightDisabled</actualResult>
+			<expectedResult type="string">true</expectedResult>
+        </assertEquals>
+        <grabAttributeFrom selector="{{AdminShippingMethodDHLSection.carriersDHLUnitOfMeasure}}" userInput="disabled" stepKey="grabDHLUnitOfMeasureDisabled"/>
+        <assertEquals stepKey="assertDHLUnitOfMeasureDisabled">
+			<actualResult type="const">$grabDHLUnitOfMeasureDisabled</actualResult>
+			<expectedResult type="string">true</expectedResult>
+        </assertEquals>
+        <grabAttributeFrom selector="{{AdminShippingMethodDHLSection.carriersDHLSize}}" userInput="disabled" stepKey="grabDHLSizeDisabled"/>
+        <assertEquals stepKey="assertDHLSizeDisabled">
+			<actualResult type="const">$grabDHLSizeDisabled</actualResult>
+			<expectedResult type="string">true</expectedResult>
+        </assertEquals>
+        <grabAttributeFrom selector="{{AdminShippingMethodDHLSection.carriersDHLNonDocAllowedMethod}}" userInput="disabled" stepKey="grabDHLNonDocAllowedMethodDisabled"/>
+        <assertEquals stepKey="assertDHLNonDocAllowedMethodDisabled">
+			<actualResult type="const">$grabDHLNonDocAllowedMethodDisabled</actualResult>
+			<expectedResult type="string">true</expectedResult>
+        </assertEquals>
+        <grabAttributeFrom selector="{{AdminShippingMethodDHLSection.carriersDHLSmartPostHubId}}" userInput="disabled" stepKey="grabDHLSmartPostHubIdDisabled"/>
+        <assertEquals stepKey="assertDHLSmartPostHubIdDisabled">
+			<actualResult type="const">$grabDHLSmartPostHubIdDisabled</actualResult>
+			<expectedResult type="string">true</expectedResult>
+        </assertEquals>
+        <grabAttributeFrom selector="{{AdminShippingMethodDHLSection.carriersDHLSpecificErrMsg}}" userInput="disabled" stepKey="grabDHLSpecificErrMsgDisabled"/>
+        <assertEquals stepKey="assertDHLSpecificErrMsgDisabled">
+			<actualResult type="const">$grabDHLSpecificErrMsgDisabled</actualResult>
+			<expectedResult type="string">true</expectedResult>
+        </assertEquals>
+    </test>
+</tests>

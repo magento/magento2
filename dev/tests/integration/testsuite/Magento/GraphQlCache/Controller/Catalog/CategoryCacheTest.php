@@ -7,8 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\GraphQlCache\Controller\Catalog;
 
-use Magento\Framework\App\Request\Http;
-use Magento\GraphQl\Controller\GraphQl;
 use Magento\GraphQlCache\Controller\AbstractGraphqlCacheTest;
 
 /**
@@ -21,30 +19,11 @@ use Magento\GraphQlCache\Controller\AbstractGraphqlCacheTest;
 class CategoryCacheTest extends AbstractGraphqlCacheTest
 {
     /**
-     * @var GraphQl
-     */
-    private $graphqlController;
-
-    /**
-     * @var Http
-     */
-    private $request;
-
-    /**
-     * @inheritdoc
-     */
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->graphqlController = $this->objectManager->get(\Magento\GraphQl\Controller\GraphQl::class);
-        $this->request = $this->objectManager->create(Http::class);
-    }
-    /**
      * Test cache tags and debug header for category and querying only for category
      *
      * @magentoDataFixture Magento/Catalog/_files/category_product.php
      */
-    public function testToCheckRequestCacheTagsForForCategory(): void
+    public function testRequestCacheTagsForCategory(): void
     {
         $categoryId ='333';
         $query
@@ -59,13 +38,10 @@ class CategoryCacheTest extends AbstractGraphqlCacheTest
            }
        }
 QUERY;
-        $this->request->setPathInfo('/graphql');
-        $this->request->setMethod('GET');
-        $this->request->setQueryValue('query', $query);
-        $response = $this->graphqlController->dispatch($this->request);
+        $response = $this->dispatchGraphQlGETRequest(['query' => $query]);
         $this->assertEquals('MISS', $response->getHeader('X-Magento-Cache-Debug')->getFieldValue());
         $actualCacheTags = explode(',', $response->getHeader('X-Magento-Tags')->getFieldValue());
-        $expectedCacheTags = ['cat_c','cat_c_' . $categoryId,'FPC'];
+        $expectedCacheTags = ['cat_c','cat_c_' . $categoryId, 'FPC'];
         $this->assertEquals($expectedCacheTags, $actualCacheTags);
     }
 }

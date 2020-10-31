@@ -4,11 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
 /** @var \Magento\Vault\Block\Customer\AccountTokens $block */
 $tokens = $block->getPaymentTokens();
 ?>
-<?php if (count($tokens) !== 0): ?>
+<?php if (count($tokens) !== 0) : ?>
     <div class="table-wrapper my-credit-cards">
         <table class="data table table-credit-cards" id="token-list-table">
             <thead>
@@ -18,7 +17,7 @@ $tokens = $block->getPaymentTokens();
             </tr>
             </thead>
             <tbody>
-            <?php foreach($tokens as $token): ?>
+            <?php foreach ($tokens as $token) : ?>
                 <?= /* @noEscape */ $block->renderTokenHtml($token) ?>
             <?php endforeach; ?>
             </tbody>

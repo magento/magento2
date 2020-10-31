@@ -8,8 +8,7 @@ define([
     'uiRegistry',
     'Magento_Ui/js/form/client',
     'jquery',
-    'mageUtils',
-    'jquery/ui'
+    'mageUtils'
 ], function (_, registry, Constr, $, utils) {
     'use strict';
 

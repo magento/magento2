@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="ApplyCatalogPriceRuleByProductAttributeTest" deprecated="Use AdminApplyCatalogPriceRuleByProductAttributeTest">
+        <annotations>
+            <stories value="Catalog price rule"/>
+            <title value="DEPRECATED. Admin should be able to apply the catalog price rule by product attribute"/>
+            <description value="Admin should be able to apply the catalog price rule by product attribute"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-148"/>
+            <group value="CatalogRule"/>
+            <skip>
+                <issueId value="DEPRECATED">Use AdminApplyCatalogPriceRuleByProductAttributeTest instead.</issueId>
+            </skip>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+
+            <createData entity="ApiCategory" stepKey="createFirstCategory"/>
+            <createData entity="ApiSimpleProduct" stepKey="createFirstProduct">
+                <field key="price">40.00</field>
+                <requiredEntity createDataKey="createFirstCategory"/>
+            </createData>
+            <createData entity="ApiSimpleProduct" stepKey="createSecondProduct">
+                <field key="price">40.00</field>
+                <requiredEntity createDataKey="createFirstCategory"/>
+            </createData>
+
+            <!-- Create the configurable product based on the data in the /data folder -->
+            <createData entity="ApiConfigurableProduct" stepKey="createConfigProduct">
+                <requiredEntity createDataKey="createFirstCategory"/>
+            </createData>
+
+            <!-- Make the configurable product have two options, that are children of the default attribute set -->
+            <createData entity="productAttributeWithTwoOptionsNotVisible" stepKey="createConfigProductAttribute"/>
+            <createData entity="productAttributeOption1" stepKey="createConfigProductAttributeOption1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption2" stepKey="createConfigProductAttributeOption2">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="AddToDefaultSet" stepKey="createConfigAddToAttributeSet">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <getData entity="ProductAttributeOptionGetter" index="1" stepKey="getConfigAttributeOption1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+            <getData entity="ProductAttributeOptionGetter" index="2" stepKey="getConfigAttributeOption2">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+
+            <!-- Create the 2 children that will be a part of the configurable product -->
+            <createData entity="ApiSimpleOne" stepKey="createConfigChildProduct1">
+                <field key="price">60.00</field>
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption1"/>
+            </createData>
+            <createData entity="ApiSimpleTwo" stepKey="createConfigChildProduct2">
+                <field key="price">60.00</field>
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption2"/>
+            </createData>
+
+            <!-- Assign the two products to the configurable product -->
+            <createData entity="ConfigurableProductTwoOptions" stepKey="createConfigProductOption">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption1"/>
+                <requiredEntity createDataKey="getConfigAttributeOption2"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild1">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigChildProduct1"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild2">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigChildProduct2"/>
+            </createData>
+            <magentoCron stepKey="runCronIndex" groups="index"/>
+        </before>
+        <after>
+
+            <!--Delete created data-->
+            <deleteData createDataKey="createFirstProduct" stepKey="deleteFirstProduct"/>
+            <deleteData createDataKey="createSecondProduct" stepKey="deleteSecondProduct"/>
+            <deleteData createDataKey="createFirstCategory" stepKey="deleteFirstCategory"/>
+
+            <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
+            <deleteData createDataKey="createConfigChildProduct1" stepKey="deleteConfigChildProduct1"/>
+            <deleteData createDataKey="createConfigChildProduct2" stepKey="deleteConfigChildProduct2"/>
+            <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
+
+            <actionGroup ref="AdminOpenCatalogPriceRulePageActionGroup" stepKey="goToCatalogPriceRulePage"/>
+            <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deletePriceRule">
+                <argument name="name" value="{{SimpleCatalogPriceRule.name}}"/>
+                <argument name="searchInput" value="{{AdminSecondaryGridSection.catalogRuleIdentifierSearch}}"/>
+            </actionGroup>
+            <click stepKey="resetFilters" selector="{{AdminSecondaryGridSection.resetFilters}}"/>
+
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+        </after>
+
+        <!-- Add values to your attribute ( ex: red , green) -->
+
+        <!-- Go to Stores > Product, click "Add New Attribute" -->
+        <actionGroup ref="AdminOpenProductAttributePageActionGroup" stepKey="openProductAttributePage"/>
+        <click selector="{{AdminProductAttributeGridSection.createNewAttributeBtn}}" stepKey="createNewAttribute"/>
+        <waitForPageLoad stepKey="waitForNewAttributeFormLoad"/>
+
+        <!-- Create a new product attribute. Default label : specialColor
+             Catalog Input Type for Store Owner = Dropdown -->
+        <actionGroup ref="AdminFillProductAttributePropertiesActionGroup" stepKey="fillAttributeProperties">
+            <argument name="attributeName" value="{{productAttributeDropdownTwoOptions.attribute_code}}"/>
+            <argument name="attributeType" value="{{productAttributeDropdownTwoOptions.frontend_input}}"/>
+        </actionGroup>
+
+        <!-- Add values to your attribute ( ex: red , green) -->
+        <waitForElementVisible selector="{{AttributePropertiesSection.dropdownAddOptions}}" stepKey="waitForManageOptions"/>
+        <click selector="{{AttributePropertiesSection.dropdownAddOptions}}" stepKey="addOption"/>
+        <fillField selector="{{NewProduct.adminFieldRed}}" userInput="red" stepKey="fillFirstOption"/>
+        <click selector="{{AttributePropertiesSection.dropdownAddOptions}}" stepKey="addSecondOption"/>
+        <fillField selector="{{NewProduct.adminFieldBlue}}" userInput="green" stepKey="fillSecondOption"/>
+
+        <click selector="{{AdvancedAttributePropertiesSection.AdvancedAttributePropertiesSectionToggle}}" stepKey="clickAdvancedAttributeProperties"/>
+        <selectOption userInput="{{productAttributeDropdownTwoOptions.scope}}" selector="{{AttributePropertiesSection.Scope}}" stepKey="selectGlobal"/>
+
+        <!-- Click on "Storefront Properties" tab on left menu -->
+        <scrollToTopOfPage stepKey="scrollToTopOfPage"/>
+        <click selector="{{StorefrontPropertiesSection.StoreFrontPropertiesTab}}" stepKey="clickStorefrontPropertiesTab"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+
+        <!-- Set the property "Use for Promo Rule Conditions" to Yes -->
+        <selectOption selector="{{StorefrontPropertiesSection.useForPromoRuleConditions}}" userInput="Yes" stepKey="selectYes"/>
+
+        <!-- Save the attribute -->
+        <actionGroup ref="SaveProductAttributeActionGroup" stepKey="saveAttribute"/>
+
+        <!-- Add this product attribute to Default attribute set -->
+        <actionGroup ref="AdminOpenAttributeSetGridPageActionGroup" stepKey="openAttributeSetPage"/>
+        <actionGroup ref="AdminOpenAttributeSetByNameActionGroup" stepKey="openDefaultAttributeSet"/>
+
+        <actionGroup ref="AssignAttributeToGroupActionGroup" stepKey="assignAttributeToGroup">
+            <argument name="group" value="Product Details"/>
+            <argument name="attribute" value="{{productAttributeDropdownTwoOptions.attribute_code}}"/>
+        </actionGroup>
+        <actionGroup ref="SaveAttributeSetActionGroup" stepKey="saveAttributeSet"/>
+
+        <!-- First Simple Product: choose green as attribute value -->
+        <actionGroup ref="FilterAndSelectProductActionGroup" stepKey="openFirstSimpleProduct">
+            <argument name="productSku" value="$$createFirstProduct.sku$$"/>
+        </actionGroup>
+
+        <selectOption userInput="green" selector="{{AdminProductFormSection.customSelectField(productAttributeDropdownTwoOptions.attribute_code)}}" stepKey="selectGreen"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveFirstProduct"/>
+
+        <!-- Second Simple Product: choose red as attribute value -->
+        <actionGroup ref="FilterAndSelectProductActionGroup" stepKey="openSecondSimpleProduct">
+            <argument name="productSku" value="$$createSecondProduct.sku$$"/>
+        </actionGroup>
+
+        <selectOption userInput="red" selector="{{AdminProductFormSection.customSelectField(productAttributeDropdownTwoOptions.attribute_code)}}" stepKey="selectRed"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveSecondProduct"/>
+
+        <!-- Configurable child product1: choose green as attribute value -->
+        <actionGroup ref="FilterAndSelectProductActionGroup" stepKey="openConfigChild1Product">
+            <argument name="productSku" value="$$createConfigChildProduct1.sku$$"/>
+        </actionGroup>
+
+        <selectOption userInput="green" selector="{{AdminProductFormSection.customSelectField(productAttributeDropdownTwoOptions.attribute_code)}}" stepKey="selectGreenAttr"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveConfigChild1Product"/>
+
+        <!-- Configurable child product2: choose green as attribute value -->
+        <actionGroup ref="FilterAndSelectProductActionGroup" stepKey="openConfigChild2Product">
+            <argument name="productSku" value="$$createConfigChildProduct2.sku$$"/>
+        </actionGroup>
+
+        <selectOption userInput="green" selector="{{AdminProductFormSection.customSelectField(productAttributeDropdownTwoOptions.attribute_code)}}" stepKey="selectGreenAttribute"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveConfigChild2Product"/>
+
+        <!-- Navigate to Marketing - Promotions - Catalog Price Rules -->
+        <amOnPage url="{{AdminCatalogPriceRuleGridPage.url}}" stepKey="amOnCatalogPriceRule"/>
+        <waitForPageLoad stepKey="waitForCatalogRulePageLoad"/>
+
+        <!-- Click 'Add New Rule' button -->
+        <click selector="{{AdminMainActionsSection.add}}" stepKey="clickAddNewRule"/>
+        <waitForPageLoad stepKey="waitForNewRuleFormLoading"/>
+
+        <!-- Fill out required fields on Rule Information:
+             Rule Name: Catalog Price Rule1
+             Status: Active
+             Websites: Main Website
+             Customer Groups: NOT LOGGED IN  -->
+        <fillField userInput="{{SimpleCatalogPriceRule.name}}" selector="{{AdminCartPriceRulesFormSection.ruleName}}" stepKey="fillRuleName"/>
+        <click stepKey="selectActive" selector="{{AdminCategoryBasicFieldSection.enableCategoryLabel}}"/>
+        <selectOption userInput="{{SimpleCatalogPriceRule.websites}}" selector="{{AdminCartPriceRulesFormSection.websites}}" stepKey="selectWebsite"/>
+        <selectOption userInput="{{SimpleCatalogPriceRule.customerGroups}}" selector="{{AdminCartPriceRulesFormSection.customerGroups}}" stepKey="selectCustomerGroups"/>
+
+        <!-- Go to Conditions tab and click '+' sign to specify a condition -->
+        <scrollTo selector="{{AdminCartPriceRulesFormSection.conditionsHeaderNew}}" y="-80" stepKey="scrollTo"/>
+        <conditionalClick selector="{{AdminCartPriceRulesFormSection.conditionsHeaderNew}}" dependentSelector="{{AdminCartPriceRulesFormSection.conditionsHeaderOpenNew}}" visible="false" stepKey="openConditionsTab"/>
+        <click selector="{{AdminCartPriceRulesFormSection.addCondition('1')}}" stepKey="clickAddCondition"/>
+        <waitForAjaxLoad stepKey="waitForLoadingSelector"/>
+
+        <!-- Select earlier created product attribute in condition and set a value: specialcolor: green -->
+        <selectOption userInput="{{productAttributeDropdownTwoOptions.attribute_code}}" selector="{{AdminCartPriceRulesFormSection.ruleCondition('1')}}" stepKey="selectAttribute"/>
+        <waitForAjaxLoad stepKey="waitForLoading"/>
+        <click selector="{{AdminCartPriceRulesFormSection.ruleParameter('...')}}" stepKey="clickRuleParameter"/>
+        <waitForAjaxLoad stepKey="waitForLoadingRuleParameter"/>
+        <selectOption userInput="green" selector="{{AdminCartPriceRulesFormSection.ruleParameterInput('1--1')}}" stepKey="selectColor"/>
+
+        <!-- On Actions tab set Discount Amount:
+             Apply: By Percentage of the Original Price
+             Discount Amount: 50-->
+        <scrollTo selector="{{AdminCartPriceRulesFormSection.actionsHeader}}" y="-80" stepKey="scrollToDiscountSection"/>
+        <conditionalClick selector="{{AdminCartPriceRulesFormSection.actionsHeader}}" dependentSelector="{{AdminCartPriceRulesFormSection.actionsHeaderOpen}}" visible="false" stepKey="openTab"/>
+        <selectOption userInput="by_percent" selector="{{AdminCartPriceRulesFormSection.apply}}" stepKey="applyActions"/>
+        <fillField userInput="50" selector="{{AdminCartPriceRulesFormSection.discountAmount}}" stepKey="fillDiscountAmount"/>
+
+
+        <!-- CE: Click 'Save and Apply' button -->
+        <click selector="{{AdminNewCatalogPriceRule.saveAndApply}}" stepKey="clickSave"/>
+        <see userInput="You saved the rule." selector="{{ContentManagementSection.StoreConfigurationPageSuccessMessage}}" stepKey="seeMessage"/>
+        <see userInput="Updated rules applied." selector="{{ContentManagementSection.StoreConfigurationPageSuccessMessage}}" stepKey="seeSuccessMessage"/>
+
+        <!-- Run cron -->
+        <magentoCron stepKey="runAllCronJobs"/>
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+            <argument name="tags" value=""/>
+        </actionGroup>
+
+        <!-- Go to Frontend and open the simple product -->
+        <amOnPage url="{{StorefrontProductPage.url($$createFirstProduct.sku$$)}}" stepKey="amOnSimpleProductPage"/>
+        <waitForPageLoad stepKey="waitForSimpleProductPageLoad"/>
+
+        <!-- Verify Price for simple product with specialColor green=$20 -->
+        <see userInput="20.00" selector="{{StorefrontProductInfoMainSection.updatedPrice}}" stepKey="seePrice20"/>
+
+        <!-- Go to Frontend and  Open the Configurable product -->
+        <amOnPage url="{{StorefrontProductPage.url($$createConfigProduct.sku$$)}}" stepKey="amOnConfigProductPage"/>
+        <waitForPageLoad stepKey="waitForConfigProductPageLoad"/>
+
+        <!-- Verify Price for configurable product with specialColor green=$30 -->
+        <selectOption userInput="option1" selector="{{AdminCustomerActivitiesConfigureSection.addAttribute}}" stepKey="selectOption1"/>
+        <waitForPageLoad stepKey="waitForOption1Load"/>
+        <see userInput="30.00" selector="{{StorefrontProductInfoMainSection.updatedPrice}}" stepKey="seePrice30"/>
+
+        <selectOption userInput="option2" selector="{{AdminCustomerActivitiesConfigureSection.addAttribute}}" stepKey="selectOption2"/>
+        <waitForPageLoad stepKey="waitForOption2Load"/>
+        <see userInput="30.00" selector="{{StorefrontProductInfoMainSection.updatedPrice}}" stepKey="seeOption2Price30"/>
+
+        <!-- Go to Frontend and  open the second simple product -->
+        <amOnPage url="{{StorefrontProductPage.url($$createSecondProduct.sku$$)}}" stepKey="amOnSecondProductPage"/>
+        <waitForPageLoad stepKey="waitForSecondProductPageLoad"/>
+
+        <!-- Verify Price for simple product with specialColor red=$40 -->
+        <see userInput="40.00" selector="{{StorefrontProductInfoMainSection.updatedPrice}}" stepKey="seePrice40"/>
+    </test>
+</tests>

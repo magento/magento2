@@ -13,6 +13,7 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\Registry;
 use Magento\Quote\Model\ResourceModel\Quote\CollectionFactory as QuoteCollectionFactory;
 use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Sales\Model\OrderFactory;
 use Magento\Sales\Model\ResourceModel\Order\CollectionFactory;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
@@ -58,22 +59,30 @@ class CheckoutEndToEndTest extends GraphQlAbstract
     private $orderRepository;
 
     /**
+     * @var OrderFactory
+     */
+    private $orderFactory;
+
+    /**
      * @var array
      */
     private $headers = [];
 
-    protected function setUp()
+    /**
+     * @inheritdoc
+     */
+    protected function setUp(): void
     {
-        parent::setUp();
-
         $objectManager = Bootstrap::getObjectManager();
+
         $this->registry = $objectManager->get(Registry::class);
         $this->quoteCollectionFactory = $objectManager->get(QuoteCollectionFactory::class);
         $this->quoteResource = $objectManager->get(QuoteResource::class);
         $this->quoteIdMaskFactory = $objectManager->get(QuoteIdMaskFactory::class);
-        $this->customerRepository = Bootstrap::getObjectManager()->get(CustomerRepositoryInterface::class);
+        $this->customerRepository = $objectManager->get(CustomerRepositoryInterface::class);
         $this->orderCollectionFactory = $objectManager->get(CollectionFactory::class);
         $this->orderRepository = $objectManager->get(OrderRepositoryInterface::class);
+        $this->orderFactory = $objectManager->get(OrderFactory::class);
     }
 
     /**
@@ -97,8 +106,13 @@ class CheckoutEndToEndTest extends GraphQlAbstract
         $paymentMethod = $this->setShippingMethod($cartId, $shippingMethod);
         $this->setPaymentMethod($cartId, $paymentMethod);
 
-        $orderId = $this->placeOrder($cartId);
-        $this->checkOrderInHistory($orderId);
+        $orderIncrementId = $this->placeOrder($cartId);
+
+        $order = $this->orderFactory->create();
+        $order->loadByIncrementId($orderIncrementId);
+
+        $this->checkOrderInHistory($orderIncrementId);
+        $this->assertNotEmpty($order->getEmailSent());
     }
 
     /**
@@ -158,7 +172,7 @@ QUERY;
   products (
     filter: {
       sku: {
-        like:"simple%"
+        eq:"simple1"
       }
     }
     pageSize: 1
@@ -208,7 +222,7 @@ QUERY;
     private function addProductToCart(string $cartId, float $qty, string $sku): void
     {
         $query = <<<QUERY
-mutation {  
+mutation {
   addSimpleProductsToCart(
     input: {
       cart_id: "{$cartId}"
@@ -259,7 +273,6 @@ mutation {
           telephone: "88776655"
           region: "TX"
           country_code: "US"
-          save_in_address_book: false
          }
       }
     }
@@ -298,7 +311,6 @@ mutation {
             postcode: "887766"
             country_code: "US"
             telephone: "88776655"
-            save_in_address_book: false
           }
         }
       ]
@@ -352,7 +364,7 @@ QUERY;
         $query = <<<QUERY
 mutation {
   setShippingMethodsOnCart(input:  {
-    cart_id: "{$cartId}", 
+    cart_id: "{$cartId}",
     shipping_methods: [
       {
          carrier_code: "{$method['carrier_code']}"
@@ -426,7 +438,7 @@ mutation {
     }
   ) {
     order {
-      order_id
+      order_number
     }
   }
 }
@@ -434,10 +446,10 @@ QUERY;
         $response = $this->graphQlMutation($query, [], '', $this->headers);
         self::assertArrayHasKey('placeOrder', $response);
         self::assertArrayHasKey('order', $response['placeOrder']);
-        self::assertArrayHasKey('order_id', $response['placeOrder']['order']);
-        self::assertNotEmpty($response['placeOrder']['order']['order_id']);
+        self::assertArrayHasKey('order_number', $response['placeOrder']['order']);
+        self::assertNotEmpty($response['placeOrder']['order']['order_number']);
 
-        return $response['placeOrder']['order']['order_id'];
+        return $response['placeOrder']['order']['order_number'];
     }
 
     /**
@@ -468,7 +480,7 @@ QUERY;
         self::assertArrayHasKey('grand_total', $order);
     }
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         $this->deleteCustomer();
         $this->deleteQuote();

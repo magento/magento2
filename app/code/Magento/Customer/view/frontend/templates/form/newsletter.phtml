@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /** @var \Magento\Customer\Block\Newsletter $block */
 ?>
 <?= $block->getChildHtml('form_before') ?>
@@ -14,7 +12,7 @@
             <?= $block->getBlockHtml('formkey') ?>
             <legend class="legend"><span><?= $block->escapeHtml(__('Subscription option')) ?></span></legend><br>
             <div class="field choice">
-                <input type="checkbox" name="is_subscribed" id="subscription" value="1" title="<?= $block->escapeHtmlAttr(__('General Subscription')) ?>"<?php if ($block->getIsSubscribed()): ?> checked="checked"<?php endif; ?> class="checkbox">
+                <input type="checkbox" name="is_subscribed" id="subscription" value="1" title="<?= $block->escapeHtmlAttr(__('General Subscription')) ?>"<?php if ($block->getIsSubscribed()) : ?> checked="checked"<?php endif; ?> class="checkbox">
                 <label for="subscription" class="label"><span><?= $block->escapeHtml(__('General Subscription')) ?></span></label>
             </div>
             <?php /* Extensions placeholder */ ?>

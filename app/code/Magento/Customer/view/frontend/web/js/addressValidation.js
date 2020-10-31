@@ -9,7 +9,7 @@ define([
     'mageUtils',
     'mage/translate',
     'Magento_Checkout/js/model/postcode-validator',
-    'jquery/ui',
+    'jquery-ui-modules/widget',
     'validation'
 ], function ($, __, utils, $t, postCodeValidator) {
     'use strict';

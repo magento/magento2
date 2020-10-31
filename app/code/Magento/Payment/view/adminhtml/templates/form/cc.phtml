@@ -4,17 +4,16 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
 /**
  * @var \Magento\Payment\Block\Adminhtml\Transparent\Form $block
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
  */
 $code = $block->escapeHtml($block->getMethodCode());
 $ccType = $block->getInfoData('cc_type');
 $ccExpMonth = $block->getInfoData('cc_exp_month');
 $ccExpYear = $block->getInfoData('cc_exp_year');
 ?>
-<fieldset class="admin__fieldset payment-method" id="payment_form_<?= /* @noEscape */ $code ?>"
-          style="display:none">
+<fieldset class="admin__fieldset payment-method" id="payment_form_<?= /* @noEscape */ $code ?>">
     <div class="field-type admin__field _required">
         <label class="admin__field-label" for="<?= /* @noEscape */ $code ?>_cc_type">
             <span><?= $block->escapeHtml(__('Credit Card Type')) ?></span>
@@ -24,7 +23,8 @@ $ccExpYear = $block->getInfoData('cc_exp_year');
                     class="required-entry validate-cc-type-select admin__control-select">
                 <option value=""></option>
                 <?php foreach ($block->getCcAvailableTypes() as $typeCode => $typeName): ?>
-                    <option value="<?= $block->escapeHtml($typeCode) ?>" <?php if ($typeCode == $ccType): ?>selected="selected"<?php endif ?>>
+                    <option value="<?= $block->escapeHtml($typeCode) ?>"
+                            <?php if ($typeCode == $ccType): ?>selected="selected"<?php endif ?>>
                         <?= $block->escapeHtml($typeName) ?>
                     </option>
                 <?php endforeach ?>
@@ -37,7 +37,8 @@ $ccExpYear = $block->getInfoData('cc_exp_year');
         </label>
         <div class="admin__field-control">
             <input type="text" id="<?= /* @noEscape */ $code ?>_cc_number" name="payment[cc_number]"
-                   title="<?= $block->escapeHtml(__('Credit Card Number')) ?>" class="admin__control-text validate-cc-number"
+                   title="<?= $block->escapeHtml(__('Credit Card Number')) ?>"
+                   class="admin__control-text validate-cc-number"
                    value="<?= /* @noEscape */ $block->getInfoData('cc_number') ?>"/>
         </div>
     </div>
@@ -81,3 +82,7 @@ $ccExpYear = $block->getInfoData('cc_exp_year');
         </div>
     <?php endif; ?>
 </fieldset>
+<?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
+    "display:none",
+    'fieldset#payment_form_' . /* @noEscape */ $code
+) ?>

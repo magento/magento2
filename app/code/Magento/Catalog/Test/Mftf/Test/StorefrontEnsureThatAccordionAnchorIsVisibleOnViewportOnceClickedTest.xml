@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontEnsureThatAccordionAnchorIsVisibleOnViewportOnceClickedTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Ensure that accordion anchor is visible on viewport once clicked"/>
+            <title value="Ensure that accordion anchor is visible on viewport once clicked"/>
+            <description value="Ensure that accordion anchor is visible on viewport once clicked"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-6484"/>
+            <group value="Catalog"/>
+        </annotations>
+        <before>
+            <!-- Create product with description -->
+            <createData entity="SimpleProductWithDescription" stepKey="createProduct"/>
+
+            <!-- Create 4 product attributes visible on front end -->
+            <createData entity="productDropDownAttribute" stepKey="createFirstAttribute"/>
+            <createData entity="productAttributeOption1" stepKey="createOption">
+                <requiredEntity createDataKey="createFirstAttribute"/>
+            </createData>
+            <createData entity="productAttributeText" stepKey="createSecondAttribute"/>
+            <createData entity="newProductAttribute" stepKey="createThirdAttribute"/>
+            <createData entity="productAttributeWithTwoOptions" stepKey="createFourthAttribute"/>
+            <createData entity="productAttributeOption1" stepKey="createFirstOption">
+                <requiredEntity createDataKey="createFourthAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption2" stepKey="createSecondOption">
+                <requiredEntity createDataKey="createFourthAttribute"/>
+            </createData>
+
+            <!-- Add all created attributes to Default Attribute Set -->
+            <createData entity="AddToDefaultSet" stepKey="addFirstAttributeToAttributeSet">
+                <requiredEntity createDataKey="createFirstAttribute"/>
+            </createData>
+            <createData entity="AddToDefaultSet" stepKey="addSecondAttributeToAttributeSet">
+                <requiredEntity createDataKey="createSecondAttribute"/>
+            </createData>
+            <createData entity="AddToDefaultSet" stepKey="addThirdAttributeToAttributeSet">
+                <requiredEntity createDataKey="createThirdAttribute"/>
+            </createData>
+            <createData entity="AddToDefaultSet" stepKey="addFourthAttributeToAttributeSet">
+                <requiredEntity createDataKey="createFourthAttribute"/>
+            </createData>
+
+            <!-- Login as admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!-- Delete reviews -->
+            <actionGroup ref="AdminOpenReviewsPageActionGroup" stepKey="openAllReviewsPage"/>
+            <actionGroup ref="AdminDeleteReviewsByUserNicknameActionGroup" stepKey="deleteCustomerReview"/>
+
+            <!-- Delete customer -->
+            <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteCustomer">
+                <argument name="email" value="{{CustomerEntityOne.email}}"/>
+            </actionGroup>
+
+            <deleteData createDataKey="createFirstAttribute" stepKey="deleteFirstAttribute"/>
+            <deleteData createDataKey="createSecondAttribute" stepKey="deleteSecondAttribute"/>
+            <deleteData createDataKey="createThirdAttribute" stepKey="deleteThirdAttribute"/>
+            <deleteData createDataKey="createFourthAttribute" stepKey="deleteFourthAttribute"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+        </after>
+
+        <!-- Edit the product and set those attributes values -->
+        <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="findCreatedProductInGrid">
+            <argument name="product" value="$$createProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="goToEditProductPage">
+            <argument name="product" value="$$createProduct$$"/>
+        </actionGroup>
+        <selectOption selector="{{AdminProductFormSection.customSelectField($$createFirstAttribute.attribute[attribute_code]$$)}}" userInput="$$createOption.option[store_labels][0][label]$$" stepKey="setFirstAttributeValue"/>
+        <fillField selector="{{AdminProductAttributeSection.textAttributeByCode($$createSecondAttribute.attribute[attribute_code]$$)}}" userInput="{{ProductAttributeOption8.value}}" stepKey="setSecondAttributeValue"/>
+        <fillField selector="{{AdminProductAttributeSection.textAttributeByCode($$createThirdAttribute.attribute[attribute_code]$$)}}" userInput="{{ProductAttributeOption8.value}}" stepKey="setThirdAttributeValue"/>
+        <selectOption selector="{{AdminProductFormSection.customSelectField($$createFourthAttribute.attribute[attribute_code]$$)}}" userInput="$$createSecondOption.option[store_labels][0][label]$$" stepKey="setFourthAttributeValue"/>
+
+        <!-- Save product form -->
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveSimpleProduct"/>
+
+        <!-- Go to frontend and make a user account and login with it -->
+        <actionGroup ref="StorefrontOpenCustomerAccountCreatePageActionGroup" stepKey="openCreateAccountPage"/>
+        <actionGroup ref="StorefrontFillCustomerAccountCreationFormActionGroup" stepKey="fillCreateAccountForm">
+            <argument name="customer" value="CustomerEntityOne"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontClickCreateAnAccountCustomerAccountCreationFormActionGroup" stepKey="submitCreateAccountForm"/>
+        <actionGroup ref="AssertMessageCustomerCreateAccountActionGroup" stepKey="seeSuccessMessage">
+            <argument name="messageType" value="success"/>
+            <argument name="message" value="Thank you for registering with Main Website Store."/>
+        </actionGroup>
+
+        <!-- Go to the product view page -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openCreatedProductPage">
+            <argument name="productUrl" value="$$createProduct.custom_attributes[url_key]$$"/>
+        </actionGroup>
+
+        <!-- Click on reviews and add 2 reviews with current user -->
+        <actionGroup ref="StorefrontAddProductReviewActionGroup" stepKey="addFirstReview"/>
+        <actionGroup ref="StorefrontAddProductReviewActionGroup" stepKey="addSecondReview"/>
+
+        <!-- Go to Pending reviews page and clear filters -->
+        <actionGroup ref="AdminOpenPendingReviewsPageActionGroup" stepKey="openReviewsPage"/>
+        <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilters"/>
+
+        <!-- Moderate first product reviews: change review status from pending to approved, save -->
+        <actionGroup ref="AdminOpenReviewByUserNicknameActionGroup" stepKey="openFirstCustomerReviews"/>
+        <actionGroup ref="AdminChangeReviewStatusActionGroup" stepKey="changeFirstReviewStatus"/>
+        <actionGroup ref="AdminSaveReviewActionGroup" stepKey="saveModeratedFirstReview"/>
+
+        <!-- Moderate second product reviews: change review status from pending to approved, save -->
+        <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilter"/>
+        <actionGroup ref="AdminOpenReviewByUserNicknameActionGroup" stepKey="openSecondCustomerReviews"/>
+        <actionGroup ref="AdminChangeReviewStatusActionGroup" stepKey="changeSecondReviewStatus"/>
+        <actionGroup ref="AdminSaveReviewActionGroup" stepKey="saveModeratedSecondReview"/>
+
+        <!-- Assert that product page has the description -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductPage">
+            <argument name="productUrl" value="$$createProduct.custom_attributes[url_key]$$"/>
+        </actionGroup>
+        <click selector="{{StorefrontProductInfoDetailsSection.detailsTab}}" stepKey="clickDetailsTab"/>
+        <see selector="{{StorefrontProductInfoMainSection.productDescription}}" userInput="$$createProduct.custom_attributes[description]$$" stepKey="assertProductDescription"/>
+
+        <!-- Assert that product page has added reviews -->
+        <click selector="{{StorefrontProductReviewsSection.reviewsTab}}" stepKey="clickReviewTab"/>
+        <waitForElementVisible selector="{{StorefrontProductReviewsSection.reviewsBlock}}" stepKey="seeAllReviews"/>
+        <actionGroup ref="StorefrontAssertReviewAtProductPageActionGroup" stepKey="assertFirstReview">
+            <argument name="rowIndex" value="1"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertReviewAtProductPageActionGroup" stepKey="assertSecondReview">
+            <argument name="rowIndex" value="2"/>
+        </actionGroup>
+
+        <!-- Assert that product page has all product attributes in More Info tab -->
+        <actionGroup ref="CheckAttributeInMoreInformationTabActionGroup" stepKey="checkFirstAttributeInMoreInformationTab">
+            <argument name="attributeLabel" value="$$createFirstAttribute.attribute[frontend_labels][0][label]$$"/>
+            <argument name="attributeValue" value="$$createOption.option[store_labels][0][label]$$"/>
+        </actionGroup>
+        <actionGroup ref="CheckAttributeInMoreInformationTabActionGroup" stepKey="checkSecondAttributeInMoreInformationTab">
+            <argument name="attributeLabel" value="$$createSecondAttribute.attribute[frontend_labels][0][label]$$"/>
+            <argument name="attributeValue" value="{{ProductAttributeOption8.value}}"/>
+        </actionGroup>
+        <actionGroup ref="CheckAttributeInMoreInformationTabActionGroup" stepKey="checkThirdAttributeInMoreInformationTab">
+            <argument name="attributeLabel" value="$$createThirdAttribute.attribute[frontend_labels][0][label]$$"/>
+            <argument name="attributeValue" value="{{ProductAttributeOption8.value}}"/>
+        </actionGroup>
+        <actionGroup ref="CheckAttributeInMoreInformationTabActionGroup" stepKey="checkFourthAttributeInMoreInformationTab">
+            <argument name="attributeLabel" value="$$createFourthAttribute.attribute[frontend_labels][0][label]$$"/>
+            <argument name="attributeValue" value="$$createSecondOption.option[store_labels][0][label]$$"/>
+        </actionGroup>
+
+        <!-- Collapse the view of the page to minimum width so that mobile view becomes visible -->
+        <resizeWindow width="400" height="590" stepKey="resizeWindowToMobileView"/>
+
+        <!-- Assert that Details tab on product page become accordion -->
+        <click selector="{{StorefrontProductInfoDetailsSection.detailsTab}}" stepKey="clickDetails"/>
+        <seeElement selector="{{StorefrontProductInfoDetailsSection.detailsSectionToggleState('true')}}" stepKey="seeOpenDetailsTab"/>
+        <seeElement selector="{{StorefrontProductMoreInformationSection.moreInformationSectionToggleState('false')}}" stepKey="seeClosedMoreInformationTab"/>
+        <seeElement selector="{{StorefrontProductReviewsSection.reviewsSectionToggleState('false')}}" stepKey="seeClosedReviewTab"/>
+
+        <!-- Assert that More Information tab on product page become accordion -->
+        <click selector="{{StorefrontProductMoreInformationSection.moreInformation}}" stepKey="clickMoreInformation"/>
+        <seeElement selector="{{StorefrontProductInfoDetailsSection.detailsSectionToggleState('false')}}" stepKey="seeClosedDetails"/>
+        <seeElement selector="{{StorefrontProductMoreInformationSection.moreInformationSectionToggleState('true')}}" stepKey="seeOpenMoreInformationTab"/>
+        <seeElement selector="{{StorefrontProductReviewsSection.reviewsSectionToggleState('false')}}" stepKey="seeClosedReview"/>
+
+        <!-- Assert that Reviews tab on product page become accordion -->
+        <click selector="{{StorefrontProductReviewsSection.reviewsTab}}" stepKey="clickReview"/>
+        <seeElement selector="{{StorefrontProductInfoDetailsSection.detailsSectionToggleState('false')}}" stepKey="seeClosedDetailsTab"/>
+        <seeElement selector="{{StorefrontProductMoreInformationSection.moreInformationSectionToggleState('false')}}" stepKey="seeClosedMoreInformation"/>
+        <seeElement selector="{{StorefrontProductReviewsSection.reviewsSectionToggleState('true')}}" stepKey="seeOpenReviewTab"/>
+
+        <!-- Scroll so that the description is visible and More info tab is on the upper middle of the page -->
+        <scrollTo selector="{{StorefrontProductInfoDetailsSection.detailsTab}}" stepKey="scrollToMoreInfoTab"/>
+        <resizeWindow width="1280" height="1024" stepKey="resizeWindowToDesktop"/>
+    </test>
+</tests>

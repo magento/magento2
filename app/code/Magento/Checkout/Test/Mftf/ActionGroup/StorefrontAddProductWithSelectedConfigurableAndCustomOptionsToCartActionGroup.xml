@@ -10,11 +10,15 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!-- Add product with selected configurable option and customizable option to cart from the product page -->
     <actionGroup name="StorefrontAddProductWithSelectedConfigurableAndCustomOptionsToCartActionGroup">
+        <annotations>
+            <description>Selects the provided Customizable Option in the Product Options drop down on a Storefront Configurable product page. Clicks on Add to Cart. Validates that the Success Message is present and correct.</description>
+        </annotations>
         <arguments>
             <argument name="product" type="entity"/>
             <argument name="option" type="string"/>
             <argument name="customizableOption" type="string"/>
         </arguments>
+        
         <selectOption userInput="{{option}}" selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" stepKey="selectOption"/>
         <click selector="{{StorefrontProductInfoMainSection.selectCustomOptionByName(customizableOption)}}" stepKey="selectCustomOption"/>
         <click selector="{{StorefrontProductInfoMainSection.AddToCart}}" stepKey="clickAddToCart"/>

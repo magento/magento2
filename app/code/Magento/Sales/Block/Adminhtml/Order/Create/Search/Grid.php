@@ -5,8 +5,7 @@
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Create\Search;
 
-use Magento\Sales\Block\Adminhtml\Order\Create\Search\Grid\DataProvider\ProductCollection
-    as ProductCollectionDataProvider;
+use Magento\Sales\Block\Adminhtml\Order\Create\Search\Grid\DataProvider\ProductCollection;
 use Magento\Framework\App\ObjectManager;
 
 /**
@@ -48,7 +47,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     protected $_productFactory;
 
     /**
-     * @var ProductCollectionDataProvider $productCollectionProvider
+     * @var ProductCollection $productCollectionProvider
      */
     private $productCollectionProvider;
 
@@ -60,7 +59,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * @param \Magento\Backend\Model\Session\Quote $sessionQuote
      * @param \Magento\Sales\Model\Config $salesConfig
      * @param array $data
-     * @param ProductCollectionDataProvider|null $productCollectionProvider
+     * @param ProductCollection|null $productCollectionProvider
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -70,14 +69,14 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
         \Magento\Backend\Model\Session\Quote $sessionQuote,
         \Magento\Sales\Model\Config $salesConfig,
         array $data = [],
-        ProductCollectionDataProvider $productCollectionProvider = null
+        ProductCollection $productCollectionProvider = null
     ) {
         $this->_productFactory = $productFactory;
         $this->_catalogConfig = $catalogConfig;
         $this->_sessionQuote = $sessionQuote;
         $this->_salesConfig = $salesConfig;
         $this->productCollectionProvider = $productCollectionProvider
-            ?: ObjectManager::getInstance()->get(ProductCollectionDataProvider::class);
+            ?: ObjectManager::getInstance()->get(ProductCollection::class);
         parent::__construct($context, $backendHelper, $data);
     }
 
@@ -94,6 +93,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
         $this->setCheckboxCheckCallback('order.productGridCheckboxCheck.bind(order)');
         $this->setRowInitCallback('order.productGridRowInit.bind(order)');
         $this->setDefaultSort('entity_id');
+        $this->setFilterKeyPressCallback('order.productGridFilterKeyPress');
         $this->setUseAjax(true);
         if ($this->getRequest()->getParam('collapse')) {
             $this->setIsCollapsed(true);

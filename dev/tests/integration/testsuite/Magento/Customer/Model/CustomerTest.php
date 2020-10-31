@@ -18,7 +18,7 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
      */
     protected $customerFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->customerModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Customer\Model\Customer::class

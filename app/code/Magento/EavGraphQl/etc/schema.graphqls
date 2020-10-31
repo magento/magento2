@@ -2,7 +2,7 @@
 # See COPYING.txt for license details.
 
 type Query {
-    customAttributeMetadata(attributes: [AttributeInput!]!): CustomAttributeMetadata @resolver(class: "Magento\\EavGraphQl\\Model\\Resolver\\CustomAttributeMetadata")  @doc(description: "The customAttributeMetadata query returns the attribute type, given an attribute code and entity type") @cache(cacheable: false)
+    customAttributeMetadata(attributes: [AttributeInput!]!): CustomAttributeMetadata @resolver(class: "Magento\\EavGraphQl\\Model\\Resolver\\CustomAttributeMetadata") @doc(description: "The customAttributeMetadata query returns the attribute type, given an attribute code and entity type") @cache(cacheable: false)
 }
 
 type CustomAttributeMetadata @doc(description: "CustomAttributeMetadata defines an array of attribute_codes and entity_types") {
@@ -13,6 +13,7 @@ type Attribute @doc(description: "Attribute contains the attribute_type of the s
     attribute_code: String @doc(description: "The unique identifier for an attribute code. This value should be in lowercase letters without spaces.")
     entity_type: String @doc(description: "The type of entity that defines the attribute")
     attribute_type: String @doc(description: "The data type of the attribute")
+    input_type: String @doc(description: "The frontend input type of the attribute")
     attribute_options: [AttributeOption] @resolver(class: "Magento\\EavGraphQl\\Model\\Resolver\\AttributeOptions") @doc(description: "Attribute options list.")
 }
 

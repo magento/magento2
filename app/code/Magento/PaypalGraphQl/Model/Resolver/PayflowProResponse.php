@@ -117,7 +117,8 @@ class PayflowProResponse implements ResolverInterface
         }
 
         $maskedCartId = $args['input']['cart_id'];
-        $cart = $this->getCartForUser->execute($maskedCartId, $context->getUserId());
+        $storeId = (int)$context->getExtensionAttributes()->getStore()->getId();
+        $cart = $this->getCartForUser->execute($maskedCartId, $context->getUserId(), $storeId);
 
         $paypalPayload = $args['input']['paypal_payload'] ?? '';
 
@@ -125,9 +126,9 @@ class PayflowProResponse implements ResolverInterface
         $this->parameters->fromString(urldecode($paypalPayload));
         $data = $this->parameters->toArray();
         try {
-            $do = $this->dataObjectFactory->create(['data' => array_change_key_case($data, CASE_LOWER)]);
-            $this->responseValidator->validate($do, $this->transparent);
-            $this->transaction->savePaymentInQuote($do, $cart->getId());
+            $response = $this->transaction->getResponseObject($data);
+            $this->responseValidator->validate($response, $this->transparent);
+            $this->transaction->savePaymentInQuote($response, $cart->getId());
         } catch (LocalizedException $exception) {
             $parameters['error'] = true;
             $parameters['error_msg'] = $exception->getMessage();

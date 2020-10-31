@@ -26,58 +26,56 @@
             <createData entity="SearchTerm" stepKey="createThirdSearchTerm"/>
 
             <!-- Login as admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <!-- Log out -->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Go to the catalog search term page -->
-        <amOnPage url="{{AdminCatalogSearchTermIndexPage.url}}" stepKey="openAdminCatalogSearchTermIndexPage"/>
-        <waitForPageLoad stepKey="waitForAdminCatalogSearchTermIndexPageLoad"/>
+        <actionGroup ref="AdminOpenCatalogSearchTermIndexPageActionGroup" stepKey="openAdminCatalogSearchTermIndexPage"/>
 
         <!-- Select all created below search terms -->
-        <actionGroup ref="searchTermFilterBySearchQuery" stepKey="filterByFirstSearchQuery">
+        <actionGroup ref="AdminSearchTermFilterBySearchQueryActionGroup" stepKey="filterByFirstSearchQuery">
             <argument name="searchQuery" value="$$createFirstSearchTerm.query_text$$"/>
         </actionGroup>
-        <actionGroup ref="searchTermFilterBySearchQuery" stepKey="filterBySecondSearchQuery">
+        <actionGroup ref="AdminSearchTermFilterBySearchQueryActionGroup" stepKey="filterBySecondSearchQuery">
             <argument name="searchQuery" value="$$createSecondSearchTerm.query_text$$"/>
         </actionGroup>
-        <actionGroup ref="searchTermFilterBySearchQuery" stepKey="filterByThirdSearchQuery">
+        <actionGroup ref="AdminSearchTermFilterBySearchQueryActionGroup" stepKey="filterByThirdSearchQuery">
             <argument name="searchQuery" value="$$createThirdSearchTerm.query_text$$"/>
         </actionGroup>
 
         <!-- Delete created below search terms -->
-        <actionGroup ref="deleteSearchTerm" stepKey="deleteSearchTerms"/>
+        <actionGroup ref="AdminDeleteSearchTermActionGroup" stepKey="deleteSearchTerms"/>
 
         <!-- Assert search terms are absent on the search term page -->
-        <actionGroup ref="AssertSearchTermNotInGrid" stepKey="assertFirstSearchTermNotInGrid">
+        <actionGroup ref="AssertSearchTermNotInGridActionGroup" stepKey="assertFirstSearchTermNotInGrid">
             <argument name="searchQuery" value="$$createFirstSearchTerm.query_text$$"/>
         </actionGroup>
-        <actionGroup ref="AssertSearchTermNotInGrid" stepKey="assertSecondSearchTermNotInGrid">
+        <actionGroup ref="AssertSearchTermNotInGridActionGroup" stepKey="assertSecondSearchTermNotInGrid">
             <argument name="searchQuery" value="$$createSecondSearchTerm.query_text$$"/>
         </actionGroup>
-        <actionGroup ref="AssertSearchTermNotInGrid" stepKey="assertThirdSearchTermNotInGrid">
+        <actionGroup ref="AssertSearchTermNotInGridActionGroup" stepKey="assertThirdSearchTermNotInGrid">
             <argument name="searchQuery" value="$$createThirdSearchTerm.query_text$$"/>
         </actionGroup>
 
         <!-- Go to storefront page -->
-        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToStorefrontPage"/>
-        <waitForPageLoad stepKey="waitForStorefrontPageLoad"/>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStorefrontPage"/>
 
         <!-- Verify search term deletion on storefront -->
         <actionGroup ref="StorefrontCheckQuickSearchActionGroup" stepKey="quickSearchForFirstSearchTerm">
             <argument name="phrase" value="$$createFirstSearchTerm.query_text$$"/>
         </actionGroup>
-        <actionGroup ref="StorefrontCheckSearchIsEmpty" stepKey="checkEmptyForFirstSearchTerm"/>
+        <actionGroup ref="StorefrontCheckSearchIsEmptyActionGroup" stepKey="checkEmptyForFirstSearchTerm"/>
         <actionGroup ref="StorefrontCheckQuickSearchActionGroup" stepKey="quickSearchForSecondSearchTerm">
             <argument name="phrase" value="$$createSecondSearchTerm.query_text$$"/>
         </actionGroup>
-        <actionGroup ref="StorefrontCheckSearchIsEmpty" stepKey="checkEmptyForSecondSearchTerm"/>
+        <actionGroup ref="StorefrontCheckSearchIsEmptyActionGroup" stepKey="checkEmptyForSecondSearchTerm"/>
         <actionGroup ref="StorefrontCheckQuickSearchActionGroup" stepKey="quickSearchForThirdSearchTerm">
             <argument name="phrase" value="$$createThirdSearchTerm.query_text$$"/>
         </actionGroup>
-        <actionGroup ref="StorefrontCheckSearchIsEmpty" stepKey="checkEmptyForThirdSearchTerm"/>
+        <actionGroup ref="StorefrontCheckSearchIsEmptyActionGroup" stepKey="checkEmptyForThirdSearchTerm"/>
     </test>
 </tests>

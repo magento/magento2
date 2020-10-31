@@ -103,10 +103,6 @@
     &.confirm {
         .modal-inner-wrap {
             .lib-css(max-width, @modal-popup-confirm__width);
-
-            .modal-content {
-                padding-right: 7rem;
-            }
         }
     }
 
@@ -150,7 +146,6 @@
 
     //  Modals overlay
     .modals-overlay {
-        &:extend(.abs-modal-overlay all);
         .lib-css(z-index, @overlay__z-index);
     }
 

@@ -14,6 +14,11 @@
         <data key="shipping">10.00</data>
         <data key="grandTotal">256.00</data>
     </entity>
+    <entity name="AdminOrderSimpleProductWithCatalogRule" type="order">
+        <data key="subtotal">110.70</data>
+        <data key="shipping">5.00</data>
+        <data key="grandTotal">115.70</data>
+    </entity>
     <entity name="AdminOrderSimpleProduct" type="order">
         <data key="subtotal">123.00</data>
         <data key="shipping">5.00</data>
@@ -23,12 +28,11 @@
         <data key="from">200</data>
         <data key="to">400</data>
     </entity>
-    <entity name="AdminOrderSimpleProductWithCatalogRule" type="order">
-        <data key="subtotal">110.70</data>
-        <data key="shipping">5.00</data>
-        <data key="grandTotal">115.70</data>
+    <entity name="AdminOrderMultipleProducts" type="order">
+        <data key="subtotal">60.00</data>
+        <data key="shipping">0.00</data>
+        <data key="grandTotal">60.00</data>
     </entity>
-
     <entity name="OrderStatus" type="status">
         <data key="canceled">Canceled</data>
         <data key="closed">Closed</data>
@@ -39,5 +43,6 @@
         <data key="pending">Pending</data>
         <data key="pendingPayment">Pending Payment</data>
         <data key="processing">Processing</data>
+        <data key="ordered">Ordered</data>
     </entity>
 </entities>

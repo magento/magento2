@@ -9,8 +9,12 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="BundleProductFilter">
+        <annotations>
+            <description>Applies a Backend Admin Grid filter for Bundle Products.</description>
+        </annotations>
+
         <!--Setting filter-->
-        <!--Prereq: go to admin product catalog page-->
+        <!--PreReq: go to admin product catalog page-->
         <click selector="{{AdminProductFiltersSection.filter}}" stepKey="ClickOnFilter"/>
         <click selector="{{AdminProductFiltersSection.typeDropDown}}" stepKey="ClickOnTypeDropDown"/>
         <click selector="{{AdminProductFiltersSection.bundleOption}}" stepKey="ClickOnBundleOption"/>

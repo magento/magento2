@@ -9,6 +9,9 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminUpdateCustomerGroupByEmailActionGroup">
+        <annotations>
+            <description>Goes to the Admin Customers grid page. Filters the grid for the provided Email Address. Edits the Customer. Updates the Customer Group with the provided Customer Group. Clicks on Save.</description>
+        </annotations>
         <arguments>
             <argument name="emailAddress"/>
             <argument name="customerGroup" type="string"/>

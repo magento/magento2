@@ -10,10 +10,14 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!-- Check the configurable product in comparison page -->
     <actionGroup name="StorefrontCheckCompareConfigurableProductActionGroup">
+        <annotations>
+            <description>Validates that the Configurable Product is present and correct in the Compare Product area.</description>
+        </annotations>
         <arguments>
             <argument name="product"/>
             <argument name="optionProduct"/>
         </arguments>
+
         <seeElement selector="{{StorefrontProductCompareMainSection.ProductLinkByName(product.name)}}" stepKey="assertProductName"/>
         <see userInput="${{optionProduct.price}}.00" selector="{{StorefrontProductCompareMainSection.ProductPriceByName(product.name)}}" stepKey="assertProductPrice"/>
         <see userInput="{{product.sku}}" selector="{{StorefrontProductCompareMainSection.ProductAttributeByCodeAndProductName('SKU', product.name)}}" stepKey="assertProductSku"/>

@@ -292,6 +292,13 @@ define([
         },
 
         /**
+         * Return empty options html
+         */
+        getEmptyOptionsUnsanitizedHtml: function () {
+            return this.emptyOptionsHtml;
+        },
+
+        /**
          * Check options length and set to cache
          * if some options is added
          *
@@ -460,10 +467,6 @@ define([
         filterOptionsList: function () {
             var value = this.filterInputValue().trim().toLowerCase(),
                 array = [];
-
-            if (value && value.length < 2) {
-                return false;
-            }
 
             if (this.searchOptions) {
                 return this.loadOptions(value);
@@ -665,7 +668,7 @@ define([
          * @returns {Object} Chainable
          */
         toggleListVisible: function () {
-            this.listVisible(!this.listVisible());
+            this.listVisible(!this.disabled() && !this.listVisible());
 
             return this;
         },
@@ -751,11 +754,6 @@ define([
 
             return this.value() ? !!this.value().length : false;
         },
-
-        /**
-         * @deprecated
-         */
-        onMousemove: function () {},
 
         /**
          * Handles hover on list items.
@@ -1164,13 +1162,14 @@ define([
 
             if (this.isSearchKeyCached(searchKey)) {
                 cachedSearchResult = this.getCachedSearchResults(searchKey);
+                this.cacheOptions.plain = cachedSearchResult.options;
                 this.options(cachedSearchResult.options);
                 this.afterLoadOptions(searchKey, cachedSearchResult.lastPage, cachedSearchResult.total);
 
                 return;
             }
 
-            if (searchKey !== this.lastSearchKey) {
+            if (currentPage === 1) {
                 this.options([]);
             }
             this.processRequest(searchKey, currentPage);
@@ -1278,6 +1277,7 @@ define([
             });
 
             this.total = response.total;
+            this.cacheOptions.plain = existingOptions;
             this.options(existingOptions);
         },
 

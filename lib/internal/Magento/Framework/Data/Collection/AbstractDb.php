@@ -19,6 +19,7 @@ use Psr\Log\LoggerInterface as Logger;
  * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 abstract class AbstractDb extends \Magento\Framework\Data\Collection
 {
@@ -733,7 +734,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
     public function printLogQuery($printQuery = false, $logQuery = false, $sql = null)
     {
         if ($printQuery || $this->getFlag('print_query')) {
-            // phpcs:ignore Magento2.Security.LanguageConstruct
+            //phpcs:ignore Magento2.Security.LanguageConstruct
             echo $sql === null ? $this->getSelect()->__toString() : $sql;
         }
 
@@ -828,7 +829,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      * @return void
      * phpcs:disable Magento2.CodeAnalysis.EmptyBlock
      */
-    protected function _initSelect()
+    protected function _initSelect() //phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
     {
         // no implementation, should be overridden in children classes
     }
@@ -896,14 +897,9 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
     /**
      * @inheritdoc
      * @since 100.0.11
-     *
-     * @SuppressWarnings(PHPMD.SerializationAware)
-     * @deprecated Do not use PHP serialization.
      */
     public function __sleep()
     {
-        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
-
         return array_diff(
             parent::__sleep(),
             ['_fetchStrategy', '_logger', '_conn', 'extensionAttributesJoinProcessor']
@@ -913,14 +909,9 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
     /**
      * @inheritdoc
      * @since 100.0.11
-     *
-     * @SuppressWarnings(PHPMD.SerializationAware)
-     * @deprecated Do not use PHP serialization.
      */
     public function __wakeup()
     {
-        trigger_error('Using PHP serialization is deprecated', E_USER_DEPRECATED);
-
         parent::__wakeup();
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $this->_logger = $objectManager->get(Logger::class);

@@ -67,7 +67,7 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
     /**
      * Initialize dependencies
      *
-     * @deprecated
+     * @deprecated 101.0.2
      * @var Config
      */
     protected $_catalogConfig;
@@ -181,8 +181,8 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
     /**
      * Add advanced search filters to product collection
      *
-     * @param   array $values
-     * @return  $this
+     * @param array $values
+     * @return $this
      * @throws LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -196,6 +196,11 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
             /* @var $attribute Attribute */
             if (!isset($values[$attribute->getAttributeCode()])) {
                 continue;
+            }
+            if ($attribute->getFrontendInput() == 'text' || $attribute->getFrontendInput() == 'textarea') {
+                if (!trim($values[$attribute->getAttributeCode()])) {
+                    continue;
+                }
             }
             $value = $values[$attribute->getAttributeCode()];
             $preparedSearchValue = $this->getPreparedSearchCriteria($attribute, $value);
@@ -228,6 +233,11 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
                     ? date('Y-m-d\TH:i:s\Z', strtotime($value['to']))
                     : '';
             }
+
+            if ($attribute->getAttributeCode() === 'sku') {
+                $value = mb_strtolower($value);
+            }
+
             $condition = $this->_getResource()->prepareCondition(
                 $attribute,
                 $value,
@@ -343,17 +353,21 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
      *
      * @todo: Move this code to block
      *
-     * @param   EntityAttribute $attribute
-     * @param   mixed $value
-     * @return  string|bool
+     * @param EntityAttribute $attribute
+     * @param mixed $value
+     * @return string|bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function getPreparedSearchCriteria($attribute, $value)
     {
+        $from = null;
+        $to = null;
         if (is_array($value)) {
             if (isset($value['from']) && isset($value['to'])) {
                 if (!empty($value['from']) || !empty($value['to'])) {
+                    $from = '';
+                    $to = '';
                     if (isset($value['currency'])) {
                         /** @var $currencyModel Currency */
                         $currencyModel = $this->_currencyFactory->create()->load($value['currency']);

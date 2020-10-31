@@ -9,9 +9,13 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AssertSubTotalOnStorefrontMiniCartActionGroup">
+        <annotations>
+            <description>Validates that the provided Sub Total is present in the Storefront Mini Shopping Cart.</description>
+        </annotations>
         <arguments>
             <argument name="subTotal" type="string"/>
         </arguments>
+
         <waitForElementVisible selector="{{StorefrontMinicartSection.showCart}}" stepKey="waitForShowCartButtonVisible"/>
         <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="clickOnMiniCart"/>
         <grabTextFrom selector="{{StorefrontMinicartSection.miniCartSubtotalField}}" stepKey="grabTextFromMiniCartSubtotalField"/>

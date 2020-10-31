@@ -5,24 +5,24 @@
  */
 namespace Magento\Webapi\Model\Config;
 
-use Zend\Code\Reflection\MethodReflection;
+use Laminas\Code\Reflection\ClassReflection;
+use Laminas\Code\Reflection\MethodReflection;
+use Magento\Framework\Reflection\TypeProcessor;
 
 /**
- * Class reflector.
+ * Config class reflector
  */
 class ClassReflector
 {
     /**
-     * @var \Magento\Framework\Reflection\TypeProcessor
+     * @var TypeProcessor
      */
     protected $_typeProcessor;
 
     /**
-     * Construct reflector.
-     *
-     * @param \Magento\Framework\Reflection\TypeProcessor $typeProcessor
+     * @param TypeProcessor $typeProcessor
      */
-    public function __construct(\Magento\Framework\Reflection\TypeProcessor $typeProcessor)
+    public function __construct(TypeProcessor $typeProcessor)
     {
         $this->_typeProcessor = $typeProcessor;
     }
@@ -31,7 +31,7 @@ class ClassReflector
      * Reflect methods in given class and set retrieved data into reader.
      *
      * @param string $className
-     * @param array $methods
+     * @param string[]|array $methods List of methods of methods' metadata.
      * @return array <pre>array(
      *     $firstMethod => array(
      *         'documentation' => $methodDocumentation,
@@ -60,15 +60,16 @@ class ClassReflector
      *     ),
      *     ...
      * )</pre>
+     * @throws \ReflectionException
      */
     public function reflectClassMethods($className, $methods)
     {
         $data = [];
-        $classReflection = new \Zend\Code\Reflection\ClassReflection($className);
-        /** @var \Zend\Code\Reflection\MethodReflection $methodReflection */
+        $classReflection = new ClassReflection($className);
+        /** @var MethodReflection $methodReflection */
         foreach ($classReflection->getMethods() as $methodReflection) {
             $methodName = $methodReflection->getName();
-            if (array_key_exists($methodName, $methods)) {
+            if (in_array($methodName, $methods) || array_key_exists($methodName, $methods)) {
                 $data[$methodName] = $this->extractMethodData($methodReflection);
             }
         }
@@ -78,14 +79,15 @@ class ClassReflector
     /**
      * Retrieve method interface and documentation description.
      *
-     * @param \Zend\Code\Reflection\MethodReflection $method
+     * @param MethodReflection $method
      * @return array
      * @throws \InvalidArgumentException
+     * @throws \ReflectionException
      */
-    public function extractMethodData(\Zend\Code\Reflection\MethodReflection $method)
+    public function extractMethodData(MethodReflection $method)
     {
         $methodData = ['documentation' => $this->extractMethodDescription($method), 'interface' => []];
-        /** @var \Zend\Code\Reflection\ParameterReflection $parameter */
+        /** @var \Laminas\Code\Reflection\ParameterReflection $parameter */
         foreach ($method->getParameters() as $parameter) {
             $parameterData = [
                 'type' => $this->_typeProcessor->register($this->_typeProcessor->getParamType($parameter)),
@@ -116,10 +118,11 @@ class ClassReflector
     /**
      * Retrieve method full documentation description.
      *
-     * @param \Zend\Code\Reflection\MethodReflection $method
+     * @param MethodReflection $method
      * @return string
+     * @throws \ReflectionException
      */
-    protected function extractMethodDescription(\Zend\Code\Reflection\MethodReflection $method)
+    protected function extractMethodDescription(MethodReflection $method)
     {
         $methodReflection = new MethodReflection(
             $method->getDeclaringClass()->getName(),
@@ -141,10 +144,11 @@ class ClassReflector
      *
      * @param string $className
      * @return string
+     * @throws \ReflectionException
      */
     public function extractClassDescription($className)
     {
-        $classReflection = new \Zend\Code\Reflection\ClassReflection($className);
+        $classReflection = new ClassReflection($className);
         $docBlock = $classReflection->getDocBlock();
         if (!$docBlock) {
             return '';

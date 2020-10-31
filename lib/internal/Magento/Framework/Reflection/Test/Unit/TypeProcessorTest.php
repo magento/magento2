@@ -3,9 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 // @codingStandardsIgnoreStart
 namespace Magento\Framework\Reflection\Test\Unit;
 
+use Laminas\Code\Reflection\ClassReflection;
 use Magento\Framework\Exception\SerializationException;
 use Magento\Framework\Reflection\Test\Unit\Fixture\TSample;
 use Magento\Framework\Reflection\Test\Unit\Fixture\TSampleInterface;
@@ -15,12 +18,12 @@ use Magento\Framework\Reflection\Test\Unit\Fixture\UseClasses\SampleTwo;
 use Magento\Framework\Reflection\Test\Unit\Fixture\UseClasses\SampleTwo\SampleFour;
 use Magento\Framework\Reflection\Test\Unit\Fixture\UseSample;
 use Magento\Framework\Reflection\TypeProcessor;
-use Zend\Code\Reflection\ClassReflection;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class TypeProcessorTest extends \PHPUnit\Framework\TestCase
+class TypeProcessorTest extends TestCase
 {
     /**
      * @var TypeProcessor
@@ -30,7 +33,7 @@ class TypeProcessorTest extends \PHPUnit\Framework\TestCase
     /**
      * Set up helper.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->typeProcessor = new TypeProcessor();
     }
@@ -60,12 +63,10 @@ class TypeProcessorTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($typeData, $this->typeProcessor->getTypesData());
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The "NonExistentType" data type isn't declared. Verify the type and try again.
-     */
     public function testGetTypeDataInvalidArgumentException()
     {
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage('The "NonExistentType" data type isn\'t declared. Verify the type and try again.');
         $this->typeProcessor->getTypeData('NonExistentType');
     }
 
@@ -168,12 +169,10 @@ class TypeProcessorTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The "\Magento\TestModule3\V1\Parameter[]" parameter type is invalid. Verify the parameter and try again.
-     */
     public function testTranslateTypeNameInvalidArgumentException()
     {
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage('The "\Magento\TestModule3\V1\Parameter[]" parameter type is invalid. Verify the parameter and try again.');
         $this->typeProcessor->translateTypeName('\Magento\TestModule3\V1\Parameter[]');
     }
 
@@ -222,9 +221,9 @@ class TypeProcessorTest extends \PHPUnit\Framework\TestCase
      */
     public function testProcessSimpleTypeException($value, $type)
     {
-        $this->expectException(
-            SerializationException::class,
-            'Invalid type for value: "' . $value . '". Expected Type: "' . $type . '"'
+        $this->expectException(SerializationException::class);
+        $this->expectExceptionMessage(
+            "The \"$value\" value's type is invalid. The \"$type\" type was expected. Verify and try again."
         );
         $this->typeProcessor->processSimpleAndAnyType($value, $type);
     }
@@ -240,23 +239,19 @@ class TypeProcessorTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\SerializationException
-     * @expectedExceptionMessage The "integer" value's type is invalid. The "int[]" type was expected. Verify and try again.
-     */
     public function testProcessSimpleTypeInvalidType()
     {
+        $this->expectException('Magento\Framework\Exception\SerializationException');
+        $this->expectExceptionMessage('The "integer" value\'s type is invalid. The "int[]" type was expected. Verify and try again.');
         $value = 1;
         $type = 'int[]';
         $this->typeProcessor->processSimpleAndAnyType($value, $type);
     }
 
-    /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessageRegExp /@param annotation is incorrect for the parameter "name" \w+/
-     */
     public function testGetParamTypeWithIncorrectAnnotation()
     {
+        $this->expectException('LogicException');
+        $this->expectExceptionMessageMatches('/@param annotation is incorrect for the parameter "name" \w+/');
         $class = new ClassReflection(DataObject::class);
         $methodReflection = $class->getMethod('setName');
         $paramsReflection = $methodReflection->getParameters();
@@ -353,15 +348,33 @@ class TypeProcessorTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Checks a case when method and parent interface don't have `@return` annotation.
-     *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Method's return type must be specified using @return annotation. See Magento\Framework\Reflection\Test\Unit\Fixture\TSample::getName()
      */
     public function testGetReturnTypeWithoutReturnTag()
     {
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage('Method\'s return type must be specified using @return annotation. See Magento\Framework\Reflection\Test\Unit\Fixture\TSample::getName()');
         $classReflection = new ClassReflection(TSample::class);
         $methodReflection = $classReflection->getMethod('getName');
         $this->typeProcessor->getGetterReturnType($methodReflection);
+    }
+
+    /**
+     * Checks a case when method return annotation has a null-type at first position,
+     * and a valid type at second.
+     */
+    public function testGetReturnTypeNullAtFirstPos()
+    {
+        $expected = [
+            'type' => 'string',
+            'isRequired' => false,
+            'description' => null,
+            'parameterCount' => 0
+        ];
+
+        $classReflection = new ClassReflection(TSample::class);
+        $methodReflection = $classReflection->getMethod('getWithNull');
+
+        self::assertEquals($expected, $this->typeProcessor->getGetterReturnType($methodReflection));
     }
 
     /**

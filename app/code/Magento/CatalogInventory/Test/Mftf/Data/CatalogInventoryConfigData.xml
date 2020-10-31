@@ -20,4 +20,17 @@
         <data key="label">No</data>
         <data key="value">0</data>
     </entity>
+    <entity name="EnableCatalogInventoryConfigData">
+        <!--Default Value -->
+        <data key="path">cataloginventory/options/can_subtract</data>
+        <data key="scope_id">0</data>
+        <data key="label">Yes</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="DisableCatalogInventoryConfigData">
+        <data key="path">cataloginventory/options/can_subtract</data>
+        <data key="scope_id">0</data>
+        <data key="label">No</data>
+        <data key="value">0</data>
+    </entity>
 </entities>

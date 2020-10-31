@@ -3,31 +3,35 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-?>
-<?php
+
 /**
  * @var $block \Magento\CurrencySymbol\Block\Adminhtml\System\Currencysymbol
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
  */
 ?>
 
 <form id="currency-symbols-form" action="<?= $block->escapeUrl($block->getFormActionUrl()) ?>" method="post">
     <input name="form_key" type="hidden" value="<?= $block->escapeHtmlAttr($block->getFormKey()) ?>" />
     <fieldset class="admin__fieldset">
-        <?php foreach ($block->getCurrencySymbolsData() as $code => $data) : ?>
+        <?php foreach ($block->getCurrencySymbolsData() as $code => $data): ?>
         <div class="admin__field _required">
             <label class="admin__field-label" for="custom_currency_symbol<?= $block->escapeHtmlAttr($code) ?>">
                 <span><?= $block->escapeHtml($code) ?> (<?= $block->escapeHtml($data['displayName']) ?>)</span>
             </label>
             <div class="admin__field-control">
                 <input id="custom_currency_symbol<?= $block->escapeHtmlAttr($code) ?>"
-                       class="required-entry admin__control-text <?= $data['inherited'] ? 'disabled' : '' ?>"
+                       class="required-entry admin__control-text"
                        type="text"
                        value="<?= $block->escapeHtmlAttr($data['displaySymbol']) ?>"
-                       name="custom_currency_symbol[<?= $block->escapeHtmlAttr($code) ?>]">
+                       name="custom_currency_symbol[<?= $block->escapeHtmlAttr($code) ?>]"
+                        <?= $data['inherited'] ? 'disabled' : '' ?>>
                 <div class="admin__field admin__field-option">
+                    <?php
+                        $escapedCode = $block->escapeHtmlAttr($block->escapeJs($code));
+                        $escapedSymbol = $block->escapeJs($data['parentSymbol']);
+                    ?>
                     <input id="custom_currency_symbol_inherit<?= $block->escapeHtmlAttr($code) ?>"
                            class="admin__control-checkbox" type="checkbox"
-                           onclick="toggleUseDefault(<?= '\'' . $block->escapeJs($code) . '\',\'' . $block->escapeJs($data['parentSymbol']) . '\'' ?>)"
                             <?= $data['inherited'] ? ' checked="checked"' : '' ?>
                            value="1"
                            name="inherit_custom_currency_symbol[<?= $block->escapeHtmlAttr($code) ?>]">
@@ -37,31 +41,21 @@
                             <?= $block->escapeHtml($block->getInheritText()) ?>
                         </span>
                     </label>
+                    <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
+                        'onclick',
+                        "toggleUseDefault('" . $escapedCode . "','" . $escapedSymbol . "')",
+                        '#custom_currency_symbol_inherit' . $block->escapeJs($code)
+                    ) ?>
                 </div>
             </div>
         </div>
         <?php endforeach; ?>
     </fieldset>
 </form>
-<script>
-require(['jquery', "mage/mage", 'prototype'], function(jQuery){
-
-    jQuery('#currency-symbols-form').mage('form').mage('validation');
-
-    function toggleUseDefault(code, value)
+<script type="text/x-magento-init">
     {
-        checkbox = jQuery('#custom_currency_symbol_inherit'+code);
-        input = jQuery('#custom_currency_symbol'+code);
-
-        if (checkbox.is(':checked')) {
-            input.addClass('disabled');
-            input.val(value);
-            input.prop('readonly', true);
-        } else {
-            input.removeClass('disabled');
-            input.prop('readonly', false);
+        "#currency-symbols-form": {
+            "Magento_CurrencySymbol/js/symbols-form": {}
         }
     }
-    window.toggleUseDefault = toggleUseDefault;
-});
 </script>

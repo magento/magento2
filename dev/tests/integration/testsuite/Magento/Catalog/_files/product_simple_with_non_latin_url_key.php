@@ -41,7 +41,7 @@ try {
     $productRepository->save($product);
 } catch (\Exception $e) {
     // problems during save
-};
+}
 
 /** @var ProductInterface $product */
 $product = $objectManager->create(ProductInterface::class);
@@ -60,4 +60,4 @@ try {
     $productRepository->save($product);
 } catch (\Exception $e) {
     // problems during save
-};
+}

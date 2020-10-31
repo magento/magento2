@@ -10,13 +10,15 @@ namespace Magento\Framework\GraphQlSchemaStitching\GraphQlReader\Reader;
 use Magento\Framework\GraphQlSchemaStitching\GraphQlReader\TypeMetaReaderInterface;
 use Magento\Framework\GraphQlSchemaStitching\GraphQlReader\MetaReader\TypeMetaWrapperReader;
 use Magento\Framework\GraphQlSchemaStitching\GraphQlReader\MetaReader\DocReader;
-use Magento\Framework\GraphQlSchemaStitching\GraphQlReader\MetaReader\CacheTagReader;
+use Magento\Framework\GraphQlSchemaStitching\GraphQlReader\MetaReader\CacheAnnotationReader;
 
 /**
  * Composite configuration reader to handle the input object type meta
  */
 class InputObjectType implements TypeMetaReaderInterface
 {
+    public const GRAPHQL_INPUT = 'graphql_input';
+
     /**
      * @var TypeMetaWrapperReader
      */
@@ -28,28 +30,28 @@ class InputObjectType implements TypeMetaReaderInterface
     private $docReader;
 
     /**
-     * @var CacheTagReader
+     * @var CacheAnnotationReader
      */
-    private $cacheTagReader;
+    private $cacheAnnotationReader;
 
     /**
      * @param TypeMetaWrapperReader $typeMetaReader
      * @param DocReader $docReader
-     * @param CacheTagReader|null $cacheTagReader
+     * @param CacheAnnotationReader|null $cacheAnnotationReader
      */
     public function __construct(
         TypeMetaWrapperReader $typeMetaReader,
         DocReader $docReader,
-        CacheTagReader $cacheTagReader = null
+        CacheAnnotationReader $cacheAnnotationReader = null
     ) {
         $this->typeMetaReader = $typeMetaReader;
         $this->docReader = $docReader;
-        $this->cacheTagReader = $cacheTagReader ?? \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(CacheTagReader::class);
+        $this->cacheAnnotationReader = $cacheAnnotationReader ?? \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(CacheAnnotationReader::class);
     }
 
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
     public function read(\GraphQL\Type\Definition\Type $typeMeta) : array
     {
@@ -57,7 +59,7 @@ class InputObjectType implements TypeMetaReaderInterface
             $typeName = $typeMeta->name;
             $result = [
                 'name' => $typeName,
-                'type' => 'graphql_input',
+                'type' => self::GRAPHQL_INPUT,
                 'fields' => [] // Populated later
             ];
             $fields = $typeMeta->getFields();
@@ -70,7 +72,7 @@ class InputObjectType implements TypeMetaReaderInterface
             }
 
             if ($this->docReader->read($typeMeta->astNode->directives)) {
-                $result['cache'] = $this->cacheTagReader->read($typeMeta->astNode->directives);
+                $result['cache'] = $this->cacheAnnotationReader->read($typeMeta->astNode->directives);
             }
             return $result;
         } else {

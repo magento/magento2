@@ -29,9 +29,9 @@
         <input type="text"
                class="input-text admin__control-text qty-input"
                name="creditmemo[items][<?= (int) $_item->getOrderItemId() ?>][qty]"
-               value="<?= (int) $_item->getQty() ?>"/>
+               value="<?= (float) $_item->getQty() ?>"/>
     <?php else : ?>
-        <?= (int) $_item->getQty() ?>
+        <?= (float) $_item->getQty() ?>
     <?php endif; ?>
     </td>
     <td class="col-subtotal">

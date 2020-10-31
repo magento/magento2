@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontOnePageCheckoutJsValidationTest">
+        <annotations>
+            <features value="Checkout"/>
+            <stories value="Checkout"/>
+            <title value="Js validation error messages must be absent for required fields after checkout start."/>
+            <description value="Js validation error messages must be absent for required fields after checkout start."/>
+            <severity value="MAJOR" />
+            <testCaseId value="MC-18312" />
+            <group value="shoppingCart" />
+            <group value="mtf_migrated" />
+        </annotations>
+        <before>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="ApiSimpleProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+        </before>
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+        </after>
+
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addToCartFromStorefrontProductPage">
+            <argument name="product" value="$$createProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="guestGoToCheckout"/>
+        <actionGroup ref="StorefrontAssertNoValidationErrorForCheckoutAddressFieldsActionGroup" stepKey="seeNoValidationErrors"/>
+    </test>
+</tests>

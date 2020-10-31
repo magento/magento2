@@ -26,7 +26,7 @@ $options = $block->decorateArray($block->getOptions($stripSelection));
 </script>
         <fieldset class="fieldset fieldset-bundle-options">
             <legend id="customizeTitle" class="legend title">
-                <span><?= /* @noEscape */ __('Customize %1', $helper->productAttribute($product, $product->getName(), 'name')) ?></span>
+                <span><?= $block->escapeHtml(__('Customize %1', $helper->productAttribute($product, $product->getName(), 'name'))) ?></span>
             </legend><br />
             <?= $block->getChildHtml('product_info_bundle_options_top') ?>
             <?php foreach ($options as $option) : ?>

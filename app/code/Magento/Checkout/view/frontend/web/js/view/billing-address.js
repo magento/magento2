@@ -18,7 +18,7 @@ define([
     'Magento_Checkout/js/action/set-billing-address',
     'Magento_Ui/js/model/messageList',
     'mage/translate',
-    'Magento_Checkout/js/model/shipping-rates-validator'
+    'Magento_Checkout/js/model/billing-address-postcode-validator'
 ],
 function (
     ko,
@@ -35,7 +35,7 @@ function (
     setBillingAddressAction,
     globalMessageList,
     $t,
-    shippingRatesValidator
+    billingAddressPostcodeValidator
 ) {
     'use strict';
 
@@ -66,7 +66,7 @@ function (
             quote.paymentMethod.subscribe(function () {
                 checkoutDataResolver.resolveBillingAddress();
             }, this);
-            shippingRatesValidator.initFields(this.get('name') + '.form-fields');
+            billingAddressPostcodeValidator.initFields(this.get('name') + '.form-fields');
         },
 
         /**
@@ -159,7 +159,6 @@ function (
                     }
                     addressData['save_in_address_book'] = this.saveInAddressBook() ? 1 : 0;
                     newBillingAddress = createBillingAddress(addressData);
-
                     // New address must be selected as a billing address
                     selectBillingAddress(newBillingAddress);
                     checkoutData.setSelectedBillingAddress(newBillingAddress.getKey());
@@ -237,6 +236,59 @@ function (
          */
         getCode: function (parent) {
             return _.isFunction(parent.getCode) ? parent.getCode() : 'shared';
+        },
+
+        /**
+         * Get customer attribute label
+         *
+         * @param {*} attribute
+         * @returns {*}
+         */
+        getCustomAttributeLabel: function (attribute) {
+            var label;
+
+            if (typeof attribute === 'string') {
+                return attribute;
+            }
+
+            if (attribute.label) {
+                return attribute.label;
+            }
+
+            if (_.isArray(attribute.value)) {
+                label = _.map(attribute.value, function (value) {
+                    return this.getCustomAttributeOptionLabel(attribute['attribute_code'], value) || value;
+                }, this).join(', ');
+            } else {
+                label = this.getCustomAttributeOptionLabel(attribute['attribute_code'], attribute.value);
+            }
+
+            return label || attribute.value;
+        },
+
+        /**
+         * Get option label for given attribute code and option ID
+         *
+         * @param {String} attributeCode
+         * @param {String} value
+         * @returns {String|null}
+         */
+        getCustomAttributeOptionLabel: function (attributeCode, value) {
+            var option,
+                label,
+                options = this.source.get('customAttributes') || {};
+
+            if (options[attributeCode]) {
+                option = _.findWhere(options[attributeCode], {
+                    value: value
+                });
+
+                if (option) {
+                    label = option.label;
+                }
+            }
+
+            return label;
         }
     });
 });

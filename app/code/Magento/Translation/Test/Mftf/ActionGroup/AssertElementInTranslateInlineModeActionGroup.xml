@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertElementInTranslateInlineModeActionGroup">
+        <arguments>
+            <argument name="elementSelector" type="string"/>
+        </arguments>
+
+        <executeJS function="return window.getComputedStyle(document.querySelector('{{elementSelector}}')).getPropertyValue('outline-color')" stepKey="getBorderColor"/>
+        <executeJS function="return window.getComputedStyle(document.querySelector('{{elementSelector}}')).getPropertyValue('outline-style')" stepKey="getBorderType"/>
+        <executeJS function="return window.getComputedStyle(document.querySelector('{{elementSelector}}')).getPropertyValue('outline-width')" stepKey="getBorderWidth"/>
+
+        <assertStringContainsString stepKey="assertBorderColor">
+			<actualResult type="const">$getBorderColor</actualResult>
+			<expectedResult type="string">{{TranslateInlineModeStyleData.borderColor}}</expectedResult>
+        </assertStringContainsString>
+        <assertStringContainsString stepKey="assertBorderType">
+			<actualResult type="const">$getBorderType</actualResult>
+			<expectedResult type="string">{{TranslateInlineModeStyleData.borderType}}</expectedResult>
+        </assertStringContainsString>
+        <assertStringContainsString stepKey="assertBorderWidth">
+			<actualResult type="const">$getBorderWidth</actualResult>
+			<expectedResult type="string">{{TranslateInlineModeStyleData.borderWidth}}</expectedResult>
+        </assertStringContainsString>
+
+    </actionGroup>
+</actionGroups>

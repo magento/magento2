@@ -20,5 +20,8 @@
         <element name="confirmNewPassword" type="input" selector="#password-confirmation"/>
         <element name="confirmNewPasswordError" type="text" selector="#password-confirmation-error"/>
         <element name="email" type="input" selector=".form-edit-account input[name='email']" />
+        <element name="emailErrorMessage" type="text" selector="#email-error"/>
+        <element name="currentPasswordErrorMessage" type="text" selector="#current-password-error"/>
+        <element name="emailField" type="input" selector="#email"/>
     </section>
 </sections>

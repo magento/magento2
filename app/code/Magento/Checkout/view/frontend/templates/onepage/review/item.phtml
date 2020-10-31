@@ -28,9 +28,9 @@ $taxDataHelper = $this->helper(Magento\Tax\Helper\Data::class);
                             <dt><?= $block->escapeHtml($_option['label']) ?></dt>
                             <dd>
                                 <?php if (isset($_formatedOptionValue['full_view'])) :?>
-                                    <?= $block->escapeHtml($_formatedOptionValue['full_view']) ?>
+                                    <?= /* @noEscape */ $_formatedOptionValue['full_view'] ?>
                                 <?php else :?>
-                                    <?= $block->escapeHtml($_formatedOptionValue['value']) ?>
+                                    <?= /* @noEscape */ $_formatedOptionValue['value'] ?>
                                 <?php endif; ?>
                             </dd>
                         <?php endforeach; ?>

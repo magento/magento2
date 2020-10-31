@@ -15,6 +15,9 @@ use Magento\Framework\GraphQl\Query\Resolver\IdentityInterface;
  */
 class Identity implements IdentityInterface
 {
+    /** @var string */
+    private $cacheTag = \Magento\Cms\Model\Page::CACHE_TAG;
+
     /**
      * Get page ID from resolved data
      *
@@ -23,6 +26,7 @@ class Identity implements IdentityInterface
      */
     public function getIdentities(array $resolvedData): array
     {
-        return empty($resolvedData[PageInterface::PAGE_ID]) ? [] : [$resolvedData[PageInterface::PAGE_ID]];
+        return empty($resolvedData[PageInterface::PAGE_ID]) ?
+            [] : [$this->cacheTag, sprintf('%s_%s', $this->cacheTag, $resolvedData[PageInterface::PAGE_ID])];
     }
 }

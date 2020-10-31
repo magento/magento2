@@ -28,14 +28,13 @@ class GenerateCustomerTokenTest extends GraphQlAbstract
 
         $response = $this->graphQlMutation($mutation);
         $this->assertArrayHasKey('generateCustomerToken', $response);
-        $this->assertInternalType('array', $response['generateCustomerToken']);
+        $this->assertIsArray($response['generateCustomerToken']);
     }
 
     /**
      * Test customer with invalid data.
      *
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @expectedException \Exception
      *
      * @dataProvider dataProviderInvalidCustomerInfo
      * @param string $email
@@ -44,6 +43,8 @@ class GenerateCustomerTokenTest extends GraphQlAbstract
      */
     public function testGenerateCustomerTokenInvalidData(string $email, string $password, string $message)
     {
+        $this->expectException(\Exception::class);
+
         $mutation = $this->getQuery($email, $password);
         $this->expectExceptionMessage($message);
         $this->graphQlMutation($mutation);
@@ -119,5 +120,55 @@ mutation {
     }
 }
 MUTATION;
+    }
+
+    /**
+     * Verify customer with empty email
+     */
+    public function testGenerateCustomerTokenWithEmptyEmail()
+    {
+        $email = '';
+        $password = 'bad-password';
+
+        $mutation
+            = <<<MUTATION
+mutation {
+	generateCustomerToken(
+        email: "{$email}"
+        password: "{$password}"
+    ) {
+        token
+    }
+}
+MUTATION;
+
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('GraphQL response contains errors: Specify the "email" value.');
+        $this->graphQlMutation($mutation);
+    }
+
+    /**
+     * Verify customer with empty password
+     */
+    public function testGenerateCustomerTokenWithEmptyPassword()
+    {
+        $email = 'customer@example.com';
+        $password = '';
+
+        $mutation
+            = <<<MUTATION
+mutation {
+	generateCustomerToken(
+        email: "{$email}"
+        password: "{$password}"
+    ) {
+        token
+    }
+}
+MUTATION;
+
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('GraphQL response contains errors: Specify the "password" value.');
+        $this->graphQlMutation($mutation);
     }
 }

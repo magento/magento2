@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminDeleteCustomUserActionGroup">
+        <annotations>
+            <description>Goes to the Admin Users grid page. Deletes the provided User. Validates that the Success Message is present and correct.</description>
+        </annotations>
+        <arguments>
+            <argument name="user"/>
+        </arguments>
+
+        <amOnPage url="{{AdminUsersPage.url}}" stepKey="navigateToUserGrid"/>
+        <fillField selector="{{AdminUserGridSection.usernameFilterTextField}}" userInput="{{user.username}}" stepKey="enterUserName"/>
+        <click selector="{{AdminUserGridSection.searchButton}}" stepKey="clickSearch"/>
+        <waitForPageLoad stepKey="waitForGridToLoad"/>
+        <see selector="{{AdminUserGridSection.usernameInFirstRow}}" userInput="{{user.username}}" stepKey="seeUser"/>
+        <click selector="{{AdminUserGridSection.searchResultFirstRow}}" stepKey="openUserEdit"/>
+        <waitForPageLoad stepKey="waitForUserEditPageLoad"/>
+        <fillField selector="{{AdminEditUserSection.currentPasswordField}}" userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}" stepKey="enterThePassword"/>
+        <click selector="{{AdminMainActionsSection.delete}}" stepKey="deleteUser"/>
+        <waitForElementVisible selector="{{AdminConfirmationModalSection.message}}" stepKey="waitForConfirmModal"/>
+        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmDelete"/>
+        <waitForPageLoad stepKey="waitForSave"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You deleted the user." stepKey="seeUserDeleteMessage"/>
+    </actionGroup>
+</actionGroups>

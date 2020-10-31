@@ -9,9 +9,13 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="SearchAttributeByCodeOnProductAttributeGridActionGroup">
+        <annotations>
+            <description>Goto the Product Attribute grid page. Search for the provided Product Attribute Code.</description>
+        </annotations>
         <arguments>
             <argument name="productAttributeCode" type="string"/>
         </arguments>
+
         <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="navigateToProductAttributeGrid"/>
         <waitForPageLoad stepKey="waitForAdminProductAttributeGridLoad"/>
         <click selector="{{AdminProductAttributeGridSection.ResetFilter}}" stepKey="resetFiltersOnGrid"/>

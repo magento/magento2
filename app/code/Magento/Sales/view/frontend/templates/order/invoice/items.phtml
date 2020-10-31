@@ -7,8 +7,9 @@
 <?php $_order = $block->getOrder() ?>
 <div class="actions-toolbar">
     <a href="<?= $block->escapeUrl($block->getPrintAllInvoicesUrl($_order)) ?>"
+       class="action print"
        target="_blank"
-       class="action print">
+       rel="noopener">
         <span><?= $block->escapeHtml(__('Print All Invoices')) ?></span>
     </a>
 </div>
@@ -16,8 +17,9 @@
     <div class="order-title">
         <strong><?= $block->escapeHtml(__('Invoice #')) ?><?= $block->escapeHtml($_invoice->getIncrementId()) ?></strong>
         <a href="<?= $block->escapeUrl($block->getPrintInvoiceUrl($_invoice)) ?>"
-           onclick="this.target='_blank'"
-           class="action print">
+           class="action print"
+           target="_blank"
+           rel="noopener">
             <span><?= $block->escapeHtml(__('Print Invoice')) ?></span>
         </a>
     </div>

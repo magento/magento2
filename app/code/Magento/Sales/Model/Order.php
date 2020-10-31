@@ -5,8 +5,12 @@
  */
 namespace Magento\Sales\Model;
 
+use Magento\Config\Model\Config\Source\Nooptreq;
 use Magento\Directory\Model\Currency;
+use Magento\Directory\Model\RegionFactory;
 use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Locale\ResolverInterface;
@@ -14,6 +18,7 @@ use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\Sales\Api\Data\OrderStatusHistoryInterface;
+use Magento\Sales\Api\OrderItemRepositoryInterface;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Sales\Model\Order\ProductOption;
 use Magento\Sales\Model\ResourceModel\Order\Address\Collection;
@@ -24,8 +29,7 @@ use Magento\Sales\Model\ResourceModel\Order\Payment\Collection as PaymentCollect
 use Magento\Sales\Model\ResourceModel\Order\Shipment\Collection as ShipmentCollection;
 use Magento\Sales\Model\ResourceModel\Order\Shipment\Track\Collection as TrackCollection;
 use Magento\Sales\Model\ResourceModel\Order\Status\History\Collection as HistoryCollection;
-use Magento\Sales\Api\OrderItemRepositoryInterface;
-use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * Order model
@@ -39,17 +43,17 @@ use Magento\Framework\Api\SearchCriteriaBuilder;
  *
  * @api
  * @method int getGiftMessageId()
- * @method \Magento\Sales\Model\Order setGiftMessageId(int $value)
+ * @method Order setGiftMessageId(int $value)
  * @method bool hasBillingAddressId()
- * @method \Magento\Sales\Model\Order unsBillingAddressId()
+ * @method Order unsBillingAddressId()
  * @method bool hasShippingAddressId()
- * @method \Magento\Sales\Model\Order unsShippingAddressId()
+ * @method Order unsShippingAddressId()
  * @method int getShippigAddressId()
  * @method bool hasCustomerNoteNotify()
  * @method bool hasForcedCanCreditmemo()
  * @method bool getIsInProcess()
- * @method \Magento\Customer\Model\Customer getCustomer()
- * @method \Magento\Sales\Model\Order setSendEmail(bool $value)
+ * @method \Magento\Customer\Model\Customer|null getCustomer()
+ * @method Order setSendEmail(bool $value)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
@@ -190,7 +194,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
 
     /**
      * @var \Magento\Catalog\Api\ProductRepositoryInterface
-     * @deprecated 100.1.7 Remove unused dependency.
+     * @deprecated 100.1.0 Remove unused dependency.
      */
     protected $productRepository;
 
@@ -300,6 +304,21 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     private $searchCriteriaBuilder;
 
     /**
+     * @var ScopeConfigInterface;
+     */
+    private $scopeConfig;
+
+    /**
+     * @var RegionFactory
+     */
+    private $regionFactory;
+
+    /**
+     * @var array
+     */
+    private $regionItems;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -331,6 +350,8 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      * @param ProductOption|null $productOption
      * @param OrderItemRepositoryInterface $itemRepository
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param ScopeConfigInterface $scopeConfig
+     * @param RegionFactory $regionFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -364,7 +385,9 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         ResolverInterface $localeResolver = null,
         ProductOption $productOption = null,
         OrderItemRepositoryInterface $itemRepository = null,
-        SearchCriteriaBuilder $searchCriteriaBuilder = null
+        SearchCriteriaBuilder $searchCriteriaBuilder = null,
+        ScopeConfigInterface $scopeConfig = null,
+        RegionFactory $regionFactory = null
     ) {
         $this->_storeManager = $storeManager;
         $this->_orderConfig = $orderConfig;
@@ -392,6 +415,9 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
             ->get(OrderItemRepositoryInterface::class);
         $this->searchCriteriaBuilder = $searchCriteriaBuilder ?: ObjectManager::getInstance()
             ->get(SearchCriteriaBuilder::class);
+        $this->scopeConfig = $scopeConfig ?: ObjectManager::getInstance()->get(ScopeConfigInterface::class);
+        $this->regionFactory = $regionFactory ?: ObjectManager::getInstance()->get(RegionFactory::class);
+        $this->regionItems = [];
 
         parent::__construct(
             $context,
@@ -483,7 +509,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      * Load order by system increment identifier
      *
      * @param string $incrementId
-     * @return \Magento\Sales\Model\Order
+     * @return Order
      */
     public function loadByIncrementId($incrementId)
     {
@@ -495,7 +521,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      *
      * @param string $incrementId
      * @param string $storeId
-     * @return \Magento\Sales\Model\Order
+     * @return Order
      */
     public function loadByIncrementIdAndStoreId($incrementId, $storeId)
     {
@@ -705,7 +731,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         $hasDueAmount = $this->canInvoice() && ($checkAmtTotalPaid);
         //case when paid amount is refunded and order has creditmemo created
         $creditmemos = ($this->getCreditmemosCollection() === false) ?
-             true : (count($this->getCreditmemosCollection()) > 0);
+             true : ($this->_memoCollectionFactory->create()->setOrderFilter($this)->getTotalCount() > 0);
         $paidAmtIsRefunded = $this->getTotalRefunded() == $totalPaid && $creditmemos;
         if (($hasDueAmount || $paidAmtIsRefunded) ||
             (!$checkAmtTotalPaid &&
@@ -847,7 +873,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      */
     public function canReorder()
     {
-        return $this->_canReorder(false);
+        return $this->_canReorder();
     }
 
     /**
@@ -1065,6 +1091,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      * Retrieve frontend label of order status
      *
      * @return string
+     * @since 102.0.1
      */
     public function getFrontendStatusLabel()
     {
@@ -1104,14 +1131,14 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      * @param string $comment
      * @param bool|string $status
      * @return OrderStatusHistoryInterface
-     * @deprecated
+     * @deprecated 101.0.5
      * @see addCommentToStatusHistory
      */
     public function addStatusHistoryComment($comment, $status = false)
     {
         return $this->addCommentToStatusHistory($comment, $status, false);
     }
-    
+
     /**
      * Add a comment to order status history.
      *
@@ -1121,6 +1148,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      * @param bool|string $status
      * @param bool $isVisibleOnFront
      * @return OrderStatusHistoryInterface
+     * @since 101.0.5
      */
     public function addCommentToStatusHistory($comment, $status = false, $isVisibleOnFront = false)
     {
@@ -1315,7 +1343,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      */
     public function getShippingMethod($asObject = false)
     {
-        $shippingMethod = parent::getShippingMethod();
+        $shippingMethod = $this->getData('shipping_method');
         if (!$asObject || !$shippingMethod) {
             return $shippingMethod;
         } else {
@@ -1333,9 +1361,21 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      */
     public function getAddressesCollection()
     {
+        $region = $this->regionFactory->create();
         $collection = $this->_addressCollectionFactory->create()->setOrderFilter($this);
         if ($this->getId()) {
             foreach ($collection as $address) {
+                if (isset($this->regionItems[$address->getCountryId()][$address->getRegion()])) {
+                    if ($this->regionItems[$address->getCountryId()][$address->getRegion()]) {
+                        $address->setRegion($this->regionItems[$address->getCountryId()][$address->getRegion()]);
+                    }
+                } else {
+                    $region->loadByName($address->getRegion(), $address->getCountryId());
+                    $this->regionItems[$address->getCountryId()][$address->getRegion()] = $region->getName();
+                    if ($region->getName()) {
+                        $address->setRegion($region->getName());
+                    }
+                }
                 $address->setOrder($this);
             }
         }
@@ -1503,7 +1543,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      * Get item by quote item id
      *
      * @param mixed $quoteItemId
-     * @return  \Magento\Framework\DataObject|null
+     * @return \Magento\Framework\DataObject|null
      */
     public function getItemByQuoteItemId($quoteItemId)
     {
@@ -1967,11 +2007,23 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      */
     public function getCustomerName()
     {
-        if ($this->getCustomerFirstname()) {
-            $customerName = $this->getCustomerFirstname() . ' ' . $this->getCustomerLastname();
-        } else {
-            $customerName = (string)__('Guest');
+        if (null === $this->getCustomerFirstname()) {
+            return (string)__('Guest');
         }
+
+        $customerName = '';
+        if ($this->isVisibleCustomerPrefix() && strlen($this->getCustomerPrefix())) {
+            $customerName .= $this->getCustomerPrefix() . ' ';
+        }
+        $customerName .= $this->getCustomerFirstname();
+        if ($this->isVisibleCustomerMiddlename() && strlen($this->getCustomerMiddlename())) {
+            $customerName .= ' ' . $this->getCustomerMiddlename();
+        }
+        $customerName .= ' ' . $this->getCustomerLastname();
+        if ($this->isVisibleCustomerSuffix() && strlen($this->getCustomerSuffix())) {
+            $customerName .= ' ' . $this->getCustomerSuffix();
+        }
+
         return $customerName;
     }
 
@@ -2027,7 +2079,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     {
         $storeId = $this->getStoreId();
         if ($storeId === null) {
-            return $this->getStoreName(1);
+            return $this->getStoreName();
         }
         return $this->getStore()->getGroup()->getName();
     }
@@ -4532,6 +4584,49 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     public function setShippingMethod($shippingMethod)
     {
         return $this->setData('shipping_method', $shippingMethod);
+    }
+
+    /**
+     * Is visible customer middlename
+     *
+     * @return bool
+     */
+    private function isVisibleCustomerMiddlename(): bool
+    {
+        return $this->scopeConfig->isSetFlag(
+            'customer/address/middlename_show',
+            ScopeInterface::SCOPE_STORE
+        );
+    }
+
+    /**
+     * Is visible customer prefix
+     *
+     * @return bool
+     */
+    private function isVisibleCustomerPrefix(): bool
+    {
+        $prefixShowValue = $this->scopeConfig->getValue(
+            'customer/address/prefix_show',
+            ScopeInterface::SCOPE_STORE
+        );
+
+        return $prefixShowValue !== Nooptreq::VALUE_NO;
+    }
+
+    /**
+     * Is visible customer suffix
+     *
+     * @return bool
+     */
+    private function isVisibleCustomerSuffix(): bool
+    {
+        $prefixShowValue = $this->scopeConfig->getValue(
+            'customer/address/suffix_show',
+            ScopeInterface::SCOPE_STORE
+        );
+
+        return $prefixShowValue !== Nooptreq::VALUE_NO;
     }
 
     //@codeCoverageIgnoreEnd

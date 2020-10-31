@@ -7,43 +7,35 @@ declare(strict_types=1);
 
 namespace Magento\QuoteGraphQl\Model\Cart;
 
-use Magento\Quote\Api\CartManagementInterface;
-use Magento\Quote\Model\QuoteIdMaskFactory;
-use Magento\Quote\Model\ResourceModel\Quote\QuoteIdMask as QuoteIdMaskResourceModel;
+use Magento\Quote\Model\QuoteIdToMaskedQuoteIdInterface;
+use Magento\Quote\Model\Cart\CustomerCartResolver;
 
 /**
  * Create empty cart for customer
+ * Masked quote ID will be returned as a result
  */
 class CreateEmptyCartForCustomer
 {
     /**
-     * @var CartManagementInterface
+     * @var QuoteIdToMaskedQuoteIdInterface
      */
-    private $cartManagement;
+    private $quoteIdToMaskedQuoteId;
 
     /**
-     * @var QuoteIdMaskFactory
+     * @var CustomerCartResolver
      */
-    private $quoteIdMaskFactory;
+    private $cartResolver;
 
     /**
-     * @var QuoteIdMaskResourceModel
-     */
-    private $quoteIdMaskResourceModel;
-
-    /**
-     * @param CartManagementInterface $cartManagement
-     * @param QuoteIdMaskFactory $quoteIdMaskFactory
-     * @param QuoteIdMaskResourceModel $quoteIdMaskResourceModel
+     * @param QuoteIdToMaskedQuoteIdInterface $quoteIdToMaskedQuoteId
+     * @param CustomerCartResolver $cartResolver
      */
     public function __construct(
-        CartManagementInterface $cartManagement,
-        QuoteIdMaskFactory $quoteIdMaskFactory,
-        QuoteIdMaskResourceModel $quoteIdMaskResourceModel
+        QuoteIdToMaskedQuoteIdInterface $quoteIdToMaskedQuoteId,
+        CustomerCartResolver $cartResolver
     ) {
-        $this->cartManagement = $cartManagement;
-        $this->quoteIdMaskFactory = $quoteIdMaskFactory;
-        $this->quoteIdMaskResourceModel = $quoteIdMaskResourceModel;
+        $this->quoteIdToMaskedQuoteId = $quoteIdToMaskedQuoteId;
+        $this->cartResolver = $cartResolver;
     }
 
     /**
@@ -52,19 +44,14 @@ class CreateEmptyCartForCustomer
      * @param int $customerId
      * @param string|null $predefinedMaskedQuoteId
      * @return string
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function execute(int $customerId, string $predefinedMaskedQuoteId = null): string
     {
-        $quoteId = $this->cartManagement->createEmptyCartForCustomer($customerId);
+        $cart = $this->cartResolver->resolve($customerId, $predefinedMaskedQuoteId);
+        $quoteId = (int) $cart->getId();
 
-        $quoteIdMask = $this->quoteIdMaskFactory->create();
-        $quoteIdMask->setQuoteId($quoteId);
-
-        if (isset($predefinedMaskedQuoteId)) {
-            $quoteIdMask->setMaskedId($predefinedMaskedQuoteId);
-        }
-
-        $this->quoteIdMaskResourceModel->save($quoteIdMask);
-        return $quoteIdMask->getMaskedId();
+        return $this->quoteIdToMaskedQuoteId->execute($quoteId);
     }
 }

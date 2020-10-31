@@ -13,14 +13,35 @@ define([
     'Magento_Checkout/js/model/error-processor',
     'Magento_Customer/js/model/customer',
     'Magento_Checkout/js/action/get-totals',
-    'Magento_Checkout/js/model/full-screen-loader'
-], function (quote, urlBuilder, storage, errorProcessor, customer, getTotalsAction, fullScreenLoader) {
+    'Magento_Checkout/js/model/full-screen-loader',
+    'underscore',
+    'Magento_Checkout/js/model/payment/set-payment-hooks'
+], function (quote, urlBuilder, storage, errorProcessor, customer, getTotalsAction, fullScreenLoader, _, hooks) {
     'use strict';
+
+    /**
+     * Filter template data.
+     *
+     * @param {Object|Array} data
+     */
+    var filterTemplateData = function (data) {
+        return _.each(data, function (value, key, list) {
+            if (_.isArray(value) || _.isObject(value)) {
+                list[key] = filterTemplateData(value);
+            }
+
+            if (key === '__disableTmpl') {
+                delete list[key];
+            }
+        });
+    };
 
     return function (messageContainer, paymentData, skipBilling) {
         var serviceUrl,
-            payload;
+            payload,
+            headers = {};
 
+        paymentData = filterTemplateData(paymentData);
         skipBilling = skipBilling || false;
         payload = {
             cartId: quote.getQuoteId(),
@@ -45,8 +66,12 @@ define([
 
         fullScreenLoader.startLoader();
 
+        _.each(hooks.requestModifiers, function (modifier) {
+            modifier(headers, payload);
+        });
+
         return storage.post(
-            serviceUrl, JSON.stringify(payload)
+            serviceUrl, JSON.stringify(payload), true, 'application/json', headers
         ).fail(
             function (response) {
                 errorProcessor.process(response, messageContainer);
@@ -54,6 +79,9 @@ define([
         ).always(
             function () {
                 fullScreenLoader.stopLoader();
+                _.each(hooks.afterRequestListeners, function (listener) {
+                    listener();
+                });
             }
         );
     };

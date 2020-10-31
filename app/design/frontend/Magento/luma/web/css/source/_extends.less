@@ -1212,7 +1212,7 @@
 }
 
 //
-//  Forms: margin-bottom for small forms
+//  Ratings: vertical alignment
 //  ---------------------------------------------
 
 & when (@media-common = true) {
@@ -1570,9 +1570,15 @@
         margin-bottom: @indent__base;
 
         .actions.main {
-            .continue,
-            .clear {
+            .continue {
                 display: none;
+            }
+
+            .clear {
+                .lib-button-as-link(
+                    @_margin: 0 @indent__base 0 0
+                );
+                font-weight: @font-weight__regular;
             }
         }
     }
@@ -1713,7 +1719,7 @@
 }
 
 //
-//  Shopping cart sidebar and checkout sidebar totals
+//  Mini Cart and checkout sidebar totals
 //  ---------------------------------------------
 
 & when (@media-common = true) {

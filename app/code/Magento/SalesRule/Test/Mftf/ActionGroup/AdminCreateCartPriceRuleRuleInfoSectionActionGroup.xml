@@ -5,12 +5,17 @@
   * See COPYING.txt for license details.
   */
 -->
+
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminCreateCartPriceRuleRuleInfoSectionActionGroup">
+        <annotations>
+            <description>Goes to the Admin Cart Price Rule grid page. Clicks on Add New Rule. Fills in the provided Rule details.</description>
+        </annotations>
         <arguments>
             <argument name="ruleName" type="entity"/>
         </arguments>
+
         <amOnPage url="{{AdminCartPriceRulesPage.url}}" stepKey="amOnCartPriceList"/>
         <waitForPageLoad stepKey="waitForPriceList"/>
         <click selector="{{AdminCartPriceRulesSection.addNewRuleButton}}" stepKey="clickAddNewRule"/>

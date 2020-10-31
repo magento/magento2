@@ -5,14 +5,13 @@
  */
 namespace Magento\Framework\MessageQueue;
 
-use Doctrine\Instantiator\Exception\InvalidArgumentException;
+use InvalidArgumentException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Phrase;
 use Magento\Framework\Communication\ConfigInterface as CommunicationConfig;
 
 /**
- * Class MessageValidator to validate message with topic schema
- *
+ * Class MessageValidator to validate message with topic schema.
  */
 class MessageValidator
 {
@@ -58,6 +57,7 @@ class MessageValidator
      * @param bool $requestType
      * @return void
      * @throws InvalidArgumentException
+     * @throws LocalizedException
      */
     public function validate($topic, $message, $requestType = true)
     {
@@ -89,6 +89,8 @@ class MessageValidator
     }
 
     /**
+     * Validate queue message.
+     *
      * @param string $message
      * @param string $messageType
      * @param string $topic
@@ -104,6 +106,8 @@ class MessageValidator
     }
 
     /**
+     * Validate message primitive type.
+     *
      * @param string $message
      * @param string $messageType
      * @param string $topic
@@ -115,7 +119,7 @@ class MessageValidator
         $realType = $this->getRealType($message);
         if ($realType == 'array' && count($message) == 0) {
             return;
-        } elseif ($realType == 'array' && count($message) > 0) {
+        } elseif ($realType == 'array' && isset($message[0])) {
             $realType = $this->getRealType($message[0]);
             $compareType = preg_replace('/\[\]/', '', $messageType);
         }
@@ -135,6 +139,8 @@ class MessageValidator
     }
 
     /**
+     * Validate class type
+     *
      * @param string $message
      * @param string $messageType
      * @param string $topic
@@ -147,7 +153,7 @@ class MessageValidator
         $realType = $this->getRealType($message);
         if ($realType == 'array' && count($message) == 0) {
             return;
-        } elseif ($realType == 'array' && count($message) > 0) {
+        } elseif ($realType == 'array' && isset($message[0])) {
             $message = $message[0];
             $compareType = preg_replace('/\[\]/', '', $messageType);
         }
@@ -167,6 +173,8 @@ class MessageValidator
     }
 
     /**
+     * Returns message real type
+     *
      * @param string $message
      * @return string
      */
@@ -183,7 +191,7 @@ class MessageValidator
      *
      * @return CommunicationConfig
      *
-     * @deprecated 100.2.0
+     * @deprecated 103.0.0
      */
     private function getCommunicationConfig()
     {

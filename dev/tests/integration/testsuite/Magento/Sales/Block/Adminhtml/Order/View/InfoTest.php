@@ -21,7 +21,7 @@ class InfoTest extends \Magento\TestFramework\TestCase\AbstractBackendController
         /** @var \Magento\Sales\Block\Adminhtml\Order\View\Info $infoBlock */
         $infoBlock = $layout->createBlock(
             \Magento\Sales\Block\Adminhtml\Order\View\Info::class,
-            'info_block' . mt_rand(),
+            'info_block' . random_int(0, PHP_INT_MAX),
             []
         );
 
@@ -38,7 +38,7 @@ class InfoTest extends \Magento\TestFramework\TestCase\AbstractBackendController
         /** @var \Magento\Sales\Block\Adminhtml\Order\View\Info $customerGroupBlock */
         $customerGroupBlock = $layout->createBlock(
             \Magento\Sales\Block\Adminhtml\Order\View\Info::class,
-            'info_block' . mt_rand(),
+            'info_block' . random_int(0, PHP_INT_MAX),
             ['registry' => $this->_putOrderIntoRegistry()]
         );
 
@@ -60,7 +60,7 @@ class InfoTest extends \Magento\TestFramework\TestCase\AbstractBackendController
         /** @var \Magento\Sales\Block\Adminhtml\Order\View\Info $customerGroupBlock */
         $customerGroupBlock = $layout->createBlock(
             \Magento\Sales\Block\Adminhtml\Order\View\Info::class,
-            'info_block' . mt_rand(),
+            'info_block' . random_int(0, PHP_INT_MAX),
             ['registry' => $this->_putOrderIntoRegistry($orderData)]
         );
 
@@ -77,7 +77,7 @@ class InfoTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 
     /**
      * @param array $additionalOrderData
-     * @return \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Framework\Registry|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function _putOrderIntoRegistry(array $additionalOrderData = [])
     {
@@ -91,7 +91,7 @@ class InfoTest extends \Magento\TestFramework\TestCase\AbstractBackendController
             array_merge(['customer_group_id' => 0], $additionalOrderData)
         );
 
-        $registry->expects($this->any())->method('registry')->with('current_order')->will($this->returnValue($order));
+        $registry->expects($this->any())->method('registry')->with('current_order')->willReturn($order);
 
         return $registry;
     }

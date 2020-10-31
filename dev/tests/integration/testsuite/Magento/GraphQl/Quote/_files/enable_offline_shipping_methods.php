@@ -3,7 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-// TODO: Should be removed in scope of https://github.com/magento/graphql-ce/issues/167
+/**
+ * @deprecated use next @magentoConfigFixture instead:
+ * @magentoConfigFixture default_store carriers/flatrate/active 1
+ * @magentoConfigFixture default_store carriers/tablerate/active 1
+ * @magentoConfigFixture default_store carriers/freeshipping/active 1
+ */
 declare(strict_types=1);
 
 use Magento\Framework\App\Config\Storage\Writer;

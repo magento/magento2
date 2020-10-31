@@ -9,8 +9,12 @@
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
+declare(strict_types=1);
+
 namespace Magento\Tax\Block\Adminhtml\Rate;
 
+use Magento\Directory\Helper\Data as DirectoryHelper;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Tax\Controller\RegistryConstants;
 
@@ -84,6 +88,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\Tax\Model\TaxRateCollection $taxRateCollection
      * @param \Magento\Tax\Model\Calculation\Rate\Converter $taxRateConverter
      * @param array $data
+     * @param DirectoryHelper|null $directoryHelper
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -97,7 +102,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         \Magento\Tax\Api\TaxRateRepositoryInterface $taxRateRepository,
         \Magento\Tax\Model\TaxRateCollection $taxRateCollection,
         \Magento\Tax\Model\Calculation\Rate\Converter $taxRateConverter,
-        array $data = []
+        array $data = [],
+        ?DirectoryHelper $directoryHelper = null
     ) {
         $this->_regionFactory = $regionFactory;
         $this->_country = $country;
@@ -106,6 +112,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $this->_taxRateRepository = $taxRateRepository;
         $this->_taxRateCollection = $taxRateCollection;
         $this->_taxRateConverter = $taxRateConverter;
+        $data['directoryHelper'] = $directoryHelper ?? ObjectManager::getInstance()->get(DirectoryHelper::class);
         parent::__construct($context, $registry, $formFactory, $data);
     }
 
@@ -209,7 +216,12 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $fieldset->addField(
             'zip_is_range',
             'checkbox',
-            ['name' => 'zip_is_range', 'label' => __('Zip/Post is Range'), 'value' => '1']
+            [
+                'name' => 'zip_is_range',
+                'label' => __('Zip/Post is Range'),
+                'value' => '1',
+                'class' => 'zip-is-range-checkbox'
+            ]
         );
 
         if (!isset($formData['tax_postcode'])) {
@@ -228,7 +240,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'note' => __(
                     "'*' - matches any; 'xyz*' - matches any that begins on 'xyz' and are not longer than %1.",
                     $this->_taxData->getPostCodeSubStringLength()
-                )
+                ),
+                'class' => 'validate-length maximum-length-' . $this->_taxData->getPostCodeSubStringLength()
             ]
         );
 

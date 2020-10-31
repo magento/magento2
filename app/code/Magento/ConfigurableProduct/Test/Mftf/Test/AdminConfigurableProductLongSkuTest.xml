@@ -39,12 +39,12 @@
             </getData>
             <!--Create Category-->
             <createData entity="ApiCategory" stepKey="createCategory"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin1"/>
         </before>
 
         <after>
             <!--Clean up products-->
-            <actionGroup ref="deleteProductByName" stepKey="cleanUpProducts">
+            <actionGroup ref="DeleteProductByNameActionGroup" stepKey="cleanUpProducts">
                 <argument name="sku" value="{{ProductWithLongNameSku.sku}}"/>
                 <argument name="name" value="{{ProductWithLongNameSku.name}}"/>
             </actionGroup>
@@ -52,7 +52,10 @@
             <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
             <!--Clean up category-->
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
 
          <!--Create a configurable product with long name and sku-->
@@ -63,12 +66,12 @@
         <fillField selector="{{AdminProductFormSection.productPrice}}" userInput="{{ProductWithLongNameSku.price}}" stepKey="fillProductPrice"/>
         <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$createCategory.name$$]" stepKey="selectCategory"/>
         <!--Setup configurations-->
-        <actionGroup ref="generateConfigurationsByAttributeCode" stepKey="setupConfigurations">
+        <actionGroup ref="GenerateConfigurationsByAttributeCodeActionGroup" stepKey="setupConfigurations">
             <argument name="attributeCode" value="$$createConfigProductAttribute.attribute_code$$"/>
         </actionGroup>
 
          <!--See SKU length errors in Current Variations grid-->
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProductFail"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveProductFail"/>
         <seeInCurrentUrl url="{{AdminProductCreatePage.url(AddToDefaultSet.attributeSetId, 'configurable')}}" stepKey="seeRemainOnCreateProductPage"/>
         <see selector="{{AdminProductFormConfigurationsSection.variationsSkuInputErrorByRow('1')}}" userInput="Please enter less or equal than 64 symbols." stepKey="seeSkuTooLongError1"/>
         <see selector="{{AdminProductFormConfigurationsSection.variationsSkuInputErrorByRow('2')}}" userInput="Please enter less or equal than 64 symbols." stepKey="seeSkuTooLongError2"/>
@@ -76,7 +79,7 @@
         <fillField selector="{{AdminProductFormConfigurationsSection.variationsSkuInputByRow('1')}}" userInput="LongSku-$$getConfigAttributeOption1.label$$" stepKey="fixConfigurationSku1"/>
         <fillField selector="{{AdminProductFormConfigurationsSection.variationsSkuInputByRow('2')}}" userInput="LongSku-$$getConfigAttributeOption2.label$$" stepKey="fixConfigurationSku2"/>
         <!--Save product successfully-->
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProductSuccess"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveProductSuccess"/>
         <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeSaveProductMessage"/>
 
          <!--Assert configurations on the product edit pag-->
@@ -86,6 +89,11 @@
         <see selector="{{AdminProductFormConfigurationsSection.currentVariationsSkuCells}}" userInput="LongSku-$$getConfigAttributeOption1.label$$" stepKey="seeChildProductSku1"/>
         <see selector="{{AdminProductFormConfigurationsSection.currentVariationsSkuCells}}" userInput="LongSku-$$getConfigAttributeOption2.label$$" stepKey="seeChildProductSku2"/>
         <see selector="{{AdminProductFormConfigurationsSection.currentVariationsPriceCells}}" userInput="{{ProductWithLongNameSku.price}}" stepKey="seeConfigurationsPrice"/>
+
+        <!--Run re-index task-->
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
 
          <!--Assert storefront category list page-->
         <amOnPage url="/" stepKey="amOnStorefront"/>

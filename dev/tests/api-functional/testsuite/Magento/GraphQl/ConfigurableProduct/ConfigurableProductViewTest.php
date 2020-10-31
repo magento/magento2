@@ -15,6 +15,9 @@ use Magento\Framework\EntityManager\MetadataPool;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
+/**
+ * Test products query for configurable products
+ */
 class ConfigurableProductViewTest extends GraphQlAbstract
 {
     /**
@@ -93,6 +96,7 @@ class ConfigurableProductViewTest extends GraphQlAbstract
         configurable_options {
           id
           attribute_id
+          attribute_id_v2
           label
           position
           use_default
@@ -209,7 +213,7 @@ QUERY;
 
         $this->assertArrayHasKey('products', $response);
         $this->assertArrayHasKey('items', $response['products']);
-        $this->assertEquals(1, count($response['products']['items']));
+        $this->assertCount(1, $response['products']['items']);
         $this->assertArrayHasKey(0, $response['products']['items']);
         $this->assertBaseFields($product, $response['products']['items'][0]);
         $this->assertConfigurableProductOptions($response['products']['items'][0]);
@@ -232,7 +236,6 @@ QUERY;
         $regularPriceAmount =  $priceInfo->getPrice(RegularPrice::PRICE_CODE)->getAmount();
         /** @var MetadataPool $metadataPool */
         $metadataPool = ObjectManager::getInstance()->get(MetadataPool::class);
-        // ['product_object_field_name', 'expected_value']
         $assertionMap = [
             ['response_field' => 'attribute_set_id', 'expected_value' => $product->getAttributeSetId()],
             ['response_field' => 'created_at', 'expected_value' => $product->getCreatedAt()],
@@ -241,7 +244,7 @@ QUERY;
                 'expected_value' => $product->getData(
                     $metadataPool->getMetadata(
                         ProductInterface::class
-                    )->getLinkField()
+                    )->getIdentifierField()
                 )
             ],
             ['response_field' => 'name', 'expected_value' => $product->getName()],
@@ -300,6 +303,7 @@ QUERY;
                 isset($variantArray['product']['id']),
                 'variant product elements don\'t contain id key'
             );
+            $variantProductId = $variantArray['product']['id'];
             $indexValue = $variantArray['product']['sku'];
             unset($variantArray['product']['id']);
             $this->assertTrue(
@@ -310,14 +314,20 @@ QUERY;
             /** @var \Magento\Catalog\Model\Product $childProduct */
             $childProduct = $productRepository->get($indexValue);
 
-            /** @var  \Magento\Catalog\Api\Data\ProductLinkInterface[] */
-            $links = $childProduct->getExtensionAttributes()->getCategoryLinks();
-            $this->assertCount(1, $links, "Precondition failed, incorrect number of categories.");
-            $id =$links[0]->getCategoryId();
-
-            $actualValue
-                = $actualResponse['variants'][$variantKey]['product']['categories'][0];
-            $this->assertEquals($actualValue, ['id' => $id]);
+            switch ($variantProductId) {
+                case 10:
+                    $this->assertEmpty(
+                        $actualResponse['variants'][$variantKey]['product']['categories'],
+                        'No category is expected for product, that not visible individually'
+                    );
+                    break;
+                case 20:
+                    $this->assertEquals(
+                        $actualResponse['variants'][$variantKey]['product']['categories'][0],
+                        ['id' => 333]
+                    );
+                    break;
+            }
             unset($variantArray['product']['categories']);
 
             $mediaGalleryEntries = $childProduct->getMediaGalleryEntries();
@@ -326,14 +336,7 @@ QUERY;
                 $mediaGalleryEntries,
                 "Precondition failed since there are incorrect number of media gallery entries"
             );
-            $this->assertTrue(
-                is_array(
-                    $actualResponse['variants']
-                    [$variantKey]
-                    ['product']
-                    ['media_gallery_entries']
-                )
-            );
+            $this->assertIsArray($actualResponse['variants'][$variantKey]['product']['media_gallery_entries']);
             $this->assertCount(
                 1,
                 $actualResponse['variants'][$variantKey]['product']['media_gallery_entries'],
@@ -341,10 +344,7 @@ QUERY;
             );
             $mediaGalleryEntry = $mediaGalleryEntries[0];
             $this->assertResponseFields(
-                $actualResponse['variants']
-                [$variantKey]
-                ['product']
-                ['media_gallery_entries'][0],
+                $actualResponse['variants'][$variantKey]['product']['media_gallery_entries'][0],
                 [
                     'disabled' => (bool)$mediaGalleryEntry->isDisabled(),
                     'file' => $mediaGalleryEntry->getFile(),
@@ -356,12 +356,7 @@ QUERY;
             );
             $videoContent = $mediaGalleryEntry->getExtensionAttributes()->getVideoContent();
             $this->assertResponseFields(
-                $actualResponse['variants']
-                [$variantKey]
-                ['product']
-                ['media_gallery_entries']
-                [0]
-                ['video_content'],
+                $actualResponse['variants'][$variantKey]['product']['media_gallery_entries'][0]['video_content'],
                 [
                     'media_type' =>$videoContent->getMediaType(),
                     'video_description' => $videoContent->getVideoDescription(),
@@ -406,7 +401,7 @@ QUERY;
                 $variantArray['product']['price']
             );
             $configurableOptions = $this->getConfigurableOptions();
-            $this->assertEquals(1, count($variantArray['attributes']));
+            $this->assertCount(1, $variantArray['attributes']);
             foreach ($variantArray['attributes'] as $attribute) {
                 $hasAssertion = false;
                 foreach ($configurableOptions as $option) {
@@ -447,6 +442,11 @@ QUERY;
             $actualResponse['configurable_options'][0]['attribute_id'],
             $configurableAttributeOption['attribute_id']
         );
+        $this->assertEquals(
+            $actualResponse['configurable_options'][0]['attribute_id_v2'],
+            $configurableAttributeOption['attribute_id']
+        );
+        $this->assertIsInt($actualResponse['configurable_options'][0]['attribute_id_v2']);
         $this->assertEquals(
             $actualResponse['configurable_options'][0]['label'],
             $configurableAttributeOption['label']

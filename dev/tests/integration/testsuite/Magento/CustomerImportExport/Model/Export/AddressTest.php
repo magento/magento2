@@ -27,7 +27,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
      */
     protected $_websites = [];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(

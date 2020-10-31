@@ -15,6 +15,8 @@ use Magento\Framework\GraphQlSchemaStitching\GraphQlReader\MetaReader\DocReader;
  */
 class EnumType implements TypeMetaReaderInterface
 {
+    public const GRAPHQL_ENUM = 'graphql_enum';
+
     /**
      * @var DocReader
      */
@@ -23,26 +25,29 @@ class EnumType implements TypeMetaReaderInterface
     /**
      * @param DocReader $docReader
      */
-    public function __construct(DocReader $docReader)
-    {
+    public function __construct(
+        DocReader $docReader
+    ) {
         $this->docReader = $docReader;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function read(\GraphQL\Type\Definition\Type $typeMeta) : array
     {
         if ($typeMeta instanceof \GraphQL\Type\Definition\EnumType) {
             $result = [
                 'name' => $typeMeta->name,
-                'type' => 'graphql_enum',
+                'type' => self::GRAPHQL_ENUM,
                 'items' => [] // Populated later
             ];
             foreach ($typeMeta->getValues() as $enumValueMeta) {
                 $result['items'][$enumValueMeta->value] = [
                     'name' => strtolower($enumValueMeta->name),
-                    '_value' => $enumValueMeta->value
+                    '_value' => $enumValueMeta->value,
+                    'description' => $enumValueMeta->description,
+                    'deprecationReason' =>$enumValueMeta->deprecationReason
                 ];
 
                 if ($this->docReader->read($enumValueMeta->astNode->directives)) {
@@ -56,6 +61,7 @@ class EnumType implements TypeMetaReaderInterface
             }
 
             return $result;
+
         } else {
             return [];
         }

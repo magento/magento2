@@ -26,6 +26,7 @@ use Magento\Framework\App\ObjectManager;
  * @SuppressWarnings(PHPMD.TooManyFields)
  *
  * @api
+ * @since 100.0.2
  */
 class Config
 {
@@ -131,10 +132,10 @@ class Config
         'charset' => null,
         'media_type' => null,
         'content_type' => null,
+        'title' => null,
         'description' => null,
         'keywords' => null,
         'robots' => null,
-        'title' => null,
     ];
 
     /**
@@ -384,6 +385,7 @@ class Config
      * Set meta title
      *
      * @param string $title
+     * @since 101.0.6
      */
     public function setMetaTitle($title)
     {
@@ -394,6 +396,7 @@ class Config
      * Retrieve meta title
      *
      * @return string
+     * @since 101.0.6
      */
     public function getMetaTitle()
     {

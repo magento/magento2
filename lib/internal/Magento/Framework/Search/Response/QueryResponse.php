@@ -12,6 +12,7 @@ use Magento\Framework\Search\ResponseInterface;
 /**
  * Search Response
  * @api
+ * @since 100.0.2
  */
 class QueryResponse implements ResponseInterface
 {
@@ -75,7 +76,15 @@ class QueryResponse implements ResponseInterface
     }
 
     /**
-     * @inheritdoc
+     * Temporary solution for an existing interface of a fulltext search request in Backward compatibility purposes.
+     * Don't use this function.
+     * It must be move to different interface.
+     * Scope to split Search response interface on two different 'Search' and 'Fulltext Search' contains in MC-16461.
+     *
+     * @deprecated 102.0.2
+     *
+     * @return int
+     * @since 102.0.2
      */
     public function getTotal(): int
     {

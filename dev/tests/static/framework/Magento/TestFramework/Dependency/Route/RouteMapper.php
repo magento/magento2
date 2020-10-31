@@ -9,6 +9,7 @@ namespace Magento\TestFramework\Dependency\Route;
 
 use Magento\Framework\App\Area;
 use Magento\Framework\App\Utility\Files;
+use Magento\Framework\Component\ComponentFile;
 use Magento\TestFramework\Exception\NoSuchActionException;
 
 /**
@@ -153,7 +154,7 @@ class RouteMapper
      * @param string $routeId
      * @param string $controllerName
      * @param string $actionName
-     * @return array
+     * @return string[]
      * @throws NoSuchActionException
      * @throws \Exception
      */
@@ -173,12 +174,10 @@ class RouteMapper
         $dependencies = [];
         foreach ($this->getRouterTypes() as $routerId) {
             if (isset($this->getActionsMap()[$routerId][$routeId][$controllerName][$actionName])) {
-                $dependencies = array_merge(
-                    $dependencies,
-                    $this->getActionsMap()[$routerId][$routeId][$controllerName][$actionName]
-                );
+                $dependencies[] = $this->getActionsMap()[$routerId][$routeId][$controllerName][$actionName];
             }
         }
+        $dependencies = array_merge([], ...$dependencies);
 
         if (empty($dependencies)) {
             throw new NoSuchActionException(implode('/', [$routeId, $controllerName, $actionName]));
@@ -231,7 +230,7 @@ class RouteMapper
         // Read module's routes.xml file
         $config = simplexml_load_file($configFile);
 
-        $routers  = $config->xpath("/config/router");
+        $routers = $config->xpath("/config/router");
         foreach ($routers as $router) {
             $routerId = (string)$router['id'];
             foreach ($router->xpath('route') as $route) {
@@ -254,13 +253,11 @@ class RouteMapper
     private function getListRoutesXml()
     {
         if (empty($this->routeConfigFiles)) {
-            $files = Files::init()->getConfigFiles('*/routes.xml', [], false);
-            $pattern = '/(?<namespace>[A-Z][a-z]+)[_\/\\\\](?<module>[A-Z][a-zA-Z]+)/';
-            foreach ($files as $file) {
-                if (preg_match($pattern, $file, $matches)) {
-                    $module = $matches['namespace'] . '\\' . $matches['module'];
-                    $this->routeConfigFiles[$module][] = $file;
-                }
+            $files = Files::init()->getConfigFiles('*/routes.xml', [], false, true);
+            /** @var ComponentFile $componentFile */
+            foreach ($files as $componentFile) {
+                $module = str_replace('_', '\\', $componentFile->getComponentName());
+                $this->routeConfigFiles[$module][] = $componentFile->getFullPath();
             }
         }
         return $this->routeConfigFiles;
@@ -278,6 +275,7 @@ class RouteMapper
             $files = Files::init()->getPhpFiles(Files::INCLUDE_APP_CODE);
             $actionsMap = [];
             foreach ($this->getRoutersMap() as $routerId => $routes) {
+                $actionsMapPerArea = [];
                 foreach ($routes as $routeId => $dependencies) {
                     $actionsMapPerArea[$routeId] = [];
                     foreach ($dependencies as $module) {

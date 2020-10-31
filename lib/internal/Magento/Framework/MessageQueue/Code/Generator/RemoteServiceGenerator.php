@@ -11,7 +11,7 @@ use Magento\Framework\Communication\Config\ReflectionGenerator;
 use Magento\Framework\Communication\ConfigInterface as CommunicationConfig;
 use Magento\Framework\MessageQueue\Code\Generator\Config\RemoteServiceReader\Communication as RemoteServiceReader;
 use Magento\Framework\Reflection\MethodsMap as ServiceMethodsMap;
-use Zend\Code\Reflection\MethodReflection;
+use Laminas\Code\Reflection\MethodReflection;
 
 /**
  * Code generator for remote services.
@@ -74,7 +74,7 @@ class RemoteServiceGenerator extends \Magento\Framework\Code\Generator\EntityAbs
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     protected function _getDefaultConstructorDefinition()
     {
@@ -97,7 +97,7 @@ class RemoteServiceGenerator extends \Magento\Framework\Code\Generator\EntityAbs
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     protected function _getClassProperties()
     {
@@ -119,24 +119,24 @@ class RemoteServiceGenerator extends \Magento\Framework\Code\Generator\EntityAbs
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     protected function _getClassMethods()
     {
         $methods = [$this->_getDefaultConstructorDefinition()];
         $interfaceMethodsMap = $this->serviceMethodsMap->getMethodsMap($this->getSourceClassName());
         foreach (array_keys($interfaceMethodsMap) as $methodName) {
-            // Uses Zend Reflection instead MethodsMap service, because second does not support features of PHP 7.x
+            // Uses Laminas Reflection instead MethodsMap service, because second does not support features of PHP 7.x
             $methodReflection = new MethodReflection($this->getSourceClassName(), $methodName);
             $sourceMethodParameters = $methodReflection->getParameters();
             $methodParameters = [];
             $topicParameters = [];
-            /** @var \Zend\Code\Reflection\ParameterReflection $methodParameter */
+            /** @var \Laminas\Code\Reflection\ParameterReflection $methodParameter */
             foreach ($sourceMethodParameters as $methodParameter) {
                 $parameterName = $methodParameter->getName();
                 $parameter = [
                     'name' => $parameterName,
-                    'type' => $methodParameter->getType(),
+                    'type' => $this->convertMethodType($methodParameter->getType()),
                 ];
                 if ($methodParameter->isDefaultValueAvailable()) {
                     $parameter['defaultValue'] = $methodParameter->getDefaultValue() !== null
@@ -155,7 +155,7 @@ class RemoteServiceGenerator extends \Magento\Framework\Code\Generator\EntityAbs
             $annotations = [['name' => 'inheritdoc']];
             $method = [
                 'name' => $methodName,
-                'returnType' => $methodReflection->getReturnType(),
+                'returnType' => $this->convertMethodType($methodReflection->getReturnType()),
                 'parameters' => $methodParameters,
                 'body' => $methodBody,
                 'docblock' => ['tags' => $annotations],
@@ -166,7 +166,18 @@ class RemoteServiceGenerator extends \Magento\Framework\Code\Generator\EntityAbs
     }
 
     /**
-     * {@inheritdoc}
+     * Converts method type if needed.
+     *
+     * @param mixed $type
+     * @return string|null
+     */
+    private function convertMethodType($type)
+    {
+        return $type instanceof \ReflectionNamedType ? $type->getName() : $type;
+    }
+
+    /**
+     * @inheritDoc
      */
     protected function _validateData()
     {
@@ -175,7 +186,7 @@ class RemoteServiceGenerator extends \Magento\Framework\Code\Generator\EntityAbs
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     protected function _generateCode()
     {
@@ -218,7 +229,7 @@ class RemoteServiceGenerator extends \Magento\Framework\Code\Generator\EntityAbs
      *
      * @return ReflectionGenerator
      *
-     * @deprecated 100.2.0
+     * @deprecated 103.0.0
      */
     private function getReflectionGenerator()
     {

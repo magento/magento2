@@ -20,5 +20,6 @@
         <element name="rangeFrom" type="text" selector="#zip_from"/>
         <element name="rangeTo" type="text" selector="#zip_to"/>
         <element name="zipCode" type="input" selector="#tax_postcode"/>
+        <element name="fieldError" type="text" selector="//input[@name='{{fieldName}}']/following-sibling::label[@class='mage-error']" parameterized="true"/>
     </section>
 </sections>

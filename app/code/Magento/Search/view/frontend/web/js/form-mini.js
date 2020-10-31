@@ -11,7 +11,8 @@ define([
     'underscore',
     'mage/template',
     'matchMedia',
-    'jquery/ui',
+    'jquery-ui-modules/widget',
+    'jquery-ui-modules/core',
     'mage/translate'
 ], function ($, _, mageTemplate, mediaCheck) {
     'use strict';
@@ -29,7 +30,7 @@ define([
     $.widget('mage.quickSearch', {
         options: {
             autocomplete: 'off',
-            minSearchLength: 2,
+            minSearchLength: 3,
             responseFieldElements: 'ul li',
             selectClass: 'selected',
             template:
@@ -231,8 +232,10 @@ define([
                     break;
 
                 case $.ui.keyCode.ENTER:
-                    this.searchForm.trigger('submit');
-                    e.preventDefault();
+                    if (this.element.val().length >= parseInt(this.options.minSearchLength, 10)) {
+                        this.searchForm.trigger('submit');
+                        e.preventDefault();
+                    }
                     break;
 
                 case $.ui.keyCode.DOWN:
@@ -293,9 +296,10 @@ define([
                 dropdown = $('<ul role="listbox"></ul>'),
                 value = this.element.val();
 
-            this.submitBtn.disabled = isEmpty(value);
+            this.submitBtn.disabled = true;
 
             if (value.length >= parseInt(this.options.minSearchLength, 10)) {
+                this.submitBtn.disabled = false;
                 $.getJSON(this.options.url, {
                     q: value
                 }, $.proxy(function (data) {

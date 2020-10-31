@@ -3,17 +3,24 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Captcha\Model;
 
+use Magento\Authorization\Model\UserContextInterface;
 use Magento\Captcha\Helper\Data;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Math\Random;
 
 /**
- * Implementation of \Zend\Captcha\Image
+ * Implementation of \Laminas\Captcha\Image
+ *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  *
  * @api
  * @since 100.0.2
  */
-class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model\CaptchaInterface
+class DefaultModel extends \Laminas\Captcha\Image implements \Magento\Captcha\Model\CaptchaInterface
 {
     /**
      * Key in session for captcha code
@@ -46,7 +53,7 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
     /**
      * Override default value to prevent a captcha cut off
      * @var int
-     * @see \Zend\Captcha\Image::$fsize
+     * @see \Laminas\Captcha\Image::$fsize
      * @since 100.2.0
      */
     protected $fsize = 22;
@@ -84,23 +91,39 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
     private $words;
 
     /**
+     * @var Random
+     */
+    private $randomMath;
+
+    /**
+     * @var UserContextInterface
+     */
+    private $userContext;
+
+    /**
      * @param \Magento\Framework\Session\SessionManagerInterface $session
      * @param \Magento\Captcha\Helper\Data $captchaData
      * @param ResourceModel\LogFactory $resLogFactory
      * @param string $formId
-     * @throws \Zend\Captcha\Exception\ExtensionNotLoadedException
+     * @param Random $randomMath
+     * @param UserContextInterface|null $userContext
+     * @throws \Laminas\Captcha\Exception\ExtensionNotLoadedException
      */
     public function __construct(
         \Magento\Framework\Session\SessionManagerInterface $session,
         \Magento\Captcha\Helper\Data $captchaData,
         \Magento\Captcha\Model\ResourceModel\LogFactory $resLogFactory,
-        $formId
+        $formId,
+        Random $randomMath = null,
+        ?UserContextInterface $userContext = null
     ) {
         parent::__construct();
         $this->session = $session;
         $this->captchaData = $captchaData;
         $this->resLogFactory = $resLogFactory;
         $this->formId = $formId;
+        $this->randomMath = $randomMath ?? ObjectManager::getInstance()->get(Random::class);
+        $this->userContext = $userContext ?? ObjectManager::getInstance()->get(UserContextInterface::class);
     }
 
     /**
@@ -139,6 +162,7 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
                 $this->formId,
                 $this->getTargetForms()
             )
+            || $this->userContext->getUserType() === UserContextInterface::USER_TYPE_INTEGRATION
         ) {
             return false;
         }
@@ -228,7 +252,7 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
      */
     private function isUserAuth()
     {
-        return $this->session->isLoggedIn();
+        return $this->session->isLoggedIn() || $this->userContext->getUserId();
     }
 
     /**
@@ -382,23 +406,9 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
      */
     protected function generateWord()
     {
-        $word = '';
-        $symbols = $this->getSymbols();
+        $symbols = (string)$this->captchaData->getConfig('symbols');
         $wordLen = $this->getWordLen();
-        for ($i = 0; $i < $wordLen; $i++) {
-            $word .= $symbols[array_rand($symbols)];
-        }
-        return $word;
-    }
-
-    /**
-     * Get symbols array to use for word generation
-     *
-     * @return array
-     */
-    private function getSymbols()
-    {
-        return str_split((string)$this->captchaData->getConfig('symbols'));
+        return $this->randomMath->getRandomString($wordLen, $symbols);
     }
 
     /**
@@ -428,7 +438,7 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
             $to = self::DEFAULT_WORD_LENGTH_TO;
         }
 
-        return \Magento\Framework\Math\Random::getRandomNumber($from, $to);
+        return Random::getRandomNumber($from, $to);
     }
 
     /**
@@ -497,18 +507,23 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
     /**
      * Get captcha words
      *
-     * @return string|null
+     * @return string
      */
     private function getWords()
     {
         $sessionData = $this->session->getData($this->getFormIdKey(self::SESSION_WORD));
-        return time() < $sessionData['expires'] ? $sessionData['words'] : null;
+        $words = '';
+        if (isset($sessionData['expires'], $sessionData['words']) && time() < $sessionData['expires']) {
+            $words = $sessionData['words'];
+        }
+
+        return $words;
     }
 
     /**
      * Set captcha word
      *
-     * @param  string $word
+     * @param string $word
      * @return $this
      * @since 100.2.0
      */
@@ -538,14 +553,14 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
     /**
      * Override function to generate less curly captcha that will not cut off
      *
-     * @see \Zend\Captcha\Image::_randomSize()
+     * @see \Laminas\Captcha\Image::_randomSize()
      * @return int
      * @throws \Magento\Framework\Exception\LocalizedException
      * @since 100.2.0
      */
     protected function randomSize()
     {
-        return \Magento\Framework\Math\Random::getRandomNumber(280, 300) / 100;
+        return Random::getRandomNumber(280, 300) / 100;
     }
 
     /**
@@ -562,7 +577,7 @@ class DefaultModel extends \Zend\Captcha\Image implements \Magento\Captcha\Model
      */
     protected function gc()
     {
-        //do nothing
+        return; // required for static testing to pass
     }
 
     /**

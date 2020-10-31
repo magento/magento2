@@ -10,9 +10,13 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!--Delete customer address from grid row, row starts at 0 -->
     <actionGroup name="AdminDeleteAddressInCustomersAddressGrid">
+        <annotations>
+            <description>Deletes a Customer Address from the Customer creation/edit page under the 'Addresses' section.</description>
+        </annotations>
         <arguments>
             <argument name="row" type="string"/>
         </arguments>
+
         <click selector="{{AdminCustomerAddressesGridSection.checkboxByRow(row)}}" stepKey="clickRowCustomerAddressCheckbox"/>
         <click selector="{{AdminCustomerAddressesGridSection.selectLinkByRow(row)}}" stepKey="openActionsDropdown"/>
         <click selector="{{AdminCustomerAddressesGridSection.deleteLinkByRow(row)}}" stepKey="chooseDeleteOption"/>

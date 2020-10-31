@@ -5,6 +5,9 @@
  */
 namespace Magento\Search\Model;
 
+/**
+ * Provides list of Autocomplete items
+ */
 class Autocomplete implements AutocompleteInterface
 {
     /**
@@ -23,15 +26,15 @@ class Autocomplete implements AutocompleteInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getItems()
     {
         $data = [];
         foreach ($this->dataProviders as $dataProvider) {
-            $data = array_merge($data, $dataProvider->getItems());
+            $data[] = $dataProvider->getItems();
         }
 
-        return $data;
+        return array_merge([], ...$data);
     }
 }

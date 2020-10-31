@@ -18,7 +18,7 @@
                 <group value="mtf_migrated"/>
             </annotations>
             <before>
-                <actionGroup ref = "LoginAsAdmin" stepKey="loginAsAdmin"/>
+                <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
                 <!--Create custom store view-->
                 <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createNewStoreView">
                     <argument name="StoreGroup" value="_defaultStoreGroup"/>
@@ -32,22 +32,22 @@
                 <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteUpdatedStoreView">
                     <argument name="customStore" value="SecondStoreUnique"/>
                 </actionGroup>
-                <actionGroup ref="logout" stepKey="logout"/>
+                <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
             </after>
 
             <!--Search created store view in grid-->
             <actionGroup ref="AssertStoreViewInGridActionGroup" stepKey="searchCreatedStoreViewInGrid">
                 <argument name="storeViewName" value="{{storeViewData.name}}"/>
             </actionGroup>
-            <click selector="{{AdminStoresGridSection.storeNameInFirstRow}}" stepKey="clickStoreViewFirstRowInGrid"/>
-            <waitForPageLoad stepKey="waitForAdminSystemStoreViewPageLoad"/>
+            <actionGroup ref="AdminOpenStoreInFirstRowInStoresGridActionGroup" stepKey="clickStoreViewFirstRowInGrid"/>
+
             <!--Update created store view as per requirements-->
             <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="updateStoreView">
                 <argument name="StoreGroup" value="_defaultStoreGroup"/>
                 <argument name="customStore" value="SecondStoreUnique"/>
             </actionGroup>
             <!--Save the updated Store view and verify AssertStoreViewSuccessSaveMessage-->
-            <actionGroup ref="AdminCreateStoreViewActionSaveGroup" stepKey="verifyAssertStoreViewSuccessSaveMessage">
+            <actionGroup ref="AdminCreateStoreViewSaveActionGroup" stepKey="verifyAssertStoreViewSuccessSaveMessage">
             </actionGroup>
 
             <!--Search updated store view in grid and verify AssertStoreViewInGridMessage-->
@@ -71,8 +71,7 @@
             <see selector="{{AdminConfigSection.defaultConfigDropdown}}" userInput="{{SecondStoreUnique.name}}" stepKey="seeAssertUpdateStoreViewInDefaultConfigDropdown"/>
 
             <!--Go to storefront and verify AssertStoreFrontend-->
-            <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToStorefrontPage"/>
-            <waitForPageLoad stepKey="waitForStorefrontHomePageLoad"/>
+            <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStorefrontPage"/>
             <click selector="{{StorefrontHeaderSection.storeViewSwitcher}}" stepKey="selectStoreSwitcher"/>
             <waitForPageLoad stepKey="waitForFirstStoreView"/>
             <see selector="{{StorefrontHeaderSection.storeViewDropdown}}" userInput="{{storeViewData.name}}" stepKey="seeAssertStoreViewOnStorefront"/>

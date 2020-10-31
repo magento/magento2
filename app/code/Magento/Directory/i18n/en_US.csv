@@ -52,3 +52,4 @@ Service,Service
 "The """%1"" is not allowed as base currency for your subscription plan.","The """%1"" is not allowed as base currency for your subscription plan."
 "An invalid base currency has been entered.","An invalid base currency has been entered."
 "Currency rates can't be retrieved.","Currency rates can't be retrieved."
+"No API Key was specified.","No API Key was specified."

@@ -4,14 +4,15 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Wishlist item collection grouped by customer id
- */
 namespace Magento\Wishlist\Model\ResourceModel\Item\Collection;
 
-use Magento\Customer\Controller\RegistryConstants as RegistryConstants;
+use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
+use Magento\Customer\Controller\RegistryConstants;
+use Magento\Wishlist\Model\Item;
 
 /**
+ * Wishlist item collection for grid grouped by customer id
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Grid extends \Magento\Wishlist\Model\ResourceModel\Item\Collection
@@ -89,25 +90,48 @@ class Grid extends \Magento\Wishlist\Model\ResourceModel\Item\Collection
     }
 
     /**
-     * Initialize db select
-     *
-     * @return $this
+     * @inheritdoc
      */
     protected function _initSelect()
     {
         parent::_initSelect();
-        $this->addCustomerIdFilter(
-            $this->_registryManager->registry(RegistryConstants::CURRENT_CUSTOMER_ID)
-        )->resetSortOrder()->addDaysInWishlist()->addStoreData();
+
+        $customerId = $this->_registryManager->registry(RegistryConstants::CURRENT_CUSTOMER_ID);
+        $this->addDaysInWishlist()
+            ->addStoreData()
+            ->addCustomerIdFilter($customerId)
+            ->resetSortOrder();
+
         return $this;
     }
 
     /**
-     * Add select order
-     *
-     * @param   string $field
-     * @param   string $direction
-     * @return  \Magento\Framework\Data\Collection\AbstractDb
+     * @inheritdoc
+     */
+    protected function _assignProducts()
+    {
+        /** @var ProductCollection $productCollection */
+        $productCollection = $this->_productCollectionFactory->create()
+            ->addAttributeToSelect($this->_wishlistConfig->getProductAttributes())
+            ->addIdFilter($this->_productIds);
+
+        /** @var Item $item */
+        foreach ($this as $item) {
+            $product = $productCollection->getItemById($item->getProductId());
+            if ($product) {
+                $product->setCustomOptions([]);
+                $item->setProduct($product);
+                $item->setProductName($product->getName());
+                $item->setName($product->getName());
+                $item->setPrice($product->getPrice());
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
      */
     public function setOrder($field, $direction = self::SORT_ORDER_DESC)
     {
@@ -123,12 +147,7 @@ class Grid extends \Magento\Wishlist\Model\ResourceModel\Item\Collection
     }
 
     /**
-     * Add field filter to collection
-     *
-     * @param string|array $field
-     * @param null|string|array $condition
-     * @see self::_getConditionSql for $condition
-     * @return \Magento\Framework\Data\Collection\AbstractDb
+     * @inheritdoc
      */
     public function addFieldToFilter($field, $condition = null)
     {
@@ -146,7 +165,25 @@ class Grid extends \Magento\Wishlist\Model\ResourceModel\Item\Collection
                 if (!isset($condition['datetime'])) {
                     return $this->addDaysFilter($condition);
                 }
+                break;
+            case 'qty':
+                if (isset($condition['from']) || isset($condition['to'])) {
+                    return $this->addQtyFilter($field, $condition);
+                }
         }
+
         return parent::addFieldToFilter($field, $condition);
+    }
+
+    /**
+     * Add quantity to filter
+     *
+     * @param string $field
+     * @param array $condition
+     * @return \Magento\Wishlist\Model\ResourceModel\Item\Collection
+     */
+    private function addQtyFilter(string $field, array $condition)
+    {
+        return parent::addFieldToFilter('main_table.' . $field, $condition);
     }
 }

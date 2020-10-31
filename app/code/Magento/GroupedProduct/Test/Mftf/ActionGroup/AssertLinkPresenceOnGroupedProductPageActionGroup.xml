@@ -11,9 +11,13 @@
     <!-- Check for the product link. -->
     <!-- Assumes web client is on Grouped Product Page -->
     <actionGroup name="AssertLinkPresenceOnGroupedProductPage">
+        <annotations>
+            <description>Validates that the provided Product Name is present and correct on a Storefront Grouped Product page.</description>
+        </annotations>
         <arguments>
             <argument name="productName" type="string"/>
         </arguments>
+
         <see selector="{{StorefrontProductInfoMainSection.groupedProductsTable}}" userInput="{{productName}}" stepKey="seeFirstStagedGroupedProduct"/>
     </actionGroup>
 </actionGroups>

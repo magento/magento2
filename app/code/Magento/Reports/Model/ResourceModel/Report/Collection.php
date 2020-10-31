@@ -22,14 +22,14 @@ class Collection extends \Magento\Framework\Data\Collection
     /**
      * From value
      *
-     * @var \DateTime
+     * @var \DateTimeInterface
      */
     protected $_from;
 
     /**
      * To value
      *
-     * @var \DateTime
+     * @var \DateTimeInterface
      */
     protected $_to;
 
@@ -125,8 +125,8 @@ class Collection extends \Magento\Framework\Data\Collection
      */
     public function setInterval(\DateTimeInterface $fromDate, \DateTimeInterface $toDate)
     {
-        $this->_from = new \DateTime($fromDate->format('Y-m-d'), $fromDate->getTimezone());
-        $this->_to = new \DateTime($toDate->format('Y-m-d'), $toDate->getTimezone());
+        $this->_from = $fromDate;
+        $this->_to = $toDate;
 
         return $this;
     }
@@ -143,8 +143,8 @@ class Collection extends \Magento\Framework\Data\Collection
             if (!$this->_from && !$this->_to) {
                 return $this->_intervals;
             }
-            $dateStart = $this->_from;
-            $dateEnd = $this->_to;
+            $dateStart = new \DateTime($this->_from->format('Y-m-d'), $this->_from->getTimezone());
+            $dateEnd = new \DateTime($this->_to->format('Y-m-d'), $this->_to->getTimezone());
 
             $firstInterval = true;
             while ($dateStart <= $dateEnd) {
@@ -179,11 +179,7 @@ class Collection extends \Magento\Framework\Data\Collection
     protected function _getDayInterval(\DateTime $dateStart)
     {
         $interval = [
-            'period' => $this->_localeDate->formatDateTime(
-                $dateStart,
-                \IntlDateFormatter::SHORT,
-                \IntlDateFormatter::NONE
-            ),
+            'period' => $this->_localeDate->formatDate($dateStart, \IntlDateFormatter::SHORT),
             'start' => $this->_localeDate->convertConfigTimeToUtc($dateStart->format('Y-m-d 00:00:00')),
             'end' => $this->_localeDate->convertConfigTimeToUtc($dateStart->format('Y-m-d 23:59:59')),
         ];

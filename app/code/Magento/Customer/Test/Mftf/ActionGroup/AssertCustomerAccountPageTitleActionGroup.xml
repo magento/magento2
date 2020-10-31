@@ -5,12 +5,17 @@
   * See COPYING.txt for license details.
   */
 -->
+
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AssertCustomerAccountPageTitleActionGroup">
+        <annotations>
+            <description>Validates that the provided Page Title is present and correct on the Storefront Customer Dashboard.</description>
+        </annotations>
         <arguments>
-            <argument name="pageTitle" type="string" />
+            <argument name="pageTitle" type="string"/>
         </arguments>
-        <see selector="{{StorefrontCustomerAccountMainSection.pageTitle}}" userInput="{{pageTitle}}" stepKey="assertPageTitle" />
+
+        <see selector="{{StorefrontCustomerAccountMainSection.pageTitle}}" userInput="{{pageTitle}}" stepKey="assertPageTitle"/>
     </actionGroup>
 </actionGroups>

@@ -11,6 +11,7 @@
         <element name="rulesDropdown" type="select" selector="select[data-form-part='sales_rule_form'][data-ui-id='newchild-0-select-rule-conditions-1-new-child']"/>
         <element name="addProductAttributesButton" type="text" selector="#conditions__1--1__children>li>span>a"/>
         <element name="productAttributesDropdown" type="select" selector="#conditions__1--1__new_child"/>
+        <element name="firstProductAttributeSelected" type="select" selector="#conditions__1__children .rule-param:nth-of-type(2) a:nth-child(1)"/>
         <element name="changeCategoriesButton" type="text" selector="#conditions__1--1__children>li>span.rule-param:nth-of-type(2)>a"/>
         <element name="categoriesChooser" type="text" selector="#conditions__1--1__children>li>span.rule-param:nth-of-type(2)>span>label>a"/>
         <element name="treeRoot" type="text" selector=".x-tree-root-ct.x-tree-lines"/>

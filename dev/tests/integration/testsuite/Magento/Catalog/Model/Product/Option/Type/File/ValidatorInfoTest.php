@@ -26,14 +26,14 @@ class ValidatorInfoTest extends \PHPUnit\Framework\TestCase
     protected $maxFileSizeInMb;
 
     /**
-     * @var \Magento\Catalog\Model\Product\Option\Type\File\ValidateFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product\Option\Type\File\ValidateFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $validateFactoryMock;
 
     /**
      * {@inheritdoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var \Magento\Framework\File\Size $fileSize */
@@ -69,16 +69,16 @@ class ValidatorInfoTest extends \PHPUnit\Framework\TestCase
         );
 
         $validateMock = $this->createPartialMock(\Zend_Validate::class, ['isValid', 'getErrors']);
-        $validateMock->expects($this->once())->method('isValid')->will($this->returnValue(false));
-        $validateMock->expects($this->exactly(2))->method('getErrors')->will($this->returnValue([
+        $validateMock->expects($this->once())->method('isValid')->willReturn(false);
+        $validateMock->expects($this->exactly(2))->method('getErrors')->willReturn([
             \Zend_Validate_File_ExcludeExtension::FALSE_EXTENSION,
             \Zend_Validate_File_Extension::FALSE_EXTENSION,
             \Zend_Validate_File_ImageSize::WIDTH_TOO_BIG,
             \Zend_Validate_File_FilesSize::TOO_BIG,
-        ]));
+        ]);
         $this->validateFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($validateMock));
+            ->willReturn($validateMock);
 
         $this->model->validate(
             $this->getOptionValue(),
@@ -97,11 +97,11 @@ class ValidatorInfoTest extends \PHPUnit\Framework\TestCase
         );
 
         $validateMock = $this->createPartialMock(\Zend_Validate::class, ['isValid', 'getErrors']);
-        $validateMock->expects($this->once())->method('isValid')->will($this->returnValue(false));
-        $validateMock->expects($this->exactly(1))->method('getErrors')->will($this->returnValue(false));
+        $validateMock->expects($this->once())->method('isValid')->willReturn(false);
+        $validateMock->expects($this->exactly(1))->method('getErrors')->willReturn(false);
         $this->validateFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($validateMock));
+            ->willReturn($validateMock);
 
         $this->model->validate(
             $this->getOptionValue(),
@@ -118,7 +118,7 @@ class ValidatorInfoTest extends \PHPUnit\Framework\TestCase
         $validate = $this->objectManager->create(\Zend_Validate::class);
         $this->validateFactoryMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($validate));
+            ->willReturn($validate);
         $this->assertTrue(
             $this->model->validate(
                 $this->getOptionValue(),

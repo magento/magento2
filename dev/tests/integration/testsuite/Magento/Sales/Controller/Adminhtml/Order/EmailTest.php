@@ -46,7 +46,7 @@ class EmailTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->orderRepository = $this->_objectManager->get(OrderRepository::class);
@@ -82,7 +82,7 @@ class EmailTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         );
 
         $this->assertEquals($message->getSubject(), $subject);
-        $this->assertThat($message->getRawMessage(), $assert);
+        $this->assertThat($message->getBody()->getParts()[0]->getRawContent(), $assert);
     }
 
     /**

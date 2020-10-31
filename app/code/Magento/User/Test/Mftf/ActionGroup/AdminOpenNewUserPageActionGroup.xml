@@ -5,9 +5,14 @@
   * See COPYING.txt for license details.
   */
 -->
+
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminOpenNewUserPageActionGroup">
+        <annotations>
+            <description>Goes to the Admin New User page.</description>
+        </annotations>
+
         <amOnPage url="{{AdminNewUserPage.url}}" stepKey="amOnNewAdminUserPage"/>
         <waitForPageLoad stepKey="waitForNewAdminUserPageLoad"/>
     </actionGroup>

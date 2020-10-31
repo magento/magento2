@@ -1,7 +1,5 @@
 <?php
 /**
- * @category    Magento
- * @package     Magento_Sales
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -449,6 +447,9 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
      */
     public function getBackUrl()
     {
+        if ($this->getRequest()->getParam('customer_id')) {
+            return $this->getUrl('customer/index/edit', ['id'=> $this->getRequest()->getParam('customer_id')]);
+        }
         if ($this->getOrder() && $this->getOrder()->getBackUrl()) {
             return $this->getOrder()->getBackUrl();
         }

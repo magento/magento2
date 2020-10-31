@@ -56,7 +56,8 @@ class RemoveCouponFromCart implements ResolverInterface
         $maskedCartId = $args['input']['cart_id'];
 
         $currentUserId = $context->getUserId();
-        $cart = $this->getCartForUser->execute($maskedCartId, $currentUserId);
+        $storeId = (int)$context->getExtensionAttributes()->getStore()->getId();
+        $cart = $this->getCartForUser->execute($maskedCartId, $currentUserId, $storeId);
         $cartId = $cart->getId();
 
         try {

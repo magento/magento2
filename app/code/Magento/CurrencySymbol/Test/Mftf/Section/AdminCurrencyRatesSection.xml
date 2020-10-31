@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminCurrencyRatesSection">
+        <element name="import" type="button" selector="//button[@title='Import']"/>
+        <element name="saveCurrencyRates" type="button" selector="//button[@title='Save Currency Rates']"/>
+        <element name="options" type="button" selector="//button[@title='Options']"/>
+        <element name="oldRate" type="text" selector="//div[contains(@class, 'admin__field-note') and contains(text(), 'Old rate:')]/strong"/>
+        <element name="rateService" type="select" selector="#rate_services"/>
+        <element name="currencyRate" type="input" selector="input[name='rate[{{fistCurrency}}][{{secondCurrency}}]']" parameterized="true"/>
+    </section>
+</sections>

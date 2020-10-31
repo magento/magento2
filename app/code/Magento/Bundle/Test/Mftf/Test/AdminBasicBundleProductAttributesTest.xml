@@ -18,13 +18,13 @@
             <group value="Bundle"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
-            <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
         </after>
         <!--Create attribute set-->
-        <actionGroup ref="CreateDefaultAttributeSet" stepKey="createDefaultAttributeSet">
+        <actionGroup ref="CreateDefaultAttributeSetActionGroup" stepKey="createDefaultAttributeSet">
             <argument name="label" value="{{ProductAttributeFrontendLabel.label}}"/>
         </actionGroup>
 
@@ -66,7 +66,7 @@
         <seeOptionIsSelected selector="{{AdminProductFormBundleSection.taxClassDropDown}}" userInput="Taxable Goods" stepKey="seeCorrectTaxClass"/>
 
         <!--Fill out price-->
-        <seeInField selector="{{AdminProductFormBundleSection.priceField}}" userInput="10" stepKey="seePrice"/>
+        <seeInField selector="{{AdminProductFormBundleSection.priceField}}" userInput="10.00" stepKey="seePrice"/>
 
         <!--Stock status-->
         <seeOptionIsSelected selector="{{AdminProductFormBundleSection.stockStatusField}}" userInput="In Stock" stepKey="seeStockStatus"/>
@@ -91,14 +91,13 @@
         <seeOptionIsSelected selector="{{AdminProductFormBundleSection.countryOfManufactureDropDown}}" userInput="Italy" stepKey="seeCountryOfManufacture"/>
 
         <!--Create second attribute set for edit-->
-        <actionGroup ref="CreateDefaultAttributeSet" stepKey="createSecondAttributeSet">
+        <actionGroup ref="CreateDefaultAttributeSetActionGroup" stepKey="createSecondAttributeSet">
             <argument name="label" value="{{ProductAttributeFrontendLabelTwo.label}}"/>
         </actionGroup>
 
         <!--Filter catalog-->
-        <amOnPage url="{{AdminCatalogProductPage.url}}" stepKey="goToCatalogProductPage"/>
-        <waitForPageLoad stepKey="WaitForPageToLoad"/>
-        <actionGroup ref="filterProductGridByName" stepKey="filterBundleProductOptionsDownToName">
+        <actionGroup ref="AdminOpenCatalogProductPageActionGroup" stepKey="goToCatalogProductPage"/>
+        <actionGroup ref="FilterProductGridByNameActionGroup" stepKey="filterBundleProductOptionsDownToName">
             <argument name="product" value="BundleProduct"/>
         </actionGroup>
         <click selector="{{AdminProductFiltersSection.attributeSetOfFirstRow(ProductAttributeFrontendLabel.label)}}" stepKey="clickAttributeSet2"/>
@@ -143,7 +142,7 @@
         <selectOption selector="{{AdminProductFormBundleSection.countryOfManufactureDropDown}}" userInput="France" stepKey="countryOfManufactureDropDown"/>
 
         <!--Save the product-->
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveButton"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSaveButton"/>
         <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="messageYouSavedTheProductIsShown"/>
 
         <!--Verify form was filled out correctly after edit-->
@@ -165,7 +164,7 @@
         <seeOptionIsSelected selector="{{AdminProductFormBundleSection.taxClassDropDown}}" userInput="Taxable Goods" stepKey="seeCorrectTaxClass2"/>
 
         <!--Price-->
-        <seeInField selector="{{AdminProductFormBundleSection.priceField}}" userInput="20" stepKey="seePrice2"/>
+        <seeInField selector="{{AdminProductFormBundleSection.priceField}}" userInput="20.00" stepKey="seePrice2"/>
 
         <!--Stock status-->
         <seeOptionIsSelected selector="{{AdminProductFormBundleSection.stockStatusField}}" userInput="Out of Stock" stepKey="seeStockStatus2"/>

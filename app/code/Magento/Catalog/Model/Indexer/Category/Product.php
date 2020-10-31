@@ -64,8 +64,8 @@ class Product implements \Magento\Framework\Indexer\ActionInterface, \Magento\Fr
      */
     public function execute($ids)
     {
-        $this->executeAction($ids);
         $this->registerEntities($ids);
+        $this->executeAction($ids);
     }
 
     /**
@@ -137,10 +137,11 @@ class Product implements \Magento\Framework\Indexer\ActionInterface, \Magento\Fr
 
         /** @var Product\Action\Rows $action */
         $action = $this->rowsActionFactory->create();
-        if ($indexer->isWorking()) {
+        if ($indexer->isScheduled()) {
             $action->execute($ids, true);
+        } else {
+            $action->execute($ids);
         }
-        $action->execute($ids);
 
         return $this;
     }

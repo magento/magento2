@@ -7,7 +7,10 @@
 <?php /** @var $block \Magento\Checkout\Block\Onepage\Success */ ?>
 
 <?php if ($block->getCanViewOrder() && $block->getCanPrintOrder()) :?>
-    <a href="<?= $block->escapeUrl($block->getPrintUrl()) ?>" target="_blank" class="print">
+    <a href="<?= $block->escapeUrl($block->getPrintUrl()) ?>"
+       class="action print"
+       target="_blank"
+       rel="noopener">
         <?= $block->escapeHtml(__('Print receipt')) ?>
     </a>
     <?= $block->getChildHtml() ?>

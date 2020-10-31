@@ -91,7 +91,6 @@ class Exchange
                 if ($headers instanceof AMQPTable) {
                     try {
                         $headers->set('store_id', $storeId);
-                    // phpcs:ignore Magento2.Exceptions.ThrowCatch
                     } catch (AMQPInvalidArgumentException $ea) {
                         $errorMessage = sprintf("Can't set storeId to amqp message. Error %s.", $ea->getMessage());
                         $this->logger->error($errorMessage);
