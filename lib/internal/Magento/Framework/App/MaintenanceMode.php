@@ -58,7 +58,7 @@ class MaintenanceMode
      */
     public function __construct(
         Filesystem $filesystem,
-        ?Manager $eventManager = null,
+        Manager $eventManager = null,
         Utility\IPAddressNormaliser $ipAddressNormaliser = null
     ) {
         $this->flagDir = $filesystem->getDirectoryWrite(self::FLAG_DIR);
