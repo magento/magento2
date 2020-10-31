@@ -117,6 +117,12 @@ class IpValidator
         }
     }
 
+    /**
+     * Combine adjacent networks
+     *
+     * @param string[] $networks
+     * @return void
+     */
     private function combineAdjacentNetworks(array &$networks): void
     {
         if (count($networks) > 1) {
@@ -139,6 +145,12 @@ class IpValidator
         }
     }
 
+    /**
+     * Remove Overlapping Networks
+     *
+     * @param string[] $networks
+     * @return void
+     */
     private function removeOverlappingNetworks(array &$networks): void
     {
         if (count($networks) > 1) {
