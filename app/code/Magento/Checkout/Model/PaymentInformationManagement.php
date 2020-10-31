@@ -6,6 +6,8 @@
 
 namespace Magento\Checkout\Model;
 
+use Magento\Checkout\Api\PaymentProcessingRateLimiterInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\CouldNotSaveException;
 
 /**
@@ -17,7 +19,7 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
 {
     /**
      * @var \Magento\Quote\Api\BillingAddressManagementInterface
-     * @deprecated 100.2.0 This call was substituted to eliminate extra quote::save call
+     * @deprecated 100.1.0 This call was substituted to eliminate extra quote::save call
      */
     protected $billingAddressManagement;
 
@@ -52,11 +54,17 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
     private $cartRepository;
 
     /**
+     * @var PaymentProcessingRateLimiterInterface
+     */
+    private $paymentRateLimiter;
+
+    /**
      * @param \Magento\Quote\Api\BillingAddressManagementInterface $billingAddressManagement
      * @param \Magento\Quote\Api\PaymentMethodManagementInterface $paymentMethodManagement
      * @param \Magento\Quote\Api\CartManagementInterface $cartManagement
      * @param PaymentDetailsFactory $paymentDetailsFactory
      * @param \Magento\Quote\Api\CartTotalRepositoryInterface $cartTotalsRepository
+     * @param PaymentProcessingRateLimiterInterface|null $paymentRateLimiter
      * @codeCoverageIgnore
      */
     public function __construct(
@@ -64,13 +72,16 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
         \Magento\Quote\Api\PaymentMethodManagementInterface $paymentMethodManagement,
         \Magento\Quote\Api\CartManagementInterface $cartManagement,
         \Magento\Checkout\Model\PaymentDetailsFactory $paymentDetailsFactory,
-        \Magento\Quote\Api\CartTotalRepositoryInterface $cartTotalsRepository
+        \Magento\Quote\Api\CartTotalRepositoryInterface $cartTotalsRepository,
+        ?PaymentProcessingRateLimiterInterface $paymentRateLimiter = null
     ) {
         $this->billingAddressManagement = $billingAddressManagement;
         $this->paymentMethodManagement = $paymentMethodManagement;
         $this->cartManagement = $cartManagement;
         $this->paymentDetailsFactory = $paymentDetailsFactory;
         $this->cartTotalsRepository = $cartTotalsRepository;
+        $this->paymentRateLimiter = $paymentRateLimiter
+            ?? ObjectManager::getInstance()->get(PaymentProcessingRateLimiterInterface::class);
     }
 
     /**
@@ -110,6 +121,8 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
         \Magento\Quote\Api\Data\PaymentInterface $paymentMethod,
         \Magento\Quote\Api\Data\AddressInterface $billingAddress = null
     ) {
+        $this->paymentRateLimiter->limit();
+
         if ($billingAddress) {
             /** @var \Magento\Quote\Api\CartRepositoryInterface $quoteRepository */
             $quoteRepository = $this->getCartRepository();
@@ -152,12 +165,12 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
      * Get logger instance
      *
      * @return \Psr\Log\LoggerInterface
-     * @deprecated 100.2.0
+     * @deprecated 100.1.8
      */
     private function getLogger()
     {
         if (!$this->logger) {
-            $this->logger = \Magento\Framework\App\ObjectManager::getInstance()->get(\Psr\Log\LoggerInterface::class);
+            $this->logger = ObjectManager::getInstance()->get(\Psr\Log\LoggerInterface::class);
         }
         return $this->logger;
     }
@@ -171,7 +184,7 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
     private function getCartRepository()
     {
         if (!$this->cartRepository) {
-            $this->cartRepository = \Magento\Framework\App\ObjectManager::getInstance()
+            $this->cartRepository = ObjectManager::getInstance()
                 ->get(\Magento\Quote\Api\CartRepositoryInterface::class);
         }
         return $this->cartRepository;

@@ -180,7 +180,7 @@ class Product extends AbstractResource
     /**
      * Product Category table name getter
      *
-     * @deprecated 101.1.0
+     * @deprecated 102.0.0
      * @return string
      */
     public function getProductCategoryTable()
@@ -204,7 +204,7 @@ class Product extends AbstractResource
     /**
      * Retrieve product website identifiers
      *
-     * @deprecated 101.1.0
+     * @deprecated 102.0.0
      * @param \Magento\Catalog\Model\Product|int $product
      * @return array
      */
@@ -227,12 +227,16 @@ class Product extends AbstractResource
      */
     public function getWebsiteIdsByProductIds($productIds)
     {
+        if (!is_array($productIds) || empty($productIds)) {
+            return [];
+        }
         $select = $this->getConnection()->select()->from(
             $this->getProductWebsiteTable(),
             ['product_id', 'website_id']
         )->where(
             'product_id IN (?)',
-            $productIds
+            $productIds,
+            \Zend_Db::INT_TYPE
         );
         $productsWebsites = [];
         foreach ($this->getConnection()->fetchAll($select) as $productInfo) {
@@ -357,7 +361,7 @@ class Product extends AbstractResource
         $entityId = $product->getData($entityIdField);
         foreach ($backendTables as $backendTable => $attributes) {
             $connection = $this->getConnection();
-            $where = $connection->quoteInto('attribute_id IN (?)', $attributes);
+            $where = $connection->quoteInto('attribute_id IN (?)', $attributes, \Zend_Db::INT_TYPE);
             $where .= $connection->quoteInto(" AND {$entityIdField} = ?", $entityId);
             $connection->delete($backendTable, $where);
         }
@@ -379,7 +383,7 @@ class Product extends AbstractResource
     /**
      * Save product website relations
      *
-     * @deprecated 101.1.0
+     * @deprecated 102.0.0
      * @param \Magento\Catalog\Model\Product $product
      * @return $this
      */
@@ -408,7 +412,7 @@ class Product extends AbstractResource
      * @param DataObject $object
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @deprecated 101.1.0
+     * @deprecated 102.0.0
      */
     protected function _saveCategories(DataObject $object)
     {
@@ -450,6 +454,7 @@ class Product extends AbstractResource
         // fetching all parent IDs, including those are higher on the tree
         $entityId = (int)$object->getEntityId();
         if (!isset($this->availableCategoryIdsCache[$entityId])) {
+            $unionTables = [];
             foreach ($this->_storeManager->getStores() as $store) {
                 $unionTables[] = $this->getAvailableInCategoriesSelect(
                     $entityId,
@@ -594,7 +599,8 @@ class Product extends AbstractResource
             ['entity_id', 'sku']
         )->where(
             'entity_id IN (?)',
-            $productIds
+            $productIds,
+            \Zend_Db::INT_TYPE
         );
         return $this->getConnection()->fetchAll($select);
     }
@@ -776,7 +782,7 @@ class Product extends AbstractResource
     /**
      * Retrieve ProductWebsiteLink instance.
      *
-     * @deprecated 101.1.0
+     * @deprecated 102.0.0
      * @return ProductWebsiteLink
      */
     private function getProductWebsiteLink()
@@ -787,7 +793,7 @@ class Product extends AbstractResource
     /**
      * Retrieve CategoryLink instance.
      *
-     * @deprecated 101.1.0
+     * @deprecated 102.0.0
      * @return Product\CategoryLink
      */
     private function getProductCategoryLink()
@@ -805,7 +811,7 @@ class Product extends AbstractResource
      * Store id is required to correctly identify attribute value we are working with.
      *
      * @inheritdoc
-     * @since 101.1.0
+     * @since 102.0.0
      */
     protected function getAttributeRow($entity, $object, $attribute)
     {

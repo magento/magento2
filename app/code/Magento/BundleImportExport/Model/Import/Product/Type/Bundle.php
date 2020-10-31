@@ -339,7 +339,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
     /**
      * Deprecated method for retrieving mapping between skus and products.
      *
-     * @deprecated Misspelled method
+     * @deprecated 100.3.0 Misspelled method
      * @see retrieveProductsByCachedSkus
      */
     protected function retrieveProducsByCachedSkus()
@@ -603,11 +603,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
                     if ($assoc['position'] == $this->_cachedOptions[$entityId][$key]['index']
                         && $assoc['parent_id'] == $entityId) {
                         $option['parent_id'] = $entityId;
-                        //phpcs:ignore Magento2.Performance.ForeachArrayMerge
-                        $optionValues = array_merge(
-                            $optionValues,
-                            $this->populateOptionValueTemplate($option, $optionId)
-                        );
+                        $optionValues[] = $this->populateOptionValueTemplate($option, $optionId);
                         $this->_cachedOptions[$entityId][$key]['option_id'] = $optionId;
                         break;
                     }
@@ -615,7 +611,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
             }
         }
 
-        return $optionValues;
+        return array_merge([], ...$optionValues);
     }
 
     /**

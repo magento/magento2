@@ -247,6 +247,7 @@ class QuoteManagementTest extends TestCase
                     'getPayment',
                     'setCheckoutMethod',
                     'setCustomerIsGuest',
+                    'getCustomer',
                     'getId'
                 ]
             )
@@ -799,6 +800,12 @@ class QuoteManagementTest extends TestCase
         $this->quoteMock->expects($this->once())
             ->method('getCheckoutMethod')
             ->willReturn(Onepage::METHOD_GUEST);
+        $customerMock = $this->getMockBuilder(Customer::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->quoteMock->expects($this->once())
+            ->method('getCustomer')
+            ->willReturn($customerMock);
         $this->quoteMock->expects($this->once())->method('setCustomerId')->with(null)->willReturnSelf();
         $this->quoteMock->expects($this->once())->method('setCustomerEmail')->with($email)->willReturnSelf();
 
@@ -866,6 +873,9 @@ class QuoteManagementTest extends TestCase
         $this->assertEquals($orderId, $service->placeOrder($cartId));
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function testPlaceOrder()
     {
         $cartId = 323;

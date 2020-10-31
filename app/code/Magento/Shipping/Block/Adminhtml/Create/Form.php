@@ -5,6 +5,9 @@
  */
 namespace Magento\Shipping\Block\Adminhtml\Create;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Tax\Helper\Data as TaxHelper;
+
 /**
  * Adminhtml shipment create form
  *
@@ -13,6 +16,24 @@ namespace Magento\Shipping\Block\Adminhtml\Create;
  */
 class Form extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
 {
+    /**
+     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Sales\Helper\Admin $adminHelper
+     * @param array $data
+     * @param TaxHelper|null $taxHelper
+     */
+    public function __construct(
+        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Framework\Registry $registry,
+        \Magento\Sales\Helper\Admin $adminHelper,
+        array $data = [],
+        ?TaxHelper $taxHelper = null
+    ) {
+        $data['taxHelper'] = $taxHelper ?? ObjectManager::getInstance()->get(TaxHelper::class);
+        parent::__construct($context, $registry, $adminHelper, $data);
+    }
+
     /**
      * Retrieve invoice order
      *
@@ -44,6 +65,8 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
     }
 
     /**
+     * Prepare layout.
+     *
      * @return \Magento\Framework\View\Element\AbstractBlock
      */
     protected function _prepareLayout()
@@ -53,6 +76,8 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
     }
 
     /**
+     * Return payment html.
+     *
      * @return string
      */
     public function getPaymentHtml()
@@ -61,6 +86,8 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
     }
 
     /**
+     * Return items html.
+     *
      * @return string
      */
     public function getItemsHtml()
@@ -69,6 +96,8 @@ class Form extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
     }
 
     /**
+     * Generate save url.
+     *
      * @return string
      */
     public function getSaveUrl()

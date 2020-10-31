@@ -33,26 +33,25 @@ class YtdStartTest extends AbstractBackendController
         $this->dispatch('backend/admin/system_config/edit/section/reports/');
         $body = $this->getResponse()->getBody();
 
-        $this->assertStringContainsString($this->getOptionsHtml('01'), $body);
+        $this->assertOptionSelected('01', $body);
     }
 
     /**
-     * Options html
+     * Assert that given option is selected.
      *
-     * @param string $selected
-     * @return string
+     * @param string $option Option value.
+     * @param string $content HTML content
+     * @return void
      */
-    private function getOptionsHtml(string $selected): string
+    private function assertOptionSelected(string $option, string $content): void
     {
-        $html = '';
-        foreach ($this->monthNumbers as $number) {
-            $html .= $number === $selected
-                ? '<option value="' . $selected . '" selected="selected">' . $selected . '</option>'
-                : '<option value="' . $number . '">' . $number . '</option>';
-
-            $html .= PHP_EOL;
+        foreach ($this->monthNumbers as $monthNumber) {
+            $regEx = "\<option[^\>]+value\=\\\"$monthNumber\\\"[^\>]*?";
+            if ($monthNumber ===  $option) {
+                $regEx .= 'selected\=\"selected\"[^\>]*?';
+            }
+            $regEx .= "\>$monthNumber\<\/option\>";
+            $this->assertRegExp("#$regEx#", $content);
         }
-
-        return $html;
     }
 }

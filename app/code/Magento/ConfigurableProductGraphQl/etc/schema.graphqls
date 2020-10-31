@@ -7,6 +7,7 @@ type Mutation {
 type ConfigurableProduct implements ProductInterface, PhysicalProductInterface, CustomizableProductInterface @doc(description: "ConfigurableProduct defines basic features of a configurable product and its simple product variants") {
     variants: [ConfigurableVariant] @doc(description: "An array of variants of products") @resolver(class: "Magento\\ConfigurableProductGraphQl\\Model\\Resolver\\ConfigurableVariant")
     configurable_options: [ConfigurableProductOptions] @doc(description: "An array of linked simple product items") @resolver(class: "Magento\\ConfigurableProductGraphQl\\Model\\Resolver\\Options")
+    configurable_options_selection_metadata(selectedConfigurableOptionValues: [ID!]): ConfigurableOptionsSelectionMetadata @doc(description: "Metadata for the specified configurable options selection") @resolver(class: "Magento\\ConfigurableProductGraphQl\\Model\\Resolver\\OptionsSelectionMetadata")
 }
 
 type ConfigurableVariant @doc(description: "An array containing all the simple product variants of a configurable product") {
@@ -18,6 +19,7 @@ type ConfigurableAttributeOption @doc(description: "ConfigurableAttributeOption 
     label: String @doc(description: "A string that describes the configurable attribute option")
     code: String @doc(description: "The ID assigned to the attribute")
     value_index: Int @doc(description: "A unique index number assigned to the configurable product option")
+    uid: ID! @doc(description: "A string that encodes option details.") @resolver(class: "Magento\\ConfigurableProductGraphQl\\Model\\Resolver\\Variant\\Attributes\\ConfigurableAttributeUid") # A Base64 string that encodes option details.
 }
 
 type ConfigurableProductOptions @doc(description: "ConfigurableProductOptions defines configurable attributes for the specified product") {
@@ -57,7 +59,7 @@ input ConfigurableProductCartItemInput {
 }
 
 type ConfigurableCartItem implements CartItemInterface {
-    customizable_options: [SelectedCustomizableOption]!
+    customizable_options: [SelectedCustomizableOption] @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\CustomizableOptions")
     configurable_options: [SelectedConfigurableOption!]! @resolver(class: "Magento\\ConfigurableProductGraphQl\\Model\\Resolver\\ConfigurableCartItemOptions")
 }
 
@@ -66,4 +68,20 @@ type SelectedConfigurableOption {
     option_label: String!
     value_id: Int!
     value_label: String!
+}
+
+type ConfigurableWishlistItem implements WishlistItemInterface @doc(description: "A configurable product wish list item"){
+    child_sku: String! @doc(description: "The SKU of the simple product corresponding to a set of selected configurable options") @resolver(class: "\\Magento\\ConfigurableProductGraphQl\\Model\\Wishlist\\ChildSku")
+    configurable_options: [SelectedConfigurableOption!] @resolver(class: "\\Magento\\ConfigurableProductGraphQl\\Model\\Wishlist\\ConfigurableOptions") @doc (description: "An array of selected configurable options")
+}
+
+type ConfigurableOptionsSelectionMetadata @doc(description: "Metadata corresponding to the configurable options selection.") {
+    options_available_for_selection: [ConfigurableOptionAvailableForSelection!] @doc(description: "Configurable options available for further selection based on current selection.")
+    media_gallery: [MediaGalleryInterface!] @resolver(class: "Magento\\ConfigurableProductGraphQl\\Model\\Resolver\\SelectionMediaGallery") @doc(description: "Product images and videos corresponding to the specified configurable options selection.")
+    variant: SimpleProduct @resolver(class: "Magento\\ConfigurableProductGraphQl\\Model\\Resolver\\Variant\\Variant") @doc(description: "Variant represented by the specified configurable options selection. It is expected to be null, until selections are made for each configurable option.")
+}
+
+type ConfigurableOptionAvailableForSelection @doc(description: "Configurable option available for further selection based on current selection.") {
+    option_value_uids: [ID!]! @doc(description: "Configurable option values available for further selection.")
+    attribute_code: String! @doc(description: "Attribute code that uniquely identifies configurable option.")
 }

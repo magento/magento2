@@ -17,9 +17,30 @@ use Magento\Framework\DataObject;
 use Magento\Framework\Escaper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class RegionTest extends TestCase
 {
+    /**
+     * Simulate "serialize" method of a form element.
+     *
+     * @param string[] $keys
+     * @param array $data
+     * @return string
+     */
+    private function mockSerialize(array $keys, array $data): string
+    {
+        $attributes = [];
+        foreach ($keys as $key) {
+            if (empty($data[$key])) {
+                continue;
+            }
+            $attributes[] = $key .'="' .$data[$key] .'"';
+        }
+
+        return implode(' ', $attributes);
+    }
+
     /**
      * @param array $regionCollection
      * @dataProvider renderDataProvider
@@ -34,14 +55,25 @@ class RegionTest extends TestCase
             ['isRegionRequired']
         );
         $escaperMock = $this->createMock(Escaper::class);
+        /** @var MockObject|AbstractElement $elementMock */
         $elementMock = $this->createPartialMock(
             AbstractElement::class,
-            ['getForm', 'getHtmlAttributes']
+            ['getForm', 'getHtmlAttributes', 'serialize']
+        );
+        $elementMock->method('serialize')->willReturnCallback(
+            function (array $attributes) use ($elementMock): string {
+                return $this->mockSerialize($attributes, $elementMock->getData());
+            }
         );
         $countryMock = $this->getMockBuilder(AbstractElement::class)
-            ->addMethods(['getValue'])
+            ->addMethods(['getValue', 'serialize'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
+        $countryMock->method('serialize')->willReturnCallback(
+            function (array $attributes) use ($countryMock): string {
+                return $this->mockSerialize($attributes, $countryMock->getData());
+            }
+        );
         $regionMock = $this->createMock(
             AbstractElement::class
         );

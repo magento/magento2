@@ -41,7 +41,7 @@ class Full
      * Index values separator
      *
      * @var string
-     * @deprecated 100.1.6 Moved to \Magento\CatalogSearch\Model\Indexer\Fulltext\Action\DataProvider
+     * @deprecated 100.1.0 Moved to \Magento\CatalogSearch\Model\Indexer\Fulltext\Action\DataProvider
      * @see \Magento\CatalogSearch\Model\Indexer\Fulltext\Action\DataProvider::$separator
      */
     protected $separator = ' | ';
@@ -50,7 +50,7 @@ class Full
      * Array of \DateTime objects per store
      *
      * @var \DateTime[]
-     * @deprecated 100.1.6 Not used anymore
+     * @deprecated 100.1.0 Not used anymore
      */
     protected $dates = [];
 
@@ -58,7 +58,7 @@ class Full
      * Product Type Instances cache
      *
      * @var array
-     * @deprecated 100.1.6 Moved to \Magento\CatalogSearch\Model\Indexer\Fulltext\Action\DataProvider
+     * @deprecated 100.1.0 Moved to \Magento\CatalogSearch\Model\Indexer\Fulltext\Action\DataProvider
      * @see \Magento\CatalogSearch\Model\Indexer\Fulltext\Action\DataProvider::$productTypes
      */
     protected $productTypes = [];
@@ -67,7 +67,7 @@ class Full
      * Product Emulators cache
      *
      * @var array
-     * @deprecated 100.1.6 Moved to \Magento\CatalogSearch\Model\Indexer\Fulltext\Action\DataProvider
+     * @deprecated 100.1.0 Moved to \Magento\CatalogSearch\Model\Indexer\Fulltext\Action\DataProvider
      * @see \Magento\CatalogSearch\Model\Indexer\Fulltext\Action\DataProvider::$productEmulators
      */
     protected $productEmulators = [];
@@ -95,7 +95,7 @@ class Full
      * Catalog product type
      *
      * @var \Magento\Catalog\Model\Product\Type
-     * @deprecated 100.1.6 Moved to \Magento\CatalogSearch\Model\Indexer\Fulltext\Action\DataProvider
+     * @deprecated 100.1.0 Moved to \Magento\CatalogSearch\Model\Indexer\Fulltext\Action\DataProvider
      * @see \Magento\CatalogSearch\Model\Indexer\Fulltext\Action\DataProvider::$catalogProductType
      */
     protected $catalogProductType;
@@ -111,7 +111,7 @@ class Full
      * Core store config
      *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     * @deprecated 100.1.6 Not used anymore
+     * @deprecated 100.1.0 Not used anymore
      */
     protected $scopeConfig;
 
@@ -119,7 +119,7 @@ class Full
      * Store manager
      *
      * @var \Magento\Store\Model\StoreManagerInterface
-     * @deprecated 100.1.6 Moved to \Magento\CatalogSearch\Model\Indexer\Fulltext\Action\DataProvider
+     * @deprecated 100.1.0 Moved to \Magento\CatalogSearch\Model\Indexer\Fulltext\Action\DataProvider
      * @see \Magento\CatalogSearch\Model\Indexer\Fulltext\Action\DataProvider::$storeManager
      */
     protected $storeManager;
@@ -131,25 +131,25 @@ class Full
 
     /**
      * @var \Magento\Framework\Indexer\SaveHandler\IndexerInterface
-     * @deprecated 100.1.6 As part of self::cleanIndex()
+     * @deprecated 100.1.0 As part of self::cleanIndex()
      */
     protected $indexHandler;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime
-     * @deprecated 100.1.6 Not used anymore
+     * @deprecated 100.1.0 Not used anymore
      */
     protected $dateTime;
 
     /**
      * @var \Magento\Framework\Locale\ResolverInterface
-     * @deprecated 100.1.6 Not used anymore
+     * @deprecated 100.1.0 Not used anymore
      */
     protected $localeResolver;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
-     * @deprecated 100.1.6 Not used anymore
+     * @deprecated 100.1.0 Not used anymore
      */
     protected $localeDate;
 
@@ -160,19 +160,19 @@ class Full
 
     /**
      * @var \Magento\CatalogSearch\Model\ResourceModel\Fulltext
-     * @deprecated 100.1.6 Not used anymore
+     * @deprecated 100.1.0 Not used anymore
      */
     protected $fulltextResource;
 
     /**
      * @var \Magento\Framework\Search\Request\Config
-     * @deprecated 100.1.6 As part of self::reindexAll()
+     * @deprecated 100.1.0 As part of self::reindexAll()
      */
     protected $searchRequestConfig;
 
     /**
      * @var \Magento\Framework\Search\Request\DimensionFactory
-     * @deprecated 100.1.6 As part of self::cleanIndex()
+     * @deprecated 100.1.0 As part of self::cleanIndex()
      */
     private $dimensionFactory;
 
@@ -301,7 +301,7 @@ class Full
     /**
      * Get parents IDs of product IDs to be re-indexed
      *
-     * @deprecated as it not used in the class anymore and duplicates another API method
+     * @deprecated 100.2.3 as it not used in the class anymore and duplicates another API method
      * @see \Magento\CatalogSearch\Model\ResourceModel\Fulltext::getRelationsByChild()
      *
      * @param int[] $entityIds
@@ -317,7 +317,7 @@ class Full
             ->select()
             ->from(['relation' => $this->getTable('catalog_product_relation')], [])
             ->distinct(true)
-            ->where('child_id IN (?)', $entityIds)
+            ->where('child_id IN (?)', $entityIds, \Zend_Db::INT_TYPE)
             ->join(
                 ['cpe' => $this->getTable('catalog_product_entity')],
                 'relation.parent_id = cpe.' . $linkField,

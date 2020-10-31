@@ -35,12 +35,15 @@
     <test class="Magento\TestModuleOverrideConfig\MagentoDataFixture\ReplaceFixtureTest">
         <method name="testReplaceFixtureViaThirdModule">
             <magentoDataFixture path="Magento/TestModuleOverrideConfig/_files/fixture1_first_module.php" newPath="Magento/TestModuleOverrideConfig2/_files/fixture3_second_module.php" />
+            <magentoDataFixture path="Magento/TestModuleOverrideConfig/_files/fixture1_first_module_rollback.php" newPath="Magento/TestModuleOverrideConfig2/_files/fixture3_second_module_rollback.php" />
             <dataSet name="first_data_set">
                 <magentoDataFixture path="Magento/TestModuleOverrideConfig/_files/fixture1_first_module.php" newPath="Magento/TestModuleOverrideConfig2/_files/fixture2_second_module.php" />
+                <magentoDataFixture path="Magento/TestModuleOverrideConfig/_files/fixture1_first_module_rollback.php" newPath="Magento/TestModuleOverrideConfig2/_files/fixture2_second_module_rollback.php" />
             </dataSet>
         </method>
         <method name="testReplaceRequiredFixtureViaThirdModule">
             <magentoDataFixture path="Magento/TestModuleOverrideConfig2/_files/fixture3_second_module.php" newPath="Magento/TestModuleOverrideConfig3/_files/fixture1_third_module.php" />
+            <magentoDataFixture path="Magento/TestModuleOverrideConfig2/_files/fixture3_second_module_rollback.php" newPath="Magento/TestModuleOverrideConfig3/_files/fixture1_third_module_rollback.php" />
         </method>
     </test>
     <test class="Magento\TestModuleOverrideConfig\MagentoDataFixture\SortFixturesTest">
@@ -48,6 +51,60 @@
             <dataSet name="first_data_set">
                 <magentoDataFixture path="Magento/TestModuleOverrideConfig3/_files/fixture1_third_module.php" before="Magento/TestModuleOverrideConfig/_files/fixture3_first_module.php" />
             </dataSet>
+        </method>
+    </test>
+    <test class="Magento\TestModuleOverrideConfig\Inheritance\Fixtures\FixturesInterface">
+        <magentoAdminConfigFixture path="test_section/test_group/field_1" value="overridden config fixture value for class"/>
+        <magentoConfigFixture scopeType="store" scopeCode="current" path="test_section/test_group/field_1" value="overridden config fixture value for class"/>
+        <magentoDataFixture path="Magento/TestModuleOverrideConfig/_files/fixture1_first_module.php"/>
+        <magentoDataFixtureBeforeTransaction path="Magento/TestModuleOverrideConfig/_files/fixture1_first_module.php"/>
+        <method name="testInterfaceInheritance">
+            <magentoAdminConfigFixture path="test_section/test_group/field_2" newValue="overridden config fixture value for method"/>
+            <magentoConfigFixture scopeType="store" scopeCode="current" path="test_section/test_group/field_2" newValue="overridden config fixture value for method"/>
+            <magentoDataFixture path="Magento/TestModuleOverrideConfig/_files/fixture2_first_module.php" newPath="Magento/TestModuleOverrideConfig2/_files/fixture2_second_module.php" />
+            <magentoDataFixture path="Magento/TestModuleOverrideConfig/_files/fixture2_first_module_rollback.php" newPath="Magento/TestModuleOverrideConfig2/_files/fixture2_second_module_rollback.php" />
+            <magentoDataFixtureBeforeTransaction path="Magento/TestModuleOverrideConfig/_files/fixture2_first_module.php" newPath="Magento/TestModuleOverrideConfig2/_files/fixture2_second_module.php" />
+            <magentoDataFixtureBeforeTransaction path="Magento/TestModuleOverrideConfig/_files/fixture2_first_module_rollback.php" newPath="Magento/TestModuleOverrideConfig2/_files/fixture2_second_module_rollback.php" />
+            <dataSet name="second_data_set">
+                <magentoAdminConfigFixture path="test_section/test_group/field_3" remove="true"/>
+                <magentoConfigFixture scopeType="store" scopeCode="current" path="test_section/test_group/field_3" remove="true"/>
+                <magentoDataFixture path="Magento/TestModuleOverrideConfig/_files/fixture3_first_module.php" remove="true"/>
+                <magentoDataFixtureBeforeTransaction path="Magento/TestModuleOverrideConfig/_files/fixture3_first_module.php" remove="true"/>
+            </dataSet>
+        </method>
+    </test>
+    <test class="Magento\TestModuleOverrideConfig\Inheritance\Fixtures\FixturesAbstractClass">
+        <method name="testAbstractInheritance">
+            <magentoAdminConfigFixture path="test_section/test_group/field_2" remove="true"/>
+            <magentoConfigFixture scopeType="store" scopeCode="current" path="test_section/test_group/field_2" remove="true"/>
+            <magentoDataFixture path="Magento/TestModuleOverrideConfig/_files/fixture2_first_module.php" remove="true"/>
+            <magentoDataFixtureBeforeTransaction path="Magento/TestModuleOverrideConfig/_files/fixture2_first_module.php" remove="true"/>
+            <dataSet name="first_data_set">
+                <magentoAdminConfigFixture path="test_section/test_group/field_3" value="overridden config fixture value for data set from abstract"/>
+                <magentoConfigFixture scopeType="store" scopeCode="current" path="test_section/test_group/field_3" value="overridden config fixture value for data set from abstract"/>
+                <magentoDataFixture path="Magento/TestModuleOverrideConfig/_files/fixture3_first_module.php"/>
+                <magentoDataFixtureBeforeTransaction path="Magento/TestModuleOverrideConfig/_files/fixture3_first_module.php"/>
+            </dataSet>
+            <dataSet name="second_data_set">
+                <magentoAdminConfigFixture path="test_section/test_group/field_1" newValue="overridden config fixture value for data set from abstract"/>
+                <magentoConfigFixture scopeType="store" scopeCode="current" path="test_section/test_group/field_1" newValue="overridden config fixture value for data set from abstract"/>
+                <magentoDataFixture path="Magento/TestModuleOverrideConfig/_files/fixture1_first_module.php" newPath="Magento/TestModuleOverrideConfig2/_files/fixture1_second_module.php" />
+                <magentoDataFixture path="Magento/TestModuleOverrideConfig/_files/fixture1_first_module_rollback.php" newPath="Magento/TestModuleOverrideConfig2/_files/fixture1_second_module_rollback.php" />
+                <magentoDataFixtureBeforeTransaction path="Magento/TestModuleOverrideConfig/_files/fixture1_first_module.php" newPath="Magento/TestModuleOverrideConfig2/_files/fixture1_second_module.php" />
+                <magentoDataFixtureBeforeTransaction path="Magento/TestModuleOverrideConfig/_files/fixture1_first_module_rollback.php" newPath="Magento/TestModuleOverrideConfig2/_files/fixture1_second_module_rollback.php" />
+            </dataSet>
+        </method>
+    </test>
+    <test class="Magento\TestModuleOverrideConfig\Inheritance\Skip\SkipAbstractClass">
+        <method name="testAbstractSkip" skip="true"/>
+        <method name="testSkipDataSet">
+            <dataSet name="first_data_set" skip="true"/>
+        </method>
+    </test>
+    <test class="Magento\TestModuleOverrideConfig\Inheritance\Skip\SkipInterface">
+        <method name="testInterfaceSkip" skip="true"/>
+        <method name="testSkipDataSet">
+            <dataSet name="second_data_set" skip="true"/>
         </method>
     </test>
 </overrides>

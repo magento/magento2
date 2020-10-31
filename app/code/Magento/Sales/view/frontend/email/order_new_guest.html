@@ -8,7 +8,7 @@
 <!--@vars {
 "var formattedBillingAddress|raw":"Billing Address",
 "var order_data.email_customer_note|escape|nl2br":"Email Order Note",
-"var order.billing_address.name":"Guest Customer Name",
+"var order_data.customer_name":"Guest Customer Name",
 "var created_at_formatted":"Order Created At (datetime)",
 "var order.increment_id":"Order Id",
 "layout handle=\"sales_email_order_items\" order=$order":"Order Items Grid",
@@ -29,7 +29,7 @@
 <table>
     <tr class="email-intro">
         <td>
-            <p class="greeting">{{trans "%name," name=$order.billing_address.name}}</p>
+            <p class="greeting">{{trans "%name," name=$order_data.customer_name}}</p>
             <p>
                 {{trans "Thank you for your order from %store_name." store_name=$store.frontend_name}}
                 {{trans "Once your package ships we will send an email with a link to track your order."}}

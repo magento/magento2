@@ -17,6 +17,9 @@
             <testCaseId value="MC-16225"/>
             <group value="sales"/>
             <group value="mtf_migrated"/>
+            <skip>
+                <issueId value="MQE-2288" />
+            </skip>
         </annotations>
         <before>
             <magentoCLI command="downloadable:domains:add" arguments="example.com static.magento.com" stepKey="addDownloadableDomain"/>
@@ -44,8 +47,8 @@
             <checkOption selector="{{AdminProductDownloadableSection.isLinksPurchasedSeparately}}" stepKey="checkOption"/>
             <waitForAjaxLoad stepKey="waitForAjaxLoad"/>
             <grabValueFrom selector="{{AdminProductDownloadableSection.addLinkTitleInput('0')}}" stepKey="grabLink"/>
-            <click selector="{{AdminProductFormSection.save}}" stepKey="clickSave"/>
-            <waitForLoadingMaskToDisappear stepKey="waitForSave"/>
+
+            <actionGroup ref="AdminProductFormSaveButtonClickActionGroup" stepKey="clickSave"/>
 
             <!-- Create configurable Product -->
             <createData entity="ApiConfigurableProduct" stepKey="createConfigProduct">
@@ -164,8 +167,12 @@
             <!-- Create Customer Account -->
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
 
-            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
 
             <!-- Place order with options according to dataset -->
             <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="newOrder">
@@ -258,8 +265,11 @@
 
         <!--  Click on the "Print Order" button -->
         <click selector="{{StorefrontGuestOrderViewSection.printOrder}}" stepKey="printOrder"/>
+        <wait time="5" stepKey="waitForPrintWindowToOpen" />
         <switchToWindow stepKey="switchToWindow"/>
+        <wait time="5" stepKey="waitForPrintTabToOpen" />
         <switchToNextTab stepKey="switchToTab"/>
+        <wait stepKey="waitForPrintPreviewToLoad" time="5" />
         <seeInCurrentUrl url="sales/guest/print/order_id/" stepKey="seePrintPage"/>
 
         <!-- AssertSalesPrintOrderProducts -->

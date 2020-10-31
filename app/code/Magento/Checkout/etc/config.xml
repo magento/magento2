@@ -19,6 +19,7 @@
                 <redirect_to_cart>0</redirect_to_cart>
                 <number_items_to_display_pager>20</number_items_to_display_pager>
                 <crosssell_enabled>1</crosssell_enabled>
+                <enable_clear_shopping_cart>0</enable_clear_shopping_cart>
             </cart>
             <cart_link>
                 <use_qty>1</use_qty>
@@ -40,6 +41,9 @@
                     <sales_rule_coupon_request>
                         <label>Applying coupon code</label>
                     </sales_rule_coupon_request>
+                    <payment_processing_request>
+                        <label>Checkout/Placing Order</label>
+                    </payment_processing_request>
                 </areas>
             </frontend>
         </captcha>
@@ -47,6 +51,7 @@
             <captcha>
                 <shown_to_logged_in_user>
                     <sales_rule_coupon_request>1</sales_rule_coupon_request>
+                    <payment_processing_request>1</payment_processing_request>
                 </shown_to_logged_in_user>
             </captcha>
         </customer>
