@@ -1377,6 +1377,31 @@ class AccountManagementTest extends TestCase
     /**
      * @throws \Magento\Framework\Exception\LocalizedException
      */
+    public function testInitiatePasswordResetEmailResetNoDuplicateEmail()
+    {
+        $storeId = 1;
+        $customerId = 1;
+
+        $email = 'test@example.com';
+        $template = AccountManagement::EMAIL_RESET;
+        $templateIdentifier = 'Template Identifier';
+        $sender = 'Sender';
+
+        $hash = hash("sha256", uniqid(microtime() . random_int(0, PHP_INT_MAX), true));
+
+        $this->emailNotificationMock->expects($this->once())
+            ->method('passwordResetConfirmation')
+            ->willReturnSelf();
+
+        $this->prepareInitiatePasswordReset($email, $templateIdentifier, $sender, $storeId, $customerId, $hash);
+        $this->accountManagement->initiatePasswordReset($email, $template);
+
+        $this->assertFalse($this->accountManagement->initiatePasswordReset($email, $template));
+    }
+
+    /**
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
     public function testInitiatePasswordResetNoTemplate()
     {
         $storeId = 1;
