@@ -949,7 +949,7 @@ class Category extends AbstractResource
         \Magento\Catalog\Model\Category $category,
         \Magento\Catalog\Model\Category $newParent,
         $afterCategoryId = null
-    ){
+    ) {
         $childrenCount = $this->getChildrenCount($category->getId()) + 1;
         $table = $this->getEntityTable();
         $connection = $this->getConnection();
