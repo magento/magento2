@@ -162,16 +162,17 @@ class Tree extends Dbp
         return $this->_storeId;
     }
      /**
-     * Add data to collection
-     * @param Collection $collection
-     * @param boolean $sorted
-     * @param array $exclude
-     * @param boolean $toLoad
-     * @param boolean $onlyActive
-     * @return $this
-     - @deprecated This method is not intended for usage in child classes
-     - @see addCollectionDataWithIncludeMenu($collection, $sorted, $exclude, $toLoad, $onlyActive, $onlyIncludeInMenu)
-     */
+      * Add data to collection
+      *
+      * @param Collection $collection
+      * @param boolean $sorted
+      * @param array $exclude
+      * @param boolean $toLoad
+      * @param boolean $onlyActive
+      * @return $this
+      - @deprecated This method is not intended for usage in child classes
+      - @see addCollectionDataWithIncludeMenu($collection, $sorted, $exclude, $toLoad, $onlyActive, $onlyIncludeInMenu)
+      */
     public function addCollectionData(
         $collection = null,
         $sorted = false,
@@ -179,7 +180,7 @@ class Tree extends Dbp
         $toLoad = true,
         $onlyActive = false
     ) {
-       return $this->addCollectionDataWithIncludeMenu($collection, $sorted, $exclude, $toLoad, $onlyActive, true);
+        return $this->addCollectionDataWithIncludeMenu($collection, $sorted, $exclude, $toLoad, $onlyActive, true);
     }
 
     /**
@@ -226,7 +227,7 @@ class Tree extends Dbp
                 $collection->addFieldToFilter('entity_id', ['nin' => $disabledIds]);
             }
             $collection->addAttributeToFilter('is_active', 1);
-            if($onlyIncludeInMenu){
+            if ($onlyIncludeInMenu) {
                 $collection->addAttributeToFilter('include_in_menu', 1);
             }
 
