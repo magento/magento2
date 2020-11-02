@@ -16,9 +16,6 @@
             <description value="Login as customer sees special prices on category"/>
             <severity value="CRITICAL"/>
             <group value="login_as_customer"/>
-            <skip>
-                <issueId value="https://github.com/magento/magento2-login-as-customer/pull/193"/>
-            </skip>
         </annotations>
         <before>
             <magentoCLI command="config:set {{LoginAsCustomerConfigDataEnabled.path}} 1"
