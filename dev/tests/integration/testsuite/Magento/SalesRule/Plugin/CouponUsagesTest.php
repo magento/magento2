@@ -80,7 +80,7 @@ class CouponUsagesTest extends TestCase
             [
                 'consumers' => $this->consumers,
                 'logFilePath' => TESTS_TEMP_DIR . "/MessageQueueTestLog.txt",
-                'maxMessages' => null,
+                'maxMessages' => 100,
                 'appInitParams' => Bootstrap::getInstance()->getAppInitParams()
             ]
         );
@@ -117,10 +117,7 @@ class CouponUsagesTest extends TestCase
         $couponCode = 'one_usage';
         $reservedOrderId = 'test01';
 
-        $binDirectory = realpath(INTEGRATION_TESTS_DIR . '/bin/');
-        $magentoCli = $binDirectory . '/magento';
-        $consumerStartCommand = "php {$magentoCli} queue:consumers:start sales.rule.update.coupon.usage &";
-        exec($consumerStartCommand);
+        $this->publisherConsumerController->startConsumers();
 
         /** @var Coupon $coupon */
         $coupon = $this->objectManager->get(Coupon::class);
