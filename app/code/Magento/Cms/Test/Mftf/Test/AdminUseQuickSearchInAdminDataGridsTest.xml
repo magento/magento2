@@ -9,7 +9,7 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminUseQuickSearchInAdminDataGridsTest">
         <annotations>
-            <features value="CmsPage"/>
+            <features value="Cms"/>
             <stories value="Create CMS Page"/>
             <title value="[CMS Grids] Use quick search in Admin data grids"/>
             <description value="Verify that Merchant can use quick search in order to simplify the data grid filtering in Admin"/>
