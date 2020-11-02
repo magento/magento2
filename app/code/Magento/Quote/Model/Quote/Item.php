@@ -9,6 +9,7 @@ namespace Magento\Quote\Model\Quote;
 
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\ExtensionAttributesFactory;
+use Magento\Quote\Api\Data\CartItemInterface;
 
 /**
  * Sales Quote Item Model
@@ -431,6 +432,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
             ->setProductId($product->getId())
             ->setProductType($product->getTypeId())
             ->setSku($this->getProduct()->getSku())
+            ->setOriginalProductSku($this->getProduct()->getData('sku'))
             ->setName($product->getName())
             ->setWeight($this->getProduct()->getWeight())
             ->setTaxClassId($product->getTaxClassId())
@@ -1074,5 +1076,21 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
     public function setExtensionAttributes(\Magento\Quote\Api\Data\CartItemExtensionInterface $extensionAttributes)
     {
         return $this->_setExtensionAttributes($extensionAttributes);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getOriginalProductSku()
+    {
+        return $this->getData(self::KEY_ORIGINAL_PRODUCT_SKU);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setOriginalProductSku(string $sku)
+    {
+        return $this->setData(self::KEY_ORIGINAL_PRODUCT_SKU, $sku);
     }
 }

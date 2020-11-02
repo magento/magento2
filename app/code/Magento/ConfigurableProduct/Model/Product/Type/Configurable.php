@@ -1155,7 +1155,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
             if ($optionProduct) {
                 $simpleSku = $simpleOption->getProduct()->getSku();
             }
-            $sku = $simpleSku;
+            $sku = parent::getOptionSku($product, $simpleSku);
         } else {
             $sku = parent::getSku($product);
         }

@@ -19,6 +19,8 @@ interface CartItemInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
 
     const KEY_SKU = 'sku';
 
+    const KEY_ORIGINAL_PRODUCT_SKU = 'original_product_sku';
+
     const KEY_QTY = 'qty';
 
     const KEY_NAME = 'name';
@@ -49,11 +51,26 @@ interface CartItemInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
     public function setItemId($itemId);
 
     /**
-     * Returns the product SKU.
+     * Returns the product options SKU.
      *
      * @return string|null Product SKU. Otherwise, null.
      */
     public function getSku();
+
+    /**
+     * Sets the product options SKU.
+     *
+     * @param string $sku
+     * @return $this
+     */
+    public function setSku($sku);
+
+    /**
+     * Returns the product SKU.
+     *
+     * @return string|null Product SKU. Otherwise, null.
+     */
+    public function getOriginalProductSku();
 
     /**
      * Sets the product SKU.
@@ -61,7 +78,7 @@ interface CartItemInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
      * @param string $sku
      * @return $this
      */
-    public function setSku($sku);
+    public function setOriginalProductSku(string $sku);
 
     /**
      * Returns the product quantity.

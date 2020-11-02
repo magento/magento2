@@ -230,7 +230,8 @@
                 comment="Parent Item ID"/>
         <column xsi:type="smallint" name="is_virtual" unsigned="true" nullable="true" identity="false"
                 comment="Is Virtual"/>
-        <column xsi:type="varchar" name="sku" nullable="true" length="255" comment="Sku"/>
+        <column xsi:type="varchar" name="sku" nullable="true" length="255" comment="Sku with options"/>
+        <column xsi:type="varchar" name="original_product_sku" nullable="true" length="255" comment="Sku"/>
         <column xsi:type="varchar" name="name" nullable="true" length="255" comment="Name"/>
         <column xsi:type="text" name="description" nullable="true" comment="Description"/>
         <column xsi:type="text" name="applied_rule_ids" nullable="true" comment="Applied Rule Ids"/>
