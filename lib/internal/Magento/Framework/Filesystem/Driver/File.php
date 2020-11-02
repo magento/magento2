@@ -990,7 +990,7 @@ class File implements DriverInterface
         );
 
         if (strpos($path, DIRECTORY_SEPARATOR . '.') === false) {
-            return $path;
+            return rtrim($path, DIRECTORY_SEPARATOR);
         }
 
         $pathParts = explode(DIRECTORY_SEPARATOR, $path);
@@ -1008,6 +1008,7 @@ class File implements DriverInterface
             }
             $realPath[] = $pathPart;
         }
-        return implode(DIRECTORY_SEPARATOR, $realPath);
+
+        return rtrim(implode(DIRECTORY_SEPARATOR, $realPath), DIRECTORY_SEPARATOR);
     }
 }
