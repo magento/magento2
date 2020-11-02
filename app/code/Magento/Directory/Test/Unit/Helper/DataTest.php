@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Directory\Test\Unit\Helper;
 
+use ArrayIterator;
 use Magento\Directory\Helper\Data;
 use Magento\Directory\Model\AllowedCountries;
 use Magento\Directory\Model\CurrencyFactory;
@@ -53,6 +54,16 @@ class DataTest extends TestCase
     protected $_store;
 
     /**
+     * @var RequestInterface|MockObject
+     */
+    protected $_request;
+
+    /**
+     * @var StoreManagerInterface|MockObject
+     */
+    protected $_storeManager;
+
+    /**
      * @var ScopeConfigInterface|MockObject
      */
     protected $scopeConfigMock;
@@ -67,10 +78,10 @@ class DataTest extends TestCase
         $objectManager = new ObjectManager($this);
         $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $this->scopeConfigMock->expects($this->any())->method('isSetFlag')->willReturn(false);
-        $requestMock = $this->getMockForAbstractClass(RequestInterface::class);
+        $this->_request = $this->getMockForAbstractClass(RequestInterface::class);
         $context = $this->createMock(Context::class);
         $context->method('getRequest')
-            ->willReturn($requestMock);
+            ->willReturn($this->_request);
         $context->expects($this->any())
             ->method('getScopeConfig')
             ->willReturn($this->scopeConfigMock);
@@ -94,8 +105,7 @@ class DataTest extends TestCase
         $this->jsonHelperMock = $this->createMock(JsonDataHelper::class);
 
         $this->_store = $this->createMock(Store::class);
-        $storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
-        $storeManager->expects($this->any())->method('getStore')->willReturn($this->_store);
+        $this->_storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
 
         $currencyFactory = $this->createMock(CurrencyFactory::class);
 
@@ -105,14 +115,103 @@ class DataTest extends TestCase
             'countryCollection' => $this->_countryCollection,
             'regCollectionFactory' => $regCollectionFactory,
             'jsonHelper' => $this->jsonHelperMock,
-            'storeManager' => $storeManager,
+            'storeManager' => $this->_storeManager,
             'currencyFactory' => $currencyFactory,
         ];
         $this->_object = $objectManager->getObject(Data::class, $arguments);
     }
 
-    public function testGetRegionJson()
+    /**
+     * @return array
+     */
+    public function regionJsonProvider(): array
     {
+        $countries = [
+            'Country1' => [
+                'r1' => ['code' => 'r1-code', 'name' => 'r1-name'],
+                'r2' => ['code' => 'r2-code', 'name' => 'r2-name']
+            ],
+            'Country2' => [
+                'r3' => ['code' => 'r3-code', 'name' => 'r3-name'],
+            ],
+            'Country3' => [],
+        ];
+
+        return [
+            [
+                null,
+                $countries,
+            ],
+            [
+                null,
+                [
+                    'Country1' => $countries['Country1'],
+                ],
+                [ScopeInterface::SCOPE_WEBSITE => 1],
+            ],
+            [
+                1,
+                [
+                    'Country2' => $countries['Country2'],
+                ],
+            ],
+            [
+                null,
+                [
+                    'Country2' => $countries['Country2'],
+                ],
+                [
+                    ScopeInterface::SCOPE_WEBSITE => null,
+                    ScopeInterface::SCOPE_STORE => 1,
+                ],
+            ],
+            [
+                2,
+                [
+                    'Country3' => $countries['Country3'],
+                ],
+            ],
+            [
+                null,
+                [
+                    'Country3' => $countries['Country3'],
+                ],
+                [ScopeInterface::SCOPE_STORE => 2],
+            ],
+        ];
+    }
+
+    /**
+     * @param int|null $currentStoreId
+     * @param array $allowedCountries
+     * @param array $requestParams
+     * @dataProvider regionJsonProvider
+     */
+    public function testGetRegionJson(?int $currentStoreId, array $allowedCountries, array $requestParams = [])
+    {
+        if ($currentStoreId) {
+            $this->_store->method('getId')->willReturn($currentStoreId);
+            $this->_storeManager->expects($this->any())->method('getStore')->willReturn($this->_store);
+        } else {
+            $this->_storeManager->expects($this->any())->method('getStore')->willReturn(null);
+        }
+
+        if ($requestParams) {
+            $map = [];
+
+            foreach ($requestParams as $name => $value) {
+                $map[] = [$name, null, $value];
+            }
+
+            $this->_request
+                ->method('getParam')
+                ->willReturnMap($map);
+        }
+
+        $expectedDataToEncode = array_merge([
+            'config' => ['show_all_regions' => false, 'regions_required' => []],
+        ], array_filter($allowedCountries));
+
         $this->scopeConfigMock->method('getValue')
             ->willReturnMap(
                 [
@@ -120,7 +219,25 @@ class DataTest extends TestCase
                         AllowedCountries::ALLOWED_COUNTRIES_PATH,
                         ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
                         null,
-                        'Country1,Country2'
+                        'Country1,Country2,Country3'
+                    ],
+                    [
+                        AllowedCountries::ALLOWED_COUNTRIES_PATH,
+                        ScopeInterface::SCOPE_WEBSITE,
+                        1,
+                        'Country1'
+                    ],
+                    [
+                        AllowedCountries::ALLOWED_COUNTRIES_PATH,
+                        ScopeInterface::SCOPE_STORE,
+                        1,
+                        'Country2'
+                    ],
+                    [
+                        AllowedCountries::ALLOWED_COUNTRIES_PATH,
+                        ScopeInterface::SCOPE_STORE,
+                        2,
+                        'Country3'
                     ],
                     [Data::XML_PATH_STATES_REQUIRED, ScopeInterface::SCOPE_STORE, null, '']
                 ]
@@ -136,14 +253,16 @@ class DataTest extends TestCase
                 ['country_id' => 'Country2', 'region_id' => 'r3', 'code' => 'r3-code', 'name' => 'r3-name']
             )
         ];
-        $regionIterator = new \ArrayIterator($regions);
+        $regionIterator = new ArrayIterator(array_filter($regions, function(DataObject $region) use ($allowedCountries) {
+            return array_key_exists($region->getData('country_id'), $allowedCountries);
+        }));
 
         $this->_regionCollection->expects(
             $this->once()
         )->method(
             'addCountryFilter'
         )->with(
-            ['Country1', 'Country2']
+            array_keys($allowedCountries)
         )->willReturnSelf();
         $this->_regionCollection->expects($this->once())->method('load');
         $this->_regionCollection->expects(
@@ -154,14 +273,6 @@ class DataTest extends TestCase
             $regionIterator
         );
 
-        $expectedDataToEncode = [
-            'config' => ['show_all_regions' => false, 'regions_required' => []],
-            'Country1' => [
-                'r1' => ['code' => 'r1-code', 'name' => 'r1-name'],
-                'r2' => ['code' => 'r2-code', 'name' => 'r2-name']
-            ],
-            'Country2' => ['r3' => ['code' => 'r3-code', 'name' => 'r3-name']]
-        ];
         $this->jsonHelperMock->expects(
             $this->once()
         )->method(
