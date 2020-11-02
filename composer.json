@@ -192,6 +192,7 @@
         "magento/module-integration": "*",
         "magento/module-layered-navigation": "*",
         "magento/module-login-as-customer": "*",
+        "magento/module-login-as-customer-graph-ql": "*",
         "magento/module-login-as-customer-admin-ui": "*",
         "magento/module-login-as-customer-api": "*",
         "magento/module-login-as-customer-assistance": "*",

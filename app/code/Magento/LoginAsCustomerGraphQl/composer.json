@@ -22,6 +22,5 @@
         "psr-4": {
             "Magento\\LoginAsCustomerGraphQl\\": ""
         }
-    },
-    "version": "1.0.1"
+    }
 }

@@ -56,7 +56,7 @@ class GenerateLoginCustomerTokenTest extends GraphQlAbstract
             $mutation,
             [],
             '',
-            $this->getAdminHeaderAuthentication('TestAdmin1', 'Zilker777')
+            $this->getAdminHeaderAuthentication('TestAdmin1', 'Magento777')
         );
         $this->assertArrayHasKey('generateCustomerTokenAsAdmin', $response);
         $this->assertIsArray($response['generateCustomerTokenAsAdmin']);
@@ -73,7 +73,7 @@ class GenerateLoginCustomerTokenTest extends GraphQlAbstract
     public function testGenerateCustomerValidTokenLoginAsCustomerDisabled()
     {
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage("Login as Customer is disabled..");
+        $this->expectExceptionMessage("Login as Customer is disabled.");
 
         $customerEmail = 'customer@example.com';
 
@@ -82,7 +82,7 @@ class GenerateLoginCustomerTokenTest extends GraphQlAbstract
             $mutation,
             [],
             '',
-            $this->getAdminHeaderAuthentication('TestAdmin1', 'Zilker777')
+            $this->getAdminHeaderAuthentication('TestAdmin1', 'Magento777')
         );
     }
 
@@ -151,7 +151,7 @@ class GenerateLoginCustomerTokenTest extends GraphQlAbstract
         return [
             'invalid_admin_user_name' => [
                 'TestAdmin(^%',
-                'Zilker777',
+                'Magento777',
                 'customer@example.com',
                 'The account sign-in was incorrect or your account is disabled temporarily. ' .
                 'Please wait and try again later.'
@@ -195,7 +195,7 @@ MUTATION;
      */
     public function getCustomerHeaderAuthentication(
         string $username = 'github@gmail.com',
-        string $password = 'Zilker777'
+        string $password = 'Magento777'
     ): array {
         $customerToken = $this->customerTokenService->createCustomerAccessToken($username, $password);
 

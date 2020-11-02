@@ -18,7 +18,7 @@ $adminInfo = [
     'firstname' => 'test',
     'lastname'  => 'test',
     'email'     => 'testadmin1@gmail.com',
-    'password'  =>'Zilker777',
+    'password'  =>'Magento777',
     'interface_locale' => 'en_US',
     'is_active' => 1
 ];
