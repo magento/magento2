@@ -109,6 +109,7 @@ class CouponUsagesTest extends TestCase
      * Test increasing coupon usages after after order placing and decreasing after order cancellation.
      *
      * @magentoDataFixture Magento/SalesRule/_files/coupons_limited_order.php
+     * @magentoDbIsolation disabled
      */
     public function testSubmitQuoteAndCancelOrder()
     {
@@ -130,9 +131,7 @@ class CouponUsagesTest extends TestCase
 
         // Make sure coupon usages value is incremented then order is placed.
         $order = $this->quoteManagement->submit($quote);
-
-
-        sleep(15); // timeout to processing Magento queue
+        sleep(10); // timeout to processing Magento queue
         $this->usage->loadByCustomerCoupon($this->couponUsage, $customerId, $coupon->getId());
         $coupon->loadByCode($couponCode);
 
