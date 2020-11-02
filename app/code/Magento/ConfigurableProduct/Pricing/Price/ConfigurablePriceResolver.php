@@ -6,14 +6,19 @@
 
 namespace Magento\ConfigurableProduct\Pricing\Price;
 
+use Magento\Catalog\Model\Product;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Framework\Pricing\SaleableInterface;
 
+/**
+ * @inheritDoc
+ */
 class ConfigurablePriceResolver implements PriceResolverInterface
 {
     /**
-     * @var \Magento\ConfigurableProduct\Pricing\Price\PriceResolverInterface
+     * @var PriceResolverInterface
+     * @deprecated
      */
     protected $priceResolver;
 
@@ -30,15 +35,11 @@ class ConfigurablePriceResolver implements PriceResolverInterface
     protected $configurable;
 
     /**
-     * @var LowestPriceOptionsProviderInterface
-     */
-    private $lowestPriceOptionsProvider;
-
-    /**
      * @param PriceResolverInterface $priceResolver
      * @param Configurable $configurable
      * @param PriceCurrencyInterface $priceCurrency
-     * @param LowestPriceOptionsProviderInterface $lowestPriceOptionsProvider
+     * @param LowestPriceOptionsProviderInterface $lowestPriceOptionsProvider @deprecated
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         PriceResolverInterface $priceResolver,
@@ -49,24 +50,16 @@ class ConfigurablePriceResolver implements PriceResolverInterface
         $this->priceResolver = $priceResolver;
         $this->configurable = $configurable;
         $this->priceCurrency = $priceCurrency;
-        $this->lowestPriceOptionsProvider = $lowestPriceOptionsProvider ?:
-            ObjectManager::getInstance()->get(LowestPriceOptionsProviderInterface::class);
     }
 
     /**
-     * @param \Magento\Framework\Pricing\SaleableInterface|\Magento\Catalog\Model\Product $product
+     * @inheritDoc
+     *
+     * @param SaleableInterface|Product $product
      * @return float
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function resolvePrice(\Magento\Framework\Pricing\SaleableInterface $product)
+    public function resolvePrice(SaleableInterface $product)
     {
-        $price = null;
-
-        foreach ($this->lowestPriceOptionsProvider->getProducts($product) as $subProduct) {
-            $productPrice = $this->priceResolver->resolvePrice($subProduct);
-            $price = isset($price) ? min($price, $productPrice) : $productPrice;
-        }
-
-        return (float)$price;
+        return (float)$product->getMinimalPrice();
     }
 }
