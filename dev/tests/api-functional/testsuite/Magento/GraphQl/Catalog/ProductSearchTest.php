@@ -1086,7 +1086,6 @@ QUERY;
             weight
          }
          type_id
-         attribute_set_id
        }
         total_count
         page_info
@@ -1239,7 +1238,6 @@ QUERY;
             weight
            }
            type_id
-           attribute_set_id
          }
         total_count
         page_info
@@ -1303,7 +1301,6 @@ QUERY;
             weight
            }
            type_id
-           attribute_set_id
          }
         total_count
         page_info
@@ -1682,7 +1679,6 @@ QUERY;
             weight
         }
         type_id
-        attribute_set_id
       }
         total_count
         page_info
@@ -2108,7 +2104,6 @@ QUERY;
     {
       items
        {
-         attribute_set_id
          sku
          price {
             minimalPrice {
@@ -2208,7 +2203,6 @@ products(
         weight
        }
        type_id
-       attribute_set_id
      }
     total_count
     page_info
@@ -2265,7 +2259,6 @@ QUERY;
         ... on PhysicalProductInterface {
            weight
          }
-           attribute_set_id
          }
         total_count
         page_info
@@ -2298,12 +2291,9 @@ QUERY;
   {
        items{
            id
-           attribute_set_id
-           created_at
            name
            sku
            type_id
-           updated_at
            ... on PhysicalProductInterface {
                weight
            }
@@ -2448,7 +2438,6 @@ QUERY;
             $this->assertResponseFields(
                 $productItemsInResponse[$itemIndex][0],
                 [
-                    'attribute_set_id' => $filteredProducts[$itemIndex]->getAttributeSetId(),
                     'sku' => $filteredProducts[$itemIndex]->getSku(),
                     'name' => $filteredProducts[$itemIndex]->getName(),
                     'price' => [
@@ -2475,7 +2464,6 @@ QUERY;
             $this->assertResponseFields(
                 $productItemsInResponse[$itemIndex][0],
                 [
-                    'attribute_set_id' => $filteredProducts[$itemIndex]->getAttributeSetId(),
                     'sku' => $filteredProducts[$itemIndex]->getSku(),
                     'name' => $filteredProducts[$itemIndex]->getName(),
                     'price' => [

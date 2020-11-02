@@ -249,8 +249,8 @@ interface CategoryInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model
     canonical_url: String @doc(description: "Relative canonical URL. This value is returned only if the system setting 'Use Canonical Link Meta Tag For Categories' is enabled") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Category\\CanonicalUrl")
     position: Int @doc(description: "The position of the category relative to other categories at the same level in tree.")
     level: Int @doc(description: "Indicates the depth of the category within the tree.")
-    created_at: String @doc(description: "Timestamp indicating when the category was created.")
-    updated_at: String @doc(description: "Timestamp indicating when the category was updated.")
+    created_at: String @deprecated(reason: "The field should not be used on the storefront.") @doc(description: "Timestamp indicating when the category was created.")
+    updated_at: String @deprecated(reason: "The field should not be used on the storefront.") @doc(description: "Timestamp indicating when the category was updated.")
     product_count: Int @doc(description: "The number of products in the category that are marked as visible. By default, in complex products, parent products are visible, but their child products are not.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Category\\ProductsCount")
     default_sort_by: String @doc(description: "The attribute to use for sorting.")
     products(
