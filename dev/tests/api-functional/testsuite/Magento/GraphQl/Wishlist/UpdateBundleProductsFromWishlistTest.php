@@ -75,12 +75,10 @@ class UpdateBundleProductsFromWishlistTest extends GraphQlAbstract
         $bundleOptions = $this->generateBundleOptionUid((int) $optionId, (int) $selectionId, $optionQty);
 
         // Add product to wishlist
-        $this->addProductToWishlist();
-
-        $wishlist = $this->getBundleWishlist();
-        $wishlistId = $wishlist['customer']['wishlists'][0]['id'];
-        $wishlistItemId = $wishlist['customer']['wishlists'][0]['items_v2'][0]['id'];
-        $itemsCount = $wishlist['customer']['wishlists'][0]['items_count'];
+        $wishlist = $this->addProductToWishlist();
+        $wishlistId = $wishlist['addProductsToWishlist']['wishlist']['id'];
+        $wishlistItemId = $wishlist['addProductsToWishlist']['wishlist']['items_v2'][0]['id'];
+        $itemsCount = $wishlist['addProductsToWishlist']['wishlist']['items_count'];
 
         $query = $this->getBundleQuery((int)$wishlistItemId, $qty, $bundleOptions, (int)$wishlistId);
         $response = $this->graphQlMutation($query, [], '', $this->getHeaderMap());
@@ -110,50 +108,6 @@ class UpdateBundleProductsFromWishlistTest extends GraphQlAbstract
         $customerToken = $this->customerTokenService->createCustomerAccessToken($username, $password);
 
         return ['Authorization' => 'Bearer ' . $customerToken];
-    }
-
-    /**
-     * Get Bundle wishlist result
-     *
-     * @param string $username
-     * @return array
-     *
-     * @throws Exception
-     */
-    private function getBundleWishlist(string $username = 'customer@example.com'): array
-    {
-        return $this->graphQlQuery($this->getCustomerBundleWishlistQuery(), [], '', $this->getHeaderMap($username));
-    }
-
-    private function getCustomerBundleWishlistQuery(): string
-    {
-        return <<<QUERY
-query {
-    customer {
-        wishlists {
-            id
-            items_count
-            items_v2 {
-                id
-                quantity
-                ... on BundleWishlistItem{
-                    bundle_options{
-                        id
-                        label
-                        type
-                        values {
-                            id
-                            label
-                            quantity
-                            price
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-QUERY;
     }
 
     /**
@@ -236,8 +190,9 @@ MUTATION;
      * @magentoApiDataFixture Magento/Bundle/_files/product_1.php
      *
      * @throws Exception
+     * return array
      */
-    private function addProductToWishlist(): void
+    private function addProductToWishlist(): array
     {
         $sku = 'bundle-product';
         $product = $this->productRepository->get($sku);
@@ -256,7 +211,7 @@ MUTATION;
         $bundleOptions = $this->generateBundleOptionUid((int) $optionId, (int) $selectionId, $optionQty);
 
         $query = $this->addQuery($sku, $qty, $bundleOptions);
-        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
+        return $this->graphQlMutation($query, [], '', $this->getHeaderMap());
     }
 
     /**
@@ -321,6 +276,5 @@ mutation {
 }
 MUTATION;
     }
-
 }
 
