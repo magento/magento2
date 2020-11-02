@@ -11,7 +11,7 @@ use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
- * Class ProductInMultipleStoresTest
+ * The GraphQl test for product in multiple stores
  */
 class ProductInMultipleStoresTest extends GraphQlAbstract
 {
