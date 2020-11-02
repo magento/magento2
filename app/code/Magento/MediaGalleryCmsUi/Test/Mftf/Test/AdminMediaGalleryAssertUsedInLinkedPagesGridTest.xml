@@ -60,8 +60,8 @@
         <actionGroup ref="AdminAssertMediaGalleryFilterPlaceHolderGridActionGroup" stepKey="assertFilterApplied">
             <argument name="filterPlaceholder" value="{{ImageMetadata.title}}"/>
         </actionGroup>
-         <actionGroup ref="AdminDeleteCmsPageFromGridActionGroup" stepKey="deleteCmsPage">
-            <argument name="urlKey" value="{{_defaultCmsPage.identifier}}"/>
+        <actionGroup ref="AdminDeleteCMSPageByUrlKeyActionGroup" stepKey="deleteCmsPage">
+            <argument name="pageUrlKey" value="{{_defaultCmsPage.identifier}}"/>
         </actionGroup>
 
         <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFiltersInPageGrid"/>
