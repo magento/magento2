@@ -148,7 +148,7 @@ class MassConsumerEnvelopeCallbackTest extends TestCase
     /**
      * @dataProvider provideApplicationHeadersForAroundExecuteSuccess
      *
-     * @param mixed $headers
+     * @param array|AMQPTable $headers
      * @param int $storeId
      * @param int $currentStoreId
      */
