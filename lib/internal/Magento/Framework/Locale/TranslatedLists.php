@@ -12,7 +12,8 @@ use Magento\Framework\Locale\Bundle\LanguageBundle;
 use Magento\Framework\Locale\Bundle\RegionBundle;
 
 /**
- * Translated lists.
+ * Translatable lists of locale names and calendrical terms
+ * includes languages, countries, timezones, weekdays, currencies
  */
 class TranslatedLists implements ListsInterface
 {
