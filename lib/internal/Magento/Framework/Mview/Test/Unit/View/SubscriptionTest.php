@@ -333,9 +333,15 @@ class SubscriptionTest extends TestCase
     {
         $tableName = 'cataloginventory_stock_item';
         $ignoredColumnName = 'low_stock_date';
+        $notIgnoredColumnName = 'backorders';
         $viewId = 'cataloginventory_stock';
         $ignoredData = [
-            $viewId => [$tableName => [$ignoredColumnName]]
+            $viewId => [
+                $tableName => [
+                    $ignoredColumnName => true,
+                    $notIgnoredColumnName => false
+                ]
+            ]
         ];
 
         $this->connectionMock->expects($this->once())
@@ -349,6 +355,7 @@ class SubscriptionTest extends TestCase
                 'stock_id' => ['COLUMN_NAME' => 'stock_id'],
                 'qty' => ['COLUMN_NAME' => 'qty'],
                 $ignoredColumnName => ['COLUMN_NAME' => $ignoredColumnName],
+                $notIgnoredColumnName => ['COLUMN_NAME' => $notIgnoredColumnName]
             ]);
 
         $otherChangelogMock = $this->getMockForAbstractClass(ChangelogInterface::class);
@@ -372,5 +379,6 @@ class SubscriptionTest extends TestCase
         $statement = $method->invoke($model, Trigger::EVENT_UPDATE, $otherChangelogMock);
 
         $this->assertStringNotContainsString($ignoredColumnName, $statement);
+        $this->assertStringContainsString($notIgnoredColumnName, $statement);
     }
 }

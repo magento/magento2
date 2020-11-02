@@ -216,9 +216,12 @@ class Subscription implements SubscriptionInterface
                     $describe = $this->connection->describeTable($tableName)
                 ) {
                     $columnNames = array_column($describe, 'COLUMN_NAME');
+                    $ignoredColumnsBySubscription = array_filter(
+                        $this->ignoredUpdateColumnsBySubscription[$changelog->getViewId()][$this->getTableName()] ?? []
+                    );
                     $ignoredColumns = array_merge(
                         $this->ignoredUpdateColumns,
-                        $this->ignoredUpdateColumnsBySubscription[$changelog->getViewId()][$this->getTableName()] ?? []
+                        array_keys($ignoredColumnsBySubscription)
                     );
                     $columnNames = array_diff($columnNames, $ignoredColumns);
                     if ($columnNames) {
