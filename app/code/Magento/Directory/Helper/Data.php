@@ -190,8 +190,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Framework\Profiler::start('TEST: ' . __METHOD__, ['group' => 'TEST', 'method' => __METHOD__]);
         if (!$this->_regionJson) {
             $scope = $this->getCurrentScope();
-            $scopeKey = $scope['value'] ? '_' . implode('_', $scope) : null;
-            $cacheKey = 'DIRECTORY_REGIONS_JSON_STORE' . $scopeKey;
+            $scopeKey = $scope['value'] ? '_' . implode('_', $scope) : '';
+            $cacheKey = 'DIRECTORY_REGIONS_JSON' . $scopeKey;
             $json = $this->_configCacheType->load($cacheKey);
             if (empty($json)) {
                 $regions = $this->getRegionData();
@@ -406,14 +406,21 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Get current scope from request
      *
      * @return array
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     private function getCurrentScope(): array
     {
-        $scope = [
-            'type' => ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
-            'value' => null,
-        ];
+        $scope = $this->_storeManager->getStore()
+            ? [
+                'type' => ScopeInterface::SCOPE_STORE,
+                'value' => $this->_storeManager->getStore()->getId(),
+            ]
+            : [
+                'type' => ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
+                'value' => null,
+            ];
         $request = $this->_getRequest();
+
         if ($request->getParam(ScopeInterface::SCOPE_WEBSITE)) {
             $scope = [
                 'type' => ScopeInterface::SCOPE_WEBSITE,
