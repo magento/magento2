@@ -14,6 +14,6 @@
         </arguments>
     </type>
     <type name="Magento\Catalog\Model\Product">
-        <plugin name="bundle" type="Magento\Bundle\Model\Plugin\Frontend\Product" sortOrder="100" />
+        <plugin name="add_child_identities_bundle" type="Magento\Bundle\Model\Plugin\Frontend\ProductIdentitiesExtender"/>
     </type>
 </config>

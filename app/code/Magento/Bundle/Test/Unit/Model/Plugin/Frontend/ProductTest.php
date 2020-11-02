@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Bundle\Test\Unit\Model\Plugin\Frontend;
 
-use Magento\Bundle\Model\Plugin\Frontend\Product as ProductPlugin;
+use Magento\Bundle\Model\Plugin\Frontend\ProductIdentitiesExtender as ProductPlugin;
 use Magento\Bundle\Model\Product\Type;
 use Magento\Catalog\Model\Product;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -28,7 +28,7 @@ class ProductTest extends TestCase
     {
         $this->product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getEntityId'])
+            ->setMethods(['getEntityId', 'getTypeId'])
             ->getMock();
 
         $this->type = $this->getMockBuilder(Type::class)
@@ -65,6 +65,9 @@ class ProductTest extends TestCase
         $this->product->expects($this->once())
             ->method('getEntityId')
             ->willReturn($id);
+        $this->product->expects($this->once())
+            ->method('getTypeId')
+            ->willReturn(Type::TYPE_CODE);
         $this->type->expects($this->once())
             ->method('getChildrenIds')
             ->with($id)

@@ -7,23 +7,23 @@ declare(strict_types=1);
 
 namespace Magento\Bundle\Model\Plugin\Frontend;
 
-use Magento\Bundle\Model\Product\Type;
+use Magento\Bundle\Model\Product\Type as BundleType;
 use Magento\Catalog\Model\Product as CatalogProduct;
 
 /**
  * Add child identities to product identities on storefront.
  */
-class Product
+class ProductIdentitiesExtender
 {
     /**
-     * @var Type
+     * @var BundleType
      */
     private $type;
 
     /**
-     * @param Type $type
+     * @param BundleType $type
      */
-    public function __construct(Type $type)
+    public function __construct(BundleType $type)
     {
         $this->type = $type;
     }
@@ -37,12 +37,15 @@ class Product
      */
     public function afterGetIdentities(CatalogProduct $product, array $identities): array
     {
+        if ($product->getTypeId() !== BundleType::TYPE_CODE) {
+
+            return $identities;
+        }
         foreach ($this->type->getChildrenIds($product->getEntityId()) as $childIds) {
             foreach ($childIds as $childId) {
                 $identities[] = CatalogProduct::CACHE_TAG . '_' . $childId;
             }
         }
-
         return array_unique($identities);
     }
 }

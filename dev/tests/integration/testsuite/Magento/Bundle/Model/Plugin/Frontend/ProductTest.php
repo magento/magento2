@@ -28,7 +28,10 @@ class ProductTest extends TestCase
     {
         $pluginInfo = Bootstrap::getObjectManager()->get(PluginList::class)
             ->get(\Magento\Catalog\Model\Product::class, []);
-        $this->assertSame(Product::class, $pluginInfo['bundle']['instance']);
+        $this->assertSame(
+            ProductIdentitiesExtender::class,
+            $pluginInfo['add_child_identities_bundle']['instance']
+        );
     }
 
     /**

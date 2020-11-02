@@ -11,6 +11,7 @@ use Magento\Bundle\Model\OptionFactory;
 use Magento\Bundle\Model\Product\Type;
 use Magento\Bundle\Model\ResourceModel\BundleFactory;
 use Magento\Bundle\Model\ResourceModel\Option\Collection;
+use Magento\Bundle\Model\ResourceModel\Selection as ResourceSelection;
 use Magento\CatalogRule\Model\ResourceModel\Product\CollectionProcessor;
 use Magento\Bundle\Model\ResourceModel\Selection\Collection as SelectionCollection;
 use Magento\Bundle\Model\ResourceModel\Selection\CollectionFactory;
@@ -45,6 +46,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * Test for bundle product type
  *
+ * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class TypeTest extends TestCase
@@ -125,6 +127,11 @@ class TypeTest extends TestCase
     private $catalogRuleProcessor;
 
     /**
+     * @var ResourceSelection|MockObject
+     */
+    private $bundleSelection;
+
+    /**
      * @return void
      */
     protected function setUp(): void
@@ -173,7 +180,7 @@ class TypeTest extends TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->bundleModelSelection = $this->getMockBuilder(SelectionFactory::class)
-            ->setMethods(['create'])
+            ->setMethods(['create', 'getChildrenIds'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->bundleFactory = $this->getMockBuilder(BundleFactory::class)
@@ -194,6 +201,10 @@ class TypeTest extends TestCase
         $this->catalogRuleProcessor = $this->getMockBuilder(CollectionProcessor::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->bundleSelection = $this->getMockBuilder(ResourceSelection::class)
+            ->onlyMethods(['getChildrenIds'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $objectHelper = new ObjectManager($this);
         $this->model = $objectHelper->getObject(
@@ -201,6 +212,7 @@ class TypeTest extends TestCase
             [
                 'bundleModelSelection' => $this->bundleModelSelection,
                 'bundleFactory' => $this->bundleFactory,
+                'bundleSelection' => $this->bundleSelection,
                 'bundleCollection' => $this->bundleCollectionFactory,
                 'bundleOption' => $this->bundleOptionFactory,
                 'catalogData' => $this->catalogData,
@@ -214,6 +226,34 @@ class TypeTest extends TestCase
                 'arrayUtility' => $this->arrayUtility
             ]
         );
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetChildrenIds()
+    {
+        $this->assertClassHasAttribute('cacheChildrenIds', Type::class);
+
+        $parentId = 1;
+        $childrenIds = [
+            [
+                1 => [
+                    26 => "26",
+                    39 => "39",
+                ],
+            ],
+        ];
+
+        $this->bundleSelection->expects($this->once())
+            ->method('getChildrenIds')
+            ->with($parentId, true)
+            ->willReturn($childrenIds);
+        $this->assertIsArray($this->model->getChildrenIds($parentId, true));
+
+        $this->bundleSelection->expects($this->never())
+            ->method('getChildrenIds');
+        $this->assertEquals($childrenIds, $this->model->getChildrenIds($parentId, true));
     }
 
     /**
