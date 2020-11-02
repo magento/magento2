@@ -45,7 +45,6 @@ class AttributeRepositoryTest extends TestCase
             ['Default Store View', 'Fixture Store'],
             $this->getStoreViewLabels($result['options'][1]['value'])
         );
-
     }
 
     /**
