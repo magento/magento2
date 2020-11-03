@@ -89,6 +89,7 @@ class ReviewDataProvider extends AbstractDataProvider
     /**
      * @inheritdoc
      * @since 100.1.0
+     * @return mixed|$this
      */
     public function addFilter(\Magento\Framework\Api\Filter $filter)
     {
@@ -107,5 +108,6 @@ class ReviewDataProvider extends AbstractDataProvider
         }
 
         parent::addFilter($filter);
+        return $this;
     }
 }
