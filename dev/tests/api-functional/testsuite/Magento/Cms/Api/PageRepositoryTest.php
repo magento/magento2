@@ -654,7 +654,7 @@ class PageRepositoryTest extends WebapiAbstract
         /** @var Rules $rules */
         $rules = $this->rulesFactory->create();
         $rules->setRoleId($role->getId());
-        $rules->setResources(['Magento_Cms::page']);
+        $rules->setResources(['Magento_Cms::save']);
         $rules->saveRel();
         //Using the admin user with custom role.
         $token = $this->adminTokens->createAdminAccessToken(
@@ -704,7 +704,7 @@ class PageRepositoryTest extends WebapiAbstract
         /** @var Rules $rules */
         $rules = $this->objectManager->create(Rules::class);
         $rules->setRoleId($role->getId());
-        $rules->setResources(['Magento_Cms::page', 'Magento_Cms::save_design']);
+        $rules->setResources(['Magento_Cms::save', 'Magento_Cms::save_design']);
         $rules->saveRel();
         //Making the same request with design settings.
         $result = $this->_webApiCall($serviceInfo, $requestData);
@@ -719,7 +719,7 @@ class PageRepositoryTest extends WebapiAbstract
         /** @var Rules $rules */
         $rules = $this->objectManager->create(Rules::class);
         $rules->setRoleId($role->getId());
-        $rules->setResources(['Magento_Cms::page']);
+        $rules->setResources(['Magento_Cms::save']);
         $rules->saveRel();
         //Updating the page but with the same design properties values.
         $result = $this->_webApiCall($serviceInfo, $requestData);
