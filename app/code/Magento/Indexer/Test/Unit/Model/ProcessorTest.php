@@ -187,6 +187,7 @@ class ProcessorTest extends TestCase
             $this->indexerFactoryMock,
             $this->indexersFactoryMock,
             $this->viewProcessorMock,
+            $this->workingStateProvider,
             $makeSharedValidMock
         );
         $model->reindexAllInvalid();
