@@ -97,6 +97,7 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
      * @return $this
      * @throws \Exception if metadataPool doesn't contain metadata for ProductInterface
      * @throws \DomainException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function execute(array $entityIds = [], $useTempTable = false)
     {
@@ -105,7 +106,7 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
         $this->limitationByProducts = $idsToBeReIndexed;
         $this->useTempTable = $useTempTable;
         $indexer = $this->indexerRegistry->get(CategoryProductIndexer::INDEXER_ID);
-        $workingState = $this->getWorkingState();
+        $workingState = $this->isWorkingState();
 
         if (!$indexer->isScheduled()
             || ($indexer->isScheduled() && !$useTempTable)
@@ -123,7 +124,7 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
             $this->reindex();
 
             // get actual state
-            $workingState = $this->getWorkingState();
+            $workingState = $this->isWorkingState();
 
             if ($useTempTable && !$workingState && $indexer->isScheduled()) {
                 foreach ($this->storeManager->getStores() as $store) {
@@ -159,7 +160,7 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
      *
      * @return bool
      */
-    private function getWorkingState() : bool
+    private function isWorkingState() : bool
     {
         $indexer = $this->indexerRegistry->get(CategoryProductIndexer::INDEXER_ID);
         $sharedIndexer = $this->indexerRegistry->get(ProductCategoryIndexer::INDEXER_ID);
