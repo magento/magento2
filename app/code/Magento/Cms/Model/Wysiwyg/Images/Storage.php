@@ -543,7 +543,7 @@ class Storage extends \Magento\Framework\DataObject
      */
     public function uploadFile($targetPath, $type = null)
     {
-        $targetPath = $this->file->getRealPathSafety($targetPath);
+        $targetPath = $this->file->getRealPathSafety($targetPath) . DIRECTORY_SEPARATOR;
 
         if (!$this->isPathAllowed($targetPath, $this->getConditionsForExcludeDirs()) || strlen($targetPath) > 255) {
             throw new \Magento\Framework\Exception\LocalizedException(
