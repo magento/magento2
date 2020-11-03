@@ -22,8 +22,8 @@
         <before>
             <!-- Start Coupon Usage Consumer -->
             <actionGroup ref="CliConsumerStartActionGroup" stepKey="startMessageQueue">
-                <argument name="consumerName" value="{{SalesRuleCouponUsageConsumer.consumerName}}"/>
-                <argument name="maxMessages" value="{{SalesRuleCouponUsageConsumer.messageLimit}}"/>
+                <argument name="consumerName" value="sales.rule.update.coupon.usage"/>
+                <argument name="maxMessages" value="1000"/>
             </actionGroup>
 
             <!-- Enable Zero Subtotal Checkout -->
