@@ -6,38 +6,40 @@
 
 namespace Magento\AsynchronousOperations\Controller\Adminhtml\Index;
 
-class Index extends \Magento\Backend\App\Action
+use Magento\Backend\App\Action\Context;
+use Magento\Framework\View\Result\PageFactory;
+use Magento\Framework\View\Result\Page;
+use Magento\AsynchronousOperations\Model\AccessManager;
+use Magento\Backend\App\Action;
+use Magento\Framework\App\Action\HttpGetActionInterface;
+
+class Index extends Action implements HttpGetActionInterface
 {
-    /**
-     * Authorization level of a basic admin session
-     *
-     * @see _isAllowed()
-     */
-    const ADMIN_RESOURCE = 'Magento_Logging::system_magento_logging_bulk_operations';
+    public const BULK_OPERATIONS_MENU_ID = "Magento_AsynchronousOperations::system_magento_logging_bulk_operations";
 
     /**
-     * @var \Magento\Framework\View\Result\PageFactory
+     * @var PageFactory
      */
     private $resultPageFactory;
 
     /**
-     * @var string
+     * @var AccessManager
      */
-    private $menuId;
+    private $accessManager;
 
     /**
      * Details constructor.
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
-     * @param string $menuId
+     * @param Context $context
+     * @param PageFactory $resultPageFactory
+     * @param AccessManager $accessManager
      */
     public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\View\Result\PageFactory $resultPageFactory,
-        $menuId = 'Magento_AsynchronousOperations::system_magento_logging_bulk_operations'
+        Context $context,
+        PageFactory $resultPageFactory,
+        AccessManager $accessManager
     ) {
         $this->resultPageFactory = $resultPageFactory;
-        $this->menuId = $menuId;
+        $this->accessManager = $accessManager;
         parent::__construct($context);
     }
 
@@ -46,19 +48,19 @@ class Index extends \Magento\Backend\App\Action
      */
     protected function _isAllowed()
     {
-        return parent::_isAllowed();
+        return $this->accessManager->isOwnActionsAllowed();
     }
 
     /**
      * Bulk list action
      *
-     * @return \Magento\Framework\View\Result\Page
+     * @return Page
      */
     public function execute()
     {
         $resultPage = $this->resultPageFactory->create();
         $resultPage->initLayout();
-        $this->_setActiveMenu($this->menuId);
+        $this->_setActiveMenu(self::BULK_OPERATIONS_MENU_ID);
         $resultPage->getConfig()->getTitle()->prepend(__('Bulk Actions Log'));
         return $resultPage;
     }

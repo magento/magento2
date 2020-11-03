@@ -38,8 +38,19 @@ interface BulkStatusInterface
      * @param int $userId
      * @return BulkSummaryInterface[]
      * @since 103.0.0
+     * @deprecated 100.3.0
      */
     public function getBulksByUser($userId);
+
+    /**
+     * Get all bulks created by user and user type
+     *
+     * @param int $userId
+     * @param int $userTypeId
+     * @return BulkSummaryInterface[]
+     * @since 100.2.0
+     */
+    public function getBulksByUserAndType($userId, $userTypeId);
 
     /**
      * Computational status based on statuses of belonging operations

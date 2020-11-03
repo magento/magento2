@@ -24,8 +24,8 @@
             </storageConfig>
             <updateUrl path="mui/index/render"/>
         </settings>
-        <aclResource>Magento_Logging::system_magento_logging_bulk_operations</aclResource>
-        <dataProvider class="Magento\AsynchronousOperations\Ui\Component\DataProvider" name="bulk_listing_data_source">
+        <aclResource>Magento_AsynchronousOperations::system_magento_logging_bulk_operations</aclResource>
+        <dataProvider class="Magento\AsynchronousOperations\Ui\Component\DataProvider\Bulk\DataProvider" name="bulk_listing_data_source">
             <settings>
                 <requestFieldName>id</requestFieldName>
                 <primaryFieldName>id</primaryFieldName>

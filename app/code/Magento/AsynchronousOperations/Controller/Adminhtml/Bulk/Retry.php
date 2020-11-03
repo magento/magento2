@@ -10,13 +10,14 @@ use Magento\AsynchronousOperations\Model\BulkNotificationManagement;
 use Magento\Backend\App\Action\Context;
 use Magento\Backend\Model\View\Result\Redirect;
 use Magento\Backend\App\Action;
-use Magento\AsynchronousOperations\Model\AccessValidator;
+use Magento\AsynchronousOperations\Model\AccessManager;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 
 /**
  * Class Bulk Retry Controller
  */
-class Retry extends Action
+class Retry extends Action implements HttpPostActionInterface
 {
     /**
      * @var BulkManagement
@@ -29,27 +30,28 @@ class Retry extends Action
     private $notificationManagement;
 
     /**
-     * @var \Magento\AsynchronousOperations\Model\AccessValidator
+     * @var AccessManager
      */
-    private $accessValidator;
+    private $accessManager;
 
     /**
      * Retry constructor.
+     *
      * @param Context $context
      * @param BulkManagement $bulkManagement
      * @param BulkNotificationManagement $notificationManagement
-     * @param AccessValidator $accessValidator
+     * @param AccessManager $accessManager
      */
     public function __construct(
         Context $context,
         BulkManagement $bulkManagement,
         BulkNotificationManagement $notificationManagement,
-        AccessValidator $accessValidator
+        AccessManager $accessManager
     ) {
         parent::__construct($context);
         $this->bulkManagement = $bulkManagement;
         $this->notificationManagement = $notificationManagement;
-        $this->accessValidator = $accessValidator;
+        $this->accessManager = $accessManager;
     }
 
     /**
@@ -57,12 +59,11 @@ class Retry extends Action
      */
     protected function _isAllowed()
     {
-        return $this->_authorization->isAllowed('Magento_Logging::system_magento_logging_bulk_operations')
-            && $this->accessValidator->isAllowed($this->getRequest()->getParam('uuid'));
+        return $this->accessManager->isAllowedForBulkUuid($this->getRequest()->getParam('uuid'));
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function execute()
     {

@@ -10,6 +10,7 @@ use Magento\AsynchronousOperations\Api\Data\BulkSummaryInterface;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\AsynchronousOperations\Model\ResourceModel\Bulk\CollectionFactory as BulkCollectionFactory;
 use Magento\Framework\Data\Collection;
+use \Magento\Authorization\Model\UserContextInterface;
 
 /**
  * Class for bulk notification manager
@@ -58,10 +59,12 @@ class BulkNotificationManagement
 
     /**
      * Mark given bulks as acknowledged.
+     *
      * Notifications related to these bulks will not appear in notification area.
      *
      * @param array $bulkUuids
      * @return bool true on success or false on failure
+     * @throws \Exception
      */
     public function acknowledgeBulks(array $bulkUuids)
     {
@@ -83,6 +86,7 @@ class BulkNotificationManagement
 
     /**
      * Remove given bulks from acknowledged list.
+     *
      * Notifications related to these bulks will appear again in notification area.
      *
      * @param array $bulkUuids
@@ -119,6 +123,7 @@ class BulkNotificationManagement
                 'main_table.uuid = acknowledged_bulk.bulk_uuid',
                 []
             )->addFieldToFilter('user_id', $userId)
+            ->addFieldToFilter('user_type', UserContextInterface::USER_TYPE_ADMIN)
             ->addOrder('start_time', Collection::SORT_ORDER_DESC)
             ->getItems();
 
@@ -141,6 +146,7 @@ class BulkNotificationManagement
             ['acknowledged_bulk.bulk_uuid']
         );
         $bulks = $bulkCollection->addFieldToFilter('user_id', $userId)
+            ->addFieldToFilter('user_type', UserContextInterface::USER_TYPE_ADMIN)
             ->addFieldToFilter('acknowledged_bulk.bulk_uuid', ['null' => true])
             ->addOrder('start_time', Collection::SORT_ORDER_DESC)
             ->getItems();

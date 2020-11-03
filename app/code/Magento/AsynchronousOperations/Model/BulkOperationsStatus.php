@@ -98,6 +98,14 @@ class BulkOperationsStatus implements BulkStatusInterface
     /**
      * @inheritDoc
      */
+    public function getBulksByUserAndType($userId, $userTypeId)
+    {
+        return $this->bulkStatus->getBulksByUser($userId, $userTypeId);
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function getBulkStatus($bulkUuid)
     {
         return $this->bulkStatus->getBulkStatus($bulkUuid);

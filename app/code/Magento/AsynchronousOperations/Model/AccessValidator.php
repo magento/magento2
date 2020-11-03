@@ -7,7 +7,8 @@
 namespace Magento\AsynchronousOperations\Model;
 
 /**
- * Class AccessValidator
+ * Class AccessValidator. Used to validate if user has an access to Bulk Operation
+ * @deprecated 100.3.0, use Magento\AsynchronousOperations\Model\AccessManager instead
  */
 class AccessValidator
 {

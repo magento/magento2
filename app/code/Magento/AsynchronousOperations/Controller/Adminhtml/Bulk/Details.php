@@ -5,20 +5,26 @@
  */
 namespace Magento\AsynchronousOperations\Controller\Adminhtml\Bulk;
 
+use Magento\AsynchronousOperations\Model\AccessManager;
+use Magento\Framework\View\Result\PageFactory;
+use Magento\Backend\App\Action\Context;
+use Magento\Backend\App\Action;
+use Magento\Framework\App\Action\HttpGetActionInterface;
+
 /**
  * Class View Operation Details Controller
  */
-class Details extends \Magento\Backend\App\Action implements \Magento\Framework\App\Action\HttpGetActionInterface
+class Details extends Action implements HttpGetActionInterface
 {
     /**
-     * @var \Magento\Framework\View\Result\PageFactory
+     * @var PageFactory
      */
     private $resultPageFactory;
 
     /**
-     * @var \Magento\AsynchronousOperations\Model\AccessValidator
+     * @var AccessManager
      */
-    private $accessValidator;
+    private $accessManager;
 
     /**
      * @var string
@@ -27,19 +33,20 @@ class Details extends \Magento\Backend\App\Action implements \Magento\Framework\
 
     /**
      * Details constructor.
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
-     * @param \Magento\AsynchronousOperations\Model\AccessValidator $accessValidator
+     *
+     * @param Context $context
+     * @param PageFactory $resultPageFactory
+     * @param AccessManager $accessManager
      * @param string $menuId
      */
     public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\View\Result\PageFactory $resultPageFactory,
-        \Magento\AsynchronousOperations\Model\AccessValidator $accessValidator,
+        Context $context,
+        PageFactory $resultPageFactory,
+        AccessManager $accessManager,
         $menuId = 'Magento_AsynchronousOperations::system_magento_logging_bulk_operations'
     ) {
         $this->resultPageFactory = $resultPageFactory;
-        $this->accessValidator = $accessValidator;
+        $this->accessManager = $accessManager;
         $this->menuId = $menuId;
         parent::__construct($context);
     }
@@ -49,10 +56,9 @@ class Details extends \Magento\Backend\App\Action implements \Magento\Framework\
      */
     protected function _isAllowed()
     {
-        return $this->_authorization->isAllowed('Magento_Logging::system_magento_logging_bulk_operations')
-            && $this->accessValidator->isAllowed($this->getRequest()->getParam('uuid'));
+        return $this->accessManager->isAllowedForBulkUuid($this->getRequest()->getParam('uuid'));
     }
-    
+
     /**
      * Bulk details action
      *

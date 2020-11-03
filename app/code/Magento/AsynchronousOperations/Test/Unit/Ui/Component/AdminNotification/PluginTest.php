@@ -10,6 +10,7 @@ namespace Magento\AsynchronousOperations\Test\Unit\Ui\Component\AdminNotificatio
 use Magento\AdminNotification\Ui\Component\DataProvider\DataProvider;
 use Magento\AsynchronousOperations\Ui\Component\AdminNotification\Plugin;
 use Magento\Framework\AuthorizationInterface;
+use Magento\AsynchronousOperations\Model\AccessManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 

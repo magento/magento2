@@ -80,7 +80,7 @@ class PluginTest extends TestCase
     /**
      * @var string
      */
-    private $resourceName = 'Magento_Logging::system_magento_logging_bulk_operations';
+    private $encryptor;
 
     protected function setUp(): void
     {
@@ -103,15 +103,16 @@ class PluginTest extends TestCase
             $this->bulkNotificationMock,
             $this->userContextMock,
             $this->operationsDetailsMock,
-            $this->authorizationMock,
-            $this->statusMapper
+            $this->statusMapper,
+            $this->accessManager,
+            $this->encryptor
         );
     }
 
     public function testAfterToArrayIfNotAllowed()
     {
         $result = [];
-        $this->authorizationMock
+        $this->accessManager
             ->expects($this->once())
             ->method('isAllowed')
             ->with($this->resourceName)
@@ -146,10 +147,9 @@ class PluginTest extends TestCase
         $bulkMock->expects($this->once())->method('getDescription')->willReturn('Bulk Description');
         $this->messagefactoryMock->expects($this->once())->method('create')->willReturn($this->messageMock);
         $this->messageMock->expects($this->once())->method('toArray')->willReturn($bulkArray);
-        $this->authorizationMock
+        $this->accessManager
             ->expects($this->once())
-            ->method('isAllowed')
-            ->with($this->resourceName)
+            ->method('isOwnActionsAllowed')
             ->willReturn(true);
         $this->userContextMock->expects($this->once())->method('getUserId')->willReturn($userId);
         $this->bulkNotificationMock
@@ -158,7 +158,7 @@ class PluginTest extends TestCase
             ->with($userId)
             ->willReturn([]);
         $this->statusMapper->expects($this->once())->method('operationStatusToBulkSummaryStatus');
-        $this->bulkStatusMock->expects($this->once())->method('getBulksByUser')->willReturn($userBulks);
+        $this->bulkStatusMock->expects($this->once())->method('getBulksByUserAndType')->willReturn($userBulks);
         $result2 = $this->plugin->afterToArray($this->collectionMock, $result);
         $this->assertEquals(2, $result2['totalRecords']);
     }

@@ -9,11 +9,13 @@ use Magento\AsynchronousOperations\Model\BulkNotificationManagement;
 use Magento\Backend\App\Action\Context;
 use Magento\Backend\App\Action;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\AsynchronousOperations\Model\AccessManager;
+use Magento\Framework\App\Action\HttpGetActionInterface;
 
 /**
  * Class Bulk Notification Dismiss Controller
  */
-class Dismiss extends Action
+class Dismiss extends Action implements HttpGetActionInterface
 {
     /**
      * @var BulkNotificationManagement
@@ -21,17 +23,25 @@ class Dismiss extends Action
     private $notificationManagement;
 
     /**
+     * @var AccessManager
+     */
+    private $accessManager;
+
+    /**
      * Class constructor.
      *
      * @param Context $context
      * @param BulkNotificationManagement $notificationManagement
+     * @param AccessManager $accessManager
      */
     public function __construct(
         Context $context,
-        BulkNotificationManagement $notificationManagement
+        BulkNotificationManagement $notificationManagement,
+        AccessManager $accessManager
     ) {
         parent::__construct($context);
         $this->notificationManagement = $notificationManagement;
+        $this->accessManager = $accessManager;
     }
 
     /**
@@ -39,11 +49,11 @@ class Dismiss extends Action
      */
     protected function _isAllowed()
     {
-        return $this->_authorization->isAllowed('Magento_Logging::system_magento_logging_bulk_operations');
+        return $this->accessManager->isOwnActionsAllowed();
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function execute()
     {
