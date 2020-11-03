@@ -17,6 +17,7 @@ use Magento\Framework\Indexer\CacheContext;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Indexer\IndexerRegistry;
+use Magento\Catalog\Model\Indexer\Product\Category as ProductCategoryIndexer;
 use Magento\Catalog\Model\Indexer\Category\Product as CategoryProductIndexer;
 use Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer;
 use Magento\Indexer\Model\WorkingStateProvider;
@@ -104,44 +105,66 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
         $this->limitationByProducts = $idsToBeReIndexed;
         $this->useTempTable = $useTempTable;
         $indexer = $this->indexerRegistry->get(CategoryProductIndexer::INDEXER_ID);
-        $workingState = $this->workingStateProvider->isWorking($indexer->getId());
+        $workingState = $this->getWorkingState();
 
-        $affectedCategories = $this->getCategoryIdsFromIndex($idsToBeReIndexed);
+        if (!$indexer->isScheduled()
+            || ($indexer->isScheduled() && !$useTempTable)
+            || ($indexer->isScheduled() && $useTempTable && !$workingState)) {
 
-        if ($useTempTable && !$workingState && $indexer->isScheduled()) {
-            foreach ($this->storeManager->getStores() as $store) {
-                $this->connection->truncateTable($this->getIndexTable($store->getId()));
+            $affectedCategories = $this->getCategoryIdsFromIndex($idsToBeReIndexed);
+
+            if ($useTempTable && !$workingState && $indexer->isScheduled()) {
+                foreach ($this->storeManager->getStores() as $store) {
+                    $this->connection->truncateTable($this->getIndexTable($store->getId()));
+                }
+            } else {
+                $this->removeEntries();
             }
-        } else {
-            $this->removeEntries();
-        }
-        $this->reindex();
-        if ($useTempTable && !$workingState && $indexer->isScheduled()) {
-            foreach ($this->storeManager->getStores() as $store) {
-                $this->connection->delete(
-                    $this->tableMaintainer->getMainTable($store->getId()),
-                    ['product_id IN (?)' => $this->limitationByProducts]
-                );
-                $select = $this->connection->select()
-                    ->from($this->tableMaintainer->getMainReplicaTable($store->getId()));
-                $this->connection->query(
-                    $this->connection->insertFromSelect(
-                        $select,
+            $this->reindex();
+
+            // get actual state
+            $workingState = $this->getWorkingState();
+
+            if ($useTempTable && !$workingState && $indexer->isScheduled()) {
+                foreach ($this->storeManager->getStores() as $store) {
+                    $this->connection->delete(
                         $this->tableMaintainer->getMainTable($store->getId()),
-                        [],
-                        AdapterInterface::INSERT_ON_DUPLICATE
-                    )
-                );
+                        ['product_id IN (?)' => $this->limitationByProducts]
+                    );
+                    $select = $this->connection->select()
+                        ->from($this->tableMaintainer->getMainReplicaTable($store->getId()));
+                    $this->connection->query(
+                        $this->connection->insertFromSelect(
+                            $select,
+                            $this->tableMaintainer->getMainTable($store->getId()),
+                            [],
+                            AdapterInterface::INSERT_ON_DUPLICATE
+                        )
+                    );
+                }
             }
+
+            $affectedCategories = array_merge($affectedCategories, $this->getCategoryIdsFromIndex($idsToBeReIndexed));
+
+            $this->registerProducts($idsToBeReIndexed);
+            $this->registerCategories($affectedCategories);
+            $this->eventManager->dispatch('clean_cache_by_tags', ['object' => $this->cacheContext]);
         }
-
-        $affectedCategories = array_merge($affectedCategories, $this->getCategoryIdsFromIndex($idsToBeReIndexed));
-
-        $this->registerProducts($idsToBeReIndexed);
-        $this->registerCategories($affectedCategories);
-        $this->eventManager->dispatch('clean_cache_by_tags', ['object' => $this->cacheContext]);
 
         return $this;
+    }
+
+    /**
+     * Get state for current and shared indexer
+     *
+     * @return bool
+     */
+    private function getWorkingState() : bool
+    {
+        $indexer = $this->indexerRegistry->get(CategoryProductIndexer::INDEXER_ID);
+        $sharedIndexer = $this->indexerRegistry->get(ProductCategoryIndexer::INDEXER_ID);
+        return $this->workingStateProvider->isWorking($indexer->getId())
+            || $this->workingStateProvider->isWorking($sharedIndexer->getId());
     }
 
     /**

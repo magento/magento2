@@ -17,6 +17,7 @@ use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Catalog\Model\Config;
 use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\Indexer\Product\Category as ProductCategoryIndexer;
+use Magento\Catalog\Model\Indexer\Category\Product as CategoryProductIndexer;
 use Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer;
 use Magento\Indexer\Model\WorkingStateProvider;
 
@@ -110,42 +111,62 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
         $this->limitationByCategories = array_unique($this->limitationByCategories);
         $this->useTempTable = $useTempTable;
         $indexer = $this->indexerRegistry->get(ProductCategoryIndexer::INDEXER_ID);
-        $workingState = $this->workingStateProvider->isWorking($indexer->getId());
+        $workingState = $this->getWorkingState();
 
-        if ($useTempTable && !$workingState && $indexer->isScheduled()) {
-            foreach ($this->storeManager->getStores() as $store) {
-                $this->connection->truncateTable($this->getIndexTable($store->getId()));
+        if (!$indexer->isScheduled()
+            || ($indexer->isScheduled() && !$useTempTable)
+            || ($indexer->isScheduled() && $useTempTable && !$workingState)) {
+            if ($useTempTable && !$workingState && $indexer->isScheduled()) {
+                foreach ($this->storeManager->getStores() as $store) {
+                    $this->connection->truncateTable($this->getIndexTable($store->getId()));
+                }
+            } else {
+                $this->removeEntries();
             }
-        } else {
-            $this->removeEntries();
-        }
 
-        $this->reindex();
+            $this->reindex();
 
-        if ($useTempTable && !$workingState && $indexer->isScheduled()) {
-            foreach ($this->storeManager->getStores() as $store) {
-                $removalCategoryIds = array_diff($this->limitationByCategories, [$this->getRootCategoryId($store)]);
-                $this->connection->delete(
-                    $this->tableMaintainer->getMainTable($store->getId()),
-                    ['category_id IN (?)' => $removalCategoryIds]
-                );
-                $select = $this->connection->select()
-                    ->from($this->tableMaintainer->getMainReplicaTable($store->getId()));
-                $this->connection->query(
-                    $this->connection->insertFromSelect(
-                        $select,
+            // get actual state
+            $workingState = $this->getWorkingState();
+
+            if ($useTempTable && !$workingState && $indexer->isScheduled()) {
+                foreach ($this->storeManager->getStores() as $store) {
+                    $removalCategoryIds = array_diff($this->limitationByCategories, [$this->getRootCategoryId($store)]);
+                    $this->connection->delete(
                         $this->tableMaintainer->getMainTable($store->getId()),
-                        [],
-                        AdapterInterface::INSERT_ON_DUPLICATE
-                    )
-                );
+                        ['category_id IN (?)' => $removalCategoryIds]
+                    );
+                    $select = $this->connection->select()
+                        ->from($this->tableMaintainer->getMainReplicaTable($store->getId()));
+                    $this->connection->query(
+                        $this->connection->insertFromSelect(
+                            $select,
+                            $this->tableMaintainer->getMainTable($store->getId()),
+                            [],
+                            AdapterInterface::INSERT_ON_DUPLICATE
+                        )
+                    );
+                }
             }
-        }
 
-        $this->registerCategories($entityIds);
-        $this->eventManager->dispatch('clean_cache_by_tags', ['object' => $this->cacheContext]);
+            $this->registerCategories($entityIds);
+            $this->eventManager->dispatch('clean_cache_by_tags', ['object' => $this->cacheContext]);
+        }
 
         return $this;
+    }
+
+    /**
+     * Get state for current and shared indexer
+     *
+     * @return bool
+     */
+    private function getWorkingState() : bool
+    {
+        $indexer = $this->indexerRegistry->get(ProductCategoryIndexer::INDEXER_ID);
+        $sharedIndexer = $this->indexerRegistry->get(CategoryProductIndexer::INDEXER_ID);
+        return $this->workingStateProvider->isWorking($indexer->getId())
+            || $this->workingStateProvider->isWorking($sharedIndexer->getId());
     }
 
     /**
