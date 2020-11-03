@@ -23,7 +23,7 @@
             <createData entity="_newDefaultCmsPage" stepKey="createSecondCMSPage" />
             <createData entity="_emptyCmsPage" stepKey="createThirdCMSPage" />
             <createData entity="Sales25offBlock" stepKey="createFirstCmsBlock"/>
-            <createData entity="TestBlock" stepKey="createSecondCmsBlock"/>
+            <createData entity="ActiveTestBlock" stepKey="createSecondCmsBlock"/>
             <createData entity="_emptyCmsBlock" stepKey="createThirdCmsBlock"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
