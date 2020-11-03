@@ -147,7 +147,6 @@ class QuantityValidatorTest extends TestCase
                     'The creditmemo contains product SKU "%1" that is not part of the original order.',
                     $creditmemoItemSku
                 ),
-                __('You can\'t create a creditmemo without products.')
             ],
             $this->validator->validate($creditmemoMock)
         );
