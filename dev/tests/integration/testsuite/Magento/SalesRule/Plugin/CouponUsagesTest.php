@@ -26,6 +26,7 @@ use PHPUnit\Framework\TestCase;
  * @magentoAppArea frontend
  * @magentoDbIsolation enabled
  * @magentoAppIsolation enabled
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CouponUsagesTest extends TestCase
 {
