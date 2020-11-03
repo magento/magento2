@@ -1454,11 +1454,12 @@ QUERY;
      */
     public function testFilteringForProductsFromMultipleCategories()
     {
+        $categoriesIds = ["4","5","12"];
         $query
             = <<<QUERY
 {
    products(filter:{
-          category_id :{in:["4","5","12"]}
+          category_id :{in:["{$categoriesIds[0]}","{$categoriesIds[1]}","{$categoriesIds[2]}"]}
          })
  {
     items
@@ -1484,6 +1485,21 @@ QUERY;
         $response = $this->graphQlQuery($query);
         /** @var ProductRepositoryInterface $productRepository */
         $this->assertEquals(3, $response['products']['total_count']);
+        $actualProducts = [];
+        foreach ($categoriesIds as $categoriesId) {
+            /** @var CategoryLinkManagement $productLinks */
+            $productLinks = ObjectManager::getInstance()->get(CategoryLinkManagement::class);
+            $links = $productLinks->getAssignedProducts($categoriesId);
+            $links = array_reverse($links);
+            foreach ($links as $linkProduct) {
+                $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
+                /** @var ProductInterface $product */
+                $product = $productRepository->get($linkProduct->getSku());
+                $actualProducts[$linkProduct->getSku()] = $product->getName();
+            }
+        }
+        $expectedProducts = array_column($response['products']['items'], "name", "sku");
+        $this->assertEquals($expectedProducts, $actualProducts);
     }
 
     /**
