@@ -13,6 +13,7 @@
             <stories value="Open CMS Edit Page"/>
             <title value="Open CMS Edit Page after choosing page on the grid."/>
             <description value="Open CMS Edit Page after choosing page on the grid."/>
+            <testCaseId value="MC-38854"/>
             <severity value="MINOR"/>
         </annotations>
         <before>
