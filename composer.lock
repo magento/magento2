@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.158.16",
+            "version": "3.158.19",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "6e8fc20ff7bc21b28e80815a9818b6ca7928ae3a"
+                "reference": "b1c3c763e227e518768f0416cbd2b29c11f79561"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/6e8fc20ff7bc21b28e80815a9818b6ca7928ae3a",
-                "reference": "6e8fc20ff7bc21b28e80815a9818b6ca7928ae3a",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/b1c3c763e227e518768f0416cbd2b29c11f79561",
+                "reference": "b1c3c763e227e518768f0416cbd2b29c11f79561",
                 "shasum": ""
             },
             "require": {
@@ -89,7 +89,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2020-10-28T20:19:05+00:00"
+            "time": "2020-11-02T19:49:21+00:00"
         },
         {
             "name": "colinmollenhour/cache-backend-file",
@@ -309,16 +309,16 @@
         },
         {
             "name": "composer/composer",
-            "version": "1.10.16",
+            "version": "1.10.17",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/composer.git",
-                "reference": "217f0272673c72087862c40cf91ac07eb438d778"
+                "reference": "09d42e18394d8594be24e37923031c4b7442a1cb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/composer/zipball/217f0272673c72087862c40cf91ac07eb438d778",
-                "reference": "217f0272673c72087862c40cf91ac07eb438d778",
+                "url": "https://api.github.com/repos/composer/composer/zipball/09d42e18394d8594be24e37923031c4b7442a1cb",
+                "reference": "09d42e18394d8594be24e37923031c4b7442a1cb",
                 "shasum": ""
             },
             "require": {
@@ -399,7 +399,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-10-24T07:55:59+00:00"
+            "time": "2020-10-30T21:31:58+00:00"
         },
         {
             "name": "composer/semver",
@@ -2944,23 +2944,23 @@
         },
         {
             "name": "laminas/laminas-session",
-            "version": "2.9.3",
+            "version": "2.10.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-session.git",
-                "reference": "519e8966146536cd97c1cc3d59a21b095fb814d7"
+                "reference": "921e6a9f807ee243a9a4f8a8a297929d0c2b50cd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-session/zipball/519e8966146536cd97c1cc3d59a21b095fb814d7",
-                "reference": "519e8966146536cd97c1cc3d59a21b095fb814d7",
+                "url": "https://api.github.com/repos/laminas/laminas-session/zipball/921e6a9f807ee243a9a4f8a8a297929d0c2b50cd",
+                "reference": "921e6a9f807ee243a9a4f8a8a297929d0c2b50cd",
                 "shasum": ""
             },
             "require": {
-                "laminas/laminas-eventmanager": "^2.6.2 || ^3.0",
+                "laminas/laminas-eventmanager": "^3.0",
                 "laminas/laminas-stdlib": "^3.2.1",
                 "laminas/laminas-zendframework-bridge": "^1.0",
-                "php": "^5.6 || ^7.0"
+                "php": "^7.3 || ~8.0.0"
             },
             "replace": {
                 "zendframework/zend-session": "^2.9.1"
@@ -2971,11 +2971,12 @@
                 "laminas/laminas-coding-standard": "~1.0.0",
                 "laminas/laminas-db": "^2.7",
                 "laminas/laminas-http": "^2.5.4",
-                "laminas/laminas-servicemanager": "^2.7.5 || ^3.0.3",
+                "laminas/laminas-servicemanager": "^3.0.3",
                 "laminas/laminas-validator": "^2.6",
                 "mongodb/mongodb": "^1.0.1",
                 "php-mock/php-mock-phpunit": "^1.1.2 || ^2.0",
-                "phpunit/phpunit": "^5.7.27 || ^6.5.14 || ^7.5.20"
+                "phpspec/prophecy-phpunit": "^2.0",
+                "phpunit/phpunit": "^9.3"
             },
             "suggest": {
                 "laminas/laminas-cache": "Laminas\\Cache component",
@@ -2987,10 +2988,6 @@
             },
             "type": "library",
             "extra": {
-                "branch-alias": {
-                    "dev-master": "2.9.x-dev",
-                    "dev-develop": "2.10.x-dev"
-                },
                 "laminas": {
                     "component": "Laminas\\Session",
                     "config-provider": "Laminas\\Session\\ConfigProvider"
@@ -3011,7 +3008,13 @@
                 "laminas",
                 "session"
             ],
-            "time": "2020-03-29T13:26:04+00:00"
+            "funding": [
+                {
+                    "url": "https://funding.communitybridge.org/projects/laminas-project",
+                    "type": "community_bridge"
+                }
+            ],
+            "time": "2020-10-31T15:33:31+00:00"
         },
         {
             "name": "laminas/laminas-soap",
@@ -3180,38 +3183,32 @@
         },
         {
             "name": "laminas/laminas-uri",
-            "version": "2.7.1",
+            "version": "2.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-uri.git",
-                "reference": "6be8ce19622f359b048ce4faebf1aa1bca73a7ff"
+                "reference": "8651611b6285529f25a4cb9a466c686d9b31468e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-uri/zipball/6be8ce19622f359b048ce4faebf1aa1bca73a7ff",
-                "reference": "6be8ce19622f359b048ce4faebf1aa1bca73a7ff",
+                "url": "https://api.github.com/repos/laminas/laminas-uri/zipball/8651611b6285529f25a4cb9a466c686d9b31468e",
+                "reference": "8651611b6285529f25a4cb9a466c686d9b31468e",
                 "shasum": ""
             },
             "require": {
                 "laminas/laminas-escaper": "^2.5",
                 "laminas/laminas-validator": "^2.10",
                 "laminas/laminas-zendframework-bridge": "^1.0",
-                "php": "^5.6 || ^7.0"
+                "php": "^7.3 || ~8.0.0"
             },
             "replace": {
-                "zendframework/zend-uri": "self.version"
+                "zendframework/zend-uri": "^2.7.1"
             },
             "require-dev": {
-                "laminas/laminas-coding-standard": "~1.0.0",
-                "phpunit/phpunit": "^5.7.27 || ^6.5.8 || ^7.1.4"
+                "laminas/laminas-coding-standard": "^2.1",
+                "phpunit/phpunit": "^9.3"
             },
             "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.7.x-dev",
-                    "dev-develop": "2.8.x-dev"
-                }
-            },
             "autoload": {
                 "psr-4": {
                     "Laminas\\Uri\\": "src/"
@@ -3227,7 +3224,13 @@
                 "laminas",
                 "uri"
             ],
-            "time": "2019-12-31T17:56:00+00:00"
+            "funding": [
+                {
+                    "url": "https://funding.communitybridge.org/projects/laminas-project",
+                    "type": "community_bridge"
+                }
+            ],
+            "time": "2020-10-31T20:20:07+00:00"
         },
         {
             "name": "laminas/laminas-validator",
@@ -6679,16 +6682,16 @@
         },
         {
             "name": "codeception/codeception",
-            "version": "4.1.9",
+            "version": "4.1.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Codeception/Codeception.git",
-                "reference": "5782e342b978a3efd0b7a776b7808902840b8213"
+                "reference": "bf2b548a358750a5ecb3d1aa2b32ebfb82a46061"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Codeception/Codeception/zipball/5782e342b978a3efd0b7a776b7808902840b8213",
-                "reference": "5782e342b978a3efd0b7a776b7808902840b8213",
+                "url": "https://api.github.com/repos/Codeception/Codeception/zipball/bf2b548a358750a5ecb3d1aa2b32ebfb82a46061",
+                "reference": "bf2b548a358750a5ecb3d1aa2b32ebfb82a46061",
                 "shasum": ""
             },
             "require": {
@@ -6718,7 +6721,7 @@
                 "monolog/monolog": "~1.8",
                 "squizlabs/php_codesniffer": "~2.0",
                 "symfony/process": ">=2.7 <6.0",
-                "vlucas/phpdotenv": "^2.0 | ^3.0 | ^4.0"
+                "vlucas/phpdotenv": "^2.0 | ^3.0 | ^4.0 | ^5.0"
             },
             "suggest": {
                 "codeception/specify": "BDD-style code blocks",
@@ -6766,7 +6769,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2020-10-23T17:59:47+00:00"
+            "time": "2020-11-03T17:34:51+00:00"
         },
         {
             "name": "codeception/lib-asserts",
@@ -6873,24 +6876,21 @@
         },
         {
             "name": "codeception/module-sequence",
-            "version": "1.0.0",
+            "version": "1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Codeception/module-sequence.git",
-                "reference": "70563527b768194d6ab22e1ff943a5e69741c5dd"
+                "reference": "b75be26681ae90824cde8f8df785981f293667e1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Codeception/module-sequence/zipball/70563527b768194d6ab22e1ff943a5e69741c5dd",
-                "reference": "70563527b768194d6ab22e1ff943a5e69741c5dd",
+                "url": "https://api.github.com/repos/Codeception/module-sequence/zipball/b75be26681ae90824cde8f8df785981f293667e1",
+                "reference": "b75be26681ae90824cde8f8df785981f293667e1",
                 "shasum": ""
             },
             "require": {
-                "codeception/codeception": "4.0.x-dev | ^4.0",
-                "php": ">=5.6.0 <8.0"
-            },
-            "require-dev": {
-                "codeception/util-robohelpers": "dev-master"
+                "codeception/codeception": "^4.0",
+                "php": ">=5.6.0 <9.0"
             },
             "type": "library",
             "autoload": {
@@ -6912,7 +6912,7 @@
             "keywords": [
                 "codeception"
             ],
-            "time": "2019-10-10T12:08:50+00:00"
+            "time": "2020-10-31T18:36:26+00:00"
         },
         {
             "name": "codeception/module-webdriver",
