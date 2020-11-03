@@ -5,25 +5,27 @@
  */
 namespace Magento\Bundle\Model\Plugin;
 
-use Magento\Bundle\Model\Product\Type;
+use Magento\Bundle\Model\Product\Type as BundleType;
 use Magento\Catalog\Model\Product as CatalogProduct;
 
 class Product
 {
     /**
-     * @var Type
+     * @var BundleType
      */
     private $type;
 
     /**
-     * @param Type $type
+     * @param BundleType $type
      */
-    public function __construct(Type $type)
+    public function __construct(BundleType $type)
     {
         $this->type = $type;
     }
 
     /**
+     * Add parent identities to product identities
+     *
      * @param CatalogProduct $product
      * @param array $identities
      * @return string[]
@@ -32,6 +34,9 @@ class Product
         CatalogProduct $product,
         array $identities
     ) {
+        if ($product->getTypeId() !== BundleType::TYPE_CODE) {
+            return $identities;
+        }
         foreach ($this->type->getParentIdsByChild($product->getEntityId()) as $parentId) {
             $identities[] = CatalogProduct::CACHE_TAG . '_' . $parentId;
         }

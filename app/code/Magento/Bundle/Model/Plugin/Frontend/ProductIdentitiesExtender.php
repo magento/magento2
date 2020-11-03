@@ -38,7 +38,6 @@ class ProductIdentitiesExtender
     public function afterGetIdentities(CatalogProduct $product, array $identities): array
     {
         if ($product->getTypeId() !== BundleType::TYPE_CODE) {
-
             return $identities;
         }
         foreach ($this->type->getChildrenIds($product->getEntityId()) as $childIds) {
@@ -46,6 +45,7 @@ class ProductIdentitiesExtender
                 $identities[] = CatalogProduct::CACHE_TAG . '_' . $childId;
             }
         }
+
         return array_unique($identities);
     }
 }

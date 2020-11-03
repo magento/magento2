@@ -215,6 +215,11 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
     private $searchCriteriaBuilder;
 
     /**
+     * @var array
+     */
+    private $cacheParentIdsByChild;
+
+    /**
      * @codingStandardsIgnoreStart/End
      * @param \Magento\Catalog\Model\Product\Option $catalogProductOption
      * @param \Magento\Eav\Model\Config $eavConfig
@@ -364,7 +369,12 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      */
     public function getParentIdsByChild($childId)
     {
-        return $this->_catalogProductTypeConfigurable->getParentIdsByChild($childId);
+        $cacheKey = is_array($childId) ? implode('-', $childId) : $childId;
+        if (!isset($this->cacheParentIdsByChild[$cacheKey])) {
+            $this->cacheParentIdsByChild[$cacheKey] = $this->_catalogProductTypeConfigurable->getParentIdsByChild($childId);
+        }
+
+        return $this->cacheParentIdsByChild[$cacheKey];
     }
 
     /**

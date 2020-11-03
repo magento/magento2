@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\ConfigurableProduct\Model\Plugin;
 
-use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable as ConfigurableType;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
 
@@ -17,7 +17,7 @@ use Magento\Catalog\Model\Product;
 class ProductIdentitiesExtender
 {
     /**
-     * @var Configurable
+     * @var ConfigurableType
      */
     private $configurableType;
 
@@ -27,10 +27,10 @@ class ProductIdentitiesExtender
     private $productRepository;
 
     /**
-     * @param Configurable $configurableType
+     * @param ConfigurableType $configurableType
      * @param ProductRepositoryInterface $productRepository
      */
-    public function __construct(Configurable $configurableType, ProductRepositoryInterface $productRepository)
+    public function __construct(ConfigurableType $configurableType, ProductRepositoryInterface $productRepository)
     {
         $this->configurableType = $configurableType;
         $this->productRepository = $productRepository;
@@ -46,10 +46,15 @@ class ProductIdentitiesExtender
      */
     public function afterGetIdentities(Product $subject, array $identities): array
     {
+        if ($subject->getTypeId() !== ConfigurableType::TYPE_CODE) {
+            return $identities;
+        }
+        $parentProductIdentities = [];
         foreach ($this->configurableType->getParentIdsByChild($subject->getId()) as $parentId) {
             $parentProduct = $this->productRepository->getById($parentId);
-            $identities = array_merge($identities, $parentProduct->getIdentities());
+            $parentProductIdentities[] = $parentProduct->getIdentities();
         }
+        $identities = array_merge($identities, $parentProductIdentities);
 
         return array_unique($identities);
     }

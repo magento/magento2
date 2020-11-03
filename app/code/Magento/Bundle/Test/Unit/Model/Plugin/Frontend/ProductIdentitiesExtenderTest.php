@@ -13,7 +13,7 @@ use Magento\Catalog\Model\Product;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-class ProductTest extends TestCase
+class ProductIdentitiesExtenderTest extends TestCase
 {
     /** @var  \Magento\Bundle\Model\Plugin\Product */
     private $plugin;

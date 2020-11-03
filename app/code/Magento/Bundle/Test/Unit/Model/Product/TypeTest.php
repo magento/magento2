@@ -180,7 +180,7 @@ class TypeTest extends TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->bundleModelSelection = $this->getMockBuilder(SelectionFactory::class)
-            ->setMethods(['create', 'getChildrenIds'])
+            ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->bundleFactory = $this->getMockBuilder(BundleFactory::class)
@@ -202,7 +202,7 @@ class TypeTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->bundleSelection = $this->getMockBuilder(ResourceSelection::class)
-            ->onlyMethods(['getChildrenIds'])
+            ->onlyMethods(['getChildrenIds', 'getParentIdsByChild'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -254,6 +254,31 @@ class TypeTest extends TestCase
         $this->bundleSelection->expects($this->never())
             ->method('getChildrenIds');
         $this->assertEquals($childrenIds, $this->model->getChildrenIds($parentId, true));
+    }
+
+    public function testGetParentIdsByChild()
+    {
+        $this->assertClassHasAttribute('cacheParentIdsByChild', Type::class);
+
+        $childId = 10;
+        $parentIdsByChild = [
+            [
+                1 => [
+                    26 => "26",
+                    39 => "39",
+                ],
+            ],
+        ];
+
+        $this->bundleSelection->expects($this->once())
+            ->method('getParentIdsByChild')
+            ->with($childId)
+            ->willReturn($parentIdsByChild);
+        $this->assertIsArray($this->model->getParentIdsByChild($childId));
+
+        $this->bundleSelection->expects($this->never())
+            ->method('getParentIdsByChild');
+        $this->assertEquals($parentIdsByChild, $this->model->getParentIdsByChild($childId));
     }
 
     /**
