@@ -423,6 +423,7 @@ class PhpRule implements RuleInterface
 
     /**
      * Create regex patterns from service url paths
+     *
      * @return array
      */
     private function getServiceMethodRegexps(): array
