@@ -679,6 +679,8 @@ class ProcessCronQueueObserverTest extends TestCase
 
     /**
      * Test case, successfully run job
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testDispatchRunJob()
     {
@@ -764,7 +766,7 @@ class ProcessCronQueueObserverTest extends TestCase
             ->method('getCollection')->willReturn($this->scheduleCollectionMock);
         $scheduleMock->expects($this->any())
             ->method('getResource')->willReturn($this->scheduleResourceMock);
-        $this->scheduleFactoryMock->expects($this->once(2))
+        $this->scheduleFactoryMock->expects($this->once())
             ->method('create')->willReturn($scheduleMock);
 
         $testCronJob = $this->getMockBuilder('CronJob')
