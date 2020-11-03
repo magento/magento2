@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\AwsS3\Driver;
 
 use Exception;
-use League\Flysystem\AwsS3v3\AwsS3Adapter;
+use League\Flysystem\AdapterInterface;
 use League\Flysystem\Config;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem\DriverInterface;
@@ -32,14 +32,9 @@ class AwsS3 implements RemoteDriverInterface
     private const CONFIG = ['ACL' => 'private'];
 
     /**
-     * @var AwsS3Adapter
+     * @var AdapterInterface
      */
     private $adapter;
-
-    /**
-     * @var array
-     */
-    private $streams = [];
 
     /**
      * @var LoggerInterface
@@ -47,15 +42,28 @@ class AwsS3 implements RemoteDriverInterface
     private $logger;
 
     /**
-     * @param AwsS3Adapter $adapter
+     * @var array
+     */
+    private $streams = [];
+
+    /**
+     * @var string
+     */
+    private $objectUrl;
+
+    /**
+     * @param AdapterInterface $adapter
      * @param LoggerInterface $logger
+     * @param string $objectUrl
      */
     public function __construct(
-        AwsS3Adapter $adapter,
-        LoggerInterface $logger
+        AdapterInterface $adapter,
+        LoggerInterface $logger,
+        string $objectUrl
     ) {
         $this->adapter = $adapter;
         $this->logger = $logger;
+        $this->objectUrl = $objectUrl;
     }
 
     /**
@@ -282,26 +290,27 @@ class AwsS3 implements RemoteDriverInterface
      * @param string $path Relative path
      * @return string Absolute path
      */
-    private function normalizeAbsolutePath(string $path = '.'): string
+    private function normalizeAbsolutePath(string $path = '/'): string
     {
         $path = ltrim($path, '/');
-        $path = str_replace(
-            $this->adapter->getClient()->getObjectUrl(
-                $this->adapter->getBucket(),
-                $this->adapter->applyPathPrefix('.')
-            ),
-            '',
-            $path
-        );
+        $path = str_replace($this->getObjectUrl(''), '', $path);
 
         if (!$path) {
-            $path = '.';
+            $path = '/';
         }
 
-        return $this->adapter->getClient()->getObjectUrl(
-            $this->adapter->getBucket(),
-            $this->adapter->applyPathPrefix($path)
-        );
+        return $this->getObjectUrl($path);
+    }
+
+    /**
+     * Retrieves object URL from cache.
+     *
+     * @param string $path
+     * @return string
+     */
+    private function getObjectUrl(string $path): string
+    {
+        return $this->objectUrl . ltrim($path, '/');
     }
 
     /**
@@ -312,11 +321,7 @@ class AwsS3 implements RemoteDriverInterface
      */
     private function normalizeRelativePath(string $path): string
     {
-        return str_replace(
-            $this->normalizeAbsolutePath(),
-            '',
-            $path
-        );
+        return str_replace($this->normalizeAbsolutePath(), '', $path);
     }
 
     /**

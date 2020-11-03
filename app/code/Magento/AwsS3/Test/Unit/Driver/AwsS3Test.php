@@ -7,8 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\AwsS3\Test\Unit\Driver;
 
-use Aws\S3\S3ClientInterface;
 use League\Flysystem\AwsS3v3\AwsS3Adapter;
+use League\Flysystem\Cached\CachedAdapter;
 use Magento\AwsS3\Driver\AwsS3;
 use Magento\Framework\Exception\FileSystemException;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -33,40 +33,14 @@ class AwsS3Test extends TestCase
     private $adapterMock;
 
     /**
-     * @var S3ClientInterface|MockObject
-     */
-    private $clientMock;
-
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    /**
      * @inheritDoc
      */
     protected function setUp(): void
     {
-        $this->adapterMock = $this->createMock(AwsS3Adapter::class);
-        $this->clientMock = $this->getMockForAbstractClass(S3ClientInterface::class);
-        $this->logger = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->adapterMock = $this->createMock(CachedAdapter::class);
+        $loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
 
-        $this->adapterMock->method('applyPathPrefix')
-            ->willReturnArgument(0);
-        $this->adapterMock->method('getBucket')
-            ->willReturn('test');
-        $this->adapterMock->method('getClient')
-            ->willReturn($this->clientMock);
-        $this->clientMock->method('getObjectUrl')
-            ->willReturnCallback(function (string $bucket, string $path) {
-                if ($path === '.') {
-                    $path = '';
-                }
-
-                return self::URL . $path;
-            });
-
-        $this->driver = new AwsS3($this->adapterMock, $this->logger);
+        $this->driver = new AwsS3($this->adapterMock, $loggerMock, self::URL);
     }
 
     /**

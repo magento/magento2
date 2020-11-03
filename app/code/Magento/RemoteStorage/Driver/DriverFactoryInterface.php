@@ -18,6 +18,8 @@ interface DriverFactoryInterface
      * @param array $config
      * @param string $prefix
      * @return RemoteDriverInterface
+     *
+     * @throws DriverException
      */
     public function create(array $config, string $prefix): RemoteDriverInterface;
 }

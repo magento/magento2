@@ -82,7 +82,8 @@
         "webonyx/graphql-php": "^0.13.8",
         "wikimedia/less.php": "~1.8.0",
         "league/flysystem": "^1.0",
-        "league/flysystem-aws-s3-v3": "^1.0"
+        "league/flysystem-aws-s3-v3": "^1.0",
+        "league/flysystem-cached-adapter": "^1.0"
     },
     "require-dev": {
         "allure-framework/allure-phpunit": "~1.2.0",

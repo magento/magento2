@@ -10,6 +10,7 @@ namespace Magento\AwsS3\Driver;
 use Aws\S3\S3Client;
 use League\Flysystem\AwsS3v3\AwsS3Adapter;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\RemoteStorage\Driver\DriverException;
 use Magento\RemoteStorage\Driver\DriverFactoryInterface;
 use Magento\RemoteStorage\Driver\RemoteDriverInterface;
 
@@ -32,11 +33,7 @@ class AwsS3Factory implements DriverFactoryInterface
     }
 
     /**
-     * Creates an instance of AWS S3 driver.
-     *
-     * @param array $config
-     * @param string $prefix
-     * @return RemoteDriverInterface
+     * @inheritDoc
      */
     public function create(array $config, string $prefix): RemoteDriverInterface
     {
@@ -46,17 +43,18 @@ class AwsS3Factory implements DriverFactoryInterface
             unset($config['credentials']);
         }
 
+        if (empty($config['bucket']) || empty($config['region'])) {
+            throw new DriverException(__('Bucket and region are required values'));
+        }
+
+        $client = new S3Client($config);
+        $adapter = new AwsS3Adapter($client, $config['bucket'], $prefix);
+
         return $this->objectManager->create(
             AwsS3::class,
             [
-                'adapter' => $this->objectManager->create(
-                    AwsS3Adapter::class,
-                    [
-                        'client' => $this->objectManager->create(S3Client::class, ['args' => $config]),
-                        'bucket' => $config['bucket'],
-                        'prefix' => $prefix
-                    ]
-                )
+                'adapter' => $adapter,
+                'objectUrl' => $client->getObjectUrl($adapter->getBucket(), $adapter->applyPathPrefix('.'))
             ]
         );
     }
