@@ -19,6 +19,6 @@
         <fillField selector="{{AdminEnhancedMediaGalleryEditDetailsSection.title}}" userInput="{{image.title}}" stepKey="setTitle" />
         <fillField selector="{{AdminEnhancedMediaGalleryEditDetailsSection.description}}" userInput="{{image.description}}" stepKey="setDescription" />
         <click selector="{{AdminEnhancedMediaGalleryEditDetailsSection.save}}" stepKey="saveDetails"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear"/>
+        <waitForElementVisible selector="{{AdminEnhancedMediaGalleryViewDetailsSection.modalTitle}}" stepKey="waitForLoadingMaskToDisappear"/>
     </actionGroup>
 </actionGroups>
