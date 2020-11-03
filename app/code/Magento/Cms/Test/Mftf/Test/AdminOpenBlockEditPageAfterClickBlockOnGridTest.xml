@@ -13,6 +13,7 @@
             <stories value="Open CMS Block Edit Page"/>
             <title value="Open CMS Block Edit Page after choosing block on the grid."/>
             <description value="Open CMS Block Edit Page after choosing block on the grid."/>
+            <testCaseId value="MC-38853"/>
             <severity value="MINOR"/>
         </annotations>
         <before>
