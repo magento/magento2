@@ -43,11 +43,6 @@ class Processor
     protected $mviewProcessor;
 
     /**
-     * @var WorkingStateProvider
-     */
-    private $workingStateProvider;
-
-    /**
      * @var MakeSharedIndexValid
      */
     protected $makeSharedValid;
@@ -57,7 +52,6 @@ class Processor
      * @param IndexerInterfaceFactory $indexerFactory
      * @param Indexer\CollectionFactory $indexersFactory
      * @param ProcessorInterface $mviewProcessor
-     * @param WorkingStateProvider $workingStateProvider
      * @param MakeSharedIndexValid|null $makeSharedValid
      */
     public function __construct(
@@ -65,7 +59,6 @@ class Processor
         IndexerInterfaceFactory $indexerFactory,
         Indexer\CollectionFactory $indexersFactory,
         ProcessorInterface $mviewProcessor,
-        WorkingStateProvider $workingStateProvider,
         MakeSharedIndexValid $makeSharedValid = null
     ) {
         $this->config = $config;
@@ -73,7 +66,6 @@ class Processor
         $this->indexersFactory = $indexersFactory;
         $this->mviewProcessor = $mviewProcessor;
         $this->makeSharedValid = $makeSharedValid ?: ObjectManager::getInstance()->get(MakeSharedIndexValid::class);
-        $this->workingStateProvider = $workingStateProvider;
     }
 
     /**
