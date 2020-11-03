@@ -104,7 +104,7 @@ class UpdateProductsInWishlist implements ResolverInterface
         $wishlistOutput = "";
 
         foreach ($wishlistItems as $wishlistItem) {
-            $wishlistOutput = $this->updateWishlistItem->execute($wishlistItem->getId(), $wishlistItem, $wishlist);
+            $wishlistOutput = $this->updateWishlistItem->execute($wishlistItem, $wishlist);
         }
 
         if (count($wishlistOutput->getErrors()) !== count($wishlistItems)) {
@@ -174,3 +174,4 @@ class UpdateProductsInWishlist implements ResolverInterface
         return $wishlist;
     }
 }
+

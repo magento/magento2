@@ -82,6 +82,7 @@ class UpdateBundleProductsFromWishlistTest extends GraphQlAbstract
 
         $query = $this->getBundleQuery((int)$wishlistItemId, $qty, $bundleOptions, (int)$wishlistId);
         $response = $this->graphQlMutation($query, [], '', $this->getHeaderMap());
+
         $this->assertArrayHasKey('updateProductsInWishlist', $response);
         $this->assertArrayHasKey('wishlist', $response['updateProductsInWishlist']);
         $response = $response['updateProductsInWishlist']['wishlist'];
