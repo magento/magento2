@@ -58,6 +58,9 @@ class ProductIdentitiesExtenderTest extends TestCase
         $productMock->expects($this->once())
             ->method('getId')
             ->willReturn($productId);
+        $productMock->expects($this->once())
+            ->method('getTypeId')
+            ->willReturn(Configurable::TYPE_CODE);
         $this->configurableTypeMock->expects($this->once())
             ->method('getParentIdsByChild')
             ->with($productId)

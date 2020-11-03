@@ -49,12 +49,12 @@ class ProductIdentitiesExtender
         if ($subject->getTypeId() !== ConfigurableType::TYPE_CODE) {
             return $identities;
         }
-        $parentProductIdentities = [];
+        $parentProductsIdentities = [];
         foreach ($this->configurableType->getParentIdsByChild($subject->getId()) as $parentId) {
             $parentProduct = $this->productRepository->getById($parentId);
-            $parentProductIdentities[] = $parentProduct->getIdentities();
+            $parentProductsIdentities[] = $parentProduct->getIdentities();
         }
-        $identities = array_merge($identities, $parentProductIdentities);
+        $identities = array_merge($identities, ...$parentProductsIdentities);
 
         return array_unique($identities);
     }
