@@ -29,6 +29,7 @@ class GenerateCustomerTokenTest extends GraphQlAbstract
         $response = $this->graphQlMutation($mutation);
         $this->assertArrayHasKey('generateCustomerToken', $response);
         $this->assertIsArray($response['generateCustomerToken']);
+        $this->assertEquals($response['generateCustomerToken']['ttl'], 1, 'Default TTL is 1!');
     }
 
     /**
@@ -112,11 +113,12 @@ class GenerateCustomerTokenTest extends GraphQlAbstract
     {
         return <<<MUTATION
 mutation {
-	generateCustomerToken(
+    generateCustomerToken(
         email: "{$email}"
         password: "{$password}"
     ) {
         token
+        ttl
     }
 }
 MUTATION;
@@ -133,11 +135,12 @@ MUTATION;
         $mutation
             = <<<MUTATION
 mutation {
-	generateCustomerToken(
+    generateCustomerToken(
         email: "{$email}"
         password: "{$password}"
     ) {
         token
+        ttl
     }
 }
 MUTATION;
@@ -158,11 +161,12 @@ MUTATION;
         $mutation
             = <<<MUTATION
 mutation {
-	generateCustomerToken(
+    generateCustomerToken(
         email: "{$email}"
         password: "{$password}"
     ) {
         token
+        ttl
     }
 }
 MUTATION;

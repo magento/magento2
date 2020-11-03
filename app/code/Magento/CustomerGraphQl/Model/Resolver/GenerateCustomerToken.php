@@ -15,6 +15,7 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Integration\Helper\Oauth\Data as OauthHelper;
 
 /**
  * Customers Token resolver, used for GraphQL request processing.
@@ -32,20 +33,20 @@ class GenerateCustomerToken implements ResolverInterface
     private $customerTokenService;
 
     /**
-     * @var ScopeConfigInterface
+     * @var OauthHelper
      */
-    private $scopeConfig;
+    private $oauthHelper;
 
     /**
      * @param CustomerTokenServiceInterface $customerTokenService
-     * @param ScopeConfigInterface $scopeConfig
+     * @param OauthHelper $oauthHelper
      */
     public function __construct(
         CustomerTokenServiceInterface $customerTokenService,
-        ScopeConfigInterface $scopeConfig
+        OauthHelper $oauthHelper
     ) {
         $this->customerTokenService = $customerTokenService;
-        $this->scopeConfig = $scopeConfig;
+        $this->oauthHelper = $oauthHelper;
     }
 
     /**
@@ -68,10 +69,10 @@ class GenerateCustomerToken implements ResolverInterface
 
         try {
             $token = $this->customerTokenService->createCustomerAccessToken($args['email'], $args['password']);
-            $tokenLifetime = $this->scopeConfig->getValue(self::TOKEN_LIFETIME_PATH_KEY);
+            $tokenLifetime = $this->oauthHelper->getCustomerTokenLifetime();
             return [
                 'token' => $token,
-                'expiration_time' => is_numeric($tokenLifetime) && $tokenLifetime > 0 ? $tokenLifetime : 1
+                'ttl' => is_numeric($tokenLifetime) && $tokenLifetime > 0 ? $tokenLifetime : 1
             ];
         } catch (AuthenticationException $e) {
             throw new GraphQlAuthenticationException(__($e->getMessage()), $e);

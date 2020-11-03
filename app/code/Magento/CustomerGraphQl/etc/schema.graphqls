@@ -64,7 +64,7 @@ input CustomerAddressAttributeInput {
 
 type CustomerToken {
     token: String @doc(description: "The customer token")
-    expiration_time: Float @doc(description: "Token lifetime (hours)")
+    ttl: Float @doc(description: "Token lifetime (hours)")
 }
 
 input CustomerInput {
