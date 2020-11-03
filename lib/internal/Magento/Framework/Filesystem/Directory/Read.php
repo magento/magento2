@@ -209,14 +209,16 @@ class Read implements ReadInterface
     {
         $this->validatePath($path);
 
-        return $this->driver->isExists($this->driver->getAbsolutePath($this->path, $path));
+        return $this->driver->isExists(
+            $this->driver->getRealPathSafety($this->driver->getAbsolutePath($this->path, $path))
+        );
     }
 
     /**
      * Gathers the statistics of the given path
      *
      * @param string $path
-     * @return array
+     * @return arrays
      * @throws \Magento\Framework\Exception\FileSystemException
      * @throws ValidatorException
      */
