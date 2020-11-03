@@ -111,7 +111,7 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
         $this->limitationByCategories = array_unique($this->limitationByCategories);
         $this->useTempTable = $useTempTable;
         $indexer = $this->indexerRegistry->get(ProductCategoryIndexer::INDEXER_ID);
-        $workingState = $this->getWorkingState();
+        $workingState = $this->isWorkingState();
 
         if (!$indexer->isScheduled()
             || ($indexer->isScheduled() && !$useTempTable)
@@ -127,7 +127,7 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
             $this->reindex();
 
             // get actual state
-            $workingState = $this->getWorkingState();
+            $workingState = $this->isWorkingState();
 
             if ($useTempTable && !$workingState && $indexer->isScheduled()) {
                 foreach ($this->storeManager->getStores() as $store) {
@@ -161,7 +161,7 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
      *
      * @return bool
      */
-    private function getWorkingState() : bool
+    private function isWorkingState() : bool
     {
         $indexer = $this->indexerRegistry->get(ProductCategoryIndexer::INDEXER_ID);
         $sharedIndexer = $this->indexerRegistry->get(CategoryProductIndexer::INDEXER_ID);
