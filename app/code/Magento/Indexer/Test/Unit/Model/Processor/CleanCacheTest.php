@@ -17,6 +17,9 @@ use Magento\Indexer\Model\Processor\CleanCache;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Test cache clean plugin
+ */
 class CleanCacheTest extends TestCase
 {
     /**
@@ -102,6 +105,9 @@ class CleanCacheTest extends TestCase
         $this->cacheMock->expects($this->once())
             ->method('clean')
             ->with($tags);
+
+        $this->contextMock->expects($this->once())
+            ->method('flush');
 
         $this->plugin->afterUpdateMview($this->subjectMock);
     }
