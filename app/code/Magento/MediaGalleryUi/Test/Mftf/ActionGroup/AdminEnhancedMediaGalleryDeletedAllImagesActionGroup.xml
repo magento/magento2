@@ -1,0 +1,26 @@
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <actionGroup name="AdminEnhancedMediaGalleryDeletedAllImagesActionGroup">
+        <annotations>
+            <description>Open Media Gallery page and delete all images</description>
+        </annotations>
+        <amOnPage url="{{AdminStandaloneMediaGalleryPage.url}}" stepKey="openMediaGalleryPage"/>
+        <!-- It sometimes is loading too long for default 10s -->
+        <waitForPageLoad time="60" stepKey="waitForPageFullyLoaded"/>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearExistingFilters"/>
+        <helper class="\Magento\MediaGalleryUi\Test\Mftf\Helper\MediaGalleryUiHelper" method="deleteAllImagesUsingMassAction" stepKey="deleteAllImagesUsingMassAction">
+            <argument name="emptyRow">{{AdminMediaGalleryGridSection.noDataMessage}}</argument>
+            <argument name="deleteImagesButton">{{AdminEnhancedMediaGalleryMassActionSection.deleteImages}}</argument>
+            <argument name="checkImage">{{AdminEnhancedMediaGalleryMassActionSection.massActionCheckboxAll}}</argument>
+            <argument name="deleteSelectedButton">{{AdminEnhancedMediaGalleryMassActionSection.deleteSelected}}</argument>
+            <argument name="modalAcceptButton">{{AdminEnhancedMediaGalleryDeleteModalSection.confirmDelete}}</argument>
+            <argument name="successMessageContainer">{{AdminMediaGalleryMessagesSection.success}}</argument>
+            <argument name="successMessage">been successfully deleted</argument>
+        </helper>
+    </actionGroup>
+</actionGroups>
