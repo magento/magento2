@@ -18,7 +18,7 @@
     <preference for="Magento\Framework\App\RequestInterface" type="Magento\Framework\App\Request\Http" />
     <preference for="Magento\Framework\App\PlainTextRequestInterface" type="Magento\Framework\App\Request\Http" />
     <preference for="Magento\Framework\App\RequestContentInterface" type="Magento\Framework\App\Request\Http" />
-    <preference for="Magento\Framework\App\Request\PathInfoProcessorInterface" type="Magento\Store\App\Request\PathInfoProcessor" />
+    <preference for="Magento\Framework\App\Request\PathInfoProcessorInterface" type="Magento\Framework\App\Request\DefaultPathInfoProcessor" />
     <preference for="Magento\Framework\App\ResponseInterface" type="Magento\Framework\App\Response\Http" />
     <preference for="Magento\Framework\App\RouterListInterface" type="Magento\Framework\App\RouterList" />
     <preference for="Magento\Framework\App\FrontControllerInterface" type="Magento\Framework\App\FrontController" />
@@ -26,10 +26,6 @@
     <preference for="Magento\Framework\App\Cache\StateInterface" type="Magento\Framework\App\Cache\State" />
     <preference for="Magento\Framework\App\Cache\TypeListInterface" type="Magento\Framework\App\Cache\TypeList" />
     <preference for="Magento\Framework\App\ObjectManager\ConfigWriterInterface" type="Magento\Framework\App\ObjectManager\ConfigWriter\Filesystem" />
-    <preference for="Magento\Store\Model\StoreManagerInterface" type="Magento\Store\Model\StoreManager" />
-    <preference for="Magento\Framework\View\DesignInterface" type="Magento\Theme\Model\View\Design\Proxy" />
-    <preference for="Magento\Framework\View\Design\ThemeInterface" type="Magento\Theme\Model\Theme" />
-    <preference for="Magento\Framework\View\Design\Theme\ResolverInterface" type="Magento\Theme\Model\Theme\Resolver" />
     <preference for="Magento\Framework\View\ConfigInterface" type="Magento\Framework\View\Config" />
     <preference for="Magento\Framework\View\Asset\Bundle\ConfigInterface" type="Magento\Framework\View\Asset\Bundle\Config" />
     <preference for="Magento\Framework\Locale\ListsInterface" type="Magento\Framework\Locale\TranslatedLists" />
@@ -45,11 +41,6 @@
     <preference for="\Magento\Framework\Setup\SchemaSetupInterface" type="\Magento\Setup\Module\Setup" />
     <preference for="\Magento\Framework\Setup\ModuleDataSetupInterface" type="\Magento\Setup\Module\DataSetup" />
     <preference for="Magento\Framework\App\ExceptionHandlerInterface" type="Magento\Framework\App\ExceptionHandler" />
-    <type name="Magento\Store\Model\Store">
-        <arguments>
-            <argument name="currencyInstalled" xsi:type="string">system/currency/installed</argument>
-        </arguments>
-    </type>
     <preference for="Magento\Framework\Api\ExtensionAttribute\JoinDataInterface" type="Magento\Framework\Api\ExtensionAttribute\JoinData" />
     <preference for="Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface" type="Magento\Framework\Api\ExtensionAttribute\JoinProcessor" />
     <preference for="Magento\Framework\Locale\ConfigInterface" type="Magento\Framework\Locale\Config" />
@@ -212,7 +203,14 @@
     <preference for="Magento\Framework\HTTP\ClientInterface" type="Magento\Framework\HTTP\Client\Curl" />
     <preference for="Magento\Framework\Interception\ConfigLoaderInterface" type="Magento\Framework\Interception\PluginListGenerator" />
     <preference for="Magento\Framework\Interception\ConfigWriterInterface" type="Magento\Framework\Interception\PluginListGenerator" />
+    <preference for="Magento\Framework\Data\Argument\InterpreterInterface" type="Magento\Framework\Data\Argument\Interpreter\Composite" />
+    <preference for="Magento\Framework\Webapi\CustomAttributeTypeLocatorInterface" type="Magento\Framework\CustomAttributesDefaultTypeLocator" />
     <type name="Magento\Framework\Model\ResourceModel\Db\TransactionManager" shared="false" />
+    <type name="Magento\Framework\Webapi\ServiceTypeToEntityTypeMap">
+        <arguments>
+            <argument name="serviceTypeToEntityTypeMap" xsi:type="array" />
+        </arguments>
+    </type>
     <type name="Magento\Framework\Acl\Data\Cache">
         <arguments>
             <argument name="aclBuilder" xsi:type="object">Magento\Framework\Acl\Builder\Proxy</argument>
@@ -228,14 +226,9 @@
             <argument name="filesystem" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
         </arguments>
     </type>
-    <preference for="Magento\AsynchronousOperations\Model\ConfigInterface" type="Magento\WebapiAsync\Model\Config\Proxy" />
     <type name="Magento\Framework\Communication\Config\CompositeReader">
         <arguments>
             <argument name="readers" xsi:type="array">
-                <item name="asyncServiceReader" xsi:type="array">
-                    <item name="reader" xsi:type="object">Magento\WebapiAsync\Code\Generator\Config\RemoteServiceReader\Communication</item>
-                    <item name="sortOrder" xsi:type="string">0</item>
-                </item>
                 <item name="xmlReader" xsi:type="array">
                     <item name="reader" xsi:type="object">Magento\Framework\Communication\Config\Reader\XmlReader</item>
                     <item name="sortOrder" xsi:type="string">10</item>
@@ -284,7 +277,6 @@
     <type name="Magento\Framework\View\BlockPool" shared="false" />
     <type name="Magento\Framework\App\Request\Http">
         <arguments>
-            <argument name="pathInfoProcessor" xsi:type="object">Magento\Backend\App\Request\PathInfoProcessor\Proxy</argument>
             <argument name="routeConfig" xsi:type="object">Magento\Framework\App\Route\ConfigInterface\Proxy</argument>
         </arguments>
     </type>
@@ -357,20 +349,9 @@
             <argument name="resource" xsi:type="object">Magento\Framework\App\ResourceConnection\Proxy</argument>
         </arguments>
     </type>
-    <type name="Magento\Backend\App\Area\FrontNameResolver">
-        <arguments>
-            <argument name="defaultFrontName" xsi:type="init_parameter">Magento\Backend\Setup\ConfigOptionsList::CONFIG_PATH_BACKEND_FRONTNAME</argument>
-        </arguments>
-    </type>
     <type name="Magento\Framework\App\Cache\State">
         <arguments>
             <argument name="banAll" xsi:type="init_parameter">Magento\Framework\App\Cache\State::PARAM_BAN_CACHE</argument>
-        </arguments>
-    </type>
-    <type name="Magento\Store\Model\StoreManager">
-        <arguments>
-            <argument name="scopeCode" xsi:type="init_parameter">Magento\Store\Model\StoreManager::PARAM_RUN_CODE</argument>
-            <argument name="scopeType" xsi:type="init_parameter">Magento\Store\Model\StoreManager::PARAM_RUN_TYPE</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\Translate">
@@ -381,6 +362,18 @@
             <argument name="request" xsi:type="object">Magento\Framework\App\Request\Http\Proxy</argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\Stdlib\DateTime\Timezone">
+        <arguments>
+            <argument name="defaultTimezonePath" xsi:type="string">general/locale/timezone</argument>
+            <argument name="scopeType" xsi:type="string">store</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Locale\Resolver">
+        <arguments>
+            <argument name="defaultLocalePath" xsi:type="string">general/locale/code</argument>
+            <argument name="scopeType" xsi:type="const">Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT</argument>
+        </arguments>
+    </type>
     <type name="Magento\Framework\App\Helper\Context">
         <arguments>
             <argument name="translateInline" xsi:type="object">Magento\Framework\Translate\InlineInterface\Proxy</argument>
@@ -388,11 +381,6 @@
     </type>
     <type name="Magento\Framework\Data\Structure" shared="false" />
     <type name="Magento\Framework\View\Layout\Data\Structure" shared="false" />
-    <type name="Magento\Theme\Model\View\Design">
-        <arguments>
-            <argument name="storeManager" xsi:type="object">Magento\Store\Model\StoreManagerInterface\Proxy</argument>
-        </arguments>
-    </type>
     <type name="Magento\Framework\Acl" shared="false" />
     <type name="Magento\Framework\App\ObjectManager\ConfigLoader">
         <arguments>
@@ -469,7 +457,7 @@
     <type name="Magento\Framework\Url">
         <arguments>
             <argument name="session" xsi:type="object">Magento\Framework\Session\Generic\Proxy</argument>
-            <argument name="scopeType" xsi:type="const">Magento\Store\Model\ScopeInterface::SCOPE_STORE</argument>
+            <argument name="scopeType" xsi:type="string">store</argument>
         </arguments>
     </type>
     <virtualType name="layoutArgumentReaderInterpreter" type="Magento\Framework\Data\Argument\Interpreter\Composite">
@@ -512,6 +500,24 @@
     <virtualType name="layoutArrayArgumentReaderInterpreter" type="Magento\Framework\Data\Argument\Interpreter\ArrayType">
         <arguments>
             <argument name="itemInterpreter" xsi:type="object">layoutArgumentReaderInterpreter</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Framework\Data\Argument\Interpreter\Composite">
+        <arguments>
+            <argument name="interpreters" xsi:type="array">
+                <item name="const" xsi:type="object">Magento\Framework\Data\Argument\Interpreter\Constant</item>
+                <item name="array" xsi:type="object">arrayArgumentInterpreterProxy</item>
+                <item name="boolean" xsi:type="object">Magento\Framework\Data\Argument\Interpreter\Boolean</item>
+                <item name="number" xsi:type="object">Magento\Framework\Data\Argument\Interpreter\Number</item>
+                <item name="string" xsi:type="object">Magento\Framework\Data\Argument\Interpreter\StringUtils</item>
+                <item name="null" xsi:type="object">Magento\Framework\Data\Argument\Interpreter\NullType</item>
+            </argument>
+            <argument name="discriminator" xsi:type="string">xsi:type</argument>
+        </arguments>
+    </type>
+    <virtualType name="arrayArgumentInterpreterProxy" type="Magento\Framework\Data\Argument\InterpreterInterface\Proxy">
+        <arguments>
+            <argument name="instanceName" xsi:type="string">Magento\Framework\Data\Argument\Interpreter\ArrayType</argument>
         </arguments>
     </virtualType>
     <virtualType name="layoutArrayArgumentGeneratorInterpreter" type="Magento\Framework\Data\Argument\Interpreter\ArrayType">
@@ -570,7 +576,7 @@
     <type name="Magento\Framework\View\Layout\Reader\Block">
         <arguments>
             <argument name="readerPool" xsi:type="object">blockRenderPool</argument>
-            <argument name="scopeType" xsi:type="const">Magento\Store\Model\ScopeInterface::SCOPE_STORE</argument>
+            <argument name="scopeType" xsi:type="string">store</argument>
             <argument name="argumentInterpreter" xsi:type="object">layoutArgumentReaderInterpreter</argument>
         </arguments>
     </type>
@@ -581,7 +587,7 @@
     </type>
     <type name="Magento\Framework\View\Layout\ConfigCondition">
         <arguments>
-            <argument name="scopeType" xsi:type="const">Magento\Store\Model\ScopeInterface::SCOPE_STORE</argument>
+            <argument name="scopeType" xsi:type="string">store</argument>
         </arguments>
     </type>
     <virtualType name="bodyRenderPool" type="Magento\Framework\View\Layout\ReaderPool">
@@ -628,6 +634,11 @@
             </argument>
         </arguments>
     </virtualType>
+    <type name="Magento\Framework\Reflection\MethodsMap">
+        <arguments>
+            <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Reflection</argument>
+        </arguments>
+    </type>
     <type name="Magento\Framework\View\Result\Layout">
         <arguments>
             <argument name="layoutReaderPool" xsi:type="object">genericLayoutRenderPool</argument>
@@ -1097,7 +1108,7 @@
     </type>
     <type name="Magento\Framework\Session\Validator">
         <arguments>
-            <argument name="scopeType" xsi:type="const">Magento\Store\Model\ScopeInterface::SCOPE_STORE</argument>
+            <argument name="scopeType" xsi:type="string">store</argument>
             <argument name="skippedUserAgentList" xsi:type="array">
                 <item name="flash" xsi:type="string">Shockwave Flash</item>
                 <item name="flash_mac" xsi:type="string"><![CDATA[Adobe Flash Player\s{1,}\w{1,10}]]></item>
@@ -1166,7 +1177,20 @@
             <argument name="areaCode" xsi:type="string">frontend</argument>
         </arguments>
     </type>
-
+    <type name="Magento\Store\Model\Store">
+        <arguments>
+            <argument name="currencyInstalled" xsi:type="string">system/currency/installed</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Customer\Model\Session">
+        <arguments>
+            <argument name="configShare" xsi:type="object">Magento\Customer\Model\Config\Share\Proxy</argument>
+            <argument name="customerUrl" xsi:type="object">Magento\Customer\Model\Url\Proxy</argument>
+            <argument name="customerResource" xsi:type="object">Magento\Customer\Model\ResourceModel\Customer\Proxy</argument>
+            <argument name="storage" xsi:type="object">Magento\Customer\Model\Session\Storage</argument>
+            <argument name="customerRepository" xsi:type="object">Magento\Customer\Api\CustomerRepositoryInterface\Proxy</argument>
+        </arguments>
+    </type>
     <type name="Magento\Framework\Module\ModuleList\Loader">
         <arguments>
             <argument name="filesystemDriver" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
@@ -1382,12 +1406,6 @@
             <argument name="fileName" xsi:type="string">deployed_version.txt</argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\Locale\Resolver">
-        <arguments>
-            <argument name="defaultLocalePath" xsi:type="const">Magento\Directory\Helper\Data::XML_PATH_DEFAULT_LOCALE</argument>
-            <argument name="scopeType" xsi:type="const">Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT</argument>
-        </arguments>
-    </type>
     <type name="Magento\Framework\View\Element\Message\Renderer\RenderersPool">
         <arguments>
             <argument name="renderers" xsi:type="array">
@@ -1411,11 +1429,6 @@
             <argument name="logAllQueries" xsi:type="init_parameter">Magento\Framework\Config\ConfigOptionsListConstants::CONFIG_PATH_DB_LOGGER_LOG_EVERYTHING</argument>
             <argument name="logQueryTime" xsi:type="init_parameter">Magento\Framework\Config\ConfigOptionsListConstants::CONFIG_PATH_DB_LOGGER_QUERY_TIME_THRESHOLD</argument>
             <argument name="logCallStack" xsi:type="init_parameter">Magento\Framework\Config\ConfigOptionsListConstants::CONFIG_PATH_DB_LOGGER_INCLUDE_STACKTRACE</argument>
-        </arguments>
-    </type>
-    <type name="Magento\Framework\App\Config\MetadataConfigTypeProcessor">
-        <arguments>
-            <argument name="configSource" xsi:type="object">Magento\Config\App\Config\Source\EnvironmentConfigSource</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\Message\ExceptionMessageFactoryPool">
@@ -1786,11 +1799,6 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\Cache\LockGuardedCacheLoader">
-        <arguments>
-            <argument name="locker" xsi:type="object">Magento\Framework\Lock\Backend\Database</argument>
-        </arguments>
-    </type>
     <type name="Magento\Framework\Cache\CompositeStaleCacheNotifier">
         <arguments>
             <argument name="notifiers" xsi:type="array">
@@ -1833,61 +1841,6 @@
             </argument>
         </arguments>
     </type>
-    <virtualType name="DefaultWYSIWYGValidator" type="Magento\Framework\Validator\HTML\ConfigurableWYSIWYGValidator">
-        <arguments>
-            <argument name="allowedTags" xsi:type="array">
-                <item name="div" xsi:type="string">div</item>
-                <item name="a" xsi:type="string">a</item>
-                <item name="p" xsi:type="string">p</item>
-                <item name="span" xsi:type="string">span</item>
-                <item name="em" xsi:type="string">em</item>
-                <item name="strong" xsi:type="string">strong</item>
-                <item name="ul" xsi:type="string">ul</item>
-                <item name="li" xsi:type="string">li</item>
-                <item name="ol" xsi:type="string">ol</item>
-                <item name="h5" xsi:type="string">h5</item>
-                <item name="h4" xsi:type="string">h4</item>
-                <item name="h3" xsi:type="string">h3</item>
-                <item name="h2" xsi:type="string">h2</item>
-                <item name="h1" xsi:type="string">h1</item>
-                <item name="table" xsi:type="string">table</item>
-                <item name="tbody" xsi:type="string">tbody</item>
-                <item name="tr" xsi:type="string">tr</item>
-                <item name="td" xsi:type="string">td</item>
-                <item name="th" xsi:type="string">th</item>
-                <item name="tfoot" xsi:type="string">tfoot</item>
-                <item name="img" xsi:type="string">img</item>
-                <item name="hr" xsi:type="string">hr</item>
-                <item name="figure" xsi:type="string">figure</item>
-                <item name="button" xsi:type="string">button</item>
-            </argument>
-            <argument name="allowedAttributes" xsi:type="array">
-                <item name="class" xsi:type="string">class</item>
-                <item name="width" xsi:type="string">width</item>
-                <item name="height" xsi:type="string">height</item>
-                <item name="style" xsi:type="string">style</item>
-                <item name="alt" xsi:type="string">alt</item>
-                <item name="title" xsi:type="string">title</item>
-                <item name="border" xsi:type="string">border</item>
-                <item name="id" xsi:type="string">id</item>
-            </argument>
-            <argument name="attributesAllowedByTags" xsi:type="array">
-                <item name="a" xsi:type="array">
-                    <item name="href" xsi:type="string">href</item>
-                </item>
-                <item name="img" xsi:type="array">
-                    <item name="src" xsi:type="string">src</item>
-                </item>
-                <item name="button" xsi:type="array">
-                    <item name="type" xsi:type="string">type</item>
-                </item>
-            </argument>
-            <argument name="attributeValidators" xsi:type="array">
-                <item name="style" xsi:type="object">Magento\Framework\Validator\HTML\StyleAttributeValidator</item>
-            </argument>
-        </arguments>
-    </virtualType>
-    <preference for="Magento\Framework\Validator\HTML\WYSIWYGValidatorInterface" type="DefaultWYSIWYGValidator" />
     <type name="Magento\Framework\View\TemplateEngine\Php">
         <arguments>
             <argument name="blockVariables" xsi:type="array">
@@ -1896,4 +1849,5 @@
             </argument>
         </arguments>
     </type>
+
 </config>

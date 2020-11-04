@@ -1,2 +1,0 @@
-_website,_email,_entity_id,city,company,country_id,fax,firstname,lastname,middlename,postcode,prefix,region,region_id,street,suffix,telephone,vat_id,vat_is_valid,vat_request_date,vat_request_id,vat_request_success,_address_default_billing_,_address_default_shipping_
-base,jondoe@example.com,1,"New York",,US,,Jon,Doe,,10044,,"New York",43,"Main Street 1",,123456789,,,,,,1,1

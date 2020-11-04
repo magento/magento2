@@ -1,7 +1,0 @@
-
-    /**
-     * @inheritdoc
-     */
-    public function revert()
-    {
-    }

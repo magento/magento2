@@ -25,11 +25,6 @@ class Tree extends Dbp
     const LEVEL_FIELD = 'level';
 
     /**
-     * @var array
-     */
-    private $_inactiveItems;
-
-    /**
      * @var \Magento\Framework\Event\ManagerInterface
      */
     private $_eventManager;
@@ -295,7 +290,7 @@ class Tree extends Dbp
         foreach ($allIds as $id) {
             $parents = $this->getNodeById($id)->getPath();
             foreach ($parents as $parent) {
-                if (!$this->_getItemIsActive($parent->getId())) {
+                if (!$this->_getItemIsActive($parent->getId(), $storeId)) {
                     $disabledIds[] = $id;
                     continue;
                 }
@@ -685,8 +680,6 @@ class Tree extends Dbp
     }
 
     /**
-     * Get entity methadata pool.
-     *
      * @return \Magento\Framework\EntityManager\MetadataPool
      */
     private function getMetadataPool()

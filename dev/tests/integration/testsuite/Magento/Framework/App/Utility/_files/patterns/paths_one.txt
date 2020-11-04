@@ -1,2 +1,0 @@
-module Magento_Module *
-theme frontend/Test/theme One*

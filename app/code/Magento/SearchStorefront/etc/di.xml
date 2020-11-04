@@ -1,0 +1,186 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <!-- Logger -->
+    <virtualType name="SearchStorefrontLogger" type="Magento\Framework\Logger\Monolog">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="error" xsi:type="object">\Magento\SearchStorefront\Model\Logging\Error</item>
+                <item name="debug" xsi:type="object">Magento\SearchStorefront\Model\Logging\Debug</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <preference for="Magento\SearchStorefrontApi\Api\SearchInterface" type="Magento\SearchStorefrontApi\Api\InMemorySearch"/>
+    <preference for="Magento\SearchStorefrontApi\Api\SearchServerInterface" type="Magento\SearchStorefront\Model\SearchService"/>
+
+    <type name="Magento\SearchStorefrontSearch\Model\EngineResolver">
+        <arguments>
+            <argument name="logger" xsi:type="object">SearchStorefrontLogger</argument>
+        </arguments>
+    </type>
+
+    <!-- Connection config for elasticsearch -->
+    <preference for="Magento\SearchStorefrontElasticsearch\Api\Data\ConnectionConfigInterface" type="Magento\SearchStorefront\Model\Search\Client\Config" />
+
+    <!-- Set path to active search engine -->
+    <type name="Magento\SearchStorefrontSearch\Model\EngineResolver">
+        <arguments>
+            <argument name="path" xsi:type="string">search_store_front/search/engine</argument>
+            <argument name="scopeType" xsi:type="string">default</argument>
+        </arguments>
+    </type>
+
+    <!-- Set path to active search engine for advanced search client resolver -->
+    <type name="Magento\SearchStorefrontAdvancedSearch\Model\Client\ClientResolver">
+        <arguments>
+            <argument name="path" xsi:type="string">search_store_front/search/engine</argument>
+            <argument name="scopeType" xsi:type="string">default</argument>
+        </arguments>
+    </type>
+
+    <preference for="Magento\Framework\Search\Request\Aggregation\StatusInterface" type="Magento\SearchStorefront\Model\Aggregation\Status" />
+
+    <preference for="Magento\Framework\App\ScopeResolver" type="Magento\SearchStorefront\Model\Scope\ScopeResolver" />
+    <preference for="Magento\Framework\App\ScopeResolverInterface" type="Magento\SearchStorefront\Model\Scope\ScopeResolver" />
+    <preference for="Magento\Store\Model\StoreManagerInterface" type="Magento\SearchStorefront\Model\Store\StoreManager" />
+    <preference for="Magento\Store\Api\Data\StoreInterface" type="Magento\SearchStorefront\Model\Store\Store" />
+
+    <preference for="Magento\Catalog\Model\Attribute\LockValidatorInterface" type="Magento\Catalog\Model\Attribute\LockValidatorComposite" />
+
+    <type name="Magento\Framework\EntityManager\MetadataPool">
+        <arguments>
+            <argument name="metadata" xsi:type="array">
+                <item name="Magento\Catalog\Api\Data\ProductInterface" xsi:type="array">
+                    <item name="entityTableName" xsi:type="string">catalog_product_entity</item>
+                    <item name="eavEntityType" xsi:type="string">catalog_product</item>
+                    <item name="identifierField" xsi:type="string">entity_id</item>
+                    <item name="entityContext" xsi:type="array">
+                        <item name="store" xsi:type="string">Magento\Store\Model\StoreScopeProvider</item>
+                    </item>
+                </item>
+                <item name="Magento\Catalog\Api\Data\CategoryInterface" xsi:type="array">
+                    <item name="entityTableName" xsi:type="string">catalog_category_entity</item>
+                    <item name="eavEntityType" xsi:type="string">catalog_category</item>
+                    <item name="identifierField" xsi:type="string">entity_id</item>
+                    <item name="entityContext" xsi:type="array">
+                        <item name="store" xsi:type="string">Magento\Store\Model\StoreScopeProvider</item>
+                    </item>
+                </item>
+                <item name="Magento\Catalog\Api\Data\CategoryLinkInterface" xsi:type="array">
+                    <item name="entityTableName" xsi:type="string">catalog_category_product</item>
+                    <item name="identifierField" xsi:type="string">entity_id</item>
+                </item>
+                <item name="Magento\Catalog\Api\Data\ProductFrontendActionInterface" xsi:type="array">
+                    <item name="entityTableName" xsi:type="string">catalog_product_frontend_action</item>
+                    <item name="identifierField" xsi:type="string">action_id</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+
+    <preference for="Magento\Framework\Search\Adapter\OptionsInterface" type="Magento\SearchStorefront\Model\Adapter\Options"/>
+
+    <preference for="Magento\SearchStorefront\DataProvider\Product\LayeredNavigation\LayerBuilderInterface"
+            type="Magento\SearchStorefront\DataProvider\Product\LayeredNavigation\LayerBuilder"/>
+
+    <type name="Magento\SearchStorefront\DataProvider\Product\LayeredNavigation\LayerBuilder">
+        <arguments>
+            <argument name="builders" xsi:type="array">
+                <item name="price_bucket" xsi:type="object">Magento\SearchStorefront\DataProvider\Product\LayeredNavigation\Builder\Price</item>
+                <item name="category_bucket" xsi:type="object">Magento\SearchStorefront\DataProvider\Product\LayeredNavigation\Builder\Category</item>
+                <item name="attribute_bucket" xsi:type="object">Magento\SearchStorefront\DataProvider\Product\LayeredNavigation\Builder\Attribute</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <!-- configure pool of search criteria appliers for filters, sort orders, search phrase etc. -->
+    <type name="Magento\SearchStorefront\DataProvider\Product\SearchCriteria\Builder\ApplierPool">
+        <arguments>
+            <argument name="searchCriteriaAppliers" xsi:type="array">
+                <item name="phrase" xsi:type="object">Magento\SearchStorefront\DataProvider\Product\SearchCriteria\Builder\PhraseApplier</item>
+                <item name="filters" xsi:type="object">Magento\SearchStorefront\DataProvider\Product\SearchCriteria\Builder\FilterApplier</item>
+                <item name="request_name" xsi:type="object">Magento\SearchStorefront\DataProvider\Product\SearchCriteria\Builder\RequestTypeApplier</item>
+                <item name="sort" xsi:type="object">Magento\SearchStorefront\DataProvider\Product\SearchCriteria\Builder\SortApplier</item>
+                <item name="page_size" xsi:type="object">Magento\SearchStorefront\DataProvider\Product\SearchCriteria\Builder\PageApplier</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <preference for="Magento\SearchStorefront\DataProvider\Product\SearchCriteria\SearchCriteriaBuilderInterface"
+            type="Magento\SearchStorefront\DataProvider\Product\SearchCriteria\Builder"/>
+
+    <preference for="Magento\Catalog\Api\CategoryRepositoryInterface" type="Magento\Catalog\Model\CategoryRepository" />
+    <preference for="Magento\Catalog\Api\CategoryAttributeRepositoryInterface" type="Magento\Catalog\Model\Category\AttributeRepository" />
+
+    <preference for="Magento\Framework\Search\Dynamic\DataProviderInterface" type="Magento\SearchStorefront\SearchAdapter\Dynamic\DataProvider" />
+
+    <type name="Magento\Framework\Search\Dynamic\DataProviderFactory">
+        <arguments>
+            <argument name="dataProviders" xsi:type="array">
+                <item name="storefrontElasticsearch5" xsi:type="string">Magento\SearchStorefront\SearchAdapter\Dynamic\DataProvider</item>
+                <item name="storefrontElasticsearch6" xsi:type="string">Magento\SearchStorefront\SearchAdapter\Dynamic\DataProvider</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\SearchStorefrontElasticsearch\SearchAdapter\Aggregation\Builder">
+        <arguments>
+            <argument name="dataProviderContainer" xsi:type="array">
+                <item name="catalogsearch_fulltext" xsi:type="object">Magento\SearchStorefront\SearchAdapter\Dynamic\DataProvider</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\SearchStorefront\SearchAdapter\Dynamic\DataProvider">
+        <arguments>
+            <argument name="indexerId" xsi:type="string">catalogsearch_fulltext</argument>
+        </arguments>
+    </type>
+
+    <!-- scope config settings -->
+    <type name="Magento\Framework\App\Config\Initial\Converter">
+        <arguments>
+            <argument name="nodeMap" xsi:type="array">
+                <item name="default" xsi:type="string">/config/default</item>
+                <item name="stores" xsi:type="string">/config/stores</item>
+                <item name="websites" xsi:type="string">/config/websites</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Reflection\MethodsMap">
+        <arguments>
+            <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Reflection</argument>
+        </arguments>
+    </type>
+    <!-- scope resolvers replacements that are reading via direct sql -->
+    <type name="Magento\Framework\App\ScopeResolverPool">
+        <arguments>
+            <argument name="scopeResolvers" xsi:type="array">
+                <item name="default" xsi:type="object">Magento\Framework\App\ScopeResolver</item>
+                <item name="store" xsi:type="object">Magento\SearchStorefront\Model\Scope\Resolver\Store</item>
+                <item name="stores" xsi:type="object">Magento\SearchStorefront\Model\Scope\Resolver\Store</item>
+                <item name="group" xsi:type="object">Magento\SearchStorefront\Model\Scope\Resolver\Group</item>
+                <item name="website" xsi:type="object">Magento\SearchStorefront\Model\Scope\Resolver\Website</item>
+                <item name="websites" xsi:type="object">Magento\SearchStorefront\Model\Scope\Resolver\Website</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\Framework\Search\Request\Config\FilesystemReader">
+        <plugin name="productAttributesDynamicFields"  type="Magento\SearchStorefront\Plugin\Search\Request\ConfigReader" />
+    </type>
+    <type name="Magento\SearchStorefront\Model\Search\RequestGenerator\GeneratorResolver">
+        <arguments>
+            <argument name="defaultGenerator" xsi:type="object">\Magento\SearchStorefront\Model\Search\RequestGenerator\General</argument>
+            <argument name="generators" xsi:type="array">
+                <item name="decimal" xsi:type="object">Magento\SearchStorefront\Model\Search\RequestGenerator\Decimal</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

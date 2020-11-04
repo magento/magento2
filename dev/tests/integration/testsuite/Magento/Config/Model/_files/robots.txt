@@ -1,1 +1,0 @@
-Sitemap: http://store.com/sitemap.xml

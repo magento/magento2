@@ -1,5 +1,0 @@
-"_website","_email","_entity_id","city","company","country_id","fax","firstname","lastname","middlename","postcode","prefix","region","region_id","street","suffix","telephone","vat_id","vat_is_valid","vat_request_date","vat_request_id","vat_request_success","_address_default_billing_","_address_default_shipping_"
-"admin","BetsyParker@example.com",1,,,"US",,"Katy","Parker","T.",19107,,,,"1079 Rocky Road",,"215-629-9720",,,,,,,1
-"admin","BetsyParker@example.com",3,"Phoenix",,"US",,"Brad","Brown","H.",85034,,"Arizona",4,"4225 Martha Street",,"928-707-1577",,,,,,1,
-"admin","BetsyParker@example.com",,"Tallahassee",,"US",,"William ","Compton","M.",32301,,"Florida",18,"1973 Drainer Avenue",,"850-590-7403",,,,,,,
-"admin","BetsyParker@example.com",,"Tallahassee",,"UA",,"An ","Compton","M.",32301,,,18,"1973 Drainer Avenue",,"850-590-7403",,,,,,,

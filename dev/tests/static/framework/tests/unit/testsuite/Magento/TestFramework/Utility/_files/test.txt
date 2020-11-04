@@ -1,9 +1,0 @@
-strtoupper(strtolower($foo . $bar))
-function foo($merchantMd5, $merchantApiLogin)
-$this->generateHash(foo($bar), $foo)
-foo(
-    'bar'
-)
-Foo::bar($foo, $this->getData('bar'))
-$this->foo('bar')
-Foo::foo()

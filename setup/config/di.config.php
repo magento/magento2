@@ -30,9 +30,7 @@ return [
             SchemaConfig::class => [
                 'parameters' => [
                     'connectionScopes' => [
-                        'default',
-                        'checkout',
-                        'sales'
+                        'default'
                     ]
                 ]
             ],

@@ -1,4 +1,0 @@
-sku,price,name,product_type,attribute_set_code,_upsell_sku,description
-simple1,25,"Simple Product",simple,Default,,description
-simple2,10,"Simple Product2",simple,invalid attribute set,,description
-simple3,58,"Simple Product 3",simple,Default,simple2,description

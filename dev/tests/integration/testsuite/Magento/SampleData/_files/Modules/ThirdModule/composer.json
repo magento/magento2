@@ -1,8 +1,0 @@
-{
-  "name": "magento/module-second",
-  "description": "N/A",
-  "type": "magento2-module",
-  "config": {
-    "sort-packages": true
-  }
-}

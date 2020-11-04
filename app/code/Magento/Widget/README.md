@@ -1,1 +1,0 @@
-The Widget module allows Magento application to be extended with custom widget blocks.

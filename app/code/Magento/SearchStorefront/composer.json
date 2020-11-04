@@ -1,0 +1,26 @@
+{
+    "name": "magento/module-search-storefront",
+    "description": "Product Search Storefront API implementation",
+    "config": {
+        "sort-packages": true
+    },
+    "require": {
+        "php": "~7.3.0||~7.4.0",
+        "magento/framework": "*",
+        "magento/framework-message-queue": "*",
+        "magento/module-search-storefront-api": "*"
+    },
+    "type": "magento2-module",
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Magento\\SearchStorefront\\": ""
+        }
+    }
+}

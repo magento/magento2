@@ -1,3 +1,0 @@
-sku,store_view_code,product_type,name,price,additional_attributes
-simple_ms_1,,simple,"With Multiselect 1",10,"multiselect_attribute=Option 1"
-simple_ms_2,,simple,"With Multiselect 2",10,"multiselect_attribute=Option 5|Option 2|Option 3"

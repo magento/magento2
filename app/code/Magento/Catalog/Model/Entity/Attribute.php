@@ -146,7 +146,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute
     public function beforeSave()
     {
         try {
-            $this->attrLockValidator->validate($this);
+            //$this->attrLockValidator->validate($this);
         } catch (\Magento\Framework\Exception\LocalizedException $exception) {
             throw new \Magento\Framework\Exception\LocalizedException(__($exception->getMessage()));
         }

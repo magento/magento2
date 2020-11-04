@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!--
+/**
+* Copyright © Magento, Inc. All rights reserved.
+* See COPYING.txt for license details.
+*/
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
+    <module name="Magento_SearchStorefront">
+        <sequence>
+            <module name="Magento_SearchStorefrontApi"/>
+            <module name="Magento_SearchStorefrontElasticsearch6"/>
+            <module name="Magento_SearchStorefrontAdvancedSearch"/>
+        </sequence>
+    </module>
+</config>

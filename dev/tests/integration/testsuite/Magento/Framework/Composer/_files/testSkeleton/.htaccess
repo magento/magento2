@@ -1,7 +1,0 @@
-<IfVersion < 2.4>
-    deny from all
-</IfVersion>
-<IfVersion >= 2.4>
-    Require all denied
-</IfVersion>
-

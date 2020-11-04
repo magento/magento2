@@ -1,0 +1,28 @@
+{
+    "name": "magento/module-search-storefront-api",
+    "description": "N/A",
+    "config": {
+        "sort-packages": true
+    },
+    "require": {
+        "php": "~7.3.0||~7.4.0",
+        "magento/framework": "*",
+        "google/protobuf": "^3.11",
+        "grpc/grpc": "^1.27",
+        "spiral/php-grpc": "^1.1"
+    },
+    "type": "magento2-module",
+    "version": "0.0.1",
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Magento\\SearchStorefrontApi\\": ""
+        }
+    }
+}

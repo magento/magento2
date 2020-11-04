@@ -7,13 +7,10 @@ namespace Magento\Catalog\Model;
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Api\Data\CategoryInterface;
-use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Convert\ConvertArray;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Profiler;
-use Magento\UrlRewrite\Model\UrlFinderInterface;
-use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 
 /**
  * Catalog category
@@ -103,14 +100,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     protected $_resource;
 
     /**
-     * URL rewrite model
-     *
-     * @var \Magento\UrlRewrite\Model\UrlRewrite
-     * @deprecated 102.0.0
-     */
-    protected $_urlRewrite;
-
-    /**
      * Use flat resource model flag
      *
      * @var bool
@@ -190,16 +179,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     protected $flatState;
 
     /**
-     * @var \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator
-     */
-    protected $categoryUrlPathGenerator;
-
-    /**
-     * @var \Magento\UrlRewrite\Model\UrlFinderInterface
-     */
-    protected $urlFinder;
-
-    /**
      * @var \Magento\Framework\Indexer\IndexerRegistry
      */
     protected $indexerRegistry;
@@ -229,8 +208,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * @param Config $catalogConfig
      * @param \Magento\Framework\Filter\FilterManager $filter
      * @param Indexer\Category\Flat\State $flatState
-     * @param \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator $categoryUrlPathGenerator
-     * @param UrlFinderInterface $urlFinder
      * @param \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry
      * @param CategoryRepositoryInterface $categoryRepository
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
@@ -253,8 +230,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
         \Magento\Catalog\Model\Config $catalogConfig,
         \Magento\Framework\Filter\FilterManager $filter,
         Indexer\Category\Flat\State $flatState,
-        \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator $categoryUrlPathGenerator,
-        UrlFinderInterface $urlFinder,
         \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry,
         CategoryRepositoryInterface $categoryRepository,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
@@ -270,8 +245,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
         $this->_catalogConfig = $catalogConfig;
         $this->filter = $filter;
         $this->flatState = $flatState;
-        $this->categoryUrlPathGenerator = $categoryUrlPathGenerator;
-        $this->urlFinder = $urlFinder;
         $this->indexerRegistry = $indexerRegistry;
         $this->categoryRepository = $categoryRepository;
         parent::__construct(
@@ -608,31 +581,6 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     public function getUrl()
     {
         $url = $this->_getData('url');
-        if ($url === null) {
-            Profiler::start('REWRITE: ' . __METHOD__, ['group' => 'REWRITE', 'method' => __METHOD__]);
-            if ($this->hasData('request_path') && $this->getRequestPath() != '') {
-                $this->setData('url', $this->getUrlInstance()->getDirectUrl($this->getRequestPath()));
-                Profiler::stop('REWRITE: ' . __METHOD__);
-                return $this->getData('url');
-            }
-
-            $rewrite = $this->urlFinder->findOneByData(
-                [
-                    UrlRewrite::ENTITY_ID => $this->getId(),
-                    UrlRewrite::ENTITY_TYPE => CategoryUrlRewriteGenerator::ENTITY_TYPE,
-                    UrlRewrite::STORE_ID => $this->getStoreId(),
-                ]
-            );
-            if ($rewrite) {
-                $this->setData('url', $this->getUrlInstance()->getDirectUrl($rewrite->getRequestPath()));
-                Profiler::stop('REWRITE: ' . __METHOD__);
-                return $this->getData('url');
-            }
-
-            $this->setData('url', $this->getCategoryIdUrl());
-            Profiler::stop('REWRITE: ' . __METHOD__);
-            return $this->getData('url');
-        }
         return $url;
     }
 
@@ -643,11 +591,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function getCategoryIdUrl()
     {
-        Profiler::start('REGULAR: ' . __METHOD__, ['group' => 'REGULAR', 'method' => __METHOD__]);
-        $urlKey = $this->getUrlKey() ? $this->getUrlKey() : $this->formatUrlKey($this->getName());
-        $url = $this->getUrlInstance()->getUrl('catalog/category/view', ['s' => $urlKey, 'id' => $this->getId()]);
-        Profiler::stop('REGULAR: ' . __METHOD__);
-        return $url;
+        return '';
     }
 
     /**

@@ -1,0 +1,28 @@
+#!/usr/bin/env sh
+
+#Platform agnostic absolute path detection
+SCRIPT_RELATIVE_DIR=$(dirname $0)
+CURRENT_DIR=$(pwd)
+cd $SCRIPT_RELATIVE_DIR
+SCRIPT_ABSOLUTE_DIR=$(pwd)
+SCRIPT_ABSOLUTE_PATH=${SCRIPT_ABSOLUTE_DIR}/grpc-server
+
+if [ -L "$SCRIPT_ABSOLUTE_PATH" ]; then #Symlink in vendor/bin from vendor/magento/module-grpc/bin/grpc-server
+  cd ${SCRIPT_ABSOLUTE_PATH}/../../../
+  MAGENTO_ROOT=$(pwd)
+  cd ${SCRIPT_ABSOLUTE_DIR}/../magento/module-grpc/etc/
+  CONFIG_PATH="$(pwd)/.rr.yaml"
+else #Direct launch from vendor/magento/module-grpc or copied file from Magento/Grpc
+  if [ -d ${SCRIPT_ABSOLUTE_DIR}/../../app/code/Magento/Grpc ]; then
+    cd ${SCRIPT_ABSOLUTE_DIR}/../../
+    MAGENTO_ROOT=$(pwd)
+    cd ${MAGENTO_ROOT}/app/code/Magento/Grpc/etc
+  else
+    cd ${SCRIPT_ABSOLUTE_PATH}/../../../../../
+    MAGENTO_ROOT=$(pwd)
+    cd ${SCRIPT_ABSOLUTE_DIR}/../etc/
+  fi
+  CONFIG_PATH="$(pwd)/.rr.yaml"
+fi
+
+rr-grpc grpc:workers -w $MAGENTO_ROOT -c $CONFIG_PATH

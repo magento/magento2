@@ -1,4 +1,0 @@
-email,_website,_store,confirmation,created_at,created_in,default_billing,default_shipping,disable_auto_group_change,dob,firstname,gender,group_id,lastname,middlename,password_hash,prefix,rp_token,rp_token_created_at,store_id,suffix,taxvat,website_id,password
-customer@example.com,base,"default",,5/6/2012 16:15,Admin,"1","1",0,,"Firstname-updated",Male,1,"Lastname-updated",T.,145d12bfff8a6a279eb61e277e3d727c0ba95acc1131237f1594ddbb7687a564:l1,,,,0,,,"1",
-julie.worrell@example.com,base,"",,5/6/2012 16:19,Admin,"1","1",0,,"Julie-updated",Female,1,"Worrell-updated",T.,145d12bfff8a6a279eb61e277e3d727c0ba95acc1131237f1594ddbb7687a564:l1,,,,0,,,"1",
-david.lamar@example.com,base,"",,5/6/2012 16:25,Admin,"1","1",0,,"David-updated",Male,1,"Lamar-updated",T.,145d12bfff8a6a279eb61e277e3d727c0ba95acc1131237f1594ddbb7687a564:l1,,,,0,,,"1",

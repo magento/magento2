@@ -65,7 +65,8 @@ class OperationFactoryTest extends TestCase
         $notRegisteredOperation = 'coffee';
         $this->expectException(OperationException::class);
         $this->expectExceptionMessage(
-            sprintf('Unrecognized operation "%s"', $notRegisteredOperation)
+            sprintf('Unrecognized operation "%s"', $notRegisteredOperation),
+            OperationException::UNAVAILABLE_OPERATION
         );
         $this->factory->create($notRegisteredOperation);
     }

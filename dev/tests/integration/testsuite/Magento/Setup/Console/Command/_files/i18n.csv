@@ -1,9 +1,0 @@
-"Read Details","Read Details",module,Magento_A
-"Mark as Read","Mark as Read",module,Magento_A
-"Are you sure?","Are you sure?",module,"Magento_A,Magento_B,Magento_C"
-"Messages Inbox","Messages Inbox",module,Magento_D
-"You have %1 new system messages","You have %1 new system messages",module,Magento_A
-"You have %1 new system message","You have %1 new system message",module,Magento_B
-"Incoming Message","Incoming Message",module,Magento_C
-close,close,module,"Magento_B,Magento_C"
-"Read details","Read details",module,Magento_D

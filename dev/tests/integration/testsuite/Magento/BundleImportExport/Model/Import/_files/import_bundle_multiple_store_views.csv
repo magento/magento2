@@ -1,5 +1,0 @@
-sku,store_view_code,attribute_set_code,product_type,product_websites,name,product_online,price,additional_attributes,qty,out_of_stock_qty,website_id,bundle_price_type,bundle_sku_type,bundle_price_view,bundle_weight_type,bundle_values
-Simple 1,,Default,simple,base,Simple 1,1,100,,1000,0,1,,,,,
-Simple 2,,Default,simple,base,Simple 2,1,200,,1000,0,1,,,,,
-Simple 3,,Default,simple,base,Simple 3,1,300,,1000,0,1,,,,,
-Bundle 1,,Default,bundle,base,Bundle 1,1,,shipment_type=separately,0,0,1,dynamic,dynamic,Price range,dynamic,"name=Option 1,name_default=Option 1 1,name_fixture_second_store=Option 2 1,type=checkbox,required=1,sku=Simple 1,price=0.0000,default=0,default_qty=1.0000,price_type=fixed|name=Option 2,name_default=Option 1 2,name_fixture_second_store=Option 2 2,type=checkbox,required=1,sku=Simple 2,price=0.0000,default=0,default_qty=1.0000,price_type=fixed|name=Option 2,type=checkbox,required=1,sku=Simple 3,price=0.0000,default=0,default_qty=1.0000,price_type=fixed"

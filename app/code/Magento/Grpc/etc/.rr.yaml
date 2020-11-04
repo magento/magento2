@@ -1,0 +1,7 @@
+grpc:
+    listen: "tcp://:9001"
+    proto: "search.proto"
+    workers:
+        command: "./vendor/bin/worker"
+        pool:
+            numWorkers: 4

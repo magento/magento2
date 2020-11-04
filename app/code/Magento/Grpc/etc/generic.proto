@@ -1,0 +1,108 @@
+//Magento license
+
+syntax = "proto3";
+
+package magento.grpc.api;
+
+import "google/protobuf/any.proto";
+import "google/protobuf/struct.proto";
+import "google/protobuf/field_mask.proto";
+
+///*
+// * This is a reference declaration for generic entity
+// * Copy & paste the content below in order to create your entity
+// */
+//message GenericListRequest {
+//    /**
+//     * Use field mask to extract scalar attributes
+//     */
+//    google.protobuf.FieldMask attributeCodes = 1;
+//
+//    /**
+//     * Use complex attribute select to extract nested objects or EAV attributes if applicable
+//     */
+//    repeated magento.generic.ComplexAttributeSelect complexAttributesSelect = 2;
+//
+//    /**
+//     * Defines query filters
+//     */
+//    magento.generic.Clause filter = 3;
+//
+//    /**
+//     * Pagination & list size
+//     */
+//    string cursor = 4;
+//    int64 size = 5;
+//}
+//
+//message GenericGetListResult {
+//    string endCursor = 1;
+//    bool hasNextPage = 2;
+//}
+//
+//message GenericCreateRequest {
+//    /**
+//     * Placeholder for entity specific attributes
+//     */
+//
+//    /**
+//     * Use the following way to specify EAV values if applicable
+//     */
+//    map<string, magento.generic.CustomAttributeValue> custom_attributes = 3;
+//}
+//
+//message GenericUpdateRequest {
+//    google.protobuf.FieldMask updateMask = 1;
+//    google.protobuf.FieldMask deleteMask = 2;
+//
+//    /**
+//     * Place your entity attributes here
+//     */
+//
+//
+//    /**
+//     * Use the following way to specify EAV values
+//     */
+//    map<string, magento.generic.CustomAttributeValue> custom_attributes = 3;
+//}
+
+
+message OrClause {
+    Clause clause1 = 1;
+    Clause clause2 = 2;
+}
+
+message AndClause {
+    Clause clause1 = 1;
+    Clause clause2 = 2;
+}
+
+message EqClause {
+    string attribute = 1;
+    google.protobuf.Value value = 2;
+}
+
+message InClause {
+    string attribute = 1;
+    repeated google.protobuf.Value value = 2;
+}
+
+message Clause {
+    oneof kind {
+        OrClause or = 1;
+        AndClause and = 2;
+        EqClause eq = 3;
+        InClause in = 4;
+    }
+}
+
+message ComplexAttributeSelect {
+    google.protobuf.FieldMask attributeCodes = 1;
+    Clause filter = 2;
+    Clause fallback = 3;
+}
+
+message CustomAttributeValue {
+    google.protobuf.Any value = 1;
+}
+

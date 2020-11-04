@@ -1,3 +1,0 @@
-# Vault Functional Tests
-
-The Functional Test Module for **Magento Vault** module.

@@ -7,16 +7,10 @@
 
 namespace Magento\Catalog\Model;
 
-use Magento\Catalog\Model\CategoryRepository\PopulateWithValues;
-use Magento\Catalog\Model\ResourceModel\Category as CategoryResource;
-use Magento\Framework\Api\ExtensibleDataObjectConverter;
-use Magento\Framework\App\ObjectManager;
-use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
 use Magento\Catalog\Api\Data\CategoryInterface;
-use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Repository for categories.
@@ -31,27 +25,27 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
     protected $instances = [];
 
     /**
-     * @var StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $storeManager;
 
     /**
-     * @var CategoryFactory
+     * @var \Magento\Catalog\Model\CategoryFactory
      */
     protected $categoryFactory;
 
     /**
-     * @var CategoryResource
+     * @var \Magento\Catalog\Model\ResourceModel\Category
      */
     protected $categoryResource;
 
     /**
-     * @var MetadataPool
+     * @var \Magento\Framework\EntityManager\MetadataPool
      */
     protected $metadataPool;
 
     /**
-     * @var ExtensibleDataObjectConverter
+     * @var \Magento\Framework\Api\ExtensibleDataObjectConverter
      */
     private $extensibleDataObjectConverter;
 
@@ -63,37 +57,28 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
     protected $useConfigFields = ['available_sort_by', 'default_sort_by', 'filter_price_range'];
 
     /**
-     * @var PopulateWithValues
-     */
-    private $populateWithValues;
-
-    /**
-     * @param CategoryFactory $categoryFactory
-     * @param CategoryResource $categoryResource
-     * @param StoreManagerInterface $storeManager
-     * @param PopulateWithValues|null $populateWithValues
+     * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
+     * @param \Magento\Catalog\Model\ResourceModel\Category $categoryResource
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
-        CategoryFactory $categoryFactory,
-        CategoryResource $categoryResource,
-        StoreManagerInterface $storeManager,
-        ?PopulateWithValues $populateWithValues
+        \Magento\Catalog\Model\CategoryFactory $categoryFactory,
+        \Magento\Catalog\Model\ResourceModel\Category $categoryResource,
+        \Magento\Store\Model\StoreManagerInterface $storeManager
     ) {
         $this->categoryFactory = $categoryFactory;
         $this->categoryResource = $categoryResource;
         $this->storeManager = $storeManager;
-        $objectManager = ObjectManager::getInstance();
-        $this->populateWithValues = $populateWithValues ?? $objectManager->get(PopulateWithValues::class);
     }
 
     /**
      * @inheritdoc
      */
-    public function save(CategoryInterface $category)
+    public function save(\Magento\Catalog\Api\Data\CategoryInterface $category)
     {
         $storeId = (int)$this->storeManager->getStore()->getId();
         $existingData = $this->getExtensibleDataObjectConverter()
-            ->toNestedArray($category, [], CategoryInterface::class);
+            ->toNestedArray($category, [], \Magento\Catalog\Api\Data\CategoryInterface::class);
         $existingData = array_diff_key($existingData, array_flip(['path', 'level', 'parent_id']));
         $existingData['store_id'] = $storeId;
 
@@ -125,7 +110,7 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
             $existingData['parent_id'] = $parentId;
             $existingData['level'] = null;
         }
-        $this->populateWithValues->execute($category, $existingData);
+        $category->addData($existingData);
         try {
             $this->validateCategory($category);
             $this->categoryResource->save($category);
@@ -166,7 +151,7 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
     /**
      * @inheritdoc
      */
-    public function delete(CategoryInterface $category)
+    public function delete(\Magento\Catalog\Api\Data\CategoryInterface $category)
     {
         try {
             $categoryId = $category->getId();
@@ -228,15 +213,15 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
     /**
      * Lazy loader for the converter.
      *
-     * @return ExtensibleDataObjectConverter
+     * @return \Magento\Framework\Api\ExtensibleDataObjectConverter
      *
      * @deprecated 101.0.0
      */
     private function getExtensibleDataObjectConverter()
     {
         if ($this->extensibleDataObjectConverter === null) {
-            $this->extensibleDataObjectConverter = ObjectManager::getInstance()
-                ->get(ExtensibleDataObjectConverter::class);
+            $this->extensibleDataObjectConverter = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\Api\ExtensibleDataObjectConverter::class);
         }
         return $this->extensibleDataObjectConverter;
     }
@@ -244,13 +229,13 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
     /**
      * Lazy loader for the metadata pool.
      *
-     * @return MetadataPool
+     * @return \Magento\Framework\EntityManager\MetadataPool
      */
     private function getMetadataPool()
     {
         if (null === $this->metadataPool) {
-            $this->metadataPool = ObjectManager::getInstance()
-                ->get(MetadataPool::class);
+            $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\EntityManager\MetadataPool::class);
         }
         return $this->metadataPool;
     }

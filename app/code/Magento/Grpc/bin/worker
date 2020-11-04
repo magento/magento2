@@ -1,0 +1,60 @@
+#!/usr/bin/env php
+<?php
+/**
+ * gRPC entry point for Magento
+ *
+ * Please make sure you ran './bin/magento proto:marshal' CLI command before running this code
+ */
+ini_set('display_errors', 'stderr');
+
+$executedScriptName = $argv[0];
+$directoryName = dirname($executedScriptName);
+
+/**
+ * Takes symlinks into account. Other ways like realpath or getcwd always resolve real file name
+ *
+ * @param string $cwd
+ * @param string $directory
+ * @return string
+ */
+$absolutePathResolver = function(string $cwd, string $directory): string
+{
+    $path = $cwd . DIRECTORY_SEPARATOR . $directory;
+
+    //Remove double separators
+    $path = str_replace(DIRECTORY_SEPARATOR . DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR, $path);
+
+    //Replace /./ or \.\ with / or \
+    $path = str_replace(DIRECTORY_SEPARATOR . '.' . DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR, $path);
+
+    //Recursively replace /something/../ with /
+    $replacer = function ($input) use (&$replacer) {
+        $output = preg_replace('~[/\\\][^/\\\]+?[/\\\]\.\.[/\\\]~', DIRECTORY_SEPARATOR, $input);
+        if (false !== strpos($output, '..')) {
+            return $replacer($output);
+        }
+        return $output;
+    };
+
+    //Remove recursive tail(e.g. /something/something/..)
+    return preg_replace('~[/\\\][^/\\\]+?[/\\\]\.\.$~', '', $replacer($path));
+};
+
+$absoluteDirectory = $absolutePathResolver(getcwd(), $directoryName);
+$appRoot = dirname(dirname(dirname(dirname($absoluteDirectory))));
+if (!\file_exists($appRoot . DIRECTORY_SEPARATOR . 'app' .DIRECTORY_SEPARATOR . 'bootstrap.php')) {
+    $appRoot = dirname(dirname($absoluteDirectory));
+}
+
+try {
+    require $appRoot . DIRECTORY_SEPARATOR . 'app' .DIRECTORY_SEPARATOR . 'bootstrap.php';
+} catch (\Exception $e) {
+    echo 'Autoload error: ' . $e->getMessage();
+    exit(1);
+}
+
+$bootstrap = \Magento\Framework\App\Bootstrap::create(BP, $_SERVER);
+/** @var \Magento\Grpc\App\Grpc $app */
+$app = $bootstrap->createApplication(\Magento\Grpc\App\Grpc::class);
+
+$bootstrap->run($app);

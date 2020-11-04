@@ -1,0 +1,117 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\SearchStorefrontElasticsearch\Model\Config">
+        <arguments>
+            <argument name="engineList" xsi:type="array">
+                <item name="storefrontElasticsearch6" xsi:type="string">storefrontElasticsearch6</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\SearchStorefrontSearch\Model\AdapterFactory">
+        <arguments>
+            <argument name="adapters" xsi:type="array">
+                <item name="storefrontElasticsearch6" xsi:type="string">Magento\SearchStorefrontElasticsearch\Elasticsearch5\SearchAdapter\Adapter</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\SearchStorefrontSearch\Model\EngineResolver">
+        <arguments>
+            <argument name="engines" xsi:type="array">
+                <item name="storefrontElasticsearch6" xsi:type="string">storefrontElasticsearch6</item>
+            </argument>
+            <argument name="defaultEngine" xsi:type="string">storefrontElasticsearch6</argument>
+        </arguments>
+    </type>
+
+    <virtualType name="Magento\SearchStorefrontElasticsearch6\Model\Client\ElasticsearchFactory" type="Magento\SearchStorefrontAdvancedSearch\Model\Client\ClientFactory">
+        <arguments>
+            <argument name="clientClass" xsi:type="string">Magento\SearchStorefrontElasticsearch6\Model\Client\Elasticsearch</argument>
+        </arguments>
+    </virtualType>
+
+    <type name="Magento\SearchStorefrontElasticsearch\Elasticsearch5\Model\Client\ClientFactoryProxy">
+        <arguments>
+            <argument name="clientFactories" xsi:type="array">
+                <item name="storefrontElasticsearch6" xsi:type="object">Magento\SearchStorefrontElasticsearch6\Model\Client\ElasticsearchFactory</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\SearchStorefrontElasticsearch\Elasticsearch5\Model\Adapter\BatchDataMapper\CategoryFieldsProviderProxy">
+        <arguments>
+            <argument name="categoryFieldsProviders" xsi:type="array">
+                <item name="storefrontElasticsearch6" xsi:type="object">Magento\SearchStorefrontElasticsearch\Elasticsearch5\Model\Adapter\BatchDataMapper\CategoryFieldsProvider</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\Framework\Search\Dynamic\IntervalFactory">
+        <arguments>
+            <argument name="intervals" xsi:type="array">
+                <item name="storefrontElasticsearch6" xsi:type="string">Magento\SearchStorefrontElasticsearch\Elasticsearch5\SearchAdapter\Aggregation\Interval</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\Framework\Search\Dynamic\DataProviderFactory">
+        <arguments>
+            <argument name="dataProviders" xsi:type="array">
+                <item name="storefrontElasticsearch6" xsi:type="string">Magento\SearchStorefrontElasticsearch\SearchAdapter\Dynamic\DataProvider</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\SearchStorefrontSearch\Model\Search\PageSizeProvider">
+        <arguments>
+            <argument name="pageSizeBySearchEngine" xsi:type="array">
+                <item name="storefrontElasticsearch6" xsi:type="number">10000</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\SearchStorefrontSearch\Model\SearchEngine\Validator">
+        <arguments>
+            <argument name="engineValidators" xsi:type="array">
+                <item name="storefrontElasticsearch6" xsi:type="object">Magento\SearchStorefrontElasticsearch\Setup\Validator</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <!-- @tODO clean up field resolvers -->
+    <type name="Magento\SearchStorefrontElasticsearch\Elasticsearch5\Model\Adapter\FieldMapper\ProductFieldMapperProxy">
+        <arguments>
+            <argument name="productFieldMappers" xsi:type="array">
+                <item name="storefrontElasticsearch6" xsi:type="object">Magento\SearchStorefrontElasticsearch6\Model\Adapter\FieldMapper\ProductFieldMapper</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <virtualType name="storefrontElasticsearch6FieldNameResolver" type="\Magento\SearchStorefrontElasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\CompositeResolver">
+        <arguments>
+            <argument name="items" xsi:type="array">
+                <item name="notEav" xsi:type="object">\Magento\SearchStorefrontElasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\NotEavAttribute</item>
+                <item name="special" xsi:type="object">\Magento\SearchStorefrontElasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\SpecialAttribute</item>
+                <item name="price" xsi:type="object">\Magento\SearchStorefrontElasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\Price</item>
+                <item name="categoryName" xsi:type="object">\Magento\SearchStorefrontElasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\CategoryName</item>
+                <item name="position" xsi:type="object">\Magento\SearchStorefrontElasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\Position</item>
+                <item name="default" xsi:type="object">\Magento\SearchStorefrontElasticsearch6\Model\Adapter\FieldMapper\Product\FieldProvider\FieldName\Resolver\DefaultResolver</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="Magento\SearchStorefrontElasticsearch6\Model\Adapter\FieldMapper\ProductFieldMapper"
+                 type="Magento\SearchStorefrontElasticsearch\Elasticsearch5\Model\Adapter\FieldMapper\ProductFieldMapper">
+        <arguments>
+            <argument name="fieldProvider" xsi:type="object">storefrontElasticsearch5FieldProvider</argument>
+            <argument name="fieldNameResolver" xsi:type="object">storefrontElasticsearch6FieldNameResolver</argument>
+        </arguments>
+    </virtualType>
+</config>

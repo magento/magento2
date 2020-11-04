@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\SearchStorefrontSearch\Api\SearchInterface" type="Magento\SearchStorefrontSearch\Model\Search"/>
+    <preference for="Magento\Framework\Search\EngineResolverInterface" type="Magento\SearchStorefrontSearch\Model\EngineResolver"/>
+    <preference for="Magento\Framework\Search\SearchEngineInterface" type="Magento\SearchStorefrontSearch\Model\SearchEngine"/>
+
+    <!-- @api -->
+    <!-- synonyms returns empty array. @todo implement synonyms reader from storage another then DB -->
+    <preference for="Magento\SearchStorefrontSearch\Api\SynonymAnalyzerInterface" type="Magento\SearchStorefrontSearch\Model\SynonymAnalyzer" />
+    <preference for="Magento\Framework\Search\Adapter\Preprocessor\PreprocessorInterface" type="Magento\SearchStorefrontSearch\Adapter\Query\Preprocessor\Synonyms" />
+
+    <!-- @todo at the moment unused search_engine config. was used only for enable synonyms support -->
+    <preference for="Magento\Framework\Search\SearchEngine\ConfigInterface" type="Magento\SearchStorefrontSearch\Model\SearchEngine\Config" />
+    <type name="Magento\SearchStorefrontSearch\Model\SearchEngine\Config">
+        <arguments>
+            <argument name="dataStorage" xsi:type="object">Magento\SearchStorefrontSearch\Model\SearchEngine\Config\Data</argument>
+        </arguments>
+    </type>
+</config>

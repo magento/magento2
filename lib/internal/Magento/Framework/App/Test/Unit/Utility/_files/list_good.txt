@@ -1,4 +1,0 @@
-# comments are ignored
-{one,two}.txt
-bar
-baz/*.txt
