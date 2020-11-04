@@ -12,6 +12,7 @@ use Magento\Framework\Indexer\ActionInterface;
 use Magento\Framework\Indexer\ConfigInterface;
 use Magento\Framework\Indexer\StateInterface;
 use Magento\Framework\Indexer\StructureFactory;
+use Magento\Framework\Indexer\IndexerInterfaceFactory;
 use Magento\Framework\Mview\ViewInterface;
 use Magento\Indexer\Model\Indexer;
 use Magento\Indexer\Model\Indexer\CollectionFactory;
@@ -61,6 +62,11 @@ class IndexerTest extends TestCase
      */
     private $workingStateProvider;
 
+    /**
+     * @var IndexerInterfaceFactory|MockObject
+     */
+    private $indexerFactoryMock;
+
     protected function setUp(): void
     {
         $this->workingStateProvider = $this->getMockBuilder(WorkingStateProvider::class)
@@ -77,6 +83,10 @@ class IndexerTest extends TestCase
         );
         $this->actionFactoryMock = $this->createPartialMock(
             ActionFactory::class,
+            ['create']
+        );
+        $this->indexerFactoryMock = $this->createPartialMock(
+            IndexerInterfaceFactory::class,
             ['create']
         );
         $this->viewMock = $this->getMockForAbstractClass(
@@ -109,7 +119,8 @@ class IndexerTest extends TestCase
             $this->viewMock,
             $this->stateFactoryMock,
             $this->indexFactoryMock,
-            $this->workingStateProvider
+            $this->workingStateProvider,
+            $this->indexerFactoryMock
         );
     }
 
@@ -356,7 +367,7 @@ class IndexerTest extends TestCase
     protected function loadIndexer($indexId)
     {
         $this->configMock->expects(
-            $this->once()
+            $this->any()
         )->method(
             'getIndexer'
         )->with(
