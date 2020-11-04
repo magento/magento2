@@ -119,11 +119,8 @@ endif; ?>
                    type="checkbox"
                    id="<?= $block->escapeHtmlAttr($block->getForm()->getHtmlIdPrefix()) ?>save_in_address_book"
                    value="1"
-                <?php if ($billingAddressDataProvider && $billingAddressDataProvider->getSaveInAddressBook()): ?>
-                    checked="checked"
-                <?php elseif ($block->getIsShipping()
-                    && !$block->getDontSaveInAddressBook()
-                    && !$block->getAddressId()): ?>
+                <?php if ($billingAddressDataProvider && $billingAddressDataProvider->getSaveInAddressBook() ||
+                    $block->getIsShipping() && !$block->getDontSaveInAddressBook() && !$block->getAddressId()): ?>
                     checked="checked"
                 <?php endif; ?>
                    class="admin__control-checkbox"/>
