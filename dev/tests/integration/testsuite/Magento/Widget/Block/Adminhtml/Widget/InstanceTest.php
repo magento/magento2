@@ -128,7 +128,7 @@ class InstanceTest extends TestCase
                     ),
                 ],
                 'expected_widgets' => [
-                    'recently compared products'
+                    'recently compared products',
                 ],
             ],
         ];
@@ -147,7 +147,6 @@ class InstanceTest extends TestCase
     {
         $this->request->setParams($filter);
         $collection = $this->getGridCollection();
-        $this->assertCount(count($expectedWidgets), $collection);
         $this->assertEquals($expectedWidgets, $collection->getColumnValues('title'));
     }
 
