@@ -16,10 +16,7 @@ class ProductSearchAggregationsTest extends GraphQlAbstract
      */
     public function testAggregationBooleanAttribute()
     {
-        $this->markTestSkipped(
-            'MC-22184: Elasticsearch returns incorrect aggregation options for booleans'
-            . 'MC-36768: Custom attribute not appears in elasticsearch'
-        );
+        $this->markTestSkipped('MC-22184: Elasticsearch returns incorrect aggregation options for booleans');
 
         $query = $this->getGraphQlQuery(
             '"search_product_1", "search_product_2", "search_product_3", "search_product_4" ,"search_product_5"'
@@ -44,7 +41,6 @@ class ProductSearchAggregationsTest extends GraphQlAbstract
         $this->assertEquals('boolean_attribute', $booleanAggregation['attribute_code']);
         $this->assertContainsEquals(['label' => '1', 'value'=> '1', 'count' => '3'], $booleanAggregation['options']);
 
-        $this->markTestSkipped('MC-22184: Elasticsearch returns incorrect aggregation options for booleans');
         $this->assertEquals(2, $booleanAggregation['count']);
         $this->assertCount(2, $booleanAggregation['options']);
         $this->assertContainsEquals(['label' => '0', 'value'=> '0', 'count' => '2'], $booleanAggregation['options']);
