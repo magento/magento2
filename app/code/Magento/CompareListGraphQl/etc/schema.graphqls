@@ -3,8 +3,11 @@
 
 type ComparableItem {
     uid: ID!
-    product: ProductInterface!
+    product: ComparableProduct!
     attributes: [ProductAttribute]! @doc(description: "Product comparable attributes")
+}
+
+type ComparableProduct implements ProductInterface {
 }
 
 type ProductAttribute {

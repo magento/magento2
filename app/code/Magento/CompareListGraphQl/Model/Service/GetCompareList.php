@@ -60,7 +60,7 @@ class GetCompareList
         $maskedListId = $this->compareListIdToMaskedListId->execute($listId);
         return [
             'uid' => $maskedListId,
-            'items' => $this->comparableItemsService->getComparableItems($listId, $context),
+            'items' => $this->comparableItemsService->execute($listId, $context),
             'attributes' => $this->comparableAttributesService->execute($listId, $context)
         ];
     }

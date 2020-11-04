@@ -41,12 +41,12 @@ class CompareListIdToMaskedListId
      *
      * @param int $listId
      *
-     * @return string
+     * @return null|string
      */
-    public function execute(int $listId): string
+    public function execute(int $listId): ?string
     {
         $listIdMask = $this->listIdMaskFactory->create();
         $this->listIdMaskResource->load($listIdMask, $listId, 'list_id');
-        return $listIdMask->getMaskedId() ?? '';
+        return $listIdMask->getMaskedId() ?? null;
     }
 }

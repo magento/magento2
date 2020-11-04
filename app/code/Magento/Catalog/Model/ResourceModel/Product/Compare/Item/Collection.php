@@ -182,9 +182,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      *
      * @return int
      */
-    public function getListId()
+    public function getListId(): int
     {
-        return $this->listId;
+        return (int)$this->listId;
     }
 
     /**
@@ -274,7 +274,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      *
      * @return array
      */
-    public function getProductsByListId(int $listId)
+    public function getProductsByListId(int $listId): array
     {
         $select = $this->getConnection()->select()->
         from(
