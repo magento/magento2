@@ -665,11 +665,9 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
         }
 
         // Mixed bind is not supported - so remember whether it is named bind, to normalize later if required
-        $isNamedBind = false;
         if ($bind) {
             foreach ($bind as $k => $v) {
                 if (!is_int($k)) {
-                    $isNamedBind = true;
                     if ($k[0] != ':') {
                         $bind[":{$k}"] = $v;
                         unset($bind[$k]);
