@@ -221,7 +221,9 @@ class Read implements ReadInterface
     {
         $this->validatePath($path);
 
-        return $this->driver->isExists($this->driver->getAbsolutePath($this->path, $path));
+        return $this->driver->isExists(
+            $this->driver->getRealPathSafety($this->driver->getAbsolutePath($this->path, $path))
+        );
     }
 
     /**
