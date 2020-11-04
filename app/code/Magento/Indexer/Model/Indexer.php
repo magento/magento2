@@ -417,6 +417,16 @@ class Indexer extends \Magento\Framework\DataObject implements IndexerInterface
             $state = $this->getState();
             $state->setStatus(StateInterface::STATUS_WORKING);
             $state->save();
+
+            $sharedIndexers = [];
+            $indexerConfig = $this->config->getIndexer($this->getId());
+            if ($indexerConfig['shared_index'] !== null) {
+                $sharedIndexers = $this->getSharedIndexers($indexerConfig['shared_index']);
+            }
+            if (!empty($sharedIndexers)) {
+                $this->suspendSharedViews($sharedIndexers);
+            }
+
             if ($this->getView()->isEnabled()) {
                 $this->getView()->suspend();
             }
@@ -424,13 +434,70 @@ class Indexer extends \Magento\Framework\DataObject implements IndexerInterface
                 $this->getActionInstance()->executeFull();
                 $state->setStatus(StateInterface::STATUS_VALID);
                 $state->save();
+                if (!empty($sharedIndexers)) {
+                    $this->resumeSharedViews($sharedIndexers);
+                }
                 $this->getView()->resume();
             } catch (\Throwable $exception) {
                 $state->setStatus(StateInterface::STATUS_INVALID);
                 $state->save();
+                if (!empty($sharedIndexers)) {
+                    $this->resumeSharedViews($sharedIndexers);
+                }
                 $this->getView()->resume();
                 throw $exception;
             }
+        }
+    }
+
+    /**
+     * Get indexer ids that uses same index
+     *
+     * @param string $sharedIndex
+     * @return array
+     */
+    private function getSharedIndexers(string $sharedIndex) : array
+    {
+        $result = [];
+        foreach (array_keys($this->config->getIndexers()) as $indexerId) {
+            if ($indexerId === $this->getId()) {
+                continue;
+            }
+            $indexerConfig = $this->config->getIndexer($indexerId);
+            if ($indexerConfig['shared_index'] === $sharedIndex) {
+                $indexer = $this->indexersFactory->create();
+                $indexer->load($indexerId);
+                $result[] = $indexer;
+            }
+        }
+        return $result;
+    }
+
+    /**
+     * Suspend views of shared indexers
+     *
+     * @param array $sharedIndexers
+     * @return void
+     */
+    private function suspendSharedViews(array $sharedIndexers) : void
+    {
+        foreach ($sharedIndexers as $indexer) {
+            if ($indexer->getView()->isEnabled()) {
+                $indexer->getView()->suspend();
+            }
+        }
+    }
+
+    /**
+     * Suspend views of shared indexers
+     *
+     * @param array $sharedIndexers
+     * @return void
+     */
+    private function resumeSharedViews(array $sharedIndexers) : void
+    {
+        foreach ($sharedIndexers as $indexer) {
+            $indexer->getView()->resume();
         }
     }
 
