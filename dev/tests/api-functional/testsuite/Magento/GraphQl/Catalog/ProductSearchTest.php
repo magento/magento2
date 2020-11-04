@@ -13,6 +13,7 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\CategoryLinkManagement;
+use Magento\Catalog\Model\Indexer\Product\Category\Processor;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Category\Collection;
 use Magento\Eav\Api\Data\AttributeOptionInterface;
@@ -1170,6 +1171,11 @@ QUERY;
         $category->setPostedProducts($productPositions);
         $category->save();
 
+        // Reindex products from the result to invalidate query cache.
+        /** @var $indexer Processor */
+        $indexer = Bootstrap::getObjectManager()->get(Processor::class);
+        $indexer->reindexList(array_keys($productPositions));
+
         $queryDesc = <<<QUERY
 {
   products(filter: {category_id: {eq: "$categoryId"}}, sort: {position: ASC}) {
@@ -1448,11 +1454,12 @@ QUERY;
      */
     public function testFilteringForProductsFromMultipleCategories()
     {
+        $categoriesIds = ["4","5","12"];
         $query
             = <<<QUERY
 {
    products(filter:{
-          category_id :{in:["4","5","12"]}
+          category_id :{in:["{$categoriesIds[0]}","{$categoriesIds[1]}","{$categoriesIds[2]}"]}
          })
  {
     items
@@ -1478,6 +1485,21 @@ QUERY;
         $response = $this->graphQlQuery($query);
         /** @var ProductRepositoryInterface $productRepository */
         $this->assertEquals(3, $response['products']['total_count']);
+        $actualProducts = [];
+        foreach ($categoriesIds as $categoriesId) {
+            /** @var CategoryLinkManagement $productLinks */
+            $productLinks = ObjectManager::getInstance()->get(CategoryLinkManagement::class);
+            $links = $productLinks->getAssignedProducts($categoriesId);
+            $links = array_reverse($links);
+            foreach ($links as $linkProduct) {
+                $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
+                /** @var ProductInterface $product */
+                $product = $productRepository->get($linkProduct->getSku());
+                $actualProducts[$linkProduct->getSku()] = $product->getName();
+            }
+        }
+        $expectedProducts = array_column($response['products']['items'], "name", "sku");
+        $this->assertEquals($expectedProducts, $actualProducts);
     }
 
     /**
