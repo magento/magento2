@@ -1,0 +1,102 @@
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+syntax = "proto3";
+
+package magento.searchStorefrontApi.proto;
+
+option php_metadata_namespace = "Magento\\SearchStorefrontApi\\Metadata";
+
+service Search {
+  rpc searchProducts (ProductSearchRequest) returns (ProductsSearchResult) {}
+}
+
+message ProductSearchRequest {
+  // search query to perform full-text search
+  string phrase = 1;
+
+  //scope to check
+  string store = 2;
+
+  // number of product ids to return in set
+  int32 page_size = 3;
+
+  // current page of result set to return
+  int32 current_page = 4;
+
+  // filters to filter result by specified attribute values
+  repeated Filter filters = 5;
+
+  // sort order of returned product by specified attribute in specified order
+  repeated Sort sort = 6;
+
+  //include aggregation into response
+  bool include_aggregations = 7;
+
+  //customer group id (for price bucket)
+  int32 customer_group_id = 8;
+}
+
+message Filter {
+  // attribute code to filer
+  string attribute = 1;
+
+  // an array of values to filter on
+  repeated string in = 2;
+
+  // a string to filter on
+  string eq =  3;
+
+  // range to filter on
+  SearchRange range = 4;
+}
+
+message SearchRange {
+  float from = 1;
+
+  float to = 2;
+}
+
+message ProductsSearchResult {
+  int32 total_count = 1;
+
+  // response items - at the moment item has only 1 field: product id
+  repeated string items = 2;
+
+  repeated Bucket facets = 3;
+
+  SearchResultPageInfo page_info = 4;
+}
+
+message SearchResultPageInfo {
+  int32 current_page = 1;
+
+  int32 page_size = 2;
+
+  int32 total_pages = 3;
+}
+
+message Bucket {
+  string attribute = 1;
+
+  string label = 2;
+
+  int32 count = 3;
+
+  repeated BucketOption options = 5;
+}
+
+message BucketOption {
+  string value = 1;
+
+  string label = 2;
+
+  int32 count = 3;
+}
+
+message Sort {
+  string attribute = 1;
+
+  string direction = 2;
+}
