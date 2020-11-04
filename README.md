@@ -5,7 +5,10 @@
 </p>
 
 ## Storefront Search Service
-will provide some description soon
+Install:
+1. composer install
+2. bin/magento storefront:search:init
+3. edit env.php to specify database and elasticsearch connections
 
 ## GRPC up (local php)
 1. Run bin/magento storefront:grpc:init \\\Magento\\\SearchStorefrontApi\\\Api\\\SearchProxyServer
