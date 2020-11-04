@@ -112,7 +112,7 @@ class Config extends Command
                 'crypt' => [
                     'key' => 'crypt_key'
                 ],
-                'cache_types' => $this->getCacheTypes(),
+//                'cache_types' => $this->getCacheTypes(),
                 'resource' => [
                     'default_setup' => [
                         'connection' => 'default'
@@ -168,6 +168,20 @@ class Config extends Command
                 ],
                 'install'     => [
                     'date' => $this->dateTime->formatDate(true)
+                ]
+            ],
+            'app_config' => [
+                'modules' => [
+                    'Magento_SearchStorefrontConfig' => 1,
+                    'Magento_Store' => 1,
+                    'Magento_Eav' => 1,
+                    'Magento_Grpc' => 1,
+                    'Magento_SearchStorefrontSearch' => 1,
+                    'Magento_SearchStorefrontApi' => 1,
+                    'Magento_SearchStorefrontElasticsearch' => 1,
+                    'Magento_SearchStorefrontElasticsearch6' => 1,
+                    'Magento_SearchStorefrontAdvancedSearch' => 1,
+                    'Magento_SearchStorefront' => 1,
                 ]
             ]
         ];

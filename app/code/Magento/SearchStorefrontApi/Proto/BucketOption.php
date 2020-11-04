@@ -9,9 +9,9 @@ use Google\Protobuf\Internal\RepeatedField;
 use Google\Protobuf\Internal\GPBUtil;
 
 /**
- * Generated from protobuf message <code>magento.searchStorefrontApi.proto.Option</code>
+ * Generated from protobuf message <code>magento.searchStorefrontApi.proto.BucketOption</code>
  */
-class Option extends \Google\Protobuf\Internal\Message
+class BucketOption extends \Google\Protobuf\Internal\Message
 {
     /**
      * Generated from protobuf field <code>string value = 1;</code>
