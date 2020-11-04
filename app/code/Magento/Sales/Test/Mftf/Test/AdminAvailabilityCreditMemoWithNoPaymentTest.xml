@@ -55,14 +55,12 @@
         </actionGroup>
 
         <!--Click *Custom Price* link, enter 0 and click *Update Items and Quantities* button-->
-        <click selector="{{AdminOrderFormItemsSection.customPriceCheckbox}}" stepKey="clickCustomPriceCheckbox"/>
-        <waitForElementVisible selector="{{AdminOrderFormItemsSection.customPriceField}}" stepKey="waitForPriceFieldAppears"/>
-        <fillField selector="{{AdminOrderFormItemsSection.customPriceField}}" userInput="0" stepKey="fillCustomPriceField"/>
-        <click selector="{{AdminOrderFormItemsSection.updateItemsAndQuantities}}" stepKey="clickUpdateItemsAndQuantitiesButton"/>
+        <actionGroup ref="AdminSetCustomPriceActionGroup" stepKey="setCustomPriceToZero"/>
 
         <!--Fill customer group and customer email-->
-        <selectOption selector="{{AdminOrderFormAccountSection.group}}" userInput="{{GeneralCustomerGroup.code}}" stepKey="selectCustomerGroup"/>
-        <fillField selector="{{AdminOrderFormAccountSection.email}}" userInput="{{Simple_US_Customer.email}}" stepKey="fillCustomerEmail"/>
+        <actionGroup ref="AdminFillAccountInformationOnCreateOrderPageActionGroup" stepKey="fillAccountData">
+            <argument name="email" value="{{Simple_US_Customer.email}}"/>
+        </actionGroup>
 
         <!--Fill customer address information-->
         <actionGroup ref="FillOrderCustomerInformationActionGroup" stepKey="fillCustomerAddress">
@@ -79,10 +77,8 @@
         <actionGroup ref="SubmitInvoiceActionGroup" stepKey="submitInvoice"/>
 
         <!--Verify that *Credit Memo* button is displayed-->
-        <seeElement selector="{{AdminOrderFormItemsSection.creditMemo}}" stepKey="seeCreditMemo"/>
-        <click selector="{{AdminOrderFormItemsSection.creditMemo}}" stepKey="clickCreditMemoItem"/>
-        <waitForPageLoad stepKey="waitForCreditMemoPageLoaded"/>
-        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="New Memo" stepKey="seeNewMemoPageTitle"/>
-        <seeInCurrentUrl url="{{AdminCreditMemoNewPage.url}}" stepKey="seeNewMemoUrlOnPage"/>
+
+        <actionGroup ref="AdminStartCreateCreditMemoFromOrderPageActionGroup" stepKey="seeCreditMemo"/>
+      
     </test>
 </tests>
