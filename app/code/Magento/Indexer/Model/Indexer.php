@@ -13,6 +13,7 @@ use Magento\Framework\Indexer\IndexerInterface;
 use Magento\Framework\Indexer\IndexStructureInterface;
 use Magento\Framework\Indexer\StateInterface;
 use Magento\Framework\Indexer\StructureFactory;
+use Magento\Framework\Indexer\IndexerInterfaceFactory;
 
 /**
  * Indexer model.
@@ -67,6 +68,11 @@ class Indexer extends \Magento\Framework\DataObject implements IndexerInterface
     private $workingStateProvider;
 
     /**
+     * @var IndexerInterfaceFactory
+     */
+    private $indexerFactory;
+
+    /**
      * @param ConfigInterface $config
      * @param ActionFactory $actionFactory
      * @param StructureFactory $structureFactory
@@ -74,6 +80,7 @@ class Indexer extends \Magento\Framework\DataObject implements IndexerInterface
      * @param Indexer\StateFactory $stateFactory
      * @param Indexer\CollectionFactory $indexersFactory
      * @param WorkingStateProvider $workingStateProvider
+     * @param IndexerInterfaceFactory $indexerFactory
      * @param array $data
      */
     public function __construct(
@@ -84,6 +91,7 @@ class Indexer extends \Magento\Framework\DataObject implements IndexerInterface
         Indexer\StateFactory $stateFactory,
         Indexer\CollectionFactory $indexersFactory,
         WorkingStateProvider $workingStateProvider,
+        IndexerInterfaceFactory $indexerFactory,
         array $data = []
     ) {
         $this->config = $config;
@@ -93,6 +101,7 @@ class Indexer extends \Magento\Framework\DataObject implements IndexerInterface
         $this->stateFactory = $stateFactory;
         $this->indexersFactory = $indexersFactory;
         $this->workingStateProvider = $workingStateProvider;
+        $this->indexerFactory = $indexerFactory;
         parent::__construct($data);
     }
 
@@ -465,7 +474,7 @@ class Indexer extends \Magento\Framework\DataObject implements IndexerInterface
             }
             $indexerConfig = $this->config->getIndexer($indexerId);
             if ($indexerConfig['shared_index'] === $sharedIndex) {
-                $indexer = $this->indexersFactory->create();
+                $indexer = $this->indexerFactory->create();
                 $indexer->load($indexerId);
                 $result[] = $indexer;
             }
