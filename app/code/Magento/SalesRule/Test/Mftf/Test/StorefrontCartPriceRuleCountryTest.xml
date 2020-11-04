@@ -77,8 +77,10 @@
         <!-- See discount if we use valid country -->
         <selectOption selector="{{CheckoutCartSummarySection.country}}" userInput="Brazil" stepKey="fillCountry"/>
         <waitForPageLoad stepKey="waitForCountry1"/>
-        <waitForElementVisible selector="{{CheckoutCartSummarySection.discountAmount}}" stepKey="waitForDiscountElement"/>
-        <see selector="{{CheckoutCartSummarySection.discountAmount}}" userInput="-$9.99" stepKey="seeDiscountTotal"/>
+        <comment userInput="Adding the comment to replace action for preserving Backward Compatibility" stepKey="waitForDiscountElement"/>
+        <actionGroup ref="AssertStorefrontCartDiscountActionGroup" stepKey="seeDiscountTotal">
+            <argument name="discount" value="9.99"/>
+        </actionGroup>
 
         <!-- Do not see discount with other country -->
         <selectOption selector="{{CheckoutCartSummarySection.country}}" userInput="United States" stepKey="fillCountry2"/>

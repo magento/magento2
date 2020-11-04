@@ -81,7 +81,9 @@
         <!-- Now we should see the discount because we exceeded $200 -->
         <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToCartPage2"/>
         <see selector="{{CheckoutCartSummarySection.subtotal}}" userInput="$246.00" stepKey="seeSubtotal2"/>
-        <waitForElementVisible selector="{{CheckoutCartSummarySection.discountAmount}}" stepKey="waitForDiscountElement"/>
-        <see selector="{{CheckoutCartSummarySection.discountAmount}}" userInput="-$0.01" stepKey="seeDiscountTotal"/>
+        <comment userInput="Adding the comment to replace action for preserving Backward Compatibility" stepKey="waitForDiscountElement"/>
+        <actionGroup ref="AssertStorefrontCartDiscountActionGroup" stepKey="seeDiscountTotal">
+            <argument name="discount" value="0.01"/>
+        </actionGroup>
     </test>
 </tests>

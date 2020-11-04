@@ -77,8 +77,10 @@
         <!-- See discount if we use valid postcode -->
         <selectOption selector="{{CheckoutCartSummarySection.stateProvince}}" userInput="Indiana" stepKey="fillState"/>
         <waitForPageLoad stepKey="waitForPostcode1"/>
-        <waitForElementVisible selector="{{CheckoutCartSummarySection.discountAmount}}" stepKey="waitForDiscountElement"/>
-        <see selector="{{CheckoutCartSummarySection.discountAmount}}" userInput="-$9.99" stepKey="seeDiscountTotal"/>
+        <comment userInput="Adding the comment to replace action for preserving Backward Compatibility" stepKey="waitForDiscountElement"/>
+        <actionGroup ref="AssertStorefrontCartDiscountActionGroup" stepKey="seeDiscountTotal">
+            <argument name="discount" value="9.99"/>
+        </actionGroup>
 
         <!-- Do not see discount with other postcode -->
         <selectOption selector="{{CheckoutCartSummarySection.stateProvince}}" userInput="Texas" stepKey="fillState2"/>

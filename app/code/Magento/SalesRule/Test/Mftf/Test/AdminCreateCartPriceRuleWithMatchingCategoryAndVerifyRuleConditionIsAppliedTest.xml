@@ -118,6 +118,8 @@
             <argument name="shippingMethod" value="Flat Rate - Fixed"/>
             <argument name="total" value="$66.50"/>
         </actionGroup>
-        <see selector="{{CheckoutCartSummarySection.discountAmount}}" userInput="-$61.50" stepKey="seeAssertDiscountAmountAppliedForMatchingCategory"/>
+        <actionGroup ref="AssertStorefrontCartDiscountActionGroup" stepKey="seeAssertDiscountAmountAppliedForMatchingCategory">
+            <argument name="discount" value="61.50"/>
+        </actionGroup>
     </test>
 </tests>
