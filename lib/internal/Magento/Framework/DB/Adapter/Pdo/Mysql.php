@@ -56,7 +56,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     public const DDL_CREATE            = 2;
     public const DDL_INDEX             = 3;
     public const DDL_FOREIGN_KEY       = 4;
-    public const DDL_EXISTS            = 5;
+    private const DDL_EXISTS           = 5;
     public const DDL_CACHE_PREFIX      = 'DB_PDO_MYSQL_DDL';
     public const DDL_CACHE_TAG         = 'DB_PDO_MYSQL_DDL';
 
