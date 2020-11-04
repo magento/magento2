@@ -25,7 +25,8 @@
         "magento/module-store": "*",
         "magento/module-tax": "*",
         "magento/module-theme": "*",
-        "magento/module-ui": "*"
+        "magento/module-ui": "*",
+        "magento/module-authorization": "*"
     },
     "suggest": {
         "magento/module-cookie": "*"
