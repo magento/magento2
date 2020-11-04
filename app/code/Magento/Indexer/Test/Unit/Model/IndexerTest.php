@@ -357,7 +357,8 @@ class IndexerTest extends TestCase
             'view_id' => 'view_test',
             'action_class' => 'Some\Class\Name',
             'title' => 'Indexer public name',
-            'description' => 'Indexer public description'
+            'description' => 'Indexer public description',
+            'shared_index' => null
         ];
     }
 
