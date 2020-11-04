@@ -13,6 +13,7 @@ use Magento\Store\Model\Store;
 use Magento\Catalog\Model\Config;
 use Magento\Catalog\Model\Indexer\Category\Product\Action\Rows;
 use Magento\Catalog\Model\Indexer\Product\Category as ProductCategoryIndexer;
+use Magento\Catalog\Model\Indexer\Category\Product as CategoryProductIndexer;
 use Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer;
 use Magento\Indexer\Model\WorkingStateProvider;
 use Magento\Framework\EntityManager\EntityMetadataInterface;
@@ -219,9 +220,25 @@ class RowsTest extends TestCase
         $this->connection->expects($this->any())
             ->method('fetchOne')
             ->willReturn($categoryId);
-        $this->indexerRegistry->expects($this->any())
+        $this->indexerRegistry->expects($this->at(0))
             ->method('get')
             ->with(ProductCategoryIndexer::INDEXER_ID)
+            ->willReturn($this->indexer);
+        $this->indexerRegistry->expects($this->at(1))
+            ->method('get')
+            ->with(ProductCategoryIndexer::INDEXER_ID)
+            ->willReturn($this->indexer);
+        $this->indexerRegistry->expects($this->at(2))
+            ->method('get')
+            ->with(CategoryProductIndexer::INDEXER_ID)
+            ->willReturn($this->indexer);
+        $this->indexerRegistry->expects($this->at(3))
+            ->method('get')
+            ->with(ProductCategoryIndexer::INDEXER_ID)
+            ->willReturn($this->indexer);
+        $this->indexerRegistry->expects($this->at(4))
+            ->method('get')
+            ->with(CategoryProductIndexer::INDEXER_ID)
             ->willReturn($this->indexer);
         $this->indexer->expects($this->any())
             ->method('getId')
