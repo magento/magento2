@@ -51,7 +51,7 @@
         <!--Open View and edit -->
         <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="clickMiniCart"/>
         <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="goToCheckout"/>
-        <comment userInput="StepKey Backward Compatibility" stepKey="waitForPageToLoad"/>
+        <comment userInput="Adding the comment to replace clickAddProductToggle action for preserving Backward Compatibility" stepKey="waitForPageToLoad"/>
 
         <!--Create an account-->
         <waitForElementVisible selector="{{StorefrontCustomerSignInPopupFormSection.createAnAccount}}" stepKey="waitForElementToBeVisible"/>

@@ -85,7 +85,7 @@
 
         <!-- Proceed to checkout and assert notification banner -->
         <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="clickProceedToCheckout"/>
-        <comment userInput="StepKey Backward Compatibility" stepKey="waitForProceedToCheckout"/>
+        <comment userInput="Adding the comment to replace clickAddProductToggle action for preserving Backward Compatibility" stepKey="waitForProceedToCheckout"/>
         <actionGroup ref="StorefrontAssertLoginAsCustomerNotificationBannerActionGroup" stepKey="assertNotificationBannerOnCheckoutPage">
             <argument name="customerFullName" value="$$createCustomer.firstname$$ $$createCustomer.lastname$$"/>
         </actionGroup>
