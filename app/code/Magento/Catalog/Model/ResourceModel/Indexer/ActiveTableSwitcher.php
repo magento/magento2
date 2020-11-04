@@ -34,9 +34,27 @@ class ActiveTableSwitcher
     public function switchTable(\Magento\Framework\DB\Adapter\AdapterInterface $connection, array $tableNames)
     {
         $toRename = [];
+        $tableComment = '';
+        $replicaComment = '';
         foreach ($tableNames as $tableName) {
             $outdatedTableName = $tableName . $this->outdatedTableSuffix;
             $replicaTableName = $tableName . $this->additionalTableSuffix;
+
+            $tableCreateQuery = 'SHOW CREATE TABLE ' . $tableName;
+            $tableCreateResult = $connection->fetchRow($tableCreateQuery);
+
+            $tableCommentPosition = strpos((string )end($tableCreateResult), "COMMENT=");
+            if ($tableCommentPosition) {
+                $tableComment = substr((string )end($tableCreateResult), $tableCommentPosition + 8);
+            }
+
+            $replicaCreateQuery = 'SHOW CREATE TABLE ' . $replicaTableName;
+            $replicaCreateResult = $connection->fetchRow($replicaCreateQuery);
+
+            $replicaCommentPosition = strpos((string )end($replicaCreateResult), "COMMENT=");
+            if ($replicaCommentPosition) {
+                $replicaComment = substr((string )end($replicaCreateResult), $replicaCommentPosition + 8);
+            }
 
             $renameBatch = [
                 [
@@ -53,6 +71,12 @@ class ActiveTableSwitcher
                 ]
             ];
             $toRename = array_merge($toRename, $renameBatch);
+            if (!empty($toRename) && $replicaComment !== '' && $tableComment !== $replicaComment) {
+                $changeTableComment   = sprintf("ALTER TABLE %s COMMENT=%s", $tableName, $replicaComment);
+                $connection->query($changeTableComment);
+                $changeReplicaComment = sprintf("ALTER TABLE %s COMMENT=%s", $replicaTableName, $tableComment);
+                $connection->query($changeReplicaComment);
+            }
         }
 
         if (!empty($toRename)) {
@@ -61,6 +85,8 @@ class ActiveTableSwitcher
     }
 
     /**
+     * Returns table name with additional suffix
+     *
      * @param string $tableName
      * @return string
      */
