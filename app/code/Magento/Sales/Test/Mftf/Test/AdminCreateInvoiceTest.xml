@@ -49,7 +49,7 @@
         <fillField selector="{{CheckoutShippingGuestInfoSection.telephone}}" userInput="{{CustomerAddressSimple.telephone}}" stepKey="enterTelephone"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask"/>
         <actionGroup ref="StorefrontSelectFirstShippingMethodActionGroup" stepKey="selectFirstShippingMethod"/>
-        <comment userInput="Adding the comment to replace clickAddProductToggle action for preserving Backward Compatibility" stepKey="waitForLoadingMask2"/>
+        <comment userInput="Adding the comment to replace waitForLoadingMask2 action for preserving Backward Compatibility" stepKey="waitForLoadingMask2"/>
         <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickNext"/>
         <!-- Checkout select Check/Money Order payment -->
         <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment"/>
