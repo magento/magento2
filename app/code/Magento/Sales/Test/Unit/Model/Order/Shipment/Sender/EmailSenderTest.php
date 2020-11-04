@@ -301,11 +301,6 @@ class EmailSenderTest extends TestCase
             ->method('setSendEmail')
             ->with($emailSendingResult);
 
-        $this->orderMock->method('getCustomerName')->willReturn('Customer name');
-        $this->orderMock->method('getIsNotVirtual')->willReturn(true);
-        $this->orderMock->method('getEmailCustomerNote')->willReturn(null);
-        $this->orderMock->method('getFrontendStatusLabel')->willReturn('Pending');
-
         if (!$configValue || $forceSyncMode) {
             $transport = [
                 'order' => $this->orderMock,
