@@ -79,7 +79,7 @@ class RemoveProductsFromCompareList implements ResolverInterface
             throw new GraphQlInputException(__('"products" value must be specified.'));
         }
 
-        if (!isset($args['input']['uid'])) {
+        if (empty($args['input']['uid'])) {
             throw new GraphQlInputException(__('"uid" value must be specified.'));
         }
 

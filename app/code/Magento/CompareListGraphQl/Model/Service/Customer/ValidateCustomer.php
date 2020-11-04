@@ -5,11 +5,8 @@
  */
 declare(strict_types=1);
 
-namespace Magento\CompareListGraphQl\Model\Service;
+namespace Magento\CompareListGraphQl\Model\Service\Customer;
 
-use Magento\Catalog\Model\CompareList;
-use Magento\Catalog\Model\CompareListFactory;
-use Magento\Catalog\Model\ResourceModel\Product\Compare\CompareList as ResourceCompareList;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\AuthenticationInterface;
@@ -20,9 +17,9 @@ use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 
 /**
- * Service class for customer
+ * Class provided customer validation
  */
-class CustomerService
+class ValidateCustomer
 {
     /**
      * @var AuthenticationInterface
@@ -30,89 +27,28 @@ class CustomerService
     private $authentication;
 
     /**
-     * @var CustomerRepositoryInterface
-     */
-    private $customerRepository;
-
-    /**
      * @var AccountManagementInterface
      */
     private $accountManagement;
 
     /**
-     * @var ResourceCompareList
+     * @var CustomerRepositoryInterface
      */
-    private $resourceCompareList;
-
-    /**
-     * @var CompareListFactory
-     */
-    private $compareListFactory;
+    private $customerRepository;
 
     /**
      * @param AuthenticationInterface $authentication
      * @param AccountManagementInterface $accountManagement
      * @param CustomerRepositoryInterface $customerRepository
-     * @param CompareListFactory $compareListFactory
-     * @param ResourceCompareList $resourceCompareList
      */
     public function __construct(
         AuthenticationInterface $authentication,
         AccountManagementInterface $accountManagement,
-        CustomerRepositoryInterface $customerRepository,
-        CompareListFactory $compareListFactory,
-        ResourceCompareList $resourceCompareList
+        CustomerRepositoryInterface $customerRepository
     ) {
         $this->authentication = $authentication;
         $this->accountManagement = $accountManagement;
         $this->customerRepository = $customerRepository;
-        $this->compareListFactory = $compareListFactory;
-        $this->resourceCompareList = $resourceCompareList;
-    }
-
-    /**
-     * Get listId by Customer ID
-     *
-     * @param int $customerId
-     *
-     * @return int|null
-     */
-    public function getListIdByCustomerId(int $customerId)
-    {
-        if ($customerId) {
-            /** @var CompareList $compareList */
-            $compareList = $this->compareListFactory->create();
-            $this->resourceCompareList->load($compareList, $customerId, 'customer_id');
-            return (int)$compareList->getListId();
-        }
-
-        return null;
-    }
-
-    /**
-     * Set customer to compare list
-     *
-     * @param int $listId
-     * @param int $customerId
-     *
-     * @return bool
-     *
-     * @throws GraphQlAuthenticationException
-     * @throws GraphQlInputException
-     * @throws GraphQlNoSuchEntityException
-     */
-    public function setCustomerToCompareList(int $listId, int $customerId): bool
-    {
-        if ($this->validateCustomer($customerId)) {
-            /** @var CompareList $compareListModel */
-            $compareList = $this->compareListFactory->create();
-            $this->resourceCompareList->load($compareList, $listId, 'list_id');
-            $compareList->setCustomerId($customerId);
-            $this->resourceCompareList->save($compareList);
-            return true;
-        }
-
-        return false;
     }
 
     /**
@@ -126,7 +62,7 @@ class CustomerService
      * @throws GraphQlInputException
      * @throws GraphQlNoSuchEntityException
      */
-    public function validateCustomer(int $customerId): int
+    public function execute(int $customerId): int
     {
         try {
             $customer = $this->customerRepository->getById($customerId);

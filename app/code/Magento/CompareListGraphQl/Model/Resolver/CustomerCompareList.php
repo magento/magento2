@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CompareListGraphQl\Model\Resolver;
 
-use Magento\CompareListGraphQl\Model\Service\CustomerService;
+use Magento\CompareListGraphQl\Model\Service\Customer\GetListIdByCustomerId;
 use Magento\CompareListGraphQl\Model\Service\GetCompareList;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
@@ -26,20 +26,20 @@ class CustomerCompareList implements ResolverInterface
     private $getCompareList;
 
     /**
-     * @var CustomerService
+     * @var GetListIdByCustomerId
      */
-    private $customerService;
+    private $getListIdByCustomerId;
 
     /**
-     * @param GetCompareList     $getCompareList
-     * @param CustomerService    $customerService
+     * @param GetCompareList $getCompareList
+     * @param GetListIdByCustomerId $getListIdByCustomerId
      */
     public function __construct(
         GetCompareList $getCompareList,
-        CustomerService $customerService
+        GetListIdByCustomerId $getListIdByCustomerId
     ) {
         $this->getCompareList = $getCompareList;
-        $this->customerService = $customerService;
+        $this->getListIdByCustomerId = $getListIdByCustomerId;
     }
 
     /**
@@ -62,7 +62,7 @@ class CustomerCompareList implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        $listId = $this->customerService->getListIdByCustomerId($context->getUserId());
+        $listId = $this->getListIdByCustomerId->execute((int)$context->getUserId());
 
         if (!$listId) {
             return null;

@@ -74,7 +74,7 @@ class AddProductsToCompareList implements ResolverInterface
         array $args = null
     ) {
         $storeId = (int)$context->getExtensionAttributes()->getStore()->getStoreId();
-        if (!isset($args['input']['uid'])) {
+        if (empty($args['input']['uid'])) {
             throw new GraphQlInputException(__('"uid" value must be specified.'));
         }
 

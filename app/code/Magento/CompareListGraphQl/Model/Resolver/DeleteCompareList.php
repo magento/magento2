@@ -74,7 +74,7 @@ class DeleteCompareList implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        if (!isset($args['uid'])) {
+        if (empty($args['uid'])) {
             throw new GraphQlInputException(__('"uid" value must be specified'));
         }
 
