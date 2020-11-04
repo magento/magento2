@@ -11,11 +11,6 @@ namespace Magento\Framework\Mview\View;
  */
 interface ChangelogInterface
 {
-    const ATTRIBUTE_SCOPE_SUPPORT = 'attribute_scope';
-    const STORE_SCOPE_SUPPORT = 'store_scope';
-    const ATTRIBUTE_COLUMN = 'attribute_id';
-    const STORE_COLUMN = 'store_id';
-
     /**
      * Create changelog table
      *
