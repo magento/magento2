@@ -23,7 +23,9 @@
                         stepKey="enableLoginAsCustomer"/>
             <magentoCLI command="config:set {{LoginAsCustomerStoreViewLogin.path}} 0"
                         stepKey="enableLoginAsCustomerAutoDetection"/>
-            <magentoCLI command="cache:flush config" stepKey="flushCacheBeforeTestRun"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="flushCacheBeforeTestRun">
+                <argument name="tags" value="config"/>
+            </actionGroup>
             <createData entity="Simple_US_Customer_Assistance_Allowed" stepKey="createFirstCustomer"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsDefaultUser"/>
         </before>
@@ -37,7 +39,9 @@
             <!-- Set config back-->
             <magentoCLI command="config:set {{LoginAsCustomerConfigDataEnabled.path}} 0"
                         stepKey="disableLoginAsCustomer"/>
-            <magentoCLI command="cache:flush config" stepKey="flushCacheAfterTestRun"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="flushCacheAfterTestRun">
+                <argument name="tags" value="config"/>
+            </actionGroup>
         </after>
         <!-- Login into First Customer account -->
         <actionGroup ref="AdminLoginAsCustomerLoginFromCustomerPageActionGroup"
