@@ -49,7 +49,7 @@
 
         <!--Create a Simple Product with Custom Options -->
         <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToCatalogProductGrid"/>
-        <comment userInput="StepKey Backward Compatibility" stepKey="clickAddProductDropdown"/>
+        <comment userInput="Adding the comment to replace clickAddProductToggle action for preserving Backward Compatibility" stepKey="clickAddProductDropdown"/>
         <actionGroup ref="AdminClickAddProductToggleAndSelectProductTypeActionGroup" stepKey="clickAddSimpleProduct">
             <argument name="productType" value="simple"/>
         </actionGroup>

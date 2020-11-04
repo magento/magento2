@@ -101,7 +101,7 @@
 
         <!-- Create a configurable product to verify the storefront with -->
         <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="amOnProductGridPage"/>
-        <comment userInput="StepKey Backward Compatibility" stepKey="clickOnAddProductToggle"/>
+        <comment userInput="Adding the comment to replace clickAddProductToggle action for preserving Backward Compatibility" stepKey="clickOnAddProductToggle"/>
         <actionGroup ref="AdminClickAddProductToggleAndSelectProductTypeActionGroup" stepKey="clickOnAddConfigurableProduct">
             <argument name="productType" value="configurable"/>
         </actionGroup>

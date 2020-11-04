@@ -46,11 +46,11 @@
         <see selector="{{AdminDataGridTableSection.dataGridEmpty}}" userInput="We couldn't find any records." stepKey="assertDataGridEmptyMessage2"/>
          <!--Go to the Catalog > Products page and create Simple Product -->
         <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="amOnProductList"/>
-        <comment userInput="StepKey Backward Compatibility" stepKey="toggleAddProductBtn"/>
+        <comment userInput="Adding the comment to replace clickAddProductToggle action for preserving Backward Compatibility" stepKey="toggleAddProductBtn"/>
         <actionGroup ref="AdminClickAddProductToggleAndSelectProductTypeActionGroup" stepKey="chooseAddSimpleProduct">
             <argument name="productType" value="simple"/>
         </actionGroup>
-        <comment userInput="StepKey Backward Compatibility" stepKey="waitForProductAdded"/>
+        <comment userInput="Adding the comment to replace clickAddProductToggle action for preserving Backward Compatibility" stepKey="waitForProductAdded"/>
         <!-- Press Add Attribute button -->
         <click selector="{{AdminProductFormSection.addAttributeBtn}}" stepKey="clickAddAttributeBtn"/>
         <waitForPageLoad stepKey="waitForAttributeAdded"/>

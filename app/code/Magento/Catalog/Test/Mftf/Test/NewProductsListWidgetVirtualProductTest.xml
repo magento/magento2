@@ -26,7 +26,7 @@
         <!-- Create a Virtual Product to appear in the widget -->
 
         <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="amOnProductList"/>
-        <comment userInput="StepKey Backward Compatibility" stepKey="toggleAddProductButton"/>
+        <comment userInput="Adding the comment to replace clickAddProductToggle action for preserving Backward Compatibility" stepKey="toggleAddProductButton"/>
         <actionGroup ref="AdminClickAddProductToggleAndSelectProductTypeActionGroup" stepKey="clickAddVirtualProduct">
             <argument name="productType" value="virtual"/>
         </actionGroup>

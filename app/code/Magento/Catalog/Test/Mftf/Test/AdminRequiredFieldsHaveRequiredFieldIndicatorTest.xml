@@ -40,7 +40,7 @@
         </assertEquals>
 
         <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndexPage"/>
-        <comment userInput="StepKey Backward Compatibility" stepKey="addProductDropdown"/>
+        <comment userInput="Adding the comment to replace clickAddProductToggle action for preserving Backward Compatibility" stepKey="addProductDropdown"/>
         <actionGroup ref="AdminClickAddProductToggleAndSelectProductTypeActionGroup" stepKey="addSimpleProduct">
             <argument name="productType" value="simple"/>
         </actionGroup>
