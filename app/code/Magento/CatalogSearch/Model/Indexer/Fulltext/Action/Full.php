@@ -358,6 +358,8 @@ class Full
             $staticFields[] = $attribute->getAttributeCode();
         }
 
+        $productCount = $this->dataProvider->getProductCount($storeId, $staticFields);
+
         $dynamicFields = [
             'int' => array_keys($this->dataProvider->getSearchableAttributes('int')),
             'varchar' => array_keys($this->dataProvider->getSearchableAttributes('varchar')),
@@ -366,37 +368,36 @@ class Full
             'datetime' => array_keys($this->dataProvider->getSearchableAttributes('datetime')),
         ];
 
-        $lastProductId = 0;
-        $products = $this->dataProvider
-            ->getSearchableProducts($storeId, $staticFields, $productIds, $lastProductId, $this->batchSize);
-        while (count($products) > 0) {
-            $productsIds = array_column($products, 'entity_id');
-            $relatedProducts = $this->getRelatedProducts($products);
-            $productsIds = array_merge($productsIds, array_values($relatedProducts));
-
-            $productsAttributes = $this->dataProvider->getProductAttributes($storeId, $productsIds, $dynamicFields);
-
-            foreach ($products as $productData) {
-                $lastProductId = $productData['entity_id'];
-
-                $productIndex = [$productData['entity_id'] => $productsAttributes[$productData['entity_id']]];
-                if (isset($relatedProducts[$productData['entity_id']])) {
-                    $childProductsIndex = $this->getChildProductsIndex(
-                        $productData['entity_id'],
-                        $relatedProducts,
-                        $productsAttributes
-                    );
-                    if (empty($childProductsIndex)) {
-                        continue;
-                    }
-                    $productIndex = $productIndex + $childProductsIndex;
-                }
-
-                $index = $this->dataProvider->prepareProductIndex($productIndex, $productData, $storeId);
-                yield $productData['entity_id'] => $index;
-            }
+        $j = 0;
+        for ($i = 0; $i < ceil($productCount / $this->batchSize); $i++) {
             $products = $this->dataProvider
-                ->getSearchableProducts($storeId, $staticFields, $productIds, $lastProductId, $this->batchSize);
+                ->getSearchableProducts($storeId, $staticFields, $this->batchSize, $i * $this->batchSize);
+
+            if (count($products) > 0) {
+                $productsIds = array_column($products, 'entity_id');
+                $relatedProducts = $this->getRelatedProducts($products);
+                $productsIds = array_merge($productsIds, array_values($relatedProducts));
+
+                $productsAttributes = $this->dataProvider->getProductAttributes($storeId, $productsIds, $dynamicFields);
+
+                foreach ($products as $productData) {
+                    $productIndex = [$productData['entity_id'] => $productsAttributes[$productData['entity_id']]];
+                    if (isset($relatedProducts[$productData['entity_id']])) {
+                        $childProductsIndex = $this->getChildProductsIndex(
+                            $productData['entity_id'],
+                            $relatedProducts,
+                            $productsAttributes
+                        );
+                        if (empty($childProductsIndex)) {
+                            continue;
+                        }
+                        $productIndex = $productIndex + $childProductsIndex;
+                    }
+
+                    $index = $this->dataProvider->prepareProductIndex($productIndex, $productData, $storeId);
+                    yield $productData['entity_id'] => $index;
+                }
+            }
         }
     }
 

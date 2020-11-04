@@ -183,27 +183,23 @@ class DataProvider
     public function getSearchableProducts(
         $storeId,
         array $staticFields,
-        $productIds = null,
-        $lastProductId = 0,
-        $batch = 100
+        $batch,
+        $offset
     ) {
+        $select = $this->getSelectForSearchableProducts($storeId, $staticFields, $batch, $offset);
+        $result = $this->connection->fetchAssoc($select);
+        return $result;
+    }
 
-        $select = $this->getSelectForSearchableProducts($storeId, $staticFields, $productIds, $lastProductId, $batch);
-        if ($productIds === null) {
-            $select->where(
-                'e.entity_id < ?',
-                $lastProductId ? $this->antiGapMultiplier * $batch + $lastProductId + 1 : $batch + 1
-            );
-        }
-        $products = $this->connection->fetchAll($select);
-        if ($productIds === null && !$products) {
-            // try to search without limit entity_id by batch size for cover case with a big gap between entity ids
-            $products = $this->connection->fetchAll(
-                $this->getSelectForSearchableProducts($storeId, $staticFields, $productIds, $lastProductId, $batch)
-            );
-        }
-
-        return $products;
+    /**
+     * @param int $storeId
+     * @param array $staticFields
+     * @return int
+     */
+    public function getProductCount($storeId, array $staticFields): int
+    {
+        $products = $this->getSelectForSearchableProducts($storeId, $staticFields);
+        return count($this->connection->fetchAll($products));
     }
 
     /**
@@ -211,27 +207,23 @@ class DataProvider
      *
      * @param int $storeId
      * @param array $staticFields
-     * @param array|int $productIds
-     * @param int $lastProductId
      * @param int $batch
+     * @param int $offset
      * @return Select
      */
-    private function getSelectForSearchableProducts(
+    public function getSelectForSearchableProducts(
         $storeId,
         array $staticFields,
-        $productIds,
-        $lastProductId,
-        $batch
+        $batch = 0,
+        $offset = 0
     ) {
         $websiteId = (int)$this->storeManager->getStore($storeId)->getWebsiteId();
-        $lastProductId = (int) $lastProductId;
 
-        $select = $this->connection->select()
-            ->useStraightJoin(true)
-            ->from(
-                ['e' => $this->getTable('catalog_product_entity')],
-                array_merge(['entity_id', 'type_id'], $staticFields)
-            )
+        $select = $this->connection->select();
+        $select->from(
+            ['e' => $this->getTable('catalog_product_entity')],
+            array_merge(['entity_id', 'type_id'], $staticFields)
+        )
             ->join(
                 ['website' => $this->getTable('catalog_product_website')],
                 $this->connection->quoteInto('website.product_id = e.entity_id AND website.website_id = ?', $websiteId),
@@ -241,12 +233,11 @@ class DataProvider
         $this->joinAttribute($select, 'visibility', $storeId, $this->engine->getAllowedVisibility());
         $this->joinAttribute($select, 'status', $storeId, [Status::STATUS_ENABLED]);
 
-        if ($productIds !== null) {
-            $select->where('e.entity_id IN (?)', $productIds);
-        }
-        $select->where('e.entity_id > ?', $lastProductId);
         $select->order('e.entity_id');
-        $select->limit($batch);
+
+        if ($batch) {
+            $select->limit($batch, $offset);
+        }
 
         return $select;
     }
@@ -323,7 +314,7 @@ class DataProvider
                 'catelogsearch_searchable_attributes_load_after',
                 ['engine' => $this->engine, 'attributes' => $attributes]
             );
-            
+
             $this->eventManager->dispatch(
                 'catalogsearch_searchable_attributes_load_after',
                 ['engine' => $this->engine, 'attributes' => $attributes]
@@ -572,7 +563,7 @@ class DataProvider
         foreach ($indexData as $entityId => $attributeData) {
             foreach ($attributeData as $attributeId => $attributeValues) {
                 $value = $this->getAttributeValue($attributeId, $attributeValues, $storeId);
-                if ($value !== null && $value !== false && $value !== '') {
+                if (!empty($value)) {
                     if (!isset($index[$attributeId])) {
                         $index[$attributeId] = [];
                     }
