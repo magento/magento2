@@ -368,7 +368,6 @@ class Full
             'datetime' => array_keys($this->dataProvider->getSearchableAttributes('datetime')),
         ];
 
-        $j = 0;
         for ($i = 0; $i < ceil($productCount / $this->batchSize); $i++) {
             $products = $this->dataProvider
                 ->getSearchableProducts($storeId, $staticFields, $this->batchSize, $i * $this->batchSize);
