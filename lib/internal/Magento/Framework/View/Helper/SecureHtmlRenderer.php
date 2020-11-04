@@ -120,7 +120,7 @@ class SecureHtmlRenderer
                     }
                     {$listenerFunction}.apply(targetElement);
                     if ({$elementName}.nodeName == 'A' &&  "$eventName" == 'onclick') {
-			event.preventDefault();
+                        event.preventDefault();
                     }
 		}
             }
