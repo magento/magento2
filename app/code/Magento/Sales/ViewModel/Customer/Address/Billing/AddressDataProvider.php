@@ -9,17 +9,16 @@ namespace Magento\Sales\ViewModel\Customer\Address\Billing;
 
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 use Magento\Sales\Model\AdminOrder\Create;
-use Magento\Quote\Model\Quote\Address as QuoteAddress;
 
 /**
- * Customer address formatter
+ * Customer billing address data provider
  */
-class Address implements ArgumentInterface
+class AddressDataProvider implements ArgumentInterface
 {
     /**
      * @var Create
      */
-    protected $orderCreate;
+    private $orderCreate;
 
     /**
      * Customer billing address
@@ -33,22 +32,12 @@ class Address implements ArgumentInterface
     }
 
     /**
-     * Return billing address object
-     *
-     * @return QuoteAddress
-     */
-    public function getAddress(): QuoteAddress
-    {
-        return $this->orderCreate->getBillingAddress();
-    }
-
-    /**
      * Get save billing address in the address book
      *
      * @return int
      */
     public function getSaveInAddressBook(): int
     {
-        return (int)$this->getAddress()->getSaveInAddressBook();
+        return (int)$this->orderCreate->getBillingAddress()->getSaveInAddressBook();
     }
 }
