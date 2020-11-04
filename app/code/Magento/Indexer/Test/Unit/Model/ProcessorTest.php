@@ -48,7 +48,6 @@ class ProcessorTest extends TestCase
      */
     protected $viewProcessorMock;
 
-
     protected function setUp(): void
     {
         $this->configMock = $this->getMockForAbstractClass(
