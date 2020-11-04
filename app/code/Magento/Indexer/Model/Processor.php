@@ -85,18 +85,7 @@ class Processor
                 // Skip indexers having shared index that was already complete
                 $sharedIndex = $indexerConfig['shared_index'] ?? null;
                 if (!in_array($sharedIndex, $this->sharedIndexesComplete)) {
-                    if (!empty($sharedIndex)) {
-                        $sharedIndexer = $this->indexerFactory->create()->load($sharedIndex);
-                        if ($sharedIndexer->getView()->isEnabled()) {
-                            $sharedIndexer->getView()->suspend();
-                        }
-                    }
                     $indexer->reindexAll();
-                    if (!empty($sharedIndex)) {
-                        if ($sharedIndexer->getView()->isEnabled()) {
-                            $sharedIndexer->getView()->resume();
-                        }
-                    }
 
                     if (!empty($sharedIndex) && $this->makeSharedValid->execute($sharedIndex)) {
                         $this->sharedIndexesComplete[] = $sharedIndex;
