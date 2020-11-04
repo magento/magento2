@@ -18,90 +18,50 @@
             <group value="sales"/>
         </annotations>
         <before>
-            <!-- Login as admin -->
             <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
-
-            <!-- Create customer -->
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
-
-            <!-- Create simple product -->
             <createData entity="SimpleProduct2" stepKey="createSimpleProduct">
                 <field key="price">10</field>
             </createData>
-
-            <!-- Create sales rule with coupon -->
             <createData entity="SalesRuleSpecificCouponWithFixedDiscount" stepKey="createCartPriceRule"/>
             <createData entity="SimpleSalesRuleCoupon" stepKey="createCouponForCartPriceRule">
                 <requiredEntity createDataKey="createCartPriceRule"/>
             </createData>
-
-            <!-- Enable Bank Transfer payment -->
             <magentoCLI
                 command="config:set {{EnablePaymentBankTransferConfigData.path}} {{EnablePaymentBankTransferConfigData.value}}"
                 stepKey="enableBankTransferPayment"/>
-
-            <!--Set default flat rate shipping method settings-->
             <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}"
                         stepKey="enableFlatRate"/>
         </before>
         <after>
-            <!-- Disable Bank Transfer payment -->
             <magentoCLI
                 command="config:set {{DisablePaymentBankTransferConfigData.path}} {{DisablePaymentBankTransferConfigData.value}}"
                 stepKey="disableBankTransferPayment"/>
-
-            <!--Disable flat rate shipping method-->
             <magentoCLI command="config:set {{DisableFlatRateConfigData.path}} {{DisableFlatRateConfigData.value}}"
                         stepKey="disableFlatRate"/>
-
-            <!-- Delete sales rule -->
             <deleteData createDataKey="createCartPriceRule" stepKey="deleteCartPriceRule"/>
-
-            <!-- Delete customer -->
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
-
-            <!-- Delete product -->
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
-
-            <!-- Log out -->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
-
-        <!-- Create order -->
         <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="goToCreateOrderPage">
             <argument name="customer" value="$$createCustomer$$"/>
         </actionGroup>
-
-        <!-- Add product to order -->
         <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addProductToOrder">
             <argument name="product" value="$$createSimpleProduct$$"/>
         </actionGroup>
-
-        <!-- Apply coupon to the order -->
         <actionGroup ref="AdminApplyCouponToOrderActionGroup" stepKey="applyCoupon">
             <argument name="couponCode" value="$$createCouponForCartPriceRule.code$$"/>
         </actionGroup>
-
-        <!-- Remove coupon from the order -->
         <actionGroup ref="AdminRemoveCouponFromOrderActionGroup" stepKey="removeCoupon"/>
-
-        <!--Select FlatRate shipping method-->
         <actionGroup ref="AdminSelectFlatRateShippingMethodActionGroup" stepKey="selectFlatRateShippingMethod"/>
-
-        <!-- Select bank Transfer payment method -->
         <waitForElementVisible selector="{{AdminOrderFormPaymentSection.paymentBlock}}"
                                stepKey="waitForPaymentOptions"/>
         <conditionalClick selector="{{AdminOrderFormPaymentSection.bankTransferOption}}"
                           dependentSelector="{{AdminOrderFormPaymentSection.bankTransferOption}}" visible="true"
                           stepKey="checkBankTransferOption"/>
-
-        <!-- Submit order -->
         <actionGroup ref="AdminSubmitOrderActionGroup" stepKey="submitOrder"/>
-
-        <!-- Grab order id -->
         <grabTextFrom selector="|Order # (\d+)|" stepKey="getOrderId"/>
-
-        <!-- Open created order -->
         <amOnPage url="{{AdminOrdersPage.url}}" stepKey="goToOrdersPage"/>
         <waitForPageLoad stepKey="waitForOrdersPageLoad"/>
         <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrdersGridById">
