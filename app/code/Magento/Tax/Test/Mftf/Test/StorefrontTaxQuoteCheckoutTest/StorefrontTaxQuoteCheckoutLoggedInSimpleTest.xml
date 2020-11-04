@@ -115,7 +115,7 @@
             <argument name="classPrefix" value="._show"/>
         </actionGroup>
         <actionGroup ref="StorefrontCheckoutClickSaveAddressButtonActionGroup" stepKey="saveAddress"/>
-        <comment userInput="StepKey Backward Compatibility" stepKey="waitForAddressSaved"/>
+        <comment userInput="Adding the comment to replace clickAddProductToggle action for preserving Backward Compatibility" stepKey="waitForAddressSaved"/>
         <see stepKey="seeAddress2" selector="{{CheckoutShippingSection.selectedShippingAddress}}" userInput="{{SimpleTaxCA.state}}"/>
         <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="clickNext2"/>
 
