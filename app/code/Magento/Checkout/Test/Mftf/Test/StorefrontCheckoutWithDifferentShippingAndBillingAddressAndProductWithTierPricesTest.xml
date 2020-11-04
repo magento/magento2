@@ -66,7 +66,7 @@
         <!-- Fill the Estimate Shipping and Tax section -->
         <actionGroup ref="CheckoutFillEstimateShippingAndTaxActionGroup" stepKey="fillEstimateShippingAndTaxFields"/>
         <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="goToCheckout"/>
-        <comment userInput="Adding the comment to replace clickAddProductToggle action for preserving Backward Compatibility" stepKey="waitForPageToLoad"/>
+        <comment userInput="Adding the comment to replace waitForPageToLoad action for preserving Backward Compatibility" stepKey="waitForPageToLoad"/>
 
         <!-- Fill the guest form -->
         <actionGroup ref="FillGuestCheckoutShippingAddressWithCountryActionGroup" stepKey="fillGuestForm">

@@ -65,7 +65,7 @@
         <!-- Go to Checkout page -->
         <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="goToShoppingCartFromMinicart"/>
         <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="clickProceedToCheckout"/>
-        <comment userInput="Adding the comment to replace clickAddProductToggle action for preserving Backward Compatibility" stepKey="waitForProceedToCheckout"/>
+        <comment userInput="Adding the comment to replace waitForProceedToCheckout action for preserving Backward Compatibility" stepKey="waitForProceedToCheckout"/>
 
         <!-- Input in field email and password for newly created customer; click Login button -->
         <actionGroup ref="LoginAsCustomerOnCheckoutPageActionGroup" stepKey="customerLogin">

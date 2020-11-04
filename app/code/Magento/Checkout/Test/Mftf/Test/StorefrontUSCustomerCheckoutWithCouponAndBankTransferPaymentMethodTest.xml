@@ -57,7 +57,7 @@
         </actionGroup>
 
         <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="goToCheckout"/>
-        <comment userInput="Adding the comment to replace clickAddProductToggle action for preserving Backward Compatibility" stepKey="waitForPageToLoad"/>
+        <comment userInput="Adding the comment to replace waitForPageToLoad action for preserving Backward Compatibility" stepKey="waitForPageToLoad"/>
 
         <!-- Fill the guest form -->
         <actionGroup ref="FillGuestCheckoutShippingAddressFormActionGroup" stepKey="fillGuestForm"/>

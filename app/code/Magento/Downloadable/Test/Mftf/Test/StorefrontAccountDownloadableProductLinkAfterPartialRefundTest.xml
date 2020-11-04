@@ -68,7 +68,7 @@
 
         <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="goToShoppingCartFromMinicart"/>
         <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="clickProceedToCheckout"/>
-        <comment userInput="Adding the comment to replace clickAddProductToggle action for preserving Backward Compatibility" stepKey="waitForProceedToCheckout"/>
+        <comment userInput="Adding the comment to replace waitForProceedToCheckout action for preserving Backward Compatibility" stepKey="waitForProceedToCheckout"/>
         <waitForElementVisible selector="{{CheckoutShippingSection.shipHereButton(UK_Not_Default_Address.street[0])}}" stepKey="waitForShipHereVisible"/>
         <click selector="{{CheckoutShippingSection.shipHereButton(UK_Not_Default_Address.street[0])}}" stepKey="clickShipHere"/>
         <click selector="{{CheckoutShippingGuestInfoSection.next}}" stepKey="clickNext"/>

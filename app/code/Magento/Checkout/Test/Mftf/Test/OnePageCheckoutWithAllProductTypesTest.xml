@@ -169,7 +169,7 @@
             <argument name="address" value="US_Address_CA"/>
         </actionGroup>
         <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="clickProceedToCheckout"/>
-        <comment userInput="Adding the comment to replace clickAddProductToggle action for preserving Backward Compatibility" stepKey="waitForProceedToCheckout"/>
+        <comment userInput="Adding the comment to replace waitForProceedToCheckout action for preserving Backward Compatibility" stepKey="waitForProceedToCheckout"/>
         <actionGroup ref="FillCustomerSignInPopupFormActionGroup" stepKey="fillCustomerSignInPopupForm">
             <argument name="customer" value="$$createCustomer$$"/>
         </actionGroup>
