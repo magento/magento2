@@ -119,7 +119,9 @@ class SecureHtmlRenderer
                         targetElement = event.target;
                     }
                     {$listenerFunction}.apply(targetElement);
-                    event.preventDefault();
+                    if ({$elementName}.nodeName == 'A' &&  "$eventName" == 'onclick') {
+			event.preventDefault();
+                    }
 		}
             }
 	
