@@ -12,6 +12,7 @@ use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Utility\Files;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Config\Reader\Filesystem as Reader;
+use Magento\Framework\Config\ValidationState\Configurable;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Test\Integrity\Dependency\Converter;
 use Magento\Test\Integrity\Dependency\DeclarativeSchemaDependencyProvider;
@@ -26,7 +27,6 @@ use Magento\TestFramework\Dependency\PhpRule;
 use Magento\TestFramework\Dependency\ReportsConfigRule;
 use Magento\TestFramework\Dependency\Route\RouteMapper;
 use Magento\TestFramework\Dependency\VirtualType\VirtualTypeMapper;
-use Magento\TestFramework\Workaround\Override\Config\ValidationState;
 
 /**
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
@@ -288,12 +288,10 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
             new WebapiFileResolver(self::getComponentRegistrar()),
             new Converter(),
             new SchemaLocator(self::getComponentRegistrar()),
-            new ValidationState(),
+            new Configurable(false),
             'webapi.xml',
             [
                 '/routes/route' => ['url', 'method'],
-                '/routes/route/resources/resource' => 'ref',
-                '/routes/route/data/parameter' => 'name'
             ],
         );
 
