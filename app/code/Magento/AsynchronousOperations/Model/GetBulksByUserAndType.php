@@ -48,18 +48,18 @@ class GetBulksByUserAndType implements GetBulksByUserAndTypeInterface
     private $calculatedStatusSql;
 
     /**
-     * @param ResourceConnection $resourceConnection
      * @param CalculatedStatusSql $calculatedStatusSql
+     * @param ResourceConnection $resourceConnection
      * @param CollectionFactory $bulkCollection
      */
     public function __construct(
-        ResourceConnection $resourceConnection,
         CalculatedStatusSql $calculatedStatusSql,
+        ResourceConnection $resourceConnection,
         CollectionFactory $bulkCollection
     ) {
-        $this->bulkCollectionFactory = $bulkCollection;
-        $this->resourceConnection = $resourceConnection;
         $this->calculatedStatusSql = $calculatedStatusSql;
+        $this->resourceConnection = $resourceConnection;
+        $this->bulkCollectionFactory = $bulkCollection;
     }
 
     /**

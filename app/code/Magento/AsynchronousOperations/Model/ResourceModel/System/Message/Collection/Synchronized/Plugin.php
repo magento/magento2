@@ -89,8 +89,8 @@ class Plugin
         BulkNotificationManagement $bulkNotificationManagement,
         UserContextInterface $userContext,
         Details $operationDetails,
+        AuthorizationInterface $authorization,
         StatusMapper $statusMapper,
-        ?AuthorizationInterface $authorization = null,
         ?Encryptor $encryptor = null,
         ?GetBulksByUserAndTypeInterface $getBulksByUserAndType = null
     ) {
@@ -99,8 +99,8 @@ class Plugin
         $this->userContext = $userContext;
         $this->operationDetails = $operationDetails;
         $this->bulkNotificationManagement = $bulkNotificationManagement;
+        $this->authorization = $authorization;
         $this->statusMapper = $statusMapper;
-        $this->authorization = $authorization ?: ObjectManager::getInstance()->get(AuthorizationInterface::class);
         $this->encryptor = $encryptor ?: ObjectManager::getInstance()->get(Encryptor::class);
         $this->getBulksByUserAndType = $getBulksByUserAndType
             ?: ObjectManager::getInstance()->get(GetBulksByUserAndTypeInterface::class);

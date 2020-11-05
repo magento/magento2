@@ -10,7 +10,7 @@ use Magento\AsynchronousOperations\Api\Data\BulkSummaryInterface;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\AsynchronousOperations\Model\ResourceModel\Bulk\CollectionFactory as BulkCollectionFactory;
 use Magento\Framework\Data\Collection;
-use \Magento\Authorization\Model\UserContextInterface;
+use Magento\Authorization\Model\UserContextInterface;
 
 /**
  * Class for bulk notification manager
