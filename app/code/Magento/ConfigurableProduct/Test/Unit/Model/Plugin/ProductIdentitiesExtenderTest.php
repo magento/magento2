@@ -14,6 +14,9 @@ use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Unit test for Magento\ConfigurableProduct\Model\Plugin\ProductIdentitiesExtender class.
+ */
 class ProductIdentitiesExtenderTest extends TestCase
 {
     /**
@@ -31,6 +34,9 @@ class ProductIdentitiesExtenderTest extends TestCase
      */
     private $plugin;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $this->configurableTypeMock = $this->getMockBuilder(Configurable::class)
@@ -42,6 +48,11 @@ class ProductIdentitiesExtenderTest extends TestCase
         $this->plugin = new ProductIdentitiesExtender($this->configurableTypeMock, $this->productRepositoryMock);
     }
 
+    /**
+     * Verify after get identities
+     *
+     * @return void
+     */
     public function testAfterGetIdentities()
     {
         $productId = 1;

@@ -311,6 +311,10 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      */
     public function getParentIdsByChild($childId)
     {
+        if (is_array($childId) && count($childId) > 1) {
+            return $this->_bundleSelection->getParentIdsByChild($childId);
+        }
+
         $cacheKey = is_array($childId) ? implode('-', $childId) : $childId;
         if (!isset($this->cacheParentIdsByChild[$cacheKey])) {
             $this->cacheParentIdsByChild[$cacheKey] = $this->_bundleSelection->getParentIdsByChild($childId);

@@ -8,13 +8,13 @@ declare(strict_types=1);
 namespace Magento\Bundle\Test\Unit\Model\Plugin;
 
 use Magento\Bundle\Model\Product\Type;
-use Magento\Bundle\Model\Plugin\Product as Plugin;
+use Magento\Bundle\Model\Plugin\ProductIdentitiesExtender as Plugin;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-class ProductTest extends TestCase
+class ProductIdentitiesExtenderTest extends TestCase
 {
     /** @var Plugin */
     private $plugin;
@@ -25,6 +25,9 @@ class ProductTest extends TestCase
     /** @var  MockObject|Product */
     private $product;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
@@ -46,6 +49,11 @@ class ProductTest extends TestCase
         );
     }
 
+    /**
+     * Verify after get identities
+     *
+     * @return void
+     */
     public function testAfterGetIdentities()
     {
         $baseIdentities = [

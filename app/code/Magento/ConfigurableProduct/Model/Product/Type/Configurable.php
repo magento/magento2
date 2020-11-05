@@ -369,7 +369,11 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      */
     public function getParentIdsByChild($childId)
     {
-        $cacheKey = is_array($childId) ? implode('-', $childId) : $childId;
+        if (is_array($childId) && count($childId) > 1) {
+            return $this->_catalogProductTypeConfigurable->getParentIdsByChild($childId);
+        }
+
+        $cacheKey = is_array($childId) ? array_shift($childId) : $childId;
         if (!isset($this->cacheParentIdsByChild[$cacheKey])) {
             $this->cacheParentIdsByChild[$cacheKey] = $this->_catalogProductTypeConfigurable->getParentIdsByChild($childId);
         }
