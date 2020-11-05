@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Cms\Api;
 
 use Magento\Authorization\Model\Role;
@@ -191,15 +193,12 @@ class PageRepositoryTest extends WebapiAbstract
      */
     public function testGetByStores(string $requestStore): void
     {
-        $page = $this->getPageByIdentifier->execute('page100', 0);
-        $storeCode = $requestStore == 'all' ? 'admin' : $requestStore;
-        $store = $this->storeManager->getStore($storeCode);
-        $this->updatePage($page, ['store_id' => $store->getId()]);
-        $page = $this->getPageByIdentifier->execute('page100', $store->getId());
-        $comparedFields = $this->getPageRequestData()['page'];
+        $newStoreId = $this->getStoreIdByRequestStore($requestStore);
+        $this->updatePage('page100', 0, ['store_id' => $newStoreId]);
+        $page = $this->getPageByIdentifier->execute('page100', $newStoreId);
         $expectedData = array_intersect_key(
             $this->dataObjectProcessor->buildOutputDataArray($page, PageInterface::class),
-            $comparedFields
+            $this->getPageRequestData()['page']
         );
         $serviceInfo = $this->getServiceInfo(
             'GetById',
@@ -212,9 +211,7 @@ class PageRepositoryTest extends WebapiAbstract
         }
 
         $page = $this->_webApiCall($serviceInfo, $requestData, null, $requestStore);
-        $this->assertNotNull($page['id']);
-        $actualData = array_intersect_key($page, $comparedFields);
-        $this->assertEquals($expectedData, $actualData, 'Error while getting page.');
+        $this->assertResponseData($page, $expectedData);
     }
 
     /**
@@ -255,27 +252,17 @@ class PageRepositoryTest extends WebapiAbstract
      */
     public function testCreateByStores(string $requestStore): void
     {
+        $newStoreId = $this->getStoreIdByRequestStore($requestStore);
         $serviceInfo = $this->getServiceInfo('Save', Request::HTTP_METHOD_POST);
         $requestData = $this->getPageRequestData();
+
         $page = $this->_webApiCall($serviceInfo, $requestData, null, $requestStore);
-        $this->assertNotNull($page['id']);
-        $storeCode = $requestStore == 'all' ? 'admin' : $requestStore;
-        $store = $this->storeManager->getStore($storeCode);
-        $this->currentPage = $this->getPageByIdentifier->execute(
-            $requestData['page'][PageInterface::IDENTIFIER],
-            $store->getId()
-        );
-        $actualData = array_intersect_key($page, $requestData['page']);
-        $this->assertEquals($requestData['page'], $actualData, 'The page was saved with an error.');
-        if ($requestStore != 'all') {
-            $this->cmsUiDataProvider->addFilter(
-                $this->filterBuilder->setField('store_id')->setValue($store->getId())->create()
-            );
-        }
-        $pageGridData = $this->cmsUiDataProvider->getData();
+        $this->currentPage = $this->getPageByIdentifier($requestData['page'][PageInterface::IDENTIFIER], $newStoreId);
+        $this->assertResponseData($page, $requestData['page']);
+        $pageGridData = $this->getPageGridDataByStoreCode($requestStore);
         $this->assertTrue(
             $this->isPageInArray($pageGridData['items'], $page['id']),
-            sprintf('The "%s" page is missing from the "%s" store', $page['title'], $storeCode)
+            sprintf('The "%s" page is missing from the "%s" store', $page['title'], $requestStore)
         );
     }
 
@@ -373,10 +360,8 @@ class PageRepositoryTest extends WebapiAbstract
      */
     public function testUpdateByStores(string $requestStore): void
     {
-        $page = $this->getPageByIdentifier->execute('page100', 0);
-        $storeCode = $requestStore == 'all' ? 'admin' : $requestStore;
-        $store = $this->storeManager->getStore($storeCode);
-        $this->updatePage($page, ['store_id' => $store->getId()]);
+        $newStoreId = $this->getStoreIdByRequestStore($requestStore);
+        $page = $this->updatePage('page100', 0, ['store_id' => $newStoreId]);
         $serviceInfo = $this->getServiceInfo(
             'Save',
             Request::HTTP_METHOD_PUT,
@@ -385,22 +370,12 @@ class PageRepositoryTest extends WebapiAbstract
         $requestData = $this->getPageRequestData();
 
         $page = $this->_webApiCall($serviceInfo, $requestData, null, $requestStore);
-        $this->assertNotNull($page['id']);
-        $this->currentPage = $this->getPageByIdentifier->execute(
-            $requestData['page'][PageInterface::IDENTIFIER],
-            $store->getId()
-        );
-        $actualData = array_intersect_key($page, $requestData['page']);
-        $this->assertEquals($requestData['page'], $actualData, 'The page was saved with an error.');
-        if ($requestStore != 'all') {
-            $this->cmsUiDataProvider->addFilter(
-                $this->filterBuilder->setField('store_id')->setValue($store->getId())->create()
-            );
-        }
-        $pageGridData = $this->cmsUiDataProvider->getData();
+        $this->currentPage = $this->getPageByIdentifier($requestData['page'][PageInterface::IDENTIFIER], $newStoreId);
+        $this->assertResponseData($page, $requestData['page']);
+        $pageGridData = $this->getPageGridDataByStoreCode($requestStore);
         $this->assertTrue(
             $this->isPageInArray($pageGridData['items'], $page['id']),
-            sprintf('The "%s" page is missing from the "%s" store', $page['title'], $storeCode)
+            sprintf('The "%s" page is missing from the "%s" store', $page['title'], $requestStore)
         );
     }
 
@@ -440,10 +415,8 @@ class PageRepositoryTest extends WebapiAbstract
      */
     public function testDeleteByStores(string $requestStore): void
     {
-        $page = $this->getPageByIdentifier->execute('page100', 0);
-        $storeCode = $requestStore == 'all' ? 'admin' : $requestStore;
-        $store = $this->storeManager->getStore($storeCode);
-        $this->updatePage($page, ['store_id' => $store->getId()]);
+        $newStoreId = $this->getStoreIdByRequestStore($requestStore);
+        $page = $this->updatePage('page100', 0, ['store_id' => $newStoreId]);
         $serviceInfo = $this->getServiceInfo(
             'DeleteById',
             Request::HTTP_METHOD_DELETE,
@@ -453,17 +426,13 @@ class PageRepositoryTest extends WebapiAbstract
         if (TESTS_WEB_API_ADAPTER === self::ADAPTER_SOAP) {
             $requestData[PageInterface::PAGE_ID] = $page->getId();
         }
+
         $pageResponse = $this->_webApiCall($serviceInfo, $requestData, null, $requestStore);
         $this->assertTrue($pageResponse);
-        if ($requestStore != 'all') {
-            $this->cmsUiDataProvider->addFilter(
-                $this->filterBuilder->setField('store_id')->setValue($store->getId())->create()
-            );
-        }
-        $pageGridData = $this->cmsUiDataProvider->getData();
+        $pageGridData = $this->getPageGridDataByStoreCode($requestStore);
         $this->assertFalse(
-            $this->isPageInArray($pageGridData['items'], $page->getId()),
-            sprintf('The "%s" page should not be present on the "%s" store', $page->getTitle(), $storeCode)
+            $this->isPageInArray($pageGridData['items'], (int)$page->getId()),
+            sprintf('The "%s" page should not be present on the "%s" store', $page->getTitle(), $requestStore)
         );
     }
 
@@ -561,12 +530,12 @@ class PageRepositoryTest extends WebapiAbstract
             'default_store' => [
                 'request_store' => 'default',
             ],
-            /*'second_store' => [
+            'second_store' => [
                 'request_store' => 'fixture_second_store',
             ],
             'all' => [
                 'request_store' => 'all',
-            ],*/
+            ],
         ];
     }
 
@@ -606,9 +575,9 @@ class PageRepositoryTest extends WebapiAbstract
     /**
      * Create page with hard-coded identifier to test with create-delete-create flow.
      * @param string $identifier
-     * @return string
+     * @return int
      */
-    private function createPageWithIdentifier($identifier): string
+    private function createPageWithIdentifier($identifier): int
     {
         $serviceInfo = $this->getServiceInfo('Save', Request::HTTP_METHOD_POST);
         $requestData = [
@@ -792,12 +761,14 @@ class PageRepositoryTest extends WebapiAbstract
     /**
      * Update page with data
      *
-     * @param PageInterface $page
+     * @param string $pageIdentifier
+     * @param int $storeId
      * @param array $pageData
      * @return PageInterface
      */
-    private function updatePage(PageInterface $page, array $pageData): PageInterface
+    private function updatePage(string $pageIdentifier, int $storeId, array $pageData): PageInterface
     {
+        $page = $this->getPageByIdentifier->execute($pageIdentifier, $storeId);
         $page->addData($pageData);
 
         return $this->pageRepository->save($page);
@@ -819,5 +790,69 @@ class PageRepositoryTest extends WebapiAbstract
                 PageInterface::CONTENT      => self::PAGE_CONTENT,
             ]
         ];
+    }
+
+    /**
+     * Get store id by request store code
+     *
+     * @param string $requestStoreCode
+     * @return int
+     */
+    private function getStoreIdByRequestStore(string $requestStoreCode): int
+    {
+        $storeCode = $requestStoreCode === 'all' ? 'admin' : $requestStoreCode;
+        $store = $this->storeManager->getStore($storeCode);
+
+        return (int)$store->getId();
+    }
+
+    /**
+     * Check that the response data is as expected
+     *
+     * @param array $page
+     * @param array $expectedData
+     * @return void
+     */
+    private function assertResponseData(array $page, array $expectedData): void
+    {
+        $this->assertNotNull($page['id']);
+        $actualData = array_intersect_key($page, $expectedData);
+        $this->assertEquals($expectedData, $actualData, 'Response data does not match expected.');
+    }
+
+    /**
+     * Get page grid data of cms ui dataprovider filtering by store code
+     *
+     * @param string $requestStore
+     * @return array
+     */
+    private function getPageGridDataByStoreCode(string $requestStore): array
+    {
+        if ($requestStore !== 'all') {
+            $store = $this->storeManager->getStore($requestStore);
+            $this->cmsUiDataProvider->addFilter(
+                $this->filterBuilder->setField('store_id')->setValue($store->getId())->create()
+            );
+        }
+
+        return $this->cmsUiDataProvider->getData();
+    }
+
+    /**
+     * Get page by identifier without throw exception
+     *
+     * @param string $identifier
+     * @param int $storeId
+     * @return PageInterface|null
+     */
+    private function getPageByIdentifier(string $identifier, int $storeId): ?PageInterface
+    {
+        $page = null;
+        try {
+            $page = $this->getPageByIdentifier->execute($identifier, $storeId);
+        } catch (NoSuchEntityException $exception) {
+        }
+
+        return $page;
     }
 }
