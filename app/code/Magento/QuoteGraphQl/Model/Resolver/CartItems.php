@@ -51,7 +51,9 @@ class CartItems implements ResolverInterface
         /** @var QuoteItem $cartItem */
         foreach ($cartItems as $cartItem) {
             if ($cartItem->getHasError()) {
-                $itemsData[] = new GraphQlInputException(__($cartItem->getErrorInfos()[0]['message']));
+                foreach ($cartItem->getErrorInfos() as $error) {
+                    $itemsData[] = new GraphQlInputException(__($error['message']));
+                }
             }
             
             $productId = $cartItem->getProduct()->getId();
