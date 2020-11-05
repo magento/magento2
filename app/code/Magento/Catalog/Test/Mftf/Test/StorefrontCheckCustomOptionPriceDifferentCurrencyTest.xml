@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCheckCustomOptionPriceDifferentCurrencyTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Custom options"/>
+            <title value="Check custom option price with different currency"/>
+            <description value="Check custom option price with different currency on the product page"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-38926"/>
+            <useCaseId value="MC-30626"/>
+            <group value="catalog"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set currency/options/allow EUR,USD" stepKey="setCurrencyAllow"/>
+            <createData entity="SimpleProduct2" stepKey="createProduct">
+                <field key="price">10</field>
+            </createData>
+            <updateData createDataKey="createProduct" entity="productWithCheckbox" stepKey="updateProductWithOptions"/>
+        </before>
+        <after>
+            <magentoCLI command="config:set currency/options/allow USD" stepKey="setCurrencyAllow"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+        </after>
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="openProductPageOnStorefront">
+            <argument name="product" value="$createProduct$"/>
+        </actionGroup>
+        <seeElement selector="{{StorefrontProductInfoMainSection.productAttributeOptionsCheckbox(ProductOptionCheckbox.title, '12.3')}}" stepKey="checkPriceProductOptionUSD"/>
+        <actionGroup ref="StorefrontSwitchCurrencyActionGroup" stepKey="switchEURCurrency">
+            <argument name="currency" value="EUR"/>
+        </actionGroup>
+        <seeElement selector="{{StorefrontProductInfoMainSection.productAttributeOptionsCheckbox(ProductOptionCheckbox.title, '8.6961')}}" stepKey="checkPriceProductOptionEUR"/>
+    </test>
+</tests>
