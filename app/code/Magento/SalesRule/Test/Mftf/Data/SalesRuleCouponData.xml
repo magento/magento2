@@ -13,8 +13,4 @@
         <data key="is_primary">1</data>
         <data key="times_used">0</data>
     </entity>
-    <entity name="SalesRuleCouponUsageConsumer">
-        <data key="consumerName">sales.rule.update.coupon.usage</data>
-        <data key="messageLimit">100</data>
-    </entity>
 </entities>
