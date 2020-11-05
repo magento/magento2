@@ -13,8 +13,8 @@
             <stories value="Create Order with offline payment methods"/>
             <title value="Create Order to verify apply and remove coupon code test"/>
             <description value="Create Order to verify apply and remove coupon code test"/>
-            <severity value="CRITICAL"/>
-            <testCaseId value="MC-37386"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="MC-38919"/>
             <group value="sales"/>
         </annotations>
         <before>
