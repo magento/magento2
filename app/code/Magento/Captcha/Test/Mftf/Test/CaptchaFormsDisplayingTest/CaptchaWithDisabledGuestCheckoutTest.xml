@@ -56,9 +56,8 @@
         
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart2"/>
        
-        <waitForElementVisible selector="{{StorefrontCustomerSignInPopupFormSection.email}}" stepKey="waitEmailFieldVisible2"/>
-        <waitForElementVisible selector="{{StorefrontCustomerSignInPopupFormSection.captchaField}}" stepKey="seeCaptchaField2"/>
-        <waitForElementVisible selector="{{StorefrontCustomerSignInPopupFormSection.captchaImg}}" stepKey="seeCaptchaImage2"/>
-        <waitForElementVisible selector="{{StorefrontCustomerSignInPopupFormSection.captchaReload}}" stepKey="seeCaptchaReloadButton2"/>
+        <waitForElementVisible selector="{{StorefrontCustomerSignInPopupFormSection.email}}" stepKey="waitEmailFieldVisible"/>
+      
+        <actionGroup ref="AssertCaptchaVisibleOnCustomerSignInPopupActionGroup" stepKey="seeCaptchaAfterReload"/>
     </test>
 </tests>
