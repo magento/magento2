@@ -14,9 +14,9 @@
             <stories value="Filter by date login as customer logs"/>
             <title value="Filter by date login as customer logs"/>
             <description value="Filter by date should be from/to"/>
-            <severity value="MAJOR"/>
+            <severity value="AVERAGE"/>
             <group value="login_as_customer"/>
-            <testCaseId value="MC-"/>
+            <testCaseId value="MC-38920"/>
         </annotations>
         <before>
             <magentoCLI command="config:set {{LoginAsCustomerConfigDataEnabled.path}} 1"
