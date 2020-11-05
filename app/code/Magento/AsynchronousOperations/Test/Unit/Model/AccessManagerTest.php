@@ -12,8 +12,10 @@ use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\EntityManager\EntityManager;
 use Magento\AsynchronousOperations\Api\Data\BulkSummaryInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class AccessManagerTest extends \PHPUnit\Framework\TestCase
+class AccessManagerTest extends TestCase
 {
     /**
      * @var AccessManager
@@ -21,26 +23,29 @@ class AccessManagerTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     private $userContextMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     private $entityManagerMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     private $bulkSummaryFactoryMock;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
+     * @var MockObject
      */
     private $authorizationMock;
 
-    protected function setUp()
+    /**
+     * @inheritDoc
+     */
+    protected function setUp(): void
     {
         $this->userContextMock = $this->createMock(UserContextInterface::class);
         $this->entityManagerMock = $this->createMock(EntityManager::class);
@@ -60,23 +65,30 @@ class AccessManagerTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @dataProvider summaryDataProvider
-     * @param string $bulkUserId
+     * @param int $bulkUserId
      * @param bool $expectedResult
+     * @return void
      */
-    public function testIsAllowedForBulkUuid($bulkUserId, $expectedResult)
+    public function testIsAllowedForBulkUuid(int $bulkUserId, bool $expectedResult): void
     {
         $adminId = 1;
         $uuid = 'test-001';
         $bulkSummaryMock = $this->createMock(BulkSummaryInterface::class);
 
-        $this->bulkSummaryFactoryMock->expects($this->once())->method('create')->willReturn($bulkSummaryMock);
+        $this->bulkSummaryFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($bulkSummaryMock);
         $this->entityManagerMock->expects($this->once())
             ->method('load')
             ->with($bulkSummaryMock, $uuid)
             ->willReturn($bulkSummaryMock);
 
-        $bulkSummaryMock->expects($this->once())->method('getUserId')->willReturn($bulkUserId);
-        $this->userContextMock->expects($this->once())->method('getUserId')->willReturn($adminId);
+        $bulkSummaryMock->expects($this->once())
+            ->method('getUserId')
+            ->willReturn($bulkUserId);
+        $this->userContextMock->expects($this->once())
+            ->method('getUserId')
+            ->willReturn($adminId);
 
         $this->assertEquals($this->model->isAllowedForBulkUuid($uuid), $expectedResult);
     }
@@ -84,7 +96,7 @@ class AccessManagerTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public static function summaryDataProvider()
+    public static function summaryDataProvider(): array
     {
         return [
             [2, false],

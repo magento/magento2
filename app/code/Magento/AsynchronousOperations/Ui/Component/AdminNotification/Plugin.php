@@ -25,8 +25,6 @@ class Plugin
     private $isAllowed;
 
     /**
-     * Plugin constructor.
-     *
      * @param AccessManager $accessManager
      */
     public function __construct(
@@ -43,14 +41,13 @@ class Plugin
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterGetMeta(
-        DataProvider $dataProvider,
-        $result
-    ) {
+    public function afterGetMeta(DataProvider $dataProvider, $result)
+    {
         if (!isset($this->isAllowed)) {
             $this->isAllowed = $this->accessManager->isOwnActionsAllowed();
         }
         $result['columns']['arguments']['data']['config']['isAllowed'] = $this->isAllowed;
+
         return $result;
     }
 }

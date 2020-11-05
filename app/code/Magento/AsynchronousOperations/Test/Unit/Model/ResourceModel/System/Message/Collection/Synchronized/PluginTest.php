@@ -11,6 +11,7 @@ use Magento\AdminNotification\Model\ResourceModel\System\Message\Collection\Sync
 use Magento\AdminNotification\Model\System\Message;
 use Magento\AdminNotification\Model\System\MessageFactory;
 use Magento\AsynchronousOperations\Api\Data\BulkSummaryInterface;
+use Magento\AsynchronousOperations\Model\AccessManager;
 use Magento\AsynchronousOperations\Model\BulkNotificationManagement;
 use Magento\AsynchronousOperations\Model\BulkSummary;
 use Magento\AsynchronousOperations\Model\Operation\Details;
@@ -19,6 +20,7 @@ use Magento\AsynchronousOperations\Model\StatusMapper;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\Bulk\BulkStatusInterface;
+use Magento\Framework\Encryption\Encryptor;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -78,7 +80,12 @@ class PluginTest extends TestCase
     private $statusMapper;
 
     /**
-     * @var string
+     * @var AccessManager|MockObject
+     */
+    private $accessManager;
+
+    /**
+     * @var Encryptor|MockObject
      */
     private $encryptor;
 
@@ -97,6 +104,8 @@ class PluginTest extends TestCase
         $this->collectionMock = $this->createMock(Synchronized::class);
         $this->bulkNotificationMock = $this->createMock(BulkNotificationManagement::class);
         $this->statusMapper = $this->createMock(StatusMapper::class);
+        $this->accessManager = $this->createMock(AccessManager::class);
+        $this->encryptor = $this->createMock(Encryptor::class);
         $this->plugin = new Plugin(
             $this->messagefactoryMock,
             $this->bulkStatusMock,
@@ -114,8 +123,7 @@ class PluginTest extends TestCase
         $result = [];
         $this->accessManager
             ->expects($this->once())
-            ->method('isAllowed')
-            ->with($this->resourceName)
+            ->method('isOwnActionsAllowed')
             ->willReturn(false);
         $this->assertEquals($result, $this->plugin->afterToArray($this->collectionMock, $result));
     }
