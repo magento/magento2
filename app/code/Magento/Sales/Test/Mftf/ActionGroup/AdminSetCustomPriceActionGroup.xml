@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminSetCustomPriceActionGroup">
+        <arguments>
+            <argument name="price" defaultValue="0" type="string"/>
+        </arguments>
+        <click selector="{{AdminOrderFormItemsSection.customPriceCheckbox}}" stepKey="clickCustomPriceCheckbox"/>
+        <waitForElementVisible selector="{{AdminOrderFormItemsSection.customPriceField}}" stepKey="waitForPriceFieldAppears"/>
+        <fillField selector="{{AdminOrderFormItemsSection.customPriceField}}" userInput="{{price}}" stepKey="fillCustomPriceField"/>
+        <click selector="{{AdminOrderFormItemsSection.updateItemsAndQuantities}}" stepKey="clickUpdateItemsAndQuantitiesButton"/>
+    </actionGroup>
+</actionGroups>
