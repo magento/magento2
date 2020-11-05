@@ -115,6 +115,16 @@ class DefaultColumn extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
     }
 
     /**
+     * Get original product sku
+     *
+     * @return string
+     */
+    public function getOriginalProductSku(): string
+    {
+        return $this->getItem()->getOriginalProductSku();
+    }
+
+    /**
      * Calculate total amount for the item
      *
      * @param QuoteItem|Item|InvoiceItem|CreditmemoItem $item

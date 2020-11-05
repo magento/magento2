@@ -68,6 +68,10 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      */
     const SKU = 'sku';
     /*
+     * Original product SKU.
+     */
+    const ORIGINAL_PRODUCT_SKU = 'original_product_sku';
+    /*
      * Name.
      */
     const NAME = 'name';
@@ -955,6 +959,13 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     public function getSku();
 
     /**
+     * Gets the original product SKU for the order item.
+     *
+     * @return string
+     */
+    public function getOriginalProductSku();
+
+    /**
      * Gets the store ID for the order item.
      *
      * @return int|null Store ID.
@@ -1154,6 +1165,14 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      * @return $this
      */
     public function setSku($sku);
+
+    /**
+     * Sets the SKU for the order item.
+     *
+     * @param string
+     * @return $this
+     */
+    public function setOriginalProductSku($sku);
 
     /**
      * Sets the name for the order item.

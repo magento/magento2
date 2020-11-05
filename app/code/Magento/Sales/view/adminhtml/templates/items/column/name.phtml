@@ -23,7 +23,7 @@ $catalogHelper = $block->getData('catalogHelper');
     </div>
     <div class="product-sku-block">
         <span><?= $block->escapeHtml(__('SKU'))?>:</span>
-        <?= /* @noEscape */ implode('<br />', $catalogHelper->splitSku($block->escapeHtml($block->getSku()))) ?>
+        <?= /* @noEscape */ implode('<br />', $catalogHelper->splitSku($block->escapeHtml($block->getOriginalProductSku()))) ?>
     </div>
 
     <?php if ($block->getOrderOptions()): ?>
