@@ -81,6 +81,10 @@ class UpdateHandlerTest extends \PHPUnit\Framework\TestCase
      * @var int
      */
     private $mediaAttributeId;
+    /**
+     * @var \Magento\Eav\Model\ResourceModel\UpdateHandler
+     */
+    private $eavUpdateHandler;
 
     /**
      * @var StoreManagerInterface
@@ -116,6 +120,8 @@ class UpdateHandlerTest extends \PHPUnit\Framework\TestCase
         $this->mediaDirectory = $this->objectManager->get(Filesystem::class)
             ->getDirectoryWrite(DirectoryList::MEDIA);
         $this->mediaDirectory->writeFile($this->fileName, 'Test');
+        $this->updateHandler = $this->objectManager->create(UpdateHandler::class);
+        $this->eavUpdateHandler = $this->objectManager->create(\Magento\Eav\Model\ResourceModel\UpdateHandler::class);
         $this->metadataPool = $this->objectManager->get(MetadataPool::class);
     }
 
@@ -206,6 +212,15 @@ class UpdateHandlerTest extends \PHPUnit\Framework\TestCase
         $secondStoreId = (int)$this->storeRepository->get('fixture_second_store')->getId();
         $imageRoles = ['image', 'small_image', 'thumbnail', 'swatch_image'];
         $product = $this->getProduct($secondStoreId);
+        $entityIdField = $product->getResource()->getLinkField();
+        $entityData = [];
+        $entityData['store_id'] = $product->getStoreId();
+        $entityData[$entityIdField] = $product->getData($entityIdField);
+        $entityData = array_merge($entityData, $roles);
+        $this->eavUpdateHandler->execute(
+            \Magento\Catalog\Api\Data\ProductInterface::class,
+            $entityData
+        );
         $product->addData($roles);
         $this->updateHandler->execute($product);
 
