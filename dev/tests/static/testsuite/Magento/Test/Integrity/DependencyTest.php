@@ -292,6 +292,8 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
             'webapi.xml',
             [
                 '/routes/route' => ['url', 'method'],
+                '/routes/route/resources/resource' => 'ref',
+                '/routes/route/data/parameter' => 'name',
             ],
         );
 
