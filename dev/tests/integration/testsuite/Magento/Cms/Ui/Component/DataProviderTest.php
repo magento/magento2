@@ -20,6 +20,7 @@ use PHPUnit\Framework\TestCase;
  * Checks Cms UI component data provider behaviour
  *
  * @magentoAppArea adminhtml
+ * @magentoDbIsolation enabled
  */
 class DataProviderTest extends TestCase
 {
@@ -45,75 +46,31 @@ class DataProviderTest extends TestCase
     }
 
     /**
-     * @dataProvider pageFilterDataProvider
-     *
      * @magentoDataFixture Magento/Cms/_files/pages.php
      *
-     * @param array $filter
-     * @param string $expectedPage
      * @return void
      */
-    public function testPageFiltering(array $filter, string $expectedPage): void
+    public function testPageFilteringByTitlePart(): void
     {
-        $this->request->setParams(['filters' => $filter]);
+        $this->request->setParams(['search' => 'Cms Page 1']);
         $data = $this->getComponentProvidedData('cms_page_listing');
-        $this->assertCount(1, $data['items']);
-        $this->assertEquals(reset($data['items'])[PageInterface::IDENTIFIER], $expectedPage);
+        $items = $data['items'];
+        $this->assertCount(1, $items);
+        $this->assertEquals('page100', reset($items)[PageInterface::IDENTIFIER]);
     }
 
     /**
-     * @return array
-     */
-    public function pageFilterDataProvider(): array
-    {
-        return [
-            'partial_title_filter' => [
-                'filter' => ['title' => 'Cms Page 1'],
-                'expected_item' => 'page100',
-            ],
-            'multiple_filter' => [
-                'filter' => [
-                    'title' => 'Cms Page',
-                    'meta_title' => 'Cms Meta title for Blank page',
-                ],
-                'expected_item' => 'page_design_blank',
-            ],
-        ];
-    }
-
-    /**
-     * @dataProvider blockFilterDataProvider
-     *
      * @magentoDataFixture Magento/Cms/_files/blocks.php
      *
      * @return void
      */
-    public function testBlockFiltering(array $filter, string $expectedBlock): void
+    public function testBlockFilteringByTitlePart(): void
     {
-        $this->request->setParams(['filters' => $filter]);
+        $this->request->setParams(['search' => 'Enabled CMS Block']);
         $data = $this->getComponentProvidedData('cms_block_listing');
-        $this->assertCount(1, $data['items']);
-        $this->assertEquals(reset($data['items'])[BlockInterface::IDENTIFIER], $expectedBlock);
-    }
-
-    /**
-     * @return array
-     */
-    public function blockFilterDataProvider(): array
-    {
-        return [
-            'partial_title_filter' => [
-                'filter' => ['title' => 'Enabled CMS Block'],
-                'expected_item' => 'enabled_block',
-            ],
-            'multiple_filter' => [
-                'filter' => [
-                    'title' => 'CMS Block Title',
-                    'is_active' => [0],
-                ],
-                'expected_item' => 'disabled_block',
-            ],
-        ];
+        $items = $data['items'];
+        $this->assertCount(1, $items);
+        $this->assertEquals('enabled_block', reset($items)[BlockInterface::IDENTIFIER]);
     }
 
     /**
