@@ -5,6 +5,8 @@
  */
 namespace Magento\Catalog\Model\ResourceModel\Indexer;
 
+use Magento\Framework\DB\Adapter\AdapterInterface;
+
 /**
  * Logic for switching active and replica index tables.
  */
@@ -27,7 +29,7 @@ class ActiveTableSwitcher
     /**
      * Switch index tables from replica to active.
      *
-     * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
+     * @param AdapterInterface $connection
      * @param array $tableNames
      * @return void
      */
@@ -36,6 +38,7 @@ class ActiveTableSwitcher
         $toRename = [];
         $tableComment = '';
         $replicaComment = '';
+        $renameBatch = [];
         foreach ($tableNames as $tableName) {
             $outdatedTableName = $tableName . $this->outdatedTableSuffix;
             $replicaTableName = $tableName . $this->additionalTableSuffix;
@@ -43,17 +46,21 @@ class ActiveTableSwitcher
             $tableCreateQuery = 'SHOW CREATE TABLE ' . $tableName;
             $tableCreateResult = $connection->fetchRow($tableCreateQuery);
 
-            $tableCommentPosition = strpos((string )end($tableCreateResult), "COMMENT=");
-            if ($tableCommentPosition) {
-                $tableComment = substr((string )end($tableCreateResult), $tableCommentPosition + 8);
+            if (is_array($tableCreateResult)) {
+                $tableCommentPosition = strpos((string )end($tableCreateResult), "COMMENT=");
+                if ($tableCommentPosition) {
+                    $tableComment = substr((string )end($tableCreateResult), $tableCommentPosition + 8);
+                }
             }
 
             $replicaCreateQuery = 'SHOW CREATE TABLE ' . $replicaTableName;
             $replicaCreateResult = $connection->fetchRow($replicaCreateQuery);
 
-            $replicaCommentPosition = strpos((string )end($replicaCreateResult), "COMMENT=");
-            if ($replicaCommentPosition) {
-                $replicaComment = substr((string )end($replicaCreateResult), $replicaCommentPosition + 8);
+            if (is_array($replicaCreateResult)) {
+                $replicaCommentPosition = strpos((string )end($replicaCreateResult), "COMMENT=");
+                if ($replicaCommentPosition) {
+                    $replicaComment = substr((string )end($replicaCreateResult), $replicaCommentPosition + 8);
+                }
             }
 
             $renameBatch = [
@@ -70,14 +77,12 @@ class ActiveTableSwitcher
                     'newName' => $replicaTableName
                 ]
             ];
-            $toRename = array_merge($toRename, $renameBatch);
-            if (!empty($toRename) && $replicaComment !== '' && $tableComment !== $replicaComment) {
-                $changeTableComment   = sprintf("ALTER TABLE %s COMMENT=%s", $tableName, $replicaComment);
-                $connection->query($changeTableComment);
-                $changeReplicaComment = sprintf("ALTER TABLE %s COMMENT=%s", $replicaTableName, $tableComment);
-                $connection->query($changeReplicaComment);
+
+            if (!empty($renameBatch)) {
+                $this->switchTableComments($tableName, $replicaTableName, $tableComment, $replicaComment, $connection);
             }
         }
+        $toRename = array_merge($toRename, $renameBatch);
 
         if (!empty($toRename)) {
             $connection->renameTablesBatch($toRename);
@@ -93,5 +98,24 @@ class ActiveTableSwitcher
     public function getAdditionalTableName($tableName)
     {
         return $tableName . $this->additionalTableSuffix;
+    }
+
+    /**
+     * Switch table comments
+     *
+     * @param string $tableName
+     * @param string $replicaName
+     * @param string $tableComment
+     * @param string $replicaComment
+     * @param AdapterInterface $connection
+     */
+    private function switchTableComments($tableName, $replicaName, $tableComment, $replicaComment, $connection)
+    {
+        if ($tableComment !== '' && $tableComment !== $replicaComment) {
+            $changeTableComment   = sprintf("ALTER TABLE %s COMMENT=%s", $tableName, $replicaComment);
+            $connection->query($changeTableComment);
+            $changeReplicaComment = sprintf("ALTER TABLE %s COMMENT=%s", $replicaName, $tableComment);
+            $connection->query($changeReplicaComment);
+        }
     }
 }
