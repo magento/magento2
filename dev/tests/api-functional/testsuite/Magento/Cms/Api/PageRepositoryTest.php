@@ -13,6 +13,7 @@ use Magento\Authorization\Model\Rules;
 use Magento\Authorization\Model\RulesFactory;
 use Magento\Cms\Api\Data\PageInterface;
 use Magento\Cms\Api\Data\PageInterfaceFactory;
+use Magento\Cms\Model\ResourceModel\Page as PageResource;
 use Magento\Cms\Ui\Component\DataProvider as CmsDataProvider;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\Api\FilterBuilder;
@@ -85,7 +86,7 @@ class PageRepositoryTest extends WebapiAbstract
     private $adminTokens;
 
     /**
-     * @var array
+     * @var PageInterface[]
      */
     private $createdPages = [];
 
@@ -110,9 +111,9 @@ class PageRepositoryTest extends WebapiAbstract
     private $cmsUiDataProvider;
 
     /**
-     * @var GetPageByIdentifierInterface
+     * @var PageResource
      */
-    private $getPageByIdentifier;
+    private $pageResource;
 
     /**
      * @inheritdoc
@@ -137,7 +138,7 @@ class PageRepositoryTest extends WebapiAbstract
                 'requestFieldName' => 'id',
             ]
         );
-        $this->getPageByIdentifier = $this->objectManager->get(GetPageByIdentifierInterface::class);
+        $this->pageResource = $this->objectManager->get(PageResource::class);
     }
 
     /**
@@ -151,7 +152,9 @@ class PageRepositoryTest extends WebapiAbstract
         }
 
         foreach ($this->createdPages as $page) {
-            $this->pageRepository->delete($page);
+            if ($page->getId()) {
+                $this->pageRepository->delete($page);
+            }
         }
     }
 
@@ -195,7 +198,7 @@ class PageRepositoryTest extends WebapiAbstract
     {
         $newStoreId = $this->getStoreIdByRequestStore($requestStore);
         $this->updatePage('page100', 0, ['store_id' => $newStoreId]);
-        $page = $this->getPageByIdentifier->execute('page100', $newStoreId);
+        $page = $this->loadPageByIdentifier('page100', $newStoreId);
         $expectedData = array_intersect_key(
             $this->dataObjectProcessor->buildOutputDataArray($page, PageInterface::class),
             $this->getPageRequestData()['page']
@@ -257,7 +260,10 @@ class PageRepositoryTest extends WebapiAbstract
         $requestData = $this->getPageRequestData();
 
         $page = $this->_webApiCall($serviceInfo, $requestData, null, $requestStore);
-        $this->currentPage = $this->getPageByIdentifier($requestData['page'][PageInterface::IDENTIFIER], $newStoreId);
+        $this->createdPages[] = $this->loadPageByIdentifier(
+            $requestData['page'][PageInterface::IDENTIFIER],
+            $newStoreId
+        );
         $this->assertResponseData($page, $requestData['page']);
         $pageGridData = $this->getPageGridDataByStoreCode($requestStore);
         $this->assertTrue(
@@ -370,7 +376,10 @@ class PageRepositoryTest extends WebapiAbstract
         $requestData = $this->getPageRequestData();
 
         $page = $this->_webApiCall($serviceInfo, $requestData, null, $requestStore);
-        $this->currentPage = $this->getPageByIdentifier($requestData['page'][PageInterface::IDENTIFIER], $newStoreId);
+        $this->createdPages[] = $this->loadPageByIdentifier(
+            $requestData['page'][PageInterface::IDENTIFIER],
+            $newStoreId
+        );
         $this->assertResponseData($page, $requestData['page']);
         $pageGridData = $this->getPageGridDataByStoreCode($requestStore);
         $this->assertTrue(
@@ -768,7 +777,7 @@ class PageRepositoryTest extends WebapiAbstract
      */
     private function updatePage(string $pageIdentifier, int $storeId, array $pageData): PageInterface
     {
-        $page = $this->getPageByIdentifier->execute($pageIdentifier, $storeId);
+        $page = $this->loadPageByIdentifier($pageIdentifier, $storeId);
         $page->addData($pageData);
 
         return $this->pageRepository->save($page);
@@ -839,19 +848,17 @@ class PageRepositoryTest extends WebapiAbstract
     }
 
     /**
-     * Get page by identifier without throw exception
+     * Load page by identifier and store id
      *
      * @param string $identifier
      * @param int $storeId
-     * @return PageInterface|null
+     * @return PageInterface
      */
-    private function getPageByIdentifier(string $identifier, int $storeId): ?PageInterface
+    private function loadPageByIdentifier(string $identifier, int $storeId): PageInterface
     {
-        $page = null;
-        try {
-            $page = $this->getPageByIdentifier->execute($identifier, $storeId);
-        } catch (NoSuchEntityException $exception) {
-        }
+        $page = $this->pageFactory->create();
+        $page->setStoreId($storeId);
+        $this->pageResource->load($page, $identifier, PageInterface::IDENTIFIER);
 
         return $page;
     }
