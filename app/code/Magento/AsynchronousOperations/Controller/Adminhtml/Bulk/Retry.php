@@ -7,12 +7,15 @@ namespace Magento\AsynchronousOperations\Controller\Adminhtml\Bulk;
 
 use Magento\AsynchronousOperations\Model\BulkManagement;
 use Magento\AsynchronousOperations\Model\BulkNotificationManagement;
+use Magento\AsynchronousOperations\Model\IsAllowedForBulkUuid;
 use Magento\Backend\App\Action\Context;
 use Magento\Backend\Model\View\Result\Redirect;
 use Magento\Backend\App\Action;
-use Magento\AsynchronousOperations\Model\AccessManager;
-use Magento\Framework\Controller\ResultFactory;
+use Magento\AsynchronousOperations\Model\AccessValidator;
 use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Bulk\GetBulksByUserAndTypeInterface;
+use Magento\Framework\Controller\ResultFactory;
 
 /**
  * Class Bulk Retry Controller
@@ -30,28 +33,35 @@ class Retry extends Action implements HttpPostActionInterface
     private $notificationManagement;
 
     /**
-     * @var AccessManager
+     * @var AccessValidator
      */
-    private $accessManager;
+    private $accessValidator;
 
     /**
-     * Retry constructor.
-     *
+     * @var IsAllowedForBulkUuid
+     */
+    private $isAllowedForBulkUuid;
+
+    /**
      * @param Context $context
      * @param BulkManagement $bulkManagement
      * @param BulkNotificationManagement $notificationManagement
-     * @param AccessManager $accessManager
+     * @param AccessValidator $accessValidator
+     * @param IsAllowedForBulkUuid|null $isAllowedForBulkUuid
      */
     public function __construct(
         Context $context,
         BulkManagement $bulkManagement,
         BulkNotificationManagement $notificationManagement,
-        AccessManager $accessManager
+        AccessValidator $accessValidator,
+        ?IsAllowedForBulkUuid $isAllowedForBulkUuid = null
     ) {
         parent::__construct($context);
         $this->bulkManagement = $bulkManagement;
         $this->notificationManagement = $notificationManagement;
-        $this->accessManager = $accessManager;
+        $this->accessValidator = $accessValidator;
+        $this->isAllowedForBulkUuid = $isAllowedForBulkUuid
+            ?: ObjectManager::getInstance()->get(IsAllowedForBulkUuid::class);
     }
 
     /**
@@ -59,7 +69,7 @@ class Retry extends Action implements HttpPostActionInterface
      */
     protected function _isAllowed()
     {
-        return $this->accessManager->isAllowedForBulkUuid($this->getRequest()->getParam('uuid'));
+        return $this->isAllowedForBulkUuid->execute($this->getRequest()->getParam('uuid'));
     }
 
     /**

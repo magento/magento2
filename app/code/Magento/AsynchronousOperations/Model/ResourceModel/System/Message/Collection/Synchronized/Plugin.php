@@ -7,19 +7,26 @@ namespace Magento\AsynchronousOperations\Model\ResourceModel\System\Message\Coll
 
 use Magento\AdminNotification\Model\ResourceModel\System\Message\Collection\Synchronized;
 use Magento\AdminNotification\Model\System\MessageFactory;
-use Magento\AsynchronousOperations\Model\AccessManager;
 use Magento\AsynchronousOperations\Model\BulkNotificationManagement;
 use Magento\AsynchronousOperations\Model\Operation\Details;
 use Magento\AsynchronousOperations\Model\StatusMapper;
 use Magento\Authorization\Model\UserContextInterface;
+use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\Bulk\BulkStatusInterface;
+use Magento\Framework\Bulk\BulkSummaryInterface;
+use Magento\Framework\Bulk\GetBulksByUserAndTypeInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Encryption\Encryptor;
+use Magento\Framework\Notification\MessageInterface;
 
 /**
  * Class Plugin to add bulks related notification messages to Synchronized Collection
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Plugin
 {
+    private const BULK_LOGGING_ACL = "Magento_AsynchronousOperations::system_magento_logging_bulk_operations";
+
     /**
      * @var MessageFactory
      */
@@ -41,11 +48,6 @@ class Plugin
     private $operationDetails;
 
     /**
-     * @var AccessManager
-     */
-    private $accessManager;
-
-    /**
      * @var BulkNotificationManagement
      */
     private $bulkNotificationManagement;
@@ -56,21 +58,30 @@ class Plugin
     private $statusMapper;
 
     /**
+     * @var AuthorizationInterface|mixed|null
+     */
+    private $authorization;
+
+    /**
      * @var Encryptor
      */
     private $encryptor;
 
     /**
-     * Plugin constructor.
-     *
+     * @var GetBulksByUserAndTypeInterface|null
+     */
+    private $getBulksByUserAndType;
+
+    /**
      * @param MessageFactory $messageFactory
      * @param BulkStatusInterface $bulkStatus
      * @param BulkNotificationManagement $bulkNotificationManagement
      * @param UserContextInterface $userContext
      * @param Details $operationDetails
      * @param StatusMapper $statusMapper
-     * @param AccessManager $accessManager
-     * @param Encryptor $encryptor
+     * @param AuthorizationInterface|null $authorization
+     * @param Encryptor|null $encryptor
+     * @param GetBulksByUserAndTypeInterface|null $getBulksByUserAndType
      */
     public function __construct(
         MessageFactory $messageFactory,
@@ -79,8 +90,9 @@ class Plugin
         UserContextInterface $userContext,
         Details $operationDetails,
         StatusMapper $statusMapper,
-        AccessManager $accessManager,
-        Encryptor $encryptor
+        ?AuthorizationInterface $authorization = null,
+        ?Encryptor $encryptor = null,
+        ?GetBulksByUserAndTypeInterface $getBulksByUserAndType = null
     ) {
         $this->messageFactory = $messageFactory;
         $this->bulkStatus = $bulkStatus;
@@ -88,8 +100,10 @@ class Plugin
         $this->operationDetails = $operationDetails;
         $this->bulkNotificationManagement = $bulkNotificationManagement;
         $this->statusMapper = $statusMapper;
-        $this->accessManager = $accessManager;
-        $this->encryptor = $encryptor;
+        $this->authorization = $authorization ?: ObjectManager::getInstance()->get(AuthorizationInterface::class);
+        $this->encryptor = $encryptor ?: ObjectManager::getInstance()->get(Encryptor::class);
+        $this->getBulksByUserAndType = $getBulksByUserAndType
+            ?: ObjectManager::getInstance()->get(GetBulksByUserAndTypeInterface::class);
     }
 
     /**
@@ -100,16 +114,14 @@ class Plugin
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterToArray(
-        Synchronized $collection,
-        $result
-    ) {
-        if (!$this->accessManager->isOwnActionsAllowed()) {
+    public function afterToArray(Synchronized $collection, $result)
+    {
+        if (!$this->isAllowed()) {
             return $result;
         }
-        $userId = $this->userContext->getUserId();
-        $userType = $this->userContext->getUserType();
-        $userBulks = $this->bulkStatus->getBulksByUserAndType($userId, $userType);
+        $userId = (int) $this->userContext->getUserId();
+        $userType = (int) $this->userContext->getUserType();
+        $userBulks = $this->getBulksByUserAndType->execute($userId, $userType);
         $acknowledgedBulks = $this->getAcknowledgedBulksUuid(
             $this->bulkNotificationManagement->getAcknowledgedBulksByUser($userId)
         );
@@ -120,13 +132,13 @@ class Plugin
                 $details = $this->operationDetails->getDetails($bulkUuid);
                 $text = $this->getText($details);
                 $bulkStatus = $this->statusMapper->operationStatusToBulkSummaryStatus($bulk->getStatus());
-                if ($bulkStatus === \Magento\Framework\Bulk\BulkSummaryInterface::IN_PROGRESS) {
+                if ($bulkStatus === BulkSummaryInterface::IN_PROGRESS) {
                     $text = __('%1 item(s) are currently being updated.', $details['operations_total']) . $text;
                 }
                 $data = [
                     'data' => [
                         'text' => __('Task "%1": ', $bulk->getDescription()) . $text,
-                        'severity' => \Magento\Framework\Notification\MessageInterface::SEVERITY_MAJOR,
+                        'severity' => MessageInterface::SEVERITY_MAJOR,
                         'identity' => $this->encryptor->hash('bulk' . $bulkUuid, Encryptor::HASH_VERSION_SHA256),
                         'uuid' => $bulkUuid,
                         'status' => $bulkStatus,
@@ -142,6 +154,7 @@ class Plugin
             $bulkMessages = array_slice($bulkMessages, 0, 5);
             $result['items'] = array_merge($bulkMessages, $result['items']);
         }
+
         return $result;
     }
 
@@ -186,5 +199,15 @@ class Plugin
             $acknowledgedBulksArray[] = $bulk->getBulkId();
         }
         return $acknowledgedBulksArray;
+    }
+
+    /**
+     * Check if it allowed to see bulk operations.
+     *
+     * @return bool
+     */
+    private function isAllowed(): bool
+    {
+        return $this->authorization->isAllowed(self::BULK_LOGGING_ACL);
     }
 }

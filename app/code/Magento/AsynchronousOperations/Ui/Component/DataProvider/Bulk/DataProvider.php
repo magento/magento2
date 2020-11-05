@@ -3,12 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\AsynchronousOperations\Ui\Component\DataProvider\Bulk;
 
-use Magento\AsynchronousOperations\Model\AccessManager;
+use Magento\AsynchronousOperations\Model\GetGlobalAllowedUserTypes;
 use Magento\AsynchronousOperations\Model\ResourceModel\Bulk\CollectionFactory;
 use Magento\Authorization\Model\UserContextInterface;
-use Magento\Framework\Api\FilterBuilder;
+use Magento\Framework\AuthorizationInterface;
 use Magento\Ui\DataProvider\AbstractDataProvider;
 
 /**
@@ -16,16 +19,17 @@ use Magento\Ui\DataProvider\AbstractDataProvider;
  */
 class DataProvider extends AbstractDataProvider
 {
+    private const BULK_LOGGING_ACL = "Magento_AsynchronousOperations::system_magento_logging_bulk_operations";
 
     /**
-     * @var AccessManager
+     * @var AuthorizationInterface
      */
-    private $accessManager;
+    private $authorization;
 
     /**
-     * @var FilterBuilder
+     * @var GetGlobalAllowedUserTypes
      */
-    private $filterBuilder;
+    private $getGlobalAllowedUserTypes;
 
     /**
      * @var UserContextInterface
@@ -33,14 +37,12 @@ class DataProvider extends AbstractDataProvider
     private $userContext;
 
     /**
-     * DataProvider constructor.
-     *
      * @param string $name
      * @param string $primaryFieldName
      * @param string $requestFieldName
      * @param CollectionFactory $collectionFactory
-     * @param AccessManager $accessManager
-     * @param FilterBuilder $filterBuilder
+     * @param AuthorizationInterface $authorization
+     * @param GetGlobalAllowedUserTypes $getGlobalAllowedUserTypes
      * @param UserContextInterface $userContext
      * @param array $meta
      * @param array $data
@@ -50,16 +52,16 @@ class DataProvider extends AbstractDataProvider
         $primaryFieldName,
         $requestFieldName,
         CollectionFactory $collectionFactory,
-        AccessManager $accessManager,
-        FilterBuilder $filterBuilder,
+        AuthorizationInterface $authorization,
+        GetGlobalAllowedUserTypes $getGlobalAllowedUserTypes,
         UserContextInterface $userContext,
         array $meta = [],
         array $data = []
     ) {
-        $this->filterBuilder = $filterBuilder;
-        $this->accessManager = $accessManager;
-        $this->userContext = $userContext;
         $this->collection = $collectionFactory->create();
+        $this->authorization = $authorization;
+        $this->getGlobalAllowedUserTypes = $getGlobalAllowedUserTypes;
+        $this->userContext = $userContext;
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
     }
 
@@ -68,16 +70,17 @@ class DataProvider extends AbstractDataProvider
      *
      * @return array
      */
-    public function getData()
+    public function getData(): array
     {
-        $allowedUserTypes = $this->accessManager->getGlobalAllowedUserTypes();
+        $allowedUserTypes = $this->getGlobalAllowedUserTypes->execute();
         $connection = $this->getCollection()->getConnection();
+
         $whereOr = [];
-        if (count($allowedUserTypes) > 0) {
-            $whereOr[] = $connection->quoteInto("user_type IN(?)", $allowedUserTypes);
+        if ($allowedUserTypes) {
+            $whereOr[] = $connection->quoteInto('user_type IN (?)', $allowedUserTypes);
         }
 
-        if ($this->accessManager->isOwnActionsAllowed()) {
+        if ($this->isAllowed()) {
             $whereOr[] = implode(
                 ' AND ',
                 [
@@ -87,9 +90,20 @@ class DataProvider extends AbstractDataProvider
             );
         }
 
-        $whereCond = '(' . implode(') OR (', $whereOr) . ')';
-        $this->getCollection()->getSelect()->where($whereCond);
+        $this->getCollection()
+            ->getSelect()
+            ->where('(' . implode(') OR (', $whereOr) . ')');
 
         return $this->getCollection()->toArray();
+    }
+
+    /**
+     * Check if it allowed to see own bulk operations.
+     *
+     * @return bool
+     */
+    private function isAllowed(): bool
+    {
+        return $this->authorization->isAllowed(self::BULK_LOGGING_ACL);
     }
 }

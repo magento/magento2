@@ -6,16 +6,15 @@
 
 namespace Magento\AsynchronousOperations\Controller\Adminhtml\Index;
 
-use Magento\Backend\App\Action\Context;
-use Magento\Framework\View\Result\PageFactory;
-use Magento\Framework\View\Result\Page;
-use Magento\AsynchronousOperations\Model\AccessManager;
 use Magento\Backend\App\Action;
-use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Backend\App\Action\Context;
+use Magento\Framework\View\Result\Page;
+use \Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\View\Result\PageFactory;
 
 class Index extends Action implements HttpGetActionInterface
 {
-    public const BULK_OPERATIONS_MENU_ID = "Magento_AsynchronousOperations::system_magento_logging_bulk_operations";
+    public const ADMIN_RESOURCE = 'Magento_AsynchronousOperations::system_magento_logging_bulk_operations';
 
     /**
      * @var PageFactory
@@ -23,32 +22,23 @@ class Index extends Action implements HttpGetActionInterface
     private $resultPageFactory;
 
     /**
-     * @var AccessManager
+     * @var string
      */
-    private $accessManager;
+    private $menuId;
 
     /**
-     * Details constructor.
      * @param Context $context
      * @param PageFactory $resultPageFactory
-     * @param AccessManager $accessManager
+     * @param string $menuId
      */
     public function __construct(
         Context $context,
         PageFactory $resultPageFactory,
-        AccessManager $accessManager
+        $menuId = 'Magento_AsynchronousOperations::system_magento_logging_bulk_operations'
     ) {
         $this->resultPageFactory = $resultPageFactory;
-        $this->accessManager = $accessManager;
+        $this->menuId = $menuId;
         parent::__construct($context);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    protected function _isAllowed()
-    {
-        return $this->accessManager->isOwnActionsAllowed();
     }
 
     /**
@@ -60,7 +50,7 @@ class Index extends Action implements HttpGetActionInterface
     {
         $resultPage = $this->resultPageFactory->create();
         $resultPage->initLayout();
-        $this->_setActiveMenu(self::BULK_OPERATIONS_MENU_ID);
+        $this->_setActiveMenu($this->menuId);
         $resultPage->getConfig()->getTitle()->prepend(__('Bulk Actions Log'));
         return $resultPage;
     }

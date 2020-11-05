@@ -6,50 +6,32 @@
 namespace Magento\AsynchronousOperations\Controller\Adminhtml\Notification;
 
 use Magento\AsynchronousOperations\Model\BulkNotificationManagement;
-use Magento\Backend\App\Action\Context;
 use Magento\Backend\App\Action;
-use Magento\Framework\Controller\ResultFactory;
-use Magento\AsynchronousOperations\Model\AccessManager;
+use Magento\Backend\App\Action\Context;
 use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\Controller\Result\Json;
+use Magento\Framework\Controller\ResultFactory;
 
 /**
  * Class Bulk Notification Dismiss Controller
  */
 class Dismiss extends Action implements HttpGetActionInterface
 {
+    public const ADMIN_RESOURCE = 'Magento_AsynchronousOperations::system_magento_logging_bulk_operations';
+
     /**
      * @var BulkNotificationManagement
      */
     private $notificationManagement;
 
     /**
-     * @var AccessManager
-     */
-    private $accessManager;
-
-    /**
-     * Class constructor.
-     *
      * @param Context $context
      * @param BulkNotificationManagement $notificationManagement
-     * @param AccessManager $accessManager
      */
-    public function __construct(
-        Context $context,
-        BulkNotificationManagement $notificationManagement,
-        AccessManager $accessManager
-    ) {
+    public function __construct(Context $context, BulkNotificationManagement $notificationManagement)
+    {
         parent::__construct($context);
         $this->notificationManagement = $notificationManagement;
-        $this->accessManager = $accessManager;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    protected function _isAllowed()
-    {
-        return $this->accessManager->isOwnActionsAllowed();
     }
 
     /**
@@ -64,7 +46,7 @@ class Dismiss extends Action implements HttpGetActionInterface
 
         $isAcknowledged = $this->notificationManagement->acknowledgeBulks($bulkUuids);
 
-        /** @var \Magento\Framework\Controller\Result\Json $result */
+        /** @var Json $result */
         $result = $this->resultFactory->create(ResultFactory::TYPE_JSON);
         if (!$isAcknowledged) {
             $result->setHttpResponseCode(400);

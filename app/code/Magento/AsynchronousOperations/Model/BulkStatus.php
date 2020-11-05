@@ -137,31 +137,6 @@ class BulkStatus implements BulkStatusInterface
     /**
      * @inheritDoc
      */
-    public function getBulksByUserAndType($userId, $userTypeId)
-    {
-        /** @var ResourceModel\Bulk\Collection $collection */
-        $collection = $this->bulkCollectionFactory->create();
-        $operationTableName = $this->resourceConnection->getTableName('magento_operation');
-        $statusesArray = [
-            OperationInterface::STATUS_TYPE_RETRIABLY_FAILED,
-            OperationInterface::STATUS_TYPE_NOT_RETRIABLY_FAILED,
-            BulkSummaryInterface::NOT_STARTED,
-            OperationInterface::STATUS_TYPE_OPEN,
-            OperationInterface::STATUS_TYPE_COMPLETE
-        ];
-        $select = $collection->getSelect();
-        $select->columns(['status' => $this->calculatedStatusSql->get($operationTableName)])
-            ->order(new \Zend_Db_Expr('FIELD(status, ' . implode(',', $statusesArray) . ')'));
-        $collection->addFieldToFilter('user_id', $userId)
-            ->addFieldToFilter('user_type', $userTypeId)
-            ->addOrder('start_time');
-
-        return $collection->getItems();
-    }
-
-    /**
-     * @inheritDoc
-     */
     public function getBulkStatus($bulkUuid)
     {
         /**
