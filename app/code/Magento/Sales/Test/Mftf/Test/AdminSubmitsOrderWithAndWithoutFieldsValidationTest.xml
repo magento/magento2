@@ -33,8 +33,8 @@
         <!--<actionGroup ref="NavigateToNewOrderPageNewCustomerActionGroup" stepKey="navigateToNewOrderPage"/>-->
         <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="navigateToOrderIndexPage"/>
         <see selector="{{AdminHeaderSection.pageTitle}}" userInput="Orders" stepKey="seeIndexPageTitle"/>
-        <click selector="{{AdminOrdersGridSection.createNewOrder}}" stepKey="clickCreateNewOrder"/>
-        <click selector="{{AdminOrderFormActionSection.CreateNewCustomer}}" stepKey="clickCreateCustomer"/>
+        <actionGroup ref="AdminClickCreateNewOrderOnOrderGridPageActionGroup" stepKey="clickCreateNewOrder"/>
+        <actionGroup ref="AdminClickCreateNewCustomerForOrderActionGroup" stepKey="clickCreateCustomer"/>
         <see selector="{{AdminHeaderSection.pageTitle}}" userInput="Create New Order" stepKey="seeNewOrderPageTitle"/>
 
         <!--Check if order can be submitted without the required fields including email address-->
