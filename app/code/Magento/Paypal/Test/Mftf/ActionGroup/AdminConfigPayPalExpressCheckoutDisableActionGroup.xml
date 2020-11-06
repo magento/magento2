@@ -8,7 +8,7 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="SampleConfigPayPalExpressCheckoutDisableActionGroup">
+    <actionGroup name="AdminConfigPayPalExpressCheckoutDisableActionGroup">
         <annotations>
             <description>Goes to the 'Configuration' page for 'Payment Methods'. Disables PayPal Express Checkout solution. Clicks on Save.</description>
         </annotations>
@@ -22,5 +22,6 @@
         <selectOption selector="{{PayPalExpressCheckoutConfigSection.enableSolution(countryCode)}}" userInput="No" stepKey="enableSolution"/>
         <!--Save configuration-->
         <click selector="{{AdminConfigSection.saveButton}}" stepKey="saveConfig"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
     </actionGroup>
 </actionGroups>
