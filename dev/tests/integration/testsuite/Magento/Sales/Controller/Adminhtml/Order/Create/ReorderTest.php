@@ -30,6 +30,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
  *
  * @see \Magento\Sales\Controller\Adminhtml\Order\Create\Reorder
  * @magentoAppArea adminhtml
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ReorderTest extends AbstractBackendController
 {
