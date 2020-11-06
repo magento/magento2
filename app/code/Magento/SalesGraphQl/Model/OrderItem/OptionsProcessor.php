@@ -49,12 +49,12 @@ class OptionsProcessor
             if (isset($option['option_type'])) {
                 if (in_array($option['option_type'], ['field', 'area', 'file', 'date', 'date_time', 'time'])) {
                     $selectedOptions[] = [
-                        'id' => $option['label'],
+                        'label' => $option['label'],
                         'value' => $option['print_value'] ?? $option['value'],
                     ];
                 } elseif (in_array($option['option_type'], ['drop_down', 'radio', 'checkbox', 'multiple'])) {
                     $enteredOptions[] = [
-                        'id' => $option['label'],
+                        'label' => $option['label'],
                         'value' => $option['print_value'] ?? $option['value'],
                     ];
                 }
@@ -74,7 +74,7 @@ class OptionsProcessor
         $selectedOptions = [];
         foreach ($attributesInfo ?? [] as $option) {
             $selectedOptions[] = [
-                'id' => $option['label'],
+                'label' => $option['label'],
                 'value' => $option['print_value'] ?? $option['value'],
             ];
         }
