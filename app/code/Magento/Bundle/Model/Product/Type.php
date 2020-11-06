@@ -315,7 +315,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
             return $this->_bundleSelection->getParentIdsByChild($childId);
         }
 
-        $cacheKey = is_array($childId) ? implode('-', $childId) : $childId;
+        $cacheKey = is_array($childId) ? array_shift($childId) : $childId;
         if (!isset($this->cacheParentIdsByChild[$cacheKey])) {
             $this->cacheParentIdsByChild[$cacheKey] = $this->_bundleSelection->getParentIdsByChild($childId);
         }
