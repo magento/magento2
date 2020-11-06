@@ -51,6 +51,9 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
+        <!-- Start the consumer -->
+        <magentoCLI command="queue:consumers:start sales.rule.update.coupon.usage --max-messages=100" stepKey="startMessageQueue1"/>
+
         <!--Create new customer order-->
         <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer">
             <argument name="customer" value="$$simpleCustomer$$"/>
