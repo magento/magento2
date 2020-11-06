@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Model;
 
-use Magento\Catalog\Model\ResourceModel\Product\Compare\ListIdMask as ListIdMaskMaskResource;
+use Magento\Catalog\Model\ResourceModel\Product\Compare\CompareList as CompareListResource;
 
 /**
  * MaskedListId to ListId resolver
@@ -15,25 +15,25 @@ use Magento\Catalog\Model\ResourceModel\Product\Compare\ListIdMask as ListIdMask
 class MaskedListIdToCompareListId
 {
     /**
-     * @var ListIdMaskFactory
+     * @var CompareListFactory
      */
-    private $listIdMaskFactory;
+    private $compareListFactory;
 
     /**
-     * @var ListIdMaskMaskResource
+     * @var CompareListResource
      */
-    private $listIdMaskResource;
+    private $compareListResource;
 
     /**
-     * @param ListIdMaskFactory $listIdMaskFactory
-     * @param ListIdMaskMaskResource $listIdMaskResource
+     * @param CompareListFactory $compareListFactory
+     * @param CompareListResource $compareListResource
      */
     public function __construct(
-        ListIdMaskFactory $listIdMaskFactory,
-        ListIdMaskMaskResource $listIdMaskResource
+        CompareListFactory $compareListFactory,
+        CompareListResource $compareListResource
     ) {
-        $this->listIdMaskFactory = $listIdMaskFactory;
-        $this->listIdMaskResource = $listIdMaskResource;
+        $this->compareListFactory = $compareListFactory;
+        $this->compareListResource = $compareListResource;
     }
 
     /**
@@ -45,9 +45,9 @@ class MaskedListIdToCompareListId
      */
     public function execute(string $maskedListId): int
     {
-        $listIdMask = $this->listIdMaskFactory->create();
-        $this->listIdMaskResource->load($listIdMask, $maskedListId, 'masked_id');
+        $compareList = $this->compareListFactory->create();
+        $this->compareListResource->load($compareList, $maskedListId, 'list_id_mask');
 
-        return (int)$listIdMask->getListId();
+        return (int)$compareList->getListId();
     }
 }

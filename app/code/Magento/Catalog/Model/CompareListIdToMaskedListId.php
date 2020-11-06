@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Model;
 
-use Magento\Catalog\Model\ResourceModel\Product\Compare\ListIdMask as ListIdMaskMaskResource;
+use Magento\Catalog\Model\ResourceModel\Product\Compare\CompareList as CompareListResource;
 
 /**
  *  CompareListId to MaskedListId resolver
@@ -15,29 +15,29 @@ use Magento\Catalog\Model\ResourceModel\Product\Compare\ListIdMask as ListIdMask
 class CompareListIdToMaskedListId
 {
     /**
-     * @var ListIdMaskFactory
+     * @var CompareListFactory
      */
-    private $listIdMaskFactory;
+    private $compareListFactory;
 
     /**
-     * @var ListIdMaskMaskResource
+     * @var CompareListResource
      */
-    private $listIdMaskResource;
+    private $compareListResource;
 
     /**
-     * @param ListIdMaskFactory $listIdMaskFactory
-     * @param ListIdMaskMaskResource $listIdMaskResource
+     * @param CompareListFactory $compareListFactory
+     * @param CompareListResource $compareListResource
      */
     public function __construct(
-        ListIdMaskFactory $listIdMaskFactory,
-        ListIdMaskMaskResource $listIdMaskResource
+        CompareListFactory $compareListFactory,
+        CompareListResource $compareListResource
     ) {
-        $this->listIdMaskFactory = $listIdMaskFactory;
-        $this->listIdMaskResource = $listIdMaskResource;
+        $this->compareListFactory = $compareListFactory;
+        $this->compareListResource = $compareListResource;
     }
 
     /**
-     * Get maskedId by listId
+     * Get listIdMask by listId
      *
      * @param int $listId
      *
@@ -45,8 +45,8 @@ class CompareListIdToMaskedListId
      */
     public function execute(int $listId): ?string
     {
-        $listIdMask = $this->listIdMaskFactory->create();
-        $this->listIdMaskResource->load($listIdMask, $listId, 'list_id');
-        return $listIdMask->getMaskedId() ?? null;
+        $compareList = $this->compareListFactory->create();
+        $this->compareListResource->load($compareList, $listId, 'list_id');
+        return $compareList->getListIdMask() ?? null;
     }
 }
