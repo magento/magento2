@@ -79,7 +79,7 @@ class DataProviderTest extends TestCase
      * @param UiComponentInterface $component
      * @return void
      */
-    private function prepareChildComponents(UiComponentInterface $component)
+    private function prepareChildComponents(UiComponentInterface $component): void
     {
         foreach ($component->getChildComponents() as $child) {
             $this->prepareChildComponents($child);
