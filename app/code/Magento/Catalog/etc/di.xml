@@ -1319,4 +1319,9 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Catalog\Model\Product\Configuration\Item\ItemResolverComposite">
+        <arguments>
+            <argument name="itemResolvers" xsi:type="array"/>
+        </arguments>
+    </type>
 </config>
