@@ -68,12 +68,14 @@
         <actionGroup ref="AdminSelectFlatRateShippingMethodActionGroup" stepKey="selectFlatRateShippingMethod"/>
         <actionGroup ref="AdminOrderClickSubmitOrderActionGroup" stepKey="submitOrder" />
 
-        <!--Verify order information-->
-        <actionGroup ref="VerifyCreatedOrderInformationActionGroup" stepKey="verifyCreatedOrderInformation"/>
-        <grabTextFrom selector="|Order # (\d+)|" stepKey="orderId"/>
-
         <!-- Start the consumer -->
         <magentoCLI command="queue:consumers:start sales.rule.update.coupon.usage --max-messages=100" stepKey="startMessageQueue2"/>
+        <reloadPage stepKey="refreshPage"/>
+
+        <!--Verify order information-->
+        <actionGroup ref="VerifyCreatedOrderInformationActionGroup" stepKey="verifyCreatedOrderInformation"/>
+        <reloadPage stepKey="refreshPage"/>
+        <grabTextFrom selector="|Order # (\d+)|" stepKey="orderId"/>
 
         <!-- Cancel the Order -->
         <actionGroup ref="CancelPendingOrderActionGroup" stepKey="cancelPendingOrder"/>
