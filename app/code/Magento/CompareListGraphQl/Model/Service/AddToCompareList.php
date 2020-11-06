@@ -11,6 +11,7 @@ use Magento\Catalog\Model\Product\Compare\ItemFactory;
 use Magento\Catalog\Model\ProductRepository;
 use Magento\Catalog\Model\ResourceModel\Product\Compare\Item\Collection;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 
 /**
  * Service add product to compare list
@@ -52,18 +53,23 @@ class AddToCompareList
      *
      * @param int $listId
      * @param array $products
-     * @param int $storeId
+     * @param ContextInterface $context
      *
      * @return int
      */
-    public function execute(int $listId, array $products, int $storeId): int
+    public function execute(int $listId, array $products, ContextInterface $context): int
     {
+        $storeId = (int)$context->getExtensionAttributes()->getStore()->getStoreId();
+        $customerId = $context->getUserId();
         if (count($products)) {
             $existedProducts = $this->itemCollection->getProductsByListId($listId);
             foreach ($products as $productId) {
                 if (array_search($productId, $existedProducts) === false) {
                     if ($this->productExists($productId)) {
                         $item = $this->compareItemFactory->create();
+                        if ($customerId) {
+                            $item->setCustomerId($customerId);
+                        }
                         $item->addProductData($productId);
                         $item->setStoreId($storeId);
                         $item->setListId($listId);
@@ -71,6 +77,10 @@ class AddToCompareList
                     }
                 }
             }
+        }
+
+        if ($customerId) {
+            $this->itemCollection->setListIdToCustomerCompareItems($listId, $customerId);
         }
 
         return (int)$listId;

@@ -95,23 +95,22 @@ class CreateCompareList implements ResolverInterface
     ) {
         $customerId = $context->getUserId();
         $products = !empty($args['input']['products']) ? $args['input']['products'] : [];
-        $storeId = (int)$context->getExtensionAttributes()->getStore()->getStoreId();
         $generatedListId = $this->mathRandom->getUniqueHash();
         $listId = 0;
 
         try {
             if ((0 === $customerId || null === $customerId)) {
                 $listId = $this->createCompareList->execute($generatedListId);
-                $this->addProductToCompareList->execute($listId, $products, $storeId);
+                $this->addProductToCompareList->execute($listId, $products, $context);
             }
 
             if ($customerId) {
                 $listId = $this->getListIdByCustomerId->execute($customerId);
                 if ($listId) {
-                    $this->addProductToCompareList->execute($listId, $products, $storeId);
+                    $this->addProductToCompareList->execute($listId, $products, $context);
                 } else {
                     $listId = $this->createCompareList->execute($generatedListId, $customerId);
-                    $this->addProductToCompareList->execute($listId, $products, $storeId);
+                    $this->addProductToCompareList->execute($listId, $products, $context);
                 }
             }
         } catch (LocalizedException $exception) {

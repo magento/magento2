@@ -82,7 +82,6 @@ class AddProductsToCompareList implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        $storeId = (int)$context->getExtensionAttributes()->getStore()->getStoreId();
         if (empty($args['input']['uid'])) {
             throw new GraphQlInputException(__('"uid" value must be specified.'));
         }
@@ -100,13 +99,13 @@ class AddProductsToCompareList implements ResolverInterface
         if ($userId = $context->getUserId()) {
             $customerListId = $this->getListIdByCustomerId->execute($userId);
             if ($listId === $customerListId) {
-                $this->addProductToCompareList->execute($customerListId, $args['input']['products'], $storeId);
+                $this->addProductToCompareList->execute($customerListId, $args['input']['products'], $context);
 
                 return $this->getCompareList->execute($customerListId, $context);
             }
         }
 
-        $this->addProductToCompareList->execute($listId, $args['input']['products'], $storeId);
+        $this->addProductToCompareList->execute($listId, $args['input']['products'], $context);
 
         return $this->getCompareList->execute($listId, $context);
     }

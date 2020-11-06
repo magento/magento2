@@ -288,6 +288,32 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     }
 
     /**
+     * Set list_id for customer compare item
+     *
+     * @param int $listId
+     * @param int $customerId
+     */
+    public function setListIdToCustomerCompareItems(int $listId, int $customerId)
+    {
+        $table = $this->getTable('catalog_compare_item');
+        $select = $this->getConnection()->select()->
+        from(
+            $table
+        )->where(
+            'customer_id = ?',
+            $customerId
+        );
+        $customerCompareItems =  $this->getConnection()->fetchCol($select);
+        foreach ($customerCompareItems as $itemId) {
+            $this->getConnection()->update(
+                $table,
+                ['list_id' => $listId],
+                ['catalog_compare_item_id = ?' => (int)$itemId]
+            );
+        }
+    }
+
+    /**
      * Retrieve comapre products attribute set ids
      *
      * @return array
