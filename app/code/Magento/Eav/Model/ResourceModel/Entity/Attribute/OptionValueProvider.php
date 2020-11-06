@@ -40,6 +40,13 @@ class OptionValueProvider
         $select = $this->connection->select()
             ->from($this->connection->getTableName('eav_attribute_option_value'), 'value')
             ->where('value_id = ?', $valueId);
-        return $this->connection->fetchOne($select);
+
+        $result = $this->connection->fetchOne($select);
+
+        if ($result !== false) {
+            return $result;
+        }
+
+        return null;
     }
 }
