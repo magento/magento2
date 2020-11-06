@@ -19,7 +19,7 @@ class IPAddressNormaliser
      * @param  string[] $addresses
      * @return string[]
      */
-    public function execute(array &$addresses): array
+    public function execute(array $addresses): array
     {
         $addresses = array_filter($addresses); // remove empty strings
 
