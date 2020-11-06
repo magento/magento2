@@ -89,7 +89,7 @@ class Config extends \Magento\Framework\DataObject
     public function getAllCarriers($store = null)
     {
         $carriers = [];
-        $config = $this->_scopeConfig->getValue('carriers', \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store);
+        $config = $this->_scopeConfig->getValue('carriers', \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store) ?: [];
         foreach (array_keys($config) as $carrierCode) {
             $model = $this->_carrierFactory->create($carrierCode, $store);
             if ($model) {
