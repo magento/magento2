@@ -127,10 +127,6 @@ class ViewTest extends TestCase
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
-        $this->titleMock = $this->getMockBuilder(\Magento\Framework\App\Action\Title::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
         $this->viewMock = $this->getMockBuilder(\Magento\Framework\App\View::class)
             ->disableOriginalConstructor()
             ->setMethods([])
@@ -176,9 +172,6 @@ class ViewTest extends TestCase
         $contextMock->expects($this->any())
             ->method('getResponse')
             ->willReturn($this->responseMock);
-        $contextMock->expects($this->any())
-            ->method('getTitle')
-            ->willReturn($this->titleMock);
         $contextMock->expects($this->any())
             ->method('getView')
             ->willReturn($this->viewMock);

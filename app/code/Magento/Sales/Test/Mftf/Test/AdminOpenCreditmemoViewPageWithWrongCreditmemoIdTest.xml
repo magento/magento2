@@ -33,7 +33,6 @@
 
         <seeInCurrentUrl url="{{AdminCreditMemosGridPage.url}}" stepKey="redirectToCreditMemosGridPage"/>
 
-        <see selector="{{AdminMessagesSection.error}}" userInput='This creditmemo no longer exists.'
-             stepKey="seeErrorMessage"/>
+        <actionGroup ref="AssertAdminPageIs404ActionGroup" stepKey="see404PageOnAdmin"/>
     </test>
 </tests>

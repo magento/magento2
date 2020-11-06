@@ -143,9 +143,6 @@ class ViewTest extends TestCase
      */
     protected function setUp(): void
     {
-        $titleMock = $this->getMockBuilder(\Magento\Framework\App\Action\Title::class)
-            ->disableOriginalConstructor()
-            ->getMock();
         $this->invoiceMock = $this->getMockBuilder(Invoice::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -239,9 +236,6 @@ class ViewTest extends TestCase
             ->method('getObjectManager')
             ->willReturn($this->objectManagerMock);
         $this->contextMock->expects($this->any())
-            ->method('getTitle')
-            ->willReturn($titleMock);
-        $this->contextMock->expects($this->any())
             ->method('getMessageManager')
             ->willReturn($this->messageManagerMock);
         $this->resultPageMock->expects($this->any())
@@ -272,7 +266,7 @@ class ViewTest extends TestCase
         $this->loaderMock->expects($this->once())
             ->method('load')
             ->willReturn(false);
-        
+
         $this->prepareRedirect();
         $this->setPath('sales/creditmemo');
         $this->assertInstanceOf(
