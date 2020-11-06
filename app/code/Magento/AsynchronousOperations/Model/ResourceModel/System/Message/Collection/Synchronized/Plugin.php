@@ -78,8 +78,8 @@ class Plugin
      * @param BulkNotificationManagement $bulkNotificationManagement
      * @param UserContextInterface $userContext
      * @param Details $operationDetails
+     * @param AuthorizationInterface $authorization
      * @param StatusMapper $statusMapper
-     * @param AuthorizationInterface|null $authorization
      * @param Encryptor|null $encryptor
      * @param GetBulksByUserAndTypeInterface|null $getBulksByUserAndType
      */

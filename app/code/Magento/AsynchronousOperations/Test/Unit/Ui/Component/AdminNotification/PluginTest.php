@@ -9,7 +9,7 @@ namespace Magento\AsynchronousOperations\Test\Unit\Ui\Component\AdminNotificatio
 
 use Magento\AdminNotification\Ui\Component\DataProvider\DataProvider;
 use Magento\AsynchronousOperations\Ui\Component\AdminNotification\Plugin;
-use Magento\AsynchronousOperations\Model\AccessManager;
+use Magento\Framework\AuthorizationInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -21,17 +21,25 @@ class PluginTest extends TestCase
     private $plugin;
 
     /**
-     * @var AccessManager|MockObject
+     * @var AuthorizationInterface|MockObject
      */
-    private $accessMangerMock;
+    private $authorizationMock;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
-        $this->accessMangerMock = $this->createMock(AccessManager::class);
-        $this->plugin = new Plugin($this->accessMangerMock);
+        $this->authorizationMock = $this->getMockForAbstractClass(AuthorizationInterface::class);
+        $this->plugin = new Plugin($this->authorizationMock);
     }
 
-    public function testAfterGetMeta()
+    /**
+     * After getMeta test
+     *
+     * @return void
+     */
+    public function testAfterGetMeta(): void
     {
         $result = [];
         $expectedResult = [
@@ -46,8 +54,8 @@ class PluginTest extends TestCase
             ]
         ];
         $dataProviderMock = $this->createMock(DataProvider::class);
-        $this->accessMangerMock->expects($this->once())
-            ->method('isOwnActionsAllowed')
+        $this->authorizationMock->expects($this->once())
+            ->method('isAllowed')
             ->willReturn(true);
 
         $this->assertEquals($expectedResult, $this->plugin->afterGetMeta($dataProviderMock, $result));

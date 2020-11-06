@@ -4,43 +4,48 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
+
 namespace Magento\AsynchronousOperations\Test\Unit\Model;
 
-use Magento\AsynchronousOperations\Model\AccessManager;
+use Magento\AsynchronousOperations\Model\GetGlobalAllowedUserTypes;
+use Magento\AsynchronousOperations\Model\IsAllowedForBulkUuid;
 use Magento\AsynchronousOperations\Api\Data\BulkSummaryInterfaceFactory;
 use Magento\Authorization\Model\UserContextInterface;
-use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\EntityManager\EntityManager;
 use Magento\AsynchronousOperations\Api\Data\BulkSummaryInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-class AccessManagerTest extends TestCase
+/**
+ * Test for \Magento\AsynchronousOperations\Model\IsAllowedForBulkUuid.
+ */
+class IsAllowedForBulkUuidTest extends TestCase
 {
     /**
-     * @var AccessManager
+     * @var IsAllowedForBulkUuid
      */
     private $model;
 
     /**
-     * @var MockObject
+     * @var UserContextInterface|MockObject
      */
     private $userContextMock;
 
     /**
-     * @var MockObject
+     * @var EntityManager|MockObject
      */
     private $entityManagerMock;
 
     /**
-     * @var MockObject
+     * @var BulkSummaryInterfaceFactory|MockObject
      */
     private $bulkSummaryFactoryMock;
 
     /**
-     * @var MockObject
+     * @var GetGlobalAllowedUserTypes|MockObject
      */
-    private $authorizationMock;
+    private $getGlobalAllowedUserTypes;
 
     /**
      * @inheritDoc
@@ -53,13 +58,13 @@ class AccessManagerTest extends TestCase
             BulkSummaryInterfaceFactory::class,
             ['create']
         );
-        $this->authorizationMock = $this->createMock(AuthorizationInterface::class);
+        $this->getGlobalAllowedUserTypes = $this->createMock(GetGlobalAllowedUserTypes::class);
 
-        $this->model = new AccessManager(
+        $this->model = new IsAllowedForBulkUuid(
             $this->userContextMock,
             $this->entityManagerMock,
             $this->bulkSummaryFactoryMock,
-            $this->authorizationMock
+            $this->getGlobalAllowedUserTypes
         );
     }
 
@@ -90,7 +95,7 @@ class AccessManagerTest extends TestCase
             ->method('getUserId')
             ->willReturn($adminId);
 
-        $this->assertEquals($this->model->isAllowedForBulkUuid($uuid), $expectedResult);
+        $this->assertEquals($this->model->execute($uuid), $expectedResult);
     }
 
     /**

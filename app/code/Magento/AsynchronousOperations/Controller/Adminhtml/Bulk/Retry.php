@@ -14,7 +14,6 @@ use Magento\Backend\App\Action;
 use Magento\AsynchronousOperations\Model\AccessValidator;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Bulk\GetBulksByUserAndTypeInterface;
 use Magento\Framework\Controller\ResultFactory;
 
 /**
