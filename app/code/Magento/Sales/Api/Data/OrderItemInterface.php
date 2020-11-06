@@ -393,7 +393,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     const BASE_WEEE_TAX_ROW_DISPOSITION = 'base_weee_tax_row_disposition';
 
     /**
-     * Parent Item
+     * Parent order Item
      */
     const PARENT_ITEM = 'parent_item';
 
@@ -1169,7 +1169,7 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
     /**
      * Sets the SKU for the order item.
      *
-     * @param string
+     * @param string $sku
      * @return $this
      */
     public function setOriginalProductSku($sku);

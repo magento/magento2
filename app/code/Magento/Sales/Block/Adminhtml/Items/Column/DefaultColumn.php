@@ -119,7 +119,7 @@ class DefaultColumn extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
      *
      * @return string
      */
-    public function getOriginalProductSku(): string
+    public function getOriginalProductSku()
     {
         return $this->getItem()->getOriginalProductSku();
     }

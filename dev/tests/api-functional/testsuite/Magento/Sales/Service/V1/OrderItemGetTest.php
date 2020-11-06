@@ -56,7 +56,7 @@ class OrderItemGetTest extends WebapiAbstract
 
         //check that nullable fields were marked as optional and were not sent
         foreach ($response as $fieldName => $value) {
-            if ($fieldName == 'sku') {
+            if ($fieldName == 'sku' || $fieldName == 'original_product_sku') {
                 continue;
             }
             $this->assertNotNull($value);

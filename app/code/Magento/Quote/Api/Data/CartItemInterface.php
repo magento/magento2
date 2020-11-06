@@ -78,7 +78,7 @@ interface CartItemInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
      * @param string $sku
      * @return $this
      */
-    public function setOriginalProductSku(string $sku);
+    public function setOriginalProductSku($sku);
 
     /**
      * Returns the product quantity.
