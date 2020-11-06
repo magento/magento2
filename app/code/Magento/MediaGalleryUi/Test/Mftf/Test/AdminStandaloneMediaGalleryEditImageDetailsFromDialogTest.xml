@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminStandaloneMediaGalleryEditImageDetailsFromDialogTest">
+        <annotations>
+            <features value="MediaGalleryUi"/>
+            <stories value="[Story # 38] User views basic image attributes in Media Gallery"/>
+            <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/724"/>
+            <title value="User edits image meta data in standalone media gallery"/>
+            <description value="User edits image meta data in Standalone Media Gallery"/>
+            <testCaseId value="https://studio.cucumber.io/projects/131313/test-plan/folders/1320712/scenarios/3961351"/>
+            <severity value="CRITICAL"/>
+            <group value="media_gallery_ui"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminEnhancedMediaGalleryDeletedAllImagesActionGroup" stepKey="deleteAllMediaGalleryImages"/>
+        </before>
+
+        <after>
+            <actionGroup ref="AdminEnhancedMediaGalleryDeletedAllImagesActionGroup" stepKey="deleteAllMediaGalleryImages"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+
+        <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openStandaloneMediaGallery"/>
+        <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="resetMediaGalleryGridFilters"/>
+        <actionGroup ref="AdminEnhancedMediaGalleryUploadImageActionGroup" stepKey="uploadImage">
+            <argument name="image" value="ImageUpload"/>
+        </actionGroup>
+        <generateDate date="now" format="s" stepKey="secondsFromMinuteStart"/>
+        <actionGroup ref="AdminEnhancedMediaGalleryViewImageDetails" stepKey="clickViewDetails"/>
+        <actionGroup ref="AssertAdminEnhancedMediaGalleryUploadedImageDateTimeEqualsActionGroup" stepKey="verifyCreatedAndUpdatedAtDate" />
+
+        <executeJS function="return 60 - {$secondsFromMinuteStart} + 5" stepKey="calcWaitPeriod"/>
+        <wait time="$calcWaitPeriod" stepKey="waitTillEndOfAMinute"/>
+
+        <actionGroup ref="AdminEnhancedMediaGalleryCloseViewDetailsActionGroup" stepKey="closeViewDetails"/>
+        <actionGroup ref="AdminEnhancedMediaGalleryEditImageDetailsActionGroup" stepKey="editImageDetails"/>
+        <actionGroup ref="AdminEnhancedMediaGalleryImageDetailsSaveActionGroup" stepKey="saveImage">
+            <argument name="image" value="UpdatedImageDetails"/>
+        </actionGroup>
+        <actionGroup ref="AssertImageAttributesOnEnhancedMediaGalleryActionGroup" stepKey="verifyUpdateImageOnTheGrid">
+            <argument name="image" value="UpdatedImageDetails"/>
+        </actionGroup>
+        <actionGroup ref="AdminEnhancedMediaGalleryViewImageDetails" stepKey="viewImageDetails"/>
+        <actionGroup ref="AdminEnhancedMediaGalleryVerifyImageDetailsActionGroup" stepKey="verifyImageDetails">
+            <argument name="image" value="UpdatedImageDetails"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminEnhancedMediaGalleryImageCreatedAtNotEqualsUpdatedAtTimeActionGroup" stepKey="assertUpdatedAtTimeChanged" />
+        <actionGroup ref="AdminEnhancedMediaGalleryVerifyImageDescriptionActionGroup" stepKey="verifyImageDescription">
+            <argument name="description" value="UpdatedImageDetails.description"/>
+        </actionGroup>
+    </test>
+</tests>
