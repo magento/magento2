@@ -72,6 +72,9 @@
         <actionGroup ref="VerifyCreatedOrderInformationActionGroup" stepKey="verifyCreatedOrderInformation"/>
         <grabTextFrom selector="|Order # (\d+)|" stepKey="orderId"/>
 
+        <!-- Start the consumer -->
+        <magentoCLI command="queue:consumers:start sales.rule.update.coupon.usage --max-messages=100" stepKey="startMessageQueue2"/>
+
         <!-- Cancel the Order -->
         <actionGroup ref="CancelPendingOrderActionGroup" stepKey="cancelPendingOrder"/>
 
