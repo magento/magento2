@@ -7,32 +7,51 @@ declare(strict_types=1);
 
 namespace Magento\Sales\Controller\Adminhtml\Order\Create;
 
-use Magento\Backend\Model\Session\Quote;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Quote\Api\CartRepositoryInterface;
+use Magento\Quote\Api\Data\CartInterface;
+use Magento\Sales\Api\Data\OrderInterfaceFactory;
+use Magento\TestFramework\Request;
+use Magento\TestFramework\TestCase\AbstractBackendController;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Api\Data\CustomerInterfaceFactory;
 use Magento\Framework\App\Request\Http;
-use Magento\Framework\Registry;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\OrderFactory;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Xpath;
-use Magento\TestFramework\TestCase\AbstractBackendController;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
- * Test load block for order create controller.
+ * Test for reorder controller.
  *
- * @see \Magento\Sales\Controller\Adminhtml\Order\Create\Index
- *
+ * @see \Magento\Sales\Controller\Adminhtml\Order\Create\Reorder
  * @magentoAppArea adminhtml
- * @magentoDbIsolation enabled
  */
 class ReorderTest extends AbstractBackendController
 {
+    /** @var OrderInterfaceFactory */
+    private $orderFactory;
+
+    /** @var CartRepositoryInterface */
+    private $quoteRepository;
+
+    /** @var CartInterface */
+    private $quote;
+
+    /**
+     * @var CustomerRepositoryInterface
+     */
+    private $customerRepository;
+
+    /**
+     * @var array
+     */
+    private $customerIds = [];
+
     /**
      * @var OrderRepositoryInterface
      */
@@ -49,30 +68,16 @@ class ReorderTest extends AbstractBackendController
     private $accountManagement;
 
     /**
-     * @var OrderFactory
-     */
-    private $orderFactory;
-
-    /**
-     * @var CustomerRepositoryInterface
-     */
-    private $customerRepository;
-
-    /**
-     * @var array
-     */
-    private $customerIds = [];
-
-    /**
      * @inheritdoc
      */
     protected function setUp(): void
     {
         parent::setUp();
+        $this->orderFactory = $this->_objectManager->get(OrderInterfaceFactory::class);
+        $this->quoteRepository = $this->_objectManager->get(CartRepositoryInterface::class);
         $this->orderRepository = $this->_objectManager->get(OrderRepositoryInterface::class);
         $this->customerFactory = $this->_objectManager->get(CustomerInterfaceFactory::class);
         $this->accountManagement = $this->_objectManager->get(AccountManagementInterface::class);
-        $this->orderFactory = $this->_objectManager->get(OrderFactory::class);
         $this->customerRepository = $this->_objectManager->get(CustomerRepositoryInterface::class);
     }
 
@@ -81,7 +86,9 @@ class ReorderTest extends AbstractBackendController
      */
     protected function tearDown(): void
     {
-        parent::tearDown();
+        if ($this->quote instanceof CartInterface) {
+            $this->quoteRepository->delete($this->quote);
+        }
         foreach ($this->customerIds as $customerId) {
             try {
                 $this->customerRepository->deleteById($customerId);
@@ -89,6 +96,24 @@ class ReorderTest extends AbstractBackendController
                 //customer already deleted
             }
         }
+        parent::tearDown();
+    }
+
+    /**
+     * Reorder with JS calendar options
+     *
+     * @magentoConfigFixture current_store catalog/custom_options/use_calendar 1
+     * @magentoDataFixture Magento/Sales/_files/order_with_date_time_option_product.php
+     *
+     * @return void
+     */
+    public function testReorderAfterJSCalendarEnabled(): void
+    {
+        $order = $this->orderFactory->create()->loadByIncrementId('100000001');
+        $this->dispatchReorderRequest((int)$order->getId());
+        $this->assertRedirect($this->stringContains('backend/sales/order_create'));
+        $this->quote = $this->getQuote('customer@example.com');
+        $this->assertTrue(!empty($this->quote));
     }
 
     /**
@@ -149,5 +174,37 @@ class ReorderTest extends AbstractBackendController
         $orderModel->setCustomerId($createdCustomer->getId());
 
         return $this->orderRepository->save($orderModel);
+    }
+
+    /**
+     * Dispatch reorder request.
+     *
+     * @param null|int $orderId
+     * @return void
+     */
+    private function dispatchReorderRequest(?int $orderId = null): void
+    {
+        $this->getRequest()->setMethod(Request::METHOD_GET);
+        $this->getRequest()->setParam('order_id', $orderId);
+        $this->dispatch('backend/sales/order_create/reorder');
+    }
+
+    /**
+     * Gets quote by reserved order id.
+     *
+     * @return \Magento\Quote\Api\Data\CartInterface
+     */
+    private function getQuote(string $customerEmail): \Magento\Quote\Api\Data\CartInterface
+    {
+        /** @var SearchCriteriaBuilder $searchCriteriaBuilder */
+        $searchCriteriaBuilder = $this->_objectManager->get(SearchCriteriaBuilder::class);
+        $searchCriteria = $searchCriteriaBuilder->addFilter('customer_email', $customerEmail)
+            ->create();
+
+        /** @var CartRepositoryInterface $quoteRepository */
+        $quoteRepository = $this->_objectManager->get(CartRepositoryInterface::class);
+        $items = $quoteRepository->getList($searchCriteria)->getItems();
+
+        return array_pop($items);
     }
 }
