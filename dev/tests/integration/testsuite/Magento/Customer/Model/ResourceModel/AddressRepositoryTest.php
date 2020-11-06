@@ -482,7 +482,7 @@ class AddressRepositoryTest extends TestCase
                 null,
                 null,
                 [
-                    ['id' => 1, 'city' => 'CityM', 'postcode' => 75477, 'firstname' => 'John',],
+                    ['id' => 1, 'city' => 'CityM', 'postcode' => 75477, 'firstname' => 'John'],
                 ],
                 1
             ],
@@ -491,7 +491,7 @@ class AddressRepositoryTest extends TestCase
                 null,
                 null,
                 [
-                    ['id' => 1, 'city' => 'CityM', 'postcode' => 75477, 'firstname' => 'John',],
+                    ['id' => 1, 'city' => 'CityM', 'postcode' => 75477, 'firstname' => 'John'],
                 ],
                 1
             ],
@@ -503,8 +503,8 @@ class AddressRepositoryTest extends TestCase
                     $orderBuilder->setField('city')->setDirection(SortOrder::SORT_ASC)->create(),
                 ],
                 [
-                    ['id' => 1, 'city' => 'CityM', 'postcode' => 75477, 'firstname' => 'John',],
-                    ['id' => 2, 'city' => 'CityX', 'postcode' => 47676, 'firstname' => 'John',],
+                    ['id' => 1, 'city' => 'CityM', 'postcode' => 75477, 'firstname' => 'John'],
+                    ['id' => 2, 'city' => 'CityX', 'postcode' => 47676, 'firstname' => 'John'],
                 ],
                 2
             ],
@@ -518,8 +518,8 @@ class AddressRepositoryTest extends TestCase
                     $orderBuilder->setField('city')->setDirection(SortOrder::SORT_DESC)->create(),
                 ],
                 [
-                    ['id' => 2, 'city' => 'CityX', 'postcode' => 47676, 'firstname' => 'John',],
-                    ['id' => 1, 'city' => 'CityM', 'postcode' => 75477, 'firstname' => 'John',],
+                    ['id' => 2, 'city' => 'CityX', 'postcode' => 47676, 'firstname' => 'John'],
+                    ['id' => 1, 'city' => 'CityM', 'postcode' => 75477, 'firstname' => 'John'],
                 ],
                 2
             ],
@@ -531,8 +531,8 @@ class AddressRepositoryTest extends TestCase
                     $orderBuilder->setField('postcode')->setDirection(SortOrder::SORT_ASC)->create(),
                 ],
                 [
-                    ['id' => 2, 'city' => 'CityX', 'postcode' => 47676, 'firstname' => 'John',],
-                    ['id' => 1, 'city' => 'CityM', 'postcode' => 75477, 'firstname' => 'John',],
+                    ['id' => 2, 'city' => 'CityX', 'postcode' => 47676, 'firstname' => 'John'],
+                    ['id' => 1, 'city' => 'CityM', 'postcode' => 75477, 'firstname' => 'John'],
                 ],
                 2
             ],
@@ -562,7 +562,7 @@ class AddressRepositoryTest extends TestCase
             'country_id' => 'US',
             'region' => $region,
             'postcode' => 90230,
-            'telephone' => '555655431'
+            'telephone' => '555655431',
         ];
         $address = $this->addressFactory->create(['data' => $addressData]);
         $saved = $this->repository->save($address);
@@ -653,7 +653,7 @@ class AddressRepositoryTest extends TestCase
             AddressInterface::REGION => $region,
             AddressInterface::POSTCODE => 'KA26 1PF',
             AddressInterface::TELEPHONE => '999-777-111-2345',
-            AddressInterface::VAT_ID => '987654321'
+            AddressInterface::VAT_ID => '987654321',
         ];
         $customerAddress = $this->repository->getById((int)$defaultBillingAddress);
         foreach ($addressData as $key => $value) {
