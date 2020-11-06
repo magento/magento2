@@ -21,7 +21,6 @@ use Magento\ConfigurableProduct\Model\Product\Type\Configurable\AttributeFactory
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute\Collection;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute\CollectionFactory;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\Collection as ProductCollection;
-use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable as TypeConfigurable;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\CollectionFactory
     as ProductCollectionFactory;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\ConfigurableFactory;
@@ -46,8 +45,6 @@ use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
 /**
- * Unit tests for Magento\ConfigurableProduct\Model\Product\Type\Configurable class.
- *
  * @SuppressWarnings(PHPMD.LongVariable)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -149,12 +146,6 @@ class ConfigurableTest extends TestCase
     private $catalogConfig;
 
     /**
-     * @var TypeConfigurable
-     */
-    private $catalogProductTypeConfigurable;
-
-    /**
-     * @inheritdoc
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp(): void
@@ -224,10 +215,6 @@ class ConfigurableTest extends TestCase
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->catalogProductTypeConfigurable = $this->getMockBuilder(TypeConfigurable::class)
-            ->onlyMethods(['getParentIdsByChild'])
-            ->disableOriginalConstructor()
-            ->getMock();
 
         $this->salableProcessor = $this->createMock(SalableProcessor::class);
 
@@ -255,43 +242,12 @@ class ConfigurableTest extends TestCase
                 'salableProcessor' => $this->salableProcessor,
                 'metadataPool' => $this->metadataPool,
                 'productFactory' => $this->productFactory,
-                'catalogProductTypeConfigurable' => $this->catalogProductTypeConfigurable,
             ]
         );
         $refClass = new \ReflectionClass(Configurable::class);
         $refProperty = $refClass->getProperty('metadataPool');
         $refProperty->setAccessible(true);
         $refProperty->setValue($this->model, $this->metadataPool);
-    }
-
-    /**
-     * Verify get parent ids by child
-     *
-     * @return void
-     */
-    public function testGetParentIdsByChild()
-    {
-        $this->assertClassHasAttribute('cacheParentIdsByChild', Configurable::class);
-
-        $childId = 1;
-        $parentIdsByChild = [
-            [
-                0 => [
-                    26 => "26",
-                    39 => "39",
-                ],
-            ],
-        ];
-
-        $this->catalogProductTypeConfigurable->expects($this->once())
-            ->method('getParentIdsByChild')
-            ->with($childId)
-            ->willReturn($parentIdsByChild);
-        $this->assertIsArray($this->model->getParentIdsByChild($childId));
-
-        $this->catalogProductTypeConfigurable->expects($this->never())
-            ->method('getParentIdsByChild');
-        $this->assertEquals($parentIdsByChild, $this->model->getParentIdsByChild($childId));
     }
 
     public function testHasWeightTrue()

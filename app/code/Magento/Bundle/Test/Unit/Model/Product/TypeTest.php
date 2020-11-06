@@ -11,9 +11,6 @@ use Magento\Bundle\Model\OptionFactory;
 use Magento\Bundle\Model\Product\Type;
 use Magento\Bundle\Model\ResourceModel\BundleFactory;
 use Magento\Bundle\Model\ResourceModel\Option\Collection;
-use Magento\Bundle\Model\ResourceModel\Selection as ResourceSelection;
-use Magento\Catalog\Helper\Product as ProductHelper;
-use Magento\Catalog\Model\Product\Option as OptionProduct;
 use Magento\CatalogRule\Model\ResourceModel\Product\CollectionProcessor;
 use Magento\Bundle\Model\ResourceModel\Selection\Collection as SelectionCollection;
 use Magento\Bundle\Model\ResourceModel\Selection\CollectionFactory;
@@ -48,7 +45,6 @@ use PHPUnit\Framework\TestCase;
 /**
  * Test for bundle product type
  *
- * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class TypeTest extends TestCase
@@ -74,7 +70,7 @@ class TypeTest extends TestCase
     protected $bundleCollectionFactory;
 
     /**
-     * @var Data|MockObject
+     * @var \Magento\Catalog\Helper\Data|MockObject
      */
     protected $catalogData;
 
@@ -99,7 +95,7 @@ class TypeTest extends TestCase
     protected $stockState;
 
     /**
-     * @var ProductHelper|MockObject
+     * @var \Magento\Catalog\Helper\Product|MockObject
      */
     private $catalogProduct;
 
@@ -129,12 +125,7 @@ class TypeTest extends TestCase
     private $catalogRuleProcessor;
 
     /**
-     * @var ResourceSelection|MockObject
-     */
-    private $bundleSelection;
-
-    /**
-     * @inheritdoc
+     * @return void
      */
     protected function setUp(): void
     {
@@ -173,7 +164,7 @@ class TypeTest extends TestCase
             ->setMethods(['getStockQty'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->catalogProduct = $this->getMockBuilder(ProductHelper::class)
+        $this->catalogProduct = $this->getMockBuilder(\Magento\Catalog\Helper\Product::class)
             ->setMethods(['getSkipSaleableCheck'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -203,10 +194,6 @@ class TypeTest extends TestCase
         $this->catalogRuleProcessor = $this->getMockBuilder(CollectionProcessor::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->bundleSelection = $this->getMockBuilder(ResourceSelection::class)
-            ->onlyMethods(['getChildrenIds', 'getParentIdsByChild'])
-            ->disableOriginalConstructor()
-            ->getMock();
 
         $objectHelper = new ObjectManager($this);
         $this->model = $objectHelper->getObject(
@@ -214,7 +201,6 @@ class TypeTest extends TestCase
             [
                 'bundleModelSelection' => $this->bundleModelSelection,
                 'bundleFactory' => $this->bundleFactory,
-                'bundleSelection' => $this->bundleSelection,
                 'bundleCollection' => $this->bundleCollectionFactory,
                 'bundleOption' => $this->bundleOptionFactory,
                 'catalogData' => $this->catalogData,
@@ -228,62 +214,6 @@ class TypeTest extends TestCase
                 'arrayUtility' => $this->arrayUtility
             ]
         );
-    }
-
-    /**
-     * @return void
-     */
-    public function testGetChildrenIds()
-    {
-        $this->assertClassHasAttribute('cacheChildrenIds', Type::class);
-
-        $parentId = 1;
-        $childrenIds = [
-            [
-                0 => [
-                    26 => "26",
-                    39 => "39",
-                ],
-            ],
-        ];
-
-        $this->bundleSelection->expects($this->once())
-            ->method('getChildrenIds')
-            ->with($parentId, true)
-            ->willReturn($childrenIds);
-        $this->assertIsArray($this->model->getChildrenIds($parentId, true));
-
-        $this->bundleSelection->expects($this->never())
-            ->method('getChildrenIds');
-        $this->assertEquals($childrenIds, $this->model->getChildrenIds($parentId, true));
-    }
-
-    /**
-     * @return void
-     */
-    public function testGetParentIdsByChild()
-    {
-        $this->assertClassHasAttribute('cacheParentIdsByChild', Type::class);
-
-        $childId = 1;
-        $parentIdsByChild = [
-            [
-                0 => [
-                    26 => "26",
-                    39 => "39",
-                ],
-            ],
-        ];
-
-        $this->bundleSelection->expects($this->once())
-            ->method('getParentIdsByChild')
-            ->with($childId)
-            ->willReturn($parentIdsByChild);
-        $this->assertIsArray($this->model->getParentIdsByChild($childId));
-
-        $this->bundleSelection->expects($this->never())
-            ->method('getParentIdsByChild');
-        $this->assertEquals($parentIdsByChild, $this->model->getParentIdsByChild($childId));
     }
 
     /**
@@ -306,7 +236,7 @@ class TypeTest extends TestCase
             )
             ->disableOriginalConstructor()
             ->getMock();
-        /* @var MockObject|OptionProduct $option */
+        /* @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Model\Product\Option $option */
         $option = $this->getMockBuilder(Option::class)
             ->setMethods(['groupFactory', 'getType', 'getId', 'getRequired', 'isMultiSelection'])
             ->disableOriginalConstructor()
@@ -417,7 +347,7 @@ class TypeTest extends TestCase
             )
             ->disableOriginalConstructor()
             ->getMock();
-        /* @var MockObject|OptionProduct $option */
+        /* @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Model\Product\Option $option */
         $option = $this->getMockBuilder(Option::class)
             ->setMethods(
                 [
@@ -661,7 +591,7 @@ class TypeTest extends TestCase
             )
             ->disableOriginalConstructor()
             ->getMock();
-        /* @var MockObject|OptionProduct $option */
+        /* @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Model\Product\Option $option */
         $option = $this->getMockBuilder(Option::class)
             ->setMethods(
                 [
@@ -886,7 +816,7 @@ class TypeTest extends TestCase
             )
             ->disableOriginalConstructor()
             ->getMock();
-        /* @var MockObject|OptionProduct $option */
+        /* @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Model\Product\Option $option */
         $option = $this->getMockBuilder(Option::class)
             ->setMethods(
                 [
@@ -1105,7 +1035,7 @@ class TypeTest extends TestCase
             )
             ->disableOriginalConstructor()
             ->getMock();
-        /* @var MockObject|OptionProduct $option */
+        /* @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Model\Product\Option $option */
         $option = $this->getMockBuilder(Option::class)
             ->setMethods(['groupFactory', 'getType', 'getId', 'getRequired', 'isMultiSelection'])
             ->disableOriginalConstructor()
@@ -1205,7 +1135,7 @@ class TypeTest extends TestCase
             )
             ->disableOriginalConstructor()
             ->getMock();
-        /* @var MockObject|OptionProduct $option */
+        /* @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Model\Product\Option $option */
         $option = $this->getMockBuilder(Option::class)
             ->setMethods(['groupFactory', 'getType', 'getId', 'getRequired', 'isMultiSelection'])
             ->disableOriginalConstructor()
@@ -1332,7 +1262,7 @@ class TypeTest extends TestCase
             )
             ->disableOriginalConstructor()
             ->getMock();
-        /* @var MockObject|OptionProduct $option */
+        /* @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Model\Product\Option $option */
         $option = $this->getMockBuilder(Option::class)
             ->setMethods(['groupFactory', 'getType', 'getId', 'getRequired', 'isMultiSelection'])
             ->disableOriginalConstructor()
@@ -1496,7 +1426,7 @@ class TypeTest extends TestCase
             )
             ->disableOriginalConstructor()
             ->getMock();
-        /* @var MockObject|OptionProduct $option */
+        /* @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Model\Product\Option $option */
         $option = $this->getMockBuilder(Option::class)
             ->setMethods(['groupFactory', 'getType', 'getId', 'getRequired'])
             ->disableOriginalConstructor()
@@ -1597,7 +1527,7 @@ class TypeTest extends TestCase
             )
             ->disableOriginalConstructor()
             ->getMock();
-        /* @var MockObject|OptionProduct $option */
+        /* @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Model\Product\Option $option */
         $option = $this->getMockBuilder(Option::class)
             ->setMethods(['groupFactory', 'getType', 'getId'])
             ->disableOriginalConstructor()

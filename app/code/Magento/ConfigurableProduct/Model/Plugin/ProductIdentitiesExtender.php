@@ -27,6 +27,11 @@ class ProductIdentitiesExtender
     private $productRepository;
 
     /**
+     * @var array
+     */
+    private $cacheParentIdsByChild = [];
+
+    /**
      * @param ConfigurableType $configurableType
      * @param ProductRepositoryInterface $productRepository
      */
@@ -50,12 +55,27 @@ class ProductIdentitiesExtender
             return $identities;
         }
         $parentProductsIdentities = [];
-        foreach ($this->configurableType->getParentIdsByChild($subject->getId()) as $parentId) {
+        foreach ($this->getParentIdsByChild($subject->getId()) as $parentId) {
             $parentProduct = $this->productRepository->getById($parentId);
             $parentProductsIdentities[] = $parentProduct->getIdentities();
         }
         $identities = array_merge($identities, ...$parentProductsIdentities);
 
         return array_unique($identities);
+    }
+
+    /**
+     * Get parent ids by child with cache use
+     *
+     * @param int $childId
+     * @return array
+     */
+    private function getParentIdsByChild($childId)
+    {
+        if (!isset($this->cacheParentIdsByChild[$childId])) {
+            $this->cacheParentIdsByChild[$childId] = $this->configurableType->getParentIdsByChild($childId);
+        }
+
+        return $this->cacheParentIdsByChild[$childId];
     }
 }

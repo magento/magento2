@@ -66,24 +66,31 @@ class ProductIdentitiesExtenderTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $productMock->expects($this->once())
+        $productMock->expects($this->exactly(2))
             ->method('getId')
             ->willReturn($productId);
-        $productMock->expects($this->once())
+        $productMock->expects($this->exactly(2))
             ->method('getTypeId')
             ->willReturn(Configurable::TYPE_CODE);
         $this->configurableTypeMock->expects($this->once())
             ->method('getParentIdsByChild')
             ->with($productId)
             ->willReturn([$parentProductId]);
-        $this->productRepositoryMock->expects($this->once())
+        $this->productRepositoryMock->expects($this->exactly(2))
             ->method('getById')
             ->with($parentProductId)
             ->willReturn($parentProductMock);
-        $parentProductMock->expects($this->once())
+        $parentProductMock->expects($this->exactly(2))
             ->method('getIdentities')
             ->willReturn([$parentProductIdentity]);
 
+        $productIdentities = $this->plugin->afterGetIdentities($productMock, [$productIdentity]);
+        $this->assertEquals([$productIdentity, $parentProductIdentity], $productIdentities);
+
+        $this->configurableTypeMock->expects($this->never())
+            ->method('getParentIdsByChild')
+            ->with($productId)
+            ->willReturn([$parentProductId]);
         $productIdentities = $this->plugin->afterGetIdentities($productMock, [$productIdentity]);
         $this->assertEquals([$productIdentity, $parentProductIdentity], $productIdentities);
     }

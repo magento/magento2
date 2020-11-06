@@ -62,13 +62,20 @@ class ProductIdentitiesExtenderTest extends TestCase
             Product::CACHE_TAG . '_' . 45,
             Product::CACHE_TAG . '_' . 24612,
         ];
-        $this->product->expects($this->once())
+        $this->product->expects($this->exactly(2))
             ->method('getEntityId')
             ->willReturn($id);
-        $this->product->expects($this->once())
+        $this->product->expects($this->exactly(2))
             ->method('getTypeId')
             ->willReturn(Type::TYPE_CODE);
         $this->type->expects($this->once())
+            ->method('getChildrenIds')
+            ->with($id)
+            ->willReturn($childIds);
+        $identities = $this->plugin->afterGetIdentities($this->product, $baseIdentities);
+        $this->assertEquals($expectedIdentities, $identities);
+
+        $this->type->expects($this->never())
             ->method('getChildrenIds')
             ->with($id)
             ->willReturn($childIds);

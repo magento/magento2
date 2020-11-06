@@ -21,6 +21,11 @@ class ProductIdentitiesExtender
     private $type;
 
     /**
+     * @var array
+     */
+    private $cacheChildrenIds = [];
+
+    /**
      * @param BundleType $type
      */
     public function __construct(BundleType $type)
@@ -40,12 +45,27 @@ class ProductIdentitiesExtender
         if ($product->getTypeId() !== BundleType::TYPE_CODE) {
             return $identities;
         }
-        foreach ($this->type->getChildrenIds($product->getEntityId()) as $childIds) {
+        foreach ($this->getChildrenIds($product->getEntityId()) as $childIds) {
             foreach ($childIds as $childId) {
                 $identities[] = CatalogProduct::CACHE_TAG . '_' . $childId;
             }
         }
 
         return array_unique($identities);
+    }
+
+    /**
+     * Get children ids with cache use
+     *
+     * @param mixed $entityId
+     * @return array
+     */
+    private function getChildrenIds($entityId)
+    {
+        if (!isset($this->cacheChildrenIds[$entityId])) {
+            $this->cacheChildrenIds[$entityId] = $this->type->getChildrenIds($entityId);
+        }
+
+        return $this->cacheChildrenIds[$entityId];
     }
 }

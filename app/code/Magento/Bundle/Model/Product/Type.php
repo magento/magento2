@@ -169,16 +169,6 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
     private $arrayUtility;
 
     /**
-     * @var array
-     */
-    private $cacheChildrenIds = [];
-
-    /**
-     * @var array
-     */
-    private $cacheParentIdsByChild = [];
-
-    /**
      * @param \Magento\Catalog\Model\Product\Option $catalogProductOption
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Catalog\Model\Product\Type $catalogProductType
@@ -295,12 +285,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      */
     public function getChildrenIds($parentId, $required = true)
     {
-        $cacheKey = $parentId . '-' . ($required ? 1 : 0);
-        if (!isset($this->cacheChildrenIds[$cacheKey])) {
-            $this->cacheChildrenIds[$cacheKey] = $this->_bundleSelection->getChildrenIds($parentId, $required);
-        }
-
-        return $this->cacheChildrenIds[$cacheKey];
+        return $this->_bundleSelection->getChildrenIds($parentId, $required);
     }
 
     /**
@@ -311,16 +296,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      */
     public function getParentIdsByChild($childId)
     {
-        if (is_array($childId) && count($childId) > 1) {
-            return $this->_bundleSelection->getParentIdsByChild($childId);
-        }
-
-        $cacheKey = is_array($childId) ? array_shift($childId) : $childId;
-        if (!isset($this->cacheParentIdsByChild[$cacheKey])) {
-            $this->cacheParentIdsByChild[$cacheKey] = $this->_bundleSelection->getParentIdsByChild($childId);
-        }
-
-        return $this->cacheParentIdsByChild[$cacheKey];
+        return $this->_bundleSelection->getParentIdsByChild($childId);
     }
 
     /**
