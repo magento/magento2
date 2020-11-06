@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\CompareListGraphQl\Model\Resolver;
 
 use Magento\Catalog\Model\MaskedListIdToCompareListId;
+use Magento\CompareListGraphQl\Model\Service\Customer\GetListIdByCustomerId;
 use Magento\CompareListGraphQl\Model\Service\GetCompareList;
 use Magento\CompareListGraphQl\Model\Service\RemoveFromCompareList;
 use Magento\Framework\Exception\LocalizedException;
@@ -39,18 +40,26 @@ class RemoveProductsFromCompareList implements ResolverInterface
     private $maskedListIdToCompareListId;
 
     /**
+     * @var GetListIdByCustomerId
+     */
+    private $getListIdByCustomerId;
+
+    /**
      * @param GetCompareList $getCompareList
      * @param RemoveFromCompareList $removeFromCompareList
      * @param MaskedListIdToCompareListId $maskedListIdToCompareListId
+     * @param GetListIdByCustomerId $getListIdByCustomerId
      */
     public function __construct(
         GetCompareList $getCompareList,
         RemoveFromCompareList $removeFromCompareList,
-        MaskedListIdToCompareListId $maskedListIdToCompareListId
+        MaskedListIdToCompareListId $maskedListIdToCompareListId,
+        GetListIdByCustomerId $getListIdByCustomerId
     ) {
         $this->getCompareList = $getCompareList;
         $this->removeFromCompareList = $removeFromCompareList;
         $this->maskedListIdToCompareListId = $maskedListIdToCompareListId;
+        $this->getListIdByCustomerId = $getListIdByCustomerId;
     }
 
     /**
@@ -89,6 +98,13 @@ class RemoveProductsFromCompareList implements ResolverInterface
             throw new GraphQlInputException(__('"uid" value does not exist'));
         }
 
+        if ($userId = $context->getUserId()) {
+            $customerListId = $this->getListIdByCustomerId->execute($userId);
+            if ($listId === $customerListId) {
+                $this->removeFromCompareList($customerListId, $args);
+            }
+        }
+
         try {
             $this->removeFromCompareList->execute($listId, $args['input']['products']);
         } catch (LocalizedException $exception) {
@@ -98,5 +114,23 @@ class RemoveProductsFromCompareList implements ResolverInterface
         }
 
         return $this->getCompareList->execute($listId, $context);
+    }
+
+    /**
+     * Remove products from compare list
+     *
+     * @param int $listId
+     * @param array $args
+     * @throws GraphQlInputException
+     */
+    private function removeFromCompareList(int $listId, array $args): void
+    {
+        try {
+            $this->removeFromCompareList->execute($listId, $args['input']['products']);
+        } catch (LocalizedException $exception) {
+            throw new GraphQlInputException(
+                __('Something was wrong during removing products from compare list')
+            );
+        }
     }
 }

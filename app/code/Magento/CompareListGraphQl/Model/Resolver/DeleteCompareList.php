@@ -10,6 +10,7 @@ namespace Magento\CompareListGraphQl\Model\Resolver;
 use Magento\Catalog\Model\CompareListFactory;
 use Magento\Catalog\Model\MaskedListIdToCompareListId;
 use Magento\Catalog\Model\ResourceModel\Product\Compare\CompareList as CompareListResource;
+use Magento\CompareListGraphQl\Model\Service\Customer\GetListIdByCustomerId;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
@@ -39,18 +40,26 @@ class DeleteCompareList implements ResolverInterface
     private $maskedListIdToCompareListId;
 
     /**
+     * @var GetListIdByCustomerId
+     */
+    private $getListIdByCustomerId;
+
+    /**
      * @param CompareListFactory $compareListFactory
      * @param CompareListResource $compareListResource
      * @param MaskedListIdToCompareListId $maskedListIdToCompareListId
+     * @param GetListIdByCustomerId $getListIdByCustomerId
      */
     public function __construct(
         CompareListFactory $compareListFactory,
         CompareListResource $compareListResource,
-        MaskedListIdToCompareListId $maskedListIdToCompareListId
+        MaskedListIdToCompareListId $maskedListIdToCompareListId,
+        GetListIdByCustomerId $getListIdByCustomerId
     ) {
         $this->compareListFactory = $compareListFactory;
         $this->compareListResource = $compareListResource;
         $this->maskedListIdToCompareListId = $maskedListIdToCompareListId;
+        $this->getListIdByCustomerId = $getListIdByCustomerId;
     }
 
     /**
@@ -81,12 +90,22 @@ class DeleteCompareList implements ResolverInterface
         $listId = $this->maskedListIdToCompareListId->execute($args['uid']);
         $removed = ['result' => false];
 
+        if ($userId = $context->getUserId()) {
+            $customerListId = $this->getListIdByCustomerId->execute($userId);
+            if ($listId === $customerListId) {
+                try {
+                    $removed['result'] = $this->deleteCompareList($customerListId);
+                } catch (LocalizedException $exception) {
+                    throw new GraphQlInputException(
+                        __('Something was wrong during removing compare list')
+                    );
+                }
+            }
+        }
+
         if ($listId) {
             try {
-                $compareList = $this->compareListFactory->create();
-                $compareList->setListId($listId);
-                $this->compareListResource->delete($compareList);
-                $removed['result'] = true;
+                $removed['result'] = $this->deleteCompareList($listId);
             } catch (LocalizedException $exception) {
                 throw new GraphQlInputException(
                     __('Something was wrong during removing compare list')
@@ -95,5 +114,20 @@ class DeleteCompareList implements ResolverInterface
         }
 
         return $removed;
+    }
+
+    /**
+     * Delete compare list
+     *
+     * @param int|null $listId
+     * @return bool
+     */
+    private function deleteCompareList(?int $listId): bool
+    {
+        $compareList = $this->compareListFactory->create();
+        $compareList->setListId($listId);
+        $this->compareListResource->delete($compareList);
+
+        return true;
     }
 }

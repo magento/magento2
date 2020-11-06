@@ -9,6 +9,7 @@ namespace Magento\CompareListGraphQl\Model\Resolver;
 
 use Magento\Catalog\Model\MaskedListIdToCompareListId;
 use Magento\CompareListGraphQl\Model\Service\AddToCompareList;
+use Magento\CompareListGraphQl\Model\Service\Customer\GetListIdByCustomerId;
 use Magento\CompareListGraphQl\Model\Service\GetCompareList;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
@@ -38,18 +39,26 @@ class AddProductsToCompareList implements ResolverInterface
     private $maskedListIdToCompareListId;
 
     /**
+     * @var GetListIdByCustomerId
+     */
+    private $getListIdByCustomerId;
+
+    /**
      * @param AddToCompareList $addProductToCompareList
      * @param GetCompareList $getCompareList
      * @param MaskedListIdToCompareListId $maskedListIdToCompareListId
+     * @param GetListIdByCustomerId $getListIdByCustomerId
      */
     public function __construct(
         AddToCompareList $addProductToCompareList,
         GetCompareList $getCompareList,
-        MaskedListIdToCompareListId $maskedListIdToCompareListId
+        MaskedListIdToCompareListId $maskedListIdToCompareListId,
+        GetListIdByCustomerId $getListIdByCustomerId
     ) {
         $this->addProductToCompareList = $addProductToCompareList;
         $this->getCompareList = $getCompareList;
         $this->maskedListIdToCompareListId = $maskedListIdToCompareListId;
+        $this->getListIdByCustomerId = $getListIdByCustomerId;
     }
 
     /**
@@ -86,6 +95,15 @@ class AddProductsToCompareList implements ResolverInterface
 
         if (!$listId) {
             throw new GraphQlInputException(__('"uid" value does not exist'));
+        }
+
+        if ($userId = $context->getUserId()) {
+            $customerListId = $this->getListIdByCustomerId->execute($userId);
+            if ($listId === $customerListId) {
+                $this->addProductToCompareList->execute($customerListId, $args['input']['products'], $storeId);
+
+                return $this->getCompareList->execute($customerListId, $context);
+            }
         }
 
         $this->addProductToCompareList->execute($listId, $args['input']['products'], $storeId);
