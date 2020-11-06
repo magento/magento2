@@ -157,7 +157,7 @@ class AddressRepositoryTest extends TestCase
             'No such entity with %fieldName = %fieldValue',
             [
                 'fieldName' => 'addressId',
-                'fieldValue' => 4200
+                'fieldValue' => 4200,
             ]
         );
         $this->expectException(NoSuchEntityException::class);
@@ -195,7 +195,7 @@ class AddressRepositoryTest extends TestCase
             'No such entity with %fieldName = %fieldValue',
             [
                 'fieldName' => 'addressId',
-                'fieldValue' => 12345
+                'fieldValue' => 12345,
             ]
         );
         $this->expectException(NoSuchEntityException::class);
@@ -299,7 +299,7 @@ class AddressRepositoryTest extends TestCase
             'No such entity with %fieldName = %fieldValue',
             [
                 'fieldName' => 'customerId',
-                'fieldValue' => 4200
+                'fieldValue' => 4200,
             ]
         );
         $this->expectException(NoSuchEntityException::class);
@@ -319,7 +319,7 @@ class AddressRepositoryTest extends TestCase
             'No such entity with %fieldName = %fieldValue',
             [
                 'fieldName' => 'customerId',
-                'fieldValue' => 'this_is_not_a_valid_id'
+                'fieldValue' => 'this_is_not_a_valid_id',
             ]
         );
         $this->expectException(NoSuchEntityException::class);
@@ -347,7 +347,7 @@ class AddressRepositoryTest extends TestCase
             'No such entity with %fieldName = %fieldValue',
             [
                 'fieldName' => 'addressId',
-                'fieldValue' => 1
+                'fieldValue' => 1,
             ]
         );
         $this->expectException(NoSuchEntityException::class);
@@ -375,7 +375,7 @@ class AddressRepositoryTest extends TestCase
             'No such entity with %fieldName = %fieldValue',
             [
                 'fieldName' => 'addressId',
-                'fieldValue' => 1
+                'fieldValue' => 1,
             ]
         );
         $this->expectException(NoSuchEntityException::class);
@@ -395,7 +395,7 @@ class AddressRepositoryTest extends TestCase
             'No such entity with %fieldName = %fieldValue',
             [
                 'fieldName' => 'addressId',
-                'fieldValue' => 12345
+                'fieldValue' => 12345,
             ]
         );
         $this->expectException(NoSuchEntityException::class);
@@ -482,7 +482,7 @@ class AddressRepositoryTest extends TestCase
                 null,
                 null,
                 [
-                    ['id' => 1, 'city' => 'CityM', 'postcode' => 75477, 'firstname' => 'John'],
+                    ['id' => 1, 'city' => 'CityM', 'postcode' => 75477, 'firstname' => 'John',],
                 ],
                 1
             ],
@@ -491,7 +491,7 @@ class AddressRepositoryTest extends TestCase
                 null,
                 null,
                 [
-                    ['id' => 1, 'city' => 'CityM', 'postcode' => 75477, 'firstname' => 'John'],
+                    ['id' => 1, 'city' => 'CityM', 'postcode' => 75477, 'firstname' => 'John',],
                 ],
                 1
             ],
@@ -503,8 +503,8 @@ class AddressRepositoryTest extends TestCase
                     $orderBuilder->setField('city')->setDirection(SortOrder::SORT_ASC)->create(),
                 ],
                 [
-                    ['id' => 1, 'city' => 'CityM', 'postcode' => 75477, 'firstname' => 'John'],
-                    ['id' => 2, 'city' => 'CityX', 'postcode' => 47676, 'firstname' => 'John'],
+                    ['id' => 1, 'city' => 'CityM', 'postcode' => 75477, 'firstname' => 'John',],
+                    ['id' => 2, 'city' => 'CityX', 'postcode' => 47676, 'firstname' => 'John',],
                 ],
                 2
             ],
@@ -518,8 +518,8 @@ class AddressRepositoryTest extends TestCase
                     $orderBuilder->setField('city')->setDirection(SortOrder::SORT_DESC)->create(),
                 ],
                 [
-                    ['id' => 2, 'city' => 'CityX', 'postcode' => 47676, 'firstname' => 'John'],
-                    ['id' => 1, 'city' => 'CityM', 'postcode' => 75477, 'firstname' => 'John'],
+                    ['id' => 2, 'city' => 'CityX', 'postcode' => 47676, 'firstname' => 'John',],
+                    ['id' => 1, 'city' => 'CityM', 'postcode' => 75477, 'firstname' => 'John',],
                 ],
                 2
             ],
@@ -531,8 +531,8 @@ class AddressRepositoryTest extends TestCase
                     $orderBuilder->setField('postcode')->setDirection(SortOrder::SORT_ASC)->create(),
                 ],
                 [
-                    ['id' => 2, 'city' => 'CityX', 'postcode' => 47676, 'firstname' => 'John'],
-                    ['id' => 1, 'city' => 'CityM', 'postcode' => 75477, 'firstname' => 'John'],
+                    ['id' => 2, 'city' => 'CityX', 'postcode' => 47676, 'firstname' => 'John',],
+                    ['id' => 1, 'city' => 'CityM', 'postcode' => 75477, 'firstname' => 'John',],
                 ],
                 2
             ],
@@ -662,8 +662,8 @@ class AddressRepositoryTest extends TestCase
         $savedAddress = $this->repository->save($customerAddress);
         $customerData = $savedAddress->__toArray();
         foreach ($addressData as $key => $value) {
-            if ($key === 'region') {
-                $this->assertEquals('Pinminnoch', $value->getRegion());
+            if ($key === AddressInterface::REGION) {
+                $this->assertEquals($customerData[$key][AddressInterface::REGION], $value->getRegion());
             } else {
                 $this->assertEquals($value, $customerData[$key]);
             }
