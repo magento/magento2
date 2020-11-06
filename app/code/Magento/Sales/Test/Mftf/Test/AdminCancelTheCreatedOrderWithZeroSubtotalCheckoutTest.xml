@@ -70,11 +70,11 @@
 
         <!-- Start the consumer -->
         <magentoCLI command="queue:consumers:start sales.rule.update.coupon.usage --max-messages=100" stepKey="startMessageQueue2"/>
-        <reloadPage stepKey="refreshPage"/>
+        <reloadPage stepKey="refreshPage1"/>
 
         <!--Verify order information-->
         <actionGroup ref="VerifyCreatedOrderInformationActionGroup" stepKey="verifyCreatedOrderInformation"/>
-        <reloadPage stepKey="refreshPage"/>
+        <reloadPage stepKey="refreshPage2"/>
         <grabTextFrom selector="|Order # (\d+)|" stepKey="orderId"/>
 
         <!-- Cancel the Order -->
