@@ -38,7 +38,6 @@ class ActiveTableSwitcher
         $toRename = [];
         $tableComment = '';
         $replicaComment = '';
-        $renameBatch = [];
         foreach ($tableNames as $tableName) {
             $outdatedTableName = $tableName . $this->outdatedTableSuffix;
             $replicaTableName = $tableName . $this->additionalTableSuffix;
@@ -47,20 +46,14 @@ class ActiveTableSwitcher
             $tableCreateResult = $connection->fetchRow($tableCreateQuery);
 
             if (is_array($tableCreateResult)) {
-                $tableCommentPosition = strpos((string )end($tableCreateResult), "COMMENT=");
-                if ($tableCommentPosition) {
-                    $tableComment = substr((string )end($tableCreateResult), $tableCommentPosition + 8);
-                }
+                $tableComment = $this->getTableComment($tableCreateResult);
             }
 
             $replicaCreateQuery = 'SHOW CREATE TABLE ' . $replicaTableName;
             $replicaCreateResult = $connection->fetchRow($replicaCreateQuery);
 
             if (is_array($replicaCreateResult)) {
-                $replicaCommentPosition = strpos((string )end($replicaCreateResult), "COMMENT=");
-                if ($replicaCommentPosition) {
-                    $replicaComment = substr((string )end($replicaCreateResult), $replicaCommentPosition + 8);
-                }
+                $replicaComment = $this->getTableComment($replicaCreateResult);
             }
 
             $renameBatch = [
@@ -78,11 +71,15 @@ class ActiveTableSwitcher
                 ]
             ];
 
-            if (!empty($renameBatch)) {
-                $this->switchTableComments($tableName, $replicaTableName, $tableComment, $replicaComment, $connection);
+            $toRename = $this->mergeRenameTables($renameBatch, $toRename);
+
+            if (!empty($toRename) && $replicaComment !== '' && $tableComment !== $replicaComment) {
+                $changeTableComment   = sprintf("ALTER TABLE %s COMMENT=%s", $tableName, $replicaComment);
+                $connection->query($changeTableComment);
+                $changeReplicaComment = sprintf("ALTER TABLE %s COMMENT=%s", $replicaTableName, $tableComment);
+                $connection->query($changeReplicaComment);
             }
         }
-        $toRename = array_merge($toRename, $renameBatch);
 
         if (!empty($toRename)) {
             $connection->renameTablesBatch($toRename);
@@ -101,21 +98,35 @@ class ActiveTableSwitcher
     }
 
     /**
-     * Switch table comments
+     * Returns table comment
      *
-     * @param string $tableName
-     * @param string $replicaName
-     * @param string $tableComment
-     * @param string $replicaComment
-     * @param AdapterInterface $connection
+     * @param array $tableCreateResult
+     * @return string
      */
-    private function switchTableComments($tableName, $replicaName, $tableComment, $replicaComment, $connection)
+    private function getTableComment($tableCreateResult)
     {
-        if ($tableComment !== '' && $tableComment !== $replicaComment) {
-            $changeTableComment   = sprintf("ALTER TABLE %s COMMENT=%s", $tableName, $replicaComment);
-            $connection->query($changeTableComment);
-            $changeReplicaComment = sprintf("ALTER TABLE %s COMMENT=%s", $replicaName, $tableComment);
-            $connection->query($changeReplicaComment);
+        $tableComment = '';
+        $replicaCommentPosition = strpos((string )end($tableCreateResult), "COMMENT=");
+        if ($replicaCommentPosition) {
+            $tableComment = substr((string )end($tableCreateResult), $replicaCommentPosition + 8);
         }
+        return $tableComment;
+    }
+
+    /**
+     * Merges two arrays
+     *
+     * @param array $renameBatch
+     * @param array $toRename
+     * @return array
+     */
+    private function mergeRenameTables($renameBatch, $toRename)
+    {
+        foreach ($renameBatch as $batch) {
+            if (!in_array($batch, $toRename)) {
+                array_push($toRename, $batch);
+            }
+        }
+        return $toRename;
     }
 }
