@@ -71,6 +71,7 @@ class ImagesGenerator
         $mediaDirectory->create($relativePathToMedia);
 
         $imagePath = $relativePathToMedia . DIRECTORY_SEPARATOR . $config['image-name'];
+        $imagePath = preg_replace('|/{2,}|', '/', $imagePath);
         $memory = fopen('php://memory', 'r+');
         if(!imagejpeg($image, $memory)) {
             throw new \Exception('Could not create picture ' . $imagePath);
