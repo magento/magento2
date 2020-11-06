@@ -20,14 +20,20 @@
         </annotations>
         <before>
             <magentoCLI command="config:set currency/options/allow EUR,USD" stepKey="setCurrencyAllow"/>
-            <createData entity="SimpleProduct2" stepKey="createProduct">
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
                 <field key="price">10</field>
             </createData>
             <updateData createDataKey="createProduct" entity="productWithCheckbox" stepKey="updateProductWithOptions"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </before>
         <after>
             <magentoCLI command="config:set currency/options/allow USD" stepKey="setCurrencyAllow"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
         </after>
         <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="openProductPageOnStorefront">
             <argument name="product" value="$createProduct$"/>
@@ -36,6 +42,6 @@
         <actionGroup ref="StorefrontSwitchCurrencyActionGroup" stepKey="switchEURCurrency">
             <argument name="currency" value="EUR"/>
         </actionGroup>
-        <seeElement selector="{{StorefrontProductInfoMainSection.productAttributeOptionsCheckbox(ProductOptionCheckbox.title, '8.6961')}}" stepKey="checkPriceProductOptionEUR"/>
+        <seeElement selector="{{StorefrontProductInfoMainSection.productAttributeOptionsCheckbox(ProductOptionCheckbox.title, '8.7')}}" stepKey="checkPriceProductOptionEUR"/>
     </test>
 </tests>

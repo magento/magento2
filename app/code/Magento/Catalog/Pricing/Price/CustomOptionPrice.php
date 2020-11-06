@@ -124,6 +124,8 @@ class CustomOptionPrice extends AbstractPrice implements CustomOptionPriceInterf
     }
 
     /**
+     * Get Custom Amount object
+     *
      * @param float $amount
      * @param null|bool|string|array $exclude
      * @param null|array $context
@@ -159,6 +161,19 @@ class CustomOptionPrice extends AbstractPrice implements CustomOptionPriceInterf
             }
         }
         return $this->priceCurrency->convertAndRound($optionValue);
+    }
+
+    /**
+     * Get custom amount without currency convert
+     *
+     * @param float|string $amount
+     * @param null|array $context
+     * @return AmountInterface
+     */
+    public function getCustomRoundAmount($amount, $context = [])
+    {
+        $amount = $this->priceCurrency->roundPrice($amount);
+        return $this->calculator->getAmount($amount, $this->getProduct(), null, $context);
     }
 
     /**
