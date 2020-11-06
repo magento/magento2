@@ -287,6 +287,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         return $this->getConnection()->fetchCol($select);
     }
 
+
     /**
      * Set list_id for customer compare item
      *
@@ -295,22 +296,51 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      */
     public function setListIdToCustomerCompareItems(int $listId, int $customerId)
     {
-        $table = $this->getTable('catalog_compare_item');
-        $select = $this->getConnection()->select()->
-        from(
-            $table
-        )->where(
-            'customer_id = ?',
-            $customerId
-        );
-        $customerCompareItems =  $this->getConnection()->fetchCol($select);
-        foreach ($customerCompareItems as $itemId) {
+        foreach ($this->getCustomerCompareItems($customerId) as $itemId) {
             $this->getConnection()->update(
-                $table,
+                $this->getTable('catalog_compare_item'),
                 ['list_id' => $listId],
                 ['catalog_compare_item_id = ?' => (int)$itemId]
             );
         }
+    }
+
+    /**
+     * Remove compare list if customer compare list empty
+     *
+     * @param int $customerId
+     */
+    public function removeCompareList(int $customerId)
+    {
+        if (empty($this->getCustomerCompareItems($customerId))) {
+            $this->getConnection()->delete(
+                $this->getTable('catalog_compare_list'),
+                ['customer_id = ?' => $customerId]
+            );
+        }
+    }
+
+    /**
+     * Get customer compare items
+     *
+     * @param int|null $customerId
+     * @return array
+     */
+    private function getCustomerCompareItems(?int $customerId): array
+    {
+        if ($customerId) {
+            $select = $this->getConnection()->select()->
+            from(
+                $this->getTable('catalog_compare_item')
+            )->where(
+                'customer_id = ?',
+                $customerId
+            );
+
+            return $this->getConnection()->fetchCol($select);
+        }
+
+        return [];
     }
 
     /**

@@ -31,6 +31,7 @@ class Clear extends \Magento\Catalog\Controller\Product\Compare implements HttpP
 
         try {
             $items->clear();
+            $items->removeCompareList($this->_customerSession->getCustomerId());
             $this->messageManager->addSuccessMessage(__('You cleared the comparison list.'));
             $this->_objectManager->get(\Magento\Catalog\Helper\Product\Compare::class)->calculate();
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
