@@ -39,20 +39,4 @@ class Uploader extends \Magento\Framework\File\Uploader
             $this->_fileExists = true;
         }
     }
-
-    /**
-     * Move files from TMP folder into destination folder
-     *
-     * @param string $tmpPath
-     * @param string $destPath
-     * @return bool|void
-     */
-    protected function _moveFile($tmpPath, $destPath)
-    {
-        if (is_uploaded_file($tmpPath)) {
-            return move_uploaded_file($tmpPath, $destPath);
-        } elseif (is_file($tmpPath)) {
-            return rename($tmpPath, $destPath);
-        }
-    }
 }

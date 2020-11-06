@@ -344,7 +344,11 @@ class AwsS3 implements RemoteDriverInterface
         $path = $this->normalizeRelativePath($path);
         $path = rtrim($path, '/');
 
-        return $this->adapter->has($path) && $this->adapter->getMetadata($path)['type'] === self::TYPE_FILE;
+        if ($this->adapter->has($path) && ($meta = $this->adapter->getMetadata($path))) {
+            return ($meta['type'] ?? null) === self::TYPE_FILE;
+        }
+
+        return false;
     }
 
     /**

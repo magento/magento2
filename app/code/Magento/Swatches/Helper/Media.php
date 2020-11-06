@@ -197,7 +197,7 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
                 $file
             );
         } else {
-            $destFile = dirname($file) . '/' . \Magento\MediaStorage\Model\File\Uploader::getNewFileName(
+            $destFile = rtrim(dirname($file), '/.') . '/' . \Magento\MediaStorage\Model\File\Uploader::getNewFileName(
                 $this->getOriginalFilePath($file)
             );
         }
