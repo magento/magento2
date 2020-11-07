@@ -1394,8 +1394,8 @@ class AccountManagementTest extends TestCase
             ->willReturnSelf();
 
         $this->prepareInitiatePasswordReset($email, $templateIdentifier, $sender, $storeId, $customerId, $hash);
-        $this->accountManagement->initiatePasswordReset($email, $template);
 
+        $this->assertTrue($this->accountManagement->initiatePasswordReset($email, $template));
         $this->assertFalse($this->accountManagement->initiatePasswordReset($email, $template));
     }
 

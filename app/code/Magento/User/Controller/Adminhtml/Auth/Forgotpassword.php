@@ -148,8 +148,6 @@ class Forgotpassword extends Auth implements HttpGetActionInterface, HttpPostAct
     /**
      * Retrieve and validate existing password reset token
      *
-     * returns true on success, false on failure
-     *
      * @param User $user
      * @return bool
      */

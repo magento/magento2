@@ -1593,8 +1593,6 @@ class AccountManagement implements AccountManagementInterface
     /**
      * Retrieve and validate existing password reset token
      *
-     * returns true on success, false on failure
-     *
      * @param CustomerInterface $customer
      * @return bool
      */
@@ -1606,6 +1604,10 @@ class AccountManagement implements AccountManagementInterface
             $token = $customerSecureData->getRpToken();
             return $this->validateResetPasswordToken($customerId, $token);
         } catch (NoSuchEntityException $exception) {
+            return false;
+        } catch (InputException $exception) {
+            return false;
+        } catch (ExpiredException $exception) {
             return false;
         }
     }
