@@ -58,9 +58,8 @@
         <!-- Get Category ID -->
         <grabFromCurrentUrl stepKey="categoryId" regex="#\/([0-9]*)?\/$#"/>
 
-        <!-- Open Url Rewrite Page -->
-        <amOnPage url="{{AdminUrlRewriteIndexPage.url}}" stepKey="openUrlRewriteIndexPage"/>
-        <waitForPageLoad stepKey="waitForUrlRewritePage"/>
+        <actionGroup ref="AdminOpenUrlRewritesGridPageActionGroup" stepKey="openUrlRewriteIndexPage"/>
+        <comment userInput="Adding the comment to replace action for preserving backward compatibility" stepKey="waitForUrlRewritePage"/>
 
         <!-- Verify third level category's Redirect Path, Target Path and Redirect Type after the URL update -->
         <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}"

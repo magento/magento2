@@ -88,8 +88,8 @@
         </assertEquals>
 
         <!-- Open Url Rewrite page and see the url rewrite for the moved category -->
-        <amOnPage url="{{AdminUrlRewriteIndexPage.url}}" stepKey="openUrlRewriteIndexPage"/>
-        <waitForPageLoad stepKey="waitForUrlRewritePageLoad"/>
+        <actionGroup ref="AdminOpenUrlRewritesGridPageActionGroup" stepKey="openUrlRewriteIndexPage"/>
+        <comment userInput="Adding the comment to replace action for preserving backward compatibility" stepKey="waitForUrlRewritePageLoad"/>
         <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openUrlRewriteGridFilters"/>
         <fillField selector="{{AdminDataGridHeaderSection.filterFieldInput('request_path')}}" userInput="{{SecondLevelSubCat.name_lwr}}.html" stepKey="fillCategoryUrlKey"/>
         <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickOrderApplyFilters"/>
