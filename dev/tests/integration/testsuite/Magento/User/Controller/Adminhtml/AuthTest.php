@@ -5,6 +5,7 @@
  */
 namespace Magento\User\Controller\Adminhtml;
 
+use Magento\Framework\Intl\DateTimeFactory;
 use Magento\Framework\Stdlib\DateTime;
 use Magento\TestFramework\Mail\Template\TransportBuilderMock;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -128,7 +129,8 @@ class AuthTest extends \Magento\TestFramework\TestCase\AbstractBackendController
         )->generateResetPasswordLinkToken();
         $user->changeResetPasswordLinkToken($resetPasswordToken);
 
-        $anHourAgo = Bootstrap::getObjectManager()->create(DateTime::class)
+        $anHourAgo = Bootstrap::getObjectManager()->create(DateTimeFactory::class)
+            ->create()
             ->sub(\DateInterval::createFromDateString('1 hour'))
             ->format(DateTime::DATETIME_PHP_FORMAT);
         $user->setRpTokenCreatedAt($anHourAgo);
