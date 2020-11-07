@@ -12,6 +12,7 @@ use Magento\Customer\Model\ResourceModel\Customer as CustomerResource;
 use Magento\Customer\Model\Session;
 use Magento\Framework\Intl\DateTimeFactory;
 use Magento\Framework\Math\Random;
+use Magento\Framework\Message\MessageInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\View\LayoutInterface;
