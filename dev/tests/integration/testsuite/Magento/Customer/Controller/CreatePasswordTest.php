@@ -44,6 +44,9 @@ class CreatePasswordTest extends AbstractController
     /** @var CustomerRegistry */
     private $customerRegistry;
 
+    /** @var DateTimeFactory */
+    private $dateTimeFactory;
+
     /** @var WebsiteRepositoryInterface */
     private $websiteRepository;
 
