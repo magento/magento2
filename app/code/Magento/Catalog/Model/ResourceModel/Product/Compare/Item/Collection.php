@@ -308,9 +308,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     /**
      * Remove compare list if customer compare list empty
      *
-     * @param int $customerId
+     * @param int|null $customerId
      */
-    public function removeCompareList(int $customerId)
+    public function removeCompareList(?int $customerId)
     {
         if (empty($this->getCustomerCompareItems($customerId))) {
             $this->getConnection()->delete(
