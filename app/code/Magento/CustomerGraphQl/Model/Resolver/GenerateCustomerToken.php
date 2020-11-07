@@ -14,7 +14,6 @@ use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Integration\Helper\Oauth\Data as OauthHelper;
 
 /**
