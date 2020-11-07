@@ -208,6 +208,11 @@ class Url extends \Magento\Framework\Url implements \Magento\Backend\Model\UrlIn
             $cacheSecretKey = true;
         }
         $result = parent::getUrl($routePath, $routeParams);
+
+        if (empty($this->getAreaFrontName())) {
+            $this->turnOffSecretKey();
+        }
+
         if (!$this->useSecretKey()) {
             return $result;
         }
@@ -410,7 +415,7 @@ class Url extends \Magento\Framework\Url implements \Magento\Backend\Model\UrlIn
      */
     public function getAreaFrontName()
     {
-        if (!$this->_getData('area_front_name')) {
+        if ($this->_getData('area_front_name') === null) {
             $this->setData('area_front_name', $this->_backendHelper->getAreaFrontName());
         }
         return $this->_getData('area_front_name');
@@ -423,12 +428,9 @@ class Url extends \Magento\Framework\Url implements \Magento\Backend\Model\UrlIn
      */
     protected function _getActionPath()
     {
-
         $path = parent::_getActionPath();
-        if ($path) {
-            if ($this->getAreaFrontName()) {
-                $path = $this->getAreaFrontName() . '/' . $path;
-            }
+        if ($path && $this->getAreaFrontName()) {
+            $path = $this->getAreaFrontName() . DIRECTORY_SEPARATOR . $path;
         }
         return $path;
     }
