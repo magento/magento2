@@ -205,7 +205,7 @@ class AccountManagementTest extends TestCase
     private $allowedCountriesReader;
 
     /**
-     * @var SessionCleanerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var SessionCleanerInterface|MockObject
      */
     private $sessionCleanerMock;
 
@@ -1394,6 +1394,10 @@ class AccountManagementTest extends TestCase
             ->willReturnSelf();
 
         $this->prepareInitiatePasswordReset($email, $templateIdentifier, $sender, $storeId, $customerId, $hash);
+
+        // Because we call initiatePasswordReset() twice, we need to remove the
+        // 'once' requirement on these methods.
+        $this->store->expects($this->any())->method('getWebsiteId')->willReturn(1);
 
         $this->assertTrue($this->accountManagement->initiatePasswordReset($email, $template));
         $this->assertFalse($this->accountManagement->initiatePasswordReset($email, $template));
