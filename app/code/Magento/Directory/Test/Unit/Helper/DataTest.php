@@ -242,20 +242,17 @@ class DataTest extends TestCase
                     [Data::XML_PATH_STATES_REQUIRED, ScopeInterface::SCOPE_STORE, null, '']
                 ]
             );
+
         $regions = [
-            new DataObject(
-                ['country_id' => 'Country1', 'region_id' => 'r1', 'code' => 'r1-code', 'name' => 'r1-name']
-            ),
-            new DataObject(
-                ['country_id' => 'Country1', 'region_id' => 'r2', 'code' => 'r2-code', 'name' => 'r2-name']
-            ),
-            new DataObject(
-                ['country_id' => 'Country2', 'region_id' => 'r3', 'code' => 'r3-code', 'name' => 'r3-name']
-            )
+            new DataObject(['country_id' => 'Country1', 'region_id' => 'r1', 'code' => 'r1-code', 'name' => 'r1-name']),
+            new DataObject(['country_id' => 'Country1', 'region_id' => 'r2', 'code' => 'r2-code', 'name' => 'r2-name']),
+            new DataObject(['country_id' => 'Country2', 'region_id' => 'r3', 'code' => 'r3-code', 'name' => 'r3-name']),
         ];
-        $regionIterator = new ArrayIterator(array_filter($regions, function(DataObject $region) use ($allowedCountries) {
+        $regions = array_filter($regions, function (DataObject $region) use ($allowedCountries) {
             return array_key_exists($region->getData('country_id'), $allowedCountries);
-        }));
+        });
+
+        $regionIterator = new ArrayIterator($regions);
 
         $this->_regionCollection->expects(
             $this->once()
