@@ -439,7 +439,7 @@ class SortingTest extends TestCase
             'default_order_price_desc' => [
                 'sort' => 'price',
                 'direction' => Collection::SORT_ORDER_DESC,
-                'expectation' => ['simple3', 'simple2', 'simple1', 'configurable'],
+                'expectation' => ['configurable', 'simple3', 'simple2', 'simple1'],
             ],
         ];
     }
