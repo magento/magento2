@@ -17,7 +17,9 @@ define([
             downloadableInfo: '#downloadable-links-list input',
             customOptionsInfo: '.product-custom-option',
             qtyInfo: '#qty',
-            actionElement: '[data-action="add-to-wishlist"]'
+            actionElement: '[data-action="add-to-wishlist"]',
+            productListWrapper: '.product-item-info',
+            productPageWrapper: '.product-info-main'
         },
 
         /** @inheritdoc */
@@ -65,15 +67,19 @@ define([
         _updateWishlistData: function (event) {
             var dataToAdd = {},
                 isFileUploaded = false,
+                handleObjSelector = null,
                 self = this;
 
             if (event.handleObj.selector == this.options.qtyInfo) { //eslint-disable-line eqeqeq
-                this._updateQty();
+                this._updateAddToWishlistButton({}, event);
                 event.stopPropagation();
 
                 return;
             }
-            $(event.handleObj.selector).each(function (index, element) {
+
+            handleObjSelector = $(event.currentTarget).closest('form').find(event.handleObj.selector);
+
+            handleObjSelector.each(function (index, element) {
                 if ($(element).is('input[type=text]') ||
                     $(element).is('input[type=email]') ||
                     $(element).is('input[type=number]') ||
@@ -98,19 +104,20 @@ define([
             if (isFileUploaded) {
                 this.bindFormSubmit();
             }
-            this._updateAddToWishlistButton(dataToAdd);
+            this._updateAddToWishlistButton(dataToAdd, event);
             event.stopPropagation();
         },
 
         /**
          * @param {Object} dataToAdd
+         * @param {jQuery.Event} event
          * @private
          */
-        _updateAddToWishlistButton: function (dataToAdd) {
+        _updateAddToWishlistButton: function (dataToAdd, event) {
             var self = this,
-                wishListItemsToDel = {};
+                buttons = this._getAddToWishlistButton(event);
 
-            $('[data-action="add-to-wishlist"]').each(function (index, element) {
+            buttons.each(function (index, element) {
                 var params = $(element).data('post');
 
                 if (!params) {
@@ -118,22 +125,6 @@ define([
                         'data': {}
                     };
                 }
-
-                $.each(params.data, function (key, value) {
-                    if (key.indexOf('option') === -1) {
-                        return;
-                    }
-
-                    if (!dataToAdd[key]) {
-                        wishListItemsToDel[key] = value;
-                    }
-
-                    return wishListItemsToDel;
-                });
-
-                $.each(wishListItemsToDel, function (key) {
-                    delete params.data[key];
-                });
 
                 params.data = $.extend({}, params.data, dataToAdd, {
                     'qty': $(self.options.qtyInfo).val()
@@ -143,22 +134,17 @@ define([
         },
 
         /**
-         * Update only QTY when it changed (bundle options keep the same)
-         *
+         * @param {jQuery.Event} event
          * @private
          */
-        _updateQty: function () {
-            var self = this;
+        _getAddToWishlistButton: function (event) {
+            var productListWrapper = $(event.currentTarget).closest(this.options.productListWrapper);
 
-            $('[data-action="add-to-wishlist"]').each(function (index, element) {
-                var params = $(element).data('post');
+            if (productListWrapper.length) {
+                return productListWrapper.find(this.options.actionElement);
+            }
 
-                params.data = $.extend({}, params.data, {
-                    'qty': $(self.options.qtyInfo).val()
-                });
-
-                $(element).data('post', params);
-            });
+            return $(event.currentTarget).closest(this.options.productPageWrapper).find(this.options.actionElement);
         },
 
         /**
