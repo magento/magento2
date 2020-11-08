@@ -99,6 +99,41 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                 'arguments' => $exchangeArguments,
             ];
         }
+
+        foreach ($source->getElementsByTagName('queue') as $queue) {
+            $name = $this->getAttributeValue($queue, 'name');
+            $connection = $this->getAttributeValue($queue, 'connection');
+
+            $bindings = [];
+            $queueArguments = [];
+            /** @var \DOMNode $node */
+            foreach ($queue->childNodes as $node) {
+                if (!in_array($node->nodeName, ['binding', 'arguments']) || $node->nodeType != XML_ELEMENT_NODE) {
+                    continue;
+                }
+                switch ($node->nodeName) {
+                    case 'binding':
+                        $bindings = $this->processBindings($node, $bindings);
+                        break;
+
+                    case 'arguments':
+                        $queueArguments = $this->processArguments($node);
+                        break;
+                }
+            }
+
+            $autoDelete = $this->getAttributeValue($queue, 'autoDelete', false);
+            $result[$name . '--' . $connection] = [
+                'name' => $name,
+                'type' => $this->getAttributeValue($queue, 'type'),
+                'connection' => $connection,
+                'durable' => $this->booleanUtils->toBoolean($this->getAttributeValue($queue, 'durable', true)),
+                'autoDelete' => $this->booleanUtils->toBoolean($autoDelete),
+                'internal' => $this->booleanUtils->toBoolean($this->getAttributeValue($queue, 'internal', false)),
+                'arguments' => $queueArguments,
+            ];
+        }
+
         return $result;
     }
 

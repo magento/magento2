@@ -23,4 +23,20 @@ class Data extends \Magento\Framework\Config\Data
     ) {
         parent::__construct($reader, $cache, $cacheId, $serializer);
     }
+
+    public function getQueues(): array {
+        return array_filter($this->get(),function($item){
+            if($item['type'] == 'queue'){
+                return $item;
+            }
+        });
+    }
+
+    public function getExchanges(): array {
+        return array_filter($this->get(),function($item){
+            if($item['type'] != 'queue'){
+                return $item;
+            }
+        });
+    }
 }

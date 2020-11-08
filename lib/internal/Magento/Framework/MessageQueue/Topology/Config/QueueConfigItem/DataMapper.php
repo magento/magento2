@@ -1,8 +1,10 @@
 <?php
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\MessageQueue\Topology\Config\QueueConfigItem;
 
 use Magento\Framework\MessageQueue\Topology\Config\Data;
@@ -64,17 +66,64 @@ class DataMapper
     {
         if (null === $this->mappedData) {
             $this->mappedData = [];
-            foreach ($this->configData->get() as $exchange) {
+
+            $queues = $this->createQueueItemsFromQueues($this->configData->getQueues());
+            foreach ($queues as $key => $value) {
+                $this->mappedData[$key] = $value;
+            }
+            foreach ($this->configData->getExchanges() as $exchange) {
                 $connection = $exchange['connection'];
                 foreach ($exchange['bindings'] as $binding) {
-                    if ($binding['destinationType'] === 'queue') {
+                    if ($binding['destinationType'] === 'queue' && !array_key_exists($binding['destination'] . '--' . $connection, $this->mappedData)) {
                         $queueItems = $this->createQueueItems($binding['destination'], $binding['topic'], $connection);
                         $this->mappedData = array_merge($this->mappedData, $queueItems);
                     }
                 }
             }
         }
+
         return $this->mappedData;
+    }
+
+    /**
+     * Create queue config item.
+     *
+     * @param string $name
+     * @param string $topic
+     * @param string $connection
+     * @deprecated
+     * @return array
+     */
+    private function createQueueItems($name, $topic, $connection)
+    {
+        return $this->createQueueItemsFromTopic($name, $topic, $connection);
+    }
+
+    private function createQueueItemsFromQueues(array $queues)
+    {
+        $output = [];
+        foreach ($queues as $queue) {
+            $output[$queue['name'] . '--' . $queue['connection']] =
+                $this->createQueue(
+                    $queue['name'],
+                    $queue['connection'],
+                    $queue['arguments'],
+                    $queue['durable'],
+                    $queue['autoDelete']
+                );
+        }
+        return $output;
+    }
+
+    private function createQueue($name, $connection, $arguments = [], $durable = true, $autoDelete = false)
+    {
+        return [
+            'name' => $name,
+            'connection' => $connection,
+            'durable' => isset($durable) ? $durable : true,
+            'autoDelete' => isset($autoDelete) ? $autoDelete : false,
+            'arguments' => isset($arguments) ? $arguments : [],
+        ];
     }
 
     /**
@@ -85,11 +134,11 @@ class DataMapper
      * @param string $connection
      * @return array
      */
-    private function createQueueItems($name, $topic, $connection)
+    private function createQueueItemsFromTopic($name, $topic, $connection)
     {
         $output = [];
         $synchronousTopics = [];
-
+        
         if (strpos($topic, '*') !== false || strpos($topic, '#') !== false) {
             $synchronousTopics = $this->matchSynchronousTopics($topic);
         } elseif ($this->isSynchronousTopic($topic)) {
