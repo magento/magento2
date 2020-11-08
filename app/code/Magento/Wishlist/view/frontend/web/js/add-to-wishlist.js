@@ -71,7 +71,7 @@ define([
                 self = this;
 
             if (event.handleObj.selector == this.options.qtyInfo) { //eslint-disable-line eqeqeq
-                this._updateAddToWishlistButton({}, event);
+                this._updateQty();
                 event.stopPropagation();
 
                 return;
@@ -115,7 +115,8 @@ define([
          */
         _updateAddToWishlistButton: function (dataToAdd, event) {
             var self = this,
-                buttons = this._getAddToWishlistButton(event);
+                buttons = this._getAddToWishlistButton(event),
+                wishListItemsToDel = {};
 
             buttons.each(function (index, element) {
                 var params = $(element).data('post');
@@ -126,6 +127,22 @@ define([
                     };
                 }
 
+                $.each(params.data, function (key, value) {
+                    if (key.indexOf('option') === -1) {
+                        return;
+                    }
+
+                    if (!dataToAdd[key]) {
+                        wishListItemsToDel[key] = value;
+                    }
+
+                    return wishListItemsToDel;
+                });
+
+                $.each(wishListItemsToDel, function (key) {
+                    delete params.data[key];
+                });
+
                 params.data = $.extend({}, params.data, dataToAdd, {
                     'qty': $(self.options.qtyInfo).val()
                 });
@@ -134,6 +151,24 @@ define([
         },
 
         /**
+         * Update only QTY when it changed (bundle options keep the same)
+         *
+         * @private
+         */
+        _updateQty: function () {
+            var self = this;
+
+            $('[data-action="add-to-wishlist"]').each(function (index, element) {
+                var params = $(element).data('post');
+
+                params.data = $.extend({}, params.data, {
+                    'qty': $(self.options.qtyInfo).val()
+                });
+
+                $(element).data('post', params);
+            });
+        },
+         /**
          * @param {jQuery.Event} event
          * @private
          */
