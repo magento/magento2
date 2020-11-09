@@ -222,6 +222,8 @@
         "magento/module-media-gallery-cms-ui": "*",
         "magento/module-media-gallery-catalog-integration": "*",
         "magento/module-media-gallery-catalog": "*",
+        "magento/module-media-gallery-renditions": "*",
+        "magento/module-media-gallery-renditions-api": "*",
         "magento/module-media-storage": "*",
         "magento/module-message-queue": "*",
         "magento/module-msrp": "*",

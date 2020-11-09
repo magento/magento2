@@ -84,7 +84,7 @@ class PaymentSectionModifier
      */
     private function getMoveInstructions($section, $data)
     {
-        $moved = [[]];
+        $moved = [];
 
         if (array_key_exists('children', $data)) {
             foreach ($data['children'] as $childSection => $childData) {
@@ -106,6 +106,6 @@ class PaymentSectionModifier
             ];
         }
 
-        return array_merge(...$moved);
+        return array_merge([], ...$moved);
     }
 }
