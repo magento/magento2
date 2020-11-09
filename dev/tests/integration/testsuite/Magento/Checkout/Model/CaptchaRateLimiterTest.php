@@ -9,9 +9,9 @@ declare(strict_types=1);
 namespace Magento\Checkout\Model;
 
 use Magento\Captcha\Model\DefaultModel;
-use Magento\Checkout\Api\Exception\PaymentProcessingRateLimitExceededException;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
@@ -27,10 +27,10 @@ use Magento\Customer\Model\Session as CustomerSession;
  * @magentoAppIsolation enabled
  * @magentoAppArea frontend
  */
-class CaptchaPaymentProcessingRateLimiterTest extends TestCase
+class CaptchaRateLimiterTest extends TestCase
 {
     /**
-     * @var CaptchaPaymentProcessingRateLimiter
+     * @var CaptchaRateLimiter
      */
     private $model;
 
@@ -69,7 +69,10 @@ class CaptchaPaymentProcessingRateLimiterTest extends TestCase
         $this->captchaHelper = $objectManager->get(CaptchaHelper::class);
         $this->customerSession = $objectManager->get(CustomerSession::class);
         $this->customerRepo = $objectManager->get(CustomerRepositoryInterface::class);
-        $this->model = $objectManager->get(CaptchaPaymentProcessingRateLimiter::class);
+        $this->model = $objectManager->create(
+            CaptchaRateLimiter::class,
+            ['captchaId' => 'payment_processing_request']
+        );
     }
 
     /**
@@ -95,7 +98,7 @@ class CaptchaPaymentProcessingRateLimiterTest extends TestCase
         try {
             $this->model->limit();
             $limited = false;
-        } catch (PaymentProcessingRateLimitExceededException $exception) {
+        } catch (LocalizedException $exception) {
             $limited = true;
         }
         $this->assertTrue($limited);
@@ -118,7 +121,7 @@ class CaptchaPaymentProcessingRateLimiterTest extends TestCase
         try {
             $this->model->limit();
             $limited = false;
-        } catch (PaymentProcessingRateLimitExceededException $exception) {
+        } catch (LocalizedException $exception) {
             $limited = true;
         }
         $this->assertTrue($limited);
@@ -141,7 +144,7 @@ class CaptchaPaymentProcessingRateLimiterTest extends TestCase
         try {
             $this->model->limit();
             $limited = false;
-        } catch (PaymentProcessingRateLimitExceededException $exception) {
+        } catch (LocalizedException $exception) {
             $limited = true;
         }
         //CAPTCHA is required
@@ -176,7 +179,7 @@ class CaptchaPaymentProcessingRateLimiterTest extends TestCase
         try {
             $this->model->limit();
             $limited = false;
-        } catch (PaymentProcessingRateLimitExceededException $exception) {
+        } catch (LocalizedException $exception) {
             $limited = true;
         }
         //CAPTCHA was validated
