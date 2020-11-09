@@ -30,7 +30,7 @@ class HttpVerbValidator implements HttpRequestValidatorInterface
         if (false === $request->isPost()) {
             $query = $request->getParam('query', '');
             // The easiest way to determine mutations without additional parsing
-            if (strpos(trim($query), 'mutation') === 0) {
+            if (strpos(trim($query), 'mutation') !== false) {
                 throw new GraphQlInputException(
                     new \Magento\Framework\Phrase('Mutation requests allowed only for POST requests')
                 );
