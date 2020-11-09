@@ -20,9 +20,6 @@
         </annotations>
 
         <before>
-            <!-- Start the consumer -->
-            <magentoCLI command="queue:consumers:start sales.rule.update.coupon.usage --max-messages=100" stepKey="startMessageQueue"/>
-
             <!-- Enable Zero Subtotal Checkout -->
             <magentoCLI command="config:set {{EnableZeroSubtotalCheckoutConfigData.path}} {{EnableZeroSubtotalCheckoutConfigData.value}}" stepKey="enableZeroSubtotalCheckout"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
@@ -50,10 +47,6 @@
             <deleteData createDataKey="simpleProduct" stepKey="deleteSimpleProduct"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
-
-        <!-- Start the consumer -->
-        <magentoCLI command="queue:consumers:start sales.rule.update.coupon.usage --max-messages=100" stepKey="startMessageQueue1"/>
-
         <!--Create new customer order-->
         <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer">
             <argument name="customer" value="$$simpleCustomer$$"/>
@@ -70,7 +63,6 @@
 
         <!-- Start the consumer -->
         <magentoCLI command="queue:consumers:start sales.rule.update.coupon.usage --max-messages=100" stepKey="startMessageQueue2"/>
-        <reloadPage stepKey="refreshPage1"/>
 
         <!--Verify order information-->
         <actionGroup ref="VerifyCreatedOrderInformationActionGroup" stepKey="verifyCreatedOrderInformation"/>
