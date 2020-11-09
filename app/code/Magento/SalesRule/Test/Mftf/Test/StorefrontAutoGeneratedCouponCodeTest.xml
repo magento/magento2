@@ -58,10 +58,14 @@
         <see selector="{{AdminCartPriceRulesFormSection.successMessage}}" userInput="Message is added to queue, wait to get your coupons soon"
              stepKey="seeSuccessMessage"/>
 
-        <!-- Start message queue for export consumer -->
+        <!-- Start message queue for export consumer and coupon processing -->
         <actionGroup ref="CliConsumerStartActionGroup" stepKey="startMessageQueue">
             <argument name="consumerName" value="{{AdminCodeGeneratorMessageConsumerData.consumerName}}"/>
             <argument name="maxMessages" value="{{AdminCodeGeneratorMessageConsumerData.messageLimit}}"/>
+        </actionGroup>
+        <actionGroup ref="CliConsumerStartActionGroup" stepKey="startSalesRuleMessageQueue">
+            <argument name="consumerName" value="{{SalesRuleConsumerData.consumerName}}"/>
+            <argument name="maxMessages" value="{{SalesRuleConsumerData.messageLimit}}"/>
         </actionGroup>
         <actionGroup ref="ReloadPageActionGroup" stepKey="refreshPage"/>
         <comment userInput="Replacing reload action and preserve Backward Compatibility" stepKey="waitFormToReload1"/>
