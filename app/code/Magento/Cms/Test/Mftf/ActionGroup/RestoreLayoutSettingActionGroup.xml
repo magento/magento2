@@ -15,6 +15,5 @@
 
         <waitForElementVisible selector="{{DefaultLayoutsSection.pageLayout}}" stepKey="waittForDefaultCMSLayout" after="expandDefaultLayouts"/>
         <selectOption selector="{{DefaultLayoutsSection.pageLayout}}" userInput="1 column" stepKey="selectOneColumn" before="clickSaveConfig"/>
-        <click selector="{{ContentManagementSection.Save}}" stepKey="clickSaveConfig"/>
     </actionGroup>
 </actionGroups>
