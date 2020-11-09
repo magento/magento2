@@ -42,7 +42,7 @@ class GenerateLoginCustomerTokenTest extends GraphQlAbstract
      * Verify with Admin email ID and Magento_LoginAsCustomer::login is enabled
      *
      * @magentoApiDataFixture Magento/LoginAsCustomer/_files/admin.php
-     * @magentoApiDataFixture Magento/LoginAsCustomer/_files/login_as_customer_config_enable.php
+     * @magentoConfigFixture admin_store login_as_customer/general/enabled 1
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @throws Exception
      */
@@ -66,7 +66,7 @@ class GenerateLoginCustomerTokenTest extends GraphQlAbstract
      * Verify with Admin email ID and Magento_LoginAsCustomer::login is disabled
      *
      * @magentoApiDataFixture Magento/LoginAsCustomer/_files/admin.php
-     * @magentoApiDataFixture Magento/LoginAsCustomer/_files/login_as_customer_config_disable.php
+     * @magentoConfigFixture admin_store login_as_customer/general/enabled 0
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @throws Exception
      */
@@ -90,7 +90,7 @@ class GenerateLoginCustomerTokenTest extends GraphQlAbstract
      * Verify with Customer Token in auth header
      *
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @magentoApiDataFixture Magento/LoginAsCustomer/_files/login_as_customer_config_enable.php
+     * @magentoConfigFixture admin_store login_as_customer/general/enabled 1
      * @throws Exception
      */
     public function testGenerateCustomerTokenLoginWithCustomerCredentials()
@@ -115,7 +115,7 @@ class GenerateLoginCustomerTokenTest extends GraphQlAbstract
      * Test with invalid data.
      *
      * @magentoApiDataFixture Magento/LoginAsCustomer/_files/admin.php
-     * @magentoApiDataFixture Magento/LoginAsCustomer/_files/login_as_customer_config_enable.php
+     * @magentoConfigFixture admin_store login_as_customer/general/enabled 1
      *
      * @dataProvider dataProviderInvalidInfo
      * @param string $adminUserName
