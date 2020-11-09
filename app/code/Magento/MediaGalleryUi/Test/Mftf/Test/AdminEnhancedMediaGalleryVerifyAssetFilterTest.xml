@@ -7,16 +7,19 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminEnhancedMediaGalleryVerifyAssetFilterTest">
+    <test name="AdminEnhancedMediaGalleryVerifyAssetFilterTest" deprecated="Use AdminEnhancedMediaGalleryVerifyFilterByAssetTest instead">
         <annotations>
             <features value="MediaGallery"/>
             <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/1292"/>
-            <title value="User sees entities where asset is used in"/>
+            <title value="DEPRECATED. User sees entities where asset is used in"/>
             <stories value="Story 58: User sees entities where asset is used in"/>
             <testCaseId value="https://studio.cucumber.io/projects/131313/test-plan/folders/1320712/scenarios/4951024"/>
             <description value="User sees entities where asset is used in"/>
             <severity value="CRITICAL"/>
             <group value="media_gallery_ui"/>
+            <skip>
+                <issueId value="DEPRECATED">Use AdminEnhancedMediaGalleryVerifyFilterByAssetTest instead</issueId>
+            </skip>
         </annotations>
         <before>
             <createData entity="SimpleSubCategory" stepKey="category"/>
@@ -65,16 +68,21 @@
         <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveCategory"/>
         <actionGroup ref="AdminOpenCategoryGridPageActionGroup" stepKey="openCategoryGridPage"/>
 
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="firstResetAdminDataGridToDefaultView"/>
         <actionGroup ref="AdminEnhancedMediaGalleryCategoryGridExpandFilterActionGroup" stepKey="expandFilters"/>
         <actionGroup ref="AdminEnhancedMediaGallerySelectUsedInFilterActionGroup" stepKey="setUsedInFilter">
             <argument name="filterName" value="Asset"/>
             <argument name="optionName" value="{{ImageMetadata.title}}"/>
         </actionGroup>
         <actionGroup ref="AdminEnhancedMediaGalleryCategoryGridApplyFiltersActionGroup" stepKey="applyFilters"/>
-
-        <actionGroup ref="AdminMediaGalleryAssertCategoryNameInCategoryGridActionGroup" stepKey="assertCategoryInGrid">
-            <argument name="categoryName" value="$$category.name$$"/>
+        <actionGroup ref="AssertAdminCategoryGridPageNumberOfRecordsActionGroup" stepKey="assertOneRecordInGrid">
+            <argument name="numberOfRecords" value="1 records found"/>
         </actionGroup>
-        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
+        <actionGroup ref="AssertAdminCategoryGridPageImageColumnActionGroup" stepKey="assertCategoryGridPageImageColumn"/>
+        <actionGroup ref="AssertAdminCategoryGridPageDetailsActionGroup" stepKey="assertCategoryInGrid">
+            <argument name="category" value="$$category$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminCategoryGridPageProductsInMenuEnabledColumnsActionGroup" stepKey="assertCategoryGridPageProductsInMenuEnabledColumns"/>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="secondResetAdminDataGridToDefaultView"/>
     </test>
 </tests>

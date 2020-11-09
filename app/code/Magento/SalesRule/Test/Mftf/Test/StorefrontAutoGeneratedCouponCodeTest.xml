@@ -40,8 +40,7 @@
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
         <!-- Search Cart Price Rule and go to edit Cart Price Rule -->
-        <amOnPage url="{{AdminCartPriceRulesPage.url}}" stepKey="amOnCartPriceList"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <actionGroup ref="AdminOpenCartPriceRulesPageActionGroup" stepKey="amOnCartPriceList"/>
         <fillField selector="{{AdminCartPriceRulesSection.filterByNameInput}}" userInput="$$createSalesRule.name$$"
                    stepKey="fillFieldFilterByName"/>
         <click selector="{{AdminCartPriceRulesSection.searchButton}}" stepKey="clickSearchButton"/>
@@ -64,8 +63,8 @@
             <argument name="consumerName" value="{{AdminCodeGeneratorMessageConsumerData.consumerName}}"/>
             <argument name="maxMessages" value="{{AdminCodeGeneratorMessageConsumerData.messageLimit}}"/>
         </actionGroup>
-        <reloadPage stepKey="refreshPage"/>
-        <waitForPageLoad stepKey="waitFormToReload1"/>
+        <actionGroup ref="ReloadPageActionGroup" stepKey="refreshPage"/>
+        <comment userInput="Replacing reload action and preserve Backward Compatibility" stepKey="waitFormToReload1"/>
         <conditionalClick selector="{{AdminCartPriceRulesFormSection.manageCouponCodesHeader}}"
                           dependentSelector="{{AdminCartPriceRulesFormSection.manageCouponCodesHeader}}" visible="true"
                           stepKey="clickManageCouponCodes2"/>
@@ -97,8 +96,7 @@
         <click selector="{{CheckoutShippingMethodsSection.checkShippingMethodByName('Flat Rate')}}"
                stepKey="selectFlatShippingMethod"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask"/>
-        <waitForElement selector="{{CheckoutShippingMethodsSection.next}}" time="30" stepKey="waitForNextButton"/>
-        <click selector="{{CheckoutShippingMethodsSection.next}}" stepKey="clickNext"/>
+        <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickNext"/>
         <!-- Checkout select Check/Money Order payment -->
         <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment"/>
         <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>

@@ -38,9 +38,9 @@ define([
 
         if (new Date($.localStorage.get('mage-cache-timeout')) < new Date()) {
             storage.removeAll();
-            date = new Date(Date.now() + parseInt(invalidateOptions.cookieLifeTime, 10) * 1000);
-            $.localStorage.set('mage-cache-timeout', date);
         }
+        date = new Date(Date.now() + parseInt(invalidateOptions.cookieLifeTime, 10) * 1000);
+        $.localStorage.set('mage-cache-timeout', date);
     };
 
     /**
@@ -78,7 +78,7 @@ define([
             var parameters;
 
             sectionNames = sectionConfig.filterClientSideSections(sectionNames);
-            parameters = _.isArray(sectionNames) ? {
+            parameters = _.isArray(sectionNames) && sectionNames.indexOf('*') < 0 ? {
                 sections: sectionNames.join(',')
             } : [];
             parameters['force_new_section_timestamp'] = forceNewSectionTimestamp;
@@ -261,6 +261,9 @@ define([
                     expiredSectionNames.push(sectionName);
                 }
             });
+
+            //remove expired section names of previously installed/enable modules
+            expiredSectionNames = _.intersection(expiredSectionNames, sectionConfig.getSectionNames());
 
             return _.uniq(expiredSectionNames);
         },

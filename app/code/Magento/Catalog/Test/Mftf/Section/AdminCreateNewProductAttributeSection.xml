@@ -9,7 +9,7 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminCreateNewProductAttributeSection">
-        <element name="saveAttribute" type="button" selector="#save"/>
+        <element name="saveAttribute" type="button" selector="#save" timeout="30"/>
         <element name="defaultLabel" type="input" selector="input[name='frontend_label[0]']"/>
         <element name="inputType" type="select" selector="select[name='frontend_input']" timeout="30"/>
         <element name="addValue" type="button" selector="//button[contains(@data-action,'add_new_row')]" timeout="30"/>

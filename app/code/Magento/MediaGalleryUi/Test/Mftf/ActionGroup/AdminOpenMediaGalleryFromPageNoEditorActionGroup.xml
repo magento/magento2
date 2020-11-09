@@ -9,8 +9,9 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminOpenMediaGalleryFromPageNoEditorActionGroup">
-        <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickExpandContent"/>
+        <conditionalClick selector="{{CmsNewPagePageContentSection.header}}" dependentSelector="{{CmsNewPagePageContentSection.contentHeading}}" visible="false" stepKey="clickExpandContent"/>
         <waitForElementVisible selector="{{CmsWYSIWYGSection.InsertImageBtn}}" stepKey="waitForInsertImageButton" />
+        <scrollTo selector="{{CmsWYSIWYGSection.InsertImageBtn}}" x="0" y="-80" stepKey="scrollToInsertImageButton"/>
         <click selector="{{CmsWYSIWYGSection.InsertImageBtn}}" stepKey="clickInsertImage" />
         <!-- wait for initial media gallery load, where the gallery chrome loads (and triggers loading modal) -->
         <waitForPageLoad stepKey="waitForMediaGalleryInitialLoad"/>

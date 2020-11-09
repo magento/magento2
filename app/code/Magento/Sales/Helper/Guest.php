@@ -152,6 +152,7 @@ class Guest extends \Magento\Framework\App\Helper\AbstractHelper
             return $this->resultRedirectFactory->create()->setPath('sales/order/history');
         }
         $post = $request->getPostValue();
+        $post = filter_var($post, FILTER_CALLBACK, ['options' => 'trim']);
         $fromCookie = $this->cookieManager->getCookie(self::COOKIE_NAME);
         if (empty($post) && !$fromCookie) {
             return $this->resultRedirectFactory->create()->setPath('sales/guest/form');
