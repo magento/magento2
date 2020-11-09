@@ -225,9 +225,3 @@ ErrorDocument 403 /errors/404.php
             Require all denied
         </IfVersion>
     </Files>
-
-<IfModule mod_headers.c>
-    ############################################
-    ## Prevent clickjacking
-    Header set X-Frame-Options SAMEORIGIN
-</IfModule>
