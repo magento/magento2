@@ -56,7 +56,7 @@ class GenerateLoginCustomerTokenTest extends GraphQlAbstract
             $mutation,
             [],
             '',
-            $this->getAdminHeaderAuthentication('TestAdmin1', 'Magento777')
+            $this->getAdminHeaderAuthentication('TestAdmin1', \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD)
         );
         $this->assertArrayHasKey('generateCustomerTokenAsAdmin', $response);
         $this->assertIsArray($response['generateCustomerTokenAsAdmin']);
@@ -82,7 +82,7 @@ class GenerateLoginCustomerTokenTest extends GraphQlAbstract
             $mutation,
             [],
             '',
-            $this->getAdminHeaderAuthentication('TestAdmin1', 'Magento777')
+            $this->getAdminHeaderAuthentication('TestAdmin1', \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD)
         );
     }
 
@@ -151,7 +151,7 @@ class GenerateLoginCustomerTokenTest extends GraphQlAbstract
         return [
             'invalid_admin_user_name' => [
                 'TestAdmin(^%',
-                'Magento777',
+                \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD,
                 'customer@example.com',
                 'The account sign-in was incorrect or your account is disabled temporarily. ' .
                 'Please wait and try again later.'
@@ -195,7 +195,7 @@ MUTATION;
      */
     public function getCustomerHeaderAuthentication(
         string $username = 'github@gmail.com',
-        string $password = 'Magento777'
+        string $password = \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD
     ): array {
         $customerToken = $this->customerTokenService->createCustomerAccessToken($username, $password);
 

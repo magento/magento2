@@ -3,30 +3,38 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-use Magento\User\Model\UserFactory;
-use Magento\User\Model\ResourceModel\User as UserResource;
 
-$objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+declare(strict_types=1);
 
-/** @var UserFactory $userFactory */
-$userFactory = $objectManager->get(UserFactory::class);
-/** @var UserResource $userResource */
-$userResource = $objectManager->get(UserResource::class);
+use Magento\Authorization\Model\RoleFactory;
+use Magento\Authorization\Model\Role;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\User\Model\User;
+use Magento\Authorization\Model\RulesFactory;
+use Magento\Authorization\Model\Rules;
 
-$adminInfo = [
-    'username'  => 'TestAdmin1',
-    'firstname' => 'test',
-    'lastname'  => 'test',
-    'email'     => 'testadmin1@gmail.com',
-    'password'  =>'Magento777',
-    'interface_locale' => 'en_US',
-    'is_active' => 1
-];
+//Creating a new admin user with a custom role to safely change role settings without affecting the main user's role.
+/** @var Role $role */
+$role = Bootstrap::getObjectManager()->get(RoleFactory::class)->create();
+$role->setName('test_custom_role');
+$role->setData('role_name', $role->getName());
+$role->setRoleType(\Magento\Authorization\Model\Acl\Role\Group::ROLE_TYPE);
+$role->setUserType((string)\Magento\Authorization\Model\UserContextInterface::USER_TYPE_ADMIN);
+$role->save();
+/** @var Rules $rules */
+$rules = Bootstrap::getObjectManager()->get(RulesFactory::class)->create();
+$rules->setRoleId($role->getId());
+//Granted all permissions.
+$rules->setResources([Bootstrap::getObjectManager()->get(\Magento\Framework\Acl\RootResource::class)->getId()]);
+$rules->saveRel();
 
-$userModel = $userFactory->create();
-try {
-    $userModel->setData($adminInfo);
-    $userModel->setRoleId(1);
-    $userResource->save($userModel);
-} catch (\Magento\Framework\Exception\AlreadyExistsException $e) {
-}
+/** @var User $user */
+$user = Bootstrap::getObjectManager()->create(User::class);
+$user->setFirstname("John")
+    ->setLastname("Doe")
+    ->setUsername('TestAdmin1')
+    ->setPassword(\Magento\TestFramework\Bootstrap::ADMIN_PASSWORD)
+    ->setEmail('testadmin1@gmail.com')
+    ->setIsActive(1)
+    ->setRoleId($role->getId());
+$user->save();
