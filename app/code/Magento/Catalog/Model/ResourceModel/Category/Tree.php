@@ -166,18 +166,21 @@ class Tree extends Dbp
         }
         return $this->_storeId;
     }
-     /**
-      * Add data to collection
-      *
-      * @param Collection $collection
-      * @param boolean $sorted
-      * @param array $exclude
-      * @param boolean $toLoad
-      * @param boolean $onlyActive
-      * @return $this
-      - @deprecated This method is not intended for usage in child classes
-      - @see addCollectionDataWithIncludeMenu($collection, $sorted, $exclude, $toLoad, $onlyActive, $onlyIncludeInMenu)
-      */
+
+    /**
+     * Add data to collection
+     *
+     * @param Collection $collection
+     * @param boolean $sorted
+     * @param array $exclude
+     * @param boolean $toLoad
+     * @param boolean $onlyActive
+     * @return $this
+     * @deprecated This method is not intended for usage in child classes
+     * @see addCollectionDataWithIncludeMenu($collection, $sorted, $exclude, $toLoad, $onlyActive, $onlyIncludeInMenu)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     */
     public function addCollectionData(
         $collection = null,
         $sorted = false,
@@ -185,11 +188,58 @@ class Tree extends Dbp
         $toLoad = true,
         $onlyActive = false
     ) {
-        return $this->addCollectionDataWithIncludeMenu($collection, $sorted, $exclude, $toLoad, $onlyActive, true);
+        if ($collection === null) {
+            $collection = $this->getCollection($sorted);
+        } else {
+            $this->setCollection($collection);
+        }
+
+        if (!is_array($exclude)) {
+            $exclude = [$exclude];
+        }
+
+        $nodeIds = [];
+        foreach ($this->getNodes() as $node) {
+            if (!in_array($node->getId(), $exclude)) {
+                $nodeIds[] = $node->getId();
+            }
+        }
+        $collection->addIdFilter($nodeIds);
+        if ($onlyActive) {
+            $disabledIds = $this->_getDisabledIds($collection, $nodeIds);
+            if ($disabledIds) {
+                $collection->addFieldToFilter('entity_id', ['nin' => $disabledIds]);
+            }
+            $collection->addAttributeToFilter('is_active', 1);
+            $collection->addAttributeToFilter('include_in_menu', 1);
+        }
+
+        if ($this->_joinUrlRewriteIntoCollection) {
+            $collection->joinUrlRewrite();
+            $this->_joinUrlRewriteIntoCollection = false;
+        }
+
+        if ($toLoad) {
+            $collection->load();
+
+            foreach ($collection as $category) {
+                if ($this->getNodeById($category->getId())) {
+                    $this->getNodeById($category->getId())->addData($category->getData());
+                }
+            }
+
+            foreach ($this->getNodes() as $node) {
+                if (!$collection->getItemById($node->getId()) && $node->getParent()) {
+                    $this->removeNode($node);
+                }
+            }
+        }
+
+        return $this;
     }
 
     /**
-     * Add data to collection
+     * Add data to collection with include in menu
      *
      * @param Collection $collection
      * @param boolean $sorted
@@ -226,6 +276,7 @@ class Tree extends Dbp
             }
         }
         $collection->addIdFilter($nodeIds);
+
         if ($onlyActive) {
             $disabledIds = $this->_getDisabledIds($collection, $nodeIds);
             if ($disabledIds) {
@@ -235,7 +286,6 @@ class Tree extends Dbp
             if ($onlyIncludeInMenu) {
                 $collection->addAttributeToFilter('include_in_menu', 1);
             }
-
         }
 
         if ($this->_joinUrlRewriteIntoCollection) {
@@ -247,13 +297,14 @@ class Tree extends Dbp
             $collection->load();
 
             foreach ($collection as $category) {
-                if ($this->getNodeById($category->getId())) {
-                    $this->getNodeById($category->getId())->addData($category->getData());
+                $node = $this->getNodeById($category->getId());
+                if ($node) {
+                    $node->addData($category->getData());
                 }
             }
 
             foreach ($this->getNodes() as $node) {
-                if (!$collection->getItemById($node->getId()) && $node->getParent()) {
+                if ($node->getParent() && !$collection->getItemById($node->getId())) {
                     $this->removeNode($node);
                 }
             }
