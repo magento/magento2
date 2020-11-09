@@ -97,7 +97,7 @@
         <magentoCLI command="cron:run" stepKey="runCron"/>
 
         <!-- 5. Open category A on Storefront again -->
-        <reloadPage stepKey="reloadCategoryA"/>
+        <actionGroup ref="ReloadPageActionGroup" stepKey="reloadCategoryA"/>
 
         <!-- Category A displays product A1 now -->
         <see userInput="$$createCategoryA.name$$" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="seeTitleCategoryA1"/>
@@ -126,7 +126,7 @@
         <magentoCLI command="cron:run" stepKey="runCron1"/>
 
         <!-- 9. Open category A on Storefront again -->
-        <reloadPage stepKey="refreshCategoryAPage"/>
+        <actionGroup ref="ReloadPageActionGroup" stepKey="refreshCategoryAPage"/>
 
         <!-- Category A is empty now -->
         <see userInput="$$createCategoryA.name$$" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="seeOnPageCategoryAName"/>

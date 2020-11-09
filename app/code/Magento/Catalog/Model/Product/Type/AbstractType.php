@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Catalog\Model\Product\Type;
 
@@ -618,7 +619,7 @@ abstract class AbstractType
                 }
             }
             if (count($results) > 0) {
-                throw new LocalizedException(__(implode("\n", $results)));
+                throw new LocalizedException(__(implode("\n", array_unique($results))));
             }
         }
 
