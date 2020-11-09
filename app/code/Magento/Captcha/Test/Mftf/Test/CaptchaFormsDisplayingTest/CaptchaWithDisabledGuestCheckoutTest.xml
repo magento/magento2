@@ -37,27 +37,39 @@
             <argument name="productUrl" value="$$createSimpleProduct.sku$$"/>
         </actionGroup>
 
+        <comment userInput="Add product to the Cart" stepKey="waitForPageLoad"/>
         <actionGroup ref="StorefrontClickAddToCartOnProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage"/>
 
-        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
+        <comment userInput="Open MiniCart" stepKey="waitForText"/>
+        <comment userInput="and go to Checkout" stepKey="clickCart"/>
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckout"/>
+
        
-        <actionGroup ref="StorefrontCustomerSignInPopUpActionGroup" stepKey="waitEmailFieldVisible">
+        <comment userInput="Fill in Sign in form" stepKey="waitEmailFieldVisible"/>
+        <comment userInput="- fill Email filed with valid email" stepKey="fillCustomerEmail"/>
+        <comment userInput="- fill Email filed with incorrect password" stepKey="fillIncorrectCustomerPassword"/>
+        <actionGroup ref="StorefrontCustomerSignInPopUpActionGroup" stepKey="clickSignIn">
             <argument name="customerEmail" value="{{Simple_US_Customer.email}}"/>
             <argument name="customerPwd" value="incorrectPassword"/>
         </actionGroup>
 
         <waitForElementVisible selector="{{StorefrontCustomerSignInPopupFormSection.errorMessage}}" stepKey="seeErrorMessage"/>
 
-        <actionGroup ref="AssertCaptchaVisibleOnCustomerSignInPopupActionGroup" stepKey="seeCaptcha"/>
+        <comment userInput="Check if all elements of Captcha appear:" stepKey="seeCaptchaField"/>
+        <comment userInput="- Captcha field, Image and Reload button" stepKey="seeCaptchaImage"/>
+        <actionGroup ref="AssertCaptchaVisibleOnCustomerSignInPopupActionGroup" stepKey="seeCaptchaReloadButton"/>
        
         <reloadPage stepKey="refreshPage"/>
     
         <waitForPageLoad stepKey="waitForPageLoad2"/>
         
-        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart2"/>
+        <comment userInput="Go to Checkout" stepKey="clickCart2"/>
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckout2"/>
        
-        <waitForElementVisible selector="{{StorefrontCustomerSignInPopupFormSection.email}}" stepKey="waitEmailFieldVisible"/>
-      
-        <actionGroup ref="AssertCaptchaVisibleOnCustomerSignInPopupActionGroup" stepKey="seeCaptchaAfterReload"/>
+        <waitForElementVisible selector="{{StorefrontCustomerSignInPopupFormSection.email}}" stepKey="waitEmailFieldVisible2"/>
+
+        <comment userInput="Check if all elements of Captcha appear:" stepKey="seeCaptchaField2"/>
+        <comment userInput="- Captcha field, Image and Reload button" stepKey="seeCaptchaImage2"/>
+        <actionGroup ref="AssertCaptchaVisibleOnCustomerSignInPopupActionGroup" stepKey="seeCaptchaReloadButton2"/>
     </test>
 </tests>
