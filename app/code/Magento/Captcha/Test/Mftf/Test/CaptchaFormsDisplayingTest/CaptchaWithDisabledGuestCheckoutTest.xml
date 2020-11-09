@@ -44,7 +44,6 @@
         <comment userInput="and go to Checkout" stepKey="clickCart"/>
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckout"/>
 
-       
         <comment userInput="Fill in Sign in form" stepKey="waitEmailFieldVisible"/>
         <comment userInput="- fill Email filed with valid email" stepKey="fillCustomerEmail"/>
         <comment userInput="- fill Email filed with incorrect password" stepKey="fillIncorrectCustomerPassword"/>
