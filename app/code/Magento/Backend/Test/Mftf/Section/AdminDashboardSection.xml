@@ -17,5 +17,7 @@
         <element name="dashboardDiagramAmountsContentTab" type="block" selector="#diagram_tab_amounts_content"/>
         <element name="dashboardDiagramTotals" type="text" selector="#diagram_tab_amounts_content"/>
         <element name="dashboardTotals" type="text" selector="//*[@class='dashboard-totals-label' and contains(text(), '{{columnName}}')]/../*[@class='dashboard-totals-value']" parameterized="true"/>
+        <element name="productInBestsellers" type="text" selector="#productsOrderedGrid_table td.col-product.col-name"/>
+        <element name="dashboardButtonReloadData" type="button" selector=".action-primary[title='Reload Data'][type='submit']"/>
     </section>
 </sections>

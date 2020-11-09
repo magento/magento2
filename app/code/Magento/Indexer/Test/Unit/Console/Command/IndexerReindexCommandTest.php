@@ -18,6 +18,7 @@ use Magento\Framework\Phrase;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Indexer\Console\Command\IndexerReindexCommand;
 use Magento\Indexer\Model\Config;
+use Magento\Indexer\Model\Processor\MakeSharedIndexValid;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\Console\Tester\CommandTester;
 
@@ -50,6 +51,11 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
     private $dependencyInfoProviderMock;
 
     /**
+     * @var MakeSharedIndexValid|MockObject
+     */
+    private $makeSharedValidMock;
+
+    /**
      * @var ObjectManagerHelper
      */
     private $objectManagerHelper;
@@ -64,12 +70,12 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
         $this->indexerRegistryMock = $this->getMockBuilder(IndexerRegistry::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->dependencyInfoProviderMock = $this->objectManagerHelper->getObject(
-            DependencyInfoProvider::class,
-            [
-                'config' => $this->configMock,
-            ]
-        );
+        $this->makeSharedValidMock = $this->getMockBuilder(MakeSharedIndexValid::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->dependencyInfoProviderMock = $this->objectManagerHelper->getObject(DependencyInfoProvider::class, [
+            'config' => $this->configMock,
+        ]);
         parent::setUp();
     }
 
@@ -174,11 +180,17 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
         $emptyIndexer->method('getState')
             ->willReturn($this->getStateMock(['setStatus', 'save']));
 
+        $this->makeSharedValidMock = $this->objectManagerHelper->getObject(MakeSharedIndexValid::class, [
+            'config' => $this->configMock,
+            'indexerRegistry' => $this->indexerRegistryMock
+        ]);
         $this->configureAdminArea();
 
         $this->command = new IndexerReindexCommand(
             $this->objectManagerFactory,
-            $this->indexerRegistryMock
+            $this->indexerRegistryMock,
+            $this->dependencyInfoProviderMock,
+            $this->makeSharedValidMock
         );
 
         $commandTester = new CommandTester($this->command);

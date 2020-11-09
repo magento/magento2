@@ -329,6 +329,94 @@ QUERY;
     }
 
     /**
+     * @magentoApiDataFixture Magento/ConfigurableProduct/_files/product_configurable_with_custom_option_dropdown.php
+     * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
+     */
+    public function testAddConfigurableProductToCartWithCustomOption()
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
+        $sku = 'configurable';
+        $variantSku = 'simple_10';
+        $productOptions = $this->getAvailableProductCustomOption($sku);
+        $optionId = $productOptions[0]['option_id'];
+        $optionValueId = $productOptions[0]['value'][1]['option_type_id'];
+
+        $mutation = <<<QUERY
+mutation {
+  addConfigurableProductsToCart(input: {
+    cart_id: "{$maskedQuoteId}",
+    cart_items: [
+      {
+        parent_sku: "{$sku}",
+        variant_sku: "{$variantSku}",
+        data: {
+          sku: "{$variantSku}",
+          quantity: 1
+        },
+        customizable_options: [
+          {id: {$optionId}, value_string: "{$optionValueId}"}]
+      }
+    ]
+  }) {
+    cart {
+      items {
+        id
+        quantity
+        product {
+          sku
+          name
+        }
+        ... on ConfigurableCartItem {
+          configurable_options {
+            option_label
+            value_label
+          }
+          customizable_options {
+            id
+            label
+            values{
+              label
+              value
+            }
+          }
+        }
+      }
+    }
+  }
+}
+QUERY;
+
+        $response = $this->graphQlMutation($mutation);
+        $this->assertArrayNotHasKey('errors', $response);
+        $this->assertCount(1, $response['addConfigurableProductsToCart']['cart']['items']);
+        $item = $response['addConfigurableProductsToCart']['cart']['items'][0];
+        $this->assertEquals($sku, $item['product']['sku']);
+        $expectedOptions = [
+            'configurable_options' => [
+                [
+                    'option_label' => 'Test Configurable',
+                    'value_label' => 'Option 1'
+                ]
+            ],
+            'customizable_options' => [
+                [
+                    'id' => $optionId,
+                    'label' => 'Dropdown Options',
+                    'values' => [
+                        [
+                            'label' => 'Option 2',
+                            'value' => $optionValueId
+                        ]
+                    ]
+                ]
+            ]
+        ];
+
+        $this->assertResponseFields($item['configurable_options'], $expectedOptions['configurable_options']);
+        $this->assertResponseFields($item['customizable_options'], $expectedOptions['customizable_options']);
+    }
+
+    /**
      * @param string $maskedQuoteId
      * @param string $parentSku
      * @param string $sku
@@ -405,5 +493,40 @@ QUERY;
   }
 }
 QUERY;
+    }
+
+    /**
+     * Get product customizable dropdown options
+     *
+     * @param string $productSku
+     * @return array
+     */
+    private function getAvailableProductCustomOption(string $productSku): array
+    {
+        $query = <<<QUERY
+{
+  products(filter: {sku: {eq: "${productSku}"}}) {
+    items {
+      name
+      ... on CustomizableProductInterface {
+        options {
+          option_id
+          title
+          ... on CustomizableDropDownOption {
+            value {
+              option_type_id
+              title
+            }
+          }
+        }
+      }
+    }
+  }
+}
+QUERY;
+
+        $response = $this->graphQlQuery($query);
+        $this->assertNotEmpty($response['products']['items'], "No result for product with sku: '{$productSku}'");
+        return $response['products']['items'][0]['options'];
     }
 }
