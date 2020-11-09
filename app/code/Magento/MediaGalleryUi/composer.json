@@ -12,7 +12,9 @@
         "magento/module-media-gallery-metadata-api": "*",
         "magento/module-media-gallery-synchronization-api": "*",
         "magento/module-media-content-api": "*",
-        "magento/module-cms": "*"
+        "magento/module-cms": "*",
+        "magento/module-directory": "*",
+        "magento/module-authorization": "*"
     },
     "type": "magento2-module",
     "license": [

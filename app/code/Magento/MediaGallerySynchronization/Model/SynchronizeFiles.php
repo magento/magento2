@@ -16,7 +16,7 @@ use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\MediaGalleryApi\Api\GetAssetsByPathsInterface;
 use Magento\MediaGallerySynchronizationApi\Model\ImportFilesInterface;
 use Magento\MediaGallerySynchronizationApi\Api\SynchronizeFilesInterface;
-use Magento\MediaGallerySynchronization\Model\Filesystem\SplFileInfoFactory;
+use Magento\MediaGallerySynchronization\Model\Filesystem\GetFileInfo;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -50,9 +50,9 @@ class SynchronizeFiles implements SynchronizeFilesInterface
     private $driver;
 
     /**
-     * @var SplFileInfoFactory
+     * @var GetFileInfo
      */
-    private $splFileInfoFactory;
+    private $getFileInfo;
 
     /**
      * @var ImportFilesInterface
@@ -69,7 +69,7 @@ class SynchronizeFiles implements SynchronizeFilesInterface
      * @param Filesystem $filesystem
      * @param DateTime $date
      * @param LoggerInterface $log
-     * @param SplFileInfoFactory $splFileInfoFactory
+     * @param GetFileInfo $getFileInfo
      * @param GetAssetsByPathsInterface $getAssetsByPaths
      * @param ImportFilesInterface $importFiles
      */
@@ -78,7 +78,7 @@ class SynchronizeFiles implements SynchronizeFilesInterface
         Filesystem $filesystem,
         DateTime $date,
         LoggerInterface $log,
-        SplFileInfoFactory $splFileInfoFactory,
+        GetFileInfo $getFileInfo,
         GetAssetsByPathsInterface $getAssetsByPaths,
         ImportFilesInterface $importFiles
     ) {
@@ -86,7 +86,7 @@ class SynchronizeFiles implements SynchronizeFilesInterface
         $this->filesystem = $filesystem;
         $this->date = $date;
         $this->log = $log;
-        $this->splFileInfoFactory = $splFileInfoFactory;
+        $this->getFileInfo = $getFileInfo;
         $this->getAssetsByPaths = $getAssetsByPaths;
         $this->importFiles = $importFiles;
     }
@@ -150,7 +150,7 @@ class SynchronizeFiles implements SynchronizeFilesInterface
     {
         return $this->date->gmtDate(
             self::DATE_FORMAT,
-            $this->splFileInfoFactory->create($this->getMediaDirectory()->getAbsolutePath($path))->getMTime()
+            $this->getFileInfo->execute($this->getMediaDirectory()->getAbsolutePath($path))->getMTime()
         );
     }
 

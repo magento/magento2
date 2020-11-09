@@ -34,7 +34,7 @@
         <element name="shippingMethodLabel" type="text" selector="#co-shipping-method-form dl dt span"/>
         <element name="methodName" type="text" selector="#co-shipping-method-form label"/>
         <element name="shippingPrice" type="text" selector="#co-shipping-method-form span .price"/>
-        <element name="shippingMethodElementId" type="radio" selector="#s_method_{{carrierCode}}_{{methodCode}}" parameterized="true"/>
+        <element name="shippingMethodElementId" type="radio" selector="#s_method_{{carrierCode}}_{{methodCode}}" parameterized="true" timeout="30"/>
         <element name="estimateShippingAndTaxForm" type="block" selector="#shipping-zip-form"/>
     </section>
 </sections>

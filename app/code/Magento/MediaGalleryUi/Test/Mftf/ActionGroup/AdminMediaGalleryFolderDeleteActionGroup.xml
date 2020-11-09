@@ -9,8 +9,8 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminMediaGalleryFolderDeleteActionGroup">
-        <wait time="2" stepKey="waitBeforeDeleteButtonWillBeActive"/>
-        <click selector="{{AdminMediaGalleryFolderSection.folderDeleteButton}}" stepKey="clickDeleteButton"/>
+        <waitForElementVisible selector="{{AdminMediaGalleryFolderSection.folderDeleteButtonActive}}" stepKey="waitBeforeDeleteButtonWillBeActive"/>
+        <click selector="{{AdminMediaGalleryFolderSection.folderDeleteButtonActive}}" stepKey="clickDeleteButton"/>
         <waitForElementVisible selector="{{AdminMediaGalleryFolderSection.folderDeleteModalHeader}}" stepKey="waitBeforeModalAppears"/>
         <click selector="{{AdminMediaGalleryFolderSection.folderConfirmDeleteButton}}" stepKey="clickConfirmDeleteButton"/>
     </actionGroup>
