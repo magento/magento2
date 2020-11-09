@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Filesystem;
 
+use Magento\Framework\Exception\FileSystemException;
+
 /**
  * Provides extension for Driver interface.
  *
@@ -22,7 +24,7 @@ interface ExtendedDriverInterface extends DriverInterface
      *
      * Implementation must return associative array with next keys:
      *
-     * ```php
+     * ```
      * [
      *  'path',
      *  'dirname',
@@ -32,10 +34,15 @@ interface ExtendedDriverInterface extends DriverInterface
      *  'timestamp',
      *  'size',
      *  'mimetype',
-    *  ];
+     *  'extra' => [
+     *      'image-width',
+     *      'image-height'
+     *      ]
+     *  ];
      *
      * @param string $path Absolute path to file
      * @return array
+     * @throws FileSystemException
      *
      * @deprecated Method will be moved to DriverInterface
      */

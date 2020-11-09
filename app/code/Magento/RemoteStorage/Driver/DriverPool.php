@@ -17,7 +17,7 @@ use Magento\RemoteStorage\Model\Config;
 /**
  * The remote driver pool.
  */
-class DriverPool implements DriverPoolInterface
+class DriverPool extends BaseDriverPool implements DriverPoolInterface
 {
     public const PATH_DRIVER = 'remote_storage/driver';
     public const PATH_EXPOSE_URLS = 'remote_storage/expose_urls';
@@ -40,11 +40,6 @@ class DriverPool implements DriverPoolInterface
     private $driverFactoryPool;
 
     /**
-     * @var DriverPool
-     */
-    private $driverPool;
-
-    /**
      * @var array
      */
     private $pool = [];
@@ -52,25 +47,27 @@ class DriverPool implements DriverPoolInterface
     /**
      * @param Config $config
      * @param DriverFactoryPool $driverFactoryPool
-     * @param BaseDriverPool $driverPool
+     * @param array $extraTypes
      */
     public function __construct(
         Config $config,
         DriverFactoryPool $driverFactoryPool,
-        BaseDriverPool $driverPool
+        array $extraTypes = []
     ) {
         $this->config = $config;
         $this->driverFactoryPool = $driverFactoryPool;
-        $this->driverPool = $driverPool;
+
+        parent::__construct($extraTypes);
     }
 
     /**
      * Retrieves remote driver.
      *
      * @param string $code
-     * @return RemoteDriverInterface
-     * @throws RuntimeException
+     * @return DriverInterface
+     * @throws DriverException
      * @throws FileSystemException
+     * @throws RuntimeException
      */
     public function getDriver($code = self::REMOTE): DriverInterface
     {
@@ -91,6 +88,6 @@ class DriverPool implements DriverPoolInterface
             throw new RuntimeException(__('Remote driver is not available.'));
         }
 
-        return $this->driverPool->getDriver($code);
+        return parent::getDriver($code);
     }
 }

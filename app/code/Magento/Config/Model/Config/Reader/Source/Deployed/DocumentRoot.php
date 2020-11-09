@@ -6,8 +6,7 @@
 namespace Magento\Config\Model\Config\Reader\Source\Deployed;
 
 use Magento\Framework\App\DeploymentConfig;
-use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Config\DocumentRoot as BaseDocumentRoot;
+use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Document root detector.
@@ -15,25 +14,18 @@ use Magento\Framework\Config\DocumentRoot as BaseDocumentRoot;
  * @api
  * @since 101.0.0
  *
- * @deprecated Use new implementation
- * @see \Magento\Framework\Config\DocumentRoot
+ * @deprecated Magento always uses the pub directory
+ * @see DirectoryList::PUB
  */
 class DocumentRoot
 {
     /**
-     * @var BaseDocumentRoot
-     */
-    private $documentRoot;
-
-    /**
      * @param DeploymentConfig $config
-     * @param BaseDocumentRoot $documentRoot
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function __construct(DeploymentConfig $config, BaseDocumentRoot $documentRoot = null)
+    public function __construct(DeploymentConfig $config)
     {
-        $this->documentRoot = $documentRoot ?: ObjectManager::getInstance()->get(BaseDocumentRoot::class);
     }
 
     /**
@@ -44,7 +36,7 @@ class DocumentRoot
      */
     public function getPath()
     {
-        return $this->documentRoot->getPath();
+        return DirectoryList::PUB;
     }
 
     /**
@@ -55,6 +47,6 @@ class DocumentRoot
      */
     public function isPub()
     {
-        return $this->documentRoot->isPub();
+        return true;
     }
 }

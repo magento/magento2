@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\Framework\Filesystem;
 
 /**
- * A pool of stream wrappers
+ * A pool of stream wrappers.
  */
 interface DriverPoolInterface
 {
@@ -18,5 +18,5 @@ interface DriverPoolInterface
      * @param string $code
      * @return DriverInterface
      */
-    public function getDriver($code);
+    public function getDriver($code): DriverInterface;
 }

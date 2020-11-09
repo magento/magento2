@@ -16,7 +16,7 @@ use Magento\RemoteStorage\Model\Config;
 /**
  * Filesystem implementation for remote storage.
  */
-class Filesystem extends BaseFilesystem
+class Filesystem extends BaseFilesystem implements FilesystemInterface
 {
     /**
      * @var bool
@@ -119,5 +119,13 @@ class Filesystem extends BaseFilesystem
         }
 
         return parent::getDirectoryReadByPath($path);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getDirectoryCodes(): array
+    {
+        return $this->directoryCodes;
     }
 }

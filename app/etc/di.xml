@@ -212,7 +212,6 @@
     <preference for="Magento\Framework\HTTP\ClientInterface" type="Magento\Framework\HTTP\Client\Curl" />
     <preference for="Magento\Framework\Interception\ConfigLoaderInterface" type="Magento\Framework\Interception\PluginListGenerator" />
     <preference for="Magento\Framework\Interception\ConfigWriterInterface" type="Magento\Framework\Interception\PluginListGenerator" />
-    <preference for="Magento\Framework\Filesystem\DriverPoolInterface" type="Magento\Framework\Filesystem\DriverPool" />
     <type name="Magento\Framework\Model\ResourceModel\Db\TransactionManager" shared="false" />
     <type name="Magento\Framework\Acl\Data\Cache">
         <arguments>

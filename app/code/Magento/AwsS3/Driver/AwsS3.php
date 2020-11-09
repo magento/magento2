@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\AwsS3\Driver;
 
 use Exception;
+use Generator;
 use League\Flysystem\AdapterInterface;
 use League\Flysystem\Config;
 use Magento\Framework\Exception\FileSystemException;
@@ -165,7 +166,7 @@ class AwsS3 implements RemoteDriverInterface
             $this->createDirectoryRecursively($parentDir);
         }
 
-        return (bool)$this->adapter->createDir(rtrim($path, '/'), new Config([]));
+        return (bool)$this->adapter->createDir(rtrim($path, '/'), new Config(self::CONFIG));
     }
 
     /**
@@ -205,8 +206,16 @@ class AwsS3 implements RemoteDriverInterface
     public function filePutContents($path, $content, $mode = null): int
     {
         $path = $this->normalizeRelativePath($path);
+        $config = self::CONFIG;
 
-        return $this->adapter->write($path, $content, new Config(self::CONFIG))['size'];
+        if (false !== ($imageSize = @getimagesizefromstring($content))) {
+            $config['Metadata'] = [
+                'image-width' => $imageSize[0],
+                'image-height' => $imageSize[1]
+            ];
+        }
+
+        return $this->adapter->write($path, $content, new Config($config))['size'];
     }
 
     /**
@@ -461,16 +470,6 @@ class AwsS3 implements RemoteDriverInterface
             throw new FileSystemException(__('Cannot gather meta info! %1', [$this->getWarningMessage()]));
         }
 
-        $extra = [
-            'image-width' => 0,
-            'image-height' => 0
-        ];
-
-        if (isset($metaInfo['image-width'], $metaInfo['image-height'])) {
-            $extra['image-width'] = $metaInfo['image-width'];
-            $extra['image-height'] = $metaInfo['image-height'];
-        }
-
         return [
             'path' => $metaInfo['path'],
             'dirname' => $metaInfo['dirname'],
@@ -480,7 +479,10 @@ class AwsS3 implements RemoteDriverInterface
             'timestamp' => $metaInfo['timestamp'],
             'size' => $metaInfo['size'],
             'mimetype' => $metaInfo['mimetype'],
-            'extra' => $extra
+            'extra' => [
+                'image-width' => $metaInfo['metadata']['image-width'] ?? 0,
+                'image-height' => $metaInfo['metadata']['image-height'] ?? 0
+            ]
         ];
     }
 
@@ -489,21 +491,23 @@ class AwsS3 implements RemoteDriverInterface
      */
     public function search($pattern, $path): array
     {
-        return $this->glob(rtrim($path, '/') . '/' . ltrim($pattern, '/'));
+        return iterator_to_array(
+            $this->glob(rtrim($path, '/') . '/' . ltrim($pattern, '/')),
+            false
+        );
     }
 
     /**
      * Emulate php glob function for AWS S3 storage
      *
      * @param string $pattern
-     * @return array
+     * @return Generator
      * @throws FileSystemException
      */
-    private function glob(string $pattern): array
+    private function glob(string $pattern): Generator
     {
-        $directoryContent = [];
-
         $patternFound = preg_match('(\*|\?|\[.+\])', $pattern, $parentPattern, PREG_OFFSET_CAPTURE);
+
         if ($patternFound) {
             // phpcs:ignore Magento2.Functions.DiscouragedFunction
             $parentDirectory = \dirname(substr($pattern, 0, $parentPattern[0][1] + 1));
@@ -512,13 +516,11 @@ class AwsS3 implements RemoteDriverInterface
             $searchPattern = $this->getSearchPattern($pattern, $parentPattern, $parentDirectory, $index);
 
             if ($this->isDirectory($parentDirectory . '/')) {
-                $directoryContent = $this->getDirectoryContent($parentDirectory, $searchPattern, $leftover, $index);
+                yield from $this->getDirectoryContent($parentDirectory, $searchPattern, $leftover, $index);
             }
         } elseif ($this->isDirectory($pattern) || $this->isFile($pattern)) {
-            $directoryContent[] = $pattern;
+            yield $pattern;
         }
-
-        return $directoryContent;
     }
 
     /**
@@ -526,7 +528,7 @@ class AwsS3 implements RemoteDriverInterface
      */
     public function symlink($source, $destination, DriverInterface $targetDriver = null): bool
     {
-        throw new FileSystemException(__('Method %1 is not supported', __METHOD__));
+        return $this->copy($source, $destination, $targetDriver);
     }
 
     /**
@@ -850,7 +852,7 @@ class AwsS3 implements RemoteDriverInterface
      * @param string $searchPattern
      * @param string $leftover
      * @param int|bool $index
-     * @return array
+     * @return Generator
      * @throws FileSystemException
      */
     private function getDirectoryContent(
@@ -858,7 +860,7 @@ class AwsS3 implements RemoteDriverInterface
         string $searchPattern,
         string $leftover,
         $index
-    ): array {
+    ): Generator {
         $items = $this->readDirectory($parentDirectory . '/');
         $directoryContent = [];
         foreach ($items as $item) {
@@ -866,15 +868,9 @@ class AwsS3 implements RemoteDriverInterface
                 // phpcs:ignore Magento2.Functions.DiscouragedFunction
                 && strpos(basename($item), '.') !== 0) {
                 if ($index === false || \strlen($leftover) === $index + 1) {
-                    $directoryContent[] = $this->isDirectory($item)
-                        ? rtrim($item, '/') . '/'
-                        : $item;
+                    yield $this->isDirectory($item) ? rtrim($item, '/') . '/' : $item;
                 } elseif (strlen($leftover) > $index + 1) {
-                    // phpcs:ignore Magento2.Performance.ForeachArrayMerge
-                    $directoryContent = array_merge(
-                        $directoryContent,
-                        $this->glob("{$parentDirectory}/{$item}" . substr($leftover, $index))
-                    );
+                    yield from $this->glob("{$parentDirectory}/{$item}" . substr($leftover, $index));
                 }
             }
         }

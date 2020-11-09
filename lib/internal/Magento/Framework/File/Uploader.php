@@ -7,7 +7,6 @@ namespace Magento\Framework\File;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Config\DocumentRoot;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\TargetDirectory;
@@ -189,11 +188,6 @@ class Uploader
     private $targetDirectory;
 
     /**
-     * @var DocumentRoot
-     */
-    private $documentRoot;
-
-    /**
      * Init upload
      *
      * @param string|array $fileId
@@ -201,7 +195,6 @@ class Uploader
      * @param DirectoryList|null $directoryList
      * @param DriverPool|null $driverPool
      * @param TargetDirectory|null $targetDirectory
-     * @param DocumentRoot|null $documentRoot
      * @throws \DomainException
      */
     public function __construct(
@@ -209,8 +202,7 @@ class Uploader
         Mime $fileMime = null,
         DirectoryList $directoryList = null,
         DriverPool $driverPool = null,
-        TargetDirectory $targetDirectory = null,
-        DocumentRoot $documentRoot = null
+        TargetDirectory $targetDirectory = null
     ) {
         $this->directoryList = $directoryList ?: ObjectManager::getInstance()->get(DirectoryList::class);
 
@@ -224,7 +216,6 @@ class Uploader
         $this->fileMime = $fileMime ?: ObjectManager::getInstance()->get(Mime::class);
         $this->driverPool = $driverPool ?: ObjectManager::getInstance()->get(DriverPool::class);
         $this->targetDirectory = $targetDirectory ?: ObjectManager::getInstance()->get(TargetDirectory::class);
-        $this->documentRoot = $documentRoot ?: ObjectManager::getInstance()->get(DocumentRoot::class);
     }
 
     /**
@@ -342,7 +333,7 @@ class Uploader
      */
     protected function _moveFile($tmpPath, $destPath)
     {
-        $rootCode = $this->getDocumentRoot()->getPath();
+        $rootCode = DirectoryList::PUB;
 
         if (strpos($destPath, $this->getDirectoryList()->getPath($rootCode)) !== 0) {
             $rootCode = DirectoryList::ROOT;
@@ -370,20 +361,6 @@ class Uploader
         }
 
         return $this->targetDirectory;
-    }
-
-    /**
-     * Retrieves document root.
-     *
-     * @return DocumentRoot
-     */
-    private function getDocumentRoot(): DocumentRoot
-    {
-        if (!isset($this->documentRoot)) {
-            $this->documentRoot = ObjectManager::getInstance()->get(DocumentRoot::class);
-        }
-
-        return $this->documentRoot;
     }
 
     /**

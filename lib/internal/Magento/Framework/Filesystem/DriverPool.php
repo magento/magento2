@@ -9,7 +9,7 @@ namespace Magento\Framework\Filesystem;
 /**
  * A pool of stream wrappers
  */
-class DriverPool implements DriverPoolInterface
+class DriverPool
 {
     /**#@+
      * Available driver types

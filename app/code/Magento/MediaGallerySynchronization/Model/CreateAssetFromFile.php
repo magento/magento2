@@ -82,24 +82,25 @@ class CreateAssetFromFile implements CreateAssetFromFileInterface
              * SPL file info is not compatible with remote storages and must not be used.
              */
             $file = $this->getFileInfo->execute($absolutePath);
+            [$width, $height] = getimagesize($absolutePath);
             $meta = [
                 'size' => $file->getSize(),
                 'extension' => $file->getExtension(),
                 'basename' => $file->getBasename(),
+                'extra' => [
+                    'image-width' => $width,
+                    'image-height' => $height
+                ]
             ];
         }
-
-        [$width, $height] = getimagesizefromstring(
-            $this->getMediaDirectory()->readFile($absolutePath)
-        );
 
         return $this->assetFactory->create(
             [
                 'id' => null,
                 'path' => $path,
                 'title' => $meta['basename'],
-                'width' => $width,
-                'height' => $height,
+                'width' => $meta['extra']['image-width'],
+                'height' => $meta['extra']['image-height'],
                 'hash' => $this->getHash($path),
                 'size' => $meta['size'],
                 'contentType' => 'image/' . $meta['extension'],

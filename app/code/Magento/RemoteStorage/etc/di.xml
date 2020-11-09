@@ -27,7 +27,6 @@
             <argument name="directoryCodes" xsi:type="array">
                 <item name="media" xsi:type="const">Magento\Framework\App\Filesystem\DirectoryList::MEDIA</item>
                 <item name="var_export" xsi:type="const">Magento\Framework\App\Filesystem\DirectoryList::VAR_EXPORT</item>
-                <item name="var_import" xsi:type="string">Magento\Framework\App\Filesystem\DirectoryList::VAR_IMPORT</item>
             </argument>
         </arguments>
     </virtualType>
@@ -62,8 +61,7 @@
     <type name="Magento\Framework\Console\CommandListInterface">
         <arguments>
             <argument name="commands" xsi:type="array">
-                <item name="remoteStorageEnable" xsi:type="object">Magento\RemoteStorage\Console\Command\RemoteStorageEnableCommand</item>
-                <item name="remoteStorageDisable" xsi:type="object">Magento\RemoteStorage\Console\Command\RemoteStorageDisableCommand</item>
+                <item name="remoteStorageSync" xsi:type="object">Magento\RemoteStorage\Console\Command\RemoteStorageSynchronizeCommand</item>
             </argument>
         </arguments>
     </type>
@@ -129,6 +127,11 @@
     <type name="Magento\DownloadableImportExport\Helper\Uploader">
         <arguments>
             <argument name="filesystem" xsi:type="object">fullRemoteFilesystem</argument>
+        </arguments>
+    </type>
+    <type name="Magento\RemoteStorage\Model\Synchronizer">
+        <arguments>
+            <argument name="filesystem" xsi:type="object">customRemoteFilesystem</argument>
         </arguments>
     </type>
 </config>

@@ -83,6 +83,13 @@ class Storage extends AbstractModel
     protected $_databaseFactory;
 
     /**
+     * @var Filesystem
+     *
+     * @deprecated
+     */
+    protected $filesystem;
+
+    /**
      * @var Filesystem\Directory\ReadInterface
      */
     private $localMediaDirectory;
@@ -122,6 +129,8 @@ class Storage extends AbstractModel
         $this->_fileFlag = $fileFlag;
         $this->_fileFactory = $fileFactory;
         $this->_databaseFactory = $databaseFactory;
+        $this->filesystem = $filesystem;
+
         $this->localMediaDirectory = $filesystem->getDirectoryRead(
             DirectoryList::MEDIA,
             Filesystem\DriverPool::FILE
