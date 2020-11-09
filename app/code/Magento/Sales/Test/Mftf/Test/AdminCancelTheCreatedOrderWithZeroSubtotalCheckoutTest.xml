@@ -69,6 +69,8 @@
         <reloadPage stepKey="refreshPage2"/>
         <grabTextFrom selector="|Order # (\d+)|" stepKey="orderId"/>
 
+        <reloadPage stepKey="refreshPage1"/>
+
         <!-- Cancel the Order -->
         <actionGroup ref="CancelPendingOrderActionGroup" stepKey="cancelPendingOrder"/>
 
