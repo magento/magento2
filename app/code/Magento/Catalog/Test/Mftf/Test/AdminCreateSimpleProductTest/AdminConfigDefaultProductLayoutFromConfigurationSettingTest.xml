@@ -37,12 +37,11 @@
         <actionGroup ref="NavigateToDefaultLayoutsSettingActionGroup" stepKey="navigateToWebConfigurationPage"/>
 
         <comment userInput="Set default layout to 3 columns" stepKey="expandDefaultLayouts"/>
-        
+        <comment userInput="and clear cache after" stepKey="DefaultProductLayout"/>
         <actionGroup ref="AdminSetProductLayoutSettingsActionGroup" stepKey="select3ColumnsLayout">
            <argument name="layout" value="3 columns"/>
         </actionGroup>
-        <comment userInput="Default layout has been updated" stepKey="DefaultProductLayout"/>
-        
+       
         <actionGroup ref="CliCacheFlushActionGroup" stepKey="clickSaveConfig">
            <argument name="tags" value="config"/>
         </actionGroup>
@@ -50,7 +49,7 @@
         <actionGroup ref="AdminOpenNewProductFormPageActionGroup" stepKey="navigateToNewProduct"/>
         <comment userInput="Default layout has been updated" stepKey="wait1"/>
 
-        <actionGroup ref="AdminExpandProductDesigSectionActionGroup" stepKey="clickOnDesignTab"/>
+        <actionGroup ref="AdminExpandProductDesignSectionActionGroup" stepKey="clickOnDesignTab"/>
 
         <comment userInput="Checking if settings have been applied" stepKey="waitForLayoutDropDown"/>
         <seeOptionIsSelected selector="{{ProductDesignSection.LayoutDropdown}}" userInput="3 columns" stepKey="see3ColumnsSelected"/> 
