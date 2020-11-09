@@ -1670,6 +1670,12 @@ class ProductTest extends TestCase
                  ]
             ],
             [
+                'products_to_check_valid_url_keys_with_different_language.csv',
+                [
+                    RowValidatorInterface::ERROR_DUPLICATE_URL_KEY => 0
+                ]
+            ],
+            [
                 'products_to_check_duplicated_url_keys.csv',
                 [
                     RowValidatorInterface::ERROR_DUPLICATE_URL_KEY => 2
