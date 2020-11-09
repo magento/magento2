@@ -135,9 +135,13 @@ class ProcessManager
      */
     private function startChildProcess(callable $userFunction)
     {
-        // phpcs:ignore Magento2.Functions.DiscouragedFunction
-        $status = call_user_func($userFunction);
-        $status = is_int($status) ? $status : 0;
+        try {
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
+            $status = call_user_func($userFunction);
+            $status = is_int($status) ? $status : 0;
+        } catch (\Throwable $e) {
+            $status = 1;
+        }
         // phpcs:ignore Magento2.Security.LanguageConstruct.ExitUsage
         exit($status);
     }
