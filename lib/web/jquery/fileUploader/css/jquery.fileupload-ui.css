@@ -1,73 +1,68 @@
-@charset 'UTF-8';
+@charset "UTF-8";
 /*
- * jQuery File Upload UI Plugin CSS 6.3
+ * jQuery File Upload UI Plugin CSS
  * https://github.com/blueimp/jQuery-File-Upload
  *
  * Copyright 2010, Sebastian Tschan
  * https://blueimp.net
  *
  * Licensed under the MIT license:
- * http://www.opensource.org/licenses/MIT
+ * https://opensource.org/licenses/MIT
  */
 
-.fileinput-button {
-  position: relative;
-  overflow: hidden;
-  float: left;
-  margin-right: 4px;
-}
-.fileinput-button input {
-  position: absolute;
-  top: 0;
-  right: 0;
-  margin: 0;
-  border: solid transparent;
-  border-width: 0 0 100px 200px;
-  opacity: 0;
-  filter: alpha(opacity=0);
-  -moz-transform: translate(-300px, 0) scale(4);
-  direction: ltr;
-  cursor: pointer;
-}
-.fileupload-buttonbar .btn,
-.fileupload-buttonbar .toggle {
-  margin-bottom: 5px;
-}
-.files .progress {
-  width: 200px;
-}
+.progress-animated .progress-bar,
 .progress-animated .bar {
-  background: url(../img/progressbar.gif) !important;
+  background: url('../img/progressbar.gif') !important;
   filter: none;
 }
-.fileupload-loading {
-  position: absolute;
-  left: 50%;
-  width: 128px;
-  height: 128px;
-  background: url(../img/loading.gif) center no-repeat;
+.fileupload-process {
+  float: right;
   display: none;
 }
-.fileupload-processing .fileupload-loading {
+.fileupload-processing .fileupload-process,
+.files .processing .preview {
   display: block;
+  width: 32px;
+  height: 32px;
+  background: url('../img/loading.gif') center no-repeat;
+  background-size: contain;
+}
+.files audio,
+.files video {
+  max-width: 300px;
+}
+.files .name {
+  word-wrap: break-word;
+  overflow-wrap: anywhere;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+.files button {
+  margin-bottom: 5px;
+}
+.toggle[type='checkbox'] {
+  transform: scale(2);
+  margin-left: 10px;
 }
 
-@media (max-width: 480px) {
+@media (max-width: 767px) {
+  .fileupload-buttonbar .btn {
+    margin-bottom: 5px;
+  }
+  .fileupload-buttonbar .delete,
+  .fileupload-buttonbar .toggle,
+  .files .toggle,
   .files .btn span {
     display: none;
   }
-  .files .preview * {
-    width: 40px;
+  .files audio,
+  .files video {
+    max-width: 80px;
   }
-  .files .name * {
-    width: 80px;
-    display: inline-block;
-    word-wrap: break-word;
-  }
-  .files .progress {
-    width: 20px;
-  }
-  .files .delete {
-    width: 60px;
+}
+
+@media (max-width: 480px) {
+  .files .image td:nth-child(2) {
+    display: none;
   }
 }
