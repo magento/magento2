@@ -9,9 +9,12 @@ namespace Magento\Ups\Model;
 
 use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Framework\DataObject;
+use Magento\Framework\HTTP\AsyncClient\HttpException;
+use Magento\Framework\HTTP\AsyncClient\HttpResponseDeferredInterface;
 use Magento\Framework\HTTP\AsyncClient\Response;
 use Magento\Framework\HTTP\AsyncClientInterface;
 use Magento\Quote\Model\Quote\Address\RateRequest;
+use Magento\Quote\Model\Quote\Address\RateResult\Error;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Quote\Model\Quote\Address\RateRequestFactory;
 use Magento\TestFramework\HTTP\AsyncClientInterfaceMock;
@@ -288,6 +291,50 @@ class CarrierTest extends TestCase
             'Tracking Number must match.'
         );
         $this->httpClient->clearRequests();
+    }
+
+    /**
+     * Test get carriers rates if has HttpException.
+     *
+     * @magentoConfigFixture default_store shipping/origin/country_id GB
+     * @magentoConfigFixture default_store carriers/ups/type UPS_XML
+     * @magentoConfigFixture default_store carriers/ups/active 1
+     * @magentoConfigFixture default_store carriers/ups/shipper_number 12345
+     * @magentoConfigFixture default_store carriers/ups/origin_shipment Shipments Originating in the European Union
+     * @magentoConfigFixture default_store carriers/ups/username user
+     * @magentoConfigFixture default_store carriers/ups/password pass
+     * @magentoConfigFixture default_store carriers/ups/access_license_number acn
+     * @magentoConfigFixture default_store currency/options/allow GBP,USD,EUR
+     * @magentoConfigFixture default_store currency/options/base GBP
+     */
+    public function testGetRatesWithHttpException(): void
+    {
+        $deferredResponse = $this->getMockBuilder(HttpResponseDeferredInterface::class)
+            ->onlyMethods(['get'])
+            ->getMockForAbstractClass();
+        $exception = new HttpException('Exception message');
+        $deferredResponse->method('get')->willThrowException($exception);
+        $this->httpClient->setDeferredResponseMock($deferredResponse);
+        $request = Bootstrap::getObjectManager()->create(
+            RateRequest::class,
+            [
+                'data' => [
+                    'dest_country' => 'GB',
+                    'dest_postal' => '01105',
+                    'product' => '11',
+                    'action' => 'Rate',
+                    'unit_measure' => 'KGS',
+                    'base_currency' => new DataObject(['code' => 'GBP'])
+                ]
+            ]
+        );
+        $resultRate = $this->carrier->collectRates($request)->getAllRates()[0];
+        $error = Bootstrap::getObjectManager()->get(Error::class);
+        $error->setCarrier('ups');
+        $error->setCarrierTitle($this->carrier->getConfigData('title'));
+        $error->setErrorMessage($this->carrier->getConfigData('specificerrmsg'));
+
+        $this->assertEquals($error, $resultRate);
     }
 
     /**
