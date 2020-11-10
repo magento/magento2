@@ -13,17 +13,23 @@ use Magento\Catalog\Model\Product;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Unit test for \Magento\Bundle\Model\Plugin\Frontend\ProductIdentitiesExtender
+ */
 class ProductIdentitiesExtenderTest extends TestCase
 {
-    /** @var  \Magento\Bundle\Model\Plugin\Product */
+    /** @var ProductPlugin */
     private $plugin;
 
-    /** @var  MockObject|Type */
+    /** @var MockObject|Type */
     private $type;
 
-    /** @var  MockObject|\Magento\Catalog\Model\Product */
+    /** @var MockObject|Product */
     private $product;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $this->product = $this->getMockBuilder(Product::class)
@@ -39,7 +45,7 @@ class ProductIdentitiesExtenderTest extends TestCase
         $this->plugin = new ProductPlugin($this->type);
     }
 
-    public function testAfterGetIdentities()
+    public function testAfterGetIdentities(): void
     {
         $baseIdentities = [
             'SomeCacheId',

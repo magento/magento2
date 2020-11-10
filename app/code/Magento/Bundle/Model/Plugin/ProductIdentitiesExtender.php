@@ -10,6 +10,9 @@ namespace Magento\Bundle\Model\Plugin;
 use Magento\Bundle\Model\Product\Type as BundleType;
 use Magento\Catalog\Model\Product as CatalogProduct;
 
+/**
+ * Add parent identities to product identities.
+ */
 class ProductIdentitiesExtender
 {
     /**
@@ -47,6 +50,7 @@ class ProductIdentitiesExtender
         foreach ($this->getParentIdsByChild($product->getEntityId()) as $parentId) {
             $identities[] = CatalogProduct::CACHE_TAG . '_' . $parentId;
         }
+
         return $identities;
     }
 
@@ -56,7 +60,7 @@ class ProductIdentitiesExtender
      * @param mixed $entityId
      * @return array
      */
-    private function getParentIdsByChild($entityId)
+    private function getParentIdsByChild($entityId): array
     {
         if (!isset($this->cacheParentIdsByChild[$entityId])) {
             $this->cacheParentIdsByChild[$entityId] = $this->type->getParentIdsByChild($entityId);

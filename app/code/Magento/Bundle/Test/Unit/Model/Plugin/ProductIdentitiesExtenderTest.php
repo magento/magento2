@@ -14,6 +14,9 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Unit test for \Magento\Bundle\Model\Plugin\ProductIdentitiesExtender
+ */
 class ProductIdentitiesExtenderTest extends TestCase
 {
     /** @var Plugin */
