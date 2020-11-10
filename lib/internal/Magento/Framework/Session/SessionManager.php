@@ -619,7 +619,9 @@ class SessionManager implements SessionManagerInterface
         }
 
         foreach ($this->sessionConfig->getOptions() as $option => $value) {
-            if ($option=='session.save_handler') {
+            // It is now explicitly forbidden to set the module name to "user".
+            // Formerly, this has been silently ignored.
+            if ($option === 'session.save_handler' && $value === 'user') {
                 continue;
             } else {
                 $result = ini_set($option, $value);
