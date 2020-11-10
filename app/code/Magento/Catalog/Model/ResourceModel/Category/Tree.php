@@ -177,7 +177,7 @@ class Tree extends Dbp
      * @param boolean $onlyActive
      * @return $this
      * @deprecated This method is not intended for usage in child classes
-     * @see addCollectionDataWithIncludeMenu($collection, $sorted, $exclude, $toLoad, $onlyActive, $onlyIncludeInMenu)
+     * @see addCollectionDataParams($collection, $sorted, $exclude, $toLoad, $onlyActive, $onlyIncludeInMenu)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -239,9 +239,9 @@ class Tree extends Dbp
     }
 
     /**
-     * Add data to collection with include in menu
+     * Add data params to collection
      *
-     * @param Collection $collection
+     * @param Collection|null $collection
      * @param boolean $sorted
      * @param array $exclude
      * @param boolean $toLoad
@@ -251,7 +251,7 @@ class Tree extends Dbp
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function addCollectionDataWithIncludeMenu(
+    public function addCollectionDataParams(
         $collection = null,
         $sorted = false,
         $exclude = [],

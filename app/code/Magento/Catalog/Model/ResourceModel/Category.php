@@ -708,6 +708,8 @@ class Category extends AbstractResource
      * @param boolean $asCollection
      * @param boolean $toLoad
      * @return \Magento\Framework\Data\Tree\Node\Collection|\Magento\Catalog\Model\ResourceModel\Category\Collection
+     * @deprecated The method doesn't consider onlyActive, onlyIncludeInMenu params
+     * @see getCategoriesCollection
      */
     public function getCategories($parent, $recursionLevel = 0, $sorted = false, $asCollection = false, $toLoad = true)
     {
@@ -721,6 +723,37 @@ class Category extends AbstractResource
             return $tree->getCollection();
         }
         return $nodes;
+    }
+
+    /**
+     * Retrieve categories
+     *
+     * @param integer $parent
+     * @param integer $recursionLevel
+     * @param boolean|string $sorted
+     * @param boolean $asCollection
+     * @param boolean $toLoad
+     * @param boolean $onlyActive
+     * @param boolean $onlyIncludeInMenu
+     * @return \Magento\Framework\Data\Tree\Node\Collection|\Magento\Catalog\Model\ResourceModel\Category\Collection
+     */
+    public function getCategoriesCollection(
+        $parent,
+        $recursionLevel = 0,
+        $sorted = false,
+        $asCollection = false,
+        $toLoad = true,
+        $onlyActive = true,
+        $onlyIncludeInMenu = true
+    ) {
+        $tree = $this->_categoryTreeFactory->create();
+        $nodes = $tree->loadNode($parent)
+            ->loadChildren($recursionLevel)
+            ->getChildren();
+
+        $tree->addCollectionDataParams(null, $sorted, $parent, $toLoad, $onlyActive, $onlyIncludeInMenu);
+
+        return $asCollection ? $tree->getCollection() : $nodes;
     }
 
     /**
