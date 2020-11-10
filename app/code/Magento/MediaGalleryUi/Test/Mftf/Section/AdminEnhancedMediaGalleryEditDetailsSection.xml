@@ -16,6 +16,7 @@
         <element name="addNewKeyword" type="input" selector="[data-ui-id='add-keyword']"/>
         <element name="removeSelectedKeyword" type="button" selector="//span[contains(text(), '{{keyword}}')]/following-sibling::button[@data-action='remove-selected-item']" parameterized="true"/>
         <element name="cancel" type="button" selector="#image-details-action-cancel"/>
-        <element name="save" type="button" selector="#image-details-action-save"/>
+        <element name="save" type="button" selector="#image-details-action-save" timeout="30"/>
+        <element name="modalTitle" type="text" selector="//aside[contains(@class, 'media-gallery-edit-image-details') and contains(@class, '_show')]//h1[contains(., 'Edit Image')]"/>
     </section>
 </sections>
