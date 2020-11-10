@@ -16,8 +16,7 @@ class QueueInstallerTest extends TestCase
 {
     public function testInstall()
     {
-        $bindingInstaller = $this->getMockForAbstractClass(QueueConfigItemInterface::class);
-        $model = new QueueInstaller($bindingInstaller);
+        $model = new QueueInstaller();
         $channel = $this->createMock(AMQPChannel::class);
 
         $queue = $this->getMockForAbstractClass(QueueConfigItemInterface::class);
