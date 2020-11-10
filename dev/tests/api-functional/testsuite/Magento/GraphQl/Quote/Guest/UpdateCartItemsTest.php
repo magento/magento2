@@ -316,7 +316,7 @@ QUERY;
         $query = $this->getUpdateGiftMessageQuery($messageTo, $messageFrom, $message);
         foreach ($this->graphQlMutation($query)['updateCartItems']['cart']['items'] as $item) {
             self::assertArrayHasKey('gift_message', $item);
-            self::assertSame(null, $item['gift_message']);
+            self::assertSame(['to' => '', 'from' => '', 'message' => ''], $item['gift_message']);
         }
     }
 
