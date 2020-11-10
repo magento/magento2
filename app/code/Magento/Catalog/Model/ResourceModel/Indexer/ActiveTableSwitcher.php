@@ -40,23 +40,22 @@ class ActiveTableSwitcher
             $outdatedTableName = $tableName . $this->outdatedTableSuffix;
             $replicaTableName = $tableName . $this->additionalTableSuffix;
 
-            $tableComment = $connection->showTableStatus($tableName)['Comment'];
-
-            $replicaComment = $connection->showTableStatus($replicaTableName)['Comment'];
+            $tableComment = $connection->showTableStatus($tableName)['Comment'] ?? '';
+            $replicaComment = $connection->showTableStatus($replicaTableName)['Comment'] ?? '';
 
             $renameBatch = [
                 [
                     'oldName' => $tableName,
-                    'newName' => $outdatedTableName
+                    'newName' => $outdatedTableName,
                 ],
                 [
                     'oldName' => $replicaTableName,
-                    'newName' => $tableName
+                    'newName' => $tableName,
                 ],
                 [
                     'oldName' => $outdatedTableName,
-                    'newName' => $replicaTableName
-                ]
+                    'newName' => $replicaTableName,
+                ],
             ];
 
             $toRename[] = $renameBatch;
