@@ -17,6 +17,7 @@
         <click selector="{{BlockNewPagePageActionsSection.expandSplitButton}}" stepKey="expandSplitButton"/>
         <click selector="{{BlockNewPagePageActionsSection.saveAndClose}}" stepKey="clickSaveBlock"/>
         <waitForPageLoad stepKey="waitForPageLoadAfterClickingSave"/>
+        <dontSee selector="{{BlockPageActionsSection.saveBlockWarningMessage}}" stepKey="dontSeeWarningMessage"/>
         <see userInput="You saved the block." stepKey="assertSaveBlockSuccessMessage"/>
     </actionGroup>
 </actionGroups>
