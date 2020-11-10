@@ -19,6 +19,7 @@
         <element name="FilterBtn" type="input" selector="//button[text()='Filters']"/>
         <element name="URLKey" type="input" selector="//div[@class='admin__form-field-control']/input[@name='identifier']"/>
         <element name="ApplyFiltersBtn" type="button" selector="//span[text()='Apply Filters']"/>
+        <element name="saveBlockWarningMessage" type="text" selector=".message-warning"/>
         <element name="blockGridRowByTitle" type="input" selector="//tbody//tr//td//div[contains(., '{{var1}}')]" parameterized="true" timeout="30"/>
     </section>
 </sections>
