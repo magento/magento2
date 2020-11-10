@@ -26,9 +26,21 @@ class ActiveTableSwitcherTest extends TestCase
     public function testSwitch()
     {
         $connectionMock = $this->getMockBuilder(AdapterInterface::class)
+            ->addMethods(['changeTableComment'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $tableName = 'tableName';
+        $tableData = ['Comment' => 'Table comment'];
+        $replicaName = 'tableName_replica';
+        $replicaData = ['Comment' => 'Table comment replica'];
+
+        $connectionMock->expects($this->any())->method('showTableStatus')->willReturn($replicaData);
+
+        $connectionMock->expects($this->any())->method('showTableStatus')->willReturn($tableData);
+
+        $connectionMock->expects($this->any())->method('changeTableComment')->with($tableName, $replicaData['Comment']);
+
+        $connectionMock->expects($this->any())->method('changeTableComment')->with($replicaName, $tableData['Comment']);
 
         $connectionMock->expects($this->once())->method('renameTablesBatch')->with(
             [
