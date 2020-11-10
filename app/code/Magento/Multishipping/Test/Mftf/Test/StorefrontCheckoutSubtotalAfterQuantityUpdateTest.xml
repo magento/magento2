@@ -15,7 +15,7 @@
             <title value="Check subtotals after products quantity updated"/>
             <description value="Check cart subtotals updates after product quantity updates"/>
             <severity value="MAJOR"/>
-            <testCaseId value="MC-"/>
+            <testCaseId value="MC-38994"/>
             <group value="Multishipment"/>
         </annotations>
         <before>
