@@ -14,6 +14,7 @@ use Magento\TestFramework\Helper\Bootstrap;
  * Test class for \Magento\User\Controller\Adminhtml\Auth
  *
  * @magentoAppArea adminhtml
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AuthTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
