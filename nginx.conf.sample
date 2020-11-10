@@ -105,8 +105,8 @@ location /static/ {
     # expires max;
 
     # Remove signature of the static files that is used to overcome the browser cache
-    location ~ ^/static/version {
-        rewrite ^/static/(version\d*/)?(.*)$ /static/$2 last;
+    location ~ ^/static/version\d*/ {
+        rewrite ^/static/version\d*/(.*)$ /static/$1 last;
     }
 
     location ~* \.(ico|jpg|jpeg|png|gif|svg|js|css|swf|eot|ttf|otf|woff|woff2|html|json)$ {
