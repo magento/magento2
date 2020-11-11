@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontVerifyCustomCustomerAddressAttributeTest">
+        <annotations>
+            <features value="Customer"/>
+            <stories value="Storefront Custom Customer Address Attribute"/>
+            <title value="Verify Custom Customer Address Attribute Value Shows On Storefront Customer Checkout"/>
+            <description value="Verify that custom customer address attribute value shows at checkout on storefront for second address"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-37569"/>
+            <group value="customer"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct"/>
+            <createData entity="Simple_Customer_Without_Address" stepKey="simpleCustomer"/>
+        </before>
+        <after>
+            <deleteData createDataKey="simpleProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="simpleCustomer" stepKey="deleteCustomer"/>
+        </after>
+
+        <!--Create new custom customer address attribute-->
+        <amOnPage url="{{CustomerAddressAttributesPage.url}}" stepKey="navigateToCustomerAddress"/>
+        <waitForPageLoad time="30" stepKey="timeToLoadAttributes"/>
+        <actionGroup ref="AdminAddOptionsCustomerAttribute" stepKey="adminCreateCustomerFirstAttribute">
+            <argument name="defaultLabel" value="{{AttributeDropdownData.label}}"/>
+            <argument name="attributeCode" value="{{AttributeDropdownData.code}}"/>
+            <argument name="inputType" value="{{AttributeDropdownData.inputType}}"/>
+            <argument name="sortOrder" value="{{AttributeDropdownData.sortOrder}}"/>
+            <argument name="firstOption" value="{{AttributeDropdownData.firstOption}}"/>
+            <argument name="secondOption" value="{{AttributeDropdownData.secondOption}}"/>
+        </actionGroup>
+
+        <!--Add address to B2C Customer-->
+        <actionGroup ref="AdminOpenCustomerEditPageActionGroup" stepKey="openCustomerEditPage">
+            <argument name="customerId" value="$$simpleCustomer.id$"/>
+        </actionGroup>
+        <click selector="{{AdminEditCustomerAddressesSection.addresses}}" stepKey="proceedToAddresses"/>
+        <waitForPageLoad stepKey="waitForPageToLoad"/>
+        <click selector="{{AdminEditCustomerAddressesSection.addNewAddress}}" stepKey="addNewAddresses"/>
+        <waitForPageLoad time="60" stepKey="waitForAddressForm"/>
+        <click selector="{{AdminCustomerAddressesSection.defaultBillingAddress}}" stepKey="defaultBillingAddressSetYes"/>
+        <click selector="{{AdminCustomerAddressesSection.defaultShippingAddress}}" stepKey="defaultShippingAddressSetYes"/>
+        <fillField stepKey="fillStreetAddress" userInput="{{CustomerAddressSimple.street[0]}}" selector="{{AdminEditCustomerAddressesSection.streetAddress}}"/>
+        <selectOption stepKey="selectCountry" userInput="{{CustomerAddressSimple.country_id}}" selector="{{AdminEditCustomerAddressesSection.country}}"/>
+        <selectOption stepKey="selectState" userInput="{{CustomerAddressSimple.state}}" selector="{{AdminEditCustomerAddressesSection.state}}"/>
+        <fillField  stepKey="fillCity" userInput="{{CustomerAddressSimple.city}}" selector="{{AdminEditCustomerAddressesSection.city}}"/>
+        <fillField  stepKey="fillZipCode" userInput="{{CustomerAddressSimple.postcode}}" selector="{{AdminEditCustomerAddressesSection.zipCode}}"/>
+        <fillField  stepKey="fillPhone" userInput="{{CustomerAddressSimple.telephone}}" selector="{{AdminEditCustomerAddressesSection.phone}}"/>
+        <actionGroup ref="SelectDropdownCustomerAddressAttributeValueActionGroup" stepKey="selectOptionValue1">
+            <argument name="customerAddressAttribute" value="AttributeDropdownData"/>
+            <argument name="optionValue" value="{{AttributeDropdownData.firstOption}}"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForAddressSaved"/>
+        <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+
+        <!--Login To Store Front By B2C Customer-->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginAsStoreFront">
+            <argument name="Customer" value="$$simpleCustomer$$"/>
+        </actionGroup>
+        <!-- Add Product To Cart From Product Detail Page-->
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="openProductPageOnStorefront">
+            <argument name="product" value="$$simpleProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage">
+            <argument name="productName" value="$$simpleProduct.name$$"/>
+        </actionGroup>
+
+        <!--Go To Checkout and Verify Default Address-->
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFrom"/>
+        <!-- Ensure that the selected shipping address is similar to first address -->
+        <grabTextFrom selector="{{CheckoutShippingSection.selectedShippingAddress}}" stepKey="grabSelectedShippingAddress"/>
+        <assertStringContainsString stepKey="assertShippingAddressStreet">
+            <expectedResult type="string">{{CustomerAddressSimple.street[0]}}</expectedResult>
+            <actualResult type="variable">$grabSelectedShippingAddress</actualResult>
+        </assertStringContainsString>
+        <!--Verify that selected "Test Dropdown" options appears on the page-->
+        <assertStringContainsString stepKey="assertShippingAddressCustomAttribute">
+            <expectedResult type="string">{{AttributeDropdownData.firstOption}}</expectedResult>
+            <actualResult type="variable">$grabSelectedShippingAddress</actualResult>
+        </assertStringContainsString>
+
+        <!--Add Second Shipping Address-->
+        <click selector="{{CheckoutShippingSection.newAddressButton}}" stepKey="ClickOnAddNewAddressButton"/>
+        <waitForPageLoad stepKey="waitForNewAddressPageToLoad"/>
+
+        <!--Fill in Shipping Address required fields and Custom Customer Address Attribute and click *Ship Here* button-->
+        <actionGroup ref="FillNewShippingAddressModalActionGroup" stepKey="changeAddress">
+            <argument name="address" value="US_Address_NY"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontSelectDropdownCustomerAddressAttributeValueActionGroup" stepKey="selectOptionValue2">
+            <argument name="customerAddressAttribute" value="AttributeDropdownData"/>
+            <argument name="optionValue" value="{{AttributeDropdownData.firstOption}}"/>
+        </actionGroup>
+        <click selector="{{CheckoutShippingSection.saveAddress}}" stepKey="saveNewAddress"/>
+
+        <!-- Ensure that the selected shipping address is similar to second address -->
+        <grabTextFrom selector="{{CheckoutShippingSection.selectedShippingAddress}}" stepKey="grabSelectedShippingAddress1"/>
+        <assertStringContainsString stepKey="assertShippingAddressStreet1">
+            <expectedResult type="string">{{US_Address_NY.street[0]}}</expectedResult>
+            <actualResult type="variable">$grabSelectedShippingAddress1</actualResult>
+        </assertStringContainsString>
+        <!--Verify that selected "Test Dropdown" options appears on the page-->
+        <assertStringContainsString stepKey="assertShippingAddressCustomAttribute1">
+            <expectedResult type="string">{{AttributeDropdownData.firstOption}}</expectedResult>
+            <actualResult type="variable">$grabSelectedShippingAddress1</actualResult>
+        </assertStringContainsString>
+
+        <!-- Select First Shipping Method and Go To Billing Section -->
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask"/>
+        <click selector="{{CheckoutShippingSection.firstShippingMethod}}" stepKey="selectFirstShippingMethod"/>
+        <waitForElement selector="{{CheckoutShippingSection.next}}" time="30" stepKey="waitForNextButton"/>
+        <click selector="{{CheckoutShippingSection.next}}" stepKey="clickNext"/>
+
+        <!-- Ensure that the Billing address is similar to first address -->
+        <grabTextFrom selector="{{CheckoutBillingAddressSection.selectedBillingAddress}}" stepKey="grabSelectedBillingAddress"/>
+        <assertStringContainsString stepKey="assertBillingAddressStreet">
+            <expectedResult type="string">{{CustomerAddressSimple.street[0]}}</expectedResult>
+            <actualResult type="variable">$grabSelectedBillingAddress</actualResult>
+        </assertStringContainsString>
+
+        <!--Verify that selected "Test Dropdown" options appears on the page-->
+        <assertStringContainsString stepKey="assertBillingAddressCustomAttribute">
+            <expectedResult type="string">{{AttributeDropdownData.firstOption}}</expectedResult>
+            <actualResult type="variable">$grabSelectedBillingAddress</actualResult>
+        </assertStringContainsString>
+
+        <!--Remove Custom Customer Address Attribute-->
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin1"/>
+        <actionGroup ref="AdminDeleteCustomerAttribute" stepKey="adminDeleteFirstCustomerAttribute">
+            <argument name="defaultLabel" value="{{AttributeDropdownData.label}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminLogoutActionGroup" stepKey="logout1"/>
+    </test>
+</tests>
