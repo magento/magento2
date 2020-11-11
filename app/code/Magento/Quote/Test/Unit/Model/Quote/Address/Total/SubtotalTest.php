@@ -157,13 +157,7 @@ class SubtotalTest extends TestCase
         $shippingAssignmentMock->expects($this->exactly(2))->method('getShipping')->willReturn($shipping);
         $shippingAssignmentMock->expects($this->once())->method('getItems')->willReturn([$quoteItem]);
 
-        $total = $this->getMockBuilder(Total::class)
-            ->disableOriginalConstructor()
-            ->addMethods(['setVirtualAmount', 'setBaseVirtualAmount'])
-            ->getMock();
-        $total->expects($this->once())->method('setBaseVirtualAmount')->willReturnSelf();
-        $total->expects($this->once())->method('setVirtualAmount')->willReturnSelf();
-
+        $total = $this->createMock(Total::class);
         $this->subtotalModel->collect($quote, $shippingAssignmentMock, $total);
 
         $this->assertEquals($expectedPrice, $quoteItem->getPrice());

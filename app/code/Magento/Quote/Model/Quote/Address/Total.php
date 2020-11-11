@@ -6,7 +6,7 @@
 namespace Magento\Quote\Model\Quote\Address;
 
 /**
- * Class Total
+ * Total for quote address
  *
  * @method string getCode()
  *
@@ -63,6 +63,32 @@ class Total extends \Magento\Framework\DataObject
             $code = $code . '_amount';
         }
         $this->setData($code, $amount);
+
+        return $this;
+    }
+
+    /**
+     * Set virtual amount
+     *
+     * @param float $amount
+     * @return self
+     */
+    public function setVirtualAmount(float $amount): self
+    {
+        $this->setData('virtual_amount', round($amount, 4));
+
+        return $this;
+    }
+
+    /**
+     * Set virtual amount in base store currency
+     *
+     * @param float $amount
+     * @return self
+     */
+    public function setBaseVirtualAmount(float $amount): self
+    {
+        $this->setData('base_virtual_amount', round($amount, 4));
 
         return $this;
     }
