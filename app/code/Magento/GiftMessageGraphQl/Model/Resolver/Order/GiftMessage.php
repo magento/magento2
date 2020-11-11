@@ -67,10 +67,6 @@ class GiftMessage implements ResolverInterface
             throw new GraphQlInputException(__('Can\'t load gift message for order'));
         }
 
-        if (!isset($orderGiftMessage)) {
-            return null;
-        }
-
         return [
             'to' => $orderGiftMessage->getRecipient() ?? '',
             'from' =>  $orderGiftMessage->getSender() ?? '',

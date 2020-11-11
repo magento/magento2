@@ -7,12 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\MediaGallerySynchronization\Model;
 
-use Magento\MediaGallerySynchronizationApi\Model\GetContentHashInterface;
-
 /**
  * Get hashed value of image content.
  */
-class GetContentHash implements GetContentHashInterface
+class GetContentHash
 {
     /**
      * Return the hash value of the given filepath.

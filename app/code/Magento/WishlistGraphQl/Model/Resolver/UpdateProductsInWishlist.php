@@ -83,7 +83,7 @@ class UpdateProductsInWishlist implements ResolverInterface
         array $args = null
     ) {
         if (!$this->wishlistConfig->isEnabled()) {
-            throw new GraphQlInputException(__('The wishlist is not currently available.'));
+            throw new GraphQlInputException(__('The wishlist configuration is currently disabled.'));
         }
 
         $customerId = $context->getUserId();
@@ -101,7 +101,7 @@ class UpdateProductsInWishlist implements ResolverInterface
         }
 
         $wishlistItems = $args['wishlistItems'];
-        $wishlistItems = $this->getWishlistItems($wishlistItems);
+        $wishlistItems = $this->getWishlistItems($wishlistItems, $wishlist);
         $wishlistOutput = $this->updateProductsInWishlist->execute($wishlist, $wishlistItems);
 
         if (count($wishlistOutput->getErrors()) !== count($wishlistItems)) {
@@ -110,7 +110,7 @@ class UpdateProductsInWishlist implements ResolverInterface
 
         return [
             'wishlist' => $this->wishlistDataMapper->map($wishlistOutput->getWishlist()),
-            'userInputErrors' => \array_map(
+            'user_errors' => \array_map(
                 function (Error $error) {
                     return [
                         'code' => $error->getCode(),
@@ -126,14 +126,27 @@ class UpdateProductsInWishlist implements ResolverInterface
      * Get DTO wishlist items
      *
      * @param array $wishlistItemsData
+     * @param Wishlist $wishlist
      *
      * @return array
      */
-    private function getWishlistItems(array $wishlistItemsData): array
+    private function getWishlistItems(array $wishlistItemsData, Wishlist $wishlist): array
     {
         $wishlistItems = [];
 
         foreach ($wishlistItemsData as $wishlistItemData) {
+            if (!isset($wishlistItemData['quantity'])) {
+                $wishlistItem = $wishlist->getItem($wishlistItemData['wishlist_item_id']);
+                if ($wishlistItem !== null) {
+                    $wishlistItemData['quantity'] = (float) $wishlistItem->getQty();
+                }
+            }
+            if (!isset($wishlistItemData['description'])) {
+                $wishlistItem = $wishlist->getItem($wishlistItemData['wishlist_item_id']);
+                if ($wishlistItem !== null) {
+                    $wishlistItemData['description'] = $wishlistItem->getDescription();
+                }
+            }
             $wishlistItems[] = (new WishlistItemFactory())->create($wishlistItemData);
         }
 

@@ -18,7 +18,7 @@
 @color-media-gallery-buttons-border: #adadad;
 @color-media-gallery-buttons-text: #514943;
 @color-media-gallery-checkbox-background: #eee;
-
+@color-media-gallery-scrollbar-background: #fff;
 & when (@media-common = true) {
 
     .media-gallery-delete-image-action,
@@ -29,7 +29,8 @@
         }
     }
 
-    .media-gallery-asset-ui-select-filter {
+    .media-gallery-asset-ui-select-filter,
+    .edit-image-details {
 
         .admin__action-multiselect-crumb {
             max-width: 70%;
@@ -47,7 +48,10 @@
             position: absolute;
             text-overflow: ellipsis;
         }
+    }
 
+    .media-gallery-asset-ui-select-filter,
+    .edit-image-details {
         .admin__action-multiselect-item-path {
             float: right;
             max-height: 70px;
@@ -95,6 +99,9 @@
 
     .media-gallery-container {
 
+        .action-disabled {
+            opacity: .5;
+        }
         .masonry-image-grid .no-data-message-container,
         .masonry-image-grid .error-message-container {
             left: 50%;
@@ -166,8 +173,9 @@
             height: 30px;
             margin: 1px;
             padding-left: 6px;
+            padding-right: 10px;
             padding-top: 6px;
-            width: 100%;
+            width: max-content;
         }
 
         .jstree-default .jstree-clicked {
@@ -268,8 +276,18 @@
         }
 
         .media-directory-container {
+            &::-webkit-scrollbar {
+                background-color: @color-media-gallery-scrollbar-background;
+            }
+            &::-webkit-scrollbar-thumb {
+                background-color: @color-masonry-grey;
+            }
             float: left;
+            max-width: 50%;
+            overflow-x: scroll;
+            overflow-y: hidden;
             padding-right: 40px;
+            scrollbar-color: @color-masonry-grey @color-media-gallery-scrollbar-background;
         }
 
         .media-gallery-image-block {
@@ -307,7 +325,7 @@
             }
         }
 
-        .adobe-stock-icon {
+        .media-gallery-source-icon {
             margin-bottom: -6px;
             width: 29px;
         }
@@ -366,7 +384,7 @@
         }
 
         .image-type {
-            .adobe-stock-icon {
+            .media-gallery-source-icon {
                 margin-bottom: -6px;
                 width: 29px;
             }
@@ -412,12 +430,14 @@
 
                         & > * {
                             float: left;
+                            margin-left: -1px;
                             width: 50%;
                         }
 
                         .value {
                             display: inline;
                             float: right;
+                            margin-left: 1px;
                         }
 
                         .title {

@@ -24,7 +24,7 @@
             <magentoCLI command="config:set {{LoginAsCustomerStoreViewLogin.path}} 0"
                         stepKey="enableLoginAsCustomerAutoDetection"/>
             <magentoCLI command="cache:flush config" stepKey="flushCacheBeforeTestRun"/>
-            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <createData entity="Simple_US_Customer_Assistance_Allowed" stepKey="createCustomer"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAdmin"/>
         </before>
         <after>

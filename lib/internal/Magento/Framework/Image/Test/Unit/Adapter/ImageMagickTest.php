@@ -76,11 +76,11 @@ class ImageMagickTest extends TestCase
     /**
      * @return array
      */
-    public function watermarkDataProvider()
+    public function watermarkDataProvider(): array
     {
         return [
             ['', ImageMagick::ERROR_WATERMARK_IMAGE_ABSENT],
-            [__DIR__ . '/not_exists', ImageMagick::ERROR_WATERMARK_IMAGE_ABSENT],
+            ['not_exist', ImageMagick::ERROR_WATERMARK_IMAGE_ABSENT],
             [
                 __DIR__ . '/_files/invalid_image.jpg',
                 ImageMagick::ERROR_WRONG_IMAGE
@@ -105,6 +105,8 @@ class ImageMagickTest extends TestCase
      */
     public function testOpenInvalidUrl()
     {
+        require_once __DIR__ . '/_files/global_php_mock.php';
+
         $this->expectException(\InvalidArgumentException::class);
 
         $this->imageMagic->open('bar://foo.bar');
