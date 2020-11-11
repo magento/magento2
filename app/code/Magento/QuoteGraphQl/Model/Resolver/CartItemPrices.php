@@ -11,34 +11,13 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\Quote\Model\Cart\Totals;
 use Magento\Quote\Model\Quote\Item;
-use Magento\Quote\Model\Quote\TotalsCollector;
 
 /**
  * @inheritdoc
  */
 class CartItemPrices implements ResolverInterface
 {
-    /**
-     * @var TotalsCollector
-     */
-    private $totalsCollector;
-
-    /**
-     * @var Totals
-     */
-    private $totals;
-
-    /**
-     * @param TotalsCollector $totalsCollector
-     */
-    public function __construct(
-        TotalsCollector $totalsCollector
-    ) {
-        $this->totalsCollector = $totalsCollector;
-    }
-
     /**
      * @inheritdoc
      */
@@ -49,12 +28,6 @@ class CartItemPrices implements ResolverInterface
         }
         /** @var Item $cartItem */
         $cartItem = $value['model'];
-
-        if (!$this->totals) {
-            // The totals calculation is based on quote address.
-            // But the totals should be calculated even if no address is set
-            $this->totals = $this->totalsCollector->collectQuoteTotals($cartItem->getQuote());
-        }
         $currencyCode = $cartItem->getQuote()->getQuoteCurrencyCode();
 
         return [
