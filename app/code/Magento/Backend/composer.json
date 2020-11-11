@@ -34,7 +34,8 @@
     ],
     "autoload": {
         "files": [
-            "registration.php"
+            "registration.php",
+            "cli_commands.php"
         ],
         "psr-4": {
             "Magento\\Backend\\": ""
