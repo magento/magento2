@@ -25,6 +25,11 @@ endif;
 $customerAddressFormatter = $block->getData('customerAddressFormatter');
 
 /**
+ * @var \Magento\Sales\ViewModel\Customer\Address\Billing\AddressDataProvider $billingAddressDataProvider
+ */
+$billingAddressDataProvider = $block->getData('billingAddressDataProvider');
+
+/**
  * @var \Magento\Sales\Block\Adminhtml\Order\Create\Billing\Address|
  * \Magento\Sales\Block\Adminhtml\Order\Create\Shipping\Address $block
  */
@@ -114,7 +119,8 @@ endif; ?>
                    type="checkbox"
                    id="<?= $block->escapeHtmlAttr($block->getForm()->getHtmlIdPrefix()) ?>save_in_address_book"
                    value="1"
-                <?php if (!$block->getDontSaveInAddressBook() && !$block->getAddressId()): ?>
+                <?php if ($billingAddressDataProvider && $billingAddressDataProvider->getSaveInAddressBook() ||
+                    $block->getIsShipping() && !$block->getDontSaveInAddressBook() && !$block->getAddressId()): ?>
                     checked="checked"
                 <?php endif; ?>
                    class="admin__control-checkbox"/>
