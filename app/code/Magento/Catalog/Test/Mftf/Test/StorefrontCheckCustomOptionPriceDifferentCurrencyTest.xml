@@ -38,10 +38,14 @@
         <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="openProductPageOnStorefront">
             <argument name="product" value="$createProduct$"/>
         </actionGroup>
-        <seeElement selector="{{StorefrontProductInfoMainSection.productAttributeOptionsCheckbox(ProductOptionCheckbox.title, '12.3')}}" stepKey="checkPriceProductOptionUSD"/>
+        <actionGroup ref="StorefrontAssertCustomOptionCheckboxByPriceActionGroup" stepKey="checkPriceProductOptionUSD">
+            <argument name="price" value="12.3"/>
+        </actionGroup>
         <actionGroup ref="StorefrontSwitchCurrencyActionGroup" stepKey="switchEURCurrency">
             <argument name="currency" value="EUR"/>
         </actionGroup>
-        <seeElement selector="{{StorefrontProductInfoMainSection.productAttributeOptionsCheckbox(ProductOptionCheckbox.title, '8.7')}}" stepKey="checkPriceProductOptionEUR"/>
+        <actionGroup ref="StorefrontAssertCustomOptionCheckboxByPriceActionGroup" stepKey="checkPriceProductOptionEUR">
+            <argument name="price" value="8.7"/>
+        </actionGroup>
     </test>
 </tests>
