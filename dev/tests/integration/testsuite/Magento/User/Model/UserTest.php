@@ -6,25 +6,32 @@
 
 namespace Magento\User\Model;
 
+use Magento\Authorization\Model\Role;
+use Magento\Framework\App\CacheInterface;
 use Magento\Framework\Encryption\Encryptor;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Stdlib\DateTime;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\User\Model\User as UserModel;
 
 /**
  * @magentoAppArea adminhtml
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class UserTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\User\Model\User
+     * @var UserModel
      */
     protected $_model;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime
+     * @var DateTime
      */
     protected $_dateTime;
 
     /**
-     * @var \Magento\Authorization\Model\Role
+     * @var Role
      */
     protected static $_newRole;
 
@@ -33,17 +40,26 @@ class UserTest extends \PHPUnit\Framework\TestCase
      */
     private $encryptor;
 
+    /**
+     * @var CacheInterface
+     */
+    private $cache;
+
+    /**
+     * @var ObjectManagerInterface
+     */
+    private $objectManager;
+
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
-        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\User\Model\User::class
-        );
-        $this->_dateTime = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\Framework\Stdlib\DateTime::class
-        );
-        $this->encryptor = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            Encryptor::class
-        );
+        $this->objectManager = Bootstrap::getObjectManager();
+        $this->_model = $this->objectManager->create(UserModel::class);
+        $this->_dateTime = $this->objectManager->get(DateTime::class);
+        $this->encryptor = $this->objectManager->get(Encryptor::class);
+        $this->cache = $this->objectManager->get(CacheInterface::class);
     }
 
     /**
@@ -109,8 +125,8 @@ class UserTest extends \PHPUnit\Framework\TestCase
      */
     public static function roleDataFixture()
     {
-        self::$_newRole = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\Authorization\Model\Role::class
+        self::$_newRole = Bootstrap::getObjectManager()->create(
+            Role::class
         );
         self::$_newRole->setName('admin_role')->setRoleType('G')->setPid('1');
         self::$_newRole->save();
@@ -150,7 +166,7 @@ class UserTest extends \PHPUnit\Framework\TestCase
     {
         $this->_model->loadByUsername(\Magento\TestFramework\Bootstrap::ADMIN_NAME);
         $role = $this->_model->getRole();
-        $this->assertInstanceOf(\Magento\Authorization\Model\Role::class, $role);
+        $this->assertInstanceOf(Role::class, $role);
         $this->assertEquals(\Magento\TestFramework\Bootstrap::ADMIN_ROLE_NAME, $this->_model->getRole()->getRoleName());
         $this->_model->setRoleId(self::$_newRole->getId())->save();
         $role = $this->_model->getRole();
@@ -198,7 +214,7 @@ class UserTest extends \PHPUnit\Framework\TestCase
 
     public function testGetUninitializedAclRole()
     {
-        $newuser = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\User\Model\User::class);
+        $newuser = $this->objectManager->create(UserModel::class);
         $newuser->setUserId(10);
         $this->assertNull($newuser->getAclRole(), "User role was not initialized and is expected to be empty.");
     }
@@ -251,17 +267,18 @@ class UserTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @magentoDataFixture Magento/User/_files/user_with_custom_role.php
      * @magentoDbIsolation enabled
      */
     public function testAuthenticateUserWithoutRole()
     {
         $this->expectException(\Magento\Framework\Exception\AuthenticationException::class);
 
-        $this->_model->loadByUsername(\Magento\TestFramework\Bootstrap::ADMIN_NAME);
+        $this->_model->loadByUsername('customRoleUser');
         $roles = $this->_model->getRoles();
         $this->_model->setRoleId(reset($roles))->deleteFromRole();
         $this->_model->authenticate(
-            \Magento\TestFramework\Bootstrap::ADMIN_NAME,
+            'customRoleUser',
             \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD
         );
     }
@@ -315,6 +332,7 @@ class UserTest extends \PHPUnit\Framework\TestCase
         $this->assertArrayHasKey('role_id', $role[0]);
         $roles = $this->_model->getRoles();
         $this->_model->setRoleId(reset($roles))->deleteFromRole();
+        $this->cache->clean(['user_assigned_role']);
         $this->assertEmpty($this->_model->hasAssigned2Role($this->_model));
     }
 
@@ -369,8 +387,8 @@ class UserTest extends \PHPUnit\Framework\TestCase
             'Salt is expected to be saved along with the password'
         );
 
-        /** @var \Magento\User\Model\User $model */
-        $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\User\Model\User::class);
+        /** @var UserModel $model */
+        $model = $this->objectManager->create(UserModel::class);
         $model->load($this->_model->getId());
         $this->assertEquals(
             $this->_model->getPassword(),
