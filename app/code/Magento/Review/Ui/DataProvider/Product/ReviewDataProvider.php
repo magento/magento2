@@ -5,14 +5,14 @@
  */
 namespace Magento\Review\Ui\DataProvider\Product;
 
+use Magento\Framework\Api\Filter;
 use Magento\Framework\App\RequestInterface;
 use Magento\Ui\DataProvider\AbstractDataProvider;
 use Magento\Review\Model\ResourceModel\Review\Product\CollectionFactory;
 use Magento\Review\Model\ResourceModel\Review\Product\Collection;
-use Magento\Review\Model\Review;
 
 /**
- * DataProvider Product ReviewDataProvider
+ * DataProvider for product reviews
  *
  * @api
  *
@@ -66,13 +66,7 @@ class ReviewDataProvider extends AbstractDataProvider
         $this->getCollection()->addEntityFilter($this->request->getParam('current_product_id', 0))
             ->addStoreData();
 
-        $params = $this->request->getParams();
-        if (isset($params['sorting'])) {
-            $sorting = $params['sorting'];
-            $field = $sorting['field'];
-            $direction = $sorting['direction'];
-            $this->getCollection()->getSelect()->order($field . ' ' . $direction);
-        }
+        $this->applySorting();
 
         $arrItems = [
             'totalRecords' => $this->getCollection()->getSize(),
@@ -87,11 +81,25 @@ class ReviewDataProvider extends AbstractDataProvider
     }
 
     /**
+     * Apply sorting if it set
+     *
+     * @return void
+     */
+    private function applySorting(): void
+    {
+        $sorting = $this->request->getParam('sorting');
+        if (is_array($sorting)) {
+            $select = $this->getCollection()->getSelect();
+            $select->order($sorting['field'] . ' ' . $sorting['direction']);
+        }
+    }
+
+    /**
      * @inheritdoc
      * @since 100.1.0
-     * @return mixed|$this
+     * @return void
      */
-    public function addFilter(\Magento\Framework\Api\Filter $filter)
+    public function addFilter(Filter $filter): void
     {
         $field = $filter->getField();
 
@@ -108,6 +116,5 @@ class ReviewDataProvider extends AbstractDataProvider
         }
 
         parent::addFilter($filter);
-        return $this;
     }
 }
