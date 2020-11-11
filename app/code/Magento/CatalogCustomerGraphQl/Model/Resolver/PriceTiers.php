@@ -134,7 +134,7 @@ class PriceTiers implements ResolverInterface
 
                 $productPrice = $this->tiers->getProductRegularPrice($productId) ?? 0.0;
                 $tierPrices = $this->tiers->getProductTierPrices($productId) ?? [];
-                return $this->formatAndFilterTierPrices($productId, $productPrice, $tierPrices, $currencyCode);
+                return $this->formatAndFilterTierPrices($productPrice, $tierPrices, $currencyCode);
             }
         );
     }
@@ -142,14 +142,12 @@ class PriceTiers implements ResolverInterface
     /**
      * Format and filter tier prices for output
      *
-     * @param int $productId
      * @param float $productPrice
      * @param ProductTierPriceInterface[] $tierPrices
      * @param string $currencyCode
      * @return array
      */
     private function formatAndFilterTierPrices(
-        int $productId,
         float $productPrice,
         array $tierPrices,
         string $currencyCode
@@ -158,7 +156,7 @@ class PriceTiers implements ResolverInterface
         foreach ($tierPrices as $key => $tierPrice) {
             $tierPrice->setValue($this->priceCurrency->convertAndRound($tierPrice->getValue()));
             $this->formatTierPrices($productPrice, $currencyCode, $tierPrice);
-            $this->filterTierPrices($productId, $tierPrices, $key, $tierPrice);
+            $this->filterTierPrices($tierPrices, $key, $tierPrice);
         }
         return $this->formatAndFilterTierPrices;
     }
@@ -192,28 +190,26 @@ class PriceTiers implements ResolverInterface
     /**
      * Filter the lowest price for each quantity
      *
-     * @param int $productId
      * @param array $tierPrices
      * @param int $key
      * @param ProductTierPriceInterface $tierPriceItem
      */
     private function filterTierPrices(
-        int $productId,
         array $tierPrices,
         int $key,
         ProductTierPriceInterface $tierPriceItem
     ) {
         $qty = $tierPriceItem->getQty();
-        if (isset($this->tierPricesQty[$productId][$qty])) {
-            $priceQty = $this->tierPricesQty[$productId][$qty];
+        if (isset($this->tierPricesQty[$qty])) {
+            $priceQty = $this->tierPricesQty[$qty];
             if ((float)$tierPriceItem->getValue() < (float)$tierPrices[$priceQty]->getValue()) {
                 unset($this->formatAndFilterTierPrices[$priceQty]);
-                $this->tierPricesQty[$productId][$priceQty] = $key;
+                $this->tierPricesQty[$priceQty] = $key;
             } else {
                 unset($this->formatAndFilterTierPrices[$key]);
             }
         } else {
-            $this->tierPricesQty[$productId][$qty] = $key;
+            $this->tierPricesQty[$qty] = $key;
         }
     }
 }
