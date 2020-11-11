@@ -203,9 +203,9 @@ class Transparent extends Payflowpro implements TransparentInterface
         $payPalCart = $this->payPalCartFactory->create(['salesModel' => $order]);
         $payPalCart->getAmounts();
 
-        $parentTransactionId = $vaultPaymentToken ? $vaultPaymentToken->getGatewayToken() : $zeroAmountAuthorizationId;
+        $token = $payment->getAdditionalInformation(self::PNREF);
         $request->setData('trxtype', self::TRXTYPE_AUTH_ONLY);
-        $request->setData('origid', $parentTransactionId);
+        $request->setData('origid', $token);
         $request->setData('amt', $this->formatPrice($amount));
         $request->setData('currency', $order->getBaseCurrencyCode());
         $request->setData('itemamt', $this->formatPrice($payPalCart->getSubtotal()));
@@ -226,11 +226,7 @@ class Transparent extends Payflowpro implements TransparentInterface
 
         $this->setTransStatus($payment, $response);
 
-        if ($vaultPaymentToken) {
-            $payment->setParentTransactionId($vaultPaymentToken->getGatewayToken());
-        } else {
-            $this->createPaymentToken($payment, $zeroAmountAuthorizationId);
-        }
+        $this->createPaymentToken($payment, $token);
 
         $payment->unsAdditionalInformation(self::CC_DETAILS);
         $payment->unsAdditionalInformation(self::PNREF);
@@ -328,19 +324,11 @@ class Transparent extends Payflowpro implements TransparentInterface
         }
 
         /** @var Payment $payment */
-        $zeroAmountAuthorizationId = $this->getZeroAmountAuthorizationId($payment);
-        /** @var PaymentTokenInterface $vaultPaymentToken */
-        $vaultPaymentToken = $payment->getExtensionAttributes()->getVaultPaymentToken();
-        if ($vaultPaymentToken && empty($zeroAmountAuthorizationId)) {
-            $payment->setAdditionalInformation(self::PNREF, $vaultPaymentToken->getGatewayToken());
-            if (!$payment->getParentTransactionId()) {
-                $payment->setParentTransactionId($vaultPaymentToken->getGatewayToken());
-            }
-        }
+        $token = $payment->getAdditionalInformation(self::PNREF);
         parent::capture($payment, $amount);
 
-        if ($zeroAmountAuthorizationId && $vaultPaymentToken === null) {
-            $this->createPaymentToken($payment, $zeroAmountAuthorizationId);
+        if ($token && !$payment->getAuthorizationTransaction()) {
+            $this->createPaymentToken($payment, $token);
         }
 
         return $this;
