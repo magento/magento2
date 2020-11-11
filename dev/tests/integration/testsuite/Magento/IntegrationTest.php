@@ -41,7 +41,7 @@ class IntegrationTest extends TestSuite
         $suitesConfig = $configuration->testSuite();
         $suite = new TestSuite();
         foreach ($suitesConfig as $suiteConfig) {
-            if ($suiteConfig->name() === 'Magento Integration Tests') {
+            if ($suiteConfig->name() === 'Magento_Integration_Tests') {
                 continue;
             }
             $suites = self::getSuites($suiteConfig);
@@ -73,7 +73,10 @@ class IntegrationTest extends TestSuite
     private static function getConfigurationFile(): string
     {
         $params = getopt('c:', ['configuration:']);
-        $longConfig = $params['configuration'] ?? '';
+        $defaultConfigFile = file_exists(__DIR__ . '../../phpunit.xml')
+            ? __DIR__ . '/../../phpunit.xml'
+            : __DIR__ . '/../../phpunit.xml.dist';
+        $longConfig = $params['configuration'] ?? $defaultConfigFile;
         $shortConfig = $params['c'] ?? '';
 
         return $shortConfig ? $shortConfig : $longConfig;

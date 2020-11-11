@@ -56,7 +56,7 @@ class UpdateHandlerTest extends TestCase
             ->getMockForAbstractClass();
         $this->sampleMock = $this->getMockBuilder(SampleInterface::class)
             ->getMock();
-        $this->productExtensionMock = $this->createMock(ProductExtensionInterface::class);
+        $this->productExtensionMock = $this->getProductExtensionMock();
         $this->productExtensionMock//->expects($this->once())
             ->method('getDownloadableProductSamples')
             ->willReturn([$this->sampleMock]);
@@ -144,5 +144,23 @@ class UpdateHandlerTest extends TestCase
             ->method('delete');
 
         $this->assertEquals($this->entityMock, $this->model->execute($this->entityMock));
+    }
+
+    /**
+     * Build product extension mock.
+     *
+     * @return MockObject
+     */
+    private function getProductExtensionMock(): MockObject
+    {
+        $mockBuilder = $this->getMockBuilder(ProductExtensionInterface::class)
+            ->disableOriginalConstructor();
+        try {
+            $mockBuilder->addMethods(['getDownloadableProductSamples']);
+        } catch (\RuntimeException $e) {
+            // Product extension already generated.
+        }
+
+        return $mockBuilder->getMockForAbstractClass();
     }
 }
