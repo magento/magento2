@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminDeleteCmsBlockTest">
+        <annotations>
+            <features value="Cms"/>
+            <stories value="CMS Blocks Deleting"/>
+            <title value="Admin should be able to delete CMS block from grid"/>
+            <description value="Admin should be able to delete CMS block from grid"/>
+            <group value="Cms"/>
+            <severity value="MINOR"/>
+        </annotations>
+        <before>
+            <createData entity="_defaultBlock" stepKey="createCMSBlock"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <actionGroup ref="AdminOpenCMSBlocksGridActionGroup" stepKey="navigateToCmsBlocksGrid"/>
+        <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearGridSearchFilters"/>
+        <actionGroup ref="AdminSearchCMSBlockInGridByIdentifierActionGroup" stepKey="findCreatedCmsBlock">
+            <argument name="identifier" value="$$createCMSBlock.identifier$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminDeleteCMSBlockFromGridActionGroup" stepKey="deleteCmsBlockFromGrid">
+            <argument name="identifier" value="$$createCMSBlock.identifier$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="assertSuccessMessage">
+            <argument name="message" value="You deleted the block."/>
+        </actionGroup>
+        <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearGridSearchFiltersAfterBlockDeleting"/>
+        <actionGroup ref="AdminSearchCMSBlockInGridByIdentifierActionGroup" stepKey="searchDeletedCmsBlock">
+            <argument name="identifier" value="$$createCMSBlock.identifier$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminCMSBlockIsNotInGridActionGroup" stepKey="assertDeletedCMSBlockIsNotInGrid">
+            <argument name="identifier" value="$$createCMSBlock.identifier$$"/>
+        </actionGroup>
+    </test>
+</tests>

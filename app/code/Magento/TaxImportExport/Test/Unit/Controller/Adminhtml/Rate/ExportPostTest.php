@@ -101,10 +101,11 @@ class ExportPostTest extends TestCase
         ]);
         $rateCollectionMock->expects($this->once())->method('joinCountryTable')->willReturnSelf();
         $rateCollectionMock->expects($this->once())->method('joinRegionTable')->willReturnSelf();
+        $fileContent = ['type' => 'string', 'value' => $content, 'rm' => true];
         $this->fileFactoryMock
             ->expects($this->once())
             ->method('create')
-            ->with('tax_rates.csv', $content, DirectoryList::VAR_DIR);
+            ->with('tax_rates.csv', $fileContent, DirectoryList::VAR_DIR);
         $this->controller->execute();
     }
 }
