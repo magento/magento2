@@ -10,6 +10,7 @@
         "magento/module-catalog-graph-ql": "*",
         "magento/module-quote": "*",
         "magento/module-quote-graph-ql": "*",
+        "magento/module-catalog-inventory": "*",
         "magento/framework": "*"
     },
     "license": [

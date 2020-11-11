@@ -39,14 +39,14 @@ type ProductReviewRatingsMetadata {
 }
 
 type ProductReviewRatingMetadata {
-    id: String! @doc(description: "Base64 encoded rating ID.")
+    id: String! @doc(description: "An encoded rating ID.")
     name: String! @doc(description: "The label assigned to an aspect of a product that is being rated, such as quality or price")
     values: [ProductReviewRatingValueMetadata!]! @doc(description: "List of product review ratings sorted by position.") @resolver(class: "Magento\\ReviewGraphQl\\Model\\Resolver\\ProductReviewRatingValueMetadata")
 }
 
 type ProductReviewRatingValueMetadata {
-    value_id: String! @doc(description: "Base 64 encoded rating value id.")
-    value: String! @doc(description: "e.g Good, Perfect, 3, 4, 5")
+    value_id: String! @doc(description: "An encoded rating value id.")
+    value: String! @doc(description: "A ratings scale, such as the number of stars awarded")
 }
 
 type Customer {
@@ -73,6 +73,11 @@ input CreateProductReviewInput {
 }
 
 input ProductReviewRatingInput {
-    id: String! @doc(description: "Base64 encoded rating ID.")
-    value_id: String! @doc(description: "Base 64 encoded rating value id.")
+    id: String! @doc(description: "An encoded rating ID.")
+    value_id: String! @doc(description: "An encoded rating value id.")
+}
+
+type StoreConfig @doc(description: "The type contains information about a store config") {
+    product_reviews_enabled : String @doc(description: "Indicates whether product reviews are enabled. Possible values: 1 (Yes) and 0 (No)")
+    allow_guests_to_write_product_reviews : String @doc(description: "Indicates whether guest users can write product reviews. Possible values: 1 (Yes) and 0 (No)")
 }
