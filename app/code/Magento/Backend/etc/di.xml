@@ -15,6 +15,11 @@
     <preference for="Magento\Backend\Block\Widget\Button\ToolbarInterface" type="Magento\Backend\Block\Widget\Button\Toolbar" />
     <preference for="Magento\Backend\Service\V1\ModuleServiceInterface" type="Magento\Backend\Service\V1\ModuleService" />
     <type name="Magento\Backend\Block\Widget\Button\ButtonList" shared="false" />
+    <type name="Magento\Backend\App\Area\FrontNameResolver">
+        <arguments>
+            <argument name="defaultFrontName" xsi:type="init_parameter">Magento\Backend\Setup\ConfigOptionsList::CONFIG_PATH_BACKEND_FRONTNAME</argument>
+        </arguments>
+    </type>
     <type name="Magento\Framework\App\AreaList">
         <arguments>
             <argument name="areas" xsi:type="array">
@@ -23,6 +28,11 @@
                     <item name="router" xsi:type="string">admin</item>
                 </item>
             </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\App\Request\Http">
+        <arguments>
+            <argument name="pathInfoProcessor" xsi:type="object">Magento\Backend\App\Request\PathInfoProcessor\Proxy</argument>
         </arguments>
     </type>
     <type name="Magento\Backend\Model\Menu\Config">

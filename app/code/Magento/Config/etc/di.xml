@@ -21,6 +21,11 @@
             </argument>
         </arguments>
     </virtualType>
+    <type name="Magento\Framework\App\Config\MetadataConfigTypeProcessor">
+        <arguments>
+            <argument name="configSource" xsi:type="object">Magento\Config\App\Config\Source\EnvironmentConfigSource</argument>
+        </arguments>
+    </type>
     <type name="Magento\Config\Model\Config\Structure\Reader">
         <arguments>
             <argument name="compiler" xsi:type="object">Magento\Framework\View\TemplateEngine\Xhtml\ConfigCompiler</argument>

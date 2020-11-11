@@ -28,7 +28,7 @@
     <preference for="Magento\Eav\Api\Data\AttributeSetSearchResultsInterface" type="Magento\Eav\Model\AttributeSetSearchResults" />
     <preference for="Magento\Eav\Api\Data\AttributeGroupSearchResultsInterface" type="Magento\Eav\Model\AttributeGroupSearchResults" />
     <preference for="Magento\Framework\Webapi\CustomAttributeTypeLocatorInterface" type="Magento\Eav\Model\TypeLocator" />
-
+    <preference for="Magento\Framework\Webapi\CustomAttribute\ServiceTypeListInterface" type="Magento\Eav\Model\TypeLocator\ComplexType"/>
     <type name="Magento\Eav\Model\Entity\Attribute\Config">
         <arguments>
             <argument name="reader" xsi:type="object">Magento\Eav\Model\Entity\Attribute\Config\Reader\Proxy</argument>

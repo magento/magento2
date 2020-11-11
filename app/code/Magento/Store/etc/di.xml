@@ -97,6 +97,7 @@
             <argument name="session" xsi:type="object" shared="false">Magento\Framework\Session\Generic\Proxy</argument>
             <argument name="isCustomEntryPoint" xsi:type="init_parameter">Magento\Store\Model\Store::CUSTOM_ENTRY_POINT_PARAM</argument>
             <argument name="url" xsi:type="object" shared="false">Magento\Framework\UrlInterface</argument>
+            <argument name="currencyInstalled" xsi:type="string">system/currency/installed</argument>
         </arguments>
     </type>
     <type name="Magento\Store\Model\StoreManager">
@@ -200,6 +201,21 @@
             <argument name="engines" xsi:type="array">
                 <item name="phtml" xsi:type="string">Magento\Framework\View\TemplateEngine\Php</item>
             </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\View\Layout\Reader\Block">
+        <arguments>
+            <argument name="scopeType" xsi:type="const">Magento\Store\Model\ScopeInterface::SCOPE_STORE</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\View\Layout\ConfigCondition">
+        <arguments>
+            <argument name="scopeType" xsi:type="const">Magento\Store\Model\ScopeInterface::SCOPE_STORE</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Session\Validator">
+        <arguments>
+            <argument name="scopeType" xsi:type="const">Magento\Store\Model\ScopeInterface::SCOPE_STORE</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\App\Router\NoRouteHandlerList">
