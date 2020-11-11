@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 declare(strict_types=1);
 
 namespace Magento\Wishlist\Test\Unit\Controller\Shared;
@@ -20,83 +21,60 @@ use Magento\Wishlist\Model\Wishlist;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Test for \Magento\Wishlist\Controller\Shared\Allcart.
+ */
 class AllcartTest extends TestCase
 {
     /**
      * @var Allcart
      */
-    protected $allcartController;
-
-    /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
-     */
-    protected $objectManagerHelper;
-
-    /**
-     * @var Context
-     */
-    protected $context;
+    private $allcartController;
 
     /**
      * @var WishlistProvider|MockObject
      */
-    protected $wishlistProviderMock;
+    private $wishlistProviderMock;
 
     /**
      * @var ItemCarrier|MockObject
      */
-    protected $itemCarrierMock;
+    private $itemCarrierMock;
 
     /**
      * @var Wishlist|MockObject
      */
-    protected $wishlistMock;
+    private $wishlistMock;
 
     /**
      * @var Http|MockObject
      */
-    protected $requestMock;
-
-    /**
-     * @var ResultFactory|MockObject
-     */
-    protected $resultFactoryMock;
+    private $requestMock;
 
     /**
      * @var Redirect|MockObject
      */
-    protected $resultRedirectMock;
+    private $resultRedirectMock;
 
     /**
      * @var Forward|MockObject
      */
-    protected $resultForwardMock;
+    private $resultForwardMock;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
-        $this->wishlistProviderMock = $this->getMockBuilder(WishlistProvider::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->itemCarrierMock = $this->getMockBuilder(ItemCarrier::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->wishlistMock = $this->getMockBuilder(Wishlist::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->requestMock = $this->getMockBuilder(Http::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->resultFactoryMock = $this->getMockBuilder(ResultFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->resultRedirectMock = $this->getMockBuilder(Redirect::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->resultForwardMock = $this->getMockBuilder(Forward::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->wishlistProviderMock = $this->createMock(WishlistProvider::class);
+        $this->itemCarrierMock = $this->createMock(ItemCarrier::class);
+        $this->wishlistMock = $this->createMock(Wishlist::class);
+        $this->requestMock = $this->createMock(Http::class);
+        $resultFactoryMock = $this->createMock(ResultFactory::class);
+        $this->resultRedirectMock = $this->createMock(Redirect::class);
+        $this->resultForwardMock = $this->createMock(Forward::class);
 
-        $this->resultFactoryMock->expects($this->any())
+        $resultFactoryMock->expects($this->any())
             ->method('create')
             ->willReturnMap(
                 [
@@ -105,18 +83,18 @@ class AllcartTest extends TestCase
                 ]
             );
 
-        $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $this->context = $this->objectManagerHelper->getObject(
+        $objectManagerHelper = new ObjectManagerHelper($this);
+        $context = $objectManagerHelper->getObject(
             Context::class,
             [
                 'request' => $this->requestMock,
-                'resultFactory' => $this->resultFactoryMock
+                'resultFactory' => $resultFactoryMock
             ]
         );
-        $this->allcartController = $this->objectManagerHelper->getObject(
+        $this->allcartController = $objectManagerHelper->getObject(
             Allcart::class,
             [
-                'context' => $this->context,
+                'context' => $context,
                 'wishlistProvider' => $this->wishlistProviderMock,
                 'itemCarrier' => $this->itemCarrierMock
             ]

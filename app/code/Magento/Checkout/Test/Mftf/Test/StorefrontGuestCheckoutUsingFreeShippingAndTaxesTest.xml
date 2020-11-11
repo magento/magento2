@@ -7,16 +7,16 @@
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="StorefrontGuestCheckoutUsingFreeShippingAndTaxesTest">
+    <test name="StorefrontGuestCheckoutUsingFreeShippingAndTaxesTest" deprecated="Use StorefrontVerifyGuestCheckoutUsingFreeShippingAndTaxesTest">
         <annotations>
             <stories value="Checkout"/>
-            <title value="Verify guest checkout using free shipping and tax variations"/>
+            <title value="DEPRECATED. Verify guest checkout using free shipping and tax variations"/>
             <description value="Verify guest checkout using free shipping and tax variations"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14709"/>
             <group value="mtf_migrated"/>
             <skip>
-                <issueId value="MC-18802"/>
+                <issueId value="DEPRECATED">Use StorefrontVerifyGuestCheckoutUsingFreeShippingAndTaxesTest</issueId>
             </skip>
         </annotations>
 
@@ -120,8 +120,7 @@
 
         <!-- Create a Tax Rule -->
         <actionGroup ref="AdminTaxRuleGridOpenPageActionGroup" stepKey="goToTaxRuleIndex1"/>
-        <click selector="{{AdminTaxRuleGridSection.add}}" stepKey="clickAddNewTaxRuleButton"/>
-        <waitForPageLoad stepKey="waitForTaxRuleIndex2"/>
+        <actionGroup ref="AdminClickAddTaxRuleButtonActionGroup" stepKey="clickAddNewTaxRuleButton"/>
 
         <!-- Create a tax rule with defaults -->
         <fillField selector="{{AdminTaxRuleFormSection.code}}" userInput="{{SimpleTaxRule.code}}" stepKey="fillTaxRuleCode1"/>
@@ -173,8 +172,9 @@
         <actionGroup ref="CheckoutFillEstimateShippingAndTaxActionGroup" stepKey="fillEstimateShippingAndTaxFields">
             <argument name="address" value="US_Address_NY_Default_Shipping"/>
         </actionGroup>
-        <reloadPage stepKey="reloadThePage"/>
-        <waitForPageLoad stepKey="waitForPageToReload"/>
+        <actionGroup ref="ReloadPageActionGroup" stepKey="reloadThePage"/>
+        <comment userInput="Replacing reload action and preserve Backward Compatibility" stepKey="waitForPageToReload"/>
+
         <waitForText selector="{{CheckoutCartSummarySection.taxAmount}}" userInput="$9.60" time="90" stepKey="waitForTaxAmount"/>
 
         <!--Select Free Shipping and proceed to checkout -->

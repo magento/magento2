@@ -193,7 +193,7 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
                 $resultPage->addPageLayoutHandles(['id' => $product->getId(), 'sku' => $urlSafeSku], $handle);
             }
         }
-    
+
         $resultPage->addPageLayoutHandles(['type' => $product->getTypeId()], null, false);
         $resultPage->addPageLayoutHandles(['id' => $product->getId(), 'sku' => $urlSafeSku]);
 
