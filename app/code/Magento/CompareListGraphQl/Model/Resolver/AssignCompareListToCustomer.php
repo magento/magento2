@@ -9,6 +9,7 @@ namespace Magento\CompareListGraphQl\Model\Resolver;
 
 use Magento\Catalog\Model\MaskedListIdToCompareListId;
 use Magento\CompareListGraphQl\Model\Service\Customer\SetCustomerToCompareList;
+use Magento\CompareListGraphQl\Model\Service\GetCompareList;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
@@ -33,15 +34,22 @@ class AssignCompareListToCustomer implements ResolverInterface
     private $maskedListIdToCompareListId;
 
     /**
+     * @var GetCompareList
+     */
+    private $getCompareList;
+
+    /**
      * @param SetCustomerToCompareList $setCustomerToCompareList
      * @param MaskedListIdToCompareListId $maskedListIdToCompareListId
      */
     public function __construct(
         SetCustomerToCompareList $setCustomerToCompareList,
-        MaskedListIdToCompareListId $maskedListIdToCompareListId
+        MaskedListIdToCompareListId $maskedListIdToCompareListId,
+        GetCompareList $getCompareList
     ) {
         $this->setCustomerToCompareList = $setCustomerToCompareList;
         $this->maskedListIdToCompareListId = $maskedListIdToCompareListId;
+        $this->getCompareList = $getCompareList;
     }
 
     /**
@@ -73,12 +81,21 @@ class AssignCompareListToCustomer implements ResolverInterface
             throw new GraphQlInputException(__('Customer must be logged'));
         }
 
-        $listId = $this->maskedListIdToCompareListId->execute($args['uid']);
-        $result = false;
+        try {
+            $listId = $this->maskedListIdToCompareListId->execute($args['uid']);
+        } catch (LocalizedException $exception) {
+            throw new GraphQlInputException(__($exception->getMessage()));
+        }
 
         if ($listId) {
             try {
                 $result = $this->setCustomerToCompareList->execute($listId, $context->getUserId());
+                if ($result) {
+                    return [
+                        'result' => true,
+                        'compare_list' => $this->getCompareList->execute($listId, $context)
+                    ];
+                }
             } catch (LocalizedException $exception) {
                 throw new GraphQlInputException(
                     __('Something was wrong during assigning customer.')
@@ -86,6 +103,8 @@ class AssignCompareListToCustomer implements ResolverInterface
             }
         }
 
-        return $result;
+        return [
+            'result' => false
+        ];
     }
 }

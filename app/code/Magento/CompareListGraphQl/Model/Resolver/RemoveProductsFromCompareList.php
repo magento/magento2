@@ -92,7 +92,11 @@ class RemoveProductsFromCompareList implements ResolverInterface
             throw new GraphQlInputException(__('"uid" value must be specified.'));
         }
 
-        $listId = $this->maskedListIdToCompareListId->execute($args['input']['uid']);
+        try {
+            $listId = $this->maskedListIdToCompareListId->execute($args['input']['uid'], $context->getUserId());
+        } catch (LocalizedException $exception) {
+            throw new GraphQlInputException(__($exception->getMessage()));
+        }
 
         if (!$listId) {
             throw new GraphQlInputException(__('"uid" value does not exist'));

@@ -56,6 +56,7 @@ class AddToCompareList
      * @param ContextInterface $context
      *
      * @return int
+     * @throws \Exception
      */
     public function execute(int $listId, array $products, ContextInterface $context): int
     {

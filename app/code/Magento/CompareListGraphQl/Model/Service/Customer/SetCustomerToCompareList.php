@@ -55,13 +55,13 @@ class SetCustomerToCompareList
      * @param int $listId
      * @param int $customerId
      *
-     * @return bool
+     * @return CompareList
      *
      * @throws GraphQlAuthenticationException
      * @throws GraphQlInputException
      * @throws GraphQlNoSuchEntityException
      */
-    public function execute(int $listId, int $customerId): bool
+    public function execute(int $listId, int $customerId): ?CompareList
     {
         if ($this->validateCustomer->execute($customerId)) {
             /** @var CompareList $compareListModel */
@@ -69,9 +69,9 @@ class SetCustomerToCompareList
             $this->resourceCompareList->load($compareList, $listId, 'list_id');
             $compareList->setCustomerId($customerId);
             $this->resourceCompareList->save($compareList);
-            return true;
+            return $compareList;
         }
 
-        return false;
+        return null;
     }
 }

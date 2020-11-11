@@ -3,11 +3,8 @@
 
 type ComparableItem {
     uid: ID!
-    product: ComparableProduct!
+    product: ProductInterface!
     attributes: [ProductAttribute]! @doc(description: "Product comparable attributes")
-}
-
-type ComparableProduct implements ProductInterface {
 }
 
 type ProductAttribute {
@@ -24,6 +21,7 @@ type CompareList {
     uid: ID! @doc(description: "Compare list id")
     items: [ComparableItem] @doc(description: "Comparable products")
     attributes: [ComparableAttribute] @doc(description: "Comparable attributes, provides codes and titles for the attributes")
+    item_count: Int!
 }
 
 type Customer {
@@ -38,7 +36,7 @@ type Mutation {
     createCompareList(input: CreateCompareListInput): CompareList @resolver(class: "\\Magento\\CompareListGraphQl\\Model\\Resolver\\CreateCompareList") @doc(description: "Creates a new compare list. For a logged in user, the created list is assigned to the user")
     addProductsToCompareList(input: AddProductsToCompareListInput): CompareList @resolver(class: "\\Magento\\CompareListGraphQl\\Model\\Resolver\\AddProductsToCompareList") @doc(description: "Add products to compare list")
     removeProductsFromCompareList(input: RemoveProductsFromCompareListInput): CompareList @resolver(class: "\\Magento\\CompareListGraphQl\\Model\\Resolver\\RemoveProductsFromCompareList") @doc(description: "Remove products from compare list")
-    assignCompareListToCustomer(uid: ID!): Boolean @resolver(class: "\\Magento\\CompareListGraphQl\\Model\\Resolver\\AssignCompareListToCustomer") @doc(description: "Assign compare list to customer")
+    assignCompareListToCustomer(uid: ID!): AssignCompareListToCustomerOutput @resolver(class: "\\Magento\\CompareListGraphQl\\Model\\Resolver\\AssignCompareListToCustomer") @doc(description: "Assign compare list to customer")
     deleteCompareList(uid: ID!): DeleteCompareListOutput @resolver(class: "\\Magento\\CompareListGraphQl\\Model\\Resolver\\DeleteCompareList") @doc(description: "Delete compare list")
 }
 
@@ -58,4 +56,9 @@ input RemoveProductsFromCompareListInput {
 
 type DeleteCompareListOutput {
     result: Boolean!
+}
+
+type AssignCompareListToCustomerOutput {
+    result: Boolean!
+    compare_list: CompareList
 }
