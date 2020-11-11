@@ -10,17 +10,15 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminProductCategoryIndexerInUpdateOnScheduleModeTest">
         <annotations>
+            <features value="Catalog"/>
             <stories value="Product Categories Indexer"/>
             <title value="Product Categories Indexer in Update on Schedule mode"/>
             <description value="The test verifies that in Update on Schedule mode if displaying of category products on Storefront changes due to product properties change,
             the changes are NOT applied immediately, but applied only after cron runs (twice)."/>
-            <severity value="BLOCKER"/>
-            <testCaseId value="MC-11146"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-26119"/>
             <group value="catalog"/>
             <group value="indexer"/>
-            <skip>
-                <issueId value="MC-20392"/>
-            </skip>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
@@ -99,7 +97,7 @@
         <magentoCLI command="cron:run" stepKey="runCron"/>
 
         <!-- 5. Open category A on Storefront again -->
-        <reloadPage stepKey="reloadCategoryA"/>
+        <actionGroup ref="ReloadPageActionGroup" stepKey="reloadCategoryA"/>
 
         <!-- Category A displays product A1 now -->
         <see userInput="$$createCategoryA.name$$" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="seeTitleCategoryA1"/>
@@ -128,7 +126,7 @@
         <magentoCLI command="cron:run" stepKey="runCron1"/>
 
         <!-- 9. Open category A on Storefront again -->
-        <reloadPage stepKey="refreshCategoryAPage"/>
+        <actionGroup ref="ReloadPageActionGroup" stepKey="refreshCategoryAPage"/>
 
         <!-- Category A is empty now -->
         <see userInput="$$createCategoryA.name$$" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="seeOnPageCategoryAName"/>

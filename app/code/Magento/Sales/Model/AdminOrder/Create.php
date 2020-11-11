@@ -550,6 +550,9 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
 
         $quote = $this->getQuote();
         if (!$quote->isVirtual() && $this->getShippingAddress()->getSameAsBilling()) {
+            $quote->getBillingAddress()->setCustomerAddressId(
+                $quote->getShippingAddress()->getCustomerAddressId()
+            );
             $this->setShippingAsBilling(1);
         }
 
@@ -667,12 +670,14 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
             $productOptions = $orderItem->getProductOptions();
             if ($productOptions !== null && !empty($productOptions['options'])) {
                 $formattedOptions = [];
-                $useFrontendCalendar = $this->useFrontendCalendar();
                 foreach ($productOptions['options'] as $option) {
-                    if (in_array($option['option_type'], ['date', 'date_time']) && $useFrontendCalendar) {
+                    if (in_array($option['option_type'], ['date', 'date_time', 'time', 'file'])) {
                         $product->setSkipCheckRequiredOption(false);
-                        break;
+                        $formattedOptions[$option['option_id']] =
+                          $buyRequest->getDataByKey('options')[$option['option_id']];
+                        continue;
                     }
+
                     $formattedOptions[$option['option_id']] = $option['option_value'];
                 }
                 if (!empty($formattedOptions)) {
@@ -2120,20 +2125,10 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
             $billingData['address_type'],
             $billingData['entity_id']
         );
+        if (isset($shippingData['customer_address_id']) && !isset($billingData['customer_address_id'])) {
+            unset($shippingData['customer_address_id']);
+        }
 
         return $shippingData == $billingData;
-    }
-
-    /**
-     * Use Calendar on frontend or not
-     *
-     * @return bool
-     */
-    private function useFrontendCalendar(): bool
-    {
-        return (bool)$this->_scopeConfig->getValue(
-            'catalog/custom_options/use_calendar',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        );
     }
 }
