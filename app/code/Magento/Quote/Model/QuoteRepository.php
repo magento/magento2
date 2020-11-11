@@ -145,13 +145,14 @@ class QuoteRepository implements CartRepositoryInterface
      */
     public function getForCustomer($customerId, array $sharedStoreIds = [])
     {
-        if (!isset($this->quotesByCustomerId[$customerId])) {
+        $cacheKey = $customerId.'-'.implode('-', $sharedStoreIds);
+        if (!isset($this->quotesByCustomerId[$cacheKey])) {
             $quote = $this->loadQuote('loadByCustomer', 'customerId', $customerId, $sharedStoreIds);
             $this->getLoadHandler()->load($quote);
             $this->quotesById[$quote->getId()] = $quote;
-            $this->quotesByCustomerId[$customerId] = $quote;
+            $this->quotesByCustomerId[$cacheKey] = $quote;
         }
-        return $this->quotesByCustomerId[$customerId];
+        return $this->quotesByCustomerId[$cacheKey];
     }
 
     /**

@@ -64,6 +64,6 @@ class ShoppingCartsTab extends TabWrapper
      */
     public function getTabUrl()
     {
-        return $this->getUrl('customer/*/cart', ['_current' => true]);
+        return $this->getUrl('customer/*/carts', ['_current' => true]);
     }
 }

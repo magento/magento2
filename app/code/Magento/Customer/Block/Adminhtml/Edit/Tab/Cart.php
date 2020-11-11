@@ -276,8 +276,8 @@ class Cart extends Extended
 
             try {
                 $this->quote = $this->quoteRepository->getForCustomer($customerId, $storeIds);
-            } catch (NoSuchEntityException $e) {
-                $this->quote = $this->quoteFactory->create()->setSharedStoreIds($storeIds);
+            } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+                $this->quote = $this->quoteFactory->create()->setId(-1)->setSharedStoreIds($storeIds);
             }
         }
         return $this->quote;
