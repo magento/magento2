@@ -104,10 +104,7 @@ class ViewTest extends TestCase
         $this->urlPersistMock = $this->getMockBuilder(UrlPersistInterface::class)
             ->setMethods(['deleteByData'])
             ->getMockForAbstractClass();
-        $this->categoryMock = $this->getMockBuilder(Category::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getCategories'])
-            ->getMock();
+        $this->categoryMock = $this->createMock(Category::class);
         $this->categoryFactoryMock = $this->getMockBuilder(CategoryFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
@@ -172,7 +169,7 @@ class ViewTest extends TestCase
             ->method('getIterator')
             ->willReturn(new \ArrayIterator([]));
         $this->categoryMock->expects($this->once())
-            ->method('getCategories')
+            ->method('getCategoriesCollection')
             ->willReturn($categoryCollection);
         $this->categoryFactoryMock->expects($this->once())
             ->method('create')
