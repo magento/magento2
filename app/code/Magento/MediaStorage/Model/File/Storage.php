@@ -83,11 +83,16 @@ class Storage extends AbstractModel
     protected $_databaseFactory;
 
     /**
-     * Filesystem instance
-     *
      * @var Filesystem
+     *
+     * @deprecated
      */
     protected $filesystem;
+
+    /**
+     * @var Filesystem\Directory\ReadInterface
+     */
+    private $localMediaDirectory;
 
     /**
      * @param \Magento\Framework\Model\Context $context
@@ -125,6 +130,11 @@ class Storage extends AbstractModel
         $this->_fileFactory = $fileFactory;
         $this->_databaseFactory = $databaseFactory;
         $this->filesystem = $filesystem;
+
+        $this->localMediaDirectory = $filesystem->getDirectoryRead(
+            DirectoryList::MEDIA,
+            Filesystem\DriverPool::FILE
+        );
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
@@ -286,7 +296,7 @@ class Storage extends AbstractModel
     public function getScriptConfig()
     {
         $config = [];
-        $config['media_directory'] = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA)->getAbsolutePath();
+        $config['media_directory'] = $this->localMediaDirectory->getAbsolutePath();
 
         $allowedResources = $this->_coreConfig->getValue(self::XML_PATH_MEDIA_RESOURCE_WHITELIST, 'default');
         foreach ($allowedResources as $allowedResource) {
