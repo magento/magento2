@@ -169,7 +169,7 @@ class ObsoleteCodeTest extends \PHPUnit\Framework\TestCase
         $invoker(
             function ($file) {
                 $content = file_get_contents($file);
-                $this->_testObsoleteClasses($content, $file);
+                $this->_testObsoleteClasses($content);
                 $this->_testObsoleteNamespaces($content);
                 $this->_testObsoletePaths($file);
             },
@@ -950,8 +950,10 @@ class ObsoleteCodeTest extends \PHPUnit\Framework\TestCase
         $appPath = BP;
         foreach ($blackList as $file) {
             if ($absolutePath) {
+                // phpcs:ignore
                 $ignored = array_merge($ignored, glob($appPath . DIRECTORY_SEPARATOR . $file, GLOB_NOSORT));
             } else {
+                // phpcs:ignore
                 $ignored = array_merge($ignored, $this->processPattern($appPath, $file));
             }
         }
