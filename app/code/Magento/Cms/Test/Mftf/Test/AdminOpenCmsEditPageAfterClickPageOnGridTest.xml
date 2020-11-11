@@ -24,6 +24,7 @@
         </after>
 
         <actionGroup ref="AdminOpenCMSPagesGridActionGroup" stepKey="openCmsPagesGrid"/>
+        <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearGridFilters"/>
 
         <actionGroup ref="AdminClickTableGridRowBySelectorActionGroup" stepKey="clickTableRow">
             <argument name="selector" value="{{CmsPagesPageActionsSection.homePage}}"/>
