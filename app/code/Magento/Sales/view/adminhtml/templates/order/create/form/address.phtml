@@ -4,7 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-/** @var \Magento\Sales\Block\Adminhtml\Order\Create\Form\Address $block */
+/**
+ * @var \Magento\Sales\Block\Adminhtml\Order\Create\Form\Address $block
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ */
 
 /**
  * @var \Magento\Customer\Model\ResourceModel\Address\Collection $addressCollection
@@ -12,7 +15,7 @@
 $addressCollection = $block->getData('customerAddressCollection');
 
 $addressArray = [];
-if ($block->getCustomerId()) :
+if ($block->getCustomerId()):
     $addressArray = $addressCollection->setCustomerFilter([$block->getCustomerId()])->toArray();
 endif;
 
@@ -22,28 +25,39 @@ endif;
 $customerAddressFormatter = $block->getData('customerAddressFormatter');
 
 /**
- * @var \Magento\Sales\Block\Adminhtml\Order\Create\Billing\Address|\Magento\Sales\Block\Adminhtml\Order\Create\Shipping\Address $block
+ * @var \Magento\Sales\ViewModel\Customer\Address\Billing\AddressDataProvider $billingAddressDataProvider
  */
-if ($block->getIsShipping()) :
+$billingAddressDataProvider = $block->getData('billingAddressDataProvider');
+
+/**
+ * @var \Magento\Sales\Block\Adminhtml\Order\Create\Billing\Address|
+ * \Magento\Sales\Block\Adminhtml\Order\Create\Shipping\Address $block
+ */
+if ($block->getIsShipping()):
     $_fieldsContainerId = 'order-shipping_address_fields';
     $_addressChoiceContainerId = 'order-shipping_address_choice';
-    ?>
-    <script>
+
+    $addressCollectionJson = /* @noEscape  */ $block->getAddressCollectionJson();
+    $scriptString= <<<script
     require(["Magento_Sales/order/create/form"], function(){
-        order.shippingAddressContainer = '<?= $block->escapeJs($_fieldsContainerId) ?>';
-        order.setAddresses(<?= /* @noEscape  */ $block->getAddressCollectionJson() ?>);
+        order.shippingAddressContainer = '{$block->escapeJs($_fieldsContainerId)}';
+        order.setAddresses({$addressCollectionJson});
     });
-    </script>
+script;
+    ?>
+    <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
     <?php
-else :
+else:
     $_fieldsContainerId = 'order-billing_address_fields';
     $_addressChoiceContainerId = 'order-billing_address_choice';
     ?>
-    <script>
+    <?php $scriptString = <<<script
         require(["Magento_Sales/order/create/form"], function(){
-            order.billingAddressContainer = '<?= $block->escapeJs($_fieldsContainerId) ?>';
+            order.billingAddressContainer = '{$block->escapeJs($_fieldsContainerId)}';
         });
-    </script>
+script;
+    ?>
+    <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
     <?php
 endif; ?>
 
@@ -52,33 +66,47 @@ endif; ?>
         <span><?= $block->escapeHtml($block->getHeaderText()) ?></span>
     </legend><br>
 
-    <fieldset id="<?= $block->escapeHtmlAttr($_addressChoiceContainerId) ?>" class="admin__fieldset order-choose-address">
-    <?php if ($block->getIsShipping()) : ?>
+    <fieldset id="<?= $block->escapeHtmlAttr($_addressChoiceContainerId) ?>"
+              class="admin__fieldset order-choose-address">
+    <?php if ($block->getIsShipping()): ?>
         <div class="admin__field admin__field-option admin__field-shipping-same-as-billing">
             <input type="checkbox" id="order-shipping_same_as_billing" name="shipping_same_as_billing"
-                   onclick="order.setShippingAsBilling(this.checked)" class="admin__control-checkbox"
-                   <?php if ($block->getIsAsBilling()) : ?>checked<?php endif; ?> />
+                   class="admin__control-checkbox"
+                   <?php if ($block->getIsAsBilling()): ?>checked<?php endif; ?> />
+            <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
+                'onclick',
+                "order.setShippingAsBilling(this.checked)",
+                'input#order-shipping_same_as_billing'
+            ) ?>
             <label for="order-shipping_same_as_billing" class="admin__field-label">
                 <?= $block->escapeHtml(__('Same As Billing Address')) ?>
             </label>
         </div>
     <?php endif; ?>
         <div class="admin__field admin__field-select-from-existing-address">
-            <label class="admin__field-label"><?= $block->escapeHtml(__('Select from existing customer addresses:')) ?></label>
+            <label class="admin__field-label">
+                <?= $block->escapeHtml(__('Select from existing customer addresses:')) ?>
+            </label>
             <?php $_id = $block->getForm()->getHtmlIdPrefix() . 'customer_address_id' ?>
             <div class="admin__field-control">
                 <select id="<?= $block->escapeHtmlAttr($_id) ?>"
-                        name="<?= $block->escapeHtmlAttr($block->getForm()->getHtmlNamePrefix()) ?>[customer_address_id]"
-                        onchange="order.selectAddress(this, '<?= $block->escapeJs($_fieldsContainerId) ?>')"
+                        name="<?= $block->escapeHtmlAttr($block->getForm()->getHtmlNamePrefix())
+                        ?>[customer_address_id]"
                         class="admin__control-select">
                     <option value=""><?= $block->escapeHtml(__('Add New Address')) ?></option>
-                    <?php foreach ($addressArray as $addressId => $address) : ?>
+                    <?php foreach ($addressArray as $addressId => $address): ?>
                         <option
-                            value="<?= $block->escapeHtmlAttr($addressId) ?>"<?php if ($addressId == $block->getAddressId()) : ?> selected="selected"<?php endif; ?>>
+                            value="<?= $block->escapeHtmlAttr($addressId) ?>"
+                            <?php if ($addressId == $block->getAddressId()): ?> selected="selected"<?php endif; ?>>
                             <?= $block->escapeHtml($customerAddressFormatter->getAddressAsString($address)) ?>
                         </option>
                     <?php endforeach; ?>
                 </select>
+                <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
+                    'onchange',
+                    "order.selectAddress(this, '" . $block->escapeJs($_fieldsContainerId) . "')",
+                    'select#' . $block->escapeJs($_id)
+                ) ?>
             </div>
         </div>
     </fieldset>
@@ -87,23 +115,43 @@ endif; ?>
         <?= $block->getForm()->toHtml() ?>
 
         <div class="admin__field admin__field-option order-save-in-address-book">
-            <input name="<?= $block->escapeHtmlAttr($block->getForm()->getHtmlNamePrefix()) ?>[save_in_address_book]" type="checkbox" id="<?= $block->escapeHtmlAttr($block->getForm()->getHtmlIdPrefix()) ?>save_in_address_book" value="1"<?php if (!$block->getDontSaveInAddressBook()) : ?> checked="checked"<?php endif; ?> class="admin__control-checkbox"/>
+            <input name="<?= $block->escapeHtmlAttr($block->getForm()->getHtmlNamePrefix()) ?>[save_in_address_book]"
+                   type="checkbox"
+                   id="<?= $block->escapeHtmlAttr($block->getForm()->getHtmlIdPrefix()) ?>save_in_address_book"
+                   value="1"
+                <?php if ($billingAddressDataProvider && $billingAddressDataProvider->getSaveInAddressBook() ||
+                    $block->getIsShipping() && !$block->getDontSaveInAddressBook() && !$block->getAddressId()): ?>
+                    checked="checked"
+                <?php endif; ?>
+                   class="admin__control-checkbox"/>
             <label for="<?= $block->escapeHtmlAttr($block->getForm()->getHtmlIdPrefix()) ?>save_in_address_book"
                    class="admin__field-label"><?= $block->escapeHtml(__('Save in address book')) ?></label>
         </div>
     </div>
     <?php $hideElement = 'address-' . ($block->getIsShipping() ? 'shipping' : 'billing') . '-overlay'; ?>
-    <div style="display: none;" id="<?= /* @noEscape */ $hideElement ?>" class="order-methods-overlay">
+    <div id="<?= /* @noEscape */ $hideElement ?>" class="order-methods-overlay">
         <span><?= $block->escapeHtml(__('You don\'t need to select a shipping address.')) ?></span>
     </div>
-
-    <script>
+    <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
+        "display: none;",
+        'div#' . /* @noEscape */ $hideElement
+    ) ?>
+    <?php $scriptString = <<<script
         require(["Magento_Sales/order/create/form"], function(){
-            order.bindAddressFields('<?= $block->escapeJs($_fieldsContainerId) ?>');
-            order.bindAddressFields('<?= $block->escapeJs($_addressChoiceContainerId) ?>');
-            <?php if ($block->getIsShipping() && $block->getIsAsBilling()) : ?>
+            order.bindAddressFields('{$block->escapeJs($_fieldsContainerId)}');
+            order.bindAddressFields('{$block->escapeJs($_addressChoiceContainerId)}');
+
+script;
+    if ($block->getIsShipping() && $block->getIsAsBilling()):
+                $scriptString .= <<<script
             order.disableShippingAddress(true);
-            <?php endif; ?>
+
+script;
+            endif;
+            $scriptString .= <<<script
         });
-    </script>
+
+script;
+    ?>
+    <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
 </fieldset>

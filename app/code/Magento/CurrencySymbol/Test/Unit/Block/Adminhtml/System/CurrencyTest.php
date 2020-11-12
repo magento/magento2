@@ -7,15 +7,22 @@ declare(strict_types=1);
 
 namespace Magento\CurrencySymbol\Test\Unit\Block\Adminhtml\System;
 
+use Magento\Backend\Block\Template\Context;
 use Magento\Backend\Block\Widget\Button;
 use Magento\CurrencySymbol\Block\Adminhtml\System\Currency;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Element\BlockInterface;
 use Magento\Framework\View\LayoutInterface;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\UrlInterface;
 
 class CurrencyTest extends TestCase
 {
+    /**
+     * Stub currency option link url
+     */
+    const STUB_OPTION_LINK_URL = 'https://localhost/admin/system_config/edit/section/currency#currency_options-link';
+
     /**
      * Object manager helper
      *
@@ -70,12 +77,25 @@ class CurrencyTest extends TestCase
                 ]
             );
 
+        $contextMock = $this->createMock(Context::class);
+        $urlBuilderMock = $this->createMock(UrlInterface::class);
+
+        $contextMock->expects($this->once())->method('getUrlBuilder')->willReturn($urlBuilderMock);
+
+        $urlBuilderMock->expects($this->once())->method('getUrl')->with(
+            'adminhtml/system_config/edit',
+            [
+                'section' => 'currency',
+                '_fragment' => 'currency_options-link'
+            ]
+        )->willReturn(self::STUB_OPTION_LINK_URL);
+
         $childBlockMock->expects($this->at(1))
             ->method('addChild')
             ->with(
                 'options_button',
                 Button::class,
-                ['label' => __('Options'), 'onclick' => 'setLocation(\'\')']
+                ['label' => __('Options'), 'onclick' => 'setLocation(\''.self::STUB_OPTION_LINK_URL.'\')']
             );
 
         $childBlockMock->expects($this->at(2))
@@ -90,7 +110,8 @@ class CurrencyTest extends TestCase
         $block = $this->objectManagerHelper->getObject(
             Currency::class,
             [
-                'layout' => $layoutMock
+                'layout' => $layoutMock,
+                'context' => $contextMock
             ]
         );
         $block->setLayout($layoutMock);

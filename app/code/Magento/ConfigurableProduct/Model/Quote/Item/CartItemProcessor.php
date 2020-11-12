@@ -5,6 +5,8 @@
  */
 namespace Magento\ConfigurableProduct\Model\Quote\Item;
 
+use Magento\ConfigurableProduct\Api\Data\ConfigurableItemOptionValueInterface;
+use Magento\Quote\Api\Data\ProductOptionExtensionInterface;
 use Magento\Quote\Model\Quote\Item\CartItemProcessorInterface;
 use Magento\Quote\Api\Data\CartItemInterface;
 use Magento\Framework\Serialize\Serializer\Json;
@@ -64,7 +66,7 @@ class CartItemProcessor implements CartItemProcessorInterface
     public function convertToBuyRequest(CartItemInterface $cartItem)
     {
         if ($cartItem->getProductOption() && $cartItem->getProductOption()->getExtensionAttributes()) {
-            /** @var \Magento\ConfigurableProduct\Api\Data\ConfigurableItemOptionValueInterface $options */
+            /** @var ConfigurableItemOptionValueInterface $options */
             $options = $cartItem->getProductOption()->getExtensionAttributes()->getConfigurableItemOptions();
             if (is_array($options)) {
                 $requestData = [];
@@ -82,13 +84,17 @@ class CartItemProcessor implements CartItemProcessorInterface
      */
     public function processOptions(CartItemInterface $cartItem)
     {
-        $attributesOption = $cartItem->getProduct()->getCustomOption('attributes');
+        $attributesOption = $cartItem->getProduct()
+            ->getCustomOption('attributes');
+        if (!$attributesOption) {
+            return $cartItem;
+        }
         $selectedConfigurableOptions = $this->serializer->unserialize($attributesOption->getValue());
 
         if (is_array($selectedConfigurableOptions)) {
             $configurableOptions = [];
             foreach ($selectedConfigurableOptions as $optionId => $optionValue) {
-                /** @var \Magento\ConfigurableProduct\Api\Data\ConfigurableItemOptionValueInterface $option */
+                /** @var ConfigurableItemOptionValueInterface $option */
                 $option = $this->itemOptionValueFactory->create();
                 $option->setOptionId($optionId);
                 $option->setOptionValue($optionValue);
@@ -99,8 +105,8 @@ class CartItemProcessor implements CartItemProcessorInterface
                 ? $cartItem->getProductOption()
                 : $this->productOptionFactory->create();
 
-            /** @var  \Magento\Quote\Api\Data\ProductOptionExtensionInterface $extensibleAttribute */
-            $extensibleAttribute =  $productOption->getExtensionAttributes()
+            /** @var  ProductOptionExtensionInterface $extensibleAttribute */
+            $extensibleAttribute = $productOption->getExtensionAttributes()
                 ? $productOption->getExtensionAttributes()
                 : $this->extensionFactory->create();
 
@@ -108,6 +114,7 @@ class CartItemProcessor implements CartItemProcessorInterface
             $productOption->setExtensionAttributes($extensibleAttribute);
             $cartItem->setProductOption($productOption);
         }
+
         return $cartItem;
     }
 }

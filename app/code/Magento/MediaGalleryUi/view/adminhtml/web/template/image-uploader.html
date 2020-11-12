@@ -1,0 +1,17 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<div class="media-gallery-image-uploader-container">
+    <form id="image-uploader-form" class="no-display" method="POST" enctype="multipart/form-data">
+        <input afterRender="initializeFileUpload" id="image-uploader-input" type="file" name="image"
+               multiple="multiple"/>
+    </form>
+    <div data-role="spinner" class="admin__data-grid-loading-mask" visible="loader">
+        <div class="spinner">
+            <span repeat="8"/>
+        </div>
+    </div>
+</div>

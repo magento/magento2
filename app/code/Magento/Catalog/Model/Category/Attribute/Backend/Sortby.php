@@ -102,6 +102,11 @@ class Sortby extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
             }
             $object->setData($attributeCode, implode(',', $data) ?: null);
         }
+        if ($attributeCode == 'default_sort_by') {
+            $data = $object->getData($attributeCode);
+            $attributeValue = (is_array($data) ? reset($data) : (!empty($data))) ? $data : null;
+            $object->setData($attributeCode, $attributeValue);
+        }
         if (!$object->hasData($attributeCode)) {
             $object->setData($attributeCode, null);
         }

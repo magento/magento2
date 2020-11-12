@@ -17,7 +17,8 @@
         <element name="imageSelected" type="text" selector="//small[text()='{{var1}}']/parent::*[@class='filecnt selected']" parameterized="true"/>
         <element name="ImageSource" type="input" selector=".mce-combobox.mce-abs-layout-item.mce-last.mce-has-open"/>
         <element name="ImageDescription" type="input" selector=".mce-textbox.mce-abs-layout-item.mce-last"/>
-        <element name="ImageDescriptionTinyMCE3" type="input" selector="#alt"/>
+        <element name="ImageDescriptionTinyMCE3" type="input" selector="#alt" deprecated="Deprecated New element was introduced. Please use 'ImageDescriptionTinyMCE4'"/>
+        <element name="ImageDescriptionTinyMCE4" type="input" selector="#alt" />
         <element name="Height" type="input" selector=".mce-textbox.mce-abs-layout-item.mce-first"/>
         <element name="UploadImage" type="file" selector=".fileupload"/>
         <element name="OkBtn" type="button" selector="//span[text()='Ok']"/>
@@ -35,5 +36,6 @@
         <element name="checkIfWysiwygArrowExpand" type="button" selector="//li[@id='d3lzaXd5Zw--' and contains(@class,'jstree-closed')]"/>
         <element name="confirmDelete" type="button" selector=".action-primary.action-accept"/>
         <element name="imageBlockByName" type="block" selector="//div[@data-row='file'][contains(., '{{imageName}}')]" parameterized="true"/>
+        <element name="insertEditImageModalWindow" type="block" selector=".mce-floatpanel.mce-window[aria-label='Insert/edit image']"/>
     </section>
 </sections>

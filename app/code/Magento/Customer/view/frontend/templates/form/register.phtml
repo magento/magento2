@@ -3,13 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-// phpcs:disable Magento2.Templates.ThisInTemplate.FoundHelper
-// phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
 
 use Magento\Customer\Helper\Address;
 
 /** @var \Magento\Customer\Block\Form\Register $block */
 /** @var \Magento\Framework\Escaper $escaper */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+
+/** @var Magento\Customer\Helper\Address $addressHelper */
+$addressHelper = $block->getData('addressHelper');
+/** @var \Magento\Directory\Helper\Data $directoryHelper */
+$directoryHelper = $block->getData('directoryHelper');
 $formData = $block->getFormData();
 ?>
 <?php $displayAll = $block->getConfig('general/region/display_all'); ?>
@@ -63,11 +67,12 @@ $formData = $block->getFormData();
         <?php if ($_gender->isEnabled()): ?>
             <?= $_gender->setGender($formData->getGender())->toHtml() ?>
         <?php endif ?>
+        <?= $block->getChildHtml('fieldset_create_info_additional') ?>
     </fieldset>
     <?php if ($block->getShowAddressFields()): ?>
-        <?php $cityValidationClass = $this->helper(Address::class)->getAttributeValidationClass('city'); ?>
-        <?php $postcodeValidationClass = $this->helper(Address::class)->getAttributeValidationClass('postcode'); ?>
-        <?php $regionValidationClass = $this->helper(Address::class)->getAttributeValidationClass('region'); ?>
+        <?php $cityValidationClass = $addressHelper->getAttributeValidationClass('city'); ?>
+        <?php $postcodeValidationClass = $addressHelper->getAttributeValidationClass('postcode'); ?>
+        <?php $regionValidationClass = $addressHelper->getAttributeValidationClass('region'); ?>
         <fieldset class="fieldset address">
             <legend class="legend"><span><?= $escaper->escapeHtml(__('Address Information')) ?></span></legend><br>
             <input type="hidden" name="create_address" value="1" />
@@ -88,8 +93,7 @@ $formData = $block->getFormData();
             <?php endif ?>
 
             <?php
-                $_streetValidationClass = $this->helper(Address::class)
-                    ->getAttributeValidationClass('street');
+                $_streetValidationClass = $addressHelper->getAttributeValidationClass('street');
             ?>
 
             <div class="field street required">
@@ -106,7 +110,7 @@ $formData = $block->getFormData();
                     <div class="nested">
                         <?php
                             $_streetValidationClass = trim(str_replace('required-entry', '', $_streetValidationClass));
-                            $streetLines = $this->helper(Address::class)->getStreetLines();
+                            $streetLines = $addressHelper->getStreetLines();
                         ?>
                         <?php for ($_i = 2, $_n = $streetLines; $_i <= $_n; $_i++): ?>
                             <div class="field additional">
@@ -144,19 +148,19 @@ $formData = $block->getFormData();
                     <select id="region_id"
                             name="region_id"
                             title="<?= /* @noEscape */ $block->getAttributeData()->getFrontendLabel('region') ?>"
-                            class="validate-select region_id"
-                            style="display: none;">
+                            class="validate-select region_id">
                         <option value="">
                             <?= $escaper->escapeHtml(__('Please select a region, state or province.')) ?>
                         </option>
                     </select>
+                    <?= /* @noEscape */ $secureRenderer->renderStyleAsTag("display: none;", 'select#region_id') ?>
                     <input type="text"
                            id="region"
                            name="region"
                            value="<?= $escaper->escapeHtml($block->getRegion()) ?>"
                            title="<?= /* @noEscape */ $block->getAttributeData()->getFrontendLabel('region') ?>"
-                           class="input-text <?= $escaper->escapeHtmlAttr($regionValidationClass) ?>"
-                           style="display:none;">
+                           class="input-text <?= $escaper->escapeHtmlAttr($regionValidationClass) ?>">
+                    <?= /* @noEscape */ $secureRenderer->renderStyleAsTag("display: none;", 'input#region') ?>
                 </div>
             </div>
 
@@ -255,8 +259,12 @@ $formData = $block->getFormData();
                        autocomplete="off">
             </div>
         </div>
+    </fieldset>
+
+    <fieldset class="fieldset additional_info">
         <?= $block->getChildHtml('form_additional_info') ?>
     </fieldset>
+
     <div class="actions-toolbar">
         <div class="primary">
             <button type="submit"
@@ -273,17 +281,20 @@ $formData = $block->getFormData();
         </div>
     </div>
 </form>
-<script>
+<?php $ignore = /* @noEscape */ $_dob->isEnabled() ? '\'input[id$="full"]\'' : 'null';
+$scriptString = <<<script
 require([
     'jquery',
     'mage/mage'
 ], function($){
 
     var dataForm = $('#form-validate');
-    var ignore = <?= /* @noEscape */ $_dob->isEnabled() ? '\'input[id$="full"]\'' : 'null' ?>;
+    var ignore = {$ignore};
 
     dataForm.mage('validation', {
-    <?php if ($_dob->isEnabled()): ?>
+script;
+if ($_dob->isEnabled()):
+    $scriptString .= <<<script
         errorPlacement: function(error, element) {
             if (element.prop('id').search('full') !== -1) {
                 var dobElement = $(element).parents('.customer-dob'),
@@ -297,13 +308,24 @@ require([
             }
         },
         ignore: ':hidden:not(' + ignore + ')'
-    <?php else: ?>
+script;
+else:
+    $scriptString .= <<<script
         ignore: ignore ? ':hidden:not(' + ignore + ')' : ':hidden'
-    <?php endif ?>
+script;
+endif;
+$scriptString .= <<<script
     }).find('input:text').attr('autocomplete', 'off');
 });
-</script>
+script;
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
 <?php if ($block->getShowAddressFields()): ?>
+    <?php
+    $regionJson = /* @noEscape */ $directoryHelper->getRegionJson();
+    $regionId = (int) $formData->getRegionId();
+    $countriesWithOptionalZip = /* @noEscape */ $directoryHelper->getCountriesWithOptionalZip(true);
+    ?>
 <script type="text/x-magento-init">
     {
         "#country": {
@@ -313,11 +335,9 @@ require([
                 "regionInputId": "#region",
                 "postcodeId": "#zip",
                 "form": "#form-validate",
-                "regionJson": <?= /* @noEscape */ $this->helper(\Magento\Directory\Helper\Data::class)
-                    ->getRegionJson() ?>,
-                "defaultRegion": "<?= (int) $formData->getRegionId() ?>",
-                "countriesWithOptionalZip": <?= /* @noEscape */ $this->helper(\Magento\Directory\Helper\Data::class)
-                    ->getCountriesWithOptionalZip(true) ?>
+                "regionJson": {$regionJson},
+                "defaultRegion": "{$regionId}",
+                "countriesWithOptionalZip": {$countriesWithOptionalZip}
             }
         }
     }

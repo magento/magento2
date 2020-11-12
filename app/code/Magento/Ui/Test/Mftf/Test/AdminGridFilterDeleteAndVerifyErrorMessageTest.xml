@@ -51,8 +51,7 @@
         </after>
 
         <!--Filter created simple product in grid and add category and website created in create data-->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="openProductCatalogPage"/>
-        <waitForPageLoad stepKey="waitForProductCatalogPage"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="openProductCatalogPage"/>
         <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProduct">
             <argument name="product" value="$$createProduct$$"/>
         </actionGroup>
