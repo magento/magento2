@@ -28,6 +28,18 @@ class Config implements ConfigInterface
     /** Configuration path for session cache limiter */
     const PARAM_SESSION_CACHE_LIMITER = 'session/cache_limiter';
 
+    /** Configuration path for session garbage collection probability */
+    private const PARAM_SESSION_GC_PROBABILITY = 'session/gc_probability';
+
+    /** Configuration path for session garbage collection divisor */
+    private const PARAM_SESSION_GC_DIVISOR = 'session/gc_divisor';
+
+    /**
+     * Configuration path for session garbage collection max lifetime.
+     * The number of seconds after which data will be seen as 'garbage'.
+     */
+    private const PARAM_SESSION_GC_MAXLIFETIME = 'session/gc_maxlifetime';
+
     /** Configuration path for cookie domain */
     const XML_PATH_COOKIE_DOMAIN = 'web/cookie/cookie_domain';
 
@@ -102,6 +114,7 @@ class Config implements ConfigInterface
      * @param string $scopeType
      * @param string $lifetimePath
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function __construct(
         \Magento\Framework\ValidatorFactory $validatorFactory,
@@ -147,6 +160,30 @@ class Config implements ConfigInterface
         $cacheLimiter = $deploymentConfig->get(self::PARAM_SESSION_CACHE_LIMITER);
         if ($cacheLimiter) {
             $this->setOption('session.cache_limiter', $cacheLimiter);
+        }
+
+        /**
+         * Session garbage collection probability
+         */
+        $gcProbability = $deploymentConfig->get(self::PARAM_SESSION_GC_PROBABILITY);
+        if ($gcProbability) {
+            $this->setOption('session.gc_probability', $gcProbability);
+        }
+
+        /**
+         * Session garbage collection divisor
+         */
+        $gcDivisor = $deploymentConfig->get(self::PARAM_SESSION_GC_DIVISOR);
+        if ($gcDivisor) {
+            $this->setOption('session.gc_divisor', $gcDivisor);
+        }
+
+        /**
+         * Session garbage collection max lifetime
+         */
+        $gcMaxlifetime = $deploymentConfig->get(self::PARAM_SESSION_GC_MAXLIFETIME);
+        if ($gcMaxlifetime) {
+            $this->setOption('session.gc_maxlifetime', $gcMaxlifetime);
         }
 
         /**

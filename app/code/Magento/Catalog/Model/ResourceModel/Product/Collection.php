@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Model\ResourceModel\Product;
 
+use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer;
 use Magento\Catalog\Model\Indexer\Product\Price\PriceTableResolver;
@@ -2130,16 +2131,17 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
 
         $firstCategory = array_shift($categories);
         if ($firstCategory['is_anchor'] == 1) {
-            $linkField = $this->getProductEntityMetadata()->getLinkField();
-            $anchorCategory[] = (int)$firstCategory[$linkField];
+            //category hierarchy can not be modified by staging updates
+            $entityField = $this->metadataPool->getMetadata(CategoryInterface::class)->getIdentifierField();
+            $anchorCategory[] = (int)$firstCategory[$entityField];
             foreach ($categories as $category) {
                 if (in_array($category['parent_id'], $categoryIds)
                     && in_array($category['parent_id'], $anchorCategory)) {
-                    $categoryIds[] = (int)$category[$linkField];
+                    $categoryIds[] = (int)$category[$entityField];
                     // Storefront approach is to treat non-anchor children of anchor category as anchors.
-                    // Adding their's IDs to $anchorCategory for consistency.
+                    // Adding theirs IDs to $anchorCategory for consistency.
                     if ($category['is_anchor'] == 1 || in_array($category['parent_id'], $anchorCategory)) {
-                        $anchorCategory[] = (int)$category[$linkField];
+                        $anchorCategory[] = (int)$category[$entityField];
                     }
                 }
             }

@@ -246,7 +246,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
 
         $mediaDirectory->create($config->getBaseTmpMediaPath());
         $targetFile = $config->getTmpMediaPath(basename($sourceFile));
-        copy($sourceFile, $mediaDirectory->getAbsolutePath($targetFile));
+        $mediaDirectory->getDriver()->filePutContents($mediaDirectory->getAbsolutePath($targetFile), file_get_contents($sourceFile));
 
         return $targetFile;
     }
