@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\GraphQl\Catalog\CategoryListQuery;
+namespace Magento\GraphQl\Catalog\Category\CategoryListQuery;
 
 use Magento\Catalog\Model\ResourceModel\Category\Collection as CategoryCollection;
 use Magento\Framework\ObjectManagerInterface;
