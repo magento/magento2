@@ -595,6 +595,7 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
     protected function _fileNameToDate($filename)
     {
         // Currently filenames look like STL-YYYYMMDD, so that is what we care about.
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         $dateSnippet = substr(basename($filename), 4, 8);
         $result = substr($dateSnippet, 0, 4) . '-' . substr($dateSnippet, 4, 2) . '-' . substr($dateSnippet, 6, 2);
         return $result;
