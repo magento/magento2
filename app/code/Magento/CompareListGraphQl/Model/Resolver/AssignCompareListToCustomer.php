@@ -89,11 +89,11 @@ class AssignCompareListToCustomer implements ResolverInterface
 
         if ($listId) {
             try {
-                $result = $this->setCustomerToCompareList->execute($listId, $context->getUserId());
+                $result = $this->setCustomerToCompareList->execute($listId, $context->getUserId(), $context);
                 if ($result) {
                     return [
                         'result' => true,
-                        'compare_list' => $this->getCompareList->execute($listId, $context)
+                        'compare_list' => $this->getCompareList->execute((int)$result->getListId(), $context)
                     ];
                 }
             } catch (LocalizedException $exception) {
