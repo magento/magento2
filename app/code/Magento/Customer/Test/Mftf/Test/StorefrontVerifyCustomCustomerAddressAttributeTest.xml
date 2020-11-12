@@ -17,6 +17,9 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-37569"/>
             <group value="customer"/>
+            <skip>
+                <issueId value="DEPRECATED">Use StoreFrontCheckoutWithCustomCustomerAddressAttributeTest instead</issueId>
+            </skip>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
