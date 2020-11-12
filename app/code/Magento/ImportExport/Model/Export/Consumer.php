@@ -70,8 +70,8 @@ class Consumer
         try {
             $data = $this->exportManager->export($exportInfo);
             $fileName = $exportInfo->getFileName();
-            $directory = $this->filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
-            $directory->writeFile('export/' . $fileName, $data);
+            $directory = $this->filesystem->getDirectoryWrite(DirectoryList::VAR_EXPORT);
+            $directory->writeFile($fileName, $data);
 
             $this->notifier->addMajor(
                 __('Your export file is ready'),
