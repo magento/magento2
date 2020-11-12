@@ -12,7 +12,9 @@ use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\ProductSearch;
 use Magento\CatalogGraphQl\Model\Resolver\Products\SearchResult;
 use Magento\CatalogGraphQl\Model\Resolver\Products\SearchResultFactory;
 use Magento\Framework\Api\Search\SearchCriteriaInterface;
-use Magento\Framework\Exception\InputException;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
+use Magento\Framework\GraphQl\Query\Resolver\ArgumentsProcessorInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\Search\Api\SearchInterface;
@@ -44,6 +46,11 @@ class Search implements ProductQueryInterface
     private $fieldSelection;
 
     /**
+     * @var ArgumentsProcessorInterface
+     */
+    private $argsSelection;
+
+    /**
      * @var ProductSearch
      */
     private $productsProvider;
@@ -60,6 +67,7 @@ class Search implements ProductQueryInterface
      * @param FieldSelection $fieldSelection
      * @param ProductSearch $productsProvider
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param ArgumentsProcessorInterface|null $argsSelection
      */
     public function __construct(
         SearchInterface $search,
@@ -67,7 +75,8 @@ class Search implements ProductQueryInterface
         PageSizeProvider $pageSize,
         FieldSelection $fieldSelection,
         ProductSearch $productsProvider,
-        SearchCriteriaBuilder $searchCriteriaBuilder
+        SearchCriteriaBuilder $searchCriteriaBuilder,
+        ArgumentsProcessorInterface $argsSelection = null
     ) {
         $this->search = $search;
         $this->searchResultFactory = $searchResultFactory;
@@ -75,6 +84,8 @@ class Search implements ProductQueryInterface
         $this->fieldSelection = $fieldSelection;
         $this->productsProvider = $productsProvider;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
+        $this->argsSelection = $argsSelection ?: ObjectManager::getInstance()
+            ->get(ArgumentsProcessorInterface::class);
     }
 
     /**
@@ -84,7 +95,7 @@ class Search implements ProductQueryInterface
      * @param ResolveInfo $info
      * @param ContextInterface $context
      * @return SearchResult
-     * @throws InputException
+     * @throws GraphQlInputException
      */
     public function getResult(
         array $args,
@@ -92,7 +103,7 @@ class Search implements ProductQueryInterface
         ContextInterface $context
     ): SearchResult {
         $queryFields = $this->fieldSelection->getProductsFieldSelection($info);
-        $searchCriteria = $this->buildSearchCriteria($args, $info);
+        $searchCriteria = $this->buildSearchCriteria($queryFields, $args, $info->fieldName);
 
         $realPageSize = $searchCriteria->getPageSize();
         $realCurrentPage = $searchCriteria->getCurrentPage();
@@ -136,16 +147,17 @@ class Search implements ProductQueryInterface
     /**
      * Build search criteria from query input args
      *
+     * @param array $productFields
      * @param array $args
-     * @param ResolveInfo $info
+     * @param string $fieldName
      * @return SearchCriteriaInterface
+     * @throws GraphQlInputException
      */
-    private function buildSearchCriteria(array $args, ResolveInfo $info): SearchCriteriaInterface
+    private function buildSearchCriteria(array $productFields, array $args, string $fieldName): SearchCriteriaInterface
     {
-        $productFields = (array)$info->getFieldSelection(1);
-        $includeAggregations = isset($productFields['filters']) || isset($productFields['aggregations']);
-        $searchCriteria = $this->searchCriteriaBuilder->build($args, $includeAggregations);
-
-        return $searchCriteria;
+        $fieldsKeys = array_flip($productFields);
+        $includeAggregations = isset($fieldsKeys['filters']) || isset($fieldsKeys['aggregations']);
+        $processedArgs = $this->argsSelection->process($fieldName, $args);
+        return  $this->searchCriteriaBuilder->build($processedArgs, $includeAggregations);
     }
 }

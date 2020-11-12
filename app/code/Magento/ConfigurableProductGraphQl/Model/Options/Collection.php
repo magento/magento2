@@ -22,6 +22,11 @@ use Magento\Framework\EntityManager\MetadataPool;
 class Collection
 {
     /**
+     * Option type name
+     */
+    private const OPTION_TYPE = 'configurable';
+
+    /**
      * @var CollectionFactory
      */
     private $attributeCollectionFactory;
@@ -121,11 +126,24 @@ class Collection
             $attributeData = $attribute->getData();
             $this->attributeMap[$productId][$attribute->getId()] = $attribute->getData();
             $this->attributeMap[$productId][$attribute->getId()]['id'] = $attribute->getId();
-            $this->attributeMap[$productId][$attribute->getId()]['attribute_id_v2']
-                = $attribute->getProductAttribute()->getAttributeId();
-            $this->attributeMap[$productId][$attribute->getId()]['attribute_code']
-                = $attribute->getProductAttribute()->getAttributeCode();
-            $this->attributeMap[$productId][$attribute->getId()]['values'] = $attributeData['options'];
+            $this->attributeMap[$productId][$attribute->getId()]['uid'] = base64_encode(
+                self::OPTION_TYPE . '/' . $attribute->getAttributeId()
+            );
+            $this->attributeMap[$productId][$attribute->getId()]['attribute_id_v2'] =
+                $attribute->getProductAttribute()->getAttributeId();
+            $this->attributeMap[$productId][$attribute->getId()]['attribute_uid'] =
+                base64_encode($attribute->getProductAttribute()->getAttributeId());
+            $this->attributeMap[$productId][$attribute->getId()]['product_uid'] =
+                base64_encode($attribute->getProductId());
+            $this->attributeMap[$productId][$attribute->getId()]['attribute_code'] =
+                $attribute->getProductAttribute()->getAttributeCode();
+            $this->attributeMap[$productId][$attribute->getId()]['values'] = array_map(
+                function ($value) use ($attribute) {
+                    $value['attribute_id'] = $attribute->getAttributeId();
+                    return $value;
+                },
+                $attributeData['options']
+            );
             $this->attributeMap[$productId][$attribute->getId()]['label']
                 = $attribute->getProductAttribute()->getStoreLabel();
         }

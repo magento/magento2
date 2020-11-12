@@ -21,6 +21,11 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 class Options implements ResolverInterface
 {
     /**
+     * Option type name
+     */
+    private const OPTION_TYPE = 'custom-option';
+
+    /**
      * @inheritdoc
      *
      * Format product's option data to conform to GraphQL schema
@@ -55,7 +60,8 @@ class Options implements ResolverInterface
                 $options[$key] = $option->getData();
                 $options[$key]['required'] = $option->getIsRequire();
                 $options[$key]['product_sku'] = $option->getProductSku();
-
+                // phpcs:ignore Magento2.Functions.DiscouragedFunction
+                $options[$key]['uid'] = base64_encode(self::OPTION_TYPE . '/' . $option->getOptionId());
                 $values = $option->getValues() ?: [];
                 /** @var Option\Value $value */
                 foreach ($values as $valueKey => $value) {

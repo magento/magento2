@@ -16,12 +16,9 @@ use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 
 /**
- * Fixed the id related data in the product data
- *
- * @deprecated Use UID
- * @see \Magento\CatalogGraphQl\Model\Resolver\Product\EntityIdToUid
+ * The uid related data in the product graphql interface type
  */
-class EntityIdToId implements ResolverInterface
+class EntityIdToUid implements ResolverInterface
 {
     /**
      * @var MetadataPool
@@ -57,6 +54,6 @@ class EntityIdToId implements ResolverInterface
             $this->metadataPool->getMetadata(ProductInterface::class)->getIdentifierField()
         );
 
-        return $productId;
+        return base64_encode($productId);
     }
 }

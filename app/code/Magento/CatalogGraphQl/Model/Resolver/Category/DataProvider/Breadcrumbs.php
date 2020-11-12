@@ -52,6 +52,7 @@ class Breadcrumbs
             foreach ($collection as $category) {
                 $breadcrumbsData[] = [
                     'category_id' => $category->getId(),
+                    'category_uid' => base64_encode($category->getId()),
                     'category_name' => $category->getName(),
                     'category_level' => $category->getLevel(),
                     'category_url_key' => $category->getUrlKey(),

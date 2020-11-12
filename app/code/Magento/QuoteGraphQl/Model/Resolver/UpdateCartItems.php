@@ -17,6 +17,7 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\QuoteGraphQl\Model\Cart\GetCartForUser;
 use Magento\QuoteGraphQl\Model\CartItem\DataProvider\UpdateCartItems as  UpdateCartItemsProvider;
+use Magento\Framework\GraphQl\Query\Resolver\ArgumentsProcessorInterface;
 
 /**
  * @inheritdoc
@@ -39,18 +40,26 @@ class UpdateCartItems implements ResolverInterface
     private $updateCartItems;
 
     /**
-     * @param GetCartForUser          $getCartForUser
+     * @var ArgumentsProcessorInterface
+     */
+    private $argsSelection;
+
+    /**
+     * @param GetCartForUser $getCartForUser
      * @param CartRepositoryInterface $cartRepository
      * @param UpdateCartItemsProvider $updateCartItems
+     * @param ArgumentsProcessorInterface $argsSelection
      */
     public function __construct(
         GetCartForUser $getCartForUser,
         CartRepositoryInterface $cartRepository,
-        UpdateCartItemsProvider  $updateCartItems
+        UpdateCartItemsProvider $updateCartItems,
+        ArgumentsProcessorInterface $argsSelection
     ) {
         $this->getCartForUser = $getCartForUser;
         $this->cartRepository = $cartRepository;
         $this->updateCartItems = $updateCartItems;
+        $this->argsSelection = $argsSelection;
     }
 
     /**
@@ -58,19 +67,21 @@ class UpdateCartItems implements ResolverInterface
      */
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {
-        if (empty($args['input']['cart_id'])) {
+        $processedArgs = $this->argsSelection->process($info->fieldName, $args);
+
+        if (empty($processedArgs['input']['cart_id'])) {
             throw new GraphQlInputException(__('Required parameter "cart_id" is missing.'));
         }
 
-        $maskedCartId = $args['input']['cart_id'];
+        $maskedCartId = $processedArgs['input']['cart_id'];
 
-        if (empty($args['input']['cart_items'])
-            || !is_array($args['input']['cart_items'])
+        if (empty($processedArgs['input']['cart_items'])
+            || !is_array($processedArgs['input']['cart_items'])
         ) {
             throw new GraphQlInputException(__('Required parameter "cart_items" is missing.'));
         }
 
-        $cartItems = $args['input']['cart_items'];
+        $cartItems = $processedArgs['input']['cart_items'];
         $storeId = (int)$context->getExtensionAttributes()->getStore()->getId();
         $cart = $this->getCartForUser->execute($maskedCartId, $context->getUserId(), $storeId);
 

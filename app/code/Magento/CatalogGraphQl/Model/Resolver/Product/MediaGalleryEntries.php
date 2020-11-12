@@ -53,6 +53,7 @@ class MediaGalleryEntries implements ResolverInterface
         if (!empty($product->getMediaGalleryEntries())) {
             foreach ($product->getMediaGalleryEntries() as $key => $entry) {
                 $mediaGalleryEntries[$key] = $entry->getData();
+                $mediaGalleryEntries[$key]['uid'] = base64_encode($entry->getId());
                 if ($entry->getExtensionAttributes() && $entry->getExtensionAttributes()->getVideoContent()) {
                     $mediaGalleryEntries[$key]['video_content']
                         = $entry->getExtensionAttributes()->getVideoContent()->getData();

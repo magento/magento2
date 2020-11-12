@@ -16,6 +16,7 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Quote\Api\CartItemRepositoryInterface;
 use Magento\QuoteGraphQl\Model\Cart\GetCartForUser;
+use Magento\Framework\GraphQl\Query\Resolver\ArgumentsProcessorInterface;
 
 /**
  * @inheritdoc
@@ -33,15 +34,23 @@ class RemoveItemFromCart implements ResolverInterface
     private $cartItemRepository;
 
     /**
+     * @var ArgumentsProcessorInterface
+     */
+    private $argsSelection;
+
+    /**
      * @param GetCartForUser $getCartForUser
      * @param CartItemRepositoryInterface $cartItemRepository
+     * @param ArgumentsProcessorInterface $argsSelection
      */
     public function __construct(
         GetCartForUser $getCartForUser,
-        CartItemRepositoryInterface $cartItemRepository
+        CartItemRepositoryInterface $cartItemRepository,
+        ArgumentsProcessorInterface $argsSelection
     ) {
         $this->getCartForUser = $getCartForUser;
         $this->cartItemRepository = $cartItemRepository;
+        $this->argsSelection = $argsSelection;
     }
 
     /**
@@ -49,15 +58,16 @@ class RemoveItemFromCart implements ResolverInterface
      */
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {
-        if (empty($args['input']['cart_id'])) {
+        $processedArgs = $this->argsSelection->process($info->fieldName, $args);
+        if (empty($processedArgs['input']['cart_id'])) {
             throw new GraphQlInputException(__('Required parameter "cart_id" is missing.'));
         }
-        $maskedCartId = $args['input']['cart_id'];
+        $maskedCartId = $processedArgs['input']['cart_id'];
 
-        if (empty($args['input']['cart_item_id'])) {
+        if (empty($processedArgs['input']['cart_item_id'])) {
             throw new GraphQlInputException(__('Required parameter "cart_item_id" is missing.'));
         }
-        $itemId = $args['input']['cart_item_id'];
+        $itemId = $processedArgs['input']['cart_item_id'];
 
         $storeId = (int)$context->getExtensionAttributes()->getStore()->getId();
         $cart = $this->getCartForUser->execute($maskedCartId, $context->getUserId(), $storeId);

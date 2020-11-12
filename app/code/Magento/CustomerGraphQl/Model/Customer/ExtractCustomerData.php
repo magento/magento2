@@ -104,6 +104,7 @@ class ExtractCustomerData
         //Fields are deprecated and should not be exposed on storefront.
         $customerData['group_id'] = null;
         $customerData['id'] = null;
+        $customerData['uid'] = base64_encode((string)$customer->getId());
 
         $customerData['model'] = $customer;
 

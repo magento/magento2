@@ -13,17 +13,14 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 
 /**
  * Root category tree field resolver, used for GraphQL request processing.
- *
- * @deprecated Use the UID instead of a numeric id
- * @see \Magento\CatalogGraphQl\Model\Resolver\RootCategoryUid
  */
-class RootCategoryId implements ResolverInterface
+class RootCategoryUid implements ResolverInterface
 {
     /**
      * @inheritdoc
      */
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {
-        return (int)$context->getExtensionAttributes()->getStore()->getRootCategoryId();
+        return base64_encode($context->getExtensionAttributes()->getStore()->getRootCategoryId());
     }
 }

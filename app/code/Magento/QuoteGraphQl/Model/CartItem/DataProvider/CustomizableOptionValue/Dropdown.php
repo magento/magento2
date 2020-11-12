@@ -19,6 +19,11 @@ use Magento\QuoteGraphQl\Model\CartItem\DataProvider\CustomizableOptionValueInte
 class Dropdown implements CustomizableOptionValueInterface
 {
     /**
+     * Option type name
+     */
+    private const OPTION_TYPE = 'custom-option';
+
+    /**
      * @var PriceUnitLabel
      */
     private $priceUnitLabel;
@@ -50,8 +55,15 @@ class Dropdown implements CustomizableOptionValueInterface
         $optionPriceType = (string)$optionValue->getPriceType();
         $priceValueUnits = $this->priceUnitLabel->getData($optionPriceType);
 
+        $optionDetails = [
+            self::OPTION_TYPE,
+            $option->getOptionId(),
+            $optionValue->getOptionTypeId()
+        ];
+
         $selectedOptionValueData = [
             'id' => $selectedOption->getId(),
+            'customizable_option_value_uid' => base64_encode((string)implode('/', $optionDetails)),
             'label' => $optionTypeRenderer->getFormattedOptionValue($selectedValue),
             'value' => $selectedValue,
             'price' => [

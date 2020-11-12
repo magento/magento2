@@ -47,6 +47,7 @@ class Text implements CustomizableOptionValueInterface
 
         $selectedOptionValueData = [
             'id' => $selectedOption->getId(),
+            'customizable_option_value_uid' => base64_encode((string)$selectedOption->getId()),
             'label' => '',
             'value' => $optionTypeRenderer->getFormattedOptionValue($selectedOption->getValue()),
             'price' => [

@@ -20,6 +20,11 @@ use Magento\Quote\Model\Quote\Item;
 class ConfigurableCartItemOptions implements ResolverInterface
 {
     /**
+     * Option type name
+     */
+    private const OPTION_TYPE = 'configurable';
+
+    /**
      * @var Configuration
      */
     private $configurationHelper;
@@ -61,8 +66,12 @@ class ConfigurableCartItemOptions implements ResolverInterface
             }
             $result[] = [
                 'id' => $option['option_id'],
+                'configurable_product_options_uid' => base64_encode(self::OPTION_TYPE . '/' . $option['option_id']),
                 'option_label' => $option['label'],
                 'value_id' => $option['option_value'],
+                'configurable_product_options_values_uid' => base64_encode(
+                    self::OPTION_TYPE . '/' . $option['option_id'] . '/' . $option['option_value']
+                ),
                 'value_label' => $option['value'],
             ];
         }

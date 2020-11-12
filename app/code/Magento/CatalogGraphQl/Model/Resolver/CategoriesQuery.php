@@ -7,14 +7,16 @@ declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver;
 
+use Magento\CatalogGraphQl\Model\Category\CategoryFilter;
+use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\CategoryTree;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\ExtractDataFromCategoryTree;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
+use Magento\Framework\GraphQl\Query\Resolver\ArgumentsProcessorInterface;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\CategoryTree;
-use Magento\CatalogGraphQl\Model\Category\CategoryFilter;
 
 /**
  * Categories resolver, used for GraphQL category data request processing.
@@ -37,18 +39,27 @@ class CategoriesQuery implements ResolverInterface
     private $extractDataFromCategoryTree;
 
     /**
+     * @var ArgumentsProcessorInterface
+     */
+    private $argsSelection;
+
+    /**
      * @param CategoryTree $categoryTree
      * @param ExtractDataFromCategoryTree $extractDataFromCategoryTree
      * @param CategoryFilter $categoryFilter
+     * @param ArgumentsProcessorInterface|null $argsSelection
      */
     public function __construct(
         CategoryTree $categoryTree,
         ExtractDataFromCategoryTree $extractDataFromCategoryTree,
-        CategoryFilter $categoryFilter
+        CategoryFilter $categoryFilter,
+        ArgumentsProcessorInterface $argsSelection = null
     ) {
         $this->categoryTree = $categoryTree;
         $this->extractDataFromCategoryTree = $extractDataFromCategoryTree;
         $this->categoryFilter = $categoryFilter;
+        $this->argsSelection = $argsSelection ?: ObjectManager::getInstance()
+            ->get(ArgumentsProcessorInterface::class);
     }
 
     /**
@@ -70,7 +81,8 @@ class CategoriesQuery implements ResolverInterface
         }
 
         try {
-            $filterResult = $this->categoryFilter->getResult($args, $store, [], $context);
+            $processedArgs = $this->argsSelection->process($info->fieldName, $args);
+            $filterResult = $this->categoryFilter->getResult($processedArgs, $store, [], $context);
         } catch (InputException $e) {
             throw new GraphQlInputException(__($e->getMessage()));
         }

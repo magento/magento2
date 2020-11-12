@@ -16,6 +16,11 @@ use Magento\Quote\Model\Quote\Item as QuoteItem;
 class CustomizableOption
 {
     /**
+     * Option type name
+     */
+    private const OPTION_TYPE = 'custom-option';
+
+    /**
      * @var CustomizableOptionValueInterface
      */
     private $customizableOptionValue;
@@ -56,6 +61,7 @@ class CustomizableOption
 
         return [
             'id' => $option->getId(),
+            'customizable_option_uid' => base64_encode(self::OPTION_TYPE . '/' . $option->getId()),
             'label' => $option->getTitle(),
             'type' => $option->getType(),
             'values' => $selectedOptionValueData,

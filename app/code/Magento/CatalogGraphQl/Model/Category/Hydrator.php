@@ -54,6 +54,7 @@ class Hydrator
             $categoryData = $this->dataObjectProcessor->buildOutputDataArray($category, CategoryInterface::class);
         }
         $categoryData['id'] = $category->getId();
+        $categoryData['uid'] = base64_encode($category->getId());
         $categoryData['children'] = [];
         $categoryData['available_sort_by'] = $category->getAvailableSortBy();
         $categoryData['model'] = $category;

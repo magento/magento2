@@ -68,6 +68,7 @@ class CartItems implements ResolverInterface
 
             $itemsData[] = [
                 'id' => $cartItem->getItemId(),
+                'uid' => base64_encode((string)$cartItem->getItemId()),
                 'quantity' => $cartItem->getQty(),
                 'product' => $productData,
                 'model' => $cartItem,
@@ -89,6 +90,7 @@ class CartItems implements ResolverInterface
         foreach ($products as $product) {
             $productsData[$product->getId()] = $product->getData();
             $productsData[$product->getId()]['model'] = $product;
+            $productsData[$product->getId()]['uid'] = base64_encode($product->getId());
         }
 
         return $productsData;

@@ -279,6 +279,6 @@ enum CurrencyEnum @doc(description: "The list of available currency codes") {
 }
 
 input EnteredOptionInput @doc(description: "Defines a customer-entered option") {
-    uid: ID! @doc(description: "An encoded ID")
+    uid: ID! @doc(description: "Unique identifier for the `EnteredOptionInput` object")
     value: String! @doc(description: "Text the customer entered")
 }
