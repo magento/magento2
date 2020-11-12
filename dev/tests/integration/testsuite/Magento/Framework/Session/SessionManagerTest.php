@@ -326,7 +326,7 @@ namespace Magento\Framework\Session {
             $this->assertArrayHasKey('session.use_only_cookies', self::$isIniSetInvoked);
             $this->assertEquals('1', self::$isIniSetInvoked['session.use_only_cookies']);
             foreach ($sessionConfig->getOptions() as $option => $value) {
-                if ($option == 'session.save_handler' && $value == 'user') {
+                if ($option === 'session.save_handler' && !$value === 'memcached') {
                         $this->assertArrayNotHasKey('session.save_handler', self::$isIniSetInvoked);
                 } else {
                         $this->assertArrayHasKey($option, self::$isIniSetInvoked);
