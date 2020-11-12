@@ -109,7 +109,7 @@ class Lists
                 continue;
             }
             if ($script !== '') {
-                $script = \Locale::getDisplayScript($locale) . ', ';
+                $script = \Locale::getDisplayScript($locale, Resolver::DEFAULT_LOCALE) . ', ';
             }
             $list[$locale] = $languages[$language] . ' (' . $script . $countries[$country] . ')';
         }
