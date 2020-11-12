@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="system">
+            <group id="media_storage_configuration">
+                <field id="media_storage">
+                    <comment><![CDATA[<strong style="color:red">Warning!</strong> Database media storage will be ignored if remote storage is enabled.]]></comment>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>
