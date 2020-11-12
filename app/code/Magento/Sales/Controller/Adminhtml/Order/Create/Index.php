@@ -20,6 +20,12 @@ class Index extends \Magento\Sales\Controller\Adminhtml\Order\Create implements 
     public function execute()
     {
         $this->_initSession();
+
+        // Clear existing order in session when creating a new order for a customer
+        if ($this->getRequest()->getParam('customer_id')) {
+            $this->clearSessionOrderData();
+        }
+
         $this->_getOrderCreateModel()->initRuleData();
         /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
         $resultPage = $this->resultPageFactory->create();
@@ -27,5 +33,17 @@ class Index extends \Magento\Sales\Controller\Adminhtml\Order\Create implements 
         $resultPage->getConfig()->getTitle()->prepend(__('Orders'));
         $resultPage->getConfig()->getTitle()->prepend(__('New Order'));
         return $resultPage;
+    }
+
+    /**
+     * Clear order data in session
+     *
+     * @return $this
+     */
+    private function clearSessionOrderData(): self
+    {
+        $this->_getSession()->setOrderId(null);
+
+        return $this;
     }
 }
