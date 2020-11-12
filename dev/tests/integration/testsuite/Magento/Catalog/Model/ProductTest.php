@@ -814,6 +814,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $product = ObjectManager::getInstance()->create(Product::class, ['data' => $data]);
         $this->assertSame($product->getCustomAttribute('tax_class_id')->getValue(), '3');
         $this->assertSame($product->getCustomAttribute('category_ids')->getValue(), '1,2');
+    }
 
     /**
      * @magentoDataFixture Magento/Catalog/_files/products_different_store_values.php
