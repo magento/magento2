@@ -89,11 +89,33 @@ class ArgumentsResolver
         if (!$constructor) {
             return null;
         }
+
         $configuredArguments = $this->getConfiguredArguments($instanceType);
 
         $arguments = [];
         /** @var ConstructorArgument $constructorArgument */
         foreach ($constructor as $constructorArgument) {
+            if ($constructorArgument->isVariadic()) {
+                $variadicArguments = $configuredArguments[$constructorArgument->getName()] ?? [];
+
+                if (!is_array($variadicArguments) || !count($variadicArguments)) {
+                    // Variadic argument is always the last one
+                    break;
+                }
+
+                foreach ($variadicArguments as $variadicArgumentKey => $variadicArgument) {
+                    $variadicArguments[$variadicArgumentKey] = $this->getConfiguredArgument(
+                        $variadicArgument,
+                        $constructorArgument
+                    );
+                }
+
+                array_push($arguments, ...array_values($variadicArguments));
+
+                // Variadic argument is always the last one
+                break;
+            }
+
             $argument = $this->getNonObjectArgument(null);
             if (!$constructorArgument->isRequired()) {
                 $argument = $this->getNonObjectArgument($constructorArgument->getDefaultValue());
@@ -107,8 +129,10 @@ class ArgumentsResolver
                     $constructorArgument
                 );
             }
+
             $arguments[$constructorArgument->getName()] = $argument;
         }
+
         return $arguments;
     }
 
