@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateCartPriceRuleWithSubtotalInclTaxTest">
+        <annotations>
+            <stories value="Create Sales Rule"/>
+            <title value="Create Cart Price Rule with Subtotal Incl Tax"/>
+            <description value="Test that cart price rule with Subtotal Incl Tax works correctly"/>
+            <severity value="CRITICAL"/>
+            <useCaseId value="MC-38939"/>
+            <testCaseId value="MC-38983"/>
+            <group value="SalesRule"/>
+        </annotations>
+        <before>
+            <!--Login to backend-->
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <!--Create tax rate for US-CA-*-->
+            <createData entity="defaultTaxRate" stepKey="taxRate"/>
+            <!--Create tax rule-->
+            <actionGroup ref="AdminCreateTaxRuleActionGroup" stepKey="createTaxRule">
+                <argument name="taxRate" value="$$taxRate$$"/>
+                <argument name="taxRule" value="SimpleTaxRule"/>
+            </actionGroup>
+            <!--Create simple product-->
+            <createData entity="SimpleProduct2" stepKey="product">
+                <field key="price">100</field>
+            </createData>
+            <!--Create cart price rule with no coupon and 50% discount-->
+            <createData entity="ApiCartRule" stepKey="createCartPriceRule"/>
+            <!--Add "subtotal incl tax > 100" condition to cart price rule-->
+            <amOnPage url="{{AdminCartPriceRuleEditPage.url($$createCartPriceRule.rule_id$$)}}" stepKey="openEditRule"/>
+            <actionGroup ref="SetCartAttributeConditionForCartPriceRuleActionGroup" stepKey="setCartAttributeConditionForCartPriceRule">
+                <argument name="attributeName" value="{{SalesRuleAddressConditions.base_subtotal_total_incl_tax}}"/>
+                <argument name="operatorType" value="greater than"/>
+                <argument name="value" value="100"/>
+            </actionGroup>
+        </before>
+        <after>
+            <!--Delete tax rule-->
+            <actionGroup ref="AdminDeleteTaxRule" stepKey="deleteTaxRule">
+                <argument name="taxRuleCode" value="{{SimpleTaxRule.code}}" />
+            </actionGroup>
+            <!--Delete tax rate-->
+            <deleteData createDataKey="taxRate" stepKey="deleteTaxRate"/>
+            <!--Delete product-->
+            <deleteData createDataKey="product" stepKey="deleteProduct"/>
+            <!--Delete cart price rule-->
+            <deleteData createDataKey="createCartPriceRule" stepKey="deleteCartPriceRule"/>
+            <actionGroup ref="logout" stepKey="logout"/>
+        </after>
+
+        <!--Open product -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProduct2Page">
+            <argument name="productUrl" value="$product.custom_attributes[url_key]$"/>
+        </actionGroup>
+        <!--Add to cart -->
+        <actionGroup ref="StorefrontAddToTheCartActionGroup" stepKey="product2AddToCart"/>
+        <!--Click on mini cart-->
+        <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="clickOnMiniCart"/>
+        <!--Click on view and edit cart link-->
+        <actionGroup ref="clickViewAndEditCartFromMiniCart" stepKey="goToShoppingCartFromMinicart"/>
+        <waitForPageLoad stepKey="waitForViewAndEditCartToOpen"/>
+        <!--Assert that tax and discount are not applied by default-->
+        <actionGroup ref="StorefrontCheckCartActionGroup" stepKey="AssertTaxAndDiscountIsNotApplied">
+            <argument name="subtotal" value="$100.00"/>
+            <argument name="shipping" value="$5.00"/>
+            <argument name="shippingMethod" value="Flat Rate - Fixed"/>
+            <argument name="total" value="$105.00"/>
+        </actionGroup>
+        <dontSee selector="{{CheckoutCartSummarySection.discountAmount}}" stepKey="assertDiscountIsNotApplied"/>
+        <!--Open "Estimate Shipping and Tax" section and fill US-CA address -->
+        <actionGroup ref="StorefrontCartEstimateShippingAndTaxActionGroup" stepKey="fillEstimateShippingAndTaxSection">
+            <argument name="estimateAddress" value="EstimateAddressCalifornia"/>
+        </actionGroup>
+        <!--Assert that tax and discount are applied by to total amount-->
+        <actionGroup ref="StorefrontCheckCartActionGroup" stepKey="AssertTaxAndDiscountIsApplied">
+            <argument name="subtotal" value="$100.00"/>
+            <argument name="shipping" value="$5.00"/>
+            <argument name="shippingMethod" value="Flat Rate - Fixed"/>
+            <argument name="total" value="$60.00"/>
+        </actionGroup>
+        <see selector="{{CheckoutCartSummarySection.discountAmount}}" userInput="-$50.00" stepKey="assertDiscountIsApplied"/>
+    </test>
+</tests>
