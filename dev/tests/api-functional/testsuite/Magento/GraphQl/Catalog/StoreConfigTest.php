@@ -46,18 +46,18 @@ class StoreConfigTest extends GraphQlAbstract
 }
 QUERY;
         $response = $this->graphQlQuery($query);
-        $this->assertArrayHasKey('storeConfig', $response);
+        self::assertArrayHasKey('storeConfig', $response);
 
-        $this->assertEquals('test_product_suffix', $response['storeConfig']['product_url_suffix']);
-        $this->assertEquals('test_category_suffix', $response['storeConfig']['category_url_suffix']);
-        $this->assertEquals('___', $response['storeConfig']['title_separator']);
-        $this->assertEquals('2', $response['storeConfig']['list_mode']);
-        $this->assertEquals('16', $response['storeConfig']['grid_per_page_values']);
-        $this->assertEquals(16, $response['storeConfig']['grid_per_page']);
-        $this->assertEquals('8', $response['storeConfig']['list_per_page_values']);
-        $this->assertEquals(8, $response['storeConfig']['list_per_page']);
-        $this->assertEquals('asc', $response['storeConfig']['catalog_default_sort_by']);
-        $this->assertEquals(2, $response['storeConfig']['root_category_id']);
+        self::assertEquals('test_product_suffix', $response['storeConfig']['product_url_suffix']);
+        self::assertEquals('test_category_suffix', $response['storeConfig']['category_url_suffix']);
+        self::assertEquals('___', $response['storeConfig']['title_separator']);
+        self::assertEquals('2', $response['storeConfig']['list_mode']);
+        self::assertEquals('16', $response['storeConfig']['grid_per_page_values']);
+        self::assertEquals(16, $response['storeConfig']['grid_per_page']);
+        self::assertEquals('8', $response['storeConfig']['list_per_page_values']);
+        self::assertEquals(8, $response['storeConfig']['list_per_page']);
+        self::assertEquals('asc', $response['storeConfig']['catalog_default_sort_by']);
+        self::assertEquals(2, $response['storeConfig']['root_category_id']);
     }
 
     /**
@@ -92,17 +92,17 @@ QUERY;
 }
 QUERY;
         $response = $this->graphQlQuery($query);
-        $this->assertArrayHasKey('storeConfig', $response);
+        self::assertArrayHasKey('storeConfig', $response);
 
-        $this->assertEquals('global_test_product_suffix', $response['storeConfig']['product_url_suffix']);
-        $this->assertEquals('global_test_category_suffix', $response['storeConfig']['category_url_suffix']);
-        $this->assertEquals('__', $response['storeConfig']['title_separator']);
-        $this->assertEquals('3', $response['storeConfig']['list_mode']);
-        $this->assertEquals('16', $response['storeConfig']['grid_per_page_values']);
-        $this->assertEquals(16, $response['storeConfig']['grid_per_page']);
-        $this->assertEquals('8', $response['storeConfig']['list_per_page_values']);
-        $this->assertEquals(8, $response['storeConfig']['list_per_page']);
-        $this->assertEquals('asc', $response['storeConfig']['catalog_default_sort_by']);
-        $this->assertEquals(2, $response['storeConfig']['root_category_id']);
+        self::assertEquals('global_test_product_suffix', $response['storeConfig']['product_url_suffix']);
+        self::assertEquals('global_test_category_suffix', $response['storeConfig']['category_url_suffix']);
+        self::assertEquals('__', $response['storeConfig']['title_separator']);
+        self::assertEquals('3', $response['storeConfig']['list_mode']);
+        self::assertEquals('16', $response['storeConfig']['grid_per_page_values']);
+        self::assertEquals(16, $response['storeConfig']['grid_per_page']);
+        self::assertEquals('8', $response['storeConfig']['list_per_page_values']);
+        self::assertEquals(8, $response['storeConfig']['list_per_page']);
+        self::assertEquals('asc', $response['storeConfig']['catalog_default_sort_by']);
+        self::assertEquals(2, $response['storeConfig']['root_category_id']);
     }
 }
