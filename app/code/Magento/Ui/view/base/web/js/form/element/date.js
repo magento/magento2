@@ -31,6 +31,10 @@ define([
              * Used only in date picker mode
              * (this.options.showsTime == false).
              *
+             * Locale examples:
+             * - (en_US):  YYYY-MM-DD
+             * - (nl_NL):  YYYY-MM-DD
+             *
              * @type {String}
              */
             inputDateFormat: 'y-MM-dd',
@@ -41,6 +45,10 @@ define([
              *
              * Used only in date picker mode
              * (this.options.showsTime == false).
+             *
+             * Locale examples:
+             * - (en_US):  MM/DD/YYYY
+             * - (nl_NL):  DD-MM-YYYY
              *
              * @type {String}
              */
@@ -126,7 +134,16 @@ define([
                 if (this.options.showsTime) {
                     shiftedValue = moment.tz(value, 'UTC').tz(this.storeTimeZone);
                 } else {
-                    shiftedValue = moment(value, this.inputDateFormat);
+                    if (this.parentScope.startsWith('filters.')) {
+                        /*
+                         * Date element in filter will get date value in outputDateFormat,
+                         * because the server does not convert it from client format to
+                         * server format when saving UI bookmark data.
+                         */
+                        shiftedValue = moment(value, this.outputDateFormat);
+                    } else {
+                        shiftedValue = moment(value, this.inputDateFormat);
+                    }
                 }
 
                 shiftedValue = shiftedValue.format(this.pickerDateTimeFormat);
