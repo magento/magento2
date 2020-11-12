@@ -415,7 +415,7 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
                 );
                 if ($buyRequest->getSuperGroup()) {
                     $serializedValue = $this->serializer->serialize($buyRequest->getSuperGroup());
-                    $_result[0]->addCustomOption('super_group', $serializedValue);
+                    $_result[0]->addCustomOption('grouped_options', $serializedValue);
                 }
 
                 $products[] = $_result[0];

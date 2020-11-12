@@ -109,11 +109,11 @@ class CartItemProcessor implements CartItemProcessorInterface
             return $cartItem;
         }
 
-        $superGroup = $cartItem->getOptionByCode(self::SUPER_GROUP_CODE);
-        $superGroupValues = $superGroup ? $this->jsonSerializer->unserialize($superGroup->getValue()) : null;
-        if ($superGroupValues) {
+        $groupedOptions = $cartItem->getOptionByCode('grouped_options');
+        $groupedOptionsData = $groupedOptions ? $this->jsonSerializer->unserialize($groupedOptions->getValue()) : null;
+        if ($groupedOptionsData) {
             $productOptions = [];
-            foreach ($superGroupValues as $id => $qty) {
+            foreach ($groupedOptionsData as $id => $qty) {
                 $productOptions[] = $this->groupedOptionFactory->create(['id' => $id, 'qty' => $qty]);
             }
 
