@@ -153,8 +153,8 @@
         </actionGroup>
 
         <!-- Verify swatch tooltips are not visible -->
-        <reloadPage stepKey="refreshPage"/>
-        <waitForPageLoad stepKey="waitForPageReload"/>
+        <actionGroup ref="ReloadPageActionGroup" stepKey="refreshPage"/>
+        <comment userInput="Replacing reload action and preserve Backward Compatibility" stepKey="waitForPageReload"/>
         <moveMouseOver selector="{{StorefrontProductInfoMainSection.nthSwatchOption('1')}}" stepKey="hoverDisabledSwatch"/>
         <wait time="1" stepKey="waitForTooltip2"/>
         <dontSeeElement selector="{{StorefrontProductInfoMainSection.swatchOptionTooltip}}" stepKey="swatchTooltipNotVisible"/>
