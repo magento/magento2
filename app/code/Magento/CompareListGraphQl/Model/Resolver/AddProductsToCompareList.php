@@ -11,6 +11,7 @@ use Magento\Catalog\Model\MaskedListIdToCompareListId;
 use Magento\CompareListGraphQl\Model\Service\AddToCompareList;
 use Magento\CompareListGraphQl\Model\Service\Customer\GetListIdByCustomerId;
 use Magento\CompareListGraphQl\Model\Service\GetCompareList;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
@@ -90,22 +91,22 @@ class AddProductsToCompareList implements ResolverInterface
             throw new GraphQlInputException(__('"products" value must be specified.'));
         }
 
-        $listId = $this->maskedListIdToCompareListId->execute($args['input']['uid']);
+        try {
+            $listId = $this->maskedListIdToCompareListId->execute($args['input']['uid'], $context->getUserId());
+        } catch (LocalizedException $exception) {
+            throw new GraphQlInputException(__($exception->getMessage()));
+        }
+
 
         if (!$listId) {
             throw new GraphQlInputException(__('"uid" value does not exist'));
         }
 
-        if ($userId = $context->getUserId()) {
-            $customerListId = $this->getListIdByCustomerId->execute($userId);
-            if ($listId === $customerListId) {
-                $this->addProductToCompareList->execute($customerListId, $args['input']['products'], $context);
-
-                return $this->getCompareList->execute($customerListId, $context);
-            }
+        try {
+            $this->addProductToCompareList->execute($listId, $args['input']['products'], $context);
+        } catch (\Exception $exception) {
+            throw new GraphQlInputException(__($exception->getMessage()));
         }
-
-        $this->addProductToCompareList->execute($listId, $args['input']['products'], $context);
 
         return $this->getCompareList->execute($listId, $context);
     }

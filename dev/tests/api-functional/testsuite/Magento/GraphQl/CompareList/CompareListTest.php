@@ -62,7 +62,7 @@ mutation{
 	 uid
      items {
         product {
-            sku 
+            sku
         }
       }
   }
@@ -110,7 +110,7 @@ mutation{
     uid
     items {
         product {
-            sku 
+            sku
         }
     }
   }
@@ -138,7 +138,7 @@ MUTATION;
     uid
     items {
         product {
-            sku 
+            sku
         }
     }
   }
@@ -197,7 +197,7 @@ MUTATION;
       uid
       items {
         product {
-            sku 
+            sku
         }
       }
     }
@@ -215,7 +215,15 @@ QUERY;
 
         $assignCompareListToCustomer = <<<MUTATION
 mutation {
-  assignCompareListToCustomer(uid: "{$uid}")
+  assignCompareListToCustomer(uid: "{$uid}"){
+    result
+    compare_list {
+      uid
+      items {
+        uid
+      }
+    }
+  }
 }
 MUTATION;
         $assignResponse = $this->graphQlMutation(
@@ -224,7 +232,7 @@ MUTATION;
             '',
             $this->getCustomerAuthHeaders($currentEmail, $currentPassword)
         );
-        $this->assertTrue($assignResponse['assignCompareListToCustomer']);
+        $this->assertTrue($assignResponse['assignCompareListToCustomer']['result']);
 
         $customerAssignedResponse = $this->graphQlQuery(
             $customerQuery,
@@ -286,7 +294,7 @@ mutation{
         uid
         items {
             product {
-                sku 
+                sku
             }
         }
     }

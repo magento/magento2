@@ -9,6 +9,7 @@ namespace Magento\CompareListGraphQl\Model\Resolver;
 
 use Magento\Catalog\Model\MaskedListIdToCompareListId;
 use Magento\CompareListGraphQl\Model\Service\GetCompareList;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
@@ -69,7 +70,11 @@ class CompareList implements ResolverInterface
             throw new GraphQlInputException(__('"uid" value must be specified'));
         }
 
-        $listId = $this->maskedListIdToCompareListId->execute($args['uid']);
+        try {
+            $listId = $this->maskedListIdToCompareListId->execute($args['uid'], $context->getUserId());
+        } catch (LocalizedException $exception) {
+            throw new GraphQlInputException(__($exception->getMessage()));
+        }
 
         if (!$listId) {
             return null;

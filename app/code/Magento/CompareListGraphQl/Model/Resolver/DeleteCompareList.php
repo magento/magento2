@@ -87,7 +87,11 @@ class DeleteCompareList implements ResolverInterface
             throw new GraphQlInputException(__('"uid" value must be specified'));
         }
 
-        $listId = $this->maskedListIdToCompareListId->execute($args['uid']);
+        try {
+            $listId = $this->maskedListIdToCompareListId->execute($args['uid'], $context->getUserId());
+        } catch (LocalizedException $exception) {
+            throw new GraphQlInputException(__($exception->getMessage()));
+        }
         $removed = ['result' => false];
 
         if ($userId = $context->getUserId()) {
