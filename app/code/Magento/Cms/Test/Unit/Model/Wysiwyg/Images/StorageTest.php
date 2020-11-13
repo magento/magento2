@@ -494,7 +494,7 @@ class StorageTest extends TestCase
         $targetPath = self::STORAGE_ROOT_DIR . $path;
         $fileName = 'image.gif';
         $realPath = $targetPath . '/' . $fileName;
-        $thumbnailTargetPath = self::STORAGE_ROOT_DIR . '/.thumbs' . $path;
+        $thumbnailTargetPath = self::STORAGE_ROOT_DIR . '.thumbs' . $path;
         $thumbnailDestination = $thumbnailTargetPath . '/' . $fileName;
         $type = 'image';
         $result = [
