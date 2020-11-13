@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Bundle\Model\Plugin\Frontend;
 
 use Magento\Bundle\Model\Product\Type;
+use Magento\Catalog\Model\Product\Type as ProductType;
 use Magento\Catalog\Model\Product as CatalogProduct;
 
 /**
@@ -37,6 +38,9 @@ class Product
      */
     public function afterGetIdentities(CatalogProduct $product, array $identities): array
     {
+        if  ($product->getTypeId() == ProductType::TYPE_SIMPLE) {
+            return array_unique($identities);
+        }
         foreach ($this->type->getChildrenIds($product->getEntityId()) as $childIds) {
             foreach ($childIds as $childId) {
                 $identities[] = CatalogProduct::CACHE_TAG . '_' . $childId;
