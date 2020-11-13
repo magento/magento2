@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AwsS3ConfigurableProductChildImageShouldBeShownOnWishListTest" extends="ConfigurableProductChildImageShouldBeShownOnWishListTest">
+        <annotations>
+            <features value="Wishlist"/>
+            <stories value="Configurable product child image should be Shown on wishlist"/>
+            <group value="wishlist"/>
+            <title value="AWS S3 when user add Configurable child product to WIshlist then child product image should be shown in Wishlist"/>
+            <description value="When user add Configurable child product to WIshlist then child product image should be shown in Wishlist"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-38708"/>
+            <group value="remote_storage_aws_s3"/>
+        </annotations>
+        <before>
+            <magentoCLI command="setup:config:set {{RemoteStorageAwsS3ConfigData.enable_options}}" stepKey="enableRemoteStorage"/>
+        </before>
+        <after>
+            <magentoCLI command="setup:config:set {{RemoteStorageAwsS3ConfigData.disable_options}}" stepKey="disableRemoteStorage"/>
+        </after>
+    </test>
+</tests>
