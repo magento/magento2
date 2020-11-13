@@ -330,8 +330,8 @@ input ProductAttributeFilterInput @doc(description: "ProductAttributeFilterInput
 
 input CategoryFilterInput  @doc(description: "CategoryFilterInput defines the filters to be used in the search. A filter contains at least one attribute, a comparison operator, and the value that is being searched for.")
 {
-    ids: FilterEqualTypeInput @deprecated(reason: "Use the `category_uids` argument instead.") @doc(description: "Deprecated: use 'category_uids' to filter uniquely identifiers of categories.")
-    category_uids: FilterEqualTypeInput @doc(description: "Filter by category ID that uniquely identifies the category from objects implementing `CategoryInterface`.")
+    ids: FilterEqualTypeInput @deprecated(reason: "Use the `category_uid` argument instead.") @doc(description: "Deprecated: use 'category_uid' to filter uniquely identifiers of categories.")
+    category_uid: FilterEqualTypeInput @doc(description: "Filter by category ID that uniquely identifies the category from objects implementing `CategoryInterface`.")
     url_key: FilterEqualTypeInput @doc(description: "Filter by the part of the URL that identifies the category.")
     name: FilterMatchTypeInput @doc(description: "Filter by the display name of the category.")
     url_path: FilterEqualTypeInput @doc(description: "Filter by the URL path for the category.")

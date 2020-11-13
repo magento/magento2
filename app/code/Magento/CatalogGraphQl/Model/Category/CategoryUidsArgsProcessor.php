@@ -18,7 +18,7 @@ class CategoryUidsArgsProcessor implements ArgumentsProcessorInterface
 {
     private const ID = 'ids';
 
-    private const UID = 'category_uids';
+    private const UID = 'category_uid';
 
     /** @var Uid */
     private $uidEncoder;

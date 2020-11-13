@@ -43,7 +43,7 @@ class ArgumentsCompositeProcessor implements ArgumentsProcessorInterface
         foreach ($this->processors as $processor) {
             $processedArgs = $processor->process(
                 $fieldName,
-                $args
+                $processedArgs
             );
         }
 
