@@ -541,6 +541,7 @@ QUERY;
     name
     breadcrumbs {
       category_id
+      category_uid
       category_name
       category_level
       category_url_key
@@ -556,6 +557,7 @@ QUERY;
                 'breadcrumbs' => [
                     [
                         'category_id' => 3,
+                        'category_uid' => base64_encode('3'),
                         'category_name' => "Category 1",
                         'category_level' => 2,
                         'category_url_key' => "category-1",
@@ -563,6 +565,7 @@ QUERY;
                     ],
                     [
                         'category_id' => 4,
+                        'category_uid' => base64_encode('4'),
                         'category_name' => "Category 1.1",
                         'category_level' => 3,
                         'category_url_key' => "category-1-1",
@@ -679,6 +682,7 @@ QUERY;
     name
     breadcrumbs {
       category_id
+      category_uid
       category_name
     }
   }
@@ -691,6 +695,7 @@ QUERY;
                 'breadcrumbs' => [
                     [
                         'category_id' => 3,
+                        'category_uid' => base64_encode('3'),
                         'category_name' => "Category 1",
                     ]
                 ]
