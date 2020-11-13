@@ -33,6 +33,6 @@ class RootCategoryUid implements ResolverInterface
      */
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {
-        return $this->uidEncoder->decode((string) $context->getExtensionAttributes()->getStore()->getRootCategoryId());
+        return $this->uidEncoder->encode((string) $context->getExtensionAttributes()->getStore()->getRootCategoryId());
     }
 }
