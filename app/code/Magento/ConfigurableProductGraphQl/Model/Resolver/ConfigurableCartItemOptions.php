@@ -8,8 +8,10 @@ declare(strict_types=1);
 namespace Magento\ConfigurableProductGraphQl\Model\Resolver;
 
 use Magento\Catalog\Helper\Product\Configuration;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
+use Magento\Framework\GraphQl\Query\Uid;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Quote\Model\Quote\Item;
@@ -29,13 +31,20 @@ class ConfigurableCartItemOptions implements ResolverInterface
      */
     private $configurationHelper;
 
+    /** @var Uid */
+    private $uidEncoder;
+
     /**
      * @param Configuration $configurationHelper
+     * @param Uid|null $uidEncoder
      */
     public function __construct(
-        Configuration $configurationHelper
+        Configuration $configurationHelper,
+        Uid $uidEncoder = null
     ) {
         $this->configurationHelper = $configurationHelper;
+        $this->uidEncoder = $uidEncoder ?: ObjectManager::getInstance()
+            ->get(Uid::class);
     }
 
     /**
@@ -66,10 +75,12 @@ class ConfigurableCartItemOptions implements ResolverInterface
             }
             $result[] = [
                 'id' => $option['option_id'],
-                'configurable_product_options_uid' => base64_encode(self::OPTION_TYPE . '/' . $option['option_id']),
+                'configurable_product_options_uid' => $this->uidEncoder->encode(
+                    self::OPTION_TYPE . '/' . $option['option_id']
+                ),
                 'option_label' => $option['label'],
                 'value_id' => $option['option_value'],
-                'configurable_product_options_values_uid' => base64_encode(
+                'configurable_product_options_values_uid' => $this->uidEncoder->encode(
                     self::OPTION_TYPE . '/' . $option['option_id'] . '/' . $option['option_value']
                 ),
                 'value_label' => $option['value'],

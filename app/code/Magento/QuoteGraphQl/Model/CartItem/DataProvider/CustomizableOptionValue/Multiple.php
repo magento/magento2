@@ -9,6 +9,8 @@ namespace Magento\QuoteGraphQl\Model\CartItem\DataProvider\CustomizableOptionVal
 
 use Magento\Catalog\Model\Product\Option;
 use Magento\Catalog\Model\Product\Option\Type\DefaultType;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\GraphQl\Query\Uid;
 use Magento\Quote\Model\Quote\Item as QuoteItem;
 use Magento\Quote\Model\Quote\Item\Option as SelectedOption;
 use Magento\QuoteGraphQl\Model\CartItem\DataProvider\CustomizableOptionValueInterface;
@@ -28,13 +30,20 @@ class Multiple implements CustomizableOptionValueInterface
      */
     private $priceUnitLabel;
 
+    /** @var Uid */
+    private $uidEncoder;
+
     /**
      * @param PriceUnitLabel $priceUnitLabel
+     * @param Uid|null $uidEncoder
      */
     public function __construct(
-        PriceUnitLabel $priceUnitLabel
+        PriceUnitLabel $priceUnitLabel,
+        Uid $uidEncoder = null
     ) {
         $this->priceUnitLabel = $priceUnitLabel;
+        $this->uidEncoder = $uidEncoder ?: ObjectManager::getInstance()
+            ->get(Uid::class);
     }
 
     /**
@@ -64,7 +73,7 @@ class Multiple implements CustomizableOptionValueInterface
 
             $selectedOptionValueData[] = [
                 'id' => $selectedOption->getId(),
-                'customizable_option_value_uid' => base64_encode((string)implode('/', $optionDetails)),
+                'customizable_option_value_uid' => $this->uidEncoder->encode((string)implode('/', $optionDetails)),
                 'label' => $optionValue->getTitle(),
                 'value' => $optionId,
                 'price' => [

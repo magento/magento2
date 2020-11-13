@@ -7,11 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\QuoteGraphQl\Model\Resolver;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
+use Magento\Framework\GraphQl\Query\Uid;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Item as QuoteItem;
@@ -27,12 +29,20 @@ class CartItems implements ResolverInterface
      */
     private $getCartProducts;
 
+    /** @var Uid */
+    private $uidEncoder;
+
     /**
      * @param GetCartProducts $getCartProducts
+     * @param Uid|null $uidEncoder
      */
-    public function __construct(GetCartProducts $getCartProducts)
-    {
+    public function __construct(
+        GetCartProducts $getCartProducts,
+        Uid $uidEncoder = null
+    ) {
         $this->getCartProducts = $getCartProducts;
+        $this->uidEncoder = $uidEncoder ?: ObjectManager::getInstance()
+            ->get(Uid::class);
     }
 
     /**
@@ -68,7 +78,7 @@ class CartItems implements ResolverInterface
 
             $itemsData[] = [
                 'id' => $cartItem->getItemId(),
-                'uid' => base64_encode((string)$cartItem->getItemId()),
+                'uid' => $this->uidEncoder->encode((string) $cartItem->getItemId()),
                 'quantity' => $cartItem->getQty(),
                 'product' => $productData,
                 'model' => $cartItem,
@@ -90,7 +100,7 @@ class CartItems implements ResolverInterface
         foreach ($products as $product) {
             $productsData[$product->getId()] = $product->getData();
             $productsData[$product->getId()]['model'] = $product;
-            $productsData[$product->getId()]['uid'] = base64_encode($product->getId());
+            $productsData[$product->getId()]['uid'] = $this->uidEncoder->encode((string) $product->getId());
         }
 
         return $productsData;

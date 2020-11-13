@@ -8,7 +8,9 @@ declare(strict_types=1);
 namespace Magento\CustomerGraphQl\Model\Customer;
 
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\GraphQl\Query\Uid;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\Webapi\ServiceOutputProcessor;
 use Magento\Customer\Api\Data\CustomerInterface;
@@ -28,16 +30,23 @@ class ExtractCustomerData
      */
     private $serializer;
 
+    /** @var Uid */
+    private $uidEncoder;
+
     /**
      * @param ServiceOutputProcessor $serviceOutputProcessor
-     * @param SerializerInterface $serializer
+     * @param SerializerInterface $serializer,
+     * @param Uid|null $uidEncoder
      */
     public function __construct(
         ServiceOutputProcessor $serviceOutputProcessor,
-        SerializerInterface $serializer
+        SerializerInterface $serializer,
+        Uid $uidEncoder = null
     ) {
         $this->serviceOutputProcessor = $serviceOutputProcessor;
         $this->serializer = $serializer;
+        $this->uidEncoder = $uidEncoder ?: ObjectManager::getInstance()
+            ->get(Uid::class);
     }
 
     /**
@@ -104,7 +113,7 @@ class ExtractCustomerData
         //Fields are deprecated and should not be exposed on storefront.
         $customerData['group_id'] = null;
         $customerData['id'] = null;
-        $customerData['uid'] = base64_encode((string)$customer->getId());
+        $customerData['uid'] = $this->uidEncoder->encode((string) $customer->getId());
 
         $customerData['model'] = $customer;
 

@@ -7,8 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver\Product;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
+use Magento\Framework\GraphQl\Query\Uid;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\GraphQl\Config\Element\Field;
@@ -22,6 +24,18 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
  */
 class MediaGalleryEntries implements ResolverInterface
 {
+    /** @var Uid */
+    private $uidEncoder;
+
+    /**
+     * Uid|null $uidEncoder
+     */
+    public function __construct(Uid $uidEncoder = null)
+    {
+        $this->uidEncoder = $uidEncoder ?: ObjectManager::getInstance()
+            ->get(Uid::class);
+    }
+
     /**
      * @inheritdoc
      *
@@ -53,7 +67,7 @@ class MediaGalleryEntries implements ResolverInterface
         if (!empty($product->getMediaGalleryEntries())) {
             foreach ($product->getMediaGalleryEntries() as $key => $entry) {
                 $mediaGalleryEntries[$key] = $entry->getData();
-                $mediaGalleryEntries[$key]['uid'] = base64_encode($entry->getId());
+                $mediaGalleryEntries[$key]['uid'] = $this->uidEncoder->encode((string) $entry->getId());
                 if ($entry->getExtensionAttributes() && $entry->getExtensionAttributes()->getVideoContent()) {
                     $mediaGalleryEntries[$key]['video_content']
                         = $entry->getExtensionAttributes()->getVideoContent()->getData();

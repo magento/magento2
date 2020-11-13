@@ -53,12 +53,10 @@ class CategoryUidArgsProcessor implements ArgumentsProcessorInterface
             );
         } elseif (!empty($uidFilter)) {
             if (isset($uidFilter['eq'])) {
-                $args['filter'][self::ID]['eq'] = $this->uidEncoder->decode(
-                    $uidFilter['eq']
-                );
+                $args['filter'][self::ID]['eq'] = $this->uidEncoder->decode((string) $uidFilter['eq']);
             } elseif (!empty($uidFilter['in'])) {
-                foreach ($uidFilter['in'] as $uids) {
-                    $args['filter'][self::ID]['in'][] = $this->uidEncoder->decode($uids);
+                foreach ($uidFilter['in'] as $uid) {
+                    $args['filter'][self::ID]['in'][] = $this->uidEncoder->decode((string) $uid);
                 }
             }
             unset($args['filter'][self::UID]);

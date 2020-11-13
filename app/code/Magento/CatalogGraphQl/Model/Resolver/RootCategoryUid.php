@@ -9,6 +9,7 @@ namespace Magento\CatalogGraphQl\Model\Resolver;
 
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
+use Magento\Framework\GraphQl\Query\Uid;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 
 /**
@@ -16,11 +17,22 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
  */
 class RootCategoryUid implements ResolverInterface
 {
+    /** @var Uid */
+    private $uidEncoder;
+
+    /**
+     * Uid $uidEncoder
+     */
+    public function __construct(Uid $uidEncoder)
+    {
+        $this->uidEncoder = $uidEncoder;
+    }
+
     /**
      * @inheritdoc
      */
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {
-        return base64_encode($context->getExtensionAttributes()->getStore()->getRootCategoryId());
+        return $this->uidEncoder->decode((string) $context->getExtensionAttributes()->getStore()->getRootCategoryId());
     }
 }
