@@ -227,8 +227,8 @@
             <div class="grid_prepare admin__page-subsection"></div>
         </div>
     </section>
-    <?= /* @noEscape */ $secureRenderer->renderStyleAsTag('display:none', '#package_template') ?>
     <div id="packages_content"></div>
+    <?= /* @noEscape */ $secureRenderer->renderStyleAsTag('display:none', '#package_template') ?>
     <?php $scriptString = <<<script
 require(['jquery'], function($){
     $("div#packages_content").on('click', "button[data-action='package-save-items']",
