@@ -18,7 +18,6 @@ define([
         },
 
         /**
-         *
          * @inheritdoc
          */
         setInitialValue: function () {
