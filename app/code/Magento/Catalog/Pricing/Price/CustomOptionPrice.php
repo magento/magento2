@@ -14,6 +14,7 @@ use Magento\Framework\Pricing\Amount\AmountInterface;
 
 /**
  * Class OptionPrice
+ *
  */
 class CustomOptionPrice extends AbstractPrice implements CustomOptionPriceInterface
 {
@@ -123,8 +124,6 @@ class CustomOptionPrice extends AbstractPrice implements CustomOptionPriceInterf
     }
 
     /**
-     * Calculate Custom Amount
-     *
      * @param float $amount
      * @param null|bool|string|array $exclude
      * @param null|array $context
@@ -133,9 +132,7 @@ class CustomOptionPrice extends AbstractPrice implements CustomOptionPriceInterf
     public function getCustomAmount($amount = null, $exclude = null, $context = [])
     {
         if (null !== $amount) {
-            $amount = (isset($context['should_not_be_converted']) && $context['should_not_be_converted'])
-                ? $this->priceCurrency->roundPrice($amount)
-                : $this->priceCurrency->convertAndRound($amount);
+            $amount = $this->priceCurrency->convertAndRound($amount);
         } else {
             $amount = $this->getValue();
         }
