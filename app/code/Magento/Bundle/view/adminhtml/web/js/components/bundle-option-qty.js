@@ -21,7 +21,7 @@ define([
          *
          * @inheritdoc
          */
-        setInitialValue:function () {
+        setInitialValue: function () {
             this.initialValue = this.getInitialValue();
             if (this.initialValue === undefined || this.initialValue === '') {
                 this.initialValue = 1;
