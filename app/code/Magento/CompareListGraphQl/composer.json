@@ -1,14 +1,12 @@
 {
     "name": "magento/module-compare-list-graph-ql",
-    "version": "1.0.0",
     "description": "N/A",
     "type": "magento2-module",
     "require": {
         "php": "~7.3.0||~7.4.0",
         "magento/framework": "*",
         "magento/module-catalog": "*",
-        "magento/module-customer": "*",
-        "magento/module-store": "*"
+        "magento/module-customer": "*"
     },
     "license": [
         "OSL-3.0",
