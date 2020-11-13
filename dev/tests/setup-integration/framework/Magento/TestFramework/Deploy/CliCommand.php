@@ -125,7 +125,7 @@ class CliCommand
         );
         $command = $this->getCliScriptCommand() . ' setup:db-schema:split-quote ' .
             implode(" ", array_keys($installParams)) .
-            ' -vvv --magento-init-params="' .
+            ' -vvv  --no-interaction --magento-init-params="' .
             $initParams['magento-init-params'] . '"';
 
         $this->shell->execute($command, array_values($installParams));
