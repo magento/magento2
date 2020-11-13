@@ -78,4 +78,7 @@
             </argument>
         </arguments>
     </virtualType>
+    <type name="Magento\Sales\Model\Order\Invoice">
+        <plugin name="update_configurable_product_total_qty" type="Magento\ConfigurableProduct\Plugin\Model\Order\Invoice\UpdateConfigurableProductTotalQty"/>
+    </type>
 </config>
