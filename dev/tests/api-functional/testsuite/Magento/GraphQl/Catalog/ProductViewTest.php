@@ -50,6 +50,7 @@ class ProductViewTest extends GraphQlAbstract
             created_at
             gift_message_available
             id
+            uid
             categories {
                name
                url_path
@@ -65,6 +66,7 @@ class ProductViewTest extends GraphQlAbstract
                 disabled
                 file
                 id
+                uid
                 label
                 media_type
                 position
@@ -91,6 +93,7 @@ class ProductViewTest extends GraphQlAbstract
             options_container
             ... on CustomizableProductInterface {
               options {
+                uid
                 title
                 required
                 sort_order
@@ -232,7 +235,7 @@ class ProductViewTest extends GraphQlAbstract
             special_from_date
             special_price
             special_to_date
-            swatch_image            
+            swatch_image
             tier_price
             tier_prices
             {
@@ -307,11 +310,13 @@ QUERY;
             categories
             {
                 id
+                uid
             }
             country_of_manufacture
             created_at
             gift_message_available
             id
+            uid
             image {url, label}
             meta_description
             meta_keyword
@@ -321,6 +326,7 @@ QUERY;
                 disabled
                 file
                 id
+                uid
                 label
                 media_type
                 position
@@ -351,6 +357,7 @@ QUERY;
                 required
                 sort_order
                 option_id
+                uid
                 ... on CustomizableFieldOption {
                   product_sku
                   field_option: value {
@@ -588,6 +595,7 @@ QUERY;
                    attribute_set_id
                    created_at
                    id
+                   uid
                    name
                    price {
                       minimalPrice {
@@ -679,6 +687,7 @@ QUERY;
                 'disabled' => (bool)$mediaGalleryEntry->isDisabled(),
                 'file' => $mediaGalleryEntry->getFile(),
                 'id' => $mediaGalleryEntry->getId(),
+                'uid' => base64_encode($mediaGalleryEntry->getId()),
                 'label' => $mediaGalleryEntry->getLabel(),
                 'media_type' => $mediaGalleryEntry->getMediaType(),
                 'position' => $mediaGalleryEntry->getPosition(),
@@ -744,7 +753,11 @@ QUERY;
                 ['response_field' => 'sort_order', 'expected_value' => $option->getSortOrder()],
                 ['response_field' => 'title', 'expected_value' => $option->getTitle()],
                 ['response_field' => 'required', 'expected_value' => $option->getIsRequire()],
-                ['response_field' => 'option_id', 'expected_value' => $option->getOptionId()]
+                ['response_field' => 'option_id', 'expected_value' => $option->getOptionId()],
+                [
+                    'response_field' => 'uid',
+                    'expected_value' => base64_encode('custom-option/' . $option->getOptionId())
+                ]
             ];
 
             if (!empty($option->getValues())) {
@@ -813,14 +826,13 @@ QUERY;
      */
     private function assertBaseFields($product, $actualResponse)
     {
-
         $assertionMap = [
             ['response_field' => 'attribute_set_id', 'expected_value' => $product->getAttributeSetId()],
             ['response_field' => 'created_at', 'expected_value' => $product->getCreatedAt()],
             ['response_field' => 'id', 'expected_value' => $product->getId()],
+            ['response_field' => 'uid', 'expected_value' => base64_encode($product->getId())],
             ['response_field' => 'name', 'expected_value' => $product->getName()],
-            ['response_field' => 'price', 'expected_value' =>
-                [
+            ['response_field' => 'price', 'expected_value' => [
                     'minimalPrice' => [
                         'amount' => [
                             'value' => $product->getSpecialPrice(),
@@ -956,6 +968,7 @@ QUERY;
             name
             categories {
             id
+            uid
             name
             is_anchor
             }
@@ -982,6 +995,7 @@ QUERY;
                 [
                     'name' => $category->getName(),
                     'id' => $category->getId(),
+                    'uid' => base64_encode($category->getId()),
                     'is_anchor' => $category->getIsAnchor()
                 ]
             );
@@ -1006,6 +1020,7 @@ QUERY;
             name
             categories {
             id
+            uid
             name
             is_anchor
             }
@@ -1037,6 +1052,7 @@ QUERY;
                 [
                     'name' => $category->getName(),
                     'id' => $category->getId(),
+                    'uid' => base64_encode($category->getId()),
                     'is_anchor' => $category->getIsAnchor()
                 ]
             );
@@ -1054,7 +1070,7 @@ QUERY;
 
         $query = <<<QUERY
 {
-    products(filter: 
+    products(filter:
              {
              sku: {in:["12345"]}
              }
@@ -1066,6 +1082,7 @@ QUERY;
             name
             categories {
             id
+            uid
             name
             is_anchor
             }
@@ -1098,6 +1115,7 @@ QUERY;
                 [
                     'name' => $category->getName(),
                     'id' => $category->getId(),
+                    'uid' => base64_encode($category->getId()),
                     'is_anchor' => $category->getIsAnchor()
                 ]
             );
