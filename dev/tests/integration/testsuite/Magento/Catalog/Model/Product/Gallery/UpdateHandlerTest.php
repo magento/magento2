@@ -508,6 +508,92 @@ class UpdateHandlerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Check that product images should be updated successfully regardless if the existing images exist or not
+     *
+     * @magentoDataFixture Magento/Catalog/_files/product_with_image.php
+     * @dataProvider updateImageDataProvider
+     * @param string $newFile
+     * @param string $expectedFile
+     * @param bool $exist
+     * @return void
+     */
+    public function testUpdateImage(string $newFile, string $expectedFile, bool $exist): void
+    {
+        $product = $this->getProduct(Store::DEFAULT_STORE_ID);
+        $images = $product->getData('media_gallery')['images'];
+        $this->assertCount(1, $images);
+        $oldImage = reset($images) ?: [];
+        $this->assertEquals($oldImage['file'], $product->getImage());
+        $this->assertEquals($oldImage['file'], $product->getSmallImage());
+        $this->assertEquals($oldImage['file'], $product->getThumbnail());
+        $path = $this->mediaDirectory->getAbsolutePath($this->config->getBaseMediaPath() . $oldImage['file']);
+        $tmpPath = $this->mediaDirectory->getAbsolutePath($this->config->getBaseTmpMediaPath() . $oldImage['file']);
+        $this->assertFileExists($path);
+        $this->mediaDirectory->getDriver()->copy($path, $tmpPath);
+        if (!$exist) {
+            $this->mediaDirectory->getDriver()->deleteFile($path);
+            $this->assertFileDoesNotExist($path);
+        }
+        // delete old image
+        $oldImage['removed'] = 1;
+        $newImage = [
+            'file' => $newFile,
+            'position' => 1,
+            'label' => 'New Image Alt Text',
+            'disabled' => 0,
+            'media_type' => 'image'
+        ];
+        $newImageRoles = [
+            'image' => $newFile,
+            'small_image' => 'no_selection',
+            'thumbnail' => 'no_selection',
+        ];
+        $product->setData('media_gallery', ['images' => [$oldImage, $newImage]]);
+        $product->addData($newImageRoles);
+        $this->updateHandler->execute($product);
+        $product = $this->getProduct(Store::DEFAULT_STORE_ID);
+        $images = $product->getData('media_gallery')['images'];
+        $this->assertCount(1, $images);
+        $image = reset($images) ?: [];
+        $this->assertEquals($newImage['label'], $image['label']);
+        $this->assertEquals($expectedFile, $product->getImage());
+        $this->assertEquals($newImageRoles['small_image'], $product->getSmallImage());
+        $this->assertEquals($newImageRoles['thumbnail'], $product->getThumbnail());
+        $path = $this->mediaDirectory->getAbsolutePath($this->config->getBaseMediaPath() . $product->getImage());
+        // Assert that the image exists on disk.
+        $this->assertFileExists($path);
+    }
+
+    /**
+     * @return array[]
+     */
+    public function updateImageDataProvider(): array
+    {
+        return [
+            [
+                '/m/a/magento_image.jpg',
+                '/m/a/magento_image_1.jpg',
+                true
+            ],
+            [
+                '/m/a/magento_image.jpg',
+                '/m/a/magento_image.jpg',
+                false
+            ],
+            [
+                '/m/a/magento_small_image.jpg',
+                '/m/a/magento_small_image.jpg',
+                true
+            ],
+            [
+                '/m/a/magento_small_image.jpg',
+                '/m/a/magento_small_image.jpg',
+                false
+            ]
+        ];
+    }
+
+    /**
      * Check product image link and product image exist
      *
      * @param ProductInterface $product
