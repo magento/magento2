@@ -1179,23 +1179,22 @@ class AccountManagementTest extends TestCase
         $this->assertEquals($this->accountManagement, $this->accountManagement->sendPasswordReminderEmail($customer));
     }
 
-    /**
-     * @param string $email
-     * @param string $templateIdentifier
-     * @param string $sender
-     * @param int $storeId
-     * @param int $customerId
-     * @param string $hash
-     */
-    protected function prepareInitiatePasswordReset($email, $templateIdentifier, $sender, $storeId, $customerId, $hash)
-    {
+    protected function prepareInitiatePasswordReset(
+        string $email,
+        string $templateIdentifier,
+        string $sender,
+        int $storeId,
+        int $customerId,
+        string $hash,
+        int $callCount = 1
+    ): void {
         $websiteId = 1;
         $addressId = 5;
         $datetime = $this->prepareDateTimeFactory();
         $customerData = ['key' => 'value'];
         $customerName = 'Customer Name';
 
-        $this->store->expects($this->once())
+        $this->store->expects($this->exactly($callCount))
             ->method('getWebsiteId')
             ->willReturn($websiteId);
         $this->store->expects($this->any())
@@ -1212,7 +1211,7 @@ class AccountManagementTest extends TestCase
 
         /** @var AddressInterface|MockObject $customer */
         $address = $this->getMockForAbstractClass(AddressInterface::class);
-        $address->expects($this->once())
+        $address->expects($this->exactly($callCount))
             ->method('getId')
             ->willReturn($addressId);
 
@@ -1232,25 +1231,25 @@ class AccountManagementTest extends TestCase
         $customer->expects($this->any())
             ->method('getAddresses')
             ->willReturn([$address]);
-        $this->customerRepository->expects($this->once())
+        $this->customerRepository->expects($this->exactly($callCount))
             ->method('get')
             ->willReturn($customer);
-        $this->addressRegistryMock->expects($this->once())
+        $this->addressRegistryMock->expects($this->exactly($callCount))
             ->method('retrieve')
             ->with($addressId)
             ->willReturn($addressModel);
-        $addressModel->expects($this->once())
+        $addressModel->expects($this->exactly($callCount))
             ->method('setShouldIgnoreValidation')
             ->with(true);
-        $this->customerRepository->expects($this->once())
+        $this->customerRepository->expects($this->exactly($callCount))
             ->method('get')
             ->with($email, $websiteId)
             ->willReturn($customer);
-        $this->customerRepository->expects($this->once())
+        $this->customerRepository->expects($this->exactly($callCount))
             ->method('save')
             ->with($customer)
             ->willReturnSelf();
-        $this->random->expects($this->once())
+        $this->random->expects($this->exactly($callCount))
             ->method('getUniqueHash')
             ->willReturn($hash);
         $this->customerViewHelper->expects($this->any())
@@ -1297,31 +1296,31 @@ class AccountManagementTest extends TestCase
         $transport = $this->getMockBuilder(TransportInterface::class)
             ->getMock();
 
-        $this->transportBuilder->expects($this->any())
+        $this->transportBuilder->expects($this->once())
             ->method('setTemplateIdentifier')
             ->with($templateIdentifier)
             ->willReturnSelf();
-        $this->transportBuilder->expects($this->any())
+        $this->transportBuilder->expects($this->once())
             ->method('setTemplateOptions')
             ->with(['area' => Area::AREA_FRONTEND, 'store' => $storeId])
             ->willReturnSelf();
-        $this->transportBuilder->expects($this->any())
+        $this->transportBuilder->expects($this->once())
             ->method('setTemplateVars')
             ->with(['customer' => $this->customerSecure, 'store' => $this->store])
             ->willReturnSelf();
-        $this->transportBuilder->expects($this->any())
+        $this->transportBuilder->expects($this->once())
             ->method('setFrom')
             ->with($sender)
             ->willReturnSelf();
-        $this->transportBuilder->expects($this->any())
+        $this->transportBuilder->expects($this->once())
             ->method('addTo')
             ->with($email, $customerName)
             ->willReturnSelf();
-        $this->transportBuilder->expects($this->any())
+        $this->transportBuilder->expects($this->once())
             ->method('getTransport')
             ->willReturn($transport);
 
-        $transport->expects($this->any())
+        $transport->expects($this->once())
             ->method('sendMessage');
     }
 
@@ -1393,11 +1392,15 @@ class AccountManagementTest extends TestCase
             ->method('passwordResetConfirmation')
             ->willReturnSelf();
 
-        $this->prepareInitiatePasswordReset($email, $templateIdentifier, $sender, $storeId, $customerId, $hash);
-
-        // Because we call initiatePasswordReset() twice, we need to remove the
-        // 'once' requirement on these methods.
-        $this->store->expects($this->any())->method('getWebsiteId')->willReturn(1);
+        $this->prepareInitiatePasswordReset(
+            $email,
+            $templateIdentifier,
+            $sender,
+            $storeId,
+            $customerId,
+            $hash,
+            2 // call count
+        );
 
         $this->assertTrue($this->accountManagement->initiatePasswordReset($email, $template));
         $this->assertFalse($this->accountManagement->initiatePasswordReset($email, $template));
