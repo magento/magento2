@@ -6,18 +6,16 @@
 namespace Magento\Catalog\Helper;
 
 use Magento\Catalog\Model\Config\CatalogMediaConfig;
-use Magento\Catalog\Model\View\Asset\PlaceholderFactory;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 
 /**
- * Catalog image helper.
+ * Catalog image helper
  *
  * @api
  * @SuppressWarnings(PHPMD.TooManyFields)
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
  */
 class Image extends AbstractHelper implements ArgumentInterface
@@ -45,7 +43,6 @@ class Image extends AbstractHelper implements ArgumentInterface
      * Scheduled for rotate image
      *
      * @var bool
-     * @deprecated unused
      */
     protected $_scheduleRotate = false;
 
@@ -53,7 +50,6 @@ class Image extends AbstractHelper implements ArgumentInterface
      * Angle
      *
      * @var int
-     * @deprecated unused
      */
     protected $_angle;
 
@@ -136,7 +132,7 @@ class Image extends AbstractHelper implements ArgumentInterface
     protected $attributes = [];
 
     /**
-     * @var PlaceholderFactory
+     * @var \Magento\Catalog\Model\View\Asset\PlaceholderFactory
      */
     private $viewAssetPlaceholderFactory;
 
@@ -150,7 +146,7 @@ class Image extends AbstractHelper implements ArgumentInterface
      * @param \Magento\Catalog\Model\Product\ImageFactory $productImageFactory
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param \Magento\Framework\View\ConfigInterface $viewConfig
-     * @param PlaceholderFactory $placeholderFactory
+     * @param \Magento\Catalog\Model\View\Asset\PlaceholderFactory $placeholderFactory
      * @param CatalogMediaConfig $mediaConfig
      */
     public function __construct(
@@ -158,7 +154,7 @@ class Image extends AbstractHelper implements ArgumentInterface
         \Magento\Catalog\Model\Product\ImageFactory $productImageFactory,
         \Magento\Framework\View\Asset\Repository $assetRepo,
         \Magento\Framework\View\ConfigInterface $viewConfig,
-        PlaceholderFactory $placeholderFactory = null,
+        \Magento\Catalog\Model\View\Asset\PlaceholderFactory $placeholderFactory = null,
         CatalogMediaConfig $mediaConfig = null
     ) {
         $this->_productImageFactory = $productImageFactory;
@@ -166,7 +162,7 @@ class Image extends AbstractHelper implements ArgumentInterface
         $this->_assetRepo = $assetRepo;
         $this->viewConfig = $viewConfig;
         $this->viewAssetPlaceholderFactory = $placeholderFactory
-            ?: ObjectManager::getInstance()->get(PlaceholderFactory::class);
+            ?: ObjectManager::getInstance()->get(\Magento\Catalog\Model\View\Asset\PlaceholderFactory::class);
         $this->mediaConfig = $mediaConfig ?: ObjectManager::getInstance()->get(CatalogMediaConfig::class);
     }
 
@@ -311,7 +307,7 @@ class Image extends AbstractHelper implements ArgumentInterface
      *
      * @param int $quality
      * @return $this
-     * @deprecated
+     * @deprecated 103.0.1
      */
     public function setQuality($quality)
     {
@@ -396,10 +392,11 @@ class Image extends AbstractHelper implements ArgumentInterface
      */
     public function backgroundColor($colorRGB)
     {
-        $args = func_get_args();
         // assume that 3 params were given instead of array
         if (!is_array($colorRGB)) {
-            $colorRGB = $args;
+            //phpcs:disable
+            $colorRGB = func_get_args();
+            //phpcs:enabled
         }
         $this->_getModel()->setBackgroundColor($colorRGB);
         return $this;
@@ -410,7 +407,6 @@ class Image extends AbstractHelper implements ArgumentInterface
      *
      * @param int $angle
      * @return $this
-     * @deprecated unused
      */
     public function rotate($angle)
     {
@@ -462,7 +458,7 @@ class Image extends AbstractHelper implements ArgumentInterface
      * @param null|string $placeholder
      * @return string
      *
-     * @deprecated 101.1.0 Returns only default placeholder.
+     * @deprecated 102.0.0 Returns only default placeholder.
      * Does not take into account custom placeholders set in Configuration.
      */
     public function getPlaceholder($placeholder = null)
@@ -514,7 +510,11 @@ class Image extends AbstractHelper implements ArgumentInterface
             if ($this->getImageFile()) {
                 $model->setBaseFile($this->getImageFile());
             } else {
-                $model->setBaseFile($this->getProduct()->getData($model->getDestinationSubdir()));
+                $model->setBaseFile(
+                    $this->getProduct()
+                        ? $this->getProduct()->getData($model->getDestinationSubdir())
+                        : ''
+                );
             }
         }
         return $this;
@@ -620,7 +620,6 @@ class Image extends AbstractHelper implements ArgumentInterface
      *
      * @param int $angle
      * @return $this
-     * @deprecated unused
      */
     protected function setAngle($angle)
     {
@@ -632,7 +631,6 @@ class Image extends AbstractHelper implements ArgumentInterface
      * Get Rotation Angle
      *
      * @return int
-     * @deprecated unused
      */
     protected function getAngle()
     {

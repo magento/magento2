@@ -47,8 +47,8 @@
                 <requiredEntity createDataKey="simpleProduct2"/>
             </createData>
 
-            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
-            <actionGroup ref="GoToProductPageViaIDActionGroup" stepKey="goToProduct">
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+            <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProduct">
                 <argument name="productId" value="$$createBundleProduct.id$$"/>
             </actionGroup>
             <scrollTo selector="{{AdminProductFormBundleSection.contentDropDown}}" stepKey="scrollToBundleSection"/>
@@ -62,7 +62,7 @@
             <deleteData createDataKey="createBundleProduct" stepKey="deleteBundleProduct"/>
             <deleteData createDataKey="simpleProduct1" stepKey="deleteProduct1"/>
             <deleteData createDataKey="simpleProduct2" stepKey="deleteProduct2"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Login as a customer -->

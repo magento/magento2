@@ -3,28 +3,40 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Product;
 
-class LinkTypeProviderTest extends \PHPUnit\Framework\TestCase
+use Magento\Catalog\Api\Data\ProductLinkAttributeInterface;
+use Magento\Catalog\Api\Data\ProductLinkAttributeInterfaceFactory;
+use Magento\Catalog\Api\Data\ProductLinkTypeInterface;
+use Magento\Catalog\Api\Data\ProductLinkTypeInterfaceFactory;
+use Magento\Catalog\Model\Product\Link;
+use Magento\Catalog\Model\Product\LinkFactory;
+use Magento\Catalog\Model\Product\LinkTypeProvider;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class LinkTypeProviderTest extends TestCase
 {
     /**
-     * @var \Magento\Catalog\Model\Product\LinkTypeProvider
+     * @var LinkTypeProvider
      */
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $linkTypeFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $linkAttributeFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $linkFactoryMock;
 
@@ -33,18 +45,18 @@ class LinkTypeProviderTest extends \PHPUnit\Framework\TestCase
      */
     protected $linkTypes;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->linkTypeFactoryMock = $this->createPartialMock(
-            \Magento\Catalog\Api\Data\ProductLinkTypeInterfaceFactory::class,
+            ProductLinkTypeInterfaceFactory::class,
             ['create']
         );
         $this->linkAttributeFactoryMock = $this->createPartialMock(
-            \Magento\Catalog\Api\Data\ProductLinkAttributeInterfaceFactory::class,
+            ProductLinkAttributeInterfaceFactory::class,
             ['create']
         );
         $this->linkFactoryMock = $this->createPartialMock(
-            \Magento\Catalog\Model\Product\LinkFactory::class,
+            LinkFactory::class,
             ['create']
         );
         $this->linkTypes = [
@@ -52,9 +64,9 @@ class LinkTypeProviderTest extends \PHPUnit\Framework\TestCase
             'test_product_link_2' => 'test_code_2',
             'test_product_link_3' => 'test_code_3',
         ];
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
         $this->model = $objectManager->getObject(
-            \Magento\Catalog\Model\Product\LinkTypeProvider::class,
+            LinkTypeProvider::class,
             [
                 'linkTypeFactory' => $this->linkTypeFactoryMock,
                 'linkAttributeFactory' => $this->linkAttributeFactoryMock,
@@ -73,7 +85,7 @@ class LinkTypeProviderTest extends \PHPUnit\Framework\TestCase
         $linkTypeMocks = [];
         foreach ($this->linkTypes as $type => $typeCode) {
             $value = ['name' => $type, 'code' => $typeCode];
-            $linkTypeMock = $this->createMock(\Magento\Catalog\Api\Data\ProductLinkTypeInterface::class);
+            $linkTypeMock = $this->getMockForAbstractClass(ProductLinkTypeInterface::class);
             $linkTypeMock->expects($this->once())
                 ->method('setName')
                 ->with($type)
@@ -99,7 +111,7 @@ class LinkTypeProviderTest extends \PHPUnit\Framework\TestCase
         $attributes = [
             ['code' => 'test_code_1', 'type' => 'test_type_1'],
         ];
-        $linkAttributeMock = $this->createMock(\Magento\Catalog\Api\Data\ProductLinkAttributeInterface::class);
+        $linkAttributeMock = $this->getMockForAbstractClass(ProductLinkAttributeInterface::class);
         $linkAttributeMock->expects($this->once())
             ->method('setCode')
             ->with($attributes[0]['code'])
@@ -111,7 +123,7 @@ class LinkTypeProviderTest extends \PHPUnit\Framework\TestCase
         $expectedResult = [
             $linkAttributeMock,
         ];
-        $linkMock = $this->createPartialMock(\Magento\Catalog\Model\Product\Link::class, ['getAttributes']);
+        $linkMock = $this->createPartialMock(Link::class, ['getAttributes']);
         $linkMock->expects($this->once())->method('getAttributes')->willReturn($attributes);
         $this->linkFactoryMock->expects($this->once())->method('create')->with($typeId)->willReturn($linkMock);
         $this->linkAttributeFactoryMock->expects($this->once())->method('create')->willReturn($linkAttributeMock);

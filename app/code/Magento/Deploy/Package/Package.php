@@ -219,7 +219,7 @@ class Package
      */
     public function getParam($name)
     {
-        return isset($this->params[$name]) ? $this->params[$name] : null;
+        return $this->params[$name] ?? null;
     }
 
     /**
@@ -253,7 +253,7 @@ class Package
      */
     public function getFile($fileId)
     {
-        return isset($this->files[$fileId]) ? $this->files[$fileId] : false;
+        return $this->files[$fileId] ?? false;
     }
 
     /**
@@ -443,11 +443,11 @@ class Package
      */
     public function getParentMap()
     {
-        $map = [[]];
+        $map = [];
         foreach ($this->getParentPackages() as $parentPackage) {
             $map[] = $parentPackage->getMap();
         }
-        return array_merge(...$map);
+        return array_merge([], ...$map);
     }
 
     /**
@@ -458,7 +458,7 @@ class Package
      */
     public function getParentFiles($type = null)
     {
-        $files = [[]];
+        $files = [];
         foreach ($this->getParentPackages() as $parentPackage) {
             if ($type === null) {
                 $files[] = $parentPackage->getFiles();
@@ -466,7 +466,7 @@ class Package
                 $files[] = $parentPackage->getFilesByType($type);
             }
         }
-        return array_merge(...$files);
+        return array_merge([], ...$files);
     }
 
     /**
@@ -535,7 +535,7 @@ class Package
         $area,
         $theme,
         $locale,
-        array & $result = [],
+        array &$result = [],
         ThemeInterface $themeModel = null
     ) {
         if (($package->getArea() != $area) || ($package->getTheme() != $theme) || ($package->getLocale() != $locale)) {

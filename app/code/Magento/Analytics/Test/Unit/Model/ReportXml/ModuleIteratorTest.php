@@ -3,33 +3,31 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Analytics\Test\Unit\Model\ReportXml;
 
 use Magento\Analytics\Model\ReportXml\ModuleIterator;
 use Magento\Framework\Module\Manager as ModuleManager;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Module iterator test.
- */
-class ModuleIteratorTest extends \PHPUnit\Framework\TestCase
+class ModuleIteratorTest extends TestCase
 {
     /**
-     * @var ModuleManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var ModuleManager|MockObject
      */
     private $moduleManagerMock;
 
     /**
-     * @var ModuleIterator|\PHPUnit_Framework_MockObject_MockObject
+     * @var ModuleIterator|MockObject
      */
     private $moduleIterator;
 
-    public function setUp()
+    protected function setUp(): void
     {
-        $this->moduleManagerMock = $this->getMockBuilder(ModuleManager::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->moduleManagerMock = $this->createMock(ModuleManager::class);
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->moduleIterator = $objectManagerHelper->getObject(
             ModuleIterator::class,

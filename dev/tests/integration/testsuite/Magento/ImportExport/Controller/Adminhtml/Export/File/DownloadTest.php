@@ -54,7 +54,7 @@ class DownloadTest extends AbstractBackendController
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -105,7 +105,7 @@ class DownloadTest extends AbstractBackendController
             'Incorrect response header "content-type"'
         );
         $this->assertEquals(
-            'attachment; filename="export/' . $this->fileName . '"',
+            'attachment; filename="' . $this->fileName . '"',
             $contentDisposition->getFieldValue(),
             'Incorrect response header "content-disposition"'
         );
@@ -145,7 +145,7 @@ class DownloadTest extends AbstractBackendController
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->auth = null;
 
@@ -155,7 +155,7 @@ class DownloadTest extends AbstractBackendController
     /**
      * @inheritdoc
      */
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         $filesystem = Bootstrap::getObjectManager()->get(Filesystem::class);
         /** @var WriteInterface $directory */

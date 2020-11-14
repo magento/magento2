@@ -34,10 +34,31 @@
             <argument name="isBulk" xsi:type="boolean">true</argument>
         </arguments>
     </virtualType>
+    <virtualType name="Magento\WebapiAsync\Model\Bulk\OperationRepository" type="Magento\WebapiAsync\Model\OperationRepository">
+        <arguments>
+            <argument name="inputParamsResolver" xsi:type="object">Magento\WebapiAsync\Controller\VirtualType\InputParamsResolver</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\WebapiAsync\Model\MassSchedule" type="Magento\AsynchronousOperations\Model\MassSchedule">
+        <arguments>
+            <argument name="operationRepository" xsi:type="object">Magento\WebapiAsync\Model\OperationRepository</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\WebapiAsync\Model\Bulk\MassSchedule" type="Magento\AsynchronousOperations\Model\MassSchedule">
+        <arguments>
+            <argument name="operationRepository" xsi:type="object">Magento\WebapiAsync\Model\Bulk\OperationRepository</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\WebapiAsync\Controller\Rest\AsynchronousRequestProcessor">
+        <arguments>
+            <argument name="asyncBulkPublisher" xsi:type="object">Magento\WebapiAsync\Model\MassSchedule</argument>
+        </arguments>
+    </type>
     <virtualType name="Magento\WebapiAsync\Controller\Rest\VirtualType\AsynchronousBulkRequestProcessor" type="Magento\WebapiAsync\Controller\Rest\AsynchronousRequestProcessor">
         <arguments>
             <argument name="inputParamsResolver" xsi:type="object">Magento\WebapiAsync\Controller\VirtualType\InputParamsResolver</argument>
             <argument name="processorPath" xsi:type="const">Magento\WebapiAsync\Controller\Rest\AsynchronousRequestProcessor::BULK_PROCESSOR_PATH</argument>
+            <argument name="asyncBulkPublisher" xsi:type="object">Magento\WebapiAsync\Model\Bulk\MassSchedule</argument>
         </arguments>
     </virtualType>
     <virtualType name="Magento\WebapiAsync\Controller\Rest\VirtualType\AsynchronousBulkSchemaRequestProcessor" type="Magento\WebapiAsync\Controller\Rest\AsynchronousSchemaRequestProcessor">

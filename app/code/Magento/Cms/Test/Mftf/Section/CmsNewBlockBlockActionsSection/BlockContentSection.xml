@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="BlockContentSection">
+        <element name="TextArea" type="input" selector="#cms_block_form_content"/>
+        <element name="image" type="file" selector=".mce-content-body img"/>
+        <element name="contentIframe" type="iframe" selector="cms_block_form_content_ifr"/>
+    </section>
+</sections>

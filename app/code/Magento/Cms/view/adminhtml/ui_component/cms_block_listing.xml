@@ -64,7 +64,7 @@
                     <label translate="true">Store View</label>
                     <dataScope>store_id</dataScope>
                     <imports>
-                        <link name="visible">componentType = column, index = ${ $.index }:visible</link>
+                        <link name="visible">ns = ${ $.ns }, index = ${ $.index }:visible</link>
                     </imports>
                 </settings>
             </filterSelect>
@@ -146,6 +146,7 @@
                 <editor>
                     <validation>
                         <rule name="required-entry" xsi:type="boolean">true</rule>
+                        <rule name="no-marginal-whitespace" xsi:type="boolean">true</rule>
                     </validation>
                     <editorType>text</editorType>
                 </editor>

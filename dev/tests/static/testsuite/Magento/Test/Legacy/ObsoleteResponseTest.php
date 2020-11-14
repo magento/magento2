@@ -28,7 +28,7 @@ class ObsoleteResponseTest extends \PHPUnit\Framework\TestCase
      */
     protected $appPath;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->obsoleteMethods = include __DIR__ . '/_files/response/obsolete_response_methods.php';
         $this->filesBlackList = $this->getBlackList();

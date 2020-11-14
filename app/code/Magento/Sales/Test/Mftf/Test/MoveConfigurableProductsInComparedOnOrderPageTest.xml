@@ -14,7 +14,7 @@
             <stories value="Add Products to Order from Products in Comparison List Section"/>
             <title value="Move configurable products in compared on order page test"/>
             <description value="Move configurable products in compared on order page test"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MC-16104"/>
             <group value="sales"/>
             <group value="mtf_migrated"/>
@@ -86,7 +86,7 @@
         </before>
         <after>
             <!-- Admin logout -->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
 
             <!-- Logout customer -->
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer"/>
@@ -103,7 +103,7 @@
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
 
         <!-- Login as customer -->
@@ -130,11 +130,9 @@
         </actionGroup>
 
         <!-- Login as admin -->
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
-        <!-- Open Customers -> All Customers -->
-        <amOnPage url="{{AdminCustomerPage.url}}" stepKey="openCustomersGridPage"/>
-        <waitForPageLoad stepKey="waitForCustomerPageLoad"/>
+        <actionGroup ref="AdminOpenCustomersGridActionGroup" stepKey="openCustomersGridPage"/>
         <actionGroup ref="OpenEditCustomerFromAdminActionGroup" stepKey="openEditCustomerPage">
             <argument name="customer" value="$$createCustomer$$"/>
         </actionGroup>

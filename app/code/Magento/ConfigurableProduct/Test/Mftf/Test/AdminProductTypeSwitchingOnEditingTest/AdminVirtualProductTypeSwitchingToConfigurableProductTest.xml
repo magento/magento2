@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminVirtualProductTypeSwitchingToConfigurableProductTest">
+        <annotations>
+            <features value="ConfigurableProduct"/>
+            <stories value="Product type switching"/>
+            <title value="Virtual product type switching on editing to configurable product"/>
+            <description value="Virtual product type switching on editing to configurable product"/>
+            <testCaseId value="MC-17953"/>
+            <useCaseId value="MAGETWO-44170"/>
+            <severity value="MAJOR"/>
+            <group value="catalog"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!--Create product-->
+            <comment userInput="Create product" stepKey="commentCreateProduct"/>
+            <createData entity="VirtualProduct" stepKey="createProduct"/>
+            <!--Create attribute with options-->
+            <comment userInput="Create attribute with options" stepKey="commentCreateAttributeWithOptions"/>
+            <createData entity="productAttributeWithTwoOptions" stepKey="createConfigProductAttribute"/>
+            <createData entity="productAttributeOption1" stepKey="createConfigProductAttributeOptionOne">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption2" stepKey="createConfigProductAttributeOptionTwo">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+        </before>
+        <after>
+            <!--Delete product-->
+            <comment userInput="Delete product" stepKey="commentDeleteProduct"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteAttribute"/>
+            <actionGroup ref="DeleteAllDuplicateProductUsingProductGridActionGroup" stepKey="deleteAllDuplicateProducts">
+                <argument name="product" value="$$createProduct$$"/>
+            </actionGroup>
+            <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearProductFilters"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+        </after>
+        <!--Add configurations to product-->
+        <comment userInput="Add configurations to product" stepKey="commentAddConfigurations"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="gotToConfigProductPage">
+            <argument name="productId" value="$$createProduct.id$$"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForConfigurableProductPageLoad"/>
+        <selectOption selector="{{AdminProductFormSection.productWeightSelect}}" userInput="This item has weight" stepKey="selectWeightForConfigurableProduct"/>
+        <actionGroup ref="GenerateConfigurationsByAttributeCodeActionGroup" stepKey="setupConfigurationsForProduct">
+            <argument name="attributeCode" value="$$createConfigProductAttribute.attribute_code$$"/>
+        </actionGroup>
+        <actionGroup ref="SaveConfiguredProductActionGroup" stepKey="saveNewConfigurableProductForm"/>
+        <!--Assert configurable product on Admin product page grid-->
+        <comment userInput="Assert configurable product in Admin product page grid" stepKey="commentAssertConfigurableProductOnAdmin"/>
+        <actionGroup ref="AdminOpenCatalogProductPageActionGroup" stepKey="goToCatalogProductPageForConfigurable"/>
+        <actionGroup ref="FilterProductGridBySku2ActionGroup" stepKey="filterProductGridBySkuForConfigurable">
+            <argument name="sku" value="$$createProduct.sku$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminProductGridCellActionGroup" stepKey="seeConfigurableProductNameInGrid">
+            <argument name="row" value="1"/>
+            <argument name="column" value="Name"/>
+            <argument name="value" value="$$createProduct.name$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminProductGridCellActionGroup" stepKey="seeConfigurableProductTypeInGrid">
+            <argument name="row" value="1"/>
+            <argument name="column" value="Type"/>
+            <argument name="value" value="Configurable Product"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminProductGridCellActionGroup" stepKey="seeConfigurableProductNameInGrid1">
+            <argument name="row" value="2"/>
+            <argument name="column" value="Name"/>
+            <argument name="value" value="$$createProduct.name$$-option1"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminProductGridCellActionGroup" stepKey="seeConfigurableProductNameInGrid2">
+            <argument name="row" value="3"/>
+            <argument name="column" value="Name"/>
+            <argument name="value" value="$$createProduct.name$$-option2"/>
+        </actionGroup>
+        <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearConfigurableProductFilters"/>
+        <!--Assert configurable product on storefront-->
+        <comment userInput="Assert configurable product on storefront" stepKey="commentAssertConfigurableProductOnStorefront"/>
+        <amOnPage url="{{StorefrontProductPage.url($$createProduct.name$$)}}" stepKey="openConfigurableProductPage"/>
+        <waitForPageLoad stepKey="waitForStorefrontConfigurableProductPageLoad"/>
+        <see userInput="IN STOCK" selector="{{StorefrontProductInfoMainSection.productStockStatus}}" stepKey="assertConfigurableProductInStock"/>
+        <click selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" stepKey="clickConfigurableAttributeDropDown"/>
+        <see userInput="option1" stepKey="verifyConfigurableProductOption1Exists"/>
+        <see userInput="option2" stepKey="verifyConfigurableProductOption2Exists"/>
+    </test>
+</tests>

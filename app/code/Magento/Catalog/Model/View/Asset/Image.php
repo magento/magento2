@@ -69,14 +69,14 @@ class Image implements LocalInterface
     private $imageHelper;
 
     /**
-     * @var CatalogMediaConfig
-     */
-    private $catalogMediaConfig;
-
-    /**
      * @var StoreManagerInterface
      */
     private $storeManager;
+
+    /**
+     * @var string
+     */
+    private $mediaFormatUrl;
 
     /**
      * Image constructor.
@@ -112,8 +112,10 @@ class Image implements LocalInterface
         $this->miscParams = $miscParams;
         $this->encryptor = $encryptor;
         $this->imageHelper = $imageHelper ?: ObjectManager::getInstance()->get(ImageHelper::class);
-        $this->catalogMediaConfig = $catalogMediaConfig ?: ObjectManager::getInstance()->get(CatalogMediaConfig::class);
         $this->storeManager = $storeManager ?: ObjectManager::getInstance()->get(StoreManagerInterface::class);
+
+        $catalogMediaConfig =  $catalogMediaConfig ?: ObjectManager::getInstance()->get(CatalogMediaConfig::class);
+        $this->mediaFormatUrl = $catalogMediaConfig->getMediaUrlFormat();
     }
 
     /**
@@ -124,15 +126,14 @@ class Image implements LocalInterface
      */
     public function getUrl()
     {
-        $mediaUrlFormat = $this->catalogMediaConfig->getMediaUrlFormat();
-        switch ($mediaUrlFormat) {
+        switch ($this->mediaFormatUrl) {
             case CatalogMediaConfig::IMAGE_OPTIMIZATION_PARAMETERS:
                 return $this->getUrlWithTransformationParameters();
             case CatalogMediaConfig::HASH:
                 return $this->context->getBaseUrl() . DIRECTORY_SEPARATOR . $this->getImageInfo();
             default:
                 throw new LocalizedException(
-                    __("The specified Catalog media URL format '$mediaUrlFormat' is not supported.")
+                    __("The specified Catalog media URL format '$this->mediaFormatUrl' is not supported.")
                 );
         }
     }

@@ -14,11 +14,16 @@ use Magento\Customer\Api\Data\AddressInterfaceFactory;
 use Magento\Customer\Model\AddressRegistry;
 use Magento\Customer\Model\CustomerRegistry;
 use Magento\Customer\Model\ResourceModel\Address;
+use Magento\Customer\Model\Vat;
+use Magento\Customer\Observer\AfterAddressSaveObserver;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\DataObjectFactory;
 use Magento\Framework\Exception\InputException;
 use Magento\TestFramework\Directory\Model\GetRegionIdByName;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface as PsrLogger;
 
 /**
  * Assert that address was created as expected or address create throws expected error.
@@ -38,7 +43,7 @@ class CreateAddressTest extends TestCase
         AddressInterface::COUNTRY_ID => 'US',
         'custom_region_name' => 'Alabama',
         AddressInterface::CITY => 'CityM',
-        AddressInterface::STREET => 'Green str, 67',
+        AddressInterface::STREET => ['Green str, 67'],
         AddressInterface::LASTNAME => 'Smith',
         AddressInterface::FIRSTNAME => 'John',
     ];
@@ -46,17 +51,32 @@ class CreateAddressTest extends TestCase
     /**
      * @var ObjectManager
      */
-    private $objectManager;
-
-    /**
-     * @var GetRegionIdByName
-     */
-    private $getRegionIdByName;
+    protected $objectManager;
 
     /**
      * @var AddressInterfaceFactory
      */
-    private $addressFactory;
+    protected $addressFactory;
+
+    /**
+     * @var CustomerRegistry
+     */
+    protected $customerRegistry;
+
+    /**
+     * @var AddressRepositoryInterface
+     */
+    protected $addressRepository;
+
+    /**
+     * @var GetRegionIdByName
+     */
+    protected $getRegionIdByName;
+
+    /**
+     * @var CustomerRepositoryInterface
+     */
+    protected $customerRepository;
 
     /**
      * @var AddressRegistry
@@ -69,49 +89,41 @@ class CreateAddressTest extends TestCase
     private $addressResource;
 
     /**
-     * @var CustomerRegistry
-     */
-    private $customerRegistry;
-
-    /**
-     * @var AddressRepositoryInterface
-     */
-    private $addressRepository;
-
-    /**
-     * @var CustomerRepositoryInterface
-     */
-    private $customerRepository;
-
-    /**
      * @var int[]
      */
     private $createdAddressesIds = [];
 
     /**
+     * @var DataObjectFactory
+     */
+    private $dataObjectFactory;
+
+    /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->getRegionIdByName = $this->objectManager->get(GetRegionIdByName::class);
         $this->addressFactory = $this->objectManager->get(AddressInterfaceFactory::class);
-        $this->addressRegistry = $this->objectManager->get(AddressRegistry::class);
-        $this->addressResource = $this->objectManager->get(Address::class);
         $this->customerRegistry = $this->objectManager->get(CustomerRegistry::class);
         $this->addressRepository = $this->objectManager->get(AddressRepositoryInterface::class);
+        $this->getRegionIdByName = $this->objectManager->get(GetRegionIdByName::class);
         $this->customerRepository = $this->objectManager->get(CustomerRepositoryInterface::class);
+        $this->addressRegistry = $this->objectManager->get(AddressRegistry::class);
+        $this->addressResource = $this->objectManager->get(Address::class);
+        $this->dataObjectFactory = $this->objectManager->get(DataObjectFactory::class);
         parent::setUp();
     }
 
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         foreach ($this->createdAddressesIds as $createdAddressesId) {
             $this->addressRegistry->remove($createdAddressesId);
         }
+        $this->objectManager->removeSharedInstance(AfterAddressSaveObserver::class);
         parent::tearDown();
     }
 
@@ -310,10 +322,6 @@ class CreateAddressTest extends TestCase
                 array_replace(self::STATIC_CUSTOMER_ADDRESS_DATA, [AddressInterface::LASTNAME => '']),
                 InputException::requiredField('lastname'),
             ],
-            'required_field_empty_street_as_string' => [
-                array_replace(self::STATIC_CUSTOMER_ADDRESS_DATA, [AddressInterface::STREET => '']),
-                InputException::requiredField('street'),
-            ],
             'required_field_empty_street_as_array' => [
                 array_replace(self::STATIC_CUSTOMER_ADDRESS_DATA, [AddressInterface::STREET => []]),
                 InputException::requiredField('street'),
@@ -331,6 +339,109 @@ class CreateAddressTest extends TestCase
     }
 
     /**
+     * Assert that after address creation customer group is Group for Valid VAT ID - Domestic.
+     *
+     * @magentoAppIsolation enabled
+     * @magentoDataFixture Magento/Customer/_files/customer_no_address.php
+     * @magentoConfigFixture current_store general/store_information/country_id AT
+     * @magentoConfigFixture current_store customer/create_account/auto_group_assign 1
+     * @magentoConfigFixture current_store customer/create_account/viv_domestic_group 2
+     * @return void
+     */
+    public function testAddressCreatedWithGroupAssignByDomesticVatId(): void
+    {
+        $this->createVatMock(true, true);
+        $addressData = array_merge(
+            self::STATIC_CUSTOMER_ADDRESS_DATA,
+            [AddressInterface::VAT_ID => '111', AddressInterface::COUNTRY_ID => 'AT']
+        );
+        $customer = $this->customerRepository->get('customer5@example.com');
+        $this->createAddress((int)$customer->getId(), $addressData, false, true);
+        $this->assertEquals(2, $this->getCustomerGroupId('customer5@example.com'));
+    }
+
+    /**
+     * Assert that after address creation customer group is Group for Valid VAT ID - Intra-Union.
+     *
+     * @magentoAppIsolation enabled
+     * @magentoDataFixture Magento/Customer/_files/customer_no_address.php
+     * @magentoConfigFixture current_store general/store_information/country_id GR
+     * @magentoConfigFixture current_store customer/create_account/auto_group_assign 1
+     * @magentoConfigFixture current_store customer/create_account/viv_intra_union_group 2
+     * @return void
+     */
+    public function testAddressCreatedWithGroupAssignByIntraUnionVatId(): void
+    {
+        $this->createVatMock(true, true);
+        $addressData = array_merge(
+            self::STATIC_CUSTOMER_ADDRESS_DATA,
+            [AddressInterface::VAT_ID => '111', AddressInterface::COUNTRY_ID => 'AT']
+        );
+        $customer = $this->customerRepository->get('customer5@example.com');
+        $this->createAddress((int)$customer->getId(), $addressData, false, true);
+        $this->assertEquals(2, $this->getCustomerGroupId('customer5@example.com'));
+    }
+
+    /**
+     * Assert that after address creation customer group is Group for Invalid VAT ID.
+     *
+     * @magentoAppIsolation enabled
+     * @magentoDataFixture Magento/Customer/_files/customer_no_address.php
+     * @magentoConfigFixture current_store customer/create_account/auto_group_assign 1
+     * @magentoConfigFixture current_store customer/create_account/viv_invalid_group 2
+     * @return void
+     */
+    public function testAddressCreatedWithGroupAssignByInvalidVatId(): void
+    {
+        $this->createVatMock(false, true);
+        $addressData = array_merge(
+            self::STATIC_CUSTOMER_ADDRESS_DATA,
+            [AddressInterface::VAT_ID => '111', AddressInterface::COUNTRY_ID => 'AT']
+        );
+        $customer = $this->customerRepository->get('customer5@example.com');
+        $this->createAddress((int)$customer->getId(), $addressData, false, true);
+        $this->assertEquals(2, $this->getCustomerGroupId('customer5@example.com'));
+    }
+
+    /**
+     * Assert that after address creation customer group is Validation Error Group.
+     *
+     * @magentoAppIsolation enabled
+     * @magentoDataFixture Magento/Customer/_files/customer_no_address.php
+     * @magentoConfigFixture current_store customer/create_account/auto_group_assign 1
+     * @magentoConfigFixture current_store customer/create_account/viv_error_group 2
+     * @return void
+     */
+    public function testAddressCreatedWithGroupAssignByVatIdWithError(): void
+    {
+        $this->createVatMock(false, false);
+        $addressData = array_merge(
+            self::STATIC_CUSTOMER_ADDRESS_DATA,
+            [AddressInterface::VAT_ID => '111', AddressInterface::COUNTRY_ID => 'AT']
+        );
+        $customer = $this->customerRepository->get('customer5@example.com');
+        $this->createAddress((int)$customer->getId(), $addressData, false, true);
+        $this->assertEquals(2, $this->getCustomerGroupId('customer5@example.com'));
+    }
+
+    /**
+     * @magentoDataFixture Magento/Customer/_files/customer_no_address.php
+     * @magentoDataFixture Magento/Store/_files/second_website_with_store_group_and_store.php
+     * @magentoConfigFixture default_store general/country/allow BD,BB,AF
+     * @magentoConfigFixture fixture_second_store_store general/country/allow AS,BM
+     *
+     * @return void
+     */
+    public function testCreateAvailableAddress(): void
+    {
+        $countryId = 'BB';
+        $addressData = array_merge(self::STATIC_CUSTOMER_ADDRESS_DATA, [AddressInterface::COUNTRY_ID => $countryId]);
+        $customer = $this->customerRepository->get('customer5@example.com');
+        $address = $this->createAddress((int)$customer->getId(), $addressData);
+        $this->assertSame($countryId, $address->getCountryId());
+    }
+
+    /**
      * Create customer address with provided address data.
      *
      * @param int $customerId
@@ -339,7 +450,7 @@ class CreateAddressTest extends TestCase
      * @param bool $isDefaultBilling
      * @return AddressInterface
      */
-    private function createAddress(
+    protected function createAddress(
         int $customerId,
         array $addressData,
         bool $isDefaultShipping = false,
@@ -364,5 +475,50 @@ class CreateAddressTest extends TestCase
         $this->createdAddressesIds[] = (int)$address->getId();
 
         return $address;
+    }
+
+    /**
+     * Creates mock for vat id validation.
+     *
+     * @param bool $isValid
+     * @param bool $isRequestSuccess
+     * @return void
+     */
+    private function createVatMock(bool $isValid = false, bool $isRequestSuccess = false): void
+    {
+        $gatewayResponse = $this->dataObjectFactory->create(
+            [
+                'data' => [
+                    'is_valid' => $isValid,
+                    'request_date' => '',
+                    'request_identifier' => '123123123',
+                    'request_success' => $isRequestSuccess,
+                    'request_message' => __(''),
+                ],
+            ]
+        );
+        $customerVat = $this->getMockBuilder(Vat::class)
+            ->setConstructorArgs(
+                [
+                    $this->objectManager->get(ScopeConfigInterface::class),
+                    $this->objectManager->get(PsrLogger::class)
+                ]
+            )
+            ->setMethods(['checkVatNumber'])
+            ->getMock();
+        $customerVat->method('checkVatNumber')->willReturn($gatewayResponse);
+        $this->objectManager->removeSharedInstance(Vat::class);
+        $this->objectManager->addSharedInstance($customerVat, Vat::class);
+    }
+
+    /**
+     * Returns customer group id by email.
+     *
+     * @param string $email
+     * @return int
+     */
+    private function getCustomerGroupId(string $email): int
+    {
+        return (int)$this->customerRepository->get($email)->getGroupId();
     }
 }

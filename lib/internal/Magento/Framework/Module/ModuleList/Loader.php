@@ -111,8 +111,7 @@ class Loader
      * </code>
      *
      * @return \Traversable
-     *
-     * @author Josh Di Fabio <joshdifabio@gmail.com>
+     * @throws \Magento\Framework\Exception\FileSystemException
      */
     private function getModuleConfigs()
     {
@@ -211,6 +210,6 @@ class Loader
             $allResults[] = $this->expandSequence($list, $relatedName, $accumulated);
         }
         $allResults[] = $result;
-        return array_unique(array_merge(...$allResults));
+        return array_unique(array_merge([], ...$allResults));
     }
 }

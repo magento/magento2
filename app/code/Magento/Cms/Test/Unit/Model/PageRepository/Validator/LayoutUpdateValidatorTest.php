@@ -14,8 +14,8 @@ use Magento\Framework\Config\Dom\ValidationException;
 use Magento\Framework\Config\Dom\ValidationSchemaException;
 use Magento\Framework\Config\ValidationStateInterface;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\View\Model\Layout\Update\ValidatorFactory;
 use Magento\Framework\View\Model\Layout\Update\Validator;
+use Magento\Framework\View\Model\Layout\Update\ValidatorFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -34,11 +34,11 @@ class LayoutUpdateValidatorTest extends TestCase
      */
     private $validator;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $layoutValidatorFactory = $this->createMock(ValidatorFactory::class);
         $this->layoutValidator = $this->createMock(Validator::class);
-        $layoutValidatorState = $this->createMock(ValidationStateInterface::class);
+        $layoutValidatorState = $this->getMockForAbstractClass(ValidationStateInterface::class);
 
         $layoutValidatorFactory
             ->method('create')
@@ -75,7 +75,7 @@ class LayoutUpdateValidatorTest extends TestCase
                 ->willReturn($isLayoutValid);
         }
 
-        $page = $this->createMock(PageInterface::class);
+        $page = $this->getMockForAbstractClass(PageInterface::class);
         foreach ($data as $method => $value) {
             $page
                 ->method($method)

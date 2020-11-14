@@ -3,78 +3,96 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Swatches\Test\Unit\Helper;
 
+use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Helper\Image;
+use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Image\UrlBuilder;
+use Magento\Catalog\Model\ProductFactory;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
+use Magento\Eav\Model\Entity\Attribute\Source\AbstractSource;
+use Magento\Framework\DB\Select;
+use Magento\Framework\EntityManager\EntityMetadataInterface;
 use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManager;
+use Magento\Swatches\Helper\Data;
 use Magento\Swatches\Model\ResourceModel\Swatch\Collection;
 use Magento\Swatches\Model\SwatchAttributesProvider;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class DataTest extends \PHPUnit\Framework\TestCase
+class DataTest extends TestCase
 {
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Helper\Image */
+    /** @var MockObject|Image */
     protected $imageHelperMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\ResourceModel\Product\CollectionFactory */
+    /** @var MockObject|CollectionFactory */
     protected $productCollectionFactoryMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\ResourceModel\Product\Collection */
+    /** @var MockObject|\Magento\Catalog\Model\ResourceModel\Product\Collection */
     protected $productCollectionMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\ConfigurableProduct\Model\Product\Type\Configurable */
+    /** @var MockObject|Configurable */
     protected $configurableMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\ProductFactory */
+    /** @var MockObject|ProductFactory */
     protected $productModelFactoryMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Product */
+    /** @var MockObject|Product */
     protected $productMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Store\Model\StoreManager */
+    /** @var MockObject|StoreManager */
     protected $storeManagerMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Swatches\Model\ResourceModel\Swatch\CollectionFactory */
+    /** @var MockObject|\Magento\Swatches\Model\ResourceModel\Swatch\CollectionFactory */
     protected $swatchCollectionFactoryMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|Attribute */
+    /** @var MockObject|Attribute */
     protected $attributeMock;
 
-    /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
+    /** @var ObjectManager */
     protected $objectManager;
 
-    /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager|\Magento\Swatches\Helper\Data */
+    /** @var ObjectManager|Data */
     protected $swatchHelperObject;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Api\ProductRepositoryInterface */
+    /** @var MockObject|ProductRepositoryInterface */
     protected $productRepoMock;
 
-    /** @var   \PHPUnit_Framework_MockObject_MockObject|MetadataPool */
+    /** @var   MockObject|MetadataPool */
     private $metaDataPoolMock;
 
     /**
-     * @var SwatchAttributesProvider|\PHPUnit_Framework_MockObject_MockObject
+     * @var SwatchAttributesProvider|MockObject
      */
     private $swatchAttributesProvider;
 
     /**
-     * @var  \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Product\Image\UrlBuilder
+     * @var  MockObject|UrlBuilder
      */
     private $imageUrlBuilderMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->imageHelperMock = $this->createMock(\Magento\Catalog\Helper\Image::class);
+        $this->objectManager = new ObjectManager($this);
+        $this->imageHelperMock = $this->createMock(Image::class);
         $this->productCollectionFactoryMock = $this->createPartialMock(
-            \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory::class,
+            CollectionFactory::class,
             ['create']
         );
-        $this->productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
+        $this->productMock = $this->createMock(Product::class);
         $this->productCollectionMock = $this->objectManager->getCollectionMock(
             \Magento\Catalog\Model\ResourceModel\Product\Collection::class,
             [
@@ -84,16 +102,16 @@ class DataTest extends \PHPUnit\Framework\TestCase
         );
 
         $this->configurableMock = $this->createMock(
-            \Magento\ConfigurableProduct\Model\Product\Type\Configurable::class
+            Configurable::class
         );
         $this->productModelFactoryMock = $this->createPartialMock(
-            \Magento\Catalog\Model\ProductFactory::class,
+            ProductFactory::class,
             ['create']
         );
 
-        $this->productRepoMock = $this->createMock(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+        $this->productRepoMock = $this->getMockForAbstractClass(ProductRepositoryInterface::class);
 
-        $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManager::class);
+        $this->storeManagerMock = $this->createMock(StoreManager::class);
         $this->swatchCollectionFactoryMock = $this->createPartialMock(
             \Magento\Swatches\Model\ResourceModel\Swatch\CollectionFactory::class,
             ['create']
@@ -108,7 +126,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $serializer = $this->createPartialMock(
-            \Magento\Framework\Serialize\Serializer\Json::class,
+            Json::class,
             ['serialize', 'unserialize']
         );
         $serializer->expects($this->any())
@@ -123,13 +141,13 @@ class DataTest extends \PHPUnit\Framework\TestCase
         $this->swatchAttributesProvider = $this->getMockBuilder(SwatchAttributesProvider::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->imageUrlBuilderMock = $this->getMockBuilder(\Magento\Catalog\Model\Product\Image\UrlBuilder::class)
+        $this->imageUrlBuilderMock = $this->getMockBuilder(UrlBuilder::class)
             ->disableOriginalConstructor()
             ->setMethods(['getUrl'])
             ->getMock();
 
         $this->swatchHelperObject = $this->objectManager->getObject(
-            \Magento\Swatches\Helper\Data::class,
+            Data::class,
             [
                 'productCollectionFactory' => $this->productCollectionFactoryMock,
                 'configurable' => $this->configurableMock,
@@ -185,7 +203,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ->expects($this->at(0))
             ->method('getData')
             ->with('additional_data')
-            ->will($this->returnValue($dataFromDb));
+            ->willReturn($dataFromDb);
 
         $i = 1;
         foreach ($attributeData as $key => $value) {
@@ -237,7 +255,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
      */
     public function testLoadFirstVariationWithSwatchImage($imageTypes, $expected, $requiredAttributes)
     {
-        $this->getSwatchAttributes($this->productMock);
+        $this->getSwatchAttributes();
         $this->getUsedProducts($imageTypes + $requiredAttributes, $imageTypes);
 
         $result = $this->swatchHelperObject->loadFirstVariationWithSwatchImage($this->productMock, $requiredAttributes);
@@ -245,7 +263,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
         if ($expected === false) {
             $this->assertFalse($result);
         } else {
-            $this->assertInstanceOf(\Magento\Catalog\Model\Product::class, $result);
+            $this->assertInstanceOf(Product::class, $result);
         }
     }
 
@@ -262,7 +280,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
                     'thumbnail' => '/m/a/magento.png',
                     'swatch_image' => '/m/a/magento.png', //important
                 ],
-                \Magento\Catalog\Model\Product::class,
+                Product::class,
                 ['color' => 31],
             ],
             [
@@ -277,23 +295,20 @@ class DataTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    /**
-     * @dataProvider dataForCreateSwatchProductByFallback
-     */
-    public function testLoadVariationByFallback($product)
+    public function testLoadVariationByFallback()
     {
-        $metadataMock = $this->createMock(\Magento\Framework\EntityManager\EntityMetadataInterface::class);
+        $metadataMock = $this->getMockForAbstractClass(EntityMetadataInterface::class);
         $this->metaDataPoolMock->expects($this->once())->method('getMetadata')->willReturn($metadataMock);
         $metadataMock->expects($this->once())->method('getLinkField')->willReturn('id');
 
-        $this->getSwatchAttributes($product);
+        $this->getSwatchAttributes();
 
         $this->prepareVariationCollection();
 
         $this->productCollectionMock->method('getFirstItem')->willReturn($this->productMock);
         $this->productMock->method('getData')->with('id')->willReturn(95);
         $this->productModelFactoryMock->method('create')->willReturn($this->productMock);
-        $this->productMock->method('load')->with(95)->will($this->returnSelf());
+        $this->productMock->method('load')->with(95)->willReturnSelf();
 
         $this->swatchHelperObject->loadVariationByFallback($this->productMock, ['color' => 31]);
     }
@@ -303,7 +318,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
      */
     public function testLoadFirstVariationWithImage($imageTypes, $expected, $requiredAttributes)
     {
-        $this->getSwatchAttributes($this->productMock);
+        $this->getSwatchAttributes();
         $this->getUsedProducts($imageTypes + $requiredAttributes, $imageTypes);
 
         $result = $this->swatchHelperObject->loadFirstVariationWithImage($this->productMock, $requiredAttributes);
@@ -311,7 +326,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
         if ($expected === false) {
             $this->assertFalse($result);
         } else {
-            $this->assertInstanceOf(\Magento\Catalog\Model\Product::class, $result);
+            $this->assertInstanceOf(Product::class, $result);
         }
     }
 
@@ -328,7 +343,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
                     'thumbnail' => '/m/a/magento.png',
                     'swatch_image' => '/m/a/magento.png',
                 ],
-                \Magento\Catalog\Model\Product::class,
+                Product::class,
                 ['color' => 31],
             ],
             [
@@ -365,7 +380,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
         $mediaUrls = [];
         foreach ($mediaGallery as $mediaType => $mediaFile) {
             $mediaGalleryEntryMock = $this->getMockBuilder(
-                \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface::class
+                ProductAttributeMediaGalleryEntryInterface::class
             )->getMock();
             $mediaGalleryEntryMock->expects($this->atLeastOnce())
                 ->method('isDisabled')
@@ -398,9 +413,9 @@ class DataTest extends \PHPUnit\Framework\TestCase
 
         $productMediaGallery = $this->swatchHelperObject->getProductMediaGallery($this->productMock);
         if ($mediaGallery) {
-            $this->assertContains($image, $productMediaGallery['large']);
-            $this->assertContains($image, $productMediaGallery['medium']);
-            $this->assertContains($image, $productMediaGallery['small']);
+            $this->assertStringContainsString($image, $productMediaGallery['large']);
+            $this->assertStringContainsString($image, $productMediaGallery['medium']);
+            $this->assertStringContainsString($image, $productMediaGallery['small']);
         } else {
             $this->assertEmpty($productMediaGallery);
         }
@@ -459,7 +474,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
 
         $simpleProducts = [];
         for ($i = 0; $i < 2; $i++) {
-            $simpleProduct = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+            $simpleProduct = $this->getMockBuilder(Product::class)
                 ->disableOriginalConstructor()
                 ->setMethods(['hasData', 'getMediaGalleryEntries'])
                 ->getMock();
@@ -468,7 +483,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
             $mediaGalleryEntries = [];
             foreach (array_keys($imageTypes) as $mediaType) {
                 $mediaGalleryEntryMock = $this->getMockBuilder(
-                    \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface::class
+                    ProductAttributeMediaGalleryEntryInterface::class
                 )->getMock();
                 $mediaGalleryEntryMock->expects($this->any())
                     ->method('isDisabled')
@@ -528,7 +543,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ->with('catalog_product_relation')
             ->willReturn('catalog_product_relation');
 
-        $zendDbSelectMock = $this->createMock(\Magento\Framework\DB\Select::class);
+        $zendDbSelectMock = $this->createMock(Select::class);
 
         $this->productCollectionMock->method('getSelect')->willReturn($zendDbSelectMock);
         $zendDbSelectMock->method('join')->willReturn($zendDbSelectMock);
@@ -540,7 +555,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
      */
     public function dataForCreateSwatchProduct()
     {
-        $productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
+        $productMock = $this->createMock(Product::class);
 
         return [
             [
@@ -575,23 +590,6 @@ class DataTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return array
-     */
-    public function dataForCreateSwatchProductByFallback()
-    {
-        $productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
-
-        return [
-            [
-                95,
-            ],
-            [
-                $productMock,
-            ],
-        ];
-    }
-
-    /**
      * @dataProvider dataForGettingSwatchAsArray
      */
     public function testGetSwatchAttributesAsArray($optionsArray, $attributeData, $expected)
@@ -603,14 +601,14 @@ class DataTest extends \PHPUnit\Framework\TestCase
 
         $storeId = 1;
 
-        $this->attributeMock->method('setStoreId')->with($storeId)->will($this->returnSelf());
-        $storeMock = $this->createMock(\Magento\Store\Model\Store::class);
+        $this->attributeMock->method('setStoreId')->with($storeId)->willReturnSelf();
+        $storeMock = $this->createMock(Store::class);
         $storeMock->method('getId')->willReturn($storeId);
         $this->storeManagerMock->method('getStore')->willReturn($storeMock);
 
         $this->attributeMock->method('getData')->with('')->willReturn($attributeData);
 
-        $sourceMock = $this->createMock(\Magento\Eav\Model\Entity\Attribute\Source\AbstractSource::class);
+        $sourceMock = $this->createMock(AbstractSource::class);
         $sourceMock->expects($this->any())->method('getAllOptions')->with(false)->willReturn($optionsArray);
         $this->attributeMock->method('getSource')->willReturn($sourceMock);
 
@@ -669,7 +667,8 @@ class DataTest extends \PHPUnit\Framework\TestCase
 
     public function testGetSwatchesByOptionsIdIf1()
     {
-        $swatchMock = $this->createMock(\Magento\Swatches\Model\Swatch::class);
+        //Simulate behaviour of \Magento\Swatches\Model\Swatch as array item
+        $swatchMock = $this->createMock(\ArrayAccess::class);
 
         $optionsData = [
             [
@@ -692,25 +691,21 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ->willReturn($optionsData[0]['type']);
         $swatchMock->expects($this->at(1))->method('offsetGet')->with('option_id')
             ->willReturn($optionsData[0]['option_id']);
-        $swatchMock->expects($this->at(2))->method('getData')->with('')
-            ->willReturn($optionsData[0]);
-        $swatchMock->expects($this->at(3))->method('offsetGet')->with('type')
+        $swatchMock->expects($this->at(2))->method('offsetGet')->with('type')
             ->willReturn($optionsData[1]['type']);
+        $swatchMock->expects($this->at(3))->method('offsetGet')->with('store_id')
+            ->willReturn($optionsData[1]['store_id']);
         $swatchMock->expects($this->at(4))->method('offsetGet')->with('store_id')
             ->willReturn($optionsData[1]['store_id']);
-        $swatchMock->expects($this->at(5))->method('offsetGet')->with('store_id')
-            ->willReturn($optionsData[1]['store_id']);
-        $swatchMock->expects($this->at(6))->method('offsetGet')->with('option_id')
+        $swatchMock->expects($this->at(5))->method('offsetGet')->with('option_id')
             ->willReturn($optionsData[1]['option_id']);
-        $swatchMock->expects($this->at(7))->method('getData')->with('')
-            ->willReturn($optionsData[1]);
 
-        $swatchCollectionMock = $this->objectManager
-            ->getCollectionMock(Collection::class, [$swatchMock, $swatchMock]);
-        $swatchCollectionMock->method('addFilterByOptionsIds')->with([35])->will($this->returnSelf());
+        $swatchCollectionMock = $this->createMock(Collection::class);
+        $swatchCollectionMock->method('addFilterByOptionsIds')->with([35])->willReturnSelf();
+        $swatchCollectionMock->expects($this->once())->method('getData')->willReturn([$swatchMock, $swatchMock]);
         $this->swatchCollectionFactoryMock->method('create')->willReturn($swatchCollectionMock);
 
-        $storeMock = $this->createMock(\Magento\Store\Model\Store::class);
+        $storeMock = $this->createMock(Store::class);
         $this->storeManagerMock->method('getStore')->willReturn($storeMock);
         $storeMock->method('getId')->willReturn(1);
 
@@ -719,7 +714,8 @@ class DataTest extends \PHPUnit\Framework\TestCase
 
     public function testGetSwatchesByOptionsIdIf2()
     {
-        $swatchMock = $this->createMock(\Magento\Swatches\Model\Swatch::class);
+        //Simulate behaviour of \Magento\Swatches\Model\Swatch as array item
+        $swatchMock = $this->createMock(\ArrayAccess::class);
 
         $optionsData = [
             [
@@ -737,30 +733,23 @@ class DataTest extends \PHPUnit\Framework\TestCase
                 'id' => 488,
             ]
         ];
-
-        $swatchMock->expects($this->at(0))->method('offsetGet')->with('type')->willReturn(0);
-        $swatchMock->expects($this->at(1))->method('offsetGet')->with('store_id')->willReturn(1);
-        $swatchMock->expects($this->at(2))->method('offsetGet')->with('value')->willReturn('test');
-        $swatchMock->expects($this->at(3))->method('offsetGet')->with('option_id')->willReturn(35);
-        $swatchMock->expects($this->at(4))->method('getData')->with('')->willReturn($optionsData[0]);
-        $swatchMock->expects($this->at(5))->method('offsetGet')->with('type')->willReturn(0);
-        $swatchMock->expects($this->at(6))->method('offsetGet')->with('store_id')->willReturn(1);
-        $swatchMock->expects($this->at(7))->method('offsetGet')->with('value')->willReturn('test2');
-        $swatchMock->expects($this->at(8))->method('offsetGet')->with('option_id')->willReturn(36);
-        $swatchMock->expects($this->at(9))->method('getData')->with('')->willReturn($optionsData[1]);
-
-        $swatchCollectionMock = $this->objectManager->getCollectionMock(
-            Collection::class,
-            [
-                $swatchMock,
-                $swatchMock,
-            ]
-        );
+        // @codingStandardsIgnoreStart
+        $swatchMock->expects($this->at(0))->method('offsetGet')->with('type')->willReturn($optionsData[0]['type']);
+        $swatchMock->expects($this->at(1))->method('offsetGet')->with('store_id')->willReturn($optionsData[0]['store_id']);
+        $swatchMock->expects($this->at(2))->method('offsetGet')->with('value')->willReturn($optionsData[0]['value']);
+        $swatchMock->expects($this->at(3))->method('offsetGet')->with('option_id')->willReturn($optionsData[0]['option_id']);
+        $swatchMock->expects($this->at(4))->method('offsetGet')->with('type')->willReturn($optionsData[1]['type']);
+        $swatchMock->expects($this->at(5))->method('offsetGet')->with('store_id')->willReturn($optionsData[1]['store_id']);
+        $swatchMock->expects($this->at(6))->method('offsetGet')->with('value')->willReturn($optionsData[1]['value']);
+        $swatchMock->expects($this->at(7))->method('offsetGet')->with('option_id')->willReturn($optionsData[1]['option_id']);
+        // @codingStandardsIgnoreEnd
+        $swatchCollectionMock = $this->createMock(Collection::class);
         $this->swatchCollectionFactoryMock->method('create')->willReturn($swatchCollectionMock);
 
-        $swatchCollectionMock->method('addFilterByOptionsIds')->with([35])->will($this->returnSelf());
+        $swatchCollectionMock->method('addFilterByOptionsIds')->with([35])->willReturnSelf();
+        $swatchCollectionMock->expects($this->once())->method('getData')->willReturn([$swatchMock, $swatchMock]);
 
-        $storeMock = $this->createMock(\Magento\Store\Model\Store::class);
+        $storeMock = $this->createMock(Store::class);
         $this->storeManagerMock->method('getStore')->willReturn($storeMock);
         $storeMock->method('getId')->willReturn(1);
 
@@ -769,7 +758,8 @@ class DataTest extends \PHPUnit\Framework\TestCase
 
     public function testGetSwatchesByOptionsIdIf3()
     {
-        $swatchMock = $this->createMock(\Magento\Swatches\Model\Swatch::class);
+        //Simulate behaviour of \Magento\Swatches\Model\Swatch as array item
+        $swatchMock = $this->createMock(\ArrayAccess::class);
 
         $optionsData = [
             'type' => 0,
@@ -778,24 +768,19 @@ class DataTest extends \PHPUnit\Framework\TestCase
             'option_id' => 35,
             'id' => 423,
         ];
-
-        $swatchMock->expects($this->at(0))->method('offsetGet')->with('type')->willReturn(0);
-        $swatchMock->expects($this->at(1))->method('offsetGet')->with('store_id')->willReturn(0);
-        $swatchMock->expects($this->at(2))->method('offsetGet')->with('store_id')->willReturn(0);
-        $swatchMock->expects($this->at(3))->method('offsetGet')->with('option_id')->willReturn(35);
-        $swatchMock->expects($this->at(4))->method('getData')->with('')->willReturn($optionsData);
-
-        $swatchCollectionMock = $this->objectManager->getCollectionMock(
-            Collection::class,
-            [
-                $swatchMock,
-            ]
-        );
+        // @codingStandardsIgnoreStart
+        $swatchMock->expects($this->at(0))->method('offsetGet')->with('type')->willReturn($optionsData['type']);
+        $swatchMock->expects($this->at(1))->method('offsetGet')->with('store_id')->willReturn($optionsData['store_id']);
+        $swatchMock->expects($this->at(2))->method('offsetGet')->with('store_id')->willReturn($optionsData['store_id']);
+        $swatchMock->expects($this->at(3))->method('offsetGet')->with('option_id')->willReturn($optionsData['option_id']);
+        // @codingStandardsIgnoreEnd
+        $swatchCollectionMock = $this->createMock(Collection::class);
         $this->swatchCollectionFactoryMock->method('create')->willReturn($swatchCollectionMock);
 
-        $swatchCollectionMock->method('addFilterByOptionsIds')->with([35])->will($this->returnSelf());
+        $swatchCollectionMock->method('addFilterByOptionsIds')->with([35])->willReturnSelf();
+        $swatchCollectionMock->expects($this->once())->method('getData')->willReturn([$swatchMock]);
 
-        $storeMock = $this->createMock(\Magento\Store\Model\Store::class);
+        $storeMock = $this->createMock(Store::class);
         $this->storeManagerMock->method('getStore')->willReturn($storeMock);
         $storeMock->method('getId')->willReturn(1);
 
@@ -806,6 +791,6 @@ class DataTest extends \PHPUnit\Framework\TestCase
     {
         $this->getSwatchAttributes();
         $result = $this->swatchHelperObject->isProductHasSwatch($this->productMock);
-        $this->assertEquals(true, $result);
+        $this->assertTrue($result);
     }
 }

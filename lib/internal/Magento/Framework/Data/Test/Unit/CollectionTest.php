@@ -3,25 +3,30 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Data\Test\Unit;
 
-/**
- * Class for Collection test.
- */
-class CollectionTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\Data\Collection;
+use Magento\Framework\Data\Collection\EntityFactory;
+use Magento\Framework\DataObject;
+use Magento\Framework\Url;
+use PHPUnit\Framework\TestCase;
+
+class CollectionTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Data\Collection
+     * @var Collection
      */
     protected $_model;
 
     /**
      * Set up.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->_model = new \Magento\Framework\Data\Collection(
-            $this->createMock(\Magento\Framework\Data\Collection\EntityFactory::class)
+        $this->_model = new Collection(
+            $this->createMock(EntityFactory::class)
         );
     }
 
@@ -32,8 +37,8 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      */
     public function testRemoveAllItems()
     {
-        $this->_model->addItem(new \Magento\Framework\DataObject());
-        $this->_model->addItem(new \Magento\Framework\DataObject());
+        $this->_model->addItem(new DataObject());
+        $this->_model->addItem(new DataObject());
         $this->assertCount(2, $this->_model->getItems());
         $this->_model->removeAllItems();
         $this->assertEmpty($this->_model->getItems());
@@ -46,10 +51,10 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      */
     public function testLoadWithFilter()
     {
-        $this->assertInstanceOf(\Magento\Framework\Data\Collection::class, $this->_model->loadWithFilter());
+        $this->assertInstanceOf(Collection::class, $this->_model->loadWithFilter());
         $this->assertEmpty($this->_model->getItems());
-        $this->_model->addItem(new \Magento\Framework\DataObject());
-        $this->_model->addItem(new \Magento\Framework\DataObject());
+        $this->_model->addItem(new DataObject());
+        $this->_model->addItem(new DataObject());
         $this->assertCount(2, $this->_model->loadWithFilter()->getItems());
     }
 
@@ -60,6 +65,8 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      */
     public function testSetItemObjectClass($class)
     {
+        $this->markTestSkipped('Skipped in #27500 due to testing protected/private methods and properties');
+
         $this->_model->setItemObjectClass($class);
         $this->assertAttributeSame($class, '_itemObjectClass', $this->_model);
     }
@@ -71,17 +78,16 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      */
     public function setItemObjectClassDataProvider()
     {
-        return [[\Magento\Framework\Url::class], [\Magento\Framework\DataObject::class]];
+        return [[Url::class], [DataObject::class]];
     }
 
     /**
      * Test for method setItemObjectClass with exception.
-     *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Incorrect_ClassName does not extend \Magento\Framework\DataObject
      */
     public function testSetItemObjectClassException()
     {
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage('Incorrect_ClassName does not extend \Magento\Framework\DataObject');
         $this->_model->setItemObjectClass('Incorrect_ClassName');
     }
 
@@ -151,14 +157,16 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      */
     public function testPossibleFlowWithItem()
     {
-        $firstItemMock = $this->createPartialMock(
-            \Magento\Framework\DataObject::class,
-            ['getId', 'getData', 'toArray']
-        );
-        $secondItemMock = $this->createPartialMock(
-            \Magento\Framework\DataObject::class,
-            ['getId', 'getData', 'toArray']
-        );
+        $firstItemMock = $this->getMockBuilder(DataObject::class)
+            ->addMethods(['getId'])
+            ->onlyMethods(['getData', 'toArray'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $secondItemMock = $this->getMockBuilder(DataObject::class)
+            ->addMethods(['getId'])
+            ->onlyMethods(['getData', 'toArray'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $requiredFields = ['required_field_one', 'required_field_two'];
         $arrItems = [
             'totalRecords' => 1,
@@ -170,24 +178,24 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             'item_id' => $firstItemMock,
             0 => $secondItemMock,
         ];
-        $firstItemMock->expects($this->exactly(2))->method('getId')->will($this->returnValue('item_id'));
+        $firstItemMock->expects($this->exactly(2))->method('getId')->willReturn('item_id');
 
         $firstItemMock
             ->expects($this->atLeastOnce())
             ->method('getData')
             ->with('colName')
-            ->will($this->returnValue('first_value'));
+            ->willReturn('first_value');
         $secondItemMock
             ->expects($this->atLeastOnce())
             ->method('getData')
             ->with('colName')
-            ->will($this->returnValue('second_value'));
+            ->willReturn('second_value');
 
         $firstItemMock
             ->expects($this->once())
             ->method('toArray')
             ->with($requiredFields)
-            ->will($this->returnValue('value'));
+            ->willReturn('value');
         /** add items and set them values */
         $this->_model->addItem($firstItemMock);
         $this->assertEquals($arrItems, $this->_model->toArray($requiredFields));
@@ -200,7 +208,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals([$secondItemMock], $this->_model->getItemsByColumnValue('colName', 'second_value'));
         $this->assertEquals($firstItemMock, $this->_model->getItemByColumnValue('colName', 'second_value'));
         $this->assertEquals([], $this->_model->getItemsByColumnValue('colName', 'non_existing_value'));
-        $this->assertEquals(null, $this->_model->getItemByColumnValue('colName', 'non_existing_value'));
+        $this->assertNull($this->_model->getItemByColumnValue('colName', 'non_existing_value'));
 
         /** get items */
         $this->assertEquals(['item_id', 0], $this->_model->getAllIds());
@@ -224,7 +232,10 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     public function testEachCallsMethodOnEachItemWithNoArgs()
     {
         for ($i = 0; $i < 3; $i++) {
-            $item = $this->createPartialMock(\Magento\Framework\DataObject::class, ['testCallback']);
+            $item = $this->getMockBuilder(DataObject::class)
+                ->addMethods(['testCallback'])
+                ->disableOriginalConstructor()
+                ->getMock();
             $item->expects($this->once())->method('testCallback')->with();
             $this->_model->addItem($item);
         }
@@ -239,7 +250,10 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     public function testEachCallsMethodOnEachItemWithArgs()
     {
         for ($i = 0; $i < 3; $i++) {
-            $item = $this->createPartialMock(\Magento\Framework\DataObject::class, ['testCallback']);
+            $item = $this->getMockBuilder(DataObject::class)
+                ->addMethods(['testCallback'])
+                ->disableOriginalConstructor()
+                ->getMock();
             $item->expects($this->once())->method('testCallback')->with('a', 'b', 'c');
             $this->_model->addItem($item);
         }
@@ -254,7 +268,10 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     public function testCallsClosureWithEachItemAndNoArgs()
     {
         for ($i = 0; $i < 3; $i++) {
-            $item = $this->createPartialMock(\Magento\Framework\DataObject::class, ['testCallback']);
+            $item = $this->getMockBuilder(DataObject::class)
+                ->addMethods(['testCallback'])
+                ->disableOriginalConstructor()
+                ->getMock();
             $item->expects($this->once())->method('testCallback')->with();
             $this->_model->addItem($item);
         }
@@ -271,7 +288,10 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     public function testCallsClosureWithEachItemAndArgs()
     {
         for ($i = 0; $i < 3; $i++) {
-            $item = $this->createPartialMock(\Magento\Framework\DataObject::class, ['testItemCallback']);
+            $item = $this->getMockBuilder(DataObject::class)
+                ->addMethods(['testItemCallback'])
+                ->disableOriginalConstructor()
+                ->getMock();
             $item->expects($this->once())->method('testItemCallback')->with('a', 'b', 'c');
             $this->_model->addItem($item);
         }
@@ -295,7 +315,10 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         });
 
         for ($i = 0; $i < 3; $i++) {
-            $item = $this->createPartialMock(\Magento\Framework\DataObject::class, ['testItemCallback']);
+            $item = $this->getMockBuilder(DataObject::class)
+                ->addMethods(['testItemCallback'])
+                ->disableOriginalConstructor()
+                ->getMock();
             $item->expects($this->once())->method('testItemCallback')->with();
             $this->_model->addItem($item);
         }
@@ -318,7 +341,10 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         });
 
         for ($i = 0; $i < 3; $i++) {
-            $item = $this->createPartialMock(\Magento\Framework\DataObject::class, ['testItemCallback']);
+            $item = $this->getMockBuilder(DataObject::class)
+                ->addMethods(['testItemCallback'])
+                ->disableOriginalConstructor()
+                ->getMock();
             $item->expects($this->once())->method('testItemCallback')->with('a', 'b', 'c');
             $this->_model->addItem($item);
         }

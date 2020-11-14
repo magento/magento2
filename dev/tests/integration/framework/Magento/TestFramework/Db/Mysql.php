@@ -9,15 +9,17 @@
  */
 namespace Magento\TestFramework\Db;
 
+use Magento\Framework\Exception\LocalizedException;
+
 class Mysql extends \Magento\TestFramework\Db\AbstractDb
 {
     /**
-     * Default port
+     * Mysql default Port.
      */
     const DEFAULT_PORT = 3306;
 
     /**
-     * Defaults extra file name
+     * Name of configuration file.
      */
     const DEFAULTS_EXTRA_FILE_NAME = 'defaults_extra.cnf';
 
@@ -43,7 +45,19 @@ class Mysql extends \Magento\TestFramework\Db\AbstractDb
     private $_port;
 
     /**
+     * @var bool
+     */
+    private $mysqlDumpVersionIs8;
+
+    /**
      * {@inheritdoc}
+     *
+     * @param string $host
+     * @param string $user
+     * @param string $password
+     * @param string $schema
+     * @param string $varPath
+     * @param \Magento\Framework\Shell $shell
      */
     public function __construct($host, $user, $password, $schema, $varPath, \Magento\Framework\Shell $shell)
     {
@@ -102,15 +116,36 @@ class Mysql extends \Magento\TestFramework\Db\AbstractDb
     public function storeDbDump()
     {
         $this->ensureDefaultsExtraFile();
+        $additionalArguments = '';
+
+        if ($this->isMysqlDumpVersion8()) {
+            $additionalArguments = '--column-statistics=0';
+        }
+
+        $format = sprintf(
+            '%s %s %s %s',
+            'mysqldump --defaults-file=%s --host=%s --port=%s',
+            '--no-tablespaces',
+            $additionalArguments,
+            '%s > %s'
+        );
+
         $this->_shell->execute(
-            'mysqldump --defaults-file=%s --host=%s --port=%s %s > %s',
-            [$this->_defaultsExtraFile, $this->_host, $this->_port, $this->_schema, $this->getSetupDbDumpFilename()]
+            $format,
+            [
+                $this->_defaultsExtraFile,
+                $this->_host,
+                $this->_port,
+                $this->_schema,
+                $this->getSetupDbDumpFilename()
+            ]
         );
     }
 
     /**
-     * {@inheritdoc}
-     * @throws \LogicException
+     * @inheritdoc
+     *
+     * @throws LocalizedException
      */
     public function restoreFromDbDump()
     {
@@ -125,7 +160,7 @@ class Mysql extends \Magento\TestFramework\Db\AbstractDb
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getVendorName()
     {
@@ -141,9 +176,32 @@ class Mysql extends \Magento\TestFramework\Db\AbstractDb
     {
         if (!file_exists($this->_defaultsExtraFile)) {
             $this->assertVarPathWritable();
-            $extraConfig = ['[client]', 'user=' . $this->_user, 'password="' . $this->_password . '"'];
+            $extraConfig = [
+                '[client]',
+                'user=' . $this->_user,
+                'password="' . $this->_password . '"'
+            ];
             file_put_contents($this->_defaultsExtraFile, implode(PHP_EOL, $extraConfig));
             chmod($this->_defaultsExtraFile, 0640);
         }
+    }
+
+    /**
+     * Check if mysql dump is version 8.
+     *
+     * @return bool
+     * @throws LocalizedException
+     */
+    private function isMysqlDumpVersion8(): bool
+    {
+        if (!$this->mysqlDumpVersionIs8) {
+            $version = $this->_shell->execute(
+                'mysqldump --version'
+            );
+
+            $this->mysqlDumpVersionIs8 = (bool) preg_match('/8\.0\./', $version);
+        }
+
+        return $this->mysqlDumpVersionIs8;
     }
 }

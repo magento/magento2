@@ -20,7 +20,8 @@
         <before>
             <createData entity="SimpleProduct2" stepKey="simpleProduct1"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct2"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <magentoCron stepKey="runCronIndex" groups="index"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
         </before>
         <after>
             <deleteData createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
@@ -33,7 +34,7 @@
             <actionGroup ref="AdminDeleteCustomerActionGroup" stepKey="deleteCustomer">
                 <argument name="customerEmail" value="CustomerEntityOne.email"/>
             </actionGroup>
-            <amOnPage url="{{AdminLogoutPage.url}}" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <amOnPage url="{{AdminProductCreatePage.url(BundleProduct.set, BundleProduct.type)}}" stepKey="goToBundleProductCreationPage"/>
         <waitForPageLoad stepKey="waitForBundleProductCreatePageToLoad"/>
@@ -61,8 +62,14 @@
             <argument name="price" value="Discount"/>
             <argument name="amount" value="50"/>
         </actionGroup>
-        <actionGroup ref="SignUpNewUserFromStorefrontActionGroup" stepKey="signUpNewUser">
-            <argument name="Customer" value="CustomerEntityOne"/>
+        <actionGroup ref="StorefrontOpenCustomerAccountCreatePageActionGroup" stepKey="openCreateAccountPage"/>
+        <actionGroup ref="StorefrontFillCustomerAccountCreationFormActionGroup" stepKey="fillCreateAccountForm">
+            <argument name="customer" value="CustomerEntityOne"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontClickCreateAnAccountCustomerAccountCreationFormActionGroup" stepKey="submitCreateAccountForm"/>
+        <actionGroup ref="AssertMessageCustomerCreateAccountActionGroup" stepKey="seeSuccessMessage">
+            <argument name="messageType" value="success"/>
+            <argument name="message" value="Thank you for registering with Main Website Store."/>
         </actionGroup>
         <amOnPage url="{{StorefrontProductPage.url(BundleProduct.urlKey)}}" stepKey="goToStorefront"/>
         <waitForPageLoad stepKey="waitForStorefront"/>

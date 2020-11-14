@@ -146,7 +146,7 @@ class PhpScanner implements ScannerInterface
         $entityType = ucfirst(\Magento\Framework\Api\Code\Generator\ExtensionAttributesInterfaceGenerator::ENTITY_TYPE);
         if ($reflectionClass->hasMethod($methodName) && $reflectionClass->isInterface()) {
             $returnType = $this->typeProcessor->getGetterReturnType(
-                (new \Zend\Code\Reflection\ClassReflection($reflectionClass->getName()))->getMethod($methodName)
+                (new \Laminas\Code\Reflection\ClassReflection($reflectionClass->getName()))->getMethod($methodName)
             );
             $missingClassName = $returnType['type'];
             if ($this->shouldGenerateClass($missingClassName, $entityType, $file)) {
@@ -175,7 +175,7 @@ class PhpScanner implements ScannerInterface
      */
     public function collectEntities(array $files)
     {
-        $output = [[]];
+        $output = [];
         foreach ($files as $file) {
             $classes = $this->getDeclaredClasses($file);
             foreach ($classes as $className) {
@@ -184,7 +184,7 @@ class PhpScanner implements ScannerInterface
                 $output[] = $this->_fetchMissingExtensionAttributesClasses($reflectionClass, $file);
             }
         }
-        return array_unique(array_merge(...$output));
+        return array_unique(array_merge([], ...$output));
     }
 
     /**

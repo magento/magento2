@@ -3,58 +3,70 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Checkout\Test\Unit\Block\Checkout;
 
-class DirectoryDataProcessorTest extends \PHPUnit\Framework\TestCase
+use Magento\Checkout\Block\Checkout\DirectoryDataProcessor;
+use Magento\Directory\Helper\Data;
+use Magento\Directory\Model\ResourceModel\Country\Collection;
+use Magento\Directory\Model\ResourceModel\Country\CollectionFactory;
+use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Api\StoreResolverInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class DirectoryDataProcessorTest extends TestCase
 {
     /**
-     * @var \Magento\Checkout\Block\Checkout\DirectoryDataProcessor
+     * @var DirectoryDataProcessor
      */
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $countryCollectionFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $countryCollectionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $regionCollectionFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $regionCollectionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $storeResolverMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $storeManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $directoryDataHelperMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->countryCollectionFactoryMock = $this->createPartialMock(
-            \Magento\Directory\Model\ResourceModel\Country\CollectionFactory::class,
+            CollectionFactory::class,
             ['create']
         );
         $this->countryCollectionMock = $this->createMock(
-            \Magento\Directory\Model\ResourceModel\Country\Collection::class
+            Collection::class
         );
         $this->regionCollectionFactoryMock = $this->createPartialMock(
             \Magento\Directory\Model\ResourceModel\Region\CollectionFactory::class,
@@ -64,14 +76,14 @@ class DirectoryDataProcessorTest extends \PHPUnit\Framework\TestCase
             \Magento\Directory\Model\ResourceModel\Region\Collection::class
         );
         $this->storeResolverMock = $this->createMock(
-            \Magento\Store\Api\StoreResolverInterface::class
+            StoreResolverInterface::class
         );
-        $this->directoryDataHelperMock = $this->createMock(\Magento\Directory\Helper\Data::class);
-        $this->storeManagerMock = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
+        $this->directoryDataHelperMock = $this->createMock(Data::class);
+        $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
-        $this->model = new \Magento\Checkout\Block\Checkout\DirectoryDataProcessor(
+        $this->model = new DirectoryDataProcessor(
             $this->countryCollectionFactoryMock,
             $this->regionCollectionFactoryMock,
             $this->storeResolverMock,
@@ -87,9 +99,9 @@ class DirectoryDataProcessorTest extends \PHPUnit\Framework\TestCase
             'region_id' => [],
         ];
 
-        $storeMock = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)
+        $storeMock = $this->getMockBuilder(StoreInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $storeMock->expects($this->atLeastOnce())->method('getId')->willReturn(42);
         $this->storeManagerMock->expects($this->atLeastOnce())->method('getStore')->willReturn($storeMock);
 

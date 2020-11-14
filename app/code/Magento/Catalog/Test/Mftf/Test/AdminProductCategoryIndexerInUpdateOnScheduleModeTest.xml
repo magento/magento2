@@ -10,20 +10,18 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminProductCategoryIndexerInUpdateOnScheduleModeTest">
         <annotations>
+            <features value="Catalog"/>
             <stories value="Product Categories Indexer"/>
             <title value="Product Categories Indexer in Update on Schedule mode"/>
             <description value="The test verifies that in Update on Schedule mode if displaying of category products on Storefront changes due to product properties change,
             the changes are NOT applied immediately, but applied only after cron runs (twice)."/>
             <severity value="CRITICAL"/>
-            <testCaseId value="MC-11146"/>
+            <testCaseId value="MC-26119"/>
             <group value="catalog"/>
             <group value="indexer"/>
-            <skip>
-                <issueId value="MC-20392"/>
-            </skip>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
             <!-- Create category A without products -->
             <createData entity="_defaultCategory" stepKey="createCategoryA"/>
 
@@ -69,12 +67,14 @@
             <deleteData createDataKey="createCategoryA" stepKey="deleteCategoryA"/>
             <deleteData createDataKey="createCategoryC" stepKey="deleteCategoryC"/>
             <deleteData createDataKey="createCategoryB" stepKey="deleteCategoryB"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Case: change product category from product page -->
         <!-- 1. Open Admin > Catalog > Products > Product A1 -->
-        <amOnPage url="{{AdminProductEditPage.url($$createProductA1.id$$)}}" stepKey="goToProductA1"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProductA1">
+            <argument name="productId" value="$$createProductA1.id$$"/>
+        </actionGroup>
         <waitForPageLoad stepKey="waitForProductPageLoad"/>
 
         <!-- 2. Assign category A to product A1. Save product -->
@@ -89,7 +89,7 @@
 
         <!-- The category is still empty -->
         <see userInput="$$createCategoryA.name$$" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="seeCategoryA1Name"/>
-        <see userInput="We can't find products matching the selection." stepKey="seeEmptyNotice"/>
+        <actionGroup ref="AssertStorefrontNoProductsFoundActionGroup" stepKey="seeEmptyNotice"/>
         <dontSee userInput="$$createProductA1.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="dontseeProductA1"/>
 
         <!-- 4. Run cron to reindex -->
@@ -97,14 +97,16 @@
         <magentoCLI command="cron:run" stepKey="runCron"/>
 
         <!-- 5. Open category A on Storefront again -->
-        <reloadPage stepKey="reloadCategoryA"/>
+        <actionGroup ref="ReloadPageActionGroup" stepKey="reloadCategoryA"/>
 
         <!-- Category A displays product A1 now -->
         <see userInput="$$createCategoryA.name$$" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="seeTitleCategoryA1"/>
         <see userInput="$$createProductA1.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeProductA1"/>
 
         <!--6.  Open Admin > Catalog > Products > Product A1. Unassign category A from product A1 -->
-        <amOnPage url="{{AdminProductEditPage.url($$createProductA1.id$$)}}" stepKey="OnPageProductA1"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="OnPageProductA1">
+            <argument name="productId" value="$$createProductA1.id$$"/>
+        </actionGroup>
         <waitForPageLoad stepKey="waitForProductA1PageLoad"/>
         <actionGroup ref="AdminUnassignCategoryOnProductAndSaveActionGroup" stepKey="unassignCategoryA">
             <argument name="categoryName" value="$$createCategoryA.name$$"/>
@@ -124,11 +126,11 @@
         <magentoCLI command="cron:run" stepKey="runCron1"/>
 
         <!-- 9. Open category A on Storefront again -->
-        <reloadPage stepKey="refreshCategoryAPage"/>
+        <actionGroup ref="ReloadPageActionGroup" stepKey="refreshCategoryAPage"/>
 
         <!-- Category A is empty now -->
         <see userInput="$$createCategoryA.name$$" selector="{{StorefrontCategoryMainSection.CategoryTitle}}" stepKey="seeOnPageCategoryAName"/>
-        <see userInput="We can't find products matching the selection." stepKey="seeOnPageEmptyNotice"/>
+        <actionGroup ref="AssertStorefrontNoProductsFoundActionGroup" stepKey="seeOnPageEmptyNotice"/>
         <dontSee userInput="$$createProductA1.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="dontseeProductA1OnPage"/>
 
         <!-- Case: change product status -->
@@ -144,7 +146,9 @@
         <see userInput="$$createProductC2.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeNameProductC2"/>
 
         <!-- 11. Open product C1 in Admin. Make it disabled (Enable Product = No)-->
-        <amOnPage url="{{AdminProductEditPage.url($$createProductC1.id$$)}}" stepKey="goToProductC1"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProductC1">
+            <argument name="productId" value="$$createProductC1.id$$"/>
+        </actionGroup>
         <waitForPageLoad stepKey="waitForProductC1PageLoad"/>
         <click selector="{{AdminProductFormSection.enableProductLabel}}" stepKey="clickOffEnableToggleAgain"/>
         <!-- Saved successfully -->
@@ -200,7 +204,9 @@
 
         <!-- 17. Repeat steps 10-16, but enable products instead. -->
         <!-- 17.11 Open product C1 in Admin. Make it enabled -->
-        <amOnPage url="{{AdminProductEditPage.url($$createProductC1.id$$)}}" stepKey="goToEditProductC1"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToEditProductC1">
+            <argument name="productId" value="$$createProductC1.id$$"/>
+        </actionGroup>
         <waitForPageLoad stepKey="waitForProductC1Page"/>
         <click selector="{{AdminProductFormSection.enableProductLabel}}" stepKey="clickOnEnableToggleAgain"/>
 
@@ -258,7 +264,9 @@
         <!-- Case: change product visibility -->
         <!-- 18. Repeat steps 10-17 but change product Visibility instead of product status -->
         <!-- 18.11 Open product C1 in Admin. Make it enabled -->
-        <amOnPage url="{{AdminProductEditPage.url($$createProductC1.id$$)}}" stepKey="editProductC1"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="editProductC1">
+            <argument name="productId" value="$$createProductC1.id$$"/>
+        </actionGroup>
         <waitForPageLoad stepKey="waitProductC1Page"/>
         <selectOption selector="{{AdminProductFormBundleSection.visibilityDropDown}}" userInput="Search"
                       stepKey="changeVisibility"/>

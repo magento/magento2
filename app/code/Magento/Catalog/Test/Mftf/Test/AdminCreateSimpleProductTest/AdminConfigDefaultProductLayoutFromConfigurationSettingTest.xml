@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminConfigDefaultProductLayoutFromConfigurationSettingTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Default layout configuration MAGETWO-88793"/>
+            <title value="Admin should be able to configure a default layout for Product Page from System Configuration"/>
+            <description value="Admin should be able to configure a default layout for Product Page from System Configuration"/>
+            <severity value="BLOCKER"/>
+            <testCaseId value="MAGETWO-89023"/>
+            <group value="product"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="RestoreLayoutSetting" stepKey="sampleActionGroup"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <actionGroup ref="AdminOpenWebConfigurationPageActionGroup" stepKey="navigateToWebConfigurationPage"/>
+        <conditionalClick stepKey="expandDefaultLayouts" selector="{{WebSection.DefaultLayoutsTab}}" dependentSelector="{{WebSection.CheckIfTabExpand}}" visible="true"/>
+        <waitForElementVisible selector="{{DefaultLayoutsSection.productLayout}}" stepKey="DefaultProductLayout"/>
+        <selectOption selector="{{DefaultLayoutsSection.productLayout}}" userInput="3 columns" stepKey="select3ColumnsLayout"/>
+        <click selector="{{ContentManagementSection.Save}}" stepKey="clickSaveConfig"/>
+        <amOnPage url="{{AdminProductCreatePage.url(AddToDefaultSet.attributeSetId, 'simple')}}" stepKey="navigateToNewProduct"/>
+        <waitForPageLoad stepKey="wait1"/>
+        <click selector="{{ProductDesignSection.DesignTab}}" stepKey="clickOnDesignTab"/>
+        <waitForElementVisible selector="{{ProductDesignSection.LayoutDropdown}}" stepKey="waitForLayoutDropDown"/>
+        <seeOptionIsSelected selector="{{ProductDesignSection.LayoutDropdown}}" userInput="3 columns" stepKey="see3ColumnsSelected"/>
+    </test>
+</tests>

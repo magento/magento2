@@ -3,22 +3,26 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Filter\Test\Unit;
 
-/**
- * Translit test.
- */
-class TranslitTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Filter\Translit;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\TestCase;
+
+class TranslitTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Filter\Translit
+     * @var Translit
      */
     protected $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->model = $objectManager->getObject(\Magento\Framework\Filter\Translit::class);
+        $objectManager = new ObjectManager($this);
+        $this->model = $objectManager->getObject(Translit::class);
     }
 
     /**
@@ -58,17 +62,19 @@ class TranslitTest extends \PHPUnit\Framework\TestCase
                 '         EUR ->         ',
                 $isIconv
             ],
-            ['™', 'tm', 'tm', $isIconv]
+            ['™', 'tm', 'tm', $isIconv],
+            ['লক্ষ্য এনালগ ওয়াচ টি ২০', 'laksoa enaalaga oyaoaca tai 20', 'laksoa enaalaga oyaoaca tai 20', $isIconv]
         ];
     }
 
     public function testFilterConfigured()
     {
         $config = $this->getMockBuilder(
-            \Magento\Framework\App\Config\ScopeConfigInterface::class
-        )->disableOriginalConstructor()->setMethods(
-            ['getValue', 'setValue', 'isSetFlag']
-        )->getMock();
+            ScopeConfigInterface::class
+        )->disableOriginalConstructor()
+            ->setMethods(
+                ['getValue', 'setValue', 'isSetFlag']
+            )->getMock();
 
         $config->expects(
             $this->once()
@@ -77,12 +83,12 @@ class TranslitTest extends \PHPUnit\Framework\TestCase
         )->with(
             'url/convert',
             'default'
-        )->will(
-            $this->returnValue(['char8482' => ['from' => '™', 'to' => 'TM']])
+        )->willReturn(
+            ['char8482' => ['from' => '™', 'to' => 'TM']]
         );
 
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->model = $objectManager->getObject(\Magento\Framework\Filter\Translit::class, ['config' => $config]);
+        $objectManager = new ObjectManager($this);
+        $this->model = $objectManager->getObject(Translit::class, ['config' => $config]);
 
         $this->assertEquals('TM', $this->model->filter('™'));
     }

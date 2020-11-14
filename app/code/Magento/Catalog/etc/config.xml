@@ -54,6 +54,9 @@
                 <time_format>12h</time_format>
                 <forbidden_extensions>php,exe</forbidden_extensions>
             </custom_options>
+            <layered_navigation>
+                <display_category>1</display_category>
+            </layered_navigation>
         </catalog>
         <indexer>
             <catalog_product_price>
@@ -64,7 +67,6 @@
             <media_storage_configuration>
                 <allowed_resources>
                     <tmp_images_folder>tmp</tmp_images_folder>
-                    <catalog_product_images>media/catalog/product/cache/</catalog_product_images>
                     <catalog_images_folder>catalog</catalog_images_folder>
                     <product_custom_options_fodler>custom_options</product_custom_options_fodler>
                 </allowed_resources>

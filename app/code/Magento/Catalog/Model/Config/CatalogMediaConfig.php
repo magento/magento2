@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Model\Config;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -23,8 +25,6 @@ class CatalogMediaConfig
     private $scopeConfig;
 
     /**
-     * Constructor
-     *
      * @param ScopeConfigInterface $scopeConfig
      */
     public function __construct(ScopeConfigInterface $scopeConfig)
@@ -39,7 +39,7 @@ class CatalogMediaConfig
      * @param null|int|string $scopeCode
      * @return string
      */
-    public function getMediaUrlFormat($scopeType = ScopeConfigInterface::SCOPE_TYPE_DEFAULT, $scopeCode = null)
+    public function getMediaUrlFormat($scopeType = ScopeConfigInterface::SCOPE_TYPE_DEFAULT, $scopeCode = null): string
     {
         return $this->scopeConfig->getValue(
             CatalogMediaConfig::XML_PATH_CATALOG_MEDIA_URL_FORMAT,

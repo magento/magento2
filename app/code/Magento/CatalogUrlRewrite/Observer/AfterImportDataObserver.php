@@ -37,8 +37,6 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory;
 use RuntimeException;
 
 /**
- * Class AfterImportDataObserver
- *
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -459,8 +457,7 @@ class AfterImportDataObserver implements ObserverInterface
                 }
             }
         }
-        $result = !empty($urls) ? array_merge(...$urls) : [];
-        return $result;
+        return array_merge([], ...$urls);
     }
 
     /**

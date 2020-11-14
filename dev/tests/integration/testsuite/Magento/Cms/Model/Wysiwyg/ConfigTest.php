@@ -21,7 +21,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     /**
      * {@inheritdoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->model = $objectManager->create(\Magento\Cms\Model\Wysiwyg\Config::class);
@@ -46,7 +46,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     public function testGetConfigCssUrls()
     {
         $config = $this->model->getConfig();
-        $publicPathPattern = 'http://localhost/pub/static/%s/adminhtml/Magento/backend/en_US/%s';
+        $publicPathPattern = 'http://localhost/static/%s/adminhtml/Magento/backend/en_US/%s';
         $tinyMce4Config = $config->getData('tinymce4');
         $contentCss = $tinyMce4Config['content_css'];
         if (is_array($contentCss)) {
@@ -74,11 +74,13 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ['configProvider' => $compositeConfigProvider]
         );
         $config = $model->getConfig();
+        // @phpstan-ignore-next-line
         $this->assertEquals(TestModuleWysiwygConfig::CONFIG_HEIGHT, $config['height']);
+        // @phpstan-ignore-next-line
         $this->assertEquals(TestModuleWysiwygConfig::CONFIG_CONTENT_CSS, $config['content_css']);
         $this->assertArrayHasKey('tinymce4', $config);
         $this->assertArrayHasKey('toolbar', $config['tinymce4']);
-        $this->assertNotContains(
+        $this->assertStringNotContainsString(
             'charmap',
             $config['tinymce4']['toolbar'],
             'Failed to address that the custom test module removes "charmap" button from the toolbar'

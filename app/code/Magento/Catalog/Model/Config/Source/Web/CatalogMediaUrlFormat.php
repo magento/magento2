@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Model\Config\Source\Web;
 
 use Magento\Catalog\Model\Config\CatalogMediaConfig;
@@ -16,8 +18,9 @@ class CatalogMediaUrlFormat implements \Magento\Framework\Data\OptionSourceInter
      * Get a list of supported catalog media URL formats.
      *
      * @codeCoverageIgnore
+     * @return array
      */
-    public function toOptionArray()
+    public function toOptionArray(): array
     {
         return [
             [

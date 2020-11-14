@@ -9,12 +9,15 @@ namespace Magento\Sales\Test\Unit\Ui\Component\Listing\Column;
 
 use Magento\Directory\Model\Currency;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use Magento\Framework\View\Element\UiComponent\Processor;
 use Magento\Sales\Ui\Component\Listing\Column\Price;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class PriceTest
- */
-class PriceTest extends \PHPUnit\Framework\TestCase
+class PriceTest extends TestCase
 {
     /**
      * @var Price
@@ -22,48 +25,67 @@ class PriceTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var Currency|\PHPUnit_Framework_MockObject_MockObject
+     * @var Currency|MockObject
      */
     protected $currencyMock;
 
-    protected function setUp()
+    /**
+     * @var StoreManagerInterface|MockObject
+     */
+    private $storeManagerMock;
+
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $contextMock = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\ContextInterface::class)
+        $contextMock = $this->getMockBuilder(ContextInterface::class)
             ->getMockForAbstractClass();
-        $processor = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\Processor::class)
+        $processor = $this->getMockBuilder(Processor::class)
             ->disableOriginalConstructor()
             ->getMock();
         $contextMock->expects($this->never())->method('getProcessor')->willReturn($processor);
-        $this->currencyMock = $this->getMockBuilder(\Magento\Directory\Model\Currency::class)
+        $this->currencyMock = $this->getMockBuilder(Currency::class)
             ->setMethods(['load', 'format'])
             ->disableOriginalConstructor()
             ->getMock();
+        $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->model = $objectManager->getObject(
-            \Magento\Sales\Ui\Component\Listing\Column\Price::class,
-            ['currency' => $this->currencyMock, 'context' => $contextMock]
+            Price::class,
+            ['currency' => $this->currencyMock, 'context' => $contextMock, 'storeManager' => $this->storeManagerMock]
         );
     }
 
-    public function testPrepareDataSource()
+    /**
+     * @param $hasCurrency
+     * @param $dataSource
+     * @param $currencyCode
+     * @dataProvider testPrepareDataSourceDataProvider
+     */
+    public function testPrepareDataSource($hasCurrency, $dataSource, $currencyCode)
     {
         $itemName = 'itemName';
         $oldItemValue = 'oldItemValue';
         $newItemValue = 'newItemValue';
-        $dataSource = [
-            'data' => [
-                'items' => [
-                    [
-                        $itemName => $oldItemValue,
-                        'base_currency_code' => 'US'
-                    ]
-                ]
-            ]
-        ];
+
+        $store = $this->getMockBuilder(Store::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $currencyMock = $this->getMockBuilder(Currency::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $currencyMock->expects($hasCurrency ? $this->never() : $this->once())
+            ->method('getCurrencyCode')
+            ->willReturn($currencyCode);
+        $this->storeManagerMock->expects($hasCurrency ? $this->never() : $this->once())
+            ->method('getStore')
+            ->willReturn($store);
+        $store->expects($hasCurrency ? $this->never() : $this->once())
+            ->method('getBaseCurrency')
+            ->willReturn($currencyMock);
 
         $this->currencyMock->expects($this->once())
             ->method('load')
-            ->with($dataSource['data']['items'][0]['base_currency_code'])
             ->willReturnSelf();
 
         $this->currencyMock->expects($this->once())
@@ -74,5 +96,32 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         $this->model->setData('name', $itemName);
         $dataSource = $this->model->prepareDataSource($dataSource);
         $this->assertEquals($newItemValue, $dataSource['data']['items'][0][$itemName]);
+    }
+
+    public function testPrepareDataSourceDataProvider()
+    {
+        $dataSource1 = [
+            'data' => [
+                'items' => [
+                    [
+                        'itemName' => 'oldItemValue',
+                        'base_currency_code' => 'US'
+                    ]
+                ]
+            ]
+        ];
+        $dataSource2 = [
+            'data' => [
+                'items' => [
+                    [
+                        'itemName' => 'oldItemValue'
+                    ]
+                ]
+            ]
+        ];
+        return [
+            [true, $dataSource1, 'US'],
+            [false, $dataSource2, 'SAR'],
+        ];
     }
 }
