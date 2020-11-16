@@ -63,10 +63,10 @@ class Config extends DataObject
     /**
      * Retrieve active system carriers
      *
-     * @param   mixed $store
-     * @return  AbstractCarrierInterface[]
+     * @param mixed $store
+     * @return AbstractCarrierInterface[]
      */
-    public function getActiveCarriers($store = null): array
+    public function getActiveCarriers($store = null)
     {
         $carriers = [];
         $config = $this->getCarriersConfig($store);
@@ -89,10 +89,10 @@ class Config extends DataObject
     /**
      * Retrieve all system carriers
      *
-     * @param   mixed $store
-     * @return  AbstractCarrierInterface[]
+     * @param mixed $store
+     * @return AbstractCarrierInterface[]
      */
-    public function getAllCarriers($store = null): array
+    public function getAllCarriers($store = null)
     {
         $carriers = [];
         $config = $this->getCarriersConfig($store);
