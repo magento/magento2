@@ -54,7 +54,7 @@ class GetCustomerByToken
      * @throws NoSuchEntityException
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function execute(string $resetPasswordToken):CustomerInterface
+    public function execute(string $resetPasswordToken): CustomerInterface
     {
         $this->searchCriteriaBuilder->addFilter(
             'rp_token',
