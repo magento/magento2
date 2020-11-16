@@ -23,7 +23,7 @@
                 <field key="price">10</field>
             </createData>
             <createData entity="FreeShippinMethodConfig" stepKey="enableFreeShipping"/>
-            <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToStorefront"/>
+            <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStorefront"/>
             <executeJS function="window.localStorage.clear();" stepKey="clearLocalStorage"/>
         </before>
         <after>
@@ -49,8 +49,8 @@
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappearAfterFlatRateSelection"/>
         <see selector="{{CheckoutCartSummarySection.total}}" userInput="15" stepKey="assertOrderTotalField"/>
         <!-- 5. Refresh browser page (F5) -->
-        <reloadPage stepKey="reloadPage"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <actionGroup ref="ReloadPageActionGroup" stepKey="reloadPage"/>
+        <comment userInput="Replacing reload action and preserve Backward Compatibility" stepKey="waitForPageLoad"/>
         <actionGroup ref="StorefrontAssertCartEstimateShippingAndTaxActionGroup" stepKey="assertCartEstimateShippingAndTaxAfterPageReload"/>
         <actionGroup ref="StorefrontAssertCartShippingMethodSelectedActionGroup" stepKey="assertFlatRateShippingMethodIsChecked">
             <argument name="carrierCode" value="flatrate"/>
@@ -71,8 +71,9 @@
         <!-- 9. Fill other fields -->
         <actionGroup ref="StorefrontFillGuestShippingInfoActionGroup" stepKey="fillOtherFieldsInCheckoutShippingSection"/>
         <!-- 10. Refresh browser page(F5) -->
-        <reloadPage stepKey="reloadCheckoutPage"/>
-        <waitForPageLoad stepKey="waitForCheckoutPageLoad"/>
+        <actionGroup ref="ReloadPageActionGroup" stepKey="reloadCheckoutPage"/>
+        <comment userInput="Replacing reload action and preserve Backward Compatibility" stepKey="waitForCheckoutPageLoad"/>
+
         <actionGroup ref="StorefrontAssertGuestShippingInfoActionGroup" stepKey="assertGuestShippingPersistedInfoAfterReloadingCheckoutShippingPage"/>
         <actionGroup ref="StorefrontAssertCheckoutShippingMethodSelectedActionGroup" stepKey="assertFreeShippingShippingMethodIsChecked">
             <argument name="shippingMethod" value="Free Shipping"/>

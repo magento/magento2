@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver\Category\DataProvider;
 
+use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
 
 /**
@@ -46,6 +47,7 @@ class Breadcrumbs
             $collection = $this->collectionFactory->create();
             $collection->addAttributeToSelect(['name', 'url_key', 'url_path']);
             $collection->addAttributeToFilter('entity_id', $parentCategoryIds);
+            $collection->addAttributeToFilter(CategoryInterface::KEY_IS_ACTIVE, 1);
 
             foreach ($collection as $category) {
                 $breadcrumbsData[] = [

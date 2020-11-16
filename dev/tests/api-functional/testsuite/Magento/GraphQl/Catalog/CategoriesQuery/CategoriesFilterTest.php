@@ -189,7 +189,7 @@ QUERY;
         $expectedBaseCategoryProducts = [
             ['sku' => 'simple', 'name' => 'Simple Product'],
             ['sku' => 'simple-4', 'name' => 'Simple Product Three'],
-            ['sku' => '12345', 'name' => 'Simple Product Two']
+            ['sku' => '12345', 'name' => 'Simple Product Two'],
         ];
         $this->assertCategoryProducts($baseCategory, $expectedBaseCategoryProducts);
         //Check base category children
@@ -395,8 +395,9 @@ QUERY;
      * Test category image full name is returned
      *
      * @magentoApiDataFixture Magento/Catalog/_files/catalog_category_with_long_image_name.php
+     * @magentoConfigFixture default_store web/seo/use_rewrites 0
      */
-    public function testCategoryImageName()
+    public function testCategoryImageNameAndSeoDisabled()
     {
         /** @var CategoryCollection $categoryCollection */
         $categoryCollection = Bootstrap::getObjectManager()->get(CategoryCollection::class);
@@ -427,14 +428,13 @@ QUERY;
         $categories = $response['categories'];
         $this->assertArrayNotHasKey('errors', $response);
         $this->assertNotEmpty($response['categories']['items']);
-        $expectedImageUrl = str_replace('index.php/', '', $expectedImageUrl);
-        $categories['items'][0]['image'] = str_replace('index.php/', '', $categories['items'][0]['image']);
         $this->assertEquals('Parent Image Category', $categories['items'][0]['name']);
         $this->assertEquals($expectedImageUrl, $categories['items'][0]['image']);
     }
 
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/categories.php
+     * @magentoConfigFixture default_store web/seo/use_rewrites 1
      */
     public function testFilterByUrlPathTopLevelCategory()
     {
@@ -570,6 +570,20 @@ QUERY;
                 ]
             ],
             [
+                'parent_id',
+                'eq',
+                '4',
+                [
+                    'id' => '5',
+                    'name' => 'Category 1.1.1',
+                    'url_key' => 'category-1-1-1',
+                    'url_path' => 'category-1/category-1-1/category-1-1-1',
+                    'children_count' => '0',
+                    'path' => '1/2/3/4/5',
+                    'position' => '1'
+                ]
+            ],
+            [
                 'name',
                 'match',
                 'Movable Position 2',
@@ -642,20 +656,29 @@ QUERY;
                     ]
                 ]
             ],
-            //Filter by multiple url keys
+            // Filter by multiple parent IDs
             [
-                'url_key',
+                'parent_id',
                 'in',
-                '["category-1-2", "movable"]',
+                '["3", "4"]',
                 [
                     [
-                        'id' => '7',
-                        'name' => 'Movable',
-                        'url_key' => 'movable',
-                        'url_path' => 'movable',
+                        'id' => '4',
+                        'name' => 'Category 1.1',
+                        'url_key' => 'category-1-1',
+                        'url_path' => 'category-1/category-1-1',
                         'children_count' => '0',
-                        'path' => '1/2/7',
-                        'position' => '3'
+                        'path' => '1/2/3/4',
+                        'position' => '1'
+                    ],
+                    [
+                        'id' => '5',
+                        'name' => 'Category 1.1.1',
+                        'url_key' => 'category-1-1-1',
+                        'url_path' => 'category-1/category-1-1/category-1-1-1',
+                        'children_count' => '0',
+                        'path' => '1/2/3/4/5',
+                        'position' => '1'
                     ],
                     [
                         'id' => '13',
@@ -665,6 +688,32 @@ QUERY;
                         'children_count' => '0',
                         'path' => '1/2/3/13',
                         'position' => '2'
+                    ]
+                ]
+            ],
+            //Filter by multiple url keys
+            [
+                'url_key',
+                'in',
+                '["category-1-2", "movable"]',
+                [
+                    [
+                        'id' => '13',
+                        'name' => 'Category 1.2',
+                        'url_key' => 'category-1-2',
+                        'url_path' => 'category-1/category-1-2',
+                        'children_count' => '0',
+                        'path' => '1/2/3/13',
+                        'position' => '2'
+                    ],
+                    [
+                        'id' => '7',
+                        'name' => 'Movable',
+                        'url_key' => 'movable',
+                        'url_path' => 'movable',
+                        'children_count' => '0',
+                        'path' => '1/2/7',
+                        'position' => '3'
                     ]
                 ]
             ],

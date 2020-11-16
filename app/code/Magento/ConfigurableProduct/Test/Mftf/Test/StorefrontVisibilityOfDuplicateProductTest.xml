@@ -62,8 +62,9 @@
             <argument name="attributeType" value="{{colorProductAttribute.input_type}}"/>
             <argument name="scope" value="Global"/>
         </actionGroup>
-        <reloadPage stepKey="reloadPage"/>
-        <waitForPageLoad stepKey="waitForProductPageReload"/>
+        <actionGroup ref="ReloadPageActionGroup" stepKey="reloadPage"/>
+        <comment userInput="Replacing reload action and preserve Backward Compatibility" stepKey="waitForProductPageReload"/>
+
         <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="clickOnCreateConfigurations"/>
         <waitForPageLoad stepKey="waitForFilters"/>
         <actionGroup ref="CreateOptionsForAttributeActionGroup" stepKey="createOptions">
@@ -142,8 +143,9 @@
             <argument name="attributeType" value="{{productAttributeColor.input_type}}"/>
             <argument name="scope" value="Global"/>
         </actionGroup>
-        <reloadPage stepKey="reloadDuplicatedProductPage"/>
-        <waitForPageLoad stepKey="waitForDuplicatedProductReload"/>
+        <actionGroup ref="ReloadPageActionGroup" stepKey="reloadDuplicatedProductPage"/>
+        <comment userInput="Replacing reload action and preserve Backward Compatibility" stepKey="waitForDuplicatedProductReload"/>
+
         <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="createConfigurationsDuplicatedProduct"/>
         <waitForElementVisible selector="{{AdminGridSelectRows.multicheckDropdown}}" stepKey="waitForCreateConfigurationsPageLoad"/>
         <click selector="{{AdminGridSelectRows.multicheckDropdown}}" stepKey="openMulticheckDropdown"/>
@@ -190,8 +192,12 @@
         <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="generateConfigsForDuplicatedProduct"/>
         <waitForPageLoad stepKey="waitForDuplicatedProductPageLoad"/>
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveDuplicatedProduct"/>
-        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-        <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+            <argument name="tags" value=""/>
+        </actionGroup>
         <!--Assert configurable product in category-->
         <comment userInput="Assert configurable product in category" stepKey="commentAssertProductInCategoryPage"/>
         <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="onStorefrontCategoryPage"/>

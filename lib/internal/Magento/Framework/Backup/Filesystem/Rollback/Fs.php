@@ -97,7 +97,7 @@ class Fs extends AbstractRollback
      * Get file system helper instance
      *
      * @return Helper
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      */
     private function getFsHelper()
     {

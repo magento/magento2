@@ -46,25 +46,44 @@ type CustomerOrder @doc(description: "Contains details about each of the custome
     items: [OrderItemInterface] @doc(description: "An array containing the items purchased in this order") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\OrderItems")
     total: OrderTotal @doc(description: "Contains details about the calculated totals for this order") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\OrderTotal")
     invoices: [Invoice]! @doc(description: "A list of invoices for the order") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\Invoices")
-    shipments: [OrderShipment] @doc(description: "A list of shipments for the order")
-    payment_methods: [PaymentMethod] @doc(description: "Payment details for the order")
-    shipping_address: CustomerAddress @doc(description: "The shipping address for the order")
-    billing_address: CustomerAddress @doc(description: "The billing address for the order")
-    carrier: String @doc(description: "The shipping carrier for the order delivery")
+    shipments: [OrderShipment] @doc(description: "A list of shipments for the order") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\Shipments")
+    credit_memos: [CreditMemo] @doc(description: "A list of credit memos") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\CreditMemos")
+    payment_methods: [OrderPaymentMethod] @doc(description: "Payment details for the order")
+    shipping_address: OrderAddress @doc(description: "The shipping address for the order")
+    billing_address: OrderAddress @doc(description: "The billing address for the order")
+    carrier: String @doc(description: "The shipping carrier for the order delivery") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\CustomerOrders\\Carrier")
     shipping_method: String @doc(description: "The delivery method for the order")
-    comments: [CommentItem] @doc(description: "Comments about the order")
+    comments: [SalesCommentItem] @doc(description: "Comments about the order")
     increment_id: String @deprecated(reason: "Use the id attribute instead")
     order_number: String! @deprecated(reason: "Use the number attribute instead")
     created_at: String @deprecated(reason: "Use the order_date attribute instead")
     grand_total: Float  @deprecated(reason: "Use the totals.grand_total attribute instead")
 }
 
-interface OrderItemInterface @doc(description: "Order item details") @typeResolver(class: "Magento\\SalesGraphQl\\Model\\OrderItemTypeResolver") {
+type OrderAddress @doc(description: "OrderAddress contains detailed information about an order's billing and shipping addresses"){
+    firstname: String! @doc(description: "The first name of the person associated with the shipping/billing address")
+    lastname: String! @doc(description: "The family name of the person associated with the shipping/billing address")
+    middlename: String @doc(description: "The middle name of the person associated with the shipping/billing address")
+    region: String @doc(description: "The state or province name")
+    region_id: ID @doc(description: "The unique ID for a pre-defined region")
+    country_code: CountryCodeEnum @doc(description: "The customer's country")
+    street: [String!]! @doc(description: "An array of strings that define the street number and name")
+    company: String @doc(description: "The customer's company")
+    telephone: String! @doc(description: "The telephone number")
+    fax: String @doc(description: "The fax number")
+    postcode: String @doc(description: "The customer's order ZIP or postal code")
+    city: String! @doc(description: "The city or town")
+    prefix: String @doc(description: "An honorific, such as Dr., Mr., or Mrs.")
+    suffix: String @doc(description: "A value such as Sr., Jr., or III")
+    vat_id: String @doc(description: "The customer's Value-added tax (VAT) number (for corporate customers)")
+}
+
+interface OrderItemInterface @doc(description: "Order item details") @typeResolver(class: "Magento\\SalesGraphQl\\Model\\TypeResolver\\OrderItem") {
     id: ID! @doc(description: "The unique identifier of the order item")
     product_name: String @doc(description: "The name of the base product")
     product_sku: String! @doc(description: "The SKU of the base product")
     product_url_key: String @doc(description: "URL key of the base product")
-    product_type: String @doc(description: "The type of product, such as simple, configurable, or bundle")
+    product_type: String @doc(description: "The type of product, such as simple, configurable, etc.")
     status: String @doc(description: "The status of the order item")
     product_sale_price: Money! @doc(description: "The sale price of the base product, including selected options")
     discounts: [Discount] @doc(description: "The final discount information for the product")
@@ -81,26 +100,8 @@ interface OrderItemInterface @doc(description: "Order item details") @typeResolv
 type OrderItem implements OrderItemInterface {
 }
 
-type BundleOrderItem implements OrderItemInterface {
-    bundle_options: [ItemSelectedBundleOption] @doc(description: "A list of bundle options that are assigned to the bundle product") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\BundleOptions")
-}
-
-type ItemSelectedBundleOption @doc(description: "A list of options of the selected bundle product") {
-    id: ID! @doc(description: "The unique identifier of the option")
-    label: String! @doc(description: "The label of the option")
-    values: [ItemSelectedBundleOptionValue] @doc(description: "A list of products that represent the values of the parent option")
-}
-
-type ItemSelectedBundleOptionValue @doc(description: "A list of values for the selected bundle product") {
-    id: ID! @doc(description: "The unique identifier of the value")
-    product_name: String! @doc(description: "The name of the child bundle product")
-    product_sku: String! @doc(description: "The SKU of the child bundle product")
-    quantity: Float! @doc(description: "Indicates how many of this bundle product were ordered")
-    price: Money! @doc(description: "The price of the child bundle product")
-}
-
 type OrderItemOption @doc(description: "Represents order item options like selected or entered") {
-    id: String! @doc(description: "The name of the option")
+    label: String! @doc(description: "The name of the option")
     value: String! @doc(description: "The value of the option")
 }
 
@@ -124,12 +125,12 @@ type OrderTotal @doc(description: "Contains details about the sales total amount
 type Invoice @doc(description: "Invoice details") {
     id: ID! @doc(description: "The ID of the invoice, used for API purposes")
     number: String! @doc(description: "Sequential invoice number")
-    total: InvoiceTotal @doc(description: "Invoice total amount details") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\InvoiceTotal")
-    items: [InvoiceItemInterface] @doc(description: "Invoiced product details") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\InvoiceItems")
-    comments: [CommentItem] @doc(description: "Comments on the invoice")
+    total: InvoiceTotal @doc(description: "Invoice total amount details") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\Invoice\\InvoiceTotal")
+    items: [InvoiceItemInterface] @doc(description: "Invoiced product details") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\Invoice\\InvoiceItems")
+    comments: [SalesCommentItem] @doc(description: "Comments on the invoice")
 }
 
-interface InvoiceItemInterface @doc(description: "Invoice item details") @typeResolver(class: "Magento\\SalesGraphQl\\Model\\InvoiceItemTypeResolver")  {
+interface InvoiceItemInterface @doc(description: "Invoice item details") @typeResolver(class: "Magento\\SalesGraphQl\\Model\\TypeResolver\\InvoiceItem")  {
     id: ID! @doc(description: "The unique ID of the invoice item")
     order_item: OrderItemInterface @doc(description: "Contains details about an individual order item")
     product_name: String @doc(description: "The name of the base product")
@@ -142,15 +143,11 @@ interface InvoiceItemInterface @doc(description: "Invoice item details") @typeRe
 type InvoiceItem implements InvoiceItemInterface {
 }
 
-type BundleInvoiceItem implements InvoiceItemInterface{
-    bundle_options: [ItemSelectedBundleOption] @doc(description: "A list of bundle options that are assigned to the bundle product") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\BundleOptions")
-}
-
 type InvoiceTotal @doc(description: "Contains price details from an invoice"){
     subtotal: Money! @doc(description: "The subtotal of the invoice, excluding shipping, discounts, and taxes")
     discounts: [Discount] @doc(description: "The applied discounts to the invoice")
     total_tax: Money! @doc(description: "The amount of tax applied to the invoice")
-    taxes: [TaxItem] @doc(description: "The order tax details")
+    taxes: [TaxItem] @doc(description: "The invoice tax details")
     grand_total: Money! @doc(description: "The final total amount, including shipping, discounts, and taxes")
     base_grand_total: Money! @doc(description: "The final base grand total amount in the base currency")
     total_shipping: Money! @doc(description: "The shipping amount for the invoice")
@@ -162,29 +159,36 @@ type ShippingHandling @doc(description: "The Shipping handling details") {
     amount_including_tax: Money @doc(description: "The shipping amount, including tax")
     amount_excluding_tax: Money @doc(description: "The shipping amount, excluding tax")
     taxes: [TaxItem] @doc(description: "Contains details about taxes applied for shipping")
-    discounts: [Discount] @doc(description: "The applied discounts to the shipping")
+    discounts: [ShippingDiscount] @doc(description: "The applied discounts to the shipping")
+}
+
+type ShippingDiscount @doc(description:"Defines an individual shipping discount. This discount can be applied to shipping.") {
+    amount: Money! @doc(description:"The amount of the discount")
 }
 
 type OrderShipment @doc(description: "Order shipment details") {
     id: ID! @doc(description: "The unique ID of the shipment")
     number: String! @doc(description: "The sequential credit shipment number")
-    tracking: [ShipmentTracking] @doc(description: "Contains shipment tracking details")
-    items: [ShipmentItem] @doc(description: "Contains items included in the shipment")
-    comments: [CommentItem] @doc(description: "Comments added to the shipment")
+    tracking: [ShipmentTracking] @doc(description: "Contains shipment tracking details") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\Shipment\\ShipmentTracking")
+    items: [ShipmentItemInterface] @doc(description: "Contains items included in the shipment") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\Shipment\\ShipmentItems")
+    comments: [SalesCommentItem] @doc(description: "Comments added to the shipment")
 }
 
-type CommentItem @doc(description: "Comment item details") {
+type SalesCommentItem @doc(description: "Comment item details") {
     timestamp: String! @doc(description: "The timestamp of the comment")
     message: String! @doc(description: "The text of the message")
 }
 
-type ShipmentItem @doc(description: "Order shipment item details") {
-    id: ID! @doc(description: "The unique ID of the shipment item")
-    order_item: OrderItemInterface @doc(description: "The shipped order item")
-    product_name: String @doc(description: "The name of the base product")
-    product_sku: String! @doc(description: "The SKU of the base product")
-    product_sale_price: Money! @doc(description: "The sale price for the base product")
-    quantity_shipped: Float! @doc(description: "The number of shipped items")
+interface ShipmentItemInterface @doc(description: "Order shipment item details") @typeResolver(class: "Magento\\SalesGraphQl\\Model\\TypeResolver\\ShipmentItem"){
+    id: ID! @doc(description: "Shipment item unique identifier")
+    order_item: OrderItemInterface @doc(description: "Associated order item") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\OrderItem")
+    product_name: String @doc(description: "Name of the base product")
+    product_sku: String! @doc(description: "SKU of the base product")
+    product_sale_price: Money! @doc(description: "Sale price for the base product")
+    quantity_shipped: Float! @doc(description: "Number of shipped items")
+}
+
+type ShipmentItem implements ShipmentItemInterface {
 }
 
 type ShipmentTracking @doc(description: "Order shipment tracking details") {
@@ -193,10 +197,43 @@ type ShipmentTracking @doc(description: "Order shipment tracking details") {
     number: String @doc(description: "The tracking number of the order shipment")
 }
 
-type PaymentMethod @doc(description: "Contains details about the payment method used to pay for the order") {
+type OrderPaymentMethod @doc(description: "Contains details about the payment method used to pay for the order") {
     name: String! @doc(description: "The label that describes the payment method")
     type: String! @doc(description: "The payment method code that indicates how the order was paid for")
     additional_data: [KeyValue] @doc(description:  "Additional data per payment method type")
+}
+
+type CreditMemo @doc(description: "Credit memo details") {
+    id: ID! @doc(description: "The unique ID of the credit memo, used for API purposes")
+    number: String! @doc(description: "The sequential credit memo number")
+    items: [CreditMemoItemInterface] @doc(description: "An array containing details about refunded items") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\CreditMemo\\CreditMemoItems")
+    total: CreditMemoTotal @doc(description: "Contains details about the total refunded amount") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\CreditMemo\\CreditMemoTotal")
+    comments: [SalesCommentItem] @doc(description: "Comments on the credit memo") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\CreditMemo\\CreditMemoComments")
+}
+
+interface CreditMemoItemInterface @doc(description: "Credit memo item details") @typeResolver(class: "Magento\\SalesGraphQl\\Model\\TypeResolver\\CreditMemoItem") {
+    id: ID! @doc(description: "The unique ID of the credit memo item, used for API purposes")
+    order_item: OrderItemInterface @doc(description: "The order item the credit memo is applied to") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\OrderItem")
+    product_name: String @doc(description: "The name of the base product")
+    product_sku: String! @doc(description: "SKU of the base product")
+    product_sale_price: Money! @doc(description: "The sale price for the base product, including selected options")
+    discounts: [Discount] @doc(description: "Contains information about the final discount amount for the base product, including discounts on options")
+    quantity_refunded: Float @doc(description: "The number of refunded items")
+}
+
+type CreditMemoItem implements CreditMemoItemInterface {
+}
+
+type CreditMemoTotal @doc(description: "Credit memo price details") {
+    subtotal: Money! @doc(description: "The subtotal of the invoice, excluding shipping, discounts, and taxes")
+    discounts: [Discount] @doc(description: "The applied discounts to the credit memo")
+    total_tax: Money! @doc(description: "The amount of tax applied to the credit memo")
+    taxes: [TaxItem] @doc(description: "The credit memo tax details")
+    grand_total: Money! @doc(description: "The final total amount, including shipping, discounts, and taxes")
+    base_grand_total: Money! @doc(description: "The final base grand total amount in the base currency")
+    total_shipping: Money! @doc(description: "The shipping amount for the credit memo")
+    shipping_handling: ShippingHandling @doc(description: "Contains details about the shipping and handling costs for the credit memo")
+    adjustment: Money! @doc(description: "An adjustment manually applied to the order")
 }
 
 type KeyValue @doc(description: "The key-value type") {

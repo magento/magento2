@@ -18,12 +18,16 @@ use Magento\Framework\Escaper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\Math\Random;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
 
 /**
  * Tests for \Magento\Framework\Data\Form\Element\AbstractElement
  */
 class AbstractElementTest extends TestCase
 {
+    private const RANDOM_STRING = '123456abcdefg';
+
     /**
      * @var AbstractElement|MockObject
      */
@@ -52,13 +56,18 @@ class AbstractElementTest extends TestCase
         $this->_collectionFactoryMock =
             $this->createMock(CollectionFactory::class);
         $this->_escaperMock = $objectManager->getObject(Escaper::class);
+        $randomMock = $this->createMock(Random::class);
+        $randomMock->method('getRandomString')->willReturn(self::RANDOM_STRING);
 
         $this->_model = $this->getMockForAbstractClass(
             AbstractElement::class,
             [
                 $this->_factoryMock,
                 $this->_collectionFactoryMock,
-                $this->_escaperMock
+                $this->_escaperMock,
+                [],
+                $this->createMock(SecureHtmlRenderer::class),
+                $randomMock
             ]
         );
     }
@@ -342,7 +351,8 @@ class AbstractElementTest extends TestCase
         );
         $expectedHtml = '<div class="admin__field">'
             . "\n"
-            . '<input id="" name=""  data-ui-id="form-element-" value="" class=" required-entry _required"/></div>'
+            . '<input id="" name=""  data-ui-id="form-element-" value="" class=" required-entry _required"'
+            .' formelementhookid="elemId' .self::RANDOM_STRING .'"/></div>'
             . "\n";
 
         $this->assertEquals($expectedHtml, $this->_model->getHtml());
@@ -385,7 +395,8 @@ class AbstractElementTest extends TestCase
             unset($initialData['attributes']);
         }
         $this->_model->setData($initialData);
-        $this->assertEquals($expectedValue, $this->_model->serialize($attributes));
+        $expectedValue .= ' formelementhookid="elemId' .self::RANDOM_STRING .'"';
+        $this->assertEquals(trim($expectedValue), $this->_model->serialize($attributes));
     }
 
     /**
@@ -542,7 +553,8 @@ class AbstractElementTest extends TestCase
             [
                 [],
                 '<div class="admin__field">' . "\n"
-                . '<input id="" name=""  data-ui-id="form-element-" value="" /></div>' . "\n",
+                . '<input id="" name=""  data-ui-id="form-element-" value=""'
+                .' formelementhookid="elemId' .self::RANDOM_STRING .'"/></div>' . "\n",
             ],
             [
                 ['default_html' => 'some default html'],
@@ -558,7 +570,8 @@ class AbstractElementTest extends TestCase
                 '<div class="admin__field">' . "\n"
                 . '<label class="label admin__field-label" for="html-id" data-ui-id="form-element-some-namelabel">'
                 . '<span>some label</span></label>' . "\n"
-                . '<input id="html-id" name="some-name"  data-ui-id="form-element-some-name" value="some-value" />'
+                . '<input id="html-id" name="some-name"  data-ui-id="form-element-some-name" value="some-value"'
+                .' formelementhookid="elemId' .self::RANDOM_STRING .'"/>'
                 . '</div>' . "\n"
             ],
             [
@@ -571,7 +584,8 @@ class AbstractElementTest extends TestCase
                 ],
                 '<label class="label admin__field-label" for="html-id" data-ui-id="form-element-some-namelabel">'
                 . '<span>some label</span></label>' . "\n"
-                . '<input id="html-id" name="some-name"  data-ui-id="form-element-some-name" value="some-value" />'
+                . '<input id="html-id" name="some-name"  data-ui-id="form-element-some-name" value="some-value"'
+                .' formelementhookid="elemId' .self::RANDOM_STRING .'"/>'
             ],
         ];
     }
@@ -620,7 +634,8 @@ class AbstractElementTest extends TestCase
         return [
             [
                 [],
-                '<input id="" name=""  data-ui-id="form-element-" value="" />',
+                '<input id="" name=""  data-ui-id="form-element-" value="" formelementhookid="elemId'
+                    .self::RANDOM_STRING .'"/>',
             ],
             [
                 [
@@ -628,7 +643,8 @@ class AbstractElementTest extends TestCase
                     'name' => 'some-name',
                     'value' => 'some-value',
                 ],
-                '<input id="html-id" name="some-name"  data-ui-id="form-element-some-name" value="some-value" />'
+                '<input id="html-id" name="some-name"  data-ui-id="form-element-some-name" value="some-value"'
+                    .' formelementhookid="elemId' .self::RANDOM_STRING .'"/>'
             ],
             [
                 [
@@ -638,7 +654,8 @@ class AbstractElementTest extends TestCase
                     'before_element_html' => 'some-html',
                 ],
                 '<label class="addbefore" for="html-id">some-html</label>'
-                . '<input id="html-id" name="some-name"  data-ui-id="form-element-some-name" value="some-value" />'
+                . '<input id="html-id" name="some-name"  data-ui-id="form-element-some-name" value="some-value"'
+                .' formelementhookid="elemId' .self::RANDOM_STRING .'"/>'
             ],
             [
                 [
@@ -647,7 +664,8 @@ class AbstractElementTest extends TestCase
                     'value' => 'some-value',
                     'after_element_js' => 'some-js',
                 ],
-                '<input id="html-id" name="some-name"  data-ui-id="form-element-some-name" value="some-value" />some-js'
+                '<input id="html-id" name="some-name"  data-ui-id="form-element-some-name" value="some-value"'
+                    .' formelementhookid="elemId' .self::RANDOM_STRING .'"/>some-js'
             ],
             [
                 [
@@ -656,8 +674,9 @@ class AbstractElementTest extends TestCase
                     'value' => 'some-value',
                     'after_element_html' => 'some-html',
                 ],
-                '<input id="html-id" name="some-name"  data-ui-id="form-element-some-name" value="some-value" />'
-                . '<label class="addafter" for="html-id">some-html</label>'
+                '<input id="html-id" name="some-name"  data-ui-id="form-element-some-name" value="some-value"'
+                    .' formelementhookid="elemId' .self::RANDOM_STRING .'"/>'
+                    . '<label class="addafter" for="html-id">some-html</label>'
             ]
         ];
     }
