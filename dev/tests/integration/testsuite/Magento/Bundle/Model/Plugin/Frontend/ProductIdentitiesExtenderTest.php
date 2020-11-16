@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace Magento\Bundle\Model\Plugin\Frontend;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\Product;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Interception\PluginList;
 use PHPUnit\Framework\TestCase;
@@ -16,7 +17,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * Test bundle fronted product plugin adds children products ids to bundle product identities.
  */
-class ProductTest extends TestCase
+class ProductIdentitiesExtenderTest extends TestCase
 {
     /**
      * Check, product plugin is registered for storefront.
@@ -27,8 +28,11 @@ class ProductTest extends TestCase
     public function testProductIsRegistered(): void
     {
         $pluginInfo = Bootstrap::getObjectManager()->get(PluginList::class)
-            ->get(\Magento\Catalog\Model\Product::class, []);
-        $this->assertSame(Product::class, $pluginInfo['bundle']['instance']);
+            ->get(Product::class, []);
+        $this->assertSame(
+            ProductIdentitiesExtender::class,
+            $pluginInfo['add_bundle_child_identities']['instance']
+        );
     }
 
     /**
