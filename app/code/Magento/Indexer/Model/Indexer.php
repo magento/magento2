@@ -13,6 +13,7 @@ use Magento\Framework\Indexer\IndexerInterface;
 use Magento\Framework\Indexer\IndexStructureInterface;
 use Magento\Framework\Indexer\StateInterface;
 use Magento\Framework\Indexer\StructureFactory;
+use Magento\Framework\Indexer\IndexerInterfaceFactory;
 
 /**
  * Indexer model.
@@ -62,12 +63,24 @@ class Indexer extends \Magento\Framework\DataObject implements IndexerInterface
     protected $indexersFactory;
 
     /**
+     * @var WorkingStateProvider
+     */
+    private $workingStateProvider;
+
+    /**
+     * @var IndexerInterfaceFactory
+     */
+    private $indexerFactory;
+
+    /**
      * @param ConfigInterface $config
      * @param ActionFactory $actionFactory
      * @param StructureFactory $structureFactory
      * @param \Magento\Framework\Mview\ViewInterface $view
      * @param Indexer\StateFactory $stateFactory
      * @param Indexer\CollectionFactory $indexersFactory
+     * @param WorkingStateProvider $workingStateProvider
+     * @param IndexerInterfaceFactory $indexerFactory
      * @param array $data
      */
     public function __construct(
@@ -77,6 +90,8 @@ class Indexer extends \Magento\Framework\DataObject implements IndexerInterface
         \Magento\Framework\Mview\ViewInterface $view,
         Indexer\StateFactory $stateFactory,
         Indexer\CollectionFactory $indexersFactory,
+        WorkingStateProvider $workingStateProvider,
+        IndexerInterfaceFactory $indexerFactory,
         array $data = []
     ) {
         $this->config = $config;
@@ -85,6 +100,8 @@ class Indexer extends \Magento\Framework\DataObject implements IndexerInterface
         $this->view = $view;
         $this->stateFactory = $stateFactory;
         $this->indexersFactory = $indexersFactory;
+        $this->workingStateProvider = $workingStateProvider;
+        $this->indexerFactory = $indexerFactory;
         parent::__construct($data);
     }
 
@@ -405,10 +422,20 @@ class Indexer extends \Magento\Framework\DataObject implements IndexerInterface
      */
     public function reindexAll()
     {
-        if ($this->getState()->getStatus() != StateInterface::STATUS_WORKING) {
+        if (!$this->workingStateProvider->isWorking($this->getId())) {
             $state = $this->getState();
             $state->setStatus(StateInterface::STATUS_WORKING);
             $state->save();
+
+            $sharedIndexers = [];
+            $indexerConfig = $this->config->getIndexer($this->getId());
+            if ($indexerConfig['shared_index'] !== null) {
+                $sharedIndexers = $this->getSharedIndexers($indexerConfig['shared_index']);
+            }
+            if (!empty($sharedIndexers)) {
+                $this->suspendSharedViews($sharedIndexers);
+            }
+
             if ($this->getView()->isEnabled()) {
                 $this->getView()->suspend();
             }
@@ -416,13 +443,70 @@ class Indexer extends \Magento\Framework\DataObject implements IndexerInterface
                 $this->getActionInstance()->executeFull();
                 $state->setStatus(StateInterface::STATUS_VALID);
                 $state->save();
+                if (!empty($sharedIndexers)) {
+                    $this->resumeSharedViews($sharedIndexers);
+                }
                 $this->getView()->resume();
             } catch (\Throwable $exception) {
                 $state->setStatus(StateInterface::STATUS_INVALID);
                 $state->save();
+                if (!empty($sharedIndexers)) {
+                    $this->resumeSharedViews($sharedIndexers);
+                }
                 $this->getView()->resume();
                 throw $exception;
             }
+        }
+    }
+
+    /**
+     * Get indexer ids that uses same index
+     *
+     * @param string $sharedIndex
+     * @return array
+     */
+    private function getSharedIndexers(string $sharedIndex) : array
+    {
+        $result = [];
+        foreach (array_keys($this->config->getIndexers()) as $indexerId) {
+            if ($indexerId === $this->getId()) {
+                continue;
+            }
+            $indexerConfig = $this->config->getIndexer($indexerId);
+            if ($indexerConfig['shared_index'] === $sharedIndex) {
+                $indexer = $this->indexerFactory->create();
+                $indexer->load($indexerId);
+                $result[] = $indexer;
+            }
+        }
+        return $result;
+    }
+
+    /**
+     * Suspend views of shared indexers
+     *
+     * @param array $sharedIndexers
+     * @return void
+     */
+    private function suspendSharedViews(array $sharedIndexers) : void
+    {
+        foreach ($sharedIndexers as $indexer) {
+            if ($indexer->getView()->isEnabled()) {
+                $indexer->getView()->suspend();
+            }
+        }
+    }
+
+    /**
+     * Suspend views of shared indexers
+     *
+     * @param array $sharedIndexers
+     * @return void
+     */
+    private function resumeSharedViews(array $sharedIndexers) : void
+    {
+        foreach ($sharedIndexers as $indexer) {
+            $indexer->getView()->resume();
         }
     }
 

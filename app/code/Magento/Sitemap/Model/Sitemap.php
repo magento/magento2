@@ -475,12 +475,9 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
 
         if ($this->_sitemapIncrement == 1) {
             // In case when only one increment file was created use it as default sitemap
-            $path = rtrim(
-                $this->getSitemapPath(),
-                '/'
-            ) . '/' . $this->_getCurrentSitemapFilename(
-                $this->_sitemapIncrement
-            );
+            $path = rtrim($this->getSitemapPath(), '/')
+                . '/'
+                . $this->_getCurrentSitemapFilename($this->_sitemapIncrement);
             $destination = rtrim($this->getSitemapPath(), '/') . '/' . $this->getSitemapFilename();
 
             $this->_directory->renameFile($path, $destination);
