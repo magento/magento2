@@ -138,6 +138,11 @@
         <index referenceId="CATALOG_PRODUCT_ENTITY_INT_STORE_ID" indexType="btree">
             <column name="store_id"/>
         </index>
+        <index referenceId="CATALOG_PRODUCT_ENTITY_INT_ATTRIBUTE_ID_STORE_ID_VALUE" indexType="btree">
+            <column name="attribute_id"/>
+            <column name="store_id"/>
+            <column name="value"/>
+        </index>
     </table>
     <table name="catalog_product_entity_text" resource="default" engine="innodb"
            comment="Catalog Product Text Attribute Backend Table">
@@ -149,7 +154,7 @@
                 default="0" comment="Store ID"/>
         <column xsi:type="int" name="entity_id" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Entity ID"/>
-        <column xsi:type="text" name="value" nullable="true" comment="Value"/>
+        <column xsi:type="mediumtext" name="value" nullable="true" comment="Value"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="value_id"/>
         </constraint>
@@ -403,7 +408,7 @@
                 default="0" comment="Store ID"/>
         <column xsi:type="int" name="entity_id" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Entity ID"/>
-        <column xsi:type="text" name="value" nullable="true" comment="Value"/>
+        <column xsi:type="mediumtext" name="value" nullable="true" comment="Value"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="value_id"/>
         </constraint>

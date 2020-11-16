@@ -18,6 +18,7 @@
             <testCaseId value="MC-15794"/>
             <useCaseId value="MC-11050"/>
             <group value="email"/>
+            <group value="WYSIWYGDisabled"/>
         </annotations>
 
         <before>

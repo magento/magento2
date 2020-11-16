@@ -84,12 +84,14 @@
         <actionGroup ref="AdminChangeFlatRateShippingMethodStatusActionGroup" stepKey="enableFlatRateShippingStatus"/>
 
         <!-- Flush cache -->
-        <magentoCLI command="cache:flush" stepKey="cacheFlush"/>
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+            <argument name="tags" value=""/>
+        </actionGroup>
 
         <!-- Back to the Checkout and refresh the page -->
         <switchToPreviousTab stepKey="switchToPreviousTab"/>
-        <reloadPage stepKey="refreshPage"/>
-        <waitForPageLoad stepKey="waitPageReload"/>
+        <actionGroup ref="ReloadPageActionGroup" stepKey="refreshPage"/>
+        <comment userInput="Replacing reload action and preserve Backward Compatibility" stepKey="waitPageReload"/>
 
         <!-- Payment step is opened after refreshing -->
         <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" stepKey="waitForPaymentSection"/>

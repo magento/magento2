@@ -7,9 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\QuoteGraphQl\Model\Cart;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\Quote\Api\Data\CartInterface;
+use Magento\Quote\Model\QuoteRepository;
 
 /**
  * Set single shipping address for a specified shopping cart
@@ -27,15 +29,24 @@ class SetShippingAddressesOnCart implements SetShippingAddressesOnCartInterface
     private $getShippingAddress;
 
     /**
+     * @var QuoteRepository
+     */
+    private $quoteRepository;
+
+    /**
      * @param AssignShippingAddressToCart $assignShippingAddressToCart
      * @param GetShippingAddress $getShippingAddress
+     * @param QuoteRepository|null $quoteRepository
      */
     public function __construct(
         AssignShippingAddressToCart $assignShippingAddressToCart,
-        GetShippingAddress $getShippingAddress
+        GetShippingAddress $getShippingAddress,
+        QuoteRepository $quoteRepository = null
     ) {
         $this->assignShippingAddressToCart = $assignShippingAddressToCart;
         $this->getShippingAddress = $getShippingAddress;
+        $this->quoteRepository = $quoteRepository
+            ?? ObjectManager::getInstance()->get(QuoteRepository::class);
     }
 
     /**
@@ -51,7 +62,10 @@ class SetShippingAddressesOnCart implements SetShippingAddressesOnCartInterface
         $shippingAddressInput = current($shippingAddressesInput) ?? [];
         $customerAddressId = $shippingAddressInput['customer_address_id'] ?? null;
 
-        if (!$customerAddressId && !isset($shippingAddressInput['address']['save_in_address_book'])) {
+        if (!$customerAddressId
+            && isset($shippingAddressInput['address'])
+            && !isset($shippingAddressInput['address']['save_in_address_book'])
+        ) {
             $shippingAddressInput['address']['save_in_address_book'] = true;
         }
 
@@ -67,5 +81,7 @@ class SetShippingAddressesOnCart implements SetShippingAddressesOnCartInterface
             throw $e;
         }
         $this->assignShippingAddressToCart->execute($cart, $shippingAddress);
+        // trigger quote re-evaluation after address change
+        $this->quoteRepository->save($cart);
     }
 }

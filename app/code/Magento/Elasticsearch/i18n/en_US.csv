@@ -11,3 +11,4 @@
 "Elasticsearch Server Timeout","Elasticsearch Server Timeout"
 "Test Connection","Test Connection"
 "Minimum Terms to Match","Minimum Terms to Match"
+"Created indexer handler must be instance of %1.", "Created indexer handler must be instance of %1."

@@ -115,11 +115,13 @@
         <magentoCLI command="config:set {{EnableTranslateInlineForStorefront.path}} {{EnableTranslateInlineForStorefront.value}}" stepKey="enableTranslateInlineForStorefront"/>
 
         <!-- 2. Refresh magento cache -->
-        <magentoCLI command="cache:flush" stepKey="flushCacheAfterTranslateEnabled"/>
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCacheAfterTranslateEnabled">
+            <argument name="tags" value=""/>
+        </actionGroup>
 
         <!-- 3. Go to storefront and click on cart button on the top -->
-        <reloadPage stepKey="reloadPage"/>
-        <waitForPageLoad stepKey="waitForReload"/>
+        <actionGroup ref="ReloadPageActionGroup" stepKey="reloadPage"/>
+        <comment userInput="Replacing reload action and preserve Backward Compatibility" stepKey="waitForReload"/>
         <actionGroup ref="StorefrontOpenMiniCartActionGroup" stepKey="openMiniCart"/>
 
         <!-- Check button "Proceed to Checkout". There must be red borders and "book" icons on labels that can be translated. -->
@@ -476,7 +478,9 @@
         <!-- 7. Set *Enabled for Storefront* option to *No* and save configuration -->
         <magentoCLI command="config:set {{DisableTranslateInlineForStorefront.path}} {{DisableTranslateInlineForStorefront.value}}" stepKey="disableTranslateInlineForStorefront"/>
         <!-- 8. Clear magento cache -->
-        <magentoCLI command="cache:flush" stepKey="flushCacheAfterTranslateDisabled"/>
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCacheAfterTranslateDisabled">
+            <argument name="tags" value=""/>
+        </actionGroup>
 
         <magentoCLI command="setup:static-content:deploy -f" stepKey="deployStaticContent"/>
 
@@ -486,8 +490,9 @@
         <resetCookie userInput="mage-translation-file-version" stepKey="resetTranslationFileVersion"/>
 
         <!-- Reload page after full clear -->
-        <reloadPage stepKey="reloadPageAfterFullClean"/>
-        <waitForPageLoad stepKey="waitForPageLoadAfterFullClean"/>
+        <actionGroup ref="ReloadPageActionGroup" stepKey="reloadPageAfterFullClean"/>
+        <comment userInput="Replacing reload action and preserve Backward Compatibility" stepKey="waitForPageLoadAfterFullClean"/>
+
 
         <!-- Add product to cart and go through Checkout process like you did in steps ##3-6 and check translation you maid. -->
         <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="openProductPage1">

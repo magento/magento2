@@ -39,7 +39,9 @@
                 <requiredEntity createDataKey="createCategoryA"/>
             </createData>
 
-            <magentoCLI command="cache:clean" arguments="full_page" stepKey="clearCache"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+                <argument name="tags" value="full_page"/>
+            </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer"/>
             <resetCookie userInput="PHPSESSID" stepKey="resetSessionCookie"/>
@@ -61,8 +63,7 @@
         <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
 
         <!-- 2. Navigate Go to "Catalog"->"Products" -->
-        <amOnPage url="{{ProductCatalogPage.url}}" stepKey="onCatalogProductPage"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <actionGroup ref="AdminProductCatalogPageOpenActionGroup" stepKey="onCatalogProductPage"/>
 
         <!-- 3. Open separate tab with Storefront -->
         <openNewTab stepKey="openNewTab"/>
@@ -75,10 +76,10 @@
 
         <!-- 5. Open admin tab with page with products. Reload this page twice. -->
         <switchToPreviousTab stepKey="switchToPreviousTab"/>
-        <reloadPage stepKey="reloadAdminCatalogPageFirst"/>
-        <waitForPageLoad stepKey="waitForReloadFirst"/>
-        <reloadPage stepKey="reloadAdminCatalogPageSecond"/>
-        <waitForPageLoad stepKey="waitForReloadSecond"/>
+        <actionGroup ref="ReloadPageActionGroup" stepKey="reloadAdminCatalogPageFirst"/>
+        <comment userInput="Replacing reload action and preserve Backward Compatibility" stepKey="waitForReloadFirst"/>
+        <actionGroup ref="ReloadPageActionGroup" stepKey="reloadAdminCatalogPageSecond"/>
+        <comment userInput="Replacing reload action and preserve Backward Compatibility" stepKey="waitForReloadSecond"/>
 
         <seeInTitle userInput="Products / Inventory / Catalog / Magento Admin" stepKey="seeAdminProductsPageTitle"/>
         <see userInput="Products" selector="{{AdminHeaderSection.pageTitle}}" stepKey="seeAdminProductsPageHeader"/>

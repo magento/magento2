@@ -169,7 +169,7 @@ class Address extends AbstractCustomer
      * Array of region parameters
      *
      * @var array
-     * @deprecated field not in use
+     * @deprecated 100.3.4 field not in use
      */
     protected $_regionParameters;
 
@@ -199,19 +199,19 @@ class Address extends AbstractCustomer
 
     /**
      * @var \Magento\Eav\Model\Config
-     * @deprecated field not-in use
+     * @deprecated 100.3.4 field not-in use
      */
     protected $_eavConfig;
 
     /**
      * @var \Magento\Customer\Model\AddressFactory
-     * @deprecated not utilized anymore
+     * @deprecated 100.3.4 not utilized anymore
      */
     protected $_addressFactory;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime
-     * @deprecated the property isn't used
+     * @deprecated 100.3.4 the property isn't used
      */
     protected $dateTime;
 
@@ -525,12 +525,12 @@ class Address extends AbstractCustomer
     protected function _importData()
     {
         //Preparing data for mass validation/import.
-        $rows = [[]];
+        $rows = [];
         while ($bunch = $this->_dataSourceModel->getNextBunch()) {
             $rows[] = $bunch;
         }
 
-        $this->prepareCustomerData(array_merge(...$rows));
+        $this->prepareCustomerData(array_merge([], ...$rows));
         unset($bunch, $rows);
         $this->_dataSourceModel->getIterator()->rewind();
 
@@ -667,8 +667,6 @@ class Address extends AbstractCustomer
                 $defaults[$table][$customerId][$attributeCode] = $addressId;
             }
         }
-        // let's try to find region ID
-        $entityRow[self::COLUMN_REGION_ID] = null;
 
         if (!empty($entityRow[self::COLUMN_REGION]) && !empty($entityRow[self::COLUMN_COUNTRY_ID])) {
             $entityRow[self::COLUMN_REGION_ID] = $this->getCountryRegionId(
@@ -679,6 +677,8 @@ class Address extends AbstractCustomer
             $entityRow[self::COLUMN_REGION] = $entityRow[self::COLUMN_REGION_ID] !== null
                 ? $this->_regions[$entityRow[self::COLUMN_REGION_ID]]
                 : $entityRow[self::COLUMN_REGION];
+        } elseif ($newAddress) {
+            $entityRow[self::COLUMN_REGION_ID] = null;
         }
         if ($newAddress) {
             $entityRowNew = $entityRow;
@@ -908,7 +908,7 @@ class Address extends AbstractCustomer
                     }
                 }
 
-                if (isset($rowData[self::COLUMN_COUNTRY_ID])) {
+                if (!empty($rowData[self::COLUMN_COUNTRY_ID])) {
                     if (isset($rowData[self::COLUMN_POSTCODE])
                         && !$this->postcodeValidator->isValid(
                             $rowData[self::COLUMN_COUNTRY_ID],
@@ -918,8 +918,7 @@ class Address extends AbstractCustomer
                         $this->addRowError(self::ERROR_VALUE_IS_REQUIRED, $rowNumber, self::COLUMN_POSTCODE);
                     }
 
-                    if (isset($rowData[self::COLUMN_REGION])
-                        && !empty($rowData[self::COLUMN_REGION])
+                    if (!empty($rowData[self::COLUMN_REGION])
                         && count($this->getCountryRegions($rowData[self::COLUMN_COUNTRY_ID])) > 0
                         && null === $this->getCountryRegionId(
                             $rowData[self::COLUMN_COUNTRY_ID],
