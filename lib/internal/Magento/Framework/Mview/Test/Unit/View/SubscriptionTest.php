@@ -323,4 +323,62 @@ class SubscriptionTest extends TestCase
 
         $this->model->remove();
     }
+
+    /**
+     * Test ignored columns for mview specified at the subscription level
+     *
+     * @return void
+     */
+    public function testBuildStatementIgnoredColumnSubscriptionLevel(): void
+    {
+        $tableName = 'cataloginventory_stock_item';
+        $ignoredColumnName = 'low_stock_date';
+        $notIgnoredColumnName = 'backorders';
+        $viewId = 'cataloginventory_stock';
+        $ignoredData = [
+            $viewId => [
+                $tableName => [
+                    $ignoredColumnName => true,
+                    $notIgnoredColumnName => false
+                ]
+            ]
+        ];
+
+        $this->connectionMock->expects($this->once())
+            ->method('isTableExists')
+            ->willReturn(true);
+        $this->connectionMock->expects($this->once())
+            ->method('describeTable')
+            ->willReturn([
+                'item_id' => ['COLUMN_NAME' => 'item_id'],
+                'product_id' => ['COLUMN_NAME' => 'product_id'],
+                'stock_id' => ['COLUMN_NAME' => 'stock_id'],
+                'qty' => ['COLUMN_NAME' => 'qty'],
+                $ignoredColumnName => ['COLUMN_NAME' => $ignoredColumnName],
+                $notIgnoredColumnName => ['COLUMN_NAME' => $notIgnoredColumnName]
+            ]);
+
+        $otherChangelogMock = $this->getMockForAbstractClass(ChangelogInterface::class);
+        $otherChangelogMock->expects($this->once())
+            ->method('getViewId')
+            ->willReturn($viewId);
+
+        $model = new Subscription(
+            $this->resourceMock,
+            $this->triggerFactoryMock,
+            $this->viewCollectionMock,
+            $this->viewMock,
+            $tableName,
+            'columnName',
+            [],
+            $ignoredData
+        );
+
+        $method = new \ReflectionMethod($model, 'buildStatement');
+        $method->setAccessible(true);
+        $statement = $method->invoke($model, Trigger::EVENT_UPDATE, $otherChangelogMock);
+
+        $this->assertStringNotContainsString($ignoredColumnName, $statement);
+        $this->assertStringContainsString($notIgnoredColumnName, $statement);
+    }
 }
