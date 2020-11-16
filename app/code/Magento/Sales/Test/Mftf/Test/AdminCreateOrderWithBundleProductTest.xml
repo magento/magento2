@@ -87,7 +87,7 @@
         <!--Add bundle product to order and check product price in grid-->
         <actionGroup ref="AddBundleProductToOrderAndCheckPriceInGridActionGroup" stepKey="addBundleProductToOrder">
             <argument name="product" value="$$product$$"/>
-            <argument name="quantity" value="1"/>
+            <argument name="quantity" value="2"/>
             <argument name="price" value="$738.00"/>
         </actionGroup>
 
