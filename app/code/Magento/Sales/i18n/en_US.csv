@@ -284,8 +284,8 @@ Go to Home Page,Go to Home Page
 We can't find this wish list.,We can't find this wish list.
 "We could not add a product to cart by the ID ""%1"".","We could not add a product to cart by the ID ""%1""."
 There is an error in one of the option rows.,There is an error in one of the option rows.
-Shipping Address: ,Shipping Address: 
-Billing Address: ,Billing Address: 
+Shipping Address: ,Shipping Address:
+Billing Address: ,Billing Address:
 Please specify order items.,Please specify order items.
 Please specify a shipping method.,Please specify a shipping method.
 Please specify a payment method.,Please specify a payment method.
@@ -383,8 +383,8 @@ Authorization,Authorization
 Please set a proper payment and order id.,Please set a proper payment and order id.
 Please enter a Transaction ID.,Please enter a Transaction ID.
 You can't do this without a transaction object.,You can't do this without a transaction object.
-Order # ,Order # 
-Order Date: ,Order Date: 
+Order # ,Order #
+Order Date: ,Order Date:
 Sold to:,Sold to:
 Ship to:,Ship to:
 Payment Method:,Payment Method:
@@ -400,8 +400,8 @@ Total (ex),Total (ex)
 Qty,Qty
 Tax,Tax
 Total (inc),Total (inc)
-Credit Memo # ,Credit Memo # 
-Invoice # ,Invoice # 
+Credit Memo # ,Credit Memo #
+Invoice # ,Invoice #
 The order object is not specified.,The order object is not specified.
 The source object is not specified.,The source object is not specified.
 An item object is not specified.,An item object is not specified.
@@ -409,7 +409,7 @@ A PDF object is not specified.,A PDF object is not specified.
 A PDF page object is not specified.,A PDF page object is not specified.
 Excl. Tax,Excl. Tax
 Incl. Tax,Incl. Tax
-Packing Slip # ,Packing Slip # 
+Packing Slip # ,Packing Slip #
 title,title
 The PDF total model %1 must be or extend \Magento\Sales\Model\Order\Pdf\Total\DefaultTotal.,The PDF total model %1 must be or extend \Magento\Sales\Model\Order\Pdf\Total\DefaultTotal.
 We cannot register an existing shipment,We cannot register an existing shipment
@@ -669,7 +669,7 @@ Your %store_name order has shipped,Your %store_name order has shipped
 Your shipping confirmation is below. Thank you again for your business.,Your shipping confirmation is below. Thank you again for your business.
 Your Shipment #%shipment_id for Order #%order_id,Your Shipment #%shipment_id for Order #%order_id
 Update to your %store_name shipment,Update to your %store_name shipment
-Gift Options for ,Gift Options for 
+Gift Options for ,Gift Options for
 Add Products,Add Products
 You have item changes,You have item changes
 Ok,Ok
@@ -803,4 +803,5 @@ If set YES Email field will be required during Admin order creation for new Cust
 Could not save the shipment tracking,Could not save the shipment tracking
 Please enter a coupon code!,Please enter a coupon code!
 Reorder is not available.,Reorder is not available.
+The coupon code has been removed.,The coupon code has been removed.
 This creditmemo no longer exists.,This creditmemo no longer exists.
