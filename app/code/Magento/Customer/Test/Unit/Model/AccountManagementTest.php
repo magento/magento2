@@ -256,7 +256,14 @@ class AccountManagementTest extends TestCase
             ->getMockForAbstractClass();
 
         $this->customerSecure = $this->getMockBuilder(CustomerSecure::class)
-            ->setMethods(['setRpToken', 'addData', 'setRpTokenCreatedAt', 'setData'])
+            ->setMethods([
+                'addData',
+                'getRpToken',
+                'getRpTokenCreatedAt',
+                'setData',
+                'setRpToken',
+                'setRpTokenCreatedAt',
+            ])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -1200,7 +1207,7 @@ class AccountManagementTest extends TestCase
         $this->store->expects($this->any())
             ->method('getId')
             ->willReturn($storeId);
-        $this->storeManager->expects($this->any())
+        $this->storeManager->expects($this->exactly($callCount))
             ->method('getStore')
             ->willReturn($this->store);
 
@@ -1211,7 +1218,7 @@ class AccountManagementTest extends TestCase
 
         /** @var AddressInterface|MockObject $customer */
         $address = $this->getMockForAbstractClass(AddressInterface::class);
-        $address->expects($this->exactly($callCount))
+        $address->expects($this->once())
             ->method('getId')
             ->willReturn($addressId);
 
@@ -1231,25 +1238,22 @@ class AccountManagementTest extends TestCase
         $customer->expects($this->any())
             ->method('getAddresses')
             ->willReturn([$address]);
-        $this->customerRepository->expects($this->exactly($callCount))
-            ->method('get')
-            ->willReturn($customer);
-        $this->addressRegistryMock->expects($this->exactly($callCount))
+        $this->addressRegistryMock->expects($this->once())
             ->method('retrieve')
             ->with($addressId)
             ->willReturn($addressModel);
-        $addressModel->expects($this->exactly($callCount))
+        $addressModel->expects($this->once())
             ->method('setShouldIgnoreValidation')
             ->with(true);
         $this->customerRepository->expects($this->exactly($callCount))
             ->method('get')
             ->with($email, $websiteId)
             ->willReturn($customer);
-        $this->customerRepository->expects($this->exactly($callCount))
+        $this->customerRepository->expects($this->once())
             ->method('save')
             ->with($customer)
             ->willReturnSelf();
-        $this->random->expects($this->exactly($callCount))
+        $this->random->expects($this->once())
             ->method('getUniqueHash')
             ->willReturn($hash);
         $this->customerViewHelper->expects($this->any())
@@ -1265,6 +1269,9 @@ class AccountManagementTest extends TestCase
             ->with($datetime)
             ->willReturnSelf();
         $this->customerSecure->expects($this->any())
+            ->method('getRpTokenCreatedAt')
+            ->willReturn($datetime);
+        $this->customerSecure->expects($this->any())
             ->method('addData')
             ->with($customerData)
             ->willReturnSelf();
@@ -1272,7 +1279,7 @@ class AccountManagementTest extends TestCase
             ->method('setData')
             ->with('name', $customerName)
             ->willReturnSelf();
-        $this->customerRegistry->expects($this->any())
+        $this->customerRegistry->expects($this->exactly($callCount * 2))
             ->method('retrieveSecureData')
             ->with($customerId)
             ->willReturn($this->customerSecure);
@@ -1280,48 +1287,9 @@ class AccountManagementTest extends TestCase
             ->method('buildOutputDataArray')
             ->with($customer, Customer::class)
             ->willReturn($customerData);
-
-        $this->prepareEmailSend($email, $templateIdentifier, $sender, $storeId, $customerName);
-    }
-
-    /**
-     * @param string $email
-     * @param int $templateIdentifier
-     * @param string $sender
-     * @param int $storeId
-     * @param string $customerName
-     */
-    protected function prepareEmailSend($email, $templateIdentifier, $sender, $storeId, $customerName)
-    {
-        $transport = $this->getMockBuilder(TransportInterface::class)
-            ->getMock();
-
-        $this->transportBuilder->expects($this->once())
-            ->method('setTemplateIdentifier')
-            ->with($templateIdentifier)
-            ->willReturnSelf();
-        $this->transportBuilder->expects($this->once())
-            ->method('setTemplateOptions')
-            ->with(['area' => Area::AREA_FRONTEND, 'store' => $storeId])
-            ->willReturnSelf();
-        $this->transportBuilder->expects($this->once())
-            ->method('setTemplateVars')
-            ->with(['customer' => $this->customerSecure, 'store' => $this->store])
-            ->willReturnSelf();
-        $this->transportBuilder->expects($this->once())
-            ->method('setFrom')
-            ->with($sender)
-            ->willReturnSelf();
-        $this->transportBuilder->expects($this->once())
-            ->method('addTo')
-            ->with($email, $customerName)
-            ->willReturnSelf();
-        $this->transportBuilder->expects($this->once())
-            ->method('getTransport')
-            ->willReturn($transport);
-
-        $transport->expects($this->once())
-            ->method('sendMessage');
+        $this->customer->expects($this->any())
+            ->method('getResetPasswordLinkExpirationPeriod')
+            ->willReturn(100000);
     }
 
     /**
@@ -1403,6 +1371,11 @@ class AccountManagementTest extends TestCase
         );
 
         $this->assertTrue($this->accountManagement->initiatePasswordReset($email, $template));
+
+        $this->customerSecure->expects($this->any())
+            ->method('getRpToken')
+            ->willReturn($hash);
+
         $this->assertFalse($this->accountManagement->initiatePasswordReset($email, $template));
     }
 
