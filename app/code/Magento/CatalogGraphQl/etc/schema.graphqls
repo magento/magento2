@@ -332,6 +332,7 @@ input CategoryFilterInput  @doc(description: "CategoryFilterInput defines the fi
 {
     ids: FilterEqualTypeInput @deprecated(reason: "Use the `category_uid` argument instead.") @doc(description: "Deprecated: use 'category_uid' to filter uniquely identifiers of categories.")
     category_uid: FilterEqualTypeInput @doc(description: "Filter by category ID that uniquely identifies the category from objects implementing `CategoryInterface`.")
+    parent_id: FilterEqualTypeInput @doc(description: "Filter by parent category ID")
     url_key: FilterEqualTypeInput @doc(description: "Filter by the part of the URL that identifies the category.")
     name: FilterMatchTypeInput @doc(description: "Filter by the display name of the category.")
     url_path: FilterEqualTypeInput @doc(description: "Filter by the URL path for the category.")

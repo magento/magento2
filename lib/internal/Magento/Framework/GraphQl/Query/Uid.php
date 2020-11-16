@@ -19,14 +19,15 @@ class Uid
      * Decode UID value to ID
      *
      * @param string $uid
-     * @return false|string
+     * @return null|string
      * @phpcs:disable Magento2.Functions.DiscouragedFunction
      * @throws GraphQlInputException
      */
-    public function decode(string $uid)
+    public function decode(string $uid): ?string
     {
         if ($this->isValidBase64($uid)) {
-            return base64_decode($uid, true);
+            $result = base64_decode($uid, true);
+            return ($result !== false) ? $result : null;
         }
         throw new GraphQlInputException(__('Value of uid "%1" is incorrect.', $uid));
     }
