@@ -103,7 +103,7 @@
         <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="clickNextOnShippingStep"/>
 
         <!-- Ensure that the Billing address is similar to first address -->
-        <actionGroup ref="CheckSelectedBillingAddressInCheckoutWithSearchActionGroup" stepKey="assertBillingAddress">
+        <actionGroup ref="StorefrontCheckSelectedBillingAddressInCheckoutWithSearchActionGroup" stepKey="assertBillingAddress">
             <argument name="customerVar" value="$$simpleCustomer$$"/>
             <argument name="customerAddressVar" value="CustomerAddressSimple"/>
         </actionGroup>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!-- Check selected Billing address information on Review Section step -->
+    <actionGroup name="StorefrontCheckSelectedBillingAddressInCheckoutWithSearchActionGroup">
+        <annotations>
+            <description value="Verify customer billing address values on storefront checkout."/>
+        </annotations>
+        <arguments>
+            <argument name="customerVar"/>
+            <argument name="customerAddressVar"/>
+        </arguments>
+        <waitForElement selector="{{CheckoutBillingAddressSection.selectedBillingAddress}}" time="30" stepKey="waitForBillingSectionLoaded"/>
+        <see stepKey="VerifyFirstNameInSelectedAddress" selector="{{CheckoutBillingAddressSection.selectedBillingAddress}}" userInput="{{customerVar.firstname}}" />
+        <see stepKey="VerifyLastNameInSelectedAddress" selector="{{CheckoutBillingAddressSection.selectedBillingAddress}}" userInput="{{customerVar.lastname}}" />
+        <see stepKey="VerifyStreetInSelectedAddress" selector="{{CheckoutBillingAddressSection.selectedBillingAddress}}" userInput="{{customerAddressVar.street[0]}}" />
+        <see stepKey="VerifyCityInSelectedAddress" selector="{{CheckoutBillingAddressSection.selectedBillingAddress}}" userInput="{{customerAddressVar.city}}" />
+        <see stepKey="VerifyZipInSelectedAddress" selector="{{CheckoutBillingAddressSection.selectedBillingAddress}}" userInput="{{customerAddressVar.postcode}}" />
+        <see stepKey="VerifyPhoneInSelectedAddress" selector="{{CheckoutBillingAddressSection.selectedBillingAddress}}" userInput="{{customerAddressVar.telephone}}" />
+    </actionGroup>
+</actionGroups>
