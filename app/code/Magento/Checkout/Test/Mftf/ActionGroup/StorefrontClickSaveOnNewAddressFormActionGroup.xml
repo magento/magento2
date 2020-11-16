@@ -8,11 +8,11 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminOpenCmsBlocksGridActionGroup">
+    <actionGroup name="StorefrontClickSaveOnNewAddressFormActionGroup">
         <annotations>
-            <description>Goes to the Cms Blocks grid page.</description>
+            <description>Clicks the save button on the storefront new address form</description>
         </annotations>
-        <amOnPage url="{{CmsBlocksPage.url}}" stepKey="navigateToCMSBlocksGrid"/>
+        <click selector="{{CheckoutShippingSection.saveAddress}}" stepKey="saveNewAddress"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
     </actionGroup>
 </actionGroups>

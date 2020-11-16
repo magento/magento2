@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontVerifyCustomCustomerAddressAttributeTest">
+        <annotations>
+            <features value="Customer"/>
+            <stories value="Storefront Custom Customer Address Attribute"/>
+            <title value="Verify Custom Customer Address Attribute Value Shows On Storefront Customer Checkout"/>
+            <description value="Verify that custom customer address attribute value shows at checkout on storefront for second address"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-37569"/>
+            <group value="customer"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct"/>
+            <createData entity="Simple_US_Customer" stepKey="simpleCustomer"/>
+        </before>
+        <after>
+            <deleteData createDataKey="simpleProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="simpleCustomer" stepKey="deleteCustomer"/>
+            <!--Remove Custom Customer Address Attribute-->
+            <actionGroup ref="AdminDeleteCustomerAttribute" stepKey="adminDeleteFirstCustomerAttribute">
+                <argument name="defaultLabel" value="{{AttributeDropdownData.label}}"/>
+            </actionGroup>
+        </after>
+
+        <!--Create new custom customer address attribute-->
+        <actionGroup ref="AdminNavigateToCustomerAddressAttributesPageActionGroup"/>
+        <actionGroup ref="AdminAddOptionsCustomerAttribute" stepKey="adminCreateCustomerFirstAttribute">
+            <argument name="defaultLabel" value="{{AttributeDropdownData.label}}"/>
+            <argument name="attributeCode" value="{{AttributeDropdownData.code}}"/>
+            <argument name="inputType" value="{{AttributeDropdownData.inputType}}"/>
+            <argument name="sortOrder" value="{{AttributeDropdownData.sortOrder}}"/>
+            <argument name="firstOption" value="{{AttributeDropdownData.firstOption}}"/>
+            <argument name="secondOption" value="{{AttributeDropdownData.secondOption}}"/>
+        </actionGroup>
+
+        <!--Add address to B2C Customer-->
+        <actionGroup ref="AdminOpenCustomerEditPageActionGroup" stepKey="openCustomerEditPage">
+            <argument name="customerId" value="$$simpleCustomer.id$"/>
+        </actionGroup>
+        <click selector="{{AdminEditCustomerAddressesSection.addresses}}" stepKey="proceedToAddresses"/>
+        <waitForPageLoad stepKey="waitForPageToLoad"/>
+        <click selector="{{AdminCustomerAddressesGridSection.firstRowEditLink}}" stepKey="editFirstAddress"/>
+        <waitForPageLoad time="60" stepKey="waitForAddressForm"/>
+
+        <actionGroup ref="SelectDropdownCustomerAddressAttributeValueActionGroup" stepKey="selectOptionValue">
+            <argument name="customerAddressAttribute" value="AttributeDropdownData"/>
+            <argument name="optionValue" value="{{AttributeDropdownData.firstOption}}"/>
+        </actionGroup>
+
+        <!--Login To Store Front By B2C Customer-->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginAsStoreFront">
+            <argument name="Customer" value="$$simpleCustomer$$"/>
+        </actionGroup>
+        <!-- Add Product To Cart From Product Detail Page-->
+        <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="openProductPageOnStorefront">
+            <argument name="product" value="$$simpleProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAddToTheCartActionGroup" stepKey="addToCartFromStorefrontProductPage"/>
+
+        <!--Go To Checkout and Verify Default Address-->
+        <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="goToCheckoutPage"/>
+        <!-- Ensure that the selected shipping address is similar to first address -->
+        <actionGroup ref="CheckSelectedShippingAddressInCheckoutWithSearchActionGroup" stepKey="assertShippingAddress">
+            <argument name="customerVar" value="$$simpleCustomer$$"/>
+            <argument name="customerAddressVar" value="CustomerAddressSimple"/>
+        </actionGroup>
+        <!--Verify that selected "Test Dropdown" options appears on the page-->
+        <see selector="{{CheckoutShippingAddressSection.selectedShippingAddress}}" userInput="{{AttributeDropdownData.firstOption}}" stepKey="seeShippingAddressCustomAttribute"/>
+
+        <!--Add Second Shipping Address-->
+        <actionGroup ref="StorefrontClickAddNewAddressButtonFromCheckoutShippingActionGroup" stepKey="clickAddNewAddressButton"
+
+        <!--Fill in Shipping Address required fields and Custom Customer Address Attribute and click *Ship Here* button-->
+        <actionGroup ref="FillNewShippingAddressModalActionGroup" stepKey="changeAddress">
+            <argument name="address" value="US_Address_NY"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontSelectDropdownCustomerAddressAttributeValueActionGroup" stepKey="selectOptionValue1">
+            <argument name="customerAddressAttribute" value="AttributeDropdownData"/>
+            <argument name="optionValue" value="{{AttributeDropdownData.firstOption}}"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontClickSaveOnNewAddressFormActionGroup" stepKey="clickOnSaveNewAddress"/>
+
+        <!-- Ensure that the selected shipping address is similar to second address -->
+        <actionGroup ref="CheckSelectedShippingAddressInCheckoutWithSearchActionGroup" stepKey="assertShippingAddress1">
+            <argument name="customerVar" value="$$simpleCustomer$$"/>
+            <argument name="customerAddressVar" value="US_Address_NY"/>
+        </actionGroup>
+        <!--Verify that selected "Test Dropdown" options appears on the page-->
+        <see selector="{{CheckoutShippingAddressSection.selectedShippingAddress}}" userInput="{{AttributeDropdownData.firstOption}}" stepKey="seeShippingAddressCustomAttribute1"/>
+
+        <!-- Select First Shipping Method and Go To Billing Section -->
+        <click selector="{{CheckoutShippingSection.firstShippingMethod}}" stepKey="selectFirstShippingMethod"/>
+        <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="clickNextOnShippingStep"/>
+
+        <!-- Ensure that the Billing address is similar to first address -->
+        <actionGroup ref="StorefrontCheckSelectedBillingAddressInCheckoutWithSearchActionGroup" stepKey="assertBillingAddress">
+            <argument name="customerVar" value="$$simpleCustomer$$"/>
+            <argument name="customerAddressVar" value="CustomerAddressSimple"/>
+        </actionGroup>
+        <!--Verify that selected "Test Dropdown" options appears on the page-->
+        <see selector="{{CheckoutBillingAddressSection.selectedBillingAddress}}" userInput="{{AttributeDropdownData.firstOption}}" stepKey="seeBillingAddressCustomAttribute"/>
+    </test>
+</tests>
