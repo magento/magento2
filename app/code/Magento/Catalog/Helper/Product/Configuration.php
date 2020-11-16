@@ -116,6 +116,7 @@ class Configuration extends AbstractHelper implements ConfigurationInterface
                         'print_value' => $group->getPrintableOptionValue($itemOption->getValue()),
                         'option_id' => $option->getId(),
                         'option_type' => $option->getType(),
+                        'option_value' => $itemOption->getValue(),
                         'custom_view' => $group->isCustomizedView(),
                     ];
                 }
