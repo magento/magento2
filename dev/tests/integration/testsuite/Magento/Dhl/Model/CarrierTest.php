@@ -9,10 +9,13 @@ namespace Magento\Dhl\Model;
 
 use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Framework\DataObject;
+use Magento\Framework\HTTP\AsyncClient\HttpException;
+use Magento\Framework\HTTP\AsyncClient\HttpResponseDeferredInterface;
 use Magento\Framework\HTTP\AsyncClient\Response;
 use Magento\Framework\HTTP\AsyncClientInterface;
 use Magento\Framework\Simplexml\Element;
 use Magento\Quote\Model\Quote\Address\RateRequest;
+use Magento\Quote\Model\Quote\Address\RateResult\Error;
 use Magento\Shipping\Model\Shipment\Request;
 use Magento\Shipping\Model\Tracking\Result\Status;
 use Magento\Store\Model\ScopeInterface;
@@ -473,6 +476,33 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
         $this->assertStringNotContainsString('<Depth>', $requestXml);
 
         $this->config->reinit();
+    }
+
+    /**
+     * Test get carriers rates if has HttpException.
+     *
+     * @magentoConfigFixture default_store carriers/dhl/active 1
+     */
+    public function testGetRatesWithHttpException(): void
+    {
+        $this->setDhlConfig(['showmethod' => 1]);
+        $requestData = $this->getRequestData();
+        $deferredResponse = $this->getMockBuilder(HttpResponseDeferredInterface::class)
+            ->onlyMethods(['get'])
+            ->getMockForAbstractClass();
+        $exception = new HttpException('Exception message');
+        $deferredResponse->method('get')->willThrowException($exception);
+        $this->httpClient->setDeferredResponseMock($deferredResponse);
+        /** @var RateRequest $request */
+        $request = Bootstrap::getObjectManager()->create(RateRequest::class, $requestData);
+        $this->dhlCarrier = Bootstrap::getObjectManager()->create(Carrier::class);
+        $resultRate = $this->dhlCarrier->collectRates($request)->getAllRates()[0];
+        $error = Bootstrap::getObjectManager()->get(Error::class);
+        $error->setCarrier('dhl');
+        $error->setCarrierTitle($this->dhlCarrier->getConfigData('title'));
+        $error->setErrorMessage($this->dhlCarrier->getConfigData('specificerrmsg'));
+
+        $this->assertEquals($error, $resultRate);
     }
 
     /**
