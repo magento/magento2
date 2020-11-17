@@ -55,8 +55,7 @@ $billingData = [
     'telephone' => '11111111',
     'fax' => '',
     'confirm_password' => '',
-    'save_in_address_book' => '1',
-    'use_for_shipping' => '1',
+    'save_in_address_book' => '1'
 ];
 
 $billingAddress = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()

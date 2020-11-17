@@ -61,24 +61,11 @@ class SetBillingAddressOnCart
             $addressInput['save_in_address_book'] = true;
         }
 
-        // Need to keep this for BC of `use_for_shipping` field
-        $sameAsShipping = isset($billingAddressInput['use_for_shipping'])
-            ? (bool)$billingAddressInput['use_for_shipping'] : false;
-        $sameAsShipping = isset($billingAddressInput['same_as_shipping'])
-            ? (bool)$billingAddressInput['same_as_shipping'] : $sameAsShipping;
-
         $this->checkForInputExceptions($billingAddressInput);
-
-        $addresses = $cart->getAllShippingAddresses();
-        if ($sameAsShipping && count($addresses) > 1) {
-            throw new GraphQlInputException(
-                __('Using the "same_as_shipping" option with multishipping is not possible.')
-            );
-        }
 
         $billingAddress = $this->createBillingAddress($context, $customerAddressId, $addressInput);
 
-        $this->assignBillingAddressToCart->execute($cart, $billingAddress, $sameAsShipping);
+        $this->assignBillingAddressToCart->execute($cart, $billingAddress);
     }
 
     /**
