@@ -78,7 +78,7 @@
         <see selector="{{CheckoutShippingAddressSection.selectedShippingAddress}}" userInput="{{AttributeDropdownData.firstOption}}" stepKey="seeShippingAddressCustomAttribute"/>
 
         <!--Add Second Shipping Address-->
-        <actionGroup ref="StorefrontClickAddNewAddressButtonFromCheckoutShippingActionGroup" stepKey="clickAddNewAddressButton" />
+        <actionGroup ref="StorefrontClickAddNewAddressButtonFromCheckoutShippingActionGroup" stepKey="clickAddNewAddressButton"/>
 
         <!--Fill in Shipping Address required fields and Custom Customer Address Attribute and click *Ship Here* button-->
         <actionGroup ref="FillNewShippingAddressModalActionGroup" stepKey="changeAddress">
