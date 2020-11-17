@@ -14,10 +14,8 @@ use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
-use Magento\SalesGraphQl\Model\Order\OrderAddress;
-use Magento\SalesGraphQl\Model\Order\OrderPayments;
+use Magento\SalesGraphQl\Model\Formatter\Order as OrderFormatter;
 use Magento\SalesGraphQl\Model\Resolver\CustomerOrders\Query\OrderFilter;
 use Magento\Store\Api\Data\StoreInterface;
 
@@ -32,16 +30,6 @@ class CustomerOrders implements ResolverInterface
     private $searchCriteriaBuilder;
 
     /**
-     * @var OrderAddress
-     */
-    private $orderAddress;
-
-    /**
-     * @var OrderPayments
-     */
-    private $orderPayments;
-
-    /**
      * @var OrderRepositoryInterface
      */
     private $orderRepository;
@@ -52,24 +40,26 @@ class CustomerOrders implements ResolverInterface
     private $orderFilter;
 
     /**
+     * @var OrderFormatter
+     */
+    private $orderFormatter;
+
+    /**
      * @param OrderRepositoryInterface $orderRepository
-     * @param OrderAddress $orderAddress
-     * @param OrderPayments $orderPayments
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param OrderFilter $orderFilter
+     * @param OrderFormatter $orderFormatter
      */
     public function __construct(
         OrderRepositoryInterface $orderRepository,
-        OrderAddress $orderAddress,
-        OrderPayments $orderPayments,
         SearchCriteriaBuilder $searchCriteriaBuilder,
-        OrderFilter $orderFilter
+        OrderFilter $orderFilter,
+        OrderFormatter $orderFormatter
     ) {
         $this->orderRepository = $orderRepository;
-        $this->orderAddress = $orderAddress;
-        $this->orderPayments = $orderPayments;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->orderFilter = $orderFilter;
+        $this->orderFormatter = $orderFormatter;
     }
 
     /**
@@ -101,44 +91,20 @@ class CustomerOrders implements ResolverInterface
             throw new GraphQlInputException(__($e->getMessage()));
         }
 
+        $ordersArray = [];
+        foreach ($searchResult->getItems() as $orderModel) {
+            $ordersArray[] = $this->orderFormatter->format($orderModel);
+        }
+
         return [
             'total_count' => $searchResult->getTotalCount(),
-            'items' => $this->formatOrdersArray($searchResult->getItems()),
+            'items' => $ordersArray,
             'page_info' => [
                 'page_size' => $searchResult->getPageSize(),
                 'current_page' => $searchResult->getCurPage(),
                 'total_pages' => $maxPages,
             ]
         ];
-    }
-
-    /**
-     * Format order models for graphql schema
-     *
-     * @param OrderInterface[] $orderModels
-     * @return array
-     */
-    private function formatOrdersArray(array $orderModels)
-    {
-        $ordersArray = [];
-        foreach ($orderModels as $orderModel) {
-            $ordersArray[] = [
-                'created_at' => $orderModel->getCreatedAt(),
-                'grand_total' => $orderModel->getGrandTotal(),
-                'id' => base64_encode($orderModel->getEntityId()),
-                'increment_id' => $orderModel->getIncrementId(),
-                'number' => $orderModel->getIncrementId(),
-                'order_date' => $orderModel->getCreatedAt(),
-                'order_number' => $orderModel->getIncrementId(),
-                'status' => $orderModel->getStatusLabel(),
-                'shipping_method' => $orderModel->getShippingDescription(),
-                'shipping_address' => $this->orderAddress->getOrderShippingAddress($orderModel),
-                'billing_address' => $this->orderAddress->getOrderBillingAddress($orderModel),
-                'payment_methods' => $this->orderPayments->getOrderPaymentMethod($orderModel),
-                'model' => $orderModel,
-            ];
-        }
-        return $ordersArray;
     }
 
     /**
