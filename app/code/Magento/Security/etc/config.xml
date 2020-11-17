@@ -13,6 +13,7 @@
                 <password_reset_protection_type>1</password_reset_protection_type>
                 <max_number_password_reset_requests>5</max_number_password_reset_requests>
                 <min_time_between_password_reset_requests>10</min_time_between_password_reset_requests>
+                <session_lifetime>900</session_lifetime>
             </security>
         </admin>
         <customer>

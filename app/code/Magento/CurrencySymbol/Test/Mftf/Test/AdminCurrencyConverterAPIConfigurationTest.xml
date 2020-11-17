@@ -45,7 +45,7 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!--Import rates from Currency Converter API-->
-        <amOnPage url="{{AdminCurrencyRatesPage.url}}" stepKey="onCurrencyRatePage"/>
+        <actionGroup ref="AdminOpenCurrencyRatesPageActionGroup" stepKey="onCurrencyRatePage"/>
         <actionGroup ref="AdminImportCurrencyRatesActionGroup" stepKey="importCurrencyRates">
             <argument name="rateService" value="Currency Converter API"/>
         </actionGroup>
@@ -74,7 +74,7 @@
             <argument name="tags" value=""/>
         </actionGroup>
         <!--Import rates from Currency Converter API with currencies greater then 10-->
-        <amOnPage url="{{AdminCurrencyRatesPage.url}}" stepKey="onCurrencyRatePageSecondTime"/>
+        <actionGroup ref="AdminOpenCurrencyRatesPageActionGroup" stepKey="onCurrencyRatePageSecondTime"/>
         <actionGroup ref="AdminImportCurrencyRatesActionGroup" stepKey="importCurrencyRatesGreaterThen10">
             <argument name="rateService" value="Currency Converter API"/>
         </actionGroup>
