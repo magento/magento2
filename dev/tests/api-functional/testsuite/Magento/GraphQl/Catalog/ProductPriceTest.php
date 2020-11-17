@@ -914,7 +914,6 @@ QUERY;
         self::assertEquals('5.99', $productInformation['special_price']);
     }
 
-
     /**
      * Check if the special price is not visible if the current date is not in the date range set
      * for the special price
