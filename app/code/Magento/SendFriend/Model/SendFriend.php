@@ -10,6 +10,7 @@ namespace Magento\SendFriend\Model;
 use Magento\Framework\Exception\LocalizedException as CoreException;
 use Magento\Framework\Stdlib\Cookie\CookieMetadata;
 use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * SendFriend Log
@@ -130,10 +131,10 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress $remoteAddress
      * @param \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager
      * @param \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation
-     * @param CookieMetadataFactory $cookieMetadataFactory
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @param CookieMetadataFactory $cookieMetadataFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -147,10 +148,10 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress $remoteAddress,
         \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager,
         \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation,
-        CookieMetadataFactory $cookieMetadataFactory,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        CookieMetadataFactory $cookieMetadataFactory = null
     ) {
         $this->_storeManager = $storeManager;
         $this->_transportBuilder = $transportBuilder;
@@ -160,7 +161,9 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
         $this->remoteAddress = $remoteAddress;
         $this->cookieManager = $cookieManager;
         $this->inlineTranslation = $inlineTranslation;
-        $this->cookieMetadataFactory = $cookieMetadataFactory;
+        $this->cookieMetadataFactory = $cookieMetadataFactory  ?? ObjectManager::getInstance()->get(
+               CookieMetadataFactory::class
+            );
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
