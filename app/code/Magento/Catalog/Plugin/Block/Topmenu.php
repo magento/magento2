@@ -8,9 +8,12 @@ declare(strict_types=1);
 namespace Magento\Catalog\Plugin\Block;
 
 use Magento\Catalog\Model\Category;
+use Magento\Catalog\Model\Layer\Resolver;
 use Magento\Catalog\Model\MenuCategoryData;
+use Magento\Catalog\Model\ResourceModel\Category\StateDependentCollectionFactory;
 use Magento\Framework\Data\Collection;
 use Magento\Framework\Data\Tree\Node;
+use Magento\Store\Model\StoreManagerInterface;
 use function array_merge;
 
 /**
@@ -19,7 +22,7 @@ use function array_merge;
 class Topmenu
 {
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Category\StateDependentCollectionFactory
+     * @var StateDependentCollectionFactory
      */
     private $collectionFactory;
 
@@ -29,28 +32,28 @@ class Topmenu
     private $menuCategoryData;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     private $storeManager;
 
     /**
-     * @var \Magento\Catalog\Model\Layer\Resolver
+     * @var Resolver
      */
     private $layerResolver;
 
     /**
      * Initialize dependencies.
      *
-     * @param \Magento\Catalog\Helper\Category $catalogCategory
-     * @param \Magento\Catalog\Model\ResourceModel\Category\StateDependentCollectionFactory $categoryCollectionFactory
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Catalog\Model\Layer\Resolver $layerResolver
+     * @param StateDependentCollectionFactory $categoryCollectionFactory
+     * @param MenuCategoryData $menuCategoryData
+     * @param StoreManagerInterface $storeManager
+     * @param Resolver $layerResolver
      */
     public function __construct(
-        \Magento\Catalog\Model\ResourceModel\Category\StateDependentCollectionFactory $categoryCollectionFactory,
+        StateDependentCollectionFactory $categoryCollectionFactory,
         MenuCategoryData $menuCategoryData,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Catalog\Model\Layer\Resolver $layerResolver
+        StoreManagerInterface $storeManager,
+        Resolver $layerResolver
     ) {
         $this->collectionFactory = $categoryCollectionFactory;
         $this->menuCategoryData = $menuCategoryData;
@@ -133,7 +136,7 @@ class Topmenu
     /**
      * Get current Category from catalog layer
      *
-     * @return \Magento\Catalog\Model\Category
+     * @return Category|null
      */
     private function getCurrentCategory()
     {
@@ -149,7 +152,7 @@ class Topmenu
     /**
      * Convert category to array
      *
-     * @param \Magento\Catalog\Model\Category $category
+     * @param Category $category
      * @param bool $isParentActive
      * @return array
      */
