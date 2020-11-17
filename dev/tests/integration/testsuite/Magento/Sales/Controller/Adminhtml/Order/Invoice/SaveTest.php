@@ -58,6 +58,26 @@ class SaveTest extends AbstractInvoiceControllerTest
         $this->dispatch('backend/sales/order_invoice/save');
         $invoice = $this->getInvoiceByOrder($order);
         $this->checkSuccess($invoice, 2);
+        $this->assertNull($this->transportBuilder->getSentMessage());
+    }
+
+    /**
+     * @magentoDataFixture Magento/Sales/_files/order.php
+     *
+     * @return void
+     */
+    public function testSendEmailOnInvoiceSaveEmailCopyOfInvoice(): void
+    {
+        $order = $this->getOrder('100000001');
+        $itemId = $order->getItemsCollection()->getFirstItem()->getId();
+        $post = $this->hydratePost([$itemId => 2], "", false, "1");
+        $this->prepareRequest(
+            $post,
+            ['order_id' => $order->getEntityId()]
+        );
+        $this->dispatch('backend/sales/order_invoice/save');
+        $invoice = $this->getInvoiceByOrder($order);
+        $this->checkSuccess($invoice, 2);
         $message = $this->transportBuilder->getSentMessage();
         $this->assertNotNull($message);
         $subject = __('Invoice for your %1 order', $order->getStore()->getFrontendName())->render();
