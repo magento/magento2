@@ -96,9 +96,6 @@
             <argument name="filesystem" xsi:type="object">fullRemoteFilesystem</argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\Url\ScopeInterface">
-        <plugin name="remoteUrl" type="Magento\RemoteStorage\Plugin\Scope"/>
-    </type>
     <type name="Magento\ImportExport\Model\Import">
         <arguments>
             <argument name="filesystem" xsi:type="object">fullRemoteFilesystem</argument>
