@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Theme\Block\Html;
+namespace Magento\Sales\Block\Order;
 
 use Magento\Framework\Data\Collection;
 use Magento\Framework\Exception\LocalizedException;
