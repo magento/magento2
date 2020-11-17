@@ -7,8 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\AwsS3\Driver;
 
-use Exception;
 use Generator;
+use Exception;
 use League\Flysystem\AdapterInterface;
 use League\Flysystem\Config;
 use Magento\Framework\Exception\FileSystemException;
@@ -99,7 +99,7 @@ class AwsS3 implements RemoteDriverInterface
      */
     public function fileGetContents($path, $flag = null, $context = null): string
     {
-        $path = $this->normalizeRelativePath($path);
+        $path = $this->normalizeRelativePath($path, true);
 
         if (isset($this->streams[$path])) {
             //phpcs:disable
@@ -119,9 +119,9 @@ class AwsS3 implements RemoteDriverInterface
             return true;
         }
 
-        $path = $this->normalizeRelativePath($path);
+        $path = $this->normalizeRelativePath($path, true);
 
-        if (!$path || $path === '/') {
+        if (!$path) {
             return true;
         }
 
@@ -145,13 +145,11 @@ class AwsS3 implements RemoteDriverInterface
             return true;
         }
 
-        return $this->createDirectoryRecursively(
-            $this->normalizeRelativePath($path)
-        );
+        return $this->createDirectoryRecursively($path);
     }
 
     /**
-     * Created directory recursively.
+     * Create directory recursively.
      *
      * @param string $path
      * @return bool
@@ -159,6 +157,7 @@ class AwsS3 implements RemoteDriverInterface
      */
     private function createDirectoryRecursively(string $path): bool
     {
+        $path = $this->normalizeRelativePath($path);
         //phpcs:ignore Magento2.Functions.DiscouragedFunction
         $parentDir = dirname($path);
 
@@ -166,7 +165,14 @@ class AwsS3 implements RemoteDriverInterface
             $this->createDirectoryRecursively($parentDir);
         }
 
-        return (bool)$this->adapter->createDir(rtrim($path, '/'), new Config(self::CONFIG));
+        if (!$this->isDirectory($path)) {
+            return (bool)$this->adapter->createDir(
+                $this->fixPath($path),
+                new Config(self::CONFIG)
+            );
+        }
+
+        return true;
     }
 
     /**
@@ -175,8 +181,8 @@ class AwsS3 implements RemoteDriverInterface
     public function copy($source, $destination, DriverInterface $targetDriver = null): bool
     {
         return $this->adapter->copy(
-            $this->normalizeRelativePath($source),
-            $this->normalizeRelativePath($destination)
+            $this->normalizeRelativePath($source, true),
+            $this->normalizeRelativePath($destination, true)
         );
     }
 
@@ -186,7 +192,7 @@ class AwsS3 implements RemoteDriverInterface
     public function deleteFile($path): bool
     {
         return $this->adapter->delete(
-            $this->normalizeRelativePath($path)
+            $this->normalizeRelativePath($path, true)
         );
     }
 
@@ -196,7 +202,7 @@ class AwsS3 implements RemoteDriverInterface
     public function deleteDirectory($path): bool
     {
         return $this->adapter->deleteDir(
-            $this->normalizeRelativePath($path)
+            $this->normalizeRelativePath($path, true)
         );
     }
 
@@ -205,7 +211,7 @@ class AwsS3 implements RemoteDriverInterface
      */
     public function filePutContents($path, $content, $mode = null): int
     {
-        $path = $this->normalizeRelativePath($path);
+        $path = $this->normalizeRelativePath($path, true);
         $config = self::CONFIG;
 
         if (false !== ($imageSize = @getimagesizefromstring($content))) {
@@ -243,7 +249,7 @@ class AwsS3 implements RemoteDriverInterface
             return $path;
         }
 
-        $isAbsolute = strpos($path, $this->normalizeAbsolutePath()) === 0;
+        $isAbsolute = strpos($path, $this->normalizeAbsolutePath('')) === 0;
         $path = $this->normalizeRelativePath($path);
 
         //Removing redundant directory separators.
@@ -280,17 +286,35 @@ class AwsS3 implements RemoteDriverInterface
      */
     public function getAbsolutePath($basePath, $path, $scheme = null)
     {
-        $basePath = $this->normalizeRelativePath((string)$basePath);
-        $path = $this->normalizeRelativePath((string)$path);
-        if ($basePath && $path && 0 === strpos($path, $basePath)) {
+        $basePath = (string)$basePath;
+        $path = (string)$path;
+
+        if ($basePath && $path && 0 === strpos(rtrim($path, '/'), rtrim($basePath, '/'))) {
             return $this->normalizeAbsolutePath($path);
         }
 
-        if ($basePath && $basePath !== '/') {
-            $path = $basePath . ltrim((string)$path, '/');
+        if ($basePath) {
+            $path = $basePath . ltrim($path, '/');
         }
 
         return $this->normalizeAbsolutePath($path);
+    }
+
+    /**
+     * Resolves relative path.
+     *
+     * @param string $path Absolute path
+     * @return string Relative path
+     */
+    private function normalizeRelativePath(string $path, bool $fixPath = false): string
+    {
+        $relativePath = str_replace($this->normalizeAbsolutePath(''), '', $path);
+
+        if ($fixPath) {
+            $relativePath = $this->fixPath($relativePath);
+        }
+
+        return $relativePath;
     }
 
     /**
@@ -299,14 +323,9 @@ class AwsS3 implements RemoteDriverInterface
      * @param string $path Relative path
      * @return string Absolute path
      */
-    private function normalizeAbsolutePath(string $path = '/'): string
+    private function normalizeAbsolutePath(string $path): string
     {
-        $path = ltrim($path, '/');
         $path = str_replace($this->getObjectUrl(''), '', $path);
-
-        if (!$path) {
-            $path = '/';
-        }
 
         return $this->getObjectUrl($path);
     }
@@ -320,17 +339,6 @@ class AwsS3 implements RemoteDriverInterface
     private function getObjectUrl(string $path): string
     {
         return $this->objectUrl . ltrim($path, '/');
-    }
-
-    /**
-     * Resolves relative path.
-     *
-     * @param string $path Absolute path
-     * @return string Relative path
-     */
-    private function normalizeRelativePath(string $path): string
-    {
-        return str_replace($this->normalizeAbsolutePath(), '', $path);
     }
 
     /**
@@ -350,8 +358,7 @@ class AwsS3 implements RemoteDriverInterface
             return false;
         }
 
-        $path = $this->normalizeRelativePath($path);
-        $path = rtrim($path, '/');
+        $path = $this->normalizeRelativePath($path, true);;
 
         if ($this->adapter->has($path) && ($meta = $this->adapter->getMetadata($path))) {
             return ($meta['type'] ?? null) === self::TYPE_FILE;
@@ -365,20 +372,20 @@ class AwsS3 implements RemoteDriverInterface
      */
     public function isDirectory($path): bool
     {
-        if (in_array($path, ['.', '/'], true)) {
+        if (in_array($path, ['.', '/', ''], true)) {
             return true;
         }
 
-        $path = $this->normalizeRelativePath($path);
+        $path = $this->normalizeRelativePath($path, true);
 
-        if (!$path || $path === '/') {
+        if (!$path) {
             return true;
         }
 
-        $path = rtrim($path, '/') . '/';
+        if ($this->adapter->has($path)) {
+            $meta = $this->adapter->getMetadata($path);
 
-        if ($this->adapter->has($path) && ($meta = $this->adapter->getMetadata($path))) {
-            return ($meta['type'] ?? null) === self::TYPE_DIR;
+            return !($meta && $meta['type'] === self::TYPE_FILE);
         }
 
         return false;
@@ -389,14 +396,19 @@ class AwsS3 implements RemoteDriverInterface
      */
     public function getRelativePath($basePath, $path = null): string
     {
-        $basePath = $this->normalizeAbsolutePath($basePath);
-        $absolutePath = $this->normalizeAbsolutePath((string)$path);
+        $basePath = (string)$basePath;
+        $path = (string)$path;
 
-        if ($basePath === $absolutePath . '/' || strpos($absolutePath, $basePath) === 0) {
-            return ltrim(substr($absolutePath, strlen($basePath)), '/');
+        if (
+            ($basePath && $path)
+            && ($basePath === $path . '/' || strpos($path, $basePath) === 0)
+        ) {
+            $result = substr($path, strlen($basePath));
+        } else {
+            $result = $path;
         }
 
-        return ltrim($path, '/');
+        return $result;
     }
 
     /**
@@ -422,8 +434,8 @@ class AwsS3 implements RemoteDriverInterface
     public function rename($oldPath, $newPath, DriverInterface $targetDriver = null): bool
     {
         return $this->adapter->rename(
-            $this->normalizeRelativePath($oldPath),
-            $this->normalizeRelativePath($newPath)
+            $this->normalizeRelativePath($oldPath, true),
+            $this->normalizeRelativePath($newPath, true)
         );
     }
 
@@ -432,7 +444,7 @@ class AwsS3 implements RemoteDriverInterface
      */
     public function stat($path): array
     {
-        $path = $this->normalizeRelativePath($path);
+        $path = $this->normalizeRelativePath($path, true);
         $metaInfo = $this->adapter->getMetadata($path);
 
         if (!$metaInfo) {
@@ -463,12 +475,16 @@ class AwsS3 implements RemoteDriverInterface
      */
     public function getMetadata(string $path): array
     {
-        $path = $this->normalizeRelativePath($path);
+        $path = $this->normalizeRelativePath($path, true);
         $metaInfo = $this->adapter->getMetadata($path);
 
         if (!$metaInfo) {
             throw new FileSystemException(__('Cannot gather meta info! %1', [$this->getWarningMessage()]));
         }
+
+        $mimeType = $this->adapter->getMimetype($path)['mimetype'];
+        $size = $this->adapter->getSize($path)['size'];
+        $timestamp = $this->adapter->getTimestamp($path)['timestamp'];
 
         return [
             'path' => $metaInfo['path'],
@@ -476,9 +492,9 @@ class AwsS3 implements RemoteDriverInterface
             'basename' => $metaInfo['basename'],
             'extension' => $metaInfo['extension'],
             'filename' => $metaInfo['filename'],
-            'timestamp' => $metaInfo['timestamp'],
-            'size' => $metaInfo['size'],
-            'mimetype' => $metaInfo['mimetype'],
+            'timestamp' => $timestamp,
+            'size' => $size,
+            'mimetype' => $mimeType,
             'extra' => [
                 'image-width' => $metaInfo['metadata']['image-width'] ?? 0,
                 'image-height' => $metaInfo['metadata']['image-height'] ?? 0
@@ -510,16 +526,16 @@ class AwsS3 implements RemoteDriverInterface
 
         if ($patternFound) {
             // phpcs:ignore Magento2.Functions.DiscouragedFunction
-            $parentDirectory = \dirname(substr($pattern, 0, $parentPattern[0][1] + 1));
+            $parentDirectory = dirname(substr($pattern, 0, $parentPattern[0][1] + 1));
             $leftover = substr($pattern, $parentPattern[0][1]);
             $index = strpos($leftover, '/');
             $searchPattern = $this->getSearchPattern($pattern, $parentPattern, $parentDirectory, $index);
 
-            if ($this->isDirectory($parentDirectory . '/')) {
+            if ($this->isDirectory($parentDirectory)) {
                 yield from $this->getDirectoryContent($parentDirectory, $searchPattern, $leftover, $index);
             }
-        } elseif ($this->isDirectory($pattern) || $this->isFile($pattern)) {
-            yield $pattern;
+        } elseif ($this->isExists($pattern)) {
+            yield $this->normalizeAbsolutePath($pattern);
         }
     }
 
@@ -550,9 +566,9 @@ class AwsS3 implements RemoteDriverInterface
     /**
      * @inheritDoc
      */
-    public function touch($path, $modificationTime = null)
+    public function touch($path, $modificationTime = null): bool
     {
-        $path = $this->normalizeRelativePath($path);
+        $path = $this->normalizeRelativePath($path, true);
 
         $content = $this->adapter->has($path) ?
             $this->adapter->read($path)['contents']
@@ -607,6 +623,7 @@ class AwsS3 implements RemoteDriverInterface
                 )
             );
         }
+
         return $result;
     }
 
@@ -621,6 +638,7 @@ class AwsS3 implements RemoteDriverInterface
                 new Phrase('An error occurred during "%1" execution.', [$this->getWarningMessage()])
             );
         }
+
         return $result;
     }
 
@@ -638,6 +656,7 @@ class AwsS3 implements RemoteDriverInterface
                 )
             );
         }
+
         return $result;
     }
 
@@ -672,6 +691,7 @@ class AwsS3 implements RemoteDriverInterface
                 )
             );
         }
+
         return $result;
     }
 
@@ -689,6 +709,7 @@ class AwsS3 implements RemoteDriverInterface
                 )
             );
         }
+
         return $result;
     }
 
@@ -706,6 +727,7 @@ class AwsS3 implements RemoteDriverInterface
                 )
             );
         }
+
         return $result;
     }
 
@@ -758,7 +780,7 @@ class AwsS3 implements RemoteDriverInterface
      */
     public function fileOpen($path, $mode)
     {
-        $path = $this->normalizeRelativePath($path);
+        $path = $this->normalizeRelativePath($path, true);
 
         if (!isset($this->streams[$path])) {
             $this->streams[$path] = tmpfile();
@@ -771,6 +793,17 @@ class AwsS3 implements RemoteDriverInterface
         }
 
         return $this->streams[$path];
+    }
+
+    /**
+     * Removes slashes in path.
+     *
+     * @param string $path
+     * @return string
+     */
+    private function fixPath(string $path): string
+    {
+        return trim($path, '/');
     }
 
     /**
@@ -799,15 +832,16 @@ class AwsS3 implements RemoteDriverInterface
     {
         $relativePath = $this->normalizeRelativePath($path);
         $contentsList = $this->adapter->listContents(
-            $relativePath,
+            $this->fixPath($relativePath),
             $isRecursive
         );
+
         $itemsList = [];
         foreach ($contentsList as $item) {
             if (isset($item['path'])
                 && $item['path'] !== $relativePath
-                && strpos($item['path'], $relativePath) === 0) {
-                $itemsList[] = $item['path'];
+                && (!$relativePath || strpos($item['path'], $relativePath) === 0)) {
+                $itemsList[] = $this->getAbsolutePath($item['dirname'], $item['path']);
             }
         }
 
@@ -825,7 +859,7 @@ class AwsS3 implements RemoteDriverInterface
      */
     private function getSearchPattern(string $pattern, array $parentPattern, string $parentDirectory, $index): string
     {
-        $parentLength = \strlen($parentDirectory);
+        $parentLength = strlen($parentDirectory);
         if ($index !== false) {
             $searchPattern = substr(
                 $pattern,
@@ -861,14 +895,16 @@ class AwsS3 implements RemoteDriverInterface
         string $leftover,
         $index
     ): Generator {
-        $items = $this->readDirectory($parentDirectory . '/');
+        $items = $this->readDirectory($parentDirectory);
         $directoryContent = [];
         foreach ($items as $item) {
             if (preg_match('/' . $searchPattern . '$/', $item)
                 // phpcs:ignore Magento2.Functions.DiscouragedFunction
                 && strpos(basename($item), '.') !== 0) {
-                if ($index === false || \strlen($leftover) === $index + 1) {
-                    yield $this->isDirectory($item) ? rtrim($item, '/') . '/' : $item;
+                if ($index === false || strlen($leftover) === $index + 1) {
+                    yield $this->normalizeAbsolutePath(
+                        $this->isDirectory($item) ? rtrim($item, '/') . '/' : $item
+                    );
                 } elseif (strlen($leftover) > $index + 1) {
                     yield from $this->glob("{$parentDirectory}/{$item}" . substr($leftover, $index));
                 }

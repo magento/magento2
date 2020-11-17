@@ -10,3 +10,6 @@ type GroupedProductItem @doc(description: "GroupedProductItem contains informati
     position: Int @doc(description: "The relative position of this item compared to the other group items")
     product: ProductInterface @doc(description: "The ProductInterface object, which contains details about this product option") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product")
 }
+
+type GroupedProductWishlistItem implements WishlistItemInterface @doc(description: "A grouped product wish list item") {
+}
