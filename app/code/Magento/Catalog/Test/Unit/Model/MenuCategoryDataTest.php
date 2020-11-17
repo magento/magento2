@@ -7,9 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model;
 
-use Magento\Catalog\Helper\Category;
+use Magento\Catalog\Helper\Category as CategoryHelper;
 use Magento\Catalog\Helper\Data;
-use Magento\Catalog\Model\Indexer\Category\Flat\State;
+use Magento\Catalog\Model\Category;
+use Magento\Catalog\Model\Layer;
 use Magento\Catalog\Model\Layer\Resolver;
 use Magento\Catalog\Model\MenuCategoryData;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -19,44 +20,33 @@ use PHPUnit\Framework\TestCase;
 class MenuCategoryDataTest extends TestCase
 {
     /**
+     * @var MockObject|CategoryHelper
+     */
+    protected $categoryHelper;
+
+    /**
      * @var MenuCategoryData
      */
-    protected $_observer;
-
-    /**
-     * @var MockObject|Category
-     */
-    protected $_catalogCategory;
-
-    /**
-     * @var MockObject|\Magento\Catalog\Model\Category
-     */
-    protected $_childrenCategory;
-
-    /**
-     * @var MockObject|\Magento\Catalog\Model\Category
-     */
-    protected $_category;
-
-    /**
-     * @var MockObject|State
-     */
-    protected $_categoryFlatState;
+    protected $model;
 
     protected function setUp(): void
     {
-        $this->_catalogCategory = $this->createPartialMock(
-            Category::class,
+        $this->categoryHelper = $this->createPartialMock(
+            CategoryHelper::class,
             ['getStoreCategories', 'getCategoryUrl']
         );
 
+        $layer = $this->createMock(Layer::class);
         $layerResolver = $this->createMock(Resolver::class);
-        $layerResolver->expects($this->once())->method('get')->willReturn(null);
-        $this->_observer = (new ObjectManager($this))->getObject(
+        $layerResolver->expects($this->once())
+            ->method('get')
+            ->willReturn($layer);
+
+        $this->model = (new ObjectManager($this))->getObject(
             MenuCategoryData::class,
             [
                 'layerResolver' => $layerResolver,
-                'catalogCategory' => $this->_catalogCategory,
+                'catalogCategory' => $this->categoryHelper,
                 'catalogData' => $this->createMock(Data::class),
             ]
         );
@@ -64,10 +54,17 @@ class MenuCategoryDataTest extends TestCase
 
     public function testGetMenuCategoryData()
     {
-        $category = $this->createPartialMock(\Magento\Catalog\Model\Category::class, ['getId', 'getName']);
-        $category->expects($this->once())->method('getId')->willReturn('id');
-        $category->expects($this->once())->method('getName')->willReturn('name');
-        $this->_catalogCategory->expects($this->once())->method('getCategoryUrl')->willReturn('url');
+        $category = $this->createPartialMock(Category::class, ['getId', 'getName']);
+        $category->expects($this->once())
+            ->method('getId')
+            ->willReturn('id');
+        $category->expects($this->once())
+            ->method('getName')
+            ->willReturn('name');
+
+        $this->categoryHelper->expects($this->once())
+            ->method('getCategoryUrl')
+            ->willReturn('url');
 
         $this->assertEquals(
             [
@@ -77,7 +74,7 @@ class MenuCategoryDataTest extends TestCase
                 'is_active' => false,
                 'has_active' => false,
             ],
-            $this->_observer->getMenuCategoryData($category)
+            $this->model->getMenuCategoryData($category)
         );
     }
 }
