@@ -111,7 +111,7 @@ class DefaultOrder extends \Magento\Framework\View\Element\Template
      * @param OrderItem|null $item
      * @return string
      */
-    public function getItemPriceHtml($item = null)
+    public function getItemPriceHtml(?OrderItem $item = null): string
     {
         $block = $this->getLayout()->getBlock('item_unit_price');
         $block->setItem($item ?: $this->getItem());
