@@ -48,12 +48,6 @@ class Login extends \Magento\Backend\Controller\Adminhtml\Auth implements HttpGe
             return $this->getRedirect($this->_backendUrl->getStartupPageUrl());
         }
 
-        $requestUrl = $this->getRequest()->getUri();
-        $backendUrl = $this->getUrl('*');
-        // redirect according to rewrite rule
-        if ($requestUrl != $backendUrl) {
-            return $this->getRedirect($backendUrl);
-        }
         return $this->resultPageFactory->create();
     }
 
