@@ -61,7 +61,9 @@ class WishlistItems implements ResolverInterface
         /** @var Wishlist $wishlist */
         $wishlist = $value['model'];
 
-        $wishlistItems = $this->getWishListItems($wishlist);
+        /** @var WishlistItemCollection $wishlistItemCollection */
+        $wishlistItemsCollection = $this->getWishListItems($wishlist, $args);
+        $wishlistItems = $wishlistItemsCollection->getItems();
 
         $data = [];
         foreach ($wishlistItems as $wishlistItem) {
@@ -74,17 +76,28 @@ class WishlistItems implements ResolverInterface
                 'itemModel' => $wishlistItem,
             ];
         }
-        return $data;
+        return [
+            'items' => $data,
+            'page_info' => [
+                'current_page' => $wishlistItemsCollection->getCurPage(),
+                'page_size' => $wishlistItemsCollection->getPageSize(),
+                'total_pages' => $wishlistItemsCollection->getLastPageNumber()
+            ]
+        ];
     }
 
     /**
      * Get wishlist items
      *
      * @param Wishlist $wishlist
-     * @return Item[]
+     * @param array $args
+     * @return WishlistItemCollection
      */
-    private function getWishListItems(Wishlist $wishlist): array
+    private function getWishListItems(Wishlist $wishlist, array $args): WishlistItemCollection
     {
+        $currentPage = $args['currentPage'] ?? 1;
+        $pageSize = $args['pageSize'] ?? 20;
+
         /** @var WishlistItemCollection $wishlistItemCollection */
         $wishlistItemCollection = $this->wishlistItemCollectionFactory->create();
         $wishlistItemCollection
@@ -93,6 +106,13 @@ class WishlistItems implements ResolverInterface
                 return $store->getId();
             }, $this->storeManager->getStores()))
             ->setVisibilityFilter();
-        return $wishlistItemCollection->getItems();
+        if ($currentPage > 0) {
+            $wishlistItemCollection->setCurPage($currentPage);
+        }
+
+        if ($pageSize > 0) {
+            $wishlistItemCollection->setPageSize($pageSize);
+        }
+        return $wishlistItemCollection;
     }
 }

@@ -25,7 +25,10 @@ type WishlistOutput @doc(description: "Deprecated: `Wishlist` type should be use
 type Wishlist {
     id: ID @doc(description: "Wishlist unique identifier")
     items: [WishlistItem] @resolver(class: "\\Magento\\WishlistGraphQl\\Model\\Resolver\\WishlistItemsResolver") @deprecated(reason: "Use field `items_v2` from type `Wishlist` instead")
-    items_v2: [WishlistItemInterface] @resolver(class: "\\Magento\\WishlistGraphQl\\Model\\Resolver\\WishlistItems") @doc(description: "An array of items in the customer's wish list")
+    items_v2(
+        currentPage: Int = 1,
+        pageSize: Int = 20
+    ): WishlistItems @resolver(class: "\\Magento\\WishlistGraphQl\\Model\\Resolver\\WishlistItems") @doc(description: "An array of items in the customer's wish list")
     items_count: Int @doc(description: "The number of items in the wish list")
     sharing_code: String @doc(description: "An encrypted code that Magento uses to link to the wish list")
     updated_at: String @doc(description: "The time of the last modification to the wish list")
@@ -38,6 +41,11 @@ interface WishlistItemInterface @typeResolver(class: "Magento\\WishlistGraphQl\\
     added_at: String!  @doc(description: "The date and time the item was added to the wish list")
     product: ProductInterface @doc(description: "Product details of the wish list item") @resolver(class: "\\Magento\\WishlistGraphQl\\Model\\Resolver\\ProductResolver")
     customizable_options: [SelectedCustomizableOption] @doc(description: "Custom options selected for the wish list item")
+}
+
+type WishlistItems {
+    items: [WishlistItemInterface]! @doc(description: "Wishlist items list")
+    page_info: SearchResultPageInfo
 }
 
 type WishlistItem {
