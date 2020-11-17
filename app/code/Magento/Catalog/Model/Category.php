@@ -981,45 +981,12 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * @param bool $toLoad
      * @return \Magento\Framework\Data\Tree\Node\Collection|\Magento\Catalog\Model\ResourceModel\Category\Collection
      * @deprecated The method doesn't consider onlyActive, onlyIncludeInMenu params
-     * @see getCategoriesCollection
+     * @see \Magento\Catalog\Model\Category\GetCategoriesCollection
      */
     public function getCategories($parent, $recursionLevel = 0, $sorted = false, $asCollection = false, $toLoad = true)
     {
         $categories = $this->getResource()->getCategories($parent, $recursionLevel, $sorted, $asCollection, $toLoad);
         return $categories;
-    }
-
-    /**
-     * Retrieve categories collection by parent
-     *
-     * @param int $parent
-     * @param int $recursionLevel
-     * @param bool $sorted
-     * @param bool $asCollection
-     * @param bool $toLoad
-     * @param bool $onlyActive
-     * @param bool $onlyIncludeInMenu
-     * @return \Magento\Framework\Data\Tree\Node\Collection|\Magento\Catalog\Model\ResourceModel\Category\Collection
-     */
-    public function getCategoriesCollection(
-        $parent,
-        $recursionLevel = 0,
-        $sorted = false,
-        $asCollection = false,
-        $toLoad = true,
-        $onlyActive = true,
-        $onlyIncludeInMenu = true
-    ) {
-        return $this->getResource()
-            ->getCategoriesCollection(
-                $parent,
-                $recursionLevel,
-                $sorted,
-                $asCollection,
-                $toLoad,
-                $onlyActive,
-                $onlyIncludeInMenu
-            );
     }
 
     /**
