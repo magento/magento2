@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontClickSaveOnNewAddressFormActionGroup">
+        <annotations>
+            <description>Clicks the save button on the storefront new address form</description>
+        </annotations>
+        <click selector="{{CheckoutShippingSection.saveAddress}}" stepKey="saveNewAddress"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+    </actionGroup>
+</actionGroups>
