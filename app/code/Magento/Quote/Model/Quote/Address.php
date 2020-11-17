@@ -1652,7 +1652,13 @@ class Address extends AbstractAddress implements
      */
     public function getEmail()
     {
-        return $this->getData(self::KEY_EMAIL);
+        $email = $this->getData(self::KEY_EMAIL);
+        $q = $this->getQuote();
+        if (!$email && $this->getQuote() && $this->getQuote()->dataHasChangedFor('email')) {
+            $email = $this->getQuote()->getCustomerEmail();
+            $this->setEmail($email);
+        }
+        return $email;
     }
 
     /**
