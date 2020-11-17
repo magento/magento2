@@ -8,16 +8,19 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminMediaGalleryInsertLargeImageFileSizeTest">
+    <test name="AdminMediaGalleryInsertLargeImageFileSizeTest" deprecated="Use AdminMediaGalleryInsertImageLargeFileSizeTest instead">
         <annotations>
             <features value="AdminMediaGalleryInsertLargeImageFileSizeTest"/>
             <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/1806"/>
-            <title value="Admin user should see correct image file size after rendition"/>
+            <title value="DEPRECATED. Admin user should see correct image file size after rendition"/>
             <testCaseId value="https://studio.cucumber.io/projects/131313/test-plan/folders/1507933/scenarios/5200023"/>
             <stories value="User inserts image rendition to the content"/>
             <description value="Admin user should see correct image file size after rendition"/>
             <severity value="AVERAGE"/>
             <group value="media_gallery_ui"/>
+            <skip>
+                <issueId value="DEPRECATED">Use AdminMediaGalleryInsertImageLargeFileSizeTest instead</issueId>
+            </skip>
         </annotations>
         <before>
             <createData entity="SimpleSubCategory" stepKey="category"/>
