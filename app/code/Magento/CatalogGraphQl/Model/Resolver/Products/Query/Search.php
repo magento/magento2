@@ -102,8 +102,7 @@ class Search implements ProductQueryInterface
         ResolveInfo $info,
         ContextInterface $context
     ): SearchResult {
-        $queryFields = $this->fieldSelection->getProductsFieldSelection($info);
-        $searchCriteria = $this->buildSearchCriteria($queryFields, $args, $info->fieldName);
+        $searchCriteria = $this->buildSearchCriteria($args, $info);
 
         $realPageSize = $searchCriteria->getPageSize();
         $realCurrentPage = $searchCriteria->getCurrentPage();
@@ -119,7 +118,7 @@ class Search implements ProductQueryInterface
         $searchResults = $this->productsProvider->getList(
             $searchCriteria,
             $itemsResults,
-            $queryFields,
+            $this->fieldSelection->getProductsFieldSelection($info),
             $context
         );
 
@@ -147,17 +146,17 @@ class Search implements ProductQueryInterface
     /**
      * Build search criteria from query input args
      *
-     * @param array $productFields
      * @param array $args
-     * @param string $fieldName
+     * @param ResolveInfo $info
      * @return SearchCriteriaInterface
-     * @throws GraphQlInputException
      */
-    private function buildSearchCriteria(array $productFields, array $args, string $fieldName): SearchCriteriaInterface
+    private function buildSearchCriteria(array $args, ResolveInfo $info): SearchCriteriaInterface
     {
-        $fieldsKeys = array_flip($productFields);
-        $includeAggregations = isset($fieldsKeys['filters']) || isset($fieldsKeys['aggregations']);
-        $processedArgs = $this->argsSelection->process($fieldName, $args);
-        return  $this->searchCriteriaBuilder->build($processedArgs, $includeAggregations);
+        $productFields = (array)$info->getFieldSelection(1);
+        $includeAggregations = isset($productFields['filters']) || isset($productFields['aggregations']);
+        $processedArgs = $this->argsSelection->process((string) $info->fieldName, $args);
+        $searchCriteria = $this->searchCriteriaBuilder->build($processedArgs, $includeAggregations);
+
+        return $searchCriteria;
     }
 }
