@@ -33,7 +33,7 @@
         </after>
 
         <!--Create new custom customer address attribute-->
-        <actionGroup ref="AdminNavigateToCustomerAddressAttributesPageActionGroup"/>
+        <actionGroup ref="AdminNavigateToCustomerAddressAttributesPageActionGroup" stepKey="adminNavigateToCustomerAddressAttributesPage"/>
         <actionGroup ref="AdminAddOptionsCustomerAttribute" stepKey="adminCreateCustomerFirstAttribute">
             <argument name="defaultLabel" value="{{AttributeDropdownData.label}}"/>
             <argument name="attributeCode" value="{{AttributeDropdownData.code}}"/>
