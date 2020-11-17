@@ -57,10 +57,10 @@ class MenuCategoryData
     /**
      * Get category data to be added to the Menu
      *
-     * @param \Magento\Framework\Data\Tree\Node $category
+     * @param Category $category
      * @return array
      */
-    public function getMenuCategoryData($category)
+    public function getMenuCategoryData(Category $category): array
     {
         $nodeId = 'category-node-' . $category->getId();
 
@@ -88,7 +88,7 @@ class MenuCategoryData
      * @param Category $category
      * @return bool
      */
-    protected function hasActive($category)
+    protected function hasActive(Category $category): bool
     {
         $catalogLayer = $this->getCatalogLayer();
         if (!$catalogLayer) {
@@ -108,7 +108,7 @@ class MenuCategoryData
      * Get catalog layer
      * @return Layer
      */
-    private function getCatalogLayer()
+    private function getCatalogLayer(): Layer
     {
         if ($this->catalogLayer === null) {
             $this->catalogLayer = $this->layerResolver->get();

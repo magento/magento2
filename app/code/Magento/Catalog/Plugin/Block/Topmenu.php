@@ -73,10 +73,10 @@ class Topmenu
      */
     public function beforeGetHtml(
         \Magento\Theme\Block\Html\Topmenu $subject,
-        $outermostClass = '',
-        $childrenWrapClass = '',
-        $limit = 0
-    ) {
+        string $outermostClass = '',
+        string $childrenWrapClass = '',
+        int $limit = 0
+    ): void {
         $rootId = $this->storeManager->getStore()->getRootCategoryId();
         $storeId = $this->storeManager->getStore()->getId();
         /** @var \Magento\Catalog\Model\ResourceModel\Category\Collection $collection */
@@ -117,7 +117,7 @@ class Topmenu
      * @param \Magento\Theme\Block\Html\Topmenu $subject
      * @return void
      */
-    public function beforeGetIdentities(\Magento\Theme\Block\Html\Topmenu $subject)
+    public function beforeGetIdentities(\Magento\Theme\Block\Html\Topmenu $subject): void
     {
         $subject->addIdentity(Category::CACHE_TAG);
         $rootId = $this->storeManager->getStore()->getRootCategoryId();
@@ -138,7 +138,7 @@ class Topmenu
      *
      * @return Category|null
      */
-    private function getCurrentCategory()
+    private function getCurrentCategory(): ?Category
     {
         $catalogLayer = $this->layerResolver->get();
 
@@ -156,7 +156,7 @@ class Topmenu
      * @param bool $isParentActive
      * @return array
      */
-    private function getCategoryAsArray($category, $isParentActive)
+    private function getCategoryAsArray(Category $category, bool $isParentActive): array
     {
         $menuData = $this->menuCategoryData->getMenuCategoryData($category);
         $localData = [
@@ -174,7 +174,7 @@ class Topmenu
      * @return \Magento\Catalog\Model\ResourceModel\Category\Collection
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    protected function getCategoryTree($storeId, $rootId)
+    protected function getCategoryTree(int $storeId, int $rootId)
     {
         /** @var \Magento\Catalog\Model\ResourceModel\Category\Collection $collection */
         $collection = $this->collectionFactory->create();
