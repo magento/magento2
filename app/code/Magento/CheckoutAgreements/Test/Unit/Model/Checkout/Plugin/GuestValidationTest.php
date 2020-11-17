@@ -20,6 +20,7 @@ use Magento\Quote\Api\Data\PaymentExtension;
 use Magento\Quote\Api\Data\PaymentInterface;
 use Magento\Store\Model\ScopeInterface;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\RuntimeException;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -174,7 +175,7 @@ class GuestValidationTest extends TestCase
         $mockBuilder = $this->getMockBuilder(PaymentExtension::class);
         try {
             $mockBuilder->addMethods(['getAgreementIds']);
-        } catch (\RuntimeException $e) {
+        } catch (RuntimeException $e) {
             // Payment extension already generated.
         }
 

@@ -20,6 +20,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\ProductVideo\Model\Product\Attribute\Media\ExternalVideoEntryConverter;
 use Magento\ProductVideo\Model\Product\Attribute\Media\VideoEntry;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\RuntimeException;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -232,7 +233,7 @@ class ExternalVideoEntryConverterTest extends TestCase
                     'getVideoContent',
                 ]
             );
-        } catch (\Exception $e) {
+        } catch (RuntimeException $e) {
             // ProductAttributeMediaGalleryEntryExtension already generated and has all necessary methods.
         }
 

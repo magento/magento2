@@ -20,6 +20,7 @@ use Magento\Sales\Api\Data\OrderItemExtensionFactory;
 use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\Sales\Model\ResourceModel\Order\Collection;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\RuntimeException;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -279,7 +280,7 @@ class OrderGetTest extends TestCase
         $mockObject = $this->getMockBuilder(OrderExtension::class);
         try {
             $mockObject->addMethods(['getGiftMessage', 'setGiftMessage']);
-        } catch (\RuntimeException $e) {
+        } catch (RuntimeException $e) {
             // Order extension already generated.
         }
 
@@ -296,7 +297,7 @@ class OrderGetTest extends TestCase
         $mockObject = $this->getMockBuilder(OrderItemExtension::class);
         try {
             $mockObject->addMethods(['getGiftMessage', 'setGiftMessage']);
-        } catch (\RuntimeException $e) {
+        } catch (RuntimeException $e) {
             // Order extension already generated.
         }
 

@@ -15,6 +15,7 @@ use Magento\Downloadable\Api\LinkRepositoryInterface;
 use Magento\Downloadable\Model\Link\UpdateHandler;
 use Magento\Downloadable\Model\Product\Type;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\RuntimeException;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -157,7 +158,7 @@ class UpdateHandlerTest extends TestCase
             ->disableOriginalConstructor();
         try {
             $mockBuilder->addMethods(['getDownloadableProductLinks']);
-        } catch (\RuntimeException $e) {
+        } catch (RuntimeException $e) {
             // ProductExtension already generated.
         }
 

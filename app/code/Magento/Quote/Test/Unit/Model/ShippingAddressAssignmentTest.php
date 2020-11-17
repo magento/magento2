@@ -16,6 +16,7 @@ use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\ShippingAssignment\ShippingAssignmentProcessor;
 use Magento\Quote\Model\ShippingAddressAssignment;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\RuntimeException;
 use PHPUnit\Framework\TestCase;
 
 class ShippingAddressAssignmentTest extends TestCase
@@ -122,7 +123,7 @@ class ShippingAddressAssignmentTest extends TestCase
         $mockBuilder = $this->getMockBuilder(CartExtension::class);
         try {
             $mockBuilder->addMethods(['setShippingAssignments']);
-        } catch (\RuntimeException $e) {
+        } catch (RuntimeException $e) {
             // CartExtension already generated.
         }
 

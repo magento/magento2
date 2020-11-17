@@ -21,6 +21,7 @@ use Magento\Quote\Api\Data\ProductOptionInterface;
 use Magento\Quote\Model\Quote\Item;
 use Magento\Quote\Model\Quote\ProductOptionFactory;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\RuntimeException;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -250,7 +251,7 @@ class CartItemProcessorTest extends TestCase
         $mockBuilder = $this->getMockBuilder(ProductOptionExtension::class);
         try {
             $mockBuilder->addMethods(['setDownloadableOption']);
-        } catch (\RuntimeException $e) {
+        } catch (RuntimeException $e) {
             // ProductOptionExtension already generated.
         }
 

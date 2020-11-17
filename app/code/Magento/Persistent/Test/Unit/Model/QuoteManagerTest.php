@@ -392,7 +392,7 @@ class QuoteManagerTest extends TestCase
         $extensionMockBuilder = $this->getMockBuilder(CartExtensionInterface::class);
         try {
             $extensionMockBuilder->addMethods(['setShippingAssignments']);
-        } catch (\RuntimeException $e) {
+        } catch (RuntimeException $e) {
             // do nothing as CartExtensionInterface already generated and has 'setShippingAssignments' method.
         }
 

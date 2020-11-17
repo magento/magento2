@@ -11,6 +11,7 @@ use Magento\Multishipping\Model\DisableMultishipping;
 use Magento\Quote\Api\Data\CartExtensionInterface;
 use Magento\Quote\Api\Data\CartInterface;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\RuntimeException;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -121,7 +122,7 @@ class DisableMultishippingTest extends TestCase
             ->disableOriginalConstructor();
         try {
             $mockBuilder->addMethods(['getShippingAssignments', 'setShippingAssignments']);
-        } catch (\RuntimeException $e) {
+        } catch (RuntimeException $e) {
             // CartExtension already generated.
         }
 

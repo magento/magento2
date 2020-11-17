@@ -15,6 +15,7 @@ use Magento\Downloadable\Api\SampleRepositoryInterface;
 use Magento\Downloadable\Model\Product\Type;
 use Magento\Downloadable\Model\Sample\UpdateHandler;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\RuntimeException;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -157,7 +158,7 @@ class UpdateHandlerTest extends TestCase
             ->disableOriginalConstructor();
         try {
             $mockBuilder->addMethods(['getDownloadableProductSamples']);
-        } catch (\RuntimeException $e) {
+        } catch (RuntimeException $e) {
             // Product extension already generated.
         }
 

@@ -29,6 +29,7 @@ use Magento\Sales\Model\ResourceModel\Order\Collection;
 use Magento\Tax\Api\Data\OrderTaxDetailsInterface;
 use Magento\Tax\Api\OrderTaxManagementInterface;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\RuntimeException;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -261,7 +262,7 @@ class OrderRepositoryTest extends TestCase
                     'setPaymentAdditionalInfo',
                 ]
             );
-        } catch (\RuntimeException $e) {
+        } catch (RuntimeException $e) {
             // Order extension already generated.
         }
 

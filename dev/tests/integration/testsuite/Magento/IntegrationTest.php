@@ -41,7 +41,7 @@ class IntegrationTest extends TestSuite
         $suitesConfig = $configuration->testSuite();
         $suite = new TestSuite();
         foreach ($suitesConfig as $suiteConfig) {
-            if ($suiteConfig->name() === 'Magento_Integration_Tests') {
+            if ($suiteConfig->name() === 'Magento Integration Tests') {
                 continue;
             }
             $suites = self::getSuites($suiteConfig);

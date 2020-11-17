@@ -32,6 +32,7 @@ use Magento\Quote\Model\ShippingAssignment;
 use Magento\Quote\Model\ShippingAssignmentFactory;
 use Magento\Quote\Model\ShippingFactory;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\RuntimeException;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -631,7 +632,7 @@ class ShippingInformationManagementTest extends TestCase
         $mockBuilder = $this->getMockBuilder(CartExtension::class);
         try {
             $mockBuilder->addMethods(['getShippingAssignments', 'setShippingAssignments']);
-        } catch (\RuntimeException $e) {
+        } catch (RuntimeException $e) {
             // CartExtension already generated.
         }
 
