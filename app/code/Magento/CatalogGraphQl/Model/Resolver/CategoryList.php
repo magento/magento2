@@ -10,7 +10,6 @@ namespace Magento\CatalogGraphQl\Model\Resolver;
 use Magento\CatalogGraphQl\Model\Category\CategoryFilter;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\CategoryTree;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\ExtractDataFromCategoryTree;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
@@ -47,19 +46,18 @@ class CategoryList implements ResolverInterface
      * @param CategoryTree $categoryTree
      * @param ExtractDataFromCategoryTree $extractDataFromCategoryTree
      * @param CategoryFilter $categoryFilter
-     * @param ArgumentsProcessorInterface|null $argsSelection
+     * @param ArgumentsProcessorInterface $argsSelection
      */
     public function __construct(
         CategoryTree $categoryTree,
         ExtractDataFromCategoryTree $extractDataFromCategoryTree,
         CategoryFilter $categoryFilter,
-        ArgumentsProcessorInterface $argsSelection = null
+        ArgumentsProcessorInterface $argsSelection
     ) {
         $this->categoryTree = $categoryTree;
         $this->extractDataFromCategoryTree = $extractDataFromCategoryTree;
         $this->categoryFilter = $categoryFilter;
-        $this->argsSelection = $argsSelection ?: ObjectManager::getInstance()
-            ->get(ArgumentsProcessorInterface::class);
+        $this->argsSelection = $argsSelection;
     }
 
     /**

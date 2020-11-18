@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\QuoteGraphQl\Model\Resolver;
 
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
@@ -34,15 +33,14 @@ class CartItems implements ResolverInterface
 
     /**
      * @param GetCartProducts $getCartProducts
-     * @param Uid|null $uidEncoder
+     * @param Uid $uidEncoder
      */
     public function __construct(
         GetCartProducts $getCartProducts,
-        Uid $uidEncoder = null
+        Uid $uidEncoder
     ) {
         $this->getCartProducts = $getCartProducts;
-        $this->uidEncoder = $uidEncoder ?: ObjectManager::getInstance()
-            ->get(Uid::class);
+        $this->uidEncoder = $uidEncoder;
     }
 
     /**

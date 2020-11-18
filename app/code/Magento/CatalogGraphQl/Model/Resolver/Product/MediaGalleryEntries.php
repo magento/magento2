@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver\Product;
 
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Framework\GraphQl\Query\Uid;
@@ -28,12 +27,11 @@ class MediaGalleryEntries implements ResolverInterface
     private $uidEncoder;
 
     /**
-     * Uid|null $uidEncoder
+     * Uid $uidEncoder
      */
-    public function __construct(Uid $uidEncoder = null)
+    public function __construct(Uid $uidEncoder)
     {
-        $this->uidEncoder = $uidEncoder ?: ObjectManager::getInstance()
-            ->get(Uid::class);
+        $this->uidEncoder = $uidEncoder;
     }
 
     /**
