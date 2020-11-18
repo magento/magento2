@@ -81,10 +81,10 @@ class ReviewDataProviderTest extends TestCase
         $this->collectionMock->expects($this->once())
             ->method('addStoreData')
             ->willReturnSelf();
-        $this->requestMock->expects($this->exactly(2))
+        $this->requestMock->expects($this->once())
             ->method('getParam')
-            ->withConsecutive(['current_product_id', 0], ['sorting'])
-            ->willReturnOnConsecutiveCalls(1, null);
+            ->with('current_product_id', 0)
+            ->willReturn(1);
 
         $this->assertSame($expected, $this->model->getData());
     }

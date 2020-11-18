@@ -7,9 +7,9 @@ namespace Magento\Review\Ui\DataProvider\Product;
 
 use Magento\Framework\Api\Filter;
 use Magento\Framework\App\RequestInterface;
-use Magento\Ui\DataProvider\AbstractDataProvider;
-use Magento\Review\Model\ResourceModel\Review\Product\CollectionFactory;
 use Magento\Review\Model\ResourceModel\Review\Product\Collection;
+use Magento\Review\Model\ResourceModel\Review\Product\CollectionFactory;
+use Magento\Ui\DataProvider\AbstractDataProvider;
 
 /**
  * DataProvider for product reviews
@@ -66,8 +66,6 @@ class ReviewDataProvider extends AbstractDataProvider
         $this->getCollection()->addEntityFilter($this->request->getParam('current_product_id', 0))
             ->addStoreData();
 
-        $this->applySorting();
-
         $arrItems = [
             'totalRecords' => $this->getCollection()->getSize(),
             'items' => [],
@@ -81,17 +79,32 @@ class ReviewDataProvider extends AbstractDataProvider
     }
 
     /**
-     * Apply sorting if it set
+     * Returns prepared field name
      *
-     * @return void
+     * @param string $name
+     * @return string
      */
-    private function applySorting(): void
+    private function getPreparedField(string $name): string
     {
-        $sorting = $this->request->getParam('sorting');
-        if (is_array($sorting)) {
-            $select = $this->getCollection()->getSelect();
-            $select->order($sorting['field'] . ' ' . $sorting['direction']);
+        $preparedName = '';
+
+        if (in_array($name, ['review_id', 'created_at', 'status_id'])) {
+            $preparedName = 'rt.' . $name;
+        } elseif (in_array($name, ['title', 'nickname', 'detail'])) {
+            $preparedName = 'rdt.' . $name;
+        } elseif ($name === 'review_created_at') {
+            $preparedName = 'rt.created_at';
         }
+
+        return $preparedName ?: $name;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function addOrder($field, $direction): void
+    {
+        $this->getCollection()->setOrder($this->getPreparedField($field), $direction);
     }
 
     /**
@@ -102,18 +115,7 @@ class ReviewDataProvider extends AbstractDataProvider
     public function addFilter(Filter $filter): void
     {
         $field = $filter->getField();
-
-        if (in_array($field, ['review_id', 'created_at', 'status_id'])) {
-            $filter->setField('rt.' . $field);
-        }
-
-        if (in_array($field, ['title', 'nickname', 'detail'])) {
-            $filter->setField('rdt.' . $field);
-        }
-
-        if ($field === 'review_created_at') {
-            $filter->setField('rt.created_at');
-        }
+        $filter->setField($this->getPreparedField($field));
 
         parent::addFilter($filter);
     }

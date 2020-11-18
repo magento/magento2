@@ -46,21 +46,21 @@ class ReviewDataProviderTest extends TestCase
      * @magentoDataFixture Magento/Review/_files/different_reviews.php
      * @dataProvider sortingDataProvider
      *
-     * @param array $sorting
+     * @param string $field
+     * @param string $direction
      * @param array $expectedSortedTitles
      * @return void
      */
-    public function testSorting(array $sorting, array $expectedSortedTitles): void
+    public function testSorting(string $field, string $direction, array $expectedSortedTitles): void
     {
         $request = $this->objectManager->create(RequestInterface::class);
-        $request->setParam('sorting', $sorting);
         $request->setParam('current_product_id', 1);
 
         $dataProvider = $this->objectManager->create(
             ReviewDataProvider::class,
             array_merge($this->modelParams, ['request' => $request])
         );
-
+        $dataProvider->addOrder($field, $direction);
         $result = $dataProvider->getData();
 
         $this->assertEquals($this->getItemsField($result, 'title'), $expectedSortedTitles);
@@ -91,12 +91,14 @@ class ReviewDataProviderTest extends TestCase
     public function sortingDataProvider(): array
     {
         return [
-            [
-                ['field' => 'title', 'direction' => 'asc'],
+            'sort by title field ascending' => [
+                'title',
+                'asc',
                 ['1 filter second review', '2 filter first review', 'Review Summary'],
             ],
-            [
-                ['field' => 'title', 'direction' => 'desc'],
+            'sort by title field descending' => [
+                'title',
+                'desc',
                 ['Review Summary', '2 filter first review', '1 filter second review'],
             ],
         ];
