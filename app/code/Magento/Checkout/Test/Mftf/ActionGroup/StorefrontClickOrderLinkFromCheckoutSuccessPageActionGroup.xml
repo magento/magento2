@@ -14,6 +14,6 @@
         </annotations>
         <click selector="{{CheckoutSuccessMainSection.orderLink}}" stepKey="clickOrderLink"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
-        <waitForText selector="{{StorefrontCustomerAccountMainSection.pageTitle}}" userInput="Order # " stepKey="waitForPageTitle"/>
+        <waitForText selector="{{StorefrontCustomerAccountMainSection.pageTitle}}" userInput="Order #" stepKey="waitForPageTitle"/>
     </actionGroup>
 </actionGroups>

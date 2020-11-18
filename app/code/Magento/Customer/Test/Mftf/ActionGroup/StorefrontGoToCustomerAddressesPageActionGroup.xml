@@ -12,6 +12,5 @@
             <description>Goes to the storefront customer addresses page</description>
         </annotations>
         <amOnPage url="{{StorefrontCustomerAddressesPage.url}}" stepKey="goToAddressPage"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
     </actionGroup>
 </actionGroups>
