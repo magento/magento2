@@ -27,6 +27,8 @@ class Onepage
     const METHOD_GUEST    = 'guest';
     const METHOD_REGISTER = 'register';
     const METHOD_CUSTOMER = 'customer';
+    const USE_FOR_SHIPPING = 1;
+    const NOT_USE_FOR_SHIPPING = 0;
 
     /**
      * @var \Magento\Customer\Model\Session
