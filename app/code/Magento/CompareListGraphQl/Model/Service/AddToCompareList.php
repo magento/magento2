@@ -62,6 +62,10 @@ class AddToCompareList
     {
         $storeId = (int)$context->getExtensionAttributes()->getStore()->getStoreId();
         $customerId = $context->getUserId();
+        if ($customerId) {
+            $this->itemCollection->setListIdToCustomerCompareItems($listId, $customerId);
+        }
+
         if (count($products)) {
             $existedProducts = $this->itemCollection->getProductsByListId($listId);
             foreach ($products as $productId) {
@@ -78,10 +82,6 @@ class AddToCompareList
                     }
                 }
             }
-        }
-
-        if ($customerId) {
-            $this->itemCollection->setListIdToCustomerCompareItems($listId, $customerId);
         }
 
         return (int)$listId;
