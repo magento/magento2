@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCreateCustomerAccountWithAddressInformationTest">
+        <annotations>
+            <features value="Customer"/>
+            <stories value="Create a Customer via the Storefront with Address Information"/>
+            <title value="Customer should be able to create an account with address information via the storefront"/>
+            <description value="Customer should be able to create an account with address information such like Company, phone number, Street Address, City, State, Country, Zip Code via the storefront"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-36076"/>
+            <group value="customer"/>
+            <group value="create"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set customer/address/show_address_fields 1" stepKey="setShowAddressInformation"/>
+        </before>
+        <after>
+            <magentoCLI command="config:set customer/address/show_address_fields 0" stepKey="setShowAddressInformation"/>
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+            <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteNewUser">
+                <argument name="email" value="{{CustomerEntityOne.email}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <actionGroup ref="StorefrontCreateCustomerAccountWithAddressInformationActionGroup" stepKey="SignUpNewUser">
+            <argument name="Customer" value="CustomerEntityOne"/>
+            <argument name="address" value="CustomerAddressSimple"/>
+        </actionGroup>
+    </test>
+</tests>

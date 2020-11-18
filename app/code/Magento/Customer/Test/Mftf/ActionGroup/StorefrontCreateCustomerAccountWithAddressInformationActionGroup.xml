@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontCreateCustomerAccountWithAddressInformationActionGroup" extends="SignUpNewUserFromStorefrontActionGroup">
+        <annotations>
+            <description>EXTENDS: SignUpNewUserFromStorefrontActionGroup. Fills address fields.</description>
+        </annotations>
+        <arguments>
+            <argument name="address" type="entity"/>
+        </arguments>
+        <fillField selector="{{StorefrontCustomerAddressFormSection.company}}" userInput="{{address.company}}" after="fillGender" stepKey="fillCompany"/>
+        <fillField selector="{{StorefrontCustomerAddressFormSection.phoneNumber}}" userInput="{{address.telephone}}" after="fillCompany" stepKey="fillPhoneNumber"/>
+        <fillField selector="{{StorefrontCustomerAddressFormSection.streetAddress}}" userInput="{{address.street[0]}}" after="fillPhoneNumber" stepKey="fillStreetAddress"/>
+        <selectOption selector="{{StorefrontCustomerAddressFormSection.country}}" userInput="{{address.country_id}}" after="fillStreetAddress" stepKey="selectCounty"/>
+        <selectOption selector="{{StorefrontCustomerAddressFormSection.state}}" userInput="{{address.state}}" after="selectCounty" stepKey="selectRegion" />
+        <fillField selector="{{StorefrontCustomerAddressFormSection.city}}" userInput="{{address.city}}" after="selectRegion" stepKey="fillCityName"/>
+        <fillField selector="{{StorefrontCustomerAddressFormSection.zip}}" userInput="{{address.postcode}}" after="fillCityName" stepKey="fillZip"/>
+    </actionGroup>
+</actionGroups>
