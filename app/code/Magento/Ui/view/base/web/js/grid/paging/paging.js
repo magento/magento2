@@ -36,7 +36,8 @@ define([
             imports: {
                 totalSelected: '${ $.selectProvider }:totalSelected',
                 totalRecords: '${ $.provider }:data.totalRecords',
-                filters: '${ $.provider }:params.filters'
+                filters: '${ $.provider }:params.filters',
+                search: '${ $.provider }:params.search'
             },
 
             exports: {
@@ -58,7 +59,8 @@ define([
                 'pages': 'onPagesChange',
                 'pageSize': 'onPageSizeChange',
                 'totalRecords': 'updateCounter',
-                '${ $.provider }:params.filters': 'goFirst'
+                '${ $.provider }:params.filters': 'goFirst',
+                'search': 'goFirst'
             },
 
             modules: {
