@@ -70,6 +70,11 @@ class EmailSenderHandler
     private $localeDate;
 
     /**
+     * @var string
+     */
+    private $modifyStartFromDate = '-1 day';
+
+    /**
      * @param \Magento\Sales\Model\Order\Email\Sender $emailSender
      * @param \Magento\Sales\Model\ResourceModel\EntityAbstract $entityResource
      * @param \Magento\Sales\Model\ResourceModel\Collection\AbstractCollection $entityCollection
@@ -78,6 +83,7 @@ class EmailSenderHandler
      * @param \Magento\Store\Model\StoreManagerInterface|null $storeManager
      * @param ValueFactory|null $configValueFactory
      * @param TimezoneInterface|null $localeDate
+     * @param string|null $modifyStartFromDate
      */
     public function __construct(
         \Magento\Sales\Model\Order\Email\Sender $emailSender,
@@ -87,7 +93,8 @@ class EmailSenderHandler
         IdentityInterface $identityContainer = null,
         \Magento\Store\Model\StoreManagerInterface $storeManager = null,
         ?ValueFactory $configValueFactory = null,
-        ?TimezoneInterface $localeDate = null
+        ?TimezoneInterface $localeDate = null,
+        ?string $modifyStartFromDate = null
     ) {
         $this->emailSender = $emailSender;
         $this->entityResource = $entityResource;
@@ -101,6 +108,7 @@ class EmailSenderHandler
 
         $this->configValueFactory = $configValueFactory ?: ObjectManager::getInstance()->get(ValueFactory::class);
         $this->localeDate = $localeDate ?: ObjectManager::getInstance()->get(TimezoneInterface::class);
+        $this->modifyStartFromDate = $modifyStartFromDate ?: $this->modifyStartFromDate;
     }
 
     /**
@@ -179,7 +187,7 @@ class EmailSenderHandler
 
         if ($configValue->getId()) {
             $fromDate = $this->localeDate->date($configValue->getUpdatedAt())
-                ->modify('-1 day')->format('Y-m-d H:i:s');
+                ->modify($this->modifyStartFromDate)->format('Y-m-d H:i:s');
         }
 
         return $fromDate;

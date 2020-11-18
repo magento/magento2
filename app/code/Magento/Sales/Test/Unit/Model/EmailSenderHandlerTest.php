@@ -85,6 +85,11 @@ class EmailSenderHandlerTest extends TestCase
      */
     private $localeDate;
 
+    /**
+     * @var string
+     */
+    private $modifyStartFromDate = '-1 day';
+
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
@@ -135,14 +140,15 @@ class EmailSenderHandlerTest extends TestCase
         $this->object = $objectManager->getObject(
             EmailSenderHandler::class,
             [
-                'emailSender'        => $this->emailSender,
-                'entityResource'     => $this->entityResource,
-                'entityCollection'   => $this->entityCollection,
-                'globalConfig'       => $this->globalConfig,
-                'identityContainer'  => $this->identityContainerMock,
-                'storeManager'       => $this->storeManagerMock,
-                'configValueFactory' => $this->configValueFactory,
-                'localeDate'         => $this->localeDate,
+                'emailSender'         => $this->emailSender,
+                'entityResource'      => $this->entityResource,
+                'entityCollection'    => $this->entityCollection,
+                'globalConfig'        => $this->globalConfig,
+                'identityContainer'   => $this->identityContainerMock,
+                'storeManager'        => $this->storeManagerMock,
+                'configValueFactory'  => $this->configValueFactory,
+                'localeDate'          => $this->localeDate,
+                'modifyStartFromDate' => $this->modifyStartFromDate
             ]
         );
     }
@@ -177,7 +183,7 @@ class EmailSenderHandlerTest extends TestCase
 
             $dateTime = new \DateTime();
             $nowDate = $dateTime->format('Y-m-d H:i:s');
-            $fromDate = $dateTime->modify('-1 day')->format('Y-m-d H:i:s');
+            $fromDate = $dateTime->modify($this->modifyStartFromDate)->format('Y-m-d H:i:s');
             $this->entityCollection
                 ->expects($this->at(2))
                 ->method('addFieldToFilter')
