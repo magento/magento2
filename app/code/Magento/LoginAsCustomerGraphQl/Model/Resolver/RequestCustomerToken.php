@@ -42,7 +42,6 @@ class RequestCustomerToken implements ResolverInterface
     private $createCustomerToken;
 
     /**
-     * RequestCustomerToken constructor.
      * @param AuthorizationInterface $authorization
      * @param LoginAsCustomerConfig $config
      * @param CreateCustomerToken $createCustomerToken

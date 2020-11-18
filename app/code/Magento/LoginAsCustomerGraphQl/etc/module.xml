@@ -8,10 +8,10 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
 	<module name="Magento_LoginAsCustomerGraphQl">
         <sequence>
-            <module name="Magento_LoginAsCustomer"/>
+            <module name="Magento_LoginAsCustomerApi"/>
             <module name="Magento_Customer"/>
-            <module name="Magento_Authorization"/>
-            <module name="Magento_GraphQl"/>
+            <module name="Magento_Store"/>
+            <module name="Magento_CatalogGraphQl"/>
         </sequence>
     </module>
 </config>

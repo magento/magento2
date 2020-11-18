@@ -16,8 +16,6 @@ use Exception;
 
 /**
  * Create customer token from customer email
- *
- * Class CreateCustomerToken
  */
 class CreateCustomerToken
 {
@@ -32,7 +30,6 @@ class CreateCustomerToken
     private $tokenModelFactory;
 
     /**
-     * CreateCustomerToken constructor.
      * @param TokenFactory $tokenModelFactory
      * @param CustomerFactory $customerFactory
      */
