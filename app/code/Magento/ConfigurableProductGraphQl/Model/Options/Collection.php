@@ -136,7 +136,7 @@ class Collection
             $this->attributeMap[$productId][$attribute->getId()] = $attribute->getData();
             $this->attributeMap[$productId][$attribute->getId()]['id'] = $attribute->getId();
             $this->attributeMap[$productId][$attribute->getId()]['uid'] = $this->uidEncoder->encode(
-                self::OPTION_TYPE . '/' . $attribute->getId()
+                self::OPTION_TYPE . '/' . $productId . '/' . $attribute->getAttributeId()
             );
             $this->attributeMap[$productId][$attribute->getId()]['attribute_id_v2'] =
                 $attribute->getProductAttribute()->getAttributeId();

@@ -33,8 +33,7 @@ type ConfigurableProductOptions @doc(description: "ConfigurableProductOptions de
     position: Int @doc(description: "A number that indicates the order in which the attribute is displayed")
     use_default: Boolean @doc(description: "Indicates whether the option is the default")
     values: [ConfigurableProductOptionsValues] @doc(description: "An array that defines the value_index codes assigned to the configurable product")
-    product_id: Int @deprecated(reason: "User `product_uid` instead") @doc(description: "This is the same as a product's id field")
-    product_uid: ID! @doc(description: "This is the same as a product's id field")
+    product_id: Int @deprecated(reason: "`product_id` is not needed and can be obtained from it's parent") @doc(description: "This is the same as a product's id field")
 }
 
 type ConfigurableProductOptionsValues @doc(description: "ConfigurableProductOptionsValues contains the index number assigned to a configurable product option") {
@@ -68,11 +67,11 @@ type ConfigurableCartItem implements CartItemInterface {
 }
 
 type SelectedConfigurableOption {
-    id: Int! @deprecated(reason: "Use SelectedConfigurableOption.configurable_product_options_uid instead")
-    configurable_product_options_uid: ID! @doc(description: "Unique identifier for the selected configurable option object")
+    id: Int! @deprecated(reason: "Use SelectedConfigurableOption.configurable_product_option_uid instead")
+    configurable_product_option_uid: ID! @doc(description: "Unique identifier for the selected configurable option object")
     option_label: String!
-    value_id: Int! @deprecated(reason: "Use SelectedConfigurableOption.configurable_product_options_values_uid instead")
-    configurable_product_options_values_uid: ID! @doc(description: "Unique identifier for the option value of the `SelectedConfigurableOption` object")
+    value_id: Int! @deprecated(reason: "Use SelectedConfigurableOption.configurable_product_option_value_uid instead")
+    configurable_product_option_value_uid: ID! @doc(description: "Unique identifier for the option value of the `SelectedConfigurableOption` object")
     value_label: String!
 }
 
