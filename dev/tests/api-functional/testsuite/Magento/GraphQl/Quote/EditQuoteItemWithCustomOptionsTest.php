@@ -188,13 +188,14 @@ QUERY;
      */
     private function getQuery(string $maskedQuoteId, int $quoteItemId, $customizableOptionsQuery): string
     {
+        $base64EncodedItemId = base64_encode((string) $quoteItemId);
         return <<<QUERY
 mutation {
   updateCartItems(input: {
     cart_id:"$maskedQuoteId"
     cart_items: [
       {
-        cart_item_id: $quoteItemId
+        cart_item_uid: "$base64EncodedItemId"
         quantity: 1
         customizable_options: $customizableOptionsQuery
       }
@@ -209,9 +210,11 @@ mutation {
         ... on SimpleCartItem {
           customizable_options {
             label
+            customizable_option_uid
             values {
               label
               value
+              customizable_option_value_uid
             }
           }
         }
