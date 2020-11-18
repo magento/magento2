@@ -5,6 +5,10 @@
  */
 namespace Magento\Sales\Model;
 
+use Magento\Framework\App\Config\ValueFactory;
+use Magento\Framework\App\Config\ValueInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Sales\Model\Order\Email\Container\IdentityInterface;
 
 /**
@@ -54,13 +58,26 @@ class EmailSenderHandler
     private $storeManager;
 
     /**
+     * Config data factory
+     *
+     * @var ValueFactory
+     */
+    private $configValueFactory;
+
+    /**
+     * @var TimezoneInterface
+     */
+    private $localeDate;
+
+    /**
      * @param \Magento\Sales\Model\Order\Email\Sender $emailSender
      * @param \Magento\Sales\Model\ResourceModel\EntityAbstract $entityResource
      * @param \Magento\Sales\Model\ResourceModel\Collection\AbstractCollection $entityCollection
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $globalConfig
      * @param IdentityInterface|null $identityContainer
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @throws \InvalidArgumentException
+     * @param \Magento\Store\Model\StoreManagerInterface|null $storeManager
+     * @param ValueFactory|null $configValueFactory
+     * @param TimezoneInterface|null $localeDate
      */
     public function __construct(
         \Magento\Sales\Model\Order\Email\Sender $emailSender,
@@ -68,17 +85,22 @@ class EmailSenderHandler
         \Magento\Sales\Model\ResourceModel\Collection\AbstractCollection $entityCollection,
         \Magento\Framework\App\Config\ScopeConfigInterface $globalConfig,
         IdentityInterface $identityContainer = null,
-        \Magento\Store\Model\StoreManagerInterface $storeManager = null
+        \Magento\Store\Model\StoreManagerInterface $storeManager = null,
+        ?ValueFactory $configValueFactory = null,
+        ?TimezoneInterface $localeDate = null
     ) {
         $this->emailSender = $emailSender;
         $this->entityResource = $entityResource;
         $this->entityCollection = $entityCollection;
         $this->globalConfig = $globalConfig;
 
-        $this->identityContainer = $identityContainer ?: \Magento\Framework\App\ObjectManager::getInstance()
+        $this->identityContainer = $identityContainer ?: ObjectManager::getInstance()
             ->get(\Magento\Sales\Model\Order\Email\Container\NullIdentity::class);
-        $this->storeManager = $storeManager ?: \Magento\Framework\App\ObjectManager::getInstance()
+        $this->storeManager = $storeManager ?: ObjectManager::getInstance()
             ->get(\Magento\Store\Model\StoreManagerInterface::class);
+
+        $this->configValueFactory = $configValueFactory ?: ObjectManager::getInstance()->get(ValueFactory::class);
+        $this->localeDate = $localeDate ?: ObjectManager::getInstance()->get(TimezoneInterface::class);
     }
 
     /**
@@ -90,6 +112,8 @@ class EmailSenderHandler
         if ($this->globalConfig->getValue('sales_email/general/async_sending')) {
             $this->entityCollection->addFieldToFilter('send_email', ['eq' => 1]);
             $this->entityCollection->addFieldToFilter('email_sent', ['null' => true]);
+            $startFromDate = $this->getStartFromDate();
+            $this->entityCollection->addFieldToFilter('created_at', ['from' => $startFromDate]);
             $this->entityCollection->setPageSize(
                 $this->globalConfig->getValue('sales_email/general/sending_limit')
             );
@@ -139,5 +163,25 @@ class EmailSenderHandler
         }
 
         return $stores;
+    }
+
+    /**
+     * Get start from date for collection filter
+     *
+     * @return string
+     */
+    private function getStartFromDate(): string
+    {
+        $fromDate = $this->localeDate->date()->format('Y-m-d H:i:s');
+        /** @var $configValue ValueInterface */
+        $configValue = $this->configValueFactory->create();
+        $configValue->load('sales_email/general/async_sending', 'path');
+
+        if ($configValue->getId()) {
+            $fromDate = $this->localeDate->date($configValue->getUpdatedAt())
+                ->modify('-1 day')->format('Y-m-d H:i:s');
+        }
+
+        return $fromDate;
     }
 }
