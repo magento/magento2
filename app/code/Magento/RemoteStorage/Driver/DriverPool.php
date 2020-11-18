@@ -20,9 +20,9 @@ use Magento\RemoteStorage\Model\Config;
 class DriverPool extends BaseDriverPool implements DriverPoolInterface
 {
     public const PATH_DRIVER = 'remote_storage/driver';
-    public const PATH_EXPOSE_URLS = 'remote_storage/expose_urls';
     public const PATH_PREFIX = 'remote_storage/prefix';
     public const PATH_CONFIG = 'remote_storage/config';
+    public const PATH_CACHE = 'remote_storage/cache';
 
     /**
      * Driver name.
@@ -79,10 +79,7 @@ class DriverPool extends BaseDriverPool implements DriverPoolInterface
             $driver = $this->config->getDriver();
 
             if ($driver && $this->driverFactoryPool->has($driver)) {
-                return $this->pool[$code] = $this->driverFactoryPool->get($driver)->create(
-                    $this->config->getConfig(),
-                    $this->config->getPrefix()
-                );
+                return $this->pool[$code] = $this->driverFactoryPool->get($driver)->create();
             }
 
             throw new RuntimeException(__('Remote driver is not available.'));
