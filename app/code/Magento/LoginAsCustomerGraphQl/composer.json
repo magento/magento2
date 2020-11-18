@@ -5,6 +5,7 @@
         "php": "~7.3.0||~7.4.0",
         "magento/framework": "*",
         "magento/module-login-as-customer-api": "*",
+        "magento/module-integration": "*",
         "magento/module-store": "*",
         "magento/module-customer": "*",
         "magento/module-catalog-graph-ql": "*"
