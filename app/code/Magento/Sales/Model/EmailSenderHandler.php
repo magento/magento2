@@ -8,8 +8,8 @@ namespace Magento\Sales\Model;
 use Magento\Framework\App\Config\ValueFactory;
 use Magento\Framework\App\Config\ValueInterface;
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Sales\Model\Order\Email\Container\IdentityInterface;
+use Magento\Sales\Model\ResourceModel\Collection\AbstractCollection;
 
 /**
  * Sales emails sending
@@ -36,7 +36,7 @@ class EmailSenderHandler
     /**
      * Entity collection model.
      *
-     * @var \Magento\Sales\Model\ResourceModel\Collection\AbstractCollection
+     * @var AbstractCollection
      */
     protected $entityCollection;
 
@@ -65,35 +65,28 @@ class EmailSenderHandler
     private $configValueFactory;
 
     /**
-     * @var TimezoneInterface
-     */
-    private $localeDate;
-
-    /**
      * @var string
      */
-    private $modifyStartFromDate = '-1 day';
+    private $modifyStartFromDate;
 
     /**
      * @param \Magento\Sales\Model\Order\Email\Sender $emailSender
      * @param \Magento\Sales\Model\ResourceModel\EntityAbstract $entityResource
-     * @param \Magento\Sales\Model\ResourceModel\Collection\AbstractCollection $entityCollection
+     * @param AbstractCollection $entityCollection
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $globalConfig
      * @param IdentityInterface|null $identityContainer
      * @param \Magento\Store\Model\StoreManagerInterface|null $storeManager
      * @param ValueFactory|null $configValueFactory
-     * @param TimezoneInterface|null $localeDate
      * @param string|null $modifyStartFromDate
      */
     public function __construct(
         \Magento\Sales\Model\Order\Email\Sender $emailSender,
         \Magento\Sales\Model\ResourceModel\EntityAbstract $entityResource,
-        \Magento\Sales\Model\ResourceModel\Collection\AbstractCollection $entityCollection,
+        AbstractCollection $entityCollection,
         \Magento\Framework\App\Config\ScopeConfigInterface $globalConfig,
         IdentityInterface $identityContainer = null,
         \Magento\Store\Model\StoreManagerInterface $storeManager = null,
         ?ValueFactory $configValueFactory = null,
-        ?TimezoneInterface $localeDate = null,
         ?string $modifyStartFromDate = null
     ) {
         $this->emailSender = $emailSender;
@@ -107,7 +100,6 @@ class EmailSenderHandler
             ->get(\Magento\Store\Model\StoreManagerInterface::class);
 
         $this->configValueFactory = $configValueFactory ?: ObjectManager::getInstance()->get(ValueFactory::class);
-        $this->localeDate = $localeDate ?: ObjectManager::getInstance()->get(TimezoneInterface::class);
         $this->modifyStartFromDate = $modifyStartFromDate ?: $this->modifyStartFromDate;
     }
 
@@ -120,8 +112,7 @@ class EmailSenderHandler
         if ($this->globalConfig->getValue('sales_email/general/async_sending')) {
             $this->entityCollection->addFieldToFilter('send_email', ['eq' => 1]);
             $this->entityCollection->addFieldToFilter('email_sent', ['null' => true]);
-            $startFromDate = $this->getStartFromDate();
-            $this->entityCollection->addFieldToFilter('created_at', ['from' => $startFromDate]);
+            $this->filterCollectionByStartFromDate($this->entityCollection);
             $this->entityCollection->setPageSize(
                 $this->globalConfig->getValue('sales_email/general/sending_limit')
             );
@@ -158,7 +149,7 @@ class EmailSenderHandler
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     private function getStores(
-        \Magento\Sales\Model\ResourceModel\Collection\AbstractCollection $entityCollection
+        AbstractCollection $entityCollection
     ): array {
         $stores = [];
 
@@ -174,22 +165,24 @@ class EmailSenderHandler
     }
 
     /**
-     * Get start from date for collection filter
+     * Filter collection by start from date
      *
-     * @return string
+     * @param AbstractCollection $collection
+     * @return void
      */
-    private function getStartFromDate(): string
+    private function filterCollectionByStartFromDate(AbstractCollection $collection): void
     {
-        $fromDate = $this->localeDate->date()->format('Y-m-d H:i:s');
         /** @var $configValue ValueInterface */
         $configValue = $this->configValueFactory->create();
         $configValue->load('sales_email/general/async_sending', 'path');
 
         if ($configValue->getId()) {
-            $fromDate = $this->localeDate->date($configValue->getUpdatedAt())
-                ->modify($this->modifyStartFromDate)->format('Y-m-d H:i:s');
-        }
+            $startFromDate = date(
+                'Y-m-d H:i:s',
+                strtotime($configValue->getUpdatedAt() . ' ' . $this->modifyStartFromDate)
+            );
 
-        return $fromDate;
+            $collection->addFieldToFilter('created_at', ['from' => $startFromDate]);
+        }
     }
 }

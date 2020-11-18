@@ -215,6 +215,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Sales\Model\EmailSenderHandler">
+        <arguments>
+            <argument name="modifyStartFromDate" xsi:type="string">-1 day</argument>
+        </arguments>
+    </type>
     <virtualType name="SalesOrderIndexGridSyncRemove" type="Magento\Sales\Observer\GridSyncRemoveObserver">
         <arguments>
             <argument name="entityGrid" xsi:type="object">Magento\Sales\Model\ResourceModel\Order\Grid</argument>

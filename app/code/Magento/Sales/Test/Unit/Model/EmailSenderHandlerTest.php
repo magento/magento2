@@ -12,7 +12,6 @@ use Magento\Framework\App\Config;
 use Magento\Framework\App\Config\Value;
 use Magento\Framework\App\Config\ValueFactory;
 use Magento\Framework\DB\Select;
-use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Model\AbstractModel;
 use Magento\Sales\Model\EmailSenderHandler;
@@ -81,11 +80,6 @@ class EmailSenderHandlerTest extends TestCase
     private $configValueFactory;
 
     /**
-     * @var TimezoneInterface|MockObject
-     */
-    private $localeDate;
-
-    /**
      * @var string
      */
     private $modifyStartFromDate = '-1 day';
@@ -133,10 +127,6 @@ class EmailSenderHandlerTest extends TestCase
             ValueFactory::class
         );
 
-        $this->localeDate = $this->createMock(
-            TimezoneInterface::class
-        );
-
         $this->object = $objectManager->getObject(
             EmailSenderHandler::class,
             [
@@ -147,7 +137,6 @@ class EmailSenderHandlerTest extends TestCase
                 'identityContainer'   => $this->identityContainerMock,
                 'storeManager'        => $this->storeManagerMock,
                 'configValueFactory'  => $this->configValueFactory,
-                'localeDate'          => $this->localeDate,
                 'modifyStartFromDate' => $this->modifyStartFromDate
             ]
         );
@@ -181,9 +170,8 @@ class EmailSenderHandlerTest extends TestCase
                 ->method('addFieldToFilter')
                 ->with('email_sent', ['null' => true]);
 
-            $dateTime = new \DateTime();
-            $nowDate = $dateTime->format('Y-m-d H:i:s');
-            $fromDate = $dateTime->modify($this->modifyStartFromDate)->format('Y-m-d H:i:s');
+            $nowDate = date('Y-m-d H:i:s');
+            $fromDate = date('Y-m-d H:i:s', strtotime($nowDate . ' ' . $this->modifyStartFromDate));
             $this->entityCollection
                 ->expects($this->at(2))
                 ->method('addFieldToFilter')
@@ -226,10 +214,6 @@ class EmailSenderHandlerTest extends TestCase
             $this->configValueFactory->expects($this->once())
                 ->method('create')
                 ->willReturn($backendModelMock);
-
-            $this->localeDate->expects($this->exactly(2))
-                ->method('date')
-                ->willReturn(new \DateTime($nowDate));
 
             if ($collectionItems) {
 
