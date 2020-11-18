@@ -111,17 +111,17 @@ class Cli extends Console\Application
     public function doRun(Console\Input\InputInterface $input, Console\Output\OutputInterface $output)
     {
         $exitCode = null;
-        try {
+//        try {
             $exitCode = parent::doRun($input, $output);
-        } catch (\Exception $e) {
-            $errorMessage = $e->getMessage() . PHP_EOL . $e->getTraceAsString();
-            $this->logger->error($errorMessage);
-            $this->initException = $e;
-        }
+//        } catch (\Exception $e) {
+//            $errorMessage = $e->getMessage() . PHP_EOL . $e->getTraceAsString();
+//            $this->logger->error($errorMessage);
+//            $this->initException = $e;
+//        }
 
-        if ($this->initException) {
-            throw $this->initException;
-        }
+//        if ($this->initException) {
+//            throw $this->initException;
+//        }
 
         return $exitCode;
     }
@@ -142,7 +142,7 @@ class Cli extends Console\Application
     protected function getApplicationCommands()
     {
         $commands = [];
-        try {
+//        try {
             if (class_exists(\Magento\Setup\Console\CommandList::class)) {
                 $setupCommandList = new \Magento\Setup\Console\CommandList($this->serviceManager);
                 $commands = array_merge($commands, $setupCommandList->getCommands());
@@ -158,9 +158,9 @@ class Cli extends Console\Application
                 $commands,
                 $this->getVendorCommands($this->objectManager)
             );
-        } catch (\Exception $e) {
-            $this->initException = $e;
-        }
+//        } catch (\Exception $e) {
+//            $this->initException = $e;
+//        }
 
         return $commands;
     }
