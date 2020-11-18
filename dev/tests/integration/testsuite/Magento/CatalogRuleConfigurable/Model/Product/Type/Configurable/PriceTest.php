@@ -85,13 +85,6 @@ class PriceTest extends TestCase
                 'max_price' => 15,
                 'tier_price' => 15
             ],
-            'configurable' => [
-                'price' => 0,
-                'final_price' => 0,
-                'min_price' => 9,
-                'max_price' => 30,
-                'tier_price' => 15
-            ],
         ];
         $this->assertConfigurableProductPrice(20, 25, $indexPrices);
     }
@@ -115,13 +108,6 @@ class PriceTest extends TestCase
                 'final_price' => 8,
                 'min_price' => 8,
                 'max_price' => 15,
-                'tier_price' => 15
-            ],
-            'configurable' => [
-                'price' => 0,
-                'final_price' => 0,
-                'min_price' => 4.5,
-                'max_price' => 23,
                 'tier_price' => 15
             ],
         ];

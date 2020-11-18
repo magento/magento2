@@ -194,10 +194,6 @@ class PriceTest extends TestCase
     {
         $configurable = $this->getProduct('configurable');
         $this->assertIndexTableData(
-            'configurable',
-            ['price' => 0, 'final_price' => 0, 'min_price' => 9, 'max_price' => 30, 'tier_price' => 15]
-        );
-        $this->assertIndexTableData(
             'simple_10',
             ['price' => 10, 'final_price' => 9, 'min_price' => 9, 'max_price' => 9, 'tier_price' => null]
         );
