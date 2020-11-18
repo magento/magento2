@@ -8,12 +8,11 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminOpenCMSBlocksGridActionGroup">
+    <actionGroup name="AdminOpenCurrencyRatesPageActionGroup">
         <annotations>
-            <description>Navigate to the Admin Blocks Grid page.</description>
+            <description>Open currency rates page.</description>
         </annotations>
-
-        <amOnPage url="{{CmsBlocksPage.url}}" stepKey="navigateToCMSBlocksGrid"/>
+        <amOnPage url="{{AdminCurrencyRatesPage.url}}" stepKey="openCurrencyRatesPage"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
     </actionGroup>
 </actionGroups>
