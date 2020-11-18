@@ -77,6 +77,6 @@ class ProductUrlSuffix implements ResolverInterface
                 $storeId
             );
         }
-        return $this->productUrlSuffix[$storeId];
+        return (string) $this->productUrlSuffix[$storeId];
     }
 }

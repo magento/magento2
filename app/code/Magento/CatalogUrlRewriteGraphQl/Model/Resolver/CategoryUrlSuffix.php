@@ -77,6 +77,6 @@ class CategoryUrlSuffix implements ResolverInterface
                 $storeId
             );
         }
-        return $this->categoryUrlSuffix[$storeId];
+        return (string) $this->categoryUrlSuffix[$storeId];
     }
 }
