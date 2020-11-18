@@ -50,6 +50,11 @@ class CartItemProcessor implements CartItemProcessorInterface
     private $productOptionFactory;
 
     /**
+     * @var array|null
+     */
+    private $groupedOptions;
+
+    /**
      * @param ObjectFactory $objectFactory
      * @param GroupedOptionsInterfaceFactory $groupedOptionFactory
      * @param Json $jsonSerializer
@@ -84,6 +89,7 @@ class CartItemProcessor implements CartItemProcessorInterface
         if ($extensionAttributes) {
             $groupedOptions = $extensionAttributes->getGroupedOptions();
             if ($groupedOptions) {
+                $this->groupedOptions = $groupedOptions;
                 $requestData = [];
 
                 foreach ($groupedOptions as $item) {
@@ -105,24 +111,16 @@ class CartItemProcessor implements CartItemProcessorInterface
      */
     public function processOptions(CartItemInterface $cartItem): CartItemInterface
     {
-        if ($cartItem->getProductType() !== Grouped::TYPE_CODE) {
+        if (empty($this->groupedOptions) || $cartItem->getProductType() !== Grouped::TYPE_CODE) {
             return $cartItem;
         }
 
-        $groupedOptions = $cartItem->getOptionByCode('grouped_options');
-        $groupedOptionsData = $groupedOptions ? $this->jsonSerializer->unserialize($groupedOptions->getValue()) : null;
-        if ($groupedOptionsData) {
-            $productOptions = [];
-            foreach ($groupedOptionsData as $id => $qty) {
-                $productOptions[] = $this->groupedOptionFactory->create(['id' => $id, 'qty' => $qty]);
-            }
-
-            $extension = $this->productOptionExtensionFactory->create()->setGroupedOptions($productOptions);
-            if (!$cartItem->getProductOption()) {
-                $cartItem->setProductOption($this->productOptionFactory->create());
-            }
-            $cartItem->getProductOption()->setExtensionAttributes($extension);
+        $extension = $this->productOptionExtensionFactory->create()
+            ->setGroupedOptions($this->groupedOptions);
+        if (!$cartItem->getProductOption()) {
+            $cartItem->setProductOption($this->productOptionFactory->create());
         }
+        $cartItem->getProductOption()->setExtensionAttributes($extension);
 
         return $cartItem;
     }
