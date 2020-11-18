@@ -186,7 +186,7 @@ define([
          * @returns {Paging} Chainable.
          */
         goFirst: function () {
-            if (!_.isUndefined(this.filters)) {
+            if (!_.isUndefined(this.filters) || !_.isEmpty(this.search)) {
                 this.current = 1;
             }
 
