@@ -116,7 +116,7 @@ class DiffManagerTest extends TestCase
         $generatedIndex = new Index('index_type', 'index', $table, [$column], 'hash', 'index_type');
         $diff->expects(self::exactly(2))
             ->method('register')
-            ->withConsecutive([$generatedIndex, 'drop_element', $generatedIndex], [$index, 'add_complex_element']);
+            ->withConsecutive([$generatedIndex, 'drop_index', $generatedIndex], [$index, 'add_complex_element']);
         $this->model->registerModification($diff, $index, $generatedIndex);
     }
 

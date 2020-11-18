@@ -23,7 +23,7 @@ class DropIndex implements OperationInterface
     /**
      * Operation name.
      */
-    const OPERATION_NAME = 'drop_index';
+    public const OPERATION_NAME = 'drop_index';
 
     /**
      * @var DbSchemaWriterInterface
