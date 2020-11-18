@@ -13,6 +13,11 @@ use Magento\Framework\MessageQueue\ConnectionTypeResolverInterface;
 class ConnectionTypeResolver implements ConnectionTypeResolverInterface
 {
     /**
+     *
+     */
+    const REDIS = 'redis';
+
+    /**
      * Redis connection names.
      *
      * @var string[]
@@ -27,7 +32,7 @@ class ConnectionTypeResolver implements ConnectionTypeResolverInterface
     public function __construct(array $redisConnectionNames = [])
     {
         $this->redisConnectionNames = $redisConnectionNames;
-        $this->redisConnectionNames[] = 'redis';
+        $this->redisConnectionNames[] = self::REDIS;
     }
 
     /**

@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework\MessageQueue;
 
+use Magento\Framework\App\DeploymentConfig;
+
 /**
  * Message Queue default config value provider.
  */
@@ -23,16 +25,22 @@ class DefaultValueProvider
      * @var string
      */
     private $exchange;
+    /**
+     * @var DeploymentConfig
+     */
+    private $config;
 
     /**
      * Initialize dependencies.
      *
+     * @param DeploymentConfig $config
      * @param string $connection
      * @param string $exchange
      */
-    public function __construct($connection = 'db', $exchange = 'magento')
+    public function __construct(DeploymentConfig $config, $connection = 'db', $exchange = 'magento')
     {
-        $this->connection = $connection;
+        $this->config = $config;
+        $this->connection = $this->config->get('queue/default_connection', $connection);
         $this->exchange = $exchange;
     }
 

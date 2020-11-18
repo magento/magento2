@@ -5,12 +5,12 @@
  */
 namespace Magento\Framework\MessageQueue\Topology\Config\Xml;
 
-use Magento\Framework\Stdlib\BooleanUtils;
-use Magento\Framework\Data\Argument\InterpreterInterface;
 use Magento\Framework\Config\Converter\Dom\Flat as FlatConverter;
 use Magento\Framework\Config\Dom\ArrayNodeConfig;
 use Magento\Framework\Config\Dom\NodePathMatcher;
+use Magento\Framework\Data\Argument\InterpreterInterface;
 use Magento\Framework\MessageQueue\DefaultValueProvider;
+use Magento\Framework\Stdlib\BooleanUtils;
 
 /**
  * Converts MessageQueue topology config from \DOMDocument to array
@@ -67,7 +67,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
         /** @var $exchange \DOMElement */
         foreach ($source->getElementsByTagName('exchange') as $exchange) {
             $name = $this->getAttributeValue($exchange, 'name');
-            $connection = $this->getAttributeValue($exchange, 'connection');
+            $connection = $this->getAttributeValue($exchange, 'connection', $this->defaultValue->getConnection());
 
             $bindings = [];
             $exchangeArguments = [];
@@ -90,7 +90,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             $autoDelete = $this->getAttributeValue($exchange, 'autoDelete', false);
             $result[$name . '--' . $connection] = [
                 'name' => $name,
-                'type' => $this->getAttributeValue($exchange, 'type'),
+                'type' => $this->getAttributeValue($exchange, 'type', 'topic'),
                 'connection' => $connection,
                 'durable' => $this->booleanUtils->toBoolean($this->getAttributeValue($exchange, 'durable', true)),
                 'autoDelete' => $this->booleanUtils->toBoolean($autoDelete),
@@ -173,7 +173,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
         }
         $bindings[$id] = [
             'id' => $id,
-            'destinationType' => $this->getAttributeValue($node, 'destinationType'),
+            'destinationType' => $this->getAttributeValue($node, 'destinationType', 'queue'),
             'destination' => $this->getAttributeValue($node, 'destination'),
             'disabled' => $isDisabled,
             'topic' => $this->getAttributeValue($node, 'topic'),

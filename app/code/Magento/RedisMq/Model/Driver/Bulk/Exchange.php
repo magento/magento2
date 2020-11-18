@@ -70,7 +70,7 @@ class Exchange implements ExchangeInterface
             }
         }
         if (!$isMatchedBindings) {
-            $queue = $this->queueFactory->create($topic, 'redis');//todo get default
+            $queue = $this->queueFactory->create('magento', ConnectionTypeResolver::REDIS);
             array_map(function ($envelope) use ($queue) {
                 $queue->push($envelope);
             }, $envelopes);

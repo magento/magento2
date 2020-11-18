@@ -994,7 +994,7 @@ class Store extends AbstractExtensibleModel implements
      */
     public function getCurrentCurrency()
     {
-        $currency = $this->getData('current_currency');
+        $currency = $this->_getData('current_currency');
 
         if ($currency === null) {
             $currency = $this->currencyFactory->create()->load($this->getCurrentCurrencyCode());

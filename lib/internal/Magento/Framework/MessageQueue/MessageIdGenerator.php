@@ -31,6 +31,6 @@ class MessageIdGenerator implements MessageIdGeneratorInterface
      */
     public function generate($topicName)
     {
-        return $this->encryptor->hash(uniqid($topicName));
+        return $this->encryptor->hash(uniqid($topicName, true));
     }
 }
