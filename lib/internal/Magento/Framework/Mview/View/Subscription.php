@@ -174,15 +174,16 @@ class Subscription implements SubscriptionInterface
             foreach ($viewList as $view) {
                 /** @var \Magento\Framework\Mview\ViewInterface $view */
                 // Skip the current view
-                if ($view->getId() == $this->getView()->getId()) {
+                if ($view->getId() === $this->getView()->getId()) {
                     continue;
                 }
                 // Search in view subscriptions
                 foreach ($view->getSubscriptions() as $subscription) {
-                    if ($subscription['name'] != $this->getTableName()) {
-                        continue;
+                    if ($subscription['name'] === $this->getTableName()
+                        && $subscription['column'] === $this->getColumnName()
+                    ) {
+                        $this->linkedViews[] = $view;
                     }
-                    $this->linkedViews[] = $view;
                 }
             }
         }
