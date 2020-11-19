@@ -117,7 +117,6 @@ class DefaultModel extends \Laminas\Captcha\Image implements \Magento\Captcha\Mo
         Random $randomMath = null,
         ?UserContextInterface $userContext = null
     ) {
-        parent::__construct();
         $this->session = $session;
         $this->captchaData = $captchaData;
         $this->resLogFactory = $resLogFactory;
