@@ -87,30 +87,6 @@ class Validation
     }
 
     /**
-     * Check validation before saving the payment information
-     *
-     * @param \Magento\Checkout\Api\PaymentInformationManagementInterface $subject
-     * @param int $cartId
-     * @param \Magento\Quote\Api\Data\PaymentInterface $paymentMethod
-     * @param \Magento\Quote\Api\Data\AddressInterface|null $billingAddress
-     * @return void
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @throws \Magento\Framework\Exception\CouldNotSaveException
-     */
-    public function beforeSavePaymentInformation(
-        \Magento\Checkout\Api\PaymentInformationManagementInterface $subject,
-        $cartId,
-        \Magento\Quote\Api\Data\PaymentInterface $paymentMethod,
-        \Magento\Quote\Api\Data\AddressInterface $billingAddress = null
-    ) {
-        $quote = $this->quoteRepository->getActive($cartId);
-        if ($this->isAgreementEnabled() && !$quote->getIsMultiShipping()) {
-            $this->validateAgreements($paymentMethod);
-        }
-    }
-
-    /**
      * Validate agreements base on the payment method
      *
      * @param \Magento\Quote\Api\Data\PaymentInterface $paymentMethod
