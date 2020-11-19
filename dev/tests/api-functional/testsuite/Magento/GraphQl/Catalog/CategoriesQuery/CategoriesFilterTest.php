@@ -570,6 +570,20 @@ QUERY;
                 ]
             ],
             [
+                'parent_id',
+                'eq',
+                '4',
+                [
+                    'id' => '5',
+                    'name' => 'Category 1.1.1',
+                    'url_key' => 'category-1-1-1',
+                    'url_path' => 'category-1/category-1-1/category-1-1-1',
+                    'children_count' => '0',
+                    'path' => '1/2/3/4/5',
+                    'position' => '1'
+                ]
+            ],
+            [
                 'name',
                 'match',
                 'Movable Position 2',
@@ -639,6 +653,41 @@ QUERY;
                         'children_count' => '0',
                         'path' => '1/2/10',
                         'position' => '6'
+                    ]
+                ]
+            ],
+            // Filter by multiple parent IDs
+            [
+                'parent_id',
+                'in',
+                '["3", "4"]',
+                [
+                    [
+                        'id' => '4',
+                        'name' => 'Category 1.1',
+                        'url_key' => 'category-1-1',
+                        'url_path' => 'category-1/category-1-1',
+                        'children_count' => '0',
+                        'path' => '1/2/3/4',
+                        'position' => '1'
+                    ],
+                    [
+                        'id' => '5',
+                        'name' => 'Category 1.1.1',
+                        'url_key' => 'category-1-1-1',
+                        'url_path' => 'category-1/category-1-1/category-1-1-1',
+                        'children_count' => '0',
+                        'path' => '1/2/3/4/5',
+                        'position' => '1'
+                    ],
+                    [
+                        'id' => '13',
+                        'name' => 'Category 1.2',
+                        'url_key' => 'category-1-2',
+                        'url_path' => 'category-1/category-1-2',
+                        'children_count' => '0',
+                        'path' => '1/2/3/13',
+                        'position' => '2'
                     ]
                 ]
             ],
