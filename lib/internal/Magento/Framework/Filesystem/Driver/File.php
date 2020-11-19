@@ -5,7 +5,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Framework\Filesystem\Driver;
 
 use Magento\Framework\Exception\FileSystemException;
@@ -337,16 +336,17 @@ class File implements DriverInterface
     {
         $result = false;
         $targetDriver = $targetDriver ?: $this;
-        if (get_class($targetDriver) == get_class($this)) {
+        if (get_class($targetDriver) === get_class($this)) {
             $result = @rename($this->getScheme() . $oldPath, $newPath);
             if ($this->stateful) {
                 clearstatcache(true, $this->getScheme() . $oldPath);
                 clearstatcache(true, $newPath);
             }
+            $this->changePermissions($newPath, 0777 & ~umask());
         } else {
             $content = $this->fileGetContents($oldPath);
             if (false !== $targetDriver->filePutContents($newPath, $content)) {
-                $result = $this->deleteFile($newPath);
+                $result = $this->isFile($oldPath) ? $this->deleteFile($oldPath) : true;
             }
         }
         if (!$result) {
@@ -372,7 +372,7 @@ class File implements DriverInterface
     public function copy($source, $destination, DriverInterface $targetDriver = null)
     {
         $targetDriver = $targetDriver ?: $this;
-        if (get_class($targetDriver) == get_class($this)) {
+        if (get_class($targetDriver) === get_class($this)) {
             $result = @copy($this->getScheme() . $source, $destination);
             if ($this->stateful) {
                 clearstatcache(true, $destination);
@@ -542,6 +542,7 @@ class File implements DriverInterface
      */
     public function changePermissionsRecursively($path, $dirPermissions, $filePermissions)
     {
+        $result = true;
         if ($this->isFile($path)) {
             $result = @chmod($path, $filePermissions);
         } else {

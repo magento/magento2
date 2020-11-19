@@ -121,9 +121,9 @@ class UpdateHandlerTest extends \PHPUnit\Framework\TestCase
         $this->mediaDirectory = $this->objectManager->get(Filesystem::class)
             ->getDirectoryWrite(DirectoryList::MEDIA);
         $this->mediaDirectory->writeFile($this->fileName, 'Test');
-        $this->metadataPool = $this->objectManager->get(MetadataPool::class);
         $this->updateHandler = $this->objectManager->create(UpdateHandler::class);
         $this->eavUpdateHandler = $this->objectManager->create(\Magento\Eav\Model\ResourceModel\UpdateHandler::class);
+        $this->metadataPool = $this->objectManager->get(MetadataPool::class);
     }
 
     /**

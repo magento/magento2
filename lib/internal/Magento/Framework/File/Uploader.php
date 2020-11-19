@@ -9,6 +9,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\TargetDirectory;
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\Filesystem\DriverPool;
 use Magento\Framework\Filter\ArrayFilter;
@@ -46,8 +47,7 @@ class Uploader
 
     /**
      * Upload type. Used to right handle $_FILES array.
-     *
-     * @var \Magento\Framework\File\Uploader::SINGLE_STYLE|\Magento\Framework\File\Uploader::MULTIPLE_STYLE
+     * @var Uploader::SINGLE_STYLE|\Magento\Framework\File\Uploader::MULTIPLE_STYLE
      * @access protected
      */
     protected $_uploadType;
@@ -189,6 +189,11 @@ class Uploader
     private $fileDriver;
 
     /**
+     * @var TargetDirectory
+     */
+    private $targetDirectory;
+
+    /**
      * Init upload
      *
      * @param string|array $fileId
@@ -196,6 +201,7 @@ class Uploader
      * @param DirectoryList|null $directoryList
      * @param DriverPool|null $driverPool
      * @param Filesystem $filesystem
+     * @param TargetDirectory|null $targetDirectory
      * @throws \DomainException
      */
     public function __construct(
@@ -203,9 +209,10 @@ class Uploader
         Mime $fileMime = null,
         DirectoryList $directoryList = null,
         DriverPool $driverPool = null,
-        Filesystem $filesystem = null
+        Filesystem $filesystem = null,
+        TargetDirectory $targetDirectory = null
     ) {
-        $this->directoryList= $directoryList ?: ObjectManager::getInstance()->get(DirectoryList::class);
+        $this->directoryList = $directoryList ?: ObjectManager::getInstance()->get(DirectoryList::class);
 
         $this->filesystem = $filesystem ?: ObjectManager::getInstance()->get(FileSystem::class);
         $this->_setUploadFileId($fileId);
@@ -216,7 +223,8 @@ class Uploader
             $this->_fileExists = true;
         }
         $this->fileMime = $fileMime ?: ObjectManager::getInstance()->get(Mime::class);
-        $this->driverPool = $driverPool;
+        $this->driverPool = $driverPool ?: ObjectManager::getInstance()->get(DriverPool::class);
+        $this->targetDirectory = $targetDirectory ?: ObjectManager::getInstance()->get(TargetDirectory::class);
     }
 
     /**
@@ -308,7 +316,10 @@ class Uploader
         }
         if ($this->_allowCreateFolders) {
             $this->createDestinationFolder($destinationFolder);
-        } elseif (!$this->getFileDriver()->isWritable($destinationFolder)) {
+        } elseif (!$this->getTargetDirectory()
+            ->getDirectoryWrite(DirectoryList::ROOT)
+            ->isWritable($destinationFolder)
+        ) {
             throw new FileSystemException(__('Destination folder is not writable or does not exists.'));
         }
     }
@@ -331,15 +342,53 @@ class Uploader
      *
      * @param string $tmpPath
      * @param string $destPath
-     * @return bool|void
+     * @return bool
+     * @throws FileSystemException
      */
     protected function _moveFile($tmpPath, $destPath)
     {
-        if (is_uploaded_file($tmpPath)) {
-            return move_uploaded_file($tmpPath, $destPath);
-        } elseif (is_file($tmpPath)) {
-            return rename($tmpPath, $destPath);
+        $rootCode = DirectoryList::PUB;
+
+        if (strpos($destPath, $this->getDirectoryList()->getPath($rootCode)) !== 0) {
+            $rootCode = DirectoryList::ROOT;
         }
+
+        $destPath = str_replace($this->getDirectoryList()->getPath($rootCode), '', $destPath);
+        $directory = $this->getTargetDirectory()->getDirectoryWrite($rootCode);
+
+        return $this->getFileDriver()->rename(
+            $tmpPath,
+            $directory->getAbsolutePath($destPath),
+            $directory->getDriver()
+        );
+    }
+
+    /**
+     * Retrieves target directory.
+     *
+     * @return TargetDirectory
+     */
+    private function getTargetDirectory(): TargetDirectory
+    {
+        if (!isset($this->targetDirectory)) {
+            $this->targetDirectory = ObjectManager::getInstance()->get(TargetDirectory::class);
+        }
+
+        return $this->targetDirectory;
+    }
+
+    /**
+     * Retrieves directory list.
+     *
+     * @return DirectoryList
+     */
+    private function getDirectoryList(): DirectoryList
+    {
+        if (!isset($this->directoryList)) {
+            $this->directoryList = ObjectManager::getInstance()->get(DirectoryList::class);
+        }
+
+        return $this->directoryList;
     }
 
     /**
@@ -683,7 +732,7 @@ class Uploader
      * Create destination folder
      *
      * @param string $destinationFolder
-     * @return \Magento\Framework\File\Uploader
+     * @return Uploader
      * @throws FileSystemException
      */
     private function createDestinationFolder(string $destinationFolder)
@@ -696,8 +745,10 @@ class Uploader
             $destinationFolder = substr($destinationFolder, 0, -1);
         }
 
-        if (!$this->getFileDriver()->isDirectory($destinationFolder)) {
-            $result = $this->getFileDriver()->createDirectory($destinationFolder);
+        $rootDirectory = $this->getTargetDirectory()->getDirectoryWrite(DirectoryList::ROOT);
+
+        if (!$rootDirectory->isDirectory($destinationFolder)) {
+            $result = $rootDirectory->getDriver()->createDirectory($destinationFolder);
             if (!$result) {
                 throw new FileSystemException(__('Unable to create directory %1.', $destinationFolder));
             }
@@ -714,20 +765,24 @@ class Uploader
      */
     public static function getNewFileName($destinationFile)
     {
+        /** @var Filesystem $fileSystem */
+        $fileSystem = ObjectManager::getInstance()->get(Filesystem::class);
+        $local = $fileSystem->getDirectoryRead(DirectoryList::ROOT);
+        /** @var TargetDirectory $targetDirectory */
+        $targetDirectory = ObjectManager::getInstance()->get(TargetDirectory::class);
+        $remote = $targetDirectory->getDirectoryRead(DirectoryList::ROOT);
+
+        $fileExists = function ($path) use ($local, $remote) {
+            return $local->isExist($path) || $remote->isExist($path);
+        };
+
         $fileInfo = pathinfo($destinationFile);
-        if (file_exists($destinationFile)) {
-            $index = 1;
-            $baseName = $fileInfo['filename'] . '.' . $fileInfo['extension'];
-            while (file_exists($fileInfo['dirname'] . '/' . $baseName)) {
-                $baseName = $fileInfo['filename'] . '_' . $index . '.' . $fileInfo['extension'];
-                $index++;
-            }
-            $destFileName = $baseName;
-        } else {
-            return $fileInfo['basename'];
+        $index = 1;
+        while ($fileExists($fileInfo['dirname'] . '/' . $fileInfo['basename'])) {
+            $fileInfo['basename'] = $fileInfo['filename'] . '_' . $index++ . '.' . $fileInfo['extension'];
         }
 
-        return $destFileName;
+        return $fileInfo['basename'];
     }
 
     /**
