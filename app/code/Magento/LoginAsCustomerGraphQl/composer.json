@@ -7,8 +7,7 @@
         "magento/module-login-as-customer-api": "*",
         "magento/module-integration": "*",
         "magento/module-store": "*",
-        "magento/module-customer": "*",
-        "magento/module-catalog-graph-ql": "*"
+        "magento/module-customer": "*"
     },
     "suggest": {
         "magento/module-login-as-customer": "*"
