@@ -31,7 +31,13 @@
         </arguments>
     </virtualType>
     <virtualType name="fullRemoteFilesystem" type="Magento\RemoteStorage\Filesystem" />
+    <virtualType name="stdFilesystem" type="Magento\Framework\Filesystem" />
     <preference for="Magento\Framework\Filesystem" type="customRemoteFilesystem"/>
+    <type name="Magento\RemoteStorage\Driver\Cache\CacheFactory">
+        <arguments>
+            <argument name="filesystem" xsi:type="object">stdFilesystem</argument>
+        </arguments>
+    </type>
     <type name="Magento\Framework\Filesystem\Directory\TargetDirectory">
         <arguments>
             <argument name="filesystem" xsi:type="object">fullRemoteFilesystem</argument>

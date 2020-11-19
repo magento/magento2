@@ -327,7 +327,7 @@
         "tinymce/tinymce": "3.4.7",
         "magento/module-tinymce-3": "*",
         "magento/module-csp": "*",
-        "magento/module-aws-s-3": "*",
+        "magento/module-aws-s3": "*",
         "magento/module-remote-storage": "*"
     },
     "conflict": {
