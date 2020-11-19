@@ -1186,7 +1186,7 @@ class AccountManagementTest extends TestCase
         $this->assertEquals($this->accountManagement, $this->accountManagement->sendPasswordReminderEmail($customer));
     }
 
-    protected function prepareInitiatePasswordReset(
+    private function prepareInitiatePasswordReset(
         string $email,
         string $templateIdentifier,
         string $sender,

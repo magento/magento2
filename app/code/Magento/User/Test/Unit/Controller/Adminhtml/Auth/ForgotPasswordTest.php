@@ -34,42 +34,42 @@ class ForgotPasswordTest extends TestCase
     /**
      * @var Data|MockObject
      */
-    protected $backendDataHelper;
+    private $backendDataHelper;
 
     /**
      * @var Forgotpassword
      */
-    protected $controller;
+    private $controller;
 
     /**
      * @var ManagerInterface|MockObject
      */
-    protected $messageManager;
+    private $messageManager;
 
     /**
      * @var Http|MockObject
      */
-    protected $request;
+    private $request;
 
     /**
      * @var ResponseInterface|MockObject
      */
-    protected $response;
+    private $response;
 
     /**
      * @var Redirect|MockObject
      */
-    protected $resultRedirect;
+    private $resultRedirect;
 
     /**
      * @var SecurityManager|MockObject
      */
-    protected $securityManager;
+    private $securityManager;
 
     /**
      * @var User|MockObject
      */
-    protected $userCollection;
+    private $userCollection;
 
     protected function setUp(): void
     {
@@ -264,7 +264,7 @@ class ForgotPasswordTest extends TestCase
         $this->controller->execute();
     }
 
-    protected function prepareContext()
+    private function prepareContext()
     {
         $this->resultRedirect = $this->getMockBuilder(Redirect::class)
             ->disableOriginalConstructor()
