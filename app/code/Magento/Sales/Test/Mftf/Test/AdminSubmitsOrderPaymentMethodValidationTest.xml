@@ -48,8 +48,8 @@
         <scrollToTopOfPage stepKey="scrollToTopOfOrderFormPage" after="seePaymentMethodRequired"/>
 
         <!--Fill customer group and customer email-->
-        <comment userInput="Fill Account Information" stepKey="selectCustomerGroup"/>
-        <actionGroup ref="AdminFillAccountInformationOnCreateOrderPageActionGroup" stepKey="fillCustomerEmail">
+        <comment userInput="Fill Account Information" stepKey="selectCustomerGroup" after="scrollToTopOfOrderFormPage"/>
+        <actionGroup ref="AdminFillAccountInformationOnCreateOrderPageActionGroup" stepKey="fillCustomerEmail" after="selectCustomerGroup">
             <argument name="email" value="{{Simple_US_Customer.email}}"/>
         </actionGroup>
        
