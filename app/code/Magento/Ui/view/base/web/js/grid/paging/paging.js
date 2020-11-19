@@ -186,7 +186,10 @@ define([
          * @returns {Paging} Chainable.
          */
         goFirst: function () {
-            if ((!_.isUndefined(this.filters) && _.keys(this.filters) > 1) || this.keywordUpdated) {
+            if (
+                (!_.isUndefined(this.filters) && _.keys(this.filters) > 1) ||
+                (!_.isUndefined(this.keywordUpdated) && this.keywordUpdated)
+            ) {
                 this.current = 1;
             }
 
