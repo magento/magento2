@@ -5,7 +5,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Framework\Filesystem\Driver;
 
 use Magento\Framework\Exception\FileSystemException;
@@ -257,7 +256,7 @@ class File implements DriverInterface
             $flags = \FilesystemIterator::SKIP_DOTS |
                      \FilesystemIterator::UNIX_PATHS |
                      \RecursiveDirectoryIterator::FOLLOW_SYMLINKS;
-            
+
             $iterator = new \FilesystemIterator($path, $flags);
             $result = [];
             /** @var \FilesystemIterator $file */
@@ -300,12 +299,13 @@ class File implements DriverInterface
     {
         $result = false;
         $targetDriver = $targetDriver ?: $this;
-        if (get_class($targetDriver) == get_class($this)) {
+        if (get_class($targetDriver) === get_class($this)) {
             $result = @rename($this->getScheme() . $oldPath, $newPath);
+            $this->changePermissions($newPath, 0777 & ~umask());
         } else {
             $content = $this->fileGetContents($oldPath);
             if (false !== $targetDriver->filePutContents($newPath, $content)) {
-                $result = $this->deleteFile($newPath);
+                $result = $this->isFile($oldPath) ? $this->deleteFile($oldPath) : true;
             }
         }
         if (!$result) {
@@ -331,7 +331,7 @@ class File implements DriverInterface
     public function copy($source, $destination, DriverInterface $targetDriver = null)
     {
         $targetDriver = $targetDriver ?: $this;
-        if (get_class($targetDriver) == get_class($this)) {
+        if (get_class($targetDriver) === get_class($this)) {
             $result = @copy($this->getScheme() . $source, $destination);
         } else {
             $content = $this->fileGetContents($source);
@@ -952,7 +952,7 @@ class File implements DriverInterface
         $flags = \FilesystemIterator::SKIP_DOTS |
                  \FilesystemIterator::UNIX_PATHS |
                  \RecursiveDirectoryIterator::FOLLOW_SYMLINKS;
- 
+
         try {
             $iterator = new \RecursiveIteratorIterator(
                 new \RecursiveDirectoryIterator($path, $flags),
