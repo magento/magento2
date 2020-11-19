@@ -37,7 +37,7 @@ define([
                 totalSelected: '${ $.selectProvider }:totalSelected',
                 totalRecords: '${ $.provider }:data.totalRecords',
                 filters: '${ $.provider }:params.filters',
-                search: '${ $.provider }:params.search'
+                keywordUpdated: '${ $.provider }:params.keywordUpdated'
             },
 
             exports: {
@@ -60,7 +60,7 @@ define([
                 'pageSize': 'onPageSizeChange',
                 'totalRecords': 'updateCounter',
                 '${ $.provider }:params.filters': 'goFirst',
-                'search': 'goFirst'
+                'keywordUpdated': 'goFirst'
             },
 
             modules: {
@@ -186,7 +186,7 @@ define([
          * @returns {Paging} Chainable.
          */
         goFirst: function () {
-            if (!_.isUndefined(this.filters)) {
+            if ((!_.isUndefined(this.filters) && _.keys(this.filters) > 1) || this.keywordUpdated) {
                 this.current = 1;
             }
 
