@@ -86,14 +86,14 @@ script;
     $scriptString1 = $secureRenderer->renderEventListenerAsTag(
         "onclick",
         "WidgetInstance.togglePageGroupChooser(this)",
-        "all_" . $escaper->escapeJs($container['name']) . "_<%- data.id %>"
+        "#all_" . $escaper->escapeJs($container['name']) . "_<%- data.id %>"
     );
     $scriptString .= "'" . $escaper->escapeJs($scriptString1) . "'+" . PHP_EOL;
 
     $scriptString1 = $secureRenderer->renderEventListenerAsTag(
         "onclick",
         "WidgetInstance.togglePageGroupChooser(this)",
-        "specific_" . $escaper->escapeJs($container['name']) . "_<%- data.id %>"
+        "#specific_" . $escaper->escapeJs($container['name']) . "_<%- data.id %>"
     );
     $scriptString .= "'" . $escaper->escapeJs($scriptString1) . "'+" . PHP_EOL;
 

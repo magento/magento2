@@ -58,9 +58,8 @@
         <comment userInput="- Captcha field, Image and Reload button" stepKey="seeCaptchaImage"/>
         <actionGroup ref="AssertCaptchaVisibleOnCustomerSignInPopupActionGroup" stepKey="seeCaptchaReloadButton"/>
        
-        <reloadPage stepKey="refreshPage"/>
-    
-        <waitForPageLoad stepKey="waitForPageLoad2"/>
+        <actionGroup ref="ReloadPageActionGroup" stepKey="refreshPage"/>
+        <comment userInput="Replacing reload action and preserve Backward Compatibility" stepKey="waitForPageLoad2" />
         
         <comment userInput="Go to Checkout" stepKey="clickCart2"/>
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckout2"/>
