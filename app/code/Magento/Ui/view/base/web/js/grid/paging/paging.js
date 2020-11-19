@@ -60,7 +60,7 @@ define([
                 'pageSize': 'onPageSizeChange',
                 'totalRecords': 'updateCounter',
                 '${ $.provider }:params.filters': 'goFirst',
-                '${ $.provider }:params.search': 'goFirst'
+                '${ $.provider }:params.search': 'onSearchUpdate'
             },
 
             modules: {
@@ -186,10 +186,7 @@ define([
          * @returns {Paging} Chainable.
          */
         goFirst: function () {
-            if (
-                (!_.isUndefined(this.filters) && _.keys(this.filters) > 1) ||
-                (!_.isUndefined(this.keywordUpdated) && this.keywordUpdated)
-            ) {
+            if (!_.isUndefined(this.filters)) {
                 this.current = 1;
             }
 
@@ -287,6 +284,17 @@ define([
          */
         onPagesChange: function () {
             this.updateCursor();
+        },
+
+        /**
+         * Resent the pagination to Page 1 on search keyword update
+         */
+        onSearchUpdate: function () {
+            if (!_.isUndefined(this.keywordUpdated) && this.keywordUpdated) {
+                this.goFirst();
+            }
+
+            return this;
         }
     });
 });
