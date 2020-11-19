@@ -31,6 +31,7 @@ use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Store\Api\Data\WebsiteInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -140,6 +141,11 @@ class LinkManagementTest extends TestCase
     private $linkField = 'product_id';
 
     /**
+     * @var WebsiteInterface|MockObject
+     */
+    private $websiteMock;
+
+    /**
      * @inheritDoc
      */
     protected function setUp(): void
@@ -203,6 +209,9 @@ class LinkManagementTest extends TestCase
         $this->dataObjectHelperMock = $this->getMockBuilder(DataObjectHelper::class)
             ->disableOriginalConstructor()
             ->getMock();
+
+        $this->websiteMock = $this->getMockForAbstractClass( WebsiteInterface::class);
+
         $this->model = $helper->getObject(
             LinkManagement::class,
             [
@@ -539,7 +548,9 @@ class LinkManagementTest extends TestCase
         $productLink->method('getSku')->willReturn('linked_product_sku');
         $productLink->method('getOptionId')->willReturn(1);
         $productLink->method('getSelectionId')->willReturn(1);
-        $productLink->method('getWebSiteId')->willReturn(100);
+        $store = $this->createMock(Store::class);
+        $this->storeManagerMock->expects($this->once())->method('getStore')->willReturn($store);
+        $store->expects($this->once())->method('getWebsiteId')->willReturn(100);
 
         $this->metadataMock->expects($this->once())->method('getLinkField')->willReturn($this->linkField);
         $productMock = $this->createMock(Product::class);
@@ -617,7 +628,9 @@ class LinkManagementTest extends TestCase
         $productLink->method('getSku')->willReturn('linked_product_sku');
         $productLink->method('getOptionId')->willReturn(1);
         $productLink->method('getSelectionId')->willReturn(1);
-        $productLink->method('getWebSiteId')->willReturn(100);
+        $store = $this->createMock(Store::class);
+        $this->storeManagerMock->expects($this->once())->method('getStore')->willReturn($store);
+        $store->expects($this->once())->method('getWebsiteId')->willReturn(100);
 
         $this->metadataMock->expects($this->once())->method('getLinkField')->willReturn($this->linkField);
         $productMock = $this->createMock(Product::class);
@@ -705,7 +718,9 @@ class LinkManagementTest extends TestCase
             ->willReturn($canChangeQuantity);
         $productLink->method('getIsDefault')->willReturn($isDefault);
         $productLink->method('getSelectionId')->willReturn($optionId);
-        $productLink->method('getWebSiteId')->willReturn($websiteId);
+        $store = $this->createMock(Store::class);
+        $this->storeManagerMock->expects($this->once())->method('getStore')->willReturn($store);
+        $store->expects($this->once())->method('getWebsiteId')->willReturn($websiteId);
 
         $this->metadataMock->expects($this->once())->method('getLinkField')->willReturn($this->linkField);
         $productMock = $this->createMock(Product::class);
@@ -785,15 +800,21 @@ class LinkManagementTest extends TestCase
         $productLink->method('getSku')->willReturn('linked_product_sku');
         $productLink->method('getId')->willReturn($id);
         $productLink->method('getSelectionId')->willReturn(1);
-        $productLink->method('getWebsiteId')->willReturn($websiteId);
+        $store = $this->createMock(Store::class);
+        $this->storeManagerMock->expects($this->once())->method('getStore')->willReturn($store);
+        $store->expects($this->once())->method('getWebsiteId')->willReturn($websiteId);
 
         $bundleProductSku = 'bundleProductSku';
-
+        $this->metadataMock->expects($this->once())->method('getLinkField')->willReturn($this->linkField);
         $productMock = $this->createMock(Product::class);
         $productMock->expects($this->once())
             ->method('getTypeId')
             ->willReturn(Type::TYPE_BUNDLE);
         $productMock->method('getId')
+            ->willReturn($parentProductId);
+        $productMock
+            ->method('getData')
+            ->with($this->linkField)
             ->willReturn($parentProductId);
 
         $linkedProductMock = $this->createMock(Product::class);

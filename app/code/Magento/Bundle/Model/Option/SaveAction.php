@@ -16,6 +16,7 @@ use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Bundle\Model\Product\Type;
 use Magento\Bundle\Api\ProductLinkManagementInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
@@ -105,7 +106,7 @@ class SaveAction
             }
         } else {
             if (!$existingOption->getOptionId()) {
-                throw new \Magento\Framework\Exception\NoSuchEntityException(
+                throw new NoSuchEntityException(
                     __("The option that was requested doesn't exist. Verify the entity and try again.")
                 );
             }
@@ -147,7 +148,6 @@ class SaveAction
         if (is_array($option->getProductLinks())) {
             $productLinks = $option->getProductLinks();
             foreach ($productLinks as $productLink) {
-                $productLink->setWebsiteId($this->storeManager->getStore($product->getStoreId())->getWebsiteId());
                 if (!$productLink->getId() && !$productLink->getSelectionId()) {
                     $linksToAdd[] = $productLink;
                 } else {
