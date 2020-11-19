@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontChangeCustomerEmailTest">
+        <annotations>
+            <features value="Customer"/>
+            <stories value="Update Customer"/>
+            <title value="Changing Customer Email Test"/>
+            <description value="Changing Customer's email with correct and wrong passwords"/>
+            <testCaseId value="MC-38725"/>
+            <useCaseId value="MC-38676"/>
+            <severity value="MAJOR"/>
+            <group value="customer"/>
+        </annotations>
+        <before>
+            <createData entity="Simple_US_Customer" stepKey="customer"/>
+        </before>
+        <after>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
+            <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
+        </after>
+
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefrontAccount">
+            <argument name="Customer" value="$customer$"/>
+        </actionGroup>
+        <!-- Navigate to "Account Information" tab First Time-->
+        <actionGroup ref="StorefrontOpenCustomerAccountInfoEditPageActionGroup" stepKey="goToCustomerEditPageFirstTime"/>
+        <!-- Entering new email, saving with correct password -->
+        <actionGroup ref="StorefrontCustomerChangeEmailActionGroup" stepKey="changeEmailCorrectAttempt">
+            <argument name="email" value="$customer.email$"/>
+            <argument name="password" value="$customer.password$"/>
+        </actionGroup>
+        <!-- See Success Notify, check that customer was force logged out -->
+        <actionGroup ref="AssertMessageCustomerChangeAccountInfoActionGroup" stepKey="seeSuccessMessage">
+            <argument name="message" value="You saved the account information."/>
+        </actionGroup>
+        <see userInput="Default welcome msg!" selector="{{StorefrontPanelHeaderSection.WelcomeMessage}}" stepKey="assertWelcomeMessage"/>
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefrontAccountAfterEmailChange">
+            <argument name="Customer" value="$customer$"/>
+        </actionGroup>
+        <!-- Navigate to "Account Information" tab Second Time-->
+        <actionGroup ref="StorefrontOpenCustomerAccountInfoEditPageActionGroup" stepKey="goToCustomerEditPageSecondTime" />
+        <!-- Entering new email, saving with wrong password -->
+        <actionGroup ref="StorefrontCustomerChangeEmailActionGroup" stepKey="changeEmailWrongAttempt">
+            <argument name="email" value="$customer.email$"/>
+            <argument name="password" value="WRONG_PASSWORD_123123q"/>
+        </actionGroup>
+        <!-- See Failure Message-->
+        <actionGroup ref="AssertMessageCustomerChangeAccountInfoActionGroup" stepKey="seeFailureMessage">
+            <argument name="message" value="The password doesn't match this account. Verify the password and try again."/>
+            <argument name="messageType" value="error"/>
+        </actionGroup>
+    </test>
+</tests>
