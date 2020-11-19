@@ -19,32 +19,29 @@
             <group value="catalog"/>
         </annotations>
         <before>
-            <magentoCLI command="config:set currency/options/allow EUR,USD" stepKey="setCurrencyAllow"/>
+            <magentoCLI command="config:set {{SetAllowedCurrenciesConfigForUSD.path}} {{SetAllowedCurrenciesConfigForUSD.value}},{{SetAllowedCurrenciesConfigForEUR.value}}" stepKey="setCurrencyAllow"/>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
             <createData entity="_defaultProduct" stepKey="createProduct">
                 <requiredEntity createDataKey="createCategory"/>
                 <field key="price">10</field>
             </createData>
             <updateData createDataKey="createProduct" entity="productWithCheckbox" stepKey="updateProductWithOptions"/>
-            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-                <argument name="indices" value=""/>
-            </actionGroup>
         </before>
         <after>
-            <magentoCLI command="config:set currency/options/allow USD" stepKey="setCurrencyAllow"/>
+            <magentoCLI command="config:set {{SetAllowedCurrenciesConfigForUSD.path}} {{SetAllowedCurrenciesConfigForUSD.value}}" stepKey="setCurrencyAllow"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
         </after>
         <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="openProductPageOnStorefront">
             <argument name="product" value="$createProduct$"/>
         </actionGroup>
-        <actionGroup ref="StorefrontAssertCustomOptionCheckboxByPriceActionGroup" stepKey="checkPriceProductOptionUSD">
+        <actionGroup ref="AssertStorefrontCustomOptionCheckboxByPriceActionGroup" stepKey="checkPriceProductOptionUSD">
             <argument name="price" value="12.3"/>
         </actionGroup>
         <actionGroup ref="StorefrontSwitchCurrencyActionGroup" stepKey="switchEURCurrency">
             <argument name="currency" value="EUR"/>
         </actionGroup>
-        <actionGroup ref="StorefrontAssertCustomOptionCheckboxByPriceActionGroup" stepKey="checkPriceProductOptionEUR">
+        <actionGroup ref="AssertStorefrontCustomOptionCheckboxByPriceActionGroup" stepKey="checkPriceProductOptionEUR">
             <argument name="price" value="8.7"/>
         </actionGroup>
     </test>

@@ -206,14 +206,14 @@ abstract class AbstractOptions extends \Magento\Framework\View\Element\Template
             }
         }
 
-        $context[CustomOptionPriceInterface::CONFIGURATION_OPTION_FLAG] = true;
+        $context = [CustomOptionPriceInterface::CONFIGURATION_OPTION_FLAG => true];
         $optionAmount = $isPercent
             ? $this->calculator->getAmount(
                 $this->priceCurrency->roundPrice($value['pricing_value']),
                 $this->getProduct(),
                 null,
                 $context
-            ): $customOptionPrice->getCustomAmount($value['pricing_value'], null, $context);
+            ) : $customOptionPrice->getCustomAmount($value['pricing_value'], null, $context);
         $priceStr .= $this->getLayout()->getBlock('product.price.render.default')->renderAmount(
             $optionAmount,
             $customOptionPrice,
