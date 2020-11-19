@@ -10,6 +10,7 @@ namespace Magento\GraphQl\CompareList;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\TestCase\GraphQl\ResponseContainsErrorsException;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
@@ -83,11 +84,30 @@ MUTATION;
     {
         $compareList = $this->createCompareList();
         $uid = $compareList['createCompareList']['uid'];
+        $this->assertEquals(0, $compareList['createCompareList']['item_count'],'Incorrect count');
         $this->uidAssertion($uid);
         $response = $this->addProductsToCompareList($uid);
         $resultUid = $response['addProductsToCompareList']['uid'];
         $this->uidAssertion($resultUid);
         $this->itemsAssertion($response['addProductsToCompareList']['items']);
+        $this->assertEquals(2, $response['addProductsToCompareList']['item_count'],'Incorrect count');
+        $this->assertResponseFields(
+            $response['addProductsToCompareList']['attributes'],
+            [
+                [
+                    'code'=> 'sku',
+                    'label'=> 'SKU'
+                ],
+                [
+                    'code'=> 'description',
+                    'label'=> 'Description'
+                ],
+                [
+                    'code'=> 'short_description',
+                    'label'=> 'Short Description'
+                ]
+            ]
+        );
     }
 
     /**
@@ -247,6 +267,61 @@ MUTATION;
     }
 
     /**
+     * Assign compare list of one customer to another customer
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/multiple_products.php
+     * @magentoApiDataFixture Magento/Customer/_files/two_customers.php
+     */
+    public function testCompareListsNotAccessibleBetweenCustomers()
+    {
+        $uidCustomer1 = $this->createCompareListForCustomer('customer@example.com', 'password');
+        $uidcustomer2 = $this->createCompareListForCustomer('customer_two@example.com', 'password');
+        $assignCompareListToCustomer = <<<MUTATION
+mutation {
+  assignCompareListToCustomer(uid: "{$uidCustomer1}"){
+    result
+    compare_list {
+      uid
+      items {
+        uid
+      }
+    }
+  }
+}
+MUTATION;
+
+        $expectedExceptionsMessage = 'GraphQL response contains errors: This customer is not authorized to access this list';
+        $this->expectException(ResponseContainsErrorsException::class);
+        $this->expectExceptionMessage($expectedExceptionsMessage);
+        //customer2 not allowed to assign compareList belonging to customer1
+        $this->graphQlMutation(
+            $assignCompareListToCustomer,
+            [],
+            '',
+            $this->getCustomerAuthHeaders('customer_two@example.com', 'password')
+        );
+
+        $deleteCompareList =  <<<MUTATION
+mutation{
+  deleteCompareList(uid:"{$uidcustomer2}") {
+    result
+  }
+}
+MUTATION;
+        $expectedExceptionsMessage = 'GraphQL response contains errors: This customer is not authorized to access this list';
+        $this->expectException(ResponseContainsErrorsException::class);
+        $this->expectExceptionMessage($expectedExceptionsMessage);
+        //customer1 not allowed to delete compareList belonging to customer2
+        $this->graphQlMutation(
+            $assignCompareListToCustomer,
+            [],
+            '',
+            $this->getCustomerAuthHeaders('customer@example.com', 'password')
+        );
+
+    }
+
+    /**
      * Get customer Header
      *
      * @param string $email
@@ -271,10 +346,31 @@ MUTATION;
 mutation{
   createCompareList {
 	 uid
+	 item_count
+	 attributes{code label}
   }
 }
 MUTATION;
         return $this->graphQlMutation($mutation);
+    }
+
+    private function createCompareListForCustomer(string $username, string $password): string
+    {
+        $compareListCustomer =  <<<MUTATION
+mutation{
+  createCompareList {
+	 uid
+  }
+}
+MUTATION;
+        $response = $this->graphQlMutation(
+            $compareListCustomer,
+            [],
+            '',
+            $this->getCustomerAuthHeaders($username, $password)
+        );
+
+        return $response['createCompareList']['uid'];
     }
 
     /**
@@ -292,6 +388,8 @@ MUTATION;
 mutation{
     addProductsToCompareList(input: { uid: "{$uid}", products: [{$product1->getId()}, {$product2->getId()}]}) {
         uid
+        item_count
+        attributes{code label}
         items {
             product {
                 sku
