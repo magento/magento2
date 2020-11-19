@@ -85,3 +85,7 @@ type ConfigurableOptionAvailableForSelection @doc(description: "Configurable opt
     option_value_uids: [ID!]! @doc(description: "Configurable option values available for further selection.")
     attribute_code: String! @doc(description: "Attribute code that uniquely identifies configurable option.")
 }
+
+type StoreConfig @doc(description: "The type contains information about a store config") {
+    configurable_thumbnail_source : String @doc(description: "The configuration setting determines which thumbnail should be used in the cart for configurable products.")
+}
