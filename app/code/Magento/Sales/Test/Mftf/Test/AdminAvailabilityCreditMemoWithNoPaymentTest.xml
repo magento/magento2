@@ -52,9 +52,13 @@
             <argument name="product" value="$$createProduct$$"/>
         </actionGroup>
 
-        <actionGroup ref="AdminSetCustomPriceActionGroup" stepKey="setCustomPriceToZero"/>
+        <comment userInput="Set Custom Price" stepKey="clickCustomPriceCheckbox"/>
+        <comment userInput="on the Order Details page" stepKey="waitForPriceFieldAppears"/>
+        <comment userInput="in Admin" stepKey="fillCustomPriceField"/>
+        <actionGroup ref="AdminSetCustomPriceActionGroup" stepKey="clickUpdateItemsAndQuantitiesButton"/>
 
-        <actionGroup ref="AdminFillAccountInformationOnCreateOrderPageActionGroup" stepKey="fillAccountData">
+        <comment userInput="Fill the Account Information section with data" stepKey="selectCustomerGroup"/>
+        <actionGroup ref="AdminFillAccountInformationOnCreateOrderPageActionGroup" stepKey="fillCustomerEmail">
             <argument name="email" value="{{Simple_US_Customer.email}}"/>
         </actionGroup>
 
@@ -71,7 +75,11 @@
 
         <actionGroup ref="SubmitInvoiceActionGroup" stepKey="submitInvoice"/>
 
-        <actionGroup ref="AdminStartCreateCreditMemoFromOrderPageActionGroup" stepKey="seeCreditMemo"/>
+        <comment userInput="Check if the Credit Memo button is displayed" stepKey="seeCreditMemo"/>  
+        <comment userInput="and if it is possible to click it" stepKey="clickCreditMemoItem"/>  
+        <comment userInput="After New Credit Memo page loaded" stepKey="waitForCreditMemoPageLoaded"/>  
+        <comment userInput="check page title and URL" stepKey="seeNewMemoPageTitle"/>  
+        <actionGroup ref="AdminStartCreateCreditMemoFromOrderPageActionGroup" stepKey="seeNewMemoUrlOnPage"/>
       
     </test>
-</tests>
+</tests
