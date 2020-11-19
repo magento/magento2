@@ -7,71 +7,82 @@ declare(strict_types=1);
 
 namespace Magento\Store\Model\StoreSwitcher;
 
-use Magento\Authorization\Model\UserContextInterface;
-use Magento\Customer\Api\CustomerRepositoryInterface;
-use Magento\Customer\Model\ResourceModel\CustomerRepository;
-use Magento\Customer\Model\Session as CustomerSession;
-use Magento\Framework\App\DeploymentConfig as DeploymentConfig;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Message\ManagerInterface;
-use Magento\Framework\Url\Helper\Data as UrlHelper;
 use Magento\Store\Api\Data\StoreInterface;
-use Magento\Store\Model\StoreSwitcher\HashGenerator\HashData;
 use Magento\Store\Model\StoreSwitcherInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Process one time token and build redirect url
  *
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class HashProcessor implements StoreSwitcherInterface
 {
     /**
-     * @var HashGenerator
-     */
-    private $hashGenerator;
-
-    /**
      * @var RequestInterface
      */
     private $request;
-
+    /**
+     * @var RedirectDataPostprocessorInterface
+     */
+    private $postprocessor;
+    /**
+     * @var RedirectDataSerializerInterface
+     */
+    private $dataSerializer;
     /**
      * @var ManagerInterface
      */
     private $messageManager;
-
     /**
-     * @var customerSession
+     * @var RedirectDataInterfaceFactory
      */
-    private $customerSession;
-
+    private $dataFactory;
     /**
-     * @var CustomerRepositoryInterface
+     * @var ContextInterfaceFactory
      */
-    private $customerRepository;
+    private $contextFactory;
+    /**
+     * @var RedirectDataValidator
+     */
+    private $dataValidator;
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
 
     /**
-     * @param HashGenerator $hashGenerator
      * @param RequestInterface $request
+     * @param RedirectDataPostprocessorInterface $postprocessor
+     * @param RedirectDataSerializerInterface $dataSerializer
      * @param ManagerInterface $messageManager
-     * @param CustomerRepository $customerRepository
-     * @param CustomerSession $customerSession
+     * @param ContextInterfaceFactory $contextFactory
+     * @param RedirectDataInterfaceFactory $dataFactory
+     * @param RedirectDataValidator $dataValidator
+     * @param LoggerInterface $logger
      */
     public function __construct(
-        HashGenerator $hashGenerator,
         RequestInterface $request,
+        RedirectDataPostprocessorInterface $postprocessor,
+        RedirectDataSerializerInterface $dataSerializer,
         ManagerInterface $messageManager,
-        CustomerRepository $customerRepository,
-        CustomerSession $customerSession
+        ContextInterfaceFactory $contextFactory,
+        RedirectDataInterfaceFactory $dataFactory,
+        RedirectDataValidator $dataValidator,
+        LoggerInterface $logger
     ) {
-        $this->hashGenerator = $hashGenerator;
         $this->request = $request;
+        $this->postprocessor = $postprocessor;
+        $this->dataSerializer = $dataSerializer;
         $this->messageManager = $messageManager;
-        $this->customerSession = $customerSession;
-        $this->customerRepository = $customerRepository;
+        $this->contextFactory = $contextFactory;
+        $this->dataFactory = $dataFactory;
+        $this->dataValidator = $dataValidator;
+        $this->logger = $logger;
     }
 
     /**
@@ -85,41 +96,39 @@ class HashProcessor implements StoreSwitcherInterface
      */
     public function switch(StoreInterface $fromStore, StoreInterface $targetStore, string $redirectUrl): string
     {
-        $customerId = $this->request->getParam('customer_id');
+        $timestamp = (int) $this->request->getParam('time_stamp');
+        $signature = (string) $this->request->getParam('signature');
+        $data = (string) $this->request->getParam('data');
+        $context = $this->contextFactory->create(
+            [
+                'fromStore' => $fromStore,
+                'targetStore' => $targetStore,
+                'redirectUrl' => $redirectUrl
+            ]
+        );
+        $redirectDataObject = $this->dataFactory->create(
+            [
+                'signature' => $signature,
+                'timestamp' => $timestamp,
+                'data' => $data
+            ]
+        );
 
-        if ($customerId) {
-            $fromStoreCode = (string)$this->request->getParam('___from_store');
-            $timeStamp = (string)$this->request->getParam('time_stamp');
-            $signature = (string)$this->request->getParam('signature');
-
-            $error = null;
-
-            $data = new HashData(
-                [
-                    "customer_id" => $customerId,
-                    "time_stamp" => $timeStamp,
-                    "___from_store" => $fromStoreCode
-                ]
-            );
-
-            if ($redirectUrl && $this->hashGenerator->validateHash($signature, $data)) {
-                try {
-                    $customer = $this->customerRepository->getById($customerId);
-                    if (!$this->customerSession->isLoggedIn()) {
-                        $this->customerSession->setCustomerDataAsLoggedIn($customer);
-                    }
-                } catch (NoSuchEntityException $e) {
-                    $error = __('The requested customer does not exist.');
-                } catch (LocalizedException $e) {
-                    $error = __('There was an error retrieving the customer record.');
-                }
+        try {
+            if ($redirectUrl && $this->dataValidator->validate($context, $redirectDataObject)) {
+                $this->postprocessor->process($context, $this->dataSerializer->unserialize($data));
             } else {
-                $error = __('The requested store cannot be found. Please check the request and try again.');
+                throw new LocalizedException(
+                    __('The requested store cannot be found. Please check the request and try again.')
+                );
             }
-
-            if ($error !== null) {
-                $this->messageManager->addErrorMessage($error);
-            }
+        } catch (LocalizedException $exception) {
+            $this->messageManager->addErrorMessage($exception->getMessage());
+        } catch (\Throwable $exception) {
+            $this->logger->error($exception);
+            $this->messageManager->addErrorMessage(
+                __('Something went wrong.')
+            );
         }
 
         return $redirectUrl;

@@ -105,4 +105,18 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\CatalogInventory\Observer\SaveInventoryDataObserver">
+        <arguments>
+            <argument name="parentItemProcessorPool" xsi:type="array">
+                <item name="grouped" xsi:type="object"> Magento\GroupedProduct\Model\Inventory\ParentItemProcessor</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogInventory\Plugin\MassUpdateProductAttribute">
+        <arguments>
+            <argument name="parentItemProcessorPool" xsi:type="array">
+                <item name="grouped" xsi:type="object"> Magento\GroupedProduct\Model\Inventory\ParentItemProcessor</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

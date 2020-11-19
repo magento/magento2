@@ -11,7 +11,7 @@
     <test name="AdminLoginAsCustomerAutoDetectionTest">
         <annotations>
             <features value="Login as Customer"/>
-            <stories value="Select Store View based on 'Store View To Login In' setting"/>
+            <stories value="Select Store based on 'Store View To Login In' setting"/>
             <title
                 value="Admin user directly login into customer account with store View To Login In = Auto detection"/>
             <description
@@ -20,7 +20,7 @@
             <group value="login_as_customer"/>
         </annotations>
         <before>
-            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <createData entity="Simple_US_Customer_Assistance_Allowed" stepKey="createCustomer"/>
             <magentoCLI command="config:set {{LoginAsCustomerConfigDataEnabled.path}} 1"
                         stepKey="enableLoginAsCustomer"/>
             <magentoCLI command="config:set {{LoginAsCustomerStoreViewLogin.path}} 0"

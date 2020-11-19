@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\MediaGalleryMetadata\Model\File;
 
-use Magento\Framework\Exception\LocalizedException;
 use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterface;
 use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterfaceFactory;
 use Magento\MediaGalleryMetadataApi\Api\ExtractMetadataInterface;
@@ -66,29 +65,10 @@ class ExtractMetadata implements ExtractMetadataInterface
     public function execute(string $path): MetadataInterface
     {
         try {
-            return $this->extractMetadata($path);
+            return $this->readSegments($this->fileReader->execute($path));
         } catch (\Exception $exception) {
             return $this->metadataFactory->create();
         }
-    }
-
-    /**
-     * Extract metadata from file
-     *
-     * @param string $path
-     * @return MetadataInterface
-     */
-    private function extractMetadata(string $path): MetadataInterface
-    {
-        try {
-            $file = $this->fileReader->execute($path);
-        } catch (\Exception $exception) {
-            throw new LocalizedException(
-                __('Could not parse the image file for metadata: %path', ['path' => $path])
-            );
-        }
-
-        return $this->readSegments($file);
     }
 
     /**
@@ -109,7 +89,12 @@ class ExtractMetadata implements ExtractMetadataInterface
                 );
             }
 
-            $data = $segmentReader->execute($file);
+            try {
+                $data = $segmentReader->execute($file);
+            } catch (\Exception $exception) {
+                continue;
+            }
+
             $title = !empty($data->getTitle()) ? $data->getTitle() : $title;
             $description = !empty($data->getDescription()) ? $data->getDescription() : $description;
 

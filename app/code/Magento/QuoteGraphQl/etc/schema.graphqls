@@ -20,8 +20,9 @@ type Mutation {
     setPaymentMethodOnCart(input: SetPaymentMethodOnCartInput): SetPaymentMethodOnCartOutput @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\SetPaymentMethodOnCart")
     setGuestEmailOnCart(input: SetGuestEmailOnCartInput): SetGuestEmailOnCartOutput @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\SetGuestEmailOnCart")
     setPaymentMethodAndPlaceOrder(input: SetPaymentMethodAndPlaceOrderInput): PlaceOrderOutput @deprecated(reason: "Should use setPaymentMethodOnCart and placeOrder mutations in single request.") @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\SetPaymentAndPlaceOrder")
-    mergeCarts(source_cart_id: String!, destination_cart_id: String!): Cart! @doc(description:"Merges the source cart into the destination cart") @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\MergeCarts")
+    mergeCarts(source_cart_id: String!, destination_cart_id: String): Cart! @doc(description:"Merges the source cart into the destination cart") @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\MergeCarts")
     placeOrder(input: PlaceOrderInput): PlaceOrderOutput @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\PlaceOrder")
+    addProductsToCart(cartId: String!, cartItems: [CartItemInput!]!): AddProductsToCartOutput @doc(description:"Add any type of product to the cart") @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\AddProductsToCart")
 }
 
 input createEmptyCartInput {
@@ -51,6 +52,9 @@ input VirtualProductCartItemInput {
 input CartItemInput {
     sku: String!
     quantity: Float!
+    parent_sku: String @doc(description: "For child products, the SKU of its parent product")
+    selected_options: [ID!] @doc(description: "The selected options for the base product, such as color or size")
+    entered_options: [EnteredOptionInput!] @doc(description: "An array of entered options for the base product, such as personalization text")
 }
 
 input CustomizableOptionInput {
@@ -368,3 +372,21 @@ type Order {
     order_number: String!
     order_id: String @deprecated(reason: "The order_id field is deprecated, use order_number instead.")
 }
+
+type CartUserInputError @doc(description:"An error encountered while adding an item to the the cart.") {
+    message: String! @doc(description: "A localized error message")
+    code: CartUserInputErrorType! @doc(description: "Cart-specific error code")
+}
+
+type AddProductsToCartOutput {
+    cart: Cart! @doc(description: "The cart after products have been added")
+    user_errors: [CartUserInputError!]! @doc(description: "An error encountered while adding an item to the cart.")
+}
+
+enum CartUserInputErrorType {
+    PRODUCT_NOT_FOUND
+    NOT_SALABLE
+    INSUFFICIENT_STOCK
+    UNDEFINED
+}
+

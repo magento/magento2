@@ -47,6 +47,7 @@ use Magento\Customer\Block\Widget\Name;
                 <span><?= $block->escapeHtml(__('Change Password')) ?></span>
             </label>
         </div>
+        <?= $block->getChildHtml('fieldset_edit_info_additional') ?>
     </fieldset>
 
     <fieldset class="fieldset password" data-container="change-email-password">
@@ -104,7 +105,11 @@ use Magento\Customer\Block\Widget\Name;
             </div>
         </div>
     </fieldset>
-    <?= $block->getChildHtml('form_additional_info') ?>
+
+    <fieldset class="fieldset additional_info">
+        <?= $block->getChildHtml('form_additional_info') ?>
+    </fieldset>
+
     <div class="actions-toolbar">
         <div class="primary">
             <button type="submit" class="action save primary" title="<?= $block->escapeHtmlAttr(__('Save')) ?>">

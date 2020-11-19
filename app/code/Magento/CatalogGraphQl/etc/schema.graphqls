@@ -326,6 +326,7 @@ input ProductAttributeFilterInput @doc(description: "ProductAttributeFilterInput
 input CategoryFilterInput  @doc(description: "CategoryFilterInput defines the filters to be used in the search. A filter contains at least one attribute, a comparison operator, and the value that is being searched for.")
 {
     ids: FilterEqualTypeInput @doc(description: "Filter by category ID that uniquely identifies the category.")
+    parent_id: FilterEqualTypeInput @doc(description: "Filter by parent category ID")
     url_key: FilterEqualTypeInput @doc(description: "Filter by the part of the URL that identifies the category.")
     name: FilterMatchTypeInput @doc(description: "Filter by the display name of the category.")
     url_path: FilterEqualTypeInput @doc(description: "Filter by the URL path for the category.")
@@ -491,4 +492,10 @@ type StoreConfig @doc(description: "The type contains information about a store 
     list_per_page : Int @doc(description: "Products per Page on List Default Value.")
     catalog_default_sort_by : String @doc(description: "Default Sort By.")
     root_category_id: Int @doc(description: "The ID of the root category") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\RootCategoryId")
+}
+
+type SimpleWishlistItem implements WishlistItemInterface @doc(description: "A simple product wish list Item") {
+}
+
+type VirtualWishlistItem implements WishlistItemInterface @doc(description: "A virtual product wish list item") {
 }
