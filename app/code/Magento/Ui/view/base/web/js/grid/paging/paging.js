@@ -60,7 +60,7 @@ define([
                 'pageSize': 'onPageSizeChange',
                 'totalRecords': 'updateCounter',
                 '${ $.provider }:params.filters': 'goFirst',
-                'keywordUpdated': 'goFirst'
+                '${ $.provider }:params.search': 'goFirst'
             },
 
             modules: {
