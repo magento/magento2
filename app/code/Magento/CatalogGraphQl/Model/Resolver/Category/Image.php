@@ -7,14 +7,16 @@ declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver\Category;
 
+use Magento\Catalog\Model\Category;
+use Magento\Catalog\Model\Category\FileInfo;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Filesystem\DirectoryList;
 use Magento\Framework\GraphQl\Config\Element\Field;
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\UrlInterface;
 use Magento\Store\Api\Data\StoreInterface;
-use Magento\Framework\Filesystem\DirectoryList;
-use Magento\Catalog\Model\Category\FileInfo;
-use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 
 /**
  * Resolve category image to a fully qualified URL
@@ -52,7 +54,7 @@ class Image implements ResolverInterface
         if (!isset($value['model'])) {
             throw new LocalizedException(__('"model" value should be specified'));
         }
-        /** @var \Magento\Catalog\Model\Category $category */
+        /** @var Category $category */
         $category = $value['model'];
         $imagePath = $category->getData('image');
         if (empty($imagePath)) {
@@ -60,7 +62,7 @@ class Image implements ResolverInterface
         }
         /** @var StoreInterface $store */
         $store = $context->getExtensionAttributes()->getStore();
-        $baseUrl = $store->getBaseUrl();
+        $baseUrl = $store->getBaseUrl(UrlInterface::URL_TYPE_WEB);
 
         $filenameWithMedia =  $this->fileInfo->isBeginsWithMediaDirectoryPath($imagePath)
             ? $imagePath : $this->formatFileNameWithMediaCategoryFolder($imagePath);
