@@ -40,4 +40,8 @@
         <data key="extension">jpg</data>
         <data key="keywords">magento, mediagallerymetadata</data>
     </entity>
+    <entity name="ImageUploadPngTwo" type="image">
+        <data key="file">magento-logo_2.png</data>
+        <data key="extension">png</data>
+    </entity>
 </entities>
