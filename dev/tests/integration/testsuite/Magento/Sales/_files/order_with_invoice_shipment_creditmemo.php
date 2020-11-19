@@ -9,6 +9,7 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Framework\DB\Transaction;
+use Magento\OfflinePayments\Model\Checkmo;
 use Magento\Sales\Api\CreditmemoItemRepositoryInterface;
 use Magento\Sales\Api\CreditmemoRepositoryInterface;
 use Magento\Sales\Api\Data\CreditmemoItemInterfaceFactory;
@@ -60,9 +61,10 @@ $addressData = [
     AddressInterface::CITY => 'Los Angeles',
     CustomerInterface::EMAIL => 'admin@example.com',
     AddressInterface::TELEPHONE => '11111111',
-    AddressInterface::COUNTRY_ID => 'US'
+    AddressInterface::COUNTRY_ID => 'US',
 ];
 $product = $productRepository->get('simple');
+/** @var AddressFactory $addressFactory */
 $addressFactory = $objectManager->get(AddressFactory::class);
 $billingAddress = $addressFactory->create(['data' => $addressData]);
 $billingAddress->setAddressType(Address::TYPE_BILLING);
@@ -71,7 +73,7 @@ $shippingAddress->setId(null)->setAddressType(Address::TYPE_SHIPPING);
 /** @var OrderPaymentInterfaceFactory $paymentFactory */
 $paymentFactory = $objectManager->get(OrderPaymentInterfaceFactory::class);
 $payment = $paymentFactory->create();
-$payment->setMethod('checkmo')
+$payment->setMethod(Checkmo::PAYMENT_METHOD_CHECKMO_CODE)
     ->setAdditionalInformation('last_trans_id', '11122')
     ->setAdditionalInformation('metadata', ['type' => 'free', 'fraudulent' => false]);
 /** @var OrderItemInterface $orderItem */
