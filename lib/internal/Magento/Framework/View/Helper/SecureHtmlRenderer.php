@@ -125,8 +125,9 @@ class SecureHtmlRenderer
                         }
                     }
                 });
-            }     
+            }            
         script;
+
         return $this->renderTag('script', ['type' => 'text/javascript'], $script, false);
     }
 
