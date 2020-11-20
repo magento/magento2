@@ -69,11 +69,15 @@ abstract class ImportResult extends Import
         if ($errorAggregator->getErrorsCount()) {
             $message = '';
             $counter = 0;
+            $unescapedMessages = [];
             foreach ($this->getErrorMessages($errorAggregator) as $error) {
-                $message .= (++$counter) . '. ' . $error . '<br>';
+                $unescapedMessages[] = (++$counter) . '. ' . $error;
                 if ($counter >= self::LIMIT_ERRORS_MESSAGE) {
                     break;
                 }
+            }
+            foreach ($unescapedMessages as $unescapedMessage) {
+                $message .= $resultBlock->escapeHtml($unescapedMessage) . '<br>';
             }
             if ($errorAggregator->hasFatalExceptions()) {
                 foreach ($this->getSystemExceptions($errorAggregator) as $error) {
@@ -90,7 +94,7 @@ abstract class ImportResult extends Import
                     . '<a href="'
                     . $this->createDownloadUrlImportHistoryFile($this->createErrorReport($errorAggregator))
                     . '">' . __('Download full report') . '</a><br>'
-                    . '<div class="import-error-list">' . $resultBlock->escapeHtml($message) . '</div></div>'
+                    . '<div class="import-error-list">' . $message . '</div></div>'
                 );
             } catch (\Exception $e) {
                 foreach ($this->getErrorMessages($errorAggregator) as $errorMessage) {
