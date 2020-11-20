@@ -62,7 +62,7 @@ class AddCustomerGroupToContext implements ContextParametersProcessorInterface
         }
         if ($customerGroupId !== null) {
             $customerSession->setCustomerGroupId($customerGroupId);
-            $contextParameters->addExtensionAttribute('id_customer_group', (int) $customerGroupId);
+            $contextParameters->addExtensionAttribute('customer_group_id', (int) $customerGroupId);
         }
         return $contextParameters;
     }
