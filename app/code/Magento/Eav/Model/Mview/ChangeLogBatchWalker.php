@@ -45,15 +45,15 @@ class ChangeLogBatchWalker implements ChangeLogBatchWalkerInterface
     /**
      * Calculate EAV attributes size
      *
-     * @param ChangelogInterface $changelogData
+     * @param ChangelogInterface $changelog
      * @return int
      * @throws \Exception
      */
-    private function calculateEavAttributeSize(ChangelogInterface $changelogData): int
+    private function calculateEavAttributeSize(ChangelogInterface $changelog): int
     {
         $connection = $this->resourceConnection->getConnection();
 
-        if (!isset($this->entityTypeCodes[$changelogData->getViewId()])) {
+        if (!isset($this->entityTypeCodes[$changelog->getViewId()])) {
             throw new \Exception('Entity type for view was not defined');
         }
 
@@ -66,7 +66,7 @@ class ChangeLogBatchWalker implements ChangeLogBatchWalkerInterface
               ['type' => $connection->getTableName('eav_entity_type')],
                 'type.entity_type_id=eav_attribute.entity_type_id'
             )
-            ->where('type.entity_type_code = ?', $this->entityTypeCodes[$changelogData->getViewId()]);
+            ->where('type.entity_type_code = ?', $this->entityTypeCodes[$changelog->getViewId()]);
 
         return (int) $connection->fetchOne($select);
     }
@@ -92,10 +92,10 @@ class ChangeLogBatchWalker implements ChangeLogBatchWalkerInterface
      * @inheritdoc
      * @throws \Exception
      */
-    public function walk(ChangelogInterface $changelogData, int $fromVersionId, int $toVersion, int $batchSize)
+    public function walk(ChangelogInterface $changelog, int $fromVersionId, int $toVersion, int $batchSize)
     {
         $connection = $this->resourceConnection->getConnection();
-        $numberOfAttributes = $this->calculateEavAttributeSize($changelogData);
+        $numberOfAttributes = $this->calculateEavAttributeSize($changelog);
         $this->setGroupConcatMax($numberOfAttributes);
         $select = $connection->select()->distinct(true)
             ->where(
@@ -106,15 +106,15 @@ class ChangeLogBatchWalker implements ChangeLogBatchWalkerInterface
                 'version_id <= ?',
                 $toVersion
             )
-            ->group([$changelogData->getColumnName(), 'store_id'])
+            ->group([$changelog->getColumnName(), 'store_id'])
             ->limit($batchSize);
 
         $columns = [
-            $changelogData->getColumnName(),
+            $changelog->getColumnName(),
             'attribute_ids' => new Expression('GROUP_CONCAT(attribute_id)'),
             'store_id'
         ];
-        $select->from($changelogData->getName(), $columns);
+        $select->from($changelog->getName(), $columns);
         return $connection->fetchAll($select);
     }
 }
