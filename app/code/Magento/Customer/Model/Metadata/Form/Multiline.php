@@ -78,7 +78,7 @@ class Multiline extends Text
     public function compactValue($value)
     {
         if (is_array($value)) {
-            $value = implode("\n", $value);
+            $value = trim(implode("\n", $value));
         }
         $value = [$value];
 

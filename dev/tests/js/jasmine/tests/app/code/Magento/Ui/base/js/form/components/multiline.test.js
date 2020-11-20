@@ -17,8 +17,10 @@ define([
                 registry.set(providerName, {
                     /** Stub */
                     on: function () {},
+
                     /** Stub */
                     set: function () {},
+
                     /** Stub */
                     get: function () {
                         return value;
@@ -48,7 +50,7 @@ define([
             });
 
             it('Check preparation of string value with line breaks', function () {
-                var value = '\n222\n';
+                var value = 'first\n\nthird';
 
                 prepareDataProvider(value);
                 obj = new Constr({
@@ -56,7 +58,7 @@ define([
                     dataScope: dataScope
                 });
 
-                expect(obj.value()).toEqual(['', '222', '']);
+                expect(obj.value()).toEqual(['first', '', 'third']);
             });
         });
     });

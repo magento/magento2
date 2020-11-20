@@ -66,7 +66,6 @@ class Multiline extends AbstractElement
     {
         $size = abs((int) $this->getData('config/size'));
         $validation = [$this->getData('config/validation')];
-        $namespace = $this->getContext()->getNamespace();
         while ($size--) {
             $identifier = $this->getName() . '_' . $size;
             $arguments = [
@@ -75,8 +74,6 @@ class Multiline extends AbstractElement
                     'config' => [
                         'dataScope' => $size,
                         'dataType' => static::DATA_TYPE,
-                        'deps' => "{$namespace}.areas.customer.customer.{$this->getName()}",
-                        'provider' => $namespace . '.' . $this->getContext()->getDataProvider()->getName(),
                         'formElement' => static::FORM_ELEMENT,
                         'sortOrder' => $size,
                     ]
