@@ -24,11 +24,6 @@ use Magento\RemoteStorage\Filesystem;
 class MediaStorage
 {
     /**
-     * @var Filesystem
-     */
-    private $filesystem;
-
-    /**
      * @var bool
      */
     private $isEnabled;
