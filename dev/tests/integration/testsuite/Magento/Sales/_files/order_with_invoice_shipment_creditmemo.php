@@ -27,6 +27,7 @@ use Magento\Sales\Api\Data\OrderAddressInterfaceFactory;
 use Magento\Sales\Model\Order\Creditmemo;
 use Magento\Sales\Model\Order\CreditmemoFactory;
 use Magento\Sales\Model\Order\ShipmentFactory;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
@@ -34,6 +35,8 @@ Resolver::getInstance()->requireDataFixture('Magento/Sales/_files/default_rollba
 Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/product_simple.php');
 
 $objectManager = Bootstrap::getObjectManager();
+/** @var StoreManagerInterface $storeManager */
+$storeManager = $objectManager->get(StoreManagerInterface::class);
 /** @var ProductRepositoryInterface $productRepository */
 $productRepository = $objectManager->get(ProductRepositoryInterface::class);
 $productRepository->cleanCache();
@@ -89,7 +92,7 @@ $orderItem->setProductId($product->getId())
     ->setName('Test item');
 /** @var  OrderInterface $order */
 $order = $objectManager->get(OrderInterfaceFactory::class)->create();
-$order->setIncrementId('100000001')
+$order->setIncrementId('100000111')
     ->setState(Order::STATE_PROCESSING)
     ->setStatus($order->getConfig()->getStateDefaultStatus(Order::STATE_PROCESSING))
     ->setSubtotal(100)
@@ -103,7 +106,8 @@ $order->setIncrementId('100000001')
     ->setBillingAddress($billingAddress)
     ->setShippingAddress($shippingAddress)
     ->addItem($orderItem)
-    ->setPayment($payment);
+    ->setPayment($payment)
+    ->setStoreId($storeManager->getStore('default')->getId());
 $orderRepository->save($order);
 
 $invoice = $invoiceService->prepareInvoice($order);
