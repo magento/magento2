@@ -56,12 +56,12 @@ class AddCustomerGroupToContext implements ContextParametersProcessorInterface
                 $customer = $this->customerRepository->getById($contextParameters->getUserId());
                 $customerGroupId = (int) $customer->getGroupId();
             } catch (LocalizedException $e) {
-                $customerGroupId = null;
+                $customerGroupId = Group::NOT_LOGGED_IN_ID;
             }
         }
         if ($customerGroupId !== null) {
             $customerSession->setCustomerGroupId($customerGroupId);
-            $contextParameters->addExtensionAttribute('customer_group_id', $customerGroupId);
+            $contextParameters->addExtensionAttribute('customer_group', (int) $customerGroupId);
         }
         return $contextParameters;
     }
