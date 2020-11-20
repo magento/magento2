@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminGridPageNumberSetsToOneAfterNewSearchTest">
+
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Catalog grid"/>
+            <title value="Checking Catalog grid page number after entering a new search keyword"/>
+            <description value="Checking Catalog grid page number after entering a new search keyword"/>
+            <severity value="MINOR"/>
+            <testCaseId value="MC-xxxxx"/>
+            <useCaseId value="MC-38787"/>
+            <group value="Catalog"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <comment userInput="Clear product grid" stepKey="commentClearProductGrid"/>
+            <actionGroup ref="AdminProductCatalogPageOpenActionGroup" stepKey="goToProductCatalog"/>
+            <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetProductGridToDefaultView"/>
+            <actionGroup ref="DeleteProductsIfTheyExistActionGroup" stepKey="deleteProductIfTheyExist"/>
+            <createData stepKey="category1" entity="SimpleSubCategory"/>
+
+            <createData stepKey="simpleProduct1" entity="SimpleProduct">
+                <requiredEntity createDataKey="category1"/>
+            </createData>
+            <createData stepKey="simpleProduct2" entity="SimpleProduct">
+                <requiredEntity createDataKey="category1"/>
+            </createData>
+            <createData stepKey="simpleProduct3" entity="SimpleProduct">
+                <requiredEntity createDataKey="category1"/>
+            </createData>
+            <createData stepKey="simpleProduct4" entity="SimpleProduct">
+                <requiredEntity createDataKey="category1"/>
+            </createData>
+            <createData stepKey="virtualProduct1" entity="VirtualProduct">
+                <requiredEntity createDataKey="category1"/>
+            </createData>
+            <createData stepKey="virtualProduct2" entity="VirtualProduct">
+                <requiredEntity createDataKey="category1"/>
+            </createData>
+            <createData stepKey="virtualProduct3" entity="VirtualProduct">
+                <requiredEntity createDataKey="category1"/>
+            </createData>
+        </before>
+
+        <after>
+            <actionGroup ref="AdminProductCatalogPageOpenActionGroup" stepKey="goToProductCatalog"/>
+            <actionGroup ref="AdminDataGridDeleteCustomPerPageActionGroup" stepKey="deleteCustomAddedPerPage">
+                <argument name="perPage" value="ProductPerPage.productCount"/>
+            </actionGroup>
+            <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearFilters"/>
+
+            <deleteData stepKey="deleteCategory1" createDataKey="category1"/>
+
+            <deleteData stepKey="deleteSimpleProduct1" createDataKey="simpleProduct1"/>
+            <deleteData stepKey="deleteSimpleProduct2" createDataKey="simpleProduct2"/>
+            <deleteData stepKey="deleteSimpleProduct3" createDataKey="simpleProduct3"/>
+            <deleteData stepKey="deleteSimpleProduct4" createDataKey="simpleProduct4"/>
+            <deleteData stepKey="deleteVirtualProduct1" createDataKey="virtualProduct1"/>
+            <deleteData stepKey="deleteVirtualProduct2" createDataKey="virtualProduct2"/>
+            <deleteData stepKey="deleteVirtualProduct3" createDataKey="virtualProduct3"/>
+
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <actionGroup ref="AdminProductCatalogPageOpenActionGroup" stepKey="goToProductCatalog"/>
+
+        <actionGroup ref="AdminDataGridSelectCustomPerPageActionGroup" stepKey="select1ProductPerPage">
+            <argument name="perPage" value="ProductPerPage.productCount"/>
+        </actionGroup>
+
+        <actionGroup ref="SearchProductGridByStringNoClearActionGroup" stepKey="searchForSimpleProduct">
+            <argument name="keyword" value="SimpleProduct"/>
+        </actionGroup>
+
+        <comment userInput="Go to the next page" stepKey="nextPage"/>
+        <click selector="{{AdminDataGridPaginationSection.nextPage}}" stepKey="clickNextPageProductGrid"/>
+        <seeInField selector="{{AdminDataGridPaginationSection.currentPage}}" userInput="2" stepKey="seeOnSecondPageProductGrid"/>
+
+        <actionGroup ref="SearchProductGridByStringNoClearActionGroup" stepKey="searchForVirtualProduct">
+            <argument name="keyword" value="VirtualProduct"/>
+        </actionGroup>
+
+        <seeInField selector="{{AdminDataGridPaginationSection.currentPage}}" userInput="1" stepKey="seeOnFirstPageProductGrid"/>
+    </test>
+</tests>
