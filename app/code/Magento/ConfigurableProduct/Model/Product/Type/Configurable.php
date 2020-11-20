@@ -17,6 +17,7 @@ use Magento\ConfigurableProduct\Model\Product\Type\Collection\SalableProcessor;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\File\UploaderFactory;
 
 /**
  * Configurable product type implementation
@@ -235,11 +236,12 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor
      * @param \Magento\Framework\Cache\FrontendInterface|null $cache
      * @param \Magento\Customer\Model\Session|null $customerSession
-     * @param \Magento\Framework\Serialize\Serializer\Json $serializer
-     * @param ProductInterfaceFactory $productFactory
-     * @param SalableProcessor $salableProcessor
+     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
+     * @param ProductInterfaceFactory|null $productFactory
+     * @param SalableProcessor|null $salableProcessor
      * @param ProductAttributeRepositoryInterface|null $productAttributeRepository
      * @param SearchCriteriaBuilder|null $searchCriteriaBuilder
+     * @param UploaderFactory|null $uploaderFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -266,7 +268,8 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
         ProductInterfaceFactory $productFactory = null,
         SalableProcessor $salableProcessor = null,
         ProductAttributeRepositoryInterface $productAttributeRepository = null,
-        SearchCriteriaBuilder $searchCriteriaBuilder = null
+        SearchCriteriaBuilder $searchCriteriaBuilder = null,
+        UploaderFactory $uploaderFactory = null
     ) {
         $this->typeConfigurableFactory = $typeConfigurableFactory;
         $this->_eavAttributeFactory = $eavAttributeFactory;
@@ -295,7 +298,8 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
             $coreRegistry,
             $logger,
             $productRepository,
-            $serializer
+            $serializer,
+            $uploaderFactory
         );
     }
 
