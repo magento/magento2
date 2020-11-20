@@ -11,9 +11,11 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 
+/**
+ * Test for \Magento\CatalogUrlRewriteGraphQl\Model\Resolver\ProductUrlSuffix.
+ */
 class ProductUrlSuffixTest extends TestCase
 {
-
     /**
      * @var ScopeConfigInterface|MockObject
      */
@@ -49,7 +51,9 @@ class ProductUrlSuffixTest extends TestCase
      */
     private $resolver;
 
-
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $this->contextMock = $this->getMockBuilder(ContextInterface::class)
