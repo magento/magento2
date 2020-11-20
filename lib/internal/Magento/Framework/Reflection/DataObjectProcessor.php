@@ -47,12 +47,18 @@ class DataObjectProcessor
     private $processors;
 
     /**
+     * @var array
+     */
+    private $objectKeyMap;
+
+    /**
      * @param MethodsMap $methodsMapProcessor
      * @param TypeCaster $typeCaster
      * @param FieldNamer $fieldNamer
      * @param CustomAttributesProcessor $customAttributesProcessor
      * @param ExtensionAttributesProcessor $extensionAttributesProcessor
      * @param array $processors
+     * @param array $objectKeyMap
      */
     public function __construct(
         MethodsMap $methodsMapProcessor,
@@ -60,7 +66,8 @@ class DataObjectProcessor
         FieldNamer $fieldNamer,
         CustomAttributesProcessor $customAttributesProcessor,
         ExtensionAttributesProcessor $extensionAttributesProcessor,
-        array $processors = []
+        array $processors = [],
+        array $objectKeyMap = []
     ) {
         $this->methodsMapProcessor = $methodsMapProcessor;
         $this->typeCaster = $typeCaster;
@@ -68,6 +75,7 @@ class DataObjectProcessor
         $this->extensionAttributesProcessor = $extensionAttributesProcessor;
         $this->customAttributesProcessor = $customAttributesProcessor;
         $this->processors = $processors;
+        $this->objectKeyMap = $objectKeyMap;
     }
 
     /**
@@ -128,7 +136,7 @@ class DataObjectProcessor
                 }
             }
 
-            $outputData[$key] = $value;
+            $outputData[$this->mapObjectKey($key, ltrim($dataObjectType, '\\'))] = $value;
         }
 
         $outputData = $this->changeOutputArray($dataObject, $outputData);
@@ -152,5 +160,21 @@ class DataObjectProcessor
         }
 
         return $outputData;
+    }
+
+    /**
+     * @param string $key
+     * @param string $dataObjectType
+     * @return string
+     */
+    protected function mapObjectKey(string $key, string $dataObjectType): string
+    {
+        if (
+            array_key_exists($dataObjectType, $this->objectKeyMap) &&
+            array_key_exists($key, $this->objectKeyMap[$dataObjectType])
+        ) {
+            $key = $this->objectKeyMap[$dataObjectType][$key];
+        }
+        return $key;
     }
 }
