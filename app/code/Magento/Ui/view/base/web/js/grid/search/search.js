@@ -127,7 +127,7 @@ define([
         apply: function (value) {
             value = value || this.inputValue;
 
-            this.keywordUpdated = this.value !== this.inputValue;
+            this.keywordUpdated = this.value !== value;
             this.value = this.inputValue = value.trim();
 
             return this;
