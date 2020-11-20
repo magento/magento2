@@ -73,9 +73,5 @@
             <path>app/design/adminhtml/Magento/backend/Magento_Rma/web/css/source/_module.less</path>
             <word>rma</word>
         </item>
-        <item>
-            <path>app/code/Magento/Eav/Model/Mview/ChangeLogBatchWalker.php</path>
-            <word>changelog</word>
-        </item>
     </whitelist>
 </config>
