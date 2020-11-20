@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * PHPUnit configuration for REST web API functional tests.
+ *
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/9.1/phpunit.xsd"
+         colors="true"
+         columns="max"
+         beStrictAboutTestsThatDoNotTestAnything="false"
+         bootstrap="./framework/bootstrap.php"
+         testSuiteLoaderClass="Magento\TestFramework\ApiSuiteLoader"
+         testSuiteLoaderFile="framework/Magento/TestFramework/ApiSuiteLoader.php"
+>
+    <!-- Test suites definition -->
+    <testsuites>
+        <testsuite name="Magento REST web API functional tests">
+            <file>testsuite/Magento/WebApiTest.php</file>
+        </testsuite>
+        <testsuite name="Magento REST web API functional tests real suite">
+            <directory>testsuite</directory>
+            <directory>../../../app/code/*/*/Test/Api</directory>
+            <exclude>testsuite/Magento/GraphQl</exclude>
+        </testsuite>
+    </testsuites>
+
+    <!-- PHP INI settings and constants definition -->
+    <php>
+        <includePath>./testsuite</includePath>
+        <const name="TESTS_INSTALL_CONFIG_FILE" value="config/install-config-mysql.php"/>
+        <const name="TESTS_GLOBAL_CONFIG_FILE" value="config/config-global.php"/>
+        <!-- WebSerivice Type -->
+        <const name="TESTS_WEB_API_ADAPTER" value="rest"/>
+        <!-- Webserver URL -->
+        <const name="TESTS_BASE_URL" value="http://magento.url"/>
+        <!-- Webserver API user -->
+        <const name="TESTS_WEBSERVICE_USER" value="admin"/>
+        <!-- Webserver API key -->
+        <const name="TESTS_WEBSERVICE_APIKEY" value="123123q"/>
+        <!-- Define if debugger should be started using XDEBUG_SESSION cookie -->
+        <const name="TESTS_XDEBUG_ENABLED" value="false"/>
+        <!-- Define XDEBUG_SESSION cookie value-->
+        <const name="TESTS_XDEBUG_SESSION" value="phpstorm" />
+        <!--Generate documentation from REST tests and put it into var/log/rest-documentation directory-->
+        <const name="GENERATE_REST_DOCUMENTATION" value="false" />
+
+        <ini name="date.timezone" value="America/Los_Angeles"/>
+
+        <!-- Semicolon-separated 'glob' patterns, that match global XML configuration files -->
+        <const name="TESTS_GLOBAL_CONFIG_DIR" value="../../../app/etc"/>
+        <!-- Whether to cleanup the application before running tests or not -->
+        <const name="TESTS_CLEANUP" value="enabled"/>
+        <!--Defines if Magento should be installed before tests execution-->
+        <const name="TESTS_MAGENTO_INSTALLATION" value="disabled"/>
+        <!-- Magento mode for tests execution. Possible values are "default", "developer" and "production". -->
+        <const name="TESTS_MAGENTO_MODE" value="default"/>
+        <const name="USE_OVERRIDE_CONFIG" value="enabled"/>
+    </php>
+
+    <!-- Test listeners -->
+    <listeners>
+        <listener class="Magento\TestFramework\Event\PhpUnit"/>
+        <listener class="Yandex\Allure\Adapter\AllureAdapter">
+            <arguments>
+                <string>var/allure-results</string> <!-- XML files output folder -->
+                <boolean>true</boolean> <!-- Whether to delete previous results on rerun -->
+                <array> <!-- A list of custom annotations to ignore (optional) -->
+                    <element key="codingStandardsIgnoreStart">
+                        <string>codingStandardsIgnoreStart</string>
+                    </element>
+                    <element key="codingStandardsIgnoreEnd">
+                        <string>codingStandardsIgnoreEnd</string>
+                    </element>
+                    <element key="expectedExceptionMessageRegExp">
+                        <string>expectedExceptionMessageRegExp</string>
+                    </element>
+                    <element key="magentoAdminConfigFixture">
+                        <string>magentoAdminConfigFixture</string>
+                    </element>
+                    <element key="magentoAppArea">
+                        <string>magentoAppArea</string>
+                    </element>
+                    <element key="magentoAppIsolation">
+                        <string>magentoAppIsolation</string>
+                    </element>
+                    <element key="magentoCache">
+                        <string>magentoCache</string>
+                    </element>
+                    <element key="magentoComponentsDir">
+                        <string>magentoComponentsDir</string>
+                    </element>
+                    <element key="magentoConfigFixture">
+                        <string>magentoConfigFixture</string>
+                    </element>
+                    <element key="magentoDataFixture">
+                        <string>magentoDataFixture</string>
+                    </element>
+                    <element key="magentoDataFixtureBeforeTransaction">
+                        <string>magentoDataFixtureBeforeTransaction</string>
+                    </element>
+                    <element key="magentoDbIsolation">
+                        <string>magentoDbIsolation</string>
+                    </element>
+                    <element key="magentoIndexerDimensionMode">
+                        <string>magentoIndexerDimensionMode</string>
+                    </element>
+                    <element key="magentoApiDataFixture">
+                        <string>magentoApiDataFixture</string>
+                    </element>
+                    <element key="Override">
+                        <string>Override</string>
+                    </element>
+                </array>
+            </arguments>
+        </listener>
+    </listeners>
+</phpunit>
