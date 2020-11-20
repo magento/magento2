@@ -14,7 +14,7 @@
         <arguments>
             <argument name="address" type="entity"/>
         </arguments>
-        <fillField selector="{{StorefrontCustomerAddressFormSection.company}}" userInput="{{address.company}}" after="fillGender" stepKey="fillCompany"/>
+        <fillField selector="{{StorefrontCustomerAddressFormSection.company}}" userInput="{{address.company}}" after="fillLastName" stepKey="fillCompany"/>
         <fillField selector="{{StorefrontCustomerAddressFormSection.phoneNumber}}" userInput="{{address.telephone}}" after="fillCompany" stepKey="fillPhoneNumber"/>
         <fillField selector="{{StorefrontCustomerAddressFormSection.streetAddress}}" userInput="{{address.street[0]}}" after="fillPhoneNumber" stepKey="fillStreetAddress"/>
         <selectOption selector="{{StorefrontCustomerAddressFormSection.country}}" userInput="{{address.country_id}}" after="fillStreetAddress" stepKey="selectCounty"/>
