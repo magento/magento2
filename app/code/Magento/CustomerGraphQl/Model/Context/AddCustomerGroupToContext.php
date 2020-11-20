@@ -49,9 +49,10 @@ class AddCustomerGroupToContext implements ContextParametersProcessorInterface
     {
         $customerSession = $this->customerSession;
         $customerGroupId = null;
+        $extensionAttributes = $contextParameters->getExtensionAttributesData();
         if ($contextParameters->getUserType() === UserContextInterface::USER_TYPE_GUEST) {
             $customerGroupId = Group::NOT_LOGGED_IN_ID;
-        } elseif ($contextParameters->getExtensionAttributes()->getIsCustomer() === true) {
+        } elseif (!empty($extensionAttributes) && $extensionAttributes['is_customer'] === true) {
             try {
                 $customer = $this->customerRepository->getById($contextParameters->getUserId());
                 $customerGroupId = (int) $customer->getGroupId();
@@ -61,7 +62,7 @@ class AddCustomerGroupToContext implements ContextParametersProcessorInterface
         }
         if ($customerGroupId !== null) {
             $customerSession->setCustomerGroupId($customerGroupId);
-            $contextParameters->addExtensionAttribute('customer_group', (int) $customerGroupId);
+            $contextParameters->addExtensionAttribute('id_customer_group', (int) $customerGroupId);
         }
         return $contextParameters;
     }

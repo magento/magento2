@@ -9,6 +9,5 @@
     <extension_attributes for="Magento\GraphQl\Model\Query\ContextInterface">
         <attribute code="is_customer" type="boolean"/>
         <attribute code="id_customer_group" type="integer"/>
-        <attribute code="customer_group" type="integer"/>
     </extension_attributes>
 </config>
