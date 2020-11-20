@@ -32,7 +32,7 @@ return [
                     'processor' => \Magento\Framework\Mview\View\AdditionalColumnsProcessor\DefaultProcessor::class
                 ],
             ],
-            'iterator' => \Magento\Framework\Mview\View\ChangeLogBatchIterator::class
+            'walker' => \Magento\Framework\Mview\View\ChangeLogBatchWalker::class
         ],
     ]
 ];
