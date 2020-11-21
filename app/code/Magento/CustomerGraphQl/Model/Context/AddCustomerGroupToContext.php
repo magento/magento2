@@ -11,7 +11,7 @@ use Magento\Authorization\Model\UserContextInterface;
 use Magento\GraphQl\Model\Query\ContextParametersInterface;
 use Magento\GraphQl\Model\Query\ContextParametersProcessorInterface;
 use Magento\Customer\Model\Group;
-use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Model\Group\Resolver as CustomerGroupResolver;
 use Magento\Framework\Exception\LocalizedException;
 
 /**
@@ -20,17 +20,17 @@ use Magento\Framework\Exception\LocalizedException;
 class AddCustomerGroupToContext implements ContextParametersProcessorInterface
 {
     /**
-     * @var CustomerRepositoryInterface
+     * @var CustomerGroupResolver
      */
-    private $customerRepository;
+    private $customerGroupResolver;
 
     /**
-     * @param CustomerRepositoryInterface $customerRepository
+     * @param CustomerGroupResolver $customerGroupResolver
      */
     public function __construct(
-        CustomerRepositoryInterface $customerRepository
+        CustomerGroupResolver $customerGroupResolver
     ) {
-        $this->customerRepository = $customerRepository;
+        $this->customerGroupResolver = $customerGroupResolver;
     }
 
     /**
@@ -43,12 +43,7 @@ class AddCustomerGroupToContext implements ContextParametersProcessorInterface
         if ($contextParameters->getUserType() === UserContextInterface::USER_TYPE_GUEST) {
             $customerGroupId = Group::NOT_LOGGED_IN_ID;
         } elseif (!empty($extensionAttributes) && $extensionAttributes['is_customer'] === true) {
-            try {
-                $customer = $this->customerRepository->getById($contextParameters->getUserId());
-                $customerGroupId = (int) $customer->getGroupId();
-            } catch (LocalizedException $e) {
-                $customerGroupId = Group::NOT_LOGGED_IN_ID;
-            }
+            $customerGroupId = $this->customerGroupResolver->resolve((int) $contextParameters->getUserId());
         }
         if ($customerGroupId !== null) {
             $contextParameters->addExtensionAttribute('customer_group_id', (int) $customerGroupId);
