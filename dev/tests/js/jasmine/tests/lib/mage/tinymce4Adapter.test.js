@@ -42,7 +42,7 @@ define([
 
     describe('"triggerSave" method', function () {
         it('Check method call.', function () {
-            spyOn(tinyMCE4, 'triggerSave')
+            spyOn(tinyMCE4, 'triggerSave');
             obj.triggerSave();
             expect(tinyMCE4.triggerSave).toHaveBeenCalled();
         });
