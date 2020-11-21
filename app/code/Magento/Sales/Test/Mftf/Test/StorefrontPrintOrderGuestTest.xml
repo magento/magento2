@@ -284,7 +284,7 @@
         </actionGroup>
 
         <!-- AssertSalesPrintOrderGrandTotal -->
-        <see userInput="$357.43" selector="{{StorefrontOrderDetailsSection.grandTotalPrice}}" stepKey="assertSalesPrintOrderGrandTotal"/>
+        <see userInput="$352.43" selector="{{StorefrontOrderDetailsSection.grandTotalPrice}}" stepKey="assertSalesPrintOrderGrandTotal"/>
 
         <!-- AssertSalesPrintOrderPaymentMethod  -->
         <see userInput="Check / Money order" selector="{{StorefrontOrderDetailsSection.paymentMethod}}" stepKey="assertSalesPrintOrderPaymentMethod"/>
