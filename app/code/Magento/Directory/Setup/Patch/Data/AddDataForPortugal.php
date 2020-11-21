@@ -82,8 +82,8 @@ class AddDataForPortugal implements DataPatchInterface
             ['PT', 'PT-16', 'Viana do Castelo'],
             ['PT', 'PT-17', 'Vila Real'],
             ['PT', 'PT-18', 'Viseu'],
-            ['PT', 'PT-19', 'Região Autónoma dos Açores'],
-            ['PT', 'PT-20', 'Região Autónoma da Madeira']
+            ['PT', 'PT-20', 'Região Autónoma dos Açores'],
+            ['PT', 'PT-30', 'Região Autónoma da Madeira']
         ];
     }
 
