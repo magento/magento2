@@ -10,7 +10,6 @@ namespace Magento\CustomerGraphQl\Model\Context;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\GraphQl\Model\Query\ContextParametersInterface;
 use Magento\GraphQl\Model\Query\ContextParametersProcessorInterface;
-use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Customer\Model\Group;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Framework\Exception\LocalizedException;
@@ -21,24 +20,16 @@ use Magento\Framework\Exception\LocalizedException;
 class AddCustomerGroupToContext implements ContextParametersProcessorInterface
 {
     /**
-     * @var CustomerSession
-     */
-    private $customerSession;
-
-    /**
      * @var CustomerRepositoryInterface
      */
     private $customerRepository;
 
     /**
-     * @param CustomerSession $customerSession
      * @param CustomerRepositoryInterface $customerRepository
      */
     public function __construct(
-        CustomerSession $customerSession,
         CustomerRepositoryInterface $customerRepository
     ) {
-        $this->customerSession = $customerSession;
         $this->customerRepository = $customerRepository;
     }
 
@@ -47,7 +38,6 @@ class AddCustomerGroupToContext implements ContextParametersProcessorInterface
      */
     public function execute(ContextParametersInterface $contextParameters): ContextParametersInterface
     {
-        $customerSession = $this->customerSession;
         $customerGroupId = null;
         $extensionAttributes = $contextParameters->getExtensionAttributesData();
         if ($contextParameters->getUserType() === UserContextInterface::USER_TYPE_GUEST) {
@@ -61,7 +51,6 @@ class AddCustomerGroupToContext implements ContextParametersProcessorInterface
             }
         }
         if ($customerGroupId !== null) {
-            $customerSession->setCustomerGroupId($customerGroupId);
             $contextParameters->addExtensionAttribute('customer_group_id', (int) $customerGroupId);
         }
         return $contextParameters;
