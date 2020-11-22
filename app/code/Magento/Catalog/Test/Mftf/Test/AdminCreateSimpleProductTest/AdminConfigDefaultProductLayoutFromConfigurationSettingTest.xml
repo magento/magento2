@@ -36,8 +36,8 @@
 
         <actionGroup ref="NavigateToDefaultLayoutsSettingActionGroup" stepKey="navigateToWebConfigurationPage"/>
 
-        <comment userInput="Set default layout to 3 columns" stepKey="expandDefaultLayouts"/>
-        <comment userInput="and clear cache after" stepKey="DefaultProductLayout"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="expandDefaultLayouts"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibilityr" stepKey="DefaultProductLayout"/>
         <actionGroup ref="AdminSetProductLayoutSettingsActionGroup" stepKey="select3ColumnsLayout">
            <argument name="layout" value="3 columns"/>
         </actionGroup>
@@ -47,11 +47,11 @@
         </actionGroup>
 
         <actionGroup ref="AdminOpenNewProductFormPageActionGroup" stepKey="navigateToNewProduct"/>
-        <comment userInput="Default layout has been updated" stepKey="wait1"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="wait1"/>
 
         <actionGroup ref="AdminExpandProductDesignSectionActionGroup" stepKey="clickOnDesignTab"/>
 
-        <comment userInput="Checking if settings have been applied" stepKey="waitForLayoutDropDown"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForLayoutDropDown"/>
         <seeOptionIsSelected selector="{{ProductDesignSection.LayoutDropdown}}" userInput="3 columns" stepKey="see3ColumnsSelected"/> 
 
     </test>
