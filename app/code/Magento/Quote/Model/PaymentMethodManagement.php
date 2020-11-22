@@ -83,7 +83,7 @@ class PaymentMethodManagement implements \Magento\Quote\Api\PaymentMethodManagem
             throw new InvalidTransitionException(__('The requested Payment Method is not available.'));
         }
 
-        $quote->save();
+        $this->quoteRepository->save($quote);
         return $quote->getPayment()->getId();
     }
 
