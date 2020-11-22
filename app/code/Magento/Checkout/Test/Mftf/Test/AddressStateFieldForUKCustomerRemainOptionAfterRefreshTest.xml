@@ -42,8 +42,8 @@
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="guestGoToCheckoutFromMinicart" />
         <selectOption stepKey="selectCounty" selector="{{CheckoutShippingSection.country}}" userInput="{{UK_Address.country_id}}"/>
         <waitForPageLoad stepKey="waitFormToReload"/>
-        <reloadPage stepKey="refreshPage"/>
-        <waitForPageLoad stepKey="waitFormToReload1"/>
+        <actionGroup ref="ReloadPageActionGroup" stepKey="refreshPage"/>
+        <comment userInput="Replacing reload action and preserve Backward Compatibility" stepKey="waitFormToReload1" />
         <fillField selector="{{CheckoutShippingSection.email}}" userInput="{{CustomerEntityOne.email}}" stepKey="enterEmail"/>
         <fillField selector="{{CheckoutShippingSection.firstName}}" userInput="{{CustomerEntityOne.firstname}}" stepKey="enterFirstName"/>
         <fillField selector="{{CheckoutShippingSection.lastName}}" userInput="{{CustomerEntityOne.lastname}}" stepKey="enterLastName"/>

@@ -40,8 +40,10 @@
         </assertEquals>
 
         <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndexPage"/>
-        <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="addProductDropdown"/>
-        <click selector="{{AdminProductGridActionSection.addSimpleProduct}}" stepKey="addSimpleProduct"/>
+        <comment userInput="Adding the comment to replace clickAddProductToggle action for preserving Backward Compatibility" stepKey="addProductDropdown"/>
+        <actionGroup ref="AdminClickAddProductToggleAndSelectProductTypeActionGroup" stepKey="addSimpleProduct">
+            <argument name="productType" value="simple"/>
+        </actionGroup>
 
         <!-- Verify that the Product Name and Sku fields have the required field name indicator -->
         <executeJS function="{{AdminProductFormSection.RequiredNameIndicator}}" stepKey="productNameRequiredFieldIndicator"/>
