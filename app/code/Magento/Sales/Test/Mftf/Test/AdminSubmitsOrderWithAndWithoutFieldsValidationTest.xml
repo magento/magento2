@@ -45,7 +45,7 @@
         </actionGroup>
 
         <!--Fill customer group and customer email-->
-        <comment userInput="Fill Account Information" stepKey="selectCustomerGroup" after="addSimpleProductToOrder"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="selectCustomerGroup" after="addSimpleProductToOrder"/>
         <actionGroup ref="AdminFillAccountInformationOnCreateOrderPageActionGroup" stepKey="fillCustomerEmail" after="selectCustomerGroup">
             <argument name="email" value="{{Simple_US_Customer.email}}"/>
         </actionGroup>
