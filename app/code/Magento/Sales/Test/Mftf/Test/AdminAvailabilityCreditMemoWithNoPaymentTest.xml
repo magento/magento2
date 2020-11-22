@@ -52,12 +52,12 @@
             <argument name="product" value="$$createProduct$$"/>
         </actionGroup>
 
-        <comment userInput="Set Custom Price" stepKey="clickCustomPriceCheckbox"/>
-        <comment userInput="on the Order Details page" stepKey="waitForPriceFieldAppears"/>
-        <comment userInput="in Admin" stepKey="fillCustomPriceField"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickCustomPriceCheckbox"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPriceFieldAppears"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="fillCustomPriceField"/>
         <actionGroup ref="AdminSetCustomPriceActionGroup" stepKey="clickUpdateItemsAndQuantitiesButton"/>
 
-        <comment userInput="Fill the Account Information section with data" stepKey="selectCustomerGroup"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="selectCustomerGroup"/>
         <actionGroup ref="AdminFillAccountInformationOnCreateOrderPageActionGroup" stepKey="fillCustomerEmail">
             <argument name="email" value="{{Simple_US_Customer.email}}"/>
         </actionGroup>
@@ -75,11 +75,11 @@
 
         <actionGroup ref="SubmitInvoiceActionGroup" stepKey="submitInvoice"/>
 
-        <comment userInput="Check if the Credit Memo button is displayed" stepKey="seeCreditMemo"/>  
-        <comment userInput="and if it is possible to click it" stepKey="clickCreditMemoItem"/>  
-        <comment userInput="After New Credit Memo page loaded" stepKey="waitForCreditMemoPageLoaded"/>  
-        <comment userInput="check page title and URL" stepKey="seeNewMemoPageTitle"/>  
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeCreditMemo"/>  
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickCreditMemoItem"/>  
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForCreditMemoPageLoaded"/>  
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeNewMemoPageTitle"/>  
         <actionGroup ref="AdminStartCreateCreditMemoFromOrderPageActionGroup" stepKey="seeNewMemoUrlOnPage"/>
       
     </test>
-</tests
+</tests>
