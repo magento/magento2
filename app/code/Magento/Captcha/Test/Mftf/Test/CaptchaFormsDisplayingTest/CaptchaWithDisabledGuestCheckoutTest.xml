@@ -37,16 +37,16 @@
             <argument name="productUrl" value="$$createSimpleProduct.sku$$"/>
         </actionGroup>
 
-        <comment userInput="Add product to the Cart" stepKey="waitForPageLoad"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPageLoad"/>
         <actionGroup ref="StorefrontClickAddToCartOnProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage"/>
 
-        <comment userInput="Open MiniCart" stepKey="waitForText"/>
-        <comment userInput="and go to Checkout" stepKey="clickCart"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForText"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickCart"/>
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckout"/>
 
-        <comment userInput="Fill in Sign in form" stepKey="waitEmailFieldVisible"/>
-        <comment userInput="- fill Email filed with valid email" stepKey="fillCustomerEmail"/>
-        <comment userInput="- fill Email filed with incorrect password" stepKey="fillIncorrectCustomerPassword"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitEmailFieldVisible"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="fillCustomerEmail"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="fillIncorrectCustomerPassword"/>
         <actionGroup ref="StorefrontCustomerSignInPopUpActionGroup" stepKey="clickSignIn">
             <argument name="customerEmail" value="{{Simple_US_Customer.email}}"/>
             <argument name="customerPwd" value="incorrectPassword"/>
@@ -54,20 +54,20 @@
 
         <waitForElementVisible selector="{{StorefrontCustomerSignInPopupFormSection.errorMessage}}" stepKey="seeErrorMessage"/>
 
-        <comment userInput="Check if all elements of Captcha appear:" stepKey="seeCaptchaField"/>
-        <comment userInput="- Captcha field, Image and Reload button" stepKey="seeCaptchaImage"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeCaptchaField"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeCaptchaImage"/>
         <actionGroup ref="AssertCaptchaVisibleOnCustomerSignInPopupActionGroup" stepKey="seeCaptchaReloadButton"/>
        
         <actionGroup ref="ReloadPageActionGroup" stepKey="refreshPage"/>
         <comment userInput="Replacing reload action and preserve Backward Compatibility" stepKey="waitForPageLoad2" />
         
-        <comment userInput="Go to Checkout" stepKey="clickCart2"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickCart2"/>
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckout2"/>
        
         <waitForElementVisible selector="{{StorefrontCustomerSignInPopupFormSection.email}}" stepKey="waitEmailFieldVisible2"/>
 
-        <comment userInput="Check if all elements of Captcha appear:" stepKey="seeCaptchaField2"/>
-        <comment userInput="- Captcha field, Image and Reload button" stepKey="seeCaptchaImage2"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeCaptchaField2"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeCaptchaImage2"/>
         <actionGroup ref="AssertCaptchaVisibleOnCustomerSignInPopupActionGroup" stepKey="seeCaptchaReloadButton2"/>
     </test>
 </tests>
