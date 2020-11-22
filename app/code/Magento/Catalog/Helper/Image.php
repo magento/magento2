@@ -84,7 +84,7 @@ class Image extends AbstractHelper implements ArgumentInterface
     /**
      * Current Product
      *
-     * @var \Magento\Catalog\Model\Product
+     * @var \Magento\Catalog\Model\Product|\Magento\Framework\DataObject
      */
     protected $_product;
 
@@ -189,7 +189,7 @@ class Image extends AbstractHelper implements ArgumentInterface
     /**
      * Initialize Helper to work with Image
      *
-     * @param \Magento\Catalog\Model\Product $product
+     * @param \Magento\Catalog\Model\Product|\Magento\Framework\DataObject $product
      * @param string $imageId
      * @param array $attributes
      * @return $this
@@ -738,7 +738,7 @@ class Image extends AbstractHelper implements ArgumentInterface
     /**
      * Set current Product
      *
-     * @param \Magento\Catalog\Model\Product $product
+     * @param \Magento\Catalog\Model\Product|\Magento\Framework\DataObject $product
      * @return $this
      */
     protected function setProduct($product)
@@ -750,7 +750,7 @@ class Image extends AbstractHelper implements ArgumentInterface
     /**
      * Get current Product
      *
-     * @return \Magento\Catalog\Model\Product
+     * @return \Magento\Catalog\Model\Product|\Magento\Framework\DataObject
      */
     protected function getProduct()
     {
