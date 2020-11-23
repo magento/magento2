@@ -46,7 +46,7 @@
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin1"/>
       
         <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="openOrder">
-            <argument name="entity_id" value="$createGuestCart.return$"/>
+            <argument name="entityId" value="$createGuestCart.return$"/>
         </actionGroup>    
 
         <actionGroup ref="AdminCreateInvoiceActionGroup" stepKey="createInvoice"/>

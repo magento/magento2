@@ -18,7 +18,7 @@
             <testCaseId value="MAGETWO-72096"/>
             <group value="sales"/>
             <skip>
-             <issueID value="DEPRECATED">Use AdminInvoiceOrderTest instead</issueID>
+             <issueId value="DEPRECATED">Use AdminInvoiceOrderTest instead</issueId>
             </skip> 
         </annotations>
         <before>
