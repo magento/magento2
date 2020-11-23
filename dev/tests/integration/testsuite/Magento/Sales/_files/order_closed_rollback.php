@@ -41,6 +41,6 @@ $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', false);
 
 $creditMemoGridAggregator = $objectManager->get(\CreditmemoGridAggregator::class);
-$creditMemoGridAggregator->purge('100000111', 'order_increment_id');
+$creditMemoGridAggregator->purge('100001111', 'order_increment_id');
 
 Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/product_simple_rollback.php');
