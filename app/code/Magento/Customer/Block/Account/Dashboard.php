@@ -120,23 +120,13 @@ class Dashboard extends Template
      * Retrieve the Url for customer orders.
      *
      * @return string
-     * @deprecated Action does not exist
+     * @deprecated 102.0.3 Action does not exist
      */
     public function getOrdersUrl()
     {
         //phpcs:ignore Magento2.Functions.DiscouragedFunction
         trigger_error('Method is deprecated', E_USER_DEPRECATED);
         return '';
-    }
-
-    /**
-     * Retrieve the Url for customer reviews.
-     *
-     * @return string
-     */
-    public function getReviewsUrl()
-    {
-        return $this->_urlBuilder->getUrl('review/customer/index', ['_secure' => true]);
     }
 
     /**

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminCategoryBasicFieldSection">
+        <element name="IncludeInMenu" type="checkbox" selector="input[name='include_in_menu']"/>
+        <element name="includeInMenuLabel" type="text" selector="input[name='include_in_menu']+label"/>
+        <element name="includeInMenuUseDefault" type="checkbox" selector="input[name='use_default[include_in_menu]']"/>
+        <element name="EnableCategory" type="checkbox" selector="input[name='is_active']"/>
+        <element name="enableCategoryLabel" type="text" selector="input[name='is_active']+label"/>
+        <element name="enableUseDefault" type="checkbox" selector="input[name='use_default[is_active]']"/>
+        <element name="CategoryNameInput" type="input" selector="input[name='name']"/>
+        <element name="RequiredFieldIndicator" type="text" selector=" return window.getComputedStyle(document.querySelector('._required[data-index=name]&gt;.admin__field-label span'), ':after').getPropertyValue('content');"/>
+        <element name="RequiredFieldIndicatorColor" type="text" selector=" return window.getComputedStyle(document.querySelector('._required[data-index=name]&gt;.admin__field-label span'), ':after').getPropertyValue('color');"/>
+        <element name="categoryNameUseDefault" type="checkbox" selector="input[name='use_default[name]']"/>
+        <element name="ContentTab" type="input" selector="input[name='name']"/>
+        <element name="FieldError" type="text" selector=".admin__field-error[data-bind='attr: {for: {{field}}}, text: error']" parameterized="true"/>
+        <element name="panelFieldControl" type="input" selector="//aside//div[@data-index=&quot;{{arg1}}&quot;]/descendant::*[@name=&quot;{{arg2}}&quot;]" parameterized="true"/>
+        <element name="productsInCategory" type="input" selector="div[data-index='assign_products']" timeout="30"/>
+        <element name="scheduleDesignUpdateTab" type="block" selector="div[data-index='schedule_design_update']" timeout="15"/>
+    </section>
+</sections>

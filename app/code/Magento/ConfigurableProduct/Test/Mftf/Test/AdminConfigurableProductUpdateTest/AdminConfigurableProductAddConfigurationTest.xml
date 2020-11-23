@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminConfigurableProductAddConfigurationTest">
+        <annotations>
+            <features value="ConfigurableProduct"/>
+            <stories value="Edit a configurable product in admin"/>
+            <title value="Admin should be able to edit configuration to add a value to an existing attribute"/>
+            <description value="Admin should be able to edit configuration to add a value to an existing attribute"/>
+            <severity value="BLOCKER"/>
+            <testCaseId value="MC-95"/>
+            <group value="ConfigurableProduct"/>
+        </annotations>
+
+        <before>
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+        </after>
+
+        <!-- Create a configurable product via the UI -->
+        <actionGroup ref="CreateConfigurableProductActionGroup" stepKey="createProduct">
+            <argument name="product" value="_defaultProduct"/>
+            <argument name="category" value="$$createCategory$$"/>
+        </actionGroup>
+
+        <!--
+            After saving, we are still on the product edit page. There is no need to reload or go to this page
+            again, because a round trip to the server has already happened.
+        -->
+
+        <!-- Add a configuration option to the configurable product -->
+        <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="clickEditConfigurations"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton1"/>
+        <waitForElementVisible selector="{{AdminCreateProductConfigurationsPanel.createNewValue}}" stepKey="waitCreateNewValueAppears"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.createNewValue}}" stepKey="clickOnCreateNewValue1"/>
+        <fillField userInput="{{colorProductAttribute4.name}}" selector="{{AdminCreateProductConfigurationsPanel.attributeName}}" stepKey="fillFieldForNewAttribute1"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.saveAttribute}}" stepKey="clickOnSaveNewAttribute1"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton2"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.applySingleQuantityToEachSkus}}" stepKey="clickOnApplySingleQuantityToEachSku"/>
+        <fillField selector="{{AdminCreateProductConfigurationsPanel.quantity}}" userInput="42" stepKey="enterAttributeQuantity"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton3"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton4"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveProduct"/>
+
+        <!-- Verify that the added option is present in the storefront -->
+        <amOnPage url="{{StorefrontProductPage.url(_defaultProduct.urlKey)}}" stepKey="amOnStorefrontPage"/>
+        <waitForPageLoad stepKey="waitForStorefrontPage"/>
+        <see selector="{{StorefrontProductInfoMainSection.productAttributeOptions1}}" userInput="{{colorProductAttribute1.name}}" stepKey="seeInDropDown1"/>
+        <see selector="{{StorefrontProductInfoMainSection.productAttributeOptions1}}" userInput="{{colorProductAttribute2.name}}" stepKey="seeInDropDown2"/>
+        <see selector="{{StorefrontProductInfoMainSection.productAttributeOptions1}}" userInput="{{colorProductAttribute3.name}}" stepKey="seeInDropDown3"/>
+        <see selector="{{StorefrontProductInfoMainSection.productAttributeOptions1}}" userInput="{{colorProductAttribute4.name}}" stepKey="seeInDropDown4"/>
+    </test>
+</tests>

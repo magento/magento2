@@ -3,13 +3,23 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\ResourceModel\Product;
 
+use Magento\Catalog\Api\Data\CategoryInterface;
+use Magento\Catalog\Api\Data\CategoryLinkInterface;
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\ResourceModel\Product\CategoryLink;
-use \PHPUnit_Framework_MockObject_MockObject as MockObject;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Select;
+use Magento\Framework\EntityManager\EntityMetadataInterface;
+use Magento\Framework\EntityManager\MetadataPool;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class CategoryLinkTest extends \PHPUnit\Framework\TestCase
+class CategoryLinkTest extends TestCase
 {
     /**
      * @var CategoryLink
@@ -17,31 +27,31 @@ class CategoryLinkTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \Magento\Framework\App\ResourceConnection|MockObject
+     * @var ResourceConnection|MockObject
      */
     private $resourceMock;
 
     /**
-     * @var \Magento\Framework\EntityManager\MetadataPool|MockObject
+     * @var MetadataPool|MockObject
      */
     private $metadataPoolMock;
 
     /**
-     * @var \Magento\Framework\DB\Select|MockObject
+     * @var Select|MockObject
      */
     private $dbSelectMock;
 
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface|MockObject
+     * @var AdapterInterface|MockObject
      */
     private $connectionMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->resourceMock = $this->getMockBuilder(\Magento\Framework\App\ResourceConnection::class)
+        $this->resourceMock = $this->getMockBuilder(ResourceConnection::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->metadataPoolMock = $this->getMockBuilder(\Magento\Framework\EntityManager\MetadataPool::class)
+        $this->metadataPoolMock = $this->getMockBuilder(MetadataPool::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -53,10 +63,10 @@ class CategoryLinkTest extends \PHPUnit\Framework\TestCase
 
     private function prepareAdapter()
     {
-        $this->dbSelectMock = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
+        $this->dbSelectMock = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->connectionMock = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
+        $this->connectionMock = $this->getMockBuilder(AdapterInterface::class)
             ->getMockForAbstractClass();
         $this->connectionMock->expects($this->any())->method('select')->willReturn($this->dbSelectMock);
         $this->resourceMock->expects($this->any())
@@ -66,16 +76,16 @@ class CategoryLinkTest extends \PHPUnit\Framework\TestCase
 
     private function prepareMetadata()
     {
-        $categoryLinkMetadata = $this->getMockBuilder(\Magento\Framework\EntityManager\EntityMetadataInterface::class)
+        $categoryLinkMetadata = $this->getMockBuilder(EntityMetadataInterface::class)
             ->getMockForAbstractClass();
         $categoryLinkMetadata->expects($this->any())->method('getEntityTable')->willReturn('category_link_table');
-        $categoryEntityMetadata = $this->getMockBuilder(\Magento\Framework\EntityManager\EntityMetadataInterface::class)
+        $categoryEntityMetadata = $this->getMockBuilder(EntityMetadataInterface::class)
             ->getMockForAbstractClass();
         $categoryEntityMetadata->expects($this->any())->method('getEntityTable')->willReturn('category_entity_table');
         $this->metadataPoolMock->expects($this->any())->method('getMetadata')->willReturnMap(
             [
-                [\Magento\Catalog\Api\Data\CategoryLinkInterface::class, $categoryLinkMetadata],
-                [\Magento\Catalog\Api\Data\CategoryInterface::class, $categoryEntityMetadata],
+                [CategoryLinkInterface::class, $categoryLinkMetadata],
+                [CategoryInterface::class, $categoryEntityMetadata],
             ]
         );
     }
@@ -84,7 +94,8 @@ class CategoryLinkTest extends \PHPUnit\Framework\TestCase
     {
         $this->prepareAdapter();
         $this->prepareMetadata();
-        $product = $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductInterface::class)->getMockForAbstractClass();
+        $product = $this->getMockBuilder(ProductInterface::class)
+            ->getMockForAbstractClass();
         $product->expects($this->any())->method('getId')->willReturn(1);
         $this->connectionMock->expects($this->once())->method('fetchAll')->with($this->dbSelectMock)->willReturn(
             [
@@ -112,7 +123,8 @@ class CategoryLinkTest extends \PHPUnit\Framework\TestCase
     {
         $this->prepareAdapter();
         $this->prepareMetadata();
-        $product = $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductInterface::class)->getMockForAbstractClass();
+        $product = $this->getMockBuilder(ProductInterface::class)
+            ->getMockForAbstractClass();
         $product->expects($this->any())->method('getId')->willReturn(1);
         $this->connectionMock->expects($this->once())
             ->method('fetchAll')
@@ -133,10 +145,11 @@ class CategoryLinkTest extends \PHPUnit\Framework\TestCase
         $expectedResult = [];
 
         foreach ($affectedIds as $type => $ids) {
-            $expectedResult = array_merge($expectedResult, $ids);
+            $expectedResult[] = $ids;
             // Verify if the correct insert, update and/or delete actions are performed:
             $this->setupExpectationsForConnection($type, $ids);
         }
+        $expectedResult = array_merge([], ...$expectedResult);
 
         $actualResult = $this->model->saveCategoryLinks($product, $newCategoryLinks);
 

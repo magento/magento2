@@ -19,7 +19,7 @@
             <group value="mtf_migrated"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
             <!-- 20 products created and category -->
             <createData entity="_defaultCategory" stepKey="createCategory"/>
             <createData entity="SimpleProduct" stepKey="createProduct01">
@@ -113,7 +113,7 @@
 
             <!-- Delete Customer -->
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Login to Storefront as Customer -->
@@ -193,15 +193,13 @@
         <!-- Place Order -->
         <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="onCheckout"/>
         <see userInput="20" selector="{{CheckoutOrderSummarySection.itemsQtyInCart}}" stepKey="see20Products"/>
-        <click selector="{{CheckoutShippingSection.next}}" stepKey="clickNextButton"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForCheckoutLoad"/>
+        <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="clickNextButton"/>
         <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="placeOrder"/>
         <waitForPageLoad stepKey="waitForSuccess"/>
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
 
         <!-- Go to My Account > My Orders page -->
-        <amOnPage url="{{StorefrontCustomerDashboardPage.url}}" stepKey="onMyAccount"/>
-        <waitForPageLoad stepKey="waitForAccountPage"/>
+        <actionGroup ref="StorefrontOpenMyAccountPageActionGroup" stepKey="onMyAccount"/>
         <click selector="{{StorefrontCustomerSidebarSection.sidebarTab('My Orders')}}" stepKey="clickOnMyOrders"/>
         <waitForPageLoad stepKey="waitForOrdersLoad"/>
 

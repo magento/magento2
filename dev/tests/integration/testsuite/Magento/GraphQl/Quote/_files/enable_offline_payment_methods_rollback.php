@@ -20,4 +20,3 @@ $configWriter->delete('payment/banktransfer/active');
 $configWriter->delete('payment/cashondelivery/active');
 $configWriter->delete('payment/checkmo/active');
 $configWriter->delete('payment/purchaseorder/active');
-$configWriter->delete('payment/authorizenet_acceptjs/active');

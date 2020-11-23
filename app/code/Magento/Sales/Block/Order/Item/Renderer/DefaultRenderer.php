@@ -6,7 +6,12 @@
 
 namespace Magento\Sales\Block\Order\Item\Renderer;
 
-use Magento\Sales\Model\Order\CreditMemo\Item as CreditMemoItem;
+use Magento\Catalog\Model\Product\OptionFactory;
+use Magento\Framework\DataObject;
+use Magento\Framework\Stdlib\StringUtils;
+use Magento\Framework\View\Element\AbstractBlock;
+use Magento\Framework\View\Element\Template\Context;
+use Magento\Sales\Model\Order\Creditmemo\Item as CreditMemoItem;
 use Magento\Sales\Model\Order\Invoice\Item as InvoiceItem;
 use Magento\Sales\Model\Order\Item as OrderItem;
 
@@ -21,25 +26,25 @@ class DefaultRenderer extends \Magento\Framework\View\Element\Template
     /**
      * Magento string lib
      *
-     * @var \Magento\Framework\Stdlib\StringUtils
+     * @var StringUtils
      */
     protected $string;
 
     /**
-     * @var \Magento\Catalog\Model\Product\OptionFactory
+     * @var OptionFactory
      */
     protected $_productOptionFactory;
 
     /**
-     * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Framework\Stdlib\StringUtils $string
-     * @param \Magento\Catalog\Model\Product\OptionFactory $productOptionFactory
+     * @param Context $context
+     * @param StringUtils $string
+     * @param OptionFactory $productOptionFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Framework\Stdlib\StringUtils $string,
-        \Magento\Catalog\Model\Product\OptionFactory $productOptionFactory,
+        Context $context,
+        StringUtils $string,
+        OptionFactory $productOptionFactory,
         array $data = []
     ) {
         $this->string = $string;
@@ -50,10 +55,10 @@ class DefaultRenderer extends \Magento\Framework\View\Element\Template
     /**
      * Set item.
      *
-     * @param \Magento\Framework\DataObject $item
+     * @param DataObject $item
      * @return $this
      */
-    public function setItem(\Magento\Framework\DataObject $item)
+    public function setItem(DataObject $item)
     {
         $this->setData('item', $item);
         return $this;
@@ -86,7 +91,7 @@ class DefaultRenderer extends \Magento\Framework\View\Element\Template
      */
     public function getOrderItem()
     {
-        if ($this->getItem() instanceof \Magento\Sales\Model\Order\Item) {
+        if ($this->getItem() instanceof OrderItem) {
             return $this->getItem();
         } else {
             return $this->getItem()->getOrderItem();
@@ -104,16 +109,16 @@ class DefaultRenderer extends \Magento\Framework\View\Element\Template
         $options = $this->getOrderItem()->getProductOptions();
         if ($options) {
             if (isset($options['options'])) {
-                $result = array_merge($result, $options['options']);
+                $result[] = $options['options'];
             }
             if (isset($options['additional_options'])) {
-                $result = array_merge($result, $options['additional_options']);
+                $result[] = $options['additional_options'];
             }
             if (isset($options['attributes_info'])) {
-                $result = array_merge($result, $options['attributes_info']);
+                $result[] = $options['attributes_info'];
             }
         }
-        return $result;
+        return array_merge([], ...$result);
     }
 
     /**

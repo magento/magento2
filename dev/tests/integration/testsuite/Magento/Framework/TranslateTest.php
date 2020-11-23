@@ -8,7 +8,7 @@ namespace Magento\Framework;
 
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\CacheCleaner;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * @magentoAppIsolation enabled
@@ -25,7 +25,7 @@ class TranslateTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         /** @var \Magento\Framework\View\FileSystem|MockObject $viewFileSystem */
         $viewFileSystem = $this->createPartialMock(
@@ -35,15 +35,15 @@ class TranslateTest extends \PHPUnit\Framework\TestCase
 
         $viewFileSystem->expects($this->any())
             ->method('getLocaleFileName')
-            ->will(
-                $this->returnValue(
+            ->willReturn(
+                
                     dirname(__DIR__) . '/Translation/Model/_files/Magento/design/Magento/theme/i18n/en_US.csv'
-                )
+                
             );
 
         /** @var \Magento\Framework\View\Design\ThemeInterface|MockObject $theme */
         $theme = $this->createMock(\Magento\Framework\View\Design\ThemeInterface::class);
-        $theme->expects($this->any())->method('getThemePath')->will($this->returnValue('Magento/luma'));
+        $theme->expects($this->any())->method('getThemePath')->willReturn('Magento/luma');
 
         /** @var \Magento\TestFramework\ObjectManager $objectManager */
         $objectManager = Bootstrap::getObjectManager();

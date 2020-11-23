@@ -9,9 +9,9 @@
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
     <table name="catalog_product_entity_media_gallery_value_video" resource="default" engine="innodb"
            comment="Catalog Product Video Table">
-        <column xsi:type="int" name="value_id" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="value_id" unsigned="true" nullable="false" identity="false"
                 comment="Media Entity ID"/>
-        <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="smallint" name="store_id" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Store ID"/>
         <column xsi:type="varchar" name="provider" nullable="true" length="32" comment="Video provider ID"/>
         <column xsi:type="text" name="url" nullable="true" comment="Video URL"/>

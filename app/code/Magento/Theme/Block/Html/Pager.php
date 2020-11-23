@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Theme\Block\Html;
 
 /**
@@ -450,7 +451,11 @@ class Pager extends \Magento\Framework\View\Element\Template
      */
     public function getPageUrl($page)
     {
-        return $this->getPagerUrl([$this->getPageVarName() => $page]);
+        return $this->getPagerUrl(
+            [
+                $this->getPageVarName() => $page > 1 ? $page : null,
+            ]
+        );
     }
 
     /**
@@ -462,7 +467,26 @@ class Pager extends \Magento\Framework\View\Element\Template
      */
     public function getLimitUrl($limit)
     {
-        return $this->getPagerUrl([$this->getLimitVarName() => $limit]);
+        return $this->getPagerUrl($this->getPageLimitParams($limit));
+    }
+
+    /**
+     * Return page limit params
+     *
+     * @param int $limit
+     * @return array
+     */
+    private function getPageLimitParams(int $limit): array
+    {
+        $data = [$this->getLimitVarName() => $limit];
+
+        $currentPage = $this->getCurrentPage();
+        $availableCount = (int) ceil($this->getTotalNum() / $limit);
+        if ($currentPage !== 1 && $availableCount < $currentPage) {
+            $data = array_merge($data, [$this->getPageVarName() => $availableCount === 1 ? null : $availableCount]);
+        }
+
+        return $data;
     }
 
     /**

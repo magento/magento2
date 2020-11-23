@@ -18,13 +18,10 @@
             <testCaseId value="MAGETWO-58718"/>
             <group value="product"/>
             <group value="WYSIWYGDisabled"/>
-            <skip>
-                <issueId value="MC-13841"/>
-            </skip>
         </annotations>
         <before>
             <!-- Login Admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <!-- Create Store View English -->
             <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreViewEn">
                 <argument name="customStore" value="customStoreEN"/>
@@ -57,7 +54,7 @@
             <!-- Clear Filter Product -->
             <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearProductFilters"/>
             <!-- Logout Admin -->
-            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
         </after>
         <!-- Search Product and Open Edit -->
         <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchProduct">

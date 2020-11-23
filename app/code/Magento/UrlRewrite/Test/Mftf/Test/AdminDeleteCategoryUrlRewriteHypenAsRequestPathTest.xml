@@ -14,17 +14,18 @@
             <title value="Delete category URL rewrite, hyphen as request path"/>
             <description value="Delete category URL rewrite, hyphen as request path"/>
             <testCaseId value="MC-5348" />
+            <severity value="MAJOR"/>
             <group value="urlRewrite"/>
             <group value="mtf_migrated"/>
         </annotations>
 
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
             <createData entity="_defaultCategory" stepKey="category"/>
         </before>
         <after>
             <deleteData createDataKey="category" stepKey="deleteCategory"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Create the Category Url Rewrite-->

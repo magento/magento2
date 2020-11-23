@@ -19,11 +19,4 @@
         <click selector="{{AdminOrdersGridSection.dropdownActionItem(action)}}" stepKey="selectAction"/>
         <waitForPageLoad stepKey="waitForResults"/>
     </actionGroup>
-    <actionGroup name="AdminTwoOrderActionOnGridActionGroup" extends="AdminOrderActionOnGridActionGroup">
-        <arguments>
-            <argument name="secondOrderId" type="string"/>
-        </arguments>
-        <checkOption selector="{{AdminOrdersGridSection.selectOrderID(secondOrderId)}}" stepKey="selectSecondOrder" after="waitForCheck"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForSecondCheck" after="selectSecondOrder"/>
-    </actionGroup>
 </actionGroups>

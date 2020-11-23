@@ -13,7 +13,8 @@ define([
     'priceUtils',
     'priceBox',
     'jquery-ui-modules/widget',
-    'jquery/jquery.parsequery'
+    'jquery/jquery.parsequery',
+    'fotoramaVideoEvents'
 ], function ($, _, mageTemplate, $t, priceUtils) {
     'use strict';
 
@@ -32,7 +33,7 @@ define([
             mediaGallerySelector: '[data-gallery-role=gallery-placeholder]',
             mediaGalleryInitial: null,
             slyOldPriceSelector: '.sly-old-price',
-            normalPriceLabelSelector: '.normal-price .price-label',
+            normalPriceLabelSelector: '.product-info-main .normal-price .price-label',
 
             /**
              * Defines the mechanism of how images of a gallery should be
@@ -139,7 +140,12 @@ define([
             });
 
             $.each(queryParams, $.proxy(function (key, value) {
-                this.options.values[key] = value;
+                if (this.options.spConfig.attributes[key] !== undefined &&
+                    _.find(this.options.spConfig.attributes[key].options, function (element) {
+                        return element.id === value;
+                    })) {
+                    this.options.values[key] = value;
+                }
             }, this));
         },
 
@@ -155,7 +161,13 @@ define([
 
                 if (element.value) {
                     attributeId = element.id.replace(/[a-z]*/, '');
-                    this.options.values[attributeId] = element.value;
+
+                    if (this.options.spConfig.attributes[attributeId] !== undefined &&
+                        _.find(this.options.spConfig.attributes[attributeId].options, function (optionElement) {
+                            return optionElement.id === element.value;
+                        })) {
+                        this.options.values[attributeId] = element.value;
+                    }
                 }
             }, this));
         },
@@ -296,9 +308,13 @@ define([
         _changeProductImage: function () {
             var images,
                 initialImages = this.options.mediaGalleryInitial,
-                galleryObject = $(this.options.mediaGallerySelector).data('gallery');
+                gallery = $(this.options.mediaGallerySelector).data('gallery');
 
-            if (!galleryObject) {
+            if (_.isUndefined(gallery)) {
+                $(this.options.mediaGallerySelector).on('gallery:loaded', function () {
+                    this._changeProductImage();
+                }.bind(this));
+
                 return;
             }
 
@@ -314,17 +330,35 @@ define([
                 images = $.extend(true, [], images);
                 images = this._setImageIndex(images);
 
-                galleryObject.updateData(images);
-
-                $(this.options.mediaGallerySelector).AddFotoramaVideoEvents({
-                    selectedOption: this.simpleProduct,
-                    dataMergeStrategy: this.options.gallerySwitchStrategy
-                });
+                gallery.updateData(images);
+                this._addFotoramaVideoEvents(false);
             } else {
-                galleryObject.updateData(initialImages);
-                $(this.options.mediaGallerySelector).AddFotoramaVideoEvents();
+                gallery.updateData(initialImages);
+                this._addFotoramaVideoEvents(true);
+            }
+        },
+
+        /**
+         * Add video events
+         *
+         * @param {Boolean} isInitial
+         * @private
+         */
+        _addFotoramaVideoEvents: function (isInitial) {
+            if (_.isUndefined($.mage.AddFotoramaVideoEvents)) {
+                return;
             }
 
+            if (isInitial) {
+                $(this.options.mediaGallerySelector).AddFotoramaVideoEvents();
+
+                return;
+            }
+
+            $(this.options.mediaGallerySelector).AddFotoramaVideoEvents({
+                selectedOption: this.simpleProduct,
+                dataMergeStrategy: this.options.gallerySwitchStrategy
+            });
         },
 
         /**
@@ -706,21 +740,19 @@ define([
          * @private
          */
         _displayTierPriceBlock: function (optionId) {
-            var options, tierPriceHtml;
+            var tierPrices = typeof optionId != 'undefined' && this.options.spConfig.optionPrices[optionId].tierPrices;
 
-            if (typeof optionId != 'undefined' &&
-                this.options.spConfig.optionPrices[optionId].tierPrices != [] // eslint-disable-line eqeqeq
-            ) {
-                options = this.options.spConfig.optionPrices[optionId];
+            if (_.isArray(tierPrices) && tierPrices.length > 0) {
 
                 if (this.options.tierPriceTemplate) {
-                    tierPriceHtml = mageTemplate(this.options.tierPriceTemplate, {
-                        'tierPrices': options.tierPrices,
-                        '$t': $t,
-                        'currencyFormat': this.options.spConfig.currencyFormat,
-                        'priceUtils': priceUtils
-                    });
-                    $(this.options.tierPriceBlockSelector).html(tierPriceHtml).show();
+                    $(this.options.tierPriceBlockSelector).html(
+                        mageTemplate(this.options.tierPriceTemplate, {
+                            'tierPrices': tierPrices,
+                            '$t': $t,
+                            'currencyFormat': this.options.spConfig.currencyFormat,
+                            'priceUtils': priceUtils
+                        })
+                    ).show();
                 }
             } else {
                 $(this.options.tierPriceBlockSelector).hide();

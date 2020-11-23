@@ -367,7 +367,7 @@ class CommonTaxCollector extends AbstractTotal
                     $priceIncludesTax,
                     $useBaseCurrency
                 );
-                $itemDataObjects[] = $parentItemDataObject;
+                $itemDataObjects[] = [$parentItemDataObject];
                 foreach ($item->getChildren() as $child) {
                     $childItemDataObject = $this->mapItem(
                         $itemDataObjectFactory,
@@ -376,31 +376,29 @@ class CommonTaxCollector extends AbstractTotal
                         $useBaseCurrency,
                         $parentItemDataObject->getCode()
                     );
-                    $itemDataObjects[] = $childItemDataObject;
+                    $itemDataObjects[] = [$childItemDataObject];
                     $extraTaxableItems = $this->mapItemExtraTaxables(
                         $itemDataObjectFactory,
                         $item,
                         $priceIncludesTax,
                         $useBaseCurrency
                     );
-                    //phpcs:ignore Magento2.Performance.ForeachArrayMerge
-                    $itemDataObjects = array_merge($itemDataObjects, $extraTaxableItems);
+                    $itemDataObjects[] = $extraTaxableItems;
                 }
             } else {
                 $itemDataObject = $this->mapItem($itemDataObjectFactory, $item, $priceIncludesTax, $useBaseCurrency);
-                $itemDataObjects[] = $itemDataObject;
+                $itemDataObjects[] = [$itemDataObject];
                 $extraTaxableItems = $this->mapItemExtraTaxables(
                     $itemDataObjectFactory,
                     $item,
                     $priceIncludesTax,
                     $useBaseCurrency
                 );
-                //phpcs:ignore Magento2.Performance.ForeachArrayMerge
-                $itemDataObjects = array_merge($itemDataObjects, $extraTaxableItems);
+                $itemDataObjects[] = $extraTaxableItems;
             }
         }
 
-        return $itemDataObjects;
+        return array_merge([], ...$itemDataObjects);
     }
 
     /**
@@ -593,8 +591,11 @@ class CommonTaxCollector extends AbstractTotal
         $total->setSubtotalInclTax($subtotalInclTax);
         $total->setBaseSubtotalTotalInclTax($baseSubtotalInclTax);
         $total->setBaseSubtotalInclTax($baseSubtotalInclTax);
-        $shippingAssignment->getShipping()->getAddress()->setBaseSubtotalTotalInclTax($baseSubtotalInclTax);
-        $shippingAssignment->getShipping()->getAddress()->setBaseTaxAmount($baseTax);
+        $address = $shippingAssignment->getShipping()->getAddress();
+        $address->setBaseTaxAmount($baseTax);
+        $address->setBaseSubtotalTotalInclTax($baseSubtotalInclTax);
+        $address->setSubtotal($total->getSubtotal());
+        $address->setBaseSubtotal($total->getBaseSubtotal());
 
         return $this;
     }
@@ -692,7 +693,7 @@ class CommonTaxCollector extends AbstractTotal
         //The price should be base price
         $quoteItem->setPrice($baseItemTaxDetails->getPrice());
         if ($quoteItem->getCustomPrice() && $this->taxHelper->applyTaxOnCustomPrice()) {
-            $quoteItem->setCustomPrice($baseItemTaxDetails->getPrice());
+            $quoteItem->setCustomPrice($itemTaxDetails->getPrice());
         }
         $quoteItem->setConvertedPrice($itemTaxDetails->getPrice());
         $quoteItem->setPriceInclTax($itemTaxDetails->getPriceInclTax());

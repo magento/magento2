@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Test class for \Magento\Store\Model\Store\Service\StoreConfigManager
  *
@@ -8,47 +8,60 @@
 
 namespace Magento\Store\Test\Unit\Model\Service;
 
+use Magento\Directory\Helper\Data;
+use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\Api\ExtensionAttributesFactory;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\UrlInterface;
+use Magento\Store\Model\Data\StoreConfig;
+use Magento\Store\Model\Data\StoreConfigFactory;
+use Magento\Store\Model\ResourceModel\Store\Collection;
+use Magento\Store\Model\ResourceModel\Store\CollectionFactory;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\Service\StoreConfigManager;
+use Magento\Store\Model\Store;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class StoreConfigManagerTest extends \PHPUnit\Framework\TestCase
+class StoreConfigManagerTest extends TestCase
 {
     /**
-     * @var \Magento\Store\Model\Service\StoreConfigManager
+     * @var StoreConfigManager
      */
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Store\Model\ResourceModel\Store\CollectionFactory
+     * @var MockObject|CollectionFactory
      */
     protected $storeCollectionFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Store\Model\Data\StoreConfigFactory
+     * @var MockObject|StoreConfigFactory
      */
     protected $storeConfigFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Config\ScopeConfigInterface
+     * @var MockObject|ScopeConfigInterface
      */
     protected $scopeConfigMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->storeConfigFactoryMock = $this->getMockBuilder(\Magento\Store\Model\Data\StoreConfigFactory::class)
+        $this->storeConfigFactoryMock = $this->getMockBuilder(StoreConfigFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
         $this->storeCollectionFactoryMock = $this->getMockBuilder(
-            \Magento\Store\Model\ResourceModel\Store\CollectionFactory::class
+            CollectionFactory::class
         )->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->scopeConfigMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
 
-        $this->model = new \Magento\Store\Model\Service\StoreConfigManager(
+        $this->model = new StoreConfigManager(
             $this->storeCollectionFactoryMock,
             $this->scopeConfigMock,
             $this->storeConfigFactoryMock
@@ -57,11 +70,11 @@ class StoreConfigManagerTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param array $storeConfig
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject
      */
     protected function getStoreMock(array $storeConfig)
     {
-        $storeMock = $this->getMockBuilder(\Magento\Store\Model\Store::class)
+        $storeMock = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -76,14 +89,14 @@ class StoreConfigManagerTest extends \PHPUnit\Framework\TestCase
             ->willReturn($storeConfig['website_id']);
 
         $urlMap = [
-            [\Magento\Framework\UrlInterface::URL_TYPE_WEB, false, $storeConfig['base_url']],
-            [\Magento\Framework\UrlInterface::URL_TYPE_WEB, true, $storeConfig['secure_base_url']],
-            [\Magento\Framework\UrlInterface::URL_TYPE_LINK, false, $storeConfig['base_link_url']],
-            [\Magento\Framework\UrlInterface::URL_TYPE_LINK, true, $storeConfig['secure_base_link_url']],
-            [\Magento\Framework\UrlInterface::URL_TYPE_STATIC, false, $storeConfig['base_static_url']],
-            [\Magento\Framework\UrlInterface::URL_TYPE_STATIC, true, $storeConfig['secure_base_static_url']],
-            [\Magento\Framework\UrlInterface::URL_TYPE_MEDIA, false, $storeConfig['base_media_url']],
-            [\Magento\Framework\UrlInterface::URL_TYPE_MEDIA, true, $storeConfig['secure_base_media_url']],
+            [UrlInterface::URL_TYPE_WEB, false, $storeConfig['base_url']],
+            [UrlInterface::URL_TYPE_WEB, true, $storeConfig['secure_base_url']],
+            [UrlInterface::URL_TYPE_LINK, false, $storeConfig['base_link_url']],
+            [UrlInterface::URL_TYPE_LINK, true, $storeConfig['secure_base_link_url']],
+            [UrlInterface::URL_TYPE_STATIC, false, $storeConfig['base_static_url']],
+            [UrlInterface::URL_TYPE_STATIC, true, $storeConfig['secure_base_static_url']],
+            [UrlInterface::URL_TYPE_MEDIA, false, $storeConfig['base_media_url']],
+            [UrlInterface::URL_TYPE_MEDIA, true, $storeConfig['secure_base_media_url']],
         ];
         $storeMock->expects($this->any())
             ->method('getBaseUrl')
@@ -93,20 +106,20 @@ class StoreConfigManagerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \Magento\Store\Model\Data\StoreConfig
+     * @return StoreConfig
      */
     protected function createStoreConfigDataObject()
     {
-        /** @var \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactoryMock */
-        $extensionFactoryMock = $this->getMockBuilder(\Magento\Framework\Api\ExtensionAttributesFactory::class)
+        /** @var ExtensionAttributesFactory $extensionFactoryMock */
+        $extensionFactoryMock = $this->getMockBuilder(ExtensionAttributesFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var \Magento\Framework\Api\AttributeValueFactory $attributeValueFactoryMock */
-        $attributeValueFactoryMock = $this->getMockBuilder(\Magento\Framework\Api\AttributeValueFactory::class)
+        /** @var AttributeValueFactory $attributeValueFactoryMock */
+        $attributeValueFactoryMock = $this->getMockBuilder(AttributeValueFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $storeConfigDataObject = new \Magento\Store\Model\Data\StoreConfig(
+        $storeConfigDataObject = new StoreConfig(
             $extensionFactoryMock,
             $attributeValueFactoryMock,
             []
@@ -123,10 +136,10 @@ class StoreConfigManagerTest extends \PHPUnit\Framework\TestCase
         $secureBaseUrl = 'https://magento/base_url';
         $baseLinkUrl = 'http://magento/base_url/links';
         $secureBaseLinkUrl = 'https://magento/base_url/links';
-        $baseStaticUrl = 'http://magento/base_url/pub/static';
+        $baseStaticUrl = 'http://magento/base_url/static';
         $secureBaseStaticUrl = 'https://magento/base_url/static';
-        $baseMediaUrl = 'http://magento/base_url/pub/media';
-        $secureBaseMediaUrl = 'https://magento/base_url/pub/media';
+        $baseMediaUrl = 'http://magento/base_url/media';
+        $secureBaseMediaUrl = 'https://magento/base_url/media';
         $locale = 'en_US';
         $timeZone = 'America/Los_Angeles';
         $baseCurrencyCode = 'USD';
@@ -149,7 +162,7 @@ class StoreConfigManagerTest extends \PHPUnit\Framework\TestCase
         ];
         $storeMocks[] = $this->getStoreMock($storeConfigs);
 
-        $storeCollectionMock = $this->getMockBuilder(\Magento\Store\Model\ResourceModel\Store\Collection::class)
+        $storeCollectionMock = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
         $storeCollectionMock->expects($this->once())
@@ -172,7 +185,7 @@ class StoreConfigManagerTest extends \PHPUnit\Framework\TestCase
             ['currency/options/base', ScopeInterface::SCOPE_STORES, $code, $baseCurrencyCode],
             ['currency/options/default', ScopeInterface::SCOPE_STORES, $code, $defaultDisplayCurrencyCode],
             ['general/locale/timezone', ScopeInterface::SCOPE_STORES, $code, $timeZone],
-            [\Magento\Directory\Helper\Data::XML_PATH_WEIGHT_UNIT, ScopeInterface::SCOPE_STORES, $code, $weightUnit]
+            [Data::XML_PATH_WEIGHT_UNIT, ScopeInterface::SCOPE_STORES, $code, $weightUnit]
         ];
         $this->scopeConfigMock->expects($this->any())
             ->method('getValue')
@@ -180,7 +193,7 @@ class StoreConfigManagerTest extends \PHPUnit\Framework\TestCase
 
         $result = $this->model->getStoreConfigs([$code]);
 
-        $this->assertEquals(1, count($result));
+        $this->assertCount(1, $result);
         $this->assertEquals($id, $result[0]->getId());
         $this->assertEquals($code, $result[0]->getCode());
         $this->assertEquals($weightUnit, $result[0]->getWeightUnit());

@@ -17,6 +17,7 @@ use Magento\ConfigurableProduct\Model\Product\Type\Collection\SalableProcessor;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\File\UploaderFactory;
 
 /**
  * Configurable product type implementation
@@ -101,6 +102,14 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @var bool
      */
     protected $_canConfigure = true;
+
+    /**
+     * Local cache
+     *
+     * @var array
+     * @since 100.4.0
+     */
+    protected $isSaleableBySku = [];
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
@@ -227,11 +236,12 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor
      * @param \Magento\Framework\Cache\FrontendInterface|null $cache
      * @param \Magento\Customer\Model\Session|null $customerSession
-     * @param \Magento\Framework\Serialize\Serializer\Json $serializer
-     * @param ProductInterfaceFactory $productFactory
-     * @param SalableProcessor $salableProcessor
+     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
+     * @param ProductInterfaceFactory|null $productFactory
+     * @param SalableProcessor|null $salableProcessor
      * @param ProductAttributeRepositoryInterface|null $productAttributeRepository
      * @param SearchCriteriaBuilder|null $searchCriteriaBuilder
+     * @param UploaderFactory|null $uploaderFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -258,7 +268,8 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
         ProductInterfaceFactory $productFactory = null,
         SalableProcessor $salableProcessor = null,
         ProductAttributeRepositoryInterface $productAttributeRepository = null,
-        SearchCriteriaBuilder $searchCriteriaBuilder = null
+        SearchCriteriaBuilder $searchCriteriaBuilder = null,
+        UploaderFactory $uploaderFactory = null
     ) {
         $this->typeConfigurableFactory = $typeConfigurableFactory;
         $this->_eavAttributeFactory = $eavAttributeFactory;
@@ -287,7 +298,8 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
             $coreRegistry,
             $logger,
             $productRepository,
-            $serializer
+            $serializer,
+            $uploaderFactory
         );
     }
 
@@ -584,8 +596,9 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      *
      * @param  \Magento\Catalog\Model\Product $product
      * @return \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\Collection
+     * @since 100.4.0
      */
-    public function getUsedProductCollection($product)
+    protected function getLinkedProductCollection($product)
     {
         $collection = $this->_productCollectionFactory->create()->setFlag(
             'product_children',
@@ -598,6 +611,17 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
         }
 
         return $collection;
+    }
+
+    /**
+     * Retrieve related products collection. Extension point for listing
+     *
+     * @param  \Magento\Catalog\Model\Product $product
+     * @return \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\Collection
+     */
+    public function getUsedProductCollection($product)
+    {
+        return $this->getLinkedProductCollection($product);
     }
 
     /**
@@ -744,14 +768,26 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      */
     public function isSalable($product)
     {
+        $storeId = $this->getStoreFilter($product);
+        if ($storeId instanceof \Magento\Store\Model\Store) {
+            $storeId = $storeId->getId();
+        }
+
+        $sku = $product->getSku();
+        if (isset($this->isSaleableBySku[$storeId][$sku])) {
+            return $this->isSaleableBySku[$storeId][$sku];
+        }
+
         $salable = parent::isSalable($product);
 
         if ($salable !== false) {
-            $collection = $this->getUsedProductCollection($product);
-            $collection->addStoreFilter($this->getStoreFilter($product));
+            $collection = $this->getLinkedProductCollection($product);
+            $collection->addStoreFilter($storeId);
             $collection = $this->salableProcessor->process($collection);
             $salable = 0 !== $collection->getSize();
         }
+
+        $this->isSaleableBySku[$storeId][$sku] = $salable;
 
         return $salable;
     }
@@ -1236,18 +1272,12 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
 
     /**
      * @inheritdoc
-     * @since 100.2.0
+     * @since 100.1.11
      */
     public function isPossibleBuyFromList($product)
     {
-        $isAllCustomOptionsDisplayed = true;
-        foreach ($this->getConfigurableAttributes($product) as $attribute) {
-            $eavAttribute = $attribute->getProductAttribute();
-
-            $isAllCustomOptionsDisplayed = ($isAllCustomOptionsDisplayed && $eavAttribute->getUsedInProductListing());
-        }
-
-        return $isAllCustomOptionsDisplayed;
+        //such cases already handled by add to cart action
+        return true;
     }
 
     /**

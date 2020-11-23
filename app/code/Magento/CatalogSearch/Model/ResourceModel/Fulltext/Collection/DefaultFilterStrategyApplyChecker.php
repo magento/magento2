@@ -8,7 +8,7 @@ namespace Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection;
 
 /**
  * This class add in backward compatibility purposes to check if need to apply old strategy for filter prepare process.
- * @deprecated
+ * @deprecated 101.0.2
  */
 class DefaultFilterStrategyApplyChecker implements DefaultFilterStrategyApplyCheckerInterface
 {

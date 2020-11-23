@@ -10,7 +10,7 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AddStoreViewToCmsPageActionGroup" extends="NavigateToCreatedCMSPageActionGroup">
         <annotations>
-            <description>EXTENDS: navigateToCreatedCMSPage. Adds the provided Store View to a Page.</description>
+            <description>EXTENDS: NavigateToCreatedCMSPageActionGroup. Adds the provided Store View to a Page.</description>
         </annotations>
         <arguments>
             <argument name="storeViewName" type="string"/>

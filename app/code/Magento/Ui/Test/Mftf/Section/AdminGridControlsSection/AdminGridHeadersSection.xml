@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminGridHeaders">
+        <element name="title" type="text" selector=".page-title-wrapper h1"/>
+        <element name="headerByName" type="text" selector="//div[@data-role='grid-wrapper']//span[@class='data-grid-cell-content' and contains(text(), '{{var1}}')]/parent::*" parameterized="true"/>
+        <element name="columnsNames" type="text" selector="[data-role='grid-wrapper'] .data-grid-th &gt; span"/>
+        <element name="totalRecords" type="text" selector="div.admin__data-grid-header-row.row.row-gutter div.row div.admin__control-support-text"/>
+    </section>
+</sections>

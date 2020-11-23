@@ -250,7 +250,7 @@ define([
 
                 // IE6 doesn't like us to assign selection to OPTION nodes before they're added to the document.
                 // That's why we first added them without selection. Now it's time to set the selection.
-                if (previousSelectedValues.length) {
+                if (previousSelectedValues.length && newOptions.value) {
                     isSelected = ko.utils.arrayIndexOf(
                         previousSelectedValues,
                         ko.selectExtensions.readValue(newOptions.value)

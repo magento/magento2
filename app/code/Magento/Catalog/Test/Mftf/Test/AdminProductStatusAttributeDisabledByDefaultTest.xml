@@ -19,12 +19,11 @@
             <group value="Catalog"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
         </before>
         <after>
-            <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="navigateToProductAttribute"/>
-            <waitForPageLoad stepKey="wait1"/>
+            <actionGroup ref="AdminOpenProductAttributePageActionGroup" stepKey="navigateToProductAttribute"/>
             <click selector="{{AdminProductAttributeGridSection.ResetFilter}}" stepKey="resetFiltersOnGrid1"/>
             <fillField selector="{{AdminProductAttributeGridSection.GridFilterFrontEndLabel}}" userInput="Enable Product" stepKey="setAttributeLabel1"/>
             <click selector="{{AdminProductAttributeGridSection.Search}}" stepKey="searchForAttributeFromTheGrid1"/>
@@ -35,10 +34,9 @@
             <waitForPageLoad stepKey="waitForSaveAttribute1"/>
             <actionGroup ref="ClearCacheActionGroup" stepKey="clearCache1"/>
 
-            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
         </after>
-        <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="navigateToProductAttribute"/>
-        <waitForPageLoad stepKey="wait1"/>
+        <actionGroup ref="AdminOpenProductAttributePageActionGroup" stepKey="navigateToProductAttribute"/>
         <click selector="{{AdminProductAttributeGridSection.ResetFilter}}" stepKey="resetFiltersOnGrid"/>
         <fillField selector="{{AdminProductAttributeGridSection.GridFilterFrontEndLabel}}" userInput="Enable Product" stepKey="setAttributeLabel"/>
         <click selector="{{AdminProductAttributeGridSection.Search}}" stepKey="searchForAttributeFromTheGrid"/>
@@ -48,11 +46,12 @@
         <click selector="{{AttributePropertiesSection.Save}}" stepKey="saveAttribute"/>
         <waitForPageLoad stepKey="waitForAttributeToSave"/>
         <actionGroup ref="ClearCacheActionGroup" stepKey="clearCache"/>
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
-        <waitForPageLoad time="30" stepKey="waitForProductGridPageToLoad"/>
-        <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickOnAddProductDropdown"/>
-        <click selector="{{AdminProductGridActionSection.addSimpleProduct}}" stepKey="clickOnAddSimpleProduct"/>
-        <waitForPageLoad stepKey="waitForProductEditToLoad"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
+        <comment userInput="Adding the comment to replace clickAddProductToggle action for preserving Backward Compatibility" stepKey="clickOnAddProductDropdown"/>
+        <actionGroup ref="AdminClickAddProductToggleAndSelectProductTypeActionGroup" stepKey="clickOnAddSimpleProduct">
+            <argument name="productType" value="simple"/>
+        </actionGroup>
+        <comment userInput="Adding the comment to replace clickAddProductToggle action for preserving Backward Compatibility" stepKey="waitForProductEditToLoad"/>
         <dontSeeCheckboxIsChecked selector="{{AdminProductFormSection.productStatus}}" stepKey="dontSeeCheckboxEnableProductIsChecked"/>
 
     </test>

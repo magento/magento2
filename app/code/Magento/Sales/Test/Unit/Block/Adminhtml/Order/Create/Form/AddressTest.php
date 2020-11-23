@@ -8,23 +8,23 @@ declare(strict_types=1);
 namespace Magento\Sales\Test\Unit\Block\Adminhtml\Order\Create\Form;
 
 use Magento\Backend\Model\Session\Quote as QuoteSession;
-use Magento\Store\Model\Store;
-use Magento\Directory\Helper\Data as DirectoryHelper;
-use Magento\Eav\Model\AttributeDataFactory;
-use Magento\Sales\Block\Adminhtml\Order\Create\Form\Address;
 use Magento\Customer\Api\AddressRepositoryInterface;
-use Magento\Customer\Api\Data\AddressSearchResultsInterface;
 use Magento\Customer\Api\Data\AddressInterface;
+use Magento\Customer\Api\Data\AddressSearchResultsInterface;
+use Magento\Customer\Model\Address\Mapper;
 use Magento\Customer\Model\Metadata\Form;
 use Magento\Customer\Model\Metadata\FormFactory;
-use Magento\Customer\Model\Address\Mapper;
-use Magento\Framework\Api\FilterBuilder;
+use Magento\Directory\Helper\Data as DirectoryHelper;
+use Magento\Eav\Model\AttributeDataFactory;
 use Magento\Framework\Api\Filter;
-use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteria;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Sales\Block\Adminhtml\Order\Create\Form\Address;
+use Magento\Store\Model\Store;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -104,7 +104,7 @@ class AddressTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
 

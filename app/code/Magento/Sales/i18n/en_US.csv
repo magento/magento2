@@ -117,6 +117,7 @@ Capture,Capture
 "Total Paid","Total Paid"
 "Total Refunded","Total Refunded"
 "Total Due","Total Due"
+"Total Canceled","Total Canceled"
 Edit,Edit
 "Are you sure you want to send an order email to customer?","Are you sure you want to send an order email to customer?"
 "This will create an offline refund. To create an online refund, open an invoice and create credit memo for it. Do you want to continue?","This will create an offline refund. To create an online refund, open an invoice and create credit memo for it. Do you want to continue?"
@@ -797,5 +798,9 @@ Created,Created
 Refunds,Refunds
 "Allow Zero GrandTotal for Creditmemo","Allow Zero GrandTotal for Creditmemo"
 "Allow Zero GrandTotal","Allow Zero GrandTotal"
+Email is required field for Admin order creation,Email is required field for Admin order creation
+If set YES Email field will be required during Admin order creation for new Customer.,If set YES Email field will be required during Admin order creation for new Customer.
 "Could not save the shipment tracking","Could not save the shipment tracking"
 "Please enter a coupon code!","Please enter a coupon code!"
+"Reorder is not available.","Reorder is not available."
+"The coupon code has been removed.","The coupon code has been removed."

@@ -35,7 +35,7 @@ class Data
     const EMPTY_IMAGE_VALUE = 'no_selection';
 
     /**
-     * Default store ID
+     * The int value of the Default store ID
      */
     const DEFAULT_STORE_ID = 0;
 
@@ -310,7 +310,7 @@ class Data
      * Method getting full media gallery for current Product
      *
      * Array structure: [
-     *  ['image'] => 'http://url/pub/media/catalog/product/2/0/blabla.jpg',
+     *  ['image'] => 'http://url/media/catalog/product/2/0/blabla.jpg',
      *  ['mediaGallery'] => [
      *      galleryImageId1 => simpleProductImage1.jpg,
      *      galleryImageId2 => simpleProductImage2.jpg,
@@ -471,13 +471,13 @@ class Data
             $swatches = [];
             $fallbackValues = [];
             $currentStoreId = $this->storeManager->getStore()->getId();
-            foreach ($swatchCollection as $item) {
+            foreach ($swatchCollection->getData() as $item) {
                 if ($item['type'] != Swatch::SWATCH_TYPE_TEXTUAL) {
-                    $swatches[$item['option_id']] = $item->getData();
+                    $swatches[$item['option_id']] = $item;
                 } elseif ($item['store_id'] == $currentStoreId && $item['value'] != '') {
-                    $fallbackValues[$item['option_id']][$currentStoreId] = $item->getData();
+                    $fallbackValues[$item['option_id']][$currentStoreId] = $item;
                 } elseif ($item['store_id'] == self::DEFAULT_STORE_ID) {
-                    $fallbackValues[$item['option_id']][self::DEFAULT_STORE_ID] = $item->getData();
+                    $fallbackValues[$item['option_id']][self::DEFAULT_STORE_ID] = $item;
                 }
             }
 

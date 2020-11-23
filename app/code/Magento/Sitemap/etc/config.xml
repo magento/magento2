@@ -25,6 +25,10 @@
                 <changefreq>daily</changefreq>
                 <image_include>all</image_include>
             </product>
+            <store>
+                <priority>1</priority>
+                <changefreq>daily</changefreq>
+            </store>
             <generate>
                 <enabled>0</enabled>
                 <error_email />
@@ -53,5 +57,12 @@
                 </jobs>
             </default>
         </crontab>
+        <system>
+            <media_storage_configuration>
+                <allowed_resources>
+                    <sitemap_folder>sitemap</sitemap_folder>
+                </allowed_resources>
+            </media_storage_configuration>
+        </system>
     </default>
 </config>

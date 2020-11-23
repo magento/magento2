@@ -339,7 +339,6 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     public function getProcessedTemplate(array $variables = [])
     {
         $processor = $this->getTemplateFilter()
-            ->setUseSessionInUrl(false)
             ->setPlainTemplateMode($this->isPlain())
             ->setIsChildTemplate($this->isChildTemplate())
             ->setTemplateProcessor([$this, 'getTemplateContent']);
@@ -362,8 +361,15 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
         $variables = $this->addEmailVariables($variables, $storeId);
         $processor->setVariables($variables);
 
+        // Type        legacy  id      strict
+        // db legacy   true    numeric false
+        // db new      false   numeric true
+        // filesystem  false   string  false
+        // preview     false   null    true
+        $isLegacy = $this->getData('is_legacy');
+        $templateId = $this->getTemplateId();
         $previousStrictMode = $processor->setStrictMode(
-            !$this->getData('is_legacy') && is_numeric($this->getTemplateId())
+            !$isLegacy && (is_numeric($templateId) || empty($templateId))
         );
 
         try {
@@ -547,7 +553,9 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     protected function cancelDesignConfig()
     {
         $this->appEmulation->stopEnvironmentEmulation();
+        $this->urlModel->setScope(null);
         $this->hasDesignBeenApplied = false;
+
         return $this;
     }
 

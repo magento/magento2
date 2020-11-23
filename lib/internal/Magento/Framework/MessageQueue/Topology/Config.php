@@ -24,9 +24,9 @@ class Config implements ConfigInterface
     private $exchangeIterator;
 
     /**
-     * Exchange config data iterator.
+     * Queue config data iterator.
      *
-     * @var ExchangeIterator
+     * @var QueueIterator
      */
     private $queueIterator;
 
@@ -43,7 +43,7 @@ class Config implements ConfigInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getExchange($name, $connection)
     {
@@ -63,7 +63,7 @@ class Config implements ConfigInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getExchanges()
     {
@@ -71,7 +71,7 @@ class Config implements ConfigInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getQueues()
     {

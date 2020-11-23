@@ -35,6 +35,7 @@
     <preference for="Magento\Catalog\Api\Data\ProductAttributeTypeInterface" type="Magento\Catalog\Model\Product\Attribute\Type" />
     <preference for="Magento\Catalog\Api\ProductAttributeGroupRepositoryInterface" type="Magento\Catalog\Model\ProductAttributeGroupRepository" />
     <preference for="Magento\Catalog\Api\ProductAttributeOptionManagementInterface" type="Magento\Catalog\Model\Product\Attribute\OptionManagement" />
+    <preference for="Magento\Catalog\Api\ProductAttributeOptionUpdateInterface" type="Magento\Catalog\Model\Product\Attribute\OptionManagement" />
     <preference for="Magento\Catalog\Api\ProductLinkRepositoryInterface" type="Magento\Catalog\Model\ProductLink\Repository" />
     <preference for="Magento\Catalog\Api\Data\ProductAttributeSearchResultsInterface" type="Magento\Catalog\Model\ProductAttributeSearchResults" />
     <preference for="Magento\Catalog\Api\Data\CategoryAttributeSearchResultsInterface" type="Magento\Catalog\Model\CategoryAttributeSearchResults" />
@@ -74,10 +75,14 @@
     <preference for="Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface" type="Magento\Catalog\Model\Product\Configuration\Item\ItemResolverComposite" />
     <preference for="Magento\Catalog\Api\Data\MassActionInterface" type="\Magento\Catalog\Model\MassAction" />
     <preference for="Magento\Catalog\Model\ProductLink\Data\ListCriteriaInterface" type="Magento\Catalog\Model\ProductLink\Data\ListCriteria" />
+    <preference for="Magento\Catalog\Api\CategoryListDeleteBySkuInterface" type="Magento\Catalog\Model\CategoryLinkRepository"/>
     <type name="Magento\Customer\Model\ResourceModel\Visitor">
         <plugin name="catalogLog" type="Magento\Catalog\Model\Plugin\Log" />
     </type>
     <type name="Magento\Catalog\Model\Category\DataProvider">
+        <arguments>
+            <argument name="uiConfigFactory" xsi:type="object">uiComponentConfigFactory</argument>
+        </arguments>
         <plugin name="set_page_layout_default_value" type="Magento\Catalog\Model\Plugin\SetPageLayoutDefaultValue" />
     </type>
     <type name="Magento\Theme\Block\Html\Topmenu">
@@ -671,14 +676,6 @@
                         <item name="store" xsi:type="string">Magento\Store\Model\StoreScopeProvider</item>
                     </item>
                 </item>
-                <item name="Magento\Catalog\Api\Data\CategoryTreeInterface" xsi:type="array">
-                    <item name="entityTableName" xsi:type="string">catalog_category_entity</item>
-                    <item name="eavEntityType" xsi:type="string">catalog_category</item>
-                    <item name="identifierField" xsi:type="string">entity_id</item>
-                    <item name="entityContext" xsi:type="array">
-                        <item name="store" xsi:type="string">Magento\Store\Model\StoreScopeProvider</item>
-                    </item>
-                </item>
                 <item name="Magento\Catalog\Api\Data\CategoryLinkInterface" xsi:type="array">
                     <item name="entityTableName" xsi:type="string">catalog_category_product</item>
                     <item name="identifierField" xsi:type="string">entity_id</item>
@@ -846,11 +843,6 @@
                         <item name="store" xsi:type="string">Magento\Store\Model\DefaultStoreScopeProvider</item>
                     </item>
                 </item>
-                <item name="Magento\Catalog\Api\Data\CategoryTreeInterface" xsi:type="array">
-                    <item name="entityContext" xsi:type="array">
-                        <item name="store" xsi:type="string">Magento\Store\Model\DefaultStoreScopeProvider</item>
-                    </item>
-                </item>
             </argument>
         </arguments>
     </virtualType>
@@ -877,10 +869,6 @@
         <arguments>
             <argument name="extensionActions" xsi:type="array">
                 <item name="eav" xsi:type="array">
-                    <item name="Magento\Catalog\Api\Data\CategoryTreeInterface" xsi:type="array">
-                        <item name="create" xsi:type="string">Magento\Catalog\Model\ResourceModel\CreateHandler</item>
-                        <item name="update" xsi:type="string">Magento\Catalog\Model\ResourceModel\UpdateHandler</item>
-                    </item>
                     <item name="Magento\Catalog\Api\Data\CategoryInterface" xsi:type="array">
                         <item name="create" xsi:type="string">Magento\Catalog\Model\ResourceModel\CreateHandler</item>
                         <item name="update" xsi:type="string">Magento\Catalog\Model\ResourceModel\UpdateHandler</item>
@@ -890,6 +878,11 @@
                         <item name="update" xsi:type="string">Magento\Catalog\Model\ResourceModel\UpdateHandler</item>
                     </item>
                 </item>
+                <item name="websites" xsi:type="array">
+                    <item name="Magento\Catalog\Api\Data\ProductInterface" xsi:type="array">
+                        <item name="create" xsi:type="string">Magento\Catalog\Model\ResourceModel\ProductWebsiteAssignmentHandler</item>
+                    </item>
+                </item>
             </argument>
         </arguments>
     </type>
@@ -897,7 +890,6 @@
         <arguments>
             <argument name="hydrators" xsi:type="array">
                 <item name="Magento\Catalog\Api\Data\CategoryInterface" xsi:type="string">Magento\Framework\EntityManager\AbstractModelHydrator</item>
-                <item name="Magento\Catalog\Api\Data\CategoryTreeInterface" xsi:type="string">Magento\Framework\EntityManager\AbstractModelHydrator</item>
                 <item name="Magento\Catalog\Api\Data\ProductInterface" xsi:type="string">Magento\Catalog\Model\Product\Hydrator</item>
             </argument>
         </arguments>

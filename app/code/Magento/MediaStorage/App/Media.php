@@ -11,6 +11,7 @@ namespace Magento\MediaStorage\App;
 use Closure;
 use Exception;
 use LogicException;
+use Magento\Catalog\Model\Config\CatalogMediaConfig;
 use Magento\Catalog\Model\View\Asset\PlaceholderFactory;
 use Magento\Framework\App;
 use Magento\Framework\App\Area;
@@ -18,8 +19,10 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\App\State;
 use Magento\Framework\AppInterface;
+use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
+use Magento\Framework\Filesystem\Driver\File;
 use Magento\MediaStorage\Model\File\Storage\Config;
 use Magento\MediaStorage\Model\File\Storage\ConfigFactory;
 use Magento\MediaStorage\Model\File\Storage\Response;
@@ -28,7 +31,7 @@ use Magento\MediaStorage\Model\File\Storage\SynchronizationFactory;
 use Magento\MediaStorage\Service\ImageResize;
 
 /**
- * Media Storage
+ * The class resize original images
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -70,7 +73,12 @@ class Media implements AppInterface
     /**
      * @var WriteInterface
      */
-    private $directory;
+    private $directoryPub;
+
+    /**
+     * @var \Magento\Framework\Filesystem\Directory\WriteInterface
+     */
+    private $directoryMedia;
 
     /**
      * @var ConfigFactory
@@ -98,6 +106,11 @@ class Media implements AppInterface
     private $imageResize;
 
     /**
+     * @var string
+     */
+    private $mediaUrlFormat;
+
+    /**
      * @param ConfigFactory $configFactory
      * @param SynchronizationFactory $syncFactory
      * @param Response $response
@@ -109,6 +122,9 @@ class Media implements AppInterface
      * @param PlaceholderFactory $placeholderFactory
      * @param State $state
      * @param ImageResize $imageResize
+     * @param File $file
+     * @param CatalogMediaConfig $catalogMediaConfig
+     * @throws \Magento\Framework\Exception\FileSystemException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -122,15 +138,24 @@ class Media implements AppInterface
         Filesystem $filesystem,
         PlaceholderFactory $placeholderFactory,
         State $state,
-        ImageResize $imageResize
+        ImageResize $imageResize,
+        File $file,
+        CatalogMediaConfig $catalogMediaConfig = null
     ) {
         $this->response = $response;
         $this->isAllowed = $isAllowed;
-        $this->directory = $filesystem->getDirectoryWrite(DirectoryList::PUB);
+        $this->directoryPub = $filesystem->getDirectoryWrite(
+            DirectoryList::PUB,
+            Filesystem\DriverPool::FILE
+        );
+        $this->directoryMedia = $filesystem->getDirectoryWrite(
+            DirectoryList::MEDIA,
+            Filesystem\DriverPool::FILE
+        );
         $mediaDirectory = trim($mediaDirectory);
         if (!empty($mediaDirectory)) {
             // phpcs:ignore Magento2.Functions.DiscouragedFunction
-            $this->mediaDirectoryPath = str_replace('\\', '/', realpath($mediaDirectory));
+            $this->mediaDirectoryPath = str_replace('\\', '/', $file->getRealPath($mediaDirectory));
         }
         $this->configCacheFile = $configCacheFile;
         $this->relativeFileName = $relativeFileName;
@@ -139,6 +164,9 @@ class Media implements AppInterface
         $this->placeholderFactory = $placeholderFactory;
         $this->appState = $state;
         $this->imageResize = $imageResize;
+
+        $catalogMediaConfig = $catalogMediaConfig ?: App\ObjectManager::getInstance()->get(CatalogMediaConfig::class);
+        $this->mediaUrlFormat = $catalogMediaConfig->getMediaUrlFormat();
     }
 
     /**
@@ -151,7 +179,7 @@ class Media implements AppInterface
     {
         $this->appState->setAreaCode(Area::AREA_GLOBAL);
 
-        if ($this->mediaDirectoryPath !== $this->directory->getAbsolutePath()) {
+        if ($this->checkMediaDirectoryChanged()) {
             // Path to media directory changed or absent - update the config
             /** @var Config $config */
             $config = $this->configFactory->create(['cacheFile' => $this->configCacheFile]);
@@ -165,12 +193,10 @@ class Media implements AppInterface
         }
 
         try {
-            /** @var Synchronization $sync */
-            $sync = $this->syncFactory->create(['directory' => $this->directory]);
-            $sync->synchronize($this->relativeFileName);
-            $this->imageResize->resizeFromImageName($this->getOriginalImage($this->relativeFileName));
-            if ($this->directory->isReadable($this->relativeFileName)) {
-                $this->response->setFilePath($this->directory->getAbsolutePath($this->relativeFileName));
+            $this->createLocalCopy();
+
+            if ($this->directoryPub->isReadable($this->relativeFileName)) {
+                $this->response->setFilePath($this->directoryPub->getAbsolutePath($this->relativeFileName));
             } else {
                 $this->setPlaceholderImage();
             }
@@ -182,7 +208,36 @@ class Media implements AppInterface
     }
 
     /**
-     * Set Placeholder as a response
+     * Create local copy of file and perform resizing if necessary.
+     *
+     * @throws NotFoundException
+     */
+    private function createLocalCopy(): void
+    {
+        $this->syncFactory->create(['directory' => $this->directoryPub])
+            ->synchronize($this->relativeFileName);
+
+        if ($this->directoryPub->isReadable($this->relativeFileName)) {
+            return;
+        }
+
+        if ($this->mediaUrlFormat === CatalogMediaConfig::HASH) {
+            $this->imageResize->resizeFromImageName($this->getOriginalImage($this->relativeFileName));
+        }
+    }
+
+    /**
+     * Check if media directory changed
+     *
+     * @return bool
+     */
+    private function checkMediaDirectoryChanged(): bool
+    {
+        return rtrim($this->mediaDirectoryPath, '/') !== rtrim($this->directoryMedia->getAbsolutePath(), '/');
+    }
+
+    /**
+     * Set placeholder image into response
      *
      * @return void
      */
@@ -200,7 +255,7 @@ class Media implements AppInterface
      */
     private function getOriginalImage(string $resizedImagePath): string
     {
-        return preg_replace('|^.*((?:/[^/]+){3})$|', '$1', $resizedImagePath);
+        return preg_replace('|^.*?((?:/([^/])/([^/])/\2\3)?/?[^/]+$)|', '$1', $resizedImagePath);
     }
 
     /**
