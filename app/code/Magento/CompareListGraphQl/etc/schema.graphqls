@@ -60,5 +60,5 @@ type DeleteCompareListOutput {
 
 type AssignCompareListToCustomerOutput {
     result: Boolean!
-    compare_list: CompareList
+    compare_list: CompareList @doc(description: "The contents of the customer's compare list")
 }
