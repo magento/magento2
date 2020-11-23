@@ -209,8 +209,8 @@ class Uploader
         Mime $fileMime = null,
         DirectoryList $directoryList = null,
         DriverPool $driverPool = null,
-        Filesystem $filesystem = null,
-        TargetDirectory $targetDirectory = null
+        TargetDirectory $targetDirectory = null,
+        Filesystem $filesystem = null
     ) {
         $this->directoryList = $directoryList ?: ObjectManager::getInstance()->get(DirectoryList::class);
 
