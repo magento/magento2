@@ -8,7 +8,7 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AddSimpleProductToOrderAndCheckCheckboxActionGroup" extends="AddSimpleProductToOrderActionGroup">
+    <actionGroup name="AdminAddSimpleProductToOrderAndCheckCheckboxActionGroup" extends="AddSimpleProductToOrderActionGroup">
         <annotations>
             <description>Adds the provided Simple Product to an Order. Checks if checkbox is checked. Fills in the provided Product Qty. Clicks on 'Add Selected Product(s) to Order'.</description>
         </annotations>
