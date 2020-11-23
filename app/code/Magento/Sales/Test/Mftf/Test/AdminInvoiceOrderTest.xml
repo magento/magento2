@@ -35,6 +35,9 @@
             <updateData createDataKey="createGuestCart" entity="GuestOrderPaymentMethod" stepKey="sendGuestPaymentInformation">
                 <requiredEntity createDataKey="createGuestCart"/>
             </updateData>   
+
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            
         </before>
 
         <after>
@@ -42,8 +45,6 @@
             <deleteData createDataKey="createSimpleProductApi" stepKey="deleteSimpleProductApi"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
-
-        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin1"/>
       
         <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="openOrder">
             <argument name="entityId" value="$createGuestCart.return$"/>
