@@ -12,7 +12,6 @@ use Magento\GraphQl\Model\Query\ContextParametersInterface;
 use Magento\GraphQl\Model\Query\ContextParametersProcessorInterface;
 use Magento\Customer\Model\Group;
 use Magento\Customer\Model\Group\Resolver as CustomerGroupResolver;
-use Magento\Framework\Exception\LocalizedException;
 
 /**
  * @inheritdoc
