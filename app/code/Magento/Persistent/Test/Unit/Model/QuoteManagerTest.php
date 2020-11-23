@@ -23,6 +23,7 @@ use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\ShippingAssignment\ShippingAssignmentProcessor;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\RuntimeException;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -94,7 +95,7 @@ class QuoteManagerTest extends TestCase
                 'setCustomerData',
                 'clearQuote',
                 'clearStorage',
-                'getQuote'
+                'getQuote',
             ])
                 ->onlyMethods(['removePersistentCookie'])
                 ->disableOriginalConstructor()
@@ -115,7 +116,7 @@ class QuoteManagerTest extends TestCase
                 'setCustomerLastname',
                 'setCustomerGroupId',
                 'setIsPersistent',
-                'getCustomerId'
+                'getCustomerId',
             ])
             ->onlyMethods([
                 'getId',
@@ -132,7 +133,7 @@ class QuoteManagerTest extends TestCase
                 'getExtensionAttributes',
                 'setExtensionAttributes',
                 '__wakeup',
-                'setCustomer'
+                'setCustomer',
             ])
             ->disableOriginalConstructor()
             ->getMock();
@@ -240,8 +241,7 @@ class QuoteManagerTest extends TestCase
             ->method('removePersistentCookie')->willReturn($this->sessionMock);
         $this->quoteMock->expects($this->once())->method('isVirtual')->willReturn(false);
         $this->quoteMock->expects($this->once())->method('getItemsQty')->willReturn(1);
-        $extensionAttributes = $this->getMockBuilder(CartExtensionInterface::class)
-            ->getMockForAbstractClass();
+        $extensionAttributes = $this->getExtensionAttributesMock();
         $shippingAssignment = $this->createMock(ShippingAssignmentInterface::class);
         $extensionAttributes->expects($this->once())
             ->method('setShippingAssignments')
@@ -380,5 +380,22 @@ class QuoteManagerTest extends TestCase
         $this->quoteRepositoryMock->expects($this->once())->method('get')->with(1)->willReturn($quoteWithNoId);
         $this->quoteMock->expects($this->once())->method('getId')->willReturn(1);
         $this->model->convertCustomerCartToGuest();
+    }
+
+    /**
+     * Build CartExtensionInterface mock.
+     *
+     * @return MockObject
+     */
+    private function getExtensionAttributesMock(): MockObject
+    {
+        $extensionMockBuilder = $this->getMockBuilder(CartExtensionInterface::class);
+        try {
+            $extensionMockBuilder->addMethods(['setShippingAssignments']);
+        } catch (RuntimeException $e) {
+            // do nothing as CartExtensionInterface already generated and has 'setShippingAssignments' method.
+        }
+
+        return $extensionMockBuilder->getMockForAbstractClass();
     }
 }
