@@ -91,13 +91,13 @@ class IsAllowedGuestCheckoutObserverTest extends TestCase
             ->getMock();
 
         $this->storeMock = $this->getMockBuilder(DataObject::class)
+            ->addMethods(['getId'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
-        $this->storeManagerMock
-            ->method('getStore')
-            ->with(self::STUB_STORE_ID)
+        $this->storeManagerMock->method('getStore')
+            ->with($this->storeMock)
             ->willReturn($this->storeMock);
 
         $this->isAllowedGuestCheckoutObserver = (new ObjectManagerHelper($this))
