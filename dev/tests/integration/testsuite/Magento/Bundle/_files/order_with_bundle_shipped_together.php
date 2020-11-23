@@ -52,7 +52,7 @@ $product->setTypeId(Type::TYPE_CODE)
     ->setStockData(['use_config_manage_stock' => 1, 'qty' => 100, 'is_qty_decimal' => 0, 'is_in_stock' => 1])
     ->setPriceView(1)
     ->setPriceType(Price::PRICE_TYPE_FIXED)
-    ->setShipmentType(AbstractType::SHIPMENT_SEPARATELY)
+    ->setShipmentType(AbstractType::SHIPMENT_TOGETHER)
     ->setPrice(10.0)
     ->setBundleOptionsData(
         [
@@ -182,7 +182,7 @@ $orderItem->setProductType($product->getTypeId());
 $orderItem->setSku($product->getSku());
 $orderItem->setProductOptions([
     'info_buyRequest' => $requestInfo,
-    'shipment_type' => AbstractType::SHIPMENT_SEPARATELY
+    'bundle_options' => [['value' => [['title' => $sampleProduct->getSku()]]]],
 ]);
 
 $orderItems[] = $orderItem;
@@ -200,10 +200,7 @@ foreach ($optionsData as $optionId => $productId) {
     $orderItem->setRowTotal($selectedProduct->getPrice());
     $orderItem->setProductType($selectedProduct->getTypeId());
     $orderItem->setSku($selectedProduct->getSku());
-    $orderItem->setProductOptions([
-        'info_buyRequest' => $requestInfo,
-        'shipment_type' => AbstractType::SHIPMENT_SEPARATELY
-    ]);
+    $orderItem->setProductOptions(['info_buyRequest' => $requestInfo]);
     $orderItem->setParentItem($orderItems[0]);
     $orderItems[] = $orderItem;
 }
