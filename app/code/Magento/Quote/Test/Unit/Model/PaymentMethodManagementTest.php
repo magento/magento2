@@ -136,7 +136,7 @@ class PaymentMethodManagementTest extends TestCase
 
         $quoteMock = $this->getMockBuilder(Quote::class)
             ->addMethods(['setTotalsCollectedFlag'])
-            ->onlyMethods(['getPayment', 'isVirtual', 'getBillingAddress', 'collectTotals', 'save'])
+            ->onlyMethods(['getPayment', 'isVirtual', 'getBillingAddress', 'collectTotals'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->quoteRepositoryMock->expects($this->once())->method('get')->with($cartId)->willReturn($quoteMock);
@@ -189,7 +189,7 @@ class PaymentMethodManagementTest extends TestCase
             ->willReturn(true);
 
         $quoteMock->expects($this->once())->method('setTotalsCollectedFlag')->with(false)->willReturnSelf();
-        $quoteMock->expects($this->once())->method('save')->willReturnSelf();
+        $this->quoteRepositoryMock->expects($this->once())->method('save')->with($quoteMock);
 
         $paymentMock->expects($this->once())->method('getId')->willReturn($paymentId);
         $this->assertEquals($paymentId, $this->model->set($cartId, $methodMock));
@@ -267,7 +267,7 @@ class PaymentMethodManagementTest extends TestCase
 
         $quoteMock = $this->getMockBuilder(Quote::class)
             ->addMethods(['setTotalsCollectedFlag'])
-            ->onlyMethods(['getPayment', 'isVirtual', 'getShippingAddress', 'collectTotals', 'save'])
+            ->onlyMethods(['getPayment', 'isVirtual', 'getShippingAddress', 'collectTotals'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->quoteRepositoryMock->expects($this->once())->method('get')->with($cartId)->willReturn($quoteMock);
@@ -324,7 +324,7 @@ class PaymentMethodManagementTest extends TestCase
             ->willReturn(true);
 
         $quoteMock->expects($this->once())->method('setTotalsCollectedFlag')->with(false)->willReturnSelf();
-        $quoteMock->expects($this->once())->method('save')->willReturnSelf();
+        $this->quoteRepositoryMock->expects($this->once())->method('save')->with($quoteMock);
 
         $paymentMock->expects($this->once())->method('getId')->willReturn($paymentId);
         $this->assertEquals($paymentId, $this->model->set($cartId, $methodMock));
