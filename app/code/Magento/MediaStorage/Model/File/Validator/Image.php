@@ -25,7 +25,6 @@ class Image extends \Zend_Validate_Abstract
         'jpg'  => 'image/jpeg',
         'gif'  => 'image/gif',
         'bmp'  => 'image/bmp',
-        'ico'  => 'image/vnd.microsoft.icon',
     ];
 
     /**
