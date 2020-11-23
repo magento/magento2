@@ -10,7 +10,7 @@ namespace Magento\Vault\Plugin;
 use Magento\Checkout\Api\PaymentInformationManagementInterface;
 use Magento\Quote\Api\Data\AddressInterface;
 use Magento\Quote\Api\Data\PaymentInterface;
-use Magento\Vault\Model\PaymentMethodList;
+use Magento\Vault\Api\PaymentMethodListInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
@@ -19,7 +19,7 @@ use Magento\Store\Model\StoreManagerInterface;
 class PaymentVaultInformationManagement
 {
     /**
-     * @var PaymentMethodList
+     * @var PaymentMethodListInterface
      */
     private $vaultPaymentMethodList;
 
@@ -31,11 +31,11 @@ class PaymentVaultInformationManagement
     /**
      * PaymentVaultInformationManagement constructor.
      *
-     * @param PaymentMethodList $vaultPaymentMethodList
+     * @param PaymentMethodListInterface $vaultPaymentMethodList
      * @param StoreManagerInterface $storeManager
      */
     public function __construct(
-        PaymentMethodList $vaultPaymentMethodList,
+        PaymentMethodListInterface $vaultPaymentMethodList,
         StoreManagerInterface $storeManager
     ) {
         $this->vaultPaymentMethodList = $vaultPaymentMethodList;
