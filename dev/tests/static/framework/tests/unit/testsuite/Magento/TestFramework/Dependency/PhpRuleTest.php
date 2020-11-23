@@ -3,12 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\TestFramework\Dependency;
 
+use Magento\Framework\Config\Reader\Filesystem;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\TestFramework\Dependency\Reader\ClassScanner;
-use Magento\TestFramework\Exception\NoSuchActionException;
+use Magento\TestFramework\Dependency\Route\RouteMapper;
 
 /**
  * Test for PhpRule dependency check
@@ -31,31 +33,40 @@ class PhpRuleTest extends \PHPUnit\Framework\TestCase
     private $classScanner;
 
     /**
+     * @var \PHPUnit\Framework\MockObject\MockObject | Filesystem
+     */
+    private $webApiConfigReader;
+
+    private $pluginMap;
+    private $mapRoutes;
+    private $mapLayoutBlocks;
+    private $whitelist;
+
+    /**
      * @inheritDoc
      * @throws \Exception
      */
     protected function setUp(): void
     {
-        $mapRoutes = ['someModule' => ['Magento\SomeModule'], 'anotherModule' => ['Magento\OneModule']];
-        $mapLayoutBlocks = ['area' => ['block.name' => ['Magento\SomeModule' => 'Magento\SomeModule']]];
-        $pluginMap = [
+        $this->mapRoutes = ['someModule' => ['Magento\SomeModule'], 'anotherModule' => ['Magento\OneModule']];
+        $this->mapLayoutBlocks = ['area' => ['block.name' => ['Magento\SomeModule' => 'Magento\SomeModule']]];
+        $this->pluginMap = [
             'Magento\Module1\Plugin1' => 'Magento\Module1\Subject',
             'Magento\Module1\Plugin2' => 'Magento\Module2\Subject',
         ];
-        $whitelist = [];
+        $this->whitelist = [];
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->classScanner = $this->createMock(ClassScanner::class);
+        $this->webApiConfigReader = $this->makeWebApiConfigReaderMock();
 
-        $this->model = $this->objectManagerHelper->getObject(
-            PhpRule::class,
-            [
-                'mapRouters' => $mapRoutes,
-                'mapLayoutBlocks' => $mapLayoutBlocks,
-                'pluginMap' => $pluginMap,
-                'whitelists' => $whitelist,
-                'classScanner' => $this->classScanner
-            ]
+        $this->model = new PhpRule(
+            $this->mapRoutes,
+            $this->mapLayoutBlocks,
+            $this->webApiConfigReader,
+            $this->pluginMap,
+            $this->whitelist,
+            $this->classScanner
         );
     }
 
@@ -107,7 +118,7 @@ class PhpRuleTest extends \PHPUnit\Framework\TestCase
                 [
                     [
                         'modules' => ['Magento\SomeModule'],
-                        'type' => \Magento\TestFramework\Dependency\RuleInterface::TYPE_HARD,
+                        'type' => RuleInterface::TYPE_HARD,
                         'source' => 'Magento\SomeModule\Any\ClassName',
                     ]
                 ]
@@ -125,7 +136,7 @@ class PhpRuleTest extends \PHPUnit\Framework\TestCase
                 [
                     [
                         'modules' => ['Magento\SomeModule'],
-                        'type' => \Magento\TestFramework\Dependency\RuleInterface::TYPE_HARD,
+                        'type' => RuleInterface::TYPE_HARD,
                         'source' => 'Magento_SomeModule',
                     ]
                 ]
@@ -143,7 +154,7 @@ class PhpRuleTest extends \PHPUnit\Framework\TestCase
                 [
                     [
                         'modules' => ['Magento\SomeModule'],
-                        'type' => \Magento\TestFramework\Dependency\RuleInterface::TYPE_HARD,
+                        'type' => RuleInterface::TYPE_HARD,
                         'source' => 'Magento\SomeModule\Any\ClassName',
                     ]
                 ]
@@ -161,7 +172,7 @@ class PhpRuleTest extends \PHPUnit\Framework\TestCase
                 [
                     [
                         'modules' => ['Magento\SomeModule'],
-                        'type' => \Magento\TestFramework\Dependency\RuleInterface::TYPE_HARD,
+                        'type' => RuleInterface::TYPE_HARD,
                         'source' => 'getBlock(\'block.name\')',
                     ]
                 ]
@@ -185,7 +196,7 @@ class PhpRuleTest extends \PHPUnit\Framework\TestCase
                 [
                     [
                         'modules' => ['Magento\Module2'],
-                        'type' => \Magento\TestFramework\Dependency\RuleInterface::TYPE_SOFT,
+                        'type' => RuleInterface::TYPE_SOFT,
                         'source' => 'Magento\Module2\Subject',
                     ]
                 ],
@@ -197,7 +208,7 @@ class PhpRuleTest extends \PHPUnit\Framework\TestCase
                 [
                     [
                         'modules' => ['Magento\Module2'],
-                        'type' => \Magento\TestFramework\Dependency\RuleInterface::TYPE_SOFT,
+                        'type' => RuleInterface::TYPE_SOFT,
                         'source' => 'Magento\Module2\NotSubject',
                     ]
                 ]
@@ -209,7 +220,7 @@ class PhpRuleTest extends \PHPUnit\Framework\TestCase
                 [
                     [
                         'modules' => ['Magento\OtherModule'],
-                        'type' => \Magento\TestFramework\Dependency\RuleInterface::TYPE_HARD,
+                        'type' => RuleInterface::TYPE_HARD,
                         'source' => 'Magento\OtherModule\NotSubject',
                     ]
                 ]
@@ -252,11 +263,150 @@ class PhpRuleTest extends \PHPUnit\Framework\TestCase
                 [
                     [
                         'modules' => ['Magento\Cms'],
-                        'type' => \Magento\TestFramework\Dependency\RuleInterface::TYPE_HARD,
+                        'type' => RuleInterface::TYPE_HARD,
                         'source' => 'getUrl("cms/index/index"',
                     ]
                 ]
             ],
+            'getUrl from API of same module with parameter' => [
+                'Magento\Catalog\SomeClass',
+                '$this->getUrl("rest/V1/products/3")',
+                []
+            ],
+            'getUrl from API of same module without parameter' => [
+                'Magento\Catalog\SomeClass',
+                '$this->getUrl("rest/V1/products")',
+                []
+            ],
+            'getUrl from API of different module with parameter' => [
+                'Magento\Backend\SomeClass',
+                '$this->getUrl("rest/V1/products/43/options")',
+                [
+                    [
+                        'modules' => ['Magento\Catalog'],
+                        'type' => RuleInterface::TYPE_HARD,
+                        'source' => 'getUrl("rest/V1/products/43/options"'
+                    ]
+                ],
+            ],
+            'getUrl from routeid wildcard' => [
+                'Magento\Catalog\Controller\ControllerName\SomeClass',
+                '$this->getUrl("*/Invalid/*")',
+                []
+            ],
+            'getUrl from wildcard url within ignored Block class' => [
+                'Magento\Cms\Block\SomeClass',
+                '$this->getUrl("Catalog/*/View")',
+                []
+            ],
+            'getUrl from wildcard url within ignored Model file' => [
+                'Magento\Cms\Model\SomeClass',
+                '$this->getUrl("Catalog/*/View")',
+                []
+            ],
+            'getUrl with in admin controller for controllerName wildcard' => [
+                'Magento\Backend\Controller\Adminhtml\System\Store\DeleteStore',
+                '$this->getUrl("adminhtml/*/deleteStorePost")',
+                []
+            ],
+        ];
+    }
+
+    /**
+     * @param string $template
+     * @param string $content
+     * @param array $expected
+     * @throws \Exception
+     * @dataProvider getDependencyInfoDataCaseGetTemplateUrlDataProvider
+     */
+    public function testGetDependencyInfoCaseTemplateGetUrl(
+        string $template,
+        string $content,
+        array $expected
+    ) {
+        $module = $this->getModuleFromClass($template);
+
+        $this->assertEquals($expected, $this->model->getDependencyInfo($module, 'php', $template, $content));
+    }
+
+    /**
+     * @return array[]
+     */
+    public function getDependencyInfoDataCaseGetTemplateUrlDataProvider()
+    {
+        return [ 'getUrl from ignore template' => [
+            'app/code/Magento/Backend/view/adminhtml/templates/dashboard/totalbar/script.phtml',
+            '$getUrl("adminhtml/*/ajaxBlock")',
+            []]];
+    }
+
+    /**
+     * @param string $class
+     * @param string $content
+     * @param array $expected
+     * @dataProvider processWildcardUrlDataProvider
+     */
+    public function testProcessWildcardUrl(
+        string $class,
+        string $content,
+        array $expected
+    ) {
+        $routeMapper = $this->createMock(RouteMapper::class);
+        $routeMapper->expects($this->once())
+            ->method('getDependencyByRoutePath')
+            ->with(
+                $this->equalTo($expected['route_id']),
+                $this->equalTo($expected['controller_name']),
+                $this->equalTo($expected['action_name'])
+            );
+        $phpRule = new PhpRule(
+            $this->mapRoutes,
+            $this->mapLayoutBlocks,
+            $this->webApiConfigReader,
+            $this->pluginMap,
+            $this->whitelist,
+            $this->classScanner,
+            $routeMapper
+        );
+        $file = $this->makeMockFilepath($class);
+        $module = $this->getModuleFromClass($class);
+
+        $phpRule->getDependencyInfo($module, 'php', $file, $content);
+    }
+
+    /**
+     * @return array[]
+     */
+    public function processWildcardUrlDataProvider()
+    {
+        return [
+            'wildcard controller route' => [
+                'Magento\SomeModule\Controller\ControllerName\SomeClass',
+                '$this->getUrl("cms/*/index")',
+                [
+                    'route_id' => 'cms',
+                    'controller_name' => 'controllername',
+                    'action_name' => 'index'
+                ]
+            ],
+            'adminhtml wildcard controller route' => [
+                'Magento\Backend\Controller\Adminhtml\System\Store\DeleteStore',
+                '$this->getUrl("adminhtml/*/deleteStorePost")',
+                    [
+                        'route_id' => 'adminhtml',
+                        'controller_name' => 'system_store',
+                        'action_name' => 'deletestorepost'
+                    ]
+            ],
+            'index wildcard' => [
+                'Magento\Backend\Controller\System\Store\DeleteStore',
+                '$this->getUrl("routeid/controllername/*")',
+                [
+                    'route_id' => 'routeid',
+                    'controller_name' => 'controllername',
+                    'action_name' => 'deletestore'
+                ]
+            ]
         ];
     }
 
@@ -290,6 +440,11 @@ class PhpRuleTest extends \PHPUnit\Framework\TestCase
                 '$this->getUrl("someModule")',
                 new LocalizedException(__('Invalid URL path: %1', 'somemodule/index/index')),
             ],
+            'getUrl from unknown wildcard path' => [
+                'Magento\Catalog\Controller\Product\View',
+                '$this->getUrl("Catalog/*/INVALID")',
+                new LocalizedException(__('Invalid URL path: %1', 'catalog/product/invalid')),
+            ],
         ];
     }
 
@@ -309,7 +464,7 @@ class PhpRuleTest extends \PHPUnit\Framework\TestCase
                 ],
             ],
         ];
-        $this->model = new PhpRule([], $mapLayoutBlocks);
+        $this->model = new PhpRule([], $mapLayoutBlocks, $this->webApiConfigReader);
         $this->assertEquals($expected, $this->model->getDependencyInfo($module, 'template', 'any', $content));
     }
 
@@ -325,7 +480,7 @@ class PhpRuleTest extends \PHPUnit\Framework\TestCase
                 [
                     [
                         'modules' => ['Magento\SomeModule'],
-                        'type' => \Magento\TestFramework\Dependency\RuleInterface::TYPE_HARD,
+                        'type' => RuleInterface::TYPE_HARD,
                         'source' => 'getBlock(\'block.name\')',
                     ]
                 ],
@@ -355,5 +510,36 @@ class PhpRuleTest extends \PHPUnit\Framework\TestCase
     {
         $moduleNameLength = strpos($class, '\\', strpos($class, '\\') + 1);
         return substr($class, 0, $moduleNameLength);
+    }
+
+    /**
+     *  Returns an example list of services that would be parsed via the configReader
+     *
+     * @return \PHPUnit\Framework\MockObject\MockObject | Filesystem
+     */
+    private function makeWebApiConfigReaderMock()
+    {
+        $services = [ 'routes' => [
+            '/V1/products/:sku' => [
+                'GET' => ['service' => [
+                    'class' => 'Magento\Catalog\Api\ProductRepositoryInterface',
+                    'method' => 'get'
+                ] ],
+                'PUT' => ['service' => [
+                    'class' => 'Magento\Catalog\Api\ProductRepositoryInterface',
+                    'method' => 'save'
+                ] ],
+            ],
+            '/V1/products/:sku/options' => ['GET' => ['service' => [
+                'class' => 'Magento\Catalog\Api\ProductCustomOptionRepositoryInterface',
+                'method' => 'getList'
+            ] ] ],
+            '/V1/products' => ['GET' => ['service' => [
+                'class' => 'Magento\Catalog\Api\ProductCustomOptionRepositoryInterface',
+                'method' => 'getList'
+            ] ] ]
+        ] ];
+
+        return $this->createConfiguredMock(Filesystem::class, [ 'read' => $services ]);
     }
 }
