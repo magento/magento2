@@ -163,6 +163,7 @@ class Vat
     {
         // Default response
         $gatewayResponse = new DataObject([
+            'result_object' => false,
             'is_valid' => false,
             'request_date' => '',
             'request_identifier' => '',
@@ -199,6 +200,7 @@ class Vat
             // Send request to service
             $result = $soapClient->checkVatApprox($requestParams);
 
+            $gatewayResponse->setResultObject($result);
             $gatewayResponse->setIsValid((bool)$result->valid);
             $gatewayResponse->setRequestDate((string)$result->requestDate);
             $gatewayResponse->setRequestIdentifier((string)$result->requestIdentifier);
