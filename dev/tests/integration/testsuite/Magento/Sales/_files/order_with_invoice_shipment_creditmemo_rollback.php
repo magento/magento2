@@ -25,7 +25,7 @@ $shipmentRepository = $objectManager->get(ShipmentRepositoryInterface::class);
 /** @var CreditmemoRepositoryInterface $creditmemoRepository */
 $creditmemoRepository = $objectManager->get(CreditmemoRepositoryInterface::class);
 /** @var OrderInterface $order */
-$order = $objectManager->get(OrderInterfaceFactory::class)->create()->loadByIncrementId('100000001');
+$order = $objectManager->get(OrderInterfaceFactory::class)->create()->loadByIncrementId('100000111');
 /** @var Registry $registry */
 $registry = $objectManager->get(Registry::class);
 $registry->unregister('isSecureArea');
