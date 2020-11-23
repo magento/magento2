@@ -34,7 +34,7 @@
             <argument name="customer" value="$$createSimpleCustomer$$"/>
         </actionGroup>
 
-        <actionGroup ref="AddSimpleProductToOrderAndCheckCheckboxActionGroup" stepKey="clickAddProducts">
+        <actionGroup ref="AdminAddSimpleProductToOrderAndCheckCheckboxActionGroup" stepKey="clickAddProducts">
             <argument name="product" value="$createSimpleProduct$"/>
         </actionGroup>
         
