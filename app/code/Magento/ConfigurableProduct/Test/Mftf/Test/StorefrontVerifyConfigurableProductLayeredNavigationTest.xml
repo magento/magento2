@@ -132,7 +132,9 @@
         <click selector="{{AdminProductGridFilterSection.nthRow('1')}}" stepKey="selectFirstRow"/>
         <waitForPageLoad stepKey="waitForProductPageToLoad"/>
         <scrollTo selector="{{AdminProductFormSection.productQuantity}}" stepKey="scrollToProductQuantity"/>
-        <selectOption selector="{{AdminProductFormSection.productStockStatus}}" userInput="Out of Stock" stepKey="disableProduct"/>
+        <actionGroup ref="AdminSetStockStatusActionGroup" stepKey="disableProduct">
+           <argument name="stockStatus" value="Out of Stock"/>
+        </actionGroup>   
         <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickOnSaveButton"/>
         <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the product." stepKey="messageYouSavedTheProductIsShown"/>
 

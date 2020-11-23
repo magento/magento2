@@ -121,7 +121,11 @@
             <argument name="productId" value="$$createConfigChildProduct2.id$$"/>
         </actionGroup>
         <waitForPageLoad stepKey="waitForSecondChildProductPageLoad"/>
-        <selectOption selector="{{AdminProductFormSection.productStockStatus}}" userInput="Out of Stock" stepKey="outOfStockStatus"/>
+
+        <actionGroup ref="AdminSetStockStatusActionGroup" stepKey="outOfStockStatus">
+            <argument name="stockStatus" value="Out of Stock"/>
+        </actionGroup>
+      
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveSecondProductForm"/>
         <!-- Go to created customer page -->
         <comment userInput="Go to created customer page" stepKey="goToCreatedCustomerPage"/>
