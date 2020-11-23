@@ -1,4 +1,9 @@
 <?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
 namespace Magento\CatalogUrlRewriteGraphQl\Test\Unit\Model\Resolver;
 
 use Magento\CatalogUrlRewriteGraphQl\Model\Resolver\CategoryUrlSuffix;
