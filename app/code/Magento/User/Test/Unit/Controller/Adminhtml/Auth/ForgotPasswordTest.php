@@ -34,7 +34,7 @@ class ForgotPasswordTest extends TestCase
     /**
      * @var Data|MockObject
      */
-    private $backendDataHelper;
+    private $backendDataHelperMock;
 
     /**
      * @var Forgotpassword
@@ -44,89 +44,89 @@ class ForgotPasswordTest extends TestCase
     /**
      * @var ManagerInterface|MockObject
      */
-    private $messageManager;
+    private $messageManagerMock;
 
     /**
      * @var Http|MockObject
      */
-    private $request;
+    private $requestMock;
 
     /**
      * @var ResponseInterface|MockObject
      */
-    private $response;
+    private $responseMock;
 
     /**
      * @var Redirect|MockObject
      */
-    private $resultRedirect;
+    private $resultRedirectMock;
 
     /**
      * @var SecurityManager|MockObject
      */
-    private $securityManager;
+    private $securityManagerMock;
 
     /**
      * @var User|MockObject
      */
-    private $userCollection;
+    private $userCollectionMock;
 
     protected function setUp(): void
     {
-        $context = $this->prepareContext();
+        $contextMock = $this->prepareContext();
 
-        $userFactory = $this->getMockBuilder(UserFactory::class)
+        $userFactoryMock = $this->getMockBuilder(UserFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
 
-        $this->securityManager = $this->getMockBuilder(SecurityManager::class)
+        $this->securityManagerMock = $this->getMockBuilder(SecurityManager::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $userCollectionFactory = $this->getMockBuilder(CollectionFactory::class)
+        $userCollectionFactoryMock = $this->getMockBuilder(CollectionFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
 
-        $this->userCollection = $this->getMockBuilder(User::class)
+        $this->userCollectionMock = $this->getMockBuilder(User::class)
             ->disableOriginalConstructor()
             ->setMethods(['getSize', 'addFieldToFilter', 'load'])
             ->getMock();
 
-        $userCollectionFactory->expects($this->any())
+        $userCollectionFactoryMock->expects($this->any())
             ->method('create')
-            ->willReturn($this->userCollection);
+            ->willReturn($this->userCollectionMock);
 
-        $this->backendDataHelper = $this->getMockBuilder(Data::class)
+        $this->backendDataHelperMock = $this->getMockBuilder(Data::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $notificator = $this->getMockBuilder(NotificatorInterface::class)
+        $notificatorMock = $this->getMockBuilder(NotificatorInterface::class)
             ->getMockForAbstractClass();
 
         $this->controller = new Forgotpassword(
-            $context,
-            $userFactory,
-            $this->securityManager,
-            $userCollectionFactory,
-            $this->backendDataHelper,
-            $notificator
+            $contextMock,
+            $userFactoryMock,
+            $this->securityManagerMock,
+            $userCollectionFactoryMock,
+            $this->backendDataHelperMock,
+            $notificatorMock
         );
     }
 
     public function testExecuteNoEmailNoParams()
     {
-        $this->request->expects($this->once())
+        $this->requestMock->expects($this->once())
             ->method('getParam')
             ->with('email')
             ->willReturn(null);
 
-        $this->request->expects($this->once())
+        $this->requestMock->expects($this->once())
             ->method('getParams')
             ->willReturn([]);
 
-        $this->messageManager->expects($this->never())
+        $this->messageManagerMock->expects($this->never())
             ->method('addError');
 
         $this->controller->execute();
@@ -134,16 +134,16 @@ class ForgotPasswordTest extends TestCase
 
     public function testExecuteEmptyEmail()
     {
-        $this->request->expects($this->once())
+        $this->requestMock->expects($this->once())
             ->method('getParam')
             ->with('email')
             ->willReturn(null);
 
-        $this->request->expects($this->once())
+        $this->requestMock->expects($this->once())
             ->method('getParams')
             ->willReturn(['unused', 'but', 'cannot', 'be', 'empty']);
 
-        $this->messageManager->expects($this->once())
+        $this->messageManagerMock->expects($this->once())
             ->method('addError')
             ->with(__('Please enter an email address.'));
 
@@ -154,16 +154,16 @@ class ForgotPasswordTest extends TestCase
     {
         $email = 'invalid email address';
 
-        $this->request->expects($this->once())
+        $this->requestMock->expects($this->once())
             ->method('getParam')
             ->with('email')
             ->willReturn($email);
 
-        $this->request->expects($this->once())
+        $this->requestMock->expects($this->once())
             ->method('getParams')
             ->willReturn(['unused', 'but', 'cannot', 'be', 'empty']);
 
-        $this->messageManager->expects($this->once())
+        $this->messageManagerMock->expects($this->once())
             ->method('addError')
             ->with(__('Please correct this email address:'));
 
@@ -174,27 +174,27 @@ class ForgotPasswordTest extends TestCase
     {
         $email = 'user1@example.com';
 
-        $this->request->expects($this->once())
+        $this->requestMock->expects($this->once())
             ->method('getParam')
             ->with('email')
             ->willReturn($email);
 
-        $this->request->expects($this->once())
+        $this->requestMock->expects($this->once())
             ->method('getParams')
             ->willReturn(['unused', 'but', 'cannot', 'be', 'empty']);
 
         $message = __('We\'ll email you a link to reset your password.');
 
-        $this->messageManager->expects($this->once())
+        $this->messageManagerMock->expects($this->once())
             ->method('addSuccess')
             ->with($message)
             ->willReturnSelf();
 
-        $this->backendDataHelper->expects($this->once())
+        $this->backendDataHelperMock->expects($this->once())
             ->method('getHomePageUrl')
             ->willReturn('/homepage.URL');
 
-        $this->response->expects($this->once())
+        $this->responseMock->expects($this->once())
             ->method('setRedirect')
             ->willReturnSelf();
 
@@ -205,27 +205,27 @@ class ForgotPasswordTest extends TestCase
     {
         $email = 'user1@example.com';
 
-        $this->request->expects($this->once())
+        $this->requestMock->expects($this->once())
             ->method('getParam')
             ->with('email')
             ->willReturn($email);
 
-        $this->request->expects($this->once())
+        $this->requestMock->expects($this->once())
             ->method('getParams')
             ->willReturn(['unused', 'but', 'cannot', 'be', 'empty']);
 
         $message = __('security violation exception message');
-        $this->securityManager->expects($this->once())
+        $this->securityManagerMock->expects($this->once())
             ->method('performSecurityCheck')
             ->with(PasswordResetRequestEvent::ADMIN_PASSWORD_RESET_REQUEST, $email)
             ->willThrowException(new SecurityViolationException($message));
 
-        $this->messageManager->expects($this->once())
+        $this->messageManagerMock->expects($this->once())
             ->method('addErrorMessage')
             ->with($message)
             ->willReturnSelf();
 
-        $this->resultRedirect->expects($this->once())
+        $this->resultRedirectMock->expects($this->once())
             ->method('setPath')
             ->with('admin')
             ->willReturnSelf();
@@ -238,25 +238,25 @@ class ForgotPasswordTest extends TestCase
         $email = 'user1@example.com';
         $exception = new \Exception('Exception');
 
-        $this->request->expects($this->once())
+        $this->requestMock->expects($this->once())
             ->method('getParam')
             ->with('email')
             ->willReturn($email);
 
-        $this->request->expects($this->once())
+        $this->requestMock->expects($this->once())
             ->method('getParams')
             ->willReturn(['unused', 'but', 'cannot', 'be', 'empty']);
 
-        $this->userCollection->expects($this->once())
+        $this->userCollectionMock->expects($this->once())
             ->method('getSize')
             ->willThrowException($exception);
 
-        $this->messageManager->expects($this->once())
+        $this->messageManagerMock->expects($this->once())
             ->method('addExceptionMessage')
             ->with($exception, __('We\'re unable to send the password reset email.'))
             ->willReturnSelf();
 
-        $this->resultRedirect->expects($this->once())
+        $this->resultRedirectMock->expects($this->once())
             ->method('setPath')
             ->with('admin')
             ->willReturnSelf();
@@ -266,57 +266,57 @@ class ForgotPasswordTest extends TestCase
 
     private function prepareContext()
     {
-        $this->resultRedirect = $this->getMockBuilder(Redirect::class)
+        $this->resultRedirectMock = $this->getMockBuilder(Redirect::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $resultRedirectFactory = $this->getMockBuilder(RedirectFactory::class)
+        $resultRedirectFactoryMock = $this->getMockBuilder(RedirectFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $context = $this->getMockBuilder(Context::class)
+        $contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->request = $this->getMockBuilder(Http::class)
+        $this->requestMock = $this->getMockBuilder(Http::class)
             ->disableOriginalConstructor()
             ->setMethods(['getParam', 'getParams'])
             ->getMock();
 
-        $this->response = $this->getMockBuilder(ResponseInterface::class)
+        $this->responseMock = $this->getMockBuilder(ResponseInterface::class)
             ->setMethods(['setRedirect'])
             ->getMockForAbstractClass();
 
-        $this->messageManager = $this->getMockBuilder(ManagerInterface::class)
+        $this->messageManagerMock = $this->getMockBuilder(ManagerInterface::class)
             ->getMockForAbstractClass();
 
-        $resultRedirectFactory->expects($this->any())
+        $resultRedirectFactoryMock->expects($this->any())
             ->method('create')
-            ->willReturn($this->resultRedirect);
+            ->willReturn($this->resultRedirectMock);
 
-        $view = $this->getMockBuilder(ViewInterface::class)
+        $viewMock = $this->getMockBuilder(ViewInterface::class)
             ->getMockForAbstractClass();
 
-        $context->expects($this->any())
+        $contextMock->expects($this->any())
             ->method('getResultRedirectFactory')
-            ->willReturn($resultRedirectFactory);
+            ->willReturn($resultRedirectFactoryMock);
 
-        $context->expects($this->any())
+        $contextMock->expects($this->any())
             ->method('getRequest')
-            ->willReturn($this->request);
+            ->willReturn($this->requestMock);
 
-        $context->expects($this->any())
+        $contextMock->expects($this->any())
             ->method('getResponse')
-            ->willReturn($this->response);
+            ->willReturn($this->responseMock);
 
-        $context->expects($this->any())
+        $contextMock->expects($this->any())
             ->method('getMessageManager')
-            ->willReturn($this->messageManager);
+            ->willReturn($this->messageManagerMock);
 
-        $context->expects($this->any())
+        $contextMock->expects($this->any())
             ->method('getView')
-            ->willReturn($view);
+            ->willReturn($viewMock);
 
-        return $context;
+        return $contextMock;
     }
 }
