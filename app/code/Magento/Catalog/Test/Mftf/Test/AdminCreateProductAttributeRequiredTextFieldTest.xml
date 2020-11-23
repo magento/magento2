@@ -51,7 +51,6 @@
 
         <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="100" stepKey="fillProductQty"/>
         <actionGroup ref="AdminSetStockStatusActionGroup" stepKey="selectStockStatus"/>
-        <!-- <selectOption selector="{{AdminProductFormSection.productStockStatus}}" userInput="In Stock" stepKey="selectStockStatus"/> -->
 
         <!-- Create Product Attribute -->
         <click selector="{{AdminProductFormSection.addAttributeBtn}}" stepKey="clickOnAddAttribute"/>
