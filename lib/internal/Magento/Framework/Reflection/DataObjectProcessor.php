@@ -167,7 +167,7 @@ class DataObjectProcessor
      * @param string $dataObjectType
      * @return string
      */
-    protected function getKeyByObjectType(string $key, string $dataObjectType): string
+    private function getKeyByObjectType(string $key, string $dataObjectType): string
     {
         $dataObjectType = ltrim($dataObjectType, '\\');
         if (
