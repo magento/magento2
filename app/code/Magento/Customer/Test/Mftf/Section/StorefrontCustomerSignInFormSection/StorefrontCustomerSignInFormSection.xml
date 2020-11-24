@@ -8,9 +8,9 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="StorefrontCustomerSignInFormSection">
-        <element name="emailField" type="input" selector="#email"/>
-        <element name="passwordField" type="input" selector="#pass"/>
-        <element name="signInAccountButton" type="button" selector="#send2" timeout="30"/>
+        <element name="emailField" type="input" selector="fieldset.login #email"/>
+        <element name="passwordField" type="input" selector="fieldset.login #pass"/>
+        <element name="signInAccountButton" type="button" selector="fieldset.login #send2" timeout="30"/>
         <element name="forgotPasswordLink" type="button" selector=".action.remind" timeout="10"/>
         <element name="customerLoginBlock" type="text" selector=".login-container .block.block-customer-login"/>
     </section>
