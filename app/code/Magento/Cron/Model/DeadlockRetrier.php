@@ -44,7 +44,7 @@ class DeadlockRetrier implements DeadlockRetrierInterface
             try {
                 return $callback();
             } catch (DeadlockException $e) {
-                $this->logger->warning(sprintf("Deadlock detected in cron cleanup: %s", $e->getMessage()));
+                $this->logger->warning(sprintf("Deadlock detected in cron: %s", $e->getMessage()));
                 continue;
             }
         }
