@@ -83,11 +83,7 @@
         "wikimedia/less.php": "~1.8.0",
         "league/flysystem": "^1.0",
         "league/flysystem-aws-s3-v3": "^1.0",
-        "league/flysystem-cached-adapter": "^1.0",
-        "spiral/roadrunner": "^1.5.2",
-        "spiral/php-grpc": "^1.1",
-        "google/protobuf": "^3.11",
-        "grpc/grpc": "^1.27"
+        "league/flysystem-cached-adapter": "^1.0"
     },
     "require-dev": {
         "allure-framework/allure-phpunit": "~1.2.0",
