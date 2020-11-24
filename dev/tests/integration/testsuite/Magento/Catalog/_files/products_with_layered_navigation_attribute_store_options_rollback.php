@@ -24,12 +24,6 @@ foreach (['simple1', 'simple2'] as $sku) {
     }
 }
 
-$productCollection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->get(\Magento\Catalog\Model\ResourceModel\Product\Collection::class);
-foreach ($productCollection as $product) {
-    $product->delete();
-}
-
 /** @var $category \Magento\Catalog\Model\Category */
 $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Catalog\Model\Category::class);
 $category->load(333);

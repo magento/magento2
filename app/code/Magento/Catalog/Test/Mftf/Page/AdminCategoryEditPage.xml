@@ -19,5 +19,6 @@
         <section name="AdminCategoryModalSection"/>
         <section name="AdminCategoryMessagesSection"/>
         <section name="AdminCategoryContentSection"/>
+        <section name="AdminCategoryScheduleDesignUpdateSection"/>
     </page>
 </pages>

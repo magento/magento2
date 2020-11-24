@@ -111,7 +111,7 @@ class BlockCache implements CacheInterface
                     ];
                 }
             }
-            $data = $this->serializer->serialize(['policies' => $policiesData, 'html' => $data]);
+            $data = $this->serializer->serialize(['policies' => $policiesData, 'html' => (string)$data]);
         }
 
         return $this->cache->save($data, $identifier, $tags, $lifeTime);
