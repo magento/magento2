@@ -9,7 +9,6 @@ namespace Magento\CatalogImportExport\Model\Import;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Config as CatalogConfig;
 use Magento\Catalog\Model\Product\Visibility;
-use Magento\Catalog\Model\ResourceModel\Product\Link;
 use Magento\CatalogImportExport\Model\Import\Product\ImageTypeProcessor;
 use Magento\CatalogImportExport\Model\Import\Product\LinkProcessor;
 use Magento\CatalogImportExport\Model\Import\Product\MediaGalleryProcessor;
@@ -2208,6 +2207,11 @@ class Product extends AbstractEntity
 
             $dirConfig = DirectoryList::getDefaultConfig();
             $dirAddon = $dirConfig[DirectoryList::MEDIA][DirectoryList::PATH];
+
+            // make media folder a primary folder for media in external storages
+            if (!is_a($this->_mediaDirectory->getDriver(), File::class)) {
+                $dirAddon = DirectoryList::MEDIA;
+            }
 
             $tmpPath = $this->getImportDir();
 
