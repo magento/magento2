@@ -12,6 +12,7 @@ use Magento\Authorization\Model\RoleFactory;
 use Magento\Authorization\Model\Rules;
 use Magento\Authorization\Model\RulesFactory;
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\ResourceModel\Product\Gallery;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\Downloadable\Api\DomainManagerInterface;
 use Magento\Downloadable\Model\Link;
@@ -23,7 +24,9 @@ use Magento\Framework\Api\SortOrderBuilder;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Webapi\Exception as HTTPExceptionCodes;
 use Magento\Integration\Api\AdminTokenServiceInterface;
+use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreRepository;
 use Magento\Store\Model\Website;
 use Magento\Store\Model\WebsiteRepository;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -34,6 +37,7 @@ use Magento\TestFramework\TestCase\WebapiAbstract;
  *
  * @magentoAppIsolation enabled
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class ProductRepositoryInterfaceTest extends WebapiAbstract
 {
@@ -77,6 +81,10 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
      * @var AdminTokenServiceInterface
      */
     private $adminTokens;
+    /**
+     * @var array
+     */
+    private $fixtureProducts = [];
 
     /**
      * @inheritDoc
@@ -98,6 +106,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
      */
     protected function tearDown(): void
     {
+        $this->deleteFixtureProducts();
         parent::tearDown();
 
         $objectManager = Bootstrap::getObjectManager();
@@ -214,6 +223,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         try {
             $website = $websiteRepository->get($websiteCode);
         } catch (NoSuchEntityException $e) {
+            $website = null;
             $this->fail("Couldn`t load website: {$websiteCode}");
         }
 
@@ -685,14 +695,15 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
      */
     public function testProductWithMediaGallery()
     {
-        $testImagePath = __DIR__ . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'test_image.jpg';
-        // @codingStandardsIgnoreLine
-        $encodedImage = base64_encode(file_get_contents($testImagePath));
+        $encodedImage = $this->getTestImage();
         //create a product with media gallery
         $filename1 = 'tiny1' . time() . '.jpg';
         $filename2 = 'tiny2' . time() . '.jpeg';
         $productData = $this->getSimpleProductData();
-        $productData['media_gallery_entries'] = $this->getMediaGalleryData($filename1, $encodedImage, $filename2);
+        $productData['media_gallery_entries'] = [
+            $this->getMediaGalleryData($filename1, $encodedImage, 1, 'tiny1', true),
+            $this->getMediaGalleryData($filename2, $encodedImage, 2, 'tiny2', false),
+        ];
         $response = $this->saveProduct($productData);
         $this->assertArrayHasKey('media_gallery_entries', $response);
         $mediaGalleryEntries = $response['media_gallery_entries'];
@@ -1595,38 +1606,33 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     /**
      * Get media gallery data
      *
-     * @param $filename1
-     * @param $encodedImage
-     * @param $filename2
+     * @param string $filename
+     * @param string $encodedImage
+     * @param int $position
+     * @param string $label
+     * @param bool $disabled
+     * @param array $types
      * @return array
      */
-    private function getMediaGalleryData($filename1, $encodedImage, $filename2)
-    {
+    private function getMediaGalleryData(
+        string $filename,
+        string $encodedImage,
+        int $position,
+        string $label,
+        bool $disabled = false,
+        array $types = []
+    ): array {
         return [
-            [
-                'position' => 1,
-                'media_type' => 'image',
-                'disabled' => true,
-                'label' => 'tiny1',
-                'types' => [],
-                'content' => [
-                    'type' => 'image/jpeg',
-                    'name' => $filename1,
-                    'base64_encoded_data' => $encodedImage,
-                ]
-            ],
-            [
-                'position' => 2,
-                'media_type' => 'image',
-                'disabled' => false,
-                'label' => 'tiny2',
-                'types' => [],
-                'content' => [
-                    'type' => 'image/jpeg',
-                    'name' => $filename2,
-                    'base64_encoded_data' => $encodedImage,
-                ]
-            ],
+            'position' => $position,
+            'media_type' => 'image',
+            'disabled' => $disabled,
+            'label' => $label,
+            'types' => $types,
+            'content' => [
+                'type' => 'image/jpeg',
+                'name' => $filename,
+                'base64_encoded_data' => $encodedImage,
+            ]
         ];
     }
 
@@ -1900,5 +1906,197 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         }
         //We don't have permissions to do that.
         $this->assertEquals('Not allowed to edit the product\'s design attributes', $exceptionMessage);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Store/_files/second_store.php
+     */
+    public function testImageRolesWithMultipleStores()
+    {
+        $this->_markTestAsRestOnly(
+            'Test skipped due to known issue with SOAP. NULL value is cast to corresponding attribute type.'
+        );
+        $productData = $this->getSimpleProductData();
+        $sku = $productData[ProductInterface::SKU];
+        $defaultScope = Store::DEFAULT_STORE_ID;
+        $defaultWebsiteId = $this->loadWebsiteByCode('base')->getId();
+        $defaultStoreId = $this->loadStoreByCode('default')->getId();
+        $secondStoreId = $this->loadStoreByCode('fixture_second_store')->getId();
+        $encodedImage = $this->getTestImage();
+        $imageRoles = ['image', 'small_image', 'thumbnail'];
+        $img1 = uniqid('/t/e/test_image1_') . '.jpg';
+        $img2 = uniqid('/t/e/test_image2_') . '.jpg';
+        $productData['media_gallery_entries'] = [
+            $this->getMediaGalleryData(basename($img1), $encodedImage, 1, 'front', false, ['image']),
+            $this->getMediaGalleryData(basename($img2), $encodedImage, 2, 'back', false, ['small_image', 'thumbnail']),
+        ];
+        $productData[ProductInterface::EXTENSION_ATTRIBUTES_KEY]['website_ids'] = [
+            $defaultWebsiteId
+        ];
+        $response = $this->saveProduct($productData, 'all');
+        if (isset($response['id'])) {
+            $this->fixtureProducts[] = $sku;
+        }
+        $imageRolesPerStore = $this->getProductStoreImageRoles(
+            $sku,
+            [$defaultScope, $defaultStoreId, $secondStoreId],
+            $imageRoles
+        );
+        $this->assertEquals($img1, $imageRolesPerStore[$defaultScope]['image']);
+        $this->assertEquals($img2, $imageRolesPerStore[$defaultScope]['small_image']);
+        $this->assertEquals($img2, $imageRolesPerStore[$defaultScope]['thumbnail']);
+        $this->assertArrayNotHasKey($defaultStoreId, $imageRolesPerStore);
+        $this->assertArrayNotHasKey($secondStoreId, $imageRolesPerStore);
+        /**
+         * Override image roles for default store
+         */
+        $storeProductData = $response;
+        $storeProductData['media_gallery_entries'][0]['types'] = ['image', 'small_image', 'thumbnail'];
+        $storeProductData['media_gallery_entries'][1]['types'] = [];
+        $this->saveProduct($storeProductData, 'default');
+        $imageRolesPerStore = $this->getProductStoreImageRoles(
+            $sku,
+            [$defaultScope, $defaultStoreId, $secondStoreId],
+            $imageRoles
+        );
+        $this->assertEquals($img1, $imageRolesPerStore[$defaultScope]['image']);
+        $this->assertEquals($img2, $imageRolesPerStore[$defaultScope]['small_image']);
+        $this->assertEquals($img2, $imageRolesPerStore[$defaultScope]['thumbnail']);
+        $this->assertEquals($img1, $imageRolesPerStore[$defaultStoreId]['image']);
+        $this->assertEquals($img1, $imageRolesPerStore[$defaultStoreId]['small_image']);
+        $this->assertEquals($img1, $imageRolesPerStore[$defaultStoreId]['thumbnail']);
+        $this->assertArrayNotHasKey($secondStoreId, $imageRolesPerStore);
+        /**
+         * Inherit image roles from default scope
+         */
+        $customAttributes = $this->convertCustomAttributesToAssociativeArray($response['custom_attributes']);
+        $customAttributes['image'] = null;
+        $customAttributes['small_image'] = null;
+        $customAttributes['thumbnail'] = null;
+        $customAttributes = $this->convertAssociativeArrayToCustomAttributes($customAttributes);
+        $storeProductData = $response;
+        $storeProductData['media_gallery_entries'] = null;
+        $storeProductData['custom_attributes'] = $customAttributes;
+        $this->saveProduct($storeProductData, 'default');
+        $imageRolesPerStore = $this->getProductStoreImageRoles(
+            $sku,
+            [$defaultScope, $defaultStoreId, $secondStoreId],
+            $imageRoles
+        );
+        $this->assertEquals($img1, $imageRolesPerStore[$defaultScope]['image']);
+        $this->assertEquals($img2, $imageRolesPerStore[$defaultScope]['small_image']);
+        $this->assertEquals($img2, $imageRolesPerStore[$defaultScope]['thumbnail']);
+        $this->assertArrayNotHasKey($defaultStoreId, $imageRolesPerStore);
+        $this->assertArrayNotHasKey($secondStoreId, $imageRolesPerStore);
+    }
+
+    /**
+     * Test that updating product image with same image name will result in incremented image name
+     */
+    public function testUpdateProductWithMediaGallery(): void
+    {
+        $productData = $this->getSimpleProductData();
+        $sku = $productData[ProductInterface::SKU];
+        $defaultScope = Store::DEFAULT_STORE_ID;
+        $defaultWebsiteId = $this->loadWebsiteByCode('base')->getId();
+        $encodedImage = $this->getTestImage();
+        $imageRoles = ['image', 'small_image', 'thumbnail'];
+        $img1 = uniqid('/t/e/test_image1_') . '.jpg';
+        $img2 = uniqid('/t/e/test_image2_') . '.jpg';
+        $productData['media_gallery_entries'] = [
+            $this->getMediaGalleryData(basename($img1), $encodedImage, 1, 'front', false, ['image']),
+            $this->getMediaGalleryData(basename($img2), $encodedImage, 2, 'back', false, ['small_image', 'thumbnail']),
+        ];
+        $productData[ProductInterface::EXTENSION_ATTRIBUTES_KEY]['website_ids'] = [
+            $defaultWebsiteId
+        ];
+        $response = $this->saveProduct($productData, 'all');
+        if (isset($response['id'])) {
+            $this->fixtureProducts[] = $sku;
+        }
+        $imageRolesPerStore = $this->getProductStoreImageRoles($sku, [$defaultScope], $imageRoles);
+        $this->assertEquals($img1, $imageRolesPerStore[$defaultScope]['image']);
+        $this->assertEquals($img2, $imageRolesPerStore[$defaultScope]['small_image']);
+        $this->assertEquals($img2, $imageRolesPerStore[$defaultScope]['thumbnail']);
+        $this->saveProduct($productData, 'all');
+        $imageRolesPerStore = $this->getProductStoreImageRoles($sku, [$defaultScope], $imageRoles);
+        $img1 = substr_replace($img1, '_1', -4, 0);
+        $img2 = substr_replace($img2, '_1', -4, 0);
+        $this->assertEquals($img1, $imageRolesPerStore[$defaultScope]['image']);
+        $this->assertEquals($img2, $imageRolesPerStore[$defaultScope]['small_image']);
+        $this->assertEquals($img2, $imageRolesPerStore[$defaultScope]['thumbnail']);
+    }
+
+    /**
+     * @return string
+     */
+    private function getTestImage(): string
+    {
+        $testImagePath = __DIR__ . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'test_image.jpg';
+        // @codingStandardsIgnoreLine
+        return base64_encode(file_get_contents($testImagePath));
+    }
+
+    /**
+     * @return void
+     */
+    private function deleteFixtureProducts(): void
+    {
+        foreach ($this->fixtureProducts as $sku) {
+            $this->deleteProduct($sku);
+        }
+        $this->fixtureProducts = [];
+    }
+
+    /**
+     * @param string $code
+     * @return StoreInterface
+     */
+    private function loadStoreByCode(string $code): StoreInterface
+    {
+        try {
+            $store = Bootstrap::getObjectManager()->get(StoreRepository::class)->get($code);
+        } catch (NoSuchEntityException $e) {
+            $store = null;
+            $this->fail("Couldn`t load store: {$code}");
+        }
+        return $store;
+    }
+
+    /**
+     * @param string $sku
+     * @param int|null $storeId
+     * @return ProductInterface
+     */
+    private function getProductModel(string $sku, int $storeId = null): ProductInterface
+    {
+        try {
+            $productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);
+            $product = $productRepository->get($sku, false, $storeId, true);
+        } catch (NoSuchEntityException $e) {
+            $product = null;
+            $this->fail("Couldn`t load product: {$sku}");
+        }
+        return $product;
+    }
+
+    /**
+     * @param string $sku
+     * @param array $stores
+     * @param array $roles
+     * @return array
+     */
+    private function getProductStoreImageRoles(string $sku, array $stores, array $roles = []): array
+    {
+        /** @var Gallery $galleryResource */
+        $galleryResource = Bootstrap::getObjectManager()->get(Gallery::class);
+        $productModel = $this->getProductModel($sku);
+        $imageRolesPerStore = [];
+        foreach ($galleryResource->getProductImages($productModel, $stores) as $role) {
+            if (empty($roles) || in_array($role['attribute_code'], $roles)) {
+                $imageRolesPerStore[$role['store_id']][$role['attribute_code']] = $role['filepath'];
+            }
+        }
+        return $imageRolesPerStore;
     }
 }

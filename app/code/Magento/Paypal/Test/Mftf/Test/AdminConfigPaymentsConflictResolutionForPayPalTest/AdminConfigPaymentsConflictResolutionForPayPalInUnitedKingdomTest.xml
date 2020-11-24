@@ -19,7 +19,7 @@
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
-            <actionGroup ref="SampleConfigPayPalExpressCheckoutActionGroup" stepKey="ConfigPayPalExpress">
+            <actionGroup ref="AdminPayPalExpressCheckoutEnableActionGroup" stepKey="ConfigPayPalExpress">
                 <argument name="credentials" value="SamplePaypalExpressConfig"/>
             </actionGroup>
         </before>

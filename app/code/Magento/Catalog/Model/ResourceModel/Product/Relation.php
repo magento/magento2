@@ -5,6 +5,7 @@
  */
 namespace Magento\Catalog\Model\ResourceModel\Product;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Framework\EntityManager\MetadataPool;
@@ -24,16 +25,16 @@ class Relation extends AbstractDb
 
     /**
      * @param Context $context
-     * @param null $connectionName
+     * @param string $connectionName
      * @param MetadataPool $metadataPool
      */
     public function __construct(
         Context $context,
         $connectionName = null,
-        MetadataPool $metadataPool
+        MetadataPool $metadataPool = null
     ) {
         parent::__construct($context, $connectionName);
-        $this->metadataPool = $metadataPool;
+        $this->metadataPool = $metadataPool ?: ObjectManager::getInstance()->get(MetadataPool::class);
     }
 
     /**

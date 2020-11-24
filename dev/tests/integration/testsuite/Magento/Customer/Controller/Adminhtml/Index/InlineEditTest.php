@@ -7,12 +7,15 @@ declare(strict_types=1);
 
 namespace Magento\Customer\Controller\Adminhtml\Index;
 
+use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Customer\Api\CustomerMetadataInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Customer\Observer\AfterAddressSaveObserver;
 use Magento\Eav\Model\AttributeRepository;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Registry;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Store\Api\WebsiteRepositoryInterface;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -23,6 +26,7 @@ use Magento\TestFramework\TestCase\AbstractBackendController;
  *
  * @magentoAppArea adminhtml
  * @magentoDbIsolation enabled
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class InlineEditTest extends AbstractBackendController
 {
@@ -41,6 +45,12 @@ class InlineEditTest extends AbstractBackendController
     /** @var AttributeRepository */
     private $attributeRepository;
 
+    /** @var AddressRepositoryInterface */
+    private $addressRepository;
+
+    /** @var Registry */
+    private $coreRegistry;
+
     /**
      * @inheritdoc
      */
@@ -53,6 +63,8 @@ class InlineEditTest extends AbstractBackendController
         $this->json = $this->objectManager->get(SerializerInterface::class);
         $this->websiteRepository = $this->objectManager->get(WebsiteRepositoryInterface::class);
         $this->attributeRepository = $this->objectManager->get(AttributeRepository::class);
+        $this->addressRepository = $this->objectManager->get(AddressRepositoryInterface::class);
+        $this->coreRegistry = Bootstrap::getObjectManager()->get(Registry::class);
     }
 
     /**
@@ -119,6 +131,53 @@ class InlineEditTest extends AbstractBackendController
                 'items' => [],
             ],
         ];
+    }
+
+    /**
+     * Customer group should not change after saving customer via customer grid because of disabled address validation
+     *
+     * @magentoConfigFixture current_store customer/create_account/auto_group_assign 1
+     * @magentoConfigFixture current_store customer/create_account/viv_invalid_group 2
+     * @magentoDataFixture Magento/Customer/_files/customer_one_address.php
+     *
+     * @return void
+     */
+    public function testInlineEditActionWithAddress(): void
+    {
+        $customer = $this->getCustomer();
+        $params = [
+            'items' => [
+                $customer->getId() => []
+            ],
+            'isAjax' => true,
+        ];
+        $actual = $this->performInlineEditRequest($params);
+        $updatedCustomer = $this->customerRepository->get('customer_one_address@test.com');
+        $this->assertEmpty($actual['messages']);
+        $this->assertFalse($actual['error']);
+        $this->assertEquals(
+            $customer->getGroupId(),
+            $updatedCustomer->getGroupId(),
+            'Customer group was changed!'
+        );
+    }
+
+    /**
+     * Change customer address with setting country from EU and setting VAT number
+     *
+     * @return CustomerInterface
+     */
+    private function getCustomer(): CustomerInterface
+    {
+        $customer = $this->customerRepository->get('customer_one_address@test.com');
+        $address = $this->addressRepository->getById((int)$customer->getDefaultShipping());
+        $address->setVatId(12345);
+        $address->setCountryId('DE');
+        $address->setRegionId(0);
+        $this->addressRepository->save($address);
+        $this->coreRegistry->unregister(AfterAddressSaveObserver::VIV_PROCESSED_FLAG);
+        //return customer after address repository save
+        return $this->customerRepository->get('customer_one_address@test.com');
     }
 
     /**

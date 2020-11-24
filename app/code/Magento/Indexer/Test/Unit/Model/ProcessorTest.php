@@ -73,11 +73,19 @@ class ProcessorTest extends TestCase
             '',
             false
         );
+
+        $indexerRegistryMock = $this->getIndexRegistryMock([]);
+        $makeSharedValidMock = new MakeSharedIndexValid(
+            $this->configMock,
+            $indexerRegistryMock
+        );
+
         $this->model = new Processor(
             $this->configMock,
             $this->indexerFactoryMock,
             $this->indexersFactoryMock,
-            $this->viewProcessorMock
+            $this->viewProcessorMock,
+            $makeSharedValidMock
         );
     }
 
