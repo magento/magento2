@@ -55,8 +55,8 @@ type Mutation {
 }
 
 input WishlistItemInput @doc(description: "Defines the items to add to a wish list") {
-    sku: String @doc(description: "The SKU of the product to add. For complex product types, specify the child product SKU")
-    quantity: Float @doc(description: "The amount or number of items to add")
+    sku: String! @doc(description: "The SKU of the product to add. For complex product types, specify the child product SKU")
+    quantity: Float! @doc(description: "The amount or number of items to add")
     parent_sku: String @doc(description: "For complex product types, the SKU of the parent product")
     selected_options: [ID!] @doc(description: "An array of strings corresponding to options the customer selected")
     entered_options: [EnteredOptionInput!] @doc(description: "An array of options that the customer entered")
@@ -73,9 +73,9 @@ type RemoveProductsFromWishlistOutput @doc(description: "Contains the customer's
 }
 
 input WishlistItemUpdateInput @doc(description: "Defines updates to items in a wish list") {
-    wishlist_item_id: ID @doc(description: "The ID of the wishlist item to update")
+    wishlist_item_id: ID! @doc(description: "The ID of the wishlist item to update")
     quantity: Float @doc(description: "The new amount or number of this item")
-    description: String @doc(description: "Describes the update")
+    description: String @doc(description: "Customer-entered comments about the item")
     selected_options: [ID!] @doc(description: "An array of strings corresponding to options the customer selected")
     entered_options: [EnteredOptionInput!] @doc(description: "An array of options that the customer entered")
 }
@@ -93,4 +93,8 @@ type WishListUserInputError @doc(description:"An error encountered while perform
 enum WishListUserInputErrorType {
     PRODUCT_NOT_FOUND
     UNDEFINED
+}
+
+type StoreConfig {
+    magento_wishlist_general_is_enabled: String @doc(description: "Indicates whether wishlists are enabled (1) or disabled (0)")
 }

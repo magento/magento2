@@ -86,8 +86,7 @@
 
         <!--Add another bundle option with 2 items-->
         <!--Go to bundle product creation page-->
-        <amOnPage url="{{AdminCatalogProductPage.url}}" stepKey="GoToCatalogProductPage"/>
-        <waitForPageLoad stepKey="WaitForPageToLoad"/>
+        <actionGroup ref="AdminOpenCatalogProductPageActionGroup" stepKey="goToCatalogProductPage"/>
         <conditionalClick selector="{{AdminProductFiltersSection.filtersClear}}" dependentSelector="{{AdminProductFiltersSection.filtersClear}}" visible="true" stepKey="ClickOnButtonToRemoveFiltersIfPresent"/>
         <waitForPageLoad stepKey="WaitForClear"/>
         <actionGroup ref="FilterProductGridByNameActionGroup" stepKey="filterBundleProductOptionsDownToName">

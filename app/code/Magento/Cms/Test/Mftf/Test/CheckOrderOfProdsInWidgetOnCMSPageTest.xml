@@ -102,6 +102,7 @@
         <actionGroup ref="NavigateToCreatedCMSPageActionGroup" stepKey="navigateToCreatedCMSPage2">
             <argument name="CMSPage" value="$$createCMSPage$$"/>
         </actionGroup>
+        <scrollTo stepKey="scrollToContent" selector="{{CmsNewPagePageContentSection.header}}"  x="0" y="-80"/>
         <conditionalClick selector="{{CmsNewPagePageContentSection.header}}"
                           dependentSelector="{{CmsNewPagePageContentSection.header}}._show" visible="false"
                           stepKey="clickContentTab2"/>
