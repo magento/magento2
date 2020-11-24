@@ -111,17 +111,17 @@ class Cli extends Console\Application
     public function doRun(Console\Input\InputInterface $input, Console\Output\OutputInterface $output)
     {
         $exitCode = null;
-//        try {
+        try {
             $exitCode = parent::doRun($input, $output);
-//        } catch (\Exception $e) {
-//            $errorMessage = $e->getMessage() . PHP_EOL . $e->getTraceAsString();
-//            $this->logger->error($errorMessage);
-//            $this->initException = $e;
-//        }
+        } catch (\Exception $e) {
+            $errorMessage = $e->getMessage() . PHP_EOL . $e->getTraceAsString();
+            $this->logger->error($errorMessage);
+            $this->initException = $e;
+        }
 
-//        if ($this->initException) {
-//            throw $this->initException;
-//        }
+        if ($this->initException) {
+            throw $this->initException;
+        }
 
         return $exitCode;
     }
