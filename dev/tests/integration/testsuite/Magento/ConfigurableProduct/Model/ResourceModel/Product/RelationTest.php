@@ -105,5 +105,41 @@ class RelationTest extends TestCase
             $this->assertArrayHasKey($childId, $result);
             $this->assertContains($result[$childId], $parentIdsOfChildIds[$childId]);
         }
+
+        $parentIdsOfChildIds = [];
+
+        foreach ($childSkusOfParentSkus as $parentSku => $childSkus) {
+            foreach ($childSkus as $childSku) {
+                $childId = $configurableIdsOfSkus[$childSku];
+                $parentIdsOfChildIds[$childId][] = $configurableIdsOfSkus[$parentSku];
+            }
+        }
+
+        /**
+         * Assert there are parent configurable products ids in result of getRelationsByChildren method
+         * and they are related to child ids.
+         */
+        $result = $this->model->getRelationsByChildren($childIds);
+        $sortedResult = $this->sortParentIdsOfChildIds($result);
+        $sortedExpected = $this->sortParentIdsOfChildIds($parentIdsOfChildIds);
+
+        $this->assertEquals($sortedExpected, $sortedResult);
+    }
+
+    /**
+     * Sorts the "Parent Ids Of Child Ids" type of the array
+     *
+     * @param array $array
+     * @return array
+     */
+    private function sortParentIdsOfChildIds(array $array): array
+    {
+        foreach ($array as $childId => &$parentIds) {
+            sort($parentIds, SORT_NUMERIC);
+        }
+
+        ksort($array, SORT_NUMERIC);
+
+        return $array;
     }
 }
