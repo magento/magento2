@@ -112,46 +112,6 @@ class CliCommand
     }
 
     /**
-     * Split quote db configuration.
-     *
-     * @return void
-     * @throws LocalizedException
-     */
-    public function splitQuote()
-    {
-        $initParams = $this->parametersHolder->getInitParams();
-        $installParams = $this->toCliArguments(
-            $this->parametersHolder->getDbData('checkout')
-        );
-        $command = $this->getCliScriptCommand() . ' setup:db-schema:split-quote ' .
-            implode(" ", array_keys($installParams)) .
-            ' -vvv  --no-interaction --magento-init-params="' .
-            $initParams['magento-init-params'] . '"';
-
-        $this->shell->execute($command, array_values($installParams));
-    }
-
-    /**
-     * Split sales db configuration.
-     *
-     * @return void
-     * @throws LocalizedException
-     */
-    public function splitSales()
-    {
-        $initParams = $this->parametersHolder->getInitParams();
-        $installParams = $this->toCliArguments(
-            $this->parametersHolder->getDbData('sales')
-        );
-        $command = $this->getCliScriptCommand() . ' setup:db-schema:split-sales ' .
-            implode(" ", array_keys($installParams)) .
-            ' -vvv --magento-init-params="' .
-            $initParams['magento-init-params'] . '"';
-
-        $this->shell->execute($command, array_values($installParams));
-    }
-
-    /**
      * Clean all types of cache
      */
     public function cacheClean()
