@@ -13,10 +13,10 @@
         <annotations>
             <features value="Catalog"/>
             <stories value="Catalog grid"/>
-            <title value="Checking Catalog grid page number after entering a new search keyword"/>
-            <description value="Checking Catalog grid page number after entering a new search keyword"/>
-            <severity value="MINOR"/>
-            <testCaseId value="MC-xxxxx"/>
+            <title value="Updating the search keyword in admin product grid should reset current page to the first one"/>
+            <description value="When changing the search keyword in admin product grid, new results should be displayed from the page one"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="MC-39332"/>
             <useCaseId value="MC-38787"/>
             <group value="Catalog"/>
         </annotations>
@@ -82,14 +82,16 @@
             <argument name="keyword" value="SimpleProduct"/>
         </actionGroup>
 
+        <waitForElementVisible selector="{{AdminDataGridPaginationSection.totalPagesCount('4')}}" stepKey="seeTotalPagesIsFourOnFirstSearch"/>
         <comment userInput="Go to the next page" stepKey="nextPage"/>
         <click selector="{{AdminDataGridPaginationSection.nextPage}}" stepKey="clickNextPageProductGrid"/>
-        <seeInField selector="{{AdminDataGridPaginationSection.currentPage}}" userInput="2" stepKey="seeOnSecondPageProductGrid"/>
+        <seeInField selector="{{AdminDataGridPaginationSection.currentPage}}" userInput="2" stepKey="seeOnSecondPageProductGridOnFirstSearch"/>
 
         <actionGroup ref="SearchProductGridByStringNoClearActionGroup" stepKey="searchForVirtualProduct">
             <argument name="keyword" value="VirtualProduct"/>
         </actionGroup>
 
-        <seeInField selector="{{AdminDataGridPaginationSection.currentPage}}" userInput="1" stepKey="seeOnFirstPageProductGrid"/>
+        <waitForElementVisible selector="{{AdminDataGridPaginationSection.totalPagesCount('3')}}" stepKey="seeTotalPagesIsThreeOnSecondSearch"/>
+        <seeInField selector="{{AdminDataGridPaginationSection.currentPage}}" userInput="1" stepKey="seeOnFirstPageProductGridOnSecondSearch"/>
     </test>
 </tests>
