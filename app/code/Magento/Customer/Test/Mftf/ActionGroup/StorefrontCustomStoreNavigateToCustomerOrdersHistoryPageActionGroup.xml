@@ -12,7 +12,7 @@
             <description>Goes to the storefront Customer Order History page for a custom store. Must have Add Store Code To Urls enabled</description>
         </annotations>
         <arguments>
-            <argument name="storeCode"/>
+            <argument name="storeCode" defaultValue="{{customStoreEN.code}}" type="string"/>
         </arguments>
         <amOnPage url="{{StorefrontCustomStoreCustomerOrdersHistoryPage.url(storeCode)}}" stepKey="amOnTheCustomerPage"/>
     </actionGroup>

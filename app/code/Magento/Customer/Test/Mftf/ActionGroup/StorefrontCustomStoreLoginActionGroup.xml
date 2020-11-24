@@ -13,7 +13,7 @@
             <description>Goes to the storefront Customer Sign In page for a custom store. Logs in using the provided Customer. Must have Add Store Code To Urls enabled</description>
         </annotations>
         <arguments>
-            <argument name="storeCode"/>
+            <argument name="storeCode" defaultValue="{{customStoreEN.code}}" type="string"/>
         </arguments>
         <amOnPage url="{{StorefrontCustomStoreCustomerSignInPage.url(storeCode)}}" stepKey="amOnSignInPage"/>
     </actionGroup>
