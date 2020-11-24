@@ -155,6 +155,13 @@ class Relation extends AbstractDb
                 'relation.parent_id = cpe.' . $linkField
             )->where('relation.child_id IN(?)', $childrenIds);
 
-        return $connection->fetchPairs($select);
+        $result = $connection->fetchAll($select);
+        $parentIdsOfChildIds = [];
+
+        foreach ($result as $row) {
+            $parentIdsOfChildIds[$row['child_id']][] = $row['parent_id'];
+        }
+
+        return $parentIdsOfChildIds;
     }
 }
