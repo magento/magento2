@@ -136,7 +136,7 @@ class DataObjectProcessor
                 }
             }
 
-            $outputData[$this->mapObjectKey($key, ltrim($dataObjectType, '\\'))] = $value;
+            $outputData[$this->getKeyByObjectType($key, $dataObjectType)] = $value;
         }
 
         $outputData = $this->changeOutputArray($dataObject, $outputData);
@@ -167,8 +167,9 @@ class DataObjectProcessor
      * @param string $dataObjectType
      * @return string
      */
-    protected function mapObjectKey(string $key, string $dataObjectType): string
+    protected function getKeyByObjectType(string $key, string $dataObjectType): string
     {
+        $dataObjectType = ltrim($dataObjectType, '\\');
         if (
             array_key_exists($dataObjectType, $this->objectKeyMap) &&
             array_key_exists($key, $this->objectKeyMap[$dataObjectType])
