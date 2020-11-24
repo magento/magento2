@@ -167,7 +167,7 @@ class DataObjectProcessor
      * @param string $dataObjectType
      * @return string
      */
-    protected function mapObjectKey(string $key, string $dataObjectType): string
+    private function mapObjectKey(string $key, string $dataObjectType): string
     {
         if (
             array_key_exists($dataObjectType, $this->objectKeyMap) &&
