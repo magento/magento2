@@ -142,7 +142,7 @@ class Cli extends Console\Application
     protected function getApplicationCommands()
     {
         $commands = [];
-//        try {
+        try {
             if (class_exists(\Magento\Setup\Console\CommandList::class)) {
                 $setupCommandList = new \Magento\Setup\Console\CommandList($this->serviceManager);
                 $commands = array_merge($commands, $setupCommandList->getCommands());
@@ -158,9 +158,9 @@ class Cli extends Console\Application
                 $commands,
                 $this->getVendorCommands($this->objectManager)
             );
-//        } catch (\Exception $e) {
-//            $this->initException = $e;
-//        }
+        } catch (\Exception $e) {
+            $this->initException = $e;
+        }
 
         return $commands;
     }
