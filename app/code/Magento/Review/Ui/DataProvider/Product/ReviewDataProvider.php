@@ -102,7 +102,7 @@ class ReviewDataProvider extends AbstractDataProvider
     /**
      * @inheritDoc
      */
-    public function addOrder($field, $direction): void
+    public function addOrder($field, $direction)
     {
         $this->getCollection()->setOrder($this->getPreparedField($field), $direction);
     }
@@ -112,7 +112,7 @@ class ReviewDataProvider extends AbstractDataProvider
      * @since 100.1.0
      * @return void
      */
-    public function addFilter(Filter $filter): void
+    public function addFilter(Filter $filter)
     {
         $field = $filter->getField();
         $filter->setField($this->getPreparedField($field));
