@@ -13,7 +13,7 @@
             <description>Searches the Admin Products grid by string without clearing filters.</description>
         </annotations>
         <arguments>
-            <argument name="keyword" type="string"/>
+            <argument name="keyword" defaultValue="" type="string"/>
         </arguments>
 
         <fillField selector="{{AdminProductGridFilterSection.keywordSearch}}" userInput="{{keyword}}" stepKey="fillKeywordSearchField"/>

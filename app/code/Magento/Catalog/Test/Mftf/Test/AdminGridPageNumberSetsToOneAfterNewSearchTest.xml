@@ -9,7 +9,6 @@
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminGridPageNumberSetsToOneAfterNewSearchTest">
-
         <annotations>
             <features value="Catalog"/>
             <stories value="Catalog grid"/>
@@ -27,27 +26,28 @@
             <actionGroup ref="AdminProductCatalogPageOpenActionGroup" stepKey="goToProductCatalog"/>
             <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetProductGridToDefaultView"/>
             <actionGroup ref="DeleteProductsIfTheyExistActionGroup" stepKey="deleteProductIfTheyExist"/>
-            <createData stepKey="category1" entity="SimpleSubCategory"/>
 
-            <createData stepKey="simpleProduct1" entity="SimpleProduct">
+            <!-- Create required prerequisites -->
+            <createData entity="SimpleSubCategory" stepKey="category1"/>
+            <createData entity="SimpleProduct" stepKey="simpleProduct1">
                 <requiredEntity createDataKey="category1"/>
             </createData>
-            <createData stepKey="simpleProduct2" entity="SimpleProduct">
+            <createData entity="SimpleProduct" stepKey="simpleProduct2">
                 <requiredEntity createDataKey="category1"/>
             </createData>
-            <createData stepKey="simpleProduct3" entity="SimpleProduct">
+            <createData entity="SimpleProduct" stepKey="simpleProduct3">
                 <requiredEntity createDataKey="category1"/>
             </createData>
-            <createData stepKey="simpleProduct4" entity="SimpleProduct">
+            <createData entity="SimpleProduct" stepKey="simpleProduct4">
                 <requiredEntity createDataKey="category1"/>
             </createData>
-            <createData stepKey="virtualProduct1" entity="VirtualProduct">
+            <createData entity="VirtualProduct" stepKey="virtualProduct1">
                 <requiredEntity createDataKey="category1"/>
             </createData>
-            <createData stepKey="virtualProduct2" entity="VirtualProduct">
+            <createData entity="VirtualProduct" stepKey="virtualProduct2">
                 <requiredEntity createDataKey="category1"/>
             </createData>
-            <createData stepKey="virtualProduct3" entity="VirtualProduct">
+            <createData entity="VirtualProduct" stepKey="virtualProduct3">
                 <requiredEntity createDataKey="category1"/>
             </createData>
         </before>
@@ -59,39 +59,47 @@
             </actionGroup>
             <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearFilters"/>
 
-            <deleteData stepKey="deleteCategory1" createDataKey="category1"/>
-
-            <deleteData stepKey="deleteSimpleProduct1" createDataKey="simpleProduct1"/>
-            <deleteData stepKey="deleteSimpleProduct2" createDataKey="simpleProduct2"/>
-            <deleteData stepKey="deleteSimpleProduct3" createDataKey="simpleProduct3"/>
-            <deleteData stepKey="deleteSimpleProduct4" createDataKey="simpleProduct4"/>
-            <deleteData stepKey="deleteVirtualProduct1" createDataKey="virtualProduct1"/>
-            <deleteData stepKey="deleteVirtualProduct2" createDataKey="virtualProduct2"/>
-            <deleteData stepKey="deleteVirtualProduct3" createDataKey="virtualProduct3"/>
+            <!-- Delete prerequisites -->
+            <deleteData createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
+            <deleteData createDataKey="simpleProduct2" stepKey="deleteSimpleProduct2"/>
+            <deleteData createDataKey="simpleProduct3" stepKey="deleteSimpleProduct3"/>
+            <deleteData createDataKey="simpleProduct4" stepKey="deleteSimpleProduct4"/>
+            <deleteData createDataKey="virtualProduct1" stepKey="deleteVirtualProduct1"/>
+            <deleteData createDataKey="virtualProduct2" stepKey="deleteVirtualProduct2"/>
+            <deleteData createDataKey="virtualProduct3" stepKey="deleteVirtualProduct3"/>
+            <deleteData createDataKey="category1" stepKey="deleteCategory1"/>
 
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <actionGroup ref="AdminProductCatalogPageOpenActionGroup" stepKey="goToProductCatalog"/>
 
+        <!-- Set the product grid to display one product per page -->
         <actionGroup ref="AdminDataGridSelectCustomPerPageActionGroup" stepKey="select1ProductPerPage">
             <argument name="perPage" value="ProductPerPage.productCount"/>
         </actionGroup>
 
+        <!-- Performing the first search and assertions -->
         <actionGroup ref="SearchProductGridByStringNoClearActionGroup" stepKey="searchForSimpleProduct">
             <argument name="keyword" value="SimpleProduct"/>
         </actionGroup>
+        <actionGroup ref="AdminGridAssertTotalPageCountActionGroup" stepKey="waitForTotalPagesCountFourToBeVisible">
+            <argument name="expectedTotalPageCount" value="4"/>
+        </actionGroup>
+        <actionGroup ref="AdminGridGoToNextPageActionGroup" stepKey="clickNextPageProductGrid"/>
+        <actionGroup ref="AdminGridAssertCurrentPageNumberActionGroup" stepKey="assertCurrentPageIsTwoOnProductGridFirstSearch">
+            <argument name="expectedCurrentPageNumber" value="2"/>
+        </actionGroup>
 
-        <waitForElementVisible selector="{{AdminDataGridPaginationSection.totalPagesCount('4')}}" stepKey="seeTotalPagesIsFourOnFirstSearch"/>
-        <comment userInput="Go to the next page" stepKey="nextPage"/>
-        <click selector="{{AdminDataGridPaginationSection.nextPage}}" stepKey="clickNextPageProductGrid"/>
-        <seeInField selector="{{AdminDataGridPaginationSection.currentPage}}" userInput="2" stepKey="seeOnSecondPageProductGridOnFirstSearch"/>
-
+        <!-- Performing the second search and assertions of successful current page number reset -->
         <actionGroup ref="SearchProductGridByStringNoClearActionGroup" stepKey="searchForVirtualProduct">
             <argument name="keyword" value="VirtualProduct"/>
         </actionGroup>
-
-        <waitForElementVisible selector="{{AdminDataGridPaginationSection.totalPagesCount('3')}}" stepKey="seeTotalPagesIsThreeOnSecondSearch"/>
-        <seeInField selector="{{AdminDataGridPaginationSection.currentPage}}" userInput="1" stepKey="seeOnFirstPageProductGridOnSecondSearch"/>
+        <actionGroup ref="AdminGridAssertTotalPageCountActionGroup" stepKey="waitForTotalPagesCountThreeToBeVisible">
+            <argument name="expectedTotalPageCount" value="3"/>
+        </actionGroup>
+        <actionGroup ref="AdminGridAssertCurrentPageNumberActionGroup" stepKey="assertCurrentPageIsOneOnProductGridSecondSearch">
+            <argument name="expectedCurrentPageNumber" value="1"/>
+        </actionGroup>
     </test>
 </tests>
