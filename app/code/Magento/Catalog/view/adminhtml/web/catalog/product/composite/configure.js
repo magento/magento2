@@ -607,6 +607,7 @@ define([
          * @param method can be 'item_confirm', 'item_restore', 'current_confirmed_to_form', 'form_confirmed_to_confirmed'
          */
         _processFieldsData: function (method) {
+            var self = this;
 
             /**
              * Internal function for rename fields names of some list type
@@ -652,6 +653,11 @@ define([
                     for (var i = 0; i < elms.length; i++) {
                         if (elms[i].name && elms[i].type == 'file') {
                             elms[i].name = elms[i].name.replace(patternFlat, replacementFlat);
+                            self.blockFormFields.insert(new Element('input', {
+                                type: 'hidden',
+                                name: 'options[files_prefix]'.replace(pattern, replacement),
+                                value: 'item_' + itemId + '_'
+                            }));
                         } else if (elms[i].name) {
                             elms[i].name = elms[i].name.replace(pattern, replacement);
                         }
