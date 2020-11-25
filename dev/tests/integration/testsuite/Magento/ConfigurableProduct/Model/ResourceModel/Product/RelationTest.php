@@ -100,26 +100,6 @@ class RelationTest extends TestCase
          * and they are related to child ids.
          */
         $result = $this->model->getRelationsByChildren($childIds);
-
-        foreach ($childIds as $childId) {
-            $this->assertArrayHasKey($childId, $result);
-            $this->assertContains($result[$childId], $parentIdsOfChildIds[$childId]);
-        }
-
-        $parentIdsOfChildIds = [];
-
-        foreach ($childSkusOfParentSkus as $parentSku => $childSkus) {
-            foreach ($childSkus as $childSku) {
-                $childId = $configurableIdsOfSkus[$childSku];
-                $parentIdsOfChildIds[$childId][] = $configurableIdsOfSkus[$parentSku];
-            }
-        }
-
-        /**
-         * Assert there are parent configurable products ids in result of getRelationsByChildren method
-         * and they are related to child ids.
-         */
-        $result = $this->model->getRelationsByChildren($childIds);
         $sortedResult = $this->sortParentIdsOfChildIds($result);
         $sortedExpected = $this->sortParentIdsOfChildIds($parentIdsOfChildIds);
 
