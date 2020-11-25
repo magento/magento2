@@ -21,7 +21,7 @@ type CompareList {
     uid: ID! @doc(description: "The unique ID assigned to the compare list")
     items: [ComparableItem] @doc(description: "An array of products to compare")
     attributes: [ComparableAttribute] @doc(description: "An array of attributes that can be used for comparing products")
-    item_count: Int!
+    item_count: Int! @doc(description: "The number of items in the compare list")
 }
 
 type Customer {
@@ -60,5 +60,5 @@ type DeleteCompareListOutput {
 
 type AssignCompareListToCustomerOutput {
     result: Boolean!
-    compare_list: CompareList
+    compare_list: CompareList @doc(description: "The contents of the customer's compare list")
 }
