@@ -10,7 +10,7 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">	
     <actionGroup name="AdminCheckProductOnProductGridActionGroup">	
         <annotations>	
-            <description>Check the product on the Product Grid</description>	
+            <description>Check the checkbox for the product on the Product Grid</description>	
         </annotations>	
         <arguments>	
             <argument name="product" type="entity"/>	
