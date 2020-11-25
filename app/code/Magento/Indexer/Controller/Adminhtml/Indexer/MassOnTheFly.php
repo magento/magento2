@@ -22,7 +22,7 @@ class MassOnTheFly extends \Magento\Indexer\Controller\Adminhtml\Indexer impleme
     {
         $indexerIds = $this->getRequest()->getParam('indexer_ids');
         if (!is_array($indexerIds)) {
-            $this->messageManager->addError(__('Please select indexers.'));
+            $this->messageManager->addErrorMessage(__('Please select indexers.'));
         } else {
             try {
                 foreach ($indexerIds as $indexerId) {
@@ -36,7 +36,7 @@ class MassOnTheFly extends \Magento\Indexer\Controller\Adminhtml\Indexer impleme
                     __('%1 indexer(s) are in "Update on Save" mode.', count($indexerIds))
                 );
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
             } catch (\Exception $e) {
                 $this->messageManager->addException(
                     $e,

@@ -8,10 +8,12 @@ declare(strict_types=1);
 namespace Magento\Catalog\Model\Product\Gallery;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\Product;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\EntityManager\Operation\ExtensionInterface;
 use Magento\MediaStorage\Model\File\Uploader as FileUploader;
+use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
@@ -88,6 +90,15 @@ class CreateHandler implements ExtensionInterface
      * @var  \Magento\Store\Model\StoreManagerInterface
      */
     private $storeManager;
+
+    /**
+     * @var string[]
+     */
+    private $mediaAttributesWithLabels = [
+        'image',
+        'small_image',
+        'thumbnail'
+    ];
 
     /**
      * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
@@ -190,27 +201,8 @@ class CreateHandler implements ExtensionInterface
             $value['duplicate'] = $duplicate;
         }
 
-        /* @var $mediaAttribute \Magento\Catalog\Api\Data\ProductAttributeInterface */
-        foreach ($this->getMediaAttributeCodes() as $mediaAttrCode) {
-            $attrData = $product->getData($mediaAttrCode);
-            if (empty($attrData) && empty($clearImages) && empty($newImages) && empty($existImages)) {
-                continue;
-            }
-            $this->processMediaAttribute(
-                $product,
-                $mediaAttrCode,
-                $clearImages,
-                $newImages
-            );
-            if (in_array($mediaAttrCode, ['image', 'small_image', 'thumbnail'])) {
-                $this->processMediaAttributeLabel(
-                    $product,
-                    $mediaAttrCode,
-                    $clearImages,
-                    $newImages,
-                    $existImages
-                );
-            }
+        if (!empty($value['images'])) {
+            $this->processMediaAttributes($product, $existImages, $newImages, $clearImages);
         }
 
         $product->setData($attrCode, $value);
@@ -492,30 +484,39 @@ class CreateHandler implements ExtensionInterface
     /**
      * Process media attribute
      *
-     * @param \Magento\Catalog\Model\Product $product
+     * @param Product $product
      * @param string $mediaAttrCode
      * @param array $clearImages
      * @param array $newImages
      */
     private function processMediaAttribute(
-        \Magento\Catalog\Model\Product $product,
-        $mediaAttrCode,
+        Product $product,
+        string $mediaAttrCode,
         array $clearImages,
         array $newImages
-    ) {
-        $attrData = $product->getData($mediaAttrCode);
-        if (in_array($attrData, $clearImages)) {
-            $product->setData($mediaAttrCode, 'no_selection');
-        }
-
-        if (in_array($attrData, array_keys($newImages))) {
-            $product->setData($mediaAttrCode, $newImages[$attrData]['new_file']);
-        }
-        if (!empty($product->getData($mediaAttrCode))) {
+    ): void {
+        $storeId = $product->isObjectNew() ? Store::DEFAULT_STORE_ID : (int) $product->getStoreId();
+        /***
+         * Attributes values are saved as default value in single store mode
+         * @see \Magento\Catalog\Model\ResourceModel\AbstractResource::_saveAttributeValue
+         */
+        if ($storeId === Store::DEFAULT_STORE_ID
+            || $this->storeManager->hasSingleStore()
+            || $this->getMediaAttributeStoreValue($product, $mediaAttrCode, $storeId) !== null
+        ) {
+            $value = $product->getData($mediaAttrCode);
+            $newValue = $value;
+            if (in_array($value, $clearImages)) {
+                $newValue = 'no_selection';
+            }
+            if (in_array($value, array_keys($newImages))) {
+                $newValue = $newImages[$value]['new_file'];
+            }
+            $product->setData($mediaAttrCode, $newValue);
             $product->addAttributeUpdate(
                 $mediaAttrCode,
-                $product->getData($mediaAttrCode),
-                $product->getStoreId()
+                $newValue,
+                $storeId
             );
         }
     }
@@ -523,19 +524,19 @@ class CreateHandler implements ExtensionInterface
     /**
      * Process media attribute label
      *
-     * @param \Magento\Catalog\Model\Product $product
+     * @param Product $product
      * @param string $mediaAttrCode
      * @param array $clearImages
      * @param array $newImages
      * @param array $existImages
      */
     private function processMediaAttributeLabel(
-        \Magento\Catalog\Model\Product $product,
-        $mediaAttrCode,
+        Product $product,
+        string $mediaAttrCode,
         array $clearImages,
         array $newImages,
         array $existImages
-    ) {
+    ): void {
         $resetLabel = false;
         $attrData = $product->getData($mediaAttrCode);
         if (in_array($attrData, $clearImages)) {
@@ -596,15 +597,79 @@ class CreateHandler implements ExtensionInterface
         $canRemoveImage = true;
         $gallery = $this->getImagesForAllStores($product);
         $storeId = $product->getStoreId();
+        $storeIds = [];
+        $storeIds[] = 0;
+        $websiteIds = array_map('intval', $product->getWebsiteIds() ?? []);
+        foreach ($this->storeManager->getStores() as $store) {
+            if (in_array((int) $store->getWebsiteId(), $websiteIds, true)) {
+                $storeIds[] = (int) $store->getId();
+            }
+        }
 
         if (!empty($gallery)) {
             foreach ($gallery as $image) {
-                if ($image['filepath'] === $imageFile && (int) $image['store_id'] !== $storeId) {
+                if (in_array((int) $image['store_id'], $storeIds)
+                    && $image['filepath'] === $imageFile
+                    && (int) $image['store_id'] !== $storeId
+                ) {
                     $canRemoveImage = false;
                 }
             }
         }
 
         return $canRemoveImage;
+    }
+
+    /**
+     * Get media attribute value for store view
+     *
+     * @param Product $product
+     * @param string $attributeCode
+     * @param int|null $storeId
+     * @return string|null
+     */
+    private function getMediaAttributeStoreValue(Product $product, string $attributeCode, int $storeId = null): ?string
+    {
+        $gallery = $this->getImagesForAllStores($product);
+        $storeId = $storeId === null ? (int) $product->getStoreId() : $storeId;
+        foreach ($gallery as $image) {
+            if ($image['attribute_code'] === $attributeCode && ((int)$image['store_id']) === $storeId) {
+                return $image['filepath'];
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Update media attributes
+     *
+     * @param Product $product
+     * @param array $existImages
+     * @param array $newImages
+     * @param array $clearImages
+     */
+    private function processMediaAttributes(
+        Product $product,
+        array $existImages,
+        array $newImages,
+        array $clearImages
+    ): void {
+        foreach ($this->getMediaAttributeCodes() as $mediaAttrCode) {
+            $this->processMediaAttribute(
+                $product,
+                $mediaAttrCode,
+                $clearImages,
+                $newImages
+            );
+            if (in_array($mediaAttrCode, $this->mediaAttributesWithLabels)) {
+                $this->processMediaAttributeLabel(
+                    $product,
+                    $mediaAttrCode,
+                    $clearImages,
+                    $newImages,
+                    $existImages
+                );
+            }
+        }
     }
 }

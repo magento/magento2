@@ -346,9 +346,9 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
 
         $blackList = [];
         foreach (glob(__DIR__ . '/_files/phpcpd/blacklist/*.txt') as $list) {
-            // phpcs:ignore Magento2.Performance.ForeachArrayMerge.ForeachArrayMerge
-            $blackList = array_merge($blackList, file($list, FILE_IGNORE_NEW_LINES));
+            $blackList[] = file($list, FILE_IGNORE_NEW_LINES);
         }
+        $blackList = array_merge([], ...$blackList);
 
         $copyPasteDetector->setBlackList($blackList);
 

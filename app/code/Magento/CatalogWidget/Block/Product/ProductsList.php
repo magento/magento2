@@ -365,9 +365,13 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
 
         $collection->setVisibility($this->catalogProductVisibility->getVisibleInCatalogIds());
 
+        /**
+         * Change sorting attribute to entity_id because created_at can be the same for products fastly created
+         * one by one and sorting by created_at is indeterministic in this case.
+         */
         $collection = $this->_addProductAttributesAndPrices($collection)
             ->addStoreFilter()
-            ->addAttributeToSort('created_at', 'desc')
+            ->addAttributeToSort('entity_id', 'desc')
             ->setPageSize($this->getPageSize())
             ->setCurPage($this->getRequest()->getParam($this->getData('page_var_name'), 1));
 
@@ -534,7 +538,7 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
      */
     public function getIdentities()
     {
-        $identities = [[]];
+        $identities = [];
         if ($this->getProductCollection()) {
             foreach ($this->getProductCollection() as $product) {
                 if ($product instanceof IdentityInterface) {
@@ -542,7 +546,7 @@ class ProductsList extends AbstractProduct implements BlockInterface, IdentityIn
                 }
             }
         }
-        $identities = array_merge(...$identities);
+        $identities = array_merge([], ...$identities);
 
         return $identities ?: [Product::CACHE_TAG];
     }

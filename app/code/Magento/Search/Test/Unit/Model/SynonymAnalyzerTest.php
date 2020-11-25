@@ -49,9 +49,9 @@ class SynonymAnalyzerTest extends TestCase
      */
     public function testGetSynonymsForPhrase()
     {
-        $phrase = 'Elizabeth is the british queen';
+        $phrase = 'Elizabeth/Angela is the british queen';
         $expected = [
-            0 => [ 0 => "Elizabeth" ],
+            0 => [ 0 => "Elizabeth/Angela" ],
             1 => [ 0 => "is" ],
             2 => [ 0 => "the" ],
             3 => [ 0 => "british", 1 => "english" ],

@@ -80,29 +80,23 @@ class AfterAddressSaveObserverTest extends TestCase
     protected $appState;
 
     /**
-     * @var Customer|MockObject
-     */
-    protected $customerMock;
-
-    /**
      * @var Session|MockObject
      */
     protected $customerSessionMock;
 
+    /**
+     * @var GroupInterface|MockObject
+     */
+    protected $group;
+
     protected function setUp(): void
     {
-        $this->vat = $this->getMockBuilder(Vat::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->helperAddress = $this->getMockBuilder(\Magento\Customer\Helper\Address::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->registry = $this->getMockBuilder(Registry::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
+        $this->vat = $this->createMock(Vat::class);
+        $this->helperAddress = $this->createMock(HelperAddress::class);
+        $this->registry = $this->createMock(Registry::class);
+        $this->escaper = $this->createMock(Escaper::class);
+        $this->appState = $this->createMock(AppState::class);
+        $this->customerSessionMock = $this->createMock(Session::class);
         $this->group = $this->getMockBuilder(GroupInterface::class)
             ->setMethods(['getId'])
             ->getMockForAbstractClass();
@@ -114,21 +108,8 @@ class AfterAddressSaveObserverTest extends TestCase
 
         $this->scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)
             ->getMockForAbstractClass();
-
         $this->messageManager = $this->getMockBuilder(ManagerInterface::class)
             ->getMockForAbstractClass();
-
-        $this->escaper = $this->getMockBuilder(Escaper::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->appState = $this->getMockBuilder(\Magento\Framework\App\State::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->customerSessionMock = $this->getMockBuilder(Session::class)
-            ->disableOriginalConstructor()
-            ->getMock();
 
         $this->model = new AfterAddressSaveObserver(
             $this->vat,
@@ -595,7 +576,7 @@ class AfterAddressSaveObserverTest extends TestCase
                 ->with($vatId)
                 ->willReturn($vatId);
             $this->messageManager->expects($this->once())
-                ->method('addError')
+                ->method('addErrorMessage')
                 ->with($resultInvalidMessage)
                 ->willReturnSelf();
         }
@@ -605,7 +586,7 @@ class AfterAddressSaveObserverTest extends TestCase
                 ->with('trans_email/ident_support/email', ScopeInterface::SCOPE_STORE)
                 ->willReturn('admin@example.com');
             $this->messageManager->expects($this->once())
-                ->method('addError')
+                ->method('addErrorMessage')
                 ->with($resultErrorMessage)
                 ->willReturnSelf();
         }

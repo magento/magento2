@@ -15,7 +15,7 @@
         <arguments>
             <argument name="imageName" type="string"/>
         </arguments>
-        <click selector="{{AdminEnhancedMediaGalleryMassActionSection.massActionCheckbox(imageName)}}" stepKey="selectImageInGridToDelte"/>
-        <see selector="{{AdminEnhancedMediaGalleryMassActionSection.totalSelected}}" userInput="(1 Selected)" stepKey="verifySelectedCount"/>
+        <checkOption selector="{{AdminEnhancedMediaGalleryMassActionSection.massActionCheckbox(imageName)}}" stepKey="selectImageInGridToDelte"/>
+        <waitForText selector="{{AdminEnhancedMediaGalleryMassActionSection.totalSelected}}" userInput="(1 Selected)" stepKey="verifySelectedCount"/>
     </actionGroup>
 </actionGroups>

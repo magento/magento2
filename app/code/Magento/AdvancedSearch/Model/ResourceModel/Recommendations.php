@@ -8,7 +8,6 @@ namespace Magento\AdvancedSearch\Model\ResourceModel;
 /**
  * Catalog search recommendations resource model
  *
- * @author      Magento Core Team <core@magentocommerce.com>
  * @api
  * @since 100.0.2
  */

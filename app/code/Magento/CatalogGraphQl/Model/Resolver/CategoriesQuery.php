@@ -70,7 +70,7 @@ class CategoriesQuery implements ResolverInterface
         }
 
         try {
-            $filterResult = $this->categoryFilter->getResult($args, $store);
+            $filterResult = $this->categoryFilter->getResult($args, $store, [], $context);
         } catch (InputException $e) {
             throw new GraphQlInputException(__($e->getMessage()));
         }

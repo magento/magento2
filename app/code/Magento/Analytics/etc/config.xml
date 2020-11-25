@@ -15,10 +15,12 @@
                 <otp>https://advancedreporting.rjmetrics.com/otp</otp>
                 <report>https://advancedreporting.rjmetrics.com/report</report>
                 <notify_data_changed>https://advancedreporting.rjmetrics.com/report</notify_data_changed>
+                <documentation>https://docs.magento.com/user-guide/reports/advanced-reporting.html</documentation>
             </url>
             <integration_name>Magento Analytics user</integration_name>
             <general>
                 <collection_time>02,00,00</collection_time>
+                <token/>
             </general>
         </analytics>
     </default>

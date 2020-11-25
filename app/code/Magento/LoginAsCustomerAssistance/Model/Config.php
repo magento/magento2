@@ -16,9 +16,6 @@ use Magento\Store\Model\ScopeInterface;
  */
 class Config implements ConfigInterface
 {
-    /**
-     * Extension config path
-     */
     private const XML_PATH_SHOPPING_ASSISTANCE_CHECKBOX_TITLE
         = 'login_as_customer/general/shopping_assistance_checkbox_title';
     private const XML_PATH_SHOPPING_ASSISTANCE_CHECKBOX_TOOLTIP

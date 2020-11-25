@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontConfigurableProductMSRPCovertTest">
+        <annotations>
+            <features value="ConfigurableProduct"/>
+            <stories value="View configurable product options, verify convert MSRP currency on storefront."/>
+            <title value="Verify convert MSRP currency of configurable product options"/>
+            <description value="Check convert MSRP currency of configurable product options."/>
+            <testCaseId value="MC-37575"/>
+            <severity value="MAJOR"/>
+            <group value="ConfigurableProduct"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+
+            <createData entity="ApiConfigurableProduct" stepKey="createConfigProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+
+            <createData entity="productAttributeWithTwoOptions" stepKey="createConfigProductAttribute"/>
+            <createData entity="productAttributeOption1" stepKey="createConfigProductAttributeOption1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption2" stepKey="createConfigProductAttributeOption2">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="AddToDefaultSet" stepKey="createConfigAddToAttributeSet">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <getData entity="ProductAttributeOptionGetter" index="1" stepKey="getConfigAttributeOption1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+            <getData entity="ProductAttributeOptionGetter" index="2" stepKey="getConfigAttributeOption2">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+
+            <createData entity="ApiSimpleProductWithPrice50" stepKey="createConfigChildProduct1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption1"/>
+            </createData>
+            <createData entity="ApiSimpleProductWithPrice60" stepKey="createConfigChildProduct2">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption2"/>
+            </createData>
+
+            <createData entity="ConfigurableProductTwoOptions" stepKey="createConfigProductOption">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption1"/>
+                <requiredEntity createDataKey="getConfigAttributeOption2"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild1">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigChildProduct1"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild2">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigChildProduct2"/>
+            </createData>
+
+            <createData entity="MsrpEnableMAP" stepKey="enableMAP"/>
+            <magentoCLI command="config:set currency/options/allow EUR,USD" stepKey="setCurrencyAllow"/>
+        </before>
+        <after>
+
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
+            <deleteData createDataKey="createConfigChildProduct1" stepKey="deleteConfigChildProduct1"/>
+            <deleteData createDataKey="createConfigChildProduct2" stepKey="deleteConfigChildProduct2"/>
+            <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
+            <createData entity="MsrpDisableMAP" stepKey="disableMAP"/>
+            <magentoCLI command="config:set currency/options/allow USD" stepKey="setCurrencyAllow"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
+        </after>
+
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToFirstChildProductEditPage">
+            <argument name="productId" value="$$createConfigChildProduct1.id$$"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForProductPageLoad"/>
+        <actionGroup ref="AdminSetAdvancedPricingActionGroup" stepKey="setAdvancedPricingFirst">
+            <argument name="advancedPrice" value="100"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToSecondChildProductEditPage">
+            <argument name="productId" value="$$createConfigChildProduct2.id$$"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForProductPageLoad1"/>
+        <actionGroup ref="AdminSetAdvancedPricingActionGroup" stepKey="setAdvancedPricingSecond">
+            <argument name="advancedPrice" value="100"/>
+        </actionGroup>
+
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+            <argument name="tags" value=""/>
+        </actionGroup>
+
+        <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="navigateToProduct">
+            <argument name="productUrlKey" value="$$createConfigProduct.custom_attributes[url_key]$$"/>
+        </actionGroup>
+
+        <actionGroup ref="StorefrontSwitchCurrencyActionGroup" stepKey="switchEURCurrency">
+            <argument name="currency" value="EUR"/>
+        </actionGroup>
+
+        <selectOption selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" userInput="$$getConfigAttributeOption1.value$$" stepKey="selectFirstOption"/>
+        <waitForElement selector="{{StorefrontProductInfoMainSection.mapPrice}}" stepKey="waitForLoad"/>
+        <grabTextFrom selector="{{StorefrontProductInfoMainSection.mapPrice}}" stepKey="grabProductMapPrice"/>
+        <assertNotEquals stepKey="assertProductMapPrice">
+            <actualResult type="const">($grabProductMapPrice)</actualResult>
+            <expectedResult type="string">€100.00</expectedResult>
+        </assertNotEquals>
+    </test>
+</tests>

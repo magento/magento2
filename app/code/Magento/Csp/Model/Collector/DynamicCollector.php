@@ -21,6 +21,19 @@ class DynamicCollector implements PolicyCollectorInterface
     private $added = [];
 
     /**
+     * @var MergerInterface
+     */
+    private $merger;
+
+    /**
+     * @param MergerInterface $merger
+     */
+    public function __construct(MergerInterface $merger)
+    {
+        $this->merger = $merger;
+    }
+
+    /**
      * Add a policy for current page.
      *
      * @param PolicyInterface $policy
@@ -28,7 +41,15 @@ class DynamicCollector implements PolicyCollectorInterface
      */
     public function add(PolicyInterface $policy): void
     {
-        $this->added[] = $policy;
+        if (array_key_exists($policy->getId(), $this->added)) {
+            if ($this->merger->canMerge($this->added[$policy->getId()], $policy)) {
+                $this->added[$policy->getId()] = $this->merger->merge($this->added[$policy->getId()], $policy);
+            } else {
+                throw new \RuntimeException('Cannot merge a policy of ' .get_class($policy));
+            }
+        } else {
+            $this->added[$policy->getId()] = $policy;
+        }
     }
 
     /**
@@ -36,6 +57,6 @@ class DynamicCollector implements PolicyCollectorInterface
      */
     public function collect(array $defaultPolicies = []): array
     {
-        return array_merge($defaultPolicies, $this->added);
+        return array_merge($defaultPolicies, array_values($this->added));
     }
 }

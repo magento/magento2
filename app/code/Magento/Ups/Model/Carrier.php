@@ -1118,6 +1118,7 @@ XMLAuth;
 
         /** @var HttpResponseDeferredInterface[] $trackingResponses */
         $trackingResponses = [];
+        $tracking = '';
         foreach ($trackings as $tracking) {
             /**
              * RequestOption==>'1' to request all activities
@@ -1135,7 +1136,7 @@ XMLAuth;
 </TrackRequest>
 XMLAuth;
 
-            $trackingResponses[] = $this->asyncHttpClient->request(
+            $trackingResponses[$tracking] = $this->asyncHttpClient->request(
                 new Request(
                     $url,
                     Request::METHOD_POST,
@@ -1144,13 +1145,9 @@ XMLAuth;
                 )
             );
         }
-        foreach ($trackingResponses as $response) {
+        foreach ($trackingResponses as $tracking => $response) {
             $httpResponse = $response->get();
-            if ($httpResponse->getStatusCode() >= 400) {
-                $xmlResponse = '';
-            } else {
-                $xmlResponse = $httpResponse->getBody();
-            }
+            $xmlResponse = $httpResponse->getStatusCode() >= 400 ? '' : $httpResponse->getBody();
 
             $this->_parseXmlTrackingResponse($tracking, $xmlResponse);
         }
@@ -1362,10 +1359,11 @@ XMLAuth;
     protected function _formShipmentRequest(DataObject $request)
     {
         $packages = $request->getPackages();
+        $shipmentItems = [];
         foreach ($packages as $package) {
             $shipmentItems[] = $package['items'];
         }
-        $shipmentItems = array_merge(...$shipmentItems);
+        $shipmentItems = array_merge([], ...$shipmentItems);
 
         $xmlRequest = $this->_xmlElFactory->create(
             ['data' => '<?xml version = "1.0" ?><ShipmentConfirmRequest xml:lang="en-US"/>']
@@ -1528,24 +1526,18 @@ XMLAuth;
             }
 
             if ($deliveryConfirmation && $deliveryConfirmationLevel === self::DELIVERY_CONFIRMATION_PACKAGE) {
-                    $serviceOptionsNode = $packagePart[$packageId]->addChild('PackageServiceOptions');
-                    $serviceOptionsNode->addChild(
-                        'DeliveryConfirmation'
-                    )->addChild(
-                        'DCISType',
-                        $deliveryConfirmation
-                    );
+                $serviceOptionsNode = $packagePart[$packageId]->addChild('PackageServiceOptions');
+                $serviceOptionsNode
+                    ->addChild('DeliveryConfirmation')
+                    ->addChild('DCISType', $deliveryConfirmation);
             }
         }
 
-        if (isset($deliveryConfirmation) && $deliveryConfirmationLevel === self::DELIVERY_CONFIRMATION_SHIPMENT) {
+        if (!empty($deliveryConfirmation) && $deliveryConfirmationLevel === self::DELIVERY_CONFIRMATION_SHIPMENT) {
             $serviceOptionsNode = $shipmentPart->addChild('ShipmentServiceOptions');
-            $serviceOptionsNode->addChild(
-                'DeliveryConfirmation'
-            )->addChild(
-                'DCISType',
-                $deliveryConfirmation
-            );
+            $serviceOptionsNode
+                ->addChild('DeliveryConfirmation')
+                ->addChild('DCISType', $deliveryConfirmation);
         }
 
         $shipmentPart->addChild('PaymentInformation')
@@ -1624,9 +1616,11 @@ XMLAuth;
             $xmlResponse = '';
         }
 
+        $response = '';
         try {
             $response = $this->_xmlElFactory->create(['data' => $xmlResponse]);
         } catch (Throwable $e) {
+            $response = $this->_xmlElFactory->create(['data' => '']);
             $debugData['result'] = ['error' => $e->getMessage(), 'code' => $e->getCode()];
         }
 
@@ -1800,6 +1794,7 @@ XMLAuth;
         $this->setXMLAccessRequest();
         $xmlRequest = $this->_xmlAccessRequest . $rawXmlRequest;
         $xmlResponse = $this->_getCachedQuotes($xmlRequest);
+        $debugData = [];
 
         if ($xmlResponse === null) {
             $debugData['request'] = $this->filterDebugData($this->_xmlAccessRequest) . $rawXmlRequest;
