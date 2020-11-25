@@ -224,8 +224,6 @@ QUERY;
         $urlRewriteModel->setId($urlRewriteModel->getId());
         $urlRewriteModel->save();
 
-        ObjectManager::getInstance()->get(\Magento\TestFramework\Helper\CacheCleaner::class)->cleanAll();
-
         //modifying query by adding spaces to avoid getting cached values.
         $this->queryUrlAndAssertResponse(
             (int) $product->getEntityId(),
