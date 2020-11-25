@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminStartCreateProductAttributeOnProductPageActionGroup">
+        <annotations>
+            <description>On the Create/Edit product page create new Attribute</description>
+        </annotations>
+        <arguments>
+            <argument name="attributeCode" defaultValue="{{newProductAttribute.attribute_code}}" type="string" />
+            <argument name="attributeLabel" defaultValue="{{ProductAttributeFrontendLabel.label}}" type="string" />
+            <argument name="inputType" defaultValue="Dropdown" type="string" />
+        </arguments>
+        <click selector="{{AdminProductFormSection.addAttributeBtn}}" stepKey="clickOnAddAttribute"/>
+        <waitForElementVisible selector="{{AdminProductFormSection.createNewAttributeBtn}}" stepKey="waitForCreateBtn"/>
+        <click selector="{{AdminProductFormSection.createNewAttributeBtn}}" stepKey="clickCreateNewAttributeButton"/>
+        <waitForElementVisible selector="{{AdminCreateNewProductAttributeSection.defaultLabel}}" stepKey="waitForLabelInput"/>
+        <fillField selector="{{AdminCreateNewProductAttributeSection.defaultLabel}}" userInput="{{attributeLabel}}" stepKey="fillAttributeLabel"/>
+        <selectOption selector="{{AdminCreateNewProductAttributeSection.inputType}}" userInput="{{inputType}}" stepKey="setInputType"/>
+        <click selector="{{AdminCreateNewProductAttributeSection.advancedAttributeProperties}}" stepKey="clickOnAdvancedAttributeProperties"/>
+        <waitForElementVisible selector="{{AdminCreateNewProductAttributeSection.attributeCode}}" stepKey="waitForAttributeCodeToVisible"/>
+        <fillField selector="{{AdminCreateNewProductAttributeSection.attributeCode}}" userInput="{{attributeCode}}" stepKey="fillAttributeCode"/>
+    </actionGroup>
+</actionGroups>

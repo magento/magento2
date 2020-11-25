@@ -11,6 +11,7 @@ use Magento\Framework\View\Element\Context;
 use Magento\Robots\Model\Config\Value;
 use Magento\Sitemap\Helper\Data as SitemapHelper;
 use Magento\Sitemap\Model\ResourceModel\Sitemap\CollectionFactory;
+use Magento\Sitemap\Model\Sitemap;
 use Magento\Sitemap\Model\SitemapConfigReader;
 use Magento\Framework\App\ObjectManager;
 use Magento\Store\Model\StoreManagerInterface;
@@ -115,6 +116,9 @@ class Robots extends AbstractBlock implements IdentityInterface
         $collection->addStoreFilter($storeIds);
 
         $sitemapLinks = [];
+        /**
+         * @var Sitemap $sitemap
+         */
         foreach ($collection as $sitemap) {
             $sitemapUrl = $sitemap->getSitemapUrl($sitemap->getSitemapPath(), $sitemap->getSitemapFilename());
             $sitemapLinks[$sitemapUrl] = 'Sitemap: ' . $sitemapUrl;

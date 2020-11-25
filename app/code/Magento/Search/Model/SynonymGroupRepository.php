@@ -150,7 +150,7 @@ class SynonymGroupRepository implements SynonymGroupRepositoryInterface
      */
     private function merge(SynonymGroupInterface $synonymGroupToMerge, array $matchingGroupIds)
     {
-        $mergedSynonyms = [[]];
+        $mergedSynonyms = [];
         foreach ($matchingGroupIds as $groupId) {
             /** @var SynonymGroup $synonymGroupModel */
             $synonymGroupModel = $this->synonymGroupFactory->create();
@@ -160,7 +160,7 @@ class SynonymGroupRepository implements SynonymGroupRepositoryInterface
         }
         $mergedSynonyms[] = explode(',', $synonymGroupToMerge->getSynonymGroup());
 
-        return array_unique(array_merge(...$mergedSynonyms));
+        return array_unique(array_merge([], ...$mergedSynonyms));
     }
 
     /**

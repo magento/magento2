@@ -70,7 +70,7 @@ class Attribute extends AbstractFilter
             $label = $this->getOptionText($value);
             $labels[] = is_array($label) ? $label : [$label];
         }
-        $label = implode(',', array_unique(array_merge(...$labels)));
+        $label = implode(',', array_unique(array_merge([], ...$labels)));
         $this->getLayer()
             ->getState()
             ->addFilter($this->_createItem($label, $attributeValue));

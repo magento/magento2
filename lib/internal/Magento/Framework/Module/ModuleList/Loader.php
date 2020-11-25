@@ -210,6 +210,6 @@ class Loader
             $allResults[] = $this->expandSequence($list, $relatedName, $accumulated);
         }
         $allResults[] = $result;
-        return array_unique(array_merge(...$allResults));
+        return array_unique(array_merge([], ...$allResults));
     }
 }

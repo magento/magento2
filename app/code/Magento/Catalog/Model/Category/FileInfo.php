@@ -239,7 +239,8 @@ class FileInfo
         $mediaDirectoryRelativeSubpath = substr($mediaDirectoryPath, strlen($baseDirectoryPath));
         $pubDirectory = $baseDirectory->getRelativePath($pubDirectoryPath);
 
-        if (strpos($mediaDirectoryRelativeSubpath, $pubDirectory) === 0 && strpos($filePath, $pubDirectory) !== 0) {
+        if ($pubDirectory && strpos($mediaDirectoryRelativeSubpath, $pubDirectory) === 0
+            && strpos($filePath, $pubDirectory) !== 0) {
             $mediaDirectoryRelativeSubpath = substr($mediaDirectoryRelativeSubpath, strlen($pubDirectory));
         }
 

@@ -7,6 +7,7 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\QuoteGraphQl\Model\CartItem\DataProvider\CustomizableOptionValueInterface" type="Magento\QuoteGraphQl\Model\CartItem\DataProvider\CustomizableOptionValue\Composite" />
+    <preference for="Magento\QuoteGraphQl\Model\CartItem\DataProvider\Processor\ItemDataProcessorInterface" type="Magento\QuoteGraphQl\Model\CartItem\DataProvider\Processor\ItemDataCompositeProcessor" />
     <type name="Magento\QuoteGraphQl\Model\Resolver\CartItemTypeResolver">
         <arguments>
             <argument name="supportedTypes" xsi:type="array">

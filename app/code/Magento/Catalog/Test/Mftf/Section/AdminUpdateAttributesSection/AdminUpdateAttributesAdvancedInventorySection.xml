@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminUpdateAttributesAdvancedInventorySection">
+        <element name="inventory" type="button" selector="#attributes_update_tabs_inventory"/>
+        <element name="changeQty" type="checkbox" selector="#inventory_qty_checkbox"/>
+        <element name="qty" type="input" selector="#inventory_qty"/>
+        <element name="changeStockAvailability" type="checkbox" selector="#inventory_stock_availability_checkbox"/>
+        <element name="stockAvailability" type="select" selector="//select[@name='inventory[is_in_stock]']"/>
+    </section>
+</sections>
