@@ -1118,6 +1118,7 @@ XMLAuth;
 
         /** @var HttpResponseDeferredInterface[] $trackingResponses */
         $trackingResponses = [];
+        $tracking = '';
         foreach ($trackings as $tracking) {
             /**
              * RequestOption==>'1' to request all activities
@@ -1532,7 +1533,7 @@ XMLAuth;
             }
         }
 
-        if (isset($deliveryConfirmation) && $deliveryConfirmationLevel === self::DELIVERY_CONFIRMATION_SHIPMENT) {
+        if (!empty($deliveryConfirmation) && $deliveryConfirmationLevel === self::DELIVERY_CONFIRMATION_SHIPMENT) {
             $serviceOptionsNode = $shipmentPart->addChild('ShipmentServiceOptions');
             $serviceOptionsNode
                 ->addChild('DeliveryConfirmation')
@@ -1615,6 +1616,7 @@ XMLAuth;
             $xmlResponse = '';
         }
 
+        $response = '';
         try {
             $response = $this->_xmlElFactory->create(['data' => $xmlResponse]);
         } catch (Throwable $e) {

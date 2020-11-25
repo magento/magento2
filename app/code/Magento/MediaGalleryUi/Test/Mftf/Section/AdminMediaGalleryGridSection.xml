@@ -8,7 +8,7 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminMediaGalleryGridSection">
-        <element name="noDataMessage" type="text" selector="div.no-data-message-container"/>
+        <element name="noDataMessage" type="text" selector="[data-id='media-gallery-masonry-grid'] .no-data-message-container"/>
         <element name="nthImageInGrid" type="text" selector="div[class='masonry-image-column'][data-repeat-index='{{row}}'] img" parameterized="true"/>
     </section>
 </sections>

@@ -649,7 +649,7 @@ QUERY;
                 'image_prefix' => ''
             ],
             'with_pub_media_strategy' => [
-                'image_prefix' => '/pub/media/catalog/category/'
+                'image_prefix' => '/media/catalog/category/'
             ],
             'catalog_category_strategy' => [
                 'image_prefix' => 'catalog/category/'

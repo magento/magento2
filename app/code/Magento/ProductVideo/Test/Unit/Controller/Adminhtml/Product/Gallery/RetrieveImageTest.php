@@ -99,11 +99,20 @@ class RetrieveImageTest extends TestCase
      */
     private $fileDriverMock;
 
-    /**
-     * Set up
-     */
+    private function setupObjectManagerForCheckImageExist($return)
+    {
+        $objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $mockFileSystem = $this->createMock(Filesystem::class);
+        $mockRead = $this->createMock(ReadInterface::class);
+        $objectManagerMock->method($this->logicalOr('get', 'create'))->willReturn($mockFileSystem);
+        $mockFileSystem->method('getDirectoryRead')->willReturn($mockRead);
+        $mockRead->method('isExist')->willReturn($return);
+        \Magento\Framework\App\ObjectManager::setInstance($objectManagerMock);
+    }
+
     protected function setUp(): void
     {
+        $this->setupObjectManagerForCheckImageExist(false);
         $objectManager = new ObjectManager($this);
         $this->contextMock = $this->createMock(Context::class);
         $this->validatorMock = $this
