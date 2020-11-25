@@ -87,16 +87,16 @@ abstract class ImportResult extends Import
                     break;
                 }
             }
-            $message .= implode('<br>', $escapedMessages);
             if ($errorAggregator->hasFatalExceptions()) {
                 foreach ($this->getSystemExceptions($errorAggregator) as $error) {
-                    $message .= $this->escaper->escapeHtml($error->getErrorMessage())
+                    $escapedMessages[] = $this->escaper->escapeHtml($error->getErrorMessage())
                         . ' <a href="#" onclick="$(this).next().show();$(this).hide();return false;">'
                         . __('Show more') . '</a><div style="display:none;">' . __('Additional data') . ': '
                         . $this->escaper->escapeHtml($error->getErrorDescription()) . '</div>';
                 }
             }
             try {
+                $message .= implode('<br>', $escapedMessages);
                 $resultBlock->addNotice(
                     '<strong>' . __('Following Error(s) has been occurred during importing process:') . '</strong><br>'
                     . '<div class="import-error-wrapper">' . __('Only the first 100 errors are shown. ')
