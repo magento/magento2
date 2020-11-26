@@ -38,7 +38,7 @@ $mediaDirectory->create($targetDirPath);
 $mediaDirectory->create($targetTmpDirPath);
 
 $dist = $mediaDirectory->getAbsolutePath($mediaConfig->getBaseMediaPath() .  DIRECTORY_SEPARATOR . 'magento_image.jpg');
-copy(__DIR__ . '/magento_image.jpg', $dist);
+$mediaDirectory->getDriver()->filePutContents($dist, file_get_contents(__DIR__ . '/magento_image.jpg'));
 
 /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
 $productRepository = $objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);

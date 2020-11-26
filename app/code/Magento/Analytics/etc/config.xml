@@ -20,6 +20,7 @@
             <integration_name>Magento Analytics user</integration_name>
             <general>
                 <collection_time>02,00,00</collection_time>
+                <token/>
             </general>
         </analytics>
     </default>
