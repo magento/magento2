@@ -16,7 +16,7 @@ use Magento\GroupedProduct\Api\Data\GroupedOptionsExtensionInterface;
 class GroupedOptions implements GroupedOptionsInterface
 {
     /**
-     * @var float
+     * @var int
      */
     private $qty;
 
@@ -32,10 +32,10 @@ class GroupedOptions implements GroupedOptionsInterface
 
     /**
      * @param int $id
-     * @param float $qty
+     * @param int $qty
      * @param GroupedOptionsExtensionInterface|null $extensionAttributes
      */
-    public function __construct(int $id, float $qty, $extensionAttributes = null)
+    public function __construct(int $id, int $qty, $extensionAttributes = null)
     {
         $this->id = $id;
         $this->qty = $qty;
@@ -53,7 +53,7 @@ class GroupedOptions implements GroupedOptionsInterface
     /**
      * @inheritDoc
      */
-    public function getQty(): float
+    public function getQty(): int
     {
         return $this->qty;
     }

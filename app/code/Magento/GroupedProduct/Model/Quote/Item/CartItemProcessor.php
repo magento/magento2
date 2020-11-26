@@ -9,9 +9,6 @@ namespace Magento\GroupedProduct\Model\Quote\Item;
 
 use Magento\Framework\DataObject;
 use Magento\Framework\DataObject\Factory as ObjectFactory;
-use Magento\Framework\Serialize\Serializer\Json;
-use Magento\GroupedProduct\Api\Data\GroupedOptionsInterface;
-use Magento\GroupedProduct\Api\Data\GroupedOptionsInterfaceFactory;
 use Magento\GroupedProduct\Model\Product\Type\Grouped;
 use Magento\Quote\Api\Data as QuoteApi;
 use Magento\Quote\Api\Data\CartItemInterface;
@@ -30,16 +27,6 @@ class CartItemProcessor implements CartItemProcessorInterface
     private $objectFactory;
 
     /**
-     * @var GroupedOptionsInterface
-     */
-    private $groupedOptionFactory;
-
-    /**
-     * @var Json
-     */
-    private $jsonSerializer;
-
-    /**
      * @var QuoteApi\ProductOptionExtensionFactory
      */
     private $productOptionExtensionFactory;
@@ -56,21 +43,15 @@ class CartItemProcessor implements CartItemProcessorInterface
 
     /**
      * @param ObjectFactory $objectFactory
-     * @param GroupedOptionsInterfaceFactory $groupedOptionFactory
-     * @param Json $jsonSerializer
      * @param QuoteApi\ProductOptionExtensionFactory $productOptionExtensionFactory
      * @param QuoteApi\ProductOptionInterfaceFactory $productOptionFactory
      */
     public function __construct(
         ObjectFactory $objectFactory,
-        GroupedOptionsInterfaceFactory $groupedOptionFactory,
-        Json $jsonSerializer,
         QuoteApi\ProductOptionExtensionFactory $productOptionExtensionFactory,
         QuoteApi\ProductOptionInterfaceFactory $productOptionFactory
     ) {
         $this->objectFactory = $objectFactory;
-        $this->groupedOptionFactory = $groupedOptionFactory;
-        $this->jsonSerializer = $jsonSerializer;
         $this->productOptionExtensionFactory = $productOptionExtensionFactory;
         $this->productOptionFactory = $productOptionFactory;
     }
@@ -83,21 +64,19 @@ class CartItemProcessor implements CartItemProcessorInterface
      */
     public function convertToBuyRequest(CartItemInterface $cartItem): ?DataObject
     {
-        $extensionAttributes = $cartItem->getProductOption()
-            ? $cartItem->getProductOption()->getExtensionAttributes()
-            : null;
-        if ($extensionAttributes) {
-            $groupedOptions = $extensionAttributes->getGroupedOptions();
-            if ($groupedOptions) {
-                $this->groupedOptions = $groupedOptions;
-                $requestData = [];
+        if ($cartItem->getProductOption()
+            && $cartItem->getProductOption()->getExtensionAttributes()
+            && $cartItem->getProductOption()->getExtensionAttributes()->getGroupedOptions()
+        ) {
+            $groupedOptions = $cartItem->getProductOption()->getExtensionAttributes()->getGroupedOptions();
+            $this->groupedOptions = $groupedOptions;
 
-                foreach ($groupedOptions as $item) {
-                    $requestData[self::SUPER_GROUP_CODE][$item->getId()] = $item->getQty();
-                }
-
-                return $this->objectFactory->create($requestData);
+            $requestData = [];
+            foreach ($groupedOptions as $item) {
+                $requestData[self::SUPER_GROUP_CODE][$item->getId()] = $item->getQty();
             }
+
+            return $this->objectFactory->create($requestData);
         }
 
         return null;

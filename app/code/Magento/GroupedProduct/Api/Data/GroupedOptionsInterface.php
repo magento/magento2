@@ -24,9 +24,9 @@ interface GroupedOptionsInterface extends ExtensibleDataInterface
     /**
      * Get associated product qty
      *
-     * @return float
+     * @return int
      */
-    public function getQty(): float;
+    public function getQty(): int;
 
     /**
      * Set extension attributes
