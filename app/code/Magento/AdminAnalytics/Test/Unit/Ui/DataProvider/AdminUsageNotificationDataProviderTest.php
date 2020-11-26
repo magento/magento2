@@ -8,9 +8,9 @@ declare(strict_types=1);
 namespace Magento\AdminAnalytics\Test\Unit\Ui\DataProvider;
 
 use Magento\AdminAnalytics\Ui\DataProvider\AdminUsageNotificationDataProvider;
+use Magento\Framework\Api\Filter;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
-use Magento\Framework\Api\Filter;
 
 class AdminUsageNotificationDataProviderTest extends TestCase
 {
