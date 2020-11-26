@@ -485,6 +485,32 @@
             column-count: @_value;
 }
 
+.lib-flex-center() {
+    align-items: center;
+    display: flex;
+}
+
+.lib-flex-center-center() {
+    .lib-flex-center();
+    justify-content: center;
+}
+
+.lib-flex-wrap() {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.lib-flex-center-wrap() {
+    .lib-flex-center();
+    flex-wrap: wrap;
+}
+
+.lib-content-flex() {
+    .lib-flex-wrap ();
+    align-items: center;
+    justify-content: space-between;
+}
+
 //
 //  Pointer for popups or dropdowns
 //  ---------------------------------------------
