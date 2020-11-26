@@ -54,6 +54,25 @@ class EnableAdminUsage extends Action implements HttpPostActionInterface
     }
 
     /**
+     * Log information about the last shown advertisement.
+     *
+     * @return \Magento\Framework\Controller\ResultInterface
+     */
+    public function execute()
+    {
+        $this->enableAdminUsage();
+        $this->markUserNotified();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function _isAllowed()
+    {
+        return $this->_authorization->isAllowed(static::ADMIN_RESOURCE);
+    }
+
+    /**
      * Change the value of config/admin/usage/enabled.
      */
     private function enableAdminUsage()
@@ -80,24 +99,5 @@ class EnableAdminUsage extends Action implements HttpPostActionInterface
         $resultJson = $this->resultFactory->create(ResultFactory::TYPE_JSON);
 
         return $resultJson->setData($responseContent);
-    }
-
-    /**
-     * Log information about the last shown advertisement.
-     *
-     * @return \Magento\Framework\Controller\ResultInterface
-     */
-    public function execute()
-    {
-        $this->enableAdminUsage();
-        $this->markUserNotified();
-    }
-
-    /**
-     * @inheritDoc
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed(static::ADMIN_RESOURCE);
     }
 }

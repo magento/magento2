@@ -27,19 +27,21 @@ class CanViewNotificationTest extends TestCase
     /** @var ProductMetadataInterface|MockObject */
     private $productMetadataMock;
 
-    /** @var Log|MockObject */
-    private $logMock;
-
     /** @var CacheInterface|MockObject */
     private $cacheStorageMock;
 
+    /** @var Log|MockObject */
+    private $logMock;
+
     protected function setUp(): void
     {
-        $this->cacheStorageMock = $this->getMockBuilder(CacheInterface::class)
-            ->getMockForAbstractClass();
-        $this->logMock = $this->createMock(Log::class);
         $this->viewerLoggerMock = $this->createMock(Logger::class);
         $this->productMetadataMock = $this->getMockForAbstractClass(ProductMetadataInterface::class);
+        $this->cacheStorageMock = $this->getMockBuilder(CacheInterface::class)
+            ->getMockForAbstractClass();
+
+        $this->logMock = $this->createMock(Log::class);
+
         $objectManager = new ObjectManager($this);
         $this->canViewNotification = $objectManager->getObject(
             CanViewNotification::class,
@@ -55,6 +57,7 @@ class CanViewNotificationTest extends TestCase
      * @param $expected
      * @param $cacheResponse
      * @param $logExists
+     *
      * @dataProvider isVisibleProvider
      */
     public function testIsVisibleLoadDataFromLog($expected, $cacheResponse, $logExists)
@@ -70,6 +73,13 @@ class CanViewNotificationTest extends TestCase
             ->method('save')
             ->with('log-exists', 'admin-usage-notification-popup');
         $this->assertEquals($expected, $this->canViewNotification->isVisible([]));
+    }
+
+    public function testGetName()
+    {
+        $result = $this->canViewNotification->getName();
+
+        $this->assertSame('can_view_admin_usage_notification', $result);
     }
 
     /**
