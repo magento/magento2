@@ -30,7 +30,7 @@ class CanViewNotificationTest extends TestCase
     /** @var Log|MockObject */
     private $logMock;
 
-    /** @var MockObject|CacheInterface */
+    /** @var CacheInterface|MockObject */
     private $cacheStorageMock;
 
     protected function setUp(): void

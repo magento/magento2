@@ -74,7 +74,7 @@ class EnableAdminUsage extends Action implements HttpPostActionInterface
             'success' => $this->notificationLogger->log(
                 $this->productMetadata->getVersion()
             ),
-            'error_message' => '',
+            'error_message' => ''
         ];
 
         $resultJson = $this->resultFactory->create(ResultFactory::TYPE_JSON);
