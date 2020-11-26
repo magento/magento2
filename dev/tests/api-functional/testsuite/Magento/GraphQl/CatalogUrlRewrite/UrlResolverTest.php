@@ -223,7 +223,7 @@ QUERY;
         $urlRewriteModel->setRedirectType('301');
         $urlRewriteModel->setId($urlRewriteModel->getId());
         $urlRewriteModel->save();
-ObjectManager::getInstance()->get(\Magento\TestFramework\Helper\CacheCleaner::class)->clean(['eav']);
+        ObjectManager::getInstance()->get(\Magento\TestFramework\Helper\CacheCleaner::class)->clean(['eav']);
         //modifying query by adding spaces to avoid getting cached values.
         $this->queryUrlAndAssertResponse(
             (int) $product->getEntityId(),
