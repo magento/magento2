@@ -13,6 +13,7 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\Vat;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\DataObject;
+use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\StateException;
 use Magento\Framework\ObjectManagerInterface;
@@ -132,6 +133,49 @@ class QuoteManagementTest extends TestCase
         $quoteAfterOrderPlaced = $this->getQuoteByReservedOrderId->execute('guest_quote');
         self::assertEquals(2, $quoteAfterOrderPlaced->getCustomerGroupId());
         self::assertEquals(3, $quoteAfterOrderPlaced->getCustomerTaxClassId());
+    }
+
+    /**
+     * Creates order with purchase_order payment method
+     *
+     * @magentoAppIsolation enabled
+     * @magentoDataFixture Magento/Sales/_files/quote_with_purchase_order.php
+     *
+     * @return void
+     * @throws CouldNotSaveException
+     */
+    public function testSubmitWithPurchaseOrder(): void
+    {
+        $paymentMethodName = 'purchaseorder';
+        $poNumber = '12345678';
+        $quote = $this->getQuoteByReservedOrderId->execute('test_order_1');
+        $quote->getPayment()->setPoNumber($poNumber);
+        $quote->collectTotals()->save();
+        $orderId = $this->cartManagement->placeOrder($quote->getId());
+        $order = $this->orderRepository->get($orderId);
+        $orderItems = $order->getItems();
+        $this->assertCount(1, $orderItems);
+        $payment = $order->getPayment();
+        $this->assertEquals($paymentMethodName, $payment->getMethod());
+        $this->assertEquals($poNumber, $payment->getPoNumber());
+    }
+
+    /**
+     * Creates order with purchase_order payment method without po_number
+     *
+     * @magentoAppIsolation enabled
+     * @magentoDataFixture Magento/Sales/_files/quote_with_purchase_order.php
+     *
+     * @return void
+     * @throws CouldNotSaveException
+     */
+    public function testSubmitWithPurchaseOrderWithException(): void
+    {
+        $this->expectException(LocalizedException::class);
+        $this->expectExceptionMessage('Purchase order number is a required field.');
+
+        $quote = $this->getQuoteByReservedOrderId->execute('test_order_1');
+        $this->cartManagement->placeOrder($quote->getId());
     }
 
     /**

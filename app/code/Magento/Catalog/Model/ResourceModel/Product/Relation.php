@@ -5,13 +5,38 @@
  */
 namespace Magento\Catalog\Model\ResourceModel\Product;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Framework\Model\ResourceModel\Db\Context;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Catalog\Api\Data\ProductInterface;
+
 /**
  * Catalog Product Relations Resource model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Relation extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+class Relation extends AbstractDb
 {
+    /**
+     * @var MetadataPool
+     */
+    private $metadataPool;
+
+    /**
+     * @param Context $context
+     * @param string $connectionName
+     * @param MetadataPool $metadataPool
+     */
+    public function __construct(
+        Context $context,
+        $connectionName = null,
+        MetadataPool $metadataPool = null
+    ) {
+        parent::__construct($context, $connectionName);
+        $this->metadataPool = $metadataPool ?: ObjectManager::getInstance()->get(MetadataPool::class);
+    }
+
     /**
      * Initialize resource model and define main table
      *
@@ -108,5 +133,28 @@ class Relation extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $this->getConnection()->delete($this->getMainTable(), $where);
         }
         return $this;
+    }
+
+    /**
+     * Finds parent relations by given children ids.
+     *
+     * @param array $childrenIds Child products entity ids.
+     * @return array Parent products entity ids.
+     */
+    public function getRelationsByChildren(array $childrenIds): array
+    {
+        $connection = $this->getConnection();
+        $linkField = $this->metadataPool->getMetadata(ProductInterface::class)
+            ->getLinkField();
+        $select = $connection->select()
+            ->from(
+                ['cpe' => $this->getTable('catalog_product_entity')],
+                'entity_id'
+            )->join(
+                ['relation' => $this->getTable('catalog_product_relation')],
+                'relation.parent_id = cpe.' . $linkField
+            )->where('relation.child_id IN(?)', $childrenIds);
+
+        return $connection->fetchCol($select);
     }
 }
