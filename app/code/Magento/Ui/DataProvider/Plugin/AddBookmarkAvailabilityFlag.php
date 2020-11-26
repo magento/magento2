@@ -41,10 +41,10 @@ class AddBookmarkAvailabilityFlag
      * Modify provider configuration and return meta
      *
      * @param DataProviderInterface $subject
-     * @param $meta
+     * @param array $meta
      * @return mixed
      */
-    public function afterGetMeta(DataProviderInterface $subject, $meta)
+    public function afterGetMeta(DataProviderInterface $subject, array $meta)
     {
         $this->modifyProviderConfigData($subject);
 

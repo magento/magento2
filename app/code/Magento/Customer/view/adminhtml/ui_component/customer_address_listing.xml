@@ -36,13 +36,7 @@
         </dataProvider>
     </dataSource>
     <listingToolbar name="listing_top">
-        <bookmark name="bookmarks">
-            <settings>
-                <imports>
-                    <link name="current.request_params.parent_id">${ $.provider }:params.parent_id</link>
-                </imports>
-            </settings>
-        </bookmark>
+        <bookmark name="bookmarks"/>
         <columnsControls name="columns_controls"/>
         <filterSearch name="fulltext"/>
         <filters name="listing_filters" component="Magento_Customer/js/grid/filters/filters">
