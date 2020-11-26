@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\ImportExport\Controller\Adminhtml;
 
 use Magento\Framework\Filesystem\DirectoryList;
@@ -12,18 +14,19 @@ use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorI
 use Magento\ImportExport\Controller\Adminhtml\Import\HttpFactoryMock;
 
 /**
+ * Test for \Magento\ImportExport\Controller\Adminhtml\ImportResult class.
+ *
  * @magentoAppArea adminhtml
  */
 class ImportResultTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     /**
-     * @dataProvider validationDataProvider
      * @param string $fileName
      * @param string $mimeType
      * @param string $delimiter
-     * @throws \Magento\Framework\Exception\FileSystemException
      * @backupGlobals enabled
      * @magentoDbIsolation enabled
+     * @dataProvider validationDataProvider
      * @SuppressWarnings(PHPMD.Superglobals)
      */
     public function testAddErrorMessages(string $fileName, string $mimeType, string $delimiter): void
@@ -48,8 +51,9 @@ class ImportResultTest extends \Magento\TestFramework\TestCase\AbstractBackendCo
         $tmpDir = $filesystem->getDirectoryWrite(DirectoryList::SYS_TMP);
         $subDir = str_replace('\\', '_', __CLASS__);
         $tmpDir->create($subDir);
-        $target = $tmpDir->getAbsolutePath("{$subDir}/{$fileName}");
-        copy(__DIR__ . "/Import/_files/{$fileName}", $target);
+        $target = $tmpDir->getAbsolutePath("{$subDir}" . DIRECTORY_SEPARATOR . "{$fileName}");
+        copy(__DIR__ . DIRECTORY_SEPARATOR . 'Import' . DIRECTORY_SEPARATOR . '_files'
+            . DIRECTORY_SEPARATOR . "{$fileName}", $target);
 
         $_FILES = [
             'import_file' => [
