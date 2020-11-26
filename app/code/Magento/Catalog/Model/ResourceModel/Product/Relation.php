@@ -159,7 +159,7 @@ class Relation extends AbstractDb
         $parentIdsOfChildIds = [];
 
         foreach ($result as $row) {
-            $parentIdsOfChildIds[$row['child_id']][] = $row['parent_id'];
+            $parentIdsOfChildIds[$row['child_id']][] = $row['entity_id'];
         }
 
         return $parentIdsOfChildIds;
