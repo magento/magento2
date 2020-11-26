@@ -99,7 +99,9 @@ class Collection
 
         /** @var LinkCollection $linkCollection */
         $linkCollection = $this->linkCollectionFactory->create();
-        $linkCollection->setOptionIdsFilter($this->optionIds);
+        $linkCollection
+            ->setOptionIdsFilter($this->optionIds)
+            ->addFilterByRequiredOptions();
         $field = 'parent_product_id';
         foreach ($linkCollection->getSelect()->getPart('from') as $tableAlias => $data) {
             if ($data['tableName'] == $linkCollection->getTable('catalog_product_bundle_selection')) {
