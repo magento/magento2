@@ -160,10 +160,10 @@ QUERY;
         }
 QUERY;
 
-        $response = $this->dispatchGraphQlGETRequest(['query'=> $query]);
+        $response = $this->dispatchGraphQlGETRequest(['query' => $query]);
         $actualCacheTags = explode(',', $response->getHeader('X-Magento-Tags')->getFieldValue());
         $expectedCacheTags = ['cat_c', 'cat_c_333'];
-        
+
         foreach ($expectedCacheTags as $cacheTag) {
             $this->assertArrayHasKey($cacheTag, $actualCacheTags);
         }
