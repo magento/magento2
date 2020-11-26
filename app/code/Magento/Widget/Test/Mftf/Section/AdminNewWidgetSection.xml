@@ -43,6 +43,9 @@
         <element name="displayMode" type="select" selector="select[id*='display_mode']"/>
         <element name="restrictTypes" type="select" selector="select[id*='types']"/>
         <element name="saveAndContinue" type="button" selector="#save_and_edit_button" timeout="30"/>
+        <element name="specificEntitySelectContainer" type="select" selector="select[name='widget_instance[0][anchor_categories][block]']"/>
+        <element name="specificEntitySelectRadio" type="input" selector="#specific_anchor_categories_0"/>
+        <element name="specificEntityOptionsChooser" type="button" selector="#anchor_categories_ids_0 .widget-option-chooser"/>
         <element name="widgetInstanceType" type="select" selector=".admin__field-control select#instance_code" />
         <!-- Catalog Product List Widget Options -->
         <element name="title" type="input" selector="[name='parameters[title]']"/>

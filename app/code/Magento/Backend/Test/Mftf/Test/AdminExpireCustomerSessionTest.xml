@@ -40,7 +40,7 @@
             <argument name="Customer" value="$$createCustomer$$" />
         </actionGroup>
         <wait time="60" stepKey="waitForCookieLifetime"/>
-        <reloadPage stepKey="reloadPage"/>
+        <actionGroup ref="ReloadPageActionGroup" stepKey="reloadPage"/>
 
         <!-- 5. Perform asserts. -->
         <seeElement selector="{{StorefrontPanelHeaderSection.customerLoginLink}}" stepKey="assertAuthorizationLinkIsVisibleOnStoreFront"/>
