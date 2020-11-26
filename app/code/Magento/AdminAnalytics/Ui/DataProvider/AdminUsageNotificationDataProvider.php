@@ -6,8 +6,8 @@
 
 namespace Magento\AdminAnalytics\Ui\DataProvider;
 
-use Magento\Ui\DataProvider\AbstractDataProvider;
 use Magento\Framework\Api\Filter;
+use Magento\Ui\DataProvider\AbstractDataProvider;
 
 /**
  * Data Provider for the Admin usage UI component.

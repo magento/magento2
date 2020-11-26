@@ -8,8 +8,8 @@ declare(strict_types=1);
 namespace Magento\AdminAnalytics\Model\Condition;
 
 use Magento\AdminAnalytics\Model\ResourceModel\Viewer\Logger;
-use Magento\Framework\View\Layout\Condition\VisibilityConditionInterface;
 use Magento\Framework\App\CacheInterface;
+use Magento\Framework\View\Layout\Condition\VisibilityConditionInterface;
 
 /**
  * Dynamic validator for UI admin analytics notification, control UI component visibility.
@@ -24,7 +24,7 @@ class CanViewNotification implements VisibilityConditionInterface
     private static $conditionName = 'can_view_admin_usage_notification';
 
     /**
-     * Prefix for cache
+     * Prefix for cache.
      *
      * @var string
      */
@@ -53,7 +53,7 @@ class CanViewNotification implements VisibilityConditionInterface
     }
 
     /**
-     * Validate if notification popup can be shown and set the notification flag
+     * Validate if notification popup can be shown and set the notification flag.
      *
      * @param array $arguments Attributes from element node.
      * @inheritdoc
@@ -67,13 +67,15 @@ class CanViewNotification implements VisibilityConditionInterface
             if ($logExists) {
                 $this->cacheStorage->save('log-exists', $cacheKey);
             }
+
             return !$logExists;
         }
+
         return false;
     }
 
     /**
-     * Get condition name
+     * Get condition name.
      *
      * @return string
      */

@@ -3,15 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\AdminAnalytics\ViewModel;
 
-use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Backend\Model\Auth\Session;
+use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Framework\App\State;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 
 /**
- * Gets user version and mode
+ * Gets user version and mode.
  */
 class Metadata implements ArgumentInterface
 {
@@ -46,7 +47,7 @@ class Metadata implements ArgumentInterface
     }
 
     /**
-     * Get product version
+     * Get product version.
      *
      * @return string
      */
@@ -56,7 +57,7 @@ class Metadata implements ArgumentInterface
     }
 
     /**
-     * Get current user id (hash generated from email)
+     * Get current user id (hash generated from email).
      *
      * @return string
      */
@@ -64,8 +65,9 @@ class Metadata implements ArgumentInterface
     {
         return hash('sha512', 'ADMIN_USER' . $this->authSession->getUser()->getEmail());
     }
+
     /**
-     * Get Magento mode that the user is using
+     * Get Magento mode that the user is using.
      *
      * @return string
      */

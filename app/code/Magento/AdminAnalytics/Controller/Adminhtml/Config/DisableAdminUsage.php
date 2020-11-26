@@ -7,16 +7,16 @@ declare(strict_types=1);
 
 namespace Magento\AdminAnalytics\Controller\Adminhtml\Config;
 
-use Magento\Backend\App\Action;
-use Magento\Framework\App\Action\HttpPostActionInterface;
-use Magento\Framework\Controller\ResultFactory;
 use Magento\AdminAnalytics\Model\ResourceModel\Viewer\Logger as NotificationLogger;
-use Magento\Framework\App\ProductMetadataInterface;
-use Magento\Framework\Controller\ResultInterface;
+use Magento\Backend\App\Action;
 use Magento\Config\Model\Config\Factory;
+use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\App\ProductMetadataInterface;
+use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Controller\ResultInterface;
 
 /**
- * Controller to record Admin analytics usage log
+ * Controller to record Admin analytics usage log.
  */
 class DisableAdminUsage extends Action implements HttpPostActionInterface
 {
@@ -56,7 +56,7 @@ class DisableAdminUsage extends Action implements HttpPostActionInterface
     }
 
     /**
-     * Change the value of config/admin/usage/enabled
+     * Change the value of config/admin/usage/enabled.
      */
     private function disableAdminUsage()
     {
@@ -66,7 +66,7 @@ class DisableAdminUsage extends Action implements HttpPostActionInterface
     }
 
     /**
-     * Log information about the last admin usage selection
+     * Log information about the last admin usage selection.
      *
      * @return ResultInterface
      */
@@ -80,11 +80,12 @@ class DisableAdminUsage extends Action implements HttpPostActionInterface
         ];
 
         $resultJson = $this->resultFactory->create(ResultFactory::TYPE_JSON);
+
         return $resultJson->setData($responseContent);
     }
 
     /**
-     * Log information about the last shown advertisement
+     * Log information about the last shown advertisement.
      *
      * @return ResultInterface
      */
