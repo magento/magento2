@@ -1,0 +1,1 @@
+/home/dinesh/magento2/.b2b/dev/tests/integration/testsuite/Magento/Setup/Fixtures/FixturesAsserts/NegotiableQuotesAssert.php

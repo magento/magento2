@@ -1,0 +1,1 @@
+/home/dinesh/magento2/.b2b/dev/tests/static/testsuite/Magento/Test/Integrity/_files/blacklist/compiler_plugins_b2b.txt

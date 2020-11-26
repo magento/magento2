@@ -1,0 +1,1 @@
+/home/dinesh/magento2/.ee/dev/tests/static/testsuite/Magento/Test/Legacy/_files/copyright/blacklist_ee.php

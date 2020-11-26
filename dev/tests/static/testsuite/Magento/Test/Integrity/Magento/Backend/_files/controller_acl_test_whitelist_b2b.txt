@@ -1,0 +1,1 @@
+/home/dinesh/magento2/.b2b/dev/tests/static/testsuite/Magento/Test/Integrity/Magento/Backend/_files/controller_acl_test_whitelist_b2b.txt
