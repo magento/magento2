@@ -139,7 +139,7 @@ class Address extends AbstractAddress implements
     const ADDRESS_TYPE_BILLING = 'billing';
 
     const ADDRESS_TYPE_SHIPPING = 'shipping';
-    
+
     private const CACHED_ITEMS_ALL = 'cached_items_all';
 
     /**
@@ -1040,7 +1040,7 @@ class Address extends AbstractAddress implements
         $request->setPackageValue($item ? $item->getBaseRowTotal() : $baseSubtotal);
         $baseSubtotalWithDiscount = $baseSubtotal + $this->getBaseDiscountAmount();
         $packageWithDiscount = $item ? $item->getBaseRowTotal() -
-            $item->getBaseDiscountAmount() : $baseSubtotalWithDiscount;
+            $item->getBaseDiscountAmount() : $baseSubtotalWithDiscount - $this->getBaseVirtualAmount();
         $request->setPackageValueWithDiscount($packageWithDiscount);
         $request->setPackageWeight($item ? $item->getRowWeight() : $this->getWeight());
         $request->setPackageQty($item ? $item->getQty() : $this->getItemQty());
