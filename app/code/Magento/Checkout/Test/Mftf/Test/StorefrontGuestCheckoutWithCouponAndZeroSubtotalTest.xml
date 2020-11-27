@@ -49,8 +49,8 @@
         <!-- Assert Discount and proceed to checkout -->
         <waitForElementVisible selector="{{CheckoutCartSummarySection.discountAmount}}" stepKey="waitForDiscountElement"/>
         <see selector="{{CheckoutCartSummarySection.discountAmount}}" userInput="-$50.00" stepKey="seeDiscountTotal"/>
-        <click selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="goToCheckout"/>
-        <waitForPageLoad stepKey="waitForPageToLoad"/>
+        <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="goToCheckout"/>
+        <comment userInput="Adding the comment to replace waitForPageToLoad action for preserving Backward Compatibility" stepKey="waitForPageToLoad"/>
 
         <!--Fill Customer Information -->
         <fillField selector="{{CheckoutShippingSection.emailAddress}}" userInput="{{Simple_US_Customer.email}}" stepKey="enterEmail"/>
