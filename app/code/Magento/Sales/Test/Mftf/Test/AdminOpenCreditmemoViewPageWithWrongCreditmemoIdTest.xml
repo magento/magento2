@@ -16,11 +16,9 @@
             <severity value="MAJOR"/>
             <group value="sales"/>
         </annotations>
-
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
         </before>
-
         <after>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
@@ -30,9 +28,7 @@
         </actionGroup>
 
         <waitForPageLoad stepKey="waitForPageLoad"/>
-
         <seeInCurrentUrl url="{{AdminCreditMemosGridPage.url}}" stepKey="redirectToCreditMemosGridPage"/>
-
-        <actionGroup ref="AssertAdminPageIs404ActionGroup" stepKey="see404PageOnAdmin"/>
+        <see selector="{{AdminMessagesSection.error}}" userInput='This creditmemo no longer exists.' stepKey="seeErrorMessage"/>
     </test>
 </tests>
