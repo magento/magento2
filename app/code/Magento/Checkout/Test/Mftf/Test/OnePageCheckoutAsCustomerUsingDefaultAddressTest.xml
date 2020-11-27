@@ -54,8 +54,8 @@
         <actionGroup ref="FillShippingZipForm" stepKey="fillShippingZipForm">
             <argument name="address" value="US_Address_CA"/>
         </actionGroup>
-        <click selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="clickProceedToCheckout"/>
-        <waitForPageLoad stepKey="waitForProceedToCheckout"/>
+        <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="clickProceedToCheckout"/>
+        <comment userInput="Adding the comment to replace waitForProceedToCheckout action for preserving Backward Compatibility" stepKey="waitForProceedToCheckout"/>
 
 
         <!-- Login as customer on checkout page -->
