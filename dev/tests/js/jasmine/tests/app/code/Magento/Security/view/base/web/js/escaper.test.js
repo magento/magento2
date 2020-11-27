@@ -134,7 +134,8 @@ define([
             },
             'link with script content': {
                 data: '<a href="javascript:void">Click</a>',
-                expected: '<a>Click</a>'
+                expected: '<a>Click</a>',
+                allowedTags: ['a']
             }
         };
     }
