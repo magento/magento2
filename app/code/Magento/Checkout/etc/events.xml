@@ -9,4 +9,7 @@
     <event name="sales_quote_save_after">
         <observer name="set_checkout_quote_id" instance="Magento\Checkout\Observer\SalesQuoteSaveAfterObserver" />
     </event>
+    <event name="catalog_product_save_after">
+        <observer name="product_prices_updated" instance="Magento\Checkout\Observer\CatalogProductSaveAfterObserver" />
+    </event>
 </config>

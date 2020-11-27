@@ -56,7 +56,14 @@
                         </item>
                     </argument>
                 </arguments>
-                <container name="minicart.addons" label="Mini-cart promotion block"/>
+                <container name="minicart.addons" label="Mini-cart promotion block">
+                    <block class="Magento\Checkout\Block\ProductPricesUpdated" name="checkout.cart.product.prices.updated"
+                           template="Magento_Checkout::cart/product-prices-updated.phtml">
+                        <arguments>
+                            <argument name="cache_lifetime" xsi:type="number">31536000</argument>
+                        </arguments>
+                    </block>
+                </container>
             </block>
         </referenceContainer>
     </body>

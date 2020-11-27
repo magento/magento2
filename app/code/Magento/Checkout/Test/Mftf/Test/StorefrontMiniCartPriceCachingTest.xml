@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontMiniCartPriceCachingTest">
+        <annotations>
+            <features value="Checkout"/>
+            <stories value="Mini Cart Caching"/>
+            <title value="Storefront mini cart price caching test"/>
+            <description value="Mini cart price cache is invalidated if product price changes"/>
+            <severity value="CRITICAL"/>
+            <group value="checkout"/>
+        </annotations>
+        <before>
+            <!-- Create a Customer -->
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+
+            <!-- Create a Category -->
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+
+            <!-- Create a simple Product -->
+            <createData entity="_defaultProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+        </before>
+        <after>
+            <!-- Delete Product -->
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+
+            <!-- Delete Category -->
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+
+            <!-- Delete Customer -->
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+        </after>
+
+        <!-- Login as Customer -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefrontAccountAsCustomer">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+
+        <!-- Assert Cart is empty -->
+        <actionGroup ref="AssertShoppingCartIsEmptyActionGroup" stepKey="seeEmptyShoppingCartForCustomer"/>
+
+        <!-- Go to the Product page -->
+        <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.custom_attributes[url_key]$$)}}" stepKey="goToProductPage"/>
+        <waitForPageLoad stepKey="waitForProductPageLoad"/>
+
+        <!-- Add the Product to the Shopping Cart -->
+        <actionGroup ref="AddProductWithQtyToCartFromStorefrontProductPageActionGroup" stepKey="addProductToCart">
+            <argument name="productName" value="$$createSimpleProduct.name$$"/>
+            <argument name="productQty" value="2"/>
+        </actionGroup>
+
+        <!-- Assert Product in Shopping Cart -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStoreFrontHomePage"/>
+        <actionGroup ref="AssertOneProductNameInMiniCartActionGroup" stepKey="assertProductInMiniCart">
+            <argument name="productName" value="$$createSimpleProduct.name$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertMiniShoppingCartSubTotalActionGroup" stepKey="assertMiniCartSubTotal">
+            <argument name="dataQuote" value="quoteQty2Price123"/>
+        </actionGroup>
+
+        <!-- Change Product price -->
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        <actionGroup ref="AdminEditProductPriceActionGroup" stepKey="changeProductPrice">
+            <argument name="productId" value="$$createSimpleProduct.id$$"/>
+            <argument name="newPrice" value="100"/>
+        </actionGroup>
+
+        <!-- Assert Product price in Shopping Cart changed -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStoreFrontHomePageAfterChange"/>
+        <actionGroup ref="AssertOneProductNameInMiniCartActionGroup" stepKey="assertProductInMiniCartAfterChange">
+            <argument name="productName" value="$$createSimpleProduct.name$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertMiniShoppingCartSubTotalActionGroup" stepKey="assertMiniCartSubTotalAfterChange">
+            <argument name="dataQuote" value="quoteQty2Price100"/>
+        </actionGroup>
+    </test>
+</tests>
