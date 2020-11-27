@@ -15,7 +15,10 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\Result\Raw;
 use Magento\Framework\Controller\Result\RawFactory;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\Filesystem\Driver\File;
+use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\Image\Adapter\AdapterInterface;
 use Magento\Framework\Image\AdapterFactory;
 use Magento\Framework\ObjectManagerInterface;
@@ -79,11 +82,6 @@ class DirectiveTest extends TestCase
     protected $responseMock;
 
     /**
-     * @var File|MockObject
-     */
-    protected $fileMock;
-
-    /**
      * @var Config|MockObject
      */
     protected $wysiwygConfigMock;
@@ -102,6 +100,11 @@ class DirectiveTest extends TestCase
      * @var Raw|MockObject
      */
     protected $rawMock;
+
+    /**
+     * @var DriverInterface|MockObject
+     */
+    private $driverMock;
 
     protected function setUp(): void
     {
@@ -146,10 +149,6 @@ class DirectiveTest extends TestCase
             ->disableOriginalConstructor()
             ->setMethods(['setHeader', 'setBody', 'sendResponse'])
             ->getMockForAbstractClass();
-        $this->fileMock = $this->getMockBuilder(File::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['fileGetContents'])
-            ->getMock();
         $this->wysiwygConfigMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -173,6 +172,17 @@ class DirectiveTest extends TestCase
         $this->actionContextMock->expects($this->any())
             ->method('getObjectManager')
             ->willReturn($this->objectManagerMock);
+        $this->driverMock = $this->getMockBuilder(DriverInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $directoryWrite = $this->getMockBuilder(WriteInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $directoryWrite->expects($this->any())->method('getDriver')->willReturn($this->driverMock);
+        $filesystemMock = $this->getMockBuilder(Filesystem::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $filesystemMock->expects($this->any())->method('getDirectoryWrite')->willReturn($directoryWrite);
 
         $objectManager = new ObjectManager($this);
         $this->wysiwygDirective = $objectManager->getObject(
@@ -185,7 +195,7 @@ class DirectiveTest extends TestCase
                 'logger' => $this->loggerMock,
                 'config' => $this->wysiwygConfigMock,
                 'filter' => $this->templateFilterMock,
-                'file' => $this->fileMock,
+                'filesystem' => $filesystemMock
             ]
         );
     }
@@ -216,7 +226,7 @@ class DirectiveTest extends TestCase
         $this->imageAdapterMock->expects($this->once())
             ->method('getImage')
             ->willReturn($imageBody);
-        $this->fileMock->expects($this->once())
+        $this->driverMock->expects($this->once())
             ->method('fileGetContents')
             ->willReturn($imageBody);
         $this->rawFactoryMock->expects($this->any())
@@ -267,7 +277,7 @@ class DirectiveTest extends TestCase
         $this->imageAdapterMock->expects($this->any())
             ->method('getImage')
             ->willReturn($imageBody);
-        $this->fileMock->expects($this->once())
+        $this->driverMock->expects($this->once())
             ->method('fileGetContents')
             ->willReturn($imageBody);
         $this->loggerMock->expects($this->once())

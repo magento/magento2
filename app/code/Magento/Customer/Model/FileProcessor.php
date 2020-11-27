@@ -233,7 +233,8 @@ class FileProcessor
             );
         } catch (\Exception $e) {
             throw new \Magento\Framework\Exception\LocalizedException(
-                __('Something went wrong while saving the file.')
+                __('Something went wrong while saving the file.'),
+                $e
             );
         }
 
