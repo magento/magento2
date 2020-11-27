@@ -17,16 +17,16 @@ interface GroupedOptionsInterface extends ExtensibleDataInterface
     /**
      * Get associated product id
      *
-     * @return int
+     * @return int|null
      */
-    public function getId(): int;
+    public function getId(): ?int;
 
     /**
      * Get associated product qty
      *
-     * @return int
+     * @return int|null
      */
-    public function getQty(): int;
+    public function getQty(): ?int;
 
     /**
      * Set extension attributes

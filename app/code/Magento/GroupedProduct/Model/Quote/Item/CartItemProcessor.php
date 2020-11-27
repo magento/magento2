@@ -9,6 +9,8 @@ namespace Magento\GroupedProduct\Model\Quote\Item;
 
 use Magento\Framework\DataObject;
 use Magento\Framework\DataObject\Factory as ObjectFactory;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\GroupedProduct\Api\Data\GroupedOptionsInterface;
 use Magento\GroupedProduct\Model\Product\Type\Grouped;
 use Magento\Quote\Api\Data as QuoteApi;
 use Magento\Quote\Api\Data\CartItemInterface;
@@ -71,15 +73,31 @@ class CartItemProcessor implements CartItemProcessorInterface
             $groupedOptions = $cartItem->getProductOption()->getExtensionAttributes()->getGroupedOptions();
             $this->groupedOptions = $groupedOptions;
 
-            $requestData = [];
-            foreach ($groupedOptions as $item) {
-                $requestData[self::SUPER_GROUP_CODE][$item->getId()] = $item->getQty();
-            }
-
-            return $this->objectFactory->create($requestData);
+            return $this->objectFactory->create($this->getConvertedData($groupedOptions));
         }
 
         return null;
+    }
+
+    /**
+     * Returns grouped_options converted to super_group data
+     *
+     * @param GroupedOptionsInterface[] $groupedOptions
+     * @return array
+     * @throws LocalizedException
+     */
+    private function getConvertedData(array $groupedOptions): array
+    {
+        $requestData = [];
+        foreach ($groupedOptions as $item) {
+            /** @var GroupedOptionsInterface $item */
+            if ($item->getQty() === null || $item->getId() === null) {
+                throw new LocalizedException(__('Please specify id and qty for grouped options.'));
+            }
+            $requestData[self::SUPER_GROUP_CODE][$item->getId()] = $item->getQty();
+        }
+
+        return $requestData;
     }
 
     /**
