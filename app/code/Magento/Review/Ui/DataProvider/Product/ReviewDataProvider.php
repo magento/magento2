@@ -110,7 +110,6 @@ class ReviewDataProvider extends AbstractDataProvider
     /**
      * @inheritdoc
      * @since 100.1.0
-     * @return void
      */
     public function addFilter(Filter $filter)
     {
