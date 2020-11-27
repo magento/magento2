@@ -251,6 +251,7 @@
         <!-- Place the order -->
         <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="onCheckout"/>
         <see userInput="22" selector="{{CheckoutOrderSummarySection.itemsQtyInCart}}" stepKey="see21Products"/>
+        <click selector="{{CheckoutShippingSection.firstShippingMethod}}" stepKey="selectFirstShippingMethod"/>
         <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="clickNextButton"/>
         <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="placeOrder"/>
         <waitForPageLoad stepKey="waitForSuccess"/>
