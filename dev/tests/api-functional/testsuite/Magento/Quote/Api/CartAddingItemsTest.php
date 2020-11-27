@@ -166,6 +166,57 @@ class CartAddingItemsTest extends WebapiAbstract
     }
 
     /**
+     * Test adding grouped product when qty for grouped_options not specified.
+     *
+     * @magentoApiDataFixture Magento/GroupedProduct/_files/product_grouped_with_simple.php
+     * @magentoApiDataFixture Magento/Customer/_files/customer_one_address.php
+     * @return void
+     */
+    public function testAddToCartGroupedCustomQuantityNotAllParamsSpecified(): void
+    {
+        $this->_markTestAsRestOnly();
+
+        $productId = $this->productResource->getIdBySku('simple_11');
+
+        // Get customer ID token
+        /** @var CustomerTokenServiceInterface $customerTokenService */
+        $customerTokenService = $this->objectManager->create(CustomerTokenServiceInterface::class);
+        $token = $customerTokenService->createCustomerAccessToken(
+            'customer_one_address@test.com',
+            'password'
+        );
+
+        // Creating empty cart for registered customer.
+        $serviceInfo = [
+            'rest' => ['resourcePath' => '/V1/carts/mine', 'httpMethod' => Request::HTTP_METHOD_POST, 'token' => $token]
+        ];
+
+        $quoteId = $this->_webApiCall($serviceInfo, ['customerId' => 999]); // customerId 999 will get overridden
+        $this->assertGreaterThan(0, $quoteId);
+
+        // Adding item to the cart
+        $requestData = [
+            'cartItem' => [
+                'quote_id' => $quoteId,
+                'sku' => 'grouped',
+                'qty' => 1,
+                'product_option' => [
+                    'extension_attributes' => [
+                        'grouped_options' => [
+                            ['id' => $productId],
+                        ]
+                    ]
+                ]
+            ]
+        ];
+
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Please specify id and qty for grouped options.');
+
+        $this->_webApiCall($this->getServiceInfoAddToCart($token), $requestData);
+    }
+
+    /**
      * Returns service info add to cart
      *
      * @param string $token
