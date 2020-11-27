@@ -5,6 +5,8 @@
  */
 namespace Magento\User\Controller\Adminhtml;
 
+use Magento\Framework\Intl\DateTimeFactory;
+use Magento\Framework\Stdlib\DateTime;
 use Magento\TestFramework\Mail\Template\TransportBuilderMock;
 use Magento\TestFramework\Helper\Bootstrap;
 
@@ -12,6 +14,7 @@ use Magento\TestFramework\Helper\Bootstrap;
  * Test class for \Magento\User\Controller\Adminhtml\Auth
  *
  * @magentoAppArea adminhtml
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AuthTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
@@ -104,6 +107,45 @@ class AuthTest extends \Magento\TestFramework\TestCase\AbstractBackendController
         $this->assertEquals('auth', $this->getRequest()->getControllerName());
         $this->assertEquals('resetpassword', $this->getRequest()->getActionName());
         $this->assertTrue((bool)strpos($this->getResponse()->getBody(), $resetPasswordToken));
+    }
+
+    /**
+     * Test reset password action extends expiry of token
+     *
+     * @covers \Magento\User\Controller\Adminhtml\Auth\ResetPassword::execute
+     * @covers \Magento\User\Controller\Adminhtml\Auth\ResetPassword::_validateResetPasswordLinkToken
+     * @magentoDataFixture Magento/User/_files/dummy_user.php
+     */
+    public function testResetPasswordActionWithTokenNearExpiry()
+    {
+        /** @var $user \Magento\User\Model\User */
+        $user = Bootstrap::getObjectManager()->create(
+            \Magento\User\Model\User::class
+        )->loadByUsername(
+            'dummy_username'
+        );
+        $this->assertNotEmpty($user->getId(), 'Broken fixture');
+        $resetPasswordToken = Bootstrap::getObjectManager()->get(
+            \Magento\User\Helper\Data::class
+        )->generateResetPasswordLinkToken();
+        $user->changeResetPasswordLinkToken($resetPasswordToken);
+
+        $anHourAgo = Bootstrap::getObjectManager()->create(DateTimeFactory::class)
+            ->create()
+            ->sub(\DateInterval::createFromDateString('1 hour'))
+            ->format(DateTime::DATETIME_PHP_FORMAT);
+        $user->setRpTokenCreatedAt($anHourAgo);
+        $user->save();
+
+        $this->getRequest()->setQueryValue('token', $resetPasswordToken)->setQueryValue('id', $user->getId());
+        $this->dispatch('backend/admin/auth/resetpassword');
+
+        $this->assertEquals('adminhtml', $this->getRequest()->getRouteName());
+        $this->assertEquals('auth', $this->getRequest()->getControllerName());
+        $this->assertEquals('resetpassword', $this->getRequest()->getActionName());
+        $this->assertTrue((bool)strpos($this->getResponse()->getBody(), $resetPasswordToken));
+
+        $this->assertNotEquals($anHourAgo, $user->reload()->getRpTokenCreatedAt());
     }
 
     /**
