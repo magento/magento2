@@ -212,10 +212,12 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
             );
 
             $attributeToDelete = $this->_request->getParam('delete_attribute_value');
-            $this->deleteCustomerFileAttribute(
-                $customerCandidateDataObject,
-                $attributeToDelete
-            );
+            if ($attributeToDelete !== null) {
+                $this->deleteCustomerFileAttribute(
+                    $customerCandidateDataObject,
+                    $attributeToDelete
+                );
+            }
 
             try {
                 // whether a customer enabled change email option
