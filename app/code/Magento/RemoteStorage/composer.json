@@ -14,7 +14,8 @@
         "magento/module-media-storage": "*",
         "magento/module-import-export": "*",
         "magento/module-catalog-import-export": "*",
-        "magento/module-downloadable-import-export": "*"
+        "magento/module-downloadable-import-export": "*",
+        "predis/predis": "*"
     },
     "type": "magento2-module",
     "license": [
