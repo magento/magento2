@@ -77,6 +77,7 @@ class SetGuestEmailOnCartTest extends GraphQlAbstract
         $quote = $this->quoteFactory->create();
         $this->quoteResource->load($quote, $reservedOrderId, 'reserved_order_id');
         $addresses = $quote->getAddressesCollection();
+        $this->assertEquals(2, $addresses->count());
         foreach ($addresses as $address) {
             if ($address->getAddressType() === Address::ADDRESS_TYPE_SHIPPING) {
                 $this->assertEquals($secondEmail, $address->getEmail());
