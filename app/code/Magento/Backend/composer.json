@@ -1,18 +1,16 @@
 {
     "name": "magento/module-backend",
-    "type": "magento2-module",
     "description": "N/A",
-    "license": [
-        "OSL-3.0",
-        "AFL-3.0"
-    ],
+    "config": {
+        "sort-packages": true
+    },
     "require": {
-        "php": "~7.3.0 || ~7.4.0",
+        "php": "~7.3.0||~7.4.0",
         "magento/framework": "*",
         "magento/module-backup": "*",
         "magento/module-catalog": "*",
-        "magento/module-cms": "*",
         "magento/module-config": "*",
+        "magento/module-cms": "*",
         "magento/module-customer": "*",
         "magento/module-developer": "*",
         "magento/module-directory": "*",
@@ -31,16 +29,18 @@
     "suggest": {
         "magento/module-theme": "*"
     },
-    "config": {
-        "sort-packages": true
-    },
+    "type": "magento2-module",
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
     "autoload": {
-        "psr-4": {
-            "Magento\\Backend\\": ""
-        },
         "files": [
             "registration.php",
             "cli_commands.php"
-        ]
+        ],
+        "psr-4": {
+            "Magento\\Backend\\": ""
+        }
     }
 }
