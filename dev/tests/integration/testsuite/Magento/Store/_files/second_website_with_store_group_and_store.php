@@ -56,5 +56,6 @@ $store->setCode('fixture_second_store')
 $storeResource->save($store);
 /* Refresh CatalogSearch index */
 /** @var IndexerRegistry $indexerRegistry */
+$storeManager->reinitStores();
 $indexerRegistry = $objectManager->get(IndexerRegistry::class);
 $indexerRegistry->get(Fulltext::INDEXER_ID)->reindexAll();

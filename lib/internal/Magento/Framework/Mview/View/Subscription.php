@@ -57,12 +57,18 @@ class Subscription implements SubscriptionInterface
     protected $linkedViews = [];
 
     /**
-     * List of columns that can be updated in a subscribed table
+     * List of columns that can be updated in any subscribed table
      * without creating a new change log entry
      *
      * @var array
      */
     private $ignoredUpdateColumns;
+
+    /**
+     * List of columns that can be updated in a specific subscribed table
+     * for a specific view without creating a new change log entry
+     */
+    private $ignoredUpdateColumnsBySubscription = [];
 
     /**
      * @var Resource
@@ -77,6 +83,7 @@ class Subscription implements SubscriptionInterface
      * @param string $tableName
      * @param string $columnName
      * @param array $ignoredUpdateColumns
+     * @param array $ignoredUpdateColumnsBySubscription
      */
     public function __construct(
         ResourceConnection $resource,
@@ -85,7 +92,8 @@ class Subscription implements SubscriptionInterface
         ViewInterface $view,
         $tableName,
         $columnName,
-        $ignoredUpdateColumns = []
+        $ignoredUpdateColumns = [],
+        $ignoredUpdateColumnsBySubscription = []
     ) {
         $this->connection = $resource->getConnection();
         $this->triggerFactory = $triggerFactory;
@@ -95,6 +103,7 @@ class Subscription implements SubscriptionInterface
         $this->columnName = $columnName;
         $this->resource = $resource;
         $this->ignoredUpdateColumns = $ignoredUpdateColumns;
+        $this->ignoredUpdateColumnsBySubscription = $ignoredUpdateColumnsBySubscription;
     }
 
     /**
@@ -212,7 +221,14 @@ class Subscription implements SubscriptionInterface
                     $describe = $this->connection->describeTable($tableName)
                 ) {
                     $columnNames = array_column($describe, 'COLUMN_NAME');
-                    $columnNames = array_diff($columnNames, $this->ignoredUpdateColumns);
+                    $ignoredColumnsBySubscription = array_filter(
+                        $this->ignoredUpdateColumnsBySubscription[$changelog->getViewId()][$this->getTableName()] ?? []
+                    );
+                    $ignoredColumns = array_merge(
+                        $this->ignoredUpdateColumns,
+                        array_keys($ignoredColumnsBySubscription)
+                    );
+                    $columnNames = array_diff($columnNames, $ignoredColumns);
                     if ($columnNames) {
                         $columns = [];
                         foreach ($columnNames as $columnName) {
@@ -235,7 +251,6 @@ class Subscription implements SubscriptionInterface
             default:
                 return '';
         }
-
         return sprintf(
             $trigger,
             $this->connection->quoteIdentifier($this->resource->getTableName($changelog->getName())),
