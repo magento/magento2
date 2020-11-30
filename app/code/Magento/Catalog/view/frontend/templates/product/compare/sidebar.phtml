@@ -31,7 +31,10 @@
         </ol>
         <div class="actions-toolbar">
             <div class="primary">
-                <a data-bind="attr: {'href': compareProducts().listUrl}" class="action compare primary"><span><?= $block->escapeHtml(__('Compare')) ?></span></a>
+                <a
+                    data-bind="attr: {'href': compareProducts().listUrl ? compareProducts().listUrl : '#'}"
+                    class="action compare primary"
+                ><span><?= $block->escapeHtml(__('Compare')) ?></span></a>
             </div>
             <div class="secondary">
                 <a id="compare-clear-all" href="#" class="action clear" data-post="<?=$block->escapeHtml(
