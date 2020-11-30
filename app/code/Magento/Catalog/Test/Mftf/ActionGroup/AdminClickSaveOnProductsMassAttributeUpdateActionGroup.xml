@@ -14,6 +14,7 @@
         </annotations>
 
         <click selector="{{AdminEditProductAttributesSection.Save}}" stepKey="save"/>
-
+        <waitForPageLoad stepKey="waitForUpdateAttributesPage"/>
+        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="Update Attributes" stepKey="seeUpdateAttributesTitle"/>
     </actionGroup>
 </actionGroups>
