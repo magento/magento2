@@ -10,6 +10,6 @@
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
     <entity name="SalesRuleConsumerData">
         <data key="consumerName">sales.rule.update.coupon.usage</data>
-        <data key="messageLimit">100</data>
+        <data key="messageLimit">3</data>
     </entity>
 </entities>
