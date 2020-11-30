@@ -15,6 +15,7 @@
             <description value="Checking Fixed Amount Cart Price Rule is correctly applied to bundle products"/>
             <severity value="AVERAGE"/>
             <group value="SalesRule"/>
+            <testCaseId value="MC-39480"/>
         </annotations>
         <before>
             <createData entity="SalesRuleNoCouponWithFixedDiscountWholeCart" stepKey="createSalesRule"/>
