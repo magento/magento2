@@ -31,16 +31,14 @@
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogoutStorefront"/>
         </before>
         <after>
-            <!-- Customer Log Out -->
-            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
+            <!-- Logout customer -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogoutStorefront"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <!-- Delete product and category -->
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrderListingFilters"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAdmin"/>
-            <!-- Logout customer -->
-            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogoutStorefront"/>
         </after>
 
         <!-- Login Customer Storefront -->
