@@ -19,10 +19,3 @@
         <see userInput="{{email}}" selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}" stepKey="seeEmail"/>
     </actionGroup>
 </actionGroups>
-
-
-
-
-
-
-
