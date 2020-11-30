@@ -8,9 +8,9 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="SearchProductGridByStringNoClearActionGroup">
+    <actionGroup name="AdminSearchGridByStringNoClearActionGroup">
         <annotations>
-            <description>Searches the Admin Products grid by string without clearing filters.</description>
+            <description>Search the Admin grid by string without clearing filters.</description>
         </annotations>
         <arguments>
             <argument name="keyword" defaultValue="" type="string"/>

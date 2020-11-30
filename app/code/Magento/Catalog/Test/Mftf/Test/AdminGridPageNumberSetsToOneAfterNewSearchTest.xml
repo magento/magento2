@@ -80,7 +80,7 @@
         </actionGroup>
 
         <!-- Performing the first search and assertions -->
-        <actionGroup ref="SearchProductGridByStringNoClearActionGroup" stepKey="searchForSimpleProduct">
+        <actionGroup ref="AdminSearchGridByStringNoClearActionGroup" stepKey="searchForSimpleProduct">
             <argument name="keyword" value="SimpleProduct"/>
         </actionGroup>
         <actionGroup ref="AdminGridAssertTotalPageCountActionGroup" stepKey="waitForTotalPagesCountFourToBeVisible">
@@ -92,7 +92,7 @@
         </actionGroup>
 
         <!-- Performing the second search and assertions of successful current page number reset -->
-        <actionGroup ref="SearchProductGridByStringNoClearActionGroup" stepKey="searchForVirtualProduct">
+        <actionGroup ref="AdminSearchGridByStringNoClearActionGroup" stepKey="searchForVirtualProduct">
             <argument name="keyword" value="VirtualProduct"/>
         </actionGroup>
         <actionGroup ref="AdminGridAssertTotalPageCountActionGroup" stepKey="waitForTotalPagesCountThreeToBeVisible">
