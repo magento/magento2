@@ -102,7 +102,7 @@ class Cart extends \Magento\Framework\DataObject implements SectionSourceInterfa
             'isGuestCheckoutAllowed' => $this->isGuestCheckoutAllowed(),
             'website_id' => $this->getQuote()->getStore()->getWebsiteId(),
             'storeId' => $this->getQuote()->getStore()->getStoreId(),
-            'updated_at' => $this->getQuote()->getUpdatedAt() ?
+            'updatedAt' => $this->getQuote()->getUpdatedAt() ?
                 (string)\strtotime($this->getQuote()->getUpdatedAt()) : ''
         ];
     }

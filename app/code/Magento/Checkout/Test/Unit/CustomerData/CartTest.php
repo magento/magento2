@@ -95,6 +95,9 @@ class CartTest extends TestCase
         $this->assertTrue($this->model->isGuestCheckoutAllowed());
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function testGetSectionData()
     {
         $summaryQty = 100;
@@ -105,6 +108,7 @@ class CartTest extends TestCase
         $itemData = ['item' => 'data'];
         $shortcutButtonsHtml = '<span>Buttons</span>';
         $websiteId = 100;
+        $updatedAt = date('Y-m-d');
 
         $subtotalMock = $this->getMockBuilder(DataObject::class)
             ->addMethods(['getValue'])
@@ -115,7 +119,7 @@ class CartTest extends TestCase
 
         $quoteMock = $this->getMockBuilder(Quote::class)
             ->addMethods(['getHasError'])
-            ->onlyMethods(['getTotals', 'getAllVisibleItems', 'getStore'])
+            ->onlyMethods(['getTotals', 'getAllVisibleItems', 'getStore', 'getUpdatedAt'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->checkoutSessionMock->expects($this->exactly(2))->method('getQuote')->willReturn($quoteMock);
@@ -150,6 +154,7 @@ class CartTest extends TestCase
             ->getMock();
         $quoteItemMock->expects($this->exactly(3))->method('getProduct')->willReturn($productMock);
         $quoteItemMock->expects($this->once())->method('getStoreId')->willReturn($storeId);
+        $quoteMock->expects($this->any())->method('getUpdatedAt')->willReturn($updatedAt);
 
         $productMock->expects($this->once())->method('isVisibleInSiteVisibility')->willReturn(false);
         $productMock->expects($this->exactly(3))->method('getId')->willReturn($productId);
@@ -191,7 +196,8 @@ class CartTest extends TestCase
             'isGuestCheckoutAllowed' => 1,
             'website_id' => $websiteId,
             'subtotalAmount' => 200,
-            'storeId' => null
+            'storeId' => null,
+            'updatedAt' => strtotime($updatedAt),
         ];
         $this->assertEquals($expectedResult, $this->model->getSectionData());
     }
@@ -206,6 +212,7 @@ class CartTest extends TestCase
         $productId = 10;
         $storeId = 20;
         $websiteId = 100;
+        $updatedAt = date('Y-m-d');
 
         $productRewrite = [$productId => ['rewrite' => 'product']];
         $itemData = ['item' => 'data'];
@@ -219,7 +226,7 @@ class CartTest extends TestCase
 
         $quoteMock = $this->getMockBuilder(Quote::class)
             ->addMethods(['getHasError'])
-            ->onlyMethods(['getTotals', 'getAllVisibleItems', 'getStore'])
+            ->onlyMethods(['getTotals', 'getAllVisibleItems', 'getStore', 'getUpdatedAt'])
             ->disableOriginalConstructor()
             ->getMock();
         $quoteItemMock = $this->getMockBuilder(Item::class)
@@ -238,6 +245,7 @@ class CartTest extends TestCase
             ->getMock();
         $storeMock->expects($this->once())->method('getWebsiteId')->willReturn($websiteId);
         $quoteMock->expects($this->any())->method('getStore')->willReturn($storeMock);
+        $quoteMock->expects($this->any())->method('getUpdatedAt')->willReturn($updatedAt);
 
         $this->checkoutCartMock->expects($this->once())->method('getSummaryQty')->willReturn($summaryQty);
         $this->checkoutHelperMock->expects($this->once())
@@ -304,7 +312,8 @@ class CartTest extends TestCase
             'isGuestCheckoutAllowed' => 1,
             'website_id' => $websiteId,
             'subtotalAmount' => 200,
-            'storeId' => null
+            'storeId' => null,
+            'updatedAt' => strtotime($updatedAt),
         ];
         $this->assertEquals($expectedResult, $this->model->getSectionData());
     }
