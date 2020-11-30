@@ -23,7 +23,7 @@
         </before>
         <after>
             <!-- Logout customer -->
-            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogoutStorefront"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutFromCustomer"/>
             <deleteData createDataKey="createCustomer" before="goToProductAttributes" stepKey="deleteCustomer"/>
         </after>
 
