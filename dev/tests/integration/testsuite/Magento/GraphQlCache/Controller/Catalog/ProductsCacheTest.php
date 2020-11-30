@@ -165,7 +165,7 @@ QUERY;
         $expectedCacheTags = ['cat_c', 'cat_c_333'];
 
         foreach ($expectedCacheTags as $cacheTag) {
-            $this->assertArrayHasKey($cacheTag, $actualCacheTags);
+            $this->assertContains($cacheTag, $actualCacheTags);
         }
     }
 }
