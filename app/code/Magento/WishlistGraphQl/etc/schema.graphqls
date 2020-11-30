@@ -44,8 +44,8 @@ interface WishlistItemInterface @typeResolver(class: "Magento\\WishlistGraphQl\\
 }
 
 type WishlistItems {
-    items: [WishlistItemInterface]! @doc(description: "Wishlist items list")
-    page_info: SearchResultPageInfo
+    items: [WishlistItemInterface]! @doc(description: "A list of items in the wish list")
+    page_info: SearchResultPageInfo @doc(description: "Contains pagination metadata")
 }
 
 type WishlistItem {
