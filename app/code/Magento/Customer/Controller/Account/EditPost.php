@@ -33,7 +33,8 @@ use Magento\Customer\Controller\AbstractAccount;
 use Magento\Framework\Phrase;
 
 /**
- * Class EditPost
+ * Customer edit account information controller
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class EditPost extends AbstractAccount implements CsrfAwareActionInterface, HttpPostActionInterface
@@ -185,6 +186,7 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
      * Change customer email or password action
      *
      * @return \Magento\Framework\Controller\Result\Redirect
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function execute()
     {
@@ -217,6 +219,12 @@ class EditPost extends AbstractAccount implements CsrfAwareActionInterface, Http
                 );
                 $this->dispatchSuccessEvent($customerCandidateDataObject);
                 $this->messageManager->addSuccessMessage(__('You saved the account information.'));
+                // logout from current session if password changed.
+                if ($isPasswordChanged) {
+                    $this->session->logout();
+                    $this->session->start();
+                    return $resultRedirect->setPath('customer/account/login');
+                }
                 return $resultRedirect->setPath('customer/account');
             } catch (InvalidEmailOrPasswordException $e) {
                 $this->messageManager->addErrorMessage($this->escaper->escapeHtml($e->getMessage()));

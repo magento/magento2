@@ -17,6 +17,7 @@
             <argument name="image"/>
         </arguments>
 
+        <waitForPageLoad stepKey="waitForPageFullyLoaded"/>
         <attachFile selector="{{AdminEnhancedMediaGalleryActionsSection.upload}}" userInput="{{image.value}}" stepKey="uploadImage"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear"/>

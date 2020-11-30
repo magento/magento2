@@ -15,8 +15,8 @@ use Magento\Framework\Indexer\StateInterface;
  * Customer address model
  *
  * @api
- * @method int getParentId() getParentId()
- * @method \Magento\Customer\Model\Address setParentId() setParentId(int $parentId)
+ * @method int getParentId()
+ * @method \Magento\Customer\Model\Address setParentId(int $parentId)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
  */
