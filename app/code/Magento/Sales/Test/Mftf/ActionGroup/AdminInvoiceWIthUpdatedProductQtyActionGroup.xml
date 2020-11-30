@@ -20,7 +20,7 @@
         </arguments>
 
         <fillField selector="{{AdminInvoiceItemsSection.qtyToInvoiceColumn}}" userInput="{{qty}}" stepKey="fillQtyField" after="waitForInvoicePage"/>
-        <click selector="{{AdminInvoiceItemsSection.updateQty}}" stepKey="clickUpdateQuantityButton" after="changeQtyToInvoice"/>
-        <waitForPageLoad stepKey="waitForPageRefreshed" after="updateQuantity"/>
+        <click selector="{{AdminInvoiceItemsSection.updateQty}}" stepKey="clickUpdateQuantityButton" after="fillQtyField"/>
+        <waitForPageLoad stepKey="waitForPageRefreshed" after="clickUpdateQuantityButton"/>
     </actionGroup>
 </actionGroups>
