@@ -383,6 +383,18 @@ class SubscriptionTest extends TestCase
             ->method('getViewId')
             ->willReturn($viewId);
 
+        $this->viewMock->expects($this->once())
+            ->method('getSubscriptions')
+            ->willReturn(
+                [
+                    $this->tableName => ['name' => $this->tableName, 'column' => 'columnName'],
+                    'cataloginventory_stock_item' => ['name' => 'otherTableName', 'column' => 'columnName']
+                ]
+            );
+        $this->viewMock->expects($this->once())
+            ->method('getChangeLog')
+            ->willReturn($otherChangelogMock);
+
         $model = new Subscription(
             $this->resourceMock,
             $this->triggerFactoryMock,
@@ -396,7 +408,7 @@ class SubscriptionTest extends TestCase
 
         $method = new \ReflectionMethod($model, 'buildStatement');
         $method->setAccessible(true);
-        $statement = $method->invoke($model, Trigger::EVENT_UPDATE, $otherChangelogMock);
+        $statement = $method->invoke($model, Trigger::EVENT_UPDATE, $this->viewMock);
 
         $this->assertStringNotContainsString($ignoredColumnName, $statement);
         $this->assertStringContainsString($notIgnoredColumnName, $statement);
