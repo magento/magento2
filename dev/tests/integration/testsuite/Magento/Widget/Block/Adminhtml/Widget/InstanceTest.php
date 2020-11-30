@@ -118,13 +118,23 @@ class InstanceTest extends TestCase
                     'filter' => base64_encode('sort_order=1'),
                 ],
                 'expected_widgets' => [
-                    'recently compared products'
+                    'recently compared products',
                 ],
             ],
-            'filter_by_multiple_filters' => [
+            'filter_by_title_and_luma_theme' => [
                 'filter' => [
                     'filter' => base64_encode(
-                        'type=Magento%5CCatalog%5CBlock%5CWidget%5CRecentlyCompared&sort_order=1'
+                        'title=cms page widget title&theme_id=' . $this->loadThemeIdByCode('Magento/luma')
+                    ),
+                ],
+                'expected_widgets' => [
+                    'cms page widget title',
+                ],
+            ],
+            'filter_by_title_and_blank_theme' => [
+                'filter' => [
+                    'filter' => base64_encode(
+                        'title=recently compared products&theme_id=' . $this->loadThemeIdByCode('Magento/blank')
                     ),
                 ],
                 'expected_widgets' => [
@@ -270,7 +280,7 @@ class InstanceTest extends TestCase
         $this->assertCount(count($expectedWidgets), $collection);
         foreach ($expectedWidgets as $widgetTitle) {
             $item = $collection->getItemByColumnValue('title', $widgetTitle);
-            $this->assertNotNull($item);
+            $this->assertNotNull($item, sprintf('Expected widget %s is not present in grid', $widgetTitle));
         }
     }
 
