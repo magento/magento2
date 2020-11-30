@@ -51,7 +51,7 @@ class SynchronizerTest extends TestCase
     public function testExecute(): void
     {
         $this->filesystemMock->method('getDirectoryCodes')
-            ->willReturn(['test']);
+            ->willReturn(['test', 'import_export']);
 
         $localDriver = $this->createMock(DriverInterface::class);
         $remoteDriver = $this->createMock(DriverInterface::class);
@@ -63,7 +63,8 @@ class SynchronizerTest extends TestCase
         $remoteDirectory->method('getDriver')
             ->willReturn($remoteDriver);
 
-        $this->filesystemMock->method('getDirectoryWrite')
+        $this->filesystemMock->expects(self::exactly(2))
+            ->method('getDirectoryWrite')
             ->willReturnMap([
                 ['test', DriverPool::FILE, $localDirectory],
                 ['test', RemoteDriverPool::REMOTE, $remoteDirectory]
