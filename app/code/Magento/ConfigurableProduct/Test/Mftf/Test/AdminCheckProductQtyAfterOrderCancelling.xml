@@ -54,22 +54,22 @@
             <argument name="orderId" value="$createGuestCart.return$"/>
         </actionGroup>
 
-        <actionGroup ref="AdminOrderGridClickFirstRowActionGroup" stepKey="clickOrderRow"/>
+        <actionGroup ref="AdminOrderGridClickFirstRowActionGroup" stepKey="openOrder"/>
         
-        <actionGroup ref="AdminInvoiceWIthUpdatedProductQtyActionGroup" stepKey="ChangeQtyToInvoice">
+        <actionGroup ref="AdminInvoiceWIthUpdatedProductQtyActionGroup" stepKey="createPartialInvoice">
            <argument name="qty" value="1"/>
         </actionGroup>   
        
-        <actionGroup ref="AdminCreateShipmentFromOrderPage" stepKey="clickSubmitShipment">   
+        <actionGroup ref="AdminCreateShipmentFromOrderPage" stepKey="createShipment">   
              <argument name="Qty" value="1"/>
              <argument name="Number" value="111"/>
         </actionGroup>     
        
-        <actionGroup ref="CancelPendingOrderActionGroup" stepKey="cancelPendingOption">
+        <actionGroup ref="CancelPendingOrderActionGroup" stepKey="cancelOrder">
             <argument name="orderStatus" value="Complete"/>
         </actionGroup>
 
-        <see selector="{{AdminOrderItemsOrderedSection.itemQty('1')}}" userInput="Canceled 3" stepKey="seeCanceledQuantity"/>
+        <see selector="{{AdminOrderItemsOrderedSection.itemQty('1')}}" userInput="Canceled 3" stepKey="seeCanceledQty"/>
 
         <actionGroup ref="AdminOpenCatalogProductPageActionGroup" stepKey="goToCatalogProductPage"/>
 
@@ -77,13 +77,13 @@
             <argument name="sku" value="$$createConfigProduct.sku$$"/>
         </actionGroup>
 
-        <actionGroup ref="AssertAdminProductGridCellActionGroup" stepKey="seeProductSkuInGrid">
+        <actionGroup ref="AssertAdminProductGridCellActionGroup" stepKey="assertProductDataInGrid">
             <argument name="row" value="1"/>
             <argument name="column" value="Quantity"/>
             <argument name="value" value="99"/>
         </actionGroup>
 
-        <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearProductFilters"/>
+        <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearFilters"/>
 
     </test>
 </tests>

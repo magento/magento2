@@ -19,8 +19,8 @@
             <argument name="qty" type="string"/>
         </arguments>
 
-        <fillField selector="{{AdminInvoiceItemsSection.qtyToInvoiceColumn}}" userInput="{{qty}}" stepKey="changeQtyToInvoice" after="waitForInvoicePage"/>
-        <click selector="{{AdminInvoiceItemsSection.updateQty}}" stepKey="updateQuantity" after="changeQtyToInvoice"/>
-        <waitForPageLoad stepKey="waitPageToBeLoaded" after="updateQuantity"/>
+        <fillField selector="{{AdminInvoiceItemsSection.qtyToInvoiceColumn}}" userInput="{{qty}}" stepKey="fillQtyField" after="waitForInvoicePage"/>
+        <click selector="{{AdminInvoiceItemsSection.updateQty}}" stepKey="clickUpdateQuantityButton" after="changeQtyToInvoice"/>
+        <waitForPageLoad stepKey="waitForPageRefreshed" after="updateQuantity"/>
     </actionGroup>
 </actionGroups>
