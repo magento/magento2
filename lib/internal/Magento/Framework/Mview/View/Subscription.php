@@ -205,7 +205,7 @@ class Subscription implements SubscriptionInterface
      * @param ViewInterface $view
      * @return string
      */
-    protected function buildStatement($event, $view)
+    protected function buildStatement(string $event, ViewInterface $view): string
     {
         $column = $this->getSubscriptionColumn($view);
         $changelog = $view->getChangelog();
