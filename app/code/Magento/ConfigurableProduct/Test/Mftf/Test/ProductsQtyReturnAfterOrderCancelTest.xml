@@ -13,7 +13,7 @@
         <annotations>
             <features value="ConfigurableProduct"/>
             <stories value="Cancel order"/>
-            <title value="Product quantity return after order cancel"/>
+            <title value="DEPRECATED. Product quantity return after order cancel"/>
             <description value="Check Product quantity return after order cancel"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MAGETWO-97228"/>
