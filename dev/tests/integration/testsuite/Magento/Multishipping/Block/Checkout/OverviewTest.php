@@ -6,7 +6,7 @@
 
 namespace Magento\Multishipping\Block\Checkout;
 
-use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\ProductRepository;
 use Magento\Checkout\Block\Cart\Item\Renderer;
 use Magento\Framework\App\Area;
 use Magento\Framework\ObjectManagerInterface;
@@ -26,12 +26,12 @@ class OverviewTest extends TestCase
     /**
      * @var Overview
      */
-    protected $block;
+    private $block;
 
     /**
      * @var ObjectManagerInterface
      */
-    protected $objectManager;
+    private $objectManager;
 
     /**
      * @var Quote
@@ -39,7 +39,7 @@ class OverviewTest extends TestCase
     private $quote;
 
     /**
-     * @var Product
+     * @var ProductRepository
      */
     private $product;
 
@@ -48,6 +48,9 @@ class OverviewTest extends TestCase
      */
     private $item;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         Bootstrap::getInstance()->loadArea(Area::AREA_FRONTEND);
@@ -72,9 +75,9 @@ class OverviewTest extends TestCase
             Renderer::class,
             ['template' => 'cart/item/default.phtml']
         );
-        $this->quote = $this->objectManager->get(Quote::class);
-        $this->product = $this->objectManager->get(Product::class);
-        $this->item = $this->objectManager->get(Item::class);
+        $this->quote = $this->objectManager->create(Quote::class);
+        $this->product = $this->objectManager->create(ProductRepository::class);
+        $this->item = $this->objectManager->create(Item::class);
     }
 
     /**
@@ -82,7 +85,7 @@ class OverviewTest extends TestCase
      */
     public function testGetRowItemHtml()
     {
-        $product = $this->product->load('1');
+        $product = $this->product->get('simple');
         $item = $this->item->setProduct($product);
         $item->setQuote($this->quote);
         // assure that default renderer was obtained
