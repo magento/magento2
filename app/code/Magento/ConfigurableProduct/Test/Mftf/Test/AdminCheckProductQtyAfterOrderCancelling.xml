@@ -8,7 +8,7 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminCheckProductQtyAfterOrderCancelling">
+    <test name="AdminCheckProductQtyAfterOrderCancellingTest">
 
         <annotations>
             <features value="ConfigurableProduct"/>
@@ -41,7 +41,7 @@
             </updateData> 
 
             <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
-            
+
         </before>
 
         <after>

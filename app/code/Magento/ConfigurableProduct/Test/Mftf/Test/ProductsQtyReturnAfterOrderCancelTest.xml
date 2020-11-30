@@ -8,7 +8,7 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="">
+    <test name="ProductsQtyReturnAfterOrderCancelTest" deprecated="Use AdminCheckProductQtyAfterOrderCancellingTest instead">
 
         <annotations>
             <features value="ConfigurableProduct"/>
@@ -23,44 +23,28 @@
 
         <before>
             <createData entity="ApiCategory" stepKey="createCategory"/>
-            <createData entity="BaseConfigurableProduct" stepKey="createConfigProduct">
+            <createData entity="ApiConfigurableProduct" stepKey="createConfigProduct">
                 <requiredEntity createDataKey="createCategory"/>
-                <field key="quantity">1000</field>
             </createData>
-
-            
-
             <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
         </before>
 
         <after>
-            <!-- <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/> -->
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
         </after>
 
         <actionGroup ref="AdminOpenCatalogProductPageActionGroup" stepKey="goToCatalogProductPage1"/>
 
-        <actionGroup ref="ClearFiltersAdminProductGridActionGroup" stepKey="clickClearFiltersInitial"/>
+        <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFiltersInitial"/>
         <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditProduct">
             <argument name="product" value="$$createConfigProduct$$"/>
         </actionGroup>
         <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="100" stepKey="changeProductQuantity"/>
-        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveChanges"/> 
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveChanges"/>
 
-        <createData entity="GuestCart" stepKey="createGuestCart"/>
-            <createData entity="SimpleFourCartItems" stepKey="addCartItem">
-                <requiredEntity createDataKey="createGuestCart"/>
-                <requiredEntity createDataKey="createConfigProduct"/>
-            </createData>
-            <createData entity="GuestAddressInformation" stepKey="addGuestOrderAddress">
-                <requiredEntity createDataKey="createGuestCart"/>
-            </createData>
-            <updateData createDataKey="createGuestCart" entity="GuestOrderPaymentMethod" stepKey="sendGuestPaymentInformation">
-                <requiredEntity createDataKey="createGuestCart"/>
-        </updateData> 
-
-        <!-- <amOnPage url="$$createConfigProduct.sku$$.html" stepKey="navigateToProductPage"/>
+        <amOnPage url="$$createConfigProduct.sku$$.html" stepKey="navigateToProductPage"/>
         <waitForPageLoad stepKey="waitForProductPage"/>
         <fillField selector="{{StorefrontProductInfoMainSection.qty}}" userInput="4" stepKey="fillQuantity"/>
 
@@ -79,10 +63,10 @@
             <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage" />
         </actionGroup>
 
-        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderNumber"/> -->
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderNumber"/>
 
         <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderGridById">
-            <argument name="orderId" value="$createGuestCart.return$"/>
+            <argument name="orderId" value="$grabOrderNumber"/>
         </actionGroup>
 
         <actionGroup ref="AdminOrderGridClickFirstRowActionGroup" stepKey="clickOrderRow"/>
@@ -91,16 +75,11 @@
         <click selector="{{AdminInvoiceItemsSection.updateQty}}" stepKey="updateQuantity"/>
         <waitForPageLoad stepKey="waitPageToBeLoaded"/>
         <actionGroup ref="AdminInvoiceClickSubmitActionGroup" stepKey="clickSubmitInvoice"/>
-        <!-- <click selector="{{AdminOrderDetailsMainActionsSection.ship}}" stepKey="clickShipAction"/>
-        <waitForPageLoad stepKey="waitOrderDetailToLoad"/> -->
-        <!-- <fillField selector="{{AdminShipmentItemsSection.itemQtyToShip('1')}}" userInput="1" stepKey="changeItemQtyToShip"/> -->
-        <actionGroup ref="AdminCreateShipmentFromOrderPage" stepKey="clickSubmitShipment">   
-             <argument name="Qty" value="1"/>
-             <argument name="Number" value="111"/>
-        </actionGroup>     
-       
-        <!-- <click selector="{{AdminShipmentMainActionsSection.submitShipment}}" stepKey="clickSubmitShipment"/>
-        <waitForPageLoad stepKey="waitShipmentSectionToLoad"/> -->
+        <click selector="{{AdminOrderDetailsMainActionsSection.ship}}" stepKey="clickShipAction"/>
+        <waitForPageLoad stepKey="waitOrderDetailToLoad"/>
+        <fillField selector="{{AdminShipmentItemsSection.itemQtyToShip('1')}}" userInput="1" stepKey="changeItemQtyToShip"/>
+        <click selector="{{AdminShipmentMainActionsSection.submitShipment}}" stepKey="clickSubmitShipment"/>
+        <waitForPageLoad stepKey="waitShipmentSectionToLoad"/>
         <actionGroup ref="CancelPendingOrderActionGroup" stepKey="cancelPendingOption">
             <argument name="orderStatus" value="Complete"/>
         </actionGroup>
