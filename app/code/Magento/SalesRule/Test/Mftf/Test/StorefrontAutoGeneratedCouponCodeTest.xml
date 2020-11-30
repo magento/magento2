@@ -63,7 +63,7 @@
             <argument name="consumerName" value="{{AdminCodeGeneratorMessageConsumerData.consumerName}}"/>
             <argument name="maxMessages" value="{{AdminCodeGeneratorMessageConsumerData.messageLimit}}"/>
         </actionGroup>
-        <actionGroup ref="CliConsumerStartActionGroup" stepKey="startSalesRuleMessageQueue">
+        <actionGroup ref="CliConsumerStartActionGroup" stepKey="startUsageProcessingMessageQueue">
             <argument name="consumerName" value="{{SalesRuleConsumerData.consumerName}}"/>
             <argument name="maxMessages" value="{{SalesRuleConsumerData.messageLimit}}"/>
         </actionGroup>
