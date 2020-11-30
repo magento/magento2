@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontCustomerChangeAccountInformationActionGroup">
+        <annotations>
+            <description>Change the Customer First and Last name via the Storefront Customer Dashboard page.</description>
+        </annotations>
+        <arguments>
+            <argument name="firstName" type="string"/>
+            <argument name="lastName" type="string"/>
+        </arguments>
+
+        <conditionalClick selector="{{StorefrontCustomerSidebarSection.sidebarTab('Account Information')}}" dependentSelector="{{StorefrontCustomerSidebarSection.sidebarTab('Account Information')}}" visible="true" stepKey="openAccountInfoTab"/>
+        <waitForPageLoad stepKey="waitForAccountInfoTabOpened"/>
+        <fillField selector="{{StorefrontCustomerAccountInformationSection.firstName}}" userInput="{{firstName}}" stepKey="fillFirstName"/>
+        <fillField selector="{{StorefrontCustomerAccountInformationSection.lastName}}" userInput="{{lastName}}" stepKey="fillLastName"/>
+        <click selector="{{StorefrontCustomerAccountInformationSection.saveButton}}" stepKey="saveChange"/>
+        <waitForPageLoad stepKey="waitForPageLoaded"/>
+    </actionGroup>
+</actionGroups>
