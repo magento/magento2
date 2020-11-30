@@ -8,7 +8,7 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminInvoiceWIthUpdatedProductQtyActionGroup" extends="AdminCreateInvoiceActionGroup">
+    <actionGroup name="AdminInvoiceWithUpdatedProductQtyActionGroup" extends="AdminCreateInvoiceActionGroup">
          <annotations>
             <description>Start order Invoicing.
                          Update product qty to invoice (there is one product in the Order).

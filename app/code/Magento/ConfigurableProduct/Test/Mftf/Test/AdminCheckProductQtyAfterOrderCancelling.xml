@@ -56,7 +56,7 @@
 
         <actionGroup ref="AdminOrderGridClickFirstRowActionGroup" stepKey="openOrder"/>
         
-        <actionGroup ref="AdminInvoiceWIthUpdatedProductQtyActionGroup" stepKey="createPartialInvoice">
+        <actionGroup ref="AdminInvoiceWithUpdatedProductQtyActionGroup" stepKey="createPartialInvoice">
            <argument name="qty" value="1"/>
         </actionGroup>   
        
