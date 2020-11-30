@@ -85,7 +85,7 @@ class ExportFileDataProvider extends DataProvider
         );
 
         $this->fileIO = $fileIO ?: ObjectManager::getInstance()->get(File::class);
-        $this->directory = $filesystem->getDirectoryWrite(DirectoryList::VAR_EXPORT);
+        $this->directory = $filesystem->getDirectoryWrite(DirectoryList::VAR_IMPORT_EXPORT);
     }
 
     /**
@@ -97,11 +97,11 @@ class ExportFileDataProvider extends DataProvider
     public function getData()
     {
         $emptyResponse = ['items' => [], 'totalRecords' => 0];
-        if (!$this->directory->isExist($this->directory->getAbsolutePath())) {
+        if (!$this->directory->isExist($this->directory->getAbsolutePath() . 'export/')) {
             return $emptyResponse;
         }
 
-        $files = $this->getExportFiles($this->directory->getAbsolutePath());
+        $files = $this->getExportFiles($this->directory->getAbsolutePath() . 'export/');
         if (empty($files)) {
             return $emptyResponse;
         }
@@ -128,14 +128,11 @@ class ExportFileDataProvider extends DataProvider
      */
     private function getPathToExportFile($file): string
     {
-        $directory = $this->fileSystem->getDirectoryRead(DirectoryList::VAR_EXPORT);
         $delimiter = '/';
         $cutPath = explode(
             $delimiter,
-            $directory->getAbsolutePath()
+            $this->directory->getAbsolutePath() . 'export'
         );
-        // remove . from dirname if file path is not absolute in the file system but just a file name
-        $file['dirname'] = $file['dirname'] !== '.' ? $file['dirname'] : '';
 
         $filePath = explode(
             $delimiter,
@@ -163,6 +160,7 @@ class ExportFileDataProvider extends DataProvider
             return [];
         }
         foreach ($files as $filePath) {
+            $filePath = $this->directory->getAbsolutePath($filePath);
             if ($this->directory->isFile($filePath)) {
                 $fileModificationTime = $this->directory->stat($filePath)['mtime'];
                 $sortedFiles[$fileModificationTime] = $filePath;
