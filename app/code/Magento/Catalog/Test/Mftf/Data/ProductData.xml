@@ -577,6 +577,10 @@
         <var key="sku" entityType="product" entityKey="sku" />
         <requiredEntity type="product_option">ProductOptionDropDownWithLongValuesTitle</requiredEntity>
     </entity>
+    <entity name="productWithCheckbox" type="product">
+        <var key="sku" entityType="product" entityKey="sku" />
+        <requiredEntity type="product_option">ProductOptionCheckbox</requiredEntity>
+    </entity>
     <entity name="productWithDropdownOption" type="product">
         <var key="sku" entityType="product" entityKey="sku" />
         <requiredEntity type="product_option">ProductOptionValueDropdown</requiredEntity>
