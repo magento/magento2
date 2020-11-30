@@ -16,11 +16,9 @@
             <severity value="MAJOR"/>
             <group value="shipping"/>
         </annotations>
-
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
         </before>
-
         <after>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
@@ -30,9 +28,7 @@
         </actionGroup>
 
         <waitForPageLoad stepKey="waitForPageLoad"/>
-
         <seeInCurrentUrl url="{{AdminShipmentsGridPage.url}}" stepKey="redirectToShipmentsGridPage"/>
-
         <see selector="{{AdminMessagesSection.error}}" userInput='This shipment no longer exists.'
              stepKey="seeErrorMessage"/>
     </test>
