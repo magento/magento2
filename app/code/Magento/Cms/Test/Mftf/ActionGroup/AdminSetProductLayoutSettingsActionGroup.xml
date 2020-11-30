@@ -15,10 +15,11 @@
         <arguments>
             <argument name="layout" type="string"/>
         </arguments>
-
         <waitForElementVisible selector="{{DefaultLayoutsSection.productLayout}}" stepKey="waittForDefaultProductLayout"/>
         <selectOption selector="{{DefaultLayoutsSection.productLayout}}" userInput="{{layout}}" stepKey="selectLayout"/>
         <click selector="{{ContentManagementSection.Save}}" stepKey="clickSaveConfig"/>
+        <waitForPageLoad stepKey="waitForSavingSystemConfiguration"/>
+        <see userInput="You saved the configuration." stepKey="seeSuccessMessage"/>
         
     </actionGroup>
 </actionGroups>
