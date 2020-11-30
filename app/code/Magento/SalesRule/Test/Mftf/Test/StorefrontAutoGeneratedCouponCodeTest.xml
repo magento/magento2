@@ -63,10 +63,6 @@
             <argument name="consumerName" value="{{AdminCodeGeneratorMessageConsumerData.consumerName}}"/>
             <argument name="maxMessages" value="{{AdminCodeGeneratorMessageConsumerData.messageLimit}}"/>
         </actionGroup>
-        <actionGroup ref="CliConsumerStartActionGroup" stepKey="startUsageProcessingMessageQueue">
-            <argument name="consumerName" value="{{SalesRuleConsumerData.consumerName}}"/>
-            <argument name="maxMessages" value="{{SalesRuleConsumerData.messageLimit}}"/>
-        </actionGroup>
         <actionGroup ref="ReloadPageActionGroup" stepKey="refreshPage"/>
         <comment userInput="Replacing reload action and preserve Backward Compatibility" stepKey="waitFormToReload1"/>
         <conditionalClick selector="{{AdminCartPriceRulesFormSection.manageCouponCodesHeader}}"
@@ -105,10 +101,16 @@
         <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment"/>
         <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
         <waitForElement selector="{{CheckoutSuccessMainSection.success}}" time="30" stepKey="waitForLoadSuccessPage"/>
+        <actionGroup ref="CliConsumerStartActionGroup" stepKey="startUsageProcessingMessageQueue">
+            <argument name="consumerName" value="{{SalesRuleConsumerData.consumerName}}"/>
+            <argument name="maxMessages" value="{{SalesRuleConsumerData.messageLimit}}"/>
+        </actionGroup>
+        <reloadPage stepKey="refreshPage1"/>
 
         <!-- Step: 9-10. Open the Product Page, add the product to Cart, go to Shopping Cart and Apply the same coupon code -->
         <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.name$$)}}" stepKey="openProductPage1"/>
         <waitForPageLoad stepKey="waitForPageLoad3"/>
+        <reloadPage stepKey="refreshPage2"/>
         <actionGroup ref="ApplyCartRuleOnStorefrontActionGroup" stepKey="applyCartPriceRule1">
             <argument name="product" value="$$createSimpleProduct$$"/>
             <argument name="couponCode" value="{$couponCode}"/>
