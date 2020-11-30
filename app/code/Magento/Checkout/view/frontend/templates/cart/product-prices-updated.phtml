@@ -6,13 +6,10 @@
 
 /** @var Magento\Checkout\Block\ProductPricesUpdated $block */
 ?>
-<script>
-    const PRODUCTS_UPDATED_AT = "<?= time(); ?>";
-</script>
 <script type="text/x-magento-init">
 {
     "*": {
-        "Magento_Checkout/js/product-prices-updated": {"updated_at": "<?= time(); ?>"}
+        "Magento_Checkout/js/product-prices-updated": {"productsUpdatedTime": "<?= time(); ?>"}
     }
 }
 </script>
