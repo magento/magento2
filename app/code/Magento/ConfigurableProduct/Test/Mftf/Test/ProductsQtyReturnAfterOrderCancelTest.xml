@@ -19,6 +19,9 @@
             <testCaseId value="MAGETWO-97228"/>
             <useCaseId value="MAGETWO-82221"/>
             <group value="ConfigurableProduct"/>
+            <skip>
+                <issueId value="DEPRECATED">Use AdminCheckProductQtyAfterOrderCancellingTest instead</issueId>
+            </skip> 
         </annotations>
 
         <before>
