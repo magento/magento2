@@ -10,10 +10,10 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="StorefrontHoverProductOnCategoryPageActionGroup">
         <annotations>
-            <description>Hover product on the Category page</description>
+           <description>Hover product on the Category page</description>
         </annotations>
 
-    <moveMouseOver selector="{{StorefrontCategoryMainSection.ProductItemInfo}}" stepKey="hoverOverProduct"/>
+        <moveMouseOver selector="{{StorefrontCategoryMainSection.ProductItemInfo}}" stepKey="hoverOverProduct"/>
 
     </actionGroup>
 </actionGroups>
