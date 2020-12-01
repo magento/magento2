@@ -14,6 +14,8 @@
             <stories value="Email Updating"/>
             <title value="Email Updating Test"/>
             <description value="Admin should be able update created Email Template"/>
+            <group value="backend"/>
+            <severity value="MINOR"></severity>
         </annotations>
 
         <before>
