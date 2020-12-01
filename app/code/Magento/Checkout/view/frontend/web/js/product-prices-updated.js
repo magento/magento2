@@ -20,7 +20,6 @@ define([
         }
 
         customerData.getInitCustomerData().done(function () {
-            debugger;
             var cartUpdated = cartData().updatedAt;
 
             if (!cartCacheUpdated || cartUpdated > cartCacheUpdated) {
