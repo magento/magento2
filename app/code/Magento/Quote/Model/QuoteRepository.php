@@ -134,8 +134,8 @@ class QuoteRepository implements CartRepositoryInterface
     {
         if (!isset($this->quotesById[$cartId])) {
             $quote = $this->loadQuote('loadByIdWithoutStore', 'cartId', $cartId, $sharedStoreIds);
-            $this->getLoadHandler()->load($quote);
             $this->quotesById[$cartId] = $quote;
+            $this->getLoadHandler()->load($quote);
         }
         return $this->quotesById[$cartId];
     }
