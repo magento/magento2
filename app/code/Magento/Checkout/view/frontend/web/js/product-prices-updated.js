@@ -11,12 +11,18 @@ define([
     return function (data) {
         var cacheKey = 'cart-cache-updated',
             cartData = customerData.get('cart'),
-            localStorageSupported = isLocalStorageSupported(),
-            cartCacheUpdated = localStorageSupported ? window.localStorage.getItem(cacheKey) : 0;
+            cartCacheUpdated = null;
+
+        try {
+            cartCacheUpdated = window.localStorage.getItem(cacheKey);
+        } catch (e) {
+            console.error(e);
+        }
 
         customerData.getInitCustomerData().done(function () {
-            var cartUpdated = cartData().updatedAt;
             debugger;
+            var cartUpdated = cartData().updatedAt;
+
             if (!cartCacheUpdated || cartUpdated > cartCacheUpdated) {
                 cartCacheUpdated = cartUpdated;
             }
@@ -25,28 +31,13 @@ define([
                 customerData.invalidate(['cart']);
                 customerData.reload(['cart'], true);
                 cartCacheUpdated = data.productsUpdatedTime;
-                if (localStorageSupported) {
+
+                try {
                     window.localStorage.setItem(cacheKey, cartCacheUpdated);
+                } catch (e) {
+                    console.error(e);
                 }
             }
         });
-
-        function isLocalStorageSupported() {
-            var key = '_storageSupported';
-
-            try {
-                window.localStorage.setItem(key, 'true');
-
-                if (window.localStorage.getItem(key) === 'true') {
-                    window.localStorage.removeItem(key);
-
-                    return true;
-                }
-
-                return false;
-            } catch (e) {
-                return false;
-            }
-        };
     };
 });
