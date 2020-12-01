@@ -1132,11 +1132,11 @@
             "customer_id": true
         },
         "index": {
-            "CATALOG_COMPARE_LIST_LIST_ID_MASK": true,
-            "CATALOG_COMPARE_LIST_CUSTOMER_ID": true
+            "CATALOG_COMPARE_LIST_LIST_ID_MASK": true
         },
         "constraint": {
             "PRIMARY": true,
+            "CATALOG_COMPARE_LIST_CUSTOMER_ID": true,
             "CATALOG_COMPARE_LIST_CUSTOMER_ID_CUSTOMER_ENTITY_ENTITY_ID": true
         }
     }
