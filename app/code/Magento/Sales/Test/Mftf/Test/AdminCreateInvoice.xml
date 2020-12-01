@@ -35,9 +35,17 @@
             </createData>
             <updateData createDataKey="createGuestCart" entity="GuestOrderPaymentMethod" stepKey="sendGuestPaymentInformation">
                 <requiredEntity createDataKey="createGuestCart"/>
-            </updateData> 
+            </updateData>
 
             <createData entity="Invoice" stepKey="invoiceOrder">
+              <requiredEntity createDataKey="createGuestCart"/>
+            </createData>
+
+            <createData entity="Shipment" stepKey="shipOrder">
+              <requiredEntity createDataKey="createGuestCart"/>
+            </createData>
+
+            <createData entity="CreditMemo" stepKey="refundMemo">
               <requiredEntity createDataKey="createGuestCart"/>
             </createData>  
 
