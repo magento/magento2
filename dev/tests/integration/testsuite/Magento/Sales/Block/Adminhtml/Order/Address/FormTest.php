@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Sales\Block\Adminhtml\Order\Address;
 
+use Magento\Directory\Model\ResourceModel\Country\CollectionFactory;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\View\LayoutInterface;
@@ -15,6 +16,7 @@ use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderInterfaceFactory;
 use Magento\TestFramework\App\Config;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Helper\Xpath;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -38,6 +40,9 @@ class FormTest extends TestCase
     /** @var OrderInterfaceFactory */
     private $orderFactory;
 
+    /** @var CollectionFactory */
+    private $countryCollectionFactory;
+
     /**
      * @inheritdoc
      */
@@ -50,6 +55,7 @@ class FormTest extends TestCase
         $this->orderFactory = $this->objectManager->get(OrderInterfaceFactory::class);
         $this->registry = $this->objectManager->get(Registry::class);
         $this->objectManager->removeSharedInstance(Config::class);
+        $this->countryCollectionFactory = $this->objectManager->get(CollectionFactory::class);
     }
 
     /**
@@ -108,6 +114,32 @@ class FormTest extends TestCase
         $address = $this->getOrderAddress('100000001');
         $this->registerOrderAddress($address);
         $this->assertCountryField('CA');
+    }
+
+    /**
+     * @magentoDbIsolation disabled
+     *
+     * @magentoDataFixture Magento/Sales/_files/order_with_customer_on_second_website.php
+     *
+     * @magentoConfigFixture default_store general/country/default UA
+     * @magentoConfigFixture default_store general/country/allow UA
+     *
+     * @return void
+     */
+    public function testFormRenderedWithSelectRegionInput(): void
+    {
+        $address = $this->getOrderAddress('100000001');
+        $this->registerOrderAddress($address);
+        $form = $this->block->getForm();
+        $countryElement = $form->getElement('country_id');
+        $this->assertNotNull($countryElement);
+        $this->assertEquals('US', $countryElement->getEscapedValue());
+        $html = $form->toHtml();
+        $regionIdSelectXpath = '//select[@id=\'region_id\']';
+        $this->assertEquals(1, Xpath::getElementsCountForXpath($regionIdSelectXpath, $html));
+        $countryOptionsXpath = '//select[@id=\'country_id\']/option';
+        $allowedCountriesCount = count($this->countryCollectionFactory->create()->loadByStore());
+        $this->assertEquals($allowedCountriesCount, Xpath::getElementsCountForXpath($countryOptionsXpath, $html));
     }
 
     /**

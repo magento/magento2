@@ -8,9 +8,13 @@ declare(strict_types=1);
 namespace Magento\GraphQl\ConfigurableProduct;
 
 use Exception;
+use Magento\Config\Model\ResourceModel\Config;
+use Magento\Framework\App\Config\ReinitableConfigInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use Magento\CatalogInventory\Model\Configuration;
 
 /**
  * Add configurable product to cart testcases
@@ -23,12 +27,30 @@ class AddConfigurableProductToCartSingleMutationTest extends GraphQlAbstract
     private $getMaskedQuoteIdByReservedOrderId;
 
     /**
+     * @var Config $config
+     */
+    private $resourceConfig;
+
+    /**
+     * @var ScopeConfigInterface
+     */
+    private $scopeConfig;
+
+    /**
+     * @var ReinitableConfigInterface
+     */
+    private $reinitConfig;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->getMaskedQuoteIdByReservedOrderId = $objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
+        $this->resourceConfig = $objectManager->get(Config::class);
+        $this->scopeConfig = $objectManager->get(ScopeConfigInterface::class);
+        $this->reinitConfig = $objectManager->get(ReinitableConfigInterface::class);
     }
 
     /**
@@ -166,9 +188,20 @@ class AddConfigurableProductToCartSingleMutationTest extends GraphQlAbstract
      */
     public function testOutOfStockVariationToCart()
     {
+        $showOutOfStock = $this->scopeConfig->getValue(Configuration::XML_PATH_SHOW_OUT_OF_STOCK);
+
+        // Changing SHOW_OUT_OF_STOCK to show the out of stock option, otherwise graphql won't display it.
+        $this->resourceConfig->saveConfig(Configuration::XML_PATH_SHOW_OUT_OF_STOCK, 1);
+        $this->reinitConfig->reinit();
+
         $product = $this->getConfigurableProductInfo();
         $attributeId = (int) $product['configurable_options'][0]['attribute_id'];
         $valueIndex = $product['configurable_options'][0]['values'][0]['value_index'];
+        // Asserting that the first value is the right option we want to add to cart
+        $this->assertEquals(
+            $product['configurable_options'][0]['values'][0]['label'],
+            'Option 1'
+        );
         $parentSku = $product['sku'];
 
         $configurableOptionsQuery = $this->generateSuperAttributesUIDQuery($attributeId, $valueIndex);
@@ -191,6 +224,8 @@ class AddConfigurableProductToCartSingleMutationTest extends GraphQlAbstract
             $response['addProductsToCart']['user_errors'][0]['message'],
             $expectedErrorMessages
         );
+        $this->resourceConfig->saveConfig(Configuration::XML_PATH_SHOW_OUT_OF_STOCK, $showOutOfStock);
+        $this->reinitConfig->reinit();
     }
 
     /**

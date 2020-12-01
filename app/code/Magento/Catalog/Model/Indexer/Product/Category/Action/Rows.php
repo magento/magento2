@@ -270,14 +270,14 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
             );
             $categoryIds[] = $storeCategories;
         }
-        $categoryIds = array_merge(...$categoryIds);
+        $categoryIds = array_merge([], ...$categoryIds);
 
         $parentCategories = [$categoryIds];
         foreach ($categoryIds as $categoryId) {
             $parentIds = explode('/', $this->getPathFromCategoryId($categoryId));
             $parentCategories[] = $parentIds;
         }
-        $categoryIds = array_unique(array_merge(...$parentCategories));
+        $categoryIds = array_unique(array_merge([], ...$parentCategories));
 
         return $categoryIds;
     }

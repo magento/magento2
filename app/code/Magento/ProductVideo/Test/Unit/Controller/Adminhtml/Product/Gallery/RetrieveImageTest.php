@@ -181,20 +181,8 @@ class RetrieveImageTest extends TestCase
         $this->request->expects($this->any())->method('getParam')->willReturn(
             'https://example.com/test.jpg'
         );
-        $readInterface = $this->createMock(
-            ReadInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $writeInterface = $this->createMock(
-            WriteInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $readInterface = $this->createMock(ReadInterface::class);
+        $writeInterface = $this->createMock(WriteInterface::class);
         $this->filesystemMock->expects($this->any())->method('getDirectoryRead')->willReturn($readInterface);
         $readInterface->expects($this->any())->method('getAbsolutePath')->willReturn('');
         $this->abstractAdapter->expects($this->any())
@@ -217,20 +205,8 @@ class RetrieveImageTest extends TestCase
         $this->request->expects($this->any())->method('getParam')->willReturn(
             'https://example.com/test.php'
         );
-        $readInterface = $this->createMock(
-            ReadInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
-        $writeInterface = $this->createMock(
-            WriteInterface::class,
-            [],
-            [],
-            '',
-            false
-        );
+        $readInterface = $this->createMock(ReadInterface::class);
+        $writeInterface = $this->createMock(WriteInterface::class);
         $this->filesystemMock->expects($this->any())->method('getDirectoryRead')->willReturn($readInterface);
         $readInterface->expects($this->any())->method('getAbsolutePath')->willReturn('');
         $this->abstractAdapter->expects($this->never())->method('validateUploadFile');

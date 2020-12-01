@@ -7,16 +7,19 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminMediaGalleryAssertUsedInLinkPagesGridTest">
+    <test name="AdminMediaGalleryAssertUsedInLinkPagesGridTest" deprecated="Use AdminMediaGalleryAssertUsedInLinkedPagesGridTest instead">
         <annotations>
             <features value="AdminMediaGalleryUsedInBlocksFilter"/>
             <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/1168"/>
-            <title value="Used in pages link"/>
+            <title value="DEPRECATED. Used in pages link"/>
             <stories value="Story 58: User sees entities where asset is used in" />
             <testCaseId value="https://studio.cucumber.io/projects/131313/test-plan/folders/1320712/scenarios/4951848"/>
             <description value="User filters assets used in pages"/>
             <severity value="CRITICAL"/>
             <group value="media_gallery_ui"/>
+            <skip>
+                <issueId value="DEPRECATED">Use AdminMediaGalleryAssertUsedInLinkedPagesGridTest instead</issueId>
+            </skip>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>

@@ -550,6 +550,9 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
 
         $quote = $this->getQuote();
         if (!$quote->isVirtual() && $this->getShippingAddress()->getSameAsBilling()) {
+            $quote->getBillingAddress()->setCustomerAddressId(
+                $quote->getShippingAddress()->getCustomerAddressId()
+            );
             $this->setShippingAsBilling(1);
         }
 
@@ -2120,6 +2123,9 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
             $billingData['address_type'],
             $billingData['entity_id']
         );
+        if (isset($shippingData['customer_address_id']) && !isset($billingData['customer_address_id'])) {
+            unset($shippingData['customer_address_id']);
+        }
 
         return $shippingData == $billingData;
     }

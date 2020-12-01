@@ -39,6 +39,7 @@
         <element name="emptyMiniCart" type="text" selector="//div[@class='minicart-wrapper']//span[@class='counter qty empty']/../.."/>
         <element name="minicartContent" type="block" selector="#minicart-content-wrapper"/>
         <element name="messageEmptyCart" type="text" selector="//*[@id='minicart-content-wrapper']//*[contains(@class,'subtitle empty')]"/>
+        <element name="emptyCartMessageContent" type="text" selector="#minicart-content-wrapper .minicart.empty.text" timeout="30"/>
         <element name="visibleItemsCountText" type="text" selector="//div[@class='items-total']"/>
         <element name="productQuantity" type="input" selector="//*[@id='mini-cart']//a[contains(text(),'{{productName}}')]/../..//div[@class='details-qty qty']//input[@data-item-qty='{{qty}}']" parameterized="true"/>
         <element name="productImage" type="text" selector="//ol[@id='mini-cart']//img[@class='product-image-photo']"/>

@@ -192,6 +192,32 @@ class IndexTest extends AbstractBackendController
     }
 
     /**
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     */
+    public function testAclDeleteActionAllow()
+    {
+        $this->getRequest()->setParam('id', 1);
+        $this->dispatch('backend/customer/index/edit');
+        $body = $this->getResponse()->getBody();
+        $this->assertStringContainsString('Delete Customer', $body);
+    }
+
+    /**
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     */
+    public function testAclDeleteActionDeny()
+    {
+        $resource= 'Magento_Customer::delete';
+        $this->_objectManager->get(\Magento\Framework\Acl\Builder::class)
+            ->getAcl()
+            ->deny(null, $resource);
+        $this->getRequest()->setParam('id', 1);
+        $this->dispatch('backend/customer/index/edit');
+        $body = $this->getResponse()->getBody();
+        $this->assertStringNotContainsString('Delete Customer', $body);
+    }
+
+    /**
      * Prepare email mock to test emails.
      *
      * @param int $occurrenceNumber

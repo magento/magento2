@@ -110,6 +110,11 @@ class PriceTiers implements ResolverInterface
         }
 
         $product = $value['model'];
+
+        if ($product->hasData('can_show_price') && $product->getData('can_show_price') === false) {
+            return [];
+        }
+
         $productId = $product->getId();
         $this->tiers->addProductFilter($productId);
 

@@ -3,12 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\Image\Adapter;
 
 use Magento\Framework\Exception\LocalizedException;
 
 /**
- * Image adapter from ImageMagick
+ * Image adapter from ImageMagick.
  */
 class ImageMagick extends AbstractAdapter
 {
@@ -34,6 +35,18 @@ class ImageMagick extends AbstractAdapter
         'small_image' => ['width' => 300, 'height' => 300],
         'sharpen' => ['radius' => 4, 'deviation' => 1],
     ];
+
+    /**
+     * @var \Imagick
+     */
+    protected $_imageHandler;
+
+    /**
+     * Colorspace of the image
+     *
+     * @var int
+     */
+    private $colorspace = -1;
 
     /**
      * Set/get background color. Check Imagick::COLOR_* constants
@@ -94,6 +107,8 @@ class ImageMagick extends AbstractAdapter
             );
         }
 
+        $this->getColorspace();
+        $this->maybeConvertColorspace();
         $this->backgroundColor();
         $this->getMimeType();
     }
@@ -158,8 +173,8 @@ class ImageMagick extends AbstractAdapter
     /**
      * Render image and return its binary contents
      *
-     * @see \Magento\Framework\Image\Adapter\AbstractAdapter::getImage
      * @return string
+     * @see \Magento\Framework\Image\Adapter\AbstractAdapter::getImage
      */
     public function getImage()
     {
@@ -288,7 +303,7 @@ class ImageMagick extends AbstractAdapter
         $this->_checkCanProcess();
 
         $opacity = $this->getWatermarkImageOpacity() ? $this->getWatermarkImageOpacity() : $opacity;
-        $opacity = (double)number_format($opacity / 100, 1);
+        $opacity = (double) number_format($opacity / 100, 1);
 
         $watermark = new \Imagick($imagePath);
 
@@ -419,8 +434,8 @@ class ImageMagick extends AbstractAdapter
     /**
      * Check whether the adapter can work with the image
      *
-     * @throws \LogicException
      * @return true
+     * @throws \LogicException
      */
     protected function _checkCanProcess()
     {
@@ -585,5 +600,32 @@ class ImageMagick extends AbstractAdapter
             $positionY,
             $compositeChannels
         );
+    }
+
+    /**
+     * Get and store the image colorspace.
+     *
+     * @return int
+     */
+    private function getColorspace(): int
+    {
+        if ($this->colorspace === -1) {
+            $this->colorspace = $this->_imageHandler->getImageColorspace();
+        }
+
+        return $this->colorspace;
+    }
+
+    /**
+     * Convert colorspace to SRGB if current colorspace is COLORSPACE_CMYK or COLORSPACE_UNDEFINED.
+     *
+     * @return void
+     */
+    private function maybeConvertColorspace(): void
+    {
+        if ($this->colorspace === \Imagick::COLORSPACE_CMYK || $this->colorspace === \Imagick::COLORSPACE_UNDEFINED) {
+            $this->_imageHandler->transformImageColorspace(\Imagick::COLORSPACE_SRGB);
+            $this->colorspace = $this->_imageHandler->getImageColorspace();
+        }
     }
 }

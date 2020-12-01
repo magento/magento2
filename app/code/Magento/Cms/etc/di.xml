@@ -215,6 +215,7 @@
     <type name="Magento\Cms\Model\BlockRepository">
         <arguments>
             <argument name="collectionProcessor" xsi:type="object">Magento\Cms\Model\Api\SearchCriteria\BlockCollectionProcessor</argument>
+            <argument name="hydrator" xsi:type="object">Magento\Framework\EntityManager\AbstractModelHydrator</argument>
         </arguments>
     </type>
 
@@ -234,6 +235,7 @@
             <argument name="validators" xsi:type="array">
                 <item name="layout_update" xsi:type="object">Magento\Cms\Model\PageRepository\Validator\LayoutUpdateValidator</item>
             </argument>
+            <argument name="hydrator" xsi:type="object">Magento\Framework\EntityManager\AbstractModelHydrator</argument>
         </arguments>
     </type>
     <preference for="Magento\Cms\Model\Page\CustomLayoutManagerInterface" type="Magento\Cms\Model\Page\CustomLayout\CustomLayoutManager" />
@@ -243,4 +245,73 @@
         </arguments>
     </type>
     <preference for="Magento\Cms\Model\Page\CustomLayoutRepositoryInterface" type="Magento\Cms\Model\Page\CustomLayout\CustomLayoutRepository" />
+    <type name="Magento\Cms\Model\Wysiwyg\Validator">
+        <arguments>
+            <argument name="validator" xsi:type="object">DefaultWYSIWYGValidator</argument>
+        </arguments>
+    </type>
+    <preference for="Magento\Framework\Validator\HTML\WYSIWYGValidatorInterface" type="Magento\Cms\Model\Wysiwyg\Validator" />
+    <type name="Magento\Framework\Console\CommandListInterface">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="cms_wysiwyg_restrict" xsi:type="object">Magento\Cms\Command\WysiwygRestrictCommand</item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="DefaultWYSIWYGValidator" type="Magento\Framework\Validator\HTML\ConfigurableWYSIWYGValidator">
+        <arguments>
+            <argument name="allowedTags" xsi:type="array">
+                <item name="div" xsi:type="string">div</item>
+                <item name="a" xsi:type="string">a</item>
+                <item name="p" xsi:type="string">p</item>
+                <item name="span" xsi:type="string">span</item>
+                <item name="em" xsi:type="string">em</item>
+                <item name="strong" xsi:type="string">strong</item>
+                <item name="ul" xsi:type="string">ul</item>
+                <item name="li" xsi:type="string">li</item>
+                <item name="ol" xsi:type="string">ol</item>
+                <item name="h5" xsi:type="string">h5</item>
+                <item name="h4" xsi:type="string">h4</item>
+                <item name="h3" xsi:type="string">h3</item>
+                <item name="h2" xsi:type="string">h2</item>
+                <item name="h1" xsi:type="string">h1</item>
+                <item name="table" xsi:type="string">table</item>
+                <item name="tbody" xsi:type="string">tbody</item>
+                <item name="tr" xsi:type="string">tr</item>
+                <item name="td" xsi:type="string">td</item>
+                <item name="th" xsi:type="string">th</item>
+                <item name="tfoot" xsi:type="string">tfoot</item>
+                <item name="img" xsi:type="string">img</item>
+                <item name="hr" xsi:type="string">hr</item>
+                <item name="figure" xsi:type="string">figure</item>
+                <item name="button" xsi:type="string">button</item>
+                <item name="i" xsi:type="string">i</item>
+                <item name="u" xsi:type="string">u</item>
+            </argument>
+            <argument name="allowedAttributes" xsi:type="array">
+                <item name="class" xsi:type="string">class</item>
+                <item name="width" xsi:type="string">width</item>
+                <item name="height" xsi:type="string">height</item>
+                <item name="style" xsi:type="string">style</item>
+                <item name="alt" xsi:type="string">alt</item>
+                <item name="title" xsi:type="string">title</item>
+                <item name="border" xsi:type="string">border</item>
+                <item name="id" xsi:type="string">id</item>
+            </argument>
+            <argument name="attributesAllowedByTags" xsi:type="array">
+                <item name="a" xsi:type="array">
+                    <item name="href" xsi:type="string">href</item>
+                </item>
+                <item name="img" xsi:type="array">
+                    <item name="src" xsi:type="string">src</item>
+                </item>
+                <item name="button" xsi:type="array">
+                    <item name="type" xsi:type="string">type</item>
+                </item>
+            </argument>
+            <argument name="attributeValidators" xsi:type="array">
+                <item name="style" xsi:type="object">Magento\Framework\Validator\HTML\StyleAttributeValidator</item>
+            </argument>
+        </arguments>
+    </virtualType>
 </config>

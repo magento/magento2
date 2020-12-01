@@ -114,7 +114,9 @@ endif; ?>
                    type="checkbox"
                    id="<?= $block->escapeHtmlAttr($block->getForm()->getHtmlIdPrefix()) ?>save_in_address_book"
                    value="1"
-                <?php if (!$block->getDontSaveInAddressBook()): ?> checked="checked"<?php endif; ?>
+                <?php if (!$block->getDontSaveInAddressBook() && !$block->getAddressId()): ?>
+                    checked="checked"
+                <?php endif; ?>
                    class="admin__control-checkbox"/>
             <label for="<?= $block->escapeHtmlAttr($block->getForm()->getHtmlIdPrefix()) ?>save_in_address_book"
                    class="admin__field-label"><?= $block->escapeHtml(__('Save in address book')) ?></label>

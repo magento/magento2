@@ -69,10 +69,7 @@
             <argument name="product" value="$$createSimpleProduct$$"/>
             <argument name="customer" value="$$createCustomer$$"/>
         </actionGroup>
-        <grabTextFrom selector="{{AdminOrderDetailsInformationSection.orderId}}" stepKey="grabOrderId"/>
-        <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderGridById">
-            <argument name="orderId" value="$grabOrderId"/>
-        </actionGroup>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="grabOrderId"/>
 
         <!-- Verify Login as Customer Login action works correctly from Order page -->
         <actionGroup ref="AdminLoginAsCustomerLoginFromOrderPageActionGroup"

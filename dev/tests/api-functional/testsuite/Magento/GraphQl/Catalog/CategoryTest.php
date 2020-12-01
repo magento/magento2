@@ -661,6 +661,45 @@ QUERY;
     }
 
     /**
+     * Testing breadcrumbs that shouldn't include disabled parent categories
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/categories.php
+     */
+    public function testBreadCrumbsWithDisabledParentCategory()
+    {
+        $parentCategoryId = 4;
+        $childCategoryId = 5;
+        $category = $this->categoryRepository->get($parentCategoryId);
+        $category->setIsActive(false);
+        $this->categoryRepository->save($category);
+
+        $query = <<<QUERY
+{
+  category(id: {$childCategoryId}) {
+    name
+    breadcrumbs {
+      category_id
+      category_name
+    }
+  }
+}
+QUERY;
+        $response = $this->graphQlQuery($query);
+        $expectedResponse = [
+            'category' => [
+                'name' => 'Category 1.1.1',
+                'breadcrumbs' => [
+                    [
+                        'category_id' => 3,
+                        'category_name' => "Category 1",
+                    ]
+                ]
+            ]
+        ];
+        $this->assertEquals($expectedResponse, $response);
+    }
+
+    /**
      * @return array
      */
     public function categoryImageDataProvider(): array
