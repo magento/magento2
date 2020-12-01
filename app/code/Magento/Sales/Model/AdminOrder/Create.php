@@ -970,7 +970,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
                 $item = $this->getCustomerCart()->getItemById($itemId);
                 if ($item) {
                     $this->moveQuoteItem($item, 'order', $qty);
-                    $this->removeItem($itemId, 'cart');
+                    $data['remove'][$itemId] = 'cart';
                 }
             }
         }
@@ -984,6 +984,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
                 );
                 if ($item->getId()) {
                     $this->addProduct($item->getProduct(), $item->getBuyRequest()->toArray());
+                    $data['remove'][$itemId] = 'wishlist';
                 }
             }
         }
