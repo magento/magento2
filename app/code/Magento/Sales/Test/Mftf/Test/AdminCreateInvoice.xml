@@ -37,8 +37,9 @@
                 <requiredEntity createDataKey="createGuestCart"/>
             </updateData> 
 
-            <createData entity="Invoice" stepKey="invoiceOrder"/>
-            
+            <createData entity="Invoice" stepKey="invoiceOrder">
+              <requiredEntity createDataKey="createGuestCart"/>
+            </createData>  
 
         </before>
         <after>
