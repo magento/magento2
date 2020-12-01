@@ -12,8 +12,6 @@
         <contentType>application/json</contentType>
          <object key="cartItem" dataType="CartItem">
             <field key="quote_id">string</field>
-            <field key="sku" type="string">string</field>
-            <field key="qty">integer</field>
         </object>
     </operation>
 </operations>
