@@ -19,6 +19,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Session\SessionManagerInterface;
 use Magento\Customer\Model\FileUploaderDataResolver;
 use Magento\Customer\Model\AttributeMetadataResolver;
+use Magento\Ui\Component\Form\Element\Multiline;
 use Magento\Ui\DataProvider\AbstractDataProvider;
 
 /**
@@ -140,6 +141,7 @@ class DataProviderWithDefaultAddresses extends AbstractDataProvider
                 $result['customer'],
                 array_flip(self::$forbiddenCustomerFields)
             );
+            $this->prepareCustomAttributeValue($result['customer']);
             unset($result['address']);
 
             $result['default_billing_address'] = $this->prepareDefaultAddress(
@@ -188,6 +190,24 @@ class DataProviderWithDefaultAddresses extends AbstractDataProvider
         $addressData['region'] = $address->getRegion();
 
         return $addressData;
+    }
+
+    /***
+     * Prepare values for Custom Attributes.
+     *
+     * @param array $data
+     * @return void
+     */
+    private function prepareCustomAttributeValue(array &$data): void
+    {
+        foreach ($this->meta['customer']['children'] as $attributeName => $attributeMeta) {
+            if ($attributeMeta['arguments']['data']['config']['dataType'] === Multiline::NAME
+                && isset($data[$attributeName])
+                && !is_array($data[$attributeName])
+            ) {
+                $data[$attributeName] = explode("\n", $data[$attributeName]);
+            }
+        }
     }
 
     /**
