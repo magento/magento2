@@ -87,15 +87,11 @@ class StoreCreateCommand extends Command
             )
         ;
 
-        /** @var \Magento\Store\Api\Data\GroupInterface $defaultGroup */
-        $defaultGroup = $this->getDefaultStoreGroup->execute();
-
         $this->addOption(
             self::INPUT_OPTION_GROUP,
             'g',
             InputOption::VALUE_OPTIONAL,
-            'Group ID (php bin/magento store:list).',
-            $defaultGroup->getId()
+            'Group ID (php bin/magento store:list).'
         );
 
         parent::configure();
@@ -109,6 +105,13 @@ class StoreCreateCommand extends Command
         $io = new SymfonyStyle($input, $output);
 
         try {
+            $defaultGroupId = $input->getOption(self::INPUT_OPTION_GROUP);
+            if ($defaultGroupId === null) {
+                /** @var \Magento\Store\Api\Data\GroupInterface $defaultGroup */
+                $defaultGroup = $this->getDefaultStoreGroup->execute();
+                $defaultGroupId = $defaultGroup->getId();
+            }
+            $defaultGroupId = (int) $defaultGroupId;
             $data = [
                 self::INPUT_OPTION_GROUP => (int) $input->getOption(
                     self::INPUT_OPTION_GROUP
