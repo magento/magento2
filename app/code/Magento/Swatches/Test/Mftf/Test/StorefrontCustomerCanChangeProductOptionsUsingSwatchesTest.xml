@@ -23,8 +23,9 @@
         </before>
         <after>
             <!-- Logout customer -->
-            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutFromCustomer"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutStorefront"/>
             <deleteData createDataKey="createCustomer" before="goToProductAttributes" stepKey="deleteCustomer"/>
+            <comment userInput="BIC workaround" stepKey="logoutFromCustomer"/>
         </after>
 
         <!-- Remove steps that are not used for this test -->

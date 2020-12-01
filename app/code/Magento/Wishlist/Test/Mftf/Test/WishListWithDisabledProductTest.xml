@@ -24,9 +24,10 @@
         </before>
         <after>
             <!-- Logout customer -->
-            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutStorefront"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <comment userInput="BIC workaround" stepKey="customerLogout"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefrontAccount">
