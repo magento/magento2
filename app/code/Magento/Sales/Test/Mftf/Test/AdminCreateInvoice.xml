@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateInvoice">
+        <annotations>
+            <features value="Sales"/>
+            <stories value="1Create an Invoice via the Admin"/>
+            <title value="1111Admin should be able to create an invoice"/>
+            <description value="1Admin should be able to create an invoice"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="1MAGETWO-72096"/>
+            <group value="sales"/>
+        </annotations>
+        <before>
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+
+            <createData entity="defaultSimpleProduct" stepKey="createConfigProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+
+            <createData entity="GuestCart" stepKey="createGuestCart"/>
+                <createData entity="SimpleCartItem" stepKey="addCartItem">
+                <requiredEntity createDataKey="createGuestCart"/>
+                <requiredEntity createDataKey="createConfigProduct"/>
+            </createData>
+            <createData entity="GuestAddressInformation" stepKey="addGuestOrderAddress">
+                <requiredEntity createDataKey="createGuestCart"/>
+            </createData>
+            <updateData createDataKey="createGuestCart" entity="GuestOrderPaymentMethod" stepKey="sendGuestPaymentInformation">
+                <requiredEntity createDataKey="createGuestCart"/>
+            </updateData> 
+
+            <createData entity="Invoice" stepKey="invoiceOrder"/>
+            
+
+        </before>
+        <after>
+            <!-- <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/> -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/> 
+        </after>
+
+         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        
+    </test>
+</tests>
