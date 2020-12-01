@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminMassOrdersCancelCompleteAndClosedAPITest">
+        <annotations>
+            <stories value="Mass Update Orders"/>
+            <title value="Mass cancel orders in status  Complete, Closed"/>
+            <description value="Try to cancel orders in status Complete, Closed"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-16183"/>
+            <group value="sales"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+
+            <createData entity="defaultSimpleProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+
+            <createData entity="GuestCart" stepKey="createGuestCartOne"/>
+                <createData entity="SimpleCartItem" stepKey="addCartItemOne">
+                <requiredEntity createDataKey="createGuestCartOne"/>
+                <requiredEntity createDataKey="createSimpleProduct"/>
+            </createData>
+            <createData entity="GuestAddressInformation" stepKey="addGuestOrderAddressOne">
+                <requiredEntity createDataKey="createGuestCartOne"/>
+            </createData>
+            <updateData createDataKey="createGuestCartOne" entity="GuestOrderPaymentMethod" stepKey="sendGuestPaymentInformationOne">
+                <requiredEntity createDataKey="createGuestCartOne"/>
+            </updateData>
+
+            <createData entity="Invoice" stepKey="invoiceOrderOne">
+              <requiredEntity createDataKey="createGuestCartOne"/>
+            </createData>
+
+            <createData entity="Shipment" stepKey="shipOrderOne">
+              <requiredEntity createDataKey="createGuestCartOne"/>
+            </createData>
+
+
+            <createData entity="GuestCart" stepKey="createGuestCartTwo"/>
+                <createData entity="SimpleCartItem" stepKey="addCartItemTwo">
+                <requiredEntity createDataKey="createGuestCartTow"/>
+                <requiredEntity createDataKey="createSimpleProduct"/>
+            </createData>
+            <createData entity="GuestAddressInformation" stepKey="addGuestOrderAddressTwo">
+                <requiredEntity createDataKey="createGuestCartTwo"/>
+            </createData>
+            <updateData createDataKey="createGuestCartTwo" entity="GuestOrderPaymentMethod" stepKey="sendGuestPaymentInformationTwo">
+                <requiredEntity createDataKey="createGuestCartTwo"/>
+            </updateData>
+
+            <createData entity="Invoice" stepKey="invoiceOrderTwo">
+              <requiredEntity createDataKey="createGuestCartTwo"/>
+            </createData>
+
+            <createData entity="CreditMemo" stepKey="refundOrderTwo">
+              <requiredEntity createDataKey="createGuestCartTwo"/>
+            </createData>
+
+        </before>
+        <after>
+            <!-- Delete data -->
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!-- Create first order -->
+        <!-- <actionGroup ref="CreateOrderActionGroup" stepKey="createFirstOrder">
+            <argument name="product" value="$$createProduct$$"/>
+            <argument name="customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <grabTextFrom selector="|Order # (\d+)|" stepKey="getFirstOrderId"/>
+        <assertNotEmpty stepKey="assertOrderIdIsNotEmpty" after="getFirstOrderId">
+			<actualResult type="const">$getFirstOrderId</actualResult>
+        </assertNotEmpty> -->
+
+        <!-- Create Shipment for first Order -->
+        <!-- <actionGroup ref="AdminCreateInvoiceAndShipmentActionGroup" stepKey="createShipmentForFirstOrder"/> -->
+
+        <!-- Create second order -->
+        <!-- <actionGroup ref="CreateOrderActionGroup" stepKey="createSecondOrder">
+            <argument name="product" value="$$createProduct$$"/>
+            <argument name="customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <grabTextFrom selector="|Order # (\d+)|" stepKey="getSecondOrderId"/>
+        <assertNotEmpty stepKey="assertSecondOrderIdIsNotEmpty" after="getSecondOrderId">
+			<actualResult type="const">$getSecondOrderId</actualResult>
+        </assertNotEmpty> -->
+
+        <!-- Create CreditMemo for second Order -->
+        <!-- <actionGroup ref="AdminCreateInvoiceAndCreditMemoActionGroup" stepKey="createCreditMemo"/> -->
+
+        <!-- Navigate to backend: Go to Sales > Orders -->
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="onOrderPage"/>
+        <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearFilters"/>
+
+        <!-- Select Mass Action according to dataset: Cancel -->
+        <actionGroup ref="AdminTwoOrderActionOnGridActionGroup" stepKey="massActionCancel">
+            <argument name="action" value="Cancel"/>
+            <argument name="orderId" value="$createGuestCartOne.return$"/>
+            <argument name="secondOrderId" value="$createGuestCartTwo.return$"/>
+        </actionGroup>
+        <see userInput="You cannot cancel the order(s)." stepKey="assertOrderCancelMassActionFailMessage"/>
+
+        <!--Assert first order in orders grid -->
+        <actionGroup ref="AdminOrderFilterByOrderIdAndStatusActionGroup" stepKey="seeFirstOrder">
+            <argument name="orderId" value="$createGuestCartOne.return$"/>
+            <argument name="orderStatus" value="Complete"/>
+        </actionGroup>
+        <see userInput="$createGuestCartOne.return$" selector="{{AdminOrdersGridSection.gridCell('1','ID')}}" stepKey="assertFirstOrderID"/>
+        <see userInput="Complete" selector="{{AdminOrdersGridSection.gridCell('1','Status')}}" stepKey="assertFirstOrderStatus"/>
+
+        <!--Assert second order in orders grid -->
+        <actionGroup ref="AdminOrderFilterByOrderIdAndStatusActionGroup" stepKey="seeSecondOrder">
+            <argument name="orderId" value="$createGuestCartTwo.return$"/>
+            <argument name="orderStatus" value="Closed"/>
+        </actionGroup>
+        <see userInput="$createGuestCartTwo.return$" selector="{{AdminOrdersGridSection.gridCell('1','ID')}}" stepKey="assertSecondOrderID"/>
+        <see userInput="Closed" selector="{{AdminOrdersGridSection.gridCell('1','Status')}}" stepKey="assertSecondStatus"/>
+    </test>
+</tests>
