@@ -120,7 +120,7 @@
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForStorefrontProductComparePageLoad2"/>
        
         <actionGroup ref="SeeProductInComparisonListActionGroup" stepKey="seeProductInCompareList2">
-             <argument name="productVar" value="$$product$$"/>
+            <argument name="productVar" value="$$product$$"/>
         </actionGroup>
 
     </test>
