@@ -10,12 +10,12 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminLoginAsCustomerChangeAccountInformationTest">
         <annotations>
-            <features value="Login as Customer"/>
+            <features value="Backend"/>
             <stories value="Edit Customer Account Information"/>
             <title value="Admin user login as customer and edit customer's first and last name"/>
-            <description
-                value="Verify Admin can access customer's personal cabinet and change his first and last name using Login as Customer functionality"/>
+            <description value="Verify Admin can access customer's personal cabinet and change his first and last name using Login as Customer functionality"/>
             <group value="login_as_customer"/>
+            <severity value="MINOR"></severity>
         </annotations>
         <before>
             <magentoCLI command="config:set {{LoginAsCustomerConfigDataEnabled.path}} 1" stepKey="enableLoginAsCustomer"/>
