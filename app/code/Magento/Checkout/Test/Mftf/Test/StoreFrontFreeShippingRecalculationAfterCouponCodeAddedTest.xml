@@ -87,8 +87,9 @@
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <see userInput="Your coupon was successfully applied." stepKey="seeSuccessMessage"/>
         <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder1"/>
-        <waitForPageLoad stepKey="waitForError"/>
-        <see stepKey="seeShippingMethodError" userInput="The shipping method is missing. Select the shipping method and try again."/>
+        <!-- Cannot use waitForPageLoad as the below error message will disappear after a few seconds & waitForPageLoad will cause this test to be flaky -->
+        <comment userInput="BIC workaround" stepKey="waitForError"/>
+        <waitForText stepKey="seeShippingMethodError" userInput="The shipping method is missing. Select the shipping method and try again."/>
         <amOnPage stepKey="navigateToShippingPage" url="{{CheckoutShippingPage.url}}"/>
         <waitForPageLoad stepKey="waitForShippingPageLoad"/>
         <click stepKey="chooseFlatRateShipping" selector="{{CheckoutShippingMethodsSection.shippingMethodRowByName('Flat Rate')}}"/>
