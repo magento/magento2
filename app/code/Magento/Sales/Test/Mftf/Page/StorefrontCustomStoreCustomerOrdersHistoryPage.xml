@@ -8,8 +8,7 @@
 
 <pages xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/PageObject.xsd">
-    <page name="AdminShipmentPage" url="sales/shipment/" area="admin" module="Magento_Sales">
-        <section name="AdminShipmentGridSection"/>
-        <section name="AdminShipmentsGridFiltersSection"/>
+    <page name="StorefrontCustomStoreCustomerOrdersHistoryPage" url="/{{storeCode}}/sales/order/history/" module="Magento_Sales" area="storefront" parameterized="true">
+        <section name="StorefrontCustomerOrdersGridSection"/>
     </page>
 </pages>
