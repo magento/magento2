@@ -32,8 +32,8 @@ class WebapiDocBlock extends \Magento\TestFramework\Bootstrap\DocBlock
                 unset($subscribers[$key]);
             }
         }
-        $subscribers[] = new \Magento\TestFramework\Annotation\ApiDataFixture();
         $subscribers[] = new ApiConfigFixture();
+        $subscribers[] = new \Magento\TestFramework\Annotation\ApiDataFixture();
 
         return $subscribers;
     }
