@@ -10,5 +10,6 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/PageObject.xsd">
     <page name="AdminShipmentPage" url="sales/shipment/" area="admin" module="Magento_Sales">
         <section name="AdminShipmentGridSection"/>
+        <section name="AdminShipmentsGridFiltersSection"/>
     </page>
 </pages>
