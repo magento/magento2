@@ -210,6 +210,19 @@ class UploadTest extends AbstractBackendController
                     'errorcode' => 0,
                 ],
             ],
+            'upload_wrong_png' => [
+                'file' => [
+                    'copy_file' => true,
+                    'name' => 'magento_wrong.png',
+                    'type' => 'image/png',
+                    'current_path' => '/../../../../_files',
+                ],
+                'expectation' => [
+                    'message' => 'Unsupported image format.',
+                    'errorcode' => 0,
+                    'tmp_media_path' => '/m/w/magento_wrong.png',
+                ],
+            ]
         ];
     }
 
