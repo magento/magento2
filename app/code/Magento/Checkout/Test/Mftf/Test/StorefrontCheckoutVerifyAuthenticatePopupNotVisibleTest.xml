@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCheckoutVerifyAuthenticatePopupNotVisibleTest">
+        <annotations>
+            <features value="Checkout"/>
+            <stories value="Authentication popup should be removed from Checkout page"/>
+            <title value="Verify authenticate popup not visible in checkout page"/>
+            <description value="Verify authenticate popup not visible in checkout page"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="MC-36218"/>
+            <group value="checkout"/>
+        </annotations>
+
+        <before>
+            <!--Create Simple Products-->
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+        </before>
+        <after>
+            <!--Delete created data-->
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+        </after>
+
+        <!--Go to product page-->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openStorefrontProductPage">
+            <argument name="productUrl" value="$$createSimpleProduct.custom_attributes[url_key]$$"/>
+        </actionGroup>
+
+        <!--Add Product to Shopping Cart-->
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage">
+            <argument name="productName" value="$$createSimpleProduct.name$$"/>
+            <argument name="productCount" value="1"/>
+        </actionGroup>
+
+        <!--Go to Checkout-->
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
+
+        <!--Verify block not visible-->
+        <dontSee selector="{{StorefrontAuthenticatePopupSection.authenticatePopupContainer}}" stepKey="verifyAuthenticatePopupContainerNotVisible"/>
+    </test>
+</tests>
