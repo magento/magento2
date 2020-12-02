@@ -105,7 +105,6 @@
         <!-- Step: 9-10. Open the Product Page, add the product to Cart, go to Shopping Cart and Apply the same coupon code -->
         <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.name$$)}}" stepKey="openProductPage1"/>
         <waitForPageLoad stepKey="waitForPageLoad3"/>
-        <reloadPage stepKey="refreshPage2"/>
         <actionGroup ref="ApplyCartRuleOnStorefrontActionGroup" stepKey="applyCartPriceRule1">
             <argument name="product" value="$$createSimpleProduct$$"/>
             <argument name="couponCode" value="{$couponCode}"/>
