@@ -20,16 +20,16 @@ return [
         'enable-modules' => 'Magento_TestSetupModule2,Magento_TestSetupModule1,Magento_Backend',
         'disable-modules' => 'all'
     ],
-    'checkout' => [
+    'shard_two' => [
         'host' => '{{db-host}}',
         'username' => '{{db-user}}',
         'password' => '{{db-password}}',
-        'dbname' => '{{db-checkout}}'
+        'dbname' => '{{db-shardone}}'
     ],
-    'sales' => [
+    'shard_one' => [
         'host' => '{{db-host}}',
         'username' => '{{db-user}}',
         'password' => '{{db-password}}',
-        'dbname' => '{{db-sales}}'
+        'dbname' => '{{db-shardtwo}}'
     ]
 ];
