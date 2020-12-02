@@ -143,9 +143,13 @@ class AttributeRepository
     {
         /** @var \Magento\Customer\Api\Data\OptionInterface $option */
         foreach ($options as &$option) {
+            $value = $option->getValue();
+            if (is_array($option->getOptions())) {
+                $value = $this->getOptionArray($option->getOptions());
+            }
             $option = [
                 'label' => (string)$option->getLabel(),
-                'value' => $option->getValue(),
+                'value' => $value,
                 '__disableTmpl' => true
             ];
         }
