@@ -22,7 +22,7 @@
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
-            <actionGroup ref="SwitchToVersion4ActionGroup" stepKey="enableTinyMCE4"/>
+            <actionGroup ref="CliEnableTinyMCE4ActionGroup" stepKey="enableTinyMCE4"/>
             <waitForPageLoad stepKey="waitConfigToSave"/>
             <createData entity="ApiCategory" stepKey="createFirstCategory"/>
             <createData entity="ApiSimpleProduct" stepKey="product1">
