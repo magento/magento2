@@ -100,6 +100,10 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
         } elseif ($this->_options['remote_backend'] instanceof \Zend_Cache_Backend_ExtendedInterface) {
             $this->remote = $this->_options['remote_backend'];
         } else {
+            $dirPath = $this->_options['local_backend_options']['cache_dir'] ?? null;
+            if (!is_dir($dirPath)) {
+                \mkdir($dirPath, 0755, true);
+            }
             $this->remote = \Zend_Cache::_makeBackend(
                 $this->_options['remote_backend'],
                 array_merge($universalOptions, $this->_options['remote_backend_options']),
