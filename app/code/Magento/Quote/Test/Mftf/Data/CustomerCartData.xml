@@ -24,5 +24,4 @@
         <requiredEntity type="payment_method">PaymentMethodCheckMoneyOrder</requiredEntity>
         <requiredEntity type="billing_address">BillingAddressTX</requiredEntity>
     </entity>
-
 </entities>
