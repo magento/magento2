@@ -26,7 +26,7 @@
         <arguments>
             <argument name="directoryCodes" xsi:type="array">
                 <item name="media" xsi:type="const">Magento\Framework\App\Filesystem\DirectoryList::MEDIA</item>
-                <item name="var_export" xsi:type="const">Magento\Framework\App\Filesystem\DirectoryList::VAR_EXPORT</item>
+                <item name="var_import_export" xsi:type="const">Magento\Framework\App\Filesystem\DirectoryList::VAR_IMPORT_EXPORT</item>
             </argument>
         </arguments>
     </virtualType>
@@ -95,9 +95,6 @@
         <arguments>
             <argument name="filesystem" xsi:type="object">fullRemoteFilesystem</argument>
         </arguments>
-    </type>
-    <type name="Magento\Framework\Url\ScopeInterface">
-        <plugin name="remoteUrl" type="Magento\RemoteStorage\Plugin\Scope"/>
     </type>
     <type name="Magento\ImportExport\Model\Import">
         <arguments>
