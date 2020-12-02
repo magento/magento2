@@ -101,11 +101,6 @@
         <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment"/>
         <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
         <waitForElement selector="{{CheckoutSuccessMainSection.success}}" time="30" stepKey="waitForLoadSuccessPage"/>
-        <actionGroup ref="CliConsumerStartActionGroup" stepKey="startUsageProcessingMessageQueue">
-            <argument name="consumerName" value="{{SalesRuleConsumerData.consumerName}}"/>
-            <argument name="maxMessages" value="{{SalesRuleConsumerData.messageLimit}}"/>
-        </actionGroup>
-        <reloadPage stepKey="refreshPage1"/>
 
         <!-- Step: 9-10. Open the Product Page, add the product to Cart, go to Shopping Cart and Apply the same coupon code -->
         <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.name$$)}}" stepKey="openProductPage1"/>
@@ -151,6 +146,11 @@
         <!-- Step; 15-16. Open the Product Page, add the product to Cart, go to Shopping Cart and Apply the same coupon code -->
         <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.name$$)}}" stepKey="openProductPage3"/>
         <waitForPageLoad stepKey="waitForPageLoad5"/>
+        <!-- Start the usage processing consumer -->
+        <actionGroup ref="CliConsumerStartActionGroup" stepKey="startUsageProcessingMessageQueue">
+            <argument name="consumerName" value="{{SalesRuleConsumerData.consumerName}}"/>
+            <argument name="maxMessages" value="{{SalesRuleConsumerData.messageLimit}}"/>
+        </actionGroup>
         <actionGroup ref="ApplyCartRuleOnStorefrontActionGroup" stepKey="applyCartPriceRule3">
             <argument name="product" value="$$createSimpleProduct$$"/>
             <argument name="couponCode" value="{$couponCode}"/>
