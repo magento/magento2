@@ -6,8 +6,7 @@
   */
 -->
 
-<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminMassProductPriceUpdateTest">
         <annotations>
             <stories value="Mass product update"/>
@@ -36,25 +35,25 @@
         <actionGroup ref="SortProductsByIdDescendingActionGroup" stepKey="sortProductsByIdDescending"/>
 
         <actionGroup ref="AdminCheckProductOnProductGridActionGroup" stepKey="selectFirstProduct">
-           <argument name="product" value="$simpleProduct1$"/>
+            <argument name="product" value="$simpleProduct1$"/>
         </actionGroup>
-         <actionGroup ref="AdminCheckProductOnProductGridActionGroup" stepKey="selectSecondProduct">
-           <argument name="product" value="$simpleProduct2$"/>
+        <actionGroup ref="AdminCheckProductOnProductGridActionGroup" stepKey="selectSecondProduct">
+            <argument name="product" value="$simpleProduct2$"/>
         </actionGroup>
 
         <actionGroup ref="AdminClickMassUpdateProductAttributesActionGroup" stepKey="clickDropdown"/>
-        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickChangeStatus"/> 
-        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForProductAttributePageToLoad"/>  
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickChangeStatus"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForProductAttributePageToLoad"/>
 
-        <actionGroup ref="AdminSetPriceForMassUpdateActionGroup" stepKey="scrollToPriceCheckBox">  
-           <argument name="price" value="90.99"/>
-        </actionGroup>   
-        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="selectPriceCheckBox"/> 
-        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="fillPrice"/>  
+        <actionGroup ref="AdminSetPriceForMassUpdateActionGroup" stepKey="scrollToPriceCheckBox">
+            <argument name="price" value="90.99"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="selectPriceCheckBox"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="fillPrice"/>
 
         <actionGroup ref="AdminSaveProductsMassAttributesUpdateActionGroup" stepKey="clickOnSaveButton"/>
-        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForUpdatedProductToSave"/> 
-        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeAttributeUpateSuccessMsg"/>   
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForUpdatedProductToSave"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeAttributeUpateSuccessMsg"/>
 
         <actionGroup ref="CliConsumerStartActionGroup" stepKey="startMessageQueueConsumer">
             <argument name="consumerName" value="{{AdminProductAttributeUpdateConsumerData.consumerName}}"/>
@@ -63,26 +62,26 @@
       
         <magentoCLI command="cron:run --group=index" stepKey="runCron"/>
 
-        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="openFirstProduct"/>  
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="openFirstProduct"/>
         <actionGroup ref="AssertAdminProductPriceUpdatedOnEditPageActionGroup" stepKey="waitForFirstProductToLoad">
-             <argument name="product" value="$$simpleProduct1$$"/>
-             <argument name="price" value="90.99"/>
+            <argument name="product" value="$$simpleProduct1$$"/>
+            <argument name="price" value="90.99"/>
         </actionGroup>
-        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeFirstProductNameInField"/> 
-        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeFirstProductSkuInField"/>   
-        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeFirstProductPriceInField"/>   
-        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickOnBackButton"/>   
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeFirstProductNameInField"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeFirstProductSkuInField"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeFirstProductPriceInField"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickOnBackButton"/>
 
         <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="waitForProductsToLoad"/>
         
-        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="openSecondProduct"/> 
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="openSecondProduct"/>
         <actionGroup ref="AssertAdminProductPriceUpdatedOnEditPageActionGroup" stepKey="waitForSecondProductToLoad">
-             <argument name="product" value="$$simpleProduct2$$"/>
-             <argument name="price" value="90.99"/>
-        </actionGroup>   
-        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeSecondProductNameInField"/>   
-        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeSecondProductSkuInField"/>   
-        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeSecondProductPriceInField"/>   
+            <argument name="product" value="$$simpleProduct2$$"/>
+            <argument name="price" value="90.99"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeSecondProductNameInField"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeSecondProductSkuInField"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeSecondProductPriceInField"/>
         
     </test>
 </tests>

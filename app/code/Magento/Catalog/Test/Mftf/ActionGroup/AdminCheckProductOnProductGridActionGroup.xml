@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>	
+<?xml version="1.0" encoding="UTF-8"?>
 <!--	
  /**	
   * Copyright © Magento, Inc. All rights reserved.	
@@ -6,17 +6,16 @@
   */	
 -->	
 
-<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"	
-              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">	
-    <actionGroup name="AdminCheckProductOnProductGridActionGroup">	
-        <annotations>	
-            <description>Check the checkbox for the product on the Product Grid</description>	
-        </annotations>	
-        <arguments>	
-            <argument name="product" type="entity"/>	
-        </arguments>	
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+  <actionGroup name="AdminCheckProductOnProductGridActionGroup">
+    <annotations>
+      <description>Check the checkbox for the product on the Product Grid</description>
+    </annotations>
+    <arguments>
+      <argument name="product" type="entity"/>
+    </arguments>
 
-      <checkOption selector="{{AdminProductGridSection.productRowCheckboxBySku(product.sku)}}" stepKey="selectProduct"/>    	
+    <checkOption selector="{{AdminProductGridSection.productRowCheckboxBySku(product.sku)}}" stepKey="selectProduct"/>
 
-    </actionGroup>	
+  </actionGroup>
 </actionGroups>
