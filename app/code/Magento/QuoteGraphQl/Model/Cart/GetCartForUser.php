@@ -118,6 +118,7 @@ class GetCartForUser
     private function updateCartCurrency(Quote $cart, int $storeId)
     {
         $cartStore = $this->storeRepository->getById($cart->getStoreId());
+        $currentCartCurrencyCode = $cartStore->getCurrentCurrency()->getCode();
         if ((int)$cart->getStoreId() !== $storeId) {
             $newStore = $this->storeRepository->getById($storeId);
             if ($cartStore->getWebsite() !== $newStore->getWebsite()) {
@@ -128,8 +129,10 @@ class GetCartForUser
             $cart->setStoreId($storeId);
             $cart->setStoreCurrencyCode($newStore->getCurrentCurrency());
             $cart->setQuoteCurrencyCode($newStore->getCurrentCurrency());
-        } else {
+        } elseif ($cart->getQuoteCurrencyCode() !== $currentCartCurrencyCode) {
             $cart->setQuoteCurrencyCode($cartStore->getCurrentCurrency());
+        } else {
+            return;
         }
         $this->cartRepository->save($cart);
     }
