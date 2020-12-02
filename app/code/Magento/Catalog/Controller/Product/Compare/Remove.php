@@ -50,9 +50,6 @@ class Remove extends \Magento\Catalog\Controller\Product\Compare implements Http
                 $helper = $this->_objectManager->get(\Magento\Catalog\Helper\Product\Compare::class);
                 if ($item->getId()) {
                     $item->delete();
-                    /** @var Collection $items */
-                    $items = $this->_itemCollectionFactory->create();
-                    $items->removeCompareList($this->_customerSession->getCustomerId());
                     $productName = $this->_objectManager->get(\Magento\Framework\Escaper::class)
                         ->escapeHtml($product->getName());
                     $this->messageManager->addSuccessMessage(
