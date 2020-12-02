@@ -101,8 +101,10 @@
 
         <!-- Create a configurable product to verify the storefront with -->
         <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="amOnProductGridPage"/>
-        <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickOnAddProductToggle"/>
-        <click selector="{{AdminProductGridActionSection.addConfigurableProduct}}" stepKey="clickOnAddConfigurableProduct"/>
+        <comment userInput="Adding the comment to replace clickAddProductToggle action for preserving Backward Compatibility" stepKey="clickOnAddProductToggle"/>
+        <actionGroup ref="AdminClickAddProductToggleAndSelectProductTypeActionGroup" stepKey="clickOnAddConfigurableProduct">
+            <argument name="productType" value="configurable"/>
+        </actionGroup>
         <fillField userInput="{{_defaultProduct.name}}" selector="{{AdminProductFormSection.productName}}" stepKey="fillName"/>
         <fillField userInput="{{_defaultProduct.sku}}" selector="{{AdminProductFormSection.productSku}}" stepKey="fillSKU"/>
         <fillField userInput="{{_defaultProduct.price}}" selector="{{AdminProductFormSection.productPrice}}" stepKey="fillPrice"/>
