@@ -67,7 +67,7 @@ class ShardingTest extends SetupTestCase
      */
     public function testInstall()
     {
-        $this->shardingConfig->addConfiguration();
+        $this->shardingConfig->applyConfiguration();
         $this->cliCommand->install(['Magento_TestSetupDeclarationModule2']);
         $this->deploymentConfig->resetData();
 
@@ -87,7 +87,7 @@ class ShardingTest extends SetupTestCase
      */
     public function testUpgrade()
     {
-        $this->shardingConfig->addConfiguration();
+        $this->shardingConfig->applyConfiguration();
         $this->cliCommand->install(['Magento_TestSetupDeclarationModule2']);
         $this->deploymentConfig->resetData();
         $this->cliCommand->upgrade();

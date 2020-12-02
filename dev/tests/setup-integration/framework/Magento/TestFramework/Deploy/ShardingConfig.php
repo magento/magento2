@@ -35,9 +35,9 @@ class ShardingConfig
     }
 
     /**
-     * Add sharding database connection to env file
+     * Apply sharding database connection to env file
      */
-    public function addConfiguration()
+    public function applyConfiguration()
     {
         $allDbData = include TESTS_INSTALLATION_DB_CONFIG_FILE;
         $config = $this->configReader->load(ConfigFilePool::APP_ENV);
