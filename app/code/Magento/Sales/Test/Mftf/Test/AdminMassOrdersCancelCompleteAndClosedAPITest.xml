@@ -18,7 +18,9 @@
             <group value="sales"/>
             <group value="mtf_migrated"/>
         </annotations>
+        
         <before>
+
             <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
 
             <createData entity="ApiCategory" stepKey="createCategory"/>

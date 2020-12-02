@@ -25,10 +25,4 @@
         <requiredEntity type="billing_address">BillingAddressTX</requiredEntity>
     </entity>
 
-    <entity name="CustomerOrderPaymentMethod" type="CustomerPaymentInformation">
-        <var key="cart_id" entityKey="return" entityType="CustomerCart"/>
-        <requiredEntity type="payment_method">PaymentMethodCheckMoneyOrder</requiredEntity>
-        <requiredEntity type="billing_address">BillingAddressTX</requiredEntity>
-    </entity>
-    
 </entities>
