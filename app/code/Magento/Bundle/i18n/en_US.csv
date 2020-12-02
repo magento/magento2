@@ -105,3 +105,6 @@ Select...,Select...
 Status,Status
 Thumbnail,Thumbnail
 Type,Type
+"Cannot create shipment as bundle product ""%1"" has shipment type ""%2"". %3 should be shipped instead.","Cannot create shipment as bundle product ""%1"" has shipment type ""%2"". %3 should be shipped instead."
+"Bundle product itself","Bundle product itself"
+"Bundle product options","Bundle product options"

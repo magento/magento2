@@ -31,6 +31,7 @@
             <media_storage_configuration>
                 <allowed_resources>
                     <wysiwyg_image_folder>wysiwyg</wysiwyg_image_folder>
+                    <preview_folder>.thumbs</preview_folder>
                 </allowed_resources>
             </media_storage_configuration>
         </system>
