@@ -322,6 +322,7 @@ class Redirect
                 ->setHttpOnly(true)
                 ->setDuration(3600)
                 ->setPath($this->storeManager->getStore()->getStorePath())
+                ->setSameSite('Lax')
         );
     }
 
