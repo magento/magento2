@@ -50,7 +50,7 @@
 
             <createData entity="GuestCart" stepKey="createGuestCartTwo"/>
                 <createData entity="SimpleCartItem" stepKey="addCartItemTwo">
-                <requiredEntity createDataKey="createGuestCartTow"/>
+                <requiredEntity createDataKey="createGuestCartTwo"/>
                 <requiredEntity createDataKey="createSimpleProduct"/>
             </createData>
             <createData entity="GuestAddressInformation" stepKey="addGuestOrderAddressTwo">
@@ -71,7 +71,6 @@
         </before>
         <after>
             <!-- Delete data -->
-            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
@@ -103,32 +102,44 @@
         <!-- Create CreditMemo for second Order -->
         <!-- <actionGroup ref="AdminCreateInvoiceAndCreditMemoActionGroup" stepKey="createCreditMemo"/> -->
 
+        <!-- <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="openOrderOne">
+            <argument name="entityId" value="$createGuestCartOne.return$"/>
+        </actionGroup>
+        <grabTextFrom selector="|Order # (\d+)|" stepKey="getOrderOneId"/>
+
+        <actionGroup ref="AdminOpenOrderByEntityIdActionGroup" stepKey="openOrderTwo">
+            <argument name="entityId" value="$createGuestCartTwo.return$"/>
+        </actionGroup> -->
+      
         <!-- Navigate to backend: Go to Sales > Orders -->
         <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="onOrderPage"/>
         <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearFilters"/>
 
+        <grabTextFrom selector="{{AdminOrdersGridSection.orderIdByIncrementId($createGuestCartOne.return$)}}" stepKey="getOrderOneId"/>
+        <grabTextFrom selector="{{AdminOrdersGridSection.orderIdByIncrementId($createGuestCartTwo.return$)}}" stepKey="getOrderTwoId"/>
+
         <!-- Select Mass Action according to dataset: Cancel -->
         <actionGroup ref="AdminTwoOrderActionOnGridActionGroup" stepKey="massActionCancel">
             <argument name="action" value="Cancel"/>
-            <argument name="orderId" value="$createGuestCartOne.return$"/>
-            <argument name="secondOrderId" value="$createGuestCartTwo.return$"/>
+            <argument name="orderId" value="$getOrderOneId"/>
+            <argument name="secondOrderId" value="$getOrderTwoId"/>
         </actionGroup>
         <see userInput="You cannot cancel the order(s)." stepKey="assertOrderCancelMassActionFailMessage"/>
 
         <!--Assert first order in orders grid -->
         <actionGroup ref="AdminOrderFilterByOrderIdAndStatusActionGroup" stepKey="seeFirstOrder">
-            <argument name="orderId" value="$createGuestCartOne.return$"/>
+            <argument name="orderId" value="$getOrderOneId"/>
             <argument name="orderStatus" value="Complete"/>
         </actionGroup>
-        <see userInput="$createGuestCartOne.return$" selector="{{AdminOrdersGridSection.gridCell('1','ID')}}" stepKey="assertFirstOrderID"/>
+        <see userInput="$getOrderOneId" selector="{{AdminOrdersGridSection.gridCell('1','ID')}}" stepKey="assertFirstOrderID"/>
         <see userInput="Complete" selector="{{AdminOrdersGridSection.gridCell('1','Status')}}" stepKey="assertFirstOrderStatus"/>
 
         <!--Assert second order in orders grid -->
         <actionGroup ref="AdminOrderFilterByOrderIdAndStatusActionGroup" stepKey="seeSecondOrder">
-            <argument name="orderId" value="$createGuestCartTwo.return$"/>
+            <argument name="orderId" value="$getOrderTwoId"/>
             <argument name="orderStatus" value="Closed"/>
         </actionGroup>
-        <see userInput="$createGuestCartTwo.return$" selector="{{AdminOrdersGridSection.gridCell('1','ID')}}" stepKey="assertSecondOrderID"/>
+        <see userInput="$getOrderTwoId" selector="{{AdminOrdersGridSection.gridCell('1','ID')}}" stepKey="assertSecondOrderID"/>
         <see userInput="Closed" selector="{{AdminOrdersGridSection.gridCell('1','Status')}}" stepKey="assertSecondStatus"/>
     </test>
 </tests>
