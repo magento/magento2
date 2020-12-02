@@ -6,7 +6,8 @@
   */
 -->
 
-<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AssertAdminProductPriceUpdatedOnEditPageActionGroup" extends="OpenEditProductOnBackendActionGroup">
         <annotations>
             <description>Validate if Product price is updated on the Product creation/edit page</description>

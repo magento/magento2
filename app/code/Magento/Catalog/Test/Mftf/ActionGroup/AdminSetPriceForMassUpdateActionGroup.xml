@@ -6,7 +6,8 @@
   */
 -->
 
-<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminSetPriceForMassUpdateActionGroup">
         <annotations>
             <description>Click the "Change" checkbox for the "Price" field. Set new price.</description>
@@ -15,7 +16,7 @@
             <argument name="price" type="string"/>
         </arguments>
 
-        <scrollTo stepKey="scrollToPriceCheckBox" selector="{{AdminEditProductAttributesSection.ChangeAttributePriceToggle}}" x="0" y="-160"/>
+        <scrollTo stepKey="scrollToPriceCheckBox" selector="{{AdminEditProductAttributesSection.ChangeAttributePriceToggle}}"  x="0" y="-160"/>
         <click selector="{{AdminEditProductAttributesSection.ChangeAttributePriceToggle}}" stepKey="selectPriceCheckBox"/>
         <fillField stepKey="fillPrice" selector="{{AdminEditProductAttributesSection.AttributePrice}}" userInput="{{price}}"/>
 
