@@ -5,12 +5,12 @@
  */
 return [
     'test_table_one' => 'CREATE TABLE `test_table_one` (
-  `smallint` smallint NOT NULL AUTO_INCREMENT,,
+  `smallint` smallint NOT NULL AUTO_INCREMENT,
   `varchar` varchar(254) DEFAULT NULL,
   PRIMARY KEY (`smallint`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8',
     'test_table_two' => 'CREATE TABLE `test_table_two` (
-  `smallint` smallint NOT NULL AUTO_INCREMENT,,
+  `smallint` smallint NOT NULL AUTO_INCREMENT,
   `varchar` varchar(254) DEFAULT NULL,
   PRIMARY KEY (`smallint`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8',
