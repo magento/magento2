@@ -225,7 +225,7 @@ class LoadBlockTest extends AbstractBackendController
         $params = $this->hydrateParams();
         $this->dispatchWitParams($params, $post);
 
-        $wishlistItems->clear();
+        $wishlistItems->clear()->load();
         $this->assertEmpty($wishlistItems);
         $quoteItems = $this->session->getQuote()->getItemsCollection();
         $this->assertCount(1, $quoteItems);
