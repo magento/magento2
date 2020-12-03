@@ -459,8 +459,7 @@ QUERY;
     /**
      * Test for category entity with empty url suffix
      *
-     * @magentoConfigFixture default_store catalog/seo/category_url_suffix
-     * @magentoApiDataFixture Magento/CatalogUrlRewrite/_files/product_with_category.php
+     * @magentoApiDataFixture Magento/CatalogUrlRewrite/_files/product_with_category_empty_url_suffix.php
      */
     public function testCategoryUrlResolverWithEmptyUrlSuffix()
     {
@@ -470,8 +469,7 @@ QUERY;
     /**
      * Tests if target_path(relative_url) is resolved for Product entity with empty url suffix
      *
-     * @magentoConfigFixture default_store catalog/seo/product_url_suffix
-     * @magentoApiDataFixture Magento/CatalogUrlRewrite/_files/product_with_category.php
+     * @magentoApiDataFixture Magento/CatalogUrlRewrite/_files/product_with_category_empty_url_suffix.php
      */
     public function testProductUrlResolverWithEmptyUrlSuffix()
     {
