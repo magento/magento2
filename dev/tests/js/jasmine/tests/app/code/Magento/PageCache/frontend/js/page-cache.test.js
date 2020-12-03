@@ -106,13 +106,6 @@ define([
             expect($.mage.cookies.set).toHaveBeenCalled();
             expect(inputContainer.val()).toEqual(jasmine.any(String));
         });
-
-        it('widget exists on load on body', function (done) {
-            $(function () {
-                expect($('body').data('mageFormKey')).toBeDefined();
-                done();
-            });
-        });
     });
 
     describe('Testing PageCache Widget', function () {
