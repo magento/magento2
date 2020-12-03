@@ -466,8 +466,6 @@ QUERY;
     public function testShippingMethodOnSetSameAsShippingTrue()
     {
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
-        $carrierCode = 'flatrate';
-        $methodCode = 'flatrate';
 
         $query = <<<QUERY
 mutation {
