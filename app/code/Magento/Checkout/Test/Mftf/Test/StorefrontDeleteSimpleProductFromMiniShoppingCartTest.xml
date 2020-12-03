@@ -54,6 +54,7 @@
             <argument name="productName" value="$$simpleProduct.name$$"/>
         </actionGroup>
         <reloadPage stepKey="reloadPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
 
         <!--Check the minicart is empty and verify AssertProductAbsentInMiniShoppingCart-->
         <actionGroup ref="AssertMiniCartEmptyActionGroup" stepKey="miniCartEnpty"/>
