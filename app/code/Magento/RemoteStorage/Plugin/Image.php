@@ -185,7 +185,7 @@ class Image
     private function copyFileToTmp(string $filePath): string
     {
         if ($this->fileExistsInTmp($filePath)) {
-            return $filePath;
+            return $this->tmpFiles[$filePath];
         }
         $absolutePath = $this->remoteDirectoryWrite->getAbsolutePath($filePath);
         if ($this->remoteDirectoryWrite->isFile($absolutePath)) {
@@ -223,7 +223,7 @@ class Image
      */
     private function fileExistsInTmp(string $filePath): bool
     {
-        return in_array($filePath, $this->tmpFiles, true);
+        return array_key_exists($filePath, $this->tmpFiles);
     }
 
     /**
