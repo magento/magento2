@@ -15,6 +15,7 @@
     <testsuites>
         <testsuite name="Magento_Unit_Tests_App_Code">
             <directory>../../../app/code/*/*/Test/Unit</directory>
+            <directory>../../../vendor/magento/module-*/Test/Unit</directory>
         </testsuite>
         <testsuite name="Magento_Unit_Tests_Other">
             <directory>../../../lib/internal/*/*/Test/Unit</directory>
