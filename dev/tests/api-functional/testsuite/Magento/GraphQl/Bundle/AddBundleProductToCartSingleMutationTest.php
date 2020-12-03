@@ -274,7 +274,7 @@ QUERY;
               items {
                 sku
                 option_id
-                option_uid
+                uid
                 required
                 type
                 title
