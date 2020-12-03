@@ -33,7 +33,7 @@ type BundleCartItem implements CartItemInterface {
 
 type SelectedBundleOption {
     id: Int! @deprecated(reason: "Use `uid` instead")
-    uid: ID! @doc(description: "The unique identifier of the selected bundle option.")
+    uid: ID! @doc(description: "The unique ID for a `SelectedBundleOption` object")
     label: String!
     type: String!
     values: [SelectedBundleOptionValue!]!
@@ -41,7 +41,7 @@ type SelectedBundleOption {
 
 type SelectedBundleOptionValue {
     id: Int! @doc(description: "Use `uid` instead")
-    uid: ID! @doc(description: "The unique identifier of the selected bundle option value.")
+    uid: ID! @doc(description: "The unique ID for a `SelectedBundleOptionValue` object")
     label: String!
     quantity: Float!
     price: Float!
@@ -49,7 +49,7 @@ type SelectedBundleOptionValue {
 
 type BundleItem @doc(description: "BundleItem defines an individual item in a bundle product.") {
     option_id: Int @deprecated(reason: "Use `uid` instead") @doc(description: "An ID assigned to each type of item in a bundle product.")
-    uid: ID @doc(description: "The unique identifier of the bundle item product.")
+    uid: ID @doc(description: "The unique ID for a `BundleItem` object.")
     title: String @doc(description: "The display name of the item.")
     required: Boolean @doc(description: "Indicates whether the item must be included in the bundle.")
     type: String @doc(description: "The input type that the customer uses to select the item. Examples include radio button and checkbox.")
@@ -69,7 +69,7 @@ type BundleItemOption @doc(description: "BundleItemOption defines characteristic
     price_type: PriceTypeEnum @doc(description: "One of FIXED, PERCENT, or DYNAMIC.")
     can_change_quantity: Boolean @doc(description: "Indicates whether the customer can change the number of items for this option.")
     product: ProductInterface @doc(description: "Contains details about this product option.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product")
-    uid: ID! @doc(description: "The unique identifier of the bundle item option.") @resolver(class: "Magento\\BundleGraphQl\\Model\\Resolver\\Options\\BundleItemOptionUid")
+    uid: ID! @doc(description: "The unique ID for a `BundleItemOption` object.") @resolver(class: "Magento\\BundleGraphQl\\Model\\Resolver\\Options\\BundleItemOptionUid")
 }
 
 type BundleProduct implements ProductInterface, PhysicalProductInterface, CustomizableProductInterface @doc(description: "BundleProduct defines basic features of a bundle product and contains multiple BundleItems.") {
@@ -108,15 +108,15 @@ type BundleCreditMemoItem implements CreditMemoItemInterface {
 }
 
 type ItemSelectedBundleOption @doc(description: "A list of options of the selected bundle product") {
-    id: ID! @deprecated(reason: "Use `uid` instead") @doc(description: "The unique identifier of the option")
-    uid: ID! @doc(description: "The unique identifier of the selected bundle option item")
+    id: ID! @deprecated(reason: "Use `uid` instead") @doc(description: "The unique ID for a `ItemSelectedBundleOption` object")
+    uid: ID! @doc(description: "The unique ID for a `ItemSelectedBundleOption` object")
     label: String! @doc(description: "The label of the option")
     values: [ItemSelectedBundleOptionValue] @doc(description: "A list of products that represent the values of the parent option")
 }
 
 type ItemSelectedBundleOptionValue @doc(description: "A list of values for the selected bundle product") {
-    id: ID! @deprecated(reason: "Use `uid` instead") @doc(description: "The unique identifier of the value")
-    uid: ID! @doc(description: "The unique identifier of the selected bundle item option value")
+    id: ID! @deprecated(reason: "Use `uid` instead") @doc(description: "The unique ID for a `ItemSelectedBundleOptionValue` object")
+    uid: ID! @doc(description: "The unique ID for a `ItemSelectedBundleOptionValue` object")
     product_name: String! @doc(description: "The name of the child bundle product")
     product_sku: String! @doc(description: "The SKU of the child bundle product")
     quantity: Float! @doc(description: "Indicates how many of this bundle product were ordered")
