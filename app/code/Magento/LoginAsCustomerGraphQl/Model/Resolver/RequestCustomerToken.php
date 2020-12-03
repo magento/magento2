@@ -76,6 +76,7 @@ class RequestCustomerToken implements ResolverInterface
         array $args = null
     ) {
         $isAllowedLogin = $this->authorization->isAllowed('Magento_LoginAsCustomer::login');
+        $isAlllowedShoppingAssistance = $this->authorization->isAllowed('Magento_LoginAsCustomer::allow_shopping_assistance');
         $isEnabled = $this->config->isEnabled();
 
         /* Get input params */
@@ -96,6 +97,13 @@ class RequestCustomerToken implements ResolverInterface
                 __('Login as Customer is disabled.')
             );
         }
+
+        if (!$isAlllowedShoppingAssistance) {
+            throw new GraphQlAuthorizationException(
+                __('Allow remote shopping assistance is disabled.')
+            );
+        }
+        
         return $this->createCustomerToken->execute(
             $args['customer_email'],
             $context->getExtensionAttributes()->getStore()

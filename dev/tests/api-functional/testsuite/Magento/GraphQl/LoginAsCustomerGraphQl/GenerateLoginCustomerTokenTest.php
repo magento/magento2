@@ -43,7 +43,7 @@ class GenerateLoginCustomerTokenTest extends GraphQlAbstract
      *
      * @magentoApiDataFixture Magento/LoginAsCustomer/_files/admin.php
      * @magentoConfigFixture admin_store login_as_customer/general/enabled 1
-     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/LoginAsCustomer/_files/customer.php
      * @throws Exception
      */
     public function testGenerateCustomerValidTokenLoginAsCustomerEnabled()
@@ -67,7 +67,7 @@ class GenerateLoginCustomerTokenTest extends GraphQlAbstract
      *
      * @magentoApiDataFixture Magento/LoginAsCustomer/_files/admin.php
      * @magentoConfigFixture admin_store login_as_customer/general/enabled 0
-     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/LoginAsCustomer/_files/customer.php
      * @throws Exception
      */
     public function testGenerateCustomerValidTokenLoginAsCustomerDisabled()
@@ -89,7 +89,7 @@ class GenerateLoginCustomerTokenTest extends GraphQlAbstract
     /**
      * Verify with Customer Token in auth header
      *
-     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/LoginAsCustomer/_files/customer.php
      * @magentoConfigFixture admin_store login_as_customer/general/enabled 1
      * @throws Exception
      */
