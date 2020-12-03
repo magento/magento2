@@ -1849,8 +1849,8 @@ mutation {
 QUERY;
         $response = $this->graphQlMutation($query, [], '', $this->getHeaderMap());
 
-        self::assertArrayHasKey('cart', $response['setShippingAddressesOnCart']);
-        $cartResponse = $response['setShippingAddressesOnCart']['cart'];
+        self::assertArrayHasKey('cart', $response['setBillingAddressOnCart']);
+        $cartResponse = $response['setBillingAddressOnCart']['cart'];
 
         self::assertArrayHasKey('shipping_addresses', $cartResponse);
         self::assertCount(1, $cartResponse['shipping_addresses']);
