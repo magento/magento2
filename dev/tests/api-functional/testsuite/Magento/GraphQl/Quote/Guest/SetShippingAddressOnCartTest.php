@@ -457,6 +457,90 @@ QUERY;
     }
 
     /**
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_flatrate_shipping_method.php
+     */
+    public function testShippingMethodOnSetSameAsShippingTrue()
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        $carrierCode = 'flatrate';
+        $methodCode = 'flatrate';
+
+        $query = <<<QUERY
+mutation {
+  setBillingAddressOnCart(
+    input: {
+      cart_id: "$maskedQuoteId"
+      billing_address: {
+         address: {
+          firstname: "test firstname"
+          lastname: "test lastname"
+          company: "test company"
+          street: ["test street 1", "test street 2"]
+          city: "test city"
+          region: "AL"
+          postcode: "887766"
+          country_code: "US"
+          telephone: "88776655"
+         }
+         same_as_shipping: true
+      }
+    }
+  ) {
+    cart {
+      shipping_addresses {
+        selected_shipping_method {
+          carrier_code
+          carrier_title
+          method_code
+          method_title
+          amount{
+            currency
+            value
+          }
+        }
+        __typename
+      }
+    }
+  }
+}
+QUERY;
+        $response = $this->graphQlMutation($query);
+
+        self::assertArrayHasKey('cart', $response['setShippingAddressesOnCart']);
+        $cartResponse = $response['setShippingAddressesOnCart']['cart'];
+
+        self::assertArrayHasKey('shipping_addresses', $cartResponse);
+        self::assertCount(1, $cartResponse['shipping_addresses']);
+
+        $shippingAddress = current($cartResponse['shipping_addresses']);
+        self::assertArrayHasKey('selected_shipping_method', $shippingAddress);
+
+        self::assertArrayHasKey('carrier_code', $shippingAddress['selected_shipping_method']);
+        self::assertEquals('flatrate', $shippingAddress['selected_shipping_method']['carrier_code']);
+
+        self::assertArrayHasKey('method_code', $shippingAddress['selected_shipping_method']);
+        self::assertEquals('flatrate', $shippingAddress['selected_shipping_method']['method_code']);
+
+        self::assertArrayHasKey('carrier_title', $shippingAddress['selected_shipping_method']);
+        self::assertEquals('Flat Rate', $shippingAddress['selected_shipping_method']['carrier_title']);
+
+        self::assertArrayHasKey('method_title', $shippingAddress['selected_shipping_method']);
+        self::assertEquals('Fixed', $shippingAddress['selected_shipping_method']['method_title']);
+
+        self::assertArrayHasKey('amount', $shippingAddress['selected_shipping_method']);
+        $amount = $shippingAddress['selected_shipping_method']['amount'];
+
+        self::assertArrayHasKey('value', $amount);
+        self::assertEquals(10, $amount['value']);
+        self::assertArrayHasKey('currency', $amount);
+        self::assertEquals('USD', $amount['currency']);
+    }
+
+    /**
      * Verify the all the whitelisted fields for a New Address Object
      *
      * @param array $shippingAddressResponse
