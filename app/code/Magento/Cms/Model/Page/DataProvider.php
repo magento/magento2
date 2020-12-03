@@ -24,6 +24,7 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
      * @var DataPersistorInterface
      */
     protected $dataPersistor;
+
     /**
      * @var array
      */
