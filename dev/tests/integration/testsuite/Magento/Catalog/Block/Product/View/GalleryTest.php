@@ -462,7 +462,7 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
                     [
                         'img' => '/media/catalog/product/m/a/magento_small_image.jpg',
                         'caption' => 'Simple Product',
-                        'position' => null,
+                        'position' => 2,
                     ],
                 ]
             ],

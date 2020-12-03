@@ -594,6 +594,73 @@ class UpdateHandlerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Tests that images positions are inconsistent across store-views if images were added in a store-view level
+     *
+     * @magentoDataFixture Magento/Catalog/_files/product_with_image.php
+     * @magentoDataFixture Magento/Store/_files/second_store.php
+     * @return void
+     */
+    public function testAddImageInStoreView(): void
+    {
+        $secondStoreId = (int)$this->storeRepository->get('fixture_second_store')->getId();
+        $existingImagePath = '/m/a/magento_image.jpg';
+        $newImagePath = '/m/a/magento_small_image.jpg';
+        $product = $this->getProduct($secondStoreId);
+        $images = $product->getData('media_gallery')['images'];
+        $newImage = [
+            'file' => $newImagePath,
+            'position' => 2,
+            'label' => 'New Image Alt Text',
+            'disabled' => 0,
+            'media_type' => 'image'
+        ];
+        $images[] = $newImage;
+        $product->setData('media_gallery', ['images' => $images]);
+        $this->updateHandler->execute($product);
+        $product = $this->getProduct(Store::DEFAULT_STORE_ID);
+        $expectedImages = [
+            [
+                'file' => $existingImagePath,
+                'label' => 'Image Alt Text',
+                'position' => 1
+            ],
+            [
+                'file' => $newImagePath,
+                'label' => null,
+                'position' => 2
+            ],
+        ];
+        $actualImages = array_map(
+            function (\Magento\Framework\DataObject $item) {
+                return $item->toArray(['file', 'label', 'position']);
+            },
+            $product->getMediaGalleryImages()->getItems()
+        );
+        $this->assertEquals($expectedImages, array_values($actualImages));
+        $product->cleanModelCache();
+        $product = $this->getProduct($secondStoreId);
+        $expectedImages = [
+            [
+                'file' => $existingImagePath,
+                'label' => 'Image Alt Text',
+                'position' => 1
+            ],
+            [
+                'file' => $newImagePath,
+                'label' => 'New Image Alt Text',
+                'position' => 2
+            ],
+        ];
+        $actualImages = array_map(
+            function (\Magento\Framework\DataObject $item) {
+                return $item->toArray(['file', 'label', 'position']);
+            },
+            $product->getMediaGalleryImages()->getItems()
+        );
+        $this->assertEquals($expectedImages, array_values($actualImages));
+    }
+
+    /**
      * Check product image link and product image exist
      *
      * @param ProductInterface $product

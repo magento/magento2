@@ -206,7 +206,7 @@ class ContentTest extends \PHPUnit\Framework\TestCase
                     [
                         'file' => '/m/a/magento_small_image.jpg',
                         'label' => null,
-                        'position' => null,
+                        'position' => 2,
                     ],
                 ]
             ],
