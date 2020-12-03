@@ -78,9 +78,7 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
         ?CustomLayoutManagerInterface $customLayoutManager = null,
         ?PageRepositoryInterface $pageRepository = null
     ) {
-
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data, $pool);
-
         $this->collection = $pageCollectionFactory->create();
         $this->dataPersistor = $dataPersistor;
         $this->auth = $auth ?? ObjectManager::getInstance()->get(AuthorizationInterface::class);
@@ -145,7 +143,7 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
      * Loads the current page by current request params.
      * @return Page|null
      */
-    public function getCurrentPage(): ?Page
+    private function getCurrentPage(): ?Page
     {
         if (!$this->getRequestFieldName()) {
             return null;
