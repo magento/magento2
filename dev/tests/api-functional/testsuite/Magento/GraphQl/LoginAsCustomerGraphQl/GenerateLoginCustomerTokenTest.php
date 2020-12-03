@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\GraphQl\LoginAsCustomer;
+namespace Magento\GraphQl\LoginAsCustomerGraphQl;
 
 use Exception;
 use Magento\Framework\Exception\AuthenticationException;
