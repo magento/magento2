@@ -594,70 +594,99 @@ class UpdateHandlerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Tests that images positions are inconsistent across store-views if images were added in a store-view level
+     * Tests that images are added correctly
      *
      * @magentoDataFixture Magento/Catalog/_files/product_with_image.php
      * @magentoDataFixture Magento/Store/_files/second_store.php
+     * @dataProvider addImagesDataProvider
+     * @param string $addFromStore
+     * @param array $newImages
+     * @param string $viewFromStore
+     * @param array $expectedImages
+     * @param array $select
      * @return void
      */
-    public function testAddImageInStoreView(): void
-    {
-        $secondStoreId = (int)$this->storeRepository->get('fixture_second_store')->getId();
-        $existingImagePath = '/m/a/magento_image.jpg';
-        $newImagePath = '/m/a/magento_small_image.jpg';
-        $product = $this->getProduct($secondStoreId);
+    public function testAddImages(
+        string $addFromStore,
+        array $newImages,
+        string $viewFromStore,
+        array $expectedImages,
+        array $select = ['file', 'label', 'position']
+    ): void {
+        $storeId = (int)$this->storeRepository->get($addFromStore)->getId();
+        $product = $this->getProduct($storeId);
         $images = $product->getData('media_gallery')['images'];
-        $newImage = [
-            'file' => $newImagePath,
-            'position' => 2,
-            'label' => 'New Image Alt Text',
-            'disabled' => 0,
-            'media_type' => 'image'
-        ];
-        $images[] = $newImage;
+        $images = array_merge($images, $newImages);
         $product->setData('media_gallery', ['images' => $images]);
         $this->updateHandler->execute($product);
-        $product = $this->getProduct(Store::DEFAULT_STORE_ID);
-        $expectedImages = [
-            [
-                'file' => $existingImagePath,
-                'label' => 'Image Alt Text',
-                'position' => 1
-            ],
-            [
-                'file' => $newImagePath,
-                'label' => null,
-                'position' => 2
-            ],
-        ];
+        $storeId = (int)$this->storeRepository->get($viewFromStore)->getId();
+        $product = $this->getProduct($storeId);
         $actualImages = array_map(
-            function (\Magento\Framework\DataObject $item) {
-                return $item->toArray(['file', 'label', 'position']);
+            function (\Magento\Framework\DataObject $item) use ($select) {
+                return $item->toArray($select);
             },
             $product->getMediaGalleryImages()->getItems()
         );
         $this->assertEquals($expectedImages, array_values($actualImages));
-        $product->cleanModelCache();
-        $product = $this->getProduct($secondStoreId);
-        $expectedImages = [
+    }
+
+    /**
+     * @return array[]
+     */
+    public function addImagesDataProvider(): array
+    {
+        return [
             [
-                'file' => $existingImagePath,
-                'label' => 'Image Alt Text',
-                'position' => 1
+                'fixture_second_store',
+                [
+                    [
+                        'file' => '/m/a/magento_small_image.jpg',
+                        'position' => 2,
+                        'label' => 'New Image Alt Text',
+                        'disabled' => 0,
+                        'media_type' => 'image'
+                    ]
+                ],
+                'default',
+                [
+                    [
+                        'file' => '/m/a/magento_image.jpg',
+                        'label' => 'Image Alt Text',
+                        'position' => 1,
+                    ],
+                    [
+                        'file' => '/m/a/magento_small_image.jpg',
+                        'label' => null,
+                        'position' => 2,
+                    ],
+                ]
             ],
             [
-                'file' => $newImagePath,
-                'label' => 'New Image Alt Text',
-                'position' => 2
-            ],
+                'fixture_second_store',
+                [
+                    [
+                        'file' => '/m/a/magento_small_image.jpg',
+                        'position' => 2,
+                        'label' => 'New Image Alt Text',
+                        'disabled' => 0,
+                        'media_type' => 'image'
+                    ]
+                ],
+                'fixture_second_store',
+                [
+                    [
+                        'file' => '/m/a/magento_image.jpg',
+                        'label' => 'Image Alt Text',
+                        'position' => 1,
+                    ],
+                    [
+                        'file' => '/m/a/magento_small_image.jpg',
+                        'label' => 'New Image Alt Text',
+                        'position' => 2,
+                    ],
+                ]
+            ]
         ];
-        $actualImages = array_map(
-            function (\Magento\Framework\DataObject $item) {
-                return $item->toArray(['file', 'label', 'position']);
-            },
-            $product->getMediaGalleryImages()->getItems()
-        );
-        $this->assertEquals($expectedImages, array_values($actualImages));
     }
 
     /**
