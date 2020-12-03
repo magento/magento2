@@ -28,8 +28,12 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
      * @var array
      */
     protected $loadedData;
-    /** @var PageRepositoryInterface */
+
+    /**
+     * @var PageRepositoryInterface
+     */
     private $pageRepository;
+
     /**
      * @var AuthorizationInterface
      */
@@ -44,6 +48,7 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
      * @var CustomLayoutManagerInterface
      */
     private $customLayoutManager;
+
     /**
      * @var null|array
      */
@@ -111,8 +116,9 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
             return $this->loadedData;
         }
 
-        $page = $this->getCurrentPage();
-        if ($page === null) {
+        try {
+            $page = $this->getCurrentPage();
+        } catch (LocalizedException $exception) {
             return [];
         }
 
@@ -141,29 +147,26 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
 
     /**
      * Loads the current page by current request params.
-     * @return Page|null
+     * @return Page
+     * @throws LocalizedException
      */
-    private function getCurrentPage(): ?Page
+    private function getCurrentPage(): Page
     {
         if (!$this->getRequestFieldName()) {
-            return null;
+            throw new LocalizedException(__('RequestFieldName is not spefied'));
         }
 
         $pageId = (int)$this->request->getParam($this->getRequestFieldName());
         if ($pageId === 0) {
-            return null;
+            throw new LocalizedException(__('Page size must be given'));
         }
 
         if (isset($this->loadedPages[$pageId])) {
             return $this->loadedPages[$pageId];
         }
 
-        try {
-            $this->loadedPages[$pageId] = $this->pageRepository->getById($pageId);
-            return $this->loadedPages[$pageId];
-        } catch (LocalizedException $exception) {
-            return null;
-        }
+        $this->loadedPages[$pageId] = $this->pageRepository->getById($pageId);
+        return $this->loadedPages[$pageId];
     }
 
     /**
@@ -199,16 +202,19 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
 
         //List of custom layout files available for current page.
         $options = [['label' => 'No update', 'value' => '_no_update_']];
-        if ($page = $this->getCurrentPage()) {
-            //We must have a specific page selected.
-            //If custom layout XML is set then displaying this special option.
+
+        try {
+            $page = $this->getCurrentPage();
             if ($page->getCustomLayoutUpdateXml() || $page->getLayoutUpdateXml()) {
                 $options[] = ['label' => 'Use existing layout update XML', 'value' => '_existing_'];
             }
             foreach ($this->customLayoutManager->fetchAvailableFiles($page) as $layoutFile) {
                 $options[] = ['label' => $layoutFile, 'value' => $layoutFile];
             }
+        } catch (LocalizedException $exception) {
+
         }
+
         $customLayoutMeta = [
             'design' => [
                 'children' => [
