@@ -44,6 +44,7 @@
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="scrollToTopOfPage"/>
         <actionGroup ref="AdminProductFormOpenAdvancedPricingDialogActionGroup" stepKey="clickOnAdvancedPricingButton"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="addCustomerGroupAllGroupsQty1PriceDiscountAndpercente"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForCustomerGroupPriceAddButton"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="fillProductTierPriceQtyInput"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="selectProductTierPriceValueType"/>
 
