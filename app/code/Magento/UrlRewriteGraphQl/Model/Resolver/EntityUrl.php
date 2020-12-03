@@ -53,7 +53,7 @@ class EntityUrl implements ResolverInterface
         Uid $idEncoder
     ) {
         $this->urlFinder = $urlFinder;
-        $this->cuxstomUrlLocator = $customUrlLocator;
+        $this->customUrlLocator = $customUrlLocator;
         $this->idEncoder = $idEncoder;
     }
 
