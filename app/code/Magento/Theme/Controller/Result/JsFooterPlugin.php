@@ -100,7 +100,7 @@ class JsFooterPlugin
      *
      * @return bool
      */
-    private function isDeferEnabled(): bool
+    public function isDeferEnabled(): bool
     {
         return $this->scopeConfig->isSetFlag(
             self::XML_PATH_DEV_MOVE_JS_TO_BOTTOM,
