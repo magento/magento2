@@ -313,10 +313,7 @@ class FileProcessorTest extends TestCase
 
         $destinationPath = 'customer/f/i';
 
-        $this->mediaDirectory->expects($this->once())
-            ->method('create')
-            ->with($destinationPath)
-            ->willReturn(false);
+        $this->configureMediaDirectoryMock($destinationPath, false);
 
         $model = $this->getModel(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER);
         $model->moveTemporaryFile($filePath);
@@ -331,10 +328,7 @@ class FileProcessorTest extends TestCase
 
         $destinationPath = 'customer/f/i';
 
-        $this->mediaDirectory->expects($this->once())
-            ->method('create')
-            ->with($destinationPath)
-            ->willReturn(true);
+        $this->configureMediaDirectoryMock($destinationPath, true);
         $this->mediaDirectory->expects($this->once())
             ->method('isWritable')
             ->with($destinationPath)
@@ -350,10 +344,7 @@ class FileProcessorTest extends TestCase
 
         $destinationPath = 'customer/f/i';
 
-        $this->mediaDirectory->expects($this->once())
-            ->method('create')
-            ->with($destinationPath)
-            ->willReturn(true);
+        $this->configureMediaDirectoryMock($destinationPath, true);
         $this->mediaDirectory->expects($this->once())
             ->method('isWritable')
             ->with($destinationPath)
@@ -390,10 +381,7 @@ class FileProcessorTest extends TestCase
 
         $destinationPath = 'customer/f/i';
 
-        $this->mediaDirectory->expects($this->once())
-            ->method('create')
-            ->with($destinationPath)
-            ->willReturn(true);
+        $this->configureMediaDirectoryMock($destinationPath, true);
         $this->mediaDirectory->expects($this->once())
             ->method('isWritable')
             ->with($destinationPath)
@@ -440,10 +428,7 @@ class FileProcessorTest extends TestCase
 
         $destinationPath = 'customer/f/i';
 
-        $this->mediaDirectory->expects($this->once())
-            ->method('create')
-            ->with($destinationPath)
-            ->willReturn(true);
+        $this->configureMediaDirectoryMock($destinationPath, true);
         $this->mediaDirectory->expects($this->once())
             ->method('isWritable')
             ->with($destinationPath)
@@ -485,5 +470,27 @@ class FileProcessorTest extends TestCase
         $model = $this->getModel(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER);
 
         $this->assertEquals($expected, $model->getMimeType($fileName));
+    }
+
+    /**
+     * Configure media directory mock to create media directory.
+     *
+     * @param string $destinationPath
+     * @param bool $directoryCreated
+     */
+    private function configureMediaDirectoryMock(string $destinationPath, bool $directoryCreated): void
+    {
+        $this->mediaDirectory->expects($this->at(0))
+            ->method('isExist')
+            ->with('customer/tmp/filename.ext1')
+            ->willReturn(true);
+        $this->mediaDirectory->expects($this->at(1))
+            ->method('isExist')
+            ->with('customer/filename.ext1')
+            ->willReturn(false);
+        $this->mediaDirectory->expects($this->once())
+            ->method('create')
+            ->with($destinationPath)
+            ->willReturn($directoryCreated);
     }
 }
