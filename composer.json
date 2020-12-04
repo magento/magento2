@@ -199,6 +199,7 @@
         "magento/module-login-as-customer-api": "*",
         "magento/module-login-as-customer-assistance": "*",
         "magento/module-login-as-customer-frontend-ui": "*",
+        "magento/module-login-as-customer-graph-ql": "*",
         "magento/module-login-as-customer-log": "*",
         "magento/module-login-as-customer-quote": "*",
         "magento/module-login-as-customer-page-cache": "*",
