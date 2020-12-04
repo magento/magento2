@@ -61,7 +61,7 @@ class ProductTest extends TestCase
      */
     public function productProvider()
     {
-        $storeBaseMediaUrl = 'http://store.com/pub/media/catalog/product/cache/c9e0b0ef589f3508e5ba515cde53c5ff/';
+        $storeBaseMediaUrl = 'http://store.com/media/catalog/product/cache/c9e0b0ef589f3508e5ba515cde53c5ff/';
         return [
             [
                 [

@@ -77,12 +77,13 @@ class Collection extends ConfigCollection
                 'value',
                 $this->valueProcessor->process(
                     $item->getData('value'),
-                    $this->getData('scope'),
-                    $this->getData('scope_id'),
+                    $item->getData('scope'),
+                    $item->getData('scope_id'),
                     $item->getData('path')
                 )
             );
         }
-        parent::_afterLoad();
+
+        return parent::_afterLoad();
     }
 }

@@ -8,15 +8,18 @@ namespace Magento\Customer\Model\Customer;
 
 use Magento\Customer\Model\Address;
 use Magento\Customer\Model\Customer;
+use Magento\Customer\Model\CustomerFactory;
 use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory as CustomerCollectionFactory;
 use Magento\Directory\Model\CountryFactory;
 use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Eav\Model\Entity\Type;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Session\SessionManagerInterface;
 use Magento\Customer\Model\FileUploaderDataResolver;
 use Magento\Customer\Model\AttributeMetadataResolver;
+use Magento\Ui\Component\Form\Element\Multiline;
 use Magento\Ui\DataProvider\AbstractDataProvider;
 
 /**
@@ -67,6 +70,11 @@ class DataProviderWithDefaultAddresses extends AbstractDataProvider
     private $attributeMetadataResolver;
 
     /**
+     * @var CustomerFactory
+     */
+    private $customerFactory;
+
+    /**
      * @param string $name
      * @param string $primaryFieldName
      * @param string $requestFieldName
@@ -79,6 +87,7 @@ class DataProviderWithDefaultAddresses extends AbstractDataProvider
      * @param bool $allowToShowHiddenAttributes
      * @param array $meta
      * @param array $data
+     * @param CustomerFactory $customerFactory
      * @throws LocalizedException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -94,7 +103,8 @@ class DataProviderWithDefaultAddresses extends AbstractDataProvider
         AttributeMetadataResolver $attributeMetadataResolver,
         $allowToShowHiddenAttributes = true,
         array $meta = [],
-        array $data = []
+        array $data = [],
+        CustomerFactory $customerFactory = null
     ) {
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
         $this->collection = $customerCollectionFactory->create();
@@ -107,6 +117,7 @@ class DataProviderWithDefaultAddresses extends AbstractDataProvider
         $this->meta['customer']['children'] = $this->getAttributesMeta(
             $eavConfig->getEntityType('customer')
         );
+        $this->customerFactory = $customerFactory ?: ObjectManager::getInstance()->get(CustomerFactory::class);
     }
 
     /**
@@ -130,6 +141,7 @@ class DataProviderWithDefaultAddresses extends AbstractDataProvider
                 $result['customer'],
                 array_flip(self::$forbiddenCustomerFields)
             );
+            $this->prepareCustomAttributeValue($result['customer']);
             unset($result['address']);
 
             $result['default_billing_address'] = $this->prepareDefaultAddress(
@@ -142,9 +154,10 @@ class DataProviderWithDefaultAddresses extends AbstractDataProvider
 
             $this->loadedData[$customer->getId()] = $result;
         }
-
         $data = $this->session->getCustomerFormData();
         if (!empty($data)) {
+            $customer = $this->customerFactory->create();
+            $this->fileUploaderDataResolver->overrideFileUploaderData($customer, $data['customer']);
             $customerId = $data['customer']['entity_id'] ?? null;
             $this->loadedData[$customerId] = $data;
             $this->session->unsCustomerFormData();
@@ -177,6 +190,24 @@ class DataProviderWithDefaultAddresses extends AbstractDataProvider
         $addressData['region'] = $address->getRegion();
 
         return $addressData;
+    }
+
+    /***
+     * Prepare values for Custom Attributes.
+     *
+     * @param array $data
+     * @return void
+     */
+    private function prepareCustomAttributeValue(array &$data): void
+    {
+        foreach ($this->meta['customer']['children'] as $attributeName => $attributeMeta) {
+            if ($attributeMeta['arguments']['data']['config']['dataType'] === Multiline::NAME
+                && isset($data[$attributeName])
+                && !is_array($data[$attributeName])
+            ) {
+                $data[$attributeName] = explode("\n", $data[$attributeName]);
+            }
+        }
     }
 
     /**
