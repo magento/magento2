@@ -674,7 +674,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
                     if (in_array($option['option_type'], ['date', 'date_time', 'time', 'file'])) {
                         $product->setSkipCheckRequiredOption(false);
                         $formattedOptions[$option['option_id']] =
-                          $buyRequest->getDataByKey('options')[$option['option_id']];
+                            $buyRequest->getDataByKey('options')[$option['option_id']];
                         continue;
                     }
 
@@ -1661,7 +1661,8 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
 
         // emulate request
         $request = $form->prepareRequest($accountData);
-        $data = $form->extractData($request);
+        $requestScope = $request->getPostValue() ? 'order/account' : null;
+        $data = $form->extractData($request, $requestScope);
         $data = $form->restoreData($data);
         $customer = $this->customerFactory->create();
         $this->dataObjectHelper->populateWithArray(
