@@ -118,7 +118,7 @@ class MediaTest extends TestCase
             ->method('getAbsolutePath')
             ->with(null)
             ->willReturn(self::MEDIA_DIRECTORY);
-        $this->directoryPubMock->expects(self::once())
+        $this->directoryPubMock->expects(self::exactly(2))
             ->method('getAbsolutePath')
             ->with(self::RELATIVE_FILE_PATH)
             ->willReturn($filePath);
@@ -154,7 +154,7 @@ class MediaTest extends TestCase
             ->method('isReadable')
             ->with(self::RELATIVE_FILE_PATH)
             ->willReturn(true);
-        $this->directoryPubMock->expects(self::once())
+        $this->directoryPubMock->expects(self::exactly(2))
             ->method('getAbsolutePath')
             ->with(self::RELATIVE_FILE_PATH)
             ->willReturn($filePath);
@@ -214,10 +214,15 @@ class MediaTest extends TestCase
 
     public function testExceptionWhenIsAllowedReturnsFalse(): void
     {
+        $filePath = '/absolute/path/to/test/file.png';
         $this->directoryMediaMock->expects(self::once())
             ->method('getAbsolutePath')
             ->with(null)
             ->willReturn(self::MEDIA_DIRECTORY);
+        $this->directoryPubMock->expects(self::once())
+            ->method('getAbsolutePath')
+            ->with(self::RELATIVE_FILE_PATH)
+            ->willReturn($filePath);
         $this->configMock->expects(self::once())
             ->method('save');
 
