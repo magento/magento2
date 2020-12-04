@@ -1,1 +1,0 @@
-/home/dinesh/magento2/.ee/dev/tests/static/testsuite/Magento/Test/Legacy/_files/connection/blacklist/files_list_ee.php

@@ -1,1 +1,0 @@
-/home/dinesh/magento2/.ee/dev/tests/integration/testsuite/Magento/SalesRule/_files/cart_rule_tablerate_free_shipping_by_category_rollback.php

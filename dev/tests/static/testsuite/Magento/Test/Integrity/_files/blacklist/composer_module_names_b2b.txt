@@ -1,1 +1,0 @@
-/home/dinesh/magento2/.b2b/dev/tests/static/testsuite/Magento/Test/Integrity/_files/blacklist/composer_module_names_b2b.txt

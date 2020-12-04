@@ -1,1 +1,0 @@
-/home/dinesh/magento2/.ee/dev/tests/static/testsuite/Magento/Test/Integrity/Magento/Framework/Api/_files/ExtensibleInterfacesTest/blacklist_ee.txt

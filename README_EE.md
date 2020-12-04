@@ -1,1 +1,0 @@
-/home/dinesh/magento2/.ee/README_EE.md

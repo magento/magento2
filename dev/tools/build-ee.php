@@ -1,1 +1,0 @@
-/home/dinesh/magento2/.ee/dev/tools/build-ee.php
