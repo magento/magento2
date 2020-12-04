@@ -8,7 +8,7 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminMassOrdersCancelCompleteAndClosedTest" deprecated="Use AdminMassOrdersCancelCompleteAndClosedAPITest instead">
+    <test name="AdminMassOrdersCancelCompleteAndClosedTest" deprecated="Use AdminMassOrdersCancelClosedAndCompleteTest instead">
         <annotations>
             <stories value="Mass Update Orders"/>
             <title value="DEPRECATED. Mass cancel orders in status  Complete, Closed"/>
@@ -18,7 +18,7 @@
             <group value="sales"/>
             <group value="mtf_migrated"/>
             <skip>
-                <issueId value="DEPRECATED">Use AdminMassOrdersCancelCompleteAndClosedAPITest instead</issueId>
+                <issueId value="DEPRECATED">Use AdminMassOrdersCancelClosedAndCompleteTest instead</issueId>
             </skip> 
         </annotations>
         <before>
