@@ -149,6 +149,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $config = Bootstrap::getObjectManager()->create(\Magento\Eav\Model\Config::class);
         $updatedAttribute = $config->getAttribute($entityType, 'foo');
         $this->assertEquals('foo', $updatedAttribute->getFrontendLabel());
+        CacheCleaner::clean(['eav']);
         $config = Bootstrap::getObjectManager()->create(\Magento\Eav\Model\Config::class);
         // Check that attribute data has changed
         $updatedAttributeAfterCacheClean = $config->getAttribute($entityType, 'foo');

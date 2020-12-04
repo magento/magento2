@@ -34,6 +34,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
     protected function tearDown(): void
     {
         $this->objectManager->removeSharedInstance(ContentProviderInterface::class);
+        CacheCleaner::clean(['layout']);
         parent::tearDown();
     }
 
