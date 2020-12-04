@@ -1974,7 +1974,7 @@ class Product extends AbstractEntity
         if (filter_var($columnImage, FILTER_VALIDATE_URL)) {
             $hash = $this->getFileHash($columnImage);
         } else {
-            $path = $importDir . DS . $columnImage;
+            $path = $importDir . DIRECTORY_SEPARATOR . $columnImage;
             $hash = $this->isFileExists($path) ? $this->getFileHash($path) : '';
         }
 
@@ -2000,7 +2000,7 @@ class Product extends AbstractEntity
     private function addImageHashes(array &$images): void
     {
         $productMediaPath = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA)
-            ->getAbsolutePath(DS . 'catalog' . DS . 'product');
+            ->getAbsolutePath(DIRECTORY_SEPARATOR . 'catalog' . DIRECTORY_SEPARATOR . 'product');
 
         foreach ($images as $storeId => $skus) {
             foreach ($skus as $sku => $files) {
@@ -2197,7 +2197,7 @@ class Product extends AbstractEntity
         $dirAddon = $dirConfig[DirectoryList::MEDIA][DirectoryList::PATH];
 
         return empty($this->_parameters[Import::FIELD_NAME_IMG_FILE_DIR])
-            ? $dirAddon . DS . $this->_mediaDirectory->getRelativePath('import')
+            ? $dirAddon . DIRECTORY_SEPARATOR . $this->_mediaDirectory->getRelativePath('import')
             : $this->_parameters[Import::FIELD_NAME_IMG_FILE_DIR];
     }
 
