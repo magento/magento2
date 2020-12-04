@@ -637,6 +637,37 @@ QUERY;
     }
 
     /**
+     * @magentoApiDataFixture Magento/Catalog/_files/categories.php
+     */
+    public function testGetCategoryWithIdAndUid()
+    {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('`ids` and `category_uid` can\'t be used at the same time');
+
+        $categoryId = 8;
+        $categoryUid = base64_encode((string) 8);
+        $query = <<<QUERY
+{
+categories(filters: {ids: {in: ["$categoryId"]}, category_uid: {in: ["$categoryUid"]}}) {
+  items {
+    id
+    name
+    url_key
+    image
+    children {
+      id
+      name
+      url_key
+      image
+    }
+  }
+}
+}
+QUERY;
+        $this->graphQlQuery($query);
+    }
+
+    /**
      * @return array
      */
     public function categoryImageDataProvider(): array

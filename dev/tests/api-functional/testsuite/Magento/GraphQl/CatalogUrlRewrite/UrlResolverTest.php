@@ -358,6 +358,7 @@ QUERY;
   urlResolver(url:"{$urlPath}")
   {
    id
+   entity_uid
    relative_url
    type
    redirectCode
@@ -498,6 +499,7 @@ QUERY;
   urlResolver(url:"{$urlKey}")
   {
    id
+   entity_uid
    relative_url
    type
    redirectCode
@@ -507,6 +509,7 @@ QUERY;
         $response = $this->graphQlQuery($query);
         $this->assertArrayHasKey('urlResolver', $response);
         $this->assertEquals($productId, $response['urlResolver']['id']);
+        $this->assertEquals(base64_encode((string)$productId), $response['urlResolver']['entity_uid']);
         $this->assertEquals($relativePath, $response['urlResolver']['relative_url']);
         $this->assertEquals(strtoupper($expectedType), $response['urlResolver']['type']);
         $this->assertEquals($redirectCode, $response['urlResolver']['redirectCode']);

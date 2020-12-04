@@ -9,21 +9,30 @@ namespace Magento\CatalogGraphQl\Model\Resolver;
 
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
+use Magento\Framework\GraphQl\Query\Uid;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 
 /**
  * Root category tree field resolver, used for GraphQL request processing.
- *
- * @deprecated Use the UID instead of a numeric id
- * @see \Magento\CatalogGraphQl\Model\Resolver\RootCategoryUid
  */
-class RootCategoryId implements ResolverInterface
+class RootCategoryUid implements ResolverInterface
 {
+    /** @var Uid */
+    private $uidEncoder;
+
+    /**
+     * Uid $uidEncoder
+     */
+    public function __construct(Uid $uidEncoder)
+    {
+        $this->uidEncoder = $uidEncoder;
+    }
+
     /**
      * @inheritdoc
      */
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {
-        return (int)$context->getExtensionAttributes()->getStore()->getRootCategoryId();
+        return $this->uidEncoder->encode((string) $context->getExtensionAttributes()->getStore()->getRootCategoryId());
     }
 }
