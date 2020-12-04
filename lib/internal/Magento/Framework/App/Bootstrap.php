@@ -386,7 +386,7 @@ class Bootstrap
         $handler = new ErrorHandler();
         set_error_handler([$handler, 'handler']);
     }
-    
+
     /**
      * Getter for error code
      *
@@ -441,6 +441,10 @@ class Bootstrap
             } catch (\Exception $e) {
                 $message .= "Could not write error message to log. Please use developer mode to see the message.\n";
             }
+            if (!headers_sent()) {
+                header('HTTP/1.1 503 Service Temporarily Unavailable');
+            }
+            // phpcs:ignore Magento2.Security.LanguageConstruct.DirectOutput
             echo $message;
         }
         exit(1);
