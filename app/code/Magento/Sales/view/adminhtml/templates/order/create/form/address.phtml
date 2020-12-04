@@ -22,7 +22,13 @@ endif;
 $customerAddressFormatter = $block->getData('customerAddressFormatter');
 
 /**
- * @var \Magento\Sales\Block\Adminhtml\Order\Create\Billing\Address|\Magento\Sales\Block\Adminhtml\Order\Create\Shipping\Address $block
+ * @var \Magento\Sales\ViewModel\Customer\Address\Billing\AddressDataProvider $billingAddressDataProvider
+ */
+$billingAddressDataProvider = $block->getData('billingAddressDataProvider');
+
+/**
+ * @var \Magento\Sales\Block\Adminhtml\Order\Create\Billing\Address|
+ * \Magento\Sales\Block\Adminhtml\Order\Create\Shipping\Address $block
  */
 if ($block->getIsShipping()) :
     $_fieldsContainerId = 'order-shipping_address_fields';
@@ -87,9 +93,16 @@ endif; ?>
         <?= $block->getForm()->toHtml() ?>
 
         <div class="admin__field admin__field-option order-save-in-address-book">
-            <input name="<?= /* @noEscape */ $block->getForm()->getHtmlNamePrefix() ?>[save_in_address_book]" type="checkbox" id="<?= /* @noEscape */ $block->getForm()->getHtmlIdPrefix() ?>save_in_address_book" value="1"<?php if (!$block->getDontSaveInAddressBook()) : ?> checked="checked"<?php endif; ?> class="admin__control-checkbox"/>
+            <input name="<?= /* @noEscape */ $block->getForm()->getHtmlNamePrefix() ?>[save_in_address_book]"
+                   type="checkbox" id="<?= /* @noEscape */ $block->getForm()->getHtmlIdPrefix() ?>save_in_address_book"
+                   value="1"
+                <?php if ($billingAddressDataProvider && $billingAddressDataProvider->getSaveInAddressBook() ||
+                    $block->getIsShipping() && !$block->getDontSaveInAddressBook() && !$block->getAddressId()): ?>
+                    checked="checked"
+                <?php endif; ?>
+                   class="admin__control-checkbox"/>
             <label for="<?= /* @noEscape */ $block->getForm()->getHtmlIdPrefix() ?>save_in_address_book"
-                   class="admin__field-label"><?= $block->escapeHtml(__('Save in address book')) ?></label>
+                   class="admin__field-label"><?= $block->escapeHtml(__('Add to address book')) ?></label>
         </div>
     </div>
     <?php $hideElement = 'address-' . ($block->getIsShipping() ? 'shipping' : 'billing') . '-overlay'; ?>
