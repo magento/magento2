@@ -38,7 +38,7 @@
         <actionGroup ref="AdminCheckProductOnProductGridActionGroup" stepKey="selectFirstProduct">
            <argument name="product" value="$simpleProduct1$"/>
         </actionGroup>
-         <actionGroup ref="AdminCheckProductOnProductGridActionGroup" stepKey="selectSecondProduct">
+        <actionGroup ref="AdminCheckProductOnProductGridActionGroup" stepKey="selectSecondProduct">
            <argument name="product" value="$simpleProduct2$"/>
         </actionGroup>
 
