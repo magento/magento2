@@ -228,9 +228,6 @@ class File extends AbstractData
      */
     private function getFileExtension(string $fileName): string
     {
-        if ($this->fileProcessor->isExist($fileName)) {
-            return $this->fileProcessor->getStat($fileName)['extension'];
-        }
         return pathinfo($fileName, PATHINFO_EXTENSION);
     }
 
