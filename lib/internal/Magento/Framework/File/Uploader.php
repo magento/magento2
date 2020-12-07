@@ -716,31 +716,31 @@ class Uploader
         if (isset($fileId['tmp_name'])) {
             $tmpName = trim($fileId['tmp_name']);
 
-            $allowedFolders = [
-                sys_get_temp_dir(),
-                $this->directoryList->getPath(DirectoryList::MEDIA),
-                $this->directoryList->getPath(DirectoryList::VAR_DIR),
-                $this->directoryList->getPath(DirectoryList::TMP),
-                $this->directoryList->getPath(DirectoryList::UPLOAD),
-            ];
+            if (preg_match('/\.\.(\\\|\/)/', $tmpName) !== 1) {
+                $allowedFolders = [
+                    sys_get_temp_dir(),
+                    $this->directoryList->getPath(DirectoryList::MEDIA),
+                    $this->directoryList->getPath(DirectoryList::VAR_DIR),
+                    $this->directoryList->getPath(DirectoryList::TMP),
+                    $this->directoryList->getPath(DirectoryList::UPLOAD),
+                ];
 
-            $disallowedFolders = [
-                $this->directoryList->getPath(DirectoryList::LOG),
-            ];
+                $disallowedFolders = [
+                    $this->directoryList->getPath(DirectoryList::LOG),
+                ];
 
-            foreach ($allowedFolders as $allowedFolder) {
-                $dir = $this->filesystem->getDirectoryReadByPath($allowedFolder);
-                if ($dir->isExist($tmpName)) {
-                    $isValid = true;
-                    break;
+                foreach ($allowedFolders as $allowedFolder) {
+                    if (stripos($tmpName, $allowedFolder) === 0) {
+                        $isValid = true;
+                        break;
+                    }
                 }
-            }
 
-            foreach ($disallowedFolders as $disallowedFolder) {
-                $dir = $this->filesystem->getDirectoryReadByPath($disallowedFolder);
-                if ($dir->isExist($tmpName)) {
-                    $isValid = false;
-                    break;
+                foreach ($disallowedFolders as $disallowedFolder) {
+                    if (stripos($tmpName, $disallowedFolder) === 0) {
+                        $isValid = false;
+                        break;
+                    }
                 }
             }
         }
