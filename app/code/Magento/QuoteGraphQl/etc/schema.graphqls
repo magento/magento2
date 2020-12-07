@@ -53,13 +53,13 @@ input CartItemInput {
     sku: String!
     quantity: Float!
     parent_sku: String @doc(description: "For child products, the SKU of its parent product")
-    selected_options: [ID!] @doc(description: "The selected options for the base product, such as color or size")
+    selected_options: [ID!] @doc(description: "The selected options for the base product, such as color or size with  unique ID for a `CustomizableRadioOption`, `CustomizableDropDownOption`, `ConfigurableProductOptionsValues`, etc. objects")
     entered_options: [EnteredOptionInput!] @doc(description: "An array of entered options for the base product, such as personalization text")
 }
 
 input CustomizableOptionInput {
-    id: Int!
-    value_string: String!
+    id: Int @doc(description: "The customizable option id of the product")
+    value_string: String! @doc(description: "The string value of the option")
 }
 
 input ApplyCouponToCartInput {
@@ -73,14 +73,16 @@ input UpdateCartItemsInput {
 }
 
 input CartItemUpdateInput {
-    cart_item_id: Int!
+    cart_item_id: Int @doc(description: "Deprecated. Use `cart_item_uid` instead.")
+    cart_item_uid: ID @doc(description: "The unique ID for a `CartItemInterface` object")
     quantity: Float
     customizable_options: [CustomizableOptionInput!]
 }
 
 input RemoveItemFromCartInput {
     cart_id: String!
-    cart_item_id: Int!
+    cart_item_id: Int @doc(description: "Deprecated. Use `cart_item_uid` instead.")
+    cart_item_uid: ID @doc(description: "Required field. The unique ID for a `CartItemInterface` object")
 }
 
 input SetShippingAddressesOnCartInput {
@@ -199,9 +201,9 @@ type PlaceOrderOutput {
 }
 
 type Cart {
-    id: ID! @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\MaskedCartId") @doc(description: "The ID of the cart.")
+    id: ID! @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\MaskedCartId") @doc(description: "The unique ID for a `Cart` object")
     items: [CartItemInterface] @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartItems")
-    applied_coupon: AppliedCoupon @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\AppliedCoupon") @doc(description:"An array of coupons that have been applied to the cart") @deprecated(reason: "Use applied_coupons instead ")
+    applied_coupon: AppliedCoupon @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\AppliedCoupon") @doc(description:"An array of coupons that have been applied to the cart") @deprecated(reason: "Use applied_coupons instead")
     applied_coupons: [AppliedCoupon] @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\AppliedCoupons") @doc(description:"An array of `AppliedCoupon` objects. Each object contains the `code` text attribute, which specifies the coupon code")
     email: String @resolver (class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartEmail")
     shipping_addresses: [ShippingCartAddress]! @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\ShippingAddresses")
@@ -328,7 +330,8 @@ type VirtualCartItem implements CartItemInterface @doc(description: "Virtual Car
 }
 
 interface CartItemInterface @typeResolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\CartItemTypeResolver") {
-    id: String!
+    id: String! @deprecated(reason: "Use `uid` instead")
+    uid: ID! @doc(description: "The unique ID for a `CartItemInterface` object")
     quantity: Float!
     prices: CartItemPrices @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartItemPrices")
     product: ProductInterface!
@@ -348,7 +351,8 @@ type CartItemPrices {
 }
 
 type SelectedCustomizableOption {
-    id: Int!
+    id: Int! @deprecated(reason: "Use SelectedCustomizableOption.customizable_option_uid instead")
+    customizable_option_uid: ID! @doc(description: "The unique ID for a `CustomizableRadioOption`, `CustomizableDropDownOption`, `CustomizableMultipleOption`, etc. of `CustomizableOptionInterface` objects")
     label: String!
     is_required: Boolean!
     values: [SelectedCustomizableOptionValue!]!
@@ -356,7 +360,8 @@ type SelectedCustomizableOption {
 }
 
 type SelectedCustomizableOptionValue {
-    id: Int!
+    id: Int! @deprecated(reason: "Use SelectedCustomizableOptionValue.customizable_option_value_uid instead")
+    customizable_option_value_uid: ID! @doc(description: "The unique ID for a `CustomizableMultipleValue`, `CustomizableRadioValue`, `CustomizableCheckboxValue`, `CustomizableDropDownValue`, etc. objects")
     label: String!
     value: String!
     price: CartItemSelectedOptionValuePrice!
@@ -369,7 +374,7 @@ type CartItemSelectedOptionValuePrice {
 }
 
 type Order {
-    order_number: String!
+    order_number: String! @doc(description: "The unique ID for a `Order` object.")
     order_id: String @deprecated(reason: "The order_id field is deprecated, use order_number instead.")
 }
 

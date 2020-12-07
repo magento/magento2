@@ -79,6 +79,11 @@ class Products implements ResolverInterface
             'layer_type' => isset($args['search']) ? Resolver::CATALOG_LAYER_SEARCH : Resolver::CATALOG_LAYER_CATEGORY,
         ];
 
+        if (isset($args['filter']['category_id'])) {
+            $data['categories'] = $args['filter']['category_id']['eq'] ?? $args['filter']['category_id']['in'];
+            $data['categories'] = is_array($data['categories']) ? $data['categories'] : [$data['categories']];
+        }
+
         return $data;
     }
 
