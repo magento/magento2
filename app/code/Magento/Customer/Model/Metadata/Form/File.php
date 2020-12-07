@@ -182,7 +182,7 @@ class File extends AbstractData
     {
         $label = $value['name'];
         $rules = $this->getAttribute()->getValidationRules();
-        $extension = $this->fileProcessor->getStat($value['name'])['extension'];
+        $extension = $this->getFileExtension($value['name']);
         $fileExtensions = ArrayObjectSearch::getArrayElementByName(
             $rules,
             'file_extensions'
@@ -218,6 +218,17 @@ class File extends AbstractData
         }
 
         return [];
+    }
+
+    /**
+     * Get file extension from the file if it exists, otherwise, get from filename.
+     *
+     * @param string $fileName
+     * @return string
+     */
+    private function getFileExtension(string $fileName): string
+    {
+        return pathinfo($fileName, PATHINFO_EXTENSION);
     }
 
     /**
