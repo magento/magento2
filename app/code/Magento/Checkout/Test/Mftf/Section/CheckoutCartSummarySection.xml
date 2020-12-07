@@ -9,6 +9,7 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="CheckoutCartSummarySection">
+        <element name="itemsInCartLabel" type="text" selector="//*[@id='opc-sidebar']/div[1]/div/div[1]/strong/span[2]"/>
         <element name="orderTotal" type="input" selector=".grand.totals .amount .price"/>
         <element name="subTotal" type="input" selector="span[data-th='Subtotal']"/>
         <element name="expandShoppingCartSummary" type="button" selector="//*[contains(@class, 'items-in-cart')][not(contains(@class, 'active'))]"/>
@@ -34,7 +35,7 @@
         <element name="shippingMethodLabel" type="text" selector="#co-shipping-method-form dl dt span"/>
         <element name="methodName" type="text" selector="#co-shipping-method-form label"/>
         <element name="shippingPrice" type="text" selector="#co-shipping-method-form span .price"/>
-        <element name="shippingMethodElementId" type="radio" selector="#s_method_{{carrierCode}}_{{methodCode}}" parameterized="true"/>
+        <element name="shippingMethodElementId" type="radio" selector="#s_method_{{carrierCode}}_{{methodCode}}" parameterized="true" timeout="30"/>
         <element name="estimateShippingAndTaxForm" type="block" selector="#shipping-zip-form"/>
     </section>
 </sections>

@@ -679,6 +679,8 @@ class ProcessCronQueueObserverTest extends TestCase
 
     /**
      * Test case, successfully run job
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testDispatchRunJob()
     {

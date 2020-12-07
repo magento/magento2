@@ -35,7 +35,7 @@ class LogoTest extends TestCase
         )->method(
             'getBaseUrl'
         )->willReturn(
-            'http://localhost/pub/media/'
+            'http://localhost/media/'
         );
         $mediaDirectory->expects($this->any())->method('isFile')->willReturn(true);
 
@@ -53,7 +53,7 @@ class LogoTest extends TestCase
         ];
         $block = $objectManager->getObject(Logo::class, $arguments);
 
-        $this->assertEquals('http://localhost/pub/media/logo/default/image.gif', $block->getLogoSrc());
+        $this->assertEquals('http://localhost/media/logo/default/image.gif', $block->getLogoSrc());
     }
 
     /**

@@ -79,6 +79,55 @@ class ProductPriceTest extends GraphQlAbstract
     }
 
     /**
+     * @magentoApiDataFixture Magento/Catalog/_files/products.php
+     * @magentoApiDataFixture Magento/Directory/_files/usd_cny_rate.php
+     * @magentoConfigFixture default_store currency/options/allow CNY,USD
+     */
+    public function testProductWithSinglePriceNonDefaultCurrency()
+    {
+        $skus = ['simple'];
+        $query = $this->getProductQuery($skus);
+        $headerMap = [
+            'Content-Currency' => 'CNY'
+        ];
+        $result = $this->graphQlQuery($query, [], '', $headerMap);
+
+        $this->assertArrayNotHasKey('errors', $result);
+        $this->assertNotEmpty($result['products']['items']);
+        $product = $result['products']['items'][0];
+        $this->assertNotEmpty($product['price_range']);
+
+        $expectedPriceRange = [
+            "minimum_price" => [
+                "regular_price" => [
+                    "value" => 70
+                ],
+                "final_price" => [
+                    "value" => 70
+                ],
+                "discount" => [
+                    "amount_off" => 0,
+                    "percent_off" => 0
+                ]
+            ],
+            "maximum_price" => [
+                "regular_price" => [
+                    "value" => 70
+                ],
+                "final_price" => [
+                    "value" => 70
+                ],
+                "discount" => [
+                    "amount_off" => 0,
+                    "percent_off" => 0
+                ]
+            ]
+        ];
+
+        $this->assertPrices($expectedPriceRange, $product['price_range'], 'CNY');
+    }
+
+    /**
      * Pricing for Simple, Grouped and Configurable products with no special or tier prices configured
      *
      * @magentoApiDataFixture Magento/ConfigurableProduct/_files/product_configurable_12345.php
@@ -909,7 +958,7 @@ QUERY;
       name
       sku
       price_range {
-        minimum_price {regular_price 
+        minimum_price {regular_price
         {
          value
          currency
@@ -949,13 +998,13 @@ QUERY;
       ... on ConfigurableProduct{
         variants{
           product{
-           
+
             sku
             price_range {
         minimum_price {regular_price {value}
           final_price {
             value
-            
+
           }
           discount {
             amount_off
@@ -965,11 +1014,11 @@ QUERY;
         maximum_price {
           regular_price {
             value
-           
+
           }
           final_price {
             value
-            
+
           }
           discount {
             amount_off
@@ -985,7 +1034,7 @@ QUERY;
               final_price{value}
                 quantity
               }
-            
+
             }
           }
         }

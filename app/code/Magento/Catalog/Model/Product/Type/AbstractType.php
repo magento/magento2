@@ -3,13 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Catalog\Model\Product\Type;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\File\UploaderFactory;
 
 /**
  * Abstract model for product type implementation
@@ -114,6 +115,11 @@ abstract class AbstractType
     protected $_cacheProductSetAttributes = '_cache_instance_product_set_attributes';
 
     /**
+     * @var UploaderFactory
+     */
+    private $uploaderFactory;
+
+    /**
      * Delete data specific for this product type
      *
      * @param \Magento\Catalog\Model\Product $product
@@ -175,8 +181,6 @@ abstract class AbstractType
     protected $serializer;
 
     /**
-     * Construct
-     *
      * @param \Magento\Catalog\Model\Product\Option $catalogProductOption
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Catalog\Model\Product\Type $catalogProductType
@@ -187,6 +191,7 @@ abstract class AbstractType
      * @param \Psr\Log\LoggerInterface $logger
      * @param ProductRepositoryInterface $productRepository
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
+     * @param UploaderFactory $uploaderFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -199,7 +204,8 @@ abstract class AbstractType
         \Magento\Framework\Registry $coreRegistry,
         \Psr\Log\LoggerInterface $logger,
         ProductRepositoryInterface $productRepository,
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null,
+        UploaderFactory $uploaderFactory = null
     ) {
         $this->_catalogProductOption = $catalogProductOption;
         $this->_eavConfig = $eavConfig;
@@ -212,6 +218,7 @@ abstract class AbstractType
         $this->productRepository = $productRepository;
         $this->serializer = $serializer ?: ObjectManager::getInstance()
             ->get(\Magento\Framework\Serialize\Serializer\Json::class);
+        $this->uploaderFactory = $uploaderFactory ?: ObjectManager::getInstance()->get(UploaderFactory::class);
     }
 
     /**
@@ -493,28 +500,20 @@ abstract class AbstractType
             if (isset($queueOptions['operation']) && ($operation = $queueOptions['operation'])) {
                 switch ($operation) {
                     case 'receive_uploaded_file':
-                        $src = isset($queueOptions['src_name']) ? $queueOptions['src_name'] : '';
-                        $dst = isset($queueOptions['dst_name']) ? $queueOptions['dst_name'] : '';
+                        $src = $queueOptions['src_name'] ?? '';
+                        $dst = $queueOptions['dst_name'] ?? '';
                         /** @var $uploader \Zend_File_Transfer_Adapter_Http */
-                        $uploader = isset($queueOptions['uploader']) ? $queueOptions['uploader'] : null;
-
-                        // phpcs:ignore Magento2.Functions.DiscouragedFunction
-                        $path = dirname($dst);
-
-                        try {
-                            $rootDir = $this->_filesystem->getDirectoryWrite(
-                                DirectoryList::ROOT
-                            );
-                            $rootDir->create($rootDir->getRelativePath($path));
-                        } catch (\Magento\Framework\Exception\FileSystemException $e) {
-                            throw new \Magento\Framework\Exception\LocalizedException(
-                                __('We can\'t create the "%1" writeable directory.', $path)
-                            );
+                        $uploader = $queueOptions['uploader'] ?? null;
+                        $isUploaded = false;
+                        if ($uploader && $uploader->isValid()) {
+                            $path = pathinfo($dst, PATHINFO_DIRNAME);
+                            $uploader = $this->uploaderFactory->create(['fileId' => $src]);
+                            $uploader->setFilesDispersion(false);
+                            $uploader->setAllowRenameFiles(true);
+                            $isUploaded = $uploader->save($path, pathinfo($dst, PATHINFO_FILENAME));
                         }
 
-                        $uploader->setDestination($path);
-
-                        if (empty($src) || empty($dst) || !$uploader->receive($src)) {
+                        if (empty($src) || empty($dst) || !$isUploaded) {
                             /**
                              * @todo: show invalid option
                              */
@@ -620,7 +619,7 @@ abstract class AbstractType
                 }
             }
             if (count($results) > 0) {
-                throw new LocalizedException(__(implode("\n", $results)));
+                throw new LocalizedException(__(implode("\n", array_unique($results))));
             }
         }
 

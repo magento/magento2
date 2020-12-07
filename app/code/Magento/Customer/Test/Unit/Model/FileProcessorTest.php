@@ -11,10 +11,13 @@ use Magento\Customer\Api\AddressMetadataInterface;
 use Magento\Customer\Api\CustomerMetadataInterface;
 use Magento\Customer\Model\FileProcessor;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\File\Mime;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Url\EncoderInterface;
 use Magento\Framework\UrlInterface;
 use Magento\MediaStorage\Model\File\Uploader;
@@ -310,10 +313,7 @@ class FileProcessorTest extends TestCase
 
         $destinationPath = 'customer/f/i';
 
-        $this->mediaDirectory->expects($this->once())
-            ->method('create')
-            ->with($destinationPath)
-            ->willReturn(false);
+        $this->configureMediaDirectoryMock($destinationPath, false);
 
         $model = $this->getModel(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER);
         $model->moveTemporaryFile($filePath);
@@ -328,10 +328,7 @@ class FileProcessorTest extends TestCase
 
         $destinationPath = 'customer/f/i';
 
-        $this->mediaDirectory->expects($this->once())
-            ->method('create')
-            ->with($destinationPath)
-            ->willReturn(true);
+        $this->configureMediaDirectoryMock($destinationPath, true);
         $this->mediaDirectory->expects($this->once())
             ->method('isWritable')
             ->with($destinationPath)
@@ -347,10 +344,7 @@ class FileProcessorTest extends TestCase
 
         $destinationPath = 'customer/f/i';
 
-        $this->mediaDirectory->expects($this->once())
-            ->method('create')
-            ->with($destinationPath)
-            ->willReturn(true);
+        $this->configureMediaDirectoryMock($destinationPath, true);
         $this->mediaDirectory->expects($this->once())
             ->method('isWritable')
             ->with($destinationPath)
@@ -363,17 +357,70 @@ class FileProcessorTest extends TestCase
         $path = CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER . '/' . FileProcessor::TMP_DIR . $filePath;
         $newPath = $destinationPath . $filePath;
 
+        $objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $mockFileSystem = $this->createMock(Filesystem::class);
+        $mockRead = $this->createMock(ReadInterface::class);
+        $objectManagerMock->method('get')->willReturn($mockFileSystem);
+        $mockFileSystem->method('getDirectoryRead')->willReturn($mockRead);
+        $mockRead->method('isExist')->willReturn(false);
+        ObjectManager::setInstance($objectManagerMock);
+
         $this->mediaDirectory->expects($this->once())
             ->method('renameFile')
             ->with($path, $newPath)
             ->willReturn(true);
 
+
         $model = $this->getModel(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER);
         $this->assertEquals('/f/i' . $filePath, $model->moveTemporaryFile($filePath));
     }
 
+    public function testMoveTemporaryFileNewFileName()
+    {
+        $filePath = '/filename.ext1';
+
+        $destinationPath = 'customer/f/i';
+
+        $this->configureMediaDirectoryMock($destinationPath, true);
+        $this->mediaDirectory->expects($this->once())
+            ->method('isWritable')
+            ->with($destinationPath)
+            ->willReturn(true);
+        $this->mediaDirectory->expects($this->once())
+            ->method('getAbsolutePath')
+            ->with($destinationPath)
+            ->willReturn('/' . $destinationPath);
+
+        $path = CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER . '/' . FileProcessor::TMP_DIR . $filePath;
+
+        $objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $mockFileSystem = $this->createMock(Filesystem::class);
+        $mockRead = $this->createMock(ReadInterface::class);
+        $objectManagerMock->method('get')->willReturn($mockFileSystem);
+        $mockFileSystem->method('getDirectoryRead')->willReturn($mockRead);
+        $mockRead->method('isExist')->willReturnOnConsecutiveCalls(true, true, false);
+        ObjectManager::setInstance($objectManagerMock);
+
+        $this->mediaDirectory->expects($this->once())
+            ->method('renameFile')
+            ->with($path, 'customer/f/i/filename_2.ext1')
+            ->willReturn(true);
+
+
+        $model = $this->getModel(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER);
+        $this->assertEquals('/f/i/filename_2.ext1', $model->moveTemporaryFile($filePath));
+    }
+
     public function testMoveTemporaryFileWithException()
     {
+        $objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $mockFileSystem = $this->createMock(Filesystem::class);
+        $mockRead = $this->createMock(ReadInterface::class);
+        $objectManagerMock->method($this->logicalOr('get', 'create'))->willReturn($mockFileSystem);
+        $mockFileSystem->method('getDirectoryRead')->willReturn($mockRead);
+        $mockRead->method('isExist')->willReturn(false);
+        ObjectManager::setInstance($objectManagerMock);
+
         $this->expectException(LocalizedException::class);
         $this->expectExceptionMessage('Something went wrong while saving the file');
 
@@ -381,10 +428,7 @@ class FileProcessorTest extends TestCase
 
         $destinationPath = 'customer/f/i';
 
-        $this->mediaDirectory->expects($this->once())
-            ->method('create')
-            ->with($destinationPath)
-            ->willReturn(true);
+        $this->configureMediaDirectoryMock($destinationPath, true);
         $this->mediaDirectory->expects($this->once())
             ->method('isWritable')
             ->with($destinationPath)
@@ -426,5 +470,27 @@ class FileProcessorTest extends TestCase
         $model = $this->getModel(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER);
 
         $this->assertEquals($expected, $model->getMimeType($fileName));
+    }
+
+    /**
+     * Configure media directory mock to create media directory.
+     *
+     * @param string $destinationPath
+     * @param bool $directoryCreated
+     */
+    private function configureMediaDirectoryMock(string $destinationPath, bool $directoryCreated): void
+    {
+        $this->mediaDirectory->expects($this->at(0))
+            ->method('isExist')
+            ->with('customer/tmp/filename.ext1')
+            ->willReturn(true);
+        $this->mediaDirectory->expects($this->at(1))
+            ->method('isExist')
+            ->with('customer/filename.ext1')
+            ->willReturn(false);
+        $this->mediaDirectory->expects($this->once())
+            ->method('create')
+            ->with($destinationPath)
+            ->willReturn($directoryCreated);
     }
 }

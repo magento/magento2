@@ -45,11 +45,11 @@ class BuyRequestBuilder
      */
     public function build(array $cartItemData): DataObject
     {
-        $requestData = [[]];
+        $requestData = [];
         foreach ($this->providers as $provider) {
             $requestData[] = $provider->execute($cartItemData);
         }
 
-        return $this->dataObjectFactory->create(['data' => array_merge(...$requestData)]);
+        return $this->dataObjectFactory->create(['data' => array_merge([], ...$requestData)]);
     }
 }
