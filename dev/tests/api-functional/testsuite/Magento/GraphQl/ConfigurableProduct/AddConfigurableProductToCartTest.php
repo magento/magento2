@@ -417,6 +417,42 @@ QUERY;
     }
 
     /**
+     * @magentoApiDataFixture Magento/ConfigurableProduct/_files/configurable_product_with_child_products_with_images.php
+     * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
+     */
+    public function testAddConfigurableProductWithImageToCart()
+    {
+        $searchResponse = $this->graphQlQuery($this->getFetchProductQuery('configurable'));
+        $product = current($searchResponse['products']['items']);
+        
+        $quantity = 1;
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
+        $parentSku = $product['sku'];
+        $sku = 'simple_20';
+        $attributeId = (int) $product['configurable_options'][0]['attribute_id'];
+        $optionId = $product['configurable_options'][0]['values'][1]['value_index'];
+
+        $query = $this->graphQlQueryForVariant(
+            $maskedQuoteId,
+            $parentSku,
+            $sku,
+            $quantity
+        );
+       
+        $response = $this->graphQlMutation($query);
+        
+        $cartItem = current($response['addConfigurableProductsToCart']['cart']['items']);
+        self::assertEquals($quantity, $cartItem['quantity']);
+        self::assertEquals($parentSku, $cartItem['product']['sku']);
+        self::assertArrayHasKey('configured_variant', $cartItem);
+
+        $variant = $cartItem['configured_variant'];
+        $expectedThumbnailUrl = "magento_thumbnail.jpg";
+        $variantImage = basename($variant['thumbnail']['url']);
+        $this->assertEquals($expectedThumbnailUrl, $variantImage);
+    }
+
+    /**
      * @param string $maskedQuoteId
      * @param string $parentSku
      * @param string $sku
@@ -452,6 +488,52 @@ mutation {
             option_label
             value_id
             value_label
+          }
+        }
+      }
+    }
+  }
+}
+QUERY;
+    }
+
+/**
+     * @param string $maskedQuoteId
+     * @param string $parentSku
+     * @param string $sku
+     * @param int $quantity
+     * @return cart items with variants details
+     */
+    private function graphQlQueryForVariant(string $maskedQuoteId, string $parentSku, string $sku, int $quantity): string
+    {
+        return <<<QUERY
+mutation {
+  addConfigurableProductsToCart(
+    input:{
+      cart_id:"{$maskedQuoteId}"
+      cart_items:{
+        parent_sku: "{$parentSku}"
+        data:{
+          sku:"{$sku}"
+          quantity:{$quantity}
+        }
+      }
+    }
+  ) {
+    cart {
+      items {
+        id
+        quantity
+        product {
+          sku
+        }
+        ... on ConfigurableCartItem {
+          configured_variant {
+            sku
+            thumbnail {
+              label
+              url
+            }
           }
         }
       }
