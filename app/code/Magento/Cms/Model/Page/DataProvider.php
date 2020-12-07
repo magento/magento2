@@ -154,7 +154,7 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
     private function getCurrentPage(): Page
     {
         if (!$this->getRequestFieldName()) {
-            throw new LocalizedException(__('RequestFieldName is not spefied'));
+            throw new LocalizedException(__('RequestFieldName is not specified'));
         }
 
         $pageId = (int)$this->request->getParam($this->getRequestFieldName());
