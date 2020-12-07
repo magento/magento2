@@ -26,7 +26,7 @@ define([
                 cartCacheUpdated = cartUpdated;
             }
 
-            if (data.productsUpdatedTime > cartCacheUpdated) {
+            if (data.productsUpdatedTime >= cartCacheUpdated) {
                 customerData.invalidate(['cart']);
                 customerData.reload(['cart'], true);
                 cartCacheUpdated = data.productsUpdatedTime;

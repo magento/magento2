@@ -60,7 +60,7 @@
                     <block class="Magento\Checkout\Block\ProductPricesUpdated"
                            name="checkout.cart.product.prices.updated"
                            template="Magento_Checkout::cart/product-prices-updated.phtml"
-                           ttl="86400">
+                           ttl="31536000">
                         <arguments>
                             <argument name="cache_lifetime" xsi:type="number">31536000</argument>
                         </arguments>
