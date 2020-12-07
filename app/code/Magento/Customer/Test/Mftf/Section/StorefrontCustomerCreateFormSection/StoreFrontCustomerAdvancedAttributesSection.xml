@@ -20,5 +20,7 @@
         <element name="yesNoOptionAttribute" type="select" selector="//select[@id='{{var}}']/option[2]" parameterized="true"/>
         <element name="selectedOption" type="text" selector="//select[@id='{{var}}']/option[@selected='selected']" parameterized="true"/>
         <element name="attributeLabel" type="text" selector="//span[text()='{{attributeLabel}}']" parameterized="true"/>
+        <element name="fileAttribute" type="file" selector="//input[@type='file' and @name='{{attributeCode}}']" parameterized="true" timeout="30"/>
+        <element name="customFileAttributeUploadButton" type="input" selector=".file-uploader-area input[name='{{attributeCode}}'] ~ .file-uploader-button" parameterized="true"/>
     </section>
 </sections>

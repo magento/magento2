@@ -58,6 +58,6 @@
         <click selector="{{CheckoutShippingMethodsSection.next}}" stepKey="clickNextButton"/>
         <!--  Assert order cannot be placed and error message will shown. -->
         <waitForPageLoad stepKey="waitForError"/>
-        <see stepKey="seeShippingMethodError" userInput="The shipping method is missing. Select the shipping method and try again."/>
+        <seeElementInDOM selector="{{CheckoutHeaderSection.errorMessageContainsText('The shipping method is missing. Select the shipping method and try again')}}" stepKey="seeShippingMethodError"/>
     </test>
 </tests>
