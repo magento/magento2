@@ -159,7 +159,7 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
 
         $pageId = (int)$this->request->getParam($this->getRequestFieldName());
         if ($pageId === 0) {
-            throw new LocalizedException(__('Page size must be given'));
+            throw new LocalizedException(__('Page ID must be given'));
         }
 
         if (isset($this->loadedPages[$pageId])) {
