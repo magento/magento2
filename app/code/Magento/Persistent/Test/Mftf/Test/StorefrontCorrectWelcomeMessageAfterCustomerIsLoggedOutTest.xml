@@ -75,5 +75,8 @@
         <see userInput="Welcome, $$createCustomerForPersistent.firstname$$ $$createCustomerForPersistent.lastname$$! Not you?"
              selector="{{StorefrontHeaderSection.welcomeMessage}}"
              stepKey="seePersistentWelcomeMessage"/>
+        <dontSee userInput="Not you? Not you?"
+             selector="{{StorefrontHeaderSection.welcomeMessage}}"
+             stepKey="verifyNotYouLinkNotDuplicated"/>
     </test>
 </tests>
