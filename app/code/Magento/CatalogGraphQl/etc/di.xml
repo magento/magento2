@@ -67,6 +67,15 @@
         </arguments>
     </type>
 
+    <type name="Magento\Framework\GraphQl\Query\Resolver\ArgumentsCompositeProcessor">
+        <arguments>
+            <argument name="processors" xsi:type="array">
+                <item name="category_uid" xsi:type="object">Magento\CatalogGraphQl\Model\Resolver\Products\Query\CategoryUidArgsProcessor</item>
+                <item name="category_uids" xsi:type="object">Magento\CatalogGraphQl\Model\Category\CategoryUidsArgsProcessor</item>
+            </argument>
+        </arguments>
+    </type>
+
     <type name="Magento\CatalogGraphQl\Plugin\Search\Request\ConfigReader">
         <arguments>
             <argument name="exactMatchAttributes" xsi:type="array">
