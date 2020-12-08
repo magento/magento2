@@ -187,7 +187,9 @@ class Media implements AppInterface
             $this->mediaDirectoryPath = $config->getMediaDirectory();
             $allowedResources = $config->getAllowedResources();
             $isAllowed = $this->isAllowed;
-            if (!$isAllowed($this->relativeFileName, $allowedResources)) {
+            $fileAbsolutePath = $this->directoryPub->getAbsolutePath($this->relativeFileName);
+            $fileRelativePath = str_replace(rtrim($this->mediaDirectoryPath, '/') . '/', '', $fileAbsolutePath);
+            if (!$isAllowed($fileRelativePath, $allowedResources)) {
                 throw new LogicException('The path is not allowed: ' . $this->relativeFileName);
             }
         }
