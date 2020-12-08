@@ -370,6 +370,7 @@
         <data key="shareable">Yes</data>
         <data key="file">magento-logo.png</data>
         <data key="fileName">magento-logo</data>
+        <data key="file_extension">png</data>
     </entity>
     <entity name="MagentoLogo" type="image">
         <data key="title" unique="suffix">MagentoLogo</data>
@@ -576,6 +577,10 @@
     <entity name="productWithOptions2" type="product">
         <var key="sku" entityType="product" entityKey="sku" />
         <requiredEntity type="product_option">ProductOptionDropDownWithLongValuesTitle</requiredEntity>
+    </entity>
+    <entity name="productWithCheckbox" type="product">
+        <var key="sku" entityType="product" entityKey="sku" />
+        <requiredEntity type="product_option">ProductOptionCheckbox</requiredEntity>
     </entity>
     <entity name="productWithDropdownOption" type="product">
         <var key="sku" entityType="product" entityKey="sku" />

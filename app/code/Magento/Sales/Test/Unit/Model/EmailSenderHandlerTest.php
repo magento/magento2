@@ -7,7 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\Sales\Test\Unit\Model;
 
+use Magento\Config\Model\Config\Backend\Encrypted;
 use Magento\Framework\App\Config;
+use Magento\Framework\App\Config\Value;
+use Magento\Framework\App\Config\ValueFactory;
 use Magento\Framework\DB\Select;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Model\AbstractModel;
@@ -71,6 +74,16 @@ class EmailSenderHandlerTest extends TestCase
      */
     private $storeManagerMock;
 
+    /**
+     * @var ValueFactory|MockObject
+     */
+    private $configValueFactory;
+
+    /**
+     * @var string
+     */
+    private $modifyStartFromDate = '-1 day';
+
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
@@ -110,15 +123,21 @@ class EmailSenderHandlerTest extends TestCase
             StoreManagerInterface::class
         );
 
+        $this->configValueFactory = $this->createMock(
+            ValueFactory::class
+        );
+
         $this->object = $objectManager->getObject(
             EmailSenderHandler::class,
             [
-                'emailSender'       => $this->emailSender,
-                'entityResource'    => $this->entityResource,
-                'entityCollection'  => $this->entityCollection,
-                'globalConfig'      => $this->globalConfig,
-                'identityContainer' => $this->identityContainerMock,
-                'storeManager'      => $this->storeManagerMock,
+                'emailSender'         => $this->emailSender,
+                'entityResource'      => $this->entityResource,
+                'entityCollection'    => $this->entityCollection,
+                'globalConfig'        => $this->globalConfig,
+                'identityContainer'   => $this->identityContainerMock,
+                'storeManager'        => $this->storeManagerMock,
+                'configValueFactory'  => $this->configValueFactory,
+                'modifyStartFromDate' => $this->modifyStartFromDate
             ]
         );
     }
@@ -151,6 +170,13 @@ class EmailSenderHandlerTest extends TestCase
                 ->method('addFieldToFilter')
                 ->with('email_sent', ['null' => true]);
 
+            $nowDate = date('Y-m-d H:i:s');
+            $fromDate = date('Y-m-d H:i:s', strtotime($nowDate . ' ' . $this->modifyStartFromDate));
+            $this->entityCollection
+                ->expects($this->at(2))
+                ->method('addFieldToFilter')
+                ->with('created_at', ['from' => $fromDate]);
+
             $this->entityCollection
                 ->expects($this->any())
                 ->method('addAttributeToSelect')
@@ -174,6 +200,20 @@ class EmailSenderHandlerTest extends TestCase
                 ->expects($this->any())
                 ->method('getItems')
                 ->willReturn($collectionItems);
+
+            /** @var Value|Encrypted|MockObject $valueMock */
+            $backendModelMock = $this->getMockBuilder(Value::class)
+                ->disableOriginalConstructor()
+                ->onlyMethods(['load', 'getId'])
+                ->addMethods(['getUpdatedAt'])
+                ->getMock();
+            $backendModelMock->expects($this->once())->method('load')->willReturnSelf();
+            $backendModelMock->expects($this->once())->method('getId')->willReturn(1);
+            $backendModelMock->expects($this->once())->method('getUpdatedAt')->willReturn($nowDate);
+
+            $this->configValueFactory->expects($this->once())
+                ->method('create')
+                ->willReturn($backendModelMock);
 
             if ($collectionItems) {
 

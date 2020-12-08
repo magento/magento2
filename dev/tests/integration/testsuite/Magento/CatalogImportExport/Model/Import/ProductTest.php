@@ -732,7 +732,7 @@ class ProductTest extends TestCase
                     )
                 );
                 // phpcs:ignore Magento2.Performance.ForeachArrayMerge
-                $option = array_merge(...$option);
+                $option = array_merge([], ...$option);
 
                 if (!empty($option['type']) && !empty($option['name'])) {
                     $lastOptionKey = $option['type'] . '|' . $option['name'];
@@ -1670,6 +1670,12 @@ class ProductTest extends TestCase
                  ]
             ],
             [
+                'products_to_check_valid_url_keys_with_different_language.csv',
+                [
+                    RowValidatorInterface::ERROR_DUPLICATE_URL_KEY => 0
+                ]
+            ],
+            [
                 'products_to_check_duplicated_url_keys.csv',
                 [
                     RowValidatorInterface::ERROR_DUPLICATE_URL_KEY => 2
@@ -2275,7 +2281,7 @@ class ProductTest extends TestCase
         $collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create(\Magento\Catalog\Model\ResourceModel\Category\Collection::class);
         $collection
-            ->addAttributeToFilter('entity_id', ['in' => \array_unique(\array_merge(...$categoryIds))])
+            ->addAttributeToFilter('entity_id', ['in' => \array_unique(\array_merge([], ...$categoryIds))])
             ->load()
             ->delete();
 

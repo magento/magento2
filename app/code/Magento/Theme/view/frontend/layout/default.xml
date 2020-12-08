@@ -8,6 +8,7 @@
 <page layout="3columns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <update handle="default_head_blocks"/>
     <body>
+        <attribute name="id" value="html-body"/>
         <block name="require.js" class="Magento\Framework\View\Element\Template" template="Magento_Theme::page/js/require_js.phtml" />
         <referenceContainer name="after.body.start">
             <block class="Magento\RequireJs\Block\Html\Head\Config" name="requirejs-config"/>
