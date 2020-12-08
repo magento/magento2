@@ -40,8 +40,12 @@ define([
                     name: '',
                     index: '',
                     dataScope: dataScope,
+                    outputDateFormat: 'DD-MM-YYYY',
+                    inputDateFormat: 'YYYY-MM-DD',
+                    pickerDateTimeFormat: 'DD-MM-YYYY',
                     options: {
-                        showsTime: true
+                        showsTime: false,
+                        dateFormat: 'dd-MM-y'
                     }
                 });
                 utils = mageUtils;
@@ -54,6 +58,11 @@ define([
             spyOn(utils, 'convertToMomentFormat');
             model.prepareDateTimeFormats();
             expect(utils.convertToMomentFormat).toHaveBeenCalled();
+        });
+
+        it('Check date will have correct value with different locales.', function () {
+            model.value('2020-11-28');
+            expect(model.getPreview()).toBe('28-11-2020');
         });
 
     });
