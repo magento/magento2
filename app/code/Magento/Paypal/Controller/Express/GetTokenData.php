@@ -181,10 +181,11 @@ class GetTokenData extends AbstractExpress implements HttpGetActionInterface
             $quote = $this->userContext->getUserId()
                 ? $this->cartRepository->get($quoteId)
                 : $this->guestCartRepository->get($quoteId);
-        } else {
-            $quote = $this->_getQuote();
+            if ((int)$quote->getCustomer()->getId() === (int)$this->userContext->getUserId()) {
+                return $quote;
+            }
         }
-        return $quote;
+        return $this->_getQuote();
     }
     /**
      * Get paypal token
