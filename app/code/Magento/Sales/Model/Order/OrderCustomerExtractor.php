@@ -17,6 +17,7 @@ use Magento\Customer\Api\Data\RegionInterfaceFactory as RegionFactory;
 use Magento\Customer\Api\Data\CustomerInterfaceFactory as CustomerFactory;
 use Magento\Quote\Api\Data\AddressInterfaceFactory as QuoteAddressFactory;
 use Magento\Sales\Model\Order\Address as OrderAddress;
+use Magento\Quote\Model\Quote\Address as QuoteAddress;
 
 /**
  * Extract customer data from an order.
@@ -54,9 +55,9 @@ class OrderCustomerExtractor
     private $customerFactory;
 
     /**
-     * @var QuoteAddressFactory
+     * @var QuoteAddressCollectionFactory
      */
-    private $quoteAddressFactory;
+    private $quoteAddressCollectionFactory;
 
     /**
      * @param OrderRepositoryInterface $orderRepository
@@ -74,15 +75,17 @@ class OrderCustomerExtractor
         AddressFactory $addressFactory,
         RegionFactory $regionFactory,
         CustomerFactory $customerFactory,
-        QuoteAddressFactory $quoteAddressFactory
-    ) {
+        QuoteAddressCollectionFactory $quoteAddressCollectionFactory
+
+    )
+    {
         $this->orderRepository = $orderRepository;
         $this->customerRepository = $customerRepository;
         $this->objectCopyService = $objectCopyService;
         $this->addressFactory = $addressFactory;
         $this->regionFactory = $regionFactory;
         $this->customerFactory = $customerFactory;
-        $this->quoteAddressFactory = $quoteAddressFactory;
+        $this->quoteAddressCollectionFactory = $quoteAddressCollectionFactory;
     }
 
     /**
@@ -111,36 +114,46 @@ class OrderCustomerExtractor
         $processedAddressData = [];
         $customerAddresses = [];
         foreach ($order->getAddresses() as $orderAddress) {
-            $addressData = $this->objectCopyService
-                ->copyFieldsetToTarget('order_address', 'to_customer_address', $orderAddress, []);
+            $quoteAddressId = $orderAddress->getQuoteAddressId();
 
-            $index = array_search($addressData, $processedAddressData);
-            if ($index === false) {
-                // create new customer address only if it is unique
-                $customerAddress = $this->addressFactory->create(['data' => $addressData]);
-                $customerAddress->setIsDefaultBilling(false);
-                $customerAddress->setIsDefaultShipping(false);
-                if (is_string($orderAddress->getRegion())) {
-                    /** @var RegionInterface $region */
-                    $region = $this->regionFactory->create();
-                    $region->setRegion($orderAddress->getRegion());
-                    $region->setRegionCode($orderAddress->getRegionCode());
-                    $region->setRegionId($orderAddress->getRegionId());
-                    $customerAddress->setRegion($region);
+            /* @var QuoteAddress $quoteAddress */
+            $quoteAddress = $this->quoteAddressCollectionFactory->create()
+                ->addFieldToSelect(QuoteAddress::SAVE_IN_ADDRESS_BOOK)
+                ->addFieldToFilter("address_id", $quoteAddressId)
+                ->getFirstItem();
+
+            if ($quoteAddress && (int)$quoteAddress->getSaveInAddressBook() === 1) {
+                $addressData = $this->objectCopyService
+                    ->copyFieldsetToTarget('order_address', 'to_customer_address', $orderAddress, []);
+
+                $index = array_search($addressData, $processedAddressData);
+                if ($index === false) {
+                    // create new customer address only if it is unique
+                    $customerAddress = $this->addressFactory->create(['data' => $addressData]);
+                    $customerAddress->setIsDefaultBilling(false);
+                    $customerAddress->setIsDefaultShipping(false);
+                    if (is_string($orderAddress->getRegion())) {
+                        /** @var RegionInterface $region */
+                        $region = $this->regionFactory->create();
+                        $region->setRegion($orderAddress->getRegion());
+                        $region->setRegionCode($orderAddress->getRegionCode());
+                        $region->setRegionId($orderAddress->getRegionId());
+                        $customerAddress->setRegion($region);
+                    }
+
+                    $processedAddressData[] = $addressData;
+                    $customerAddresses[] = $customerAddress;
+                    $index = count($processedAddressData) - 1;
                 }
 
-                $processedAddressData[] = $addressData;
-                $customerAddresses[] = $customerAddress;
-                $index = count($processedAddressData) - 1;
-            }
-
-            $customerAddress = $customerAddresses[$index];
-            // make sure that address type flags from equal addresses are stored in one resulted address
-            if ($orderAddress->getAddressType() == OrderAddress::TYPE_BILLING) {
-                $customerAddress->setIsDefaultBilling(true);
-            }
-            if ($orderAddress->getAddressType() == OrderAddress::TYPE_SHIPPING) {
-                $customerAddress->setIsDefaultShipping(true);
+                $customerAddress = $customerAddresses[$index];
+                // make sure that address type flags from equal addresses are stored in one resulted address
+                if ($orderAddress->getAddressType() == OrderAddress::TYPE_BILLING) {
+                    $customerAddress->setIsDefaultBilling(true);
+                }
+                if ($orderAddress->getAddressType() == OrderAddress::TYPE_SHIPPING) {
+                    $customerAddress->setIsDefaultShipping(true);
+                }
             }
         }
 
