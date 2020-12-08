@@ -75,7 +75,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
         $this->imageDestroy();
         try {
             $this->_imageHandler = call_user_func($this->_getCallback('create'), $this->_fileName);
-        } catch (\Exception $ex) {
+        } catch (\Throwable $ex) {
             throw new LocalizedException(__('Unsupported image format.'));
         }
     }
