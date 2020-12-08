@@ -169,6 +169,24 @@ class GetTokenData extends AbstractExpress implements HttpGetActionInterface
     }
 
     /**
+     * Prepare quote specified for checkout.
+     *
+     * @return \Magento\Quote\Api\Data\CartInterface
+     * @throws LocalizedException
+     */
+    private function prepareQuote()
+    {
+        $quoteId = $this->getRequest()->getParam('quote_id');
+        if ($quoteId) {
+            $quote = $this->userContext->getUserId()
+                ? $this->cartRepository->get($quoteId)
+                : $this->guestCartRepository->get($quoteId);
+        } else {
+            $quote = $this->_getQuote();
+        }
+        return $quote;
+    }
+    /**
      * Get paypal token
      *
      * @return string|null
@@ -176,7 +194,7 @@ class GetTokenData extends AbstractExpress implements HttpGetActionInterface
      */
     private function getToken(): ?string
     {
-        $quote = $this->_getQuote();
+        $quote = $this->prepareQuote();
         $this->_initCheckout($quote);
 
         if ($quote->getIsMultiShipping()) {
