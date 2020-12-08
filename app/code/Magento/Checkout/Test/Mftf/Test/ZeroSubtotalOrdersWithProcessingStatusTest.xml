@@ -41,9 +41,7 @@
             <deleteData createDataKey="simplecategory" stepKey="deleteCategory"/>
         </after>
 
-        <!--Open MARKETING > Cart Price Rules-->
-        <amOnPage url="{{AdminCartPriceRulesPage.url}}" stepKey="amOnCartPriceList"/>
-        <waitForPageLoad stepKey="waitForRulesPage"/>
+        <actionGroup ref="AdminOpenCartPriceRulesPageActionGroup" stepKey="amOnCartPriceList"/>
 
         <!--Add New Rule-->
         <click selector="{{AdminCartPriceRulesSection.addNewRuleButton}}" stepKey="clickAddNewRule"/>

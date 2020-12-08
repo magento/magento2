@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminCmsPageFillOutBasicFieldsActionGroup">
+        <annotations>
+            <description>Fills out the Page details (Page Title, Content and URL Key) on the Admin Page creation/edit page.</description>
+        </annotations>
+        <arguments>
+            <argument name="title" type="string" defaultValue="{{_defaultCmsPage.title}}"/>
+            <argument name="contentHeading" type="string" defaultValue="{{_defaultCmsPage.content_heading}}"/>
+            <argument name="content" type="string" defaultValue="{{_defaultCmsPage.content}}"/>
+            <argument name="urlKey" type="string" defaultValue="{{_defaultCmsPage.identifier}}"/>
+        </arguments>
+
+        <fillField selector="{{CmsNewPagePageBasicFieldsSection.pageTitle}}" userInput="{{title}}" stepKey="fillTitle"/>
+        <conditionalClick selector="{{CmsNewPagePageContentSection.header}}" dependentSelector="{{CmsNewPagePageContentSection.contentHeading}}" visible="false" stepKey="expandContentTabIfCollapsed"/>
+        <fillField selector="{{CmsNewPagePageContentSection.contentHeading}}" userInput="{{contentHeading}}" stepKey="fillContentHeading"/>
+        <scrollTo selector="{{CmsNewPagePageContentSection.content}}" stepKey="scrollToPageContent"/>
+        <fillField selector="{{CmsNewPagePageContentSection.content}}" userInput="{{content}}" stepKey="fillContent"/>
+        <conditionalClick selector="{{CmsNewPagePageSeoSection.header}}" dependentSelector="{{CmsNewPagePageSeoSection.urlKey}}" visible="false" stepKey="clickExpandSearchEngineOptimisationIfCollapsed"/>
+        <fillField selector="{{CmsNewPagePageSeoSection.urlKey}}" userInput="{{urlKey}}" stepKey="fillUrlKey"/>
+    </actionGroup>
+</actionGroups>

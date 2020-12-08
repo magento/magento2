@@ -57,7 +57,7 @@ class SaveTest extends ThemeTest
             ->with('js_order')
             ->willReturn($jsOrder);
 
-        $this->_request->expects($this->once(5))->method('getPostValue')->willReturn(true);
+        $this->_request->expects($this->once())->method('getPostValue')->willReturn(true);
 
         $themeMock = $this->getMockBuilder(Theme::class)
             ->addMethods(['setCustomization'])

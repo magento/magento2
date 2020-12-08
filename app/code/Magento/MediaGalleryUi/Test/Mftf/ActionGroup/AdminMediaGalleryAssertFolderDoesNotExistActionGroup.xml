@@ -12,7 +12,7 @@
         <arguments>
             <argument name="name" type="string" defaultValue="{{AdminMediaGalleryFolderData.name}}"/>
         </arguments>
-        <wait time="5" stepKey="waitForFolderTreeReloads"/>
-        <dontSeeElement selector="//div[contains(@class, 'media-directory-container')]//a[contains(text(), '{{name}}')]" stepKey="folderDoesNotExist"/>
+        <waitForPageLoad stepKey="waitForFolderTreeReloads"/>
+        <dontSeeElement selector="{{AdminMediaGalleryFolderSection.folderInTree(name)}}" stepKey="folderDoesNotExist"/>
     </actionGroup>
 </actionGroups>

@@ -53,8 +53,9 @@ class Zip extends AbstractArchive implements ArchiveInterface
     {
         $zip = new \ZipArchive();
         if ($zip->open($source) === true) {
-            $zip->renameIndex(0, basename($destination));
-            $filename = $zip->getNameIndex(0) ?: '';
+            $baseName = basename($destination);
+            $filename = $this->getFilenameFromZip($zip, $baseName);
+
             if ($filename) {
                 $zip->extractTo(dirname($destination), $filename);
             } else {
@@ -66,5 +67,26 @@ class Zip extends AbstractArchive implements ArchiveInterface
         }
 
         return $destination;
+    }
+
+    /**
+     * Retrieve filename for import from zip archive.
+     *
+     * @param \ZipArchive $zip
+     * @param string $baseName
+     *
+     * @return string
+     */
+    private function getFilenameFromZip(\ZipArchive $zip, string $baseName): string
+    {
+        $index = 0;
+
+        do {
+            $zip->renameIndex($index, $baseName);
+            $filename = $zip->getNameIndex($index);
+            $index++;
+        } while ($baseName !== $filename && $filename !== false);
+
+        return $filename === $baseName ? $filename : '';
     }
 }
