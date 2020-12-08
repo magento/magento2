@@ -144,7 +144,7 @@
         <waitForElementVisible selector="{{AdminOrderFormConfigureProductSection.optionSelect($$createConfigProductAttribute.default_frontend_label$$)}}" stepKey="waitForConfigurablePopover"/>
         <selectOption selector="{{AdminOrderFormConfigureProductSection.optionSelect($$createConfigProductAttribute.default_frontend_label$$)}}" userInput="$$getConfigAttributeOption1.label$$" stepKey="selectConfigurableOption"/>
         <click selector="{{AdminOrderFormConfigureProductSection.ok}}" stepKey="clickOkButton"/>
-        <comment userInput="Click OK button to update lists" stepKey="clickOnUpdateButton"/>
+        <comment userInput="Action should be removed but replaced with comment due to backward compatibility" stepKey="clickOnUpdateButton"/>
         <waitForPageLoad stepKey="waitForAdminOrderItemsOrderedSectionPageLoad1"/>
 
         <!-- Assert Products in Order item section -->

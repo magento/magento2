@@ -964,17 +964,17 @@ define([
             }.bind(this));
             // response handler
             productConfigure.setOnLoadIFrameCallback(listType, function (response) {
-                var area = ['items', 'shipping_method', 'billing_method', 'totals', 'giftmessage'];
+                var areas = ['items', 'shipping_method', 'billing_method', 'totals', 'giftmessage'];
 
                 if (!response.ok) {
                     return;
                 }
                 if (isWishlist) {
                     this.removeSidebarItem(itemId, 'wishlist').done(function () {
-                        this.loadArea(area, true);
+                        this.loadArea(areas, true);
                     }.bind(this));
                 } else {
-                    this.loadArea(area, true);
+                    this.loadArea(areas, true);
                 }
             }.bind(this));
             // show item configuration
