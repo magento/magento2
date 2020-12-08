@@ -26,7 +26,7 @@ $viewModel = $block->getData('product_layer_view_model');
                             if ($filterItem->getCount() == 1): ?>
                                 <?= $escaper->escapeHtml(__('item')) ?><?php
                             else:
-                                ?><?= $escaper->escapeHtml(__('item')) ?><?php
+                                ?><?= $escaper->escapeHtml(__('items')) ?><?php
                             endif;?></span></span>
                     <?php endif; ?></a>
             <?php else: ?>
@@ -35,7 +35,7 @@ $viewModel = $block->getData('product_layer_view_model');
                         class="count"><?= /* @noEscape */ (int) $filterItem->getCount() ?><span
                             class="filter-count-label"><?php
                             if ($filterItem->getCount() == 1): ?>
-                                <?= $escaper->escapeHtml(__('items')) ?><?php
+                                <?= $escaper->escapeHtml(__('item')) ?><?php
                             else:
                                 ?><?= $escaper->escapeHtml(__('items')) ?><?php
                             endif;?></span></span>
