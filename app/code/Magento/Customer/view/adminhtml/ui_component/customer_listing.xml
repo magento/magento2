@@ -190,9 +190,6 @@
         <column name="website_id" class="Magento\Customer\Ui\Component\Listing\Column\Websites" component="Magento_Ui/js/grid/columns/select" sortOrder="110">
             <settings>
                 <filter>select</filter>
-                <editor>
-                    <editorType>select</editorType>
-                </editor>
                 <dataType>select</dataType>
                 <label translate="true">Web Site</label>
             </settings>

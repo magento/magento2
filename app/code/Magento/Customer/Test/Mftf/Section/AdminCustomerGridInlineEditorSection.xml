@@ -11,5 +11,8 @@
     <section name="AdminCustomerGridInlineEditorSection">
         <element name="customerGenderEditor" type="select" selector="tr.data-grid-editable-row:not([style*='display: none']) [name='gender']"/>
         <element name="saveInGrid" type="button" selector="tr.data-grid-editable-row-actions button.action-primary" timeout="30"/>
+        <element name="customerEmailEditor" type="select" selector="tr.data-grid-editable-row:not([style*='display: none']) input[name='email']"/>
+        <element name="customerWebsiteEditor" type="select" selector="tr.data-grid-editable-row:not([style*='display: none']) select[name='website_id']"/>
+        <element name="cellContent" type="select" selector="//tr[@class='data-grid-editable-row' and not(contains(@style,'display:none'))]//td[count(//div[@data-role='grid-wrapper']//tr//th[contains(., '{{col}}')]/preceding-sibling::th) +1 ]" parameterized="true"/>
     </section>
 </sections>
