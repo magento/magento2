@@ -18,6 +18,8 @@ use Magento\Customer\Api\Data\CustomerInterfaceFactory as CustomerFactory;
 use Magento\Quote\Api\Data\AddressInterfaceFactory as QuoteAddressFactory;
 use Magento\Sales\Model\Order\Address as OrderAddress;
 use Magento\Quote\Model\Quote\Address as QuoteAddress;
+use Magento\Quote\Model\ResourceModel\Quote\Address\CollectionFactory as QuoteAddressCollectionFactory;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Extract customer data from an order.
@@ -55,6 +57,11 @@ class OrderCustomerExtractor
     private $customerFactory;
 
     /**
+     * @var QuoteAddressFactory
+     */
+    private $quoteAddressFactory;
+
+    /**
      * @var QuoteAddressCollectionFactory
      */
     private $quoteAddressCollectionFactory;
@@ -75,18 +82,20 @@ class OrderCustomerExtractor
         AddressFactory $addressFactory,
         RegionFactory $regionFactory,
         CustomerFactory $customerFactory,
-        QuoteAddressCollectionFactory $quoteAddressCollectionFactory
-
-    )
-    {
+        QuoteAddressFactory $quoteAddressFactory,
+        QuoteAddressCollectionFactory $quoteAddressCollectionFactory = null
+    ) {
         $this->orderRepository = $orderRepository;
         $this->customerRepository = $customerRepository;
         $this->objectCopyService = $objectCopyService;
         $this->addressFactory = $addressFactory;
         $this->regionFactory = $regionFactory;
         $this->customerFactory = $customerFactory;
-        $this->quoteAddressCollectionFactory = $quoteAddressCollectionFactory;
+        $this->quoteAddressFactory = $quoteAddressFactory;
+        $this->quoteAddressCollectionFactory = $quoteAddressCollectionFactory ?: ObjectManager::getInstance()
+            ->get(QuoteAddressCollectionFactory::class);
     }
+
 
     /**
      * Extract customer data from order.
