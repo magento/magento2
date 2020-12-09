@@ -430,6 +430,10 @@ class Bootstrap
     {
 
         if ($this->isDeveloperMode()) {
+            if (!headers_sent()) {
+                header('HTTP/1.1 500 Internal Server Error');
+            }
+            // phpcs:ignore Magento2.Security.LanguageConstruct.DirectOutput
             echo $e;
         } else {
             $message = "An error has happened during application run. See exception log for details.\n";
@@ -442,7 +446,7 @@ class Bootstrap
                 $message .= "Could not write error message to log. Please use developer mode to see the message.\n";
             }
             if (!headers_sent()) {
-                header('HTTP/1.1 503 Service Temporarily Unavailable');
+                header('HTTP/1.1 500 Internal Server Error');
             }
             // phpcs:ignore Magento2.Security.LanguageConstruct.DirectOutput
             echo $message;
