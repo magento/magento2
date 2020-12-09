@@ -13,6 +13,11 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Stdlib\DateTime;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\User\Model\User as UserModel;
+use Magento\Email\Model\ResourceModel\Template\Collection as TemplateCollection;
+use Magento\Framework\Exception\NotFoundException;
+use Magento\Framework\Phrase;
+use Magento\Framework\App\Config\MutableScopeConfigInterface;
+use Magento\TestFramework\Mail\Template\TransportBuilderMock;
 
 /**
  * @magentoAppArea adminhtml
@@ -564,5 +569,69 @@ class UserTest extends \PHPUnit\Framework\TestCase
             'The account sign-in was incorrect or your account is disabled temporarily. '
             . 'Please wait and try again later.'
         );
+    }
+
+    /**
+     * Verify custom notification is sent when new user created
+     *
+     * @magentoDbIsolation enabled
+     * @magentoDataFixture Magento/Email/Model/_files/email_template_new_user_notification.php
+     */
+    public function testSendNotificationEmailsIfRequired()
+    {
+        /** @var MutableScopeConfigInterface $config */
+        $config = Bootstrap::getObjectManager()->get(MutableScopeConfigInterface::class);
+        $config->setValue(
+            'admin/emails/new_user_notification_template',
+            $this->getCustomEmailTemplateIdForNewUserNotification()
+        );
+        $userModel = Bootstrap::getObjectManager()->create(
+            \Magento\User\Model\User::class
+        );
+        $userModel->setFirstname(
+            'John'
+        )->setLastname(
+            'Doe'
+        )->setUsername(
+            'user2'
+        )->setPassword(
+            \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD
+        )->setEmail(
+            'user@magento.com'
+        );
+        $userModel->save();
+        $userModel->sendNotificationEmailsIfRequired();
+        /** @var TransportBuilderMock $transportBuilderMock */
+        $transportBuilderMock = Bootstrap::getObjectManager()->get(TransportBuilderMock::class);
+        $sentMessage = $transportBuilderMock->getSentMessage();
+        $this->assertSame(
+            'New User Notification Custom Text',
+            $sentMessage->getBodyText()
+        );
+    }
+
+    /**
+     * Return email template id for new user notification
+     *
+     * @return int|null
+     * @throws NotFoundException
+     */
+    private function getCustomEmailTemplateIdForNewUserNotification(): ?int
+    {
+        $templateId = null;
+        $templateCollection = Bootstrap::getObjectManager()->get(TemplateCollection::class);
+        $origTemplateCode = 'admin_emails_new_user_notification_template';
+        foreach ($templateCollection as $template) {
+            if ($template->getOrigTemplateCode() == $origTemplateCode) {
+                $templateId = (int) $template->getId();
+            }
+        }
+        if ($templateId === null) {
+            throw new NotFoundException(new Phrase(
+                'Customized %templateCode% email template not found',
+                ['templateCode' => $origTemplateCode]
+            ));
+        }
+        return $templateId;
     }
 }
