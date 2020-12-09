@@ -5,10 +5,11 @@
  */
 namespace Magento\ImportExport\Test\Unit\Helper;
 
+use Magento\Framework\Exception\ValidatorException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
- * Class ReportTest
+ * Test for ImportExport Class ReportTest
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -40,6 +41,11 @@ class ReportTest extends \PHPUnit\Framework\TestCase
     protected $varDirectory;
 
     /**
+     * @var \Magento\Framework\Filesystem\Directory\Read|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $importHistoryDirectory;
+
+    /**
      * @var \Magento\ImportExport\Helper\Report
      */
     protected $report;
@@ -65,14 +71,48 @@ class ReportTest extends \PHPUnit\Framework\TestCase
         );
         $this->varDirectory = $this->createPartialMock(
             \Magento\Framework\Filesystem\Directory\Write::class,
-            ['getRelativePath', 'readFile', 'isFile', 'stat']
+            ['getRelativePath', 'getAbsolutePath', 'readFile', 'isFile', 'stat']
         );
-        $this->filesystem = $this->createPartialMock(\Magento\Framework\Filesystem::class, ['getDirectoryWrite']);
-        $this->varDirectory->expects($this->any())->method('getRelativePath')->willReturn('path');
-        $this->varDirectory->expects($this->any())->method('readFile')->willReturn('contents');
-        $this->varDirectory->expects($this->any())->method('isFile')->willReturn(true);
-        $this->varDirectory->expects($this->any())->method('stat')->willReturn(100);
-        $this->filesystem->expects($this->any())->method('getDirectoryWrite')->willReturn($this->varDirectory);
+        $this->importHistoryDirectory = $this->createPartialMock(
+            \Magento\Framework\Filesystem\Directory\Read::class,
+            ['getAbsolutePath']
+        );
+        $this->filesystem = $this
+            ->createPartialMock(
+                \Magento\Framework\Filesystem::class,
+                ['getDirectoryWrite', 'getDirectoryReadByPath']
+            );
+        $this->varDirectory
+            ->expects($this->any())
+            ->method('getRelativePath')
+            ->willReturn('path');
+        $this->varDirectory
+            ->expects($this->any())
+            ->method('readFile')
+            ->willReturn('contents');
+        $this->varDirectory
+            ->expects($this->any())
+            ->method('getAbsolutePath')
+            ->willReturn('path');
+        $this->varDirectory
+            ->expects($this->any())
+            ->method('isFile')
+            ->willReturn(true);
+        $this->varDirectory
+            ->expects($this->any())
+            ->method('stat')
+            ->willReturn(100);
+        $this->importHistoryDirectory
+            ->expects($this->any())->method('getAbsolutePath')
+            ->willReturnArgument(0);
+        $this->filesystem
+            ->expects($this->any())
+            ->method('getDirectoryWrite')
+            ->willReturn($this->varDirectory);
+        $this->filesystem
+            ->expects($this->any())
+            ->method('getDirectoryReadByPath')
+            ->willReturn($this->importHistoryDirectory);
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->report = $this->objectManagerHelper->getObject(
             \Magento\ImportExport\Helper\Report::class,
@@ -154,13 +194,16 @@ class ReportTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @dataProvider importFileExistsDataProvider
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Filename has not permitted symbols in it
      * @param string $fileName
      * @return void
      */
     public function testImportFileExistsException($fileName)
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('File not found');
+        $this->importHistoryDirectory->expects($this->any())
+            ->method('getAbsolutePath')
+            ->will($this->throwException(new ValidatorException(__("Error"))));
         $this->report->importFileExists($fileName);
     }
 

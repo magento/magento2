@@ -975,9 +975,12 @@ class File implements DriverInterface
      */
     public function getRealPathSafety($path)
     {
-        if (strpos($path, DIRECTORY_SEPARATOR . '.') === false) {
-            return $path;
-        }
+        //Check backslashes
+        $path = preg_replace(
+            '/\\\\+/',
+            DIRECTORY_SEPARATOR,
+            $path
+        );
 
         //Removing redundant directory separators.
         $path = preg_replace(
@@ -985,6 +988,11 @@ class File implements DriverInterface
             DIRECTORY_SEPARATOR,
             $path
         );
+
+        if (strpos($path, DIRECTORY_SEPARATOR . '.') === false) {
+            return rtrim($path, DIRECTORY_SEPARATOR);
+        }
+
         $pathParts = explode(DIRECTORY_SEPARATOR, $path);
         if (end($pathParts) == '.') {
             $pathParts[count($pathParts) - 1] = '';
@@ -1000,6 +1008,7 @@ class File implements DriverInterface
             }
             $realPath[] = $pathPart;
         }
-        return implode(DIRECTORY_SEPARATOR, $realPath);
+
+        return rtrim(implode(DIRECTORY_SEPARATOR, $realPath), DIRECTORY_SEPARATOR);
     }
 }
