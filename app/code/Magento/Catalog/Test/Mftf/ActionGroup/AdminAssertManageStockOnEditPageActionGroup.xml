@@ -10,7 +10,8 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminAssertManageStockOnEditPageActionGroup">
         <annotations>
-            <description>Check if manageStock value is correct (the Product Edit page should be opened in Admin prior this check).</description>
+            <description>Check if manageStock value is correct
+                        (the Product Edit page->Advanced Inventory section should be opened in Admin prior this check).</description>
         </annotations>
         <arguments>
             <argument name="manageStock" type="string"/>
