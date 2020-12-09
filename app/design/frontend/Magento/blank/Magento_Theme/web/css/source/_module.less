@@ -60,10 +60,6 @@
         min-height: 100vh; // Stretch content area for sticky footer
     }
 
-    .page-main {
-        .lib-vendor-prefix-flex-grow(1);
-    }
-
     //
     //  Header
     //  ---------------------------------------------
@@ -209,14 +205,14 @@
 
             .options {
                 .lib-dropdown(
-                @_dropdown-actions-padding: 0,
-                @_dropdown-list-item-padding: 0,
-                @_dropdown-toggle-icon-content: @icon-down,
-                @_dropdown-toggle-active-icon-content: @icon-up,
-                @_icon-font-text-hide: true,
-                @_icon-font-size: 22px,
-                @_icon-font-line-height: 22px,
-                @_dropdown-list-min-width: 160px
+                    @_dropdown-actions-padding: 0,
+                    @_dropdown-list-item-padding: 0,
+                    @_dropdown-toggle-icon-content: @icon-down,
+                    @_dropdown-toggle-active-icon-content: @icon-up,
+                    @_icon-font-text-hide: true,
+                    @_icon-font-size: 22px,
+                    @_icon-font-line-height: 22px,
+                    @_dropdown-list-min-width: 160px
                 );
 
                 ul.dropdown {
