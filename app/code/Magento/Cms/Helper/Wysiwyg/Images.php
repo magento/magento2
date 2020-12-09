@@ -9,6 +9,8 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Wysiwyg Images Helper.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Images extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -65,6 +67,11 @@ class Images extends \Magento\Framework\App\Helper\AbstractHelper
     protected $escaper;
 
     /**
+     * @var \Magento\Framework\Filesystem\Directory\Read
+     */
+    private $_readDirectory;
+
+    /**
      * Construct
      *
      * @param \Magento\Framework\App\Helper\Context $context
@@ -87,6 +94,7 @@ class Images extends \Magento\Framework\App\Helper\AbstractHelper
 
         $this->_directory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         $this->_directory->create($this->getStorageRoot());
+        $this->_readDirectory = $filesystem->getDirectoryReadByPath($this->getStorageRoot());
     }
 
     /**
@@ -166,7 +174,9 @@ class Images extends \Magento\Framework\App\Helper\AbstractHelper
             return $this->getStorageRoot();
         } else {
             $path = $this->getStorageRoot() . $this->idDecode($id);
-            if (preg_match('/\.\.(\\\|\/)/', $path)) {
+            try {
+                $this->_readDirectory->getAbsolutePath($path);
+            } catch (\Exception $e) {
                 throw new \InvalidArgumentException('Path is invalid');
             }
 
@@ -225,6 +235,7 @@ class Images extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * Return path of the current selected directory or root directory for startup
+     *
      * Try to create target directory if it doesn't exist
      *
      * @return string
@@ -294,6 +305,7 @@ class Images extends \Magento\Framework\App\Helper\AbstractHelper
     public function idDecode($string)
     {
         $string = strtr($string, ':_-', '+/=');
+        //phpcs:ignore Magento2.Functions.DiscouragedFunction
         return base64_decode($string);
     }
 
@@ -315,7 +327,7 @@ class Images extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Set user-traversable image directory subpath relative to media directory and relative to nested storage root
      *
-     * @var string $subpath
+     * @param string $subpath
      * @return void
      */
     public function setImageDirectorySubpath($subpath)
