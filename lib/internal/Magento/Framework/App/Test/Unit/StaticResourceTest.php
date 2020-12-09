@@ -20,6 +20,7 @@ use Magento\Framework\App\StaticResource;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 use Psr\Log\LoggerInterface;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use Magento\Framework\Filesystem\Driver\File;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -81,6 +82,11 @@ class StaticResourceTest extends \PHPUnit\Framework\TestCase
      */
     private $object;
 
+    /**
+     * @var File|MockObject
+     */
+    private $driverMock;
+
     protected function setUp()
     {
         $this->stateMock = $this->createMock(State::class);
@@ -93,6 +99,7 @@ class StaticResourceTest extends \PHPUnit\Framework\TestCase
         $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
         $this->configLoaderMock = $this->createMock(ConfigLoader::class);
         $this->deploymentConfigMock = $this->createMock(DeploymentConfig::class);
+        $this->driverMock = $this->createMock(File::class);
         $this->object = new StaticResource(
             $this->stateMock,
             $this->responseMock,
@@ -102,7 +109,8 @@ class StaticResourceTest extends \PHPUnit\Framework\TestCase
             $this->moduleListMock,
             $this->objectManagerMock,
             $this->configLoaderMock,
-            $this->deploymentConfigMock
+            $this->deploymentConfigMock,
+            $this->driverMock
         );
     }
 
@@ -190,6 +198,9 @@ class StaticResourceTest extends \PHPUnit\Framework\TestCase
         $this->responseMock->expects($this->once())
             ->method('setFilePath')
             ->with('resource/file.css');
+        $this->driverMock->expects($this->once())
+            ->method('getRealPathSafety')
+            ->willReturnArgument(0);
         $this->object->launch();
     }
 
@@ -259,6 +270,9 @@ class StaticResourceTest extends \PHPUnit\Framework\TestCase
             ->method('get')
             ->with('resource')
             ->willReturn('short/path.js');
+        $this->driverMock->expects($this->once())
+            ->method('getRealPathSafety')
+            ->willReturnArgument(0);
         $this->object->launch();
     }
 
@@ -298,6 +312,10 @@ class StaticResourceTest extends \PHPUnit\Framework\TestCase
             ->method('get')
             ->with('resource')
             ->willReturn('frontend/..\..\folder_above/././Magento_Ui/template/messages.html');
+        $this->driverMock->expects($this->once())
+            ->method('getRealPathSafety')
+            ->with('frontend/..\..\folder_above/././Magento_Ui/template/messages.html')
+            ->willReturn('folder_above/Magento_Ui/template/messages.html');
         $this->expectExceptionMessage("Requested path '$path' is wrong.");
 
         $this->object->launch();
