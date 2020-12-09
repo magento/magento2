@@ -74,6 +74,7 @@ class CartPlugin
         /** @var Quote $quote */
         $quote = $this->checkoutSession->getQuote();
         if ($quote->isMultipleShippingAddresses() && $this->isCheckoutComplete()) {
+            $this->disableMultishipping->execute($quote);
             foreach ($quote->getAllShippingAddresses() as $address) {
                 $quote->removeAddress($address->getId());
             }
