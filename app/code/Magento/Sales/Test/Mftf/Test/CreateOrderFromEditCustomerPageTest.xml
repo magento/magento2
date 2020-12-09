@@ -182,8 +182,8 @@
 
         <!-- Select Free Shipping -->
         <waitForElementVisible selector="{{AdminInvoicePaymentShippingSection.getShippingMethodAndRates}}" stepKey="waitForShippingSection"/>
-        <click selector="{{AdminInvoicePaymentShippingSection.getShippingMethodAndRates}}" stepKey="openShippingMethod"/>
-        <waitForPageLoad stepKey="waitForShippingMethods"/>
+        <actionGroup ref="AdminClickGetShippingMethodsAndRatesActionGroup" stepKey="openShippingMethod"/>
+        <comment userInput="Adding the comment to replace action for preserving Backward Compatibility" stepKey="waitForShippingMethods"/>
         <click selector="{{AdminOrderFormPaymentSection.freeShippingOption}}" stepKey="chooseShippingMethod"/>
         <waitForPageLoad stepKey="waitForPageToLoad"/>
         <actionGroup ref="AdminOrderClickSubmitOrderActionGroup" stepKey="submitOrder" />

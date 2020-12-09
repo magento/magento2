@@ -139,6 +139,7 @@
         "magento/module-checkout-agreements-graph-ql": "*",
         "magento/module-cms": "*",
         "magento/module-cms-url-rewrite": "*",
+        "magento/module-compare-list-graph-ql": "*",
         "magento/module-config": "*",
         "magento/module-configurable-import-export": "*",
         "magento/module-configurable-product": "*",
@@ -199,6 +200,7 @@
         "magento/module-login-as-customer-api": "*",
         "magento/module-login-as-customer-assistance": "*",
         "magento/module-login-as-customer-frontend-ui": "*",
+        "magento/module-login-as-customer-graph-ql": "*",
         "magento/module-login-as-customer-log": "*",
         "magento/module-login-as-customer-quote": "*",
         "magento/module-login-as-customer-page-cache": "*",
@@ -327,7 +329,7 @@
         "tinymce/tinymce": "3.4.7",
         "magento/module-tinymce-3": "*",
         "magento/module-csp": "*",
-        "magento/module-aws-s-3": "*",
+        "magento/module-aws-s3": "*",
         "magento/module-remote-storage": "*"
     },
     "conflict": {
