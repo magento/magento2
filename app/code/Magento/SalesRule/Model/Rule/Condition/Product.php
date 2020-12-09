@@ -25,7 +25,7 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
         $attributes['quote_item_price'] = __('Price in cart');
         $attributes['quote_item_row_total'] = __('Row total in cart');
 
-        $attributes['parent::category_ids'] = __('Category (Parent only)');
+        $attributes['parent::category_ids'] = __('Category (Parent Only)');
         $attributes['children::category_ids'] = __('Category (Children Only)');
     }
 
@@ -74,8 +74,8 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
             }
             $frontLabel = $attribute->getFrontendLabel();
             $attributes[$attribute->getAttributeCode()] = $frontLabel;
-            $attributes['parent::' . $attribute->getAttributeCode()] = $frontLabel . __('(Parent Only)');
-            $attributes['children::' . $attribute->getAttributeCode()] = $frontLabel . __('(Children Only)');
+            $attributes['parent::' . $attribute->getAttributeCode()] = __('%1 (Parent Only)', $frontLabel);
+            $attributes['children::' . $attribute->getAttributeCode()] = __('%1 (Children Only)', $frontLabel);
         }
 
         $this->_addSpecialAttributes($attributes);
