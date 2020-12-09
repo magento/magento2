@@ -139,7 +139,7 @@ class Address extends AbstractAddress implements
     const ADDRESS_TYPE_BILLING = 'billing';
 
     const ADDRESS_TYPE_SHIPPING = 'shipping';
-    
+
     private const CACHED_ITEMS_ALL = 'cached_items_all';
 
     /**
@@ -1217,7 +1217,9 @@ class Address extends AbstractAddress implements
             $storeId
         );
 
-        $taxes = $taxInclude ? $this->getBaseTaxAmount() : 0;
+        $taxes = $taxInclude
+            ? $this->getBaseTaxAmount() + $this->getBaseDiscountTaxCompensationAmount()
+            : 0;
 
         return $includeDiscount ?
             ($this->getBaseSubtotalWithDiscount() + $taxes >= $amount) :
