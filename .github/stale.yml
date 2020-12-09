@@ -15,6 +15,7 @@ exemptLabels:
   - "Priority: P0"
   - "Priority: P1"
   - "Priority: P2"
+  - "Progress: ready for dev"
   - "Progress: dev in progress"
   - "Progress: PR in progress"
   - "Progress: done"
