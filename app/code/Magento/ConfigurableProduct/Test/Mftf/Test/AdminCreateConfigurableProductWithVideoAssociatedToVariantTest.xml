@@ -17,9 +17,13 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-37344"/>
             <group value="ConfigurableProduct"/>
+            <skip>
+                <issueId value="MC-33903"/>
+            </skip>
         </annotations>
 
         <before>
+            <createData entity="ProductVideoYoutubeApiKeyConfig" stepKey="setYoutubeApiKeyConfig"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <createData entity="SimpleSubCategory" stepKey="categoryHandle"/>
 
@@ -81,6 +85,7 @@
         </before>
         <after>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
+            <createData entity="DefaultProductVideoConfig" stepKey="setYoutubeApiKeyDefaultConfig"/>
             <deleteData createDataKey="simple1Handle" stepKey="deleteSimple1"/>
             <deleteData createDataKey="simple2Handle" stepKey="deleteSimple2"/>
             <deleteData createDataKey="childProductHandle1" stepKey="deleteChild1"/>
