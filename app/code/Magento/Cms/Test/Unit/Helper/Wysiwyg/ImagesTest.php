@@ -6,6 +6,7 @@
 namespace Magento\Cms\Test\Unit\Helper\Wysiwyg;
 
 use Magento\Cms\Model\Wysiwyg\Config as WysiwygConfig;
+use Magento\Framework\Exception\ValidatorException;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -31,6 +32,11 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
      * @var \Magento\Framework\Filesystem\Directory\Write|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $directoryWriteMock;
+
+    /**
+     * @var \Magento\Framework\Filesystem\Directory\Read|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $directoryReadMock;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -115,10 +121,18 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
                 ]
             );
 
+        $this->directoryReadMock = $this->getMockBuilder(\Magento\Framework\Filesystem\Directory\Read::class)
+            ->setConstructorArgs(['path' => $this->path])
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->filesystemMock = $this->createMock(\Magento\Framework\Filesystem::class);
         $this->filesystemMock->expects($this->once())
             ->method('getDirectoryWrite')
             ->willReturn($this->directoryWriteMock);
+        $this->filesystemMock->expects($this->once())
+            ->method('getDirectoryReadByPath')
+            ->willReturn($this->directoryReadMock);
 
         $this->storeManagerMock = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
             ->setMethods(
@@ -240,12 +254,15 @@ class ImagesTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($this->imagesHelper->getStorageRoot(), $this->imagesHelper->convertIdToPath($pathId));
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Path is invalid
-     */
     public function testConvertIdToPathInvalid()
     {
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage('Path is invalid');
+        $this->directoryReadMock->expects($this->any())
+            ->method('getAbsolutePath')
+            ->will(
+                $this->throwException(new ValidatorException(__("Error")))
+            );
         $this->imagesHelper->convertIdToPath('Ly4uLy4uLy4uLy4uLy4uL3dvcms-');
     }
 

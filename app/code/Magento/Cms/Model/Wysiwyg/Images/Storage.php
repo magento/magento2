@@ -545,6 +545,10 @@ class Storage extends \Magento\Framework\DataObject
     {
         $targetPath = $this->file->getRealPathSafety($targetPath);
 
+        if ($this->file->isDirectory($targetPath)) {
+            $targetPath = $targetPath . DIRECTORY_SEPARATOR;
+        }
+
         if (!$this->isPathAllowed($targetPath, $this->getConditionsForExcludeDirs()) || strlen($targetPath) > 255) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('We can\'t upload the file to current folder right now. Please try another folder.')
