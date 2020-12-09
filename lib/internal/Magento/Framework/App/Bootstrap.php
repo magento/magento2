@@ -428,11 +428,10 @@ class Bootstrap
      */
     protected function terminate(\Throwable $e)
     {
-
+        if (!headers_sent()) {
+            header('HTTP/1.1 500 Internal Server Error');
+        }
         if ($this->isDeveloperMode()) {
-            if (!headers_sent()) {
-                header('HTTP/1.1 500 Internal Server Error');
-            }
             // phpcs:ignore Magento2.Security.LanguageConstruct.DirectOutput
             echo $e;
         } else {
@@ -444,9 +443,6 @@ class Bootstrap
                 $this->objectManager->get(LoggerInterface::class)->critical($e);
             } catch (\Exception $e) {
                 $message .= "Could not write error message to log. Please use developer mode to see the message.\n";
-            }
-            if (!headers_sent()) {
-                header('HTTP/1.1 500 Internal Server Error');
             }
             // phpcs:ignore Magento2.Security.LanguageConstruct.DirectOutput
             echo $message;
