@@ -11,25 +11,6 @@ Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/product_simp
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-$productIds = range(10, 12, 1);
-// add product Id which have custom require options.
-$productIds[] = 1;
-
-foreach ($productIds as $productId) {
-    /** @var \Magento\CatalogInventory\Model\Stock\Item $stockItem */
-    $stockItem = $objectManager->create(\Magento\CatalogInventory\Model\Stock\Item::class);
-    $stockItem->load($productId, 'product_id');
-
-    if (!$stockItem->getProductId()) {
-        $stockItem->setProductId($productId);
-    }
-    $stockItem->setUseConfigManageStock(1);
-    $stockItem->setQty(1000);
-    $stockItem->setIsQtyDecimal(0);
-    $stockItem->setIsInStock(1);
-    $stockItem->save();
-}
-
 /** @var $product \Magento\Catalog\Model\Product */
 $product = $objectManager->create(\Magento\Catalog\Model\Product::class);
 $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_BUNDLE)
@@ -116,4 +97,4 @@ if ($product->getBundleOptionsData()) {
     $extension->setBundleProductOptions($options);
     $product->setExtensionAttributes($extension);
 }
-$product->save();
+$productRepository->save($product);
