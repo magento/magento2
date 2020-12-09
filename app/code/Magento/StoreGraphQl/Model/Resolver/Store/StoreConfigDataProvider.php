@@ -65,8 +65,19 @@ class StoreConfigDataProvider
      */
     public function getStoreConfigData(StoreInterface $store): array
     {
-        $defaultStoreConfig = $this->storeConfigManager->getStoreConfigs([$store->getCode()]);
-        return $this->prepareStoreConfigData(current($defaultStoreConfig), $store->getData());
+        $defaultWebsiteStore = $this->storeWebsiteRelation->getWebsiteStores(
+            (int) $store->getWebsiteId(),
+            true,
+            (int) $store->getStoreGroupId(),
+            (int) $store->getStoreId()
+        );
+        if (empty($defaultWebsiteStore)) {
+            return [];
+        }
+
+        $storeConfigs = $this->storeConfigManager->getStoreConfigs([$store->getCode()]);
+
+        return $this->prepareStoreConfigData(current($storeConfigs), current($defaultWebsiteStore));
     }
 
     /**
@@ -101,15 +112,16 @@ class StoreConfigDataProvider
      */
     private function prepareStoreConfigData(StoreConfigInterface $storeConfig, array $storeData): array
     {
-        $x=1;
         return array_merge([
             'id' => $storeConfig->getId(),
             'code' => $storeConfig->getCode(),
             'store_code' => $storeConfig->getCode(),
             'store_name' => $storeData['name'] ?? null,
             'store_sort_order' => $storeData['sort_order'] ?? null,
+            'is_default_store' => $storeData['default_store_id'] == $storeConfig->getId() ?? null,
             'store_group_code' => $storeData['store_group_code'] ?? null,
             'store_group_name' => $storeData['store_group_name'] ?? null,
+            'is_default_store_group' => $storeData['default_group_id'] == $storeData['group_id'] ?? null,
             'store_group_default_store_code' => $storeData['store_group_default_store_code'] ?? null,
             'website_id' => $storeConfig->getWebsiteId(),
             'website_code' => $storeData['website_code'] ?? null,
