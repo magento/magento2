@@ -17,9 +17,16 @@ type Website @doc(description: "Website is deprecated because it is should not b
 }
 
 type StoreConfig @doc(description: "The type contains information about a store config") {
-    id : Int @doc(description: "The ID number assigned to the store")
-    code : String @doc(description: "A code assigned to the store to identify it")
-    website_id : Int @doc(description: "The ID number assigned to the website store belongs")
+    id : Int @deprecated(reason: "Use `store_code` instead.") @doc(description: "The ID number assigned to the store")
+    code : String @deprecated(reason: "Use `store_code` instead.") @doc(description: "A code assigned to the store to identify it")
+    store_code: ID @doc(description: "The unique ID for a `StoreConfig` object representing store view and used as optional `Store` in Headers to select a current store view.")
+    store_name : String @doc(description: "The name of the store view.")
+    store_sort_order : Float @doc(description: "The store view sort order")
+    store_group_code : ID @doc(description: "The unique ID/Code for a store group of which the `StoreConfig` belongs")
+    store_group_name : String @doc(description: "The store group name for which the `StoreConfig` belongs")
+    website_id : Int @deprecated(reason: "The field should not be used on the storefront") @doc(description: "The ID number assigned to the website store belongs")
+    website_code : ID @doc(description: "The unique ID/Code for a website group of which the `StoreConfig` belongs")
+    website_name : ID @doc(description: "The name of the website")
     locale : String @doc(description: "Store locale")
     base_currency_code : String @doc(description: "Base currency code")
     default_display_currency_code : String @doc(description: "Default display currency code")
@@ -33,6 +40,5 @@ type StoreConfig @doc(description: "The type contains information about a store 
     secure_base_link_url : String @doc(description: "Secure base link URL for the store")
     secure_base_static_url : String @doc(description: "Secure base static URL for the store")
     secure_base_media_url : String @doc(description: "Secure base media URL for the store")
-    store_name : String @doc(description: "Name of the store")
     use_store_in_url: Boolean @doc(description: "The configuration determines if the store code should be used in the URL")
 }
