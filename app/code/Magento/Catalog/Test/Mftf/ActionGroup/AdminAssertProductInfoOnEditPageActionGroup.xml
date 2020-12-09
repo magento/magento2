@@ -10,7 +10,8 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminAssertProductInfoOnEditPageActionGroup">
         <annotations>
-            <description>Validates next fields on the Product Edit Page: name, sku, price, quantity, stock status, tax class, weight, weigh select, visibility, url key</description>
+            <description>Validates next fields on the Product Edit Page: 
+                        name, sku, price, quantity, stock status, tax class, weight, weigh select, visibility, url key</description>
         </annotations>
         <arguments>
             <argument name="product" type="entity"/>

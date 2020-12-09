@@ -11,7 +11,7 @@
     <test name="AdminUpdateSimpleProductWithRegularPriceInStockEnabledFlatTest" deprecated="Use AdminUpdateSimpleProductWithRegularPriceInStockEnabledFlatCatalogTest instead">
         <annotations>
             <stories value="Update Simple Product"/>
-            <title value="DEPREACTED. Update Simple Product with Regular Price (In Stock) Enabled Flat"/>
+            <title value="DEPRECACTED. Update Simple Product with Regular Price (In Stock) Enabled Flat"/>
             <description value="Test log in to Update Simple Product and Update Simple Product with Regular Price (In Stock) Enabled Flat"/>
             <testCaseId value="MC-10818"/>
             <severity value="CRITICAL"/>
