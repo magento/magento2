@@ -255,6 +255,47 @@ QUERY;
     }
 
     /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/Catalog/_files/product_virtual.php
+     * @magentoApiDataFixture Magento/Bundle/_files/bundle_product_two_dropdown_options.php
+     * @magentoApiDataFixture Magento/GraphQl/Bundle/_files/set_custom_option_bundle_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/set_custom_options_simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product_with_options.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_bundle_product_with_custom_option.php
+     */
+    public function testGetCartItemsWithCustomOptions()
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        $query = <<<QUERY
+            {
+              cart(cart_id: "{$maskedQuoteId}") {
+                id
+                items {
+                  id
+                  quantity
+                  ... on SimpleCartItem {
+                      customizable_options {
+                          id
+                          label
+                      }
+                  }
+                  ... on BundleCartItem {
+                      customizable_options {
+                          id
+                          label
+                      }
+                  }
+                }
+              }
+            }
+            QUERY;
+
+        $this->graphQlQuery($query, [], '', $this->getHeaderMap());
+    }
+
+    /**
      * @param string $maskedQuoteId
      * @return string
      */
