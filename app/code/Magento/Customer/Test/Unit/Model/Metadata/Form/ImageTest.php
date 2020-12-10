@@ -197,13 +197,21 @@ class ImageTest extends AbstractFormTestCase
     public function testValidateIsNotValidFile()
     {
         $value = [
-            'tmp_name' => 'tmp_file',
+            'tmp_name' => 'tmp_file.txt',
             'name' => 'realFileName',
         ];
 
         $this->attributeMetadataMock->expects($this->once())
             ->method('getStoreLabel')
             ->willReturn('File Input Field Label');
+
+        $this->fileProcessorMock->expects($this->once())
+            ->method('getStat')
+            ->with($value['tmp_name'])
+            ->willReturn([
+                'extension' => 'txt',
+                'basename' => 'tmp_file.txt',
+            ]);
 
         $this->fileProcessorMock->expects($this->once())
             ->method('isExist')
@@ -241,6 +249,14 @@ class ImageTest extends AbstractFormTestCase
         $this->attributeMetadataMock->expects($this->once())
             ->method('getStoreLabel')
             ->willReturn('File Input Field Label');
+
+        $this->fileProcessorMock->expects($this->once())
+            ->method('getStat')
+            ->with($value['tmp_name'])
+            ->willReturn([
+                'extension' => 'gif',
+                'basename' => 'logo.gif',
+            ]);
 
         $this->fileProcessorMock->expects($this->once())
             ->method('isExist')
@@ -301,6 +317,14 @@ class ImageTest extends AbstractFormTestCase
             ->willReturn([$validationRuleMock]);
 
         $this->fileProcessorMock->expects($this->once())
+            ->method('getStat')
+            ->with($value['tmp_name'])
+            ->willReturn([
+                'extension' => 'gif',
+                'basename' => 'logo.gif',
+            ]);
+
+        $this->fileProcessorMock->expects($this->once())
             ->method('isExist')
             ->with(FileProcessor::TMP_DIR . '/' . $value['name'])
             ->willReturn(true);
@@ -358,6 +382,14 @@ class ImageTest extends AbstractFormTestCase
             ->willReturn([$validationRuleMock]);
 
         $this->fileProcessorMock->expects($this->once())
+            ->method('getStat')
+            ->with($value['tmp_name'])
+            ->willReturn([
+                'extension' => 'gif',
+                'basename' => 'logo.gif',
+            ]);
+
+        $this->fileProcessorMock->expects($this->once())
             ->method('isExist')
             ->with(FileProcessor::TMP_DIR . '/' . $value['name'])
             ->willReturn(true);
@@ -413,6 +445,14 @@ class ImageTest extends AbstractFormTestCase
         $this->attributeMetadataMock->expects($this->once())
             ->method('getValidationRules')
             ->willReturn([$validationRuleMock]);
+
+        $this->fileProcessorMock->expects($this->once())
+            ->method('getStat')
+            ->with($value['tmp_name'])
+            ->willReturn([
+                'extension' => 'gif',
+                'basename' => 'logo.gif',
+            ]);
 
         $this->fileProcessorMock->expects($this->once())
             ->method('isExist')
