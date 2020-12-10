@@ -7,17 +7,20 @@ declare(strict_types=1);
 
 namespace Magento\UrlRewrite\Model;
 
-use Magento\Catalog\Api\CategoryRepositoryInterface;
-use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\Product;
-use Magento\Cms\Api\PageRepositoryInterface;
 use Magento\Cms\Model\Page;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\EntityManager\EventManager;
 use Magento\Framework\Indexer\CacheContext;
+use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Model\Context;
+use Magento\Framework\Model\ResourceModel\AbstractResource;
+use Magento\Framework\Registry;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite;
+use Magento\UrlRewrite\Model\ResourceModel\UrlRewriteCollection;
 
 /**
  * UrlRewrite model class
@@ -36,7 +39,7 @@ use Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite;
  * @method UrlRewrite setStoreId($value)
  * @method UrlRewrite setDescription($value)
  */
-class UrlRewrite extends \Magento\Framework\Model\AbstractModel
+class UrlRewrite extends AbstractModel
 {
     /**
      * @var Json
@@ -44,24 +47,41 @@ class UrlRewrite extends \Magento\Framework\Model\AbstractModel
     private $serializer;
 
     /**
+     * @var CacheContext|mixed|null
+     */
+    private $cacheContext;
+
+    /**
+     * @var EventManager|mixed|null
+     */
+    private $eventManager;
+
+    /**
      * UrlRewrite constructor.
      *
-     * @param \Magento\Framework\Model\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
+     * @param Context $context
+     * @param Registry $registry
+     * @param AbstractResource|null $resource
+     * @param AbstractDb|null $resourceCollection
      * @param array $data
-     * @param Json $serializer
+     * @param Json|null $serializer
+     * @param CacheContext|null $cacheContext
+     * @param EventManager|null $eventManager
      */
     public function __construct(
-        \Magento\Framework\Model\Context $context,
-        \Magento\Framework\Registry $registry,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        Context $context,
+        Registry $registry,
+        AbstractResource $resource = null,
+        AbstractDb $resourceCollection = null,
         array $data = [],
-        Json $serializer = null
-    ) {
+        Json $serializer = null,
+        CacheContext $cacheContext = null,
+        EventManager $eventManager = null
+    )
+    {
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
+        $this->cacheContext = $cacheContext ?: ObjectManager::getInstance()->get(CacheContext::class);
+        $this->eventManager = $eventManager ?: ObjectManager::getInstance()->get(EventManager::class);
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
@@ -72,8 +92,8 @@ class UrlRewrite extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init(\Magento\UrlRewrite\Model\ResourceModel\UrlRewrite::class);
-        $this->_collectionName = \Magento\UrlRewrite\Model\ResourceModel\UrlRewriteCollection::class;
+        $this->_init(ResourceModel\UrlRewrite::class);
+        $this->_collectionName = UrlRewriteCollection::class;
     }
 
     /**
@@ -102,57 +122,37 @@ class UrlRewrite extends \Magento\Framework\Model\AbstractModel
         return $this->setData(\Magento\UrlRewrite\Service\V1\Data\UrlRewrite::METADATA, $metadata);
     }
 
-    private function opt1() {
-        $map = [
-            Rewrite::ENTITY_TYPE_PRODUCT => Product::CACHE_TAG,
-            Rewrite::ENTITY_TYPE_CATEGORY => Category::CACHE_TAG,
-            Rewrite::ENTITY_TYPE_CMS_PAGE => Page::CACHE_TAG
-        ];
+    /**
+     * Clean cache for the entity which was affected by updating UrlRewrite
+     *
+     * @param $entityType
+     * @param $entityId
+     */
+    private function cleanCacheForEntity($entityType, $entityId)
+    {
+        if ($entityType !== Rewrite::ENTITY_TYPE_CUSTOM) {
+            $map = [
+                Rewrite::ENTITY_TYPE_PRODUCT => Product::CACHE_TAG,
+                Rewrite::ENTITY_TYPE_CATEGORY => Category::CACHE_TAG,
+                Rewrite::ENTITY_TYPE_CMS_PAGE => Page::CACHE_TAG
+            ];
 
-        if ($this->getEntityType() !== Rewrite::ENTITY_TYPE_CUSTOM) {
-            $cacheKey = $map[$this->getEntityType()];
+            $cacheKey = $map[$entityType];
 
-            $cacheContext = ObjectManager::getInstance()->get(CacheContext::class);
-            $eventManager = ObjectManager::getInstance()->get(EventManager::class);
-
-            $cacheContext->registerEntities($cacheKey, [$this->getEntityId()]);
-            $eventManager->dispatch('clean_cache_by_tags', ['object' => $cacheContext]);
+            $this->cacheContext->registerEntities($cacheKey, [$entityId]);
+            $this->eventManager->dispatch('clean_cache_by_tags', ['object' => $this->cacheContext]);
         }
     }
 
-    private function opt2() {
-        $map = [
-            Rewrite::ENTITY_TYPE_PRODUCT => function ($prodId) {
-                /** @var ProductRepositoryInterface $productRepository */
-                $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
-                return $productRepository->getById($prodId);
-            },
-            Rewrite::ENTITY_TYPE_CATEGORY => function ($catId) {
-                /** @var CategoryRepositoryInterface $productRepository */
-                $categoryRepository = ObjectManager::getInstance()->get(CategoryRepositoryInterface::class);
-                return $categoryRepository->get($catId);
-            },
-            Rewrite::ENTITY_TYPE_CMS_PAGE => function ($cmsId) {
-                /** @var PageRepositoryInterface $productRepository */
-                $pageRepository = ObjectManager::getInstance()->get(PageRepositoryInterface::class);
-                return $pageRepository->getById($cmsId);
-            },
-            Rewrite::ENTITY_TYPE_CUSTOM => false
-        ];
-
-        $getter = $map[$this->getEntityType()];
-
-        if ($getter) {
-            $entity = $getter($this->getEntityId());
-
-            $entityManager = ObjectManager::getInstance()->get(EventManager::class);
-            $entityManager->dispatch('clean_cache_by_tags', ['object' => $entity]);
-        }
+    public function afterDelete()
+    {
+        $this->cleanCacheForEntity($this->getEntityType(), $this->getEntityId());
+        return parent::afterDelete(); // TODO: Change the autogenerated stub
     }
 
     public function afterSave()
     {
-        $this->opt1();
-        return parent::afterSave(); // TODO: Change the autogenerated stub
+        $this->cleanCacheForEntity($this->getEntityType(), $this->getEntityId());
+        return parent::afterSave();
     }
 }
