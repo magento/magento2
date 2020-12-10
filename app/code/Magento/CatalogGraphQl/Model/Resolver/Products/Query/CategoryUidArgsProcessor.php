@@ -12,13 +12,13 @@ use Magento\Framework\GraphQl\Query\Uid;
 use Magento\Framework\GraphQl\Query\Resolver\ArgumentsProcessorInterface;
 
 /**
- * Parent category UID processor class for category uid and category id arguments
+ * Category UID processor class for category uid and category id arguments
  */
-class ParentCategoryUidArgsProcessor implements ArgumentsProcessorInterface
+class CategoryUidArgsProcessor implements ArgumentsProcessorInterface
 {
-    private const ID = 'parent_id';
+    private const ID = 'category_id';
 
-    private const UID = 'parent_uid';
+    private const UID = 'category_uid';
 
     /** @var Uid */
     private $uidEncoder;
@@ -43,19 +43,19 @@ class ParentCategoryUidArgsProcessor implements ArgumentsProcessorInterface
         string $fieldName,
         array $args
     ): array {
-        $parentUidFilter = $args['filter'][self::UID] ?? [];
-        $parentIdFilter = $args['filter'][self::ID] ?? [];
-        if (!empty($parentIdFilter)
-            && !empty($parentUidFilter)
+        $idFilter = $args['filter'][self::ID] ?? [];
+        $uidFilter = $args['filter'][self::UID] ?? [];
+        if (!empty($idFilter)
+            && !empty($uidFilter)
             && $fieldName === 'products') {
             throw new GraphQlInputException(
                 __('`%1` and `%2` can\'t be used at the same time.', [self::ID, self::UID])
             );
-        } elseif (!empty($parentUidFilter)) {
-            if (isset($parentUidFilter['eq'])) {
-                $args['filter'][self::ID]['eq'] = $this->uidEncoder->decode((string) $parentUidFilter['eq']);
-            } elseif (!empty($parentUidFilter['in'])) {
-                foreach ($parentUidFilter['in'] as $uid) {
+        } elseif (!empty($uidFilter)) {
+            if (isset($uidFilter['eq'])) {
+                $args['filter'][self::ID]['eq'] = $this->uidEncoder->decode((string) $uidFilter['eq']);
+            } elseif (!empty($uidFilter['in'])) {
+                foreach ($uidFilter['in'] as $uid) {
                     $args['filter'][self::ID]['in'][] = $this->uidEncoder->decode((string) $uid);
                 }
             }
