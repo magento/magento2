@@ -6,8 +6,6 @@
 
 namespace Magento\Framework\Image\Adapter;
 
-use Magento\Framework\Exception\LocalizedException;
-
 /**
  * Gd2 adapter.
  *
@@ -58,7 +56,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
      *
      * @param string $filename
      * @return void
-     * @throws \OverflowException|LocalizedException
+     * @throws \OverflowException
      */
     public function open($filename)
     {
@@ -73,11 +71,10 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
             throw new \OverflowException('Memory limit has been reached.');
         }
         $this->imageDestroy();
-        try {
-            $this->_imageHandler = call_user_func($this->_getCallback('create'), $this->_fileName);
-        } catch (\Throwable $ex) {
-            throw new LocalizedException(__('Unsupported image format.'));
-        }
+        $this->_imageHandler = call_user_func(
+            $this->_getCallback('create', null, sprintf('Unsupported image format. File: %s', $this->_fileName)),
+            $this->_fileName
+        );
     }
 
     /**

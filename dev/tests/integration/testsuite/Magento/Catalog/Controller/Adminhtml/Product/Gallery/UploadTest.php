@@ -198,7 +198,7 @@ class UploadTest extends AbstractBackendController
                     'current_path' => '/../../../../_files',
                 ],
                 'expectation' => [
-                    'message' => 'Wrong file size.',
+                    'message' => 'Something went wrong while saving the file(s).',
                     'errorcode' => 0,
                     'tmp_media_path' => '/m/a/magento_empty.jpg',
                 ],
@@ -206,7 +206,7 @@ class UploadTest extends AbstractBackendController
             'upload_without_image' => [
                 'file' => [],
                 'expectation' => [
-                    'message' => '$_FILES array is empty',
+                    'message' => 'Something went wrong while saving the file(s).',
                     'errorcode' => 0,
                 ],
             ],
@@ -218,7 +218,7 @@ class UploadTest extends AbstractBackendController
                     'current_path' => '/../../../../_files',
                 ],
                 'expectation' => [
-                    'message' => 'Unsupported image format.',
+                    'message' => 'Something went wrong while saving the file(s).',
                     'errorcode' => 0,
                     'tmp_media_path' => '/m/w/magento_wrong.png',
                 ],
