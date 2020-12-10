@@ -16,6 +16,7 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Pricing\SaleableInterface;
+use Magento\NegotiableQuote\Model\PriceCurrency;
 use Magento\Store\Api\Data\StoreInterface;
 
 /**
@@ -34,13 +35,20 @@ class PriceRange implements ResolverInterface
     private $priceProviderPool;
 
     /**
+     * @var PriceCurrency
+     */
+    private $priceCurrency;
+
+    /**
      * @param PriceProviderPool $priceProviderPool
      * @param Discount $discount
+     * @param PriceCurrency $priceCurrency
      */
-    public function __construct(PriceProviderPool $priceProviderPool, Discount $discount)
+    public function __construct(PriceProviderPool $priceProviderPool, Discount $discount, PriceCurrency $priceCurrency)
     {
         $this->priceProviderPool = $priceProviderPool;
         $this->discount = $discount;
+        $this->priceCurrency = $priceCurrency;
     }
 
     /**
@@ -124,11 +132,13 @@ class PriceRange implements ResolverInterface
         return [
             'regular_price' => [
                 'value' => $regularPrice,
-                'currency' => $store->getCurrentCurrencyCode()
+                'currency' => $store->getCurrentCurrencyCode(),
+                'formatted' => $this->priceCurrency->format($regularPrice,false,null,null,$store->getCurrentCurrencyCode())
             ],
             'final_price' => [
                 'value' => $finalPrice,
-                'currency' => $store->getCurrentCurrencyCode()
+                'currency' => $store->getCurrentCurrencyCode(),
+                'formatted' => $this->priceCurrency->format($finalPrice,false,null,null,$store->getCurrentCurrencyCode())
             ],
             'discount' => $this->discount->getDiscountByDifference($regularPrice, $finalPrice),
         ];
@@ -159,11 +169,13 @@ class PriceRange implements ResolverInterface
         return [
             'regular_price' => [
                 'value' => null,
-                'currency' => null
+                'currency' => null,
+                'formatted' => null
             ],
             'final_price' => [
                 'value' => null,
-                'currency' => null
+                'currency' => null,
+                'formatted' => null
             ],
             'discount' => null
         ];

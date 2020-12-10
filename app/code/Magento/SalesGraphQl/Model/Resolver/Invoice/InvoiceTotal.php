@@ -11,6 +11,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\NegotiableQuote\Model\PriceCurrency;
 use Magento\Sales\Api\Data\InvoiceInterface;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Tax\Api\OrderTaxManagementInterface;
@@ -38,18 +39,26 @@ class InvoiceTotal implements ResolverInterface
     private $shippingTaxCalculator;
 
     /**
+     * @var PriceCurrency
+     */
+    private $priceCurrency;
+
+    /**
      * @param OrderTaxManagementInterface $orderTaxManagement
      * @param TaxHelper $taxHelper
      * @param ShippingTaxCalculator $shippingTaxCalculator
+     * @param PriceCurrency $priceCurrency
      */
     public function __construct(
         OrderTaxManagementInterface $orderTaxManagement,
         TaxHelper $taxHelper,
-        ShippingTaxCalculator $shippingTaxCalculator
+        ShippingTaxCalculator $shippingTaxCalculator,
+        PriceCurrency $priceCurrency
     ) {
         $this->taxHelper = $taxHelper;
         $this->orderTaxManagement = $orderTaxManagement;
         $this->shippingTaxCalculator = $shippingTaxCalculator;
+        $this->priceCurrency = $priceCurrency;
     }
 
     /**
@@ -77,11 +86,11 @@ class InvoiceTotal implements ResolverInterface
         $currency = $orderModel->getOrderCurrencyCode();
         $baseCurrency = $orderModel->getBaseCurrencyCode();
         return [
-            'base_grand_total' => ['value' => $invoiceModel->getBaseGrandTotal(), 'currency' => $baseCurrency],
-            'grand_total' => ['value' =>  $invoiceModel->getGrandTotal(), 'currency' => $currency],
-            'subtotal' => ['value' =>  $invoiceModel->getSubtotal(), 'currency' => $currency],
-            'total_tax' => ['value' =>  $invoiceModel->getTaxAmount(), 'currency' => $currency],
-            'total_shipping' => ['value' => $invoiceModel->getShippingAmount(), 'currency' => $currency],
+            'base_grand_total' => ['value' => $invoiceModel->getBaseGrandTotal(), 'currency' => $baseCurrency, 'formatted' => $this->priceCurrency->format($invoiceModel->getBaseGrandTotal(),false,null,null,$baseCurrency)],
+            'grand_total' => ['value' =>  $invoiceModel->getGrandTotal(), 'currency' => $currency, 'formatted' => $this->priceCurrency->format($invoiceModel->getGrandTotal(),false,null,null,$currency)],
+            'subtotal' => ['value' =>  $invoiceModel->getSubtotal(), 'currency' => $currency, 'formatted' => $this->priceCurrency->format($invoiceModel->getSubTotal(),false,null,null,$currency)],
+            'total_tax' => ['value' =>  $invoiceModel->getTaxAmount(), 'currency' => $currency, 'formatted' => $this->priceCurrency->format($invoiceModel->getTaxAmount(),false,null,null,$currency)],
+            'total_shipping' => ['value' => $invoiceModel->getShippingAmount(), 'currency' => $currency, 'formatted' => $this->priceCurrency->format($invoiceModel->getShippingAmount(),false,null,null,$currency)],
             'discounts' => $this->getDiscountDetails($invoiceModel),
             'taxes' => $this->formatTaxes(
                 $orderModel,
@@ -90,15 +99,18 @@ class InvoiceTotal implements ResolverInterface
             'shipping_handling' => [
                 'amount_excluding_tax' => [
                     'value' => $invoiceModel->getShippingAmount() ?? 0,
-                    'currency' => $currency
+                    'currency' => $currency,
+                    'formatted' => $this->priceCurrency->format($invoiceModel->getShippingAmount() ?? 0,false,null,null,$currency)
                 ],
                 'amount_including_tax' => [
                     'value' => $invoiceModel->getShippingInclTax() ?? 0,
-                    'currency' => $currency
+                    'currency' => $currency,
+                    'formatted' => $this->priceCurrency->format($invoiceModel->getShippingInclTax() ?? 0,false,null,null,$currency)
                 ],
                 'total_amount' => [
                     'value' => $invoiceModel->getShippingAmount() ?? 0,
-                    'currency' => $currency
+                    'currency' => $currency,
+                    'formatted' => $this->priceCurrency->format($invoiceModel->getShippingAmount() ?? 0,false,null,null,$currency)
                 ],
                 'discounts' => $this->getShippingDiscountDetails($invoiceModel, $orderModel),
                 'taxes' => $this->formatTaxes(
@@ -130,7 +142,8 @@ class InvoiceTotal implements ResolverInterface
                 [
                     'amount' => [
                         'value' => sprintf('%.2f', abs($calculatedInvoiceShippingDiscount)),
-                        'currency' => $invoiceModel->getOrderCurrencyCode()
+                        'currency' => $invoiceModel->getOrderCurrencyCode(),
+                        'formatted' => $this->priceCurrency->format(sprintf('%.2f', abs($calculatedInvoiceShippingDiscount)),false,null,null,$invoiceModel->getOrderCurrencyCode())
                     ]
                 ];
         }
@@ -151,7 +164,8 @@ class InvoiceTotal implements ResolverInterface
                 'label' => $invoice->getDiscountDescription() ?? __('Discount'),
                 'amount' => [
                     'value' => abs($invoice->getDiscountAmount()),
-                    'currency' => $invoice->getOrderCurrencyCode()
+                    'currency' => $invoice->getOrderCurrencyCode(),
+                    'formatted' => $this->priceCurrency->format(abs($invoice->getDiscountAmount()),false,null,null,$invoice->getOrderCurrencyCode())
                 ]
             ];
         }
@@ -174,7 +188,8 @@ class InvoiceTotal implements ResolverInterface
                 'title' => $appliedTax['title'] ?? null,
                 'amount' => [
                     'value' => $appliedTax['tax_amount'] ?? 0,
-                    'currency' => $order->getOrderCurrencyCode()
+                    'currency' => $order->getOrderCurrencyCode(),
+                    'formatted' => $this->priceCurrency->format($appliedTax['tax_amount'] ?? 0,false,null,null,$order->getOrderCurrencyCode())
                 ]
             ];
             $taxes[] = $appliedTaxesArray;

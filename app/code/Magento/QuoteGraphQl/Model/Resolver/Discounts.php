@@ -11,6 +11,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\NegotiableQuote\Model\PriceCurrency;
 use Magento\Quote\Model\Quote;
 
 /**
@@ -18,6 +19,19 @@ use Magento\Quote\Model\Quote;
  */
 class Discounts implements ResolverInterface
 {
+    /**
+     * @var PriceCurrency
+     */
+    private $priceCurrency;
+
+    /**
+     * Discounts constructor.
+     * @param PriceCurrency $priceCurrency
+     */
+    public function __construct(PriceCurrency $priceCurrency){
+        $this->priceCurrency = $priceCurrency;
+    }
+
     /**
      * @inheritdoc
      */
@@ -51,6 +65,7 @@ class Discounts implements ResolverInterface
                 $discountData = $value->getDiscountData();
                 $amount['value'] = $discountData->getAmount();
                 $amount['currency'] = $quote->getQuoteCurrencyCode();
+                $amount['formatted']= $this->priceCurrency->format($discountData->getAmount(),false,null,null,$quote->getQuoteCurrencyCode());
                 $discount['amount'] = $amount;
                 $discountValues[] = $discount;
             }
