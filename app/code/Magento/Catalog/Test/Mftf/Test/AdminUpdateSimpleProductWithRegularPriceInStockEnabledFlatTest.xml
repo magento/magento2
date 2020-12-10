@@ -8,15 +8,18 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminUpdateSimpleProductWithRegularPriceInStockEnabledFlatTest">
+    <test name="AdminUpdateSimpleProductWithRegularPriceInStockEnabledFlatTest" deprecated="Use AdminUpdateSimpleProductWithRegularPriceInStockEnabledFlatCatalogTest instead">
         <annotations>
             <stories value="Update Simple Product"/>
-            <title value="Update Simple Product with Regular Price (In Stock) Enabled Flat"/>
+            <title value="DEPRECACTED. Update Simple Product with Regular Price (In Stock) Enabled Flat"/>
             <description value="Test log in to Update Simple Product and Update Simple Product with Regular Price (In Stock) Enabled Flat"/>
             <testCaseId value="MC-10818"/>
             <severity value="CRITICAL"/>
             <group value="catalog"/>
             <group value="mtf_migrated"/>
+            <skip>
+                <issueId value="DEPRECATED">Use AdminUpdateSimpleProductWithRegularPriceInStockEnabledFlatCatalogTest instead</issueId>
+            </skip> 
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>

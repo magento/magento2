@@ -40,8 +40,10 @@
         <actionGroup ref="FilterProductGridBySku2ActionGroup" stepKey="filterProductGrid">
             <argument name="sku" value="$$initialSimpleProduct.sku$$"/>
         </actionGroup>
-        <click selector="{{AdminProductGridFilterSection.nthRow('1')}}" stepKey="clickFirstRowToOpenDefaultSimpleProduct"/>
-        <waitForPageLoad stepKey="waitUntilProductIsOpened"/>
+        <actionGroup ref="AdminOrderGridClickFirstRowActionGroup" stepKey="clickFirstRowToOpenDefaultSimpleProduct"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitUntilProductIsOpened"/>
+        <!-- <click selector="{{AdminProductGridFilterSection.nthRow('1')}}" stepKey="clickFirstRowToOpenDefaultSimpleProduct"/>
+        <waitForPageLoad stepKey="waitUntilProductIsOpened"/> -->
 
         <!-- Update simple product with regular price(in stock) -->
         <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{simpleProductRegularPrice32501InStock.name}}" stepKey="fillSimpleProductName"/>
@@ -74,8 +76,10 @@
         <fillField selector="{{AdminProductGridFilterSection.nameFilter}}" userInput="{{simpleProductRegularPrice32501InStock.name}}" stepKey="fillSimpleProductNameInNameFilter"/>
         <fillField selector="{{AdminProductGridFilterSection.skuFilter}}" userInput="{{simpleProductRegularPrice32501InStock.sku}}" stepKey="fillProductSku"/>
         <click selector="{{AdminProductGridFilterSection.applyFilters}}" stepKey="clickApplyFiltersButton"/>
-        <click selector="{{AdminProductGridFilterSection.nthRow('1')}}" stepKey="clickFirstRowToVerifyUpdatedSimpleProductVisibleInGrid"/>
-        <waitForPageLoad stepKey="waitUntilSimpleProductPageIsOpened"/>
+        <actionGroup ref="AdminOrderGridClickFirstRowActionGroup" stepKey="clickFirstRowToVerifyUpdatedSimpleProductVisibleInGrid"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitUntilSimpleProductPageIsOpened"/>
+        <!-- <click selector="{{AdminProductGridFilterSection.nthRow('1')}}" stepKey="clickFirstRowToVerifyUpdatedSimpleProductVisibleInGrid"/>
+        <waitForPageLoad stepKey="waitUntilSimpleProductPageIsOpened"/> -->
 
         <!-- Verify customer see updated simple product in the product form page -->
         <seeInField selector="{{AdminProductFormSection.productName}}" userInput="{{simpleProductRegularPrice32501InStock.name}}" stepKey="seeSimpleProductName"/>
@@ -86,6 +90,7 @@
         <seeInField selector="{{AdminProductFormSection.productWeight}}" userInput="{{simpleProductRegularPrice32501InStock.weight}}" stepKey="seeSimpleProductWeight"/>
         <click selector="{{AdminProductFormSection.categoriesDropdown}}" stepKey="clickCategoriesDropDownToVerify"/>
         <see selector="{{AdminProductFormSection.selectMultipleCategories}}" userInput="$$categoryEntity.name$$" stepKey="selectedCategories" />
+        <actionGroup ref="AdminSubmitCategoriesPopupActionGroup" stepKey="clickDoneOnAdvancedCategorySelect"/>
         <seeInField selector="{{AdminProductFormSection.visibility}}" userInput="{{simpleProductRegularPrice32501InStock.visibility}}" stepKey="seeVisibility"/>
         <scrollTo selector="{{AdminProductSEOSection.sectionHeader}}" x="0" y="-80" stepKey="scrollToAdminProductSEOSection1"/>
         <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="clickAdminProductSEOSection1"/>
@@ -123,10 +128,14 @@
         <!--Verify customer don't see updated simple product link on magento storefront page and is searchable by sku -->
         <amOnPage url="{{StorefrontProductPage.url(simpleProductRegularPrice32501InStock.urlKey)}}" stepKey="goToMagentoStorefrontPage"/>
         <waitForPageLoad stepKey="waitForStoreFrontProductPageLoad"/>
-        <fillField selector="{{StorefrontQuickSearchResultsSection.searchTextBox}}" userInput="{{simpleProductRegularPrice32501InStock.sku}}" stepKey="fillSimpleProductSkuInSearchTextBox"/>
-        <waitForPageLoad stepKey="waitForSearchTextBox"/>
-        <click selector="{{StorefrontQuickSearchResultsSection.searchTextBoxButton}}" stepKey="clickSearchTextBoxButton"/>
-        <waitForPageLoad stepKey="waitForSearch"/>
-        <dontSee selector="{{StorefrontQuickSearchResultsSection.productLink}}" userInput="{{simpleProductRegularPrice32501InStock.name}}" stepKey="dontSeeProductName"/>
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="fillSimpleProductSkuInSearchTextBo">
+            <argument name="phrase" value="{{simpleProductRegularPrice32501InStock.sku}}"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForSearchTextBox"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickSearchTextBoxButton"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForSearch"/>
+        <actionGroup ref="StorefrontAssertProductNameIsNotOnProductMainPageActionGroup" stepKey="dontSeeProductName">
+            <argument name="productName" value="{{simpleProductRegularPrice32501InStock.name}}"/>
+        </actionGroup>
     </test>
 </tests>

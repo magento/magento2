@@ -129,10 +129,14 @@
         <!--Verify Product Attribute present in search page -->
         <amOnPage url="$$createCategory.name$$.html" stepKey="goToStorefrontPage1"/>
         <waitForPageLoad stepKey="waitForProductFrontPageToLoad1"/>
-        <fillField selector="{{StorefrontQuickSearchResultsSection.searchTextBox}}" userInput="{{ProductAttributeOption8.value}}" stepKey="fillAttribute"/>
-        <waitForPageLoad stepKey="waitForSearchTextBox"/>
-        <click selector="{{StorefrontQuickSearchResultsSection.searchTextBoxButton}}" stepKey="clickSearchTextBoxButton"/>
-        <waitForPageLoad stepKey="waitForSearch"/>
-        <see selector="{{StorefrontCategoryMainSection.productName}}" userInput="{{SimpleProduct.name}}" stepKey="seeProductNameInCategoryPage"/>
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="fillAttribute">
+            <argument name="phrase" value="{{ProductAttributeOption8.value}}"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForSearchTextBox"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickSearchTextBoxButton"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForSearchResultToLoad"/>
+        <actionGroup ref="StorefrontAssertProductNameOnProductMainPageActionGroup" stepKey="seeProductNameInCategoryPage">
+            <argument name="productName" value="{{SimpleProduct.name}}"/>
+        </actionGroup>
     </test>
 </tests>
