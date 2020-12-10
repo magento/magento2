@@ -14,6 +14,7 @@
     <preference for="Magento\Framework\GraphQlSchemaStitching\GraphQlReader\TypeMetaReaderInterface" type="Magento\Framework\GraphQlSchemaStitching\GraphQlReader\TypeReaderComposite"/>
     <preference for="Magento\GraphQl\Model\Query\ContextFactoryInterface" type="Magento\GraphQl\Model\Query\ContextFactory"/>
     <preference for="Magento\GraphQl\Model\Query\ContextParametersInterface" type="Magento\GraphQl\Model\Query\ContextParameters"/>
+    <preference for="Magento\Framework\GraphQl\Query\Resolver\ArgumentsProcessorInterface" type="Magento\Framework\GraphQl\Query\Resolver\ArgumentsCompositeProcessor"/>
     <type name="Magento\Framework\App\AreaList">
         <arguments>
             <argument name="areas" xsi:type="array">
