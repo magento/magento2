@@ -450,6 +450,7 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
     public function testPhpCompatibility()
     {
         $targetVersions = $this->getTargetPhpVersions();
+        $this->assertNotEmpty($targetVersions, 'No supported versions information in composer.json');
         $reportFile    = self::$reportDir . '/phpcompatibility_report.txt';
         $rulesetDir    = __DIR__ . '/_files/PHPCompatibilityMagento';
 
