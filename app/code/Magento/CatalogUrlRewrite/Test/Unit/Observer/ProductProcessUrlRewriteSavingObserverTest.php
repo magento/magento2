@@ -14,8 +14,7 @@ use Magento\CatalogUrlRewrite\Observer\ProductProcessUrlRewriteSavingObserver;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Event;
 use Magento\Framework\Event\Observer;
-use Magento\Framework\ObjectManagerInterface;
-use Magento\Store\Api\StoreWebsiteRelationInterface;
+use Magento\Store\Model\StoreResolver\GetStoresListByWebsiteIds;
 use Magento\UrlRewrite\Model\UrlPersistInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -47,19 +46,9 @@ class ProductProcessUrlRewriteSavingObserverTest extends TestCase
     protected $product;
 
     /**
-     * @var ObjectManagerInterface
-     */
-    protected $objectManager;
-
-    /**
      * @var ProductProcessUrlRewriteSavingObserver
      */
     protected $model;
-
-    /**
-     * @var StoreWebsiteRelationInterface|MockObject
-     */
-    private $storeRelation;
 
     /**
      * @var AppendUrlRewritesToProducts|MockObject
@@ -100,10 +89,6 @@ class ProductProcessUrlRewriteSavingObserverTest extends TestCase
         $this->event->expects($this->any())->method('getProduct')->willReturn($this->product);
         $this->observer = $this->createPartialMock(Observer::class, ['getEvent']);
         $this->observer->expects($this->any())->method('getEvent')->willReturn($this->event);
-        $this->storeRelation = $this->getMockBuilder(StoreWebsiteRelationInterface::class)
-            ->onlyMethods(['getStoreByWebsiteId'])
-            ->disableOriginalConstructor()
-            ->getMock();
 
         $this->scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)
             ->onlyMethods(['isSetFlag'])
@@ -115,11 +100,16 @@ class ProductProcessUrlRewriteSavingObserverTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $getStoresList = $this->getMockBuilder(GetStoresListByWebsiteIds::class)
+            ->onlyMethods(['execute'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->model = new ProductProcessUrlRewriteSavingObserver(
             $this->urlPersist,
-            $this->storeRelation,
             $this->appendRewrites,
-            $this->scopeConfig
+            $this->scopeConfig,
+            $getStoresList
         );
     }
 
@@ -227,10 +217,6 @@ class ProductProcessUrlRewriteSavingObserverTest extends TestCase
         $this->product->expects($this->any())
             ->method('getIsChangedCategories')
             ->willReturn($isChangedCategories);
-
-        $this->storeRelation->expects($this->any())
-            ->method('getStoreByWebsiteId')
-            ->willReturn([3]);
 
         $this->product->expects($this->any())->method('getWebsiteIds')->will(
             $this->returnValue($websitesWithProduct)
