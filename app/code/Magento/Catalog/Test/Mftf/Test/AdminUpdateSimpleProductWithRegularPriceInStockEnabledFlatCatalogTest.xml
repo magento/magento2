@@ -67,20 +67,20 @@
         </actionGroup>
 
         <actionGroup ref="AdminClickOnAdvancedInventoryLinkActionGroup" stepKey="clickTheAdvancedInventoryLink1"/>
-        <actionGroup ref="AdminAssertManageStockOnEditPageActionGroup" stepKey="assertManageStock1">
+        <actionGroup ref="AssertAdminManageStockOnEditPageActionGroup" stepKey="assertManageStock1">
             <argument name="manageStock" value="No"/>
         </actionGroup>
         <actionGroup ref="AdminSubmitAdvancedInventoryFormActionGroup" stepKey="clickDoneButtonOnAdvancedInventorySection1"/>
 
-        <actionGroup ref="AdminAssertProductIsAssignedToCategoryActionGroup" stepKey="checkifProductIsAssignedToInitialCategory">
+        <actionGroup ref="AssertAdminProductIsAssignedToCategoryActionGroup" stepKey="checkifProductIsAssignedToInitialCategory">
             <argument name="categoryName" value="$$initialCategoryEntity.name$$"/>
         </actionGroup>
 
-        <actionGroup ref="AdminAssertProductIsAssignedToCategoryActionGroup" stepKey="checkifProductIsAssignedToCategoryTwo">
+        <actionGroup ref="AssertAdminProductIsAssignedToCategoryActionGroup" stepKey="checkifProductIsAssignedToCategoryTwo">
             <argument name="categoryName" value="$$categoryEntity.name$$"/>
         </actionGroup>
 
-        <actionGroup ref="AdminAssertProductInfoOnEditPageActionGroup" stepKey="assertProductInfo">
+        <actionGroup ref="AssertAdminProductInfoOnEditPageActionGroup" stepKey="assertProductInfo">
             <argument name="product" value="simpleProductEnabledFlat"/>
         </actionGroup>
 
@@ -105,7 +105,7 @@
         <actionGroup ref="StorefrontAssertProductSkuOnProductPageActionGroup" stepKey="seeSimpleProductSKUOnStoreFrontPage">
             <argument name="productSku" value="{{simpleProductEnabledFlat.sku}}"/>
         </actionGroup>
-        <actionGroup ref="StorefrontAssertProductStockStatusOnProductPageActionGroup" stepKey="seeSimpleProductStockStatusOnStoreFrontPage">
+        <actionGroup ref="AssertStorefrontProductStockStatusOnProductPageActionGroup" stepKey="seeSimpleProductStockStatusOnStoreFrontPage">
             <argument name="productStockStatus" value="{{simpleProductEnabledFlat.storefrontStatus}}"/>
         </actionGroup>
 
