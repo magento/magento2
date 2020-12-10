@@ -228,7 +228,10 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
          * previous configuration with no newly uploaded file
          */
         $fileInfo = null;
-        if (isset($values[$option->getId()]) && is_array($values[$option->getId()])) {
+        if (isset($values[$option->getId()])) {
+            if (is_string($values[$option->getId()])) {
+                $values[$option->getId()] = explode(',', $values[$option->getId()]);
+            }
             // Legacy style, file info comes in array with option id index
             $fileInfo = $values[$option->getId()];
         } else {
