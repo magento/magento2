@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertStorefrontProductPageGalleryFullscreenThumbnailDragActionGroup">
+        <annotations>
+            <description>On the product page check functional of drag actions in the fotorama ribbon during fullscreen</description>
+        </annotations>
+        <arguments>
+            <argument name="dragPointImage" type="string" />
+            <argument name="currentImage" type="string"/>
+            <argument name="firstImage" type="string" />
+        </arguments>
+        <waitForElementVisible selector="{{StorefrontProductMediaSection.productImageFullscreen(currentImage)}}" stepKey="seeFullscreenImage"/>
+        <seeElement selector="{{StorefrontProductMediaSection.productImageInFotorama(firstImage)}}" stepKey="seeFirstImageInRibbon"/>
+        <dragAndDrop selector1="{{StorefrontProductMediaSection.productImageInFotorama(dragPointImage)}}" selector2="{{StorefrontProductMediaSection.productImageInFotorama(dragPointImage)}}" x="-300" y="0" stepKey="dragRibbon"/>
+        <seeElement selector="{{StorefrontProductMediaSection.productImageFullscreen(currentImage)}}" stepKey="seeFullscreenImageAfterDrag"/>
+        <dontSeeElement selector="{{StorefrontProductMediaSection.productImageInFotorama(firstImage)}}" stepKey="dontSeeFirstImageInRibbonAfterDrag"/>
+        <dragAndDrop selector1="{{StorefrontProductMediaSection.productImageInFotorama(dragPointImage)}}" selector2="{{StorefrontProductMediaSection.productImageInFotorama(dragPointImage)}}" x="300" y="0" stepKey="dragBackRibbon"/>
+        <seeElement selector="{{StorefrontProductMediaSection.productImageFullscreen(currentImage)}}" stepKey="seeMainImageAfterBackDrag"/>
+        <seeElement selector="{{StorefrontProductMediaSection.productImageInFotorama(firstImage)}}" stepKey="seeFirstImageInRibbonAfterBackDrag"/>
+    </actionGroup>
+</actionGroups>
