@@ -11,7 +11,7 @@ type Customer {
         currentPage: Int = 1 @doc(description: "Specifies which page of results to return. The default value is 1.")
     ): [Wishlist!]! @doc(description: "An array of wishlists. In Magento Open Source, customers are limited to one wish list. The number of wish lists is configurable for Magento Commerce") @resolver(class:"\\Magento\\WishlistGraphQl\\Model\\Resolver\\CustomerWishlists")
     wishlist: Wishlist! @deprecated(reason: "Use `Customer.wishlists` or `Customer.wishlist_v2`") @resolver(class:"\\Magento\\WishlistGraphQl\\Model\\Resolver\\CustomerWishlistResolver") @doc(description: "Contains a customer's wish lists")  @cache(cacheable: false)
-    wishlist_v2(id: ID!): Wishlist @doc(description: "Retrieve the specified wish list") @resolver(class: "\\Magento\\WishlistGraphQl\\Model\\Resolver\\WishlistById")
+    wishlist_v2(id: ID!): Wishlist @doc(description: "Retrieve the specified wish list identified by the unique ID for a `Wishlist` object") @resolver(class: "\\Magento\\WishlistGraphQl\\Model\\Resolver\\WishlistById")
 }
 
 type WishlistOutput @doc(description: "Deprecated: `Wishlist` type should be used instead") {
@@ -23,16 +23,19 @@ type WishlistOutput @doc(description: "Deprecated: `Wishlist` type should be use
 }
 
 type Wishlist {
-    id: ID @doc(description: "Wishlist unique identifier")
+    id: ID @doc(description: "The unique ID for a `Wishlist` object")
     items: [WishlistItem] @resolver(class: "\\Magento\\WishlistGraphQl\\Model\\Resolver\\WishlistItemsResolver") @deprecated(reason: "Use field `items_v2` from type `Wishlist` instead")
-    items_v2: [WishlistItemInterface] @resolver(class: "\\Magento\\WishlistGraphQl\\Model\\Resolver\\WishlistItems") @doc(description: "An array of items in the customer's wish list")
+    items_v2(
+        currentPage: Int = 1,
+        pageSize: Int = 20
+    ): WishlistItems @resolver(class: "\\Magento\\WishlistGraphQl\\Model\\Resolver\\WishlistItems") @doc(description: "An array of items in the customer's wish list")
     items_count: Int @doc(description: "The number of items in the wish list")
     sharing_code: String @doc(description: "An encrypted code that Magento uses to link to the wish list")
     updated_at: String @doc(description: "The time of the last modification to the wish list")
 }
 
 interface WishlistItemInterface @typeResolver(class: "Magento\\WishlistGraphQl\\Model\\Resolver\\Type\\WishlistItemType") {
-    id: ID!  @doc(description: "The ID of the wish list item")
+    id: ID!  @doc(description: "The unique ID for a `WishlistItemInterface` object")
     quantity: Float!  @doc(description: "The quantity of this wish list item")
     description: String  @doc(description: "The description of the item")
     added_at: String!  @doc(description: "The date and time the item was added to the wish list")
@@ -40,8 +43,13 @@ interface WishlistItemInterface @typeResolver(class: "Magento\\WishlistGraphQl\\
     customizable_options: [SelectedCustomizableOption] @doc(description: "Custom options selected for the wish list item")
 }
 
+type WishlistItems {
+    items: [WishlistItemInterface]! @doc(description: "A list of items in the wish list")
+    page_info: SearchResultPageInfo @doc(description: "Contains pagination metadata")
+}
+
 type WishlistItem {
-    id: Int @doc(description: "The wish list item ID")
+    id: Int @doc(description: "The unique ID for a `WishlistItem` object")
     qty: Float @doc(description: "The quantity of this wish list item"),
     description: String @doc(description: "The customer's comment about this item"),
     added_at: String @doc(description: "The time when the customer added the item to the wish list"),
@@ -73,7 +81,7 @@ type RemoveProductsFromWishlistOutput @doc(description: "Contains the customer's
 }
 
 input WishlistItemUpdateInput @doc(description: "Defines updates to items in a wish list") {
-    wishlist_item_id: ID! @doc(description: "The ID of the wishlist item to update")
+    wishlist_item_id: ID! @doc(description: "The unique ID for a `WishlistItemInterface` object")
     quantity: Float @doc(description: "The new amount or number of this item")
     description: String @doc(description: "Customer-entered comments about the item")
     selected_options: [ID!] @doc(description: "An array of strings corresponding to options the customer selected")
