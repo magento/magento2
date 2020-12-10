@@ -68,17 +68,19 @@ class AddConfigurableProductToWishlistTest extends GraphQlAbstract
 
         $this->assertArrayHasKey('addProductsToWishlist', $response);
         $this->assertArrayHasKey('wishlist', $response['addProductsToWishlist']);
+        $this->assertEmpty($response['addProductsToWishlist']['user_errors']);
         $wishlistResponse = $response['addProductsToWishlist']['wishlist'];
         $this->assertEquals($wishlist->getItemsCount(), $wishlistResponse['items_count']);
         $this->assertEquals($wishlist->getSharingCode(), $wishlistResponse['sharing_code']);
         $this->assertEquals($wishlist->getUpdatedAt(), $wishlistResponse['updated_at']);
-        $this->assertEquals($wishlistItem->getId(), $wishlistResponse['items_v2'][0]['id']);
-        $this->assertEquals($wishlistItem->getData('qty'), $wishlistResponse['items_v2'][0]['quantity']);
-        $this->assertEquals($wishlistItem->getDescription(), $wishlistResponse['items_v2'][0]['description']);
-        $this->assertEquals($wishlistItem->getAddedAt(), $wishlistResponse['items_v2'][0]['added_at']);
-        $this->assertNotEmpty($wishlistResponse['items_v2'][0]['configurable_options']);
-        $configurableOptions = $wishlistResponse['items_v2'][0]['configurable_options'];
+        $this->assertEquals($wishlistItem->getId(), $wishlistResponse['items_v2']['items'][0]['id']);
+        $this->assertEquals($wishlistItem->getData('qty'), $wishlistResponse['items_v2']['items'][0]['quantity']);
+        $this->assertEquals($wishlistItem->getDescription(), $wishlistResponse['items_v2']['items'][0]['description']);
+        $this->assertEquals($wishlistItem->getAddedAt(), $wishlistResponse['items_v2']['items'][0]['added_at']);
+        $this->assertNotEmpty($wishlistResponse['items_v2']['items'][0]['configurable_options']);
+        $configurableOptions = $wishlistResponse['items_v2']['items'][0]['configurable_options'];
         $this->assertEquals('Test Configurable', $configurableOptions[0]['option_label']);
+        $this->assertEquals('Option 1', $configurableOptions[0]['value_label']);
     }
 
     /**
@@ -138,8 +140,9 @@ mutation {
       sharing_code
       items_count
       updated_at
-      items_v2 {
-        id
+      items_v2(currentPage:1,pageSize:1) {
+      items{
+          id
         description
         quantity
         added_at
@@ -152,6 +155,7 @@ mutation {
             value_label
           }
         }
+      }
       }
     }
   }
