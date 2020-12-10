@@ -5,20 +5,20 @@
  */
 declare(strict_types=1);
 
-namespace Magento\CatalogGraphQl\Model\Resolver\Products\Query;
+namespace Magento\CatalogGraphQl\Model\Category;
 
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\Uid;
 use Magento\Framework\GraphQl\Query\Resolver\ArgumentsProcessorInterface;
 
 /**
- * Parent category UID processor class for category uid and category id arguments
+ * Parent Category UID processor class for category uid and category id arguments
  */
-class ParentCategoryUidArgsProcessor implements ArgumentsProcessorInterface
+class ParentCategoryUidsArgsProcessor implements ArgumentsProcessorInterface
 {
     private const ID = 'parent_id';
 
-    private const UID = 'parent_uid';
+    private const UID = 'parent_category_uid';
 
     /** @var Uid */
     private $uidEncoder;
@@ -43,23 +43,26 @@ class ParentCategoryUidArgsProcessor implements ArgumentsProcessorInterface
         string $fieldName,
         array $args
     ): array {
-        $parentUidFilter = $args['filter'][self::UID] ?? [];
-        $parentIdFilter = $args['filter'][self::ID] ?? [];
+        $filterKey = 'filters';
+        $parentUidFilter = $args[$filterKey][self::UID] ?? [];
+        $parentIdFilter = $args[$filterKey][self::ID] ?? [];
         if (!empty($parentIdFilter)
             && !empty($parentUidFilter)
-            && $fieldName === 'products') {
+            && ($fieldName === 'categories' || $fieldName === 'categoryList')) {
             throw new GraphQlInputException(
                 __('`%1` and `%2` can\'t be used at the same time.', [self::ID, self::UID])
             );
         } elseif (!empty($parentUidFilter)) {
             if (isset($parentUidFilter['eq'])) {
-                $args['filter'][self::ID]['eq'] = $this->uidEncoder->decode((string) $parentUidFilter['eq']);
+                $args[$filterKey][self::ID]['eq'] = $this->uidEncoder->decode(
+                    $parentUidFilter['eq']
+                );
             } elseif (!empty($parentUidFilter['in'])) {
-                foreach ($parentUidFilter['in'] as $uid) {
-                    $args['filter'][self::ID]['in'][] = $this->uidEncoder->decode((string) $uid);
+                foreach ($parentUidFilter['in'] as $parentUids) {
+                    $args[$filterKey][self::ID]['in'][] = $this->uidEncoder->decode($parentUids);
                 }
             }
-            unset($args['filter'][self::UID]);
+            unset($args[$filterKey][self::UID]);
         }
         return $args;
     }
