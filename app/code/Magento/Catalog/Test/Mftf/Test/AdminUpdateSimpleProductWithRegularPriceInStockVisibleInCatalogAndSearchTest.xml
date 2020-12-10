@@ -84,8 +84,12 @@
         <seeInField selector="{{AdminProductFormSection.productQuantity}}" userInput="{{simpleProductRegularPrice245InStock.quantity}}" stepKey="seeSimpleProductQuantity"/>
         <seeInField selector="{{AdminProductFormSection.productStockStatus}}" userInput="{{simpleProductRegularPrice245InStock.status}}" stepKey="seeSimpleProductStockStatus"/>
         <seeInField selector="{{AdminProductFormSection.productWeight}}" userInput="{{simpleProductRegularPrice245InStock.weight}}" stepKey="seeSimpleProductWeight"/>
-        <click selector="{{AdminProductFormSection.categoriesDropdown}}" stepKey="clickCategoriesDropDownToVerify"/>
-        <see selector="{{AdminProductFormSection.selectMultipleCategories}}" userInput="$$categoryEntity.name$$" stepKey="selectedCategories" />
+
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickCategoriesDropDownToVerify"/>
+        <actionGroup ref="AssertAdminProductIsAssignedToCategoryActionGroup" stepKey="selectedCategories">
+            <argument name="categoryName" value="$$categoryEntity.name$$"/>
+        </actionGroup>
+       
         <seeInField selector="{{AdminProductFormSection.visibility}}" userInput="{{simpleProductRegularPrice245InStock.visibility}}" stepKey="seeVisibility"/>
         <scrollTo selector="{{AdminProductSEOSection.sectionHeader}}" x="0" y="-80" stepKey="scrollToAdminProductSEOSection1"/>
         <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="clickAdminProductSEOSection1"/>
