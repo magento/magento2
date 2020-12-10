@@ -46,8 +46,6 @@ class GalleryTest extends TestCase
             ->disableOriginalConstructor()
             ->onlyMethods(['getItems'])
             ->getMock();
-
-
         $galleryMock->expects(($this->any()))->method('getProduct')->willReturn($productMock);
         $productMock->expects($this->once())->method('getTypeId')->willReturn('configurable');
         $productMock->expects($this->once())->method('getTypeInstance')->willReturn($configurableTypeMock);

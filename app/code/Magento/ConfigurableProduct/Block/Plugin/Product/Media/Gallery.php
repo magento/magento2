@@ -56,7 +56,7 @@ class Gallery
      * @param Product $product
      * @return array
      */
-    private function getProductGallery($product)
+    private function getProductGallery(Product $product): array
     {
         $result = [];
         $images = $this->getImagesOrderedByPosition($product);
@@ -74,7 +74,7 @@ class Gallery
      * @param Product $product
      * @return array
      */
-    private function getImagesOrderedByPosition($product)
+    private function getImagesOrderedByPosition(Product $product): array
     {
         $imagesCollection = $product->getMediaGalleryImages();
         $images = $imagesCollection->getItems();
