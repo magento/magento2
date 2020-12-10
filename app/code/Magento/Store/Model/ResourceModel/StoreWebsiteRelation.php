@@ -60,20 +60,12 @@ class StoreWebsiteRelation
         int $storeId = null
     ): array {
         $connection = $this->resource->getConnection();
-        $storeTable = $this->resource->getTableName('store_website');
+        $storeTable = $this->resource->getTableName('store');
         $storeSelect = $connection->select()
             ->from(['main_table' => $storeTable])
-            ->columns(
-                [
-                    'website_code' => 'code',
-                    'website_name' => 'name',
-                    'website_sort_order' => 'sort_order',
-                    'default_group_id'
-                ]
-            )
             ->join(
                 ['group_table' => $this->resource->getTableName('store_group')],
-                'main_table.website_id = group_table.website_id',
+                'main_table.group_id = group_table.group_id',
                 [
                     'store_group_code' => 'code',
                     'store_group_name' => 'name',
@@ -81,27 +73,33 @@ class StoreWebsiteRelation
                 ]
             )
             ->join(
-                ['store_table' => $this->resource->getTableName('store')],
-                'group_table.group_id = store_table.group_id'
+                ['website' => $this->resource->getTableName('store_website')],
+                'main_table.website_id = website.website_id',
+                [
+                    'website_code' => 'code',
+                    'website_name' => 'name',
+                    'website_sort_order' => 'sort_order',
+                    'default_group_id'
+                ]
             );
 
         if ($storeGroupId) {
             $storeSelect = $storeSelect->where(
-                'store_table.group_id = ?',
+                'main_table.group_id = ?',
                 $storeGroupId
             );
         }
 
         if ($storeId) {
             $storeSelect = $storeSelect->where(
-                'store_table.store_id = ?',
+                'main_table.store_id = ?',
                 $storeId
             );
         }
 
         if ($available) {
             $storeSelect = $storeSelect->where(
-                'store_table.is_active = 1'
+                'main_table.is_active = 1'
             );
         }
 
