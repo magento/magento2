@@ -7,7 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Data\Collection;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Data\Collection;
+use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Filesystem\Directory\WriteInterface;
+use Magento\Framework\Phrase;
 
 /**
  * Filesystem items collection
@@ -127,6 +132,26 @@ class Filesystem extends \Magento\Framework\Data\Collection
     protected $_collectedFiles = [];
 
     /**
+     * @var WriteInterface
+     */
+    private $rootDirectory;
+
+    /**
+     * @param EntityFactoryInterface|null $_entityFactory
+     * @param \Magento\Framework\Filesystem $filesystem
+     */
+    public function __construct(
+        EntityFactoryInterface $_entityFactory = null,
+        \Magento\Framework\Filesystem $filesystem = null
+    ) {
+        $this->_entityFactory = $_entityFactory ?? ObjectManager::getInstance()->get(EntityFactoryInterface::class);
+
+        $filesystem = $filesystem ?? ObjectManager::getInstance()->get(\Magento\Framework\Filesystem::class);
+        $this->rootDirectory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
+        parent::__construct($this->_entityFactory);
+    }
+
+    /**
      * Allowed dirs mask setter. Set empty to not filter.
      *
      * @param string $regex
@@ -208,9 +233,8 @@ class Filesystem extends \Magento\Framework\Data\Collection
     public function addTargetDir($value)
     {
         $value = (string)$value;
-        if (!is_dir($value)) {
-            // phpcs:ignore Magento2.Exceptions.DirectThrow
-            throw new \Exception('Unable to set target directory.');
+        if (!$this->rootDirectory->isDirectory($value)) {
+            throw new FileSystemException(__('Unable to set target directory.'));
         }
         $this->_targetDirs[$value] = $value;
         return $this;
@@ -235,6 +259,7 @@ class Filesystem extends \Magento\Framework\Data\Collection
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @throws FileSystemException
      */
     protected function _collectRecursive($dir)
     {
@@ -243,9 +268,9 @@ class Filesystem extends \Magento\Framework\Data\Collection
             $dir = [$dir];
         }
         foreach ($dir as $folder) {
-            if ($nodes = glob($folder . '/*', GLOB_NOSORT)) {
+            if ($nodes = $this->rootDirectory->search('/*', $folder)) {
                 foreach ($nodes as $node) {
-                    $collectedResult[] = $node;
+                    $collectedResult[] = $this->rootDirectory->getAbsolutePath($node);
                 }
             }
         }
@@ -254,7 +279,9 @@ class Filesystem extends \Magento\Framework\Data\Collection
         }
 
         foreach ($collectedResult as $item) {
-            if (is_dir($item) && (!$this->_allowedDirsMask || preg_match($this->_allowedDirsMask, basename($item)))) {
+            if ($this->rootDirectory->isDirectory($item)
+                && (!$this->_allowedDirsMask || preg_match($this->_allowedDirsMask, basename($item)))
+            ) {
                 if ($this->_collectDirs) {
                     if ($this->_dirsFirst) {
                         $this->_collectedDirs[] = $item;
@@ -265,7 +292,7 @@ class Filesystem extends \Magento\Framework\Data\Collection
                 if ($this->_collectRecursively) {
                     $this->_collectRecursive($item);
                 }
-            } elseif ($this->_collectFiles && is_file(
+            } elseif ($this->_collectFiles && $this->rootDirectory->isFile(
                 $item
             ) && (!$this->_allowedFilesMask || preg_match(
                 $this->_allowedFilesMask,
@@ -369,7 +396,7 @@ class Filesystem extends \Magento\Framework\Data\Collection
      *
      * @param array $a
      * @param array $b
-     * @return int
+     * @return int|void
      */
     protected function _usort($a, $b)
     {
