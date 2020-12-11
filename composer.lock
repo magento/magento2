@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "50fd3418a729ef9b577d214fe6c9b0b1",
+    "content-hash": "ac6fc13ba98a815bce589d300d28012c",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
@@ -1459,12 +1459,6 @@
                 "BSD-3-Clause"
             ],
             "description": "Replace zendframework and zfcampus packages with their Laminas Project equivalents.",
-            "funding": [
-                {
-                    "url": "https://funding.communitybridge.org/projects/laminas-project",
-                    "type": "community_bridge"
-                }
-            ],
             "time": "2020-05-20T13:45:39+00:00"
         },
         {
@@ -3720,13 +3714,11 @@
                     "Magento\\Composer\\": "src"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "OSL-3.0",
                 "AFL-3.0"
             ],
-            "description": "Magento composer library helps to instantiate Composer application and run composer commands.",
-            "time": "2020-06-15T17:52:31+00:00"
+            "description": "Magento composer library helps to instantiate Composer application and run composer commands."
         },
         {
             "name": "magento/magento-composer-installer",
@@ -7556,20 +7548,6 @@
                 "parser",
                 "php"
             ],
-            "funding": [
-                {
-                    "url": "https://www.doctrine-project.org/sponsorship.html",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://www.patreon.com/phpdoctrine",
-                    "type": "patreon"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/doctrine%2Flexer",
-                    "type": "tidelift"
-                }
-            ],
             "time": "2020-05-25T17:44:05+00:00"
         },
         {
@@ -8461,21 +8439,21 @@
         },
         {
             "name": "magento/magento-coding-standard",
-            "version": "5",
+            "version": "6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/magento-coding-standard.git",
-                "reference": "da46c5d57a43c950dfa364edc7f1f0436d5353a5"
+                "reference": "efc9084db3d1bd145b92d6b8a2e9cb0faec54fa7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/magento-coding-standard/zipball/da46c5d57a43c950dfa364edc7f1f0436d5353a5",
-                "reference": "da46c5d57a43c950dfa364edc7f1f0436d5353a5",
+                "url": "https://api.github.com/repos/magento/magento-coding-standard/zipball/efc9084db3d1bd145b92d6b8a2e9cb0faec54fa7",
+                "reference": "efc9084db3d1bd145b92d6b8a2e9cb0faec54fa7",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.6.0",
-                "squizlabs/php_codesniffer": "^3.4",
+                "squizlabs/php_codesniffer": "^3.5",
                 "webonyx/graphql-php": ">=0.12.6 <1.0"
             },
             "require-dev": {
@@ -8496,7 +8474,7 @@
                 "AFL-3.0"
             ],
             "description": "A set of Magento specific PHP CodeSniffer rules.",
-            "time": "2019-11-04T22:08:27+00:00"
+            "time": "2020-12-03T14:41:54+00:00"
         },
         {
             "name": "magento/magento2-functional-testing-framework",
@@ -9560,20 +9538,6 @@
                 "MIT"
             ],
             "description": "PHPStan - PHP Static Analysis Tool",
-            "funding": [
-                {
-                    "url": "https://github.com/ondrejmirtes",
-                    "type": "github"
-                },
-                {
-                    "url": "https://www.patreon.com/phpstan",
-                    "type": "patreon"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/phpstan/phpstan",
-                    "type": "tidelift"
-                }
-            ],
             "time": "2020-05-05T12:55:44+00:00"
         },
         {
@@ -9863,12 +9827,6 @@
             "keywords": [
                 "timer"
             ],
-            "funding": [
-                {
-                    "url": "https://github.com/sebastianbergmann",
-                    "type": "github"
-                }
-            ],
             "time": "2020-04-20T06:00:37+00:00"
         },
         {
@@ -10012,16 +9970,6 @@
                 "phpunit",
                 "testing",
                 "xunit"
-            ],
-            "funding": [
-                {
-                    "url": "https://phpunit.de/donate.html",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/sebastianbergmann",
-                    "type": "github"
-                }
             ],
             "time": "2020-05-22T13:54:05+00:00"
         },
@@ -12059,5 +12007,6 @@
         "ext-zip": "*",
         "lib-libxml": "*"
     },
-    "platform-dev": []
+    "platform-dev": [],
+    "plugin-api-version": "1.1.0"
 }
