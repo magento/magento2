@@ -98,15 +98,16 @@ class Dependence extends \Magento\Backend\Block\AbstractBlock
      *
      * @param string $fieldName
      * @param string $fieldNameFrom
-     * @param \Magento\Config\Model\Config\Structure\Element\Dependency\Field|string $refField
+     * @param \Magento\Config\Model\Config\Structure\Element\Dependency\Field|array|string $refField
      * @return \Magento\Backend\Block\Widget\Form\Element\Dependence
      */
     public function addFieldDependence($fieldName, $fieldNameFrom, $refField)
     {
         if (!is_object($refField)) {
+            $values = is_array($refField) ? array_values($refField) : [(string)$refField];
             /** @var $refField \Magento\Config\Model\Config\Structure\Element\Dependency\Field */
             $refField = $this->_fieldFactory->create(
-                ['fieldData' => ['value' => (string)$refField], 'fieldPrefix' => '']
+                ['fieldData' => ['values' => $values], 'fieldPrefix' => '']
             );
         }
         $this->_depends[$fieldName][$fieldNameFrom] = $refField;

@@ -57,6 +57,17 @@ class FieldTest extends TestCase
     }
 
     /**
+     * @return array
+     */
+    protected function _getComplexArrayData()
+    {
+        return [
+            'values' => [self::COMPLEX_VALUE1, self::COMPLEX_VALUE2, self::COMPLEX_VALUE3],
+            'dependPath' => ['section_5', 'group_6', 'group_7', 'field_8']
+        ];
+    }
+
+    /**
      * Get SUT
      *
      * @param array $data
@@ -104,7 +115,9 @@ class FieldTest extends TestCase
             [$this->_getSimpleData(), true],
             [$this->_getSimpleData(), false],
             [$this->_getComplexData(), true],
-            [$this->_getComplexData(), false]
+            [$this->_getComplexData(), false],
+            [$this->_getComplexArrayData(), true],
+            [$this->_getComplexArrayData(), false],
         ];
     }
 
@@ -133,7 +146,9 @@ class FieldTest extends TestCase
             [$this->_getComplexData(), true, self::COMPLEX_VALUE1, false],
             [$this->_getComplexData(), false, self::COMPLEX_VALUE2, true],
             [$this->_getComplexData(), true, self::SIMPLE_VALUE, true],
-            [$this->_getComplexData(), false, self::SIMPLE_VALUE, false]
+            [$this->_getComplexData(), false, self::SIMPLE_VALUE, false],
+            [$this->_getComplexArrayData(), true, self::SIMPLE_VALUE, true],
+            [$this->_getComplexArrayData(), false, self::SIMPLE_VALUE, false],
         ];
     }
 
@@ -159,7 +174,9 @@ class FieldTest extends TestCase
             [$this->_getSimpleData(), false, [self::SIMPLE_VALUE]],
             [$this->_getSimpleEmptyData(), false, [static::EMPTY_VALUE]],
             [$this->_getComplexData(), true, $complexDataValues],
-            [$this->_getComplexData(), false, $complexDataValues]
+            [$this->_getComplexData(), false, $complexDataValues],
+            [$this->_getComplexArrayData(), true, $complexDataValues],
+            [$this->_getComplexArrayData(), false, $complexDataValues],
         ];
     }
 
