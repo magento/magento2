@@ -61,10 +61,10 @@ class Download extends ExportController implements HttpGetActionInterface
         $resultRedirect = $this->resultRedirectFactory->create();
         $resultRedirect->setPath('adminhtml/export/index');
         $fileName = $this->getRequest()->getParam('filename');
-        $exportDirectory = $this->filesystem->getDirectoryRead(DirectoryList::VAR_EXPORT);
+        $exportDirectory = $this->filesystem->getDirectoryRead(DirectoryList::VAR_IMPORT_EXPORT);
 
         try {
-            $fileExist = $exportDirectory->isExist($fileName);
+            $fileExist = $exportDirectory->isExist('export/' . $fileName);
         } catch (Throwable $e) {
             $fileExist = false;
         }
