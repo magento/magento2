@@ -11,59 +11,81 @@ use Magento\Framework\Exception\MailException;
 use Magento\Framework\Message\Manager;
 use Magento\Sales\Model\AdminOrder\EmailSender;
 use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Email\Sender\InvoiceSender;
 use Magento\Sales\Model\Order\Email\Sender\OrderSender;
+use Magento\Sales\Model\Order\Invoice;
+use Magento\Sales\Model\ResourceModel\Order\Invoice\Collection as InvoiceCollection;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
+/**
+ * Tests to sent order emails
+ */
 class EmailSenderTest extends TestCase
 {
     /**
-     * @var MockObject
+     * @var LoggerInterface|MockObject
      */
-    protected $orderMock;
+    private $loggerMock;
 
     /**
-     * @var MockObject
+     * @var Manager|MockObject
      */
-    protected $loggerMock;
+    private $messageManagerMock;
 
     /**
-     * @var MockObject
+     * @var OrderSender|MockObject
      */
-    protected $messageManagerMock;
+    private $orderSenderMock;
+
+    /**
+     * @var InvoiceSender|MockObject
+     */
+    private $invoiceSenderMock;
 
     /**
      * @var EmailSender
      */
-    protected $emailSender;
+    private $emailSender;
 
     /**
-     * @var OrderSender
-     */
-    protected $orderSenderMock;
-
-    /**
-     * Test setup
+     * @inheritdoc
      */
     protected function setUp(): void
     {
         $this->messageManagerMock = $this->createMock(Manager::class);
         $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
-        $this->orderMock = $this->createMock(Order::class);
         $this->orderSenderMock = $this->createMock(OrderSender::class);
+        $this->invoiceSenderMock = $this->createMock(InvoiceSender::class);
 
-        $this->emailSender = new EmailSender($this->messageManagerMock, $this->loggerMock, $this->orderSenderMock);
+        $this->emailSender = new EmailSender(
+            $this->messageManagerMock,
+            $this->loggerMock,
+            $this->orderSenderMock,
+            $this->invoiceSenderMock
+        );
     }
 
     /**
-     * testSendSuccess
+     * Test to send order emails
      */
     public function testSendSuccess()
     {
+        $invoicePaid = $this->createMock(Invoice::class);
+        $invoicePaid->method('getState')->willReturn(Invoice::STATE_PAID);
+        $invoiceOpen = $this->createMock(Invoice::class);
+        $invoiceOpen->method('getState')->willReturn(Invoice::STATE_OPEN);
+        $order = $this->createOrderMock([$invoiceOpen, $invoicePaid]);
+
         $this->orderSenderMock->expects($this->once())
-            ->method('send');
-        $this->assertTrue($this->emailSender->send($this->orderMock));
+            ->method('send')
+            ->with($order);
+        $this->invoiceSenderMock->expects($this->once())
+            ->method('send')
+            ->with($invoicePaid);
+
+        $this->assertTrue($this->emailSender->send($order));
     }
 
     /**
@@ -71,6 +93,7 @@ class EmailSenderTest extends TestCase
      */
     public function testSendFailure()
     {
+        $orderMock = $this->createOrderMock();
         $this->orderSenderMock->expects($this->once())
             ->method('send')
             ->willThrowException(new MailException(__('test message')));
@@ -79,6 +102,22 @@ class EmailSenderTest extends TestCase
         $this->loggerMock->expects($this->once())
             ->method('critical');
 
-        $this->assertFalse($this->emailSender->send($this->orderMock));
+        $this->assertFalse($this->emailSender->send($orderMock));
+    }
+
+    /**
+     * Create order mock
+     *
+     * @param array $invoiceCollection
+     * @return MockObject|Order
+     */
+    private function createOrderMock(array $invoiceCollection = []): MockObject
+    {
+        $collection = $this->createMock(InvoiceCollection::class);
+        $collection->method('getItems')->willReturn($invoiceCollection);
+        $order = $this->createMock(Order::class);
+        $order->method('getInvoiceCollection')->willReturn($collection);
+
+        return $order;
     }
 }
