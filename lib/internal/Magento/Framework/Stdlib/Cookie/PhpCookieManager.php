@@ -207,21 +207,7 @@ class PhpCookieManager implements CookieManagerInterface
         if ($numCookies > static::MAX_NUM_COOKIES) {
             $this->logger->warning(
                 new Phrase('Unable to send the cookie. Maximum number of cookies would be exceeded.'),
-                array_merge(
-                    ['user-agent' => $this->httpHeader->getHttpUserAgent()],
-                    [
-                        'cookies' => implode(
-                            ', ',
-                            array_map(
-                                function ($v, $k) {
-                                    return sprintf("%s='%s'", $k, $v);
-                                },
-                                $_COOKIE,
-                                array_keys($_COOKIE)
-                            )
-                        )
-                    ]
-                )
+                array_merge($_COOKIE, ['user-agent' => $this->httpHeader->getHttpUserAgent()])
             );
         }
 
