@@ -205,4 +205,18 @@ class PluginTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($customer->getId(), (int)$subscriber->getCustomerId());
         $this->assertEquals($currentStore, (int)$subscriber->getStoreId());
     }
+
+    /**
+     * Test get list customer, which have more then 2 subscribes in newsletter_subscriber.
+     *
+     * @magentoAppArea frontend
+     * @magentoDataFixture Magento/Newsletter/_files/subscribers.php
+     */
+    public function testCustomerWithTwoNewsLetterSubscriptions()
+    {
+        /** @var \Magento\Framework\Api\SearchCriteriaBuilder $searchBuilder */
+        $searchBuilder = Bootstrap::getObjectManager()->create(\Magento\Framework\Api\SearchCriteriaBuilder::class);
+        $searchCriteria = $searchBuilder->addFilter('entity_id', 1)->create();
+        $this->customerRepository->getList($searchCriteria);
+    }
 }

@@ -235,27 +235,6 @@ class CustomerPlugin
     }
 
     /**
-     * Add subscription status to customer list
-     *
-     * @param CustomerRepositoryInterface $subject
-     * @param SearchResults $searchResults
-     * @return SearchResults
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    public function afterGetList(CustomerRepositoryInterface $subject, SearchResults $searchResults): SearchResults
-    {
-        foreach ($searchResults->getItems() as $customer) {
-            /** @var CustomerExtensionInterface $extensionAttributes */
-            $extensionAttributes = $customer->getExtensionAttributes();
-
-            $isSubscribed = (int) $extensionAttributes->getIsSubscribed() === Subscriber::STATUS_SUBSCRIBED ?: false;
-            $extensionAttributes->setIsSubscribed($isSubscribed);
-        }
-
-        return $searchResults;
-    }
-
-    /**
      * Set Is Subscribed extension attribute
      *
      * @param CustomerInterface $customer
