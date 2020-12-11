@@ -117,7 +117,7 @@
     <preference for="Magento\Framework\AuthorizationInterface" type="Magento\Framework\Authorization" />
     <preference for="Magento\Framework\Authorization\PolicyInterface" type="Magento\Framework\Authorization\Policy\DefaultPolicy" />
     <preference for="Magento\Framework\Authorization\RoleLocatorInterface" type="Magento\Framework\Authorization\RoleLocator\DefaultRoleLocator" />
-    <preference for="Magento\Framework\Session\SessionManagerInterface" type="Magento\Framework\Session\Generic" />
+    <preference for="Magento\Framework\Session\SessionManagerInterface" type="Magento\Framework\Session\Generic\Proxy" />
     <preference for="Magento\Framework\App\Config\ScopeConfigInterface" type="Magento\Framework\App\Config" />
     <preference for="Magento\Framework\App\Config\ReinitableConfigInterface" type="Magento\Framework\App\ReinitableConfig" />
     <preference for="Magento\Framework\App\Config\MutableScopeConfigInterface" type="Magento\Framework\App\MutableScopeConfig" />
