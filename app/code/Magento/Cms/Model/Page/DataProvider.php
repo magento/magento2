@@ -11,14 +11,16 @@ use Magento\Cms\Model\ResourceModel\Page\CollectionFactory;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Ui\DataProvider\Modifier\PoolInterface;
-use Magento\Framework\AuthorizationInterface;
+use Magento\Ui\DataProvider\ModifierPoolDataProvider;
+use Psr\Log\LoggerInterface;
 
 /**
- * Class DataProvider
+ * Cms Page DataProvider
  */
-class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
+class DataProvider extends ModifierPoolDataProvider
 {
     /**
      * @var DataPersistorInterface
@@ -56,6 +58,11 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
     private $loadedPages;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @param string $name
      * @param string $primaryFieldName
      * @param string $requestFieldName
@@ -68,6 +75,7 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
      * @param RequestInterface|null $request
      * @param CustomLayoutManagerInterface|null $customLayoutManager
      * @param PageRepositoryInterface|null $pageRepository
+     * @param LoggerInterface|null $logger
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -82,7 +90,8 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
         ?AuthorizationInterface $auth = null,
         ?RequestInterface $request = null,
         ?CustomLayoutManagerInterface $customLayoutManager = null,
-        ?PageRepositoryInterface $pageRepository = null
+        ?PageRepositoryInterface $pageRepository = null,
+        ?LoggerInterface $logger = null
     ) {
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data, $pool);
         $this->collection = $pageCollectionFactory->create();
@@ -93,6 +102,7 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
         $this->customLayoutManager = $customLayoutManager
             ?? ObjectManager::getInstance()->get(CustomLayoutManagerInterface::class);
         $this->pageRepository = $pageRepository ?? ObjectManager::getInstance()->get(PageRepositoryInterface::class);
+        $this->logger = $logger ?: ObjectManager::getInstance()->get(LoggerInterface::class);
     }
 
     /**
@@ -132,7 +142,7 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
 
         $data = $this->dataPersistor->get('cms_page');
         if (empty($data)) {
-           return $this->loadedData;
+            return $this->loadedData;
         }
 
         $page = $this->collection->getNewEmptyItem();
@@ -148,6 +158,7 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
 
     /**
      * Loads the current page by current request params.
+     *
      * @return Page
      * @throws LocalizedException
      */
@@ -204,16 +215,20 @@ class DataProvider extends \Magento\Ui\DataProvider\ModifierPoolDataProvider
         //List of custom layout files available for current page.
         $options = [['label' => 'No update', 'value' => '_no_update_']];
 
+        $page = null;
         try {
             $page = $this->getCurrentPage();
+        } catch (LocalizedException $e) {
+            $this->logger->error($e->getMessage());
+        }
+
+        if ($page) {
             if ($page->getCustomLayoutUpdateXml() || $page->getLayoutUpdateXml()) {
                 $options[] = ['label' => 'Use existing layout update XML', 'value' => '_existing_'];
             }
             foreach ($this->customLayoutManager->fetchAvailableFiles($page) as $layoutFile) {
                 $options[] = ['label' => $layoutFile, 'value' => $layoutFile];
             }
-        } catch (LocalizedException $exception) {
-
         }
 
         $customLayoutMeta = [
