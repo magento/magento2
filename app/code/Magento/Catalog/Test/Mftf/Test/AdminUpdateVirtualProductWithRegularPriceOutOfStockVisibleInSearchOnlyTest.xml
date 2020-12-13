@@ -106,7 +106,7 @@
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForSearchTextBox"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickSearchTextBoxButton"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForSearch"/>
-        <actionGroup ref="StorefrontAssertProductNameIsNotOnProductMainPageActionGroup" stepKey="dontSeeVirtualProductLinkOnStorefrontPage">
+        <actionGroup ref="AssertStorefrontProductNameIsNotOnProductMainPageActionGroup" stepKey="dontSeeVirtualProductLinkOnStorefrontPage">
             <argument name="productName" value="{{updateVirtualProductRegularPrice99OutOfStock.name}}"/>
         </actionGroup>
 
