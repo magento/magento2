@@ -27,6 +27,9 @@
     <type name="Magento\CatalogUrlRewrite\Model\Storage\DbStorage">
         <plugin name="dynamic_storage_plugin" type="Magento\CatalogUrlRewrite\Plugin\DynamicCategoryRewrites"/>
     </type>
+    <type name="Magento\Catalog\Model\Product\Action">
+        <plugin name="update_url_rewrites_after_websites_update_plugin" type="Magento\CatalogUrlRewrite\Plugin\Catalog\Model\Product\UpdateProductWebsiteUrlRewrites"/>
+    </type>
     <type name="Magento\CatalogUrlRewrite\Model\Map\UrlRewriteFinder">
         <arguments>
             <argument name="urlRewriteClassNames" xsi:type="array">
