@@ -5,8 +5,8 @@
   * See COPYING.txt for license details.
   */
 -->
-<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="CaptchaWithDisabledGuestCheckoutTest">
         <annotations>
             <features value="Captcha"/>
@@ -32,7 +32,7 @@
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct1"/>
         </after>
-        
+
         <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductPage">
             <argument name="productUrl" value="$$createSimpleProduct.sku$$"/>
         </actionGroup>
@@ -57,13 +57,13 @@
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeCaptchaField"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeCaptchaImage"/>
         <actionGroup ref="AssertStorefrontCaptchaVisibleOnCustomerSignInPopupActionGroup" stepKey="seeCaptchaReloadButton"/>
-       
+
         <actionGroup ref="ReloadPageActionGroup" stepKey="refreshPage"/>
-        <comment userInput="Replacing reload action and preserve Backward Compatibility" stepKey="waitForPageLoad2" />
-        
+        <comment userInput="Replacing reload action and preserve Backward Compatibility" stepKey="waitForPageLoad2"/>
+
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickCart2"/>
         <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckout2"/>
-       
+
         <waitForElementVisible selector="{{StorefrontCustomerSignInPopupFormSection.email}}" stepKey="waitEmailFieldVisible2"/>
 
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeCaptchaField2"/>
