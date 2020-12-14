@@ -984,6 +984,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
                 );
                 if ($item->getId()) {
                     $this->addProduct($item->getProduct(), $item->getBuyRequest()->toArray());
+                    $this->removeItem($itemId, 'wishlist');
                 }
             }
         }

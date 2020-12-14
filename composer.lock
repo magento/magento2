@@ -8439,21 +8439,21 @@
         },
         {
             "name": "magento/magento-coding-standard",
-            "version": "5",
+            "version": "6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/magento-coding-standard.git",
-                "reference": "da46c5d57a43c950dfa364edc7f1f0436d5353a5"
+                "reference": "efc9084db3d1bd145b92d6b8a2e9cb0faec54fa7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/magento-coding-standard/zipball/da46c5d57a43c950dfa364edc7f1f0436d5353a5",
-                "reference": "da46c5d57a43c950dfa364edc7f1f0436d5353a5",
+                "url": "https://api.github.com/repos/magento/magento-coding-standard/zipball/efc9084db3d1bd145b92d6b8a2e9cb0faec54fa7",
+                "reference": "efc9084db3d1bd145b92d6b8a2e9cb0faec54fa7",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.6.0",
-                "squizlabs/php_codesniffer": "^3.4",
+                "squizlabs/php_codesniffer": "^3.5",
                 "webonyx/graphql-php": ">=0.12.6 <1.0"
             },
             "require-dev": {
@@ -8474,7 +8474,7 @@
                 "AFL-3.0"
             ],
             "description": "A set of Magento specific PHP CodeSniffer rules.",
-            "time": "2019-11-04T22:08:27+00:00"
+            "time": "2020-12-03T14:41:54+00:00"
         },
         {
             "name": "magento/magento2-functional-testing-framework",
