@@ -11,15 +11,14 @@
     <test name="AdminChangeCustomerAssociatedWebsiteTest">
         <annotations>
             <features value="Customer"/>
-            <title value="Admin should not be able to change customer assigned website ID"/>
-            <description value="Admin should not be able to change customer assigned website ID"/>
+            <title value="Admin should be able to change customer associated website ID"/>
+            <description value="Admin should be able to change customer associated website ID"/>
             <severity value="AVERAGE"/>
             <useCaseId value="MC-38913"/>
             <testCaseId value="MC-39764"/>
             <stories value="Customer Edit"/>
             <group value="customer"/>
         </annotations>
-
         <before>
             <!--Login to admin-->
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
@@ -45,9 +44,6 @@
         <after>
             <!--Delete customer-->
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
-            <!--Reset customer grid filter-->
-            <actionGroup ref="AdminOpenCustomersGridActionGroup" stepKey="navigateToCustomersPage"/>
-            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearCustomersGridFilter"/>
             <!--Delete custom website-->
             <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite">
                 <argument name="websiteName" value="{{NewWebSiteData.name}}"/>
@@ -55,31 +51,27 @@
             <!--Logout from admin-->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
-        <!--Open customer grid-->
-        <actionGroup ref="AdminOpenCustomersGridActionGroup" stepKey="navigateToCustomersPage"/>
-        <!--Filter customers grid by email-->
-        <actionGroup ref="AdminFilterCustomerGridByEmail" stepKey="filterCustomer">
-            <argument name="email" value="$createCustomer.email$"/>
-        </actionGroup>
-        <!--Click on customer row to open inline editor-->
-        <click selector="{{AdminDataGridTableSection.rowTemplate($createCustomer.email$)}}" stepKey="clickCustomersGridRow"/>
-        <!--Wait for inline editor to open-->
-        <waitForElementVisible selector="{{AdminCustomerGridInlineEditorSection.customerEmailEditor}}" stepKey="waitForEditor"/>
-        <!--Assert that website is not editable-->
-        <dontSeeElement selector="{{AdminCustomerGridInlineEditorSection.customerWebsiteEditor}}" stepKey="dontSeeWebsiteEditor"/>
-        <!--Assert that "Main Website" is displayed in website cell-->
-        <see selector="{{AdminCustomerGridInlineEditorSection.cellContent('Web Site')}}" userInput="{{_defaultWebsite.name}}" stepKey="assertThatMainWebsiteIsDisplayedInWebsiteCell"/>
         <!--Open customer edit page-->
         <actionGroup ref="AdminOpenCustomerEditPageActionGroup" stepKey="openCustomerEditPage">
             <argument name="customerId" value="$createCustomer.id$"/>
         </actionGroup>
         <!--Navigate to "Account Information" tab-->
         <actionGroup ref="AdminOpenAccountInformationTabFromCustomerEditPageActionGroup" stepKey="openAccountInformationEditPage"/>
-        <!--Assert that "Main Website" is selected in website selector-->
+        <!--Verify that "Main Website" is selected in website selector-->
         <seeOptionIsSelected selector="{{AdminCustomerAccountInformationSection.associateToWebsite}}" userInput="{{_defaultWebsite.name}}" stepKey="assertThatMainWebsiteIsSelected"/>
-        <!--Assert that website selector is disabled-->
-        <assertElementContainsAttribute stepKey="assertThatWebsiteSelectorIsDisabled">
-            <expectedResult selector="{{AdminCustomerAccountInformationSection.associateToWebsite}}" attribute="disabled" type="string"/>
-        </assertElementContainsAttribute>
+        <!--Change customer website to "Second Website"-->
+        <actionGroup ref="AdminUpdateCustomerWebsiteInCustomerInformationPageActionGroup" stepKey="updateCustomerWebsite">
+            <argument name="websiteName" value="{{NewWebSiteData.name}}"/>
+        </actionGroup>
+        <!--Verify that changes are saved successfully-->
+        <actionGroup ref="AdminSaveCustomerAndAssertSuccessMessage" stepKey="assertThatChangesAreSavedSuccessfully"/>
+        <!--Open customer edit page-->
+        <actionGroup ref="AdminOpenCustomerEditPageActionGroup" stepKey="openCustomerEditPage2">
+            <argument name="customerId" value="$createCustomer.id$"/>
+        </actionGroup>
+        <!--Navigate to "Account Information" tab-->
+        <actionGroup ref="AdminOpenAccountInformationTabFromCustomerEditPageActionGroup" stepKey="openAccountInformationEditPage2"/>
+        <!--Verify that "Second Website" is selected in website selector-->
+        <seeOptionIsSelected selector="{{AdminCustomerAccountInformationSection.associateToWebsite}}" userInput="{{NewWebSiteData.name}}" stepKey="assertThatSecondWebsiteIsSelected"/>
     </test>
 </tests>
