@@ -5,8 +5,8 @@
   * See COPYING.txt for license details.
   */
 -->
-<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminConfigDefaultProductLayoutFromConfigurationSettingTest">
         <annotations>
             <features value="Catalog"/>
@@ -24,7 +24,7 @@
             <actionGroup ref="NavigateToDefaultLayoutsSettingActionGroup" stepKey="navigateToWebConfigurationPage1"/>
 
             <actionGroup ref="AdminSetProductLayoutSettingsActionGroup" stepKey="sampleActionGroup">
-              <argument name="layout" value="1 column"/>
+                <argument name="layout" value="1 column"/>
             </actionGroup>
 
             <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCacheBeforeTestFinishes">
@@ -39,11 +39,11 @@
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="expandDefaultLayouts"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibilityr" stepKey="DefaultProductLayout"/>
         <actionGroup ref="AdminSetProductLayoutSettingsActionGroup" stepKey="select3ColumnsLayout">
-           <argument name="layout" value="3 columns"/>
+            <argument name="layout" value="3 columns"/>
         </actionGroup>
-       
+
         <actionGroup ref="CliCacheFlushActionGroup" stepKey="clickSaveConfig">
-           <argument name="tags" value="config"/>
+            <argument name="tags" value="config"/>
         </actionGroup>
 
         <actionGroup ref="AdminOpenNewProductFormPageActionGroup" stepKey="navigateToNewProduct"/>
@@ -52,7 +52,7 @@
         <actionGroup ref="AdminExpandProductDesignSectionActionGroup" stepKey="clickOnDesignTab"/>
 
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForLayoutDropDown"/>
-        <seeOptionIsSelected selector="{{ProductDesignSection.LayoutDropdown}}" userInput="3 columns" stepKey="see3ColumnsSelected"/> 
+        <seeOptionIsSelected selector="{{ProductDesignSection.LayoutDropdown}}" userInput="3 columns" stepKey="see3ColumnsSelected"/>
 
     </test>
 </tests>

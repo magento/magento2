@@ -15,6 +15,7 @@
         <arguments>
             <argument name="layout" type="string"/>
         </arguments>
+        
         <waitForElementVisible selector="{{DefaultLayoutsSection.productLayout}}" stepKey="waittForDefaultProductLayout"/>
         <selectOption selector="{{DefaultLayoutsSection.productLayout}}" userInput="{{layout}}" stepKey="selectLayout"/>
         <click selector="{{ContentManagementSection.Save}}" stepKey="clickSaveConfig"/>
