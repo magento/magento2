@@ -41,7 +41,7 @@
         <after>
             <magentoCLI command="config:set {{StorefrontPaypalEnableTransferCartLineConfigData.path}} {{StorefrontPaypalEnableTransferCartLineConfigData.value}}" stepKey="enableTransferCartLine"/>
             <magentoCLI command="config:set {{StorefrontPaypalExpressAuthorizationPaymentActionOptionConfigData.path}} {{StorefrontPaypalExpressAuthorizationPaymentActionOptionConfigData.value}}" stepKey="setPaymentAction"/>
-            <magentoCLI command="config:set {{DisableFreeShippingMethod.path}} {{DisableFreeShippingMethod.value}}" stepKey="disableFreeShipping"/>
+            <actionGroup ref="CliDisableFreeShippingMethodActionGroup" stepKey="disableFreeShipping"/>
             <!-- Delete product -->
             <deleteData stepKey="deleteCategory" createDataKey="createCategory"/>
             <deleteData stepKey="deleteProduct" createDataKey="createProduct"/>

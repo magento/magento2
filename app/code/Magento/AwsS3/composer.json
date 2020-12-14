@@ -1,5 +1,5 @@
 {
-    "name": "magento/module-aws-s-3",
+    "name": "magento/module-aws-s3",
     "description": "N/A",
     "config": {
         "sort-packages": true
