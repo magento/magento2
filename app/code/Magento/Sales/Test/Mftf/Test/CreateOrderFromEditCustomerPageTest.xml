@@ -136,14 +136,15 @@
         <see selector="{{AdminCreateOrderWishListSection.wishListBlock}}" userInput="$$simpleProduct.name$$" stepKey="seeSimpleProductInWishList"/>
         <see selector="{{AdminCreateOrderWishListSection.wishListBlock}}" userInput="$$createConfigProduct.name$$" stepKey="seeConfigurableProductInWishList"/>
 
-        <!-- Add products to order from Wish List -->
+        <!-- Move products to order from Wish List -->
         <waitForElementVisible selector="{{AdminCreateOrderWishListSection.addProductToOrderCheckBox($$simpleProduct.name$$)}}" stepKey="waitForCheckBoxToVisible"/>
         <click selector="{{AdminCreateOrderWishListSection.addProductToOrderCheckBox($$simpleProduct.name$$)}}" stepKey="selectProductToAddToOrder"/>
+        <click selector="{{AdminCustomerCreateNewOrderSection.updateChangesBtn}}" stepKey="clickUpdateChangesButton"/>
         <click selector="{{AdminCreateOrderWishListSection.addConfigProductToOrder($$createConfigProduct.name$$)}}" stepKey="AddConfigurableProductToOrder"/>
         <waitForElementVisible selector="{{AdminOrderFormConfigureProductSection.optionSelect($$createConfigProductAttribute.default_frontend_label$$)}}" stepKey="waitForConfigurablePopover"/>
         <selectOption selector="{{AdminOrderFormConfigureProductSection.optionSelect($$createConfigProductAttribute.default_frontend_label$$)}}" userInput="$$getConfigAttributeOption1.label$$" stepKey="selectConfigurableOption"/>
         <click selector="{{AdminOrderFormConfigureProductSection.ok}}" stepKey="clickOkButton"/>
-        <click selector="{{AdminCustomerCreateNewOrderSection.updateChangesBtn}}" stepKey="clickOnUpdateButton"/>
+        <comment userInput="Action should be removed but replaced with comment due to backward compatibility" stepKey="clickOnUpdateButton"/>
         <waitForPageLoad stepKey="waitForAdminOrderItemsOrderedSectionPageLoad1"/>
 
         <!-- Assert Products in Order item section -->
@@ -171,9 +172,9 @@
         <dontSee selector="{{AdminCreateOrderShoppingCartSection.shoppingCartBlock}}" userInput="$$simpleProduct.name$$" stepKey="donSeeProductInShoppingCart"/>
         <dontSee selector="{{AdminCreateOrderShoppingCartSection.shoppingCartBlock}}" userInput="$$simpleProduct1.name$$" stepKey="dontSeeSecondProductInShoppingCart"/>
 
-        <!-- After move, assert products are present in Wish List section -->
-        <see selector="{{AdminCreateOrderWishListSection.wishListBlock}}" userInput="$$simpleProduct.name$$" stepKey="seeSimpleProductInWishList1"/>
-        <see selector="{{AdminCreateOrderWishListSection.wishListBlock}}" userInput="$$createConfigProduct.name$$" stepKey="seeConfigurableProductInWishList1"/>
+        <!-- After move, assert products are not present in Wish List section -->
+        <dontSee selector="{{AdminCreateOrderWishListSection.wishListBlock}}" userInput="$$simpleProduct.name$$" stepKey="seeSimpleProductInWishList1"/>
+        <dontSee selector="{{AdminCreateOrderWishListSection.wishListBlock}}" userInput="$$createConfigProduct.name$$" stepKey="seeConfigurableProductInWishList1"/>
 
         <!-- After move, assert products are present in order items section -->
         <see selector="{{AdminOrderItemsOrderedSection.productName}}" userInput="$$simpleProduct.name$$" stepKey="seeSimpleProductInOrderItemGrid1"/>
