@@ -23,9 +23,9 @@
         </annotations>
 
         <before>
-            <magentoCLI command="config:set {{EnableFreeShippingMethod.path}} {{EnableFreeShippingMethod.value}}" stepKey="enableFreeShipping"/>
-            <magentoCLI command="config:set {{EnableFlatRateShippingMethod.path}} {{EnableFlatRateShippingMethod.value}}" stepKey="enableFlatRateShipping"/>
-            <magentoCLI command="config:set {{EnableCheckMoneyOrderPaymentMethod.path}} {{EnableCheckMoneyOrderPaymentMethod.value}}" stepKey="enableCheckMoneyOrderPaymentMethod"/>
+            <actionGroup ref="CliEnableFreeShippingMethodActionGroup" stepKey="enableFreeShipping"/>
+            <actionGroup ref="CliEnableFlatRateShippingMethodActionGroup" stepKey="enableFlatRateShipping"/>
+            <actionGroup ref="CliEnableCheckMoneyOrderPaymentMethodActionGroup" stepKey="enableCheckMoneyOrderPaymentMethod"/>
             <magentoCLI command="config:set {{LoginAsCustomerConfigDataEnabled.path}} 1"
                         stepKey="enableLoginAsCustomer"/>
             <magentoCLI command="config:set {{LoginAsCustomerStoreViewLogin.path}} 0"
@@ -43,7 +43,7 @@
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearAllOrdersGridFilters"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
-            <magentoCLI command="config:set {{DisableFreeShippingMethod.path}} {{DisableFreeShippingMethod.value}}" stepKey="disableFreeShipping"/>
+            <actionGroup ref="CliDisableFreeShippingMethodActionGroup" stepKey="disableFreeShipping"/>
             <comment userInput="Adding the comment to replace 'cache:flush' command for preserving Backward Compatibility" stepKey="flushCacheAfterTestRun"/>
         </after>
 

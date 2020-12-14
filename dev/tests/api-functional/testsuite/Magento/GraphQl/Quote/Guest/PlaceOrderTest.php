@@ -328,6 +328,45 @@ class PlaceOrderTest extends GraphQlAbstract
     }
 
     /**
+     * Test place order with gift message options
+     *
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoConfigFixture default_store carriers/flatrate/active 1
+     * @magentoConfigFixture default_store carriers/tablerate/active 1
+     * @magentoConfigFixture default_store carriers/freeshipping/active 1
+     * @magentoConfigFixture default_store payment/banktransfer/active 1
+     * @magentoConfigFixture default_store payment/cashondelivery/active 1
+     * @magentoConfigFixture default_store payment/checkmo/active 1
+     * @magentoConfigFixture default_store payment/purchaseorder/active 1
+     * @magentoConfigFixture sales/gift_options/allow_order 1
+     * @magentoConfigFixture default_store customer/create_account/auto_group_assign 1
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/set_guest_email.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_gift_options.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_billing_address.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_flatrate_shipping_method.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_checkmo_payment_method.php
+     */
+    public function testPlaceOrderWithGiftMessage()
+    {
+        $reservedOrderId = 'test_quote';
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute($reservedOrderId);
+
+        $query = $this->getQuery($maskedQuoteId);
+        $response = $this->graphQlMutation($query);
+
+        self::assertArrayHasKey('placeOrder', $response);
+        self::assertArrayHasKey('order_number', $response['placeOrder']['order']);
+        self::assertEquals($reservedOrderId, $response['placeOrder']['order']['order_number']);
+        $orderIncrementId = $response['placeOrder']['order']['order_number'];
+        $order = $this->orderFactory->create();
+        $order->loadByIncrementId($orderIncrementId);
+        $this->assertNotEmpty($order->getGiftMessageId());
+    }
+
+    /**
      * @param string $maskedQuoteId
      * @return string
      */
