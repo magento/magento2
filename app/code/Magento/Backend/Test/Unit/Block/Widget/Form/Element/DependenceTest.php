@@ -14,7 +14,6 @@ use Magento\Framework\Json\EncoderInterface;
 use Magento\Framework\View\Helper\SecureHtmlRenderer;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use stdClass;
 
 class DependenceTest extends TestCase
 {
@@ -45,9 +44,9 @@ class DependenceTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->contextMock            = $this->createMock(Context::class);
-        $this->jsonEncoderMock        = $this->createMock(EncoderInterface::class);
-        $this->fieldFactoryMock       = $this->createMock(FieldFactory::class);
+        $this->contextMock = $this->createMock(Context::class);
+        $this->jsonEncoderMock = $this->createMock(EncoderInterface::class);
+        $this->fieldFactoryMock = $this->createMock(FieldFactory::class);
         $this->secureHtmlRendererMock = $this->createMock(SecureHtmlRenderer::class);
 
         $this->dependence = new Dependence(
@@ -61,7 +60,7 @@ class DependenceTest extends TestCase
 
     /**
      * @param string|array $value
-     * @param array        $expectedFieldValues
+     * @param array $expectedFieldValues
      *
      * @dataProvider fieldDependenceValuesDataProvider
      */
@@ -89,6 +88,6 @@ class DependenceTest extends TestCase
             ->expects(self::never())
             ->method('create');
 
-        $this->dependence->addFieldDependence('test_1', 'from_1', new stdClass());
+        $this->dependence->addFieldDependence('test_1', 'from_1', new \stdClass());
     }
 }
