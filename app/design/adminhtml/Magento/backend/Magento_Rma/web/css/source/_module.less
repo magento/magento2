@@ -7,21 +7,14 @@
     .rma-request-details,
     .rma-wrapper .order-shipping-address {
         float: left;
-        /**
-         * @codingStandardsIgnoreStart
-         */
-        #mix-grid .width(6, 12);
-        //@codingStandardsIgnoreEnd
+        .mix-grid .width(6, 12);
     }
 
     .rma-confirmation,
-    .rma-wrapper .order-return-address, .rma-wrapper .order-shipping-method {
+    .rma-wrapper .order-return-address,
+    .rma-wrapper .order-shipping-method {
         float: right;
-        /**
-        * @codingStandardsIgnoreStart
-        */
-        #mix-grid .width(6, 12);
-        //@codingStandardsIgnoreEnd
+        .mix-grid .width(6, 12);
     }
 }
 
@@ -54,6 +47,7 @@
             margin: 0 0 @order-create-sidebar__margin__s;
         }
     }
+
     .col-reason {
         .admin__control-select + .admin__control-text {
             margin-top: @indent__xs;

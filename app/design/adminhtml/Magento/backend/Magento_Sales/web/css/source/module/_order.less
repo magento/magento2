@@ -45,12 +45,12 @@
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
     .order-details {
         float: right;
-        #mix-grid .width(9,12);
+        .mix-grid .width(9,12);
         margin-left: 0;
     }
 
     .order-sidebar {
-        #mix-grid .column(3,12);
+        .mix-grid .column(3,12);
         margin-left: 0;
     }
 
@@ -61,7 +61,7 @@
     .order-payment-method,
     .order-comments-history {
         float: left;
-        #mix-grid .width(6,12);
+        .mix-grid .width(6,12);
     }
 
     .order-shipping-address,
@@ -69,7 +69,7 @@
     .order-totals,
     .order-view-account-information .order-account-information {
         float: right;
-        #mix-grid .width(6,12);
+        .mix-grid .width(6,12);
     }
 }
 

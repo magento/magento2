@@ -10,7 +10,7 @@
 .order-create-gift-wrapping {
     float: left;
 
-    #mix-grid .width(6, 12);
+    .mix-grid .width(6, 12);
 
     .admin__field {
         margin: 1.5rem 0;
@@ -85,8 +85,8 @@
 
 //
 //  Stores -> Other Settings -> Gift wrapping (create/edit)
-//  _____________________________________________
 //  TODO UI: remove after page build on ui-components
+//  _____________________________________________
 
 [class*='adminhtml-giftwrapping-'] {
     .field-base_price {
@@ -134,11 +134,15 @@
                 }
 
                 &:focus ~ .addafter:last-child:before {
-                    &:extend(.abs-form-control-pattern:focus);
+                    &:extend(
+                    .abs-form-control-pattern:focus
+                    );
                 }
 
                 &:hover ~ .addafter:last-child:before {
-                    &:extend(.abs-form-control-pattern:hover);
+                    &:extend(
+                    .abs-form-control-pattern:hover
+                    );
                 }
             }
         }

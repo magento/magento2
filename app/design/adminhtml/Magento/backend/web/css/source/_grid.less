@@ -74,7 +74,7 @@
 //  Form Fields Grid Sketch
 //  _____________________________________________
 
-#mix-grid() {
+.mix-grid() {
     .row() {
         .lib-clearer();
         margin-left: ~'-@{temp_gutter}';
@@ -86,12 +86,12 @@
     }
 
     .width(@_columns-min, @_total: @temp_columns) {
-        #mix-grid .return_length(@_columns-min, @_total);
+        .mix-grid .return_length(@_columns-min, @_total);
         width: @_length;
     }
 
     .column(@_columns-min, @_total: @temp_columns) {
-        #mix-grid .width(@_columns-min, @_total);
+        .mix-grid .width(@_columns-min, @_total);
         float: left;
         margin-left: @temp_gutter;
     }
