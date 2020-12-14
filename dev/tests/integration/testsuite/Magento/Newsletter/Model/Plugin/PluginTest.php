@@ -217,6 +217,10 @@ class PluginTest extends \PHPUnit\Framework\TestCase
         /** @var \Magento\Framework\Api\SearchCriteriaBuilder $searchBuilder */
         $searchBuilder = Bootstrap::getObjectManager()->create(\Magento\Framework\Api\SearchCriteriaBuilder::class);
         $searchCriteria = $searchBuilder->addFilter('entity_id', 1)->create();
-        $this->customerRepository->getList($searchCriteria);
+        $items = $this->customerRepository->getList($searchCriteria)->getItems();
+        /** @var \Magento\Customer\Api\Data\CustomerInterface $customer */
+        $customer = $items[0];
+        $extensionAttributes = $customer->getExtensionAttributes();
+        $this->assertTrue($extensionAttributes->getIsSubscribed());
     }
 }

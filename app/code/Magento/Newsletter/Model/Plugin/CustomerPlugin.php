@@ -235,6 +235,37 @@ class CustomerPlugin
     }
 
     /**
+     * Add subscription status to customer list
+     *
+     * @param CustomerRepositoryInterface $subject
+     * @param SearchResults $searchResults
+     * @return SearchResults
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function afterGetList(CustomerRepositoryInterface $subject, SearchResults $searchResults): SearchResults
+    {
+        $customerEmails = [];
+
+        foreach ($searchResults->getItems() as $customer) {
+            $customerEmails[] = $customer->getEmail();
+        }
+
+        $collection = $this->collectionFactory->create();
+        $collection->addFieldToFilter('subscriber_email', ['in' => $customerEmails]);
+
+        foreach ($searchResults->getItems() as $customer) {
+            /** @var CustomerExtensionInterface $extensionAttributes */
+            $extensionAttributes = $customer->getExtensionAttributes();
+            /** @var Subscriber $subscribe */
+            $subscribe = $collection->getItemByColumnValue('subscriber_email', $customer->getEmail());
+            $isSubscribed = $subscribe && (int) $subscribe->getStatus() === Subscriber::STATUS_SUBSCRIBED;
+            $extensionAttributes->setIsSubscribed($isSubscribed);
+        }
+
+        return $searchResults;
+    }
+
+    /**
      * Set Is Subscribed extension attribute
      *
      * @param CustomerInterface $customer
