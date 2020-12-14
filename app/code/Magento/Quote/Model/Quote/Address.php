@@ -139,7 +139,7 @@ class Address extends AbstractAddress implements
     const ADDRESS_TYPE_BILLING = 'billing';
 
     const ADDRESS_TYPE_SHIPPING = 'shipping';
-    
+
     private const CACHED_ITEMS_ALL = 'cached_items_all';
 
     /**
@@ -1653,7 +1653,7 @@ class Address extends AbstractAddress implements
     public function getEmail()
     {
         $email = $this->getData(self::KEY_EMAIL);
-        if (!$email && $this->getQuote()) {
+        if ($this->getQuote() && (!$email || $this->getQuote()->dataHasChangedFor('customer_email'))) {
             $email = $this->getQuote()->getCustomerEmail();
             $this->setEmail($email);
         }
