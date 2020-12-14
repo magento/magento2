@@ -120,7 +120,9 @@
         <actionGroup ref="AdminFormSaveAndDuplicateActionGroup" stepKey="saveAndDuplicateProductForm"/>
         <click selector="{{AdminProductFormSection.enableProductLabel}}" stepKey="clickEnableProduct"/>
         <fillField selector="{{AdminProductFormSection.productName}}" userInput="$$createConfigProduct.name$$-Updated" stepKey="fillProductName"/>
-        <selectOption selector="{{AdminProductFormSection.productStockStatus}}" userInput="1" stepKey="selectInStock"/>
+        <actionGroup ref="AdminSetStockStatusActionGroup" stepKey="selectInStock">
+             <argument name="stockStatus" value="In Stock"/>
+        </actionGroup> 
         <!--Change product image-->
         <comment userInput="Change product image" stepKey="commentChangeProductImage"/>
         <actionGroup ref="RemoveProductImageActionGroup" stepKey="removeProductImage"/>
