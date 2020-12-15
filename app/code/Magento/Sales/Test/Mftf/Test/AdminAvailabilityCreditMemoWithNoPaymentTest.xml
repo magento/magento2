@@ -55,7 +55,7 @@
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickCustomPriceCheckbox"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPriceFieldAppears"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="fillCustomPriceField"/>
-        <actionGroup ref="AdminSetCustomPriceActionGroup" stepKey="clickUpdateItemsAndQuantitiesButton"/>
+        <actionGroup ref="AdminSetCustomPriceOnCreateOrderPageActionGroup" stepKey="clickUpdateItemsAndQuantitiesButton"/>
 
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="selectCustomerGroup"/>
         <actionGroup ref="AdminFillAccountInformationOnCreateOrderPageActionGroup" stepKey="fillCustomerEmail">

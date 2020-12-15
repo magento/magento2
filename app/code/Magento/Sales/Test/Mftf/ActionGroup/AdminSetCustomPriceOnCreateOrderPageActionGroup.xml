@@ -8,7 +8,7 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminSetCustomPriceActionGroup">
+    <actionGroup name="AdminSetCustomPriceOnCreateOrderPageActionGroup">
 
         <annotations>
             <description>Checks the "Custom Price" selector. Enters price. Clicks the "Update Items and Quantities" button</description>
