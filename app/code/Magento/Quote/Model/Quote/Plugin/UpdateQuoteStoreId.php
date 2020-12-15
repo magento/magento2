@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\Quote\Model\Quote\Plugin;
 
 use Magento\Quote\Model\Quote;
-use Magento\Quote\Model\QuoteRepository;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
@@ -17,24 +16,16 @@ use Magento\Store\Model\StoreManagerInterface;
 class UpdateQuoteStoreId
 {
     /**
-     * @var QuoteRepository
-     */
-    private $quoteRepository;
-
-    /**
      * @var StoreManagerInterface
      */
     private $storeManager;
 
     /**
-     * @param QuoteRepository $quoteRepository
      * @param StoreManagerInterface $storeManager
      */
     public function __construct(
-        QuoteRepository $quoteRepository,
         StoreManagerInterface $storeManager
     ) {
-        $this->quoteRepository = $quoteRepository;
         $this->storeManager = $storeManager;
     }
 
@@ -42,20 +33,17 @@ class UpdateQuoteStoreId
      * Update store id in requested quote by store id from request.
      *
      * @param Quote $subject
-     * @param null $result
-     * @return void
+     * @param Quote $result
+     * @return Quote
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterLoadByIdWithoutStore(
-        Quote $subject,
-        $result
-    ) {
-        $quoteStoreId = (int) $subject->getStoreId();
+    public function afterLoadByIdWithoutStore(Quote $subject, Quote $result): Quote
+    {
         $storeId = $this->storeManager->getStore()
             ->getId() ?: $this->storeManager->getDefaultStoreView()
                 ->getId();
-        if ($storeId !== $quoteStoreId) {
-            $subject->setStoreId($storeId);
-        }
+        $result->setStoreId($storeId);
+
+        return $result;
     }
 }
