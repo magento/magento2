@@ -60,8 +60,8 @@
             <argument name="product" value="$$createSimpleProduct$$"/>
         </actionGroup>
 
-        <actionGroup ref="AdminSelectAttributeSetActionGroup" stepKey="startEditAttrSet">
-            <argument name="attributeSet" value="CatalogAttributeSet"/>
+        <actionGroup ref="AdminSelectAttributeSetOnEditProductPageActionGroup" stepKey="startEditAttrSet">
+            <argument name="attributeSet" value="$$createAttributeSet.attribute_set_name$$"/>
         </actionGroup>
 
         <waitForText userInput="$$createProductAttribute.default_frontend_label$$" stepKey="seeAttributeInForm"/>
