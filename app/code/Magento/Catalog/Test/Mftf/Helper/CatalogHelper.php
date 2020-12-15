@@ -28,7 +28,7 @@ class CatalogHelper extends Helper
      * @retrun void
      */
     public function deleteAllProductAttributesOneByOne(
-        string $firstNotEmptyRow,
+        string $notEmptyRow,
         string $modalAcceptButton,
         string $deleteButton,
         string $successMessageContainer,
@@ -39,20 +39,18 @@ class CatalogHelper extends Helper
             $magentoWebDriver = $this->getModule('\Magento\FunctionalTestingFramework\Module\MagentoWebDriver');
             /** @var FacebookWebDriver $webDriver */
             $webDriver = $magentoWebDriver->webDriver;
-            $rows = $webDriver->findElements(WebDriverBy::cssSelector($firstNotEmptyRow));
-            while (!empty($rows)) {
-                $rows[0]->click();
+            $gridRows = $webDriver->findElements(WebDriverBy::cssSelector($notEmptyRow));
+            while (!empty($gridRows)) {
+                $gridRows[0]->click();
                 $magentoWebDriver->waitForPageLoad(30);
                 $magentoWebDriver->click($deleteButton);
                 $magentoWebDriver->waitForPageLoad(30);
                 $magentoWebDriver->waitForElementVisible($modalAcceptButton, 10);
-                $magentoWebDriver->waitForPageLoad(60);
                 $magentoWebDriver->click($modalAcceptButton);
                 $magentoWebDriver->waitForPageLoad(60);
-                $magentoWebDriver->waitForLoadingMaskToDisappear();
                 $magentoWebDriver->waitForElementVisible($successMessageContainer, 10);
                 $magentoWebDriver->see($successMessage, $successMessageContainer);
-                $rows = $webDriver->findElements(WebDriverBy::cssSelector($firstNotEmptyRow));
+                $gridRows = $webDriver->findElements(WebDriverBy::cssSelector($notEmptyRow));
             }
         } catch (\Exception $e) {
             $this->fail($e->getMessage());
