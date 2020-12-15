@@ -28,7 +28,7 @@ type StoreConfig @doc(description: "The type contains information about a store 
     is_default_store_group : Boolean @doc(description: "Indicates whether the store group has been designated as the default within the website")
     website_id : Int @deprecated(reason: "The field should not be used on the storefront") @doc(description: "The ID number assigned to the website store")
     website_code : ID @doc(description: "The unique ID for the website")
-    website_name : ID @doc(description: "The label assigned to the website")
+    website_name : String @doc(description: "The label assigned to the website")
     locale : String @doc(description: "Store locale")
     base_currency_code : String @doc(description: "Base currency code")
     default_display_currency_code : String @doc(description: "Default display currency code")
