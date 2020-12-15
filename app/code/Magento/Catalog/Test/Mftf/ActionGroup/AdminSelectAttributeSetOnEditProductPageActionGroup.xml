@@ -10,7 +10,8 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminSelectAttributeSetOnEditProductPageActionGroup">
         <annotations>
-            <description></description>
+            <description>Selects the specified value from the Attribute Set dropdown.
+                         The Edit Product Page should be opened prior to Action Group execution</description>
         </annotations>
         <arguments>
             <argument name="attributeSet" type="string"/>

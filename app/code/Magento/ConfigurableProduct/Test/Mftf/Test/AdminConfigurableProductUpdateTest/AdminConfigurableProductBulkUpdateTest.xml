@@ -59,11 +59,8 @@
         <!-- Update the description -->
         <click selector="{{AdminUpdateAttributesSection.toggleDescription}}" stepKey="clickToggleDescription"/>
         <fillField selector="{{AdminUpdateAttributesSection.description}}" userInput="MFTF automation!" stepKey="fillDescription"/>
-        <actionGroup ref="AdminSaveProductsMassAttributesUpdateActionGroup" stepKey="clickSave"/>
-        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForSuccessMessage"/> 
-
-        <!-- <click selector="{{AdminEditProductAttributesSection.Save}}" stepKey="clickSave"/>
-        <waitForElementVisible selector="{{AdminProductMessagesSection.successMessage}}" time="60" stepKey="waitForSuccessMessage"/> -->
+        <click selector="{{AdminEditProductAttributesSection.Save}}" stepKey="clickSave"/>
+        <waitForElementVisible selector="{{AdminProductMessagesSection.successMessage}}" time="60" stepKey="waitForSuccessMessage"/>
         <see selector="{{AdminProductMessagesSection.successMessage}}" userInput="Message is added to queue" stepKey="seeAttributeUpdateSuccessMsg"/>
 
         <!-- Apply changes -->
