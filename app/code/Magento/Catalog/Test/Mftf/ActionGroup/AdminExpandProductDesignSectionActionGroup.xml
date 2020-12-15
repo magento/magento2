@@ -15,6 +15,5 @@
 
         <click selector="{{ProductDesignSection.DesignTab}}" stepKey="clickDesignTab"/>
         <waitForPageLoad stepKey="waitForTabOpen"/>
-        
     </actionGroup>
 </actionGroups>
