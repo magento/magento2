@@ -52,7 +52,9 @@
         <!-- Update attribute -->
         <click selector="{{AdminEditProductAttributesSection.ChangeAttributeDescriptionToggle}}" stepKey="toggleToChangeDescription"/>
         <fillField selector="{{AdminEditProductAttributesSection.AttributeDescription}}" userInput="Updated $$createProductOne.custom_attributes[description]$$" stepKey="fillAttributeDescriptionField"/>
-        <click selector="{{AdminEditProductAttributesSection.Save}}" stepKey="save"/>
+        <actionGroup ref="AdminSaveProductsMassAttributesUpdateActionGroup" stepKey="save"/>
+        <!-- <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForSuccessMessage"/>  -->
+        <!-- <click selector="{{AdminEditProductAttributesSection.Save}}" stepKey="save"/> -->
         <see selector="{{AdminProductMessagesSection.successMessage}}" userInput="Message is added to queue" stepKey="seeAttributeUpateSuccessMsg"/>
 
 

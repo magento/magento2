@@ -60,9 +60,9 @@
             <argument name="product" value="$$createSimpleProduct$$"/>
         </actionGroup>
 
-        <click selector="{{AdminProductFormSection.attributeSet}}" stepKey="startEditAttrSet"/>
-        <fillField selector="{{AdminProductFormSection.attributeSetFilter}}" userInput="$$createAttributeSet.attribute_set_name$$" stepKey="searchForAttrSet"/>
-        <click selector="{{AdminProductFormSection.attributeSetFilterResult}}" stepKey="selectAttrSet"/>
+        <actionGroup ref="AdminSelectAttributeSetActionGroup" stepKey="startEditAttrSet">
+            <argument name="attributeSet" value="CatalogAttributeSet"/>
+        </actionGroup>
 
         <waitForText userInput="$$createProductAttribute.default_frontend_label$$" stepKey="seeAttributeInForm"/>
     </test>
