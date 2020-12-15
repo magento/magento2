@@ -7,9 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\UrlRewrite\Model;
 
-use Magento\Catalog\Model\Category;
-use Magento\Catalog\Model\Product;
-use Magento\Cms\Model\Page;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\EntityManager\EventManager;
@@ -62,6 +59,11 @@ class UrlRewrite extends AbstractModel
     private $entityToCacheTagMap;
 
     /**
+     * @var UrlFinderInterface
+     */
+    private $urlFinder;
+
+    /**
      * UrlRewrite constructor.
      *
      * @param Context $context
@@ -72,6 +74,7 @@ class UrlRewrite extends AbstractModel
      * @param Json|null $serializer
      * @param CacheContext|null $cacheContext
      * @param EventManager|null $eventManager
+     * @param UrlFinderInterface|null $urlFinder
      * @param array $entityToCacheTagMap
      */
     public function __construct(
@@ -83,12 +86,14 @@ class UrlRewrite extends AbstractModel
         Json $serializer = null,
         CacheContext $cacheContext = null,
         EventManager $eventManager = null,
+        UrlFinderInterface $urlFinder = null,
         array $entityToCacheTagMap = []
     )
     {
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(Json::class);
         $this->cacheContext = $cacheContext ?: ObjectManager::getInstance()->get(CacheContext::class);
         $this->eventManager = $eventManager ?: ObjectManager::getInstance()->get(EventManager::class);
+        $this->urlFinder = $urlFinder ?: ObjectManager::getInstance()->get(UrlFinderInterface::class);
         $this->entityToCacheTagMap = $entityToCacheTagMap;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
@@ -131,30 +136,91 @@ class UrlRewrite extends AbstractModel
     }
 
     /**
-     * Clean cache for the entity which was affected by updating UrlRewrite
+     * Gets final target UrlRewrite for custom rewrite record
      *
-     * @param $entityType
-     * @param $entityId
+     * @param string $path
+     * @param int $storeId
+     * @return UrlRewrite|null
      */
-    private function cleanCacheForEntity($entityType, $entityId)
-    {
-        if ($entityType !== Rewrite::ENTITY_TYPE_CUSTOM && array_key_exists($entityType, $this->entityToCacheTagMap)) {
-            $cacheKey = $this->entityToCacheTagMap[$entityType];
+    private function getFinalTargetUrlRewrite(string $path, int $storeId) {
+            $urlRewriteTarget = $this->urlFinder->findOneByData(
+                [
+                    'request_path' => $path,
+                    'store_id' => $storeId
+                ]
+            );
 
+            while ($urlRewriteTarget && $urlRewriteTarget->getRedirectType() > 0) {
+                $urlRewriteTarget = $this->urlFinder->findOneByData(
+                    [
+                        'request_path' => $urlRewriteTarget->getTargetPath(),
+                        'store_id' => $urlRewriteTarget->getStoreId()
+                    ]
+                );
+            }
+
+            return $urlRewriteTarget;
+    }
+
+    /**
+     * Clean the cache for entities affected by current rewrite
+     */
+    private function cleanEntitiesCache() {
+        if ($this->getEntityType() === Rewrite::ENTITY_TYPE_CUSTOM) {
+            $urlRewrite = $this->getFinalTargetUrlRewrite(
+                $this->getTargetPath(),
+                (int)$this->getStoreId()
+            );
+
+            if ($urlRewrite) {
+                $this->cleanCacheForEntity($urlRewrite->getEntityType(), (int) $urlRewrite->getEntityId());
+            }
+
+            if ($this->getOrigData() && $this->getOrigData('target_path') !== $this->getTargetPath()) {
+                $origUrlRewrite = $this->getFinalTargetUrlRewrite(
+                    $this->getOrigData('target_path'),
+                    (int)$this->getOrigData('store_id')
+                );
+
+                if ($origUrlRewrite) {
+                    $this->cleanCacheForEntity($origUrlRewrite->getEntityType(), (int) $origUrlRewrite->getEntityId());
+                }
+            }
+        } else {
+            $this->cleanCacheForEntity($this->getEntityType(), (int) $this->getEntityId());
+        }
+    }
+
+    /**
+     * Clean cache for specified entity type by id
+     *
+     * @param string $entityType
+     * @param int $entityId
+     */
+    private function cleanCacheForEntity(string $entityType, int $entityId)
+    {
+        if (array_key_exists($entityType, $this->entityToCacheTagMap)) {
+            $cacheKey = $this->entityToCacheTagMap[$entityType];
             $this->cacheContext->registerEntities($cacheKey, [$entityId]);
             $this->eventManager->dispatch('clean_cache_by_tags', ['object' => $this->cacheContext]);
         }
     }
 
+    /**
+     * @inheritdoc
+     */
     public function afterDelete()
     {
-        $this->cleanCacheForEntity($this->getEntityType(), $this->getEntityId());
+        $this->cleanEntitiesCache();
         return parent::afterDelete();
     }
 
+    /**
+     * @inheritdoc
+     */
     public function afterSave()
     {
-        $this->cleanCacheForEntity($this->getEntityType(), $this->getEntityId());
+        $this->cleanEntitiesCache();
         return parent::afterSave();
     }
 }
