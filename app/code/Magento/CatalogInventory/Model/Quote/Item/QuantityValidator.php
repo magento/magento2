@@ -157,7 +157,9 @@ class QuantityValidator
             if ($stockStatus->getStockStatus() === Stock::STOCK_OUT_OF_STOCK
                     || $parentStockStatus && $parentStockStatus->getStockStatus() == Stock::STOCK_OUT_OF_STOCK
             ) {
-                if (!$quoteItem->getStockStateResult() && !$quoteItem->getStockStateResult()->getHasError()) {
+                $hasError = $quoteItem->getStockStateResult()
+                    ? $quoteItem->getStockStateResult()->getHasError() : false;
+                if (!$hasError) {
                     $quoteItem->addErrorInfo(
                         'cataloginventory',
                         Data::ERROR_QTY,
