@@ -66,7 +66,7 @@ class DefaultProcessor implements AdditionalColumnProcessorInterface
         $table->addColumn(
             $columnName,
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-            null,
+            255,
             ['unsigned' => true, 'nullable' => true, 'default' => null],
             $columnName
         );
