@@ -13,6 +13,7 @@
             <stories value="Create product"/>
             <title value="Create Grouped Product when non-default attribute set is chosen"/>
             <description value="Create Grouped Product with simple when non-default attribute set is chosen"/>
+            <testCaseId value="MC-39950"/>
             <severity value="MAJOR"/>
             <group value="groupedProduct"/>
         </annotations>
