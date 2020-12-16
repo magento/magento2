@@ -490,12 +490,11 @@ class QuantityValidatorTest extends TestCase
         $this->stockStatusMock->expects($this->atLeastOnce())
             ->method('getStockStatus')
             ->willReturn(1);
-        $this->quoteItemMock->expects($this->never())
+        $this->quoteItemMock->expects($this->once())
             ->method('addErrorInfo')
             ->with(
-                'cataloginventory',
+                null,
                 Data::ERROR_QTY,
-                __('This product is out of stock.')
             );
         $this->quoteMock->expects($this->once())
             ->method('addErrorInfo')
