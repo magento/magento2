@@ -103,7 +103,7 @@ class EmulateCustomerObserver implements ObserverInterface
             }
 
             if ($defaultBilling = $customer->getDefaultBilling()) {
-                $address = $this->getCustomerAddressById($defaultShipping);
+                $address = $this->getCustomerAddressById($defaultBilling);
 
                 if ($address !== null) {
                     $this->_customerSession->setDefaultTaxBillingAddress([
