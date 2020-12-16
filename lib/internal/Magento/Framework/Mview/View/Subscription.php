@@ -217,12 +217,16 @@ class Subscription implements SubscriptionInterface
     {
         $prefix = $event === Trigger::EVENT_DELETE ? 'OLD.' : 'NEW.';
         $subscriptionData = $this->mviewConfig->getView($changelog->getViewId())['subscriptions'][$this->getTableName()];
+        $columnValue = $this->getView()->getChangelog()->getName() !== $changelog->getName()
+            ? $subscriptionData['column']
+            : $this->getColumnName();
+
         $columns = [
             'column_names' => [
                 'entity_id' => $this->connection->quoteIdentifier($changelog->getColumnName())
             ],
             'column_values' => [
-                'entity_id' => $this->getEntityColumn($prefix)
+                'entity_id' => $this->getEntityColumn($prefix, $columnValue),
             ]
         ];
 
@@ -311,12 +315,16 @@ class Subscription implements SubscriptionInterface
     }
 
     /**
+     * Retrieve column name.
+     *
      * @param string $prefix
+     * @param string $columnName
+     *
      * @return string
      */
-    public function getEntityColumn(string $prefix): string
+    public function getEntityColumn(string $prefix, string $columnName): string
     {
-        return $prefix . $this->connection->quoteIdentifier($this->getColumnName());
+        return $prefix . $this->connection->quoteIdentifier($columnName);
     }
 
     /**
