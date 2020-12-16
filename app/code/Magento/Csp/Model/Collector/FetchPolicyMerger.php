@@ -25,12 +25,12 @@ class FetchPolicyMerger implements MergerInterface
         return new FetchPolicy(
             $policy1->getId(),
             $policy1->isNoneAllowed() || $policy2->isNoneAllowed(),
-            array_unique(array_merge($policy1->getHostSources(), $policy2->getHostSources())),
-            array_unique(array_merge($policy1->getSchemeSources(), $policy2->getSchemeSources())),
+            array_merge($policy1->getHostSources(), $policy2->getHostSources()),
+            array_merge($policy1->getSchemeSources(), $policy2->getSchemeSources()),
             $policy1->isSelfAllowed() || $policy2->isSelfAllowed(),
             $policy1->isInlineAllowed() || $policy2->isInlineAllowed(),
             $policy1->isEvalAllowed() || $policy2->isEvalAllowed(),
-            array_unique(array_merge($policy1->getNonceValues(), $policy2->getNonceValues())),
+            array_merge($policy1->getNonceValues(), $policy2->getNonceValues()),
             array_merge($policy1->getHashes(), $policy2->getHashes()),
             $policy1->isDynamicAllowed() || $policy2->isDynamicAllowed(),
             $policy1->areEventHandlersAllowed() || $policy2->areEventHandlersAllowed()
