@@ -386,6 +386,10 @@
                 nullable="true" comment="Discount Tax Compensation Amount"/>
         <column xsi:type="decimal" name="base_discount_tax_compensation_amount" scale="4" precision="20"
                 unsigned="false" nullable="true" comment="Base Discount Tax Compensation Amount"/>
+        <column xsi:type="decimal" name="custom_price" scale="4" precision="12" unsigned="false" nullable="true"
+                comment="Custom Price"/>
+        <column xsi:type="decimal" name="original_custom_price" scale="4" precision="12" unsigned="false"
+                nullable="true" comment="Original Custom Price"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="address_item_id"/>
         </constraint>

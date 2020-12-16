@@ -86,6 +86,10 @@ use Magento\Quote\Model\Quote;
  * @method \Magento\Quote\Model\Quote\Address\Item setDiscountTaxCompensationAmount(float $value)
  * @method float getBaseDiscountTaxCompensationAmount()
  * @method \Magento\Quote\Model\Quote\Address\Item setBaseDiscountTaxCompensationAmount(float $value)
+ * @method float getCustomPrice()
+ * @method \Magento\Quote\Model\Quote\Address\Item setCustomPrice(float $value)
+ * @method float getOriginalCustomPrice()
+ * @method \Magento\Quote\Model\Quote\Address\Item setOriginalCustomPrice(float $value)
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
@@ -188,6 +192,10 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem
             $quoteItem->getPrice()
         )->setCost(
             $quoteItem->getCost()
+        )->setCustomPrice(
+            $quoteItem->getCustomPrice()
+        )->setOriginalCustomPrice(
+            $quoteItem->getOriginalCustomPrice()
         );
 
         if (!$this->hasQty()) {
