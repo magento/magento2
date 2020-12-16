@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\GraphQl\Catalog\Options\Uid;
+namespace Magento\GraphQl\Catalog\Options;
 
 use Exception;
 use Magento\TestFramework\Helper\Bootstrap;
