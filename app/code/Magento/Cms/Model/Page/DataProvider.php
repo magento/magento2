@@ -53,11 +53,6 @@ class DataProvider extends ModifierPoolDataProvider
     private $customLayoutManager;
 
     /**
-     * @var null|array
-     */
-    private $loadedPages;
-
-    /**
      * @var LoggerInterface
      */
     private $logger;
@@ -111,7 +106,7 @@ class DataProvider extends ModifierPoolDataProvider
      * @param array $meta
      * @return array
      */
-    public function prepareMeta(array $meta): array
+    public function prepareMeta(array $meta)
     {
         return $meta;
     }
@@ -121,7 +116,7 @@ class DataProvider extends ModifierPoolDataProvider
      *
      * @return array
      */
-    public function getData(): array
+    public function getData()
     {
         if (isset($this->loadedData)) {
             return $this->loadedData;
@@ -173,18 +168,13 @@ class DataProvider extends ModifierPoolDataProvider
             throw new LocalizedException(__('Page ID must be given'));
         }
 
-        if (isset($this->loadedPages[$pageId])) {
-            return $this->loadedPages[$pageId];
-        }
-
-        $this->loadedPages[$pageId] = $this->pageRepository->getById($pageId);
-        return $this->loadedPages[$pageId];
+        return $this->pageRepository->getById($pageId);
     }
 
     /**
      * @inheritDoc
      */
-    public function getMeta(): array
+    public function getMeta()
     {
         $meta = parent::getMeta();
 
