@@ -168,28 +168,30 @@ class UrlRewrite extends AbstractModel
      */
     private function cleanEntitiesCache()
     {
-        if ($this->getEntityType() === Rewrite::ENTITY_TYPE_CUSTOM) {
-            $urlRewrite = $this->getFinalTargetUrlRewrite(
-                $this->getTargetPath(),
-                (int)$this->getStoreId()
-            );
-
-            if ($urlRewrite) {
-                $this->cleanCacheForEntity($urlRewrite->getEntityType(), (int) $urlRewrite->getEntityId());
-            }
-
-            if ($this->getOrigData() && $this->getOrigData('target_path') !== $this->getTargetPath()) {
-                $origUrlRewrite = $this->getFinalTargetUrlRewrite(
-                    $this->getOrigData('target_path'),
-                    (int)$this->getOrigData('store_id')
+        if (!$this->isEmpty()) {
+            if ($this->getEntityType() === Rewrite::ENTITY_TYPE_CUSTOM) {
+                $urlRewrite = $this->getFinalTargetUrlRewrite(
+                    $this->getTargetPath(),
+                    (int)$this->getStoreId()
                 );
 
-                if ($origUrlRewrite) {
-                    $this->cleanCacheForEntity($origUrlRewrite->getEntityType(), (int) $origUrlRewrite->getEntityId());
+                if ($urlRewrite) {
+                    $this->cleanCacheForEntity($urlRewrite->getEntityType(), (int) $urlRewrite->getEntityId());
                 }
+
+                if ($this->getOrigData() && $this->getOrigData('target_path') !== $this->getTargetPath()) {
+                    $origUrlRewrite = $this->getFinalTargetUrlRewrite(
+                        $this->getOrigData('target_path'),
+                        (int)$this->getOrigData('store_id')
+                    );
+
+                    if ($origUrlRewrite) {
+                        $this->cleanCacheForEntity($origUrlRewrite->getEntityType(), (int) $origUrlRewrite->getEntityId());
+                    }
+                }
+            } else {
+                $this->cleanCacheForEntity($this->getEntityType(), (int) $this->getEntityId());
             }
-        } else {
-            $this->cleanCacheForEntity($this->getEntityType(), (int) $this->getEntityId());
         }
     }
 
