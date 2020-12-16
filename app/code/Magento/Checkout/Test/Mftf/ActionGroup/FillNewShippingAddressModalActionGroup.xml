@@ -16,6 +16,14 @@
             <argument name="address"/>
         </arguments>
 
-        <selectOption stepKey="selectRegion" selector="{{CheckoutShippingSection.region}}" userInput="{{address.state}}" after="fillCityName"/>
+        <selectOption stepKey="selectRegion" selector="{{CheckoutShippingAddressModalSection.region}}" userInput="{{address.state}}" after="fillCityName"/>
+        <fillField stepKey="fillFirstName" selector="{{CheckoutShippingAddressModalSection.firstName}}" userInput="{{address.firstname}}"/>
+        <fillField stepKey="fillLastName" selector="{{CheckoutShippingAddressModalSection.lastName}}" userInput="{{address.lastname}}"/>
+        <fillField stepKey="fillCompany" selector="{{CheckoutShippingAddressModalSection.company}}" userInput="{{address.company}}"/>
+        <fillField stepKey="fillPhoneNumber" selector="{{CheckoutShippingAddressModalSection.telephone}}" userInput="{{address.telephone}}"/>
+        <fillField stepKey="fillStreetAddress" selector="{{CheckoutShippingAddressModalSection.street}}" userInput="{{address.street[0]}}"/>
+        <fillField stepKey="fillCityName" selector="{{CheckoutShippingAddressModalSection.city}}" userInput="{{address.city}}"/>
+        <selectOption stepKey="selectCounty" selector="{{CheckoutShippingAddressModalSection.country}}" userInput="{{address.country_id}}"/>
+        <fillField stepKey="fillZip" selector="{{CheckoutShippingAddressModalSection.postcode}}" userInput="{{address.postcode}}"/>
     </actionGroup>
 </actionGroups>
