@@ -87,7 +87,7 @@ class EmulateCustomerObserver implements ObserverInterface
             /** @var  \Magento\Customer\Api\Data\CustomerInterface $customer */
             $customer = $this->customerRepository->getById($this->_persistentSession->getSession()->getCustomerId());
             if ($defaultShipping = $customer->getDefaultShipping()) {
-                $address = $this->getCustomerAddressById($defaultShipping);
+                $address = $this->getCustomerAddressById((int) $defaultShipping);
 
                 if ($address !== null) {
                     $this->_customerSession->setDefaultTaxShippingAddress(
@@ -103,7 +103,7 @@ class EmulateCustomerObserver implements ObserverInterface
             }
 
             if ($defaultBilling = $customer->getDefaultBilling()) {
-                $address = $this->getCustomerAddressById($defaultBilling);
+                $address = $this->getCustomerAddressById((int) $defaultBilling);
 
                 if ($address !== null) {
                     $this->_customerSession->setDefaultTaxBillingAddress([
@@ -127,7 +127,7 @@ class EmulateCustomerObserver implements ObserverInterface
      * @param int $addressId
      * @return \Magento\Customer\Api\Data\AddressInterface|null
      */
-    private function getCustomerAddressById($addressId)
+    private function getCustomerAddressById(int $addressId)
     {
         try {
             return $this->addressRepository->getById($addressId);
