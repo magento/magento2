@@ -165,6 +165,8 @@ class QuantityValidator
                         Data::ERROR_QTY,
                         __('This product is out of stock.')
                     );
+                } else {
+                    $quoteItem->addErrorInfo(null, Data::ERROR_QTY);
                 }
                 $quoteItem->getQuote()->addErrorInfo(
                     'stock',
