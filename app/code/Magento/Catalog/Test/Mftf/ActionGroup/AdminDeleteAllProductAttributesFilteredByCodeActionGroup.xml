@@ -19,7 +19,7 @@
         <!-- It sometimes is loading too long for default 10s -->
         <waitForPageLoad time="60" stepKey="waitForPageFullyLoaded"/>
         <click selector="{{AdminProductAttributeGridSection.ResetFilter}}" stepKey="clearExistingFilters"/>
-        <fillField selector="{{AdminProductAttributeGridSection.attributeCodeFilter}}" userInput="{{codeFilter}}" stepKey="fillAttributeCodeFilterField"/>
+        <fillField selector="{{AdminProductAttributeGridSection.FilterByAttributeCode}}" userInput="{{codeFilter}}" stepKey="fillAttributeCodeFilterField"/>
         <click selector="{{AdminProductAttributeGridSection.Search}}" stepKey="applyGridFilter"/>
         <helper class="\Magento\Catalog\Test\Mftf\Helper\CatalogHelper" method="deleteAllProductAttributesOneByOne" stepKey="deleteAllProductAttributesOneByOne">
             <argument name="notEmptyRow">{{AdminDataGridTableSection.firstNotEmptyRow2}}</argument>

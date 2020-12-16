@@ -20,7 +20,7 @@ class CatalogHelper extends Helper
     /**
      * Delete all product attributes one by one.
      *
-     * @param string $firstNotEmptyRow
+     * @param string $notEmptyRow
      * @param string $modalAcceptButton
      * @param string $deleteButton
      * @param string $successMessageContainer
@@ -45,10 +45,10 @@ class CatalogHelper extends Helper
                 $magentoWebDriver->waitForPageLoad(30);
                 $magentoWebDriver->click($deleteButton);
                 $magentoWebDriver->waitForPageLoad(30);
-                $magentoWebDriver->waitForElementVisible($modalAcceptButton, 10);
+                $magentoWebDriver->waitForElementVisible($modalAcceptButton);
                 $magentoWebDriver->click($modalAcceptButton);
                 $magentoWebDriver->waitForPageLoad(60);
-                $magentoWebDriver->waitForElementVisible($successMessageContainer, 10);
+                $magentoWebDriver->waitForElementVisible($successMessageContainer);
                 $magentoWebDriver->see($successMessage, $successMessageContainer);
                 $gridRows = $webDriver->findElements(WebDriverBy::cssSelector($notEmptyRow));
             }
