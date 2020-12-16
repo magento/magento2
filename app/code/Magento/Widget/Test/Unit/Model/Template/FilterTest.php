@@ -267,7 +267,7 @@ class FilterTest extends TestCase
     {
         $image = 'wysiwyg/VB.png';
         $construction = ['{{media url="' . $image . '"}}', 'media', ' url="' . $image . '"'];
-        $baseUrl = 'http://localhost/pub/media/';
+        $baseUrl = 'http://localhost/media/';
 
         $this->storeMock->expects($this->once())
             ->method('getBaseUrl')
@@ -285,7 +285,7 @@ class FilterTest extends TestCase
     {
         $image = 'wysiwyg/VB.png';
         $construction = ['{{media url=&quot;' . $image . '&quot;}}', 'media', ' url=&quot;' . $image . '&quot;'];
-        $baseUrl = 'http://localhost/pub/media/';
+        $baseUrl = 'http://localhost/media/';
 
         $this->storeMock->expects($this->once())
             ->method('getBaseUrl')
