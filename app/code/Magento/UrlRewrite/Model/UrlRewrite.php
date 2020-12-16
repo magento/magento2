@@ -142,7 +142,8 @@ class UrlRewrite extends AbstractModel
      * @param int $storeId
      * @return UrlRewrite|null
      */
-    private function getFinalTargetUrlRewrite(string $path, int $storeId) {
+    private function getFinalTargetUrlRewrite(string $path, int $storeId): ?UrlRewrite
+    {
             $urlRewriteTarget = $this->urlFinder->findOneByData(
                 [
                     'request_path' => $path,
@@ -165,7 +166,8 @@ class UrlRewrite extends AbstractModel
     /**
      * Clean the cache for entities affected by current rewrite
      */
-    private function cleanEntitiesCache() {
+    private function cleanEntitiesCache()
+    {
         if ($this->getEntityType() === Rewrite::ENTITY_TYPE_CUSTOM) {
             $urlRewrite = $this->getFinalTargetUrlRewrite(
                 $this->getTargetPath(),
