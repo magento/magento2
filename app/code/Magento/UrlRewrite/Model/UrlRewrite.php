@@ -18,6 +18,7 @@ use Magento\Framework\Registry;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite;
 use Magento\UrlRewrite\Model\ResourceModel\UrlRewriteCollection;
+use Magento\UrlRewrite\Service\V1\Data\UrlRewrite as UrlRewriteService;
 
 /**
  * UrlRewrite model class
@@ -140,9 +141,9 @@ class UrlRewrite extends AbstractModel
      *
      * @param string $path
      * @param int $storeId
-     * @return UrlRewrite|null
+     * @return UrlRewriteService|null
      */
-    private function getFinalTargetUrlRewrite(string $path, int $storeId): ?UrlRewrite
+    private function getFinalTargetUrlRewrite(string $path, int $storeId): ?UrlRewriteService
     {
             $urlRewriteTarget = $this->urlFinder->findOneByData(
                 [
@@ -166,7 +167,7 @@ class UrlRewrite extends AbstractModel
     /**
      * Clean the cache for entities affected by current rewrite
      */
-    private function cleanEntitiesCache()
+    public function cleanEntitiesCache()
     {
         if (!$this->isEmpty()) {
             if ($this->getEntityType() === Rewrite::ENTITY_TYPE_CUSTOM) {
@@ -215,7 +216,7 @@ class UrlRewrite extends AbstractModel
      */
     public function afterDelete()
     {
-        $this->cleanEntitiesCache();
+        $this->_getResource()->addCommitCallback([$this, 'cleanEntitiesCache']);
         return parent::afterDelete();
     }
 
@@ -224,7 +225,7 @@ class UrlRewrite extends AbstractModel
      */
     public function afterSave()
     {
-        $this->cleanEntitiesCache();
+        $this->_getResource()->addCommitCallback([$this, 'cleanEntitiesCache']);
         return parent::afterSave();
     }
 }
