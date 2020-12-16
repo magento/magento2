@@ -40,6 +40,8 @@ interface ProductInterface extends \Magento\Framework\Api\CustomAttributesDataIn
 
     const TIER_PRICE = 'tier_price';
 
+    const FINAL_PRICE = 'final_price';
+
     const ATTRIBUTES = [
         self::SKU,
         self::NAME,
@@ -295,4 +297,19 @@ interface ProductInterface extends \Magento\Framework\Api\CustomAttributesDataIn
      * @return $this
      */
     public function setTierPrices(array $tierPrices = null);
+
+    /**
+     * Product final price
+     *
+     * @return float|null
+     */
+    public function getFinalPrice();
+
+    /**
+     * Set product final price
+     *
+     * @param float $finalPrice
+     * @return $this
+     */
+    public function setFinalPrice(float $finalPrice);
 }
