@@ -43,7 +43,7 @@
     <listeners>
         <listener class="Magento\TestFramework\Event\PhpUnit"/>
         <listener class="Magento\TestFramework\ErrorLog\Listener"/>
-        <listener class="Yandex\Allure\Adapter\AllureAdapter">
+        <listener class="Yandex\Allure\PhpUnit\AllurePhpUnit">
             <arguments>
                 <string>var/allure-results</string> <!-- XML files output directory -->
                 <boolean>true</boolean> <!-- Whether to delete previous results on rerun -->
