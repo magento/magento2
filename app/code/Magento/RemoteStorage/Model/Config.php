@@ -10,6 +10,7 @@ namespace Magento\RemoteStorage\Model;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\RuntimeException;
+use Magento\RemoteStorage\Driver\Cache\CacheFactory;
 use Magento\RemoteStorage\Driver\DriverPool;
 use Magento\Framework\Filesystem\DriverPool as BaseDriverPool;
 
@@ -83,14 +84,38 @@ class Config
     }
 
     /**
-     * Retrieves value for exposing URLs.
+     * Retrieves cache config.
      *
-     * @return bool
+     * @return array
      * @throws FileSystemException
      * @throws RuntimeException
      */
-    public function getExposeUrls(): bool
+    public function getCache(): array
     {
-        return (bool)$this->config->get(DriverPool::PATH_EXPOSE_URLS, false);
+        return (array)$this->config->get(DriverPool::PATH_CACHE, []);
+    }
+
+    /**
+     * Retrieves cache adapter.
+     *
+     * @return string
+     * @throws FileSystemException
+     * @throws RuntimeException
+     */
+    public function getCacheAdapter(): string
+    {
+        return $this->getCache()['adapter'] ?? CacheFactory::ADAPTER_MEMORY;
+    }
+
+    /**
+     * Retrieves cache config.
+     *
+     * @return array
+     * @throws FileSystemException
+     * @throws RuntimeException
+     */
+    public function getCacheConfig(): array
+    {
+        return $this->getCache()['config'] ?? [];
     }
 }

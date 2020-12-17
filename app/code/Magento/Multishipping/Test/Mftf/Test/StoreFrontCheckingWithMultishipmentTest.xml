@@ -30,7 +30,7 @@
             <createData entity="Simple_US_Customer_Two_Addresses" stepKey="customer"/>
             <createData entity="FreeShippinMethodConfig" stepKey="enableFreeShipping"/>
             <createData entity="FlatRateShippingMethodConfig" stepKey="enableFlatRateShipping"/>
-            <magentoCLI command="config:set {{EnableCheckMoneyOrderPaymentMethod.path}} {{EnableCheckMoneyOrderPaymentMethod.value}}" stepKey="enableCheckMoneyOrderPaymentMethod"/>
+            <actionGroup ref="CliEnableCheckMoneyOrderPaymentMethodActionGroup" stepKey="enableCheckMoneyOrderPaymentMethod"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefrontAccount">
                 <argument name="Customer" value="$$customer$$"/>
