@@ -263,6 +263,8 @@ type SelectedShippingMethod {
     method_title: String!
     amount: Money!
     base_amount: Money @deprecated(reason: "The field should not be used on the storefront")
+    price_excl_tax: Money!
+    price_incl_tax: Money!
 }
 
 type AvailableShippingMethod {

@@ -912,7 +912,9 @@ class Config
     public function needPriceConversion($store = null)
     {
         $res = false;
-        $priceIncludesTax = $this->priceIncludesTax($store) || $this->getNeedUseShippingExcludeTax();
+        $priceIncludesTax = $this->priceIncludesTax($store)
+            || $this->getNeedUseShippingExcludeTax()
+            || $this->shippingPriceIncludesTax($store);
         if ($priceIncludesTax) {
             switch ($this->getPriceDisplayType($store)) {
                 case self::DISPLAY_TYPE_EXCLUDING_TAX:
