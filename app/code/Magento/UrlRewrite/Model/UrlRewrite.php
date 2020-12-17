@@ -145,23 +145,27 @@ class UrlRewrite extends AbstractModel
      */
     private function getFinalTargetUrlRewrite(string $path, int $storeId): ?UrlRewriteService
     {
+        $urlRewriteTarget = $this->urlFinder->findOneByData(
+            [
+                'request_path' => $path,
+                'store_id' => $storeId
+            ]
+        );
+
+        while (
+            $urlRewriteTarget &&
+            $urlRewriteTarget->getTargetPath() !== $urlRewriteTarget->getRequestPath() &&
+            $urlRewriteTarget->getRedirectType() > 0
+        ) {
             $urlRewriteTarget = $this->urlFinder->findOneByData(
                 [
-                    'request_path' => $path,
-                    'store_id' => $storeId
+                    'request_path' => $urlRewriteTarget->getTargetPath(),
+                    'store_id' => $urlRewriteTarget->getStoreId()
                 ]
             );
+        }
 
-            while ($urlRewriteTarget && $urlRewriteTarget->getRedirectType() > 0) {
-                $urlRewriteTarget = $this->urlFinder->findOneByData(
-                    [
-                        'request_path' => $urlRewriteTarget->getTargetPath(),
-                        'store_id' => $urlRewriteTarget->getStoreId()
-                    ]
-                );
-            }
-
-            return $urlRewriteTarget;
+        return $urlRewriteTarget;
     }
 
     /**
