@@ -6,7 +6,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
-    <event name="catalog_product_to_website_change">
-        <observer name="catalog_product_to_website_change" instance="Magento\CatalogUrlRewrite\Observer\ProductToWebsiteChangeObserver"/>
+    <event name="sales_model_service_quote_submit_before">
+        <observer name="giftmessage" instance="Magento\GiftMessage\Observer\SalesEventQuoteSubmitBeforeObserver" shared="false" />
     </event>
 </config>
