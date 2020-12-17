@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\Paypal\Controller\Hostedpro;
 
 use Magento\TestFramework\TestCase\AbstractController;
-use Zend\Stdlib\Parameters;
+use Laminas\Stdlib\Parameters;
 
 /**
  * Tests PayPal HostedPro return controller.
