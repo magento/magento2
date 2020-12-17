@@ -18,6 +18,9 @@
             <testCaseId value="MC-39480"/>
         </annotations>
         <before>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexCatalogInventory">
+                <argument name="indices" value="cataloginventory_stock"/>
+            </actionGroup>
             <createData entity="SalesRuleNoCouponWithFixedDiscountWholeCart" stepKey="createSalesRule"/>
             <actionGroup ref="AdminCreateApiDynamicBundleProductAllOptionTypesActionGroup" stepKey="createBundleProduct"/>
         </before>
