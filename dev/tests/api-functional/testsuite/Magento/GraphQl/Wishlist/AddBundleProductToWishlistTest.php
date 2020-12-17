@@ -85,17 +85,29 @@ class AddBundleProductToWishlistTest extends GraphQlAbstract
 
         $this->assertArrayHasKey('addProductsToWishlist', $response);
         $this->assertArrayHasKey('wishlist', $response['addProductsToWishlist']);
+        $this->assertEmpty($response['addProductsToWishlist']['user_errors']);
         $response = $response['addProductsToWishlist']['wishlist'];
         $this->assertEquals($wishlist->getItemsCount(), $response['items_count']);
         $this->assertEquals($wishlist->getSharingCode(), $response['sharing_code']);
         $this->assertEquals($wishlist->getUpdatedAt(), $response['updated_at']);
-        $this->assertEquals($item->getData('qty'), $response['items_v2'][0]['quantity']);
-        $this->assertEquals($item->getDescription(), $response['items_v2'][0]['description']);
-        $this->assertEquals($item->getAddedAt(), $response['items_v2'][0]['added_at']);
-        $this->assertNotEmpty($response['items_v2'][0]['bundle_options']);
-        $bundleOptions = $response['items_v2'][0]['bundle_options'];
+        $this->assertEquals($item->getData('qty'), $response['items_v2']['items'][0]['quantity']);
+        $this->assertEquals($item->getDescription(), $response['items_v2']['items'][0]['description']);
+        $this->assertEquals($item->getAddedAt(), $response['items_v2']['items'][0]['added_at']);
+        $this->assertNotEmpty($response['items_v2']['items'][0]['bundle_options']);
+        $bundleOptions = $response['items_v2']['items'][0]['bundle_options'];
         $this->assertEquals('Bundle Product Items', $bundleOptions[0]['label']);
         $this->assertEquals(Select::NAME, $bundleOptions[0]['type']);
+        $bundleOptionValuesResponse = $bundleOptions[0]['values'][0];
+        $this->assertNotNull($bundleOptionValuesResponse['id']);
+        unset($bundleOptionValuesResponse['id']);
+        $this->assertResponseFields(
+            $bundleOptionValuesResponse,
+            [
+                'label' => 'Simple Product',
+                'quantity' => 1,
+                'price' => 2.75
+            ]
+        );
     }
 
     /**
@@ -121,21 +133,22 @@ class AddBundleProductToWishlistTest extends GraphQlAbstract
 
         $this->assertArrayHasKey('addProductsToWishlist', $response);
         $this->assertArrayHasKey('wishlist', $response['addProductsToWishlist']);
+        $this->assertEmpty($response['addProductsToWishlist']['user_errors']);
         $response = $response['addProductsToWishlist']['wishlist'];
         $this->assertEquals($wishlist->getItemsCount(), $response['items_count']);
         $this->assertEquals($wishlist->getSharingCode(), $response['sharing_code']);
         $this->assertEquals($wishlist->getUpdatedAt(), $response['updated_at']);
-        $this->assertEquals($item->getData('qty'), $response['items_v2'][0]['quantity']);
-        $this->assertEquals($item->getDescription(), $response['items_v2'][0]['description']);
-        $this->assertEquals($item->getAddedAt(), $response['items_v2'][0]['added_at']);
-        $this->assertNotEmpty($response['items_v2'][0]['bundle_options']);
-        $bundleOptions = $response['items_v2'][0]['bundle_options'];
+        $this->assertEquals($item->getData('qty'), $response['items_v2']['items'][0]['quantity']);
+        $this->assertEquals($item->getDescription(), $response['items_v2']['items'][0]['description']);
+        $this->assertEquals($item->getAddedAt(), $response['items_v2']['items'][0]['added_at']);
+        $this->assertNotEmpty($response['items_v2']['items'][0]['bundle_options']);
+        $bundleOptions = $response['items_v2']['items'][0]['bundle_options'];
         $this->assertEquals('Option 1', $bundleOptions[0]['label']);
-        $bundleOptionOneValues = $bundleOptions[0]['values'];
-        $this->assertEquals(7, $bundleOptionOneValues[0]['quantity']);
+        $bundleOptionFirstValue = $bundleOptions[0]['values'];
+        $this->assertEquals(7, $bundleOptionFirstValue[0]['quantity']);
         $this->assertEquals('Option 2', $bundleOptions[1]['label']);
-        $bundleOptionTwoValues = $bundleOptions[1]['values'];
-        $this->assertEquals(1, $bundleOptionTwoValues[0]['quantity']);
+        $bundleOptionSecondValue = $bundleOptions[1]['values'];
+        $this->assertEquals(1, $bundleOptionSecondValue[0]['quantity']);
     }
 
     /**
@@ -195,7 +208,8 @@ mutation {
       items_count
       updated_at
       items_v2 {
-        id
+        items {
+           id
         description
         quantity
         added_at
@@ -212,6 +226,8 @@ mutation {
             }
           }
         }
+        }
+
       }
     }
   }
@@ -267,7 +283,8 @@ mutation {
       items_count
       updated_at
       items_v2 {
-        id
+        items {
+           id
         description
         quantity
         added_at
@@ -284,6 +301,8 @@ mutation {
             }
           }
         }
+        }
+
       }
     }
   }
