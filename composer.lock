@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9bc433740520119db84253a54d67a303",
+    "content-hash": "d717d63738dd3f09ba6b8d9f7d71c7bd",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.171.0",
+            "version": "3.171.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "e88837e34fe798484f4589ad30c597a231750b10"
+                "reference": "01407effc918634048346d8bd6513b2db0d07ad8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/e88837e34fe798484f4589ad30c597a231750b10",
-                "reference": "e88837e34fe798484f4589ad30c597a231750b10",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/01407effc918634048346d8bd6513b2db0d07ad8",
+                "reference": "01407effc918634048346d8bd6513b2db0d07ad8",
                 "shasum": ""
             },
             "require": {
@@ -89,7 +89,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2020-12-16T19:12:20+00:00"
+            "time": "2020-12-17T19:16:51+00:00"
         },
         {
             "name": "colinmollenhour/cache-backend-file",
