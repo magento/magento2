@@ -52,8 +52,8 @@
         <!--Clear cache and reindex-->
         <comment userInput="Clear cache and reindex" stepKey="cleanCache"/>
         <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-    <argument name="indices" value=""/>
-</actionGroup>
+            <argument name="indices" value="catalog_product_price"/>
+        </actionGroup>
         <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
     <argument name="tags" value=""/>
 </actionGroup>
