@@ -16,6 +16,11 @@
             <argument name="storage" xsi:type="object">Magento\Checkout\Model\Session\Storage</argument>
         </arguments>
     </type>
+    <type name="Magento\Checkout\Model\Session\SuccessValidator">
+        <arguments>
+            <argument name="checkoutSession" xsi:type="object">Magento\Checkout\Model\Session\Proxy</argument>
+        </arguments>
+    </type>
     <preference for="Magento\Checkout\Api\GuestShippingInformationManagementInterface" type="Magento\Checkout\Model\GuestShippingInformationManagement" />
     <preference for="Magento\Checkout\Api\ShippingInformationManagementInterface" type="Magento\Checkout\Model\ShippingInformationManagement" />
     <preference for="Magento\Checkout\Api\Data\ShippingInformationInterface" type="Magento\Checkout\Model\ShippingInformation" />
