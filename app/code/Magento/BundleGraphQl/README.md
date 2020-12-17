@@ -1,11 +1,10 @@
 # BundleGraphQl
 
-**Magento_BundleGraphQl** module extends **Magento_GraphQl** and **Magento_Bundle** modules by provides type and resolver information for the GraphQl module
-to generate bundle product information.
+**Magento_BundleGraphQl** module extends **Magento_GraphQl** and **Magento_Bundle** modules. The module provides type and resolver information for  GraphQL API.
 
 ## Installation details
 
-Before disabling or uninstalling this module, note that the following modules depends on this module:
+Before disabling or uninstalling this module, note that the following modules depend on this module:
 
 - Magento_GraphQl
 - Magento_Bundle
@@ -13,7 +12,7 @@ Before disabling or uninstalling this module, note that the following modules de
 - Magento_CatalogGraphQl
 - Magento_Store
 
-For information about module installation in Magento 2, see [Enable or disable modules](https://devdocs.magento.com/guides/v2.3/install-gde/install/cli/install-cli-subcommands-enable.html).
+For information about enabling or disabling a module in Magento 2, see [Enable or disable modules](https://devdocs.magento.com/guides/v2.3/install-gde/install/cli/install-cli-subcommands-enable.html).
 
 ## Extensibility
 
