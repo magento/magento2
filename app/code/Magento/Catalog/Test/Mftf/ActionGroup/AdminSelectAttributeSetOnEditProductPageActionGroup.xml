@@ -13,8 +13,7 @@
 <<<<<<< HEAD
             <description>Selects the specified value from the Attribute Set dropdown.</description>
 =======
-            <description>Selects the specified value from the Attribute Set dropdown.
-                         The Edit Product Page should be opened prior to Action Group execution</description>
+            <description>Selects the specified value from the Attribute Set dropdown on the opened product edit page.</description>
 >>>>>>> 88b58a08d39906584398e0c7762413e18c054a27
         </annotations>
         <arguments>
