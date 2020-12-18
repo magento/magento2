@@ -98,7 +98,7 @@ QUERY;
         $urlRewrite->setRequestPath('test' . $requestPath);
         $urlRewriteResourceModel->save($urlRewrite);
         $apiResponse = $this->graphQlQuery($query($requestPath));
-        $this->assertNull($apiResponse['urlResolver']['relative_url']);
+        $this->assertNull($apiResponse);
 
         // rolling back changes
         $urlRewrite->setRequestPath($requestPath);
@@ -197,7 +197,7 @@ QUERY;
         // delete custom rewrite and validate that API will not return cached response
         $urlRewriteResourceModel->delete($urlRewrite);
         $apiResponse = $this->graphQlQuery($query($customRequestPath));
-        $this->assertNull($apiResponse['urlResolver']['relative_url']);
+        $this->assertNull($apiResponse);
     }
 
     /**
