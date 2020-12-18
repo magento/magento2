@@ -30,5 +30,4 @@
             </argument>
         </arguments>
     </type>
-    <preference for="Magento\Framework\Session\SessionManagerInterface" type="Magento\Framework\Session\Generic" />
 </config>
