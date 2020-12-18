@@ -99,7 +99,7 @@ class Tax extends AbstractTotal
             $baseShippingTaxAmount = 0;
             $shippingDiscountTaxCompensationAmount = 0;
             $baseShippingDiscountTaxCompensationAmount = 0;
-            $shippingDelta = ($baseOrderShippingAmount - $baseOrderShippingRefundedAmount);
+            $shippingDelta = $baseOrderShippingAmount - $baseOrderShippingRefundedAmount;
 
             if ($shippingDelta > $creditmemo->getBaseShippingAmount()) {
                 $part = $creditmemo->getShippingAmount() / $orderShippingAmount;
