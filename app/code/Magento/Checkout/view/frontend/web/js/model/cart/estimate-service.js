@@ -35,6 +35,7 @@ define([
                 // check if user data not changed -> load rates from cache
                 if (!cartCache.isChanged('address', quote.shippingAddress()) &&
                     !cartCache.isChanged('cartVersion', customerData.get('cart')()['data_id']) &&
+                    !cartCache.isChanged('storeCode', quote.getStoreCode()) &&
                     cartCache.get('rates')
                 ) {
                     shippingService.setShippingRates(cartCache.get('rates'));

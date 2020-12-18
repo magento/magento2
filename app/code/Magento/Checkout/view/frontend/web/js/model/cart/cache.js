@@ -20,6 +20,7 @@ define([
             totals: null,
             address: null,
             cartVersion: null,
+            storeCode: null,
             shippingMethodCode: null,
             shippingCarrierCode: null,
             rates: null

@@ -45,6 +45,7 @@ define([
                 totals: result,
                 address: address,
                 cartVersion: customerData.get('cart')()['data_id'],
+                storeCode: quote.getStoreCode(),
                 shippingMethodCode: null,
                 shippingCarrierCode: null
             };
