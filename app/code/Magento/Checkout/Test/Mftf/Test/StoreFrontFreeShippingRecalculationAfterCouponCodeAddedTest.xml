@@ -21,7 +21,6 @@
                 <issueId value="DEPRECATED">Use StoreFrontFreeShippingRecalculationAfterCouponCodeAppliedTest instead</issueId>
             </skip>
         </annotations>
-
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <createData entity="Simple_US_Customer" stepKey="createSimpleUsCustomer">
@@ -64,7 +63,6 @@
             </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
-
         <actionGroup ref="ApplyCartRuleOnStorefrontActionGroup" stepKey="applyCartRule">
             <argument name="product" value="$$simpleProduct$$"/>
             <argument name="couponCode" value="{{CatPriceRule.coupon_code}}"/>
