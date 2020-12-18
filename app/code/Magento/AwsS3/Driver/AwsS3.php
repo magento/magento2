@@ -7,21 +7,22 @@ declare(strict_types=1);
 
 namespace Magento\AwsS3\Driver;
 
-use Generator;
 use Exception;
+use Generator;
 use League\Flysystem\AdapterInterface;
 use League\Flysystem\Config;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\Phrase;
-use Psr\Log\LoggerInterface;
 use Magento\RemoteStorage\Driver\DriverException;
 use Magento\RemoteStorage\Driver\RemoteDriverInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Driver for AWS S3 IO operations.
  *
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * phpcs:disable Magento2.Functions.DiscouragedFunction
  */
 class AwsS3 implements RemoteDriverInterface
 {
@@ -102,9 +103,7 @@ class AwsS3 implements RemoteDriverInterface
         $path = $this->normalizeRelativePath($path, true);
 
         if (isset($this->streams[$path])) {
-            //phpcs:disable
             return file_get_contents(stream_get_meta_data($this->streams[$path])['uri']);
-            //phpcs:enable
         }
 
         return $this->adapter->read($path)['contents'] ?? '';
@@ -158,7 +157,6 @@ class AwsS3 implements RemoteDriverInterface
     private function createDirectoryRecursively(string $path): bool
     {
         $path = $this->normalizeRelativePath($path);
-        //phpcs:ignore Magento2.Functions.DiscouragedFunction
         $parentDir = dirname($path);
 
         while (!$this->isDirectory($parentDir)) {
@@ -417,7 +415,6 @@ class AwsS3 implements RemoteDriverInterface
      */
     public function getParentDirectory($path): string
     {
-        //phpcs:ignore Magento2.Functions.DiscouragedFunction
         return rtrim(dirname($this->normalizeAbsolutePath($path)), '/') . '/';
     }
 
@@ -526,7 +523,6 @@ class AwsS3 implements RemoteDriverInterface
         $patternFound = preg_match('(\*|\?|\[.+\])', $pattern, $parentPattern, PREG_OFFSET_CAPTURE);
 
         if ($patternFound) {
-            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             $parentDirectory = dirname(substr($pattern, 0, $parentPattern[0][1] + 1));
             $leftover = substr($pattern, $parentPattern[0][1]);
             $index = strpos($leftover, '/');
@@ -600,7 +596,6 @@ class AwsS3 implements RemoteDriverInterface
      */
     public function fileRead($resource, $length): string
     {
-        //phpcs:ignore Magento2.Functions.DiscouragedFunction
         $result = fread($resource, $length);
         if ($result === false) {
             throw new FileSystemException(__('File cannot be read %1', [$this->getWarningMessage()]));
@@ -614,7 +609,6 @@ class AwsS3 implements RemoteDriverInterface
      */
     public function fileGetCsv($resource, $length = 0, $delimiter = ',', $enclosure = '"', $escape = '\\')
     {
-        //phpcs:ignore Magento2.Functions.DiscouragedFunction
         $result = fgetcsv($resource, $length, $delimiter, $enclosure, $escape);
         if ($result === null) {
             throw new FileSystemException(
@@ -674,7 +668,6 @@ class AwsS3 implements RemoteDriverInterface
      */
     public function filePutCsv($resource, array $data, $delimiter = ',', $enclosure = '"')
     {
-        //phpcs:ignore Magento2.Functions.DiscouragedFunction
         return fputcsv($resource, $data, $delimiter, $enclosure);
     }
 
@@ -786,9 +779,7 @@ class AwsS3 implements RemoteDriverInterface
         if (!isset($this->streams[$path])) {
             $this->streams[$path] = tmpfile();
             if ($this->adapter->has($path)) {
-                //phpcs:ignore Magento2.Functions.DiscouragedFunction
                 fwrite($this->streams[$path], $this->adapter->read($path)['contents']);
-                //phpcs:ignore Magento2.Functions.DiscouragedFunction
                 rewind($this->streams[$path]);
             }
         }
@@ -900,7 +891,6 @@ class AwsS3 implements RemoteDriverInterface
         $directoryContent = [];
         foreach ($items as $item) {
             if (preg_match('/' . $searchPattern . '$/', $item)
-                // phpcs:ignore Magento2.Functions.DiscouragedFunction
                 && strpos(basename($item), '.') !== 0) {
                 if ($index === false || strlen($leftover) === $index + 1) {
                     yield $this->normalizeAbsolutePath(
