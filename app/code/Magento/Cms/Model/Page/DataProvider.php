@@ -159,14 +159,7 @@ class DataProvider extends ModifierPoolDataProvider
      */
     private function getCurrentPage(): Page
     {
-        if (!$this->getRequestFieldName()) {
-            throw new LocalizedException(__('RequestFieldName is not specified'));
-        }
-
-        $pageId = (int)$this->request->getParam($this->getRequestFieldName());
-        if ($pageId === 0) {
-            throw new LocalizedException(__('Page ID must be given'));
-        }
+        $pageId = $this->request->getParam($this->getRequestFieldName(), 0);
 
         return $this->pageRepository->getById($pageId);
     }
