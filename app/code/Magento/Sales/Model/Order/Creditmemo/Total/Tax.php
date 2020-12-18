@@ -40,14 +40,14 @@ class Tax extends AbstractTotal
 
             if ($orderItemQty) {
                 /** Check item tax amount */
-                $tax = ($orderItemTax - $orderItem->getTaxRefunded());
-                $baseTax = ($baseOrderItemTax - $orderItem->getBaseTaxRefunded());
-                $discountTaxCompensation = ($orderItem->getDiscountTaxCompensationInvoiced()
-                    - $orderItem->getDiscountTaxCompensationRefunded());
-                $baseDiscountTaxCompensation = ($orderItem->getBaseDiscountTaxCompensationInvoiced()
-                    - $orderItem->getBaseDiscountTaxCompensationRefunded());
+                $tax = $orderItemTax - $orderItem->getTaxRefunded();
+                $baseTax = $baseOrderItemTax - $orderItem->getBaseTaxRefunded();
+                $discountTaxCompensation = $orderItem->getDiscountTaxCompensationInvoiced()
+                    - $orderItem->getDiscountTaxCompensationRefunded();
+                $baseDiscountTaxCompensation = $orderItem->getBaseDiscountTaxCompensationInvoiced()
+                    - $orderItem->getBaseDiscountTaxCompensationRefunded();
                 if (!$item->isLast()) {
-                    $availableQty = ($orderItemQty - $orderItem->getQtyRefunded());
+                    $availableQty = $orderItemQty - $orderItem->getQtyRefunded();
                     $tax = $creditmemo->roundPrice($tax / $availableQty * $item->getQty());
                     $baseTax = $creditmemo->roundPrice(($baseTax / $availableQty * $item->getQty()), 'base');
                     $discountTaxCompensation = $creditmemo->roundPrice(
@@ -76,10 +76,10 @@ class Tax extends AbstractTotal
         if ($invoice = $creditmemo->getInvoice()) {
             // recalculate tax amounts in case if refund shipping value was changed
             if ($baseOrderShippingAmount && $creditmemo->getBaseShippingAmount() !== null) {
-                $taxFactor = ($creditmemo->getBaseShippingAmount() / $baseOrderShippingAmount);
-                $shippingTaxAmount = ($invoice->getShippingTaxAmount() * $taxFactor);
-                $baseShippingTaxAmount = ($invoice->getBaseShippingTaxAmount() * $taxFactor);
-                $totalDiscountTaxCompensation += ($invoice->getShippingDiscountTaxCompensationAmount() * $taxFactor);
+                $taxFactor = $creditmemo->getBaseShippingAmount() / $baseOrderShippingAmount;
+                $shippingTaxAmount = $invoice->getShippingTaxAmount() * $taxFactor;
+                $baseShippingTaxAmount = $invoice->getBaseShippingTaxAmount() * $taxFactor;
+                $totalDiscountTaxCompensation += $invoice->getShippingDiscountTaxCompensationAmount() * $taxFactor;
                 $baseTotalDiscountTaxCompensation += $invoice->getBaseShippingDiscountTaxCompensationAmnt()
                     * $taxFactor;
                 $shippingTaxAmount = $creditmemo->roundPrice($shippingTaxAmount);
@@ -102,10 +102,10 @@ class Tax extends AbstractTotal
             $shippingDelta = ($baseOrderShippingAmount - $baseOrderShippingRefundedAmount);
 
             if ($shippingDelta > $creditmemo->getBaseShippingAmount()) {
-                $part = ($creditmemo->getShippingAmount() / $orderShippingAmount);
-                $basePart = ($creditmemo->getBaseShippingAmount() / $baseOrderShippingAmount);
-                $shippingTaxAmount = ($order->getShippingTaxAmount() * $part);
-                $baseShippingTaxAmount = ($order->getBaseShippingTaxAmount() * $basePart);
+                $part = $creditmemo->getShippingAmount() / $orderShippingAmount;
+                $basePart = $creditmemo->getBaseShippingAmount() / $baseOrderShippingAmount;
+                $shippingTaxAmount = $order->getShippingTaxAmount() * $part;
+                $baseShippingTaxAmount = $order->getBaseShippingTaxAmount() * $basePart;
                 $shippingDiscountTaxCompensationAmount = $order->getShippingDiscountTaxCompensationAmount() * $part;
                 $baseShippingDiscountTaxCompensationAmount = $order->getBaseShippingDiscountTaxCompensationAmnt()
                     * $basePart;
