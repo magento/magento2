@@ -20,6 +20,7 @@
             <group value="Catalog"/>
         </annotations>
         <before>
+            <comment userInput="Adding the comment for preserving Backward Compatibility" stepKey="loginAsAdmin"/>
             <magentoCLI command="config:set {{CatalogInventoryOptionsShowOutOfStockDisable.path}} {{CatalogInventoryOptionsShowOutOfStockDisable.value}}" stepKey="setConfigShowOutOfStockFalse"/>
             <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
                 <argument name="tags" value=""/>
@@ -35,8 +36,9 @@
             <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
                 <argument name="tags" value=""/>
             </actionGroup>
-            <deleteData createDataKey="product" stepKey="deleteProduct"/> 
-            <deleteData createDataKey="category" stepKey="deleteCategory"/> 
+            <deleteData createDataKey="product" stepKey="deleteProduct"/>
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>
+            <comment userInput="Adding the comment for preserving Backward Compatibility"  stepKey="logout"/>
         </after>
         <comment userInput="Open product page | Comment is kept to preserve the step key for backward compatibility" stepKey="openProdPage"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="goToSimpleProductPage"/>
@@ -48,10 +50,10 @@
         <comment userInput="'Add to compare' link is not available | Comment is kept to preserve the step key for backward compatibility" stepKey="addToCompareLinkAvailability"/>
 
         <dontSeeElement selector="{{StorefrontProductInfoMainSection.productAddToCompare}}" stepKey="dontSeeAddToCompareLink"/>
-      
+
         <comment userInput="Turn on 'out of stock' config | Comment is kept to preserve the step key for backward compatibility" stepKey="onOutOfStockConfig"/>
         <magentoCLI command="config:set {{CatalogInventoryOptionsShowOutOfStockEnable.path}} {{CatalogInventoryOptionsShowOutOfStockEnable.value}}" stepKey="setConfigShowOutOfStockTrue"/>
-  
+
         <comment userInput="Clear cache and reindex | Comment is kept to preserve the step key for backward compatibility" stepKey="cleanCache"/>
         <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
            <argument name="indices" value=""/>
@@ -72,13 +74,13 @@
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForProdAddToCmpList"/>
         <comment userInput="Assert success message | Comment is kept to preserve the step key for backward compatibility" stepKey="assertSuccessMsg"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="grabTextFromSuccessMessage"/>
-       
+
         <actionGroup ref="StorefrontAddProductToCompareActionGroup" stepKey="assertSuccessMessage">
             <argument name="productVar" value="$$product$$"/>
         </actionGroup>
 
         <comment userInput="See product in the comparison list | Comment is kept to preserve the step key for backward compatibility" stepKey="seeProductInComparisonList"/>
-       
+
         <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="openCategoryPage">
             <argument name="categoryName" value="$$category.name$$"/>
         </actionGroup>
@@ -112,13 +114,13 @@
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="grabTextFromSuccessMessage2"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="assertSuccessMessage2"/>
 
-        <comment userInput="Check that product displays on add to compare widget | Comment is kept to preserve the step key for backward compatibility" stepKey="checkProdNameOnWidget"/> 
+        <comment userInput="Check that product displays on add to compare widget | Comment is kept to preserve the step key for backward compatibility" stepKey="checkProdNameOnWidget"/>
         <seeElement selector="{{StorefrontComparisonSidebarSection.ProductTitleByName($$product.name$$)}}" stepKey="seeProdNameOnCmpWidget"/>
 
         <comment userInput="See product in the compare page" stepKey="seeProductInComparePage"/>
         <actionGroup ref="StorefrontOpenAndCheckComparisionActionGroup" stepKey="navigateToComparePage2"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForStorefrontProductComparePageLoad2"/>
-       
+
         <actionGroup ref="SeeProductInComparisonListActionGroup" stepKey="seeProductInCompareList2">
             <argument name="productVar" value="$$product$$"/>
         </actionGroup>
