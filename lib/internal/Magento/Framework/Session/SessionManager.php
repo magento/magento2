@@ -1,13 +1,20 @@
 <?php
 /**
- * Magento session manager
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Session;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\Request\Http as HttpRequest;
+use Magento\Framework\App\State;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\SessionException;
+use Magento\Framework\Phrase;
+use Magento\Framework\Profiler;
 use Magento\Framework\Session\Config\ConfigInterface;
+use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
+use Magento\Framework\Stdlib\CookieManagerInterface;
 
 /**
  * Standard session management.
@@ -45,7 +52,7 @@ class SessionManager implements SessionManagerInterface
     /**
      * Request
      *
-     * @var \Magento\Framework\App\Request\Http
+     * @var HttpRequest
      */
     protected $request;
 
@@ -80,17 +87,17 @@ class SessionManager implements SessionManagerInterface
     /**
      * Cookie Manager
      *
-     * @var \Magento\Framework\Stdlib\CookieManagerInterface
+     * @var CookieManagerInterface
      */
     protected $cookieManager;
 
     /**
-     * @var \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory
+     * @var CookieMetadataFactory
      */
     protected $cookieMetadataFactory;
 
     /**
-     * @var \Magento\Framework\App\State
+     * @var State
      */
     private $appState;
 
@@ -100,30 +107,34 @@ class SessionManager implements SessionManagerInterface
     private $sessionStartChecker;
 
     /**
-     * @param \Magento\Framework\App\Request\Http $request
+     * @var bool
+     */
+    private $sessionStarted = false;
+
+    /**
+     * @param HttpRequest $request
      * @param SidResolverInterface $sidResolver
      * @param ConfigInterface $sessionConfig
      * @param SaveHandlerInterface $saveHandler
      * @param ValidatorInterface $validator
      * @param StorageInterface $storage
-     * @param \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager
-     * @param \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory
-     * @param \Magento\Framework\App\State $appState
+     * @param CookieManagerInterface $cookieManager
+     * @param CookieMetadataFactory $cookieMetadataFactory
+     * @param State $appState
      * @param SessionStartChecker|null $sessionStartChecker
-     * @throws \Magento\Framework\Exception\SessionException
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Framework\App\Request\Http $request,
+        HttpRequest $request,
         SidResolverInterface $sidResolver,
         ConfigInterface $sessionConfig,
         SaveHandlerInterface $saveHandler,
         ValidatorInterface $validator,
         StorageInterface $storage,
-        \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager,
-        \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory,
-        \Magento\Framework\App\State $appState,
+        CookieManagerInterface $cookieManager,
+        CookieMetadataFactory $cookieMetadataFactory,
+        State $appState,
         SessionStartChecker $sessionStartChecker = null
     ) {
         $this->request = $request;
@@ -135,10 +146,8 @@ class SessionManager implements SessionManagerInterface
         $this->cookieManager = $cookieManager;
         $this->cookieMetadataFactory = $cookieMetadataFactory;
         $this->appState = $appState;
-        $this->sessionStartChecker = $sessionStartChecker ?: \Magento\Framework\App\ObjectManager::getInstance()->get(
-            SessionStartChecker::class
-        );
-        $this->start();
+        $this->sessionStartChecker = $sessionStartChecker ??
+            ObjectManager::getInstance()->get(SessionStartChecker::class);
     }
 
     /**
@@ -166,6 +175,11 @@ class SessionManager implements SessionManagerInterface
                 sprintf('Invalid method %s::%s(%s)', get_class($this), $method, print_r($args, 1))
             );
         }
+
+        if (!$this->sessionStarted) {
+            $this->start();
+        }
+
         $return = call_user_func_array([$this->storage, $method], $args);
         return $return === $this->storage ? $this : $return;
     }
@@ -173,20 +187,22 @@ class SessionManager implements SessionManagerInterface
     /**
      * Configure session handler and start session
      *
-     * @throws \Magento\Framework\Exception\SessionException
+     * @throws SessionException
      * @return $this
      */
     public function start()
     {
+        $this->sessionStarted = true;
+
         if ($this->sessionStartChecker->check()) {
             if (!$this->isSessionExists()) {
-                \Magento\Framework\Profiler::start('session_start');
+                Profiler::start('session_start');
 
                 try {
                     $this->appState->getAreaCode();
-                } catch (\Magento\Framework\Exception\LocalizedException $e) {
-                    throw new \Magento\Framework\Exception\SessionException(
-                        new \Magento\Framework\Phrase(
+                } catch (LocalizedException $e) {
+                    throw new SessionException(
+                        new Phrase(
                             'Area code not set: Area code must be set before starting a session.'
                         ),
                         $e
@@ -214,7 +230,7 @@ class SessionManager implements SessionManagerInterface
                 register_shutdown_function([$this, 'writeClose']);
 
                 $this->_addHost();
-                \Magento\Framework\Profiler::stop('session_start');
+                Profiler::stop('session_start');
             }
             $this->storage->init(isset($_SESSION) ? $_SESSION : []);
         }
@@ -277,6 +293,10 @@ class SessionManager implements SessionManagerInterface
      */
     public function isSessionExists()
     {
+        if (!$this->sessionStarted) {
+            $this->start();
+        }
+
         if (session_status() === PHP_SESSION_NONE && !headers_sent()) {
             return false;
         }
@@ -292,6 +312,10 @@ class SessionManager implements SessionManagerInterface
      */
     public function getData($key = '', $clear = false)
     {
+        if (!$this->sessionStarted) {
+            $this->start();
+        }
+
         $data = $this->storage->getData($key);
         if ($clear && isset($data)) {
             $this->storage->unsetData($key);
@@ -306,6 +330,10 @@ class SessionManager implements SessionManagerInterface
      */
     public function getSessionId()
     {
+        if (!$this->sessionStarted) {
+            $this->start();
+        }
+
         return session_id();
     }
 
@@ -316,6 +344,10 @@ class SessionManager implements SessionManagerInterface
      */
     public function getName()
     {
+        if (!$this->sessionStarted) {
+            $this->start();
+        }
+
         return session_name();
     }
 
@@ -327,6 +359,10 @@ class SessionManager implements SessionManagerInterface
      */
     public function setName($name)
     {
+        if (!$this->sessionStarted) {
+            $this->start();
+        }
+
         session_name($name);
         return $this;
     }
@@ -334,11 +370,16 @@ class SessionManager implements SessionManagerInterface
     /**
      * Destroy/end a session
      *
-     * @param  array $options
+     * @param array|null $options
      * @return void
+     * @throws SessionException
      */
     public function destroy(array $options = null)
     {
+        if (!$this->sessionStarted) {
+            $this->start();
+        }
+
         $options = $options ?? [];
         $options = array_merge($this->defaultDestroyOptions, $options);
 
@@ -364,6 +405,10 @@ class SessionManager implements SessionManagerInterface
      */
     public function clearStorage()
     {
+        if (!$this->sessionStarted) {
+            $this->start();
+        }
+
         $this->storage->unsetData();
         return $this;
     }
@@ -406,6 +451,10 @@ class SessionManager implements SessionManagerInterface
      */
     public function setSessionId($sessionId)
     {
+        if (!$this->sessionStarted) {
+            $this->start();
+        }
+
         $this->_addHost();
         if ($sessionId !== null && preg_match('#^[0-9a-zA-Z,-]+$#', $sessionId)) {
             if ($this->getSessionId() !== $sessionId) {
@@ -483,6 +532,10 @@ class SessionManager implements SessionManagerInterface
      */
     protected function _addHost()
     {
+        if (!$this->sessionStarted) {
+            $this->start();
+        }
+
         $host = $this->request->getHttpHost();
         if (!$host) {
             return $this;
@@ -501,6 +554,10 @@ class SessionManager implements SessionManagerInterface
      */
     protected function _getHosts()
     {
+        if (!$this->sessionStarted) {
+            $this->start();
+        }
+
         return $_SESSION[self::HOST_KEY] ?? [];
     }
 
@@ -511,6 +568,10 @@ class SessionManager implements SessionManagerInterface
      */
     protected function _cleanHosts()
     {
+        if (!$this->sessionStarted) {
+            $this->start();
+        }
+
         unset($_SESSION[self::HOST_KEY]);
         return $this;
     }
@@ -522,6 +583,10 @@ class SessionManager implements SessionManagerInterface
      */
     public function regenerateId()
     {
+        if (!$this->sessionStarted) {
+            $this->start();
+        }
+
         if (headers_sent()) {
             return $this;
         }
@@ -568,6 +633,10 @@ class SessionManager implements SessionManagerInterface
      */
     protected function clearSubDomainSessionCookie()
     {
+        if (!$this->sessionStarted) {
+            $this->start();
+        }
+
         foreach (array_keys($this->_getHosts()) as $host) {
             // Delete cookies with the same name for parent domains
             if ($this->sessionConfig->getCookieDomain() !== $host) {
@@ -590,6 +659,10 @@ class SessionManager implements SessionManagerInterface
      */
     public function expireSessionCookie()
     {
+        if (!$this->sessionStarted) {
+            $this->start();
+        }
+
         if (!$this->sessionConfig->getUseCookies()) {
             return;
         }
