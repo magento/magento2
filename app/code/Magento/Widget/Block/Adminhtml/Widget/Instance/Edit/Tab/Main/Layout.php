@@ -327,7 +327,7 @@ class Layout extends Template implements RendererInterface
         )->setData(
             [
                 'label' => $this->escapeHtmlAttr(__('Remove Layout Update')),
-                'onclick' => 'WidgetInstance.removePageGroup(this)',
+                'onclick_attribute' => 'WidgetInstance.removePageGroup(this)',
                 'class' => 'action-delete',
             ]
         );
