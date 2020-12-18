@@ -3330,4 +3330,89 @@ class ProductTest extends TestCase
         $imageItems = $product->getMediaGalleryImages()->getItems();
         $this->assertCount(0, $imageItems);
     }
+
+    /**
+     * Tests that images are imported correctly
+     *
+     * @magentoDataFixture mediaImportImageFixture
+     * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
+     * @magentoDataFixture Magento/Catalog/_files/product_with_image.php
+     * @dataProvider importImagesDataProvider
+     * @magentoAppIsolation enabled
+     * @param string $importFile
+     * @param string $productSku
+     * @param string $storeCode
+     * @param array $expectedImages
+     * @param array $select
+     */
+    public function testImportImages(
+        string $importFile,
+        string $productSku,
+        string $storeCode,
+        array $expectedImages,
+        array $select = ['file', 'label', 'position']
+    ): void {
+        $this->importDataForMediaTest($importFile);
+        $product = $this->getProductBySku($productSku, $storeCode);
+        $actualImages = array_map(
+            function (\Magento\Framework\DataObject $item) use ($select) {
+                return $item->toArray($select);
+            },
+            $product->getMediaGalleryImages()->getItems()
+        );
+        $this->assertEquals($expectedImages, array_values($actualImages));
+    }
+
+    /**
+     * @return array[]
+     */
+    public function importImagesDataProvider(): array
+    {
+        return [
+            [
+                'import_media_additional_images_storeview.csv',
+                'simple',
+                'default',
+                [
+                    [
+                        'file' => '/m/a/magento_image.jpg',
+                        'label' => 'Image Alt Text',
+                        'position' => 1
+                    ],
+                    [
+                        'file' => '/m/a/magento_additional_image_one.jpg',
+                        'label' => null,
+                        'position' => 2
+                    ],
+                    [
+                        'file' => '/m/a/magento_additional_image_two.jpg',
+                        'label' => null,
+                        'position' => 3
+                    ],
+                ]
+            ],
+            [
+                'import_media_additional_images_storeview.csv',
+                'simple',
+                'fixturestore',
+                [
+                    [
+                        'file' => '/m/a/magento_image.jpg',
+                        'label' => 'Image Alt Text',
+                        'position' => 1
+                    ],
+                    [
+                        'file' => '/m/a/magento_additional_image_one.jpg',
+                        'label' => 'Additional Image Label One',
+                        'position' => 2
+                    ],
+                    [
+                        'file' => '/m/a/magento_additional_image_two.jpg',
+                        'label' => 'Additional Image Label Two',
+                        'position' => 3
+                    ],
+                ]
+            ]
+        ];
+    }
 }
