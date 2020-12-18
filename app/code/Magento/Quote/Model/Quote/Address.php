@@ -1217,7 +1217,9 @@ class Address extends AbstractAddress implements
             $storeId
         );
 
-        $taxes = $taxInclude ? $this->getBaseTaxAmount() : 0;
+        $taxes = $taxInclude
+            ? $this->getBaseTaxAmount() + $this->getBaseDiscountTaxCompensationAmount()
+            : 0;
 
         return $includeDiscount ?
             ($this->getBaseSubtotalWithDiscount() + $taxes >= $amount) :
