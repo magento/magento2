@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "fa3e1239b260ac9d83e0893dfde0c7e3",
+    "content-hash": "d717d63738dd3f09ba6b8d9f7d71c7bd",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.169.0",
+            "version": "3.171.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "d15a231355e4435fc33bab83df075ec31edd0a9b"
+                "reference": "01407effc918634048346d8bd6513b2db0d07ad8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/d15a231355e4435fc33bab83df075ec31edd0a9b",
-                "reference": "d15a231355e4435fc33bab83df075ec31edd0a9b",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/01407effc918634048346d8bd6513b2db0d07ad8",
+                "reference": "01407effc918634048346d8bd6513b2db0d07ad8",
                 "shasum": ""
             },
             "require": {
@@ -89,7 +89,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2020-12-14T19:12:33+00:00"
+            "time": "2020-12-17T19:16:51+00:00"
         },
         {
             "name": "colinmollenhour/cache-backend-file",
@@ -3308,16 +3308,16 @@
         },
         {
             "name": "laminas/laminas-view",
-            "version": "2.11.4",
+            "version": "2.11.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-view.git",
-                "reference": "3bbb2e94287383604c898284a18d2d06cf17301e"
+                "reference": "16611035d7b3a6ef2c636a9268c213146123b663"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-view/zipball/3bbb2e94287383604c898284a18d2d06cf17301e",
-                "reference": "3bbb2e94287383604c898284a18d2d06cf17301e",
+                "url": "https://api.github.com/repos/laminas/laminas-view/zipball/16611035d7b3a6ef2c636a9268c213146123b663",
+                "reference": "16611035d7b3a6ef2c636a9268c213146123b663",
                 "shasum": ""
             },
             "require": {
@@ -3329,7 +3329,7 @@
                 "php": "^5.6 || ^7.0"
             },
             "replace": {
-                "zendframework/zend-view": "self.version"
+                "zendframework/zend-view": "^2.11.4"
             },
             "require-dev": {
                 "laminas/laminas-authentication": "^2.5",
@@ -3353,7 +3353,7 @@
                 "laminas/laminas-servicemanager": "^2.7.5 || ^3.0.3",
                 "laminas/laminas-session": "^2.8.1",
                 "laminas/laminas-uri": "^2.5",
-                "phpunit/phpunit": "^5.7.15 || ^6.0.8"
+                "phpunit/phpunit": "^5.7.27 || ^6.5.14 || ^7.5.18"
             },
             "suggest": {
                 "laminas/laminas-authentication": "Laminas\\Authentication component",
@@ -3374,12 +3374,6 @@
                 "bin/templatemap_generator.php"
             ],
             "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.11.x-dev",
-                    "dev-develop": "2.12.x-dev"
-                }
-            },
             "autoload": {
                 "psr-4": {
                     "Laminas\\View\\": "src/"
@@ -3395,7 +3389,13 @@
                 "laminas",
                 "view"
             ],
-            "time": "2019-12-31T18:03:30+00:00"
+            "funding": [
+                {
+                    "url": "https://funding.communitybridge.org/projects/laminas-project",
+                    "type": "community_bridge"
+                }
+            ],
+            "time": "2020-12-15T14:57:08+00:00"
         },
         {
             "name": "laminas/laminas-zendframework-bridge",
@@ -4313,16 +4313,16 @@
         },
         {
             "name": "phpseclib/phpseclib",
-            "version": "2.0.29",
+            "version": "2.0.30",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpseclib/phpseclib.git",
-                "reference": "497856a8d997f640b4a516062f84228a772a48a8"
+                "reference": "136b9ca7eebef78be14abf90d65c5e57b6bc5d36"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/497856a8d997f640b4a516062f84228a772a48a8",
-                "reference": "497856a8d997f640b4a516062f84228a772a48a8",
+                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/136b9ca7eebef78be14abf90d65c5e57b6bc5d36",
+                "reference": "136b9ca7eebef78be14abf90d65c5e57b6bc5d36",
                 "shasum": ""
             },
             "require": {
@@ -4330,7 +4330,7 @@
             },
             "require-dev": {
                 "phing/phing": "~2.7",
-                "phpunit/phpunit": "^4.8.35|^5.7|^6.0",
+                "phpunit/phpunit": "^4.8.35|^5.7|^6.0|^9.4",
                 "squizlabs/php_codesniffer": "~2.0"
             },
             "suggest": {
@@ -4414,7 +4414,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-09-08T04:24:43+00:00"
+            "time": "2020-12-17T05:42:04+00:00"
         },
         {
             "name": "psr/cache",
@@ -7558,16 +7558,16 @@
         },
         {
             "name": "friendsofphp/php-cs-fixer",
-            "version": "v2.16.9",
+            "version": "v2.16.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfPHP/PHP-CS-Fixer.git",
-                "reference": "3d0f843b8abe1b966156774bf4093ebbb77f92cc"
+                "reference": "7dd27dde4852270de8f672636a0855ce7de47bf0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfPHP/PHP-CS-Fixer/zipball/3d0f843b8abe1b966156774bf4093ebbb77f92cc",
-                "reference": "3d0f843b8abe1b966156774bf4093ebbb77f92cc",
+                "url": "https://api.github.com/repos/FriendsOfPHP/PHP-CS-Fixer/zipball/7dd27dde4852270de8f672636a0855ce7de47bf0",
+                "reference": "7dd27dde4852270de8f672636a0855ce7de47bf0",
                 "shasum": ""
             },
             "require": {
@@ -7597,9 +7597,11 @@
                 "php-cs-fixer/accessible-object": "^1.0",
                 "php-cs-fixer/phpunit-constraint-isidenticalstring": "^1.2",
                 "php-cs-fixer/phpunit-constraint-xmlmatchesxsd": "^1.2.1",
-                "phpunit/phpunit": "^5.7.27 || ^6.5.14 || ^7.1",
+                "phpspec/prophecy-phpunit": "^1.1 || ^2.0",
+                "phpunit/phpunit": "^5.7.27 || ^6.5.14 || ^7.5.20 || ^8.5.13 || ^9.4.4 <9.5",
                 "phpunitgoodpractices/polyfill": "^1.5",
                 "phpunitgoodpractices/traits": "^1.9.1",
+                "sanmai/phpunit-legacy-adapter": "^6.4 || ^8.2.1",
                 "symfony/phpunit-bridge": "^5.1",
                 "symfony/yaml": "^3.0 || ^4.0 || ^5.0"
             },
@@ -7652,7 +7654,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2020-12-08T13:16:25+00:00"
+            "time": "2020-12-17T16:34:40+00:00"
         },
         {
             "name": "hoa/consistency",
