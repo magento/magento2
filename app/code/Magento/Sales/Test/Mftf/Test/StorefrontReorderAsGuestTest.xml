@@ -23,22 +23,34 @@
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
             <!-- Create Customer Account -->
-            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+             <createData entity="Simple_US_Customer" stepKey="createCustomer"/> 
+            
+            <createData entity="GuestCart" stepKey="createGuestCart"/>
+                <createData entity="SimpleCartItem" stepKey="addCartItem">
+                <requiredEntity createDataKey="createGuestCart"/>
+                <requiredEntity createDataKey="createSimpleProduct"/>
+            </createData>
+            <createData entity="GuestAddressInformation" stepKey="addGuestOrderAddress">
+                <requiredEntity createDataKey="createGuestCart"/>
+            </createData>
+            <updateData createDataKey="createGuestCart" entity="GuestOrderPaymentMethod" stepKey="sendGuestPaymentInformation">
+                <requiredEntity createDataKey="createGuestCart"/>
+            </updateData>
             <!-- Reindex and flush cache -->
             <magentoCLI command="indexer:reindex" stepKey="reindex"/>
             <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </before>
         <after>
-            <deleteData createDataKey="createCustomer" stepKey="deleteCreateCustomer"/>
+            <!-- <deleteData createDataKey="createCustomer" stepKey="deleteCreateCustomer"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
-            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/> -->
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
             <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
 
         <!-- Order a product -->
-        <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.custom_attributes[url_key]$$)}}" stepKey="navigateToPDP"/>
+        <!-- <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.custom_attributes[url_key]$$)}}" stepKey="navigateToPDP"/>
         <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="cartAddSimpleProductToCart">
             <argument name="product" value="$$createSimpleProduct$$"/>
             <argument name="productCount" value="1"/>
@@ -56,15 +68,22 @@
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="getOrderId"/>
         <assertNotEmpty stepKey="assertOrderIdIsNotEmpty" after="getOrderId">
             <actualResult type="const">$getOrderId</actualResult>
-        </assertNotEmpty>
+        </assertNotEmpty> -->
 
         <!-- Find the Order on frontend > Navigate to: Orders and Returns -->
         <amOnPage url="{{StorefrontGuestOrderSearchPage.url}}" stepKey="amOnOrdersAndReturns"/>
         <waitForPageLoad stepKey="waiForStorefrontPage"/>
 
+    
+
+        <getData entity="GetOrderIdByIncrementId" stepKey="getOrderId">
+            <requiredEntity createDataKey="createGuestCart"/>
+        </getData>
+
         <!-- Fill the form with correspondent Order data -->
         <actionGroup ref="StorefrontFillOrdersAndReturnsFormActionGroup" stepKey="fillOrder">
-            <argument name="orderNumber" value="{$getOrderId}"/>
+            <!-- <argument name="orderNumber" value="{$createGuestCart.return$}"/> -->
+            <argument name="orderNumber" value="{$getOrderId.return$}"/>
             <argument name="customer" value="$$createCustomer$$"/>
         </actionGroup>
 
