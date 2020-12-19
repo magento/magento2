@@ -119,8 +119,12 @@ class SecureHtmlRenderer
                         targetElement = event.target;
                     }
                     {$listenerFunction}.apply(targetElement);
-                }
+                    if ({$elementName}.nodeName == 'A' &&  "$eventName" == 'onclick') {
+                        event.preventDefault();
+                    }
+		}
             }
+	
 script;
 
         return $this->renderTag('script', ['type' => 'text/javascript'], $script, false);
