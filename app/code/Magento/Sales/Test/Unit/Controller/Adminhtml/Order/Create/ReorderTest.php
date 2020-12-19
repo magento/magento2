@@ -14,6 +14,7 @@ use Magento\Backend\Model\View\Result\ForwardFactory;
 use Magento\Backend\Model\View\Result\Redirect;
 use Magento\Backend\Model\View\Result\RedirectFactory;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\ObjectManagerInterface;
@@ -26,6 +27,7 @@ use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Reorder\UnavailableProductsProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
 /**
  * Verify reorder class.
@@ -116,6 +118,11 @@ class ReorderTest extends TestCase
     private $orderId;
 
     /**
+     * @var LoggerInterface|MockObject
+     */
+    private $loggerMock;
+
+    /**
      * @inheritDoc
      */
     protected function setUp(): void
@@ -141,6 +148,7 @@ class ReorderTest extends TestCase
             ->getMock();
         $this->messageManagerMock = $this->getMockBuilder(ManagerInterface::class)
             ->getMockForAbstractClass();
+        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
 
         $objectManager = new ObjectManager($this);
         $this->context = $objectManager->getObject(
@@ -161,6 +169,7 @@ class ReorderTest extends TestCase
                 'reorderHelper' => $this->reorderHelperMock,
                 'context' => $this->context,
                 'resultForwardFactory' => $this->resultForwardFactoryMock,
+                'logger' => $this->loggerMock
             ]
         );
     }
@@ -290,6 +299,43 @@ class ReorderTest extends TestCase
             ->expects($this->once())
             ->method('addException')
             ->with($exception, __('Error while processing order.'))
+            ->willReturnSelf();
+        $this->resultRedirectMock
+            ->expects($this->once())
+            ->method('setPath')
+            ->with('sales/*')
+            ->willReturnSelf();
+        $this->assertInstanceOf(Redirect::class, $this->reorder->execute());
+    }
+
+    /**
+     * Verify redirect new order with throws out of stock exception.
+     *
+     * @return void
+     */
+    public function testExecuteReorderWithThrowsLocalizedException(): void
+    {
+        $errorPhrase = __('This product is out of stock.');
+        $exception = new LocalizedException($errorPhrase);
+
+        $this->clearStorage();
+        $this->getOrder();
+        $this->canReorder(true);
+        $this->createRedirect();
+        $this->getOrderId($this->orderId);
+        $this->getUnavailableProducts([]);
+
+        $this->orderMock->expects($this->once())
+            ->method('setReordered')
+            ->with(true)
+            ->willThrowException($exception);
+        $this->loggerMock
+            ->expects($this->any())
+            ->method('critical')
+            ->willReturn($exception);
+        $this->messageManagerMock
+            ->expects($this->once())
+            ->method('addErrorMessage')
             ->willReturnSelf();
         $this->resultRedirectMock
             ->expects($this->once())
