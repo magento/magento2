@@ -294,7 +294,7 @@ class Flat extends \Magento\Indexer\Model\ResourceModel\AbstractResource
         $inactiveCategories = $this->getInactiveCategoryIds();
 
         if (!empty($inactiveCategories)) {
-            $select->where('main_table.entity_id NOT IN (?)', $inactiveCategories);
+            $select->where('main_table.entity_id NOT IN (?)', $inactiveCategories, \Zend_Db::INT_TYPE);
         }
 
         // Allow extensions to modify select (e.g. add custom category attributes to select)
@@ -681,7 +681,8 @@ class Flat extends \Magento\Indexer\Model\ResourceModel\AbstractResource
             1
         )->where(
             'entity_id IN (?)',
-            $filterIds
+            $filterIds,
+            \Zend_Db::INT_TYPE
         );
 
         return $this->getConnection()->fetchCol($select);

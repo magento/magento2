@@ -48,12 +48,13 @@
         <element name="contentTab" type="button" selector="//strong[contains(@class, 'admin__collapsible-title')]/span[text()='Content']"/>
         <element name="fieldError" type="text" selector="//input[@name='product[{{fieldName}}]']/following-sibling::label[@class='admin__field-error']" parameterized="true"/>
         <element name="priceFieldError" type="text" selector="//input[@name='product[price]']/parent::div/parent::div/label[@class='admin__field-error']"/>
-        <element name="addAttributeBtn" type="button" selector="#addAttribute"/>
-        <element name="createNewAttributeBtn" type="button" selector="button[data-index='add_new_attribute_button']"/>
+        <element name="addAttributeBtn" type="button" selector="#addAttribute" timeout="30"/>
+        <element name="createNewAttributeBtn" type="button" selector="button[data-index='add_new_attribute_button']" timeout="30"/>
         <element name="save" type="button" selector="#save-button" timeout="30"/>
         <element name="saveNewAttribute" type="button" selector="//aside[contains(@class, 'create_new_attribute_modal')]//button[@id='save']"/>
         <element name="successMessage" type="text" selector="#messages"/>
         <element name="attributeTab" type="button" selector="//strong[contains(@class, 'admin__collapsible-title')]/span[text()='Attributes']"/>
+        <element name="attributeTabOpened" type="button" selector="//div[contains(@class, 'admin__collapsible-block-wrapper') and contains(@class, '_show') ]//span[text()='Attributes']"/>
         <element name="attributeLabel" type="input" selector="//input[@name='frontend_label[0]']"/>
         <element name="frontendInput" type="select" selector="select[name = 'frontend_input']"/>
         <element name="productFormTab" type="button" selector="//strong[@class='admin__collapsible-title']/span[contains(text(), '{{tabName}}')]" parameterized="true"/>

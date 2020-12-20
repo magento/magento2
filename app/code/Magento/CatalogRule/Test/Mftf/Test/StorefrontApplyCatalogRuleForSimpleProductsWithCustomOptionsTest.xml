@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontApplyCatalogRuleForSimpleProductsWithCustomOptionsTest">
+        <annotations>
+            <features value="CatalogRule"/>
+            <stories value="Apply catalog price rule"/>
+            <title value="Admin should be able to apply the catalog price rule for simple product with 3 custom options"/>
+            <description value="Admin should be able to apply the catalog price rule for simple product with 3 custom options"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-28345"/>
+            <group value="catalogRule"/>
+            <group value="mtf_migrated"/>
+            <group value="catalog"/>
+        </annotations>
+        <before>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createProduct1">
+                <requiredEntity createDataKey="createCategory"/>
+                <field key="price">56.78</field>
+            </createData>
+            <createData entity="_defaultProduct" stepKey="createProduct2">
+                <requiredEntity createDataKey="createCategory"/>
+                <field key="price">56.78</field>
+            </createData>
+            <createData entity="_defaultProduct" stepKey="createProduct3">
+                <requiredEntity createDataKey="createCategory"/>
+                <field key="price">56.78</field>
+            </createData>
+
+            <!-- Update all products to have custom options -->
+            <updateData createDataKey="createProduct1" entity="productWithCustomOptions" stepKey="updateProduc1tWithOptions"/>
+            <updateData createDataKey="createProduct2" entity="productWithCustomOptions" stepKey="updateProduct2WithOptions"/>
+            <updateData createDataKey="createProduct3" entity="productWithCustomOptions" stepKey="updateProduct3WithOptions"/>
+
+            <!-- Login as Admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+
+            <!-- Clear all catalog price rules before test -->
+            <actionGroup ref="AdminCatalogPriceRuleDeleteAllActionGroup" stepKey="deleteAllCatalogRulesBeforeTest"/>
+            <magentoCron groups="index" stepKey="fixInvalidatedIndicesBeforeTest"/>
+        </before>
+        <after>
+            <!-- Delete products and category -->
+            <deleteData createDataKey="createProduct1" stepKey="deleteProduct1"/>
+            <deleteData createDataKey="createProduct2" stepKey="deleteProduct2"/>
+            <deleteData createDataKey="createProduct3" stepKey="deleteProduct3"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+
+            <!-- Delete the catalog price rule -->
+            <actionGroup ref="AdminCatalogPriceRuleDeleteAllActionGroup" stepKey="deleteAllCatalogRulesAfterTest"/>
+            <magentoCron groups="index" stepKey="fixInvalidatedIndicesAfterTest"/>
+
+            <!-- Logout -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+        <!-- 1. Begin creating a new catalog price rule -->
+        <actionGroup ref="AdminOpenNewCatalogPriceRuleFormPageActionGroup" stepKey="openNewCatalogPriceRulePage"/>
+        <actionGroup ref="AdminCatalogPriceRuleFillMainInfoActionGroup" stepKey="fillMainInfoForCatalogPriceRule">
+            <argument name="groups" value="'NOT LOGGED IN'"/>
+        </actionGroup>
+        <actionGroup ref="AdminFillCatalogRuleConditionActionGroup" stepKey="fillConditionsForCatalogPriceRule">
+            <argument name="conditionValue" value="$createCategory.id$"/>
+        </actionGroup>
+        <actionGroup ref="AdminCatalogPriceRuleFillActionsActionGroup" stepKey="fillActionsForCatalogPriceRule">
+            <argument name="apply" value="by_percent"/>
+            <argument name="discountAmount" value="10"/>
+        </actionGroup>
+        <actionGroup ref="AdminCatalogPriceRuleSaveAndApplyActionGroup" stepKey="saveAndApplyCatalogPriceRule"/>
+
+        <!-- Navigate to category on store front -->
+        <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="goToStorefrontCategoryPage">
+            <argument name="category" value="$createCategory$"/>
+        </actionGroup>
+
+        <!-- Check product 1 price on store front category page -->
+        <actionGroup ref="StorefrontAssertProductPriceOnCategoryPageActionGroup" stepKey="assertStorefrontProduct1Price">
+            <argument name="productName" value="$createProduct1.name$"/>
+            <argument name="productPrice" value="$51.10"/>
+        </actionGroup>
+
+        <!-- Check product 1 regular price on store front category page -->
+        <actionGroup ref="StorefrontAssertProductPriceOnCategoryPageActionGroup" stepKey="assertStorefrontProduct1RegularPrice">
+            <argument name="productName" value="$createProduct1.name$"/>
+            <argument name="productPrice" value="$56.78"/>
+        </actionGroup>
+
+        <!-- Check product 2 price on store front category page -->
+        <actionGroup ref="StorefrontAssertProductPriceOnCategoryPageActionGroup" stepKey="assertStorefrontProduct2Price">
+            <argument name="productName" value="$createProduct2.name$"/>
+            <argument name="productPrice" value="$51.10"/>
+        </actionGroup>
+
+        <!-- Check product 2 regular price on store front category page -->
+        <actionGroup ref="StorefrontAssertProductPriceOnCategoryPageActionGroup" stepKey="assertStorefrontProduct2RegularPrice">
+            <argument name="productName" value="$createProduct2.name$"/>
+            <argument name="productPrice" value="$56.78"/>
+        </actionGroup>
+
+        <!-- Check product 3 price on store front category page -->
+        <actionGroup ref="StorefrontAssertProductPriceOnCategoryPageActionGroup" stepKey="assertStorefrontProduct3Price">
+            <argument name="productName" value="$createProduct3.name$"/>
+            <argument name="productPrice" value="$51.10"/>
+        </actionGroup>
+
+        <!-- Check product 3 regular price on store front category page -->
+        <actionGroup ref="StorefrontAssertProductPriceOnCategoryPageActionGroup" stepKey="assertStorefrontProduct3RegularPrice">
+            <argument name="productName" value="$createProduct3.name$"/>
+            <argument name="productPrice" value="$56.78"/>
+        </actionGroup>
+
+        <!-- Navigate to product 1 on store front -->
+        <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="goToProduct1Page">
+            <argument name="productUrlKey" value="$createProduct1.custom_attributes[url_key]$"/>
+        </actionGroup>
+
+        <!-- Assert regular and special price for product 1 after selecting ProductOptionValueDropdown1 -->
+        <actionGroup ref="StorefrontSelectCustomOptionDropDownAndAssertPricesActionGroup" stepKey="storefrontSelectCustomOptionAndAssertProduct1Prices">
+            <argument name="customOption" value="{{ProductOptionValueDropdown1.title}} +$0.01"/>
+            <argument name="productPrice" value="$56.79"/>
+            <argument name="productFinalPrice" value="$51.11"/>
+        </actionGroup>
+
+        <!-- Add product 1 to cart -->
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProduct1Page">
+            <argument name="productName" value="$createProduct1.name$"/>
+        </actionGroup>
+
+        <!-- Navigate to product 2 on store front -->
+        <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="goToProduct2Page">
+            <argument name="productUrlKey" value="$createProduct2.custom_attributes[url_key]$"/>
+        </actionGroup>
+
+        <!-- Assert regular and special price for product 2 after selecting ProductOptionValueDropdown3 -->
+        <actionGroup ref="StorefrontSelectCustomOptionDropDownAndAssertPricesActionGroup" stepKey="storefrontSelectCustomOptionAndAssertProduct2Prices">
+            <argument name="customOption" value="{{ProductOptionValueDropdown3.title}} +$5.11"/>
+            <argument name="productPrice" value="$62.46"/>
+            <argument name="productFinalPrice" value="$56.21"/>
+        </actionGroup>
+
+        <!-- Add product 2 to cart -->
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProduct2Page">
+            <argument name="productName" value="$createProduct2.name$"/>
+        </actionGroup>
+
+        <!-- Navigate to product 3 on store front -->
+        <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="goToProduct3Page">
+            <argument name="productUrlKey" value="$createProduct3.custom_attributes[url_key]$"/>
+        </actionGroup>
+
+        <!-- Add product 3 to cart with no custom option -->
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProduct3Page">
+            <argument name="productName" value="$createProduct3.name$"/>
+        </actionGroup>
+
+        <!-- Assert subtotal on mini shopping cart -->
+        <actionGroup ref="AssertSubTotalOnStorefrontMiniCartActionGroup" stepKey="assertSubTotalOnStorefrontMiniCart">
+            <argument name="subTotal" value="$158.42"/>
+        </actionGroup>
+
+        <!-- Navigate to checkout shipping page -->
+        <actionGroup ref="OpenStoreFrontCheckoutShippingPageActionGroup" stepKey="onCheckout"/>
+
+        <!-- Fill Shipping information -->
+        <actionGroup ref="GuestCheckoutFillingShippingSectionActionGroup" stepKey="fillOrderShippingInfo">
+            <argument name="customerVar" value="Simple_US_Customer"/>
+            <argument name="customerAddressVar" value="US_Address_TX"/>
+        </actionGroup>
+
+        <!-- Verify order summary on payment page -->
+        <actionGroup ref="VerifyCheckoutPaymentOrderSummaryActionGroup" stepKey="verifyCheckoutPaymentOrderSummaryActionGroup">
+            <argument name="orderSummarySubTotal" value="$158.42"/>
+            <argument name="orderSummaryShippingTotal" value="$15.00"/>
+            <argument name="orderSummaryTotal" value="$173.42"/>
+        </actionGroup>
+    </test>
+</tests>

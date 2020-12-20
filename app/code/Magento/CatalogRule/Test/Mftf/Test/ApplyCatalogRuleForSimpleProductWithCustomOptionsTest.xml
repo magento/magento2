@@ -7,16 +7,19 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="ApplyCatalogRuleForSimpleProductWithCustomOptionsTest">
+    <test name="ApplyCatalogRuleForSimpleProductWithCustomOptionsTest" deprecated="Use StorefrontApplyCatalogRuleForSimpleProductsWithCustomOptionsTest instead">
         <annotations>
             <features value="CatalogRule"/>
             <stories value="Apply catalog price rule"/>
-            <title value="Admin should be able to apply the catalog price rule for simple product with 3 custom options"/>
+            <title value="Deprecated. Admin should be able to apply the catalog price rule for simple product with 3 custom options"/>
             <description value="Admin should be able to apply the catalog price rule for simple product with 3 custom options"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-14769"/>
             <group value="CatalogRule"/>
             <group value="mtf_migrated"/>
+            <skip>
+                <issueId value="DEPRECATED">Use StorefrontApplyCatalogRuleForSimpleProductsWithCustomOptionsTest instead</issueId>
+            </skip>
         </annotations>
         <before>
             <!-- Login as Admin -->

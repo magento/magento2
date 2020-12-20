@@ -19,6 +19,7 @@
     <zip countryCode="AR">
         <codes>
             <code id="pattern_1" active="true" example="1234">^[0-9]{4}$</code>
+            <code id="pattern_2" active="true" example="A1234BCD">^[a-zA-z]{1}[0-9]{4}[a-zA-z]{3}$</code>
         </codes>
     </zip>
     <zip countryCode="AM">
@@ -64,7 +65,7 @@
     </zip>
     <zip countryCode="BR">
         <codes>
-            <code id="pattern_1" active="true" example="12345">^[0-9]{5}$</code>
+            <code id="pattern_1" active="true" example="12345678">^[0-9]{8}$</code>
             <code id="pattern_2" active="true" example="12345-678">^[0-9]{5}\-[0-9]{3}$</code>
         </codes>
     </zip>
@@ -228,6 +229,7 @@
     <zip countryCode="KR">
         <codes>
             <code id="pattern_1" active="true" example="123-456">^[0-9]{3}-[0-9]{3}$</code>
+            <code id="pattern_2" active="true" example="12345">^[0-9]{5}$</code>
         </codes>
     </zip>
     <zip countryCode="KG">

@@ -213,8 +213,7 @@
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
 
         <!-- Go to My Account > My Orders page -->
-        <amOnPage url="{{StorefrontCustomerDashboardPage.url}}" stepKey="onMyAccount"/>
-        <waitForPageLoad stepKey="waitForAccountPage"/>
+        <actionGroup ref="StorefrontOpenMyAccountPageActionGroup" stepKey="onMyAccount"/>
         <click selector="{{StorefrontCustomerSidebarSection.sidebarTab('My Orders')}}" stepKey="clickOnMyOrders"/>
         <waitForPageLoad stepKey="waitForOrdersLoad"/>
 

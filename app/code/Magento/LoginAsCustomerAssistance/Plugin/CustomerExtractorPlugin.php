@@ -35,27 +35,20 @@ class CustomerExtractorPlugin
      * Add assistance_allowed extension attribute value to Customer instance.
      *
      * @param CustomerExtractor $subject
-     * @param callable $proceed
+     * @param CustomerInterface $customer
      * @param string $formCode
      * @param RequestInterface $request
      * @param array $attributeValues
      * @return CustomerInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundExtract(
+    public function afterExtract(
         CustomerExtractor $subject,
-        callable $proceed,
+        CustomerInterface $customer,
         string $formCode,
         RequestInterface $request,
         array $attributeValues = []
     ) {
-        /** @var CustomerInterface $customer */
-        $customer = $proceed(
-            $formCode,
-            $request,
-            $attributeValues
-        );
-
         $assistanceAllowedStatus = $request->getParam('assistance_allowed');
         if (!empty($assistanceAllowedStatus)) {
             $extensionAttributes = $customer->getExtensionAttributes();

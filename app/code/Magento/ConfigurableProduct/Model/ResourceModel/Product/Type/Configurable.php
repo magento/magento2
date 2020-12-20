@@ -173,7 +173,8 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             []
         )->where(
             'p.entity_id IN (?)',
-            $parentId
+            $parentId,
+            \Zend_Db::INT_TYPE
         );
 
         $childrenIds = [

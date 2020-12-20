@@ -27,7 +27,7 @@
             <actionGroup ref="AdminEnhancedMediaGallerySelectImageForMassActionActionGroup" stepKey="selectSecondImageToDelete">
                 <argument name="imageName" value="{{UpdatedImageDetails.title}}"/>
             </actionGroup>
-            <actionGroup ref="AdminEnhancedMediaGalleryClickDeleteImagesButtonActionGroup" stepKey="clikDeleteSelectedButton"/>
+            <actionGroup ref="AdminEnhancedMediaGalleryClickDeleteImagesButtonActionGroup" stepKey="clickDeleteSelectedButton"/>
             <actionGroup ref="AdminEnhancedMediaGalleryConfirmDeleteImagesActionGroup" stepKey="deleteImages"/>
             <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
             <deleteData createDataKey="category" stepKey="deleteCategory"/>
@@ -37,6 +37,8 @@
             <argument name="category" value="$$category$$"/>
         </actionGroup>
         <actionGroup ref="AdminOpenMediaGalleryFromCategoryImageUploaderActionGroup" stepKey="openMediaGalleryFromImageUploader"/>
+        <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilter"/>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetGridToDefaultView"/>
         <actionGroup ref="AdminEnhancedMediaGalleryUploadImageActionGroup" stepKey="uploadImage">
             <argument name="image" value="ImageUpload3"/>
         </actionGroup>
@@ -50,6 +52,8 @@
         <actionGroup ref="AdminMediaGalleryClickAddSelectedActionGroup" stepKey="clickAddSelectedContentImage"/>
         <actionGroup ref="AdminSaveCategoryFormActionGroup" stepKey="saveCategoryForm"/>
         <actionGroup ref="AdminOpenMediaGalleryFromCategoryImageUploaderActionGroup" stepKey="openMediaGalleryFromImageUploaderAgain"/>
+        <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilterAgain"/>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetGridToDefaultViewAgain"/>
         <actionGroup ref="AdminEnhancedMediaGalleryExpandFilterActionGroup" stepKey="expandFilters"/>
         <actionGroup ref="AdminEnhancedMediaGallerySelectUsedInFilterActionGroup" stepKey="setUsedInFilter">
             <argument name="filterName" value="Used in Categories"/>

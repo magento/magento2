@@ -55,9 +55,10 @@
         <actionGroup ref="AdminEnhancedMediaGallerySelectImageForMassActionActionGroup" stepKey="selectFirstImageToDelete">
                 <argument name="imageName" value="{{ImageMetadata.title}}"/>
         </actionGroup>
-        <actionGroup ref="AdminEnhancedMediaGalleryClickDeleteImagesButtonActionGroup" stepKey="clikDeleteSelectedButton"/>
+        <actionGroup ref="AdminEnhancedMediaGalleryClickDeleteImagesButtonActionGroup" stepKey="clickDeleteSelectedButton"/>
+        <actionGroup ref="AdminEnhancedMediaGalleryConfirmDeleteImagesActionGroup" stepKey="deleteImages"/>
 
-        <actionGroup ref="AdminNavigateToPageGridActionGroup" stepKey="navigateToCmsPageGrid"/>
+        <actionGroup ref="AdminOpenCMSPagesGridActionGroup" stepKey="navigateToCmsPageGrid"/>
         <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearGridFilters"/>
         <actionGroup ref="AdminSearchCmsPageInGridByUrlKeyActionGroup" stepKey="findCreatedCmsPage">
             <argument name="urlKey" value="test-page-1"/>
@@ -65,5 +66,6 @@
          <actionGroup ref="AdminDeleteCmsPageFromGridActionGroup" stepKey="deleteCmsPage">
             <argument name="urlKey" value="test-page-1"/>
         </actionGroup>
+        <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clickApplyFiltersButton"/>
    </test>
 </tests>

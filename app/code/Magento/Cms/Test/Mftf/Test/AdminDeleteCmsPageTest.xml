@@ -21,7 +21,7 @@
 
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
-            <actionGroup ref="AdminNavigateToPageGridActionGroup" stepKey="navigateToCmsPageGrid"/>
+            <actionGroup ref="AdminOpenCMSPagesGridActionGroup" stepKey="navigateToCmsPageGrid"/>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearGridSearchFilters"/>
             <actionGroup ref="CreateNewPageWithBasicValues" stepKey="createNewPageWithBasicValues"/>
             <actionGroup ref="SaveCmsPageActionGroup" stepKey="clickSaveCmsPageButton"/>

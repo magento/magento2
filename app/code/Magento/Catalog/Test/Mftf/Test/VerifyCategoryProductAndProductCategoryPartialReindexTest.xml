@@ -58,9 +58,9 @@
                 <argument name="categoryName" value="$$categoryN.name$$, $$categoryM.name$$"/>
             </actionGroup>
 
-            <wait stepKey="waitBeforeRunCronIndex" time="30"/>
+            <wait stepKey="waitBeforeRunCronIndex" time="60"/>
             <magentoCLI stepKey="runCronIndex" command="cron:run --group=index"/>
-            <wait stepKey="waitAfterRunCronIndex" time="60"/>
+            <wait stepKey="waitAfterRunCronIndex" time="120"/>
         </before>
         <after>
             <!-- Change "Category Products" and "Product Categories" indexers to "Update on Save" mode -->
@@ -108,6 +108,8 @@
             <argument name="categoryName" value="$$categoryK.name$$"/>
         </actionGroup>
 
+        <wait stepKey="waitAfterAssignCategoryK" time="60"/>
+
         <!--  Unassign category M from Product B -->
         <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="amOnEditCategoryPageB">
             <argument name="productId" value="$$productB.id$$"/>
@@ -147,8 +149,9 @@
         <see userInput="$$productC.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeProductInCategoryN"/>
 
         <!-- Run cron -->
-        <wait stepKey="waitBeforeRunMagentoCron" time="30"/>
+        <wait stepKey="waitBeforeRunMagentoCron" time="60"/>
         <magentoCLI stepKey="runMagentoCron" command="cron:run --group=index"/>
+
         <wait stepKey="waitAfterRunMagentoCron" time="90"/>
 
         <!-- Open categories K, L, M, N on Storefront in order to make sure that new assigments are applied -->
@@ -213,8 +216,9 @@
         <see userInput="$$productC.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="productCOnCategoryN"/>
 
         <!-- Run Cron once to reindex product changes -->
-        <wait stepKey="waitBeforeRunCronIndexAfterProductAssignToCategory" time="30"/>
+        <wait stepKey="waitBeforeRunCronIndexAfterProductAssignToCategory" time="60"/>
         <magentoCLI stepKey="runCronIndexAfterProductAssignToCategory" command="cron:run --group=index"/>
+
         <wait stepKey="waitAfterRunCronIndexAfterProductAssignToCategory" time="90"/>
 
         <!-- Open categories K, L, M, N on Storefront in order to make sure that new assigments are applied -->

@@ -107,12 +107,13 @@
             <deleteData createDataKey="createDownloadableProduct" stepKey="deleteDownloadableProduct"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
             <deleteData createDataKey="createGroupedProduct" stepKey="deleteGroupedProduct"/>
-
-            <!-- Delete customer -->
-            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <comment userInput="BIC workaround" stepKey="deleteCustomer"/>
 
             <!-- Logout customer -->
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogoutStorefront"/>
+
+            <!-- Delete customer -->
+            <deleteData createDataKey="createCustomer" stepKey="deleteCreatedCustomer"/>
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
             <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
@@ -168,9 +169,8 @@
         <actionGroup ref="FillShippingZipForm" stepKey="fillShippingZipForm">
             <argument name="address" value="US_Address_CA"/>
         </actionGroup>
-
-        <click selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="clickProceedToCheckout"/>
-        <waitForPageLoad stepKey="waitForProceedToCheckout"/>
+        <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="clickProceedToCheckout"/>
+        <comment userInput="Adding the comment to replace waitForProceedToCheckout action for preserving Backward Compatibility" stepKey="waitForProceedToCheckout"/>
         <actionGroup ref="FillCustomerSignInPopupFormActionGroup" stepKey="fillCustomerSignInPopupForm">
             <argument name="customer" value="$$createCustomer$$"/>
         </actionGroup>
@@ -214,8 +214,7 @@
         </assertEquals>
 
         <!-- Assert order total -->
-        <amOnPage url="{{StorefrontCustomerDashboardPage.url}}" stepKey="navigateToCustomerDashboardPage"/>
-        <waitForPageLoad stepKey="waitForCustomerDashboardPageLoad"/>
+        <actionGroup ref="StorefrontOpenMyAccountPageActionGroup" stepKey="navigateToCustomerDashboardPage"/>
         <see selector="{{StorefrontCustomerRecentOrdersSection.orderTotal}}" userInput="$613.23" stepKey="checkOrderTotalInStorefront"/>
 
         <!-- Go to Address Book -->

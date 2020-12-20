@@ -94,8 +94,7 @@
         <see stepKey="seeSuccess" selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You added"/>
 
         <!-- Assert that taxes are applied correctly for NY -->
-        <amOnPage url="{{CheckoutPage.url}}" stepKey="goToCheckout"/>
-        <waitForPageLoad stepKey="waitForShippingSection"/>
+        <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="goToCheckout"/>
         <!-- Checkout select Check/Money Order payment -->
         <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment"/>
         <see stepKey="seeAddress" selector="{{CheckoutShippingSection.defaultShipping}}" userInput="{{SimpleTaxNY.state}}"/>

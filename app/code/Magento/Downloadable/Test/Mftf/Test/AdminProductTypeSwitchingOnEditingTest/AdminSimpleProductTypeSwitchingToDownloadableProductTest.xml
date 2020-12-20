@@ -49,7 +49,7 @@
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveDownloadableProductForm"/>
         <!--Assert downloadable product on Admin product page grid-->
         <comment userInput="Assert configurable product in Admin product page grid" stepKey="commentAssertDownloadableProductOnAdmin"/>
-        <amOnPage url="{{AdminCatalogProductPage.url}}" stepKey="goToCatalogProductPage"/>
+        <actionGroup ref="AdminOpenCatalogProductPageActionGroup" stepKey="goToCatalogProductPage"/>
         <actionGroup ref="FilterProductGridBySku2ActionGroup" stepKey="filterProductGridBySku">
             <argument name="sku" value="$$createProduct.sku$$"/>
         </actionGroup>

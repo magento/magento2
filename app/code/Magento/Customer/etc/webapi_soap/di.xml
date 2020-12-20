@@ -9,4 +9,15 @@
      <type name="Magento\Framework\Authorization">
         <plugin name="customerAuthorization" type="Magento\Customer\Model\Plugin\CustomerAuthorization" />
     </type>
+    <type name="Magento\Customer\Model\Customer\AuthorizationComposite">
+        <arguments>
+            <argument name="authorizationChecks" xsi:type="array">
+                <item name="soap_customer_authorization" xsi:type="object">
+                    Magento\Customer\Model\Customer\Authorization
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <preference for="Magento\Customer\Api\AccountManagementInterface"
+                type="Magento\Customer\Model\AccountManagementApi" />
 </config>
