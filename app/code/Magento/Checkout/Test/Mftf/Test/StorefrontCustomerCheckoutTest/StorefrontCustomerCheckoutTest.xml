@@ -28,12 +28,13 @@
             </actionGroup>
         </before>
         <after>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutStorefront"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteSimpleCategory"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteUsCustomer"/>
             <actionGroup ref="AdminClearCustomersFiltersActionGroup" stepKey="resetCustomerFilters"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
-            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer"/>
+            <comment userInput="BIC workaround" stepKey="logoutCustomer"/>
         </after>
 
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="storefrontCustomerLogin">
