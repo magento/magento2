@@ -16,6 +16,7 @@ use Magento\Quote\Api\Data\CartInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Quote\Model\GetQuoteByReservedOrderId;
 use Magento\TestFramework\TestCase\AbstractBackendController;
+use Magento\Wishlist\Model\Wishlist;
 
 /**
  * Class checks create order load block controller.
@@ -199,6 +200,35 @@ class LoadBlockTest extends AbstractBackendController
         $this->assertCount(1, $cartItems->getItems());
         $this->assertEquals('taxable_product', $cartItems->getFirstItem()->getSku());
         $this->quoteIdsToRemove[] = $customerCart->getId();
+    }
+
+    /**
+     * Check that Wishlist item is deleted after it has been added to Order.
+     *
+     * @return void
+     * @magentoDataFixture Magento/Wishlist/_files/wishlist_with_simple_product.php
+     */
+    public function testAddProductToOrderFromWishList(): void
+    {
+        /** @var Wishlist $wishlist */
+        $wishlist = $this->_objectManager->create(Wishlist::class);
+        $wishlistItems = $wishlist->loadByCustomerId(1)->getItemCollection();
+        $this->assertCount(1, $wishlistItems);
+
+        $post = $this->hydratePost([
+            'sidebar' => [
+                'add_wishlist_item' => [
+                    $wishlistItems->getFirstItem()->getId() => 1,
+                ],
+            ],
+        ]);
+        $params = $this->hydrateParams();
+        $this->dispatchWitParams($params, $post);
+
+        $wishlistItems->clear()->load();
+        $this->assertEmpty($wishlistItems);
+        $quoteItems = $this->session->getQuote()->getItemsCollection();
+        $this->assertCount(1, $quoteItems);
     }
 
     /**
