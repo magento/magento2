@@ -14,6 +14,8 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Quote\Model\Cart\Totals;
 use Magento\Quote\Model\Quote\Item;
 use Magento\Quote\Model\Quote\TotalsCollector;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
 
 /**
  * @inheritdoc
@@ -31,12 +33,29 @@ class CartItemPrices implements ResolverInterface
     private $totals;
 
     /**
+     * @var StoreManager
+     */
+    private $storeManager;
+
+    /**
+     * @var PriceCurrencyObj
+     */
+    private $priceCurrencyObj;
+
+
+    /**
      * @param TotalsCollector $totalsCollector
+     * @param StoreManagerInterface $storeManager
+     * @param PriceCurrencyInterface $priceCurrencyObj
      */
     public function __construct(
-        TotalsCollector $totalsCollector
+        TotalsCollector $totalsCollector,
+        StoreManagerInterface $storeManager,
+        PriceCurrencyInterface $priceCurrencyObj
     ) {
         $this->totalsCollector = $totalsCollector;
+        $this->storeManager = $storeManager;
+        $this->priceCurrencyObj = $priceCurrencyObj;
     }
 
     /**
@@ -55,12 +74,16 @@ class CartItemPrices implements ResolverInterface
             // But the totals should be calculated even if no address is set
             $this->totals = $this->totalsCollector->collectQuoteTotals($cartItem->getQuote());
         }
-        $currencyCode = $cartItem->getQuote()->getQuoteCurrencyCode();
+        // update currency code
+        //$currencyCode = $cartItem->getQuote()->getQuoteCurrencyCode();
+        $currencyCode = $this->getCurrentCurrency();
+        // update currency price
+        $cartPrice = $this->setConvertPrice($cartItem->getPrice());
 
         return [
             'price' => [
                 'currency' => $currencyCode,
-                'value' => $cartItem->getCalculationPrice(),
+                'value' => $cartPrice,
             ],
             'row_total' => [
                 'currency' => $currencyCode,
@@ -105,5 +128,23 @@ class CartItemPrices implements ResolverInterface
             return $discountValues;
         }
         return null;
+    }
+
+    private function getCurrentCurrency()
+    {
+        return $this->storeManager->getStore()->getCurrentCurrencyCode();
+    }
+
+    public function setConvertPrice($price)
+    {
+        $storeId = $this->storeManager->getStore()->getStoreId();
+        $currentCurrencyCode = $this->getCurrentCurrency();
+        $baseCurrencyCode = $this->storeManager->getStore()->getBaseCurrencyCode();
+        if ($baseCurrencyCode == $currentCurrencyCode) {
+            return $price;
+        } else {
+            $price = round($this->priceCurrencyObj->convert($price, $storeId, $currentCurrencyCode), 2);
+            return $price;
+        }
     }
 }
