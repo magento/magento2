@@ -261,7 +261,7 @@ class DefaultStock extends AbstractIndexer implements StockInterface
 
         $select->columns(['status' => $this->getStatusExpression($connection, true)]);
         if ($entityIds !== null) {
-            $select->where('e.entity_id IN(?)', $entityIds);
+            $select->where('e.entity_id IN(?)', $entityIds, \Zend_Db::INT_TYPE);
         }
 
         return $select;
