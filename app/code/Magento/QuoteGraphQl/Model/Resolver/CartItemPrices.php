@@ -38,24 +38,24 @@ class CartItemPrices implements ResolverInterface
     private $storeManager;
 
     /**
-     * @var PriceCurrencyObj
+     * @var PriceCurrency
      */
-    private $priceCurrencyObj;
+    private $priceCurrency;
 
 
     /**
      * @param TotalsCollector $totalsCollector
      * @param StoreManagerInterface $storeManager
-     * @param PriceCurrencyInterface $priceCurrencyObj
+     * @param PriceCurrencyInterface $priceCurrency
      */
     public function __construct(
         TotalsCollector $totalsCollector,
         StoreManagerInterface $storeManager,
-        PriceCurrencyInterface $priceCurrencyObj
+        PriceCurrencyInterface $priceCurrency
     ) {
         $this->totalsCollector = $totalsCollector;
         $this->storeManager = $storeManager;
-        $this->priceCurrencyObj = $priceCurrencyObj;
+        $this->priceCurrency = $priceCurrency;
     }
 
     /**
@@ -74,10 +74,7 @@ class CartItemPrices implements ResolverInterface
             // But the totals should be calculated even if no address is set
             $this->totals = $this->totalsCollector->collectQuoteTotals($cartItem->getQuote());
         }
-        // update currency code
-        //$currencyCode = $cartItem->getQuote()->getQuoteCurrencyCode();
         $currencyCode = $this->getCurrentCurrency();
-        // update currency price
         $cartPrice = $this->setConvertPrice($cartItem->getPrice());
 
         return [
@@ -130,20 +127,33 @@ class CartItemPrices implements ResolverInterface
         return null;
     }
 
+    /**
+     * Get Current Currency
+     *
+     * @return string
+     */
+
     private function getCurrentCurrency()
     {
         return $this->storeManager->getStore()->getCurrentCurrencyCode();
     }
 
+    /**
+     * Get current currency price
+     *
+     * @param string $price
+     * @return string
+     */
     public function setConvertPrice($price)
     {
         $storeId = $this->storeManager->getStore()->getStoreId();
         $currentCurrencyCode = $this->getCurrentCurrency();
         $baseCurrencyCode = $this->storeManager->getStore()->getBaseCurrencyCode();
-        if ($baseCurrencyCode == $currentCurrencyCode) {
+        if ($baseCurrencyCode === $currentCurrencyCode) {
             return $price;
         } else {
-            $price = round($this->priceCurrencyObj->convert($price, $storeId, $currentCurrencyCode), 2);
+            $price = $this->priceCurrency->convert($price, $storeId, $currentCurrencyCode);
+            $price = round($price , 2);
             return $price;
         }
     }
