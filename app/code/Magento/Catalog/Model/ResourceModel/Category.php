@@ -575,7 +575,8 @@ class Category extends AbstractResource
             'entity_id'
         )->where(
             'entity_id IN(?)',
-            $ids
+            $ids,
+            \Zend_Db::INT_TYPE
         );
 
         return $this->getConnection()->fetchCol($select);

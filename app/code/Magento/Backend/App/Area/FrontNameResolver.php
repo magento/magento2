@@ -123,7 +123,13 @@ class FrontNameResolver implements \Magento\Framework\App\Area\FrontNameResolver
         if ($this->scopeConfig->getValue(self::XML_PATH_USE_CUSTOM_ADMIN_URL, ScopeInterface::SCOPE_STORE)) {
             $backendUrl = $this->scopeConfig->getValue(self::XML_PATH_CUSTOM_ADMIN_URL, ScopeInterface::SCOPE_STORE);
         } else {
-            $backendUrl = $this->scopeConfig->getValue(Store::XML_PATH_UNSECURE_BASE_URL, ScopeInterface::SCOPE_STORE);
+            $backendUrl = $this->config->getValue(Store::XML_PATH_UNSECURE_BASE_URL);
+            if ($backendUrl === null) {
+                $backendUrl = $this->scopeConfig->getValue(
+                    Store::XML_PATH_UNSECURE_BASE_URL,
+                    ScopeInterface::SCOPE_STORE
+                );
+            }
         }
         $host = $this->request->getServer('HTTP_HOST', '');
         return stripos($this->getHostWithPort($backendUrl), (string) $host) !== false;
