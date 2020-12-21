@@ -7,11 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\ConfigurableProductGraphQl\Model\Resolver;
 
+use Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\Catalog\Api\ProductRepositoryInterface;
 
 /**
  * Fetches the Product data according to the GraphQL schema
@@ -19,16 +19,16 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 class ProductResolver implements ResolverInterface
 {
     /**
-     * @var ProductRepositoryInterface
+     * @var ItemResolverInterface
      */
-    private $productRepository;
+    private $configurableItemResolver;
 
     /**
-     * @param ProductRepositoryInterface $productRepository
+     * @param ItemResolverInterface $configurableItemResolver
      */
-    public function __construct(ProductRepositoryInterface $productRepository)
+    public function __construct(ItemResolverInterface $configurableItemResolver)
     {
-        $this->productRepository = $productRepository;
+        $this->configurableItemResolver = $configurableItemResolver;
     }
 
     /**
@@ -45,8 +45,7 @@ class ProductResolver implements ResolverInterface
             throw new LocalizedException(__('"model" value should be specified'));
         }
 
-        $cartItem = $value['model'];
-        $product = $this->productRepository->get($cartItem->getSku());
+        $product = $this->configurableItemResolver->getFinalProduct($value['model']);
         $productData = $product->toArray();
         $productData['model'] = $product;
         return $productData;

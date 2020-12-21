@@ -417,39 +417,78 @@ QUERY;
     }
 
     /**
+     * @magentoConfigFixture default_store checkout/cart/configurable_product_image itself
      * @magentoApiDataFixture Magento/ConfigurableProduct/_files/configurable_product_with_child_products_with_images.php
      * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
      */
-    public function testAddConfigurableProductWithImageToCart()
+    public function testAddConfigurableProductWithImageToCartItselfImage(): void
     {
         $searchResponse = $this->graphQlQuery($this->getFetchProductQuery('configurable'));
         $product = current($searchResponse['products']['items']);
-        
+
         $quantity = 1;
-        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
         $parentSku = $product['sku'];
         $sku = 'simple_20';
-        $attributeId = (int) $product['configurable_options'][0]['attribute_id'];
-        $optionId = $product['configurable_options'][0]['values'][1]['value_index'];
 
         $query = $this->graphQlQueryForVariant(
-            $maskedQuoteId,
+            $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1'),
             $parentSku,
             $sku,
             $quantity
         );
-       
+
         $response = $this->graphQlMutation($query);
-        
+
         $cartItem = current($response['addConfigurableProductsToCart']['cart']['items']);
         self::assertEquals($quantity, $cartItem['quantity']);
         self::assertEquals($parentSku, $cartItem['product']['sku']);
         self::assertArrayHasKey('configured_variant', $cartItem);
 
         $variant = $cartItem['configured_variant'];
-        $expectedThumbnailUrl = "magento_thumbnail.jpg";
+        $expectedThumbnailUrl = 'magento_thumbnail.jpg';
+        $expectedThumbnailLabel = 'Thumbnail Image';
         $variantImage = basename($variant['thumbnail']['url']);
-        $this->assertEquals($expectedThumbnailUrl, $variantImage);
+
+        self::assertEquals($expectedThumbnailUrl, $variantImage);
+        self::assertEquals($expectedThumbnailLabel, $variant['thumbnail']['label']);
+        self::assertEquals($sku, $variant['sku']);
+    }
+
+    /**
+     * @magentoConfigFixture default_store checkout/cart/configurable_product_image parent
+     * @magentoApiDataFixture Magento/ConfigurableProduct/_files/configurable_product_with_child_products_with_images.php
+     * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
+     */
+    public function testAddConfigurableProductWithImageToCartParentImage(): void
+    {
+        $searchResponse = $this->graphQlQuery($this->getFetchProductQuery('configurable'));
+        $product = current($searchResponse['products']['items']);
+
+        $quantity = 1;
+        $parentSku = $product['sku'];
+
+        $query = $this->graphQlQueryForVariant(
+            $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1'),
+            $parentSku,
+            'simple_20',
+            $quantity
+        );
+
+        $response = $this->graphQlMutation($query);
+
+        $cartItem = current($response['addConfigurableProductsToCart']['cart']['items']);
+        self::assertEquals($quantity, $cartItem['quantity']);
+        self::assertEquals($parentSku, $cartItem['product']['sku']);
+        self::assertArrayHasKey('configured_variant', $cartItem);
+
+        $variant = $cartItem['configured_variant'];
+        $expectedThumbnailUrl = 'thumbnail.jpg';
+        $expectedThumbnailLabel = 'Configurable Product';
+        $variantImage = basename($variant['thumbnail']['url']);
+
+        self::assertEquals($expectedThumbnailUrl, $variantImage);
+        self::assertEquals($expectedThumbnailLabel, $variant['thumbnail']['label']);
+        self::assertEquals($parentSku, $variant['sku']);
     }
 
     /**
@@ -497,12 +536,12 @@ mutation {
 QUERY;
     }
 
-/**
+    /**
      * @param string $maskedQuoteId
      * @param string $parentSku
      * @param string $sku
      * @param int $quantity
-     * @return cart items with variants details
+     * @return string
      */
     private function graphQlQueryForVariant(string $maskedQuoteId, string $parentSku, string $sku, int $quantity): string
     {
@@ -582,6 +621,7 @@ QUERY;
      *
      * @param string $productSku
      * @return array
+     * @throws Exception
      */
     private function getAvailableProductCustomOption(string $productSku): array
     {
