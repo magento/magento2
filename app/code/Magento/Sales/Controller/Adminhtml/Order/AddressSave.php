@@ -176,15 +176,15 @@ class AddressSave extends Order implements HttpPostActionInterface
      */
     private function truncateCustomFileAttributes(array $data): array
     {
-        $foundedArrays = [];
+        $foundArrays = [];
 
         foreach ($data as $value) {
             if (is_array($value)) {
-                $foundedArrays = $value;
+                $foundArrays = $value;
             }
         }
 
-        if (empty($foundedArrays)) {
+        if (empty($foundArrays)) {
             return $data;
         }
 

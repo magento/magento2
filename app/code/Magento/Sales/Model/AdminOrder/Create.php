@@ -1576,9 +1576,9 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         $customAttributes = $this->customAttributeList->getAttributes();
         foreach ($customAttributes as $attribute) {
             $attributeCode = $attribute->getAttributeCode();
-            if ($attribute->getFrontendInput() === 'file' &&
-                !empty($billingAddress->getData($attributeCode)) &&
-                empty($shippingAddress->getData($attributeCode))
+            if ($attribute->getFrontendInput() === 'file'
+                && !empty($billingAddress->getData($attributeCode))
+                && empty($shippingAddress->getData($attributeCode))
             ) {
                 $shippingAddress->setData($attributeCode, $billingAddress->getData($attributeCode));
             }
