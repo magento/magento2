@@ -53,7 +53,7 @@ type DownloadableProductLinks @doc(description: "DownloadableProductLinks define
     link_type: DownloadableFileTypeEnum @deprecated(reason: "`sample_url` serves to get the downloadable sample")
     sample_type: DownloadableFileTypeEnum @deprecated(reason: "`sample_url` serves to get the downloadable sample")
     sample_file: String @deprecated(reason: "`sample_url` serves to get the downloadable sample")
-    uid: ID! @doc(description: "A string that encodes option details.") @resolver(class: "Magento\\DownloadableGraphQl\\Resolver\\Product\\DownloadableLinksValueUid")
+    uid: ID! @doc(description: "The unique ID for a `DownloadableProductLinks` object.") @resolver(class: "Magento\\DownloadableGraphQl\\Resolver\\Product\\DownloadableLinksValueUid")
 }
 
 type DownloadableProductSamples @doc(description: "DownloadableProductSamples defines characteristics of a downloadable product") {
@@ -80,7 +80,7 @@ type DownloadableCreditMemoItem implements CreditMemoItemInterface {
 type DownloadableItemsLinks @doc(description: "DownloadableProductLinks defines characteristics of a downloadable product") {
     title: String @doc(description: "The display name of the link")
     sort_order: Int @doc(description: "A number indicating the sort order")
-    uid: ID! @doc(description: "A string that encodes option details.") @resolver(class: "Magento\\DownloadableGraphQl\\Resolver\\Product\\DownloadableLinksValueUid")
+    uid: ID! @doc(description: "The unique ID for a `DownloadableItemsLinks` object.") @resolver(class: "Magento\\DownloadableGraphQl\\Resolver\\Product\\DownloadableLinksValueUid")
 }
 
 type DownloadableWishlistItem implements WishlistItemInterface @doc(description: "A downloadable product wish list item") {
