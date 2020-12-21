@@ -20,6 +20,9 @@
         <before>
             <createData entity="SalesRuleNoCouponWithFixedDiscountWholeCart" stepKey="createSalesRule"/>
             <actionGroup ref="AdminCreateApiDynamicBundleProductAllOptionTypesActionGroup" stepKey="createBundleProduct"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexCatalogInventory">
+                <argument name="indices" value="cataloginventory_stock"/>
+            </actionGroup>
         </before>
         <after>
             <deleteData createDataKey="createSalesRule" stepKey="deleteSalesRule"/>
