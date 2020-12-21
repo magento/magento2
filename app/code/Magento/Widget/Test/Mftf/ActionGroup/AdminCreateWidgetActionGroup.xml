@@ -23,6 +23,10 @@
        <fillField selector="{{AdminNewWidgetSection.widgetTitle}}" userInput="{{widget.name}}" stepKey="fillTitle"/>
        <selectOption selector="{{AdminNewWidgetSection.widgetStoreIds}}" userInput="{{widget.store_ids[0]}}" stepKey="setWidgetStoreIds"/>
        <click selector="{{AdminNewWidgetSection.addLayoutUpdate}}" stepKey="clickAddLayoutUpdate"/>
+       <click selector="{{AdminNewWidgetSection.addLayoutUpdate}}" stepKey="clickAddLayoutUpdate2"/>
+       <seeNumberOfElements userInput="2" selector="{{AdminNewWidgetSection.layoutUpdate}}" stepKey="seeTwoLayoutUpdates"/>
+       <click selector="{{AdminNewWidgetSection.removeLastLayoutUpdate}}" stepKey="clickRemoveLastLayoutUpdate"/>
+       <seeNumberOfElements userInput="1" selector="{{AdminNewWidgetSection.layoutUpdate}}" stepKey="seeOneLayoutUpdate"/>
        <selectOption selector="{{AdminNewWidgetSection.selectDisplayOn}}" userInput="{{widget.display_on}}" stepKey="setDisplayOn"/>
        <waitForAjaxLoad stepKey="waitForLoad"/>
        <selectOption selector="{{AdminNewWidgetSection.selectContainer}}" userInput="{{widget.container}}" stepKey="setContainer"/>
