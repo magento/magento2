@@ -7,8 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\LoginAsCustomerAssistance\Plugin;
 
+use Magento\Authorization\Model\UserContextInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Framework\AuthorizationInterface;
 use Magento\LoginAsCustomerAssistance\Api\SetAssistanceInterface;
 use Magento\LoginAsCustomerAssistance\Model\IsAssistanceEnabled;
 
@@ -23,12 +25,28 @@ class CustomerPlugin
     private $setAssistance;
 
     /**
+     * @var AuthorizationInterface
+     */
+    private $authorization;
+
+    /**
+     * @var UserContextInterface
+     */
+    private $userContext;
+
+    /**
      * @param SetAssistanceInterface $setAssistance
+     * @param AuthorizationInterface $authorization
+     * @param UserContextInterface $userContext
      */
     public function __construct(
-        SetAssistanceInterface $setAssistance
+        SetAssistanceInterface $setAssistance,
+        AuthorizationInterface $authorization,
+        UserContextInterface $userContext
     ) {
         $this->setAssistance = $setAssistance;
+        $this->authorization = $authorization;
+        $this->userContext = $userContext;
     }
 
     /**
@@ -45,9 +63,15 @@ class CustomerPlugin
         CustomerInterface $result,
         CustomerInterface $customer
     ): CustomerInterface {
+        $enoughPermission = true;
+        if ($this->userContext->getUserType() === UserContextInterface::USER_TYPE_ADMIN
+            || $this->userContext->getUserType() === UserContextInterface::USER_TYPE_INTEGRATION) {
+            $enoughPermission = $this->authorization->isAllowed('Magento_LoginAsCustomer::allow_shopping_assistance');
+        }
         $customerId = (int)$result->getId();
         $customerExtensionAttributes = $customer->getExtensionAttributes();
-        if ($customerExtensionAttributes && $customerExtensionAttributes->getAssistanceAllowed()) {
+
+        if ($enoughPermission && $customerExtensionAttributes && $customerExtensionAttributes->getAssistanceAllowed()) {
             $isEnabled = (int)$customerExtensionAttributes->getAssistanceAllowed() === IsAssistanceEnabled::ALLOWED;
             $this->setAssistance->execute($customerId, $isEnabled);
         }
