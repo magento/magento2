@@ -182,9 +182,10 @@ class Tax extends AbstractTotal
     {
         $invoice = $creditMemo->getInvoice();
         $order = $creditMemo->getOrder();
-        $amount = $invoice !== null ? $invoice->getTaxAmount() : $order->getTaxInvoiced();
+        $amount = $invoice !== null ? $invoice->getTaxAmount()
+            : $order->getTaxInvoiced() - $order->getTaxRefunded();
 
-        return (float) $amount - $order->getTaxRefunded() - $creditMemo->getTaxAmount();
+        return (float) $amount - $creditMemo->getTaxAmount();
     }
 
     /**
@@ -197,9 +198,10 @@ class Tax extends AbstractTotal
     {
         $invoice = $creditMemo->getInvoice();
         $order = $creditMemo->getOrder();
-        $amount = $invoice !== null ? $invoice->getBaseTaxAmount() : $order->getBaseTaxInvoiced();
+        $amount = $invoice !== null ? $invoice->getBaseTaxAmount()
+            : $order->getBaseTaxInvoiced() - $order->getBaseTaxRefunded();
 
-        return (float) $amount - $order->getBaseTaxRefunded() - $creditMemo->getBaseTaxAmount();
+        return (float) $amount - $creditMemo->getBaseTaxAmount();
     }
 
     /**
@@ -218,12 +220,12 @@ class Tax extends AbstractTotal
                 + $invoice->getShippingDiscountTaxCompensationAmount();
         } else {
             $amount = $order->getDiscountTaxCompensationInvoiced()
-                + $order->getShippingDiscountTaxCompensationAmount();
+                + $order->getShippingDiscountTaxCompensationAmount()
+                - $order->getDiscountTaxCompensationRefunded()
+                - $order->getShippingDiscountTaxCompensationRefunded();
         }
 
         return (float) $amount
-            - $order->getDiscountTaxCompensationRefunded()
-            - $order->getShippingDiscountTaxCompensationRefunded()
             - $creditMemo->getDiscountTaxCompensationAmount()
             - $creditMemo->getShippingDiscountTaxCompensationAmount();
     }
@@ -244,12 +246,12 @@ class Tax extends AbstractTotal
                 + $invoice->getBaseShippingDiscountTaxCompensationAmnt();
         } else {
             $amount = $order->getBaseDiscountTaxCompensationInvoiced()
-                + $order->getBaseShippingDiscountTaxCompensationAmnt();
+                + $order->getBaseShippingDiscountTaxCompensationAmnt()
+                - $order->getBaseDiscountTaxCompensationRefunded()
+                - $order->getBaseShippingDiscountTaxCompensationRefunded();
         }
 
         return (float) $amount
-            - $order->getBaseDiscountTaxCompensationRefunded()
-            - $order->getBaseShippingDiscountTaxCompensationRefunded()
             - $creditMemo->getBaseShippingDiscountTaxCompensationAmnt()
             - $creditMemo->getBaseDiscountTaxCompensationAmount();
     }
