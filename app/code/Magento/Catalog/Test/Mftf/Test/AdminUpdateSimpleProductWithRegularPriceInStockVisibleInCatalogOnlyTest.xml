@@ -38,9 +38,6 @@
         <!-- Search default simple product in the grid -->
         <actionGroup ref="AdminClearFiltersActionGroup" stepKey="openProductCatalogPage"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="filterProductGrid"/>
-        <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="clickFirstRowToOpenDefaultSimpleProduct">
-            <argument name="product" value="$$initialSimpleProduct$$"/>
-        </actionGroup><comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitUntilProductIsOpened"/>
         <actionGroup ref="AdminOrderGridClickFirstRowActionGroup" stepKey="clickFirstRowToOpenDefaultSimpleProduct"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitUntilProductIsOpened"/>
 
