@@ -312,6 +312,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @magentoAppArea frontend
      */
     public function testCreateAccountWithInvalidAddress()
     {
