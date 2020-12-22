@@ -12,8 +12,9 @@
         <annotations>
             <description>Click Save Address button on checkout.</description>
         </annotations>
-
-        <click selector="{{CheckoutShippingSection.saveAddress}}" stepKey="saveAddress"/>
+        <waitForElementVisible selector="{{CheckoutShippingSection.saveAddress}}" stepKey="waitForSaveButton"/>
+        <click selector="{{CheckoutShippingSection.saveAddress}}" stepKey="clickSaveButton"/>
         <waitForPageLoad stepKey="waitForAddressSaved"/>
+        <waitForElementNotVisible selector="{{CheckoutShippingSection.newAddressForm}}" stepKey="waitForNewAddressFormGone"/>
     </actionGroup>
 </actionGroups>
