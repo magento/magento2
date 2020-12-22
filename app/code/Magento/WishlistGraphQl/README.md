@@ -2,7 +2,7 @@
 
 The **Magento_WishlistGraphQl** module adds, removes, and updates products on the wishlist.
 
-The **Magento_WishlistGraphQl** module extends **Magento_GraphQl** and **Magento_Wishlist** modules. The module provides type and resolver information for GraphQL API.
+The **Magento_WishlistGraphQl** module extends **Magento_GraphQl** and **Magento_Wishlist** modules. This module provides type and resolver information for GraphQL API.
 
 ## Installation details
 
