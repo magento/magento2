@@ -315,14 +315,14 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
      */
     public function testCreateAccountWithInvalidAddress()
     {
-        $email = 'invalid.address@example.com';
+        $this->expectException(InputException::class);
 
         /** @var \Magento\Customer\Api\Data\CustomerInterface $customer */
         $customer = $this->objectManager->create(\Magento\Customer\Api\Data\CustomerInterface::class);
         $customer->setWebsiteId(1)
             ->setGroupId(1)
             ->setStoreId(1)
-            ->setEmail($email)
+            ->setEmail('invalid.address@example.com')
             ->setFirstname('John')
             ->setLastname('Smith');
 
@@ -332,8 +332,9 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
         try {
             $this->accountManagement->createAccountWithPasswordHash($customer, null);
             $this->fail('Expected InputException not thrown.');
-        } catch (\Exception $e) {
-            $this->assertTrue($this->accountManagement->isEmailAvailable($email));
+        } catch (InputException $e) {
+            $this->assertTrue($this->accountManagement->isEmailAvailable($customer->getEmail()));
+            throw $e;
         }
     }
 
