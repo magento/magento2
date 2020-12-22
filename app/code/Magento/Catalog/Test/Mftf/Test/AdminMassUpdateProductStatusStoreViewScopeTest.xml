@@ -197,7 +197,7 @@
                 <argument name="sku" value="{{simpleProductForMassUpdate.sku}}"/>
             </actionGroup>
             <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteProduct2">
-                <argument name="sku" value="{{simpleProductForMassUpdate.sku}}"/>
+                <argument name="sku" value="{{simpleProductForMassUpdate2.sku}}"/>
             </actionGroup>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilter"/>
         </after>
