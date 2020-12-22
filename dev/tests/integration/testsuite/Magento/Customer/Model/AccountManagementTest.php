@@ -312,6 +312,32 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     */
+    public function testCreateAccountWithInvalidAddress()
+    {
+        $email = 'invalid.address@example.com';
+
+        /** @var \Magento\Customer\Api\Data\CustomerInterface $customer */
+        $customer = $this->objectManager->create(\Magento\Customer\Api\Data\CustomerInterface::class);
+        $customer->setWebsiteId(1)
+            ->setGroupId(1)
+            ->setStoreId(1)
+            ->setEmail($email)
+            ->setFirstname('John')
+            ->setLastname('Smith');
+
+        $address = $this->addressFactory->create()->setCountryId('US');
+        $customer->setAddresses([$address]);
+
+        try {
+            $this->accountManagement->createAccountWithPasswordHash($customer, null);
+            $this->fail('Expected InputException not thrown.');
+        } catch (\Exception $e) {
+            $this->assertTrue($this->accountManagement->isEmailAvailable($email));
+        }
+    }
+
+    /**
      * @magentoDataFixture Magento/Customer/_files/customer.php
      */
     public function testValidateResetPasswordLinkToken()
