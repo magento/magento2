@@ -129,6 +129,9 @@ class TaxTest extends TestCase
             ->method('loadByOrder')
             ->with($orderMock)
             ->willReturnSelf();
+        $taxCollection->expects($this->once())
+            ->method('toArray')
+            ->willReturn(['items' => []]);
 
         $taxOrder = $this->createMock(TaxModel::class);
         $taxOrder->expects($this->once())
