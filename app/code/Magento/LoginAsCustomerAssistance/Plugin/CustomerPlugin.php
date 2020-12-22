@@ -64,8 +64,8 @@ class CustomerPlugin
         CustomerInterface $customer
     ): CustomerInterface {
         $enoughPermission = true;
-        if ($this->userContext->getUserType() === UserContextInterface::USER_TYPE_ADMIN
-            || $this->userContext->getUserType() === UserContextInterface::USER_TYPE_INTEGRATION) {
+        if ($this->userContext->getUserType() === UserContextInterface::USER_TYPE_ADMIN ||
+            $this->userContext->getUserType() === UserContextInterface::USER_TYPE_INTEGRATION) {
             $enoughPermission = $this->authorization->isAllowed('Magento_LoginAsCustomer::allow_shopping_assistance');
         }
         $customerId = (int)$result->getId();
