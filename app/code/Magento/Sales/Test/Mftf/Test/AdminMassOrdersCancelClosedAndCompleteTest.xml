@@ -14,11 +14,7 @@
             <title value="Mass cancel orders in status  Complete, Closed"/>
             <description value="Try to cancel orders in status Complete, Closed"/>
             <severity value="MAJOR"/>
-<<<<<<< HEAD
-            <testCaseId value="MC-16183"/>
-=======
             <testCaseId value="MC-39905"/>
->>>>>>> 2.4-develop
             <group value="sales"/>
             <group value="mtf_migrated"/>
         </annotations>
