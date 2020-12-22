@@ -21,7 +21,6 @@ if ($customer->getId()) {
 }
 
 $registry->unregister('isSecureArea');
-$registry->register('isSecureArea', false);
 
 /* Unlock account if it was locked for tokens retrieval */
 /** @var RequestThrottler $throttler */
