@@ -112,7 +112,7 @@ class EnableAdminUsageTest extends \PHPUnit\Framework\TestCase
 
     public function testResponseWhenExceptionThrown()
     {
-        $this->markTestSkipped('magento/magento2#31356 Exceptions are not handled');
+        $this->markTestSkipped('magento/magento2#31393 Lack of exception handling');
 
         $this->configMock->method('setDataByPath')
             ->willThrowException(
