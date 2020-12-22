@@ -3415,4 +3415,25 @@ class ProductTest extends TestCase
             ]
         ];
     }
+
+    /**
+     * Verify additional images url validation during import.
+     *
+     * @magentoDbIsolation enabled
+     * @return void
+     */
+    public function testImportInvalidAdditionalImages(): void
+    {
+        $pathToFile = __DIR__ . '/_files/import_media_additional_images_with_wrong_url.csv';
+        $filesystem = BootstrapHelper::getObjectManager()->create(Filesystem::class);
+        $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
+        $source = $this->objectManager->create(Csv::class, ['file' => $pathToFile, 'directory' => $directory]);
+        $errors = $this->_model->setSource($source)->setParameters(['behavior' => Import::BEHAVIOR_APPEND])
+            ->validateData();
+        $this->assertEquals($errors->getErrorsCount(), 1);
+        $this->assertEquals(
+            "Wrong URL/path used for attribute additional_images",
+            $errors->getErrorByRowNumber(0)[0]->getErrorMessage()
+        );
+    }
 }
