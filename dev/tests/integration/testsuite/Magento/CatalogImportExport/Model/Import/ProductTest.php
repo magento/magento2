@@ -3415,4 +3415,19 @@ class ProductTest extends TestCase
             ]
         ];
     }
+
+    /**
+     * Tests that SaveImageInformation can be used not only for admin area
+     *
+     * @magentoAppArea crontab
+     */
+    public function testSaveImageInformation()
+    {
+        $saveImageInformation = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            \Magento\MediaGalleryIntegration\Plugin\SaveImageInformation::class
+        );
+        $uploader = $this->_model->getUploader();
+        $errors = $saveImageInformation->afterSave($uploader, []);
+        $this->assertEmpty($errors);
+    }
 }
