@@ -31,9 +31,7 @@
                 <argument name="storeView" value="customStoreFR"/>
             </actionGroup>
 
-            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="indexerReindexAfterCreate">
-                <argument name="indices" value=""/>
-            </actionGroup>
+            <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="indexerReindexAfterCreate"/>
             <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCacheBefore">
                 <argument name="tags" value=""/>
             </actionGroup>
