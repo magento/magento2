@@ -115,7 +115,6 @@
         <actionGroup ref="AssertAdminProductIsAssignedToCategoryActionGroup" stepKey="seeSelectedCategories">
             <argument name="categoryName" value="$$categoryEntity.name$$"/>
         </actionGroup>
-        <actionGroup ref="AdminSubmitCategoriesPopupActionGroup" stepKey="clickOnDoneAdvancedCategorySelectToApplyChanges"/>
         <scrollTo selector="{{AdminProductSEOSection.sectionHeader}}" x="0" y="-80" stepKey="scrollToAdminProductSEOSection1"/>
         <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="clickAdminProductSEOSection1"/>
         <seeInField selector="{{AdminProductSEOSection.urlKeyInput}}" userInput="{{simpleProductTierPrice300InStock.urlKey}}" stepKey="seeUrlKey"/>

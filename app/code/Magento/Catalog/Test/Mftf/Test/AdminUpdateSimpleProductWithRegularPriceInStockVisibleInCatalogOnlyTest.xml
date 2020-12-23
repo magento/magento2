@@ -89,7 +89,6 @@
         <actionGroup ref="AssertAdminProductIsAssignedToCategoryActionGroup" stepKey="selectedCategories">
             <argument name="categoryName" value="$$categoryEntity.name$$"/>
         </actionGroup>
-        <actionGroup ref="AdminSubmitCategoriesPopupActionGroup" stepKey="clickDoneOnAdvancedCategorySelect"/>
         <seeInField selector="{{AdminProductFormSection.visibility}}" userInput="{{simpleProductRegularPrice32501InStock.visibility}}" stepKey="seeVisibility"/>
         <scrollTo selector="{{AdminProductSEOSection.sectionHeader}}" x="0" y="-80" stepKey="scrollToAdminProductSEOSection1"/>
         <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="clickAdminProductSEOSection1"/>
