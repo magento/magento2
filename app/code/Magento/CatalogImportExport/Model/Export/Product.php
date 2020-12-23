@@ -29,7 +29,7 @@ use Magento\Store\Model\Store;
 class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
 {
     /**
-     * Attributes that should be exported
+     * Attributes that shouldn't be exported
      *
      * @var string[]
      */

@@ -7,22 +7,23 @@
 namespace Magento\Dhl\Model;
 
 use Magento\Catalog\Model\Product\Type;
+use Magento\Dhl\Model\Validator\XmlValidator;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Framework\Async\CallbackDeferred;
+use Magento\Framework\HTTP\AsyncClient\HttpException;
 use Magento\Framework\HTTP\AsyncClient\HttpResponseDeferredInterface;
 use Magento\Framework\HTTP\AsyncClient\Request;
 use Magento\Framework\HTTP\AsyncClientInterface;
 use Magento\Framework\Module\Dir;
-use Magento\Sales\Exception\DocumentValidationException;
-use Magento\Sales\Model\Order\Shipment;
+use Magento\Framework\Xml\Security;
 use Magento\Quote\Model\Quote\Address\RateRequest;
 use Magento\Quote\Model\Quote\Address\RateResult\Error;
+use Magento\Sales\Exception\DocumentValidationException;
+use Magento\Sales\Model\Order\Shipment;
 use Magento\Shipping\Model\Carrier\AbstractCarrier;
 use Magento\Shipping\Model\Rate\Result;
 use Magento\Shipping\Model\Rate\Result\ProxyDeferredFactory;
-use Magento\Framework\Xml\Security;
-use Magento\Dhl\Model\Validator\XmlValidator;
 
 /**
  * DHL International (API v1.4)
@@ -1064,8 +1065,15 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
                     function () use ($deferredResponses, $responseBodies) {
                         //Loading rates not found in cache
                         foreach ($deferredResponses as $deferredResponseData) {
+                            $responseResult = null;
+                            try {
+                                $responseResult = $deferredResponseData['deferred']->get();
+                            } catch (HttpException $exception) {
+                                $this->_logger->critical($exception);
+                            }
+                            $responseBody = $responseResult ? $responseResult->getBody() : '';
                             $responseBodies[] = [
-                                'body' => $deferredResponseData['deferred']->get()->getBody(),
+                                'body' => $responseBody,
                                 'date' => $deferredResponseData['date'],
                                 'request' => $deferredResponseData['request'],
                                 'from_cache' => false
@@ -1748,7 +1756,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
             foreach ($package['items'] as $item) {
                 $content[] = $item['name'];
             }
-            $nodePiece->addChild('PieceContents', substr(implode(',', $content), 0, 34));
+            $nodePiece->addChild('PieceContents', $this->string->substr(implode(',', $content), 0, 34));
         }
 
         $nodeShipmentDetails->addChild('Weight', sprintf('%.3f', $rawRequest->getPackageWeight()));
@@ -1768,7 +1776,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
         $nodeShipmentDetails->addChild('DoorTo', 'DD');
         $nodeShipmentDetails->addChild('DimensionUnit', substr($this->_getDimensionUnit(), 0, 1));
         $contentType = isset($package['params']['container']) ? $package['params']['container'] : '';
-        $packageType = $contentType === self::DHL_CONTENT_TYPE_NON_DOC ? 'CP' : '';
+        $packageType = $contentType === self::DHL_CONTENT_TYPE_NON_DOC ? 'CP' : 'EE';
         $nodeShipmentDetails->addChild('PackageType', $packageType);
         if ($this->isDutiable($rawRequest->getOrigCountryId(), $rawRequest->getDestCountryId())) {
             $nodeShipmentDetails->addChild('IsDutiable', 'Y');
@@ -2028,7 +2036,8 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
         $isDomestic = (string)$this->getCountryParams($destCountryCode)->getData('domestic');
 
         if (($origCountry == $destCountry && $isDomestic)
-            || ($this->_carrierHelper->isCountryInEU($origCountryCode)
+            || (
+                $this->_carrierHelper->isCountryInEU($origCountryCode)
                 && $this->_carrierHelper->isCountryInEU($destCountryCode)
             )
         ) {

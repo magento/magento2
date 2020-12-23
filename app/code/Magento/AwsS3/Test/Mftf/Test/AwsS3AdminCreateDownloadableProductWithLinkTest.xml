@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AwsS3AdminCreateDownloadableProductWithLinkTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Support remote file storage by downloadable products"/>
+            <title value="Create, view and check out downloadable product with remote filesystem configured. "/>
+            <description value="Admin should be able to create downloadable product with remote filesystem enabled"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-38036"/>
+            <testCaseId value="MC-38037"/>
+            <testCaseId value="MC-38039"/>
+            <group value="Downloadable"/>
+            <group value="remote_storage_aws_s3"/>
+            <skip>
+                <issueId value="MQE-2288" />
+            </skip>
+        </annotations>
+        <before>
+            <magentoCLI command="setup:config:set {{RemoteStorageAwsS3ConfigData.enable_options}}" stepKey="enableRemoteStorage"/>
+            <magentoCLI stepKey="addDownloadableDomain" command="downloadable:domains:add static.magento.com"/>
+            <!-- Create category -->
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <createData entity="Simple_US_Customer_Multiple_Addresses" stepKey="createCustomer"/>
+            <!-- Login as admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+        </before>
+        <after>
+            <magentoCLI command="setup:config:set {{RemoteStorageAwsS3ConfigData.disable_options}}" stepKey="disableRemoteStorage"/>
+            <magentoCLI stepKey="removeDownloadableDomain" command="downloadable:domains:remove static.magento.com"/>
+            <!-- Delete customer -->
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+
+            <!-- Delete category -->
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+
+            <!-- Delete created downloadable product -->
+            <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct">
+                <argument name="product" value="DownloadableProduct"/>
+            </actionGroup>
+
+            <!-- Log out -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!-- Create downloadable product -->
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="amOnProductGridPage"/>
+        <actionGroup ref="GoToSpecifiedCreateProductPageActionGroup" stepKey="createProduct">
+            <argument name="productType" value="downloadable"/>
+        </actionGroup>
+
+        <!-- Fill downloadable product values -->
+        <actionGroup ref="FillMainProductFormNoWeightActionGroup" stepKey="fillDownloadableProductForm">
+            <argument name="product" value="DownloadableProduct"/>
+        </actionGroup>
+
+        <!-- Add downloadable product to category -->
+        <searchAndMultiSelectOption selector="{{AdminProductFormSection.categoriesDropdown}}" parameterArray="[$$createCategory.name$$]" stepKey="fillCategory"/>
+
+        <!-- Add downloadable links -->
+        <click selector="{{AdminProductDownloadableSection.sectionHeader}}" stepKey="openDownloadableSection"/>
+        <checkOption selector="{{AdminProductDownloadableSection.isDownloadableProduct}}" stepKey="checkIsDownloadable"/>
+        <fillField userInput="{{downloadableData.link_title}}" selector="{{AdminProductDownloadableSection.linksTitleInput}}" stepKey="fillDownloadableLinkTitle"/>
+        <checkOption selector="{{AdminProductDownloadableSection.isLinksPurchasedSeparately}}" stepKey="checkLinksPurchasedSeparately"/>
+        <fillField userInput="{{downloadableData.sample_title}}" selector="{{AdminProductDownloadableSection.samplesTitleInput}}" stepKey="fillDownloadableSampleTitle"/>
+        <actionGroup ref="AddDownloadableProductLinkWithMaxDownloadsActionGroup" stepKey="addDownloadableLinkWithMaxDownloads">
+            <argument name="link" value="downloadableLinkWithMaxDownloads"/>
+        </actionGroup>
+        <actionGroup ref="AddDownloadableProductLinkActionGroup" stepKey="addDownloadableLink">
+            <argument name="link" value="downloadableLink"/>
+        </actionGroup>
+        <!-- Add downloadable sample-->
+        <actionGroup ref="AddDownloadableSampleFileActionGroup" stepKey="addDownloadableProductSample"/>
+
+        <!-- Save product -->
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
+        <magentoCron stepKey="runIndexCronJobs" groups="index"/>
+
+        <!-- Login to frontend -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="signIn">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <!-- Assert product in storefront category page -->
+        <amOnPage url="$$createCategory.name$$.html" stepKey="amOnCategoryPage"/>
+        <waitForPageLoad stepKey="waitForCategoryPageLoad"/>
+        <actionGroup ref="StorefrontCheckProductPriceInCategoryActionGroup" stepKey="StorefrontCheckCategorySimpleProduct">
+            <argument name="product" value="DownloadableProduct"/>
+        </actionGroup>
+
+        <!-- Assert product in storefront product page -->
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageActionGroup" stepKey="AssertProductInStorefrontProductPage">
+            <argument name="product" value="DownloadableProduct"/>
+        </actionGroup>
+
+        <!-- Assert product price in storefront product page -->
+        <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="{{DownloadableProduct.price}}" stepKey="assertProductPrice"/>
+
+        <!-- Assert link sample urls are accessible -->
+        <!-- Click on the link sample -->
+        <actionGroup ref="AssertStorefrontSeeElementActionGroup" stepKey="seeDownloadableLinkSampleWithMaxDownloads">
+            <argument name="selector" value="{{StorefrontDownloadableProductSection.downloadableLinkSampleByTitle(downloadableLinkWithMaxDownloads.title)}}"/>
+        </actionGroup>
+        <click selector="{{StorefrontDownloadableProductSection.downloadableLinkSampleByTitle(downloadableLinkWithMaxDownloads.title)}}" stepKey="clickDownloadableLinkSampleWithMaxDownloads"/>
+        <waitForPageLoad stepKey="waitForLinkSampleWithMaxDownloadsPage"/>
+        <!-- Grab Link Sample id -->
+        <switchToNextTab stepKey="switchToLinkSampleWithMaxDownloadsTab"/>
+        <grabFromCurrentUrl regex="~/link_id/(\d+)/~" stepKey="grabDownloadableLinkWithMaxDownloadsId"/>
+        <!-- Check is svg -->
+        <seeElement selector="{{StorefrontDownloadableLinkSection.downloadedSvg('Logo')}}" stepKey="assertDownloadableLinkWithMaxDownloadsIsSvg"/>
+        <closeTab stepKey="closeLinkSampleWithMaxDownloadsTab"/>
+        <!-- Click on the link sample -->
+        <actionGroup ref="AssertStorefrontSeeElementActionGroup" stepKey="seeDownloadableLinkSample">
+            <argument name="selector" value="{{StorefrontDownloadableProductSection.downloadableLinkSampleByTitle(downloadableLink.title)}}"/>
+        </actionGroup>
+        <click selector="{{StorefrontDownloadableProductSection.downloadableLinkSampleByTitle(downloadableLink.title)}}" stepKey="clickDownloadableLinkSample"/>
+        <waitForPageLoad stepKey="waitForLinkSamplePage"/>
+        <!-- Grab Link Sample id -->
+        <switchToNextTab stepKey="switchToLinkSampleTab"/>
+        <grabFromCurrentUrl regex="~/link_id/(\d+)/~" stepKey="grabDownloadableLinkSampleId"/>
+        <!-- Check is image -->
+        <seeElement selector="{{StorefrontDownloadableLinkSection.downloadedImage}}" stepKey="assertDownloadableLinkSampleIsImage"/>
+        <closeTab stepKey="closeLinkSampleTab"/>
+
+        <!-- Assert sample file is accessible -->
+        <actionGroup ref="AssertStorefrontSeeElementActionGroup" stepKey="seeDownloadableSample">
+            <argument name="selector" value="{{StorefrontDownloadableProductSection.downloadableSampleLabel(downloadableSampleFile.title)}}"/>
+        </actionGroup>
+        <click selector="{{StorefrontDownloadableProductSection.downloadableSampleLabel(downloadableSampleFile.title)}}" stepKey="clickDownloadableSample"/>
+        <waitForPageLoad stepKey="waitForSamplePage"/>
+        <!-- Grab Sample id -->
+        <switchToNextTab stepKey="switchToSampleTab"/>
+        <grabFromCurrentUrl regex="~/sample_id/(\d+)/~" stepKey="grabDownloadableSampleId"/>
+        <!-- Check is image -->
+        <seeElement selector="{{StorefrontDownloadableLinkSection.downloadedImage}}" stepKey="assertDownloadableSampleIsImage"/>
+        <closeTab stepKey="closeSampleTab"/>
+
+        <!-- Select product link in storefront product page-->
+        <scrollTo selector="{{StorefrontDownloadableProductSection.downloadableLinkBlock}}" stepKey="scrollToLinks"/>
+        <click selector="{{StorefrontDownloadableProductSection.downloadableLinkByTitle(downloadableLink.title)}}" stepKey="selectProductLink"/>
+
+        <!-- Add product with selected link to the cart -->
+        <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="addProductToCart">
+            <argument name="product" value="DownloadableProduct"/>
+            <argument name="productCount" value="1"/>
+        </actionGroup>
+
+        <!-- Assert product price in cart -->
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="openShoppingCartPage"/>
+        <see selector="{{CheckoutCartProductSection.ProductPriceByName(DownloadableProduct.name)}}" userInput="$52.99" stepKey="assertProductPriceInCart"/>
+
+        <!-- Perform checkout -->
+        <click selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="clickProceedToCheckout"/>
+        <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" stepKey="waitForPaymentSectionLoaded"/>
+        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrderButton"/>
+        <seeElement selector="{{CheckoutSuccessMainSection.success}}" stepKey="orderIsSuccessfullyPlaced"/>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
+
+        <!-- Open created order -->
+        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="onOrdersPage"/>
+        <actionGroup ref="SearchAdminDataGridByKeywordActionGroup" stepKey="searchOrder">
+            <argument name="keyword" value="$grabOrderNumber"/>
+        </actionGroup>
+        <actionGroup ref="AdminOrderGridClickFirstRowActionGroup" stepKey="clickOrderRow"/>
+
+        <!-- Open Create invoice -->
+        <actionGroup ref="AdminCreateInvoiceActionGroup" stepKey="createCreditMemo"/>
+
+        <!-- Check downloadable product link on frontend -->
+        <actionGroup ref="StorefrontAssertDownloadableProductIsPresentInCustomerAccount" stepKey="seeStorefrontMyAccountDownloadableProductsLink">
+            <argument name="product" value="DownloadableProduct"/>
+        </actionGroup>
+        <click selector="{{StorefrontCustomerDownloadableProductsSection.downloadableLink}}" stepKey="clickDownloadLink" />
+        <waitForPageLoad stepKey="waitForDownloadedLinkPage"/>
+        <!-- Grab downloadable URL -->
+        <switchToNextTab stepKey="switchToDownloadedLinkTab"/>
+        <grabFromCurrentUrl regex="~/link/id/(.+)/~" stepKey="grabDownloadLinkUrl"/>
+        <!-- Check is svg -->
+        <seeElement selector="{{StorefrontDownloadableLinkSection.downloadedSvg('Logo')}}" stepKey="assertDownloadedLinkIsSvg"/>
+        <closeTab stepKey="closeDownloadedLinkTab"/>
+    </test>
+</tests>
