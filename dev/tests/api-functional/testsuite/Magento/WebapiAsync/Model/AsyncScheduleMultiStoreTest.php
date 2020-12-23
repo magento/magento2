@@ -95,17 +95,12 @@ class AsyncScheduleMultiStoreTest extends WebapiAbstract
         $this->objectManager = Bootstrap::getObjectManager();
         $this->registry = $this->objectManager->get(Registry::class);
 
-        $params = array_merge_recursive(
-            Bootstrap::getInstance()->getAppInitParams(),
-            ['MAGE_DIRS' => ['cache' => ['path' => TESTS_TEMP_DIR . '/cache']]]
-        );
-
         $this->publisherConsumerController = $this->objectManager->create(
             PublisherConsumerController::class,
             [
                 'consumers' => $this->consumers,
                 'logFilePath' => $logFilePath,
-                'appInitParams' => $params,
+                'appInitParams' => Bootstrap::getInstance()->getAppInitParams(),
             ]
         );
         $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
@@ -129,13 +124,13 @@ class AsyncScheduleMultiStoreTest extends WebapiAbstract
      * @param string|null $storeCode
      * @return void
      */
-    public function testAsyncScheduleBulkMultistore($storeCode): void
+    public function testAsyncScheduleBulkMultistore(?string $storeCode): void
     {
         $product = $this->getProductData();
         $this->_markTestAsRestOnly();
 
         /** @var Store $store */
-        $store = $this->objectManager->create(Store::class);
+        $store = $this->objectManager->get(Store::class);
         $store->load(self::STORE_CODE_FROM_FIXTURE);
         $this->assertEquals(
             self::STORE_NAME_FROM_FIXTURE,
