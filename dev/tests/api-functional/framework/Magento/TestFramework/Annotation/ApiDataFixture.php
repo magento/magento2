@@ -36,6 +36,12 @@ class ApiDataFixture extends DataFixture
             $this->_getFixtures($test, 'method') ?: $this->_getFixtures($test, 'class'),
             $test
         );
+        if (isset($test->getTestResultObject()->topTestSuite()->tests()[0])) {
+            \var_dump(\sprintf(
+                    'Test started %s',
+                    $test->getTestResultObject()->topTestSuite()->tests()[0]->getName())
+            );
+        }
     }
 
     /**
@@ -45,6 +51,12 @@ class ApiDataFixture extends DataFixture
      */
     public function endTest(TestCase $test)
     {
+        if (isset($test->getTestResultObject()->topTestSuite()->tests()[0])) {
+            \var_dump(\sprintf(
+                'Test ended %s',
+                $test->getTestResultObject()->topTestSuite()->tests()[0]->getName())
+            );
+        }
         $this->_revertFixtures($test);
         $objectManager = Bootstrap::getObjectManager();
         $objectManager->get(AttributeMetadataCache::class)->clean();
