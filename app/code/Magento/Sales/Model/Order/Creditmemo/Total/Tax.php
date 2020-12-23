@@ -5,13 +5,31 @@
  */
 namespace Magento\Sales\Model\Order\Creditmemo\Total;
 
+use Magento\Sales\Api\Data\CreditmemoInterface;
 use Magento\Sales\Model\Order\Creditmemo;
+use Magento\Sales\Model\Order\Invoice;
+use Magento\Sales\Model\ResourceModel\Order\Invoice as ResourceInvoice;
 
 /**
  * Collects credit memo taxes.
  */
 class Tax extends AbstractTotal
 {
+    /**
+     * @var ResourceInvoice
+     */
+    private $resourceInvoice;
+
+    /**
+     * @param ResourceInvoice $resourceInvoice
+     * @param array $data
+     */
+    public function __construct(ResourceInvoice $resourceInvoice, array $data = [])
+    {
+        $this->resourceInvoice = $resourceInvoice;
+        parent::__construct($data);
+    }
+
     /**
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -182,8 +200,12 @@ class Tax extends AbstractTotal
     {
         $invoice = $creditMemo->getInvoice();
         $order = $creditMemo->getOrder();
-        $amount = $invoice !== null ? $invoice->getTaxAmount()
-            : $order->getTaxInvoiced() - $order->getTaxRefunded();
+        if ($invoice!== null) {
+            $amount = $invoice->getTaxAmount()
+                - $this->calculateInvoiceRefundedAmount($invoice, CreditmemoInterface::TAX_AMOUNT);
+        } else {
+            $amount = $order->getTaxInvoiced() - $order->getTaxRefunded();
+        }
 
         return (float) $amount - $creditMemo->getTaxAmount();
     }
@@ -198,8 +220,13 @@ class Tax extends AbstractTotal
     {
         $invoice = $creditMemo->getInvoice();
         $order = $creditMemo->getOrder();
-        $amount = $invoice !== null ? $invoice->getBaseTaxAmount()
-            : $order->getBaseTaxInvoiced() - $order->getBaseTaxRefunded();
+
+        if ($invoice!== null) {
+            $amount = $invoice->getBaseTaxAmount()
+                - $this->calculateInvoiceRefundedAmount($invoice, CreditmemoInterface::BASE_TAX_AMOUNT);
+        } else {
+            $amount = $order->getBaseTaxInvoiced() - $order->getBaseTaxRefunded();
+        }
 
         return (float) $amount - $creditMemo->getBaseTaxAmount();
     }
@@ -217,7 +244,14 @@ class Tax extends AbstractTotal
 
         if ($invoice) {
             $amount = $invoice->getDiscountTaxCompensationAmount()
-                + $invoice->getShippingDiscountTaxCompensationAmount();
+                + $invoice->getShippingDiscountTaxCompensationAmount()
+                - $this->calculateInvoiceRefundedAmount(
+                    $invoice,
+                    CreditmemoInterface::DISCOUNT_TAX_COMPENSATION_AMOUNT
+                ) - $this->calculateInvoiceRefundedAmount(
+                    $invoice,
+                    CreditmemoInterface::SHIPPING_DISCOUNT_TAX_COMPENSATION_AMOUNT
+                );
         } else {
             $amount = $order->getDiscountTaxCompensationInvoiced()
                 + $order->getShippingDiscountTaxCompensationAmount()
@@ -243,7 +277,14 @@ class Tax extends AbstractTotal
 
         if ($invoice) {
             $amount = $invoice->getBaseDiscountTaxCompensationAmount()
-                + $invoice->getBaseShippingDiscountTaxCompensationAmnt();
+                + $invoice->getBaseShippingDiscountTaxCompensationAmnt()
+                - $this->calculateInvoiceRefundedAmount(
+                    $invoice,
+                    CreditmemoInterface::BASE_DISCOUNT_TAX_COMPENSATION_AMOUNT
+                ) - $this->calculateInvoiceRefundedAmount(
+                    $invoice,
+                    CreditmemoInterface::BASE_SHIPPING_DISCOUNT_TAX_COMPENSATION_AMNT
+                );
         } else {
             $amount = $order->getBaseDiscountTaxCompensationInvoiced()
                 + $order->getBaseShippingDiscountTaxCompensationAmnt()
@@ -254,5 +295,21 @@ class Tax extends AbstractTotal
         return (float) $amount
             - $creditMemo->getBaseShippingDiscountTaxCompensationAmnt()
             - $creditMemo->getBaseDiscountTaxCompensationAmount();
+    }
+
+    /**
+     * Calculate refunded amount for invoice
+     *
+     * @param Invoice $invoice
+     * @param string $field
+     * @return float
+     */
+    private function calculateInvoiceRefundedAmount(Invoice $invoice, string $field): float
+    {
+        if (empty($invoice->getId())) {
+            return 0;
+        }
+
+        return $this->resourceInvoice->calculateRefundedAmount((int)$invoice->getId(), $field);
     }
 }
