@@ -504,7 +504,7 @@
     </zip>
     <zip countryCode="MS">
         <codes>
-            <code id="pattern_1" active="true" example="12345">^MSR\d{4}$</code>
+            <code id="pattern_1" active="true" example="MSR1250">^MSR\s?\d{4}$</code>
         </codes>
     </zip>
     <zip countryCode="MQ">
