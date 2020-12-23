@@ -24,7 +24,6 @@ class ConfigLoaderTest extends \PHPUnit\Framework\TestCase
 
     public function testLoad()
     {
-        CacheCleaner::cleanAll();
         $data = $this->object->load('global');
         $this->assertNotEmpty($data);
         $cachedData = $this->object->load('global');

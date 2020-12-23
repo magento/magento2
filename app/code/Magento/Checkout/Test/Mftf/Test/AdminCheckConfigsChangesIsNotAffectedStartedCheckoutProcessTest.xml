@@ -58,6 +58,11 @@
             <argument name="address" value="US_Address_TX"/>
         </actionGroup>
 
+        <!-- Select Free Shipping -->
+        <actionGroup ref="StorefrontSetShippingMethodActionGroup" stepKey="setShippingMethodFreeShipping">
+            <argument name="shippingMethodName" value="Free Shipping"/>
+        </actionGroup>
+
         <!-- Assert Free Shipping checkbox -->
         <seeCheckboxIsChecked selector="{{CheckoutShippingMethodsSection.shippingMethodFreeShipping}}" stepKey="freeShippingMethodCheckboxIsChecked"/>
 

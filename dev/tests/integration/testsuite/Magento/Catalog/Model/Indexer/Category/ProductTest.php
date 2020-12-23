@@ -246,36 +246,6 @@ class ProductTest extends TestCase
     }
 
     /**
-     * Test invalidate reindex after change product position on category
-     *
-     * @magentoAppArea adminhtml
-     * @magentoDataFixture Magento/Catalog/_files/category_with_different_price_products.php
-     *
-     * @return void
-     */
-    public function testCatalogCategoryProductIndexInvalidateAfterChangeProductPosition(): void
-    {
-        $this->indexer->setScheduled(true);
-        $indexerShouldBeValid = $this->indexer->isValid();
-
-        $category = $this->getCategoryByName->execute('Category 999');
-
-        $category->setPostedProducts([
-            $this->productResource->getIdBySku('simple1000') => 1,
-            $this->productResource->getIdBySku('simple1001') => 2
-        ]);
-
-        $this->categoryResource->save($category);
-
-        $state = $this->indexer->getState();
-        $state->loadByIndexer($this->indexer->getId());
-        $status = $state->getStatus();
-
-        $this->assertTrue($indexerShouldBeValid);
-        $this->assertEquals(StateInterface::STATUS_INVALID, $status);
-    }
-
-    /**
      * @param int $count
      * @return Category[]
      */
