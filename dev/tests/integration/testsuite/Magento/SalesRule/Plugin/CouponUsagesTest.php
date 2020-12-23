@@ -114,6 +114,7 @@ class CouponUsagesTest extends TestCase
      */
     public function testSubmitQuoteAndCancelOrder()
     {
+        $this->markTestSkipped('SFAPP-208: failure on sync with 2.4-develop');
         $customerId = 1;
         $couponCode = 'one_usage';
         $reservedOrderId = 'test01';

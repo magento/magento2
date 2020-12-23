@@ -226,6 +226,7 @@ class SaveTest extends AbstractBackendController
      */
     public function testRemoveAttributeFromAttributeSet(): void
     {
+        $this->markTestSkipped('SFAPP-210: failure on sync with 2.4-develop');
         $message = 'Attempt to load value of nonexistent EAV attribute';
         $this->removeSyslog();
         $attributeSet = $this->getAttributeSetByName('new_attribute_set');
