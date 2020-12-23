@@ -173,7 +173,6 @@ QUERY;
      */
     public function testLayeredNavigationForConfigurableProducts()
     {
-        CacheCleaner::cleanAll();
         $attributeCode = 'test_configurable';
 
         /** @var Config $eavConfig */
@@ -277,7 +276,7 @@ QUERY;
      */
     public function testFilterProductsByDropDownCustomAttribute()
     {
-        CacheCleaner::cleanAll();
+        CacheCleaner::clean(['eav']);
         $attributeCode = 'second_test_configurable';
         $optionValue = $this->getDefaultAttributeOptionValue($attributeCode);
         $query = <<<QUERY
