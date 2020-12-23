@@ -5,9 +5,9 @@
  */
 namespace Magento\Backend\Block\Widget;
 
+use Magento\Backend\Block\Template\Context;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Math\Random;
-use Magento\Backend\Block\Template\Context;
 use Magento\Framework\View\Helper\SecureHtmlRenderer;
 
 /**
@@ -125,6 +125,9 @@ class Button extends \Magento\Backend\Block\Widget
             'value' => $this->getValue(),
             'disabled' => $disabled,
         ];
+        if ($this->hasData('onclick_attribute')) {
+            $attributes['onclick'] = $this->getData('onclick_attribute');
+        }
         if ($this->hasData('backend_button_widget_hook_id')) {
             $attributes['backend-button-widget-hook-id'] = $this->getData('backend_button_widget_hook_id');
         }
