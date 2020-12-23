@@ -22,26 +22,24 @@
             <group value="secure_storefront_url"/>
         </annotations>
         <before>
-            <amOnPage url="/" stepKey="goToHomePage"/>
+            <!-- Go to storefront home page -->
+            <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="openStoreFrontHomePage"/>
             <executeJS function="return window.location.host" stepKey="hostname"/>
+            <!-- Login as admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <magentoCLI command="config:set web/unsecure/base_url https://{$hostname}/" stepKey="setUnsecureBaseURL"/>
             <magentoCLI command="config:set web/secure/base_url https://{$hostname}/" stepKey="setSecureBaseURL"/>
             <magentoCLI command="config:set web/secure/use_in_frontend 1" stepKey="useSecureURLsOnStorefront"/>
             <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-                <argument name="tags" value=""/>
+                <argument name="tags" value="config full_page"/>
             </actionGroup>
         </before>
         <after>
-            <amOnPage url="/" stepKey="goToHomePage"/>
-            <executeJS function="return window.location.host" stepKey="hostname"/>
-            <magentoCLI command="config:set web/unsecure/base_url http://{$hostname}/" stepKey="setUnsecureBaseURL"/>
-            <magentoCLI command="config:set web/secure/base_url http://{$hostname}/" stepKey="setSecureBaseURL"/>
-            <magentoCLI command="config:set web/secure/use_in_frontend 0" stepKey="useSecureURLsOnStorefront"/>
-            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-                <argument name="tags" value=""/>
-            </actionGroup>
+            <!-- Admin logout -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
-        <amOnPage url="/" stepKey="goToHomePage"/>
+        <!-- Go to storefront home page -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="navigateStoreFrontHomePage"/>
         <executeJS function="return window.cookiesConfig.secure ? 'true' : 'false'" stepKey="isCookieSecure"/>
         <assertEquals stepKey="assertCookieIsSecure">
             <actualResult type="variable">isCookieSecure</actualResult>

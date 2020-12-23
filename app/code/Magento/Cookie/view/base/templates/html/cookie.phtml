@@ -11,10 +11,10 @@
  * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
  */
 $isCookieSecure = $block->getSessionConfig()->getCookieSecure() ? 'true' : 'false';
-$scriptString = "
+$scriptString = <<<script
     window.cookiesConfig = window.cookiesConfig || {};
-    window.cookiesConfig.secure = $isCookieSecure;
-";
+    window.cookiesConfig.secure = {$isCookieSecure};
+script;
 ?>
 
 <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>

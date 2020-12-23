@@ -21,16 +21,28 @@
             <group value="configuration"/>
         </annotations>
         <before>
+            <!-- Go to storefront home page -->
+            <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="openStoreFrontHomePage"/>
+            <executeJS function="return window.location.host" stepKey="hostname"/>
+            <!-- Login as admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <magentoCLI command="config:set web/unsecure/base_url https://{$hostname}/" stepKey="setUnsecureBaseURL"/>
+            <magentoCLI command="config:set web/secure/base_url https://{$hostname}/" stepKey="setSecureBaseURL"/>
+            <magentoCLI command="config:set web/secure/use_in_frontend 0" stepKey="useUnSecureURLsOnStorefront"/>
             <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-                <argument name="tags" value=""/>
+                <argument name="tags" value="config full_page"/>
             </actionGroup>
         </before>
         <after>
+            <magentoCLI command="config:set web/secure/use_in_frontend 1" stepKey="useSecureURLsOnStorefront"/>
             <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
-                <argument name="tags" value=""/>
+                <argument name="tags" value="config full_page"/>
             </actionGroup>
+            <!-- Admin logout -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
-        <amOnPage url="/" stepKey="goToHomePage"/>
+        <!-- Go to storefront home page -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="navigateStoreFrontHomePage"/>
         <executeJS function="return window.cookiesConfig.secure ? 'true' : 'false'" stepKey="isCookieSecure"/>
         <assertEquals stepKey="assertCookieIsUnsecure">
             <actualResult type="variable">isCookieSecure</actualResult>
