@@ -56,8 +56,9 @@ class SequenceCreator
     {
         $defaultStoreIds = [0, 1];
         foreach ($defaultStoreIds as $storeId) {
+            $prefix = $storeId === 1 ? $storeId : $this->sequenceConfig->get('prefix');
             foreach ($this->entityPool->getEntities() as $entityType) {
-                $this->sequenceBuilder->setPrefix($this->sequenceConfig->get('prefix'))
+                $this->sequenceBuilder->setPrefix($prefix)
                     ->setSuffix($this->sequenceConfig->get('suffix'))
                     ->setStartValue($this->sequenceConfig->get('startValue'))
                     ->setStoreId($storeId)
