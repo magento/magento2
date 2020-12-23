@@ -3,8 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Theme\Block\Html\Header;
+
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * Logo page header block
@@ -79,7 +82,7 @@ class Logo extends \Magento\Framework\View\Element\Template
         if (empty($this->_data['logo_alt'])) {
             $this->_data['logo_alt'] = $this->_scopeConfig->getValue(
                 'design/header/logo_alt',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                ScopeInterface::SCOPE_STORE
             );
         }
         return $this->_data['logo_alt'];
@@ -88,6 +91,8 @@ class Logo extends \Magento\Framework\View\Element\Template
     /**
      * Retrieve logo width
      *
+     * @deprecated
+     * @see getLogoImageWidth()
      * @return int
      */
     public function getLogoWidth()
@@ -95,10 +100,24 @@ class Logo extends \Magento\Framework\View\Element\Template
         if (empty($this->_data['logo_width'])) {
             $this->_data['logo_width'] = $this->_scopeConfig->getValue(
                 'design/header/logo_width',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                ScopeInterface::SCOPE_STORE
             );
         }
         return (int)$this->_data['logo_width'];
+    }
+
+    /**
+     * Retrieve logo width
+     *
+     * @return int
+     */
+    public function getLogoImageWidth(): int
+    {
+        $logoWidth = $this->_scopeConfig->getValue(
+            'design/header/logo_width',
+            ScopeInterface::SCOPE_STORE
+        );
+        return (int) ($logoWidth ? $logoWidth : $this->_data['logo_width']);
     }
 
     /**
@@ -111,7 +130,7 @@ class Logo extends \Magento\Framework\View\Element\Template
         if (empty($this->_data['logo_height'])) {
             $this->_data['logo_height'] = $this->_scopeConfig->getValue(
                 'design/header/logo_height',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                ScopeInterface::SCOPE_STORE
             );
         }
         return (int)$this->_data['logo_height'];
@@ -127,7 +146,7 @@ class Logo extends \Magento\Framework\View\Element\Template
         $folderName = \Magento\Config\Model\Config\Backend\Image\Logo::UPLOAD_DIR;
         $storeLogoPath = $this->_scopeConfig->getValue(
             'design/header/logo_src',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ScopeInterface::SCOPE_STORE
         );
         $path = $folderName . '/' . $storeLogoPath;
         $logoUrl = $this->_urlBuilder
