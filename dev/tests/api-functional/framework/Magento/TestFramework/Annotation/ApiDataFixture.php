@@ -39,7 +39,8 @@ class ApiDataFixture extends DataFixture
         if (isset($test->getTestResultObject()->topTestSuite()->tests()[0])) {
             \var_dump(\sprintf(
                     'Test started %s',
-                    $test->getTestResultObject()->topTestSuite()->tests()[0]->getName())
+                    $test->getTestResultObject()->topTestSuite()->getName()
+                )
             );
         }
     }
@@ -53,8 +54,9 @@ class ApiDataFixture extends DataFixture
     {
         if (isset($test->getTestResultObject()->topTestSuite()->tests()[0])) {
             \var_dump(\sprintf(
-                'Test ended %s',
-                $test->getTestResultObject()->topTestSuite()->tests()[0]->getName())
+                    'Test ended %s',
+                    $test->getTestResultObject()->topTestSuite()->getName()
+                )
             );
         }
         $this->_revertFixtures($test);
