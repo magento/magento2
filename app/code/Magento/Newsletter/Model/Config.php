@@ -41,7 +41,7 @@ class Config
      * @param string $scopeType
      * @return bool
      */
-    public function isActive(string $scopeType = \Magento\Store\Model\ScopeInterface::SCOPE_STORE): bool
+    public function isActive(string $scopeType = ScopeConfigInterface::SCOPE_TYPE_DEFAULT): bool
     {
         return $this->scopeConfig->isSetFlag(self::XML_PATH_NEWSLETTER_ACTIVE, $scopeType);
     }
