@@ -363,15 +363,16 @@ class Storage extends \Magento\Framework\DataObject
             $collection->setFilesFilter('/\.(' . implode('|', $allowed) . ')$/i');
         }
 
-        // prepare items
         foreach ($collection as $item) {
             $item->setId($this->_cmsWysiwygImages->idEncode($item->getBasename()));
             $item->setName($item->getBasename());
             $item->setShortName($this->_cmsWysiwygImages->getShortFilename($item->getBasename()));
             $item->setUrl($this->_cmsWysiwygImages->getCurrentUrl() . $item->getBasename());
-            $itemStats = $this->file->stat($item->getFilename());
+            $driver = $this->_directory->getDriver();
+            $itemStats = $driver->stat($item->getFilename());
             $item->setSize($itemStats['size']);
-            $item->setMimeType($this->mime->getMimeType($item->getFilename()));
+            $mimeType = $itemStats['mimetype'] ?? $this->mime->getMimeType($item->getFilename());
+            $item->setMimeType($mimeType);
 
             if ($this->isImage($item->getBasename())) {
                 $thumbUrl = $this->getThumbnailUrl($item->getFilename(), true);
@@ -381,7 +382,9 @@ class Storage extends \Magento\Framework\DataObject
                 }
 
                 try {
-                    $size = getimagesize($item->getFilename());
+                    $size = getimagesizefromstring(
+                        $driver->fileGetContents($item->getFilename())
+                    );
 
                     if (is_array($size)) {
                         $item->setWidth($size[0]);
@@ -438,7 +441,7 @@ class Storage extends \Magento\Framework\DataObject
             $path = $this->_cmsWysiwygImages->getStorageRoot();
         }
 
-        $newPath = $path . '/' . $name;
+        $newPath = rtrim($path, '/') . '/' . $name;
         $relativeNewPath = $this->_directory->getRelativePath($newPath);
         if ($this->_directory->isDirectory($relativeNewPath)) {
             throw new \Magento\Framework\Exception\LocalizedException(
@@ -571,7 +574,7 @@ class Storage extends \Magento\Framework\DataObject
         }
 
         // create thumbnail
-        $this->resizeFile($targetPath . '/' . $uploader->getUploadedFileName(), true);
+        $this->resizeFile($targetPath . '/' . ltrim($uploader->getUploadedFileName(), '/'), true);
 
         return $result;
     }
@@ -655,7 +658,7 @@ class Storage extends \Magento\Framework\DataObject
 
         $image->keepAspectRatio($keepRatio);
 
-        list($imageWidth, $imageHeight) = $this->getResizedParams($source);
+        [$imageWidth, $imageHeight] = $this->getResizedParams($source);
 
         $image->resize($imageWidth, $imageHeight);
         $dest = $targetDir . '/' . $this->ioFile->getPathInfo($source)['basename'];
@@ -678,7 +681,7 @@ class Storage extends \Magento\Framework\DataObject
         $configHeight = $this->_resizeParameters['height'];
 
         //phpcs:ignore Generic.PHP.NoSilencedErrors
-        list($imageWidth, $imageHeight) = @getimagesize($source);
+        [$imageWidth, $imageHeight] = @getimagesize($source);
 
         if ($imageWidth && $imageHeight) {
             $imageWidth = $configWidth > $imageWidth ? $imageWidth : $configWidth;
@@ -759,7 +762,7 @@ class Storage extends \Magento\Framework\DataObject
      */
     public function getThumbnailRoot()
     {
-        return $this->_cmsWysiwygImages->getStorageRoot() . '/' . self::THUMBS_DIRECTORY_NAME;
+        return rtrim($this->_cmsWysiwygImages->getStorageRoot(), '/') . '/' . self::THUMBS_DIRECTORY_NAME;
     }
 
     /**
@@ -844,7 +847,7 @@ class Storage extends \Magento\Framework\DataObject
     {
         return rtrim(
             preg_replace(
-                '~[/\\\]+~',
+                '~[/\\\]+(?<![htps?]://)~',
                 '/',
                 $this->_directory->getDriver()->getRealPathSafety(
                     $this->_directory->getAbsolutePath($path)

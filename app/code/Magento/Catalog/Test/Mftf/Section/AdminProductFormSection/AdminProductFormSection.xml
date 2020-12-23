@@ -77,5 +77,6 @@
         <element name="newAddedAttribute" type="text" selector="//fieldset[@class='admin__fieldset']//div[contains(@data-index,'{{attributeCode}}')]" parameterized="true"/>
         <element name="newCategoryButton" type="button" selector="button[data-index='create_category_button']" timeout="30"/>
         <element name="footerBlock" type="block" selector="//footer"/>
+        <element name="categories" type="text" selector="//*[@class='admin__action-multiselect-crumb']/span[contains(text(), '{{categoryName}}')]" parameterized="true"/>
     </section>
 </sections>

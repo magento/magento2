@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Model\ResourceModel;
 
-use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Catalog\Model\Indexer\Category\Product\Processor;
 use Magento\Catalog\Setup\CategorySetup;
 use Magento\Framework\App\ObjectManager;
@@ -575,7 +575,8 @@ class Category extends AbstractResource
             'entity_id'
         )->where(
             'entity_id IN(?)',
-            $ids
+            $ids,
+            \Zend_Db::INT_TYPE
         );
 
         return $this->getConnection()->fetchCol($select);
@@ -1172,11 +1173,11 @@ class Category extends AbstractResource
             return [];
         }
 
-        $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
+        $linkField = $this->metadataPool->getMetadata(CategoryInterface::class)->getLinkField();
         $select = $connection->select()
             ->from(
                 ['cce' => $this->getTable('catalog_category_entity')],
-                [$linkField, 'parent_id', 'path']
+                [$linkField, 'entity_id', 'parent_id', 'path']
             )->join(
                 ['cce_int' => $this->getTable('catalog_category_entity_int')],
                 'cce.' . $linkField . ' = cce_int.' . $linkField,

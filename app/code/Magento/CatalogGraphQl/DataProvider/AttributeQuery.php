@@ -148,7 +148,7 @@ class AttributeQuery
     ): Select {
         $select = $connection->select()
             ->from(['e' => $entityTableName], $entityTableAttributes)
-            ->where('e.entity_id IN (?)', $entityIds);
+            ->where('e.entity_id IN (?)', $entityIds, \Zend_Db::INT_TYPE);
 
         return $select;
     }

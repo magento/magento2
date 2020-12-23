@@ -24,7 +24,8 @@
         "magento/module-tax": "*",
         "magento/module-theme": "*",
         "magento/module-ui": "*",
-        "magento/module-captcha": "*"
+        "magento/module-captcha": "*",
+        "magento/module-authorization": "*"
     },
     "suggest": {
         "magento/module-cookie": "*"
