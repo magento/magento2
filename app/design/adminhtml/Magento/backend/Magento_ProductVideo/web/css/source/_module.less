@@ -153,7 +153,11 @@
             &.field-video_swatch_image,
             &.field-new_video_disabled {
                 .admin__field-control {
+                    /**
+                     * @codingStandardsIgnoreStart
+                     */
                     #mix-grid .column(3, @field-grid__columns);
+                    //@codingStandardsIgnoreEnd
                     float: left;
                     margin-left: 80px;
                     position: relative;
@@ -197,7 +201,11 @@
                 height: 0;
 
                 .admin__field-control {
+                    /**
+                     * @codingStandardsIgnoreStart
+                     */
                     #mix-grid .column(3, @field-grid__columns);
+                    //@codingStandardsIgnoreEnd
                     float: left;
                     margin-left: 80px;
                     position: relative;
@@ -221,7 +229,7 @@
             }
 
             input[type='checkbox'] {
-                .lib-css(appearance, none, 1);
+                .lib-vendor-prefix-appearance(none);
                 background: @color-white;
                 border: 1px solid @color-gray68;
                 border-radius: 2px;

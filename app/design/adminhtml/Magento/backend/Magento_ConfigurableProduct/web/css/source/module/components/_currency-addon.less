@@ -25,12 +25,7 @@
     width: 100%;
 
     .admin__control-text {
-        -ms-flex-order: 1;
-        -webkit-appearance: none;
-        -webkit-flex-grow: 1;
-        -webkit-flex-shrink: 1;
-        -webkit-order: 1;
-        appearance: none;
+        .lib-vendor-prefix-appearance(none);
         background-color: transparent;
         border-color: transparent;
         box-shadow: none;
@@ -53,9 +48,6 @@
     }
 
     .currency-symbol {
-        -webkit-flex-basis: auto;
-        -webkit-flex-grow: 0;
-        -webkit-flex-shrink: 0;
         border: solid @currency-addon-symbol__border-color;
         border-width: 0;
         box-sizing: border-box;

@@ -43,9 +43,10 @@
         overflow-y: auto;
         padding-top: .25em;
         &::-webkit-scrollbar {
-            -webkit-appearance: none;
+            .lib-vendor-prefix-appearance(none);
             width: 7px;
         }
+        
         &::-webkit-scrollbar-thumb {
             background-color: rgba(0, 0, 0, .5);
             border-radius: 4px;

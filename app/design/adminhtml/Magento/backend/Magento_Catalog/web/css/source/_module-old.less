@@ -90,8 +90,6 @@
     .field-gift_wrapping_price {
         &:not(.field-weight) {
             .addon {
-                .lib-vendor-prefix-display(inline-flex);
-                .lib-vendor-prefix-flex-direction(row);
                 color: #303030;
                 display: inline-flex;
                 flex-flow: row nowrap;
@@ -142,10 +140,10 @@
         }
 
         .admin__control-text {
-            .lib-css(appearance, none, 1);
-            .lib-vendor-prefix-flex-basis(auto);
-            .lib-vendor-prefix-flex-grow(1);
-            .lib-vendor-prefix-flex-shrink(1);
+            .lib-vendor-prefix-appearance(none);
+            flex-basis: auto;
+            flex-grow: 1;
+            flex-shrink: 1;
             background: none;
             border: 0;
         }
@@ -159,10 +157,10 @@
         }
 
         .addafter {
-            .lib-vendor-prefix-flex-basis(auto);
-            .lib-vendor-prefix-flex-grow(0);
-            .lib-vendor-prefix-flex-shrink(0);
-            .lib-vendor-prefix-order(0);
+            flex-basis: auto;
+            flex-grow: 0;
+            flex-shrink: 0;
+            order: 0;
             position: relative;
             z-index: 0;
 
