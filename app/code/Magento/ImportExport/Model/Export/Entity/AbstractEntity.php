@@ -389,14 +389,7 @@ abstract class AbstractEntity
      */
     public function filterAttributeCollection(\Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection $collection)
     {
-        $collection->load();
-
-        foreach ($collection as $attribute) {
-            if (in_array($attribute->getAttributeCode(), $this->_disabledAttrs)) {
-                $collection->removeItemByKey($attribute->getId());
-            }
-        }
-        return $collection;
+        return $collection->addFieldToFilter('attribute_code', ['nin' => $this->_disabledAttrs]);
     }
 
     /**

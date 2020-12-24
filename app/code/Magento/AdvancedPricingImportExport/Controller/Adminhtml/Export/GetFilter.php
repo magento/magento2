@@ -34,29 +34,9 @@ class GetFilter extends ExportController implements HttpGetActionInterface, Http
                 /** @var $export \Magento\ImportExport\Model\Export */
                 $export = $this->_objectManager->create(\Magento\ImportExport\Model\Export::class);
                 $export->setData($data);
-                $filter = (isset($data['filter']) && $data['filter']) ? $data['filter'] : null;
-                $collection = $export->getEntityAttributeCollection();
-                if (!is_null($filter)) {
-                    $filters = array_reduce(
-                        explode('&', base64_decode($filter)),
-                        function ($filter, $item) {
-                            list($key, $value) = explode('=', $item, 2);
-                            $filter[$key] = $value;
-                            return $filter;
-                        },
-                        []
-                    );
-                    foreach ($filters as $field => $value) {
-                        foreach ($collection as $attribute) {
-                            if (stripos($attribute->getData($field), $value) === false) {
-                                $collection->removeItemByKey($attribute->getId());
-                            }
-                        }
-                    }
-                }
                 $export->filterAttributeCollection(
-                    $attrFilterBlock->prepareCollection($collection)
-                );
+                    $attrFilterBlock->prepareCollection($export->getEntityAttributeCollection())
+                )->clear();
                 return $resultLayout;
             } catch (\Exception $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
