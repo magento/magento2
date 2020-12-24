@@ -66,6 +66,25 @@ QUERY;
     }
 
     /**
+     * Verify that filters id and uid can't be used at the same time
+     */
+    public function testUidAndIdUsageErrorOnProductFilteringCategory()
+    {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('`category_id` and `category_uid` can\'t be used at the same time');
+        $query = <<<QUERY
+{
+  products(filter: {category_id: {eq: "99999999"}, category_uid: {eq: "OTk5OTk5OTk="}}) {
+    filters {
+      name
+    }
+  }
+}
+QUERY;
+        $this->graphQlQuery($query);
+    }
+
+    /**
      * Verify that layered navigation filters and aggregations are correct for product query
      *
      * Filter products by an array of skus
@@ -154,7 +173,6 @@ QUERY;
      */
     public function testLayeredNavigationForConfigurableProducts()
     {
-        CacheCleaner::cleanAll();
         $attributeCode = 'test_configurable';
 
         /** @var Config $eavConfig */
@@ -258,7 +276,7 @@ QUERY;
      */
     public function testFilterProductsByDropDownCustomAttribute()
     {
-        CacheCleaner::cleanAll();
+        CacheCleaner::clean(['eav']);
         $attributeCode = 'second_test_configurable';
         $optionValue = $this->getDefaultAttributeOptionValue($attributeCode);
         $query = <<<QUERY
@@ -607,10 +625,11 @@ QUERY;
         $getCategoryByName = Bootstrap::getObjectManager()->get(GetCategoryByName::class);
         $category = $getCategoryByName->execute('Category 1.2');
         $optionValue = $this->getDefaultAttributeOptionValue('second_test_configurable');
+        $categoryUid = base64_encode($category->getId());
         $query = <<<QUERY
 {
   products(filter:{
-                   category_id : {eq:"{$category->getId()}"}
+                   category_uid : {eq:"{$categoryUid}"}
                    second_test_configurable: {eq: "{$optionValue}"}
                    },
                    pageSize: 3
@@ -1081,7 +1100,6 @@ QUERY;
             weight
          }
          type_id
-         attribute_set_id
        }
         total_count
         page_info
@@ -1234,7 +1252,6 @@ QUERY;
             weight
            }
            type_id
-           attribute_set_id
          }
         total_count
         page_info
@@ -1298,7 +1315,6 @@ QUERY;
             weight
            }
            type_id
-           attribute_set_id
          }
         total_count
         page_info
@@ -1349,7 +1365,6 @@ QUERY;
      */
     public function testFilterProductsForExactMatchingName()
     {
-
         $query
             = <<<QUERY
 {
@@ -1502,17 +1517,20 @@ QUERY;
      *
      * @magentoApiDataFixture Magento/Catalog/_files/product_in_multiple_categories.php
      * @return void
+     * @dataProvider filterProductsBySingleCategoryIdDataProvider
      */
-    public function testFilterProductsBySingleCategoryId()
+    public function testFilterProductsBySingleCategoryId(string $fieldName, string $queryCategoryId)
     {
-        $queryCategoryId = 333;
+        if (is_numeric($queryCategoryId)) {
+            $queryCategoryId = (int) $queryCategoryId;
+        }
         $query
             = <<<QUERY
 {
   products(
         filter:
         {
-            category_id:{eq:"{$queryCategoryId}"}
+            {$fieldName}:{eq:"{$queryCategoryId}"}
         }
     pageSize:2
 
@@ -1526,6 +1544,7 @@ QUERY;
        categories{
           name
           id
+          uid
           path
           children_count
           product_count
@@ -1545,7 +1564,9 @@ QUERY;
         /** @var CategoryRepositoryInterface $categoryRepository */
         $categoryRepository = ObjectManager::getInstance()->get(CategoryRepositoryInterface::class);
 
-        $links = $productLinks->getAssignedProducts($queryCategoryId);
+        $links = $productLinks->getAssignedProducts(
+            is_numeric($queryCategoryId) ? $queryCategoryId : base64_decode($queryCategoryId)
+        );
         $links = array_reverse($links);
         foreach ($response['products']['items'] as $itemIndex => $itemData) {
             $this->assertNotEmpty($itemData);
@@ -1574,6 +1595,7 @@ QUERY;
                     [
                         'name' => $category->getName(),
                         'id' => $category->getId(),
+                        'uid' => base64_encode($category->getId()),
                         'path' => $category->getPath(),
                         'children_count' => $category->getChildrenCount(),
                         'product_count' => $category->getProductCount(),
@@ -1693,7 +1715,6 @@ QUERY;
             weight
         }
         type_id
-        attribute_set_id
       }
         total_count
         page_info
@@ -2119,7 +2140,6 @@ QUERY;
     {
       items
        {
-         attribute_set_id
          sku
          price {
             minimalPrice {
@@ -2219,7 +2239,6 @@ products(
         weight
        }
        type_id
-       attribute_set_id
      }
     total_count
     page_info
@@ -2276,7 +2295,6 @@ QUERY;
         ... on PhysicalProductInterface {
            weight
          }
-           attribute_set_id
          }
         total_count
         page_info
@@ -2309,12 +2327,9 @@ QUERY;
   {
        items{
            id
-           attribute_set_id
-           created_at
            name
            sku
            type_id
-           updated_at
            ... on PhysicalProductInterface {
                weight
            }
@@ -2457,7 +2472,6 @@ QUERY;
             $this->assertResponseFields(
                 $productItemsInResponse[$itemIndex][0],
                 [
-                    'attribute_set_id' => $filteredProducts[$itemIndex]->getAttributeSetId(),
                     'sku' => $filteredProducts[$itemIndex]->getSku(),
                     'name' => $filteredProducts[$itemIndex]->getName(),
                     'price' => [
@@ -2484,7 +2498,6 @@ QUERY;
             $this->assertResponseFields(
                 $productItemsInResponse[$itemIndex][0],
                 [
-                    'attribute_set_id' => $filteredProducts[$itemIndex]->getAttributeSetId(),
                     'sku' => $filteredProducts[$itemIndex]->getSku(),
                     'name' => $filteredProducts[$itemIndex]->getName(),
                     'price' => [
@@ -2513,5 +2526,24 @@ QUERY;
                 ]
             );
         }
+    }
+
+    /**
+     * Data provider for product single category filtering
+     *
+     * @return array[][]
+     */
+    public function filterProductsBySingleCategoryIdDataProvider(): array
+    {
+        return [
+            [
+                'fieldName' => 'category_id',
+                'categoryId' => '333',
+            ],
+            [
+                'fieldName' => 'category_uid',
+                'categoryId' => base64_encode('333'),
+            ],
+        ];
     }
 }

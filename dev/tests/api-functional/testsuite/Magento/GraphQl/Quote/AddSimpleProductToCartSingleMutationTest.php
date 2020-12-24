@@ -81,10 +81,31 @@ class AddSimpleProductToCartSingleMutationTest extends GraphQlAbstract
         $customizableOptionsOutput =
             $response['addProductsToCart']['cart']['items'][0]['customizable_options'];
 
-        foreach ($customizableOptionsOutput as $customizableOptionOutput) {
+        foreach ($customizableOptionsOutput as $key => $customizableOptionOutput) {
             $customizableOptionOutputValues = [];
             foreach ($customizableOptionOutput['values'] as $customizableOptionOutputValue) {
                 $customizableOptionOutputValues[] =  $customizableOptionOutputValue['value'];
+
+                $decodedOptionValue = base64_decode($customizableOptionOutputValue['customizable_option_value_uid']);
+                $decodedArray = explode('/', $decodedOptionValue);
+                if (count($decodedArray) === 2) {
+                    self::assertEquals(
+                        base64_encode('custom-option/' . $customizableOptionOutput['id']),
+                        $customizableOptionOutputValue['customizable_option_value_uid']
+                    );
+                } elseif (count($decodedArray) === 3) {
+                    self::assertEquals(
+                        base64_encode(
+                            'custom-option/'
+                            . $customizableOptionOutput['id']
+                            . '/'
+                            . $customizableOptionOutputValue['value']
+                        ),
+                        $customizableOptionOutputValue['customizable_option_value_uid']
+                    );
+                } else {
+                    self::fail('customizable_option_value_uid ');
+                }
             }
             if (count($customizableOptionOutputValues) === 1) {
                 $customizableOptionOutputValues = $customizableOptionOutputValues[0];
@@ -93,6 +114,11 @@ class AddSimpleProductToCartSingleMutationTest extends GraphQlAbstract
             self::assertEquals(
                 $decodedItemOptions[$customizableOptionOutput['id']],
                 $customizableOptionOutputValues
+            );
+
+            self::assertEquals(
+                base64_encode((string) 'custom-option/' . $customizableOptionOutput['id']),
+                $customizableOptionOutput['customizable_option_uid']
             );
         }
     }
@@ -242,8 +268,11 @@ mutation {
                     customizable_options {
                         label
                         id
+                        customizable_option_uid
                           values {
                             value
+                            customizable_option_value_uid
+                            id
                         }
                     }
                 }

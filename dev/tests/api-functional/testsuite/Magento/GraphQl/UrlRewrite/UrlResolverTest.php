@@ -37,6 +37,7 @@ class UrlResolverTest extends GraphQlAbstract
   urlResolver(url:"{$urlPath}")
   {
    id
+   entity_uid
    relative_url
    type
    redirectCode

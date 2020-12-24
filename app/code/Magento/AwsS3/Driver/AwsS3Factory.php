@@ -86,6 +86,10 @@ class AwsS3Factory implements DriverFactoryInterface
             throw new DriverException(__('Bucket and region are required values'));
         }
 
+        if (!empty($config['http_handler'])) {
+            $config['http_handler'] = $this->objectManager->create($config['http_handler'])($config);
+        }
+
         $client = new S3Client($config);
         $adapter = new AwsS3Adapter($client, $config['bucket'], $prefix);
 
