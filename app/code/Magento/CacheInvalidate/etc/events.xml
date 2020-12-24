@@ -51,4 +51,7 @@
     <event name="clean_cache_after_reindex">
         <observer name="flush_varnish_pagecache" instance="Magento\CacheInvalidate\Observer\InvalidateVarnishObserver"/>
     </event>
+    <event name="catalog_product_price_changed">
+        <observer name="flush_varnish_pagecache" instance="Magento\CacheInvalidate\Observer\InvalidateVarnishObserver" />
+    </event>
 </config>
