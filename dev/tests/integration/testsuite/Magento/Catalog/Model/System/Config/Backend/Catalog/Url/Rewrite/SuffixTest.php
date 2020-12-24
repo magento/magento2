@@ -275,7 +275,7 @@ class SuffixTest extends TestCase
      * @param array $data
      * @return void
      */
-    private function assertRewrite(string $expectedSuffix, array $data)
+    private function assertRewrite(string $expectedSuffix, array $data): void
     {
         $rewrite = $this->urlFinder->findOneByData($data);
         $this->assertNotNull($rewrite);
