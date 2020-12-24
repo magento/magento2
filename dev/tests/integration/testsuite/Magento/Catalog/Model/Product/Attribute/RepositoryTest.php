@@ -9,6 +9,7 @@ namespace Magento\Catalog\Model\Product\Attribute;
 
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Api\Data\ProductAttributeInterfaceFactory;
+use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\Catalog\Setup\CategorySetup;
 use Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface;
 use Magento\Framework\Exception\InputException;
@@ -28,7 +29,7 @@ class RepositoryTest extends TestCase
     /** @var ObjectManagerInterface */
     private $objectManager;
 
-    /** @var Repository */
+    /** @var ProductAttributeRepositoryInterface */
     private $repository;
 
     /** @var ProductAttributeInterfaceFactory */
@@ -45,7 +46,7 @@ class RepositoryTest extends TestCase
         parent::setUp();
 
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->repository = $this->objectManager->get(Repository::class);
+        $this->repository = $this->objectManager->get(ProductAttributeRepositoryInterface::class);
         $this->attributeFactory = $this->objectManager->get(ProductAttributeInterfaceFactory::class);
     }
 
@@ -97,7 +98,7 @@ class RepositoryTest extends TestCase
     /**
      * @return array
      */
-    public function errorProvider():array
+    public function errorProvider(): array
     {
         return [
             'with_invalid_attribute_code' => [
