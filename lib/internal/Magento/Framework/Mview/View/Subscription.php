@@ -6,8 +6,10 @@
 
 namespace Magento\Framework\Mview\View;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Ddl\Trigger;
+use Magento\Framework\Mview\Config;
 use Magento\Framework\Mview\View\StateInterface;
 
 /**
@@ -72,6 +74,10 @@ class Subscription implements SubscriptionInterface
      * @var Resource
      */
     protected $resource;
+    /**
+     * @var Config
+     */
+    private $mviewConfig;
 
     /**
      * @param ResourceConnection $resource
@@ -82,6 +88,7 @@ class Subscription implements SubscriptionInterface
      * @param string $columnName
      * @param array $ignoredUpdateColumns
      * @param array $ignoredUpdateColumnsBySubscription
+     * @param Config|null $mviewConfig
      */
     public function __construct(
         ResourceConnection $resource,
@@ -91,7 +98,8 @@ class Subscription implements SubscriptionInterface
         $tableName,
         $columnName,
         $ignoredUpdateColumns = [],
-        $ignoredUpdateColumnsBySubscription = []
+        $ignoredUpdateColumnsBySubscription = [],
+        Config $mviewConfig = null
     ) {
         $this->connection = $resource->getConnection();
         $this->triggerFactory = $triggerFactory;
@@ -102,6 +110,7 @@ class Subscription implements SubscriptionInterface
         $this->resource = $resource;
         $this->ignoredUpdateColumns = $ignoredUpdateColumns;
         $this->ignoredUpdateColumnsBySubscription = $ignoredUpdateColumnsBySubscription;
+        $this->mviewConfig = $mviewConfig ?? ObjectManager::getInstance()->get(Config::class);
     }
 
     /**
@@ -197,6 +206,38 @@ class Subscription implements SubscriptionInterface
     }
 
     /**
+     * Prepare columns for trigger statement. Should be protected in order to serve new approach
+     *
+     * @param ChangelogInterface $changelog
+     * @param string $event
+     * @return array
+     * @throws \Exception
+     */
+    protected function prepareColumns(ChangelogInterface $changelog, string $event): array
+    {
+        $prefix = $event === Trigger::EVENT_DELETE ? 'OLD.' : 'NEW.';
+        $subscriptionData = $this->mviewConfig->getView($changelog->getViewId())['subscriptions'][$this->getTableName()];
+        $columns = [
+            'column_names' => [
+                'entity_id' => $this->connection->quoteIdentifier($changelog->getColumnName())
+            ],
+            'column_values' => [
+                'entity_id' => $this->getEntityColumn($prefix)
+            ]
+        ];
+
+        if (!empty($subscriptionData['additional_columns'])) {
+            $processor = $this->getProcessor();
+            $columns = array_replace_recursive(
+                $columns,
+                $processor->getTriggerColumns($prefix, $subscriptionData['additional_columns'])
+            );
+        }
+
+        return $columns;
+    }
+
+    /**
      * Build trigger statement for INSERT, UPDATE, DELETE events
      *
      * @param string $event
@@ -205,13 +246,10 @@ class Subscription implements SubscriptionInterface
      */
     protected function buildStatement($event, $changelog)
     {
+        $trigger = "%sINSERT IGNORE INTO %s (%s) VALUES (%s);";
         switch ($event) {
-            case Trigger::EVENT_INSERT:
-                $trigger = "INSERT IGNORE INTO %s (%s) VALUES (NEW.%s);";
-                break;
             case Trigger::EVENT_UPDATE:
                 $tableName = $this->resource->getTableName($this->getTableName());
-                $trigger = "INSERT IGNORE INTO %s (%s) VALUES (NEW.%s);";
                 if ($this->connection->isTableExists($tableName) &&
                     $describe = $this->connection->describeTable($tableName)
                 ) {
@@ -240,18 +278,45 @@ class Subscription implements SubscriptionInterface
                     }
                 }
                 break;
-            case Trigger::EVENT_DELETE:
-                $trigger = "INSERT IGNORE INTO %s (%s) VALUES (OLD.%s);";
-                break;
-            default:
-                return '';
         }
+        $columns = $this->prepareColumns($changelog, $event);
         return sprintf(
             $trigger,
+            $this->getProcessor()->getPreStatements(),
             $this->connection->quoteIdentifier($this->resource->getTableName($changelog->getName())),
-            $this->connection->quoteIdentifier($changelog->getColumnName()),
-            $this->connection->quoteIdentifier($this->getColumnName())
+            implode(", " , $columns['column_names']),
+            implode(", ", $columns['column_values'])
         );
+    }
+
+    /**
+     * Instantiate and retrieve additional columns processor
+     *
+     * @return AdditionalColumnProcessorInterface
+     * @throws \Exception
+     */
+    private function getProcessor(): AdditionalColumnProcessorInterface
+    {
+        $subscriptionData = $this->mviewConfig->getView($this->getView()->getId())['subscriptions'];
+        $processorClass = $subscriptionData[$this->getTableName()]['processor'];
+        $processor = ObjectManager::getInstance()->get($processorClass);
+
+        if (!$processor instanceof AdditionalColumnProcessorInterface) {
+            throw new \Exception(
+                'Processor should implements ' . AdditionalColumnProcessorInterface::class
+            );
+        }
+
+        return $processor;
+    }
+
+    /**
+     * @param string $prefix
+     * @return string
+     */
+    public function getEntityColumn(string $prefix): string
+    {
+        return $prefix . $this->connection->quoteIdentifier($this->getColumnName());
     }
 
     /**
