@@ -673,18 +673,26 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
     /**
      * @inheritdoc
      */
-    public function validateData()
+    protected function _saveValidatedBunches()
     {
-        $isDataValidated = $this->_dataValidated;
-        $result = parent::validateData();
-        if (!$isDataValidated
-            && $this->_dataValidated
-            && \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND === $this->getBehavior()
+        if (\Magento\ImportExport\Model\Import::BEHAVIOR_APPEND === $this->getBehavior()
             && !$this->_catalogData->isPriceGlobal()
         ) {
+            $source = $this->_getSource();
+            $source->rewind();
+            while ($source->valid()) {
+                try {
+                    $rowData = $source->current();
+                } catch (\InvalidArgumentException $exception) {
+                    $source->next();
+                    continue;
+                }
+                $this->validateRow($rowData, $source->key());
+                $source->next();
+            }
             $this->validateRowsForDuplicate(self::TABLE_TIER_PRICE);
         }
-        return $result;
+        return parent::_saveValidatedBunches();
     }
 
     /**
