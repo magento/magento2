@@ -1095,6 +1095,21 @@ class ProductTest extends TestCase
         $this->model->afterSave();
     }
 
+    /**
+     * Test for save method behavior with type options
+     */
+    public function testSaveWithoutTypeOptions()
+    {
+        $this->model->setCanSaveCustomOptions(false);
+        $this->model->setTypeHasOptions(true);
+        $this->model->setTypeHasRequiredOptions(true);
+        $this->configureSaveTest();
+        $this->model->beforeSave();
+        $this->model->afterSave();
+        $this->assertTrue($this->model->getTypeHasOptions());
+        $this->assertTrue($this->model->getTypeHasRequiredOptions());
+    }
+
     public function testGetIsSalableSimple()
     {
         $typeInstanceMock =
