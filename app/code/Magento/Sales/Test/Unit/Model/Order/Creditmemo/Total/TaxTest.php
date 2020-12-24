@@ -17,6 +17,9 @@ use Magento\Sales\Model\Order\Invoice;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Class to test Collecting credit memo taxes
+ */
 class TaxTest extends TestCase
 {
     /**
@@ -44,6 +47,9 @@ class TaxTest extends TestCase
      */
     protected $invoice;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
@@ -188,6 +194,8 @@ class TaxTest extends TestCase
                     'base_tax_amount' => 0.82,
                     'invoice' => new MagentoObject(
                         [
+                            'tax_amount' => 24.33,
+                            'base_tax_amount' => 24.33,
                             'shipping_tax_amount' => 2.45,
                             'base_shipping_tax_amount' => 2.45,
                             'shipping_discount_tax_compensation_amount' => 0,
@@ -277,6 +285,8 @@ class TaxTest extends TestCase
                     'base_tax_amount' => 0.82,
                     'invoice' => new MagentoObject(
                         [
+                            'tax_amount' => 24.33 * $currencyRatio,
+                            'base_tax_amount' => 24.33,
                             'shipping_tax_amount' => 2.45 * $currencyRatio,
                             'base_shipping_tax_amount' => 2.45,
                             'shipping_discount_tax_compensation_amount' => 0,
@@ -352,6 +362,8 @@ class TaxTest extends TestCase
                     'base_tax_amount' => 1.65,
                     'invoice' => new MagentoObject(
                         [
+                            'tax_amount' => 11.14,
+                            'base_tax_amount' => 11.14,
                             'shipping_tax_amount' => 1.24,
                             'base_shipping_tax_amount' => 1.24,
                             'shipping_discount_tax_compensation_amount' => 0,
@@ -428,6 +440,8 @@ class TaxTest extends TestCase
                     'base_tax_amount' => 0.82,
                     'invoice' => new MagentoObject(
                         [
+                            'tax_amount' => 16.09,
+                            'base_tax_amount' => 16.09,
                             'shipping_tax_amount' => 1.24,
                             'base_shipping_tax_amount' => 1.24,
                             'shipping_discount_tax_compensation_amount' => 0,
@@ -507,14 +521,6 @@ class TaxTest extends TestCase
                     'base_shipping_amount' => 0,
                     'tax_amount' => 0.76,
                     'base_tax_amount' => 0.76,
-                    'invoice' => new MagentoObject(
-                        [
-                            'shipping_tax_amount' => 0,
-                            'base_shipping_tax_amount' => 0,
-                            'shipping_discount_tax_compensation_amount' => 0,
-                            'base_shipping_discount_tax_compensation_amount' => 0,
-                        ]
-                    ),
                 ],
             ],
             'expected_results' => [
@@ -583,6 +589,8 @@ class TaxTest extends TestCase
                     'base_tax_amount' => 0.82,
                     'invoice' => new MagentoObject(
                         [
+                            'tax_amount' => 16.09,
+                            'base_tax_amount' => 16.09,
                             'shipping_tax_amount' => 1.24,
                             'base_shipping_tax_amount' => 1.24,
                             'shipping_discount_tax_compensation_amount' => 0,
@@ -712,14 +720,6 @@ class TaxTest extends TestCase
                     'base_shipping_amount' => 0,
                     'tax_amount' => 0,
                     'base_tax_amount' => 0,
-                    'invoice' => new MagentoObject(
-                        [
-                            'shipping_tax_amount' => 0,
-                            'base_shipping_tax_amount' => 0,
-                            'shipping_discount_tax_compensation_amount' => 0,
-                            'base_shipping_discount_tax_compensation_amount' => 0,
-                        ]
-                    ),
                 ],
             ],
             'expected_results' => [
