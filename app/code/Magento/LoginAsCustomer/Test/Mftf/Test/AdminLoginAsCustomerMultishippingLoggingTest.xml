@@ -30,10 +30,7 @@
                         stepKey="enableLoginAsCustomer"/>
             <magentoCLI command="config:set {{LoginAsCustomerStoreViewLogin.path}} 0"
                         stepKey="enableLoginAsCustomerAutoDetection"/>
-            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCacheBeforeTestRun">
-                <argument name="tags" value="config"/>
-            </actionGroup>
-
+            <comment userInput="Adding the comment to replace 'cache:flush' command for preserving Backward Compatibility" stepKey="flushCacheBeforeTestRun"/>
             <createData entity="SimpleProduct2" stepKey="createProduct1"/>
             <createData entity="SimpleProduct2" stepKey="createProduct2"/>
             <createData entity="Simple_US_Customer_Assistance_Allowed_Two_Addresses" stepKey="createCustomer"/>
@@ -47,7 +44,7 @@
             <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearAllOrdersGridFilters"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
             <actionGroup ref="CliDisableFreeShippingMethodActionGroup" stepKey="disableFreeShipping"/>
-            <magentoCLI command="cache:flush config" stepKey="flushCacheAfterTestRun"/>
+            <comment userInput="Adding the comment to replace 'cache:flush' command for preserving Backward Compatibility" stepKey="flushCacheAfterTestRun"/>
         </after>
 
         <!-- Login as Customer from Customer page -->

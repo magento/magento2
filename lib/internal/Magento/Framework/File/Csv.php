@@ -31,6 +31,11 @@ class Csv
     protected $_enclosure = '"';
 
     /**
+     * @var string
+     */
+    private $escape = "\0";
+
+    /**
      * @var File
      */
     protected $file;
@@ -96,7 +101,7 @@ class Csv
         }
 
         $fh = fopen($file, 'r');
-        while ($rowData = fgetcsv($fh, $this->_lineLength, $this->_delimiter, $this->_enclosure)) {
+        while ($rowData = fgetcsv($fh, $this->_lineLength, $this->_delimiter, $this->_enclosure, $this->escape)) {
             $data[] = $rowData;
         }
         fclose($fh);

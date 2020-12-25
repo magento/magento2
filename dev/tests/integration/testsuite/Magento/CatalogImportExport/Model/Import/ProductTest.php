@@ -2345,6 +2345,67 @@ class ProductTest extends TestCase
     }
 
     /**
+     * @magentoDataFixture Magento/Catalog/_files/product_text_attribute.php
+     * @magentoAppIsolation enabled
+     * @magentoDbIsolation enabled
+     * @dataProvider importWithJsonAndMarkupTextAttributeDataProvider
+     * @param string $productSku
+     * @param string $expectedResult
+     * @return void
+     */
+    public function testImportWithJsonAndMarkupTextAttribute(string $productSku, string $expectedResult): void
+    {
+        // added by _files/product_import_with_json_and_markup_attributes.csv
+        $this->importedProducts = [
+            'SkuProductWithJson',
+            'SkuProductWithMarkup',
+        ];
+
+        $importParameters =[
+            'behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND,
+            'entity' => 'catalog_product',
+            \Magento\ImportExport\Model\Import::FIELDS_ENCLOSURE => 0
+        ];
+        $filesystem = $this->objectManager->create(\Magento\Framework\Filesystem::class);
+        $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
+        $source = $this->objectManager->create(
+            \Magento\ImportExport\Model\Import\Source\Csv::class,
+            [
+                'file' => __DIR__ . '/_files/products_to_import_with_json_and_markup_attributes.csv',
+                'directory' => $directory
+            ]
+        );
+        $this->_model->setParameters($importParameters);
+        $this->_model->setSource($source);
+        $errors = $this->_model->validateData();
+        $this->assertTrue($errors->getErrorsCount() == 0);
+        $this->_model->importData();
+        $productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            \Magento\Catalog\Api\ProductRepositoryInterface::class
+        );
+        $product = $productRepository->get($productSku);
+        $this->assertEquals($expectedResult, $product->getData('text_attribute'));
+    }
+
+    /**
+     * @return array
+     */
+    public function importWithJsonAndMarkupTextAttributeDataProvider(): array
+    {
+        return [
+            'import of attribute with json' => [
+                'SkuProductWithJson',
+                '{"type": "basic", "unit": "inch", "sign": "(\")", "size": "1.5\""}'
+            ],
+            'import of attribute with markup' => [
+                'SkuProductWithMarkup',
+                '<div data-content>Element type is basic, measured in inches ' .
+                '(marked with sign (\")) with size 1.5\", mid-price range</div>'
+            ],
+        ];
+    }
+
+    /**
      * Import and check data from file.
      *
      * @param string $fileName
