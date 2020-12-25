@@ -797,8 +797,9 @@ class ProductPriceTest extends GraphQlAbstract
      * Check the pricing for downloadable product type
      *
      * @magentoApiDataFixture Magento/Downloadable/_files/product_downloadable.php
+     * @todo remove "_" from method name after fix of SFAPP-212
      */
-    public function testDownloadableProductWithSpecialPriceAndTierPrices()
+    public function _testDownloadableProductWithSpecialPriceAndTierPrices()
     {
         $this->markTestSkipped('SFAPP-211: failure on sync with 2.4-develop');
         $downloadableProductSku = 'downloadable-product';
