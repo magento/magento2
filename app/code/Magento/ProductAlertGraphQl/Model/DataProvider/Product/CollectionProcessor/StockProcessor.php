@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\ProductAlertGraphQl\Model\Resolver\Products\DataProvider\Product\CollectionProcessor;
+namespace Magento\ProductAlertGraphQl\Model\DataProvider\Product\CollectionProcessor;
 
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\CollectionProcessorInterface;
