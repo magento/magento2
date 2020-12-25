@@ -10,6 +10,9 @@
         "magento/module-product-alert":"*",
         "magento/module-store": "*"
     },
+    "suggest": {
+        "magento/module-graph-ql": "*"
+    },    
     "license": [
         "OSL-3.0",
         "AFL-3.0"
@@ -22,5 +25,4 @@
             "Magento\\ProductAlertGraphQl\\": ""
         }
     }
-
 }
