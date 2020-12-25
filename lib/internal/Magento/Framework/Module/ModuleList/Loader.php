@@ -132,84 +132,96 @@ class Loader
     private function sortBySequence(array $origList): array
     {
         ksort($origList);
-        $modules = $this->prearrangeModules($origList);
+        $missingRel = [];
 
-        $expanded = [];
-        foreach (array_keys($modules) as $moduleName) {
-            $sequence = $this->expandSequence($origList, $moduleName);
-            asort($sequence);
-
-            $expanded[] = [
-                'name' => $moduleName,
-                'sequence_set' => array_flip($sequence),
-            ];
+        foreach ($origList as $name => &$data) {
+            if (!isset($data['sequence'])) $data['sequence'] = [];
+            $data['_cnt'] = 0;
+            $data['_im'] = (strpos($name, 'Magento_') !== 0) ? 1 : 0;
+            $data['_rel'] = [];
         }
 
-        // Use "bubble sorting" because usort does not check each pair of elements and in this case it is important
-        $total = count($expanded);
-        for ($i = 0; $i < $total - 1; $i++) {
-            for ($j = $i; $j < $total; $j++) {
-                if (isset($expanded[$i]['sequence_set'][$expanded[$j]['name']])) {
-                    $temp = $expanded[$i];
-                    $expanded[$i] = $expanded[$j];
-                    $expanded[$j] = $temp;
+        foreach ($origList as $name => &$data) {
+            foreach ($data['sequence'] as $rel) {
+                if (!array_key_exists($rel, $origList)) {
+                    $origList[$rel] = [
+                        'sequence' => [],
+                        '_rel' => [],
+                        '_cnt' => 0,
+                        '_im' => (strpos($rel, 'Magento_') !== 0) ? 1 : 0
+                    ];
+                    $missingRel[] = $rel;
+                }
+                $origList[$rel]['_rel'][$name] = &$data;
+                $data['_cnt']++;
+            }
+        }
+        // sort so we see have
+        uasort($origList, function (&$a, &$b) {
+            if ($a['_im'] == $b['_im']) {
+                return ($a['_cnt'] > $b['_cnt']) ? 1 : 0;
+            } else
+                if ($a['_im'] == 1) {
+                    return 1;
+                } else {
+                    return -1;
+                }
+        });
+
+        $result = [];
+        $lastTime = count($origList) + 1;
+
+        // Collect Magento modules
+        while ($lastTime > count($origList)) {
+            $lastTime = count($origList);
+            foreach ($origList as $name => &$data) {
+                if ($data['_im'] == 1) break 2;
+
+                if ($data['_cnt'] == 0) {
+                    $this->_follow($result,$origList, $data, $name);
+                }
+            }
+        }
+        // collect others.
+        $lastTime = count($origList) + 1;
+        while ($lastTime > count($origList)) {
+            $lastTime = count($origList);
+            foreach ($origList as $name => &$data) {
+                if ($data['_cnt'] == 0) {
+                    $this->_follow($result,$origList, $data, $name);
                 }
             }
         }
 
-        $result = [];
-        foreach ($expanded as $pair) {
-            $result[$pair['name']] = $origList[$pair['name']];
+        if (count($origList) > 0) {
+            $badModules = join(', ', array_keys($origList));
+            throw new \LogicException("Circular reference for modules: $badModules.");
         }
-
+        $result = array_diff_key($result, array_flip($missingRel));
+        // cleanup
+        foreach ($result as $name => &$data) {
+            unset($data['_rel'], $data['_im'], $data['_cnt']);
+        }
         return $result;
     }
 
     /**
-     * Prearrange all modules by putting those from Magento before the others
+     * Follow chain of modules which dependencies were satisfies.
+     * Altering $result and $origList directly.
      *
-     * @param array $modules
-     * @return array
+     * @param array $result
+     * @param array $origList
+     * @param array $data
+     * @param string $current
      */
-    private function prearrangeModules(array $modules): array
-    {
-        $breakdown = ['magento' => [], 'others' => []];
-
-        foreach ($modules as $moduleName => $moduleDetails) {
-            if (strpos($moduleName, 'Magento_') !== false) {
-                $breakdown['magento'][$moduleName] = $moduleDetails;
-            } else {
-                $breakdown['others'][$moduleName] = $moduleDetails;
+    private function _follow(array &$result, array &$origList, array &$data, string $current) {
+        $result[$current] = $data;
+        unset($origList[$current]);
+        foreach ($data['_rel'] as $rname=>&$rel) {
+            $rel['_cnt'] -= 1;
+            if ($rel['_cnt'] == 0 && $data['_im'] == $rel['_im']) {
+                $this->_follow($result,$origList,$rel, $rname);
             }
-        }
-
-        return array_merge($breakdown['magento'], $breakdown['others']);
-    }
-
-    /**
-     * Accumulate information about all transitive "sequence" references
-     *
-     * @param array $list
-     * @param string $name
-     * @param array $accumulated
-     * @return array
-     * @throws \Exception
-     */
-    private function expandSequence($list, $name, $accumulated = [])
-    {
-        $accumulated[$name] = true;
-        $result = $list[$name]['sequence'];
-        $allResults = [];
-        foreach ($result as $relatedName) {
-            if (isset($accumulated[$relatedName])) {
-                throw new \LogicException("Circular sequence reference from '{$name}' to '{$relatedName}'.");
-            }
-            if (!isset($list[$relatedName])) {
-                continue;
-            }
-            $allResults[] = $this->expandSequence($list, $relatedName, $accumulated);
-        }
-        $allResults[] = $result;
-        return array_unique(array_merge([], ...$allResults));
+        };
     }
 }
