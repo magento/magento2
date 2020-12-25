@@ -14,7 +14,7 @@
                 <container name="sales.order.history.extra.column.header" as="extra.column.header" label="Order History Extra Column Header"/>
                 <block class="Magento\Sales\Block\Order\History\Container"
                        name="sales.order.history.extra.container" as="extra.container">
-                    <block class="Magento\Framework\View\Element\Template"
+                    <block
                         name="sales.order.history.extra.container.data" as="extra.container.data"/>
                 </block>
             </block>

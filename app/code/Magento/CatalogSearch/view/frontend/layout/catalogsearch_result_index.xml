@@ -24,7 +24,7 @@
                         <argument name="name" xsi:type="string">product_list_toolbar</argument>
                     </action>
                     <block class="Magento\Framework\View\Element\RendererList" name="category.product.type.details.renderers" as="details.renderers">
-                        <block class="Magento\Framework\View\Element\Template" name="category.product.type.details.renderers.default" as="default"/>
+                        <block name="category.product.type.details.renderers.default" as="default"/>
                     </block>
                     <block class="Magento\Catalog\Block\Product\ProductList\Item\Container" name="catalogsearch.product.addto" as="addto">
                         <block class="Magento\Catalog\Block\Product\ProductList\Item\AddTo\Compare"
@@ -36,7 +36,7 @@
                 <action method="setListModes"/>
                 <action method="setListCollection"/>
             </block>
-            <block class="Magento\Framework\View\Element\Template" name="search.search_terms_log" template="Magento_CatalogSearch::search_terms_log.phtml">
+            <block name="search.search_terms_log" template="Magento_CatalogSearch::search_terms_log.phtml">
                 <arguments>
                     <argument name="search_terms_log" xsi:type="object">Magento\CatalogSearch\Block\SearchTermsLog</argument>
                 </arguments>

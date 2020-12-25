@@ -35,7 +35,7 @@
             </block>
         </referenceContainer>
         <referenceBlock name="top.links">
-            <block class="Magento\Framework\View\Element\Template" name="catalog.compare.link" before="-"
+            <block name="catalog.compare.link" before="-"
                    template="Magento_Catalog::product/compare/link.phtml">
                 <arguments>
                     <argument name="jsLayout" xsi:type="array">
@@ -49,7 +49,7 @@
             </block>
         </referenceBlock>
         <referenceContainer name="sidebar.additional">
-            <block class="Magento\Framework\View\Element\Template" name="catalog.compare.sidebar"
+            <block name="catalog.compare.sidebar"
                    template="Magento_Catalog::product/compare/sidebar.phtml">
                 <arguments>
                     <argument name="jsLayout" xsi:type="array">
@@ -65,6 +65,6 @@
         <referenceContainer name="after.body.start">
             <block class="Magento\Framework\View\Element\Js\Components" name="head.components" as="components" template="Magento_Catalog::js/components.phtml"/>
         </referenceContainer>
-        <block class="Magento\Framework\View\Element\Template" name="head.additional" as="head.additional" template="Magento_Theme::html/container.phtml"/>
+        <block name="head.additional" as="head.additional" template="Magento_Theme::html/container.phtml"/>
     </body>
 </page>

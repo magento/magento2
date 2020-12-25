@@ -30,7 +30,7 @@
             </block>
         </referenceContainer>
         <referenceContainer name="form.additional.info">
-            <block class="Magento\Framework\View\Element\Template" name="form_additional_info_customer" template="Magento_Customer::additionalinfocustomer.phtml"/>
+            <block name="form_additional_info_customer" template="Magento_Customer::additionalinfocustomer.phtml"/>
         </referenceContainer>
     </body>
 </page>

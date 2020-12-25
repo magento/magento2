@@ -13,7 +13,7 @@
             </action>
         </referenceBlock>
         <referenceContainer name="content">
-            <block class="Magento\Framework\View\Element\Template" name="customer_logout" template="Magento_Customer::logout.phtml"/>
+            <block name="customer_logout" template="Magento_Customer::logout.phtml"/>
         </referenceContainer>
     </body>
 </page>
