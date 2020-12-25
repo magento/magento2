@@ -50,7 +50,7 @@
 
         <!--Run re-index task-->
         <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-            <argument name="indices" value="cataloginventory_stock"/>
+            <argument name="indices" value="cataloginventory_stock catalog_product_price"/>
         </actionGroup>
 
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomepage"/>
