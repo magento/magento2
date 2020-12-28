@@ -83,17 +83,6 @@ class ConfigurableTest extends TestCase
         $this->productRepository->cleanCache();
         $this->block = $this->objectManager->get(LayoutInterface::class)->createBlock(Configurable::class);
         $this->request = $this->objectManager->get(RequestInterface::class);
-        $this->request->clearParams();
-    }
-
-    /**
-     * @inheritdoc
-     */
-    protected function tearDown(): void
-    {
-        $this->request->clearParams();
-
-        parent::tearDown();
     }
 
     /**

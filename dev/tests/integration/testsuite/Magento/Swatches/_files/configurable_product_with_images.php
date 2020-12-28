@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 use Magento\Catalog\Api\Data\ProductExtensionInterfaceFactory;
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Catalog\Model\ProductFactory;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
@@ -21,15 +20,16 @@ Resolver::getInstance()->requireDataFixture(
 $objectManager = Bootstrap::getObjectManager();
 /** @var ProductRepositoryInterface $productRepository */
 $productRepository = $objectManager->get(ProductRepositoryInterface::class);
+$configurableProduct = $productRepository->get('configurable');
+$children = $configurableProduct->getTypeInstance()->getUsedProducts($configurableProduct);
 $images = ['magento_image.jpg', 'magento_small_image.jpg', 'magento_thumbnail.jpg'];
-foreach (range(1, 3) as $index) {
-    $product = $productRepository->get('simple_option_' . $index);
-    $product->setImage('/m/a/' . $images[$index - 1])
-        ->setSmallImage('/m/a/' . $images[$index - 1])
-        ->setThumbnail('/m/a/' . $images[$index - 1])
+foreach ($children as $index => $product) {
+    $product->setImage('/m/a/' . $images[$index])
+        ->setSmallImage('/m/a/' . $images[$index])
+        ->setThumbnail('/m/a/' . $images[$index])
         ->setData('media_gallery', ['images' => [
             [
-                'file' => '/m/a/' . $images[$index - 1],
+                'file' => '/m/a/' . $images[$index],
                 'position' => 1,
                 'label' => 'Image Alt Text',
                 'disabled' => 0,
