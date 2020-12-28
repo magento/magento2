@@ -76,4 +76,21 @@ class NewsletterTest extends \Magento\TestFramework\TestCase\AbstractBackendCont
         $this->assertStringContainsString('\u003Cspan\u003ESubscribed to Newsletter\u003C\/span\u003E', $body);
         $this->assertStringContainsString('\u003ENo Newsletter Found\u003C', $body);
     }
+
+    /**
+     * @magentoDataFixture Magento/Customer/_files/customer_sample.php
+     * @magentoDataFixture Magento/Newsletter/_files/newsletter_sample.php
+     * @magentoDataFixture Magento/Newsletter/_files/queue.php
+     */
+    public function testRenderingNewsletterBlockWithQueue()
+    {
+        $this->getRequest()->setParam('id', 1);
+        $this->dispatch('backend/customer/index/edit');
+        $body = $this->getResponse()->getBody();
+
+        $this->assertMatchesRegularExpression(
+            '~.+\/newsletter\\\/template\\\/preview\\\/id\\\/\d+\\\/subscriber\\\/\d+\\\/.+~',
+            $body
+        );
+    }
 }

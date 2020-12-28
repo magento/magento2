@@ -292,20 +292,16 @@ class Structure implements \Magento\Config\Model\Config\Structure\SearchInterfac
             foreach ($section['children'] as $group) {
                 if (isset($group['children'])) {
                     $path = $section['id'] . '/' . $group['id'];
-                    // phpcs:ignore Magento2.Performance.ForeachArrayMerge.ForeachArrayMerge
-                    $result = array_merge(
-                        $result,
-                        $this->_getGroupFieldPathsByAttribute(
-                            $group['children'],
-                            $path,
-                            $attributeName,
-                            $attributeValue
-                        )
+                    $result[] = $this->_getGroupFieldPathsByAttribute(
+                        $group['children'],
+                        $path,
+                        $attributeName,
+                        $attributeValue
                     );
                 }
             }
         }
-        return $result;
+        return array_merge([], ...$result);
     }
 
     /**

@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Wishlist\Model\Wishlist;
 
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Wishlist\Model\Item as WishlistItem;
 use Magento\Wishlist\Model\ItemFactory as WishlistItemFactory;
 use Magento\Wishlist\Model\ResourceModel\Item as WishlistItemResource;
@@ -63,7 +64,7 @@ class RemoveProductsFromWishlist
     public function execute(Wishlist $wishlist, array $wishlistItemsIds): WishlistOutput
     {
         foreach ($wishlistItemsIds as $wishlistItemId) {
-            $this->removeItemFromWishlist((int) $wishlistItemId);
+            $this->removeItemFromWishlist((int) $wishlistItemId, $wishlist);
         }
 
         return $this->prepareOutput($wishlist);
@@ -73,12 +74,22 @@ class RemoveProductsFromWishlist
      * Remove product item from wishlist
      *
      * @param int $wishlistItemId
+     * @param Wishlist $wishlist
      *
      * @return void
      */
-    private function removeItemFromWishlist(int $wishlistItemId): void
+    private function removeItemFromWishlist(int $wishlistItemId, Wishlist $wishlist): void
     {
         try {
+            if ($wishlist->getItem($wishlistItemId) == null) {
+                throw new LocalizedException(
+                    __(
+                        'The wishlist item with ID "%id" does not belong to the wishlist',
+                        ['id' => $wishlistItemId]
+                    )
+                );
+            }
+            $wishlist->getItemCollection()->clear();
             /** @var WishlistItem $wishlistItem */
             $wishlistItem = $this->wishlistItemFactory->create();
             $this->wishlistItemResource->load($wishlistItem, $wishlistItemId);
@@ -90,6 +101,8 @@ class RemoveProductsFromWishlist
             }
 
             $this->wishlistItemResource->delete($wishlistItem);
+        } catch (LocalizedException $exception) {
+            $this->addError($exception->getMessage());
         } catch (\Exception $e) {
             $this->addError(
                 __(

@@ -21,9 +21,13 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\Session\Storage;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Sales\Api\CreditmemoManagementInterface;
 use Magento\Sales\Controller\Adminhtml\Order\Creditmemo\Save;
 use Magento\Sales\Controller\Adminhtml\Order\CreditmemoLoader;
+use Magento\Sales\Helper\Data as SalesData;
+use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Creditmemo;
+use Magento\Sales\Model\Order\Email\Sender\CreditmemoSender;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -88,6 +92,16 @@ class SaveTest extends TestCase
     protected $resultRedirectMock;
 
     /**
+     * @var CreditmemoSender|MockObject
+     */
+    private $creditmemoSender;
+
+    /**
+     * @var SalesData|MockObject
+     */
+    private $salesData;
+
+    /**
      * Init model for future tests
      */
     protected function setUp(): void
@@ -147,12 +161,32 @@ class SaveTest extends TestCase
 
         $context = $helper->getObject(Context::class, $arguments);
 
+        $creditmemoManagement =  $this->getMockBuilder(CreditmemoManagementInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->_objectManager->expects($this->any())
+            ->method('create')
+            ->with(CreditmemoManagementInterface::class)
+            ->willReturn($creditmemoManagement);
+        $this->creditmemoSender = $this->getMockBuilder(CreditMemoSender::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['send'])
+            ->getMock();
+        $this->creditmemoSender->expects($this->any())
+            ->method('send')
+            ->willReturn(true);
+        $this->salesData = $this->getMockBuilder(SalesData::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['canSendNewCreditmemoEmail'])
+            ->getMock();
         $this->memoLoaderMock = $this->createMock(CreditmemoLoader::class);
         $this->_controller = $helper->getObject(
             Save::class,
             [
                 'context' => $context,
                 'creditmemoLoader' => $this->memoLoaderMock,
+                'creditmemoSender' => $this->creditmemoSender,
+                'salesData' => $this->salesData
             ]
         );
     }
@@ -257,5 +291,95 @@ class SaveTest extends TestCase
     {
         $this->_messageManager->expects($this->once())->method('addErrorMessage')->with($errorMessage);
         $this->_sessionMock->expects($this->once())->method('setFormData')->with($data);
+    }
+
+    /**
+     * @return array
+     */
+    public function testExecuteEmailsDataProvider()
+    {
+        /**
+        * string $sendEmail
+        * bool $emailEnabled
+        * bool $shouldEmailBeSent
+        */
+        return [
+            ['', false, false],
+            ['', true, false],
+            ['on', false, false],
+            ['on', true, true]
+        ];
+    }
+
+    /**
+     * @param string $sendEmail
+     * @param bool $emailEnabled
+     * @param bool $shouldEmailBeSent
+     * @dataProvider testExecuteEmailsDataProvider
+     */
+    public function testExecuteEmails(
+        $sendEmail,
+        $emailEnabled,
+        $shouldEmailBeSent
+    ) {
+        $orderId = 1;
+        $creditmemoId = 2;
+        $invoiceId = 3;
+        $creditmemoData = ['items' => [], 'send_email' => $sendEmail];
+
+        $this->resultRedirectFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($this->resultRedirectMock);
+        $this->resultRedirectMock->expects($this->once())
+            ->method('setPath')
+            ->with('sales/order/view', ['order_id' => $orderId])
+            ->willReturnSelf();
+
+        $order = $this->createPartialMock(
+            Order::class,
+            []
+        );
+
+        $creditmemo = $this->createPartialMock(
+            Creditmemo::class,
+            ['isValidGrandTotal', 'getOrder', 'getOrderId']
+        );
+        $creditmemo->expects($this->once())
+            ->method('isValidGrandTotal')
+            ->willReturn(true);
+        $creditmemo->expects($this->once())
+            ->method('getOrder')
+            ->willReturn($order);
+        $creditmemo->expects($this->once())
+            ->method('getOrderId')
+            ->willReturn($orderId);
+
+        $this->_requestMock->expects($this->any())
+            ->method('getParam')
+            ->willReturnMap(
+                [
+                    ['order_id', null, $orderId],
+                    ['creditmemo_id', null, $creditmemoId],
+                    ['creditmemo', null, $creditmemoData],
+                    ['invoice_id', null, $invoiceId]
+                ]
+            );
+
+        $this->_requestMock->expects($this->any())
+            ->method('getPost')
+            ->willReturn($creditmemoData);
+
+        $this->memoLoaderMock->expects($this->once())
+            ->method('load')
+            ->willReturn($creditmemo);
+
+        $this->salesData->expects($this->any())
+            ->method('canSendNewCreditmemoEmail')
+            ->willReturn($emailEnabled);
+        if ($shouldEmailBeSent) {
+            $this->creditmemoSender->expects($this->once())
+                ->method('send');
+        }
+        $this->assertEquals($this->resultRedirectMock, $this->_controller->execute());
     }
 }

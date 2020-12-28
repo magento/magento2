@@ -26,6 +26,11 @@
     <preference for="Magento\Framework\App\ScopeTreeProviderInterface" type="Magento\Store\Model\ScopeTreeProvider"/>
     <preference for="Magento\Framework\App\ScopeValidatorInterface" type="Magento\Store\Model\ScopeValidator"/>
     <preference for="Magento\Store\Model\StoreSwitcherInterface" type="Magento\Store\Model\StoreSwitcher" />
+    <preference for="Magento\Store\Model\StoreSwitcher\RedirectDataPreprocessorInterface" type="Magento\Store\Model\StoreSwitcher\RedirectDataPreprocessorComposite" />
+    <preference for="Magento\Store\Model\StoreSwitcher\RedirectDataPostprocessorInterface" type="Magento\Store\Model\StoreSwitcher\RedirectDataPostprocessorComposite" />
+    <preference for="Magento\Store\Model\StoreSwitcher\RedirectDataSerializerInterface" type="Magento\Store\Model\StoreSwitcher\RedirectDataCacheSerializer" />
+    <preference for="Magento\Store\Model\StoreSwitcher\ContextInterface" type="Magento\Store\Model\StoreSwitcher\Context" />
+    <preference for="Magento\Store\Model\StoreSwitcher\RedirectDataInterface" type="Magento\Store\Model\StoreSwitcher\RedirectData" />
     <type name="Magento\Framework\App\Http\Context">
         <arguments>
             <argument name="default" xsi:type="array">

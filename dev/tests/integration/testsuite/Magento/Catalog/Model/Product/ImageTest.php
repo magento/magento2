@@ -52,7 +52,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
     public function testGetUrlPlaceholder($model)
     {
         $this->assertStringMatchesFormat(
-            'http://localhost/pub/static/%s/frontend/%s/Magento_Catalog/images/product/placeholder/image.jpg',
+            'http://localhost/static/%s/frontend/%s/Magento_Catalog/images/product/placeholder/image.jpg',
             $model->getUrl()
         );
     }

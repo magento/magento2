@@ -36,7 +36,8 @@ define([
             imports: {
                 totalSelected: '${ $.selectProvider }:totalSelected',
                 totalRecords: '${ $.provider }:data.totalRecords',
-                filters: '${ $.provider }:params.filters'
+                filters: '${ $.provider }:params.filters',
+                keywordUpdated: '${ $.provider }:params.keywordUpdated'
             },
 
             exports: {
@@ -58,7 +59,8 @@ define([
                 'pages': 'onPagesChange',
                 'pageSize': 'onPageSizeChange',
                 'totalRecords': 'updateCounter',
-                '${ $.provider }:params.filters': 'goFirst'
+                '${ $.provider }:params.filters': 'goFirst',
+                '${ $.provider }:params.search': 'onSearchUpdate'
             },
 
             modules: {
@@ -282,6 +284,17 @@ define([
          */
         onPagesChange: function () {
             this.updateCursor();
+        },
+
+        /**
+         * Resent the pagination to Page 1 on search keyword update
+         */
+        onSearchUpdate: function () {
+            if (!_.isUndefined(this.keywordUpdated) && this.keywordUpdated) {
+                this.goFirst();
+            }
+
+            return this;
         }
     });
 });

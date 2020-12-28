@@ -65,6 +65,13 @@ class AttributeOptionProvider
                 ]
             )
             ->joinLeft(
+                ['attribute_label' => $this->resourceConnection->getTableName('eav_attribute_label')],
+                "a.attribute_id = attribute_label.attribute_id AND attribute_label.store_id = {$storeId}",
+                [
+                    'attribute_store_label' => 'attribute_label.value',
+                ]
+            )
+            ->joinLeft(
                 ['options' => $this->resourceConnection->getTableName('eav_attribute_option')],
                 'a.attribute_id = options.attribute_id',
                 []
@@ -119,7 +126,8 @@ class AttributeOptionProvider
                 $result[$option['attribute_code']] = [
                     'attribute_id' => $option['attribute_id'],
                     'attribute_code' => $option['attribute_code'],
-                    'attribute_label' => $option['attribute_label'],
+                    'attribute_label' => $option['attribute_store_label']
+                        ? $option['attribute_store_label'] : $option['attribute_label'],
                     'options' => [],
                 ];
             }
