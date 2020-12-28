@@ -97,7 +97,7 @@
         <!--Verify customer don't see updated simple product link on magento storefront page -->
         <amOnPage url="{{StorefrontProductPage.url(simpleProductNotVisibleIndividually.urlKey)}}" stepKey="goToMagentoStorefrontPage"/>
         <waitForPageLoad stepKey="waitForStoreFrontProductPageLoad"/>
-        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="fillAttribute">
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="fillSimpleProductSkuInSearchTextBox">
             <argument name="phrase" value="{{simpleProductNotVisibleIndividually.sku}}"/>
         </actionGroup>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForSearchTextBox"/>

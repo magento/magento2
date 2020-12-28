@@ -126,7 +126,7 @@
         <!--Verify customer see updated simple product link on magento storefront page and is searchable by sku -->
         <amOnPage url="{{StorefrontProductPage.url(simpleProductRegularPrice245InStock.urlKey)}}" stepKey="goToMagentoStorefrontPage"/>
         <waitForPageLoad stepKey="waitForStoreFrontProductPageLoad"/>
-        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="fillAttribute">
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="fillSimpleProductSkuInSearchTextBox">
             <argument name="phrase" value="{{simpleProductRegularPrice245InStock.sku}}"/>
         </actionGroup>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForSearchTextBox"/>
