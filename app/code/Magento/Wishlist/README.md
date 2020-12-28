@@ -22,7 +22,7 @@ Please find here [how to enable or disable modules in Magento 2](https://devdocs
 
 `Pricing/` - the directory that contain solutions for configurable and downloadable product price.
 
-For information about a typical file structure of a module in Magento 2, see [Module file structure](http://devdocs.magento.com/guides/v2.4/extension-dev-guide/build/module-file-structure.html#module-file-structure).
+For information about a typical file structure of a module in Magento 2, see [Module file structure](https://devdocs.magento.com/guides/v2.4/extension-dev-guide/build/module-file-structure.html#module-file-structure).
 
 ## Extensibility
 
