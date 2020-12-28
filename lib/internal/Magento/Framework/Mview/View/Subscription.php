@@ -10,9 +10,8 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Ddl\Trigger;
-use Magento\Framework\Mview\Config;
-use Magento\Framework\Mview\View\StateInterface;
 use Magento\Framework\DB\Ddl\TriggerFactory;
+use Magento\Framework\Mview\Config;
 use Magento\Framework\Mview\ViewInterface;
 
 /**
@@ -212,13 +211,14 @@ class Subscription implements SubscriptionInterface
     /**
      * Prepare columns for trigger statement. Should be protected in order to serve new approach
      *
-     * @param ChangelogInterface $changelog
+     * @param ViewInterface $view
      * @param string $event
      * @return array
      * @throws \Exception
      */
-    protected function prepareColumns(ChangelogInterface $changelog, string $event): array
+    protected function prepareColumns(ViewInterface $view, string $event): array
     {
+        $changelog = $view->getChangelog();
         $prefix = $event === Trigger::EVENT_DELETE ? 'OLD.' : 'NEW.';
         $subscriptionData = $this->mviewConfig->getView($changelog->getViewId())['subscriptions'][$this->getTableName()];
         $columns = [
@@ -226,7 +226,7 @@ class Subscription implements SubscriptionInterface
                 'entity_id' => $this->connection->quoteIdentifier($changelog->getColumnName())
             ],
             'column_values' => [
-                'entity_id' => $this->getEntityColumn($prefix)
+                'entity_id' => $this->getEntityColumn($prefix, $view)
             ]
         ];
 
@@ -251,7 +251,6 @@ class Subscription implements SubscriptionInterface
     protected function buildStatement(string $event, ViewInterface $view): string
     {
         $trigger = "%sINSERT IGNORE INTO %s (%s) VALUES (%s);";
-        $column = $this->getSubscriptionColumn($view);
         $changelog = $view->getChangelog();
 
         switch ($event) {
@@ -286,13 +285,14 @@ class Subscription implements SubscriptionInterface
                 }
                 break;
         }
-        $columns = $this->prepareColumns($changelog, $event);
+        $columns = $this->prepareColumns($view, $event);
+
         return sprintf(
             $trigger,
             $this->getProcessor()->getPreStatements(),
             $this->connection->quoteIdentifier($this->resource->getTableName($changelog->getName())),
-            implode(", " , $columns['column_names']),
-            implode(", ", $columns['column_values'])
+            implode(', ', $columns['column_names']),
+            implode(', ', $columns['column_values'])
         );
     }
 
@@ -319,11 +319,12 @@ class Subscription implements SubscriptionInterface
 
     /**
      * @param string $prefix
+     * @param ViewInterface $view
      * @return string
      */
-    public function getEntityColumn(string $prefix): string
+    public function getEntityColumn(string $prefix, ViewInterface $view): string
     {
-        return $prefix . $this->connection->quoteIdentifier($this->getColumnName());
+        return $prefix . $this->connection->quoteIdentifier($this->getSubscriptionColumn($view));
     }
 
     /**

@@ -207,7 +207,7 @@ class SubscriptionTest extends TestCase
             ->method('getColumnName')
             ->willReturn('entity_id');
 
-        $this->viewMock->expects($this->exactly(3))
+        $this->viewMock->expects($this->atLeastOnce())
             ->method('getChangelog')
             ->willReturn($changelogMock);
 
@@ -251,17 +251,15 @@ class SubscriptionTest extends TestCase
                     'otherTableName' => ['name' => 'otherTableName', 'column' => 'columnName']
                 ]
             );
-        $otherViewMock->expects($this->exactly(3))
+        $otherViewMock->expects($this->atLeastOnce())
             ->method('getChangelog')
             ->willReturn($otherChangelogMock);
 
         $this->viewMock->expects($this->any())
             ->method('getId')
             ->willReturn('this_id');
-        $this->viewMock->expects($this->never())
-            ->method('getSubscriptions');
 
-        $this->viewCollectionMock->expects($this->exactly(1))
+        $this->viewCollectionMock->expects($this->once())
             ->method('getViewsByStateMode')
             ->with(StateInterface::MODE_ENABLED)
             ->willReturn([$this->viewMock, $otherViewMock]);
@@ -273,8 +271,6 @@ class SubscriptionTest extends TestCase
         $this->connectionMock->expects($this->exactly(3))
             ->method('createTrigger')
             ->with($triggerMock);
-
-        $this->tableName = 'thisTableName';
 
         $this->viewMock->expects($this->exactly(3))
             ->method('getSubscriptions')
@@ -293,7 +289,7 @@ class SubscriptionTest extends TestCase
         $triggerMock = $this->createMock(Trigger::class);
         $triggerMock->expects($this->exactly(3))
             ->method('setName')->willReturnSelf();
-        $triggerMock->expects($this->exactly(3))
+        $triggerMock->expects($this->any())
             ->method('getName')
             ->willReturn('triggerName');
         $triggerMock->expects($this->exactly(3))
@@ -320,7 +316,7 @@ class SubscriptionTest extends TestCase
             true,
             []
         );
-        $otherChangelogMock->expects($this->exactly(3))
+        $otherChangelogMock->expects($this->any())
             ->method('getName')
             ->willReturn('other_test_view_cl');
         $otherChangelogMock->expects($this->exactly(3))
@@ -336,17 +332,17 @@ class SubscriptionTest extends TestCase
             true,
             []
         );
-
-        $otherViewMock->expects($this->exactly(1))
+        $otherViewMock->expects($this->atLeastOnce())
             ->method('getId')
             ->willReturn('other_id');
-
-        $otherViewMock->expects($this->exactly(3))
+        $otherViewMock->expects($this->atLeastOnce())
             ->method('getChangelog')
             ->willReturn($otherChangelogMock);
 
-        $this->viewMock->expects($this->any())
-        $otherViewMock->expects($this->any())
+        $this->viewMock->expects($this->atLeastOnce())
+            ->method('getId')
+            ->willReturn('this_id');
+        $otherViewMock->expects($this->atLeastOnce())
             ->method('getSubscriptions')
             ->willReturn(
                 [
@@ -354,10 +350,6 @@ class SubscriptionTest extends TestCase
                     'otherTableName' => ['name' => 'otherTableName', 'column' => 'columnName']
                 ]
             );
-
-        $this->viewMock->expects($this->exactly(3))
-            ->method('getId')
-            ->willReturn('this_id');
 
         $this->viewCollectionMock->expects($this->exactly(1))
             ->method('getViewsByStateMode')
@@ -443,7 +435,7 @@ class SubscriptionTest extends TestCase
                     'cataloginventory_stock_item' => ['name' => 'otherTableName', 'column' => 'columnName']
                 ]
             );
-        $this->viewMock->expects($this->once())
+        $this->viewMock->expects($this->atLeastOnce())
             ->method('getChangeLog')
             ->willReturn($otherChangelogMock);
 
