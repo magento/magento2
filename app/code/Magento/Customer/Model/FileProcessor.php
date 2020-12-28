@@ -158,9 +158,10 @@ class FileProcessor
         $viewUrl = '';
 
         if ($this->entityTypeCode == AddressMetadataInterface::ENTITY_TYPE_ADDRESS) {
-            $filePath = $this->entityTypeCode . '/' . ltrim($filePath, '/');
-            $viewUrl = $this->urlBuilder->getBaseUrl(['_type' => UrlInterface::URL_TYPE_MEDIA])
-                . $this->mediaDirectory->getRelativePath($filePath);
+            $viewUrl = $this->urlBuilder->getUrl(
+                'customer/address/viewfile',
+                [$type => $this->urlEncoder->encode(ltrim($filePath, '/'))]
+            );
         }
 
         if ($this->entityTypeCode == CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER) {

@@ -82,7 +82,7 @@
 
         <amOnPage url="{{StorefrontCategoryPage.url($$simplecategory.name$$)}}" stepKey="onCategoryPage1"/>
         <waitForPageLoad stepKey="waitForCatalogPageLoad1"/>
-        <moveMouseOver selector="{{StorefrontCategoryMainSection.ProductItemInfo}}" stepKey="hoverProduct1"/>
+        <actionGroup ref="StorefrontHoverProductOnCategoryPageActionGroup" stepKey="hoverProduct1"/>
         <actionGroup ref="StorefrontClickAddToCartButtonActionGroup" stepKey="addToCart1"/>
         <waitForElementVisible selector="{{StorefrontCategoryMainSection.SuccessMsg}}" time="30" stepKey="waitForProductAdded1"/>
         <see selector="{{StorefrontCategoryMainSection.SuccessMsg}}" userInput="You added $$simpleproduct1.name$$ to your shopping cart." stepKey="seeAddedToCartMessage1"/>
@@ -101,7 +101,7 @@
 
         <amOnPage url="{{StorefrontCategoryPage.url($$simplecategory.name$$)}}" stepKey="onCategoryPage2"/>
         <waitForPageLoad stepKey="waitForCatalogPageLoad2"/>
-        <moveMouseOver selector="{{StorefrontCategoryMainSection.ProductItemInfo}}" stepKey="hoverProduct2"/>
+        <actionGroup ref="StorefrontHoverProductOnCategoryPageActionGroup" stepKey="hoverProduct2"/>
         <actionGroup ref="StorefrontClickAddToCartButtonActionGroup" stepKey="addToCart2"/>
         <waitForElementVisible selector="{{StorefrontCategoryMainSection.SuccessMsg}}" time="30" stepKey="waitForProductAdded2"/>
         <see selector="{{StorefrontCategoryMainSection.SuccessMsg}}" userInput="You added $$simpleproduct1.name$$ to your shopping cart." stepKey="seeAddedToCartMessage2"/>
