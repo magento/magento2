@@ -16,12 +16,8 @@
             <description value="Admin should be able to set/edit Related Products information when editing a virtual product"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-3415"/>
-            <group value="Catalog"/>
-            <skip>
-                <issueId value="MC-194"/>
-            </skip>
+            <group value="catalog"/>
         </annotations>
-        <before></before>
         <after>
             <!-- Delete virtual product -->
             <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteProduct">
