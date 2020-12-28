@@ -10,7 +10,7 @@
     <if args="currentBillingAddress().company">
         <text args="currentBillingAddress().company"/><br/>
     </if>
-    <text args="_.values(currentBillingAddress().street).join(', ')"/><br/>
+    <text args="currentBillingAddress().street.join(', ')"/><br/>
     <text args="currentBillingAddress().city "/>, <span text="currentBillingAddress().region"></span> <text args="currentBillingAddress().postcode"/><br/>
     <if args="currentBillingAddress().vatId">
         <text args="currentBillingAddress().vatId"/><br/>
