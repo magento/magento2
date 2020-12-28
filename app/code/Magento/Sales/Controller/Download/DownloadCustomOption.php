@@ -8,124 +8,107 @@ declare(strict_types=1);
 
 namespace Magento\Sales\Controller\Download;
 
+use Exception;
 use Magento\Framework\App\Action\HttpGetActionInterface;
-use Magento\Framework\App\ObjectManager;
-use Magento\Framework\App\Action\Context;
-use Magento\Catalog\Model\Product\Type\AbstractType;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\Response\RedirectInterface;
 use Magento\Framework\Controller\Result\ForwardFactory;
+use Magento\Framework\Controller\Result\RedirectFactory;
+use Magento\Sales\Model\Download\CustomOptionInfo;
+use Magento\Sales\Model\Download;
+use Magento\Framework\Controller\Result\Redirect;
+use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\Message\ManagerInterface;
 
-/**
- * Class DownloadCustomOption
- *
- * @package Magento\Sales\Controller\Download
- */
-class DownloadCustomOption extends \Magento\Framework\App\Action\Action implements HttpGetActionInterface
+class DownloadCustomOption implements HttpGetActionInterface
 {
+    /**
+     * @var RequestInterface
+     */
+    private $request;
+
+    /**
+     * @var RedirectInterface
+     */
+    private $redirect;
+
     /**
      * @var ForwardFactory
      */
     protected $resultForwardFactory;
 
     /**
-     * @var \Magento\Sales\Model\Download
+     * @var ManagerInterface
+     */
+    private $messageManager;
+
+    /**
+     * @var RedirectFactory
+     */
+    private $redirectFactory;
+
+    /**
+     * @var Download
      */
     protected $download;
 
     /**
-     * @var \Magento\Framework\Unserialize\Unserialize
-     * @deprecated 101.0.0
+     * @var CustomOptionInfo
      */
-    protected $unserialize;
+    private $searcher;
 
     /**
-     * @var \Magento\Framework\Serialize\Serializer\Json
-     */
-    private $serializer;
-
-    /**
-     * @param Context $context
+     * DownloadCustomOption constructor.
+     * @param RequestInterface $request
+     * @param RedirectInterface $redirect
      * @param ForwardFactory $resultForwardFactory
-     * @param \Magento\Sales\Model\Download $download
-     * @param \Magento\Framework\Unserialize\Unserialize $unserialize
-     * @param \Magento\Framework\Serialize\Serializer\Json $serializer
+     * @param RedirectFactory $redirectFactory
+     * @param ManagerInterface $messageManager
+     * @param Download $download
+     * @param CustomOptionInfo $searcher
      */
     public function __construct(
-        Context $context,
+        RequestInterface $request,
+        RedirectInterface $redirect,
         ForwardFactory $resultForwardFactory,
-        \Magento\Sales\Model\Download $download,
-        \Magento\Framework\Unserialize\Unserialize $unserialize,
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null
+        RedirectFactory $redirectFactory,
+        ManagerInterface $messageManager,
+        Download $download,
+        CustomOptionInfo $searcher
     ) {
-        parent::__construct($context);
+        $this->request = $request;
+        $this->redirect = $redirect;
         $this->resultForwardFactory = $resultForwardFactory;
+        $this->redirectFactory = $redirectFactory;
+        $this->messageManager = $messageManager;
         $this->download = $download;
-        $this->unserialize = $unserialize;
-        $this->serializer = $serializer ?: ObjectManager::getInstance()->get(
-            \Magento\Framework\Serialize\Serializer\Json::class
-        );
+        $this->searcher = $searcher;
     }
 
     /**
-     * Custom options download action
-     *
-     * @return void|\Magento\Framework\Controller\Result\Forward
-     *
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @return Redirect|ResponseInterface|ResultInterface
      */
     public function execute()
     {
-        $quoteItemOptionId = $this->getRequest()->getParam('id');
-        /** @var $option \Magento\Quote\Model\Quote\Item\Option */
-        $option = $this->_objectManager->create(
-            \Magento\Quote\Model\Quote\Item\Option::class
-        )->load($quoteItemOptionId);
-        /** @var \Magento\Framework\Controller\Result\Forward $resultForward */
-        $resultForward = $this->resultForwardFactory->create();
+        /** @var Redirect $resultRedirect */
+        $resultRedirect = $this->redirectFactory->create();
 
-        if (!$option->getId()) {
-            return $resultForward->forward('noroute');
-        }
-
-        $optionId = null;
-        if (strpos($option->getCode(), AbstractType::OPTION_PREFIX) === 0) {
-            $optionId = str_replace(AbstractType::OPTION_PREFIX, '', $option->getCode());
-            if ((int)$optionId != $optionId) {
-                $optionId = null;
-            }
-        }
-        $productOption = null;
-        if ($optionId) {
-            /** @var $productOption \Magento\Catalog\Model\Product\Option */
-            $productOption = $this->_objectManager->create(
-                \Magento\Catalog\Model\Product\Option::class
-            );
-            $productOption->load($optionId);
-        }
-
-        if ($productOption->getId() && $productOption->getType() != 'file') {
-            return $resultForward->forward('noroute');
-        }
+        $orderItemId = (int) $this->request->getParam('order_item_id');
+        $optionId = (int) $this->request->getParam('option_id');
+        $quoteItemOptionId = (int) $this->request->getParam('id');
 
         try {
-            $info = $this->serializer->unserialize($option->getValue());
-            if ($this->getRequest()->getParam('key') != $info['secret_key']) {
-                return $resultForward->forward('noroute');
+            $info = $this->searcher->search($quoteItemOptionId, $orderItemId, $optionId);
+            if ($this->request->getParam('key') != $info['secret_key']) {
+                $resultRedirect->setUrl($this->redirect->getRefererUrl());
+                return $resultRedirect;
             }
             $this->download->downloadFile($info);
-        } catch (\Exception $e) {
-            return $resultForward->forward('noroute');
+        } catch (Exception $exception) {
+            $this->messageManager->addExceptionMessage($exception, 'Cannot download file');
+            $resultRedirect->setUrl($this->redirect->getRefererUrl());
+            return $resultRedirect;
         }
-        $this->endExecute();
-    }
-
-    /**
-     * Ends execution process
-     *
-     * @return void
-     */
-    protected function endExecute()
-    {
-        // phpcs:ignore Magento2.Security.LanguageConstruct.ExitUsage
-        exit(0);
     }
 }

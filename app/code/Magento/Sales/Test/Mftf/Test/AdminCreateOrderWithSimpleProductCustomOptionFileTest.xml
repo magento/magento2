@@ -51,5 +51,16 @@
         </actionGroup>
         <!--Verify, admin able to change file for custom option.-->
         <actionGroup ref="AdminChangeCustomerOptionFileActionGroup" stepKey="changeFile"/>
+
+        <!-- Select shipping method -->
+        <actionGroup ref="AdminClickGetShippingMethodsAndRatesActionGroup" stepKey="openShippingMethod"/>
+        <comment userInput="Adding the comment to replace action for preserving Backward Compatibility" stepKey="waitForShippingMethods"/>
+        <actionGroup ref="AdminSelectFixedShippingMethodActionGroup" stepKey="chooseShippingMethod"/>
+        <comment userInput="Adding the comment to replace action for preserving Backward Compatibility" stepKey="waitForShippingMethodLoad"/>
+
+        <!--Save Order. -->
+        <actionGroup ref="AdminSubmitOrderActionGroup" stepKey="submitOrder"/>
+        <!--Verify, admin able to download the file for custom option. -->
+        <actionGroup ref="AdminDownloadCustomerOptionFileActionGroup" stepKey="downloadFile" />
     </test>
 </tests>
