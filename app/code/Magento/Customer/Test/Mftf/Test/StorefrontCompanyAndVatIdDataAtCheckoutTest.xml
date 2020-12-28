@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCompanyAndVatIdDataAtCheckoutTest">
+        <annotations>
+            <features value="Customer"/>
+            <stories value="Check if Company name and VAT Id visible at the checkout"/>
+            <title value="Check if Company name and VAT Id visible at the checkout"/>
+            <description value="Company name and VAT Id should be visible at the checkout step in address if it switched on at configuration"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-*"/>
+            <group value="customer"/>
+            <group value="create"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set customer/address/company_show opt" stepKey="setShowCompanyName"/>
+            <magentoCLI command="config:set customer/address/taxvat_show opt" stepKey="setShowTaxNumber"/>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCacheBefore">
+                <argument name="tags" value="config"/>
+            </actionGroup>
+            <createData entity="CustomerEntityOne" stepKey="createCustomer"/>
+            <createData stepKey="category" entity="SimpleSubCategory"/>
+            <createData stepKey="product1" entity="SimpleProduct">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+        </before>
+        <after>
+            <magentoCLI command="config:set customer/address/company_show 0" stepKey="setShowCompanyNameBack"/>
+            <magentoCLI command="config:set customer/address/taxvat_show 0" stepKey="setShowTaxNumberBack"/>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCacheAfter">
+                <argument name="tags" value="config"/>
+            </actionGroup>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <deleteData stepKey="deleteCategory" createDataKey="category"/>
+            <deleteData stepKey="deleteProduct1" createDataKey="product1"/>
+        </after>
+        <!--Login customer on storefront-->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginCustomer">
+            <argument name="Customer" value="$$createCustomer$$" />
+        </actionGroup>
+        <!-- Add product to the cart -->
+        <amOnPage url="$$product1.name$$.html" stepKey="goToProductPage"/>
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addProductToCart">
+            <argument name="productName" value="$$product1.name$$"/>
+        </actionGroup>
+        <!--Go to Checkout-->
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingCheckoutPageWithShippingMethod"/>
+        <!--Check Company and Vat Id data at checkout shipping-->
+        <executeJS function="return document.querySelectorAll('{{CheckoutShippingSection.selectedShippingAddressData}}')[0].innerText;" stepKey="grabShipping"/>
+        <assertStringContainsString stepKey="checkCompanyAtShipping">
+            <expectedResult type="string">{{CustomerAddressSimple.company}}</expectedResult>
+            <actualResult type="variable">grabShipping</actualResult>
+        </assertStringContainsString>
+        <assertStringContainsString stepKey="checkVatIdAtShipping">
+            <expectedResult type="string">{{CustomerAddressSimple.vat_id}}</expectedResult>
+            <actualResult type="variable">grabShipping</actualResult>
+        </assertStringContainsString>
+        <!--Move to 'Review & Payments'-->
+        <click selector="{{CheckoutShippingMethodsSection.firstShippingMethod}}" stepKey="selectFirstShippingMethod"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask1"/>
+        <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickNext"/>
+        <!--Check Company and Vat Id data at checkout 'Review & Payments'-->
+        <executeJS function="return document.querySelectorAll('{{CheckoutPaymentWithDisplayBillingAddressOnPaymentPageSection.billingAddressDetails}}')[0].innerText;" stepKey="grabPaymentMethodInfo"/>
+        <assertStringContainsString stepKey="checkCompanyAtPaymentMethodInfo">
+            <expectedResult type="string">{{CustomerAddressSimple.company}}</expectedResult>
+            <actualResult type="variable">grabPaymentMethodInfo</actualResult>
+        </assertStringContainsString>
+        <assertStringContainsString stepKey="checkVatIdAtPaymentMethodInfo">
+            <expectedResult type="string">{{CustomerAddressSimple.vat_id}}</expectedResult>
+            <actualResult type="variable">grabPaymentMethodInfo</actualResult>
+        </assertStringContainsString>
+        <executeJS function="return document.querySelectorAll('{{CheckoutPaymentSection.shippingInformationSection}}')[0].innerText;" stepKey="grabPaymentShippingTo"/>
+        <assertStringContainsString stepKey="checkCompanyAtShippingTo">
+            <expectedResult type="string">{{CustomerAddressSimple.company}}</expectedResult>
+            <actualResult type="variable">grabPaymentShippingTo</actualResult>
+        </assertStringContainsString>
+        <assertStringContainsString stepKey="checkVatIdAtShippingTo">
+            <expectedResult type="string">{{CustomerAddressSimple.vat_id}}</expectedResult>
+            <actualResult type="variable">grabPaymentShippingTo</actualResult>
+        </assertStringContainsString>
+    </test>
+</tests>
