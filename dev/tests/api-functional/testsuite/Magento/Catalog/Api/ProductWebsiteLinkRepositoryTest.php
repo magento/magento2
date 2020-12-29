@@ -51,27 +51,14 @@ class ProductWebsiteLinkRepositoryTest extends WebapiAbstract
      *
      * @return void
      */
-    public function testSaveWebsiteLinkWithoutWebsiteId(): void
-    {
-        $serviceInfo = $this->fillServiceInfo('/V1/products/:sku/websites', Request::HTTP_METHOD_POST, 'Save');
-        $requestData = ['productWebsiteLink' => ['sku' => 'simple2']];
-        $this->expectException(\Exception::class);
-        $this->expectErrorMessage((string)__('There are not websites for assign to product'));
-        $this->_webApiCall($serviceInfo, $requestData);
-    }
-
-    /**
-     * @magentoApiDataFixture Magento/Catalog/_files/second_product_simple.php
-     *
-     * @return void
-     */
     public function testSaveWebsiteLinkWithUnexistingWebsiteId(): void
     {
+        $pattern = '/(Could\\snot\\sassign\\sproduct)+([\\s\\S]*)(to\\swebsites)+([\\s\\S]*)/';
         $unexistingWebsiteId = 8932568989;
         $serviceInfo = $this->fillServiceInfo('/V1/products/:sku/websites', Request::HTTP_METHOD_POST, 'Save');
         $requestData = ['productWebsiteLink' => ['sku' => 'simple2', 'websiteId' => $unexistingWebsiteId]];
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessageMatches('/Could not assign product \\\"%1\\\" to websites \\\"%2\\\"/');
+        $this->expectExceptionMessageMatches($pattern);
         $this->_webApiCall($serviceInfo, $requestData);
     }
 
@@ -85,8 +72,8 @@ class ProductWebsiteLinkRepositoryTest extends WebapiAbstract
         $productSku = 'unique-simple-azaza';
         $websiteId = (int)$this->websiteRepository->get('second_website')->getId();
         $resourcePath = sprintf('/V1/products/%s/websites/%u', $productSku, $websiteId);
-        $serviceInfo = $this->fillServiceInfo($resourcePath, Request::HTTP_METHOD_DELETE, 'Delete');
-        $this->_webApiCall($serviceInfo);
+        $serviceInfo = $this->fillServiceInfo($resourcePath, Request::HTTP_METHOD_DELETE, 'DeleteById');
+        $this->_webApiCall($serviceInfo, ['sku' => $productSku, 'websiteId' => $websiteId]);
         $product = $this->productRepository->get($productSku, false, null, true);
         $this->assertNotContains($websiteId, $product->getWebsiteIds());
     }

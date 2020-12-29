@@ -10,6 +10,7 @@ namespace Magento\Catalog\Model;
 use Magento\Catalog\Api\Data\ProductWebsiteLinkInterfaceFactory;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Api\ProductWebsiteLinkRepositoryInterface;
+use Magento\Framework\Exception\InputException;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Api\WebsiteRepositoryInterface;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -55,7 +56,21 @@ class ProductWebsiteLinkRepositoryTest extends TestCase
     }
 
     /**
-     * @magentoApiDataFixture Magento/Catalog/_files/product_with_two_websites.php
+     * @magentoDataFixture Magento/Catalog/_files/second_product_simple.php
+     *
+     * @return void
+     */
+    public function testSaveWithoutWebsiteId(): void
+    {
+        $productWebsiteLink = $this->productWebsiteLinkFactory->create();
+        $productWebsiteLink->setSku('unique-simple-azaza');
+        $this->expectException(InputException::class);
+        $this->expectErrorMessage((string)__('There are not websites for assign to product'));
+        $this->productWebsiteLinkRepository->save($productWebsiteLink);
+    }
+
+    /**
+     * @magentoDataFixture Magento/Catalog/_files/product_with_two_websites.php
      *
      * @return void
      */
