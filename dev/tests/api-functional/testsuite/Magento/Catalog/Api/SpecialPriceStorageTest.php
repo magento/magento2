@@ -6,11 +6,8 @@
 namespace Magento\Catalog\Api;
 
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Framework\Exception\CouldNotSaveException;
-use Magento\Framework\Exception\InputException;
-use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Exception\StateException;
 use Magento\Framework\Webapi\Rest\Request;
+use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\WebapiAbstract;
@@ -31,11 +28,17 @@ class SpecialPriceStorageTest extends WebapiAbstract
     private $objectManager;
 
     /**
-     * Set up.
+     * @var ProductResource
+     */
+    private $productResource;
+
+    /**
+     * @ingeritdoc
      */
     protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
+        $this->productResource = $this->objectManager->get(ProductResource::class);
     }
 
     /**
@@ -129,27 +132,14 @@ class SpecialPriceStorageTest extends WebapiAbstract
     }
 
     /**
-     * Test delete method.
+     * Delete special price for specified store when price scope is global
      *
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
-     * @dataProvider deleteData
-     * @param array $data
-     * @throws CouldNotSaveException
-     * @throws InputException
-     * @throws NoSuchEntityException
-     * @throws StateException
+     *
+     * @return void
      */
-    public function testDelete(array $data)
+    public function testDeleteWhenPriceIsGlobal(): void
     {
-        /** @var ProductRepositoryInterface $productRepository */
-        $productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
-        $product = $productRepository->get($data['sku'], true);
-        $product->setData('special_price', $data['price']);
-        $product->setData('special_from_date', $data['price_from']);
-        if ($data['price_to']) {
-            $product->setData('special_to_date', $data['price_to']);
-        }
-        $productRepository->save($product);
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => '/V1/products/special-price-delete',
@@ -161,17 +151,73 @@ class SpecialPriceStorageTest extends WebapiAbstract
                 'operation' => self::SERVICE_NAME . 'Delete',
             ],
         ];
-        $response = $this->_webApiCall(
+
+        $this->expectErrorMessage('Could not delete Prices for non-default store when price scope is global.');
+
+        $this->_webApiCall(
             $serviceInfo,
             [
                 'prices' => [
-                        $data
+                    ['price' => 777, 'store_id' => 1, 'sku' => self::SIMPLE_PRODUCT_SKU]
                 ]
             ]
         );
-        $product = $productRepository->get($data['sku'], false, null, true);
+    }
+
+    /**
+     * Test delete method.
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoConfigFixture catalog/price/scope 1
+     * @dataProvider deleteData
+     * @param array $data
+     * @return void
+     */
+    public function testDelete(array $data): void
+    {
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
+        $product = $productRepository->get($data['sku'], true, $data['store_id'], true);
+        $product->setData('special_price', $data['price']);
+        $product->setData('special_from_date', $data['price_from']);
+        if ($data['price_to']) {
+            $product->setData('special_to_date', $data['price_to']);
+        }
+        $this->productResource->saveAttribute($product, 'special_price');
+        $this->productResource->saveAttribute($product, 'special_from_date');
+        $this->productResource->saveAttribute($product, 'special_to_date');
+
+        $product->setData('store_id', 1);
+        $this->productResource->saveAttribute($product, 'special_price');
+        $this->productResource->saveAttribute($product, 'special_from_date');
+        $this->productResource->saveAttribute($product, 'special_to_date');
+
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => '/V1/products/special-price-delete',
+                'httpMethod' => Request::HTTP_METHOD_POST
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'Delete',
+            ],
+        ];
+
+        $response = $this->_webApiCall(
+            $serviceInfo,
+            [
+                'prices' => [$data]
+            ]
+        );
+
         $this->assertEmpty($response);
+
+        $product = $productRepository->get($data['sku'], false, $data['store_id'], true);
         $this->assertNull($product->getSpecialPrice());
+
+        $product = $productRepository->get($data['sku'], false, 1, true);
+        $this->assertNotNull($product->getSpecialPrice());
     }
 
     /**
@@ -219,8 +265,7 @@ class SpecialPriceStorageTest extends WebapiAbstract
         $toDate = '2038-01-19 03:14:07';
 
         return [
-            [
-                // data set with 'price_to' specified
+            'data set with price_to specified' => [
                 [
                     'price' => 3057,
                     'store_id' => 0,
@@ -229,8 +274,7 @@ class SpecialPriceStorageTest extends WebapiAbstract
                     'price_to' => $toDate
                 ]
             ],
-            [
-                // data set without 'price_to' specified
+            'data set without price_to specified' => [
                 [
                     'price' => 3057,
                     'store_id' => 0,
