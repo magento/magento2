@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Api;
 
+use Magento\Catalog\Model\ProductWebsiteLink;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Webapi\Rest\Request;
 use Magento\Store\Api\WebsiteRepositoryInterface;
@@ -56,7 +57,12 @@ class ProductWebsiteLinkRepositoryTest extends WebapiAbstract
         $pattern = '/(Could\\snot\\sassign\\sproduct)+([\\s\\S]*)(to\\swebsites)+([\\s\\S]*)/';
         $unexistingWebsiteId = 8932568989;
         $serviceInfo = $this->fillServiceInfo('/V1/products/:sku/websites', Request::HTTP_METHOD_POST, 'Save');
-        $requestData = ['productWebsiteLink' => ['sku' => 'simple2', 'websiteId' => $unexistingWebsiteId]];
+        $requestData = [
+            'productWebsiteLink' => [
+                ProductWebsiteLink::KEY_SKU => 'simple2',
+                ProductWebsiteLink::WEBSITE_ID => $unexistingWebsiteId,
+            ],
+        ];
         $this->expectException(\Exception::class);
         $this->expectExceptionMessageMatches($pattern);
         $this->_webApiCall($serviceInfo, $requestData);
@@ -73,7 +79,10 @@ class ProductWebsiteLinkRepositoryTest extends WebapiAbstract
         $websiteId = (int)$this->websiteRepository->get('second_website')->getId();
         $resourcePath = sprintf('/V1/products/%s/websites/%u', $productSku, $websiteId);
         $serviceInfo = $this->fillServiceInfo($resourcePath, Request::HTTP_METHOD_DELETE, 'DeleteById');
-        $this->_webApiCall($serviceInfo, ['sku' => $productSku, 'websiteId' => $websiteId]);
+        $this->_webApiCall(
+            $serviceInfo,
+            [ProductWebsiteLink::KEY_SKU => $productSku, ProductWebsiteLink::WEBSITE_ID => $websiteId]
+        );
         $product = $this->productRepository->get($productSku, false, null, true);
         $this->assertNotContains($websiteId, $product->getWebsiteIds());
     }
