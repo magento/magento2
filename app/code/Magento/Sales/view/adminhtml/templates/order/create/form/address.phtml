@@ -125,7 +125,7 @@ endif; ?>
                 <?php endif; ?>
                    class="admin__control-checkbox"/>
             <label for="<?= $block->escapeHtmlAttr($block->getForm()->getHtmlIdPrefix()) ?>save_in_address_book"
-                   class="admin__field-label"><?= $block->escapeHtml(__('Save in address book')) ?></label>
+                   class="admin__field-label"><?= $block->escapeHtml(__('Add to address book')) ?></label>
         </div>
     </div>
     <?php $hideElement = 'address-' . ($block->getIsShipping() ? 'shipping' : 'billing') . '-overlay'; ?>
