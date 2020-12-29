@@ -20,7 +20,6 @@
             <group value="create"/>
         </annotations>
         <before>
-            <magentoCLI command="config:set customer/address/company_show opt" stepKey="setShowCompanyName"/>
             <magentoCLI command="config:set customer/address/taxvat_show opt" stepKey="setShowTaxNumber"/>
             <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCacheBefore">
                 <argument name="tags" value="config"/>
@@ -32,7 +31,6 @@
             </createData>
         </before>
         <after>
-            <magentoCLI command="config:set customer/address/company_show 0" stepKey="setShowCompanyNameBack"/>
             <magentoCLI command="config:set customer/address/taxvat_show 0" stepKey="setShowTaxNumberBack"/>
             <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCacheAfter">
                 <argument name="tags" value="config"/>
