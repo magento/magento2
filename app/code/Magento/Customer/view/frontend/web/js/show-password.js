@@ -39,11 +39,11 @@ define([
          * @private
          */
         _showPassword: function () {
-            if ($(this.options.passwordSelector).attr("type") == this.options.passwordInputType) {
-                $(this.options.passwordSelector).attr("type", this.options.textInputType);
-            } else {
-                $(this.options.passwordSelector).attr("type", this.options.passwordInputType);
-            }
+            var passwordField = this.options.passwordSelector;
+            $(passwordField).attr(
+                "type",
+                ($(passwordField).attr("type") == this.options.passwordInputType) ? this.options.textInputType : this.options.passwordInputType
+            );
         }
     });
 });
