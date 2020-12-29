@@ -36,9 +36,11 @@
         </after>
 
         <!-- Search default simple product in the grid -->
-        <actionGroup ref="AdminClearFiltersActionGroup" stepKey="openProductCatalogPage"/>
+        <actionGroup ref="FilterAndSelectProductActionGroup" stepKey="openProductCatalogPage">
+            <argument name="productSku" value="$initialSimpleProduct.sku$"/>
+        </actionGroup>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="filterProductGrid"/>
-        <actionGroup ref="AdminOrderGridClickFirstRowActionGroup" stepKey="clickFirstRowToOpenDefaultSimpleProduct"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickFirstRowToOpenDefaultSimpleProduct"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitUntilProductIsOpened"/>
 
         <!-- Update simple product with regular price(in stock) -->
@@ -74,8 +76,6 @@
         <click selector="{{AdminProductGridFilterSection.applyFilters}}" stepKey="clickApplyFiltersButton"/>
         <actionGroup ref="AdminOrderGridClickFirstRowActionGroup" stepKey="clickFirstRowToVerifyUpdatedSimpleProductVisibleInGrid"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitUntilSimpleProductPageIsOpened"/>
-        <!-- <click selector="{{AdminProductGridFilterSection.nthRow('1')}}" stepKey="clickFirstRowToVerifyUpdatedSimpleProductVisibleInGrid"/>
-        <waitForPageLoad stepKey="waitUntilSimpleProductPageIsOpened"/> -->
 
         <!-- Verify customer see updated simple product in the product form page -->
         <seeInField selector="{{AdminProductFormSection.productName}}" userInput="{{simpleProductRegularPrice32501InStock.name}}" stepKey="seeSimpleProductName"/>
