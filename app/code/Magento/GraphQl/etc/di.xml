@@ -103,4 +103,29 @@
             <argument name="queryComplexity" xsi:type="number">300</argument>
         </arguments>
     </type>
+    <type name="Magento\GraphQl\Controller\Cors\HttpResponseHeaderProvider\MaxAgeHeaderProvider">
+        <arguments>
+            <argument name="headerName" xsi:type="string">Access-Control-Max-Age</argument>
+        </arguments>
+    </type>
+    <type name="Magento\GraphQl\Controller\Cors\HttpResponseHeaderProvider\AllowCredentialsHeaderProvider">
+        <arguments>
+            <argument name="headerName" xsi:type="string">Access-Control-Allow-Credentials</argument>
+        </arguments>
+    </type>
+    <type name="Magento\GraphQl\Controller\Cors\HttpResponseHeaderProvider\AllowHeadersHeaderProvider">
+        <arguments>
+            <argument name="headerName" xsi:type="string">Access-Control-Allow-Headers</argument>
+        </arguments>
+    </type>
+    <type name="Magento\GraphQl\Controller\Cors\HttpResponseHeaderProvider\AllowMethodsHeaderProvider">
+        <arguments>
+            <argument name="headerName" xsi:type="string">Access-Control-Allow-Methods</argument>
+        </arguments>
+    </type>
+    <type name="Magento\GraphQl\Controller\Cors\HttpResponseHeaderProvider\AllowOriginHeaderProvider">
+        <arguments>
+            <argument name="headerName" xsi:type="string">Access-Control-Allow-Origin</argument>
+        </arguments>
+    </type>
 </config>
