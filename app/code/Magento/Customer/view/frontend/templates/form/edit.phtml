@@ -104,6 +104,10 @@ use Magento\Customer\Block\Widget\Name;
                     autocomplete="off" />
             </div>
         </div>
+        <div class="field choice">
+            <input type="checkbox" name="show-password" title="Show Password" id="show-password" class="checkbox" data-role="show-password" data-mage-init='{"showPassword": {"passwordSelector": "#current-password,#password,#password-confirmation"}}'>
+            <label for="show-password" class="label"><span><?= $block->escapeHtml(__('Show Password')) ?></span></label>
+        </div>
     </fieldset>
 
     <fieldset class="fieldset additional_info">
