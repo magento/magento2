@@ -10,15 +10,13 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminProductInTheShoppingCartCouldBeReachedByAdminDuringOrderCreationWithMultiWebsiteConfigTest">
         <annotations>
+            <features value="Sales"/>
             <stories value="Admin create order"/>
             <title value="Product in the shopping cart could be reached by admin during order creation with multi website config"/>
             <description value="Product in the shopping cart could be reached by admin during order creation with multi website config"/>
             <severity value="MAJOR"/>
-            <testCaseId value="MC-6353"/>
+            <testCaseId value="MC-25877"/>
             <group value="sales"/>
-            <skip>
-                <issueId value="MC-20129"/>
-            </skip>
         </annotations>
         <before>
             <magentoCLI command="config:set {{StorefrontEnableAddStoreCodeToUrls.path}} {{StorefrontEnableAddStoreCodeToUrls.value}}" stepKey="addStoreCodeToUrlEnable"/>
