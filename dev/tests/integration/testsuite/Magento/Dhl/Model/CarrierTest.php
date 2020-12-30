@@ -9,24 +9,30 @@ namespace Magento\Dhl\Model;
 
 use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Framework\DataObject;
+use Magento\Framework\HTTP\AsyncClient\HttpException;
+use Magento\Framework\HTTP\AsyncClient\HttpResponseDeferredInterface;
 use Magento\Framework\HTTP\AsyncClient\Response;
 use Magento\Framework\HTTP\AsyncClientInterface;
 use Magento\Framework\Simplexml\Element;
 use Magento\Quote\Model\Quote\Address\RateRequest;
+use Magento\Quote\Model\Quote\Address\RateResult\Error;
 use Magento\Shipping\Model\Shipment\Request;
+use Magento\Shipping\Model\Simplexml\Element as ShippingElement;
 use Magento\Shipping\Model\Tracking\Result\Status;
 use Magento\Store\Model\ScopeInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\HTTP\AsyncClientInterfaceMock;
-use Magento\Shipping\Model\Simplexml\Element as ShippingElement;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for DHL integration.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CarrierTest extends \PHPUnit\Framework\TestCase
+class CarrierTest extends TestCase
 {
+    private const PRODUCT_NAME_SPECIAL_CHARS = 'Φυστίκι Ψημένο με Αλάτι Συσκευασία';
+
     /**
      * @var Carrier
      */
@@ -251,10 +257,16 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
      * @param string $origCountryId
      * @param string $expectedRegionCode
      * @param string $destCountryId
+     * @param bool|null $isProductNameContainsSpecialChars
+     * @return void
      * @dataProvider requestToShipmentDataProvider
      */
-    public function testRequestToShip(string $origCountryId, string $expectedRegionCode, string $destCountryId): void
-    {
+    public function testRequestToShip(
+        string $origCountryId,
+        string $expectedRegionCode,
+        string $destCountryId,
+        bool $isProductNameContainsSpecialChars = false
+    ): void {
         $this->config->setValue(
             'shipping/origin/country_id',
             $origCountryId,
@@ -271,6 +283,8 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
                 )
             ]
         );
+        $productName = $isProductNameContainsSpecialChars ? self::PRODUCT_NAME_SPECIAL_CHARS : 'item_name';
+
         //phpcs:enable Magento2.Functions.DiscouragedFunction
         $request = new Request(
             [
@@ -288,7 +302,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
                         ],
                         'items' => [
                             'item1' => [
-                                'name' => 'item_name',
+                                'name' => $productName,
                             ],
                         ],
                     ],
@@ -326,10 +340,15 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
         $requestElement->Request->ServiceHeader->MessageReference = 'MAGE_SHIP_28TO32_Char_CHECKED';
         $requestElement->Request->ServiceHeader->MessageTime = 'currentTime';
         $requestElement->ShipmentDetails->Date = 'currentTime';
-        $this->assertXmlStringEqualsXmlString(
-            $this->getExpectedLabelRequestXml($origCountryId, $destCountryId, $expectedRegionCode),
-            $requestElement->asXML()
+
+        $expectedLabelRequest = $this->getExpectedLabelRequestXml(
+            $origCountryId,
+            $destCountryId,
+            $expectedRegionCode,
+            $isProductNameContainsSpecialChars
         );
+
+        $this->assertXmlStringEqualsXmlString($expectedLabelRequest, $requestElement->asXML());
     }
 
     /**
@@ -348,7 +367,10 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
             ],
             [
                 'DE', 'EU', 'DE'
-            ]
+            ],
+            [
+                'GB', 'EU', 'US', true
+            ],
         ];
     }
 
@@ -358,12 +380,14 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
      * @param string $origCountryId
      * @param string $destCountryId
      * @param string $regionCode
+     * @param bool $isProductNameContainsSpecialChars
      * @return string
      */
     private function getExpectedLabelRequestXml(
         string $origCountryId,
         string $destCountryId,
-        string $regionCode
+        string $regionCode,
+        bool $isProductNameContainsSpecialChars
     ): string {
         $countryNames = [
             'US' => 'United States Of America',
@@ -383,6 +407,10 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
         $expectedRequestElement->Shipper->CountryCode = $origCountryId;
         $expectedRequestElement->Shipper->CountryName = $countryNames[$origCountryId];
         $expectedRequestElement->RegionCode = $regionCode;
+
+        if ($isProductNameContainsSpecialChars) {
+            $expectedRequestElement->ShipmentDetails->Pieces->Piece->PieceContents = self::PRODUCT_NAME_SPECIAL_CHARS;
+        }
 
         return $expectedRequestElement->asXML();
     }
@@ -473,6 +501,33 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
         $this->assertStringNotContainsString('<Depth>', $requestXml);
 
         $this->config->reinit();
+    }
+
+    /**
+     * Test get carriers rates if has HttpException.
+     *
+     * @magentoConfigFixture default_store carriers/dhl/active 1
+     */
+    public function testGetRatesWithHttpException(): void
+    {
+        $this->setDhlConfig(['showmethod' => 1]);
+        $requestData = $this->getRequestData();
+        $deferredResponse = $this->getMockBuilder(HttpResponseDeferredInterface::class)
+            ->onlyMethods(['get'])
+            ->getMockForAbstractClass();
+        $exception = new HttpException('Exception message');
+        $deferredResponse->method('get')->willThrowException($exception);
+        $this->httpClient->setDeferredResponseMock($deferredResponse);
+        /** @var RateRequest $request */
+        $request = Bootstrap::getObjectManager()->create(RateRequest::class, $requestData);
+        $this->dhlCarrier = Bootstrap::getObjectManager()->create(Carrier::class);
+        $resultRate = $this->dhlCarrier->collectRates($request)->getAllRates()[0];
+        $error = Bootstrap::getObjectManager()->get(Error::class);
+        $error->setCarrier('dhl');
+        $error->setCarrierTitle($this->dhlCarrier->getConfigData('title'));
+        $error->setErrorMessage($this->dhlCarrier->getConfigData('specificerrmsg'));
+
+        $this->assertEquals($error, $resultRate);
     }
 
     /**
