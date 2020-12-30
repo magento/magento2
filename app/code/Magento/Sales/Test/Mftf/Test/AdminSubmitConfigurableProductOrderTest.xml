@@ -11,7 +11,7 @@
     <test name="AdminSubmitConfigurableProductOrderTest">
         <annotations>
             <features value="Sales"/>
-            <stories value=" Admin create order"/>
+            <stories value="Admin create order"/>
             <title value="Create Order in Admin and update product configuration"/>
             <description value="Create Order as admin and update product attribute configuration during order creation"/>
             <severity value="MAJOR"/>
