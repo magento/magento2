@@ -14,6 +14,11 @@
                 <value id="google_analytics" type="host">www.google-analytics.com</value>
             </values>
         </policy>
+        <policy id="connect-src">
+            <values>
+                <value id="google_analytics" type="host">www.google-analytics.com</value>
+            </values>
+        </policy>
         <policy id="img-src">
             <values>
                 <value id="google_ad_services" type="host">www.googleadservices.com</value>
