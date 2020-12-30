@@ -42,8 +42,8 @@ define([
             var passwordField = this.options.passwordSelector;
 
             $(passwordField).attr('type',
-                $(passwordField).attr('type') === this.options.passwordInputType
-                ? this.options.textInputType : this.options.passwordInputType
+                $(passwordField).attr('type') === this.options.passwordInputType ?
+                this.options.textInputType : this.options.passwordInputType
             );
         }
     });
