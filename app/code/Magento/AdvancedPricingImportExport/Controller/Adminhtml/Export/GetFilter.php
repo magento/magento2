@@ -36,7 +36,7 @@ class GetFilter extends ExportController implements HttpGetActionInterface, Http
                 $export->setData($data);
                 $export->filterAttributeCollection(
                     $attrFilterBlock->prepareCollection($export->getEntityAttributeCollection())
-                )->clear();
+                );
                 return $resultLayout;
             } catch (\Exception $e) {
                 $this->messageManager->addErrorMessage($e->getMessage());
