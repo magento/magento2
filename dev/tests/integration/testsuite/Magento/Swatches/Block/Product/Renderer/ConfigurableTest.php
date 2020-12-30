@@ -156,8 +156,7 @@ class ConfigurableTest extends TestCase
     public function testGetJsonSwatchConfigUsedWithSwatchImageType(): void
     {
         $this->updateAttributeUseProductImageFlag();
-        $this->updateProductImage('simple_option_2', '/m/a/magento_image.jpg');
-        $this->setSwatchImage('simple_option_2', '/m/a/magento_image.jpg');
+        $this->updateProductImage('simple_option_2', '/m/a/magento_image.jpg', ['swatch_image']);
         $expectedOptions = $this->getDefaultOptionsList();
         $expectedOptions['option 2']['value'] = $this->imageUrlBuilder->getUrl(
             '/m/a/magento_image.jpg',
@@ -249,15 +248,16 @@ class ConfigurableTest extends TestCase
      *
      * @param string $sku
      * @param string $imageName
+     * @param array $imageRoles
      * @return void
      */
-    private function updateProductImage(string $sku, string $imageName): void
-    {
+    private function updateProductImage(
+        string $sku,
+        string $imageName,
+        array $imageRoles = ['image', 'small_image', 'thumbnail']
+    ): void {
         $product = $this->productRepository->get($sku);
         $product->setStoreId(Store::DEFAULT_STORE_ID)
-            ->setImage($imageName)
-            ->setSmallImage($imageName)
-            ->setThumbnail($imageName)
             ->setData(
                 'media_gallery',
                 [
@@ -273,20 +273,10 @@ class ConfigurableTest extends TestCase
                 ]
             )
             ->setCanSaveCustomOptions(true);
+        foreach ($imageRoles as $role) {
+            $product->setData($role, $imageName);
+        }
+
         $this->productResource->save($product);
     }
-
-    /**
-     * Set swatch image for a Product.
-     *
-     * @param string $sku
-     * @param string $imageName
-     * @return void
-     */
-    private function setSwatchImage(string $sku, string $imageName): void
-    {
-        $product = $this->productRepository->get($sku);
-        $product->setSwatchImage($imageName)->save($product);
-    }
 }
-
