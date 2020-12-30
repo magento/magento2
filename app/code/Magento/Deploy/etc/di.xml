@@ -23,12 +23,18 @@
     <type name="Magento\Framework\App\FrontControllerInterface">
         <plugin name="configHash" type="Magento\Deploy\Model\Plugin\ConfigChangeDetector" sortOrder="50"/>
     </type>
+    <type name="Magento\Deploy\Console\Command\App\ApplicationDumpCommand">
+        <arguments>
+            <argument name="writer" xsi:type="object">Magento\Framework\App\DeploymentConfig\Writer\Proxy</argument>
+            <argument name="configHash" xsi:type="object">Magento\Deploy\Model\DeploymentConfig\Hash\Proxy</argument>
+        </arguments>
+    </type>
     <type name="Magento\Framework\Console\CommandListInterface">
         <arguments>
             <argument name="commands" xsi:type="array">
                 <item name="setModeCommand" xsi:type="object">Magento\Deploy\Console\Command\SetModeCommand</item>
                 <item name="showModeCommand" xsi:type="object">Magento\Deploy\Console\Command\ShowModeCommand</item>
-                <item name="dumpApplicationCommand" xsi:type="object">\Magento\Deploy\Console\Command\App\ApplicationDumpCommand</item>
+                <item name="dumpApplicationCommand" xsi:type="object">Magento\Deploy\Console\Command\App\ApplicationDumpCommand</item>
                 <item name="sensitiveConfigSetCommand" xsi:type="object">\Magento\Deploy\Console\Command\App\SensitiveConfigSetCommand</item>
                 <item name="configImportCommand" xsi:type="object">Magento\Deploy\Console\Command\App\ConfigImportCommand</item>
                 <item name="configStatusCommand" xsi:type="object">Magento\Deploy\Console\Command\App\ConfigStatusCommand</item>

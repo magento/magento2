@@ -40,6 +40,11 @@
             <argument name="pageSize" xsi:type="number">100</argument>
         </arguments>
     </type>
+    <type name="Magento\MediaGallerySynchronization\Console\Command\Synchronize">
+        <arguments>
+            <argument name="synchronizeAssets" xsi:type="object">Magento\MediaGallerySynchronizationApi\Api\SynchronizeInterface\Proxy</argument>
+        </arguments>
+    </type>
     <type name="Magento\Framework\Console\CommandListInterface">
         <arguments>
             <argument name="commands" xsi:type="array">

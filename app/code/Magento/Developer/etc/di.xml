@@ -40,7 +40,7 @@
         </arguments>
     </virtualType>
 
-    <virtualType name="AssetPublisherForSymlink" type="Magento\Framework\App\View\Asset\Publisher">
+    <virtualType name="AssetPublisherForSymlink" type="Magento\Framework\App\View\Asset\Publisher\Proxy">
         <arguments>
             <argument name="materializationStrategyFactory" xsi:type="object">AssetMaterializationStrategyFactoryForSourceThemeDeploy</argument>
         </arguments>
@@ -79,13 +79,14 @@
             <argument name="preProcessorPool" xsi:type="object">AssetPreProcessorPoolForSourceThemeDeploy</argument>
         </arguments>
     </virtualType>
-    <virtualType name="AssetRepositoryForSourceThemeDeploy" type="Magento\Framework\View\Asset\Repository">
+    <virtualType name="AssetRepositoryForSourceThemeDeploy" type="Magento\Framework\View\Asset\Repository\Proxy">
         <arguments>
             <argument name="assetSource" xsi:type="object">AssetSourceForSourceThemeDeploy</argument>
         </arguments>
     </virtualType>
     <type name="Magento\Developer\Console\Command\SourceThemeDeployCommand">
         <arguments>
+            <argument name="validator" xsi:type="object">Magento\Framework\Validator\Locale\Proxy</argument>
             <argument name="assetPublisher" xsi:type="object">AssetPublisherForSymlink</argument>
             <argument name="assetRepository" xsi:type="object">AssetRepositoryForSourceThemeDeploy</argument>
         </arguments>

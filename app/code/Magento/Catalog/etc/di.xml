@@ -599,6 +599,15 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Catalog\Console\Command\ProductAttributesCleanUp">
+        <arguments>
+            <argument name="productAttributeRepository" xsi:type="object">Magento\Catalog\Api\ProductAttributeRepositoryInterface\Proxy</argument>
+            <argument name="attributeResource" xsi:type="object">Magento\Catalog\Model\ResourceModel\Attribute\Proxy</argument>
+            <argument name="searchCriteriaBuilder" xsi:type="object">Magento\Framework\Api\SearchCriteriaBuilder\Proxy</argument>
+            <argument name="appState" xsi:type="object">Magento\Framework\App\State\Proxy</argument>
+            <argument name="metadataPool" xsi:type="object">Magento\Framework\EntityManager\MetadataPool\Proxy</argument>
+        </arguments>
+    </type>
     <type name="Magento\Framework\Console\CommandListInterface">
         <arguments>
             <argument name="commands" xsi:type="array">
@@ -1180,7 +1189,7 @@
     <type name="Magento\Indexer\Console\Command\IndexerSetDimensionsModeCommand">
         <arguments>
             <argument name="dimensionSwitchers" xsi:type="array">
-                <item name="catalog_product_price" xsi:type="object">Magento\Catalog\Model\Indexer\Product\Price\ModeSwitcher</item>
+                <item name="catalog_product_price" xsi:type="object">Magento\Catalog\Model\Indexer\Product\Price\ModeSwitcher\Proxy</item>
             </argument>
         </arguments>
     </type>
