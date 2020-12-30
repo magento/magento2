@@ -21,6 +21,7 @@ class SpecialPriceStorageTest extends WebapiAbstract
     const SERVICE_VERSION = 'V1';
     const SIMPLE_PRODUCT_SKU = 'simple';
     const VIRTUAL_PRODUCT_SKU = 'virtual-product';
+    private const PRODUCT_SKU_TWO_WEBSITES = 'simple-on-two-websites';
 
     /**
      * @var ObjectManager
@@ -167,7 +168,7 @@ class SpecialPriceStorageTest extends WebapiAbstract
     /**
      * Test delete method.
      *
-     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoApiDataFixture Magento/Catalog/_files/product_two_websites.php
      * @magentoConfigFixture catalog/price/scope 1
      * @dataProvider deleteData
      * @param array $data
@@ -269,7 +270,7 @@ class SpecialPriceStorageTest extends WebapiAbstract
                 [
                     'price' => 3057,
                     'store_id' => 0,
-                    'sku' => self::SIMPLE_PRODUCT_SKU,
+                    'sku' => self::PRODUCT_SKU_TWO_WEBSITES,
                     'price_from' => $fromDate,
                     'price_to' => $toDate
                 ]
@@ -278,7 +279,7 @@ class SpecialPriceStorageTest extends WebapiAbstract
                 [
                     'price' => 3057,
                     'store_id' => 0,
-                    'sku' => self::SIMPLE_PRODUCT_SKU,
+                    'sku' => self::PRODUCT_SKU_TWO_WEBSITES,
                     'price_from' => $fromDate,
                     'price_to' => false
                 ]
