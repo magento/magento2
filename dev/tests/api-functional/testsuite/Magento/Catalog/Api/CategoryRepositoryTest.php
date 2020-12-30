@@ -224,7 +224,9 @@ class CategoryRepositoryTest extends WebapiAbstract
     {
         $translatedMsg = (string)__('Cannot delete category with id %1');
 
-        return sprintf('{"message":"%s","parameters":["%u"]}', $translatedMsg, $categoryId);
+        return TESTS_WEB_API_ADAPTER === self::ADAPTER_REST
+            ? sprintf('{"message":"%s","parameters":["%u"]}', $translatedMsg, $categoryId)
+            : $translatedMsg;
     }
 
     /**
