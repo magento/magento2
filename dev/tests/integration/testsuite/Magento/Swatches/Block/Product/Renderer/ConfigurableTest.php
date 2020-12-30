@@ -150,6 +150,32 @@ class ConfigurableTest extends TestCase
 
     /**
      * @magentoDataFixture Magento/Swatches/_files/configurable_product_with_visual_swatch_attribute.php
+     * @magentoDataFixture Magento/Catalog/_files/product_image.php
+     * @return void
+     */
+    public function testGetJsonSwatchConfigUsedWithSwatchImageType(): void
+    {
+        $this->updateAttributeUseProductImageFlag();
+        $this->updateProductImage('simple_option_2', '/m/a/magento_image.jpg');
+        $this->setSwatchImage('simple_option_2', '/m/a/magento_image.jpg');
+        $expectedOptions = $this->getDefaultOptionsList();
+        $expectedOptions['option 2']['value'] = $this->imageUrlBuilder->getUrl(
+            '/m/a/magento_image.jpg',
+            'swatch_image_base'
+        );
+        $expectedOptions['option 2']['thumb'] = $this->imageUrlBuilder->getUrl(
+            '/m/a/magento_image.jpg',
+            'swatch_thumb_base'
+        );
+        $this->assertOptionsData(
+            $this->serializer->unserialize($this->block->getJsonSwatchConfig()),
+            $expectedOptions,
+            ['swatch_input_type' => 'visual', 'use_product_image_for_swatch' => 1]
+        );
+    }
+
+    /**
+     * @magentoDataFixture Magento/Swatches/_files/configurable_product_with_visual_swatch_attribute.php
      * @return void
      */
     public function testGetJsonSwatchConfigUsedEmptyProductImage(): void
@@ -249,4 +275,18 @@ class ConfigurableTest extends TestCase
             ->setCanSaveCustomOptions(true);
         $this->productResource->save($product);
     }
+
+    /**
+     * Set swatch image for a Product.
+     *
+     * @param string $sku
+     * @param string $imageName
+     * @return void
+     */
+    private function setSwatchImage(string $sku, string $imageName): void
+    {
+        $product = $this->productRepository->get($sku);
+        $product->setSwatchImage($imageName)->save($product);
+    }
 }
+
