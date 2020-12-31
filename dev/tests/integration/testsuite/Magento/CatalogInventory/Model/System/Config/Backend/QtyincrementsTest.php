@@ -16,6 +16,10 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Checks that the qty increments config backend model is working correctly
+ *
+ * @see \Magento\CatalogInventory\Model\System\Config\Backend\Qtyincrements
+ *
+ * @magentoAppArea adminhtml
  */
 class QtyincrementsTest extends TestCase
 {
@@ -34,11 +38,11 @@ class QtyincrementsTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->backendFactory = $this->objectManager->create(BackendFactory::class);
+        $this->backendFactory = $this->objectManager->get(BackendFactory::class);
         $this->qtyIncrements = $this->backendFactory->create(Qtyincrements::class, [
             'data' => [
                 'path' => Configuration::XML_PATH_QTY_INCREMENTS,
-            ]
+            ],
         ]);
     }
 
