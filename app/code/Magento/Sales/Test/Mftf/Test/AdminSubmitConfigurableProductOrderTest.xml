@@ -16,7 +16,7 @@
             <description value="Create Order as admin and update product attribute configuration during order creation"/>
             <severity value="MAJOR"/>
             <testCaseId value="MC-26545"/>
-            <group value="Sales"/>
+            <group value="sales"/>
         </annotations>
 
         <before>
@@ -84,6 +84,9 @@
                 <requiredEntity createDataKey="createConfigChildProduct2"/>
             </createData>
 
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndicesBefore"/>
+
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
@@ -98,24 +101,24 @@
             <deleteData createDataKey="createCategory" stepKey="deleteApiCategory"/>
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndicesAfter"/>
         </after>
         <!--Create new customer order-->
         <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer">
-            <argument name="customer" value="$$simpleCustomer$$"/>
+            <argument name="customer" value="$simpleCustomer$"/>
         </actionGroup>
 
         <!--Add configurable product to order-->
         <actionGroup ref="AddConfigurableProductToOrderFromAdminActionGroup" stepKey="addConfigurableProductToOrder">
-            <argument name="product" value="$$createConfigProduct$$"/>
-            <argument name="attribute" value="$$createConfigProductAttribute$$"/>
-            <argument name="option" value="$$getConfigAttributeOption1$$"/>
+            <argument name="product" value="$createConfigProduct$"/>
+            <argument name="attribute" value="$createConfigProductAttribute$"/>
+            <argument name="option" value="$getConfigAttributeOption1$"/>
         </actionGroup>
 
         <!--Configure ordered configurable product-->
         <actionGroup ref="ConfigureOrderedConfigurableProductActionGroup" stepKey="configureOrderedConfigurableProduct">
-            <argument name="attribute" value="$$createConfigProductAttribute$$"/>
-            <argument name="option" value="$$getConfigAttributeOption2$$"/>
+            <argument name="attribute" value="$createConfigProductAttribute$"/>
+            <argument name="option" value="$getConfigAttributeOption2$"/>
             <argument name="quantity" value="2"/>
         </actionGroup>
 
