@@ -36,7 +36,7 @@
                 <argument name="customStore" value="customStore"/>
             </actionGroup>
             <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProductEditPage">
-                <argument name="productId" value="$$createProduct.id$$"/>
+                <argument name="productId" value="$createProduct.id$"/>
             </actionGroup>
             <actionGroup ref="ProductSetWebsiteActionGroup" stepKey="assignProductToSecondWebsite">
                 <argument name="website" value="{{customWebsite.name}}"/>
@@ -66,7 +66,7 @@
 
         <!--Open product page and add to cart-->
         <actionGroup ref="StorefrontOpenProductPageUsingStoreCodeInUrlActionGroup" stepKey="openProductPageUsingStoreCodeInUrl">
-            <argument name="product" value="$$createProduct$$"/>
+            <argument name="product" value="$createProduct$"/>
             <argument name="storeView" value="customStore"/>
         </actionGroup>
         <actionGroup ref="StorefrontAddToTheCartActionGroup" stepKey="addProductToCart"/>
@@ -79,12 +79,12 @@
 
         <!--Assert product in Shopping cart section-->
         <actionGroup ref="AdminAssertProductInShoppingCartSectionActionGroup" stepKey="seeProductInShoppingCart">
-            <argument name="product" value="$$createProduct.name$$"/>
+            <argument name="product" value="$createProduct.name$"/>
         </actionGroup>
 
         <!--Move product to the order from shopping cart-->
         <actionGroup ref="AdminMoveProductToItemsOrderedFromShoppingCartActionGroup" stepKey="addProductToItemsOrderedFromShoppingCart">
-            <argument name="product" value="$$createProduct.name$$"/>
+            <argument name="product" value="$createProduct.name$"/>
         </actionGroup>
 
         <!--Fill customer address information-->
