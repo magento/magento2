@@ -31,7 +31,7 @@
             <argument name="Customer" value="$createCustomer$"/>
         </actionGroup>
         <amOnPage url="{{StorefrontCustomerAddressesPage.url}}" stepKey="OpenCustomerAddNewAddress"/>
-        <waitForElementVisible selector="{{StorefrontCustomerAddressesSection.shippingAddressBlock}}" stepKey="waitForShippingAddressBlockVisible"/>
+        <waitForElementVisible selector="{{StorefrontCustomerAddressesSection.editDefaultShippingAddress}}" stepKey="waitForChangeShippingAddressLinkVisible"/>
         <click selector="{{StorefrontCustomerAddressesSection.editDefaultShippingAddress}}" stepKey="ClickEditDefaultShippingAddress"/>
         <fillField userInput="EditedFirstNameShipping" selector="{{StorefrontCustomerAddressFormSection.firstName}}" stepKey="fillFirstName"/>
         <fillField userInput="EditedLastNameShipping" selector="{{StorefrontCustomerAddressFormSection.lastName}}" stepKey="fillLastName"/>
