@@ -85,7 +85,7 @@
             </createData>
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-            <magentoCron groups="index" stepKey="reindexInvalidatedIndicesBefore"/>
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
 
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
