@@ -96,8 +96,8 @@ class Invoice extends AbstractItems
         $prevOptionId = '';
         $drawItems = [];
         $optionId = 0;
+        $lines = [];
         foreach ($this->getChildren($this->getItem()) as $childItem) {
-            $lines = [];
             $index = array_key_last($lines) !== null ? array_key_last($lines) + 1 : 0;
             $attributes = $this->getSelectionAttributes($childItem);
             if (is_array($attributes)) {
@@ -115,7 +115,6 @@ class Invoice extends AbstractItems
                     'feed' => 35,
                 ];
 
-                $drawItems[$optionId] = ['height' => 15];
                 $index++;
                 $prevOptionId = $attributes['option_id'];
             }
@@ -133,8 +132,8 @@ class Invoice extends AbstractItems
             $lines = $this->drawSkus($childItem, $lines);
 
             $lines = $this->drawPrices($childItem, $lines);
-            $drawItems[$optionId]['lines'] = $lines;
         }
+        $drawItems[$optionId]['lines'] = $lines;
 
         return $drawItems;
     }

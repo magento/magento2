@@ -88,7 +88,7 @@ class InvoiceTest extends TestCase
     }
 
     /**
-     * @dataProvider invoiceDataProvider
+     * @dataProvider \Magento\Bundle\Test\Unit\Model\Sales\Order\Pdf\Items\InvoiceTestProvider::getData
      * @param array $expected
      * @param string $method
      */
@@ -107,195 +107,6 @@ class InvoiceTest extends TestCase
 
         $this->prepareModel();
         $this->model->draw();
-    }
-
-    /**
-     * @return array[]
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     */
-    public function invoiceDataProvider(): array
-    {
-        return [
-            'display_both' => [
-                'expected' => [
-                    1 => [
-                        'height' => 15,
-                        'lines' => [
-                            [
-                                [
-                                    'text' => 'test option',
-                                    'feed' => 35,
-                                    'font' => 'italic',
-
-                                ],
-                            ],
-                            [
-                                [
-                                    'text' => 'Simple1',
-                                    'feed' => 40,
-                                ],
-                                [
-                                    'text' => 2,
-                                    'feed' => 435,
-                                    'align' => 'right',
-                                ],
-                                [
-                                    'text' => 1.66,
-                                    'feed' => 495,
-                                    'font' => 'bold',
-                                    'align' => 'right',
-                                ],
-                                [
-                                    'text' => 'Excl. Tax:',
-                                    'feed' => 380,
-                                    'align' => 'right',
-                                ],
-                                [
-                                    'text' => 'Excl. Tax:',
-                                    'feed' => 565,
-                                    'align' => 'right',
-                                ],
-                            ],
-                            [
-                                [
-                                    'text' => '10.00',
-                                    'feed' => 380,
-                                    'font' => 'bold',
-                                    'align' => 'right',
-                                ],
-                                [
-                                    'text' => '20.00',
-                                    'feed' => 565,
-                                    'font' => 'bold',
-                                    'align' => 'right',
-                                ],
-                            ],
-                            [
-                                [
-                                    'text' => 'Incl. Tax:',
-                                    'feed' => 380,
-                                    'align' => 'right',
-                                ],
-                                [
-                                    'text' => 'Incl. Tax:',
-                                    'feed' => 565,
-                                    'align' => 'right',
-                                ],
-                            ],
-                            [
-                                [
-                                    'text' => '10.83',
-                                    'feed' => 380,
-                                    'font' => 'bold',
-                                    'align' => 'right',
-                                ],
-                                [
-                                    'text' => '21.66',
-                                    'feed' => 565,
-                                    'font' => 'bold',
-                                    'align' => 'right',
-                                ],
-                            ],
-                        ],
-                    ],
-                ],
-                'tax_mock_method' => 'displaySalesBothPrices',
-            ],
-            'including_tax' => [
-                'expected' => [
-                    1 => [
-                        'height' => 15,
-                        'lines' => [
-                            [
-                                [
-                                    'text' => 'test option',
-                                    'feed' => 35,
-                                    'font' => 'italic',
-
-                                ],
-                            ],
-                            [
-                                [
-                                    'text' => 'Simple1',
-                                    'feed' => 40,
-                                ],
-                                [
-                                    'text' => 2,
-                                    'feed' => 435,
-                                    'align' => 'right',
-                                ],
-                                [
-                                    'text' => 1.66,
-                                    'feed' => 495,
-                                    'font' => 'bold',
-                                    'align' => 'right',
-                                ],
-                                [
-                                    'text' => '10.83',
-                                    'feed' => 380,
-                                    'font' => 'bold',
-                                    'align' => 'right',
-                                ],
-                                [
-                                    'text' => '21.66',
-                                    'feed' => 565,
-                                    'font' => 'bold',
-                                    'align' => 'right',
-                                ],
-                            ],
-                        ],
-                    ],
-                ],
-                'tax_mock_method' => 'displaySalesPriceInclTax',
-            ],
-            'excluding_tax' => [
-                'expected' => [
-                    1 => [
-                        'height' => 15,
-                        'lines' => [
-                            [
-                                [
-                                    'text' => 'test option',
-                                    'feed' => 35,
-                                    'font' => 'italic',
-
-                                ],
-                            ],
-                            [
-                                [
-                                    'text' => 'Simple1',
-                                    'feed' => 40,
-                                ],
-                                [
-                                    'text' => 2,
-                                    'feed' => 435,
-                                    'align' => 'right',
-                                ],
-                                [
-                                    'text' => 1.66,
-                                    'feed' => 495,
-                                    'font' => 'bold',
-                                    'align' => 'right',
-                                ],
-                                [
-                                    'text' => '10.00',
-                                    'feed' => 380,
-                                    'font' => 'bold',
-                                    'align' => 'right',
-                                ],
-                                [
-                                    'text' => '20.00',
-                                    'feed' => 565,
-                                    'font' => 'bold',
-                                    'align' => 'right',
-                                ],
-                            ],
-                        ],
-                    ],
-                ],
-                'tax_mock_method' => 'displaySalesPriceExclTax',
-            ],
-        ];
     }
 
     /**
@@ -334,16 +145,37 @@ class InvoiceTest extends TestCase
                     ),
                 ]
             ),
+            new DataObject(
+                [
+                    'name' => 'Simple2',
+                    'sku' => 'simple2',
+                    'price' => '5.00',
+                    'price_incl_tax' => '5.41',
+                    'row_total' => '10.00',
+                    'row_total_incl_tax' => '10.83',
+                    'qty' => '2',
+                    'tax_amount' => '0.83',
+                    'order_item' => new DataObject(
+                        [
+                            'parent_item' => $parentItem,
+                        ]
+                    ),
+                ]
+            ),
         ];
         $orderMock = $this->createMock(Order::class);
 
         $this->model->expects($this->any())->method('getChildren')->willReturn($items);
         $this->model->expects($this->any())->method('isShipmentSeparately')->willReturn(false);
         $this->model->expects($this->any())->method('isChildCalculated')->willReturn(true);
-        $this->model->expects($this->any())->method('getValueHtml')->willReturn($items[0]->getName());
-        $this->model->expects($this->any())->method('getSelectionAttributes')->willReturn(
+        $this->model->expects($this->at(2))->method('getSelectionAttributes')->willReturn(
             ['option_id' => 1, 'option_label' => 'test option']
         );
+        $this->model->expects($this->at(3))->method('getValueHtml')->willReturn($items[0]->getName());
+        $this->model->expects($this->at(5))->method('getSelectionAttributes')->willReturn(
+            ['option_id' => 1, 'option_label' => 'second option']
+        );
+        $this->model->expects($this->at(6))->method('getValueHtml')->willReturn($items[1]->getName());
 
         $orderMock->expects($this->any())->method('formatPriceTxt')->willReturnArgument(0);
         $this->model->setOrder($orderMock);
