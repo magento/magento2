@@ -136,7 +136,7 @@ type CustomizableAreaValue @doc(description: "CustomizableAreaValue defines the 
     uid: ID! @doc(description: "The unique ID for a `CustomizableAreaValue` object.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\CustomizableEnteredOptionValueUid")
 }
 
-type CategoryTree implements CategoryInterface, RoutableInterface @doc(description: "Category Tree implementation.") {
+type CategoryTree implements CategoryInterface, RoutableInterface @doc(description: "Category tree implementation") {
     children: [CategoryTree] @doc(description: "Child categories tree.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\CategoryTree")
 }
 
