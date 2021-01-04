@@ -107,10 +107,10 @@ class CarrierTest extends TestCase
             'general/country/eu_countries',
             ScopeInterface::SCOPE_STORE
         )->willReturn(
-            "GB"
+            "NL"
         );
 
-        $this->assertTrue($this->helper->isCountryInEU("GB"));
+        $this->assertTrue($this->helper->isCountryInEU("NL"));
         $this->assertFalse($this->helper->isCountryInEU("US"));
     }
 }
