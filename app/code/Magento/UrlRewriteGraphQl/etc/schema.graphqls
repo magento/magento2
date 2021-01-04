@@ -2,7 +2,7 @@
 # See COPYING.txt for license details.
 
 type Query {
-    urlResolver(url: String!): EntityUrl @resolver(class: "Magento\\UrlRewriteGraphQl\\Model\\Resolver\\EntityUrl") @doc(description: "The urlResolver query returns the relative URL for a specified product, category or CMS page, using as input a url_key appended by the url_suffix, if one exists") @deprecated(reason: "Use 'route' query instead of 'urlResolver' query") @cache(cacheIdentity: "Magento\\UrlRewriteGraphQl\\Model\\Resolver\\UrlRewrite\\UrlResolverIdentity")
+    urlResolver(url: String!): EntityUrl @resolver(class: "Magento\\UrlRewriteGraphQl\\Model\\Resolver\\EntityUrl") @doc(description: "The urlResolver query returns the relative URL for a specified product, category or CMS page, using as input a url_key appended by the url_suffix, if one exists") @deprecated(reason: "Use the 'route' query instead") @cache(cacheIdentity: "Magento\\UrlRewriteGraphQl\\Model\\Resolver\\UrlRewrite\\UrlResolverIdentity")
     route(url: String!): RoutableInterface @resolver(class: "Magento\\UrlRewriteGraphQl\\Model\\Resolver\\Route") @doc(description: "The route query returns the full details for a specified product, category or CMS page, using as input a url_key appended by the url_suffix, if one exists") @cache(cacheIdentity: "Magento\\UrlRewriteGraphQl\\Model\\Resolver\\UrlRewrite\\UrlResolverIdentity")
 }
 
