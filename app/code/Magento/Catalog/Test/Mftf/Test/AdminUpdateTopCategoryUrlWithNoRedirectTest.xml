@@ -79,7 +79,7 @@
         <see selector="{{AdminUrlRewriteIndexSection.gridCellByColumnRowNumber('1', 'Request Path')}}" userInput="$$createDefaultCategory.name$$/$$createTwoLevelNestedCategories.name$$/updatedurl.html" stepKey="seeTheRedirectPath"/>
 
         <!-- Verify third level category's old URL path doesn't show redirect path-->
-        <actionGroup ref="AdminClearFiltersOnGridActionGroup" stepKey="clickOnResetButton1"/>
+        <actionGroup ref="AdminClearGridFiltersActionGroup" stepKey="clickOnResetButton1"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPageToLoad3"/>
 
         <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openUrlRewriteGridFilters1"/>
