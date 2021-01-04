@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertAdminErrorMessageDisappearDisabledFieldActionGroup">
+        <arguments>
+            <argument name="selectorSwitch" type="string"/>
+            <argument name="selectorField" type="string"/>
+            <argument name="userInput" type="string"/>
+            <argument name="fieldIndex" type="string"/>
+        </arguments>
+
+        <checkOption selector="{{selectorSwitch}}" stepKey="clickOn"/>
+        <fillField selector="{{selectorField}}" userInput="{{userInput}}" stepKey="setProductPrice"/>
+        <click selector="{{selectorSwitch}}" stepKey="clickToOtherElement"/>
+        <seeElement selector="{{AdminProductFormBundleSection.fieldError(fieldIndex)}}" stepKey="seeError"/>
+        <checkOption selector="{{selectorSwitch}}" stepKey="clickOff"/>
+        <dontSeeElement selector="{{AdminProductFormBundleSection.fieldError(fieldIndex)}}" stepKey="dontSeeError"/>
+    </actionGroup>
+</actionGroups>
