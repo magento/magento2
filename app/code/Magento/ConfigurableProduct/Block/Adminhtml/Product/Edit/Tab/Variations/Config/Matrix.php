@@ -68,6 +68,11 @@ class Matrix extends \Magento\Backend\Block\Template
     protected $locator;
 
     /**
+     * @var DirectoryHelper
+     */
+    protected $directoryHelper;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\ConfigurableProduct\Model\Product\Type\Configurable $configurableType
      * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
