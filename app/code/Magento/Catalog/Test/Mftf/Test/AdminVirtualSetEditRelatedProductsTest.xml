@@ -15,7 +15,7 @@
             <title value="Admin should be able to set/edit Related Products information when editing a virtual product"/>
             <description value="Admin should be able to set/edit Related Products information when editing a virtual product"/>
             <severity value="CRITICAL"/>
-            <testCaseId value="MC-3415"/>
+            <testCaseId value="MC-25532"/>
             <group value="catalog"/>
         </annotations>
         <after>
@@ -34,6 +34,6 @@
         </actionGroup>
 
         <!--See related product in storefront-->
-        <amOnPage url="{{defaultVirtualProduct.sku}}.html" stepKey="goToStorefront"/>
+        <amOnPage url="{{StorefrontProductPage.url(defaultVirtualProduct.urlKey)}}" stepKey="goToStorefront"/>
     </test>
 </tests>
