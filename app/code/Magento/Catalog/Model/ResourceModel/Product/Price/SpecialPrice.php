@@ -8,7 +8,6 @@ namespace Magento\Catalog\Model\ResourceModel\Product\Price;
 
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\Catalog\Api\SpecialPriceInterface;
-use Magento\Catalog\Helper\Data;
 use Magento\Catalog\Model\ProductIdLocatorInterface;
 use Magento\Catalog\Model\ResourceModel\Attribute;
 use Magento\Framework\EntityManager\MetadataPool;
@@ -78,11 +77,6 @@ class SpecialPrice implements SpecialPriceInterface
     private $priceToAttributeId;
 
     /**
-     * @var Data
-     */
-    private $catalogData;
-
-    /**
      * Items per operation.
      *
      * @var int
@@ -94,20 +88,17 @@ class SpecialPrice implements SpecialPriceInterface
      * @param ProductAttributeRepositoryInterface $attributeRepository
      * @param ProductIdLocatorInterface $productIdLocator
      * @param MetadataPool $metadataPool
-     * @param Data|null $catalogData
      */
     public function __construct(
         Attribute $attributeResource,
         ProductAttributeRepositoryInterface $attributeRepository,
         ProductIdLocatorInterface $productIdLocator,
-        MetadataPool $metadataPool,
-        ?Data $catalogData = null
+        MetadataPool $metadataPool
     ) {
         $this->attributeResource = $attributeResource;
         $this->attributeRepository = $attributeRepository;
         $this->productIdLocator = $productIdLocator;
         $this->metadataPool = $metadataPool;
-        $this->catalogData = $catalogData ?: ObjectManager::getInstance()->get(Data::class);
     }
 
     /**
@@ -250,19 +241,11 @@ class SpecialPrice implements SpecialPriceInterface
      *
      * @param \Magento\Catalog\Api\Data\SpecialPriceInterface[] $priceItems
      * @return array
-     * @throws CouldNotDeleteException
      */
     private function getStoreSkus(array $priceItems): array
     {
-        $isPriceGlobal = $this->catalogData->isPriceGlobal();
-
         $storeSkus = [];
         foreach ($priceItems as $priceItem) {
-            if ($isPriceGlobal && $priceItem->getStoreId() !== 0) {
-                throw new CouldNotDeleteException(
-                    __('Could not delete Prices for non-default store when price scope is global.')
-                );
-            }
             $storeSkus[$priceItem->getStoreId()][] = $priceItem->getSku();
         }
 

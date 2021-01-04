@@ -141,6 +141,8 @@ class SpecialPriceStorageTest extends WebapiAbstract
      */
     public function testDeleteWhenPriceIsGlobal(): void
     {
+        $fromDate = '2037-01-19 03:14:07';
+
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => '/V1/products/special-price-delete',
@@ -153,15 +155,19 @@ class SpecialPriceStorageTest extends WebapiAbstract
             ],
         ];
 
-        $this->expectErrorMessage('Could not delete Prices for non-default store when price scope is global.');
-
-        $this->_webApiCall(
+        $response = $this->_webApiCall(
             $serviceInfo,
             [
                 'prices' => [
-                    ['price' => 777, 'store_id' => 1, 'sku' => self::SIMPLE_PRODUCT_SKU]
+                    ['price' => 777, 'store_id' => 1, 'sku' => self::SIMPLE_PRODUCT_SKU, 'price_from' => $fromDate]
                 ]
             ]
+        );
+
+        $errorMessage = current(array_column($response, 'message'));
+        $this->assertStringContainsString(
+            'Could not change non global Price when price scope is global.',
+            $errorMessage
         );
     }
 
@@ -169,7 +175,7 @@ class SpecialPriceStorageTest extends WebapiAbstract
      * Test delete method.
      *
      * @magentoApiDataFixture Magento/Catalog/_files/product_two_websites.php
-     * @magentoConfigFixture catalog/price/scope 1
+     * @magentoConfigFixture default_store catalog/price/scope 1
      * @dataProvider deleteData
      * @param array $data
      * @return void
