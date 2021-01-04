@@ -28,7 +28,7 @@ type HttpQueryParameter @doc(description: "The object details of target path par
     value: String @doc(description: "Parameter value")
 }
 
-interface RoutableInterface @typeResolver(class: "Magento\\UrlRewriteGraphQl\\Model\\RoutableInterfaceTypeResolver") @doc(description: "Description here.") {
+interface RoutableInterface @typeResolver(class: "Magento\\UrlRewriteGraphQl\\Model\\RoutableInterfaceTypeResolver") @doc(description: "Routable entities serve as the model for a rendered page") {
     display_metadata: DisplayMetadata @doc(description: "Display Meta-Data details") @resolver(class: "Magento\\UrlRewriteGraphQl\\Model\\Resolver\\DisplayMetaData")
 }
 
