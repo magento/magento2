@@ -207,19 +207,21 @@ HTML;
      */
     public function toHtmlWithDropDownDataProvider(): array
     {
+        $currentYear = date('Y');
+
         return [
             [
                 [
                     'month' => '3',
                     'day' => '5',
-                    'year' => '2020',
+                    'year' => $currentYear,
                     'hour' => '2',
                     'minute' => '15',
                     'day_part' => 'am',
-                    'date_internal' => '2020-09-30 02:15:00'
+                    'date_internal' => sprintf('%s-09-30 02:15:00', $currentYear)
                 ],
                 [
-                    '//select[@id="options_{id}_year"]/option[@selected]' => '2020',
+                    '//select[@id="options_{id}_year"]/option[@selected]' => $currentYear,
                     '//select[@id="options_{id}_month"]/option[@selected]' => '3',
                     '//select[@id="options_{id}_day"]/option[@selected]' => '5',
                     '//select[@id="options_{id}_hour"]/option[@selected]' => '2',
@@ -233,10 +235,10 @@ HTML;
                     'hour' => '2',
                     'minute' => '15',
                     'day_part' => 'am',
-                    'date_internal' => '2020-09-30 02:15:00'
+                    'date_internal' => sprintf('%s-09-30 02:15:00', $currentYear)
                 ],
                 [
-                    '//select[@id="options_{id}_year"]/option[@selected]' => '2020',
+                    '//select[@id="options_{id}_year"]/option[@selected]' => $currentYear,
                     '//select[@id="options_{id}_month"]/option[@selected]' => '9',
                     '//select[@id="options_{id}_day"]/option[@selected]' => '30',
                     '//select[@id="options_{id}_hour"]/option[@selected]' => '2',
