@@ -158,7 +158,8 @@ class SpecialPriceStorage implements SpecialPriceStorageInterface
 
         foreach ($prices as $key => $price) {
             if (!$price->getSku() || in_array($price->getSku(), $failedSkus)) {
-                $errorMessage = 'The product that was requested doesn\'t exist. Verify the product and try again.';
+                $errorMessage = 'The product that was requested doesn\'t exist. Verify the product and try again. '
+                    . 'Row ID: SKU = %SKU, Store ID: %storeId, Price From: %priceFrom, Price To: %priceTo.';
                 $this->addFailedItemPrice($price, $key, $errorMessage, []);
             }
             $this->checkStore($price, $key);
@@ -184,14 +185,16 @@ class SpecialPriceStorage implements SpecialPriceStorageInterface
     private function checkStore(SpecialPriceInterface $price, int $key): void
     {
         if ($this->catalogData->isPriceGlobal() && $price->getStoreId() !== 0) {
-            $errorMessage = 'Could not change non global Price when price scope is global.';
+            $errorMessage = 'Could not change non global Price when price scope is global. '
+                . 'Row ID: SKU = %SKU, Store ID: %storeId, Price From: %priceFrom, Price To: %priceTo.';
             $this->addFailedItemPrice($price, $key, $errorMessage, []);
         }
 
         try {
             $this->storeRepository->getById($price->getStoreId());
         } catch (NoSuchEntityException $e) {
-            $errorMessage = 'Requested store is not found.';
+            $errorMessage = 'Requested store is not found. '
+                . 'Row ID: SKU = %SKU, Store ID: %storeId, Price From: %priceFrom, Price To: %priceTo.';
             $this->addFailedItemPrice($price, $key, $errorMessage, []);
         }
     }
@@ -208,7 +211,8 @@ class SpecialPriceStorage implements SpecialPriceStorageInterface
     private function checkDate(SpecialPriceInterface $price, $value, $label, $key)
     {
         if ($value && !$this->isCorrectDateValue($value)) {
-            $errorMessage = 'Invalid attribute %label = %priceTo.';
+            $errorMessage = 'Invalid attribute %label = %priceTo. '
+                . 'Row ID: SKU = %SKU, Store ID: %storeId, Price From: %priceFrom, Price To: %priceTo.';
             $this->addFailedItemPrice($price, $key, $errorMessage, ['label' => $label]);
         }
     }
@@ -226,7 +230,8 @@ class SpecialPriceStorage implements SpecialPriceStorageInterface
     private function checkPrice(SpecialPriceInterface $price, int $key): void
     {
         if (null === $price->getPrice() || $price->getPrice() < 0) {
-            $errorMessage = 'Invalid attribute Price = %price.';
+            $errorMessage = 'Invalid attribute Price = %price. '
+                . 'Row ID: SKU = %SKU, Store ID: %storeId, Price From: %priceFrom, Price To: %priceTo.';
             $this->addFailedItemPrice($price, $key, $errorMessage, ['price' => $price->getPrice()]);
         }
     }
@@ -256,14 +261,7 @@ class SpecialPriceStorage implements SpecialPriceStorageInterface
         $additionalInfo['priceFrom'] = $price->getPriceFrom();
         $additionalInfo['priceTo'] = $price->getPriceTo();
 
-        $this->validationResult->addFailedItem(
-            $key,
-            __(
-                $message . ' Row ID: SKU = %SKU, Store ID: %storeId, Price From: %priceFrom, Price To: %priceTo.',
-                $additionalInfo
-            ),
-            $additionalInfo
-        );
+        $this->validationResult->addFailedItem($key, __($message, $additionalInfo), $additionalInfo);
     }
 
     /**
