@@ -141,8 +141,6 @@ class SpecialPriceStorageTest extends WebapiAbstract
      */
     public function testDeleteWhenPriceIsGlobal(): void
     {
-        $fromDate = '2037-01-19 03:14:07';
-
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => '/V1/products/special-price-delete',
@@ -159,7 +157,13 @@ class SpecialPriceStorageTest extends WebapiAbstract
             $serviceInfo,
             [
                 'prices' => [
-                    ['price' => 777, 'store_id' => 1, 'sku' => self::SIMPLE_PRODUCT_SKU, 'price_from' => $fromDate]
+                    [
+                        'price' => 777,
+                        'store_id' => 1,
+                        'sku' => self::SIMPLE_PRODUCT_SKU,
+                        'price_from' => '2037-01-19 03:14:07',
+                        'price_to' => '2038-01-19 03:14:07'
+                    ]
                 ]
             ]
         );
