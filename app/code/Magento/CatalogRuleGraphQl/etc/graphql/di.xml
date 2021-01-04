@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\CatalogRule\Pricing\Price\CatalogRulePrice">
+        <plugin name="update_catalog_rule_price_for_logged_in_customer_group" type="Magento\CatalogRuleGraphQl\Plugin\Pricing\Price\UpdateCatalogRulePrice"/>
+    </type>
+</config>
