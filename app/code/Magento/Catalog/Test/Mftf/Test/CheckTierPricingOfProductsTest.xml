@@ -127,8 +127,7 @@
         <waitForPageLoad stepKey="waitForCustomersPage"/>
         <see userInput="You saved the customer." stepKey="CustomerIsSaved"/>
 
-        <amOnPage url="{{AdminCustomerPage.url}}" stepKey="navigateToCustomers"/>
-        <waitForPageLoad stepKey="waitForPageLoad1" />
+        <actionGroup ref="AdminOpenCustomersGridActionGroup" stepKey="navigateToCustomers"/>
         <click selector="{{AdminCustomerFiltersSection.clearAll}}" stepKey="ClearFilters"/>
         <waitForPageLoad stepKey="waitForFiltersClear"/>
 

@@ -102,11 +102,12 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role implements H
                 'admin_permissions_role_prepare_save',
                 ['object' => $role, 'request' => $this->getRequest()]
             );
-            $role->save();
-
-            $this->_rulesFactory->create()->setRoleId($role->getId())->setResources($resource)->saveRel();
             $this->processPreviousUsers($role, $oldRoleUsers);
             $this->processCurrentUsers($role, $roleUsers);
+
+            $role->save();
+            $this->_rulesFactory->create()->setRoleId($role->getId())->setResources($resource)->saveRel();
+
             $this->messageManager->addSuccessMessage(__('You saved the role.'));
         } catch (UserLockedException $e) {
             $this->_auth->logout();
@@ -155,6 +156,7 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role implements H
     private function parseRequestVariable($paramName): array
     {
         $value = $this->getRequest()->getParam($paramName, null);
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         parse_str($value, $value);
         $value = array_keys($value);
         return $value;

@@ -32,9 +32,11 @@
         </after>
 
         <actionGroup ref="AdminProductCatalogPageOpenActionGroup" stepKey="openProductCatalogPage"/>
-        <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickAddProductToggle"/>
-        <waitForPageLoad stepKey="waitForProductToggleToSelectProduct"/>
-        <click selector="{{AdminProductGridActionSection.addVirtualProduct}}" stepKey="clickVirtualProduct"/>
+        <comment userInput="Adding the comment to replace clickAddProductToggle action for preserving Backward Compatibility" stepKey="clickAddProductToggle"/>
+        <comment userInput="Adding the comment to replace clickAddProductToggle action for preserving Backward Compatibility" stepKey="waitForProductToggleToSelectProduct"/>
+        <actionGroup ref="AdminClickAddProductToggleAndSelectProductTypeActionGroup" stepKey="clickVirtualProduct">
+            <argument name="productType" value="virtual"/>
+        </actionGroup>
 
         <!-- Create virtual product with custom options suite and import options -->
         <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{virtualProductCustomImportOptions.name}}" stepKey="fillProductName"/>
@@ -115,9 +117,7 @@
 
         <!-- Verify we see success message -->
         <see selector="{{AdminProductFormSection.successMessage}}" userInput="You saved the product." stepKey="seeAssertVirtualProductSuccessMessage"/>
-        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-            <argument name="indices" value=""/>
-        </actionGroup>
+        <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
         <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
             <argument name="tags" value=""/>
         </actionGroup>
