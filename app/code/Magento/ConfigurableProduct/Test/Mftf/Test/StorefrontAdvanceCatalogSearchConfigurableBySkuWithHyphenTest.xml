@@ -16,8 +16,8 @@
             <description value="Guest customer should be able to advance search configurable product with product sku that contains hyphen"/>
             <severity value="MAJOR"/>
             <testCaseId value="MC-28817"/>
-            <group value="configurableProduct"/>
-            <group value="searchEngineElasticsearch"/>
+            <group value="ConfigurableProduct"/>
+            <group value="SearchEngineElasticsearch"/>
         </annotations>
         <before>
             <createData entity="SimpleSubCategory" stepKey="categoryHandle" before="simple1Handle"/>
