@@ -49,6 +49,7 @@
         <actionGroup ref="AdminFillTaxIdentifierFilterOnTaxRateGridActionGroup" stepKey="fillTaxIdentifierField3">
             <argument name="taxRateCode" value="{{defaultTaxRateWithLargeRate.code}}"/>
         </actionGroup>
+        <click selector="{{AdminTaxRateGridSection.search}}" stepKey="clickSearch2"/>
         <click selector="{{AdminTaxRateGridSection.nthRow('1')}}" stepKey="clickFirstRow2"/>
         <!-- Verify we see updated large tax rate on the tax rate form page -->
         <seeInField selector="{{AdminTaxRateFormSection.taxIdentifier}}" userInput="{{defaultTaxRateWithLargeRate.code}}" stepKey="seeRTaxIdentifier"/>
