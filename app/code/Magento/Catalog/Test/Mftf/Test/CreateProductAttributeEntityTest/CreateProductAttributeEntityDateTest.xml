@@ -34,7 +34,7 @@
 
         <!--Generate date for use as default value, needs to be MM/d/YYYY and mm/d/yy-->
         <generateDate date="now" format="m/j/Y" stepKey="generateDefaultDate"/>
-        <generateDate date="now" format="m/j/y" stepKey="generateDateCompressedFormat"/>
+        <generateDate date="now" format="n/j/y" stepKey="generateDateCompressedFormat"/>
 
         <!--Navigate to Stores > Attributes > Product.-->
         <actionGroup ref="AdminOpenProductAttributePageActionGroup" stepKey="goToProductAttributes"/>
