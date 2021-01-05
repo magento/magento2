@@ -11,6 +11,7 @@ use Magento\Directory\Model\Currency;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponent\Processor;
+use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Ui\Component\Listing\Column\Price;
 use Magento\Sales\Ui\Component\Listing\Column\PurchasedPrice;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -28,6 +29,11 @@ class PurchasedPriceTest extends TestCase
      */
     protected $currencyMock;
 
+    /**
+     * @var OrderRepositoryInterface|MockObject
+     */
+    protected $orderMock;
+
     protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
@@ -41,31 +47,60 @@ class PurchasedPriceTest extends TestCase
             ->setMethods(['load', 'format'])
             ->disableOriginalConstructor()
             ->getMock();
+        $this->orderMock = $this->getMockBuilder(OrderRepositoryInterface::class)
+            ->setMethods(['getList','get','delete','save','getOrderCurrencyCode'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->model = $objectManager->getObject(
             PurchasedPrice::class,
-            ['currency' => $this->currencyMock, 'context' => $contextMock]
+            [
+                'currency' => $this->currencyMock,
+                'context' => $contextMock,
+                'order' => $this->orderMock,
+            ]
         );
     }
 
-    public function testPrepareDataSource()
-    {
-        $itemName = 'itemName';
-        $oldItemValue = 'oldItemValue';
-        $newItemValue = 'newItemValue';
+    /**
+     * @param string $itemName
+     * @param string $oldItemValue
+     * @param string $newItemValue
+     * @param string|null $orderCurrencyCode
+     * @dataProvider prepareDataSourceDataProvider
+     */
+    public function testPrepareDataSource(
+        $itemName,
+        $oldItemValue,
+        $newItemValue,
+        $orderCurrencyCode
+    ): void {
         $dataSource = [
             'data' => [
                 'items' => [
                     [
                         $itemName => $oldItemValue,
-                        'order_currency_code' => 'US'
+                        'order_currency_code' => $orderCurrencyCode,
+                        'order_id' => 1,
                     ]
                 ]
             ]
         ];
 
+        if (isset($dataSource['data']['items'][0]['order_currency_code'])) {
+            $currencyCode = $dataSource['data']['items'][0]['order_currency_code'];
+        } else {
+            $currencyCode = 'FR';
+            $this->orderMock->expects($this->once())
+                ->method('get')
+                ->willReturnSelf();
+            $this->orderMock->expects($this->once())
+                ->method('getOrderCurrencyCode')
+                ->willReturn($currencyCode);
+        }
+
         $this->currencyMock->expects($this->once())
             ->method('load')
-            ->with($dataSource['data']['items'][0]['order_currency_code'])
+            ->with($currencyCode)
             ->willReturnSelf();
 
         $this->currencyMock->expects($this->once())
@@ -76,5 +111,26 @@ class PurchasedPriceTest extends TestCase
         $this->model->setData('name', $itemName);
         $dataSource = $this->model->prepareDataSource($dataSource);
         $this->assertEquals($newItemValue, $dataSource['data']['items'][0][$itemName]);
+    }
+
+    /**
+     * @return array
+     */
+    public function prepareDataSourceDataProvider(): array
+    {
+        return [
+            [
+                'item_name' => 'itemName',
+                'old_item_value' => 'oldItemValue',
+                'new_item_value' => 'newItemValue',
+                'order_currency_code' => 'US',
+            ],
+            [
+                'item_name' => 'itemName',
+                'old_item_value' => 'oldItemValue',
+                'new_item_value' => 'newItemValue',
+                'order_currency_code' => null,
+            ],
+        ];
     }
 }
