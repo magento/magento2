@@ -21,6 +21,9 @@ use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\ExtractDataFromC
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\CategoryTree as CategoryTreeDataProvider;
 use Magento\Catalog\Model\CategoryRepository;
 
+/**
+ * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+ */
 class Route implements ResolverInterface
 {
     const CMS_PAGE = 'CMS_PAGE';
