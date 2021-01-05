@@ -27,13 +27,9 @@
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsDefaultUser"/>
         </before>
         <after>
-            <!--Clean filters -->
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilterAfter"/>
-            <!-- Log out as Default Admin User -->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAsDefaultAdmin"/>
-            <!-- Remove created data-->
             <deleteData createDataKey="createFirstCustomer" stepKey="deleteFirstCustomer"/>
-            <!-- Set config back-->
             <magentoCLI command="config:set {{LoginAsCustomerConfigDataEnabled.path}} 0"
                         stepKey="disableLoginAsCustomer"/>
         </after>
@@ -47,12 +43,7 @@
         <actionGroup ref="AdminOpenLoginAsCustomerLogActionGroup" stepKey="gotoLoginAsCustomerLog"/>
         <!-- Setup date filters -->
         <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilter"/>
-        <click selector="{{AdminLoginAsCustomerLogToolbarSection.filters}}" stepKey="clickFilters"/>
-        <click selector="{{AdminLoginAsCustomerLogToolbarSection.DatePickerFrom}}" stepKey="clickFromDate"/>
-        <click selector="{{AdminLoginAsCustomerLogToolbarSection.todayDate}}" stepKey="clickToToday"/>
-        <click selector="{{AdminLoginAsCustomerLogToolbarSection.DatePickerTo}}" stepKey="clickToDate"/>
-        <click selector="{{AdminLoginAsCustomerLogToolbarSection.todayDate}}" stepKey="clickTodayDateAgain"/>
-        <click selector="{{AdminProductGridFilterSection.applyFilters}}" stepKey="clickApplyFilters"/>
+        <actionGroup ref="AdminLoginAsCustomerLogFilterDatePickerTodayActionGroup" stepKey="filterByToday"/>
         <!-- Perform assertions -->
         <actionGroup ref="AdminAssertLoginAsCustomerLogRecordActionGroup" stepKey="verifyDefaultAdminFirstCustomerLogRecord">
             <argument name="rowNumber" value="1"/>
