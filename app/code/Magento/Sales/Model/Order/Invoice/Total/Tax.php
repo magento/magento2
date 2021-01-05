@@ -118,8 +118,13 @@ class Tax extends AbstractTotal
         $invoice->setDiscountTaxCompensationAmount($taxDiscountCompensationAmt);
         $invoice->setBaseDiscountTaxCompensationAmount($baseTaxDiscountCompensationAmt);
 
-        $invoice->setGrandTotal($invoice->getGrandTotal() + $totalTax + $totalDiscountTaxCompensation);
-        $invoice->setBaseGrandTotal($invoice->getBaseGrandTotal() + $baseTotalTax + $baseTotalDiscountTaxCompensation);
+        $grandTotal = $invoice->getGrandTotal() + $invoice->getDiscountAmount() < 0.0001
+            ? 0 : $invoice->getGrandTotal() + $totalTax + $totalDiscountTaxCompensation;
+        $baseGrandTotal = $invoice->getBaseGrandTotal() + $invoice->getBaseDiscountAmount() < 0.0001
+            ? 0 : $invoice->getBaseGrandTotal() + $baseTotalTax + $baseTotalDiscountTaxCompensation;
+
+        $invoice->setGrandTotal($grandTotal);
+        $invoice->setBaseGrandTotal($baseGrandTotal);
 
         return $this;
     }
