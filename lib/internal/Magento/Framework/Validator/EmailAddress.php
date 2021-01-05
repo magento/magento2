@@ -10,5 +10,9 @@ use Laminas\Validator\EmailAddress as LaminasEmailValidator;
 
 class EmailAddress extends LaminasEmailValidator
 {
-
+    public function __construct($options = [])
+    {
+        parent::__construct($options);
+        $this->getHostnameValidator()->useTldCheck(false);
+    }
 }
