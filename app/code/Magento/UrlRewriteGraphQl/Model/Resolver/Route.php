@@ -7,24 +7,21 @@ declare(strict_types=1);
 
 namespace Magento\UrlRewriteGraphQl\Model\Resolver;
 
-use Magento\Catalog\Model\ProductRepository;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
-use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
-use Magento\UrlRewriteGraphQl\Model\Resolver\UrlRewrite\CustomUrlLocatorInterface;
+use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\CmsGraphQl\Model\Resolver\DataProvider\Page as PageDataProvider;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\ExtractDataFromCategoryTree;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\CategoryTree as CategoryTreeDataProvider;
+use Magento\Catalog\Model\ProductRepository;
 use Magento\Catalog\Model\CategoryRepository;
+use Magento\UrlRewriteGraphQl\Model\Resolver\AbstractEntityUrl;
+use Magento\UrlRewriteGraphQl\Model\Resolver\UrlRewrite\CustomUrlLocatorInterface;
 
-/**
- * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
- */
-class Route implements ResolverInterface
+class Route  extends AbstractEntityUrl implements ResolverInterface
 {
     const CMS_PAGE = 'CMS_PAGE';
     const PRODUCT = 'PRODUCT';
@@ -33,11 +30,6 @@ class Route implements ResolverInterface
      * @var PageDataProvider
      */
     private $pageDataProvider;
-
-    /**
-     * @var UrlFinderInterface
-     */
-    private $urlFinder;
 
     /**
      * @var CustomUrlLocatorInterface
@@ -65,9 +57,14 @@ class Route implements ResolverInterface
     private $categoryRepository;
 
     /**
-    * @param UrlFinderInterface $urlFinder
-    * @param CustomUrlLocatorInterface $customUrlLocator
-    */
+     * @param UrlFinderInterface $urlFinder
+     * @param CustomUrlLocatorInterface $customUrlLocator
+     * @param ProductRepository $productRepository
+     * @param CategoryTreeDataProvider $categoryTree
+     * @param ExtractDataFromCategoryTree $extractDataFromCategoryTree
+     * @param PageDataProvider $pageDataProvider
+     * @param CategoryRepository $categoryRepository
+     */
     public function __construct(
         UrlFinderInterface $urlFinder,
         CustomUrlLocatorInterface $customUrlLocator,
@@ -77,7 +74,7 @@ class Route implements ResolverInterface
         PageDataProvider $pageDataProvider,
         CategoryRepository $categoryRepository
     ) {
-        $this->urlFinder = $urlFinder;
+        parent::__construct($urlFinder);
         $this->customUrlLocator = $customUrlLocator;
         $this->productRepository = $productRepository;
         $this->categoryTree = $categoryTree;
@@ -154,102 +151,5 @@ class Route implements ResolverInterface
         }
 
         return $result;
-    }
-
-    /**
-     * Handle custom urls with and without redirects
-     *
-     * @param UrlRewrite $finalUrlRewrite
-     * @param int $storeId
-     * @return array|null
-     */
-    private function rewriteCustomUrls(UrlRewrite $finalUrlRewrite, int $storeId): ?array
-    {
-        if ($finalUrlRewrite->getEntityType() === 'custom' || !($finalUrlRewrite->getEntityId() > 0)) {
-            $finalCustomUrlRewrite = clone $finalUrlRewrite;
-            $finalUrlRewrite = $this->findFinalUrl($finalCustomUrlRewrite->getTargetPath(), $storeId, true);
-            $relativeUrl =
-                $finalCustomUrlRewrite->getRedirectType() == 0
-                    ? $finalCustomUrlRewrite->getRequestPath() : $finalUrlRewrite->getRequestPath();
-            return [
-                'id' => $finalUrlRewrite->getEntityId(),
-                'canonical_url' => $relativeUrl,
-                'relative_url' => $relativeUrl,
-                'redirectCode' => $finalCustomUrlRewrite->getRedirectType(),
-                'type' => $this->sanitizeType($finalUrlRewrite->getEntityType())
-            ];
-        }
-        return null;
-    }
-
-    /**
-     * Find the final url passing through all redirects if any
-     *
-     * @param string $requestPath
-     * @param int $storeId
-     * @param bool $findCustom
-     * @return UrlRewrite|null
-     */
-    private function findFinalUrl(string $requestPath, int $storeId, bool $findCustom = false): ?UrlRewrite
-    {
-        $urlRewrite = $this->findUrlFromRequestPath($requestPath, $storeId);
-        if ($urlRewrite) {
-            $this->redirectType = $urlRewrite->getRedirectType();
-            while ($urlRewrite && $urlRewrite->getRedirectType() > 0) {
-                $urlRewrite = $this->findUrlFromRequestPath($urlRewrite->getTargetPath(), $storeId);
-            }
-        } else {
-            $urlRewrite = $this->findUrlFromTargetPath($requestPath, $storeId);
-        }
-        if ($urlRewrite && ($findCustom && !$urlRewrite->getEntityId() && !$urlRewrite->getIsAutogenerated())) {
-            $urlRewrite = $this->findUrlFromTargetPath($urlRewrite->getTargetPath(), $storeId);
-        }
-
-        return $urlRewrite;
-    }
-
-    /**
-     * Find a url from a request url on the current store
-     *
-     * @param string $requestPath
-     * @param int $storeId
-     * @return UrlRewrite|null
-     */
-    private function findUrlFromRequestPath(string $requestPath, int $storeId): ?UrlRewrite
-    {
-        return $this->urlFinder->findOneByData(
-            [
-                'request_path' => $requestPath,
-                'store_id' => $storeId
-            ]
-        );
-    }
-
-    /**
-     * Find a url from a target url on the current store
-     *
-     * @param string $targetPath
-     * @param int $storeId
-     * @return UrlRewrite|null
-     */
-    private function findUrlFromTargetPath(string $targetPath, int $storeId): ?UrlRewrite
-    {
-        return $this->urlFinder->findOneByData(
-            [
-                'target_path' => $targetPath,
-                'store_id' => $storeId
-            ]
-        );
-    }
-
-    /**
-     * Sanitize the type to fit schema specifications
-     *
-     * @param string $type
-     * @return string
-     */
-    private function sanitizeType(string $type) : string
-    {
-        return strtoupper(str_replace('-', '_', $type));
     }
 }
