@@ -7,6 +7,8 @@
  */
 namespace Magento\Framework\Validator;
 
-class Regex extends \Zend_Validate_Regex implements \Magento\Framework\Validator\ValidatorInterface
+use Laminas\Validator\Regex as LaminasRegex;
+
+class Regex extends LaminasRegex
 {
 }

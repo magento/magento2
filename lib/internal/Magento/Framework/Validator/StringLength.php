@@ -7,7 +7,9 @@
  */
 namespace Magento\Framework\Validator;
 
-class StringLength extends \Zend_Validate_StringLength implements \Magento\Framework\Validator\ValidatorInterface
+use Laminas\Validator\StringLength as LaminasStringLength;
+
+class StringLength extends LaminasStringLength
 {
     /**
      * @var string
