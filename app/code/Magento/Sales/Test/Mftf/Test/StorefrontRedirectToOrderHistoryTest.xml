@@ -11,8 +11,8 @@
     <test name="StorefrontRedirectToOrderHistoryTest">
         <annotations>
             <features value="Sales"/>
-            <stories value="Redirect To Order History"/>
-            <title value="Redirect To Order History"/>
+            <stories value="Print Order"/>
+            <title value="Redirect to Order History Page"/>
             <description value="Check while order printing URL with an id of not relevant order redirects to order history"/>
             <severity value="MAJOR"/>
             <testCaseId value="MC-28543"/>
