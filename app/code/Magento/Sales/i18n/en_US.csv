@@ -803,3 +803,6 @@ If set YES Email field will be required during Admin order creation for new Cust
 "Could not save the shipment tracking","Could not save the shipment tracking"
 "Please enter a coupon code!","Please enter a coupon code!"
 "Reorder is not available.","Reorder is not available."
+"The coupon code has been removed.","The coupon code has been removed."
+"This creditmemo no longer exists.","This creditmemo no longer exists."
+"Add to address book","Add to address book"

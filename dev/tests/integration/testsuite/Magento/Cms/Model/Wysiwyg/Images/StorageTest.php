@@ -109,11 +109,12 @@ class StorageTest extends \PHPUnit\Framework\TestCase
         $collection = $this->storage->getFilesCollection(self::$_baseDir, 'image');
         $this->assertInstanceOf(Collection::class, $collection);
         foreach ($collection as $item) {
+            $thumbUrl = parse_url($item->getThumbUrl(), PHP_URL_PATH);
             $this->assertInstanceOf(DataObject::class, $item);
             $this->assertStringEndsWith('/' . $fileName, $item->getUrl());
             $this->assertEquals(
-                '/pub/media/.thumbsMagentoCmsModelWysiwygImagesStorageTest/magento_image.jpg',
-                parse_url($item->getThumbUrl(), PHP_URL_PATH),
+                '/media/.thumbsMagentoCmsModelWysiwygImagesStorageTest/magento_image.jpg',
+                $thumbUrl,
                 "Check if Thumbnail URL is equal to the generated URL"
             );
             $this->assertEquals(
@@ -387,17 +388,17 @@ class StorageTest extends \PHPUnit\Framework\TestCase
             [
                 '/',
                 'image1.png',
-                '/pub/media/.thumbs/image1.png'
+                '/media/.thumbs/image1.png'
             ],
             [
                 '/cms',
                 'image2.png',
-                '/pub/media/.thumbscms/image2.png'
+                '/media/.thumbscms/image2.png'
             ],
             [
                 '/cms/pages',
                 'image3.png',
-                '/pub/media/.thumbscms/pages/image3.png'
+                '/media/.thumbscms/pages/image3.png'
             ]
         ];
     }
