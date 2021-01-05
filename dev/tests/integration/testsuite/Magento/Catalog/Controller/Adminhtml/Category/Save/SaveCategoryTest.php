@@ -103,7 +103,10 @@ class SaveCategoryTest extends AbstractSaveCategoryTest
             'return_session_messages_only' => false,
         ]);
         $this->dispatch('backend/catalog/category/save');
-        $message = 'The "Available Product Listing Sort By" attribute is required. Enter and try again.';
-        $this->assertSessionMessages($this->equalTo([(string)__($message)]), MessageInterface::TYPE_ERROR);
+        $message = (string)__(
+            'The "%1" attribute is required. Enter and try again.',
+            'Available Product Listing Sort By'
+        );
+        $this->assertSessionMessages($this->containsEqual($message), MessageInterface::TYPE_ERROR);
     }
 }
