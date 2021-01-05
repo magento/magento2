@@ -9,6 +9,7 @@ namespace Magento\Sales\Ui\Component\Listing\Column;
 
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
+use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Ui\Component\Listing\Columns\Column;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Directory\Model\Currency;
@@ -29,6 +30,11 @@ class PurchasedPrice extends Column
     private $currency;
 
     /**
+     * @var OrderRepositoryInterface
+     */
+    private $order;
+
+    /**
      * Constructor
      *
      * @param ContextInterface $context
@@ -37,6 +43,7 @@ class PurchasedPrice extends Column
      * @param array $components
      * @param array $data
      * @param Currency $currency
+     * @param OrderRepositoryInterface $order
      */
     public function __construct(
         ContextInterface $context,
@@ -44,11 +51,14 @@ class PurchasedPrice extends Column
         PriceCurrencyInterface $priceFormatter,
         array $components = [],
         array $data = [],
-        Currency $currency = null
+        Currency $currency = null,
+        OrderRepositoryInterface $order = null
     ) {
         $this->priceFormatter = $priceFormatter;
         $this->currency = $currency ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->create(Currency::class);
+        $this->order = $order ?: \Magento\Framework\App\ObjectManager::getInstance()
+            ->create(OrderRepositoryInterface::class);
         parent::__construct($context, $uiComponentFactory, $components, $data);
     }
 
@@ -62,7 +72,9 @@ class PurchasedPrice extends Column
     {
         if (isset($dataSource['data']['items'])) {
             foreach ($dataSource['data']['items'] as & $item) {
-                $currencyCode = isset($item['order_currency_code']) ? $item['order_currency_code'] : null;
+                $currencyCode = isset($item['order_currency_code'])
+                    ? $item['order_currency_code']
+                    : $this->order->get($item['order_id'])->getOrderCurrencyCode();
                 $purchaseCurrency = $this->currency->load($currencyCode);
                 $item[$this->getData('name')] = $purchaseCurrency
                     ->format($item[$this->getData('name')], [], false);
