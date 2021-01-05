@@ -647,7 +647,7 @@ class File implements DriverInterface
      * @return array|bool|null
      * @throws FileSystemException
      */
-    public function fileGetCsv($resource, $length = 0, $delimiter = ',', $enclosure = '"', $escape = '\\')
+    public function fileGetCsv($resource, $length = 0, $delimiter = ',', $enclosure = '"', $escape = "\0")
     {
         $result = @fgetcsv($resource, $length, $delimiter, $enclosure, $escape);
         if ($result === null) {
@@ -801,7 +801,10 @@ class File implements DriverInterface
             }
         }
 
-        $result = @fputcsv($resource, $data, $delimiter, $enclosure);
+        // Escape symbol is needed to fix known issue in PHP broken fputcsv escaping functionality
+        // where backslash followed by double quote breaks file consistency
+        $escape = "\0";
+        $result = @fputcsv($resource, $data, $delimiter, $enclosure, $escape);
         if (!$result) {
             throw new FileSystemException(
                 new Phrase(
