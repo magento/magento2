@@ -138,7 +138,7 @@ define([
 
                 weight = getSectionValue('weight', options);
 
-                if(!weight && productWeight.length > 0) {
+                if (!weight && productWeight.length > 0) {
                     weight = productWeight;
                 }
 
