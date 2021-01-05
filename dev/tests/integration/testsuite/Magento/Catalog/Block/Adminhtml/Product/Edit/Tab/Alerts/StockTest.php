@@ -60,7 +60,7 @@ class StockTest extends TestCase
      * @param string|null $storeCode
      * @return void
      */
-    public function testGridCollectionWIthStoreId(string $sku, string $expectedEmail, ?string $storeCode = null): void
+    public function testGridCollectionWithStoreId(string $sku, string $expectedEmail, ?string $storeCode = null): void
     {
         $productId = (int)$this->productRepository->get($sku)->getId();
         $storeId = $storeCode ? (int)$this->storeManager->getStore($storeCode)->getId() : null;
