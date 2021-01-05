@@ -131,7 +131,7 @@ class ConsumersRunner
             ];
 
             if ($maxMessages) {
-                $arguments[] = '--max-messages=' . $maxMessages;
+                $arguments[] = '--max-messages=' . min($consumer->getMaxMessages() ?? $maxMessages, $maxMessages);
             }
 
             $command = $php . ' ' . BP . '/bin/magento queue:consumers:start %s %s'

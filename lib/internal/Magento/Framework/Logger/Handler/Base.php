@@ -78,7 +78,7 @@ class Base extends StreamHandler
     /**
      * @inheritDoc
      */
-    public function write(array $record)
+    protected function write(array $record)
     {
         $logDir = $this->filesystem->getParentDirectory($this->url);
         if (!$this->filesystem->isDirectory($logDir)) {

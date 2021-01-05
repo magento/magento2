@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminEmailTemplatePreviewWithDirectivesTest">
+        <annotations>
+            <features value="Email"/>
+            <stories value="Create email template with directives"/>
+            <title value="Check email template preview with directives"/>
+            <description value="Check if email template preview works correctly with directives"/>
+            <severity value="CRITICAL"/>
+            <useCaseId value="MC-23058"/>
+            <group value="email"/>
+            <group value="WYSIWYGDisabled"/>
+            <stories value="Email Template Preview"/>
+        </annotations>
+
+        <before>
+            <!--Login to Admin Area-->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminArea"/>
+        </before>
+
+        <after>
+            <!--Delete created Template-->
+            <actionGroup ref="DeleteEmailTemplateActionGroup" stepKey="deleteTemplate"/>
+            <click selector="{{AdminDataGridHeaderSection.clearFilters}}" stepKey="clearFilters"/>
+            <!--Logout from Admin Area-->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
+        </after>
+
+        <actionGroup ref="CreateCustomTemplateActionGroup" stepKey="createTemplate">
+            <argument name="template" value="EmailTemplateWithDirectives"/>
+        </actionGroup>
+        <actionGroup ref="PreviewEmailTemplateActionGroup" stepKey="previewTemplate"/>
+        <actionGroup ref="AssertEmailTemplateContentActionGroup" stepKey="assertContent">
+            <argument name="expectedContent" value="{{EmailTemplateWithDirectives.expectedTemplate}}"/>
+        </actionGroup>
+    </test>
+</tests>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminMediaGalleryDeleteAssetsAclTest">
+        <annotations>
+            <features value="MediaGallery"/>
+            <stories value="[Story 60] User manages ACL rules for Media Gallery"/>
+            <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/1485"/>
+            <title value="User manages ACL rules for Media Gallery delete assets functionality"/>
+            <description value="User manages ACL rules for Media Gallery delete assets functionality"/>
+            <testCaseId value="https://app.hiptest.com/projects/131313/test-plan/folders/943908/scenarios/3218882"/>
+            <severity value="MAJOR"/>
+            <group value="media_gallery_ui"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdminBefore"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdminAfter"/>
+            <amOnPage url="{{AdminRolesPage.url}}" stepKey="navigateToUserRoleGrid" />
+            <waitForPageLoad stepKey="waitForRolesGridLoad" />
+            <actionGroup ref="AdminDeleteRoleActionGroup" stepKey="deleteUserRole">
+                <argument name="role" value="adminRole"/>
+            </actionGroup>
+            <amOnPage url="{{AdminUsersPage.url}}" stepKey="goToAllUsersPage"/>
+            <waitForPageLoad stepKey="waitForUsersGridLoad" />
+            <actionGroup ref="AdminDeleteNewUserActionGroup" stepKey="deleteUser">
+                <argument name="userName" value="{{admin2.username}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+
+        <actionGroup ref="AdminFillUserRoleRequiredDataActionGroup" stepKey="fillUserRoleRequiredData">
+            <argument name="User" value="adminRole"/>
+            <argument name="restrictedRole" value="Media Gallery"/>
+        </actionGroup>
+        <actionGroup ref="AdminUserClickRoleResourceTabActionGroup" stepKey="switchToRoleResourceTab"/>
+        <actionGroup ref="AdminAddRestrictedRoleActionGroup" stepKey="uncheckDeleteFolder">
+            <argument name="User" value="adminRole"/>
+            <argument name="restrictedRole" value="Delete assets"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminAddRestrictedRoleActionGroup" stepKey="AddMediaGalleryPagesResource">
+            <argument name="User" value="adminRole"/>
+            <argument name="restrictedRole" value="Pages"/>
+        </actionGroup>
+        <actionGroup ref="AdminUserSaveRoleActionGroup" stepKey="saveRole"/>
+
+        <actionGroup ref="AdminCreateUserActionGroup" stepKey="createAdminUser">
+            <argument name="role" value="adminRole"/>
+            <argument name="User" value="admin2"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
+
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsNewUser">
+            <argument name="username" value="{{admin2.username}}"/>
+            <argument name="password" value="{{admin2.password}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminOpenCreateNewCMSPageActionGroup" stepKey="openNewPage"/>
+        <actionGroup ref="AdminOpenMediaGalleryFromPageNoEditorActionGroup" stepKey="openMediaGalleryForPage"/>
+        <actionGroup ref="AdminAssertMediaGalleryButtonNotDisabledOnPageActionGroup" stepKey="assertCreateButtonEnabledAllOthersDisabled">
+            <argument name="buttonName" value="Delete Images..."/>
+        </actionGroup>
+        <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+    </test>
+</tests>

@@ -3,126 +3,175 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Block\Address;
+
+use Magento\Customer\Model\AddressRegistry;
+use Magento\Customer\Model\CustomerRegistry;
+use Magento\Customer\Model\Session;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\View\Result\Page;
+use Magento\Framework\View\Result\PageFactory;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Helper\Xpath;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests Address Edit Block
+ *
+ * @magentoAppArea frontend
+ * @magentoAppIsolation enabled
  */
-class EditTest extends \PHPUnit\Framework\TestCase
+class EditTest extends TestCase
 {
+    /** @var ObjectManagerInterface */
+    private $objectManager;
+
     /** @var Edit */
-    protected $_block;
+    private $block;
 
-    /** @var  \Magento\Customer\Model\Session */
-    protected $_customerSession;
+    /** @var  Session */
+    private $customerSession;
 
-    /** @var \Magento\Backend\Block\Template\Context */
-    protected $_context;
+    /** @var AddressRegistry */
+    private $addressRegistry;
 
-    /** @var string */
-    protected $_requestId;
+    /** @var CustomerRegistry */
+    private $customerRegistry;
 
+     /** @var RequestInterface */
+    private $request;
+
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-
-        $this->_customerSession = $objectManager->get(\Magento\Customer\Model\Session::class);
-        $this->_customerSession->setCustomerId(1);
-
-        $this->_context = $objectManager->get(\Magento\Backend\Block\Template\Context::class);
-        $this->_requestId = $this->_context->getRequest()->getParam('id');
-        $this->_context->getRequest()->setParam('id', '1');
-
-        $objectManager->get(\Magento\Framework\App\State::class)->setAreaCode('frontend');
-
-        /** @var $layout \Magento\Framework\View\Layout */
-        $layout = $objectManager->get(\Magento\Framework\View\LayoutInterface::class);
-        $currentCustomer = $objectManager->create(
-            \Magento\Customer\Helper\Session\CurrentCustomer::class,
-            ['customerSession' => $this->_customerSession]
-        );
-        $this->_block = $layout->createBlock(
-            \Magento\Customer\Block\Address\Edit::class,
-            '',
-            ['customerSession' => $this->_customerSession, 'currentCustomer' => $currentCustomer]
-        );
+        parent::setUp();
+        $this->objectManager = Bootstrap::getObjectManager();
+        $this->customerSession = $this->objectManager->get(Session::class);
+        $this->customerSession->setCustomerId(1);
+        $this->request = $this->objectManager->get(RequestInterface::class);
+        $this->request->setParam('id', '1');
+        /** @var Page $page */
+        $page = $this->objectManager->get(PageFactory::class)->create();
+        $page->addHandle(['default', 'customer_address_form']);
+        $page->getLayout()->generateXml();
+        $this->block = $page->getLayout()->getBlock('customer_address_edit');
+        $this->addressRegistry = $this->objectManager->get(AddressRegistry::class);
+        $this->customerRegistry = $this->objectManager->get(CustomerRegistry::class);
     }
 
+    /**
+     * @inheritdoc
+     */
     protected function tearDown(): void
     {
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->_customerSession->setCustomerId(null);
-        $this->_context->getRequest()->setParam('id', $this->_requestId);
-        /** @var \Magento\Customer\Model\AddressRegistry $addressRegistry */
-        $addressRegistry = $objectManager->get(\Magento\Customer\Model\AddressRegistry::class);
+        parent::tearDown();
+        $this->customerSession->setCustomerId(null);
+        $this->request->setParam('id', null);
         //Cleanup address from registry
-        $addressRegistry->remove(1);
-        $addressRegistry->remove(2);
-
-        /** @var \Magento\Customer\Model\CustomerRegistry $customerRegistry */
-        $customerRegistry = $objectManager->get(\Magento\Customer\Model\CustomerRegistry::class);
+        $this->addressRegistry->remove(1);
+        $this->addressRegistry->remove(2);
         //Cleanup customer from registry
-        $customerRegistry->remove(1);
+        $this->customerRegistry->remove(1);
     }
 
     /**
      * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @return void
      */
-    public function testGetSaveUrl()
+    public function testGetSaveUrl(): void
     {
-        $this->assertEquals('http://localhost/index.php/customer/address/formPost/', $this->_block->getSaveUrl());
-    }
-
-    /**
-     * @magentoDataFixture Magento/Customer/_files/customer.php
-     * @magentoDataFixture Magento/Customer/_files/customer_address.php
-     */
-    public function testGetRegionId()
-    {
-        $this->assertEquals(1, $this->_block->getRegionId());
+        $this->assertEquals('http://localhost/index.php/customer/address/formPost/', $this->block->getSaveUrl());
     }
 
     /**
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoDataFixture Magento/Customer/_files/customer_address.php
+     * @return void
      */
-    public function testGetCountryId()
+    public function testGetRegionId(): void
     {
-        $this->assertEquals('US', $this->_block->getCountryId());
+        $this->assertEquals(1, $this->block->getRegionId());
+    }
+
+    /**
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @magentoDataFixture Magento/Customer/_files/customer_address.php
+     * @return void
+     */
+    public function testGetCountryId(): void
+    {
+        $this->assertEquals('US', $this->block->getCountryId());
     }
 
     /**
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoDataFixture Magento/Customer/_files/customer_two_addresses.php
+     * @return void
      */
-    public function testGetCustomerAddressCount()
+    public function testGetCustomerAddressCount(): void
     {
-        $this->assertEquals(2, $this->_block->getCustomerAddressCount());
+        $this->assertEquals(2, $this->block->getCustomerAddressCount());
     }
 
     /**
      * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @return void
      */
-    public function testCanSetAsDefaultShipping()
+    public function testCanSetAsDefaultShipping(): void
     {
-        $this->assertEquals(0, $this->_block->canSetAsDefaultShipping());
+        $this->assertEquals(0, $this->block->canSetAsDefaultShipping());
     }
 
     /**
      * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @return void
      */
-    public function testIsDefaultBilling()
+    public function testIsDefaultBilling(): void
     {
-        $this->assertFalse($this->_block->isDefaultBilling());
+        $this->assertFalse($this->block->isDefaultBilling());
     }
 
     /**
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoDataFixture Magento/Customer/_files/customer_address.php
+     * @return void
      */
-    public function testGetStreetLine()
+    public function testGetStreetLine(): void
     {
-        $this->assertEquals('Green str, 67', $this->_block->getStreetLine(1));
-        $this->assertEquals('', $this->_block->getStreetLine(2));
+        $this->assertEquals('Green str, 67', $this->block->getStreetLine(1));
+        $this->assertEquals('', $this->block->getStreetLine(2));
+    }
+
+    /**
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @magentoConfigFixture current_store customer/create_account/vat_frontend_visibility 1
+     * @return void
+     */
+    public function testVatIdFieldVisible(): void
+    {
+        $html = $this->block->toHtml();
+        $labelXpath = "//div[contains(@class, 'taxvat')]//label/span[normalize-space(text()) = '%s']";
+        $this->assertEquals(1, Xpath::getElementsCountForXpath(sprintf($labelXpath, __('VAT Number')), $html));
+        $inputXpath = "//div[contains(@class, 'taxvat')]//div/input[contains(@id,'vat_id') and @type='text']";
+        $this->assertEquals(1, Xpath::getElementsCountForXpath($inputXpath, $html));
+    }
+
+    /**
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @magentoConfigFixture current_store customer/create_account/vat_frontend_visibility 0
+     * @return void
+     */
+    public function testVatIdFieldNotVisible(): void
+    {
+        $html = $this->block->toHtml();
+        $labelXpath = "//div[contains(@class, 'taxvat')]//label/span[normalize-space(text()) = '%s']";
+        $this->assertEquals(0, Xpath::getElementsCountForXpath(sprintf($labelXpath, __('VAT Number')), $html));
+        $inputXpath = "//div[contains(@class, 'taxvat')]//div/input[contains(@id,'vat_id') and @type='text']";
+        $this->assertEquals(0, Xpath::getElementsCountForXpath($inputXpath, $html));
     }
 }

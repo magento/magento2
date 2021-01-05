@@ -39,7 +39,7 @@ class DefaultItems extends Template
      */
     public function getItemOptions()
     {
-        $result = [[]];
+        $result = [];
         if ($options = $this->getItem()->getOrderItem()->getProductOptions()) {
             if (isset($options['options'])) {
                 $result[] = $options['options'];
@@ -52,7 +52,7 @@ class DefaultItems extends Template
             }
         }
 
-        return array_merge(...$result);
+        return array_merge([], ...$result);
     }
 
     /**
