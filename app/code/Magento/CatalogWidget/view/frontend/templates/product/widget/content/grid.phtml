@@ -72,8 +72,7 @@ use Magento\Framework\App\Action\Action;
                                                             <?= $block->getBlockHtml('formkey') ?>
                                                             <button type="submit"
                                                                     title="<?= $block->escapeHtml(__('Add to Cart')) ?>"
-                                                                    class="action tocart primary"
-                                                                    disabled>
+                                                                    class="action tocart primary">
                                                                 <span><?= $block->escapeHtml(__('Add to Cart')) ?></span>
                                                             </button>
                                                         </form>
@@ -114,11 +113,13 @@ use Magento\Framework\App\Action\Action;
             <?= $block->getPagerHtml() ?>
         </div>
     </div>
-<script type="text/x-magento-init">
-{
-    ".block.widget [data-role=tocart-form]": {
-        "Magento_Catalog/js/validate-product": {}
+    <?php if($block->getBlockHtml('formkey')): ?>
+    <script type="text/x-magento-init">
+    {
+        ".block.widget [data-role=tocart-form]": {
+            "Magento_Catalog/js/validate-product": {}
+        }
     }
-}
-</script>
+    </script>
+    <?php endif;?>
 <?php endif;?>
