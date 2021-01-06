@@ -7,26 +7,93 @@ declare(strict_types=1);
 
 namespace Magento\UrlRewriteGraphQl\Model\Resolver;
 
+use Magento\Framework\GraphQl\Config\Element\Field;
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
+use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
+use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
+use Magento\UrlRewriteGraphQl\Model\Resolver\UrlRewrite\CustomUrlLocatorInterface;
 
 abstract class AbstractEntityUrl {
+    /**
+     * @var CustomUrlLocatorInterface
+     */
+    private $customUrlLocator;
 
     /**
      * @var UrlFinderInterface
      */
     private $urlFinder;
 
+    /**
+     * @var int
+     */
     protected $redirectType = 0;
 
     /**
      * AbstractUrlHelper constructor.
+     * @param CustomUrlLocatorInterface $customUrlLocator
      * @param UrlFinderInterface $urlFinder
      */
     public function __construct (
+        CustomUrlLocatorInterface $customUrlLocator,
         UrlFinderInterface $urlFinder
     ) {
+        $this->customUrlLocator = $customUrlLocator;
         $this->urlFinder = $urlFinder;
+    }
+
+    /**
+     * @param Field $field
+     * @param $context
+     * @param ResolveInfo $info
+     * @param array|null $value
+     * @param array|null $args
+     * @return array|null
+     * @throws GraphQlInputException
+     * @throws GraphQlNoSuchEntityException
+     */
+    public function resolve(
+        Field $field,
+        $context,
+        ResolveInfo $info,
+        array $value = null,
+        array $args = null
+    ) {
+        if (!isset($args['url']) || empty(trim($args['url']))) {
+            throw new GraphQlInputException(__('"url" argument should be specified and not empty'));
+        }
+
+        $storeId = (int)$context->getExtensionAttributes()->getStore()->getId();
+        $result = null;
+        $url = $args['url'];
+        if (substr($url, 0, 1) === '/' && $url !== '/') {
+            $url = ltrim($url, '/');
+        }
+        $this->redirectType = 0;
+        $customUrl = $this->customUrlLocator->locateUrl($url);
+        $url = $customUrl ?: $url;
+        $finalUrlRewrite = $this->findFinalUrl($url, $storeId);
+        if ($finalUrlRewrite) {
+            $relativeUrl = $finalUrlRewrite->getRequestPath();
+            $resultArray = $this->rewriteCustomUrls($finalUrlRewrite, $storeId) ?? [
+                    'id' => $finalUrlRewrite->getEntityId(),
+                    'canonical_url' => $relativeUrl,
+                    'relative_url' => $relativeUrl,
+                    'redirectCode' => $this->redirectType,
+                    'type' => $this->sanitizeType($finalUrlRewrite->getEntityType())
+                ];
+
+            if (empty($resultArray['id'])) {
+                throw new GraphQlNoSuchEntityException(
+                    __('No such entity found with matching URL key: %url', ['url' => $url])
+                );
+            }
+
+            $result = $resultArray;
+        }
+        return $result;
     }
 
     /**
@@ -46,7 +113,6 @@ abstract class AbstractEntityUrl {
                     ? $finalCustomUrlRewrite->getRequestPath() : $finalUrlRewrite->getRequestPath();
             return [
                 'id' => $finalUrlRewrite->getEntityId(),
-                'entity_uid' => $this->idEncoder->encode((string)$finalUrlRewrite->getEntityId()),
                 'canonical_url' => $relativeUrl,
                 'relative_url' => $relativeUrl,
                 'redirectCode' => $finalCustomUrlRewrite->getRedirectType(),
