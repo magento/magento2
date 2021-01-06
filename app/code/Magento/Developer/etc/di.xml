@@ -202,11 +202,12 @@
             <argument name="fileSource" xsi:type="object">Magento\Framework\Css\PreProcessor\File\Collector\Aggregated</argument>
         </arguments>
     </type>
+
     <type name="Magento\Framework\Css\PreProcessor\File\Collector\Aggregated">
         <arguments>
             <argument name="libraryFiles" xsi:type="object">Magento\Framework\Css\PreProcessor\File\Collector\Library</argument>
             <argument name="baseFiles" xsi:type="object">cssSourceBaseFilesSorted</argument>
-            <argument name="overriddenBaseFiles" xsi:type="object">cssSourceOverriddenBaseFiles</argument>
+            <argument name="overriddenBaseFiles" xsi:type="object">cssSourceOverriddenBaseFilesSorted</argument>
         </arguments>
     </type>
 
@@ -215,14 +216,28 @@
             <argument name="subject" xsi:type="object">cssSourceBaseFilesFiltered</argument>
         </arguments>
     </virtualType>
+
     <virtualType name="cssSourceBaseFilesFiltered" type="Magento\Framework\View\File\Collector\Decorator\ModuleOutput">
         <arguments>
             <argument name="subject" xsi:type="object">cssSourceBaseFiles</argument>
         </arguments>
     </virtualType>
+
     <virtualType name="cssSourceBaseFiles" type="Magento\Framework\View\File\Collector\Base">
         <arguments>
             <argument name="subDir" xsi:type="string">web</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="cssSourceOverriddenBaseFilesSorted" type="Magento\Framework\View\File\Collector\Decorator\ModuleDependency">
+        <arguments>
+            <argument name="subject" xsi:type="object">cssSourceOverriddenBaseFilesFiltered</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="cssSourceOverriddenBaseFilesFiltered" type="Magento\Framework\View\File\Collector\Decorator\ModuleEnabled">
+        <arguments>
+            <argument name="subject" xsi:type="object">cssSourceOverriddenBaseFiles</argument>
         </arguments>
     </virtualType>
 
