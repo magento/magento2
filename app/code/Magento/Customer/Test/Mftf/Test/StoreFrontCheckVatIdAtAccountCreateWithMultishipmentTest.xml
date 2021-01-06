@@ -20,18 +20,23 @@
         </annotations>
         <before>
             <magentoCLI command="config:set customer/create_account/vat_frontend_visibility 1" stepKey="showVatNumberOnStorefrontYes"/>
-            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCacheBefore">
-                <argument name="tags" value="config"/>
-            </actionGroup>
-            <createData stepKey="category" entity="SimpleSubCategory"/>
-            <createData stepKey="product1" entity="SimpleProduct">
+            <createData entity="SimpleSubCategory" stepKey="category"/>
+            <createData entity="SimpleProduct" stepKey="product">
                 <requiredEntity createDataKey="category"/>
             </createData>
         </before>
+        <after>
+            <magentoCLI command="config:set customer/create_account/vat_frontend_visibility 0" stepKey="showVatNumberOnStorefrontNo"/>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCacheAfter">
+                <argument name="tags" value="config"/>
+            </actionGroup>
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>
+            <deleteData createDataKey="product" stepKey="deleteproduct"/>
+        </after>
         <!-- Add product to the cart -->
-        <amOnPage url="$$product1.name$$.html" stepKey="goToProductPage"/>
+        <amOnPage url="$$product.name$$.html" stepKey="goToProductPage"/>
         <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addProductToCart">
-            <argument name="productName" value="$$product1.name$$"/>
+            <argument name="productName" value="$$product.name$$"/>
         </actionGroup>
         <!-- Check Out with Multiple Addresses -->
         <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="openCart"/>
@@ -43,13 +48,5 @@
         <waitForPageLoad stepKey="waitForCreateAccountPageToLoad"/>
         <!--Check the VAT Number field-->
         <seeElement selector="{{StorefrontCustomerAddressSection.vatId}}" stepKey="assertVatIdField"/>
-        <after>
-            <magentoCLI command="config:set customer/create_account/vat_frontend_visibility 0" stepKey="showVatNumberOnStorefrontNo"/>
-            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCacheAfter">
-                <argument name="tags" value="config"/>
-            </actionGroup>
-            <deleteData stepKey="deleteCategory" createDataKey="category"/>
-            <deleteData stepKey="deleteProduct1" createDataKey="product1"/>
-        </after>
     </test>
 </tests>
