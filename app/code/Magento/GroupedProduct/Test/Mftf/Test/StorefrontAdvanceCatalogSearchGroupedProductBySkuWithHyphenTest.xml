@@ -15,7 +15,7 @@
             <title value="Guest customer should be able to advance search Grouped product with product sku that in camelCase format"/>
             <description value="Guest customer should be able to advance search Grouped product with product sku that in camelCase format"/>
             <severity value="MAJOR"/>
-            <testCaseId value="MC-20519"/>
+            <testCaseId value="MC-28832"/>
             <group value="GroupedProduct"/>
             <group value="SearchEngineElasticsearch"/>
         </annotations>
