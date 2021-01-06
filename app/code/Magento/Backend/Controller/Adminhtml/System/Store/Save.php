@@ -33,6 +33,18 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Store implements
             $websiteModel->setId(null);
         }
 
+        $groupModel = $this->_objectManager->create(\Magento\Store\Model\Group::class);
+        $groupModel->load($websiteModel->getDefaultGroupId());
+
+        $storeModel = $this->_objectManager->create(\Magento\Store\Model\Store::class);
+        $storeModel->load($groupModel->getDefaultStoreId());
+
+        if ($websiteModel->getIsDefault() && !$storeModel->isActive()) {
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __("Please enable your Store View before using this Web Site as Default")
+            );
+        }
+
         $websiteModel->save();
         $this->messageManager->addSuccessMessage(__('You saved the website.'));
 
@@ -99,6 +111,7 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Store implements
                 __('An inactive store view cannot be saved as default store view')
             );
         }
+
         $groupModel->save();
         $this->messageManager->addSuccessMessage(__('You saved the store.'));
 
