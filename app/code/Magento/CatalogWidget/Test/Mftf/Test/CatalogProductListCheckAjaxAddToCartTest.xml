@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="CatalogProductListCheckAjaxAddToCartTest" extends="CatalogProductListCheckWidgetOrderTest">
+        <annotations>
+            <features value="CatalogWidget"/>
+            <stories value="Product list widget"/>
+            <title value="Check if Add To Cart button on product list widget would work as AJAX and not POST request"/>
+            <description
+                value="Check if Add To Cart button on product list widget would send an AJAX request and not cause the page to reload"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-40300"/>
+            <useCaseId value="MC-39107"/>
+            <group value="catalogWidget"/>
+            <group value="catalog"/>
+            <group value="WYSIWYGDisabled"/>
+        </annotations>
+        <!-- Click the add to cart button -->
+        <actionGroup ref="StorefrontAddSimpleProductToCartActionGroup" stepKey="addTestProductToCart">
+            <argument name="product" value="$$createFirstProduct$$"/>
+        </actionGroup>
+        <!-- See if Add to Cart button is still visible after AJAX request -->
+        <seeElement selector="{{StorefrontProductActionSection.addToCartButtonTitleIsAddToCartBySku($$createFirstProduct.sku$$)}}" stepKey="waitForAddToCartButtonVisible"/>
+    </test>
+</tests>
