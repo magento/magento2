@@ -215,15 +215,13 @@ class Price extends AbstractFilter
 
         $data = [];
         if (count($facets) > 1) { // two range minimum
-            $lastFacet = array_key_last($facets);
             foreach ($facets as $key => $aggregation) {
                 $count = $aggregation['count'];
                 if (strpos($key, '_') === false) {
                     continue;
                 }
 
-                $isLast = $lastFacet === $key;
-                $data[] = $this->prepareData($key, $count, $isLast);
+                $data[] = $this->prepareData($key, $count);
             }
         }
 
