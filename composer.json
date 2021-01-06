@@ -33,7 +33,7 @@
         "colinmollenhour/credis": "1.11.1",
         "colinmollenhour/php-redis-session-abstract": "~1.4.0",
         "composer/composer": "^1.9",
-        "elasticsearch/elasticsearch": "~7.11.0",
+        "elasticsearch/elasticsearch": "~7.7.0",
         "guzzlehttp/guzzle": "^6.3.3",
         "laminas/laminas-captcha": "^2.7.1",
         "laminas/laminas-code": "^3.5.1",
@@ -385,6 +385,5 @@
             "Magento\\PhpStan\\": "dev/tests/static/framework/Magento/PhpStan/"
         }
     },
-    "prefer-stable": true,
-    "minimum-stability": "dev"
+    "prefer-stable": true
 }
