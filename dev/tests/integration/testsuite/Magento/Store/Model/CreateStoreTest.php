@@ -6,13 +6,8 @@
 
 namespace Magento\Store\Model;
 
-/**
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * phpcs:disable Magento2.Security.Superglobal
- */
 class CreateStoreTest extends \PHPUnit\Framework\TestCase
 {
-
     /**
      * @var \Magento\Framework\ObjectManagerInterface
      */
@@ -46,21 +41,10 @@ class CreateStoreTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @inheritdoc
-     */
-    protected function tearDown(): void
-    {
-        $this->objectManager = null;
-        $this->createStoreModel = null;
-        $this->websiteModel = null;
-    }
-
-    /**
-     * @param $code
      * @param $data
      * @dataProvider loadCreateDataProvider
      */
-    public function testExecute($code, $data)
+    public function testExecute($data)
     {
         $defaultGroupId = $this->websiteModel->getDefaultGroupId();
         $data['group_id'] = $defaultGroupId;
@@ -68,7 +52,7 @@ class CreateStoreTest extends \PHPUnit\Framework\TestCase
         $store = $this->createStoreModel->execute($data);
         $this->assertInstanceOf(\Magento\Store\Api\Data\StoreInterface::class, $store);
         $this->assertNotNull($store->getId(), 'Store was not saved correctly');
-        $this->assertEquals($code, $store->getCode());
+        $this->assertEquals($data['code'], $store->getCode());
 
         /** @var \Magento\Framework\Registry $registry */
         $registry = $this->objectManager->get(\Magento\Framework\Registry::class);
@@ -77,6 +61,9 @@ class CreateStoreTest extends \PHPUnit\Framework\TestCase
         $registry->register('isSecureArea', true);
 
         $store->delete();
+
+        $registry->unregister('isSecureArea');
+        $registry->register('isSecureArea', false);
     }
 
     /**
@@ -84,7 +71,7 @@ class CreateStoreTest extends \PHPUnit\Framework\TestCase
      */
     public function loadCreateDataProvider()
     {
-        return [['code',
+        return [[
             [
                 'name' => 'code',
                 'code' => 'code',
