@@ -7,7 +7,29 @@ type Mutation {
 type ConfigurableProduct implements ProductInterface, PhysicalProductInterface, CustomizableProductInterface @doc(description: "ConfigurableProduct defines basic features of a configurable product and its simple product variants") {
     variants: [ConfigurableVariant] @doc(description: "An array of variants of products") @resolver(class: "Magento\\ConfigurableProductGraphQl\\Model\\Resolver\\ConfigurableVariant")
     configurable_options: [ConfigurableProductOptions] @doc(description: "An array of linked simple product items") @resolver(class: "Magento\\ConfigurableProductGraphQl\\Model\\Resolver\\Options")
-    configurable_options_selection_metadata(selectedConfigurableOptionValues: [ID!]): ConfigurableOptionsSelectionMetadata @doc(description: "Metadata for the specified configurable options selection") @resolver(class: "Magento\\ConfigurableProductGraphQl\\Model\\Resolver\\OptionsSelectionMetadata")
+    configurable_product_options_selection(configurableOptionValueUids: [ID!]): ConfigurableProductOptionsSelection @doc(description: "Specified configurable product options selection") @resolver(class: "Magento\\ConfigurableProductGraphQl\\Model\\Resolver\\OptionsSelection")
+}
+
+type ConfigurableProductOptionsSelection @doc(description: "Metadata corresponding to the configurable options selection.")
+{
+    configurable_options: [ConfigurableProductOption!] @doc(description: "Configurable options available for further selection based on current selection.")
+    media_gallery: [MediaGalleryInterface!] @doc(description: "Product images and videos corresponding to the specified configurable options selection.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\MediaGallery")
+    variant: SimpleProduct @doc(description: "Variant represented by the specified configurable options selection. It is expected to be null, until selections are made for each configurable option.")
+}
+
+type ConfigurableProductOption {
+    uid: ID!
+    attribute_code: String!
+    label: String!
+    values: [ConfigurableProductOptionValue!]
+}
+
+type ConfigurableProductOptionValue {
+    uid: ID!
+    is_available: Boolean!
+    is_use_default: Boolean!
+    label: String!
+    swatch: SwatchDataInterface
 }
 
 type ConfigurableVariant @doc(description: "An array containing all the simple product variants of a configurable product") {
@@ -78,12 +100,6 @@ type SelectedConfigurableOption {
 type ConfigurableWishlistItem implements WishlistItemInterface @doc(description: "A configurable product wish list item"){
     child_sku: String! @doc(description: "The SKU of the simple product corresponding to a set of selected configurable options") @resolver(class: "\\Magento\\ConfigurableProductGraphQl\\Model\\Wishlist\\ChildSku")
     configurable_options: [SelectedConfigurableOption!] @resolver(class: "\\Magento\\ConfigurableProductGraphQl\\Model\\Wishlist\\ConfigurableOptions") @doc (description: "An array of selected configurable options")
-}
-
-type ConfigurableOptionsSelectionMetadata @doc(description: "Metadata corresponding to the configurable options selection.") {
-    options_available_for_selection: [ConfigurableOptionAvailableForSelection!] @doc(description: "Configurable options available for further selection based on current selection.")
-    media_gallery: [MediaGalleryInterface!] @resolver(class: "Magento\\ConfigurableProductGraphQl\\Model\\Resolver\\SelectionMediaGallery") @doc(description: "Product images and videos corresponding to the specified configurable options selection.")
-    variant: SimpleProduct @resolver(class: "Magento\\ConfigurableProductGraphQl\\Model\\Resolver\\Variant\\Variant") @doc(description: "Variant represented by the specified configurable options selection. It is expected to be null, until selections are made for each configurable option.")
 }
 
 type ConfigurableOptionAvailableForSelection @doc(description: "Configurable option available for further selection based on current selection.") {

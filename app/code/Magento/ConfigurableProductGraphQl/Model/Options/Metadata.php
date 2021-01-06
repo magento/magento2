@@ -3,15 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 declare(strict_types=1);
 
 namespace Magento\ConfigurableProductGraphQl\Model\Options;
 
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\ConfigurableProduct\Helper\Data;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute;
+use Magento\ConfigurableProductGraphQl\Model\Formatter\Option;
 use Magento\ConfigurableProductGraphQl\Model\Options\DataProvider\Variant;
-use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\ConfigurableProductGraphQl\Model\Formatter\Variant as VariantFormatter;
 
 /**
  * Retrieve metadata for configurable option selection.
@@ -24,150 +26,63 @@ class Metadata
     private $configurableProductHelper;
 
     /**
-     * @var SelectionUidFormatter
+     * @var Option
      */
-    private $selectionUidFormatter;
-
-    /**
-     * @var ProductRepositoryInterface
-     */
-    private $productRepository;
-
-    /**
-     * @var Variant
-     */
-    private $variant;
+    private $configurableOptionsFormatter;
 
     /**
      * @param Data $configurableProductHelper
-     * @param SelectionUidFormatter $selectionUidFormatter
-     * @param ProductRepositoryInterface $productRepository
-     * @param Variant $variant
+     * @param Option $configurableOptionsFormatter
      */
     public function __construct(
         Data $configurableProductHelper,
-        SelectionUidFormatter $selectionUidFormatter,
-        ProductRepositoryInterface $productRepository,
-        Variant $variant
+        Option $configurableOptionsFormatter
+
     ) {
         $this->configurableProductHelper = $configurableProductHelper;
-        $this->selectionUidFormatter = $selectionUidFormatter;
-        $this->productRepository = $productRepository;
-        $this->variant = $variant;
+        $this->configurableOptionsFormatter = $configurableOptionsFormatter;
     }
 
     /**
-     * Load available selections from configurable options.
+     * Load available selections from configurable options and variant.
      *
      * @param ProductInterface $product
-     * @param array $selectedOptionsUid
+     * @param array $options
+     * @param array $selectedOptions
      * @return array
-     * @throws NoSuchEntityException
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function getAvailableSelections(
-        ProductInterface $product,
-        array $selectedOptionsUid
-    ): array {
-        $options = $this->configurableProductHelper->getOptions($product, $this->getAllowProducts($product));
-        $selectedOptions = $this->selectionUidFormatter->extract($selectedOptionsUid);
-        $attributeCodes = $this->getAttributeCodes($product);
-        $availableSelections = $availableProducts = $variantData = [];
+    public function getAvailableSelections(ProductInterface $product, array $options, array $selectedOptions): array
+    {
+        $attributes = $this->getAttributes($product);
 
-        if (isset($options['index']) && $options['index']) {
-            foreach ($options['index'] as $productId => $productOptions) {
-                if (!empty($selectedOptions) && !$this->hasProductRequiredOptions($selectedOptions, $productOptions)) {
-                    continue;
-                }
+        $availableSelections = [];
 
-                $availableProducts[] = $productId;
-                foreach ($productOptions as $attributeId => $optionIndex) {
-                    $uid = $this->selectionUidFormatter->encode($attributeId, (int)$optionIndex);
-
-                    if (isset($availableSelections[$attributeId]['option_value_uids'])
-                        && in_array($uid, $availableSelections[$attributeId]['option_value_uids'])
-                    ) {
-                        continue;
-                    }
-                    $availableSelections[$attributeId]['option_value_uids'][] = $uid;
-                    $availableSelections[$attributeId]['attribute_code'] = $attributeCodes[$attributeId];
-                }
-
-                if ($this->hasSelectionProduct($selectedOptions, $productOptions)) {
-                    $variantProduct = $this->productRepository->getById($productId);
-                    $variantData = $variantProduct->getData();
-                    $variantData['model'] = $variantProduct;
-                }
+        foreach ($options as $attributeId => $option) {
+            if ($attributeId === 'index' || isset($selectedOptions[$attributeId])) {
+                continue;
             }
+
+            $availableSelections[] = $this->configurableOptionsFormatter->format($attributes[$attributeId]);
         }
 
-        return [
-            'options_available_for_selection' => $availableSelections,
-            'variant' => $variantData,
-            'availableSelectionProducts' => array_unique($availableProducts),
-            'product' => $product
-        ];
+        return $availableSelections;
+
     }
 
     /**
-     * Get allowed products.
+     * Retrieve configurable attributes for the product
      *
      * @param ProductInterface $product
-     * @return ProductInterface[]
+     * @return Attribute[]
      */
-    public function getAllowProducts(ProductInterface $product): array
-    {
-        return $this->variant->getSalableVariantsByParent($product) ?? [];
-    }
-
-    /**
-     * Check if a product has the selected options.
-     *
-     * @param array $requiredOptions
-     * @param array $productOptions
-     * @return bool
-     */
-    private function hasProductRequiredOptions($requiredOptions, $productOptions): bool
-    {
-        $result = true;
-        foreach ($requiredOptions as $attributeId => $optionIndex) {
-            if (!isset($productOptions[$attributeId]) || !$productOptions[$attributeId]
-                || $optionIndex != $productOptions[$attributeId]
-            ) {
-                $result = false;
-                break;
-            }
-        }
-
-        return $result;
-    }
-
-    /**
-     * Check if selected options match a product.
-     *
-     * @param array $requiredOptions
-     * @param array $productOptions
-     * @return bool
-     */
-    private function hasSelectionProduct($requiredOptions, $productOptions): bool
-    {
-        return $this->hasProductRequiredOptions($productOptions, $requiredOptions);
-    }
-
-    /**
-     * Retrieve attribute codes
-     *
-     * @param ProductInterface $product
-     * @return string[]
-     */
-    private function getAttributeCodes(ProductInterface $product): array
+    private function getAttributes(ProductInterface $product): array
     {
         $allowedAttributes = $this->configurableProductHelper->getAllowAttributes($product);
-        $attributeCodes = [];
+        $attributes = [];
         foreach ($allowedAttributes as $attribute) {
-            $attributeCodes[$attribute->getAttributeId()] = $attribute->getProductAttribute()->getAttributeCode();
+            $attributes[$attribute->getAttributeId()] = $attribute;
         }
 
-        return $attributeCodes;
+        return $attributes;
     }
 }
