@@ -32,7 +32,7 @@ class PurchasedPrice extends Column
     /**
      * @var OrderRepositoryInterface
      */
-    private $order;
+    private $orderRepository;
 
     /**
      * Constructor
@@ -43,7 +43,7 @@ class PurchasedPrice extends Column
      * @param array $components
      * @param array $data
      * @param Currency $currency
-     * @param OrderRepositoryInterface $order
+     * @param OrderRepositoryInterface $orderRepository
      */
     public function __construct(
         ContextInterface $context,
@@ -52,12 +52,12 @@ class PurchasedPrice extends Column
         array $components = [],
         array $data = [],
         Currency $currency = null,
-        OrderRepositoryInterface $order = null
+        OrderRepositoryInterface $orderRepository = null
     ) {
         $this->priceFormatter = $priceFormatter;
         $this->currency = $currency ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->create(Currency::class);
-        $this->order = $order ?: \Magento\Framework\App\ObjectManager::getInstance()
+        $this->orderRepository = $orderRepository ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->create(OrderRepositoryInterface::class);
         parent::__construct($context, $uiComponentFactory, $components, $data);
     }
@@ -72,9 +72,8 @@ class PurchasedPrice extends Column
     {
         if (isset($dataSource['data']['items'])) {
             foreach ($dataSource['data']['items'] as & $item) {
-                $currencyCode = isset($item['order_currency_code'])
-                    ? $item['order_currency_code']
-                    : $this->order->get($item['order_id'])->getOrderCurrencyCode();
+                $currencyCode = $item['order_currency_code']
+                    ?? $this->orderRepository->get($item['order_id'])->getOrderCurrencyCode();
                 $purchaseCurrency = $this->currency->load($currencyCode);
                 $item[$this->getData('name')] = $purchaseCurrency
                     ->format($item[$this->getData('name')], [], false);

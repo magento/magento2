@@ -22,17 +22,17 @@ class PurchasedPriceTest extends TestCase
     /**
      * @var Price
      */
-    protected $model;
+    private $model;
 
     /**
      * @var Currency|MockObject
      */
-    protected $currencyMock;
+    private $currencyMock;
 
     /**
      * @var OrderRepositoryInterface|MockObject
      */
-    protected $orderMock;
+    private $orderRepository;
 
     protected function setUp(): void
     {
@@ -47,7 +47,7 @@ class PurchasedPriceTest extends TestCase
             ->setMethods(['load', 'format'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->orderMock = $this->getMockBuilder(OrderRepositoryInterface::class)
+        $this->orderRepository = $this->getMockBuilder(OrderRepositoryInterface::class)
             ->setMethods(['getList','get','delete','save','getOrderCurrencyCode'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -56,7 +56,7 @@ class PurchasedPriceTest extends TestCase
             [
                 'currency' => $this->currencyMock,
                 'context' => $contextMock,
-                'order' => $this->orderMock,
+                'order' => $this->orderRepository,
             ]
         );
     }
@@ -90,10 +90,10 @@ class PurchasedPriceTest extends TestCase
             $currencyCode = $dataSource['data']['items'][0]['order_currency_code'];
         } else {
             $currencyCode = 'FR';
-            $this->orderMock->expects($this->once())
+            $this->orderRepository->expects($this->once())
                 ->method('get')
                 ->willReturnSelf();
-            $this->orderMock->expects($this->once())
+            $this->orderRepository->expects($this->once())
                 ->method('getOrderCurrencyCode')
                 ->willReturn($currencyCode);
         }
