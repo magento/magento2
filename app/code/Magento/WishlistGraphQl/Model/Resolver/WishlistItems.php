@@ -3,19 +3,21 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-declare(strict_types=1);
+declare (strict_types = 1);
 
 namespace Magento\WishlistGraphQl\Model\Resolver;
 
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\GraphQl\Query\Uid;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Wishlist\Model\Item;
 use Magento\Wishlist\Model\ResourceModel\Item\Collection as WishlistItemCollection;
 use Magento\Wishlist\Model\ResourceModel\Item\CollectionFactory as WishlistItemCollectionFactory;
-use Magento\Wishlist\Model\Item;
 use Magento\Wishlist\Model\Wishlist;
 
 /**
@@ -33,16 +35,25 @@ class WishlistItems implements ResolverInterface
      */
     private $storeManager;
 
+    /** 
+     * @var Uid 
+     */
+    private $uidEncoder;
+
     /**
      * @param WishlistItemCollectionFactory $wishlistItemCollectionFactory
      * @param StoreManagerInterface $storeManager
+     * @param Uid|null $uidEncoder
      */
     public function __construct(
         WishlistItemCollectionFactory $wishlistItemCollectionFactory,
-        StoreManagerInterface $storeManager
+        StoreManagerInterface $storeManager,
+        Uid $uidEncoder = null
     ) {
         $this->wishlistItemCollectionFactory = $wishlistItemCollectionFactory;
         $this->storeManager = $storeManager;
+        $this->uidEncoder = $uidEncoder ?: ObjectManager::getInstance()
+            ->get(Uid::class);
     }
 
     /**
@@ -69,6 +80,7 @@ class WishlistItems implements ResolverInterface
         foreach ($wishlistItems as $wishlistItem) {
             $data[] = [
                 'id' => $wishlistItem->getId(),
+                'uid' => $this->uidEncoder->encode($wishlistItem->getId()),
                 'quantity' => $wishlistItem->getData('qty'),
                 'description' => $wishlistItem->getDescription(),
                 'added_at' => $wishlistItem->getAddedAt(),
@@ -81,8 +93,8 @@ class WishlistItems implements ResolverInterface
             'page_info' => [
                 'current_page' => $wishlistItemsCollection->getCurPage(),
                 'page_size' => $wishlistItemsCollection->getPageSize(),
-                'total_pages' => $wishlistItemsCollection->getLastPageNumber()
-            ]
+                'total_pages' => $wishlistItemsCollection->getLastPageNumber(),
+            ],
         ];
     }
 
