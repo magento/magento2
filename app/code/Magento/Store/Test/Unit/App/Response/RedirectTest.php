@@ -5,110 +5,139 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 declare(strict_types=1);
 
 namespace Magento\Store\Test\Unit\App\Response;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Request\Http;
-use Magento\Framework\Encryption\UrlCoder;
-use Magento\Framework\Session\SessionManagerInterface;
-use Magento\Framework\Session\SidResolverInterface;
-use Magento\Framework\UrlInterface;
+use Magento\Framework\App\State;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\App\Response\Redirect;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\App\Area;
+use Magento\Store\Model\ScopeInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Test for \Magento\Store\App\Response\Redirect.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class RedirectTest extends TestCase
 {
+    private const XML_PATH_USE_CUSTOM_ADMIN_URL = 'admin/url/use_custom';
+    private const XML_PATH_CUSTOM_ADMIN_URL = 'admin/url/custom';
+
+    private const STUB_INTERNAL_URL = 'http://internalurl.com/';
+    private const STUB_EXTERNAL_URL = 'http://externalurl.com/';
+    private const STUB_CUSTOM_ADMIN_URL = 'http://externalurl.com/admin/';
+
     /**
      * @var Redirect
      */
-    protected $_model;
+    private $model;
 
     /**
-     * @var MockObject
+     * @var Http|MockObject
      */
-    protected $_requestMock;
+    private $requestMock;
 
     /**
-     * @var MockObject
+     * @var StoreManagerInterface|MockObject
      */
-    protected $_storeManagerMock;
+    private $storeManagerMock;
 
     /**
-     * @var MockObject
+     * @var State|MockObject
      */
-    protected $_urlCoderMock;
+    private $appStateMock;
 
     /**
-     * @var MockObject
+     * @var ScopeConfigInterface|MockObject
      */
-    protected $_sessionMock;
+    private $scopeConfigMock;
 
     /**
-     * @var MockObject
+     * @inheritDoc
      */
-    protected $_sidResolverMock;
-
-    /**
-     * @var MockObject
-     */
-    protected $_urlBuilderMock;
-
     protected function setUp(): void
     {
-        $this->_requestMock = $this->getMockBuilder(Http::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->_storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
-        $this->_urlCoderMock = $this->createMock(UrlCoder::class);
-        $this->_sessionMock = $this->getMockForAbstractClass(SessionManagerInterface::class);
-        $this->_sidResolverMock = $this->getMockForAbstractClass(SidResolverInterface::class);
-        $this->_urlBuilderMock = $this->getMockForAbstractClass(UrlInterface::class);
+        $objectManager = new ObjectManager($this);
 
-        $this->_model = new Redirect(
-            $this->_requestMock,
-            $this->_storeManagerMock,
-            $this->_urlCoderMock,
-            $this->_sessionMock,
-            $this->_sidResolverMock,
-            $this->_urlBuilderMock
+        $this->requestMock = $this->createMock(Http::class);
+        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->appStateMock = $this->createMock(State::class);
+        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+
+        $this->model = $objectManager->getObject(
+            Redirect::class,
+            [
+                'request' => $this->requestMock,
+                'storeManager' => $this->storeManagerMock,
+                'appState' =>  $this->appStateMock,
+                'scopeConfig' =>  $this->scopeConfigMock,
+            ]
         );
     }
 
     /**
+     * Success url test
+     *
      * @dataProvider urlAddresses
-     * @param string $baseUrl
-     * @param string $successUrl
+     *
+     * @param string $url
+     * @param string $area
+     * @param bool $isCustomAdminUrlEnabled
+     * @param string $expectedUrl
+     * @return void
      */
-    public function testSuccessUrl($baseUrl, $successUrl)
-    {
+    public function testSuccessUrl(
+        string $url,
+        string $area,
+        bool $isCustomAdminUrlEnabled,
+        string $expectedUrl
+    ): void {
         $testStoreMock = $this->createMock(Store::class);
-        $testStoreMock->expects($this->any())->method('getBaseUrl')->willReturn($baseUrl);
-        $this->_requestMock->expects($this->any())->method('getParam')->willReturn(null);
-        $this->_storeManagerMock->expects($this->any())->method('getStore')
+        $testStoreMock->expects($this->atLeastOnce())
+            ->method('getBaseUrl')
+            ->willReturn(self::STUB_INTERNAL_URL);
+        $this->requestMock->expects($this->once())
+            ->method('getParam')
+            ->willReturn(null);
+        $this->storeManagerMock->expects($this->atLeastOnce())
+            ->method('getStore')
             ->willReturn($testStoreMock);
-        $this->assertEquals($baseUrl, $this->_model->success($successUrl));
+        $this->appStateMock->expects($this->once())
+            ->method('getAreaCode')
+            ->willReturn($area);
+        $this->scopeConfigMock->expects($this->any())
+            ->method('isSetFlag')
+            ->with(self::XML_PATH_USE_CUSTOM_ADMIN_URL, ScopeInterface::SCOPE_STORE)
+            ->willReturn($isCustomAdminUrlEnabled);
+        $this->scopeConfigMock->expects($this->any())
+            ->method('getValue')
+            ->with(self::XML_PATH_CUSTOM_ADMIN_URL, ScopeInterface::SCOPE_STORE)
+            ->willReturn(self::STUB_CUSTOM_ADMIN_URL);
+
+        $this->assertEquals($expectedUrl, $this->model->success($url));
     }
 
     /**
-     * DataProvider with the test urls
+     * Data provider for testSuccessUrlWithCustomAdminUrl
      *
      * @return array
      */
-    public function urlAddresses()
+    public function urlAddresses(): array
     {
         return [
-            [
-                'http://externalurl.com/',
-                'http://internalurl.com/',
-            ],
-            [
-                'http://internalurl.com/',
-                'http://internalurl.com/'
-            ]
+            [self::STUB_CUSTOM_ADMIN_URL, Area::AREA_ADMINHTML, true, self::STUB_CUSTOM_ADMIN_URL],
+            [self::STUB_CUSTOM_ADMIN_URL, Area::AREA_ADMINHTML, false, self::STUB_INTERNAL_URL],
+            [self::STUB_CUSTOM_ADMIN_URL, Area::AREA_FRONTEND, true, self::STUB_INTERNAL_URL],
+            [self::STUB_EXTERNAL_URL, Area::AREA_ADMINHTML, true, self::STUB_INTERNAL_URL],
+            [self::STUB_EXTERNAL_URL, Area::AREA_FRONTEND, true, self::STUB_INTERNAL_URL],
         ];
     }
 }

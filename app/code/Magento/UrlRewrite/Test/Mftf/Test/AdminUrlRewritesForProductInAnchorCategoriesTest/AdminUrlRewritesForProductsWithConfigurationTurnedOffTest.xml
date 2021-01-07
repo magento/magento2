@@ -22,7 +22,9 @@
             <comment userInput="Enable SEO configuration setting to generate category/product URL Rewrites" stepKey="commentEnableUrlRewriteConfig"/>
             <magentoCLI command="config:set catalog/seo/generate_category_product_rewrites 1" stepKey="enableGenerateUrlRewrite"/>
             <!--Flush cache-->
-            <magentoCLI command="cache:flush" stepKey="cleanCache1"/>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCacheAfterEnableConfig">
+                <argument name="tags" value=""/>
+            </actionGroup>
             <createData entity="SimpleSubCategory" stepKey="simpleSubCategory1"/>
             <!-- Create Simple product 1 and assign it to Category 1 -->
             <createData entity="ApiSimpleProduct" stepKey="createSimpleProduct">
@@ -32,14 +34,18 @@
             <comment userInput="Disable SEO configuration setting to generate category/product URL Rewrites" stepKey="commentDisableUrlRewriteConfig"/>
             <magentoCLI command="config:set catalog/seo/generate_category_product_rewrites 0" stepKey="disableGenerateUrlRewrite"/>
             <!--Flush cache-->
-            <magentoCLI command="cache:flush" stepKey="cleanCache"/>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCacheAfterDisableConfig">
+                <argument name="tags" value=""/>
+            </actionGroup>
         </before>
         <after>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
             <deleteData createDataKey="simpleSubCategory1" stepKey="deletesimpleSubCategory1"/>
             <magentoCLI command="config:set catalog/seo/generate_category_product_rewrites 1" stepKey="resetConfigurationSetting"/>
             <!--Flush cache-->
-            <magentoCLI command="cache:flush" stepKey="cleanCache2"/>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
         </after>
 
         <!-- 1. Log in to Admin -->

@@ -37,8 +37,7 @@
         </before>
 
         <!--Open simple product-->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToProductIndex"/>
-        <waitForPageLoad stepKey="wait1"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="goToProductIndex"/>
         <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetProductGrid"/>
         <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProductGridBySku">
             <argument name="product" value="$$createProduct$$"/>
@@ -51,8 +50,7 @@
         <actionGroup ref="AssertProductVideoAdminProductPageActionGroup" stepKey="assertProductVideoAdminProductPage" after="addProductVideo"/>
 
         <!-- Save the product -->
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveFirstProduct"/>
-        <waitForPageLoad stepKey="waitForFirstProductSaved"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveFirstProduct"/>
 
         <!-- Assert product video in storefront product page -->
         <amOnPage url="$$createProduct.name$$.html" stepKey="goToStorefrontCategoryPage"/>

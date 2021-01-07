@@ -13,6 +13,30 @@
             margin-bottom: @indent__base;
         }
 
+        .checkout-agreement.field {
+            .lib-vendor-prefix-display();
+
+            &.required {
+                label:after {
+                    content: none;
+                }
+
+                .action-show {
+                    &:after {
+                        content: '*';
+                        .lib-typography(
+                            @_font-size: @form-field-label-asterisk__font-size,
+                            @_color: @form-field-label-asterisk__color,
+                            @_font-family: @form-field-label-asterisk__font-family,
+                            @_font-weight: @form-field-label-asterisk__font-weight,
+                            @_line-height: @form-field-label-asterisk__line-height,
+                            @_font-style: @form-field-label-asterisk__font-style
+                        );
+                    }
+                }
+            }
+        }
+
         .action-show {
             &:extend(.abs-action-button-as-link all);
             vertical-align: baseline;

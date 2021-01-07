@@ -13,7 +13,7 @@
             </action>
         </referenceBlock>
         <referenceContainer name="content">
-            <block class="Magento\Framework\View\Element\Template" name="loginascustomer_login" template="Magento_LoginAsCustomerFrontendUi::login.phtml"/>
+            <block class="Magento\Framework\View\Element\Template" name="loginascustomer_login" template="Magento_LoginAsCustomerFrontendUi::login.phtml" cacheable="false"/>
         </referenceContainer>
     </body>
 </page>

@@ -74,8 +74,12 @@
             </actionGroup>
             <!-- Logout Admin -->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
-            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-            <magentoCLI command="cache:flush" stepKey="flushCacheAfterDeletion"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCacheAfterDeletion">
+                <argument name="tags" value=""/>
+            </actionGroup>
         </after>
         <!--Create widget for recently viewed products-->
         <actionGroup ref="AdminEditCMSPageContentActionGroup" stepKey="clearRecentlyViewedWidgetsFromCMSContentBefore">
@@ -95,7 +99,9 @@
             <argument name="buttonToShowSection2" value="3"/>
         </actionGroup>
         <!-- Warm up cache -->
-        <magentoCLI command="cache:flush" stepKey="flushCacheAfterWidgetCreated"/>
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCacheAfterWidgetCreated">
+            <argument name="tags" value=""/>
+        </actionGroup>
         <!-- Navigate to product 3 on store front -->
         <amOnPage url="{{StorefrontProductPage.url($createSimpleProduct2.name$)}}" stepKey="goToStoreOneProductPageTwo"/>
         <amOnPage url="{{StorefrontProductPage.url($createSimpleProduct3.name$)}}" stepKey="goToStoreOneProductPageThree"/>

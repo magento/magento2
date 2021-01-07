@@ -266,4 +266,9 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Analytics\ReportXml\ConnectionFactory">
+        <arguments>
+            <argument name="connectionFactory" xsi:type="object">Magento\Framework\Model\ResourceModel\Type\Db\ConnectionFactory</argument>
+        </arguments>
+    </type>
 </config>

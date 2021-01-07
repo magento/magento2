@@ -39,14 +39,4 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Cms\Model\Config\Source\Wysiwyg\Editor">
-        <arguments>
-            <argument name="adapterOptions" xsi:type="array">
-                <item name="tinymce3" xsi:type="array">
-                    <item name="value" xsi:type="const">Magento\Tinymce3\Model\Config\Source\Wysiwyg\Editor::WYSIWYG_EDITOR_CONFIG_VALUE</item>
-                    <item name="label" xsi:type="string" translatable="true">TinyMCE 3 (deprecated)</item>
-                </item>
-            </argument>
-        </arguments>
-    </type>
 </config>

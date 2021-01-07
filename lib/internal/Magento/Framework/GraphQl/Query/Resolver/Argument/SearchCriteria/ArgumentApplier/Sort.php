@@ -33,7 +33,7 @@ class Sort implements ArgumentApplierInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function applyArgument(
         SearchCriteriaInterface $searchCriteria,

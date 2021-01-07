@@ -19,7 +19,8 @@
         "magento/module-reports": "*",
         "magento/module-sales": "*",
         "magento/module-shipping": "*",
-        "magento/module-store": "*"
+        "magento/module-store": "*",
+        "magento/module-ui": "*"
     },
     "suggest": {
         "magento/module-tax-sample-data": "*"

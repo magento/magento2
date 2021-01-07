@@ -4,17 +4,23 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Catalog\Api;
 
 use Magento\Authorization\Model\Role;
+use Magento\Authorization\Model\RoleFactory;
 use Magento\Authorization\Model\Rules;
+use Magento\Authorization\Model\RulesFactory;
+use Magento\Catalog\Api\Data\CategoryInterface;
+use Magento\Catalog\Model\Attribute\ScopeOverriddenValue;
+use Magento\Catalog\Model\Category;
+use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
 use Magento\Integration\Api\AdminTokenServiceInterface;
+use Magento\Store\Model\Store;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
+use Magento\UrlRewrite\Model\Storage\DbStorage;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
-use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
-use Magento\Authorization\Model\RoleFactory;
-use Magento\Authorization\Model\RulesFactory;
 
 /**
  * Test repository web API.
@@ -42,6 +48,11 @@ class CategoryRepositoryTest extends WebapiAbstract
      * @var AdminTokenServiceInterface
      */
     private $adminTokens;
+
+    /**
+     * @var string[]
+     */
+    private $createdCategories;
 
     /**
      * @inheritDoc
@@ -132,8 +143,7 @@ class CategoryRepositoryTest extends WebapiAbstract
                 sprintf('"%s" field value is invalid', $fieldName)
             );
         }
-        // delete category to clean up auto-generated url rewrites
-        $this->deleteCategory($result['id']);
+        $this->createdCategories = [$result['id']];
     }
 
     /**
@@ -141,14 +151,14 @@ class CategoryRepositoryTest extends WebapiAbstract
      */
     public function testDelete()
     {
-        /** @var \Magento\UrlRewrite\Model\Storage\DbStorage $storage */
-        $storage = Bootstrap::getObjectManager()->get(\Magento\UrlRewrite\Model\Storage\DbStorage::class);
+        /** @var DbStorage $storage */
+        $storage = Bootstrap::getObjectManager()->get(DbStorage::class);
         $categoryId = $this->modelId;
         $data = [
             UrlRewrite::ENTITY_ID => $categoryId,
             UrlRewrite::ENTITY_TYPE => CategoryUrlRewriteGenerator::ENTITY_TYPE
         ];
-        /** @var \Magento\UrlRewrite\Service\V1\Data\UrlRewrite $urlRewrite*/
+        /** @var \Magento\UrlRewrite\Service\V1\Data\UrlRewrite $urlRewrite */
         $urlRewrite = $storage->findOneByData($data);
 
         // Assert that a url rewrite is auto-generated for the category created from the data fixture
@@ -185,7 +195,7 @@ class CategoryRepositoryTest extends WebapiAbstract
     public function deleteSystemOrRootDataProvider()
     {
         return [
-            [\Magento\Catalog\Model\Category::TREE_ROOT_ID],
+            [Category::TREE_ROOT_ID],
             [2] //Default root category
         ];
     }
@@ -208,13 +218,116 @@ class CategoryRepositoryTest extends WebapiAbstract
         ];
         $result = $this->updateCategory($categoryId, $categoryData);
         $this->assertEquals($categoryId, $result['id']);
-        /** @var \Magento\Catalog\Model\Category $model */
-        $model = Bootstrap::getObjectManager()->get(\Magento\Catalog\Model\Category::class);
+        /** @var Category $model */
+        $model = Bootstrap::getObjectManager()->get(Category::class);
         $category = $model->load($categoryId);
         $this->assertFalse((bool)$category->getIsActive(), 'Category "is_active" must equal to false');
         $this->assertEquals("Update Category Test", $category->getName());
         $this->assertEquals("Update Category Description Test", $category->getDescription());
-        // delete category to clean up auto-generated url rewrites
+        $this->createdCategories = [$categoryId];
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/category.php
+     */
+    public function testUpdateWithDefaultSortByAttribute()
+    {
+        $categoryId = 333;
+        $categoryData = [
+            'name' => 'Update Category Test With default_sort_by Attribute',
+            'is_active' => true,
+            "available_sort_by" => [],
+            'custom_attributes' => [
+                [
+                    'attribute_code' => 'default_sort_by',
+                    'value' => ["name"],
+                ],
+            ],
+        ];
+        $result = $this->updateCategory($categoryId, $categoryData);
+        $this->assertEquals($categoryId, $result['id']);
+        /** @var Category $model */
+        $model = Bootstrap::getObjectManager()->get(Category::class);
+        $category = $model->load($categoryId);
+        $this->assertTrue((bool)$category->getIsActive(), 'Category "is_active" must equal to true');
+        $this->assertEquals("Update Category Test With default_sort_by Attribute", $category->getName());
+        $this->assertEquals("name", $category->getDefaultSortBy());
+        $this->createdCategories = [$categoryId];
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/category.php
+     */
+    public function testUpdateUrlKey()
+    {
+        $this->_markTestAsRestOnly('Functionality available in REST mode only.');
+
+        $categoryId = 333;
+        $categoryData = [
+            'name' => 'Update Category Test Old Name',
+            'custom_attributes' => [
+                [
+                    'attribute_code' => 'url_key',
+                    'value' => "Update Category Test Old Name",
+                ],
+            ],
+        ];
+        $result = $this->updateCategory($categoryId, $categoryData);
+        $this->assertEquals($categoryId, $result['id']);
+
+        $categoryData = [
+            'name' => 'Update Category Test New Name',
+            'custom_attributes' => [
+                [
+                    'attribute_code' => 'url_key',
+                    'value' => "Update Category Test New Name",
+                ],
+                [
+                    'attribute_code' => 'save_rewrites_history',
+                    'value' => 1,
+                ],
+            ],
+        ];
+        $result = $this->updateCategory($categoryId, $categoryData);
+        $this->assertEquals($categoryId, $result['id']);
+        /** @var Category $model */
+        $model = Bootstrap::getObjectManager()->get(Category::class);
+        $category = $model->load($categoryId);
+        $this->assertEquals("Update Category Test New Name", $category->getName());
+
+        // check for the url rewrite for the new name
+        $storage = Bootstrap::getObjectManager()->get(DbStorage::class);
+        $data = [
+            UrlRewrite::ENTITY_ID => $categoryId,
+            UrlRewrite::ENTITY_TYPE => CategoryUrlRewriteGenerator::ENTITY_TYPE,
+            UrlRewrite::REDIRECT_TYPE => 0,
+        ];
+
+        $urlRewrite = $storage->findOneByData($data);
+
+        // Assert that a url rewrite is auto-generated for the category created from the data fixture
+        $this->assertNotNull($urlRewrite);
+        $this->assertEquals(1, $urlRewrite->getIsAutogenerated());
+        $this->assertEquals($categoryId, $urlRewrite->getEntityId());
+        $this->assertEquals(CategoryUrlRewriteGenerator::ENTITY_TYPE, $urlRewrite->getEntityType());
+        $this->assertEquals('update-category-test-new-name.html', $urlRewrite->getRequestPath());
+
+        // check for the forward from the old name to the new name
+        $storage = Bootstrap::getObjectManager()->get(DbStorage::class);
+        $data = [
+            UrlRewrite::ENTITY_ID => $categoryId,
+            UrlRewrite::ENTITY_TYPE => CategoryUrlRewriteGenerator::ENTITY_TYPE,
+            UrlRewrite::REDIRECT_TYPE => 301,
+        ];
+
+        $urlRewrite = $storage->findOneByData($data);
+
+        $this->assertNotNull($urlRewrite);
+        $this->assertEquals(0, $urlRewrite->getIsAutogenerated());
+        $this->assertEquals($categoryId, $urlRewrite->getEntityId());
+        $this->assertEquals(CategoryUrlRewriteGenerator::ENTITY_TYPE, $urlRewrite->getEntityType());
+        $this->assertEquals('update-category-test-old-name.html', $urlRewrite->getRequestPath());
+
         $this->deleteCategory($categoryId);
     }
 
@@ -320,14 +433,9 @@ class CategoryRepositoryTest extends WebapiAbstract
         if ($token) {
             $serviceInfo['rest']['token'] = $serviceInfo['soap']['token'] = $token;
         }
+        $data['id'] = $id;
 
-        if (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
-            $data['id'] = $id;
-            return $this->_webApiCall($serviceInfo, ['id' => $id, 'category' => $data]);
-        } else {
-            $data['id'] = $id;
-            return $this->_webApiCall($serviceInfo, ['id' => $id, 'category' => $data]);
-        }
+        return $this->_webApiCall($serviceInfo, ['id' => $id, 'category' => $data]);
     }
 
     /**
@@ -447,5 +555,99 @@ class CategoryRepositoryTest extends WebapiAbstract
         }
         //We don't have permissions to do that.
         $this->assertEquals('Not allowed to edit the category\'s design attributes', $exceptionMessage);
+        $this->createdCategories = [$result['id']];
+    }
+
+    /**
+     * Check if repository does not override default values for attributes out of request
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/category.php
+     */
+    public function testUpdateScopeAttribute()
+    {
+        $categoryId = 333;
+        $categoryData = [
+            'name' => 'Scope Specific Value',
+        ];
+        $result = $this->updateCategoryForSpecificStore($categoryId, $categoryData);
+        $this->assertEquals($categoryId, $result['id']);
+
+        /** @var Category $model */
+        $model = Bootstrap::getObjectManager()->get(Category::class);
+        $category = $model->load($categoryId);
+
+        /** @var ScopeOverriddenValue $scopeOverriddenValue */
+        $scopeOverriddenValue = Bootstrap::getObjectManager()->get(ScopeOverriddenValue::class);
+        self::assertTrue($scopeOverriddenValue->containsValue(
+            CategoryInterface::class,
+            $category,
+            'name',
+            Store::DISTRO_STORE_ID
+        ), 'Name is not saved for specific store');
+        self::assertFalse($scopeOverriddenValue->containsValue(
+            CategoryInterface::class,
+            $category,
+            'is_active',
+            Store::DISTRO_STORE_ID
+        ), 'is_active is overridden for default store');
+        self::assertFalse($scopeOverriddenValue->containsValue(
+            CategoryInterface::class,
+            $category,
+            'url_key',
+            Store::DISTRO_STORE_ID
+        ), 'url_key is overridden for default store');
+
+        $this->deleteCategory($categoryId);
+    }
+
+    /**
+     * Update given category via web API for specific store code.
+     *
+     * @param int $id
+     * @param array $data
+     * @param string|null $token
+     * @param string $storeCode
+     * @return array
+     */
+    protected function updateCategoryForSpecificStore(
+        int $id,
+        array $data,
+        ?string $token = null,
+        string $storeCode = 'default'
+    ) {
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH . '/' . $id,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => 'V1',
+                'operation' => self::SERVICE_NAME . 'Save',
+            ],
+        ];
+        if ($token) {
+            $serviceInfo['rest']['token'] = $serviceInfo['soap']['token'] = $token;
+        }
+        $data['id'] = $id;
+
+        return $this->_webApiCall($serviceInfo, ['id' => $id, 'category' => $data], null, $storeCode);
+    }
+
+    /**
+     * @inheritDoc
+     *
+     * @return void
+     */
+    protected function tearDown(): void
+    {
+        if (!empty($this->createdCategories)) {
+            // delete category to clean up auto-generated url rewrites
+            foreach ($this->createdCategories as $categoryId) {
+                $this->deleteCategory($categoryId);
+            }
+        }
+
+        parent::tearDown();
     }
 }

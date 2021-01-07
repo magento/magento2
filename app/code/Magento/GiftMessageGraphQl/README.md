@@ -1,3 +1,3 @@
 # GiftMessageGraphQl
 
-**GiftMessageGraphQl** provides information about gift messages for cart, cart items, order and order items.
+**GiftMessageGraphQl** provides information about gift messages for carts, cart items, orders and order items.

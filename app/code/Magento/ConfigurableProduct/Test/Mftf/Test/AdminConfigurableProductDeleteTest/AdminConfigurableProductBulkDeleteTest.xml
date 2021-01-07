@@ -139,8 +139,7 @@
         </after>
 
         <!-- Search for prefix of the 3 products we created via api -->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToProductList"/>
-        <waitForPageLoad stepKey="wait1"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="goToProductList"/>
         <conditionalClick selector="{{AdminProductGridFilterSection.clearAll}}" dependentSelector="{{AdminProductGridFilterSection.clearAll}}" stepKey="clearAll" visible="true"/>
         <actionGroup ref="SearchProductGridByKeywordActionGroup" stepKey="searchForProduct">
             <argument name="keyword" value="ApiConfigurableProduct.name"/>

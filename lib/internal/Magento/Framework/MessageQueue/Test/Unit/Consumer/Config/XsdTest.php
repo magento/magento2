@@ -69,7 +69,7 @@ class XsdTest extends TestCase
             /** Valid configurations */
             'valid' => [
                 '<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/consumer.xsd">
-                    <consumer name="consumer1" queue="queue1" handler="handlerClassOne::handlerMethodOne" consumerInstance="consumerClass1" connection="amqp" maxMessages="100"/>
+                    <consumer name="consumer1" queue="queue1" handler="handlerClassOne::handlerMethodOne" consumerInstance="consumerClass1" connection="amqp" maxMessages="100" maxIdleTime="500" sleep="5" onlySpawnWhenMessageAvailable="true"/>
                     <consumer name="consumer2" queue="queue2" handler="handlerClassTwo::handlerMethodTwo" consumerInstance="consumerClass2" connection="db"/>
                     <consumer name="consumer3" queue="queue3" handler="handlerClassThree::handlerMethodThree" consumerInstance="consumerClass3"/>
                     <consumer name="consumer4" queue="queue4" handler="handlerClassFour::handlerMethodFour"/>
@@ -79,7 +79,7 @@ class XsdTest extends TestCase
             ],
             'non unique consumer name' => [
                 '<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/consumer.xsd">
-                    <consumer name="consumer1" queue="queue1" handler="handlerClassOne::handlerMethodOne" consumerInstance="consumerClass1" connection="amqp" maxMessages="100"/>
+                    <consumer name="consumer1" queue="queue1" handler="handlerClassOne::handlerMethodOne" consumerInstance="consumerClass1" connection="amqp" maxMessages="100" maxIdleTime="500" sleep="2" onlySpawnWhenMessageAvailable="false"/>
                     <consumer name="consumer1" queue="queue2" handler="handlerClassTwo::handlerMethodTwo" consumerInstance="consumerClass2" connection="db"/>
                     <consumer name="consumer3" queue="queue3" handler="handlerClassThree::handlerMethodThree" consumerInstance="consumerClass3"/>
                     <consumer name="consumer4" queue="queue4" handler="handlerClassFour::handlerMethodFour"/>
@@ -91,7 +91,7 @@ class XsdTest extends TestCase
             ],
             'invalid handler format' => [
                 '<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/consumer.xsd">
-                    <consumer name="consumer1" queue="queue1" handler="handlerClass_One1::handlerMethod1" consumerInstance="consumerClass1" connection="amqp" maxMessages="100"/>
+                    <consumer name="consumer1" queue="queue1" handler="handlerClass_One1::handlerMethod1" consumerInstance="consumerClass1" connection="amqp" maxMessages="100" maxIdleTime="500" sleep="2" onlySpawnWhenMessageAvailable="true"/>
                     <consumer name="consumer2" queue="queue2" handler="handlerClassOne2::handler_Method2" consumerInstance="consumerClass2" connection="db"/>
                     <consumer name="consumer3" queue="queue3" handler="handlerClassThree::handlerMethodThree" consumerInstance="consumerClass3"/>
                     <consumer name="consumer4" queue="queue4" handler="handlerClassFour::handlerMethodFour"/>
@@ -106,7 +106,7 @@ class XsdTest extends TestCase
             ],
             'invalid maxMessages format' => [
                 '<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/consumer.xsd">
-                    <consumer name="consumer1" queue="queue1" handler="handlerClassOne::handlerMethodOne" consumerInstance="consumerClass1" connection="amqp" maxMessages="ABC"/>
+                    <consumer name="consumer1" queue="queue1" handler="handlerClassOne::handlerMethodOne" consumerInstance="consumerClass1" connection="amqp" maxMessages="ABC" maxIdleTime="500" sleep="2" onlySpawnWhenMessageAvailable="true"/>
                     <consumer name="consumer2" queue="queue2" handler="handlerClassTwo::handlerMethodTwo" consumerInstance="consumerClass2" connection="db"/>
                     <consumer name="consumer3" queue="queue3" handler="handlerClassThree::handlerMethodThree" consumerInstance="consumerClass3"/>
                     <consumer name="consumer4" queue="queue4" handler="handlerClassFour::handlerMethodFour"/>
@@ -114,6 +114,42 @@ class XsdTest extends TestCase
                 </config>',
                 [
                     "Element 'consumer', attribute 'maxMessages': 'ABC' is not a valid value of the atomic type 'xs:integer'.",
+                ],
+            ],
+            'invalid maxIdleTime format' => [
+                '<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/consumer.xsd">
+                    <consumer name="consumer1" queue="queue1" handler="handlerClassOne::handlerMethodOne" consumerInstance="consumerClass1" connection="amqp" maxMessages="100" maxIdleTime="ABC" sleep="5" onlySpawnWhenMessageAvailable="false"/>
+                    <consumer name="consumer2" queue="queue2" handler="handlerClassTwo::handlerMethodTwo" consumerInstance="consumerClass2" connection="db"/>
+                    <consumer name="consumer3" queue="queue3" handler="handlerClassThree::handlerMethodThree" consumerInstance="consumerClass3"/>
+                    <consumer name="consumer4" queue="queue4" handler="handlerClassFour::handlerMethodFour"/>
+                    <consumer name="consumer5" queue="queue4"/>
+                </config>',
+                [
+                    "Element 'consumer', attribute 'maxIdleTime': 'ABC' is not a valid value of the atomic type 'xs:integer'.",
+                ],
+            ],
+            'invalid sleep format' => [
+                '<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/consumer.xsd">
+                    <consumer name="consumer1" queue="queue1" handler="handlerClassOne::handlerMethodOne" consumerInstance="consumerClass1" connection="amqp" maxMessages="100" maxIdleTime="500" sleep="ABC" onlySpawnWhenMessageAvailable="false"/>
+                    <consumer name="consumer2" queue="queue2" handler="handlerClassTwo::handlerMethodTwo" consumerInstance="consumerClass2" connection="db"/>
+                    <consumer name="consumer3" queue="queue3" handler="handlerClassThree::handlerMethodThree" consumerInstance="consumerClass3"/>
+                    <consumer name="consumer4" queue="queue4" handler="handlerClassFour::handlerMethodFour"/>
+                    <consumer name="consumer5" queue="queue4"/>
+                </config>',
+                [
+                    "Element 'consumer', attribute 'sleep': 'ABC' is not a valid value of the atomic type 'xs:integer'.",
+                ],
+            ],
+            'invalid onlySpawnWhenMessageAvailable format' => [
+                '<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/consumer.xsd">
+                    <consumer name="consumer1" queue="queue1" handler="handlerClassOne::handlerMethodOne" consumerInstance="consumerClass1" connection="amqp" maxMessages="100" maxIdleTime="500" sleep="5" onlySpawnWhenMessageAvailable="text"/>
+                    <consumer name="consumer2" queue="queue2" handler="handlerClassTwo::handlerMethodTwo" consumerInstance="consumerClass2" connection="db"/>
+                    <consumer name="consumer3" queue="queue3" handler="handlerClassThree::handlerMethodThree" consumerInstance="consumerClass3"/>
+                    <consumer name="consumer4" queue="queue4" handler="handlerClassFour::handlerMethodFour"/>
+                    <consumer name="consumer5" queue="queue4"/>
+                </config>',
+                [
+                    "Element 'consumer', attribute 'onlySpawnWhenMessageAvailable': 'text' is not a valid value of the atomic type 'xs:boolean'.",
                 ],
             ],
             'unexpected element' => [
@@ -130,7 +166,7 @@ class XsdTest extends TestCase
             ],
             'unexpected attribute' => [
                 '<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/consumer.xsd">
-                    <consumer name="consumer1" queue="queue1" handler="handlerClassOne::handlerMethodOne" consumerInstance="consumerClass1" connection="amqp" maxMessages="100"/>
+                    <consumer name="consumer1" queue="queue1" handler="handlerClassOne::handlerMethodOne" consumerInstance="consumerClass1" connection="amqp" maxMessages="100" maxIdleTime="500" sleep="2" onlySpawnWhenMessageAvailable="true"/>
                     <consumer name="consumer2" queue="queue2" handler="handlerClassTwo::handlerMethodTwo" consumerInstance="consumerClass2" connection="db"/>
                     <consumer name="consumer3" queue="queue3" handler="handlerClassThree::handlerMethodThree" consumerInstance="consumerClass3"/>
                     <consumer name="consumer4" queue="queue4" handler="handlerClassFour::handlerMethodFour"/>

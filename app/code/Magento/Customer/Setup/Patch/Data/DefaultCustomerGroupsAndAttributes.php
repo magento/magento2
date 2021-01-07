@@ -4,19 +4,20 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
+
 namespace Magento\Customer\Setup\Patch\Data;
 
 use Magento\Customer\Setup\CustomerSetup;
 use Magento\Customer\Setup\CustomerSetupFactory;
+use Magento\Eav\Model\Entity\Attribute\Backend\DefaultBackend;
 use Magento\Framework\Module\Setup\Migration;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
-use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Framework\Setup\Patch\PatchVersionInterface;
 
 /**
- * Class DefaultCustomerGroupsAndAttributes
- * @package Magento\Customer\Setup\Patch
+ * Class default groups and attributes for customer
  */
 class DefaultCustomerGroupsAndAttributes implements DataPatchInterface, PatchVersionInterface
 {
@@ -31,20 +32,20 @@ class DefaultCustomerGroupsAndAttributes implements DataPatchInterface, PatchVer
     private $moduleDataSetup;
 
     /**
-     * DefaultCustomerGroupsAndAttributes constructor.
      * @param CustomerSetupFactory $customerSetupFactory
      * @param ModuleDataSetupInterface $moduleDataSetup
      */
     public function __construct(
         CustomerSetupFactory $customerSetupFactory,
-        \Magento\Framework\Setup\ModuleDataSetupInterface $moduleDataSetup
+        ModuleDataSetupInterface $moduleDataSetup
     ) {
         $this->customerSetupFactory = $customerSetupFactory;
         $this->moduleDataSetup = $moduleDataSetup;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function apply()
@@ -133,7 +134,7 @@ class DefaultCustomerGroupsAndAttributes implements DataPatchInterface, PatchVer
             'customer_address',
             'street',
             'backend_model',
-            \Magento\Eav\Model\Entity\Attribute\Backend\DefaultBackend::class
+            DefaultBackend::class
         );
 
         $migrationSetup = $this->moduleDataSetup->createMigrationSetup();
@@ -146,10 +147,12 @@ class DefaultCustomerGroupsAndAttributes implements DataPatchInterface, PatchVer
             ['attribute_id']
         );
         $migrationSetup->doUpdateClassAliases();
+
+        return $this;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getDependencies()
     {
@@ -157,7 +160,7 @@ class DefaultCustomerGroupsAndAttributes implements DataPatchInterface, PatchVer
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getVersion()
     {
@@ -165,7 +168,7 @@ class DefaultCustomerGroupsAndAttributes implements DataPatchInterface, PatchVer
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAliases()
     {

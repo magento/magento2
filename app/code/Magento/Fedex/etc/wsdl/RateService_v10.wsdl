@@ -472,7 +472,7 @@
       <xs:complexType name="Commodity">
         <xs:annotation>
           <xs:documentation>
-            For international multiple piece shipments, commodity information must be passed in the Master and on each child transaction.
+            For international multiple piece shipments, commodity information must be passed in the Main and on each child transaction.
             If this shipment contains more than four commodity line items, the four highest valued should be included in the first 4 occurrences for this request.
           </xs:documentation>
         </xs:annotation>
@@ -983,7 +983,7 @@
           </xs:element>
           <xs:element name="CustomsValue" type="ns:Money" minOccurs="0">
             <xs:annotation>
-              <xs:documentation>The total customs value for the shipment. This total will rrepresent th esum of the values of all commodities, and may include freight, miscellaneous, and insurance charges. Must contain 2 explicit decimal positions with a max length of 17 including the decimal. For Express International MPS, the Total Customs Value is in the master transaction and all child transactions</xs:documentation>
+              <xs:documentation>The total customs value for the shipment. This total will rrepresent th esum of the values of all commodities, and may include freight, miscellaneous, and insurance charges. Must contain 2 explicit decimal positions with a max length of 17 including the decimal. For Express International MPS, the Total Customs Value is in the main transaction and all child transactions</xs:documentation>
             </xs:annotation>
           </xs:element>
           <xs:element name="FreightOnValue" type="ns:FreightOnValueType" minOccurs="0">
@@ -1005,7 +1005,7 @@
           <xs:element name="Commodities" type="ns:Commodity" minOccurs="0" maxOccurs="99">
             <xs:annotation>
               <xs:documentation>
-                For international multiple piece shipments, commodity information must be passed in the Master and on each child transaction.
+                For international multiple piece shipments, commodity information must be passed in the Main and on each child transaction.
                 If this shipment contains more than four commodity line items, the four highest valued should be included in the first 4 occurrences for this request.
               </xs:documentation>
             </xs:annotation>

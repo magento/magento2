@@ -34,8 +34,7 @@
             <createData entity="defaultTaxRule" stepKey="initialTaxRule"/>
             <createData entity="defaultTaxRate" stepKey="initialTaxRate"/>
             <!-- Go to tax rule page -->
-            <amOnPage url="{{AdminTaxRuleGridPage.url}}" stepKey="goToTaxRulePage"/>
-            <waitForPageLoad stepKey="waitForTaxRatePage"/>
+            <actionGroup ref="AdminTaxRuleGridOpenPageActionGroup" stepKey="goToTaxRulePage"/>
             <click stepKey="addNewTaxRate" selector="{{AdminGridMainControls.add}}"/>
             <fillField stepKey="fillRuleName" selector="{{AdminTaxRulesSection.ruleName}}" userInput="SampleRule"/>
             <!-- Add tax rule with 20% tax rate -->
@@ -57,20 +56,22 @@
             <createData entity="SimpleProduct2" stepKey="createSimpleProductThird">
                 <field key="price">5.50</field>
             </createData>
-            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
         </before>
         <after>
             <!-- Removed created Data -->
-            <amOnPage url="{{AdminTaxRuleGridPage.url}}" stepKey="goToTaxRulesPage"/>
-            <waitForPageLoad stepKey="waitForRulesPage"/>
+            <actionGroup ref="AdminTaxRuleGridOpenPageActionGroup" stepKey="goToTaxRulesPage"/>
             <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deleteRule">
                 <argument name="name" value="SampleRule"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
             </actionGroup>
             <!-- Delete the tax rate that were created -->
-            <amOnPage url="{{AdminTaxRateGridPage.url}}" stepKey="goToTaxRatesPage"/>
-            <waitForPageLoad stepKey="waitForRatesPage"/>
+            <actionGroup ref="AdminTaxRateGridOpenPageActionGroup" stepKey="goToTaxRatesPage"/>
             <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deleteNYRate">
                 <argument name="name" value="{{SimpleTaxNYRate.state}}-{{SimpleTaxNYRate.rate}}"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>

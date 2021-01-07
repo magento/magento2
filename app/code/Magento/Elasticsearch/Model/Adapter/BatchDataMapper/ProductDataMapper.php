@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Elasticsearch\Model\Adapter\BatchDataMapper;
 
 use Magento\CatalogSearch\Model\Indexer\Fulltext\Action\DataProvider;
@@ -74,7 +75,7 @@ class ProductDataMapper implements BatchDataMapperInterface
     private $attributesExcludedFromMerge = [
         'status',
         'visibility',
-        'tax_class_id'
+        'tax_class_id',
     ];
 
     /**
@@ -85,8 +86,18 @@ class ProductDataMapper implements BatchDataMapperInterface
     ];
 
     /**
-     * Construction for DocumentDataMapper
-     *
+     * @var string[]
+     */
+    private $filterableAttributeTypes;
+
+    /**
+     * @var string[]
+     */
+    private $sortableCaseSensitiveAttributes = [
+        'name',
+    ];
+
+    /**
      * @param Builder $builder
      * @param FieldMapperInterface $fieldMapper
      * @param DateFieldType $dateFieldType
@@ -94,6 +105,8 @@ class ProductDataMapper implements BatchDataMapperInterface
      * @param DataProvider $dataProvider
      * @param array $excludedAttributes
      * @param array $sortableAttributesValuesToImplode
+     * @param array $filterableAttributeTypes
+     * @param array $sortableCaseSensitiveAttributes
      */
     public function __construct(
         Builder $builder,
@@ -102,7 +115,9 @@ class ProductDataMapper implements BatchDataMapperInterface
         AdditionalFieldsProviderInterface $additionalFieldsProvider,
         DataProvider $dataProvider,
         array $excludedAttributes = [],
-        array $sortableAttributesValuesToImplode = []
+        array $sortableAttributesValuesToImplode = [],
+        array $filterableAttributeTypes = [],
+        array $sortableCaseSensitiveAttributes = []
     ) {
         $this->builder = $builder;
         $this->fieldMapper = $fieldMapper;
@@ -115,6 +130,11 @@ class ProductDataMapper implements BatchDataMapperInterface
         $this->additionalFieldsProvider = $additionalFieldsProvider;
         $this->dataProvider = $dataProvider;
         $this->attributeOptionsCache = [];
+        $this->filterableAttributeTypes = $filterableAttributeTypes;
+        $this->sortableCaseSensitiveAttributes = array_merge(
+            $this->sortableCaseSensitiveAttributes,
+            $sortableCaseSensitiveAttributes
+        );
     }
 
     /**
@@ -212,7 +232,7 @@ class ProductDataMapper implements BatchDataMapperInterface
         if ($retrievedValue !== null) {
             $productAttributes[$attribute->getAttributeCode()] = $retrievedValue;
 
-            if ($attribute->getIsSearchable()) {
+            if ($this->isAttributeLabelsShouldBeMapped($attribute)) {
                 $attributeLabels = $this->getValuesLabels($attribute, $attributeValues, $storeId);
                 $retrievedLabel = $this->retrieveFieldValue($attributeLabels);
                 if ($retrievedLabel) {
@@ -225,6 +245,26 @@ class ProductDataMapper implements BatchDataMapperInterface
     }
 
     /**
+     * Check if an attribute has one of the next storefront properties enabled for mapping labels:
+     * - "Use in Search" (is_searchable)
+     * - "Visible in Advanced Search" (is_visible_in_advanced_search)
+     * - "Use in Layered Navigation" (is_filterable)
+     * - "Use in Search Results Layered Navigation" (is_filterable_in_search)
+     *
+     * @param Attribute $attribute
+     * @return bool
+     */
+    private function isAttributeLabelsShouldBeMapped(Attribute $attribute): bool
+    {
+        return (
+            $attribute->getIsSearchable()
+            || $attribute->getIsVisibleInAdvancedSearch()
+            || $attribute->getIsFilterable()
+            || $attribute->getIsFilterableInSearch()
+        );
+    }
+
+    /**
      * Prepare attribute values.
      *
      * @param int $productId
@@ -232,6 +272,9 @@ class ProductDataMapper implements BatchDataMapperInterface
      * @param array $attributeValues
      * @param int $storeId
      * @return array
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     private function prepareAttributeValues(
         int $productId,
@@ -249,6 +292,15 @@ class ProductDataMapper implements BatchDataMapperInterface
             $attributeValues = $this->prepareMultiselectValues($attributeValues);
         }
 
+        if (in_array($attribute->getFrontendInput(), $this->filterableAttributeTypes)) {
+            $attributeValues = array_map(
+                function (string $valueId) {
+                    return (int)$valueId;
+                },
+                $attributeValues
+            );
+        }
+
         if ($this->isAttributeDate($attribute)) {
             foreach ($attributeValues as $key => $attributeValue) {
                 $attributeValues[$key] = $this->dateFieldType->formatDate($storeId, $attributeValue);
@@ -260,6 +312,12 @@ class ProductDataMapper implements BatchDataMapperInterface
             && count($attributeValues) > 1
         ) {
             $attributeValues = [$productId => implode(' ', $attributeValues)];
+        }
+
+        if (in_array($attribute->getAttributeCode(), $this->sortableCaseSensitiveAttributes)) {
+            foreach ($attributeValues as $key => $attributeValue) {
+                $attributeValues[$key] = strtolower($attributeValue);
+            }
         }
 
         return $attributeValues;

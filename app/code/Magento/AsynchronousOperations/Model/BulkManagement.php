@@ -140,8 +140,8 @@ class BulkManagement implements BulkManagementInterface
     public function retryBulk($bulkUuid, array $errorCodes)
     {
         $metadata = $this->metadataPool->getMetadata(BulkSummaryInterface::class);
-        $connection = $this->resourceConnection->getConnectionByName($metadata->getEntityConnectionName());
 
+        $connection = $this->resourceConnection->getConnectionByName($metadata->getEntityConnectionName());
         /** @var \Magento\AsynchronousOperations\Model\ResourceModel\Operation[] $retriablyFailedOperations */
         $retriablyFailedOperations = $this->operationCollectionFactory->create()
             ->addFieldToFilter('error_code', ['in' => $errorCodes])
@@ -157,23 +157,27 @@ class BulkManagement implements BulkManagementInterface
             /** @var OperationInterface $operation */
             foreach ($retriablyFailedOperations as $operation) {
                 if ($currentBatchSize === $maxBatchSize) {
+                    $whereCondition = $connection->quoteInto('operation_key IN (?)', $operationIds)
+                        . " AND "
+                        . $connection->quoteInto('bulk_uuid = ?', $bulkUuid);
                     $connection->delete(
                         $this->resourceConnection->getTableName('magento_operation'),
-                        $connection->quoteInto('id IN (?)', $operationIds)
+                        $whereCondition
                     );
                     $operationIds = [];
                     $currentBatchSize = 0;
                 }
                 $currentBatchSize++;
                 $operationIds[] = $operation->getId();
-                // Rescheduled operations must be put in queue in 'open' state (i.e. without ID)
-                $operation->setId(null);
             }
             // remove operations from the last batch
             if (!empty($operationIds)) {
+                $whereCondition = $connection->quoteInto('operation_key IN (?)', $operationIds)
+                    . " AND "
+                    . $connection->quoteInto('bulk_uuid = ?', $bulkUuid);
                 $connection->delete(
                     $this->resourceConnection->getTableName('magento_operation'),
-                    $connection->quoteInto('id IN (?)', $operationIds)
+                    $whereCondition
                 );
             }
 

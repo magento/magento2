@@ -53,15 +53,14 @@
         <waitForPageLoad stepKey="waitForGenerateConfigure"/>
         <grabValueFrom selector="{{AdminProductFormConfigurationsSection.firstSKUInConfigurableProductsGrid}}" stepKey="grabTextFromContent"/>
         <fillField stepKey="fillMoreThan64Symbols" selector="{{AdminProductFormConfigurationsSection.firstSKUInConfigurableProductsGrid}}" userInput="01234567890123456789012345678901234567890123456789012345678901234"/>
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct1"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveProduct1"/>
         <conditionalClick selector="{{AdminChooseAffectedAttributeSetPopup.closePopUp}}" dependentSelector="{{AdminChooseAffectedAttributeSetPopup.closePopUp}}" visible="true" stepKey="clickOnCloseInPopup"/>
         <see stepKey="seeErrorMessage" userInput="Please enter less or equal than 64 symbols."/>
         <fillField stepKey="fillCorrectSKU" selector="{{AdminProductFormConfigurationsSection.firstSKUInConfigurableProductsGrid}}" userInput="$grabTextFromContent"/>
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct2"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveProduct2"/>
         <conditionalClick selector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" dependentSelector="{{AdminChooseAffectedAttributeSetPopup.confirm}}" visible="true" stepKey="clickOnConfirmInPopup"/>
         <see userInput="You saved the product." stepKey="seeSaveConfirmation"/>
-        <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="goToProductAttributes"/>
-        <waitForPageLoad stepKey="waitForProductAttributes"/>
+        <actionGroup ref="AdminOpenProductAttributePageActionGroup" stepKey="goToProductAttributes"/>
         <click selector="{{AdminProductAttributeGridSection.ResetFilter}}" stepKey="resetFiltersOnGrid1"/>
         <fillField selector="{{AdminProductAttributeGridSection.FilterByAttributeCode}}" userInput="color" stepKey="fillFilter"/>
         <click selector="{{AdminProductAttributeGridSection.Search}}" stepKey="clickSearch"/>
@@ -72,8 +71,7 @@
         <actionGroup stepKey="deleteProduct1" ref="DeleteProductBySkuActionGroup">
             <argument name="sku" value="$grabTextFromContent"/>
         </actionGroup>
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPage"/>
-        <waitForPageLoad time="60" stepKey="waitForPageLoadInitial"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="visitAdminProductPage"/>
         <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFiltersInitial"/>
     </test>
 </tests>

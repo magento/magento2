@@ -61,17 +61,21 @@
         <!-- Verify that the simple product page shows the discount -->
         <amOnPage url="$$createSimpleProduct.custom_attributes[url_key]$$.html" stepKey="goToSimpleProductPage1"/>
         <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="$$createSimpleProduct.name$$" stepKey="seeCorrectName1"/>
-        <see selector="{{StorefrontProductInfoMainSection.productSku}}" userInput="$$createSimpleProduct.sku$$" stepKey="seeCorrectSku1"/>
+        <actionGroup ref="StorefrontAssertProductSkuOnProductPageActionGroup" stepKey="seeCorrectSku1">
+            <argument name="productSku" value="$$createSimpleProduct.sku$$"/>
+        </actionGroup>
         <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="$110.70" stepKey="seeCorrectPrice1"/>
 
         <!-- Verify that the configurable product page the catalog price rule discount -->
         <amOnPage url="{{_defaultProduct.urlKey}}.html" stepKey="goToConfigurableProductPage1"/>
         <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{_defaultProduct.name}}" stepKey="seeCorrectName2"/>
-        <see selector="{{StorefrontProductInfoMainSection.productSku}}" userInput="{{_defaultProduct.sku}}" stepKey="seeCorrectSku2"/>
+        <actionGroup ref="StorefrontAssertProductSkuOnProductPageActionGroup" stepKey="seeCorrectSku2">
+            <argument name="productSku" value="{{_defaultProduct.sku}}"/>
+        </actionGroup>
         <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="$0.90" stepKey="seeCorrectPrice2"/>
 
         <!-- Delete the rule -->
-        <amOnPage url="{{CatalogRulePage.url}}" stepKey="goToPriceRulePage"/>
+        <actionGroup ref="AdminOpenCatalogPriceRulePageActionGroup" stepKey="goToPriceRulePage"/>
         <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deletePriceRule">
             <argument name="name" value="{{_defaultCatalogRule.name}}"/>
             <argument name="searchInput" value="{{AdminSecondaryGridSection.catalogRuleIdentifierSearch}}"/>
@@ -79,8 +83,12 @@
 
         <!-- Apply and flush the cache -->
         <click selector="{{AdminCatalogPriceRuleGrid.applyRules}}" stepKey="clickApplyRules"/>
-        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-        <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+            <argument name="tags" value=""/>
+        </actionGroup>
 
         <!-- Verify that category page shows the original prices -->
         <amOnPage url="$$createCategory.name$$.html" stepKey="goToCategoryPage2"/>
@@ -92,13 +100,17 @@
         <!-- Verify that the simple product page shows the original price -->
         <amOnPage url="$$createSimpleProduct.custom_attributes[url_key]$$.html" stepKey="goToSimpleProductPage2"/>
         <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="$$createSimpleProduct.name$$" stepKey="seeCorrectName3"/>
-        <see selector="{{StorefrontProductInfoMainSection.productSku}}" userInput="$$createSimpleProduct.sku$$" stepKey="seeCorrectSku3"/>
+        <actionGroup ref="StorefrontAssertProductSkuOnProductPageActionGroup" stepKey="seeCorrectSku3">
+            <argument name="productSku" value="$$createSimpleProduct.sku$$"/>
+        </actionGroup>
         <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="$123.00" stepKey="seeCorrectPrice3"/>
 
         <!-- Verify that the configurable product page shows the original price -->
         <amOnPage url="{{_defaultProduct.urlKey}}.html" stepKey="goToConfigurableProductPage2"/>
         <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{_defaultProduct.name}}" stepKey="seeCorrectName4"/>
-        <see selector="{{StorefrontProductInfoMainSection.productSku}}" userInput="{{_defaultProduct.sku}}" stepKey="seeCorrectSku4"/>
+        <actionGroup ref="StorefrontAssertProductSkuOnProductPageActionGroup" stepKey="seeCorrectSku4">
+            <argument name="productSku" value="{{_defaultProduct.sku}}"/>
+        </actionGroup>
         <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="$1.00" stepKey="seeCorrectPrice4"/>
     </test>
 </tests>

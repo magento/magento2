@@ -32,8 +32,7 @@
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
         <!-- Create a configurable swatch product via the UI -->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToProductIndex"/>
-        <waitForPageLoad stepKey="waitForProductPage"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="goToProductIndex"/>
         <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateProductPage">
             <argument name="product" value="BaseConfigurableProduct"/>
         </actionGroup>
@@ -45,7 +44,7 @@
         <actionGroup ref="AddVisualSwatchToProductActionGroup" stepKey="addSwatchToProduct"/>
         <!--Add custom option to configurable product-->
         <actionGroup ref="AddProductCustomOptionFileActionGroup" stepKey="addCustomOptionToProduct"/>
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveProduct"/>
 
         <!--Go to storefront-->
         <amOnPage url="" stepKey="goToHomePage"/>

@@ -185,7 +185,7 @@ class Collection extends AbstractCollection implements SearchResultInterface
     {
         if ($field === 'region') {
             $conditionSql = $this->_getConditionSql(
-                $this->getRegionNameExpresion(),
+                $this->getRegionNameExpression(),
                 $condition
             );
             $this->getSelect()->where($conditionSql);
@@ -211,7 +211,7 @@ class Collection extends AbstractCollection implements SearchResultInterface
         $whereCondition = '';
         foreach ($fields as $key => $field) {
             $field = $field === 'region'
-                ? $this->getRegionNameExpresion()
+                ? $this->getRegionNameExpression()
                 : 'main_table.' . $field;
             $condition = $this->_getConditionSql(
                 $this->getConnection()->quoteIdentifier($field),
@@ -246,18 +246,18 @@ class Collection extends AbstractCollection implements SearchResultInterface
             )->joinLeft(
                 ['rnt' => $this->getTable('directory_country_region_name')],
                 "rnt.region_id={$regionIdField} AND {$localeCondition}",
-                ['region' => $this->getRegionNameExpresion()]
+                ['region' => $this->getRegionNameExpression()]
             );
 
         return $this;
     }
 
     /**
-     * Get SQL Expresion to define Region Name field by locale
+     * Get SQL Expression to define Region Name field by locale
      *
      * @return \Zend_Db_Expr
      */
-    private function getRegionNameExpresion(): \Zend_Db_Expr
+    private function getRegionNameExpression(): \Zend_Db_Expr
     {
         $connection = $this->getConnection();
         $defaultNameExpr = $connection->getIfNullSql(

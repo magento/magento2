@@ -44,7 +44,9 @@
             <!-- Set the category filter to NOT be present on the category page layered navigation -->
             <magentoCLI command="config:set {{DisableCategoryFilterOnCategoryPageConfigData.path}} {{DisableCategoryFilterOnCategoryPageConfigData.value}}" stepKey="hideCategoryFilterOnStorefront"/>
 
-            <magentoCLI command="cache:flush" stepKey="clearCache"/>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
         </before>
 
         <after>

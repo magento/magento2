@@ -101,7 +101,7 @@
         <seeElement selector="{{StorefrontCustomerOrdersGridSection.orderView({$grabSecondOrderId})}}" stepKey="seeSecondOrder"/>
         <waitForPageLoad stepKey="waitForOrderPageLoad"/>
         <!-- Go to Admin > Sales > Orders -->
-        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="onOrdersPage"/>
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="onOrdersPage"/>
         <actionGroup ref="SearchAdminDataGridByKeywordActionGroup" stepKey="searchFirstOrder">
             <argument name="keyword" value="$grabFirstOrderId"/>
         </actionGroup>

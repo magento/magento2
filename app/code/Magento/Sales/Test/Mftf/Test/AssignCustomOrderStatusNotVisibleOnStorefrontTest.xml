@@ -85,8 +85,7 @@
         <grabTextFrom selector="|Order # (\d+)|" stepKey="getOrderId"/>
 
         <!-- Assert order status is correct -->
-        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="goToOrdersPage"/>
-        <waitForPageLoad stepKey="waitForOrdersPageLoad"/>
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="goToOrdersPage"/>
         <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrdersGridById">
             <argument name="orderId" value="$getOrderId"/>
         </actionGroup>
@@ -100,8 +99,7 @@
         <waitForPageLoad stepKey="waitForCustomerLogin"/>
 
         <!-- Open My Orders -->
-        <amOnPage url="{{StorefrontCustomerDashboardPage.url}}" stepKey="goToCustomerDashboardPage"/>
-        <waitForPageLoad stepKey="waitForCustomerDashboardPageLoad"/>
+        <actionGroup ref="StorefrontOpenMyAccountPageActionGroup" stepKey="goToCustomerDashboardPage"/>
         <actionGroup ref="StorefrontCustomerGoToSidebarMenu" stepKey="goToMyOrdersPage">
             <argument name="menu" value="My Orders"/>
         </actionGroup>
@@ -110,8 +108,7 @@
         <see selector="{{StorefrontOrderInformationMainSection.emptyMessage}}" userInput="You have placed no orders." stepKey="seeEmptyMessage"/>
 
         <!-- Cancel order -->
-        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="goToAdminOrdersPage"/>
-        <waitForPageLoad stepKey="waitForAdminOrdersPageLoad"/>
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="goToAdminOrdersPage"/>
         <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrdersGridByOrderId">
             <argument name="orderId" value="$getOrderId"/>
         </actionGroup>

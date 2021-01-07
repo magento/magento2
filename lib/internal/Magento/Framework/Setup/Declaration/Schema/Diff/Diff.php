@@ -23,6 +23,7 @@ use Magento\Framework\Setup\Declaration\Schema\Operations\DropReference;
  *  - new (Should be changed to)
  *  - old ()
  * @api
+ * @since 102.0.0
  */
 class Diff implements DiffInterface
 {
@@ -40,6 +41,7 @@ class Diff implements DiffInterface
      * This changes created only for debug reasons.
      *
      * @var array
+     * @since 102.0.0
      */
     public $debugChanges;
 
@@ -100,6 +102,7 @@ class Diff implements DiffInterface
      * All changes are sorted because there are dependencies between tables, like foreign keys.
      *
      * @inheritdoc
+     * @since 102.0.0
      */
     public function getAll()
     {
@@ -115,6 +118,7 @@ class Diff implements DiffInterface
      * @param string $table
      * @param string $operation
      * @return ElementHistory[]
+     * @since 102.0.0
      */
     public function getChange($table, $operation)
     {
@@ -159,6 +163,7 @@ class Diff implements DiffInterface
      * @param  ElementInterface | Table $object
      * @param string $operation
      * @return bool
+     * @since 102.0.0
      */
     public function canBeRegistered(ElementInterface $object, $operation): bool
     {
@@ -202,6 +207,7 @@ class Diff implements DiffInterface
      *
      * @param TableElementInterface $dtoObject
      * @inheritdoc
+     * @since 102.0.0
      */
     public function register(
         ElementInterface $dtoObject,

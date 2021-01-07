@@ -11,7 +11,7 @@ namespace Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab\Download
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  *
- * @deprecated in favor of new class which adds grid links
+ * @deprecated 100.3.1 in favor of new class which adds grid links
  * @see \Magento\Downloadable\Ui\DataProvider\Product\Form\Modifier\Links
  */
 class Links extends \Magento\Backend\Block\Template

@@ -31,15 +31,16 @@
         </after>
 
         <!--Open New Customer Page -->
-        <amOnPage url="{{AdminNewCustomerPage.url}}" stepKey="navigateToNewCustomerPage"/>
-        <waitForPageLoad stepKey="waitToCustomerPageLoad"/>
+        <actionGroup ref="AdminNavigateNewCustomerActionGroup" stepKey="navigateToNewCustomerPage"/>
         <selectOption selector="{{AdminCustomerAccountInformationSection.group}}" userInput="$$customerGroup.code$$" stepKey="fillCustomerGroup"/>
         <fillField userInput="{{CustomerEntityOne.firstname}}" selector="{{AdminCustomerAccountInformationSection.firstName}}" stepKey="fillFirstName"/>
         <fillField userInput="{{CustomerEntityOne.lastname}}" selector="{{AdminCustomerAccountInformationSection.lastName}}" stepKey="fillLastName"/>
         <fillField userInput="{{CustomerEntityOne.email}}" selector="{{AdminCustomerAccountInformationSection.email}}" stepKey="fillEmail"/>
         <click selector="{{AdminCustomerMainActionsSection.saveButton}}" stepKey="saveCustomer"/>
         <seeElement selector="{{AdminCustomerMessagesSection.successMessage}}" stepKey="assertSuccessMessage"/>
-        <magentoCLI stepKey="flushMagentoCache" command="cache:flush" />
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+            <argument name="tags" value=""/>
+        </actionGroup>
         <reloadPage stepKey="reloadPage"/>
 
         <!--Verify Customer in grid -->
@@ -53,8 +54,7 @@
         <see userInput="{{CustomerEntityOne.email}}" selector="{{AdminCustomerGridSection.customerGrid}}" stepKey="assertEmail"/>
 
         <!--Assert Customer Form -->
-        <click selector="{{AdminCustomerGridSection.firstRowEditLink}}" stepKey="clickOnEditButton1"/>
-        <waitForPageLoad stepKey="waitForCustomerEditPageToLoad1"/>
+        <actionGroup ref="AdminClickFirstRowEditLinkOnCustomerGridActionGroup" stepKey="clickOnEditButton1"/>
         <click selector="{{AdminCustomerAccountInformationSection.accountInformationButton}}" stepKey="clickOnAccountInformation"/>
         <waitForPageLoad stepKey="waitForCustomerInformationPageToLoad"/>
         <see selector="{{AdminCustomerAccountInformationSection.groupIdValue}}" userInput="$$customerGroup.code$$" stepKey="seeCustomerGroup1"/>

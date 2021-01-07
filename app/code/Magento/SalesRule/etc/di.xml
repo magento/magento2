@@ -191,6 +191,8 @@
     </type>
     <type name="Magento\Sales\Model\Service\OrderService">
         <plugin name="coupon_uses_decrement_plugin" type="Magento\SalesRule\Plugin\CouponUsagesDecrement" />
+    </type>
+    <type name="\Magento\Quote\Model\QuoteManagement">
         <plugin name="coupon_uses_increment_plugin" type="Magento\SalesRule\Plugin\CouponUsagesIncrement" sortOrder="20"/>
     </type>
     <preference

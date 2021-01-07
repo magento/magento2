@@ -48,4 +48,9 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Sales\Block\Adminhtml\Order\Create\Search\Grid\DataProvider\ProductCollection">
+        <arguments>
+            <argument name="collectionFactory" xsi:type="object">\Magento\Catalog\Ui\DataProvider\Product\ProductCollectionFactory</argument>
+        </arguments>
+    </type>
 </config>

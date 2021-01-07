@@ -13,6 +13,7 @@ use Magento\MediaContentApi\Api\Data\ContentAssetLinkInterface;
 /**
  * Save a media asset to content relation.
  * @api
+ * @since 100.4.0
  */
 interface SaveContentAssetLinksInterface
 {
@@ -21,6 +22,7 @@ interface SaveContentAssetLinksInterface
      *
      * @param ContentAssetLinkInterface[] $contentAssetLinks
      * @throws \Magento\Framework\Exception\CouldNotSaveException
+     * @since 100.4.0
      */
     public function execute(array $contentAssetLinks): void;
 }

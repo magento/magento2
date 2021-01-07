@@ -50,8 +50,12 @@
         </actionGroup>
         <selectOption selector="{{AdminProductFormSection.customSelectField($$attribute.attribute[attribute_code]$$)}}" userInput="option1" stepKey="selectAttribute"/>
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveSimpleProduct"/>
-        <magentoCLI command="indexer:reindex" stepKey="reindexAll"/>
-        <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexAll">
+            <argument name="indices" value=""/>
+        </actionGroup>
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+            <argument name="tags" value=""/>
+        </actionGroup>
         <!-- Check storefront mobile view for shop by button is functioning as expected -->
         <comment userInput="Check storefront mobile view for shop by button is functioning as expected" stepKey="commentCheckShopByButton" />
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomePage"/>

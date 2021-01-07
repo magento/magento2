@@ -18,13 +18,16 @@ type Mutation {
     generateCustomerToken(email: String!, password: String!): CustomerToken @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\GenerateCustomerToken") @doc(description:"Retrieve the customer token")
     changeCustomerPassword(currentPassword: String!, newPassword: String!): Customer @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\ChangePassword") @doc(description:"Changes the password for the logged-in customer")
     createCustomer (input: CustomerInput!): CustomerOutput @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\CreateCustomer") @doc(description:"Create customer account")
-    updateCustomer (input: CustomerInput!): CustomerOutput @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\UpdateCustomer") @doc(description:"Update the customer's personal information")
+    createCustomerV2 (input: CustomerCreateInput!): CustomerOutput @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\CreateCustomer") @doc(description:"Create customer account")
+    updateCustomer (input: CustomerInput!): CustomerOutput @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\UpdateCustomer") @doc(description:"Deprecated. Use UpdateCustomerV2 instead.")
+    updateCustomerV2 (input: CustomerUpdateInput!): CustomerOutput @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\UpdateCustomer") @doc(description:"Update the customer's personal information")
     revokeCustomerToken: RevokeCustomerTokenOutput @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\RevokeCustomerToken") @doc(description:"Revoke the customer token")
     createCustomerAddress(input: CustomerAddressInput!): CustomerAddress @resolver(class: "Magento\\CustomerGraphQl\\Model\\Resolver\\CreateCustomerAddress") @doc(description: "Create customer address")
     updateCustomerAddress(id: Int!, input: CustomerAddressInput): CustomerAddress @resolver(class: "Magento\\CustomerGraphQl\\Model\\Resolver\\UpdateCustomerAddress") @doc(description: "Update customer address")
     deleteCustomerAddress(id: Int!): Boolean @resolver(class: "Magento\\CustomerGraphQl\\Model\\Resolver\\DeleteCustomerAddress") @doc(description: "Delete customer address")
     requestPasswordResetEmail(email: String!): Boolean  @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\RequestPasswordResetEmail") @doc(description: "Request an email with a reset password token for the registered customer identified by the specified email.")
     resetPassword(email: String!, resetPasswordToken: String!, newPassword: String!): Boolean  @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\ResetPassword") @doc(description: "Reset a customer's password using the reset password token that the customer received in an email after requesting it using requestPasswordResetEmail.")
+    updateCustomerEmail(email: String!, password: String!): CustomerOutput @resolver(class: "\\Magento\\CustomerGraphQl\\Model\\Resolver\\UpdateCustomerEmail") @doc(description: "")
 }
 
 input CustomerAddressInput {
@@ -76,6 +79,34 @@ input CustomerInput {
     gender: Int @doc(description: "The customer's gender (Male - 1, Female - 2)")
     password: String @doc(description: "The customer's password")
     is_subscribed: Boolean @doc(description: "Indicates whether the customer is subscribed to the company's newsletter")
+}
+
+input CustomerCreateInput {
+    prefix: String @doc(description: "An honorific, such as Dr., Mr., or Mrs.")
+    firstname: String! @doc(description: "The customer's first name")
+    middlename: String @doc(description: "The customer's middle name")
+    lastname: String! @doc(description: "The customer's family name")
+    suffix: String @doc(description: "A value such as Sr., Jr., or III")
+    email: String! @doc(description: "The customer's email address. Required for customer creation")
+    dob: String @doc(description: "Deprecated: Use `date_of_birth` instead")
+    date_of_birth: String @doc(description: "The customer's date of birth")
+    taxvat: String @doc(description: "The customer's Tax/VAT number (for corporate customers)")
+    gender: Int @doc(description: "The customer's gender (Male - 1, Female - 2)")
+    password: String @doc(description: "The customer's password")
+    is_subscribed: Boolean @doc(description: "Indicates whether the customer is subscribed to the company's newsletter")
+}
+
+input CustomerUpdateInput {
+    date_of_birth: String @doc(description: "The customer's date of birth")
+    dob: String @doc(description: "Deprecated: Use `date_of_birth` instead")
+    firstname: String @doc(description: "The customer's first name")
+    gender: Int @doc(description: "The customer's gender (Male - 1, Female - 2)")
+    is_subscribed: Boolean @doc(description: "Indicates whether the customer is subscribed to the company's newsletter")
+    lastname: String @doc(description: "The customer's family name")
+    middlename: String @doc(description: "The customer's middle name")
+    prefix: String @doc(description: "An honorific, such as Dr., Mr., or Mrs.")
+    suffix: String @doc(description: "A value such as Sr., Jr., or III")
+    taxvat: String @doc(description: "The customer's Tax/VAT number (for corporate customers)")
 }
 
 type CustomerOutput {

@@ -8,16 +8,19 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="VerifyCategoryProductAndProductCategoryPartialReindexTest">
+    <test name="VerifyCategoryProductAndProductCategoryPartialReindexTest" deprecated="Use StorefrontVerifyCategoryProductAndProductCategoryPartialReindexTest instead.">
         <annotations>
             <features value="Catalog"/>
             <stories value="Product Categories Indexer"/>
-            <title value="Verify Category Product and Product Category partial reindex"/>
+            <title value="DEPRECATED. Verify Category Product and Product Category partial reindex"/>
             <description value="Verify that Merchant Developer can use console commands to perform partial reindex for Category Products, Product Categories, and Catalog Search"/>
             <severity value="BLOCKER"/>
             <testCaseId value="MC-11386"/>
             <group value="catalog"/>
             <group value="indexer"/>
+            <skip>
+                <issueId value="DEPRECATED">Use StorefrontVerifyCategoryProductAndProductCategoryPartialReindexTest instead.</issueId>
+            </skip>
         </annotations>
         <before>
             <!-- Change "Category Products" and "Product Categories" indexers to "Update by Schedule" mode -->
@@ -55,14 +58,16 @@
                 <argument name="categoryName" value="$$categoryN.name$$, $$categoryM.name$$"/>
             </actionGroup>
 
-            <wait stepKey="waitBeforeRunCronIndex" time="30"/>
+            <wait stepKey="waitBeforeRunCronIndex" time="60"/>
             <magentoCLI stepKey="runCronIndex" command="cron:run --group=index"/>
-            <wait stepKey="waitAfterRunCronIndex" time="60"/>
+            <wait stepKey="waitAfterRunCronIndex" time="120"/>
         </before>
         <after>
             <!-- Change "Category Products" and "Product Categories" indexers to "Update on Save" mode -->
             <magentoCLI command="indexer:set-mode" arguments="realtime" stepKey="setRealtimeMode"/>
-            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
 
             <!-- Delete data -->
             <deleteData createDataKey="productA" stepKey="deleteProductA"/>
@@ -103,6 +108,8 @@
             <argument name="categoryName" value="$$categoryK.name$$"/>
         </actionGroup>
 
+        <wait stepKey="waitAfterAssignCategoryK" time="60"/>
+
         <!--  Unassign category M from Product B -->
         <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="amOnEditCategoryPageB">
             <argument name="productId" value="$$productB.id$$"/>
@@ -142,9 +149,10 @@
         <see userInput="$$productC.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="seeProductInCategoryN"/>
 
         <!-- Run cron -->
-        <wait stepKey="waitBeforeRunMagentoCron" time="30"/>
+        <wait stepKey="waitBeforeRunMagentoCron" time="60"/>
         <magentoCLI stepKey="runMagentoCron" command="cron:run --group=index"/>
-        <wait stepKey="waitAfterRunMagentoCron" time="60"/>
+
+        <wait stepKey="waitAfterRunMagentoCron" time="90"/>
 
         <!-- Open categories K, L, M, N on Storefront in order to make sure that new assigments are applied -->
         <!-- Category K contains only Products A, C -->
@@ -208,9 +216,10 @@
         <see userInput="$$productC.name$$" selector="{{StorefrontCategoryMainSection.productName}}" stepKey="productCOnCategoryN"/>
 
         <!-- Run Cron once to reindex product changes -->
-        <wait stepKey="waitBeforeRunCronIndexAfterProductAssignToCategory" time="30"/>
+        <wait stepKey="waitBeforeRunCronIndexAfterProductAssignToCategory" time="60"/>
         <magentoCLI stepKey="runCronIndexAfterProductAssignToCategory" command="cron:run --group=index"/>
-        <wait stepKey="waitAfterRunCronIndexAfterProductAssignToCategory" time="60"/>
+
+        <wait stepKey="waitAfterRunCronIndexAfterProductAssignToCategory" time="90"/>
 
         <!-- Open categories K, L, M, N on Storefront in order to make sure that new assigments are applied -->
 

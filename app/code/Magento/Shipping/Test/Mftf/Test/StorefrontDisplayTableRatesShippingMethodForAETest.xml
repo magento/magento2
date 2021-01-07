@@ -27,6 +27,8 @@
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
+            <!-- Customer Log Out -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
@@ -67,8 +69,7 @@
             <argument name="shippingMethodName" value="Best Way"/>
         </actionGroup>
         <!--Proceed to Review and Payments section-->
-        <click selector="{{CheckoutShippingSection.next}}" stepKey="clickToSaveShippingInfo"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskAfterClickNext"/>
+        <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="clickToSaveShippingInfo"/>
         <waitForPageLoad stepKey="waitForReviewAndPaymentsPageIsLoaded"/>
         <!--Place order and assert the message of success-->
         <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="placeOrderProductSuccessful"/>

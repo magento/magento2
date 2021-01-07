@@ -36,7 +36,7 @@
         </after>
         <actionGroup ref="SetMinimalQueryLengthActionGroup" stepKey="setMinQueryLength"/>
         <comment userInput="Go to Storefront and search for product" stepKey="searchProdUsingMinQueryLength"/>
-        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToHomePage"/>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomePage"/>
         <comment userInput="Quick search by single character and avoid using ES stopwords" stepKey="commentQuickSearch"/>
         <fillField selector="{{StorefrontQuickSearchResultsSection.searchTextBox}}" userInput="B" stepKey="fillAttribute"/>
         <waitForPageLoad stepKey="waitForSearchTextBox"/>

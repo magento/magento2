@@ -53,12 +53,12 @@ class Order extends SalesResource implements OrderResourceInterface
 
     /**
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
-     * @param Attribute $attribute
-     * @param Manager $sequenceManager
      * @param Snapshot $entitySnapshot
      * @param RelationComposite $entityRelationComposite
+     * @param Attribute $attribute
+     * @param Manager $sequenceManager
      * @param StateHandler $stateHandler
-     * @param string $connectionName
+     * @param string|null $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -137,6 +137,8 @@ class Order extends SalesResource implements OrderResourceInterface
     }
 
     /**
+     * Before save
+     *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
      */
@@ -152,15 +154,15 @@ class Order extends SalesResource implements OrderResourceInterface
             ];
             $object->setStoreName(implode(PHP_EOL, $name));
             $object->setTotalItemCount($this->calculateItems($object));
+            $object->setData(
+                'protect_code',
+                substr(
+                    hash('sha256', uniqid(Random::getRandomNumber(), true) . ':' . microtime(true)),
+                    5,
+                    32
+                )
+            );
         }
-        $object->setData(
-            'protect_code',
-            substr(
-                hash('sha256', uniqid(Random::getRandomNumber(), true) . ':' . microtime(true)),
-                5,
-                32
-            )
-        );
         $isNewCustomer = !$object->getCustomerId() || $object->getCustomerId() === true;
         if ($isNewCustomer && $object->getCustomer()) {
             $object->setCustomerId($object->getCustomer()->getId());
@@ -169,7 +171,7 @@ class Order extends SalesResource implements OrderResourceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function save(\Magento\Framework\Model\AbstractModel $object)
     {

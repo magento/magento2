@@ -7,8 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\LoginAsCustomerPageCache\Plugin\PageCache\Model\Config;
 
-use Magento\Customer\Model\Session;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\LoginAsCustomerApi\Api\GetLoggedAsCustomerAdminIdInterface;
 use Magento\PageCache\Model\Config;
 use Magento\Store\Model\ScopeInterface;
 
@@ -27,20 +27,20 @@ class DisablePageCacheIfNeededPlugin
     private $scopeConfig;
 
     /**
-     * @var Session
+     * @var GetLoggedAsCustomerAdminIdInterface
      */
-    private $customerSession;
+    private $getLoggedAsCustomerAdminId;
 
     /**
      * @param ScopeConfigInterface $scopeConfig
-     * @param Session $customerSession
+     * @param GetLoggedAsCustomerAdminIdInterface $getLoggedAsCustomerAdminId
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
-        Session $customerSession
+        GetLoggedAsCustomerAdminIdInterface $getLoggedAsCustomerAdminId
     ) {
         $this->scopeConfig = $scopeConfig;
-        $this->customerSession = $customerSession;
+        $this->getLoggedAsCustomerAdminId = $getLoggedAsCustomerAdminId;
     }
 
     /**
@@ -54,11 +54,11 @@ class DisablePageCacheIfNeededPlugin
     public function afterIsEnabled(Config $subject, $isEnabled): bool
     {
         if ($isEnabled) {
-            $disable = $this->scopeConfig->getValue(
+            $disable = $this->scopeConfig->isSetFlag(
                 'login_as_customer/general/disable_page_cache',
                 ScopeInterface::SCOPE_STORE
             );
-            $adminId = $this->customerSession->getLoggedAsCustomerAdmindId();
+            $adminId = $this->getLoggedAsCustomerAdminId->execute();
             if ($disable && $adminId) {
                 $isEnabled = false;
             }

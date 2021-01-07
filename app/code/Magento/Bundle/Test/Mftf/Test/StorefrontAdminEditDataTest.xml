@@ -25,14 +25,13 @@
             <magentoCron stepKey="runCronIndex" groups="index"/>
         </before>
         <after>
-            <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
             <deleteData createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
             <deleteData createDataKey="simpleProduct2" stepKey="deleteSimpleProduct2"/>
         </after>
 
         <!-- Create a bundle product -->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPageBundle"/>
-        <waitForPageLoad stepKey="waitForProductPageLoadBundle"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="visitAdminProductPageBundle"/>
         <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateBundleProduct">
             <argument name="product" value="BundleProduct"/>
         </actionGroup>
@@ -48,9 +47,7 @@
         <waitForElementVisible selector="{{AdminProductFormBundleSection.bundleOptionXTitle('0')}}" stepKey="waitForBundleOptions"/>
         <fillField selector="{{AdminProductFormBundleSection.bundleOptionXTitle('0')}}" userInput="{{BundleProduct.optionTitle1}}" stepKey="fillOptionTitle"/>
         <selectOption selector="{{AdminProductFormBundleSection.bundleOptionXInputType('0')}}" userInput="{{BundleProduct.optionInputType1}}" stepKey="selectInputType"/>
-        <waitForElementVisible selector="{{AdminProductFormBundleSection.addProductsToOption}}" stepKey="waitForAddProductsToBundle"/>
-        <click selector="{{AdminProductFormBundleSection.addProductsToOption}}" stepKey="clickAddProductsToOption"/>
-        <waitForPageLoad stepKey="waitForPageLoadAfterBundleProducts"/>
+        <actionGroup ref="AdminClickAddProductToOptionActionGroup" stepKey="clickAddProductsToOption"/>
         <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterBundleProductOptions">
             <argument name="product" value="$$simpleProduct1$$"/>
         </actionGroup>
@@ -84,15 +81,13 @@
         <grabTextFrom selector="{{CheckoutCartProductSection.nthBundleOptionName('1')}}" stepKey="grabTotalBefore"/>
 
         <!-- Find the product that we just created using the product grid -->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPage"/>
-        <waitForPageLoad stepKey="waitForAdminProductPageLoad"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="visitAdminProductPage"/>
         <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFiltersInitial"/>
         <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="findCreatedProduct">
             <argument name="product" value="BundleProduct"/>
         </actionGroup>
         <waitForPageLoad stepKey="waitForProductFilterLoad"/>
-        <click selector="{{AdminProductGridSection.firstRow}}" stepKey="clickOnProductPage"/>
-        <waitForPageLoad stepKey="waitForProductPageLoad"/>
+        <actionGroup ref="AdminProductGridSectionClickFirstRowActionGroup" stepKey="clickOnProductPage"/>
 
         <!-- Change the product option title -->
         <fillField selector="{{AdminProductFormBundleSection.bundleOptionXTitle('0')}}" userInput="BundleOption2" stepKey="fillOptionTitle2"/>

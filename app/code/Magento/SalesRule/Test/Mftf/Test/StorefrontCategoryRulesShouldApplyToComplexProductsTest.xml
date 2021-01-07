@@ -81,7 +81,7 @@
             <argument name="actionValue" value="$$createCategory.id$$"/>
         </actionGroup>
         <!-- 2: Go to frontend and add an item from both CAT1 and CAT2 to your cart -->
-        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToFrontend"/>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToFrontend"/>
         <!-- 3: Open configurable product 1 and add all his child products to cart -->
         <amOnPage url="{{StorefrontProductPage.url($$createConfigProductCreateConfigurableProduct1.custom_attributes[url_key]$$)}}" stepKey="amOnConfigurableProductPage"/>
         <selectOption selector="{{StorefrontProductInfoMainSection.productOptionSelect('$$createConfigProductAttributeCreateConfigurableProduct1.attribute[frontend_labels][0][label]$$')}}"  userInput="$$createConfigProductAttributeOption1CreateConfigurableProduct1.option[store_labels][0][label]$$" stepKey="selectOption"/>

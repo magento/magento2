@@ -11,6 +11,13 @@
     <update handle="print" />
     <body>
         <attribute name="class" value="account"/>
+        <referenceContainer name="header-wrapper">
+            <referenceBlock name="logo">
+                <arguments>
+                    <argument name="logo_src" xsi:type="helper" helper="Magento\Sales\Model\Order\Invoice\GetLogoFile::execute"/>
+                </arguments>
+            </referenceBlock>
+        </referenceContainer>
         <referenceContainer name="page.main.title">
             <block class="Magento\Sales\Block\Order\PrintOrder\Invoice" name="order.status" template="Magento_Sales::order/order_status.phtml" />
             <block class="Magento\Sales\Block\Order\PrintOrder\Invoice" name="order.date" template="Magento_Sales::order/order_date.phtml" />
@@ -28,5 +35,10 @@
             </block>
         </referenceContainer>
         <block class="Magento\Framework\View\Element\Template" name="additional.product.info" template="Magento_Theme::template.phtml"/>
+        <referenceBlock name="logo">
+            <arguments>
+                <argument name="logoPathResolver" xsi:type="object">Magento\Sales\ViewModel\Header\LogoPathResolver</argument>
+            </arguments>
+        </referenceBlock>
     </body>
 </page>

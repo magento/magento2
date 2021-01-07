@@ -30,7 +30,9 @@
         <fillField selector="{{AdminManageSwatchSection.swatchAdminDescriptionByIndex('3')}}" userInput="123456789012345678901BrownD" stepKey="fillDescription3" after="fillSwatch3"/>
 
         <!--Run re-index task-->
-        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
 
         <see selector="{{StorefrontCategorySidebarSection.attributeNthOption(ProductAttributeFrontendLabel.label, '3')}}" userInput="123456789012345678901" stepKey="seeGreen" after="seeBlue"/>
         <see selector="{{StorefrontCategorySidebarSection.attributeNthOption(ProductAttributeFrontendLabel.label, '4')}}" userInput="123456789012345678901" stepKey="seeBrown" after="seeGreen"/>

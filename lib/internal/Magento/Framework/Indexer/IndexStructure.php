@@ -16,7 +16,7 @@ use Magento\Framework\Search\Request\Dimension;
 /**
  * Full text search index structure.
  *
- * @deprecated
+ * @deprecated 102.0.0
  * @see \Magento\ElasticSearch
  */
 class IndexStructure implements IndexStructureInterface

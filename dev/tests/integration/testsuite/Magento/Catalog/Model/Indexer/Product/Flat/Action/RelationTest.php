@@ -11,10 +11,15 @@ namespace Magento\Catalog\Model\Indexer\Product\Flat\Action;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\TestFramework\Catalog\Model\Indexer\Product\Flat\Action\Full as FlatIndexerFull;
+use Magento\Catalog\Model\Indexer\Product\Flat\Action\Full as FlatIndexerFull;
+use Magento\Catalog\Helper\Product\Flat\Indexer;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * Test relation customization
+ *
+ * @magentoDbIsolation disabled
  */
 class RelationTest extends \Magento\TestFramework\Indexer\TestCase
 {
@@ -41,35 +46,75 @@ class RelationTest extends \Magento\TestFramework\Indexer\TestCase
     private $flatUpdated = [];
 
     /**
+     * @var Indexer
+     */
+    private $productIndexerHelper;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
     {
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $objectManager = Bootstrap::getObjectManager();
 
-        $tableBuilderMock = $this->createMock(\Magento\Catalog\Model\Indexer\Product\Flat\TableBuilder::class);
-        $flatTableBuilderMock = $this->createMock(\Magento\Catalog\Model\Indexer\Product\Flat\FlatTableBuilder::class);
-
-        $productIndexerHelper = $objectManager->create(
-            \Magento\Catalog\Helper\Product\Flat\Indexer::class,
-            ['addChildData' => 1]
+        $this->productIndexerHelper = $objectManager->create(
+            Indexer::class,
+            ['addChildData' => true]
         );
         $this->indexer = $objectManager->create(
             FlatIndexerFull::class,
             [
-                'productHelper' => $productIndexerHelper,
-                'tableBuilder' => $tableBuilderMock,
-                'flatTableBuilder' => $flatTableBuilderMock
+                'productHelper' => $this->productIndexerHelper,
             ]
         );
-        $this->storeManager = $objectManager->create(StoreManagerInterface::class);
+        $this->storeManager = $objectManager->get(StoreManagerInterface::class);
         $this->connection = $objectManager->get(ResourceConnection::class)->getConnection();
+    }
 
+    /**
+     * @inheritdoc
+     */
+    protected function tearDown(): void
+    {
+        foreach ($this->flatUpdated as $flatTable) {
+            $this->connection->dropColumn($flatTable, 'child_id');
+            $this->connection->dropColumn($flatTable, 'is_child');
+        }
+    }
+
+    /**
+     * Test that SQL generated for relation customization is valid
+     *
+     * @return void
+     * @throws LocalizedException
+     * @throws \Exception
+     */
+    public function testExecute() : void
+    {
+        $this->addChildColumns();
+        try {
+            $result = $this->indexer->execute();
+        } catch (LocalizedException $e) {
+            if ($e->getPrevious() instanceof \Zend_Db_Statement_Exception) {
+                $this->fail($e->getMessage());
+            }
+            throw $e;
+        }
+        $this->assertInstanceOf(FlatIndexerFull::class, $result);
+    }
+
+    /**
+     * Add child columns to tables if needed
+     *
+     * @return void
+     */
+    private function addChildColumns(): void
+    {
         foreach ($this->storeManager->getStores() as $store) {
-            $flatTable = $productIndexerHelper->getFlatTableName($store->getId());
-            if ($this->connection->isTableExists($flatTable) &&
-                !$this->connection->tableColumnExists($flatTable, 'child_id') &&
-                !$this->connection->tableColumnExists($flatTable, 'is_child')
+            $flatTable = $this->productIndexerHelper->getFlatTableName($store->getId());
+            if ($this->connection->isTableExists($flatTable)
+                && !$this->connection->tableColumnExists($flatTable, 'child_id')
+                && !$this->connection->tableColumnExists($flatTable, 'is_child')
             ) {
                 $this->connection->addColumn(
                     $flatTable,
@@ -99,37 +144,6 @@ class RelationTest extends \Magento\TestFramework\Indexer\TestCase
 
                 $this->flatUpdated[] = $flatTable;
             }
-        }
-    }
-
-    /**
-     * @inheritdoc
-     */
-    protected function tearDown(): void
-    {
-        foreach ($this->flatUpdated as $flatTable) {
-            $this->connection->dropColumn($flatTable, 'child_id');
-            $this->connection->dropColumn($flatTable, 'is_child');
-        }
-    }
-
-    /**
-     * Test that SQL generated for relation customization is valid
-     *
-     * @return void
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \Exception
-     */
-    public function testExecute() : void
-    {
-        $this->markTestSkipped('MC-19675');
-        try {
-            $this->indexer->execute();
-        } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            if ($e->getPrevious() instanceof \Zend_Db_Statement_Exception) {
-                $this->fail($e->getMessage());
-            }
-            throw $e;
         }
     }
 }

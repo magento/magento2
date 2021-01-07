@@ -13,5 +13,10 @@
                 <checkout_multiple_maximum_qty>100</checkout_multiple_maximum_qty>
             </options>
         </multishipping>
+        <sales>
+            <minimum_order>
+                <multi_address_error_message>The current cart does not match multi shipping criteria, please review or contact the store administrator</multi_address_error_message>
+            </minimum_order>
+        </sales>
     </default>
 </config>

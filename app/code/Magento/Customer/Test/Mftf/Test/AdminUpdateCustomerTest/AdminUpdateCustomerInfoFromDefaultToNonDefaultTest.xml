@@ -20,14 +20,14 @@
         </annotations>
         <before>
             <createData stepKey="customer" entity="Simple_Customer_Without_Address"/>
-            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
         </before>
         <after>
             <deleteData stepKey="deleteCustomer" createDataKey="customer"/>
-            <!-- Reset customer grid filter -->
-            <amOnPage stepKey="goToCustomersGridPage" url="{{AdminCustomerPage.url}}"/>
-            <waitForPageLoad stepKey="waitForCustomersGrid"/>
+            <actionGroup ref="AdminOpenCustomersGridActionGroup" stepKey="goToCustomersGridPage"/>
             <actionGroup stepKey="resetFilter" ref="AdminResetFilterInCustomerGrid"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
@@ -45,9 +45,7 @@
             <argument name="customerAddress" value="CustomerAddressSimple"/>
         </actionGroup>
         <actionGroup stepKey="saveAndCheckSuccessMessage" ref="AdminSaveCustomerAndAssertSuccessMessage"/>
-        <!-- Assert Customer in Customer grid -->
-        <amOnPage stepKey="goToCustomersGridPage" url="{{AdminCustomerPage.url}}"/>
-        <waitForPageLoad stepKey="waitForCustomersGrid"/>
+        <actionGroup ref="AdminOpenCustomersGridActionGroup" stepKey="goToCustomersGridPage"/>
         <actionGroup stepKey="resetFilter" ref="AdminResetFilterInCustomerGrid"/>
         <actionGroup stepKey="filterByEamil" ref="AdminFilterCustomerGridByEmail">
             <argument name="email" value="updated$$customer.email$$"/>

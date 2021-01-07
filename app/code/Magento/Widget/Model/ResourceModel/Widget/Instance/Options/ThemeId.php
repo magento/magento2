@@ -9,7 +9,7 @@ namespace Magento\Widget\Model\ResourceModel\Widget\Instance\Options;
 /**
  * Widget Instance Theme Id Options
  *
- * @deprecated 100.2.0 created new class that correctly loads theme options and whose name follows naming convention
+ * @deprecated 100.1.7 created new class that correctly loads theme options and whose name follows naming convention
  * @see \Magento\Widget\Model\ResourceModel\Widget\Instance\Options\Themes
  */
 class ThemeId implements \Magento\Framework\Option\ArrayInterface

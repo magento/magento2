@@ -18,6 +18,7 @@
                     <argument name="criticalCssViewModel" xsi:type="object">Magento\Theme\Block\Html\Header\CriticalCss</argument>
                 </arguments>
             </block>
+            <!-- Todo: Block css_rel_preload_script will be removed in next release as polyfill isn't used anymore -->
             <block name="css_rel_preload_script" ifconfig="dev/css/use_css_critical_path" template="Magento_Theme::js/css_rel_preload.phtml"/>
         </referenceBlock>
         <referenceContainer name="after.body.start">

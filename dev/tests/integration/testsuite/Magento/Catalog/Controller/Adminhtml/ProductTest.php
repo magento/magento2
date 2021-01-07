@@ -49,6 +49,12 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
      */
     protected function setUp(): void
     {
+        Bootstrap::getObjectManager()->configure([
+            'preferences' => [
+                \Magento\Catalog\Model\Product\Attribute\LayoutUpdateManager::class =>
+                    \Magento\TestFramework\Catalog\Model\ProductLayoutUpdateManager::class
+            ]
+        ]);
         parent::setUp();
 
         $this->aclBuilder = Bootstrap::getObjectManager()->get(Builder::class);
@@ -131,9 +137,6 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
         $repository->save($product);
         $urlPathAttribute = $product->getCustomAttribute('url_path');
         $this->assertEquals($urlPathAttribute->getValue(), $product->getSku());
-
-        // clean cache
-        CacheCleaner::cleanAll();
 
         // dispatch Save&Duplicate action and check it
         $this->assertSaveAndDuplicateAction($product);
@@ -412,6 +415,7 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
         $repo = $this->repositoryFactory->create();
         $product = $repo->get('tier_prices')->getData();
         $product['tier_price'] = $tierPrice;
+        $product['entity_id'] = null;
         /** @phpstan-ignore-next-line */
         unset($product['entity_id']);
         return $product;

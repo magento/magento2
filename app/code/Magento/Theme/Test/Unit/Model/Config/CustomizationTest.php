@@ -13,9 +13,10 @@ namespace Magento\Theme\Test\Unit\Model\Config;
 use Magento\Framework\App\Area;
 use Magento\Framework\DataObject;
 use Magento\Framework\View\DesignInterface;
+use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Theme\Model\Config\Customization;
-use Magento\Theme\Model\ResourceModel\Theme\Collection;
+use Magento\Theme\Model\Theme\StoreThemesResolverInterface;
 use Magento\Theme\Model\Theme\ThemeProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -33,46 +34,36 @@ class CustomizationTest extends TestCase
     protected $designPackage;
 
     /**
-     * @var Collection
-     */
-    protected $themeCollection;
-
-    /**
      * @var Customization
      */
     protected $model;
 
     /**
-     * @var ThemeProvider|\PHPUnit\Framework\MockObject_MockBuilder
+     * @var ThemeProvider|MockObject
      */
     protected $themeProviderMock;
+    /**
+     * @var StoreThemesResolverInterface|MockObject
+     */
+    private $storeThemesResolver;
 
     protected function setUp(): void
     {
-        $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
-            ->getMock();
-        $this->designPackage = $this->getMockBuilder(DesignInterface::class)
-            ->getMock();
-        $this->themeCollection = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $collectionFactory = $this->getMockBuilder(\Magento\Theme\Model\ResourceModel\Theme\CollectionFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
-
-        $collectionFactory->expects($this->any())->method('create')->willReturn($this->themeCollection);
+        $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)->getMock();
+        $this->designPackage = $this->getMockBuilder(DesignInterface::class)->getMock();
 
         $this->themeProviderMock = $this->getMockBuilder(ThemeProvider::class)
             ->disableOriginalConstructor()
             ->setMethods(['getThemeCustomizations', 'getThemeByFullPath'])
             ->getMock();
 
+        $this->storeThemesResolver = $this->createMock(StoreThemesResolverInterface::class);
+
         $this->model = new Customization(
             $this->storeManager,
             $this->designPackage,
-            $this->themeProviderMock
+            $this->themeProviderMock,
+            $this->storeThemesResolver
         );
     }
 
@@ -84,13 +75,15 @@ class CustomizationTest extends TestCase
      */
     public function testGetAssignedThemeCustomizations()
     {
-        $this->designPackage->expects($this->once())
-            ->method('getConfigurationDesignTheme')
-            ->willReturn($this->getAssignedTheme()->getId());
-
+        $store = $this->getStore();
         $this->storeManager->expects($this->once())
             ->method('getStores')
-            ->willReturn([$this->getStore()]);
+            ->willReturn([$store]);
+
+        $this->storeThemesResolver->expects($this->once())
+            ->method('getThemes')
+            ->with($store)
+            ->willReturn([$this->getAssignedTheme()->getId()]);
 
         $this->themeProviderMock->expects($this->once())
             ->method('getThemeCustomizations')
@@ -108,13 +101,15 @@ class CustomizationTest extends TestCase
      */
     public function testGetUnassignedThemeCustomizations()
     {
+        $store = $this->getStore();
         $this->storeManager->expects($this->once())
             ->method('getStores')
-            ->willReturn([$this->getStore()]);
+            ->willReturn([$store]);
 
-        $this->designPackage->expects($this->once())
-            ->method('getConfigurationDesignTheme')
-            ->willReturn($this->getAssignedTheme()->getId());
+        $this->storeThemesResolver->expects($this->once())
+            ->method('getThemes')
+            ->with($store)
+            ->willReturn([$this->getAssignedTheme()->getId()]);
 
         $this->themeProviderMock->expects($this->once())
             ->method('getThemeCustomizations')
@@ -131,13 +126,15 @@ class CustomizationTest extends TestCase
      */
     public function testGetStoresByThemes()
     {
+        $store = $this->getStore();
         $this->storeManager->expects($this->once())
             ->method('getStores')
-            ->willReturn([$this->getStore()]);
+            ->willReturn([$store]);
 
-        $this->designPackage->expects($this->once())
-            ->method('getConfigurationDesignTheme')
-            ->willReturn($this->getAssignedTheme()->getId());
+        $this->storeThemesResolver->expects($this->once())
+            ->method('getThemes')
+            ->with($store)
+            ->willReturn([$this->getAssignedTheme()->getId()]);
 
         $stores = $this->model->getStoresByThemes();
         $this->assertArrayHasKey($this->getAssignedTheme()->getId(), $stores);
@@ -148,15 +145,17 @@ class CustomizationTest extends TestCase
      * @covers \Magento\Theme\Model\Config\Customization::_getConfigurationThemeId
      * @covers \Magento\Theme\Model\Config\Customization::__construct
      */
-    public function testIsThemeAssignedToDefaultStore()
+    public function testIsThemeAssignedToAnyStore()
     {
+        $store = $this->getStore();
         $this->storeManager->expects($this->once())
             ->method('getStores')
-            ->willReturn([$this->getStore()]);
+            ->willReturn([$store]);
 
-        $this->designPackage->expects($this->once())
-            ->method('getConfigurationDesignTheme')
-            ->willReturn($this->getAssignedTheme()->getId());
+        $this->storeThemesResolver->expects($this->once())
+            ->method('getThemes')
+            ->with($store)
+            ->willReturn([$this->getAssignedTheme()->getId()]);
 
         $this->themeProviderMock->expects($this->once())
             ->method('getThemeCustomizations')
@@ -198,10 +197,10 @@ class CustomizationTest extends TestCase
     }
 
     /**
-     * @return DataObject
+     * @return StoreInterface|MockObject
      */
     protected function getStore()
     {
-        return new DataObject(['id' => 55]);
+        return $this->createConfiguredMock(StoreInterface::class, ['getId' => 55]);
     }
 }

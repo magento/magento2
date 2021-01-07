@@ -45,7 +45,7 @@
             <argument name="attribute" value="colorProductAttribute"/>
             <argument name="option" value="colorProductAttribute1"/>
         </actionGroup>
-        <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" stepKey="submitFirstOrder"/>
+        <actionGroup ref="AdminOrderClickSubmitOrderActionGroup" stepKey="submitFirstOrder" />
 
         <!--Add second configurable product to order-->
         <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToSecondOrderWithExistingCustomer">
@@ -56,7 +56,7 @@
             <argument name="attribute" value="colorProductAttribute"/>
             <argument name="option" value="colorProductAttribute2"/>
         </actionGroup>
-        <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" stepKey="submitSecondOrder"/>
+        <actionGroup ref="AdminOrderClickSubmitOrderActionGroup" stepKey="submitSecondOrder" />
 
         <!-- Get date -->
         <generateDate stepKey="generateStartDate" date="-1 minute" format="m/d/Y"/>

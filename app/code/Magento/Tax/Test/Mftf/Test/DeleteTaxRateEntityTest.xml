@@ -24,30 +24,26 @@
         </before>
 
         <!-- Search the tax rate on tax grid page -->
-        <amOnPage url="{{AdminTaxRateGridPage.url}}" stepKey="goToTaxRateIndex1"/>
-        <waitForPageLoad stepKey="waitForTaxRateIndex1"/>
-        <click selector="{{AdminDataGridHeaderSection.clearFilters}}" stepKey="clickClearFilters1"/>
-        <fillField selector="{{AdminTaxRateGridSection.filterByTaxIdentifier}}" userInput="$$initialTaxRate.code$$" stepKey="fillCode"/>
-        <click selector="{{AdminTaxRateGridSection.search}}" stepKey="clickSearch1"/>
-        <click selector="{{AdminTaxRateGridSection.nthRow('1')}}" stepKey="clickFirstRow1"/>
+        <actionGroup ref="AdminTaxRateGridOpenPageActionGroup" stepKey="goToTaxRateIndex1"/>
+        <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clickClearFilters"/>
+        <actionGroup ref="AdminFilterTaxRateByCodeActionGroup" stepKey="filterByCode">
+            <argument name="taxRateCode" value="$$initialTaxRate.code$$" />
+        </actionGroup>
+        <actionGroup ref="AdminSelectFirstGridRowActionGroup" stepKey="clickFirstRow"/>
+        <actionGroup ref="AdminDeleteTaxRateActionGroup" stepKey="deleteTaxRate"/>
 
-        <!-- Delete values on the tax rate form page -->
-        <click selector="{{AdminTaxRateFormSection.deleteRate}}" stepKey="clickDeleteRate"/>
-        <click selector="{{AdminTaxRateFormSection.ok}}" stepKey="clickOk"/>
         <see selector="{{AdminMessagesSection.success}}" userInput="You Deleted the tax rate." stepKey="seeSuccess1"/>
 
         <!-- Confirm Deleted TaxIdentifier(from the above step) on the tax rate grid page -->
-        <amOnPage url="{{AdminTaxRateGridPage.url}}" stepKey="goToTaxRateIndex2"/>
-        <waitForPageLoad stepKey="waitForTaxRateIndex2"/>
+        <actionGroup ref="AdminTaxRateGridOpenPageActionGroup" stepKey="goToTaxRateIndex2"/>
         <click selector="{{AdminDataGridHeaderSection.clearFilters}}" stepKey="clickClearFilters2"/>
         <fillField selector="{{AdminTaxRateGridSection.filterByTaxIdentifier}}" userInput="{{defaultTaxRate.code}}" stepKey="fillTaxIdentifierField3"/>
         <click selector="{{AdminTaxRateGridSection.search}}" stepKey="clickSearch2"/>
         <see selector="{{AdminTaxRateGridSection.emptyText}}" userInput="We couldn't find any records." stepKey="seeSuccess"/>
 
         <!-- Confirm Deleted TaxIdentifier on the tax rule grid page -->
-        <amOnPage url="{{AdminTaxRuleGridPage.url}}" stepKey="goToTaxRuleIndex3"/>
-        <click selector="{{AdminTaxRuleGridSection.add}}" stepKey="clickAddNewTaxRuleButton"/>
-        <waitForPageLoad stepKey="waitForTaxRuleIndex1"/>
+        <actionGroup ref="AdminTaxRuleGridOpenPageActionGroup" stepKey="goToTaxRuleIndex3"/>
+        <actionGroup ref="AdminClickAddTaxRuleButtonActionGroup" stepKey="clickAddNewTaxRuleButton"/>
         <fillField selector="{{AdminTaxRuleFormSection.taxRateSearch}}" userInput="$$initialTaxRate.code$$" stepKey="fillTaxRateSearch"/>
         <wait stepKey="waitForSearch" time="5" />
         <dontSee selector="{{AdminTaxRuleFormSection.fieldTaxRate}}" userInput="$$initialTaxRate.code$$" stepKey="dontSeeInTaxRuleForm"/>

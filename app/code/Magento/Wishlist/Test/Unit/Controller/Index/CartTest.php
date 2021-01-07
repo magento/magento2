@@ -10,8 +10,8 @@ namespace Magento\Wishlist\Test\Unit\Controller\Index;
 use Magento\Catalog\Helper\Product as ProductHelper;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Exception as ProductException;
-use Magento\Checkout\Model\Cart as CheckoutCart;
 use Magento\Checkout\Helper\Cart as CartHelper;
+use Magento\Checkout\Model\Cart as CheckoutCart;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\Response\RedirectInterface;
@@ -620,14 +620,8 @@ class CartTest extends TestCase
             ->method('getName')
             ->willReturn($productName);
 
-        $this->escaperMock->expects($this->once())
-            ->method('escapeHtml')
-            ->with($productName, null)
-            ->willReturn($productName);
-
         $this->messageManagerMock->expects($this->once())
-            ->method('addSuccessMessage')
-            ->with('You added ' . $productName . ' to your shopping cart.', null)
+            ->method('addComplexSuccessMessage')
             ->willReturnSelf();
 
         $this->cartHelperMock->expects($this->once())

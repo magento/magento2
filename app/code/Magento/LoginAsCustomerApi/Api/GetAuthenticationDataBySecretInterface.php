@@ -14,6 +14,7 @@ use Magento\LoginAsCustomerApi\Api\Data\AuthenticationDataInterface;
  * Get authentication data by secret
  *
  * @api
+ * @since 100.4.0
  */
 interface GetAuthenticationDataBySecretInterface
 {
@@ -23,6 +24,7 @@ interface GetAuthenticationDataBySecretInterface
      * @param string $secret
      * @return AuthenticationDataInterface
      * @throws LocalizedException
+     * @since 100.4.0
      */
     public function execute(string $secret): AuthenticationDataInterface;
 }

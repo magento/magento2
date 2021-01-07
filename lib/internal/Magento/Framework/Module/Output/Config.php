@@ -8,7 +8,7 @@
 namespace Magento\Framework\Module\Output;
 
 /**
- * @deprecated 100.2.0 Magento does not support disabling/enabling modules output from the Admin Panel since 2.2.0
+ * @deprecated 101.0.0 Magento does not support disabling/enabling modules output from the Admin Panel since 2.2.0
  * version. Module output can still be enabled/disabled in configuration files. However, this functionality should
  * not be used in future development. Module design should explicitly state dependencies to avoid requiring output
  * disabling. This functionality will temporarily be kept in Magento core, as there are unresolved modularity
@@ -24,13 +24,13 @@ class Config implements \Magento\Framework\Module\Output\ConfigInterface
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      */
     protected $_scopeConfig;
 
     /**
      * @var string
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      */
     protected $_storeType;
 
@@ -50,7 +50,7 @@ class Config implements \Magento\Framework\Module\Output\ConfigInterface
      * Whether a module is enabled in the configuration or not
      *
      * @param string $moduleName Fully-qualified module name
-     * @deprecated 100.2.0 Magento does not support disabling/enabling modules output from the Admin Panel since 2.2.0
+     * @deprecated 101.0.0 Magento does not support disabling/enabling modules output from the Admin Panel since 2.2.0
      * version. Module output can still be enabled/disabled in configuration files. However, this functionality should
      * not be used in future development. Module design should explicitly state dependencies to avoid requiring output
      * disabling. This functionality will temporarily be kept in Magento core, as there are unresolved modularity
@@ -66,7 +66,7 @@ class Config implements \Magento\Framework\Module\Output\ConfigInterface
      * Retrieve module enabled specific path
      *
      * @param string $path Fully-qualified config path
-     * @deprecated 100.2.0 Magento does not support disabling/enabling modules output from the Admin Panel since 2.2.0
+     * @deprecated 101.0.0 Magento does not support disabling/enabling modules output from the Admin Panel since 2.2.0
      * version. Module output can still be enabled/disabled in configuration files. However, this functionality should
      * not be used in future development. Module design should explicitly state dependencies to avoid requiring output
      * disabling. This functionality will temporarily be kept in Magento core, as there are unresolved modularity

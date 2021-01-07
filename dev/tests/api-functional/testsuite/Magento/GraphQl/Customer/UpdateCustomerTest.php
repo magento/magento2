@@ -371,6 +371,32 @@ QUERY;
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      */
+    public function testUpdateCustomerWithIncorrectGender()
+    {
+        $gender = 5;
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('"' . $gender . '" is not a valid gender value.');
+
+        $query = <<<QUERY
+mutation {
+    updateCustomer(
+        input: {
+            gender: {$gender}
+        }
+    ) {
+        customer {
+            gender
+        }
+    }
+}
+QUERY;
+        $this->graphQlMutation($query, [], '', $this->getCustomerAuthHeaders('customer@example.com', 'password'));
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     */
     public function testUpdateCustomerIfDobIsInvalid()
     {
         $invalidDob = 'bla-bla-bla';

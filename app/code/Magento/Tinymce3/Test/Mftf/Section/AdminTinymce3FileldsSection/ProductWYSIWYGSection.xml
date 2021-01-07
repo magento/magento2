@@ -7,7 +7,7 @@
 -->
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
-    <section name="ProductWYSIWYGSection">
+    <section name="ProductWYSIWYGSection" deprecated="This version of TinyMCE is no longer supported">
         <element name="Tinymce3MSG" type="button" selector=".admin__field-error"/>
     </section>
 </sections>

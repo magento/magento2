@@ -12,6 +12,7 @@ use Magento\Customer\Api\CustomerMetadataInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Customer\Api\SessionCleanerInterface;
 use Magento\Customer\Api\Data\ValidationResultsInterfaceFactory;
 use Magento\Customer\Helper\View;
 use Magento\Customer\Model\AccountConfirmation;
@@ -202,6 +203,11 @@ class AccountManagementTest extends TestCase
      * @var AllowedCountries|MockObject
      */
     private $allowedCountriesReader;
+
+    /**
+     * @var SessionCleanerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $sessionCleanerMock;
 
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -1519,6 +1525,7 @@ class AccountManagementTest extends TestCase
             ->setMethods(['create'])
             ->getMock();
         $dateTimeFactory->expects($this->any())->method('create')->willReturn($dateTimeMock);
+        $this->sessionCleanerMock = $this->createMock(SessionCleanerInterface::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->accountManagement = $this->objectManagerHelper->getObject(
@@ -1539,6 +1546,7 @@ class AccountManagementTest extends TestCase
                 'storeManager' => $this->storeManager,
                 'addressRegistry' => $this->addressRegistryMock,
                 'transportBuilder' => $this->transportBuilder,
+                'sessionCleaner' => $this->sessionCleanerMock,
             ]
         );
         $this->objectManagerHelper->setBackwardCompatibleProperty(
@@ -1617,34 +1625,12 @@ class AccountManagementTest extends TestCase
             ->with($newPassword)
             ->willReturn(7);
 
+        $this->sessionCleanerMock->expects($this->once())->method('clearFor')->with($customerId)->willReturnSelf();
+
         $this->customerRepository
             ->expects($this->once())
             ->method('save')
             ->with($customer);
-
-        $this->sessionManager->expects($this->atLeastOnce())->method('getSessionId');
-        $this->sessionManager->expects($this->atLeastOnce())->method('regenerateId');
-
-        $visitor = $this->getMockBuilder(Visitor::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getSessionId'])
-            ->getMock();
-        $visitor->expects($this->atLeastOnce())->method('getSessionId')
-            ->willReturnOnConsecutiveCalls('session_id_1', 'session_id_2');
-        $visitorCollection = $this->getMockBuilder(
-            CollectionFactory::class
-        )
-            ->disableOriginalConstructor()
-            ->setMethods(['addFieldToFilter', 'getItems'])->getMock();
-        $visitorCollection->expects($this->atLeastOnce())->method('addFieldToFilter')->willReturnSelf();
-        $visitorCollection->expects($this->atLeastOnce())->method('getItems')->willReturn([$visitor, $visitor]);
-        $this->visitorCollectionFactory->expects($this->atLeastOnce())->method('create')
-            ->willReturn($visitorCollection);
-        $this->saveHandler->expects($this->atLeastOnce())->method('destroy')
-            ->withConsecutive(
-                ['session_id_1'],
-                ['session_id_2']
-            );
 
         $this->assertTrue($this->accountManagement->changePassword($email, $currentPassword, $newPassword));
     }
@@ -1702,30 +1688,8 @@ class AccountManagementTest extends TestCase
         $this->customerSecure->expects($this->once())->method('setRpToken')->with(null);
         $this->customerSecure->expects($this->once())->method('setRpTokenCreatedAt')->with(null);
         $this->customerSecure->expects($this->any())->method('setPasswordHash')->willReturn(null);
+        $this->sessionCleanerMock->expects($this->once())->method('clearFor')->with($customerId)->willReturnSelf();
 
-        $this->sessionManager->method('isSessionExists')->willReturn(false);
-        $this->sessionManager->expects($this->atLeastOnce())->method('getSessionId');
-        $this->sessionManager->expects($this->atLeastOnce())->method('regenerateId');
-        $visitor = $this->getMockBuilder(Visitor::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getSessionId'])
-            ->getMock();
-        $visitor->expects($this->atLeastOnce())->method('getSessionId')
-            ->willReturnOnConsecutiveCalls('session_id_1', 'session_id_2');
-        $visitorCollection = $this->getMockBuilder(
-            CollectionFactory::class
-        )
-            ->disableOriginalConstructor()
-            ->setMethods(['addFieldToFilter', 'getItems'])->getMock();
-        $visitorCollection->expects($this->atLeastOnce())->method('addFieldToFilter')->willReturnSelf();
-        $visitorCollection->expects($this->atLeastOnce())->method('getItems')->willReturn([$visitor, $visitor]);
-        $this->visitorCollectionFactory->expects($this->atLeastOnce())->method('create')
-            ->willReturn($visitorCollection);
-        $this->saveHandler->expects($this->atLeastOnce())->method('destroy')
-            ->withConsecutive(
-                ['session_id_1'],
-                ['session_id_2']
-            );
         $this->assertTrue($this->accountManagement->resetPassword($customerEmail, $resetToken, $newPassword));
     }
 

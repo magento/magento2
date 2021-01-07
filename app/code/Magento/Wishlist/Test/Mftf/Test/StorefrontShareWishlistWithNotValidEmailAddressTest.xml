@@ -14,6 +14,7 @@
             <stories value="Customer Wishlist"/>
             <title value="Customer is not able to share wishlist with invalid email addresses"/>
             <description value="Customer is not able to share wishlist with invalid email addresses"/>
+            <severity value="AVERAGE"/>
             <group value="wishlist"/>
         </annotations>
         <before>
