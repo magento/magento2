@@ -22,7 +22,7 @@ class InterceptableValidator
      * @param string $instanceName
      * @return bool
      */
-    private function isInterceptor($instanceName)
+    private function isInterceptor(string $instanceName): bool
     {
         return $this->endsWith($instanceName, '\Interceptor');
     }
@@ -33,12 +33,9 @@ class InterceptableValidator
      * @param string $instanceName
      * @return bool
      */
-    private function isProxy($instanceName)
+    private function isProxy(string $instanceName): bool
     {
-        return $this->endsWith(
-            $instanceName,
-            '\\' . ucfirst(\Magento\Framework\ObjectManager\Code\Generator\Proxy::ENTITY_TYPE)
-        );
+        return $this->endsWith($instanceName, '\Proxy');
     }
 
     /**
@@ -48,11 +45,11 @@ class InterceptableValidator
      * @param string $instanceName
      * @return bool
      */
-    private function isInterceptable($instanceName)
+    private function isInterceptable(string $instanceName): bool
     {
         return !is_subclass_of(
             $instanceName,
-            '\\' . \Magento\Framework\ObjectManager\NoninterceptableInterface::class
+            \Magento\Framework\ObjectManager\NoninterceptableInterface::class
         );
     }
 
@@ -63,7 +60,7 @@ class InterceptableValidator
      * @param string $needle
      * @return bool
      */
-    private function endsWith($haystack, $needle)
+    private function endsWith(string $haystack, string $needle): bool
     {
         // Search forward starting from end minus needle length characters
         $temp = strlen($haystack) - strlen($needle);
