@@ -12,6 +12,7 @@ use Magento\CatalogSearch\Model\Indexer\Scope\StateFactory;
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext as FulltextResource;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Indexer\DimensionProviderInterface;
+use Magento\Framework\Indexer\SaveHandler\IndexerInterface;
 use Magento\Store\Model\StoreDimensionProvider;
 use Magento\Indexer\Model\ProcessManager;
 
@@ -32,6 +33,11 @@ class Fulltext implements
      * Indexer ID in configuration
      */
     const INDEXER_ID = 'catalogsearch_fulltext';
+
+    /**
+     * Default batch size
+     */
+    private const BATCH_SIZE = 100;
 
     /**
      * @var array index structure
@@ -55,11 +61,15 @@ class Fulltext implements
 
     /**
      * @var IndexSwitcherInterface
+     * @deprecated
+     * @see \Magento\Elasticsearch
      */
     private $indexSwitcher;
 
     /**
      * @var \Magento\CatalogSearch\Model\Indexer\Scope\State
+     * @deprecated
+     * @see \Magento\Elasticsearch
      */
     private $indexScopeState;
 
@@ -74,6 +84,11 @@ class Fulltext implements
     private $processManager;
 
     /**
+     * @var int
+     */
+    private $batchSize;
+
+    /**
      * @param FullFactory $fullActionFactory
      * @param IndexerHandlerFactory $indexerHandlerFactory
      * @param FulltextResource $fulltextResource
@@ -82,6 +97,7 @@ class Fulltext implements
      * @param DimensionProviderInterface $dimensionProvider
      * @param array $data
      * @param ProcessManager $processManager
+     * @param int|null $batchSize
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
@@ -92,7 +108,8 @@ class Fulltext implements
         StateFactory $indexScopeStateFactory,
         DimensionProviderInterface $dimensionProvider,
         array $data,
-        ProcessManager $processManager = null
+        ProcessManager $processManager = null,
+        ?int $batchSize = null
     ) {
         $this->fullAction = $fullActionFactory->create(['data' => $data]);
         $this->indexerHandlerFactory = $indexerHandlerFactory;
@@ -102,6 +119,7 @@ class Fulltext implements
         $this->indexScopeState = ObjectManager::getInstance()->get(State::class);
         $this->dimensionProvider = $dimensionProvider;
         $this->processManager = $processManager ?: ObjectManager::getInstance()->get(ProcessManager::class);
+        $this->batchSize = $batchSize ?? self::BATCH_SIZE;
     }
 
     /**
@@ -122,6 +140,7 @@ class Fulltext implements
      * @inheritdoc
      *
      * @throws \InvalidArgumentException
+     * @since 101.0.0
      */
     public function executeByDimensions(array $dimensions, \Traversable $entityIds = null)
     {
@@ -136,24 +155,49 @@ class Fulltext implements
         );
 
         if (null === $entityIds) {
-            $this->indexScopeState->useTemporaryIndex();
             $saveHandler->cleanIndex($dimensions);
             $saveHandler->saveIndex($dimensions, $this->fullAction->rebuildStoreIndex($storeId));
-
-            $this->indexSwitcher->switchIndex($dimensions);
-            $this->indexScopeState->useRegularIndex();
 
             $this->fulltextResource->resetSearchResultsByStore($storeId);
         } else {
             // internal implementation works only with array
             $entityIds = iterator_to_array($entityIds);
-            $productIds = array_unique(
-                array_merge($entityIds, $this->fulltextResource->getRelationsByChild($entityIds))
-            );
-            if ($saveHandler->isAvailable($dimensions)) {
-                $saveHandler->deleteIndex($dimensions, new \ArrayIterator($productIds));
-                $saveHandler->saveIndex($dimensions, $this->fullAction->rebuildStoreIndex($storeId, $productIds));
+            $currentBatch = [];
+            $i = 0;
+
+            foreach ($entityIds as $entityId) {
+                $currentBatch[] = $entityId;
+                if (++$i === $this->batchSize) {
+                    $this->processBatch($saveHandler, $dimensions, $currentBatch);
+                    $i = 0;
+                    $currentBatch = [];
+                }
             }
+            if (!empty($currentBatch)) {
+                $this->processBatch($saveHandler, $dimensions, $currentBatch);
+            }
+        }
+    }
+
+    /**
+     * Process batch
+     *
+     * @param IndexerInterface $saveHandler
+     * @param array $dimensions
+     * @param array $entityIds
+     */
+    private function processBatch(
+        IndexerInterface $saveHandler,
+        array $dimensions,
+        array $entityIds
+    ) : void {
+        $storeId = $dimensions[StoreDimensionProvider::DIMENSION_NAME]->getValue();
+        $productIds = array_unique(
+            array_merge($entityIds, $this->fulltextResource->getRelationsByChild($entityIds))
+        );
+        if ($saveHandler->isAvailable($dimensions)) {
+            $saveHandler->deleteIndex($dimensions, new \ArrayIterator($productIds));
+            $saveHandler->saveIndex($dimensions, $this->fullAction->rebuildStoreIndex($storeId, $productIds));
         }
     }
 

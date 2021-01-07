@@ -12,6 +12,7 @@ use Magento\Framework\Api\ExtensibleDataInterface;
  * Video Content data interface
  *
  * @api
+ * @since 100.0.2
  */
 interface VideoContentInterface extends ExtensibleDataInterface
 {

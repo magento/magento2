@@ -13,6 +13,7 @@ use \Magento\Framework\Api\SearchResultsInterface;
  * Login as customer log entity search results interface.
  *
  * @api
+ * @since 100.4.0
  */
 interface LogSearchResultsInterface extends SearchResultsInterface
 {
@@ -20,6 +21,7 @@ interface LogSearchResultsInterface extends SearchResultsInterface
      * Get log list.
      *
      * @return \Magento\LoginAsCustomerLog\Api\Data\LogInterface[]
+     * @since 100.4.0
      */
     public function getItems();
 
@@ -28,6 +30,7 @@ interface LogSearchResultsInterface extends SearchResultsInterface
      *
      * @param \Magento\LoginAsCustomerLog\Api\Data\LogInterface[] $items
      * @return void
+     * @since 100.4.0
      */
     public function setItems(array $items);
 }

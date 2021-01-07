@@ -12,7 +12,7 @@ use Magento\Downloadable\Model\Link\Purchased\Item;
 use Magento\Store\Model\ScopeInterface;
 
 /**
- * Downlaodable Sales Order Email items renderer
+ * Downloadable Sales Order Email items renderer
  *
  * @api
  * @since 100.0.2
@@ -81,6 +81,8 @@ class Downloadable extends \Magento\Sales\Block\Order\Email\Items\DefaultItems
     }
 
     /**
+     * Returns links title
+     *
      * @return null|string
      */
     public function getLinksTitle()
@@ -92,6 +94,8 @@ class Downloadable extends \Magento\Sales\Block\Order\Email\Items\DefaultItems
     }
 
     /**
+     * Returns purchased link url
+     *
      * @param Item $item
      * @return string
      */

@@ -5,6 +5,7 @@
  */
 
 /** @var $block \Magento\Theme\Block\Adminhtml\Wysiwyg\Files\Content\Uploader */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
 
 <div id="<?= $block->getHtmlId() ?>" class="uploader">
@@ -18,14 +19,18 @@
         <div id="<%- data.id %>" class="file-row">
             <span class="file-info"><%- data.name %> (<%- data.size %>)</span>
             <div class="progressbar-container">
-                <div class="progressbar upload-progress" style="width: 0%;"></div>
+                <div class="progressbar upload-progress"></div>
             </div>
+            <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
+                "width: 0%;",
+                "div.progressbar-container div.progressbar.upload-progress"
+            ) ?>
             <div class="clear"></div>
         </div>
     </script>
 </div>
+<?php $scriptString= <<<script
 
-<script>
 require([
     'jquery',
     'mage/template',
@@ -41,9 +46,9 @@ require([
             form_key: FORM_KEY
         },
         sequentialUploads: true,
-        maxFileSize: <?= $block->escapeJs($block->getFileSizeService()->getMaxFileSize()) ?> ,
+        maxFileSize: {$block->escapeJs($block->getFileSizeService()->getMaxFileSize())} ,
         add: function (e, data) {
-            var progressTmpl = mageTemplate('#<?= $block->getHtmlId() ?>-template'),
+            var progressTmpl = mageTemplate('#{$block->getHtmlId()}-template'),
                 fileSize,
                 tmpl;
 
@@ -62,7 +67,7 @@ require([
                     }
                 });
 
-                $(tmpl).appendTo('#<?= $block->getHtmlId() ?>');
+                $(tmpl).appendTo('#{$block->getHtmlId()}');
             });
 
             $(this).fileupload('process', data).done(function () {
@@ -91,4 +96,7 @@ require([
     });
 
 });
-</script>
+
+script;
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>

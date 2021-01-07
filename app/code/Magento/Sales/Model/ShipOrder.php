@@ -19,6 +19,8 @@ use Psr\Log\LoggerInterface;
 
 /**
  * Class ShipOrder
+ *
+ * Save shipment and order data
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ShipOrder implements ShipOrderInterface
@@ -111,6 +113,8 @@ class ShipOrder implements ShipOrderInterface
     }
 
     /**
+     * Process the shipment and save shipment and order data
+     *
      * @param int $orderId
      * @param \Magento\Sales\Api\Data\ShipmentItemCreationInterface[] $items
      * @param bool $notify
@@ -165,11 +169,13 @@ class ShipOrder implements ShipOrderInterface
         $connection->beginTransaction();
         try {
             $this->orderRegistrar->register($order, $shipment);
-            $order->setState(
-                $this->orderStateResolver->getStateForOrder($order, [OrderStateResolverInterface::IN_PROGRESS])
-            );
-            $order->setStatus($this->config->getStateDefaultStatus($order->getState()));
-            $this->shipmentRepository->save($shipment);
+            $shipment = $this->shipmentRepository->save($shipment);
+            if ($order->getState() === Order::STATE_NEW) {
+                $order->setState(
+                    $this->orderStateResolver->getStateForOrder($order, [OrderStateResolverInterface::IN_PROGRESS])
+                );
+                $order->setStatus($this->config->getStateDefaultStatus($order->getState()));
+            }
             $this->orderRepository->save($order);
             $connection->commit();
         } catch (\Exception $e) {
@@ -179,6 +185,7 @@ class ShipOrder implements ShipOrderInterface
                 __('Could not save a shipment, see error log for details')
             );
         }
+
         if ($notify) {
             if (!$appendComment) {
                 $comment = null;

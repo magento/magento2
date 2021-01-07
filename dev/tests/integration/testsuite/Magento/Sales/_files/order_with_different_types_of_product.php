@@ -4,28 +4,35 @@
  * See COPYING.txt for license details.
  */
 
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
+use Magento\Customer\Model\CustomerRegistry;
+use Magento\TestFramework\Helper\Bootstrap;
 
-require __DIR__ . '/../../../Magento/Customer/_files/customer.php';
-require __DIR__ . '/../../../Magento/Catalog/_files/product_simple_without_custom_options.php';
-$simpleProduct = $secondProduct;
+$objectManager = Bootstrap::getObjectManager();
+/** @var CustomerRegistry $customerRegistry */
+$customerRegistry = $objectManager->create(CustomerRegistry::class);
+/** @var ProductRepositoryInterface $productRepository */
+$productRepository = $objectManager->create(ProductRepositoryInterface::class);
 
-require __DIR__ . '/../../../Magento/ConfigurableProduct/_files/product_configurable.php';
-$configurableProduct = $productRepository->get($product->getSku());
+Resolver::getInstance()->requireDataFixture('Magento/Customer/_files/customer.php');
+$customer = $customerRegistry->retrieve(1);
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/product_simple_without_custom_options.php');
+$simpleProduct = $productRepository->get('simple-2');
+Resolver::getInstance()->requireDataFixture('Magento/ConfigurableProduct/_files/product_configurable.php');
+$configurableProduct = $productRepository->get('configurable');
 // this change is require for compatibility with downloadable product fixture,
 // it sets id=1 for product that causes rewrite of configurable product
 $configurableProduct->setId(111);
 $configurableProduct->setUrlKey('configurable-product-new');
 $productRepository->save($configurableProduct);
-
-require __DIR__ . '/../../../Magento/GraphQl/Catalog/_files/virtual_product.php';
-$virtualProduct = $productRepository->get($product->getSku());
-
-require __DIR__ . '/../../../Magento/Bundle/_files/bundle_product_radio_required_option.php';
-$bundleProduct = $productRepository->get($bundleProduct->getSku());
-
-require __DIR__ . '/../../../Magento/Downloadable/_files/product_downloadable.php';
-$downloadableProduct = $productRepository->get($product->getSku());
+Resolver::getInstance()->requireDataFixture('Magento/GraphQl/Catalog/_files/virtual_product.php');
+$virtualProduct = $productRepository->get('virtual_product');
+Resolver::getInstance()->requireDataFixture('Magento/Bundle/_files/bundle_product_radio_required_option.php');
+$bundleProduct = $productRepository->get('bundle-product-radio-required-option');
+Resolver::getInstance()->requireDataFixture('Magento/Downloadable/_files/product_downloadable.php');
+$downloadableProduct = $productRepository->get('downloadable-product');
 
 /** \Magento\Customer\Model\Customer $customer */
 $addressData = include __DIR__ . '/../../../Magento/Sales/_files/address_data.php';
@@ -34,7 +41,6 @@ $billingAddress->setAddressType('billing');
 $shippingAddress = clone $billingAddress;
 $shippingAddress->setId(null)->setAddressType('shipping');
 
-$objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 $payment = $objectManager->create(\Magento\Sales\Model\Order\Payment::class);
 $payment->setMethod('checkmo');
 $customerIdFromFixture = 1;
@@ -81,6 +87,8 @@ $qtyOrdered = 1;
 /** @var \Magento\Sales\Model\Order\Item $orderItem */
 $orderConfigurableItem = $objectManager->create(\Magento\Sales\Model\Order\Item::class);
 $orderConfigurableItem->setProductId($configurableProduct->getId())->setQtyOrdered($qtyOrdered);
+$orderConfigurableItem->setSku($configurableProduct->getSku());
+$orderConfigurableItem->setName($configurableProduct->getName());
 $orderConfigurableItem->setBasePrice($configurableProduct->getPrice());
 $orderConfigurableItem->setPrice($configurableProduct->getPrice());
 $orderConfigurableItem->setRowTotal($configurableProduct->getPrice());
@@ -119,7 +127,7 @@ $virtualProductItem->setProductId($virtualProduct->getId())
  * downloadable product
  */
 /** @var $linkCollection \Magento\Downloadable\Model\ResourceModel\Link\Collection */
-$linkCollection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+$linkCollection = Bootstrap::getObjectManager()->create(
     \Magento\Downloadable\Model\Link::class
 )->getCollection()->addProductToFilter(
     $downloadableProduct->getId()
@@ -178,6 +186,8 @@ $requestInfo = [
 /** @var \Magento\Sales\Model\Order\Item $orderItem */
 $orderBundleItem = $objectManager->create(\Magento\Sales\Model\Order\Item::class);
 $orderBundleItem->setProductId($bundleProduct->getId());
+$orderBundleItem->setSku($bundleProduct->getSku());
+$orderBundleItem->setName($bundleProduct->getName());
 $orderBundleItem->setQtyOrdered(1);
 $orderBundleItem->setBasePrice($bundleProduct->getPrice());
 $orderBundleItem->setPrice($bundleProduct->getPrice());

@@ -23,7 +23,22 @@
         </before>
 
         <after>
+            <!--Cancel orders-->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="adminLogin"/>
+            <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="goToOrdersPage"/>
+            <actionGroup ref="AdminGridColumnShowActionGroup" stepKey="showCustomerEmailColumn">
+                <argument name="columnLabel" value="Customer Email"/>
+            </actionGroup>
+            <actionGroup ref="AdminGridFilterFillInputFieldActionGroup" stepKey="filterOrdersByCustomerEmail">
+                <argument name="filterInputName" value="customer_email"/>
+                <argument name="filterValue" value="{{CustomerEntityOne.email}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminGridFilterApplyActionGroup" stepKey="applyFilters"/>
+            <actionGroup ref="AdminGridBulkActionGroup" stepKey="cancelOrders">
+                <argument name="actionLabel" value="Cancel"/>
+            </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
         </after>
 

@@ -9,17 +9,23 @@ namespace Magento\CatalogUrlRewrite\Model;
 
 use Magento\Catalog\Api\CategoryLinkManagementInterface;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
-use Magento\Catalog\Api\Data\CategoryInterface;
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\CategoryFactory;
-use Magento\Catalog\Model\ResourceModel\Category as CategoryResource;
+use Magento\Catalog\Model\ResourceModel\CategoryFactory as CategoryResourceFactory;
 use Magento\CatalogUrlRewrite\Model\Map\DataCategoryUrlRewriteDatabaseMap;
 use Magento\CatalogUrlRewrite\Model\Map\DataProductUrlRewriteDatabaseMap;
 use Magento\CatalogUrlRewrite\Model\ResourceModel\Category\Product;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\Store\Model\ScopeInterface;
+use Magento\TestFramework\Helper\Bootstrap;
 use Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException;
 use Magento\UrlRewrite\Model\OptionProvider;
 use Magento\UrlRewrite\Model\ResourceModel\UrlRewriteCollection;
+use Magento\UrlRewrite\Model\ResourceModel\UrlRewriteCollectionFactory;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class for category url rewrites tests
@@ -28,22 +34,34 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
  * @magentoConfigFixture default/catalog/seo/generate_category_product_rewrites 1
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CategoryUrlRewriteTest extends AbstractUrlRewriteTest
+class CategoryUrlRewriteTest extends TestCase
 {
-    /** @var CategoryRepositoryInterface */
-    private $categoryRepository;
-
-    /** @var CategoryResource */
-    private $categoryResource;
-
-    /** @var CategoryLinkManagementInterface */
-    private $categoryLinkManagement;
+    /** @var ObjectManagerInterface */
+    private $objectManager;
 
     /** @var CategoryFactory */
     private $categoryFactory;
 
-    /** @var string */
-    private $suffix;
+    /** @var UrlRewriteCollectionFactory */
+    private $urlRewriteCollectionFactory;
+
+    /** @var CategoryRepositoryInterface */
+    private $categoryRepository;
+
+    /** @var CategoryResourceFactory */
+    private $categoryResourceFactory;
+
+    /** @var CategoryLinkManagementInterface */
+    private $categoryLinkManagment;
+
+    /** @var ProductRepositoryInterface */
+    private $productRepository;
+
+    /** @var StoreRepositoryInterface */
+    private $storeRepository;
+
+    /** @var ScopeConfigInterface */
+    private $config;
 
     /**
      * @inheritdoc
@@ -52,14 +70,15 @@ class CategoryUrlRewriteTest extends AbstractUrlRewriteTest
     {
         parent::setUp();
 
-        $this->categoryRepository = $this->objectManager->create(CategoryRepositoryInterface::class);
-        $this->categoryResource = $this->objectManager->get(CategoryResource::class);
-        $this->categoryLinkManagement = $this->objectManager->create(CategoryLinkManagementInterface::class);
+        $this->objectManager = Bootstrap::getObjectManager();
         $this->categoryFactory = $this->objectManager->get(CategoryFactory::class);
-        $this->suffix = $this->config->getValue(
-            CategoryUrlPathGenerator::XML_PATH_CATEGORY_URL_SUFFIX,
-            ScopeInterface::SCOPE_STORE
-        );
+        $this->urlRewriteCollectionFactory = $this->objectManager->get(UrlRewriteCollectionFactory::class);
+        $this->categoryRepository = $this->objectManager->create(CategoryRepositoryInterface::class);
+        $this->categoryResourceFactory = $this->objectManager->get(CategoryResourceFactory::class);
+        $this->categoryLinkManagment = $this->objectManager->create(CategoryLinkManagementInterface::class);
+        $this->productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
+        $this->storeRepository = $this->objectManager->create(StoreRepositoryInterface::class);
+        $this->config = $this->objectManager->get(ScopeConfigInterface::class);
     }
 
     /**
@@ -70,13 +89,22 @@ class CategoryUrlRewriteTest extends AbstractUrlRewriteTest
      */
     public function testUrlRewriteOnCategorySave(array $data): void
     {
-        $categoryModel = $this->saveCategory($data['data']);
+        $categoryModel = $this->categoryFactory->create();
+        $categoryModel->isObjectNew(true);
+        $categoryModel->setData($data['data']);
+        $categoryResource = $this->categoryResourceFactory->create();
+        $categoryResource->save($categoryModel);
         $this->assertNotNull($categoryModel->getId(), 'The category was not created');
-        $urlRewriteCollection = $this->getEntityRewriteCollection($categoryModel->getId());
-        $this->assertRewrites(
-            $urlRewriteCollection,
-            $this->prepareData($data['expected_data'], (int)$categoryModel->getId())
-        );
+        $urlRewriteCollection = $this->getCategoryRewriteCollection($categoryModel->getId());
+        foreach ($urlRewriteCollection as $item) {
+            foreach ($data['expected_data'] as $field => $expectedItem) {
+                $this->assertEquals(
+                    sprintf($expectedItem, $categoryModel->getId()),
+                    $item[$field],
+                    'The expected data does not match actual value'
+                );
+            }
+        }
     }
 
     /**
@@ -95,10 +123,8 @@ class CategoryUrlRewriteTest extends AbstractUrlRewriteTest
                         'is_active' => true,
                     ],
                     'expected_data' => [
-                        [
-                            'request_path' => 'test-category%suffix%',
-                            'target_path' => 'catalog/category/view/id/%id%',
-                        ],
+                        'request_path' => 'test-category.html',
+                        'target_path' => 'catalog/category/view/id/%s',
                     ],
                 ],
             ],
@@ -112,10 +138,8 @@ class CategoryUrlRewriteTest extends AbstractUrlRewriteTest
                         'is_active' => true,
                     ],
                     'expected_data' => [
-                        [
-                            'request_path' => 'category-1/test-sub-category%suffix%',
-                            'target_path' => 'catalog/category/view/id/%id%',
-                        ],
+                        'request_path' => 'category-1/test-sub-category.html',
+                        'target_path' => 'catalog/category/view/id/%s',
                     ],
                 ],
             ],
@@ -132,11 +156,9 @@ class CategoryUrlRewriteTest extends AbstractUrlRewriteTest
     public function testCategoryProductUrlRewrite(array $data): void
     {
         $category = $this->categoryRepository->get(402);
-        $this->categoryLinkManagement->assignProductToCategories('simple2', [$category->getId()]);
-        $productRewriteCollection = $this->getCategoryProductRewriteCollection(
-            array_keys($category->getParentCategories())
-        );
-        $this->assertRewrites($productRewriteCollection, $this->prepareData($data));
+        $this->categoryLinkManagment->assignProductToCategories('simple2', [$category->getId()]);
+        $productRewriteCollection = $this->getProductRewriteCollection(array_keys($category->getParentCategories()));
+        $this->assertRewrites($productRewriteCollection, $data);
     }
 
     /**
@@ -148,15 +170,15 @@ class CategoryUrlRewriteTest extends AbstractUrlRewriteTest
             [
                 [
                     [
-                        'request_path' => 'category-1/category-1-1/category-1-1-1/simple-product2%suffix%',
+                        'request_path' => 'category-1/category-1-1/category-1-1-1/simple-product2.html',
                         'target_path' => 'catalog/product/view/id/6/category/402',
                     ],
                     [
-                        'request_path' => 'category-1/simple-product2%suffix%',
+                        'request_path' => 'category-1/simple-product2.html',
                         'target_path' => 'catalog/product/view/id/6/category/400',
                     ],
                     [
-                        'request_path' => 'category-1/category-1-1/simple-product2%suffix%',
+                        'request_path' => 'category-1/category-1-1/simple-product2.html',
                         'target_path' => 'catalog/product/view/id/6/category/401',
                     ],
                 ],
@@ -175,7 +197,10 @@ class CategoryUrlRewriteTest extends AbstractUrlRewriteTest
     {
         $this->expectException(UrlAlreadyExistsException::class);
         $this->expectExceptionMessage((string)__('URL key for specified store already exists.'));
-        $this->saveCategory($data);
+        $category = $this->categoryFactory->create();
+        $category->setData($data);
+        $categoryResource = $this->categoryResourceFactory->create();
+        $categoryResource->save($category);
     }
 
     /**
@@ -237,12 +262,10 @@ class CategoryUrlRewriteTest extends AbstractUrlRewriteTest
         $categoryId = $data['data']['id'];
         $category = $this->categoryRepository->get($categoryId);
         $category->move($data['data']['pid'], $data['data']['aid']);
-        $productRewriteCollection = $this->getCategoryProductRewriteCollection(
-            array_keys($category->getParentCategories())
-        );
-        $categoryRewriteCollection = $this->getEntityRewriteCollection($categoryId);
-        $this->assertRewrites($categoryRewriteCollection, $this->prepareData($data['expected_data']['category']));
-        $this->assertRewrites($productRewriteCollection, $this->prepareData($data['expected_data']['product']));
+        $productRewriteCollection = $this->getProductRewriteCollection(array_keys($category->getParentCategories()));
+        $categoryRewriteCollection = $this->getCategoryRewriteCollection($categoryId);
+        $this->assertRewrites($categoryRewriteCollection, $data['expected_data']['category']);
+        $this->assertRewrites($productRewriteCollection, $data['expected_data']['product']);
     }
 
     /**
@@ -262,21 +285,21 @@ class CategoryUrlRewriteTest extends AbstractUrlRewriteTest
                         'category' => [
                             [
                                 'request_path' => 'category-1.html',
-                                'target_path' => 'category-with-slash-symbol/category-1%suffix%',
+                                'target_path' => 'category-with-slash-symbol/category-1.html',
                                 'redirect_type' => OptionProvider::PERMANENT,
                             ],
                             [
-                                'request_path' => 'category-with-slash-symbol/category-1%suffix%',
+                                'request_path' => 'category-with-slash-symbol/category-1.html',
                                 'target_path' => 'catalog/category/view/id/333',
                             ],
                         ],
                         'product' => [
                             [
-                                'request_path' => 'category-with-slash-symbol/simple-product-three%suffix%',
+                                'request_path' => 'category-with-slash-symbol/simple-product-three.html',
                                 'target_path' => 'catalog/product/view/id/333/category/3331',
                             ],
                             [
-                                'request_path' => 'category-with-slash-symbol/category-1/simple-product-three%suffix%',
+                                'request_path' => 'category-with-slash-symbol/category-1/simple-product-three.html',
                                 'target_path' => 'catalog/product/view/id/333/category/333',
                             ],
                         ],
@@ -288,12 +311,13 @@ class CategoryUrlRewriteTest extends AbstractUrlRewriteTest
 
     /**
      * @magentoDataFixture Magento/Catalog/_files/category.php
+     * @magentoAppArea adminhtml
      * @return void
      */
     public function testUrlRewritesAfterCategoryDelete(): void
     {
         $categoryId = 333;
-        $categoryItemIds = $this->getEntityRewriteCollection($categoryId)->getAllIds();
+        $categoryItemIds = $this->getCategoryRewriteCollection($categoryId)->getAllIds();
         $this->categoryRepository->deleteByIdentifier($categoryId);
         $this->assertEmpty(
             array_intersect($this->getAllRewriteIds(), $categoryItemIds),
@@ -310,8 +334,8 @@ class CategoryUrlRewriteTest extends AbstractUrlRewriteTest
     {
         $category = $this->categoryRepository->get(3);
         $childIds = explode(',', $category->getAllChildren());
-        $productRewriteIds = $this->getCategoryProductRewriteCollection($childIds)->getAllIds();
-        $categoryItemIds = $this->getEntityRewriteCollection($childIds)->getAllIds();
+        $productRewriteIds = $this->getProductRewriteCollection($childIds)->getAllIds();
+        $categoryItemIds = $this->getCategoryRewriteCollection($childIds)->getAllIds();
         $this->categoryRepository->deleteByIdentifier($category->getId());
         $allIds = $this->getAllRewriteIds();
         $this->assertEmpty(
@@ -340,12 +364,11 @@ class CategoryUrlRewriteTest extends AbstractUrlRewriteTest
         $categoryId = 333;
         $category = $this->categoryRepository->get($categoryId);
         $urlKeyFirstStore = $category->getUrlKey();
-        $this->saveCategory(
-            ['store_id' => $secondStoreId, 'url_key' => $urlKeySecondStore],
-            $category
-        );
-        $urlRewriteItems = $this->getEntityRewriteCollection($categoryId)->getItems();
-        $this->assertTrue(count($urlRewriteItems) == 2);
+        $category->setStoreId($secondStoreId);
+        $category->setUrlKey($urlKeySecondStore);
+        $categoryResource = $this->categoryResourceFactory->create();
+        $categoryResource->save($category);
+        $urlRewriteItems = $this->getCategoryRewriteCollection($categoryId)->getItems();
         foreach ($urlRewriteItems as $item) {
             $item->getData('store_id') == $secondStoreId
                 ? $this->assertEquals($urlKeySecondStore . $urlSuffix, $item->getRequestPath())
@@ -354,50 +377,18 @@ class CategoryUrlRewriteTest extends AbstractUrlRewriteTest
     }
 
     /**
-     * @inheritdoc
-     */
-    protected function getUrlSuffix(): string
-    {
-        return $this->suffix;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    protected function getEntityType(): string
-    {
-        return DataCategoryUrlRewriteDatabaseMap::ENTITY_TYPE;
-    }
-
-    /**
-     * Save product with data using resource model directly
-     *
-     * @param array $data
-     * @param CategoryInterface|null $category
-     * @return CategoryInterface
-     */
-    private function saveCategory(array $data, $category = null): CategoryInterface
-    {
-        $category = $category ?: $this->categoryFactory->create();
-        $category->addData($data);
-        $this->categoryResource->save($category);
-
-        return $category;
-    }
-
-    /**
      * Get products url rewrites collection referred to categories
      *
      * @param string|array $categoryId
      * @return UrlRewriteCollection
      */
-    private function getCategoryProductRewriteCollection($categoryId): UrlRewriteCollection
+    private function getProductRewriteCollection($categoryId): UrlRewriteCollection
     {
         $condition = is_array($categoryId) ? ['in' => $categoryId] : $categoryId;
         $productRewriteCollection = $this->urlRewriteCollectionFactory->create();
         $productRewriteCollection
             ->join(
-                ['p' => $this->categoryResource->getTable(Product::TABLE_NAME)],
+                ['p' => Product::TABLE_NAME],
                 'main_table.url_rewrite_id = p.url_rewrite_id',
                 'category_id'
             )
@@ -405,5 +396,55 @@ class CategoryUrlRewriteTest extends AbstractUrlRewriteTest
             ->addFieldToFilter(UrlRewrite::ENTITY_TYPE, ['eq' => DataProductUrlRewriteDatabaseMap::ENTITY_TYPE]);
 
         return $productRewriteCollection;
+    }
+
+    /**
+     * Retrieve all rewrite ids
+     *
+     * @return array
+     */
+    private function getAllRewriteIds(): array
+    {
+        $urlRewriteCollection = $this->urlRewriteCollectionFactory->create();
+
+        return $urlRewriteCollection->getAllIds();
+    }
+
+    /**
+     * Get category url rewrites collection
+     *
+     * @param string|array $categoryId
+     * @return UrlRewriteCollection
+     */
+    private function getCategoryRewriteCollection($categoryId): UrlRewriteCollection
+    {
+        $condition = is_array($categoryId) ? ['in' => $categoryId] : $categoryId;
+        $categoryRewriteCollection = $this->urlRewriteCollectionFactory->create();
+        $categoryRewriteCollection->addFieldToFilter(UrlRewrite::ENTITY_ID, $condition)
+            ->addFieldToFilter(UrlRewrite::ENTITY_TYPE, ['eq' => DataCategoryUrlRewriteDatabaseMap::ENTITY_TYPE]);
+
+        return $categoryRewriteCollection;
+    }
+
+    /**
+     * Check that actual data contains of expected values
+     *
+     * @param UrlRewriteCollection $collection
+     * @param array $expectedData
+     * @return void
+     */
+    private function assertRewrites(UrlRewriteCollection $collection, array $expectedData): void
+    {
+        $collectionItems = $collection->toArray()['items'];
+        foreach ($collectionItems as $item) {
+            $found = false;
+            foreach ($expectedData as $expectedItem) {
+                $found = array_intersect_assoc($item, $expectedItem) == $expectedItem;
+                if ($found) {
+                    break;
+                }
+            }
+            $this->assertTrue($found, 'The actual data does not contains of expected values');
+        }
     }
 }

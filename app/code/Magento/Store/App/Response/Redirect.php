@@ -7,36 +7,55 @@
  */
 namespace Magento\Store\App\Response;
 
+use Laminas\Uri\Uri;
+use Magento\Framework\App\ActionInterface;
+use Magento\Framework\App\Area;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\Response\RedirectInterface;
+use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\App\State;
+use Magento\Framework\Encryption\UrlCoder;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Session\SessionManagerInterface;
+use Magento\Framework\Session\SidResolverInterface;
+use Magento\Framework\UrlInterface;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class Redirect computes redirect urls responses.
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Redirect implements \Magento\Framework\App\Response\RedirectInterface
+class Redirect implements RedirectInterface
 {
+    private const XML_PATH_USE_CUSTOM_ADMIN_URL = 'admin/url/use_custom';
+    private const XML_PATH_CUSTOM_ADMIN_URL = 'admin/url/custom';
+
     /**
-     * @var \Magento\Framework\App\RequestInterface
+     * @var RequestInterface
      */
     protected $_request;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * @var \Magento\Framework\Encryption\UrlCoder
+     * @var UrlCoder
      */
     protected $_urlCoder;
 
     /**
-     * @var \Magento\Framework\Session\SessionManagerInterface
+     * @var SessionManagerInterface
      */
     protected $_session;
 
     /**
-     * @var \Magento\Framework\Session\SidResolverInterface
+     * @var SidResolverInterface
      */
     protected $_sidResolver;
 
@@ -46,36 +65,51 @@ class Redirect implements \Magento\Framework\App\Response\RedirectInterface
     protected $_canUseSessionIdInParam;
 
     /**
-     * @var \Magento\Framework\UrlInterface
+     * @var UrlInterface
      */
     protected $_urlBuilder;
 
     /**
-     * @var \Laminas\Uri\Uri|null
+     * @var Uri
      */
     private $uri;
 
     /**
+     * @var State
+     */
+    private $appState;
+
+    /**
+     * @var ScopeConfigInterface
+     */
+    private $scopeConfig;
+
+    /**
      * Constructor
      *
-     * @param \Magento\Framework\App\RequestInterface $request
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\Encryption\UrlCoder $urlCoder
-     * @param \Magento\Framework\Session\SessionManagerInterface $session
-     * @param \Magento\Framework\Session\SidResolverInterface $sidResolver
-     * @param \Magento\Framework\UrlInterface $urlBuilder
-     * @param \Laminas\Uri\Uri|null $uri
+     * @param RequestInterface $request
+     * @param StoreManagerInterface $storeManager
+     * @param UrlCoder $urlCoder
+     * @param SessionManagerInterface $session
+     * @param SidResolverInterface $sidResolver
+     * @param UrlInterface $urlBuilder
+     * @param Uri|null $uri
      * @param bool $canUseSessionIdInParam
+     * @param State|null $appState
+     * @param ScopeConfigInterface|null $scopeConfig
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Framework\App\RequestInterface $request,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\Encryption\UrlCoder $urlCoder,
-        \Magento\Framework\Session\SessionManagerInterface $session,
-        \Magento\Framework\Session\SidResolverInterface $sidResolver,
-        \Magento\Framework\UrlInterface $urlBuilder,
-        \Laminas\Uri\Uri $uri = null,
-        $canUseSessionIdInParam = true
+        RequestInterface $request,
+        StoreManagerInterface $storeManager,
+        UrlCoder $urlCoder,
+        SessionManagerInterface $session,
+        SidResolverInterface $sidResolver,
+        UrlInterface $urlBuilder,
+        Uri $uri = null,
+        $canUseSessionIdInParam = true,
+        ?State $appState = null,
+        ?ScopeConfigInterface $scopeConfig = null
     ) {
         $this->_canUseSessionIdInParam = $canUseSessionIdInParam;
         $this->_request = $request;
@@ -84,20 +118,22 @@ class Redirect implements \Magento\Framework\App\Response\RedirectInterface
         $this->_session = $session;
         $this->_sidResolver = $sidResolver;
         $this->_urlBuilder = $urlBuilder;
-        $this->uri = $uri ?: ObjectManager::getInstance()->get(\Laminas\Uri\Uri::class);
+        $this->uri = $uri ?: ObjectManager::getInstance()->get(Uri::class);
+        $this->appState = $appState ?: ObjectManager::getInstance()->get(State::class);
+        $this->scopeConfig = $scopeConfig ?: ObjectManager::getInstance()->get(ScopeConfigInterface::class);
     }
 
     /**
      * Get the referrer url.
      *
      * @return string
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws NoSuchEntityException
      */
     protected function _getUrl()
     {
         $refererUrl = $this->_request->getServer('HTTP_REFERER');
-        $encodedUrl = $this->_request->getParam(\Magento\Framework\App\ActionInterface::PARAM_NAME_URL_ENCODED)
-            ?: $this->_request->getParam(\Magento\Framework\App\ActionInterface::PARAM_NAME_BASE64_URL);
+        $encodedUrl = $this->_request->getParam(ActionInterface::PARAM_NAME_URL_ENCODED)
+            ?: $this->_request->getParam(ActionInterface::PARAM_NAME_BASE64_URL);
 
         if ($encodedUrl) {
             $refererUrl = $this->_urlCoder->decode($encodedUrl);
@@ -113,6 +149,7 @@ class Redirect implements \Magento\Framework\App\Response\RedirectInterface
         } else {
             $refererUrl = $this->normalizeRefererUrl($refererUrl);
         }
+
         return $refererUrl;
     }
 
@@ -130,9 +167,9 @@ class Redirect implements \Magento\Framework\App\Response\RedirectInterface
      * Set referer url for redirect in response
      *
      * @param   string $defaultUrl
-     * @return  \Magento\Framework\App\ActionInterface
+     * @return  ActionInterface
      *
-     * @throws  \Magento\Framework\Exception\NoSuchEntityException
+     * @throws  NoSuchEntityException
      */
     public function getRedirectUrl($defaultUrl = null)
     {
@@ -149,7 +186,7 @@ class Redirect implements \Magento\Framework\App\Response\RedirectInterface
      * @param   string $defaultUrl
      * @return  string
      *
-     * @throws  \Magento\Framework\Exception\NoSuchEntityException
+     * @throws  NoSuchEntityException
      */
     public function error($defaultUrl)
     {
@@ -160,6 +197,7 @@ class Redirect implements \Magento\Framework\App\Response\RedirectInterface
         if (!$this->_isUrlInternal($errorUrl)) {
             $errorUrl = $this->_storeManager->getStore()->getBaseUrl();
         }
+
         return $errorUrl;
     }
 
@@ -169,17 +207,17 @@ class Redirect implements \Magento\Framework\App\Response\RedirectInterface
      * @param string $defaultUrl
      * @return string
      *
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws NoSuchEntityException
      */
     public function success($defaultUrl)
     {
         $successUrl = $this->_request->getParam(self::PARAM_NAME_SUCCESS_URL);
-        if (empty($successUrl)) {
-            $successUrl = $defaultUrl;
-        }
+        $successUrl = $successUrl ?: $defaultUrl;
+
         if (!$this->_isUrlInternal($successUrl)) {
             $successUrl = $this->_storeManager->getStore()->getBaseUrl();
         }
+
         return $successUrl;
     }
 
@@ -194,12 +232,12 @@ class Redirect implements \Magento\Framework\App\Response\RedirectInterface
     /**
      * Set redirect into response
      *
-     * @param \Magento\Framework\App\ResponseInterface $response
+     * @param ResponseInterface $response
      * @param string $path
      * @param array $arguments
      * @return void
      */
-    public function redirect(\Magento\Framework\App\ResponseInterface $response, $path, $arguments = [])
+    public function redirect(ResponseInterface $response, $path, $arguments = [])
     {
         $arguments = $this->updatePathParams($arguments);
         $response->setRedirect($this->_urlBuilder->getUrl($path, $arguments));
@@ -213,13 +251,67 @@ class Redirect implements \Magento\Framework\App\Response\RedirectInterface
      */
     protected function _isUrlInternal($url)
     {
-        if (strpos($url, 'http') !== false) {
-            $directLinkType = \Magento\Framework\UrlInterface::URL_TYPE_DIRECT_LINK;
-            $unsecureBaseUrl = $this->_storeManager->getStore()->getBaseUrl($directLinkType, false);
-            $secureBaseUrl = $this->_storeManager->getStore()->getBaseUrl($directLinkType, true);
-            return (strpos($url, (string) $unsecureBaseUrl) === 0) || (strpos($url, (string) $secureBaseUrl) === 0);
+        return strpos($url, 'http') !== false
+            ? $this->isInternalUrl($url) || $this->isCustomAdminUrl($url)
+            : false;
+    }
+
+    /**
+     * Is `Use Custom Admin URL` config enabled
+     *
+     * @return bool
+     */
+    private function isUseCustomAdminUrlEnabled(): bool
+    {
+        return $this->scopeConfig->isSetFlag(
+            self::XML_PATH_USE_CUSTOM_ADMIN_URL,
+            ScopeInterface::SCOPE_STORE
+        );
+    }
+
+    /**
+     * Returns custom admin url
+     *
+     * @return string
+     */
+    private function getCustomAdminUrl(): string
+    {
+        return $this->scopeConfig->getValue(
+            self::XML_PATH_CUSTOM_ADMIN_URL,
+            ScopeInterface::SCOPE_STORE
+        );
+    }
+
+    /**
+     * Is internal custom admin url
+     *
+     * @param string $url
+     * @return bool
+     */
+    private function isCustomAdminUrl(string $url): bool
+    {
+        if ($this->appState->getAreaCode() === Area::AREA_ADMINHTML && $this->isUseCustomAdminUrlEnabled()) {
+            return strpos($url, $this->getCustomAdminUrl()) === 0;
         }
+
         return false;
+    }
+
+    /**
+     * Is url internal
+     *
+     * @param string $url
+     * @return bool
+     */
+    private function isInternalUrl(string $url): bool
+    {
+        $directLinkType = UrlInterface::URL_TYPE_DIRECT_LINK;
+        $unsecureBaseUrl = $this->_storeManager->getStore()
+            ->getBaseUrl($directLinkType, false);
+        $secureBaseUrl = $this->_storeManager->getStore()
+            ->getBaseUrl($directLinkType, true);
+
+        return strpos($url, (string) $unsecureBaseUrl) === 0 || strpos($url, (string) $secureBaseUrl) === 0;
     }
 
     /**
@@ -264,10 +356,10 @@ class Redirect implements \Magento\Framework\App\Response\RedirectInterface
         $store = $this->_storeManager->getStore();
 
         if ($store
-            && !empty($refererQuery[\Magento\Store\Model\StoreManagerInterface::PARAM_NAME])
-            && ($refererQuery[\Magento\Store\Model\StoreManagerInterface::PARAM_NAME] !== $store->getCode())
+            && !empty($refererQuery[StoreManagerInterface::PARAM_NAME])
+            && ($refererQuery[StoreManagerInterface::PARAM_NAME] !== $store->getCode())
         ) {
-            $refererQuery[\Magento\Store\Model\StoreManagerInterface::PARAM_NAME] = $store->getCode();
+            $refererQuery[StoreManagerInterface::PARAM_NAME] = $store->getCode();
         }
 
         return $refererQuery;

@@ -38,5 +38,6 @@
         <element name="storeViewDropdown" type="text" selector="//select[@name='store_id']/option[contains(.,'{{storeView}}')]" parameterized="true"/>
         <element name="inputByCodeRangeFrom" type="input" selector="input.admin__control-text[name='{{code}}[from]']" parameterized="true"/>
         <element name="inputByCodeRangeTo" type="input" selector="input.admin__control-text[name='{{code}}[to]']" parameterized="true"/>
+        <element name="storeViewOptions" type="text" selector=".admin__data-grid-outer-wrap select[name='store_id'] > option[value='{{value}}']" parameterized="true"/>
     </section>
 </sections>

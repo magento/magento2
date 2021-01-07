@@ -8,16 +8,16 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="ApplyCatalogPriceRuleByProductAttributeTest">
+    <test name="ApplyCatalogPriceRuleByProductAttributeTest" deprecated="Use AdminApplyCatalogPriceRuleByProductAttributeTest">
         <annotations>
             <stories value="Catalog price rule"/>
-            <title value="Admin should be able to apply the catalog price rule by product attribute"/>
+            <title value="DEPRECATED. Admin should be able to apply the catalog price rule by product attribute"/>
             <description value="Admin should be able to apply the catalog price rule by product attribute"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-148"/>
             <group value="CatalogRule"/>
             <skip>
-                <issueId value="MC-22577"/>
+                <issueId value="DEPRECATED">Use AdminApplyCatalogPriceRuleByProductAttributeTest instead.</issueId>
             </skip>
         </annotations>
         <before>
@@ -97,7 +97,7 @@
             <deleteData createDataKey="createConfigChildProduct2" stepKey="deleteConfigChildProduct2"/>
             <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
 
-            <amOnPage url="{{CatalogRulePage.url}}" stepKey="goToCatalogPriceRulePage"/>
+            <actionGroup ref="AdminOpenCatalogPriceRulePageActionGroup" stepKey="goToCatalogPriceRulePage"/>
             <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deletePriceRule">
                 <argument name="name" value="{{SimpleCatalogPriceRule.name}}"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.catalogRuleIdentifierSearch}}"/>
@@ -232,10 +232,11 @@
         <see userInput="You saved the rule." selector="{{ContentManagementSection.StoreConfigurationPageSuccessMessage}}" stepKey="seeMessage"/>
         <see userInput="Updated rules applied." selector="{{ContentManagementSection.StoreConfigurationPageSuccessMessage}}" stepKey="seeSuccessMessage"/>
 
-        <!-- Run cron twice -->
-        <magentoCLI command="cron:run" stepKey="runCron1"/>
-        <magentoCLI command="cron:run" stepKey="runCron2"/>
-        <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        <!-- Run cron -->
+        <magentoCron stepKey="runAllCronJobs"/>
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+            <argument name="tags" value=""/>
+        </actionGroup>
 
         <!-- Go to Frontend and open the simple product -->
         <amOnPage url="{{StorefrontProductPage.url($$createFirstProduct.sku$$)}}" stepKey="amOnSimpleProductPage"/>

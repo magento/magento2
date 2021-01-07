@@ -76,6 +76,7 @@ class Adjustments extends \Magento\Backend\Block\Template
      * @param null|float $value
      *
      * @return string
+     * @since 102.1.0
      */
     public function formatValue($value)
     {

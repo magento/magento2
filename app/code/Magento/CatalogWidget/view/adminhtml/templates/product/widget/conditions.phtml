@@ -5,6 +5,7 @@
  */
 
 /** @var \Magento\CatalogWidget\Block\Product\Widget\Conditions $block */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 
 $element = $block->getElement();
 $fieldId = $element->getHtmlContainerId() ? ' id="' . $block->escapeHtmlAttr($element->getHtmlContainerId()) . '"' : '';
@@ -25,12 +26,14 @@ $fieldAttributes = $fieldId . ' class="' . $fieldClass . '" '
     </div>
 </div>
 
-
-<script>
+<?php $scriptString = <<<script
     require([
         "Magento_Rule/rules",
         "prototype"
     ], function(VarienRulesForm){
-        window.<?= $block->escapeJs($block->getHtmlId()) ?> = new VarienRulesForm('<?= $block->escapeJs($block->getHtmlId()) ?>', '<?= $block->escapeUrl($block->getNewChildUrl()) ?>');
+        window.{$block->escapeJs($block->getHtmlId())} = new VarienRulesForm('{$block->escapeJs($block->getHtmlId())}',
+         '{$block->escapeUrl($block->getNewChildUrl())}');
     });
-</script>
+script;
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>

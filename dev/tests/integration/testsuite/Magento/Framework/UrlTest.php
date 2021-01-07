@@ -23,13 +23,6 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         $this->model = Bootstrap::getObjectManager()->create(\Magento\Framework\Url::class);
     }
 
-    public function testSetGetUseSession()
-    {
-        $this->assertFalse((bool)$this->model->getUseSession());
-        $this->model->setUseSession(false);
-        $this->assertFalse($this->model->getUseSession());
-    }
-
     public function testSetRouteFrontName()
     {
         $value = 'route';
@@ -188,7 +181,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
          * Get url with type specified in params
          */
         $mediaUrl = $this->model->getBaseUrl(['_type' => \Magento\Framework\UrlInterface::URL_TYPE_MEDIA]);
-        $this->assertEquals('http://localhost/pub/media/', $mediaUrl, 'Incorrect media url');
+        $this->assertEquals('http://localhost/media/', $mediaUrl, 'Incorrect media url');
         $this->assertEquals('http://localhost/index.php/', $this->model->getBaseUrl(), 'Incorrect link url');
     }
 

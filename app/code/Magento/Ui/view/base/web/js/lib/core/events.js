@@ -6,8 +6,7 @@
 /* global WeakMap, Map*/
 define([
     'ko',
-    'underscore',
-    'es6-collections'
+    'underscore'
 ], function (ko, _) {
     'use strict';
 

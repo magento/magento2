@@ -56,8 +56,7 @@
             <argument name="parentCategory" value="$$createNewRootCategoryA.name$$"/>
         </actionGroup>
         <!-- Change root category for Main Website Store. -->
-        <amOnPage stepKey="s1" url="{{AdminSystemStorePage.url}}"/>
-        <waitForPageLoad stepKey="waitForPageAdminSystemStoreLoad" />
+        <actionGroup ref="AdminSystemStoreOpenPageActionGroup" stepKey="s1"/>
         <click stepKey="s2" selector="{{AdminStoresGridSection.resetButton}}"/>
         <waitForPageLoad stepKey="waitForPageAdminStoresGridLoadAfterResetButton" time="10"/>
         <fillField stepKey="s4" selector="{{AdminStoresGridSection.storeGrpFilterTextField}}" userInput="Main Website Store"/>
@@ -75,7 +74,9 @@
 
         <!-- @TODO: Uncomment commented below code after MQE-903 is fixed -->
         <!-- Perform cli reindex. -->
-        <!--<magentoCLI command="indexer:reindex" stepKey="magentoCli"/>-->
+        <!--<actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">-->
+        <!--    <argument name="indices" value=""/>-->
+        <!--</actionGroup>-->
 
         <!-- Delete Default Root Category. -->
         <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="navigateToCategoryPageAfterCLIReindexCommand"/>
@@ -152,7 +153,7 @@
         <click selector="{{AdminCategorySidebarTreeSection.categoryInTree('$$createNewRootCategoryA.name$$')}}" stepKey="clickOnNewRootCategoryA"/>
         <waitForPageLoad stepKey="waitForPageNewRootCategoryALoad" />
         <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="Default Category" stepKey="enterCategoryNameAsDefaultCategory"/>
-        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveCategoryDefaultCategory"/>
+        <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveCategoryDefaultCategory"/>
         <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="assertSuccessMessageAfterSaveDefaultCategory"/>
     </test>
 </tests>

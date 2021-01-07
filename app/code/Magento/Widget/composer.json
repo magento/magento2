@@ -12,7 +12,8 @@
         "magento/module-cms": "*",
         "magento/module-store": "*",
         "magento/module-theme": "*",
-        "magento/module-variable": "*"
+        "magento/module-variable": "*",
+        "magento/module-ui": "*"
     },
     "suggest": {
         "magento/module-widget-sample-data": "*"

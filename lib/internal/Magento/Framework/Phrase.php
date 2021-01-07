@@ -12,6 +12,7 @@ use Magento\Framework\Phrase\RendererInterface;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Phrase implements \JsonSerializable
 {

@@ -58,6 +58,16 @@ class DirectoryList extends \Magento\Framework\Filesystem\DirectoryList
     const VAR_DIR = 'var';
 
     /**
+     * Storage of files which was exported.
+     */
+    const VAR_EXPORT = 'var_export';
+
+    /**
+     * Storage of files for import/export.
+     */
+    const VAR_IMPORT_EXPORT = 'import_export';
+
+    /**
      * Temporary files
      */
     const TMP = 'tmp';
@@ -136,7 +146,7 @@ class DirectoryList extends \Magento\Framework\Filesystem\DirectoryList
     const GENERATED_METADATA = 'metadata';
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getDefaultConfig()
     {
@@ -146,17 +156,19 @@ class DirectoryList extends \Magento\Framework\Filesystem\DirectoryList
             self::CONFIG => [parent::PATH => 'app/etc'],
             self::LIB_INTERNAL => [parent::PATH => 'lib/internal'],
             self::VAR_DIR => [parent::PATH => 'var'],
+            /** @deprecated  */
+            self::VAR_EXPORT => [parent::PATH => 'var/export'],
             self::CACHE => [parent::PATH => 'var/cache'],
             self::LOG => [parent::PATH => 'var/log'],
             self::DI => [parent::PATH => 'generated/metadata'],
             self::GENERATION => [parent::PATH => Io::DEFAULT_DIRECTORY],
             self::SESSION => [parent::PATH => 'var/session'],
-            self::MEDIA => [parent::PATH => 'pub/media', parent::URL_PATH => 'pub/media'],
-            self::STATIC_VIEW => [parent::PATH => 'pub/static', parent::URL_PATH => 'pub/static'],
-            self::PUB => [parent::PATH => 'pub', parent::URL_PATH => 'pub'],
+            self::MEDIA => [parent::PATH => 'pub/media', parent::URL_PATH => 'media'],
+            self::STATIC_VIEW => [parent::PATH => 'pub/static', parent::URL_PATH => 'static'],
+            self::PUB => [parent::PATH => 'pub', parent::URL_PATH => ''],
             self::LIB_WEB => [parent::PATH => 'lib/web'],
             self::TMP => [parent::PATH => 'var/tmp'],
-            self::UPLOAD => [parent::PATH => 'pub/media/upload', parent::URL_PATH => 'pub/media/upload'],
+            self::UPLOAD => [parent::PATH => 'pub/media/upload', parent::URL_PATH => 'media/upload'],
             self::TMP_MATERIALIZATION_DIR => [parent::PATH => 'var/view_preprocessed/pub/static'],
             self::TEMPLATE_MINIFICATION_DIR => [parent::PATH => 'var/view_preprocessed'],
             self::SETUP => [parent::PATH => 'setup/src'],
@@ -164,12 +176,13 @@ class DirectoryList extends \Magento\Framework\Filesystem\DirectoryList
             self::GENERATED => [parent::PATH => 'generated'],
             self::GENERATED_CODE => [parent::PATH => Io::DEFAULT_DIRECTORY],
             self::GENERATED_METADATA => [parent::PATH => 'generated/metadata'],
+            self::VAR_IMPORT_EXPORT => [parent::PATH => 'var', parent::URL_PATH => 'import_export'],
         ];
         return parent::getDefaultConfig() + $result;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function __construct($root, array $config = [])
     {

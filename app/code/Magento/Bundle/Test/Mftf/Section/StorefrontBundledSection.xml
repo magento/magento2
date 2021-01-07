@@ -17,7 +17,7 @@
         <element name="updateCart" type="button" selector="#product-updatecart-button" timeout="30"/>
         <element name="configuredPrice" type="block" selector=".price-configured_price .price"/>
         <element name="fixedPricing" type="text" selector="//div[@class='price-box price-final_price']//span[@id]//..//span[contains(text(),'{{var1}}')]" parameterized="true"/>
-        <element name="customizeProduct" type="button" selector="//*[@id='bundle-slide']"/>
+        <element name="customizeProduct" type="button" selector="#bundle-slide"/>
         <element name="customizableBundleItemOption" type="text" selector="//div[@class='field choice'][1]//input[@type='checkbox']"/>
         <element name="customizableBundleItemOption2" type="text" selector="//div[@class='field choice'][2]//input[@type='checkbox']"/>
         <element name="nthOptionDiv" type="block" selector="#product-options-wrapper div.field.option:nth-of-type({{var}})" parameterized="true"/>
@@ -38,5 +38,6 @@
         <element name="currencyTrigger" type="select" selector="#switcher-currency-trigger" timeout="30"/>
         <element name="currency" type="select" selector="//a[text()='{{arg}}']" parameterized="true"/>
         <element name="multiSelectOption" type="select" selector="//div[@class='field option  required']//select"/>
+        <element name="validationMessageBox" type="block" selector="#validation-message-box"/>
     </section>
 </sections>

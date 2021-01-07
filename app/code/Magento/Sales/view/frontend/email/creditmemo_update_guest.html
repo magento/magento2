@@ -8,7 +8,7 @@
 <!--@vars {
 "var comment|escape|nl2br":"Credit Memo Comment",
 "var creditmemo.increment_id":"Credit Memo Id",
-"var billing.name":"Guest Customer Name",
+"var order_data.customer_name":"Guest Customer Name",
 "var order.increment_id":"Order Id",
 "var order_data.frontend_status_label":"Order Status",
 "var store.frontend_name":"Store Frontend Name",
@@ -21,7 +21,7 @@
 <table>
     <tr class="email-intro">
         <td>
-            <p class="greeting">{{trans "%name," name=$billing.name}}</p>
+            <p class="greeting">{{trans "%name," name=$order_data.customer_name}}</p>
             <p>
                 {{trans
                     "Your order #%increment_id has been updated with a status of <strong>%order_status</strong>."

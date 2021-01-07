@@ -75,7 +75,7 @@ define([
 
                 expect(browser.openDialog).toHaveBeenCalledWith(
                     'http://example.com/target_element_id/theTargetId/store/3/type/image/' +
-                        '?isAjax=true&current_tree_path=d3lzaXd5Zw,,',
+                        '?isAjax=true&current_tree_path=d3lzaXd5Zw--',
                     null,
                     null,
                     'Hello world',

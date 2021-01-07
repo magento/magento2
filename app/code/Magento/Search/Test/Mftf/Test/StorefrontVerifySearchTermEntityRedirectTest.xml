@@ -13,6 +13,7 @@
             <stories value="Search Term Redirect"/>
             <title value="Create Search Term Entity With Redirect. Check How Redirect is Working on Storefront"/>
             <description value="Storefront search by created search term with redirect. Verifying if created redirect is working"/>
+            <severity value="CRITICAL"/>
         </annotations>
 
         <before>
@@ -31,7 +32,7 @@
             </actionGroup>
         </before>
         <after>
-            <amOnPage url="{{AdminCatalogSearchTermIndexPage.url}}" stepKey="navigateToSearchTermPage"/>
+            <actionGroup ref="AdminOpenCatalogSearchTermIndexPageActionGroup" stepKey="navigateToSearchTermPage"/>
             <actionGroup ref="AdminSearchTermFilterBySearchQueryActionGroup" stepKey="findCreatedTerm">
                 <argument name="searchQuery" value="{{SearchTerm.query_text}}"/>
             </actionGroup>

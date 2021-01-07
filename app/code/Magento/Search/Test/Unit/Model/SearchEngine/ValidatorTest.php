@@ -34,7 +34,7 @@ class ValidatorTest extends TestCase
             [
                 'scopeConfig' => $this->scopeConfigMock,
                 'engineValidators' => ['otherEngine' => $this->otherEngineValidatorMock],
-                'engineBlacklist' => ['badEngine' => 'Bad Engine']
+                'excludedEngineList' => ['badEngine' => 'Bad Engine']
             ]
         );
     }
@@ -54,7 +54,7 @@ class ValidatorTest extends TestCase
         $this->assertEquals($expectedErrors, $this->validator->validate());
     }
 
-    public function testValidateBlacklist()
+    public function testValidateExcludedList()
     {
         $this->scopeConfigMock
             ->expects($this->once())

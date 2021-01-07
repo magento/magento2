@@ -11,6 +11,7 @@ use Magento\Bundle\Model\OptionFactory;
 use Magento\Bundle\Model\Product\Type;
 use Magento\Bundle\Model\ResourceModel\BundleFactory;
 use Magento\Bundle\Model\ResourceModel\Option\Collection;
+use Magento\CatalogRule\Model\ResourceModel\Product\CollectionProcessor;
 use Magento\Bundle\Model\ResourceModel\Selection\Collection as SelectionCollection;
 use Magento\Bundle\Model\ResourceModel\Selection\CollectionFactory;
 use Magento\Bundle\Model\Selection;
@@ -42,6 +43,8 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
+ * Test for bundle product type
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class TypeTest extends TestCase
@@ -117,6 +120,11 @@ class TypeTest extends TestCase
     private $arrayUtility;
 
     /**
+     * @var CollectionProcessor|MockObject
+     */
+    private $catalogRuleProcessor;
+
+    /**
      * @return void
      */
     protected function setUp(): void
@@ -172,18 +180,18 @@ class TypeTest extends TestCase
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
-
         $this->serializer = $this->getMockBuilder(Json::class)
             ->setMethods(null)
             ->disableOriginalConstructor()
             ->getMock();
-
         $this->metadataPool = $this->getMockBuilder(MetadataPool::class)
             ->disableOriginalConstructor()
             ->getMock();
-
         $this->arrayUtility = $this->getMockBuilder(ArrayUtils::class)
             ->setMethods(['flatten'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->catalogRuleProcessor = $this->getMockBuilder(CollectionProcessor::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -1542,7 +1550,7 @@ class TypeTest extends TestCase
 
         $this->parentClass($group, $option, $buyRequest, $product);
 
-        $product->expects($this->once())
+        $product->expects($this->any())
             ->method('getSkipCheckRequiredOption')
             ->willReturn(true);
         $buyRequest->expects($this->once())
@@ -2423,9 +2431,6 @@ class TypeTest extends TestCase
             ->willReturnSelf();
         $group->expects($this->once())
             ->method('setProcessMode')
-            ->willReturnSelf();
-        $group->expects($this->once())
-            ->method('validateUserValue')
             ->willReturnSelf();
         $group->expects($this->once())
             ->method('prepareForCart')

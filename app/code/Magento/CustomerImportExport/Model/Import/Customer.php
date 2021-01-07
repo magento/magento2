@@ -367,6 +367,7 @@ class Customer extends AbstractCustomer
      * @param array|AbstractSource $rows
      *
      * @return void
+     * @since 100.2.3
      */
     public function prepareCustomerData($rows): void
     {
@@ -387,6 +388,7 @@ class Customer extends AbstractCustomer
 
     /**
      * @inheritDoc
+     * @since 100.2.3
      */
     public function validateData()
     {
@@ -512,8 +514,8 @@ class Customer extends AbstractCustomer
     {
         while ($bunch = $this->_dataSourceModel->getNextBunch()) {
             $this->prepareCustomerData($bunch);
-            $entitiesToCreate = [[]];
-            $entitiesToUpdate = [[]];
+            $entitiesToCreate = [];
+            $entitiesToUpdate = [];
             $entitiesToDelete = [];
             $attributesToSave = [];
 
@@ -547,8 +549,8 @@ class Customer extends AbstractCustomer
                 }
             }
 
-            $entitiesToCreate = array_merge(...$entitiesToCreate);
-            $entitiesToUpdate = array_merge(...$entitiesToUpdate);
+            $entitiesToCreate = array_merge([], ...$entitiesToCreate);
+            $entitiesToUpdate = array_merge([], ...$entitiesToUpdate);
 
             $this->updateItemsCounterStats($entitiesToCreate, $entitiesToUpdate, $entitiesToDelete);
             /**

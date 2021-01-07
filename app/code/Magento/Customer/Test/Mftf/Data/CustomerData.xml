@@ -285,6 +285,21 @@
         <requiredEntity type="address">DE_Address_Berlin_Not_Default_Address</requiredEntity>
         <requiredEntity type="address">UK_Not_Default_Address</requiredEntity>
     </entity>
+    <entity name="Customer_DE_UK_US" type="customer">
+        <data key="group_id">1</data>
+        <data key="default_billing">true</data>
+        <data key="default_shipping">true</data>
+        <data key="email" unique="prefix">John.Doe@example.com</data>
+        <data key="firstname">John</data>
+        <data key="lastname">Doe</data>
+        <data key="fullname">John Doe</data>
+        <data key="password">pwdTest123!</data>
+        <data key="store_id">0</data>
+        <data key="website_id">0</data>
+        <requiredEntity type="address">DE_Address_Berlin_Not_Default_Address</requiredEntity>
+        <requiredEntity type="address">UK_Not_Default_Address</requiredEntity>
+        <requiredEntity type="address">US_Address_NY</requiredEntity>
+    </entity>
     <entity name="Retailer_Customer" type="customer">
         <data key="group_id">3</data>
         <data key="default_billing">true</data>

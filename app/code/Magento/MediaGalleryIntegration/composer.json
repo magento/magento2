@@ -1,0 +1,32 @@
+{
+    "name": "magento/module-media-gallery-integration",
+    "description": "Magento module responsible for integration of enhanced media gallery",
+    "require": {
+        "php": "~7.3.0||~7.4.0",
+        "magento/framework": "*",
+        "magento/module-media-gallery-ui-api": "*",
+        "magento/module-media-gallery-api": "*",
+        "magento/module-media-gallery-synchronization-api": "*",
+        "magento/module-ui": "*"
+    },
+    "require-dev": {
+        "magento/module-cms": "*"
+    },
+    "suggest": {
+        "magento/module-catalog": "*",
+        "magento/module-cms": "*"
+    },
+    "type": "magento2-module",
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Magento\\MediaGalleryIntegration\\": ""
+        }
+    }
+}

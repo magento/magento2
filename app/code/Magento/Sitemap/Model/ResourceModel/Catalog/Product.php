@@ -474,6 +474,7 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param \Magento\Framework\DB\Select $select
      * @return \Magento\Framework\DB\Select
+     * @since 100.2.1
      */
     public function prepareSelectStatement(\Magento\Framework\DB\Select $select)
     {

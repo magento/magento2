@@ -10,6 +10,7 @@
     <section name="PayPalPaymentSection">
         <element name="guestCheckout" type="input" selector="#guest"/>
         <element name="loginSection" type="input" selector=" #main&gt;#login"/>
+        <element name="existingAccountLoginBtn" type="input" selector="#loginSection a"/>
         <element name="email" type="input" selector="//input[contains(@name, 'email') and not(contains(@style, 'display:none'))]"/>
         <element name="password" type="input" selector="//input[contains(@name, 'password') and not(contains(@style, 'display:none'))]"/>
         <element name="loginBtn" type="input" selector="button#btnLogin"/>

@@ -7,26 +7,29 @@
 use Magento\Framework\App\TemplateTypesInterface;
 
 /* @var $block \Magento\Newsletter\Block\Adminhtml\Template\Edit */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 
 ?>
 <form action="<?= $block->escapeUrl($block->getSaveUrl()) ?>" method="post" id="newsletter_template_edit_form">
     <?= $block->getBlockHtml('formkey') ?>
     <div class="no-display">
         <input type="hidden" id="change_flag_element" name="_change_type_flag" value="" />
-        <input type="hidden" id="save_as_flag" name="_save_as_flag" value="<?= $block->escapeHtmlAttr($block->getSaveAsFlag()) ?>" />
+        <input type="hidden" id="save_as_flag" name="_save_as_flag"
+               value="<?= $block->escapeHtmlAttr($block->getSaveAsFlag()) ?>" />
     </div>
     <?= /* @noEscape */ $block->getForm() ?>
 </form>
-<form action="<?= $block->escapeUrl($block->getPreviewUrl()) ?>" method="post" id="newsletter_template_preview_form" target="_blank">
+<form action="<?= $block->escapeUrl($block->getPreviewUrl()) ?>" method="post" id="newsletter_template_preview_form"
+      target="_blank">
     <div class="no-display">
-        <input type="hidden" id="preview_type" name="type" value="<?= /* @noEscape */ $block->isTextType() ? 1 : 2 ?>" />
+        <input type="hidden" id="preview_type" name="type" value="<?= /* @noEscape */ $block->isTextType() ? 1 : 2 ?>"/>
         <input type="hidden" id="preview_text" name="text" value="" />
         <input type="hidden" id="preview_styles" name="styles" value="" />
         <input type="hidden" id="preview_id" name="id" value="" />
         <input type="hidden" name="form_key" value="<?= $block->escapeHtmlAttr($block->getFormKey()) ?>" >
     </div>
 </form>
-<script>
+<?php $scriptString = <<<script
 require([
     'jquery',
     'wysiwygAdapter',
@@ -91,7 +94,7 @@ require([
             var self = this;
 
             confirm({
-                content: "<?= $block->escapeJs($block->escapeHtml(__('Are you sure that you want to strip all tags?'))) ?>",
+                content: "{$block->escapeJs(__('Are you sure that you want to strip all tags?'))}",
                 actions: {
                     confirm: function () {
                         if (wysiwyg.activeEditor()) {
@@ -140,10 +143,10 @@ require([
                 $('change_flag_element').value = '1';
             }
 
-            if ($F('code').blank() || $F('code') == templateControl.templateName) {
+            if (\$F('code').blank() || \$F('code') == templateControl.templateName) {
                 prompt({
-                    content: '<?= $block->escapeJs($block->escapeHtml(__('Please enter a new template name.'))) ?>',
-                    value: templateControl.templateName + '<?= $block->escapeJs(__(' Copy')) ?>',
+                    content: '{$block->escapeJs(__('Please enter a new template name.'))}',
+                    value: templateControl.templateName + '{$block->escapeJs(__(' Copy'))}',
                     actions: {
                         confirm: function (value) {
                             $('code').value = value;
@@ -174,9 +177,9 @@ require([
 
         preview: function () {
             if (this.typeChange) {
-                $('preview_type').value = <?= $block->escapeJs(TemplateTypesInterface::TYPE_TEXT) ?>;
+                $('preview_type').value = {$block->escapeJs(TemplateTypesInterface::TYPE_TEXT)};
             } else {
-                $('preview_type').value = <?= $block->escapeJs($block->getTemplateType()) ?>;
+                $('preview_type').value = {$block->escapeJs($block->getTemplateType())};
             }
 
             if (wysiwyg.activeEditor()) {
@@ -200,10 +203,10 @@ require([
 
         deleteTemplate: function () {
             confirm({
-                content: "<?= $block->escapeJs($block->escapeHtml(__('Are you sure you want to delete this template?'))) ?>",
+                content: "{$block->escapeJs(__('Are you sure you want to delete this template?'))}",
                 actions: {
                     confirm: function () {
-                        window.location.href = '<?= $block->escapeUrl($block->getDeleteUrl()) ?>';
+                        window.location.href = '{$block->escapeJs($block->getDeleteUrl())}';
                     }
                 }
             });
@@ -211,8 +214,10 @@ require([
     };
 
     templateControl.init();
-    templateControl.templateName = "<?= $block->escapeJs($block->getJsTemplateName()) ?>";
+    templateControl.templateName = "{$block->escapeJs($block->getJsTemplateName())}";
 //]]>
 
 });
-</script>
+script;
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>

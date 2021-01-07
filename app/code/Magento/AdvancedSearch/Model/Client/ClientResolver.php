@@ -5,8 +5,9 @@
  */
 namespace Magento\AdvancedSearch\Model\Client;
 
-use \Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Search\EngineResolverInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
  * @api
@@ -19,7 +20,7 @@ class ClientResolver
      *
      * @var ScopeConfigInterface
      * @since 100.1.0
-     * @deprecated since it is not used anymore
+     * @deprecated 100.3.0 since it is not used anymore
      */
     protected $scopeConfig;
 
@@ -46,7 +47,7 @@ class ClientResolver
     private $clientOptionsPool;
 
     /**
-     * @var EngineResolver
+     * @var EngineResolverInterface
      */
     private $engineResolver;
 
@@ -55,14 +56,14 @@ class ClientResolver
      *
      * @var string
      * @since 100.1.0
-     * @deprecated since it is not used anymore
+     * @deprecated 100.3.0 since it is not used anymore
      */
     protected $path;
 
     /**
      * Config Scope
      * @since 100.1.0
-     * @deprecated since it is not used anymore
+     * @deprecated 100.3.0 since it is not used anymore
      */
     protected $scope;
 

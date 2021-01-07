@@ -35,7 +35,7 @@ abstract class Index extends \Magento\Backend\App\Action
 
     /**
      * @var \Magento\Framework\Validator
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      */
     protected $_validator;
 
@@ -53,13 +53,13 @@ abstract class Index extends \Magento\Backend\App\Action
 
     /**
      * @var \Magento\Customer\Model\CustomerFactory
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      */
     protected $_customerFactory = null;
 
     /**
      * @var \Magento\Customer\Model\AddressFactory
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      */
     protected $_addressFactory = null;
 
@@ -85,7 +85,7 @@ abstract class Index extends \Magento\Backend\App\Action
 
     /**
      * @var \Magento\Framework\Math\Random
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      */
     protected $_random;
 
@@ -96,7 +96,7 @@ abstract class Index extends \Magento\Backend\App\Action
 
     /**
      * @var \Magento\Framework\Api\ExtensibleDataObjectConverter
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      */
     protected $_extensibleDataObjectConverter;
 
@@ -132,7 +132,7 @@ abstract class Index extends \Magento\Backend\App\Action
 
     /**
      * @var \Magento\Framework\Reflection\DataObjectProcessor
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      */
     protected $dataObjectProcessor;
 
@@ -143,7 +143,7 @@ abstract class Index extends \Magento\Backend\App\Action
 
     /**
      * @var \Magento\Framework\View\LayoutFactory
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      */
     protected $layoutFactory;
 
@@ -289,9 +289,8 @@ abstract class Index extends \Magento\Backend\App\Action
     protected function _addSessionErrorMessages($messages)
     {
         $messages = (array)$messages;
-        $session = $this->_getSession();
 
-        $callback = function ($error) use ($session) {
+        $callback = function ($error) {
             if (!$error instanceof Error) {
                 $error = new Error($error);
             }
@@ -306,7 +305,7 @@ abstract class Index extends \Magento\Backend\App\Action
      * @param callable $singleAction A single action callable that takes a customer ID as input
      * @param int[] $customerIds Array of customer Ids to perform the action upon
      * @return int Number of customers successfully acted upon
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      */
     protected function actUponMultipleCustomers(callable $singleAction, $customerIds)
     {

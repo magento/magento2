@@ -19,7 +19,14 @@ use Magento\Framework\Url;
 use Magento\Framework\UrlInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\Math\Random;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
 
+/**
+ * Test for the widget.
+ *
+ * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+ */
 class ImageTest extends TestCase
 {
     /**
@@ -43,11 +50,31 @@ class ImageTest extends TestCase
         $collectionFactoryMock = $this->createMock(CollectionFactory::class);
         $escaperMock = $this->createMock(Escaper::class);
         $this->urlBuilder = $this->createMock(Url::class);
+        $randomMock = $this->createMock(Random::class);
+        $randomMock->method('getRandomString')->willReturn('some-rando-string');
+        $secureRendererMock = $this->createMock(SecureHtmlRenderer::class);
+        $secureRendererMock->method('renderEventListenerAsTag')
+            ->willReturnCallback(
+                function (string $event, string $listener, string $selector): string {
+                    return "<script>document.querySelector('{$selector}').{$event} = () => { {$listener} };</script>";
+                }
+            );
+        $secureRendererMock->method('renderTag')
+            ->willReturnCallback(
+                function (string $tag, array $attrs, ?string $content): string {
+                    $attrs = new DataObject($attrs);
+
+                    return "<$tag {$attrs->serialize()}>$content</$tag>";
+                }
+            );
         $this->_image = new Image(
             $factoryMock,
             $collectionFactoryMock,
             $escaperMock,
-            $this->urlBuilder
+            $this->urlBuilder,
+            [],
+            $secureRendererMock,
+            $randomMock
         );
         $formMock = new DataObject();
         $formMock->getHtmlIdPrefix('id_prefix');
@@ -101,9 +128,10 @@ class ImageTest extends TestCase
         $this->assertStringContainsString('type="file"', $html);
         $this->assertStringContainsString('value="test_value"', $html);
         $this->assertStringContainsString(
-            '<a href="http://localhost/media/test_value" onclick="imagePreview(\'_image\'); return false;"',
+            '<a previewlinkid="linkIdsome-rando-string" href="http://localhost/media/test_value"',
             $html
         );
+        $this->assertStringContainsString("imagePreview('_image');\nreturn false;", $html);
         $this->assertStringContainsString('<input type="checkbox"', $html);
     }
 }

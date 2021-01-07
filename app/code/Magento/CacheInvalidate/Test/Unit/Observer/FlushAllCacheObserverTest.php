@@ -56,7 +56,7 @@ class FlushAllCacheObserverTest extends TestCase
             Config::VARNISH
         );
 
-        $this->purgeCache->expects($this->once())->method('sendPurgeRequest')->with('.*');
+        $this->purgeCache->expects($this->once())->method('sendPurgeRequest')->with(['.*']);
         $this->model->execute($this->observerMock);
     }
 }

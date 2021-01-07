@@ -21,7 +21,7 @@
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginGetFromGeneralFile"/>
             <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
-            <actionGroup ref="SwitchToVersion4ActionGroup" stepKey="switchToTinyMCE4" />
+            <actionGroup ref="CliEnableTinyMCE4ActionGroup" stepKey="switchToTinyMCE4" />
         </before>
         <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="navigateToNewCatalog"/>
         <waitForLoadingMaskToDisappear stepKey="wait2" />
@@ -37,7 +37,7 @@
         <seeElement selector="{{TinyMCESection.InsertImageBtn}}" stepKey="insertImage"/>
         <dontSee selector="{{TinyMCESection.InsertWidgetBtn}}" stepKey="insertWidget" />
         <dontSee selector="{{TinyMCESection.InsertVariableBtn}}" stepKey="insertVariable" />
-        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveCatalog"/>
+        <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveCatalog"/>
         <!-- Go to storefront product page, assert product content -->
         <amOnPage url="/{{SimpleSubCategory.name_lwr}}.html" stepKey="goToCategoryFrontPage"/>
         <waitForPageLoad stepKey="waitForPageLoad2"/>

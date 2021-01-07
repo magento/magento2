@@ -119,6 +119,8 @@ class Role extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
         $connection->delete($this->_ruleTable, ['role_id = ?' => (int)$role->getId()]);
 
+        $this->_cache->clean(\Zend_Cache::CLEANING_MODE_MATCHING_TAG, [\Magento\Backend\Block\Menu::CACHE_TAGS]);
+
         return $this;
     }
 

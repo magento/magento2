@@ -229,6 +229,7 @@ class Store extends \Magento\Framework\DataObject implements OptionSourceInterfa
      * @param array $groupIds
      * @param array $websiteIds
      * @return array Format: array(array('value' => '<value>', 'label' => '<label>'), ...)
+     * @since 101.1.0
      */
     public function getStoreOptionsTree($isAll = false, $storeIds = [], $groupIds = [], $websiteIds = []): array
     {

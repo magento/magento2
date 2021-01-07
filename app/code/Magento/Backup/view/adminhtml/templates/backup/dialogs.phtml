@@ -3,14 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
 <!-- TODO: refactor form styles and js -->
 <script type="text/x-magento-template" id="rollback-warning-template">
-<p><?= $block->escapeHtml(__('You will lose any data created since the backup was made, including admin users, customers and orders.')) ?></p>
+<p><?= $block->escapeHtml(__(
+    'You will lose any data created since the backup was made, including admin users, customers and orders.'
+)) ?></p>
 <p><?= $block->escapeHtml(__('Are you sure you want to continue?')) ?></p>
 </script>
 <script type="text/x-magento-template" id="backup-options-template">
-    <div class="backup-messages" style="display: none;">
+    <div class="backup-messages no-display">
         <div class="messages"></div>
     </div>
     <div class="messages">
@@ -21,33 +25,56 @@
     <form action="" method="post" id="backup-form" class="form-inline">
         <fieldset class="admin__fieldset form-list question">
             <div class="admin__field field _required">
-                <label for="backup_name" class="admin__field-label"><span><?= $block->escapeHtml(__('Backup Name')) ?></span></label>
+                <label for="backup_name" class="admin__field-label">
+                    <span><?= $block->escapeHtml(__('Backup Name')) ?></span>
+                </label>
                 <div class="admin__field-control">
                     <input type="text" name="backup_name" id="backup_name"
-                           class="admin__control-text required-entry validate-alphanum-with-spaces validate-length maximum-length-50"
+                           class="admin__control-text required-entry validate-alphanum-with-spaces validate-length
+                            maximum-length-50"
                            maxlength="50" />
                     <div class="admin__field-note">
-                        <?= $block->escapeHtml(__('Please use only letters (a-z or A-Z), numbers (0-9) or spaces in this field.')) ?>
+                        <?= $block->escapeHtml(__(
+                            'Please use only letters (a-z or A-Z), numbers (0-9) or spaces in this field.'
+                        )) ?>
                     </div>
                 </div>
             </div>
 
             <div class="admin__field field maintenance-checkbox-container">
-                <label for="backup_maintenance_mode" class="admin__field-label"><span><?= $block->escapeHtml(__('Maintenance mode')) ?></span></label>
+                <label for="backup_maintenance_mode" class="admin__field-label">
+                    <span><?= $block->escapeHtml(__('Maintenance mode')) ?></span>
+                </label>
                 <div class="admin__field-control">
                     <div class="admin__field-option">
-                        <input class="admin__control-checkbox" type="checkbox" name="maintenance_mode" value="1" id="backup_maintenance_mode"/>
-                        <label class="admin__field-label" for="backup_maintenance_mode"><?= $block->escapeHtml(__('Please put your store into maintenance mode during backup.')) ?></label>
+                        <input class="admin__control-checkbox"
+                               type="checkbox"
+                               name="maintenance_mode"
+                               value="1"
+                               id="backup_maintenance_mode"/>
+                        <label class="admin__field-label"
+                               for="backup_maintenance_mode"><?= $block->escapeHtml(__(
+                                   'Please put your store into maintenance mode during backup.'
+                               )) ?></label>
                     </div>
                 </div>
             </div>
 
-            <div class="admin__field field maintenance-checkbox-container" id="exclude-media-checkbox-container" style="display: none;">
-                <label for="exclude_media" class="admin__field-label"><span><?= $block->escapeHtml(__('Exclude')) ?></span></label>
+            <div class="admin__field field maintenance-checkbox-container no-display"
+                 id="exclude-media-checkbox-container">
+                <label for="exclude_media" class="admin__field-label">
+                    <span><?= $block->escapeHtml(__('Exclude')) ?></span>
+                </label>
                 <div class="admin__field-control">
                     <div class="admin__field-option">
-                        <input class="admin__control-checkbox" type="checkbox" name="exclude_media" value="1" id="exclude_media"/>
-                        <label class="admin__field-label" for="exclude_media"><?= $block->escapeHtml(__('Exclude media folder from backup')) ?></label>
+                        <input class="admin__control-checkbox"
+                               type="checkbox"
+                               name="exclude_media"
+                               value="1"
+                               id="exclude_media"/>
+                        <label class="admin__field-label"
+                               for="exclude_media"><?= $block->escapeHtml(__('Exclude media folder from backup')) ?>
+                        </label>
                     </div>
                 </div>
             </div>
@@ -56,7 +83,7 @@
 </script>
 
 <script type="text/x-magento-template" id="rollback-request-password-template">
-    <div class="backup-messages" style="display: none;">
+    <div class="backup-messages no-display">
         <div class="messages"></div>
     </div>
     <div class="messages">
@@ -69,44 +96,63 @@
     <form action="" method="post" id="rollback-form" class="form-inline">
         <fieldset class="admin__fieldset password-box-container">
             <div class="admin__field field _required">
-                <label for="password" class="admin__field-label"><span><?= $block->escapeHtml(__('User Password')) ?></span></label>
-                <div class="admin__field-control"><input type="password" name="password" id="password" class="admin__control-text required-entry" autocomplete="new-password"></div>
-            </div>
-
-            <div class="admin__field field maintenance-checkbox-container">
-                <label for="rollback_maintenance_mode" class="admin__field-label"><span><?= $block->escapeHtml(__('Maintenance mode')) ?></span></label>
+                <label for="password" class="admin__field-label">
+                    <span><?= $block->escapeHtml(__('User Password')) ?></span>
+                </label>
                 <div class="admin__field-control">
-                    <div class="admin__field-option">
-                        <input class="admin__control-checkbox" type="checkbox" name="maintenance_mode" value="1" id="rollback_maintenance_mode"/>
-                        <label class="admin__field-label" for="rollback_maintenance_mode"><?= $block->escapeHtml(__('Please put your store into maintenance mode during rollback processing.')) ?></label>
-                    </div>  
+                    <input type="password" name="password" id="password" class="admin__control-text required-entry"
+                           autocomplete="new-password">
                 </div>
             </div>
 
-            <div class="admin__field field maintenance-checkbox-container" id="use-ftp-checkbox-row" style="display: none;">
+            <div class="admin__field field maintenance-checkbox-container">
+                <label for="rollback_maintenance_mode" class="admin__field-label">
+                    <span><?= $block->escapeHtml(__('Maintenance mode')) ?></span>
+                </label>
+                <div class="admin__field-control">
+                    <div class="admin__field-option">
+                        <input class="admin__control-checkbox" type="checkbox" name="maintenance_mode" value="1"
+                               id="rollback_maintenance_mode"/>
+                        <label class="admin__field-label" for="rollback_maintenance_mode">
+                            <?= $block->escapeHtml(__(
+                                'Please put your store into maintenance mode during rollback processing.'
+                            )) ?></label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="admin__field field maintenance-checkbox-container" id="use-ftp-checkbox-row">
                 <label for="use_ftp" class="admin__field-label">
                     <span><?= $block->escapeHtml(__('FTP')) ?></span>
                 </label>
                 <div class="admin__field-control">
                     <div class="admin__field-option">
-                        <input class="admin__control-checkbox" type="checkbox" name="use_ftp" value="1" id="use_ftp" onclick="backup.toggleFtpCredentialsForm(event)"/>
-                        <label class="admin__field-label" for="use_ftp"><?= $block->escapeHtml(__('Use FTP Connection')) ?></label>
+                        <input class="admin__control-checkbox" type="checkbox" name="use_ftp" value="1" id="use_ftp"/>
+                        <label class="admin__field-label" for="use_ftp">
+                            <?= $block->escapeHtml(__('Use FTP Connection')) ?>
+                        </label>
                     </div>
                 </div>
             </div>
         </fieldset>
-        <div class="entry-edit" id="ftp-credentials-container" style="display: none;">
+        <div class="entry-edit no-display" id="ftp-credentials-container">
             <fieldset class="admin__fieldset">
-                <legend class="admin__legend legend"><span><?= $block->escapeHtml(__('FTP credentials')) ?></span></legend><br />
+                <legend class="admin__legend legend">
+                    <span><?= $block->escapeHtml(__('FTP credentials')) ?></span>
+                </legend><br />
                 <div class="admin__field field _required">
-                    <label class="admin__field-label" for="ftp_host"><span><?= $block->escapeHtml(__('FTP Host')) ?></span></label>
+                    <label class="admin__field-label" for="ftp_host">
+                        <span><?= $block->escapeHtml(__('FTP Host')) ?></span>
+                    </label>
                     <div class="admin__field-control">
                         <input type="text" class="admin__control-text" name="ftp_host" id="ftp_host">
                     </div>
                 </div>
 
                 <div class="admin__field field _required">
-                    <label class="admin__field-label" for="ftp_user"><span><?= $block->escapeHtml(__('FTP Login')) ?></span></label>
+                    <label class="admin__field-label" for="ftp_user">
+                        <span><?= $block->escapeHtml(__('FTP Login')) ?></span>
+                    </label>
                     <div class="admin__field-control">
                         <input type="text" class="admin__control-text" name="ftp_user" id="ftp_user">
                     </div>
@@ -116,7 +162,8 @@
                         <span><?= $block->escapeHtml(__('FTP Password')) ?></span>
                     </label>
                     <div class="admin__field-control">
-                        <input type="password" class="admin__control-text" name="ftp_pass" id="ftp_pass" autocomplete="new-password">
+                        <input type="password" class="admin__control-text" name="ftp_pass" id="ftp_pass"
+                               autocomplete="new-password">
                     </div>
                 </div>
                 <div class="admin__field field">
@@ -136,17 +183,25 @@
     $backupUrl = $block->getUrl('*/*/create');
 ?>
 
-<script>
+<?php $scriptString = <<<script
+
 require([
-    "prototype",
-    "mage/adminhtml/backup"
+    'prototype',
+    'mage/adminhtml/backup'
 ], function(){
 
 //<![CDATA[
     backup = new AdminBackup();
-    backup.rollbackUrl = '<?= $block->escapeUrl($rollbackUrl) ?>';
-    backup.backupUrl = '<?= $block->escapeUrl($backupUrl) ?>';
+    backup.rollbackUrl = '{$block->escapeJs($rollbackUrl)}';
+    backup.backupUrl = '{$block->escapeJs($backupUrl)}';
 //]]>
 
 });
-</script>
+script;
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
+<?=/* @noEscape */ $secureRenderer->renderEventListenerAsTag(
+    'onclick',
+    'backup.toggleFtpCredentialsForm(event)',
+    '#use_ftp'
+) ?>

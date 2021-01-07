@@ -32,7 +32,7 @@ class CreditmemoFactory
 
     /**
      * @var \Magento\Framework\Unserialize\Unserialize
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      */
     protected $unserialize;
 
@@ -158,7 +158,7 @@ class CreditmemoFactory
         if ($item->isDummy()) {
             if ($item->getHasChildren()) {
                 foreach ($item->getChildrenItems() as $child) {
-                    if (empty($qtys)) {
+                    if (empty($qtys) || (count(array_unique($qtys)) === 1 && (int)end($qtys) === 0)) {
                         if ($this->canRefundNoDummyItem($child, $invoiceQtysRefundLimits)) {
                             return true;
                         }

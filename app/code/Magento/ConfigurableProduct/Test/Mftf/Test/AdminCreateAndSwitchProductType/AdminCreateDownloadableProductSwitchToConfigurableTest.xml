@@ -27,7 +27,7 @@
             </createData>
         </before>
         <after>
-            <actionGroup ref="GoToProductCatalogPageActionGroup" stepKey="goToProductCatalogPage"/>
+            <actionGroup ref="AdminOpenCatalogProductPageActionGroup" stepKey="goToProductCatalogPage"/>
             <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteConfigurableProduct">
                 <argument name="product" value="_defaultProduct"/>
             </actionGroup>
@@ -62,12 +62,16 @@
         <actionGroup ref="SaveConfiguredProductActionGroup" stepKey="saveProductForm"/>
         <!-- Check that product was added with implicit type change -->
         <comment stepKey="beforeVerify" userInput="Verify Product Type Assigned Correctly"/>
-        <actionGroup ref="GoToProductCatalogPageActionGroup" stepKey="goToProductCatalogPage"/>
+        <actionGroup ref="AdminOpenCatalogProductPageActionGroup" stepKey="goToProductCatalogPage"/>
         <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetSearch"/>
         <actionGroup ref="FilterProductGridByNameActionGroup" stepKey="searchForProduct">
             <argument name="product" value="_defaultProduct"/>
         </actionGroup>
-        <see selector="{{AdminProductGridSection.productGridCell('2', 'Type')}}" userInput="Configurable Product" stepKey="seeProductTypeInGrid"/>
+        <actionGroup ref="AssertAdminProductGridCellActionGroup" stepKey="seeProductTypeInGrid">
+            <argument name="row" value="2"/>
+            <argument name="column" value="Type"/>
+            <argument name="value" value="Configurable Product"/>
+        </actionGroup>
         <actionGroup ref="AssertProductInStorefrontProductPageActionGroup" stepKey="assertProductInStorefrontProductPage">
             <argument name="product" value="_defaultProduct"/>
         </actionGroup>

@@ -15,8 +15,12 @@
         <element name="idColumn" type="button" selector="//div[contains(@data-role, 'grid-wrapper')]/table/thead/tr/th/span[contains(text(), 'ID')]"/>
         <element name="clearAll" type="button" selector="//div[@class='admin__data-grid-header']//button[contains(text(), 'Clear all')]"/>
         <element name="activeFilters" type="button" selector="//div[@class='admin__data-grid-header']//span[contains(text(), 'Active filters:')]" />
+        <element name="activeFilterDiv" type="button" selector="(//div[contains(@class, 'admin__data-grid-filters-current') and contains(@class, '_show')])[1]"/>
         <element name="FilterBtn" type="input" selector="//button[text()='Filters']"/>
         <element name="URLKey" type="input" selector="//div[@class='admin__form-field-control']/input[@name='identifier']"/>
         <element name="ApplyFiltersBtn" type="button" selector="//span[text()='Apply Filters']"/>
+        <element name="blockGridRowByTitle" type="input" selector="//tbody//tr//td//div[contains(., '{{var1}}')]" parameterized="true" timeout="30"/>
+        <element name="delete" type="button" selector="//a[@data-action='item-delete']"/>
+        <element name="deleteConfirm" type="button" selector="//button[@data-role='action']//span[text()='OK']" timeout="60"/>
     </section>
 </sections>

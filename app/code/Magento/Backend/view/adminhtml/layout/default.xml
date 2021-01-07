@@ -17,6 +17,7 @@
     <body>
         <attribute name="id" value="html-body"/>
         <block name="require.js" class="Magento\Backend\Block\Page\RequireJs" template="Magento_Backend::page/js/require_js.phtml"/>
+        <block class="Magento\Framework\View\Element\Template" name="head.additional" template="Magento_Backend::page/container.phtml"/>
         <referenceContainer name="global.notices">
             <block class="Magento\Backend\Block\Page\Notices" name="global_notices" as="global_notices" template="Magento_Backend::page/notices.phtml"/>
         </referenceContainer>
@@ -70,7 +71,6 @@
                             <argument name="bugreport_url" xsi:type="string">https://github.com/magento/magento2/issues</argument>
                         </arguments>
                     </block>
-                    
                 </container>
             </container>
         </referenceContainer>

@@ -17,6 +17,7 @@ use Magento\Framework\Api\ExtensionAttributesFactory;
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * phpcs:disable Magento2.Classes.AbstractApi
  * @api
+ * @since 100.0.2
  */
 abstract class AbstractExtensibleModel extends AbstractModel implements
     \Magento\Framework\Api\CustomAttributesDataInterface
@@ -387,6 +388,7 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
 
     /**
      * @inheritdoc
+     * @since 100.0.11
      */
     public function __sleep()
     {
@@ -395,6 +397,7 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
 
     /**
      * @inheritdoc
+     * @since 100.0.11
      */
     public function __wakeup()
     {

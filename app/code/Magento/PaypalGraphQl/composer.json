@@ -13,10 +13,12 @@
         "magento/module-quote-graph-ql": "*",
         "magento/module-sales": "*",
         "magento/module-payment": "*",
-        "magento/module-store": "*"
+        "magento/module-store": "*",
+        "magento/module-vault": "*"
     },
     "suggest": {
-        "magento/module-graph-ql": "*"
+        "magento/module-graph-ql": "*",
+        "magento/module-store-graph-ql": "*"
     },
     "type": "magento2-module",
     "license": [

@@ -268,7 +268,7 @@ class Copy
      * @return mixed
      * @throws \InvalidArgumentException
      *
-     * @deprecated
+     * @deprecated 102.0.3
      * @see \Magento\Framework\DataObject\Copy::getAttributeValueFromExtensibleObject
      */
     protected function getAttributeValueFromExtensibleDataObject($source, $code)
@@ -325,7 +325,7 @@ class Copy
      * @return void
      * @throws \InvalidArgumentException
      *
-     * @deprecated
+     * @deprecated 102.0.3
      * @see \Magento\Framework\DataObject\Copy::setAttributeValueFromExtensibleObject
      */
     protected function setAttributeValueFromExtensibleDataObject(ExtensibleDataInterface $target, $code, $value)

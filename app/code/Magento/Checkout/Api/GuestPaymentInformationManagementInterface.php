@@ -8,6 +8,7 @@ namespace Magento\Checkout\Api;
 /**
  * Interface for managing guest payment information
  * @api
+ * @since 100.0.2
  */
 interface GuestPaymentInformationManagementInterface
 {

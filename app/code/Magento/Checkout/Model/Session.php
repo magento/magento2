@@ -20,6 +20,7 @@ use Psr\Log\LoggerInterface;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @SuppressWarnings(PHPMD.TooManyFields)
+ * @since 100.0.2
  */
 class Session extends \Magento\Framework\Session\SessionManager
 {
@@ -290,6 +291,7 @@ class Session extends \Magento\Framework\Session\SessionManager
                     }
                 } else {
                     $quote->setIsCheckoutCart(true);
+                    $quote->setCustomerIsGuest(1);
                     $this->_eventManager->dispatch('checkout_quote_init', ['quote' => $quote]);
                 }
             }
@@ -381,8 +383,10 @@ class Session extends \Magento\Framework\Session\SessionManager
 
         if ($customerQuote->getId() && $this->getQuoteId() != $customerQuote->getId()) {
             if ($this->getQuoteId()) {
+                $quote = $this->getQuote();
+                $quote->setCustomerIsGuest(0);
                 $this->quoteRepository->save(
-                    $customerQuote->merge($this->getQuote())->collectTotals()
+                    $customerQuote->merge($quote)->collectTotals()
                 );
                 $newQuote = $this->quoteRepository->get($customerQuote->getId());
                 $this->quoteRepository->save(
@@ -401,6 +405,7 @@ class Session extends \Magento\Framework\Session\SessionManager
             $this->getQuote()->getBillingAddress();
             $this->getQuote()->getShippingAddress();
             $this->getQuote()->setCustomer($this->_customerSession->getCustomerDataObject())
+                ->setCustomerIsGuest(0)
                 ->setTotalsCollectedFlag(false)
                 ->collectTotals();
             $this->quoteRepository->save($this->getQuote());

@@ -67,7 +67,7 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
     /**
      * Initialize dependencies
      *
-     * @deprecated
+     * @deprecated 101.0.2
      * @var Config
      */
     protected $_catalogConfig;
@@ -233,6 +233,11 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
                     ? date('Y-m-d\TH:i:s\Z', strtotime($value['to']))
                     : '';
             }
+
+            if ($attribute->getAttributeCode() === 'sku') {
+                $value = mb_strtolower($value);
+            }
+
             $condition = $this->_getResource()->prepareCondition(
                 $attribute,
                 $value,
@@ -356,9 +361,13 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
      */
     protected function getPreparedSearchCriteria($attribute, $value)
     {
+        $from = null;
+        $to = null;
         if (is_array($value)) {
             if (isset($value['from']) && isset($value['to'])) {
                 if (!empty($value['from']) || !empty($value['to'])) {
+                    $from = '';
+                    $to = '';
                     if (isset($value['currency'])) {
                         /** @var $currencyModel Currency */
                         $currencyModel = $this->_currencyFactory->create()->load($value['currency']);

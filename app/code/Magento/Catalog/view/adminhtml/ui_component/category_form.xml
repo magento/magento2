@@ -470,7 +470,7 @@
                 </imports>
             </settings>
         </field>
-        <field name="page_layout" sortOrder="190" formElement="select" component="Magento_Catalog/js/components/use-parent-settings/select" class="Magento\Catalog\Ui\Component\Form\Field\Category\PageLayout">
+        <field name="page_layout" sortOrder="190" formElement="select" component="Magento_Catalog/js/components/use-parent-settings/select">
             <settings>
                 <dataType>string</dataType>
                 <label translate="true">Layout</label>

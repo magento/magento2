@@ -35,6 +35,10 @@
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
         <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
     </entity>
+    <entity name="ApiSimpleProductWithNoSpace" type="product" extends="ApiSimpleProduct">
+        <data key="name">TestFooBar</data>
+        <data key="sku" unique="suffix">foobar</data>
+    </entity>
     <entity name="ApiSimpleProductWithSpecCharInName" type="product" extends="ApiSimpleProduct">
         <data key="name">Pursuit Lumaflex&#38;trade; Tone Band</data>
         <data key="sku" unique="suffix">x&#38;trade;</data>
@@ -67,6 +71,9 @@
         <data key="weight">1</data>
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
         <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
+    </entity>
+    <entity name="ProductForPartialSearch" extends="SimpleProduct" type="product">
+        <data key="sku">partialTestSku</data>
     </entity>
     <entity name="ProductWithSpecialSymbols" extends="SimpleProduct" type="product">
         <data key="name">SimpleProduct -+~/\\&lt;&gt;\’“:*\$#@()!,.?`=%&amp;^</data>
@@ -277,6 +284,9 @@
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
         <requiredEntity type="custom_attribute">CustomAttributeProductAttribute</requiredEntity>
     </entity>
+    <entity name="ApiSimpleProductWithCategory" type="product2" extends="ApiSimpleOne">
+        <requiredEntity type="custom_attribute">CustomAttributeCategoryIds</requiredEntity>
+    </entity>
     <entity name="ApiSimpleProductWithShortSKU" type="product2" extends="ApiSimpleOne">
         <data key="sku" unique="suffix">pr</data>
     </entity>
@@ -360,6 +370,7 @@
         <data key="shareable">Yes</data>
         <data key="file">magento-logo.png</data>
         <data key="fileName">magento-logo</data>
+        <data key="file_extension">png</data>
     </entity>
     <entity name="MagentoLogo" type="image">
         <data key="title" unique="suffix">MagentoLogo</data>
@@ -567,9 +578,17 @@
         <var key="sku" entityType="product" entityKey="sku" />
         <requiredEntity type="product_option">ProductOptionDropDownWithLongValuesTitle</requiredEntity>
     </entity>
+    <entity name="productWithCheckbox" type="product">
+        <var key="sku" entityType="product" entityKey="sku" />
+        <requiredEntity type="product_option">ProductOptionCheckbox</requiredEntity>
+    </entity>
     <entity name="productWithDropdownOption" type="product">
         <var key="sku" entityType="product" entityKey="sku" />
         <requiredEntity type="product_option">ProductOptionValueDropdown</requiredEntity>
+    </entity>
+    <entity name="productWithFileOption" type="product">
+        <var key="sku" entityType="product" entityKey="sku" />
+        <requiredEntity type="product_option">ProductOptionFile</requiredEntity>
     </entity>
     <entity name="productWithDropdownAndFieldOptions" type="product">
         <var key="sku" entityType="product" entityKey="sku" />
@@ -1235,6 +1254,20 @@
         <data key="visibility">4</data>
         <data key="name" unique="suffix">testProductName</data>
         <data key="price">100.00</data>
+        <data key="urlKey" unique="suffix">testurlkey</data>
+        <data key="status">1</data>
+        <data key="quantity">777</data>
+        <data key="weight">1</data>
+        <requiredEntity type="product_extension_attribute">EavStock777</requiredEntity>
+        <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
+    </entity>
+    <entity name="SimpleProduct_zero" type="product">
+        <data key="sku" unique="suffix">testSku</data>
+        <data key="type_id">simple</data>
+        <data key="attribute_set_id">4</data>
+        <data key="visibility">4</data>
+        <data key="name" unique="suffix">testProductName</data>
+        <data key="price">0.00</data>
         <data key="urlKey" unique="suffix">testurlkey</data>
         <data key="status">1</data>
         <data key="quantity">777</data>

@@ -7,6 +7,7 @@ namespace Magento\Framework\Indexer;
 
 /**
  * @api Retrieve status of the Indexer
+ * @since 100.0.2
  */
 interface StateInterface
 {

@@ -4,15 +4,20 @@
  * See COPYING.txt for license details.
  */
 
-// phpcs:disable Magento2.Templates.ThisInTemplate
+/** @var \Magento\Tax\Block\Adminhtml\Rate\Form $tmpBlock */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
-<script>
+
+<?php /** @var \Magento\Directory\Helper\Data $jsonHelper */
+$jsonHelper = $tmpBlock->getData('directoryHelper');
+$regionJson = /* @noEscape */ $jsonHelper->getRegionJson();
+$scriptString = <<<script
 require([
     "jquery",
     "mage/adminhtml/form"
 ], function(jQuery){
 
-    var updater = new RegionUpdater('tax_country_id', 'tax_region', 'tax_region_id', <?= /* @noEscape */ $this->helper(\Magento\Directory\Helper\Data::class)->getRegionJson() ?>, 'disable');
+    var updater = new RegionUpdater('tax_country_id', 'tax_region', 'tax_region_id', {$regionJson}, 'disable');
     updater.disableRegionValidation();
 
     (function ($) {
@@ -54,4 +59,6 @@ require([
 
     window.updater = updater;
 });
-</script>
+script;
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>

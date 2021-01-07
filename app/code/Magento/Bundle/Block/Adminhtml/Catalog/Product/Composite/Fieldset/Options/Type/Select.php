@@ -5,6 +5,9 @@
  */
 namespace Magento\Bundle\Block\Adminhtml\Catalog\Product\Composite\Fieldset\Options\Type;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+
 /**
  * Bundle option dropdown type renderer
  *
@@ -20,18 +23,63 @@ class Select extends \Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Opti
     protected $_template = 'Magento_Bundle::product/composite/fieldset/options/type/select.phtml';
 
     /**
-     * @param  string $elementId
-     * @param  string $containerId
-     * @return string
+     * @var SecureHtmlRenderer
+     */
+    protected $secureRenderer;
+
+    /**
+     * @param \Magento\Framework\View\Element\Template\Context $context
+     * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
+     * @param \Magento\Catalog\Helper\Data $catalogData
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Stdlib\StringUtils $string
+     * @param \Magento\Framework\Math\Random $mathRandom
+     * @param \Magento\Checkout\Helper\Cart $cartHelper
+     * @param \Magento\Tax\Helper\Data $taxData
+     * @param \Magento\Framework\Pricing\Helper\Data $pricingHelper
+     * @param array $data
+     * @param SecureHtmlRenderer|null $htmlRenderer
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     */
+    public function __construct(
+        \Magento\Framework\View\Element\Template\Context $context,
+        \Magento\Framework\Json\EncoderInterface $jsonEncoder,
+        \Magento\Catalog\Helper\Data $catalogData,
+        \Magento\Framework\Registry $registry,
+        \Magento\Framework\Stdlib\StringUtils $string,
+        \Magento\Framework\Math\Random $mathRandom,
+        \Magento\Checkout\Helper\Cart $cartHelper,
+        \Magento\Tax\Helper\Data $taxData,
+        \Magento\Framework\Pricing\Helper\Data $pricingHelper,
+        array $data = [],
+        ?SecureHtmlRenderer $htmlRenderer = null
+    ) {
+        parent::__construct(
+            $context,
+            $jsonEncoder,
+            $catalogData,
+            $registry,
+            $string,
+            $mathRandom,
+            $cartHelper,
+            $taxData,
+            $pricingHelper,
+            $data
+        );
+        $this->secureRenderer = $htmlRenderer ?? ObjectManager::getInstance()->get(SecureHtmlRenderer::class);
+    }
+
+    /**
+     * @inheritdoc
      */
     public function setValidationContainer($elementId, $containerId)
     {
-        return '<script>
-            document.getElementById(\'' .
+        $scriptString = 'document.getElementById(\'' .
             $elementId .
             '\').advaiceContainer = \'' .
             $containerId .
-            '\';
-            </script>';
+            '\';';
+
+        return $this->secureRenderer->renderTag('script', [], $scriptString, false);
     }
 }

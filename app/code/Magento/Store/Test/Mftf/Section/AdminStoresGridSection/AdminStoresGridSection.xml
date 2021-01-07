@@ -22,5 +22,6 @@
         <element name="emptyText" type="text" selector="//tr[@class='data-grid-tr-no-data even']/td[@class='empty-text']"/>
         <element name="websiteName" type="text" selector="//td[@class='a-left col-website_title  ']/a[contains(.,'{{websiteName}}')]" parameterized="true"/>
         <element name="gridCell" type="text" selector="//table[@class='data-grid']//tr[{{row}}]//td[count(//table[@class='data-grid']//tr//th[contains(., '{{column}}')]/preceding-sibling::th) +1 ]" parameterized="true"/>
+        <element name="storeViewLinkInNthRow" type="text" selector="tr:nth-of-type({{row}}) &gt; .col-store_title &gt; a" parameterized="true"/>
      </section>
 </sections>

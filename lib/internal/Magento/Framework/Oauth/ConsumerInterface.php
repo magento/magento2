@@ -9,6 +9,7 @@ namespace Magento\Framework\Oauth;
  * Oauth consumer interface.
  *
  * @api
+ * @since 100.0.2
  */
 interface ConsumerInterface
 {

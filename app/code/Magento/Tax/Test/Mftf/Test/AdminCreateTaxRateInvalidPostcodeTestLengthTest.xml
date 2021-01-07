@@ -22,8 +22,7 @@
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
 
-        <amOnPage url="{{AdminTaxRateGridPage.url}}" stepKey="goToTaxRateIndex1"/>
-        <waitForPageLoad stepKey="waitForTaxRateIndex1"/>
+        <actionGroup ref="AdminTaxRateGridOpenPageActionGroup" stepKey="goToTaxRateIndex1"/>
         <!-- Create a tax rate for large postcodes -->
         <click selector="{{AdminTaxRateGridSection.add}}" stepKey="clickAddNewTaxRateButton"/>
         <fillField selector="{{AdminTaxRateFormSection.taxIdentifier}}" userInput="{{taxRateWithInvalidPostCodeLength.code}}" stepKey="fillRuleName"/>

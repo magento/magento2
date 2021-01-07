@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-use Magento\Catalog\Api\Data\ProductTierPriceExtensionFactory;
-use Magento\Catalog\Api\Data\ProductExtensionInterfaceFactory;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
@@ -13,8 +11,6 @@ use Magento\Catalog\Model\Product\Type;
 use Magento\Catalog\Model\Product\Visibility;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
-
-Bootstrap::getInstance()->reinitialize();
 
 /** @var ObjectManager $objectManager */
 $objectManager = Bootstrap::getObjectManager();
