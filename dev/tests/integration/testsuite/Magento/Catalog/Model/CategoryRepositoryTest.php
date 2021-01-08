@@ -147,10 +147,7 @@ class CategoryRepositoryTest extends TestCase
 
         $caughtException = false;
         try {
-            $categoryRepository->get(
-                categoryId,
-                'default'
-            );
+            $this->categoryRepository->get($categoryId, 'default');
         } catch (SerializationException $exception) {
             $caughtException = true;
         }
