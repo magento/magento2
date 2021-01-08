@@ -20,6 +20,7 @@ use Magento\TestFramework\Helper\Xpath;
  * @see \Magento\Catalog\Block\Product\ProductList\Toolbar
  * @magentoAppArea frontend
  * @magentoDbIsolation enabled
+ * @magentoAppIsolation enabled
  */
 class ToolbarTest extends TestCase
 {
