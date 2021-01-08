@@ -23,7 +23,7 @@ type WishlistOutput @doc(description: "Deprecated: `Wishlist` type should be use
 }
 
 type Wishlist {
-    id: ID @deprecated(reason: "Use `wishlists.uid` instead") @doc(description: "The unique ID for a `Wishlist` object")
+    id: ID @deprecated(reason: "Use `uid` instead") @doc(description: "The unique ID for a `Wishlist` object")
     uid: ID @doc(description: "The unique ID for a `Wishlist` object")
     items: [WishlistItem] @resolver(class: "\\Magento\\WishlistGraphQl\\Model\\Resolver\\WishlistItemsResolver") @deprecated(reason: "Use field `items_v2` from type `Wishlist` instead")
     items_v2(
@@ -36,7 +36,7 @@ type Wishlist {
 }
 
 interface WishlistItemInterface @typeResolver(class: "Magento\\WishlistGraphQl\\Model\\Resolver\\Type\\WishlistItemType") {
-    id: ID!  @deprecated(reason: "Use `WishlistItemInterface.uid` instead") @doc(description: "The unique ID for a `WishlistItemInterface` object")
+    id: ID!  @deprecated(reason: "Use `uid` instead") @doc(description: "The unique ID for a `WishlistItemInterface` object")
     uid: ID!  @doc(description: "The unique ID for a `WishlistItemInterface` object")
     quantity: Float!  @doc(description: "The quantity of this wish list item")
     description: String  @doc(description: "The description of the item")
@@ -64,13 +64,13 @@ type Mutation {
     updateProductsInWishlist(wishlistId: ID!, wishlistItems: [WishlistItemUpdateInput!]!): UpdateProductsInWishlistOutput  @doc(description: "Updates one or more products in the specified wish list") @resolver(class: "\\Magento\\WishlistGraphQl\\Model\\Resolver\\UpdateProductsInWishlist")
     addWishlistItemsToCart(
         wishlistUid: ID!, @doc(description: "The unique ID of the requisition list")
-        wishlistItemUids: [ID!] @doc(description: "An array of UIDs presenting products to be added to the cart. If no UIDs are specified, all items in the wishlist will be added to the cart")
-    ): AddWishlistItemsToCartOutput @resolver(class: "Magento\\WishlistGraphQl\\Model\\Resolver\\Wishlist\\AddToCart") @doc(description: "Add items in the wishlist to the customer's cart")
+        wishlistItemUids: [ID!] @doc(description: "An array of UIDs representing products to be added to the cart. If no UIDs are specified, all items in the wishlist will be added to the cart")
+    ): AddWishlistItemsToCartOutput @resolver(class: "Magento\\WishlistGraphQl\\Model\\Resolver\\Wishlist\\AddToCart") @doc(description: "Add items in the specified wishlist to the customer's cart")
 }
 
 type AddWishlistItemsToCartOutput {
-    status: Boolean!
-    add_wishlist_items_to_cart_user_errors: [CartUserInputError!]!
+    status: Boolean! @doc(description: "Indicates whether the attempt to add items to the customer's cart was successful")
+    add_wishlist_items_to_cart_user_errors: [CartUserInputError!]! @doc(description: "An array of errors encountered while adding products to the customer's cart")
 }
 
 input WishlistItemInput @doc(description: "Defines the items to add to a wish list") {
