@@ -7,7 +7,7 @@
 -->
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
-    <table name="translation" resource="default" engine="innodb" comment="Translations">
+    <table name="translation" resource="default" engine="innodb" collation="utf8_bin" comment="Translations">
         <column xsi:type="int" name="key_id" unsigned="true" nullable="false" identity="true"
                 comment="Key ID of Translation"/>
         <column xsi:type="varchar" name="string" nullable="false" length="255" default="Translate String"
