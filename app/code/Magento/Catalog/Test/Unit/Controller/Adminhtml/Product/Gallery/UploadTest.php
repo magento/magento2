@@ -38,7 +38,7 @@ class UploadTest extends \PHPUnit\Framework\TestCase
      */
     private $imageUploadConfig;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->resultRawFactory = $this->createMock(
