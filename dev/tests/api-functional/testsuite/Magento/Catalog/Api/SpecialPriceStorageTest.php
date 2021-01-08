@@ -6,14 +6,20 @@
 namespace Magento\Catalog\Api;
 
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Framework\Webapi\Rest\Request;
 use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
+use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\StateException;
+use Magento\Framework\Webapi\Rest\Request;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
 /**
  * SpecialPriceStorage API operations test
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SpecialPriceStorageTest extends WebapiAbstract
 {
@@ -34,12 +40,18 @@ class SpecialPriceStorageTest extends WebapiAbstract
     private $productResource;
 
     /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
      * @ingeritdoc
      */
     protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->productResource = $this->objectManager->get(ProductResource::class);
+        $this->storeManager = $this->objectManager->get(StoreManagerInterface::class);
     }
 
     /**
@@ -174,31 +186,25 @@ class SpecialPriceStorageTest extends WebapiAbstract
     /**
      * Test delete method.
      *
-     * @magentoApiDataFixture Magento/Catalog/_files/product_two_websites.php
-     * @magentoConfigFixture default_store catalog/price/scope 1
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
      * @dataProvider deleteData
      * @param array $data
-     * @return void
+     * @throws CouldNotSaveException
+     * @throws InputException
+     * @throws NoSuchEntityException
+     * @throws StateException
      */
-    public function testDelete(array $data): void
+    public function testDelete(array $data)
     {
         /** @var ProductRepositoryInterface $productRepository */
         $productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
-        $product = $productRepository->get($data['sku'], true, $data['store_id'], true);
+        $product = $productRepository->get($data['sku'], true);
         $product->setData('special_price', $data['price']);
         $product->setData('special_from_date', $data['price_from']);
         if ($data['price_to']) {
             $product->setData('special_to_date', $data['price_to']);
         }
-        $this->productResource->saveAttribute($product, 'special_price');
-        $this->productResource->saveAttribute($product, 'special_from_date');
-        $this->productResource->saveAttribute($product, 'special_to_date');
-
-        $product->setData('store_id', 1);
-        $this->productResource->saveAttribute($product, 'special_price');
-        $this->productResource->saveAttribute($product, 'special_from_date');
-        $this->productResource->saveAttribute($product, 'special_to_date');
-
+        $productRepository->save($product);
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => '/V1/products/special-price-delete',
@@ -210,21 +216,17 @@ class SpecialPriceStorageTest extends WebapiAbstract
                 'operation' => self::SERVICE_NAME . 'Delete',
             ],
         ];
-
         $response = $this->_webApiCall(
             $serviceInfo,
             [
-                'prices' => [$data]
+                'prices' => [
+                        $data
+                ]
             ]
         );
-
+        $product = $productRepository->get($data['sku'], false, null, true);
         $this->assertEmpty($response);
-
-        $product = $productRepository->get($data['sku'], false, $data['store_id'], true);
         $this->assertNull($product->getSpecialPrice());
-
-        $product = $productRepository->get($data['sku'], false, 1, true);
-        $this->assertNotNull($product->getSpecialPrice());
     }
 
     /**
@@ -272,24 +274,82 @@ class SpecialPriceStorageTest extends WebapiAbstract
         $toDate = '2038-01-19 03:14:07';
 
         return [
-            'data set with price_to specified' => [
+            [
+                // data set with 'price_to' specified
                 [
                     'price' => 3057,
                     'store_id' => 0,
-                    'sku' => self::PRODUCT_SKU_TWO_WEBSITES,
+                    'sku' => self::SIMPLE_PRODUCT_SKU,
                     'price_from' => $fromDate,
                     'price_to' => $toDate
                 ]
             ],
-            'data set without price_to specified' => [
+            [
+                // data set without 'price_to' specified
                 [
                     'price' => 3057,
                     'store_id' => 0,
-                    'sku' => self::PRODUCT_SKU_TWO_WEBSITES,
+                    'sku' => self::SIMPLE_PRODUCT_SKU,
                     'price_from' => $fromDate,
                     'price_to' => false
                 ]
             ],
         ];
+    }
+
+    /**
+     * Test delete method for specific store.
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/product_two_websites.php
+     * @magentoConfigFixture default_store catalog/price/scope 1
+     * @return void
+     */
+    public function testDeleteDataForSpecificStore(): void
+    {
+        $secondStoreViewId = $this->storeManager->getStore('fixture_second_store')
+            ->getId();
+
+        $data = [
+            'price' => 777,
+            'store_id' => $secondStoreViewId,
+            'sku' => self::PRODUCT_SKU_TWO_WEBSITES,
+            'price_from' => '1970-01-01 00:00:01',
+            'price_to' => false
+        ];
+
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
+        $product = $productRepository->get($data['sku'], true, 1, true);
+        $product->setData('special_price', $data['price']);
+        $product->setData('special_from_date', $data['price_from']);
+
+        $this->productResource->saveAttribute($product, 'special_price');
+        $this->productResource->saveAttribute($product, 'special_from_date');
+        $this->productResource->saveAttribute($product, 'special_to_date');
+
+        $product->setData('store_id', $secondStoreViewId);
+        $this->productResource->saveAttribute($product, 'special_price');
+        $this->productResource->saveAttribute($product, 'special_from_date');
+        $this->productResource->saveAttribute($product, 'special_to_date');
+
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => '/V1/products/special-price-delete',
+                'httpMethod' => Request::HTTP_METHOD_POST
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'Delete',
+            ],
+        ];
+
+        $this->_webApiCall($serviceInfo, ['prices' => [$data]]);
+
+        $product = $productRepository->get($data['sku'], false, 1, true);
+        $this->assertNotNull($product->getSpecialPrice());
+
+        $product = $productRepository->get($data['sku'], false, $secondStoreViewId, true);
+        $this->assertNull($product->getSpecialPrice());
     }
 }
