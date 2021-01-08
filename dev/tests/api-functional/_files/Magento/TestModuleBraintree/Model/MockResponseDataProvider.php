@@ -121,7 +121,7 @@ class MockResponseDataProvider
             'bin' => $this->random->getRandomString(6),
             'cardType' => 'Visa',
             'expirationMonth' => '12',
-            'expirationYear' => '2030', //TODO: make dynamic
+            'expirationYear' => strtotime('+1 year'),
             'last4' => (string) random_int(1000, 9999),
             'token' => $this->random->getRandomString(6),
             'uniqueNumberIdentifier' => $this->random->getRandomString(32),
