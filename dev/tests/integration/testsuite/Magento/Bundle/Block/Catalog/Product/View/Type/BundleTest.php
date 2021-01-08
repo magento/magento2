@@ -8,17 +8,14 @@ declare(strict_types=1);
 namespace Magento\Bundle\Block\Catalog\Product\View\Type;
 
 use Magento\Bundle\Model\Product\Price;
-use Magento\Bundle\Model\Product\Type;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Catalog\Helper\Product as ProductHelper;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\View\LayoutInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
-use Magento\Framework\DataObject\Factory as DataObjectFactory;
 
 /**
  * Class checks bundle product view behaviour
@@ -88,41 +85,6 @@ class BundleTest extends TestCase
         $this->assertEquals(10, $selection['prices']['oldPrice']['amount']);
         $this->assertEquals(5, $selection['prices']['basePrice']['amount']);
         $this->assertEquals(5, $selection['prices']['finalPrice']['amount']);
-    }
-
-    /**
-     * Check that selection qty is calculated correctly for Bundle config.
-     *
-     * @return void
-     */
-    public function testGetJsonConfigWithPreconfiguredValues(): void
-    {
-        $optionQty = 3;
-        $bundleProduct = $this->productRepository->get('bundle-product');
-        $bundleSelection = $this->productRepository->get('simple');
-
-        /** @var Type $typeInstance */
-        $typeInstance = $bundleProduct->getTypeInstance();
-        $typeInstance->setStoreFilter($bundleProduct->getStoreId(), $bundleProduct);
-        $optionCollection = $typeInstance->getOptionsCollection($bundleProduct);
-        $optionId = $optionCollection->getFirstItem()->getId();
-        $preconfiguredValues = $this->objectManager->get(DataObjectFactory::class)->create([
-            'bundle_option' => [
-                $optionId => [$bundleSelection->getId()]
-            ],
-            'bundle_option_qty' => [
-                $optionId => $optionQty
-            ],
-        ]);
-
-        /** @var ProductHelper $productHelper */
-        $productHelper = $this->objectManager->get(ProductHelper::class);
-        $productHelper->prepareProductOptions($bundleProduct, $preconfiguredValues);
-        $this->registerProduct($bundleProduct);
-
-        $resultConfig = $this->json->unserialize($this->block->getJsonConfig());
-        $this->assertTrue(isset($resultConfig['options'][$optionId]['selections'][$optionId]['qty']));
-        $this->assertEquals($optionQty, $resultConfig['options'][$optionId]['selections'][$optionId]['qty']);
     }
 
     /**
