@@ -14,7 +14,6 @@ use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/product_simple.php');
 
 $objectManager = Bootstrap::getObjectManager();
-
 /** @var Visitor $visitor */
 $visitor = $objectManager->get(Visitor::class);
 $visitor->setVisitorId(123);
