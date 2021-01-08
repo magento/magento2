@@ -51,6 +51,17 @@ class BindCustomerLoginObserverTest extends TestCase
     }
 
     /**
+     * @inheritdoc
+     */
+    protected function tearDown(): void
+    {
+        $this->session->logout();
+        $this->visitor->setId(null);
+
+        parent::tearDown();
+    }
+
+    /**
      * @magentoDataFixture Magento/Catalog/_files/visitor_compare_list.php
      * @magentoDataFixture Magento/Customer/_files/customer.php
      *
