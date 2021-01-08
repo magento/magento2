@@ -21,33 +21,22 @@ class CreateStore
     private $groupFactory;
 
     /**
-     * @var \Magento\Store\Api\Data\StoreInterfaceFactory
-     */
-    private $storeFactory;
-
-    /**
      *
      * @param \Magento\Store\Api\Data\GroupInterfaceFactory $groupFactory
-     * @param \Magento\Store\Api\Data\StoreInterfaceFactory $storeFactory
      */
     public function __construct(
-        \Magento\Store\Api\Data\GroupInterfaceFactory $groupFactory,
-        \Magento\Store\Api\Data\StoreInterfaceFactory $storeFactory
+        \Magento\Store\Api\Data\GroupInterfaceFactory $groupFactory
     ) {
         $this->groupFactory = $groupFactory;
-        $this->storeFactory = $storeFactory;
     }
 
     /**
      *
-     * @param array $data
+     * @param \Magento\Store\Api\Data\StoreInterface $data
      * @return \Magento\Store\Api\Data\StoreInterface
      */
-    public function execute(array $data): StoreInterface
+    public function execute(StoreInterface $storeModel): StoreInterface
     {
-        /** @var \Magento\Store\Model\Storev $storeModel */
-        $storeModel = $this->storeFactory->create(['data' => $data]);
-
         /** @var \Magento\Store\Model\Group $groupModel */
         $groupModel = $this->groupFactory->create()
             ->load($storeModel->getGroupId());

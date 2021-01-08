@@ -14,6 +14,11 @@ class CreateStoreTest extends \PHPUnit\Framework\TestCase
     protected $objectManager;
 
     /**
+     * @var \Magento\Store\Api\Data\StoreInterface
+     */
+    protected $storeModel;
+
+    /**
      * @var \Magento\Store\Model\CreateStore
      */
     protected $createStoreModel;
@@ -29,6 +34,10 @@ class CreateStoreTest extends \PHPUnit\Framework\TestCase
     protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+
+        $this->storeModel = $this->objectManager->get(
+            \Magento\Store\Model\Store::class
+        );
 
         $this->createStoreModel = $this->objectManager->get(
             \Magento\Store\Model\CreateStore::class
@@ -49,7 +58,8 @@ class CreateStoreTest extends \PHPUnit\Framework\TestCase
         $defaultGroupId = $this->websiteModel->getDefaultGroupId();
         $data['group_id'] = $defaultGroupId;
 
-        $store = $this->createStoreModel->execute($data);
+        $store = $this->storeModel->setData($data);
+        $store = $this->createStoreModel->execute($store);
         $this->assertInstanceOf(\Magento\Store\Api\Data\StoreInterface::class, $store);
         $this->assertNotNull($store->getId(), 'Store was not saved correctly');
         $this->assertEquals($data['code'], $store->getCode());

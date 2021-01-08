@@ -29,6 +29,11 @@ class StoreCreateCommand extends Command
     const INPUT_OPTION_GROUP = 'group_id';
 
     /**
+     * @var \Magento\Store\Api\Data\StoreInterfaceFactory
+     */
+    private $storeFactory;
+
+    /**
      *
      * @var \Magento\Store\Model\CreateStore
      */
@@ -47,17 +52,20 @@ class StoreCreateCommand extends Command
 
     /**
      *
+     * @param \Magento\Store\Api\Data\StoreInterfaceFactory $storeFactory
      * @param \Magento\Store\Model\CreateStore $createStore
      * @param \Magento\Store\Model\GetDefaultStoreGroup $getDefaultStoreGroup
      * @param \Magento\Framework\Filter\FilterManager $filterManager
      * @param string $name
      */
     public function __construct(
+        \Magento\Store\Api\Data\StoreInterfaceFactory $storeFactory,
         \Magento\Store\Model\CreateStore $createStore,
         \Magento\Store\Model\GetDefaultStoreGroup $getDefaultStoreGroup,
         \Magento\Framework\Filter\FilterManager $filterManager,
         $name = null
     ) {
+        $this->storeFactory = $storeFactory;
         $this->createStore = $createStore;
         $this->getDefaultStoreGroup = $getDefaultStoreGroup;
         $this->filterManager = $filterManager;
@@ -136,7 +144,10 @@ class StoreCreateCommand extends Command
                 $data[self::INPUT_ARGUMENT_CODE]
             );
 
-            $this->createStore->create($data);
+            /** @var \Magento\Store\Model\Storev $storeModel */
+            $storeModel = $this->storeFactory->create(['data' => $data]);
+
+            $this->createStore->create($storeModel);
 
             $io->success('You created the store view.');
 
