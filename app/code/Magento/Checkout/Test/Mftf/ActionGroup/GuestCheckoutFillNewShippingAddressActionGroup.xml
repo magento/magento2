@@ -17,7 +17,7 @@
             <argument name="address" type="entity"/>
         </arguments>
 
-        <fillField selector="{{CheckoutShippingSection.email}}" userInput="{{customer.email}}" stepKey="fillEmailField"/>
+        <fillField selector="{{CheckoutShippingSection.emailAddress}}" userInput="{{customer.email}}" stepKey="fillEmailField"/>
         <fillField selector="{{CheckoutShippingSection.firstName}}" userInput="{{customer.firstName}}" stepKey="fillFirstName"/>
         <fillField selector="{{CheckoutShippingSection.lastName}}" userInput="{{customer.lastName}}" stepKey="fillLastName"/>
         <fillField selector="{{CheckoutShippingSection.street}}" userInput="{{address.street}}" stepKey="fillStreet"/>
