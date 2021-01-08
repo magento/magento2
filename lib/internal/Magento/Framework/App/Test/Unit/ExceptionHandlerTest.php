@@ -126,7 +126,7 @@ class ExceptionHandlerTest extends TestCase
         $this->responseMock->expects($this->once())
             ->method('setHeader')
             ->with('Content-Type', 'text/html');
-        $constraint = new StringStartsWith('1 exception(s):');
+        $constraint = new StringStartsWith('<div>1 exception(s):</div>');
         $this->responseMock->expects($this->once())
             ->method('setBody')
             ->with($constraint);
