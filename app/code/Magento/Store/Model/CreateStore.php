@@ -32,7 +32,7 @@ class CreateStore
 
     /**
      *
-     * @param \Magento\Store\Api\Data\StoreInterface $data
+     * @param \Magento\Store\Api\Data\StoreInterface $storeModel
      * @return \Magento\Store\Api\Data\StoreInterface
      */
     public function execute(StoreInterface $storeModel): StoreInterface
