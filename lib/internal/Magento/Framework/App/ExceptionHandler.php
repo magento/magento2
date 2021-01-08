@@ -98,7 +98,7 @@ class ExceptionHandler implements ExceptionHandlerInterface
                 }
             }
             $response->setHttpResponseCode(500);
-            $response->setHeader('Content-Type', 'text/plain');
+            $response->setHeader('Content-Type', 'text/html');
             $response->setBody($this->buildContentFromException($exception));
             $response->sendResponse();
             return true;
@@ -121,11 +121,11 @@ class ExceptionHandler implements ExceptionHandlerInterface
             $exceptions[] = $exception;
         } while ($exception = $exception->getPrevious());
 
-        $buffer = sprintf("%d exception(s):\n", count($exceptions));
+        $buffer = sprintf("<div>%d exception(s):</div>\n", count($exceptions));
 
         foreach ($exceptions as $index => $exception) {
             $buffer .= sprintf(
-                "Exception #%d (%s): %s\n",
+                "<div>Exception #%d (%s): %s</div>\n",
                 $index,
                 get_class($exception),
                 $exception->getMessage()
@@ -134,7 +134,7 @@ class ExceptionHandler implements ExceptionHandlerInterface
 
         foreach ($exceptions as $index => $exception) {
             $buffer .= sprintf(
-                "\nException #%d (%s): %s\n%s\n",
+                "<br/>\n<div>Exception #%d (%s): %s\n%s</div>\n",
                 $index,
                 get_class($exception),
                 $exception->getMessage(),
