@@ -47,7 +47,7 @@
         </after>
 
         <!-- Create order status -->
-        <actionGroup name="AdminGoToOrderStatusPageActionGroup" stepKey="goToOrderStatusPage"/>
+        <actionGroup ref="AdminGoToOrderStatusPageActionGroup" stepKey="goToOrderStatusPage"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForOrderStatusPageLoad"/>
         <click selector="{{AdminMainActionsSection.add}}" stepKey="clickCreateNewStatus"/>
 
@@ -119,7 +119,7 @@
         <see selector="{{AdminMessagesSection.success}}" userInput="We canceled 1 order(s)." stepKey="seeSuccessMessage"/>
 
         <!-- Unassign order status -->
-        <actionGroup name="AdminGoToOrderStatusPageActionGroup" stepKey="goToOrderStatus"/>
+        <actionGroup ref="AdminGoToOrderStatusPageActionGroup" stepKey="goToOrderStatus"/>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForStatusPageLoad"/>
         <actionGroup ref="FilterOrderStatusByLabelAndCodeActionGroup" stepKey="filterStatusGrid">
             <argument name="statusLabel" value="{{defaultOrderStatus.label}}"/>
