@@ -5,23 +5,19 @@
  */
 namespace Magento\Setup\Mvc\Bootstrap;
 
-use Magento\Framework\App\Bootstrap as AppBootstrap;
-use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\App\ObjectManager;
-use Magento\Framework\App\Request\Http;
-use Magento\Framework\App\State;
-use Magento\Framework\Filesystem;
-use Magento\Framework\Shell\ComplexParameter;
+use Interop\Container\ContainerInterface;
 use Laminas\Console\Request;
 use Laminas\EventManager\EventManagerInterface;
 use Laminas\EventManager\ListenerAggregateInterface;
 use Laminas\Mvc\Application;
 use Laminas\Mvc\MvcEvent;
-use Laminas\Router\Http\RouteMatch;
-use Laminas\ServiceManager\FactoryInterface;
-use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 use Laminas\Stdlib\RequestInterface;
-use Laminas\Uri\UriInterface;
+use Magento\Framework\App\Bootstrap as AppBootstrap;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\State;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Shell\ComplexParameter;
 
 /**
  * A listener that injects relevant Magento initialization parameters and initializes filesystem
@@ -97,14 +93,14 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
     }
 
     /**
-     * @inheritdoc
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     * @return mixed
+     * @param ContainerInterface $container
+     * @param string $requestedName
+     * @param array|null $options
+     * @return array|object
      */
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        return $this->extractInitParameters($serviceLocator->get('Application'));
+        return $this->extractInitParameters($container->get('Application'));
     }
 
     /**
