@@ -1,10 +1,10 @@
 # Magento_Usps module
 
-The **Magento_Usps** module provides integration with the United States Postal Service shipping carrier.
+The Magento_Usps module provides integration with the United States Postal Service shipping carrier.
 
 ## Installation details
 
-Before installing this module, note that the **Magento_Usps** is dependent on the following modules:
+Before installing this module, note that the Magento_Usps is dependent on the following modules:
 
 - Magento_Catalog
 - Magento_CatalogInventory
@@ -15,7 +15,7 @@ Before installing this module, note that the **Magento_Usps** is dependent on th
 - Magento_Shipping
 - Magento_Store
 
-Please find here [how to enable or disable modules in Magento 2](https://devdocs.magento.com/guides/v2.4/install-gde/install/cli/install-cli-subcommands-enable.html).
+Refer to [how to enable or disable modules in Magento 2](https://devdocs.magento.com/guides/v2.4/install-gde/install/cli/install-cli-subcommands-enable.html).
 
 ### Layouts
 
@@ -25,4 +25,4 @@ This module introduces the following layouts and layout handles in the directori
     - `checkout_cart_index`
     - `checkout_index_index`
 
-For more information about a layout in Magento 2, see the [Layout documentation](https://devdocs.magento.com/guides/v2.4/frontend-dev-guide/layouts/layout-overview.html).
+For more information about a layout, see the [Layout documentation](https://devdocs.magento.com/guides/v2.4/frontend-dev-guide/layouts/layout-overview.html).
