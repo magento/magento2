@@ -64,7 +64,7 @@ class AuthorizationTest extends TestCase
      *
      * @return void
      */
-    public function testAuthorizationWit(): void
+    public function testAuthorizationWithoutPermissions(): void
     {
         $category = $this->createCategoryWithData(['entity_id' => 333, 'custom_use_parent_settings' => true]);
         $this->expectException(AuthorizationException::class);
@@ -75,7 +75,7 @@ class AuthorizationTest extends TestCase
     /**
      * @return void
      */
-    public function testWithWrongCategoryId(): void
+    public function testAuthorizationWithWrongCategoryId(): void
     {
         $wrongCategoryId = 56464654;
         $category = $this->createCategoryWithData(['entity_id' => $wrongCategoryId]);
