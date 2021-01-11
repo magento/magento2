@@ -1,28 +1,28 @@
 # Magento_Wishlist module
 
-The **Magento_Wishlist** module implements the Wishlist functionality.
+The Magento_Wishlist module implements the Wishlist functionality.
 
 This module allows customers to create a list of products that they can add to their shopping cart to be purchased at a later date, or share with friends.
 
 ## Installation details
 
-Before installing this module, note that the **Magento_Wishlist** is dependent on the following modules:
+Before installing this module, note that the Magento_Wishlist is dependent on the following modules:
 
 - Magento_Captcha
 - Magento_Catalog
 - Magento_Customer
 
-Before disabling or uninstalling this module, please consider the following dependencies:
+Before disabling or uninstalling this module, note the following dependencies:
 
 - Magento_WishlistAnalytics
 
-Please find here [how to enable or disable modules in Magento 2](https://devdocs.magento.com/guides/v2.4/install-gde/install/cli/install-cli-subcommands-enable.html).
+Refer to [how to enable or disable modules in Magento 2](https://devdocs.magento.com/guides/v2.4/install-gde/install/cli/install-cli-subcommands-enable.html).
 
 ## Structure
 
 `Pricing/` - the directory that contain solutions for configurable and downloadable product price.
 
-For information about a typical file structure of a module in Magento 2, see [Module file structure](https://devdocs.magento.com/guides/v2.4/extension-dev-guide/build/module-file-structure.html#module-file-structure).
+For information about a typical file structure of a module, see [Module file structure](https://devdocs.magento.com/guides/v2.4/extension-dev-guide/build/module-file-structure.html#module-file-structure).
 
 ## Extensibility
 
@@ -56,7 +56,7 @@ The module dispatches the following events:
     - `product` is a product object (`\Magento\Catalog\Api\Data\ProductInterface` class).
     - `item` is an item object (`\Magento\Wishlist\Model\Item` class).
 
-For information about the event system in Magento 2, see [Events and observers](https://devdocs.magento.com/guides/v2.4/extension-dev-guide/events-and-observers.html#events).
+For information about the event, see [Events and observers](https://devdocs.magento.com/guides/v2.4/extension-dev-guide/events-and-observers.html#events).
 
 ### Layouts
 
@@ -86,7 +86,7 @@ This module introduces the following layouts and layout handles in the directori
     - `wishlist_index_share`
     - `wishlist_shared_index.xml`
     
-For more information about a layout in Magento 2, see the [Layout documentation](https://devdocs.magento.com/guides/v2.4/frontend-dev-guide/layouts/layout-overview.html).
+For more information about a layout, see the [Layout documentation](https://devdocs.magento.com/guides/v2.4/frontend-dev-guide/layouts/layout-overview.html).
 
 ### UI components
 
@@ -97,4 +97,4 @@ You can extend a customer form and widgets using the configuration files located
     - `widget_recently_compared`
     - `widget_recently_viewed`
 
-For information about a UI component in Magento 2, see [Overview of UI components](https://devdocs.magento.com/guides/v2.4/ui_comp_guide/bk-ui_comps.html).
+For information about a UI component, see [Overview of UI components](https://devdocs.magento.com/guides/v2.4/ui_comp_guide/bk-ui_comps.html).
