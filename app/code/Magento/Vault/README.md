@@ -1,10 +1,10 @@
 # Magento_Vault module
 
-The **Magento_Vault** module implements the integration with the Vault payment gateway and makes the latter available as a payment method in Magento.
+The Magento_Vault module implements the integration with the Vault payment gateway and makes the latter available as a payment method in Magento.
 
 ## Installation details
 
-Before installing this module, note that the **Magento_Vault** is dependent on the following modules:
+Before installing this module, note that the Magento_Vault is dependent on the following modules:
 
 - Magento_Checkout
 - Magento_Customer
@@ -18,7 +18,7 @@ Before disabling or uninstalling this module, note the following dependencies:
 
 - Magento_Paypal
 
-Please find here [how to enable or disable modules in Magento 2](https://devdocs.magento.com/guides/v2.4/install-gde/install/cli/install-cli-subcommands-enable.html).
+Refer to [how to enable or disable modules in Magento 2](https://devdocs.magento.com/guides/v2.4/install-gde/install/cli/install-cli-subcommands-enable.html).
 
 ## Extensibility
 
@@ -34,7 +34,7 @@ The module dispatches the following events:
     - `method` is a method code (`\Magento\Vault\Model\Method\Vault` class).
     - `payment_model` is a payment information model object (`\Magento\Payment\Model\InfoInterface` class).
 
-For more information about the event system, see [Events and observers](https://devdocs.magento.com/guides/v2.4/extension-dev-guide/events-and-observers.html#events).
+For more information about the event, see [Events and observers](https://devdocs.magento.com/guides/v2.4/extension-dev-guide/events-and-observers.html#events).
 
 ### Layouts
 
@@ -45,7 +45,7 @@ This module introduces the following layouts and layout handles in the directori
     - `customer_account`
     - `vault_cards_listaction`
 
-For more information about a layout in Magento 2, see the [Layout documentation](https://devdocs.magento.com/guides/v2.4/frontend-dev-guide/layouts/layout-overview.html).   
+For more information about a layout, see the [Layout documentation](https://devdocs.magento.com/guides/v2.4/frontend-dev-guide/layouts/layout-overview.html).   
 
 ### Public APIs
 
@@ -56,4 +56,4 @@ For more information about a layout in Magento 2, see the [Layout documentation]
     
 [Learn detailed description of the Magento_Sales API.](https://devdocs.magento.com/guides/v2.4/mrg/ce/Sales/services.html)
  
-For information about a public API in Magento 2, see [Public interfaces & APIs](https://devdocs.magento.com/guides/v2.4/extension-dev-guide/api-concepts.html).
+For information about a public API, see [Public interfaces & APIs](https://devdocs.magento.com/guides/v2.4/extension-dev-guide/api-concepts.html).
