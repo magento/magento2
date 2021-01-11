@@ -31,7 +31,7 @@ Refer to [how to enable or disable modules in Magento 2](https://devdocs.magento
 
 `CustomerData/` - directory contains messages section.
 
-For information about a typical file structure of a module in Magento 2, see [Module file structure](https://devdocs.magento.com/guides/v2.4/extension-dev-guide/build/module-file-structure.html#module-file-structure).
+For information about a typical file structure of a module, see [Module file structure](https://devdocs.magento.com/guides/v2.4/extension-dev-guide/build/module-file-structure.html#module-file-structure).
 
 ## Extensibility
 
@@ -63,7 +63,7 @@ The module dispatches the following events:
 - `assigned_theme_changed` event in the `\Magento\Theme\Observer\CheckThemeIsAssignedObserver::execute()` method. Parameters:
     - `theme` is a theme object (`\Magento\Framework\View\Design\ThemeInterface` class).
 
-For information about the event system in Magento 2, see [Events and observers](https://devdocs.magento.com/guides/v2.4/extension-dev-guide/events-and-observers.html#events).
+For information about the event, see [Events and observers](https://devdocs.magento.com/guides/v2.4/extension-dev-guide/events-and-observers.html#events).
 
 ### Layouts
 
@@ -84,7 +84,7 @@ This module introduces the following layouts and layout handles in the directori
     - `page_calendar`
     - `print`
 
-For more information about a layout in Magento 2, see the [Layout documentation](https://devdocs.magento.com/guides/v2.4/frontend-dev-guide/layouts/layout-overview.html).
+For more information about a layout, see the [Layout documentation](https://devdocs.magento.com/guides/v2.4/frontend-dev-guide/layouts/layout-overview.html).
 
 ### UI components
 
@@ -95,7 +95,7 @@ You can extend a customer form and widgets using the configuration files located
     - `design_config_listing`
     - `design_theme_listing`
 
-For information about a UI component in Magento 2, see [Overview of UI components](https://devdocs.magento.com/guides/v2.4/ui_comp_guide/bk-ui_comps.html).
+For information about a UI component, see [Overview of UI components](https://devdocs.magento.com/guides/v2.4/ui_comp_guide/bk-ui_comps.html).
 
 ### Public APIs
 
@@ -107,4 +107,4 @@ For information about a UI component in Magento 2, see [Overview of UI component
 
 [Learn detailed description of the Magento_Sales API.](https://devdocs.magento.com/guides/v2.4/mrg/ce/Sales/services.html)
 
-For information about a public API in Magento 2, see [Public interfaces & APIs](https://devdocs.magento.com/guides/v2.4/extension-dev-guide/api-concepts.html).
+For information about a public API, see [Public interfaces & APIs](https://devdocs.magento.com/guides/v2.4/extension-dev-guide/api-concepts.html).
