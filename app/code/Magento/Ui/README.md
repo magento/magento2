@@ -1,12 +1,12 @@
 # Magento_Ui module
 
-The **Magento_Ui** module introduces a set of common UI components, which could be used and configured via layout XML files.
+The Magento_Ui module introduces a set of common UI components, which could be used and configured via layout XML files.
 
 ## Installation details
 
-The **Magento_Ui** module can be installed automatically (using the native Magento Setup)) without any additional actions.
+The Magento_Ui module can be installed automatically (using the native Magento Setup)) without any additional actions.
 
-Before installing this module, note that the **Magento_Ui** is dependent on the following modules:
+Before installing this module, note that the Magento_Ui is dependent on the following modules:
 
 - Magento_Authorization
 - Magento_Backend
@@ -15,21 +15,21 @@ Before installing this module, note that the **Magento_Ui** is dependent on the 
 - Magento_Store
 - Magento_User
 
-Before disabling or uninstalling this module, please consider the following dependencies:
+Before disabling or uninstalling this module, note the following dependencies:
 
 - Magento_GoogleOptimizer
 - Magento_MediaGalleryIntegration
 - Magento_ReleaseNotification
 - Magento_Shipping
 
-Please find here [how to enable or disable modules in Magento 2](https://devdocs.magento.com/guides/v2.4/install-gde/install/cli/install-cli-subcommands-enable.html).
+Refer to [how to enable or disable modules in Magento 2](https://devdocs.magento.com/guides/v2.4/install-gde/install/cli/install-cli-subcommands-enable.html).
 
 ## Structure
 
 - `Component/` - directory that contains several component implementations.
 - `Config/` - directory that contains configuration files for Argument, Converter, and Reader.
 
-For information about a typical file structure of a module in Magento 2, see [Module file structure](https://devdocs.magento.com/guides/v2.4/extension-dev-guide/build/module-file-structure.html#module-file-structure).
+For information about a typical file structure of a module, see [Module file structure](https://devdocs.magento.com/guides/v2.4/extension-dev-guide/build/module-file-structure.html#module-file-structure).
 
 ### Layouts
 
@@ -38,7 +38,7 @@ This module introduces the following layouts and layout handles in the directori
 - `view/base/layout`:
     - `default`
 
-For more information about a layout in Magento 2, see the [Layout documentation](https://devdocs.magento.com/guides/v2.4/frontend-dev-guide/layouts/layout-overview.html).
+For more information about a layout, see the [Layout documentation](https://devdocs.magento.com/guides/v2.4/frontend-dev-guide/layouts/layout-overview.html).
 
 ### UI components
 
@@ -59,7 +59,7 @@ You can extend a customer form and widgets using the configuration files located
         - `listing`:
             - `default`
 
-For information about a UI component in Magento 2, see [Overview of UI components](https://devdocs.magento.com/guides/v2.4/ui_comp_guide/bk-ui_comps.html).
+For information about a UI component, see [Overview of UI components](https://devdocs.magento.com/guides/v2.4/ui_comp_guide/bk-ui_comps.html).
 
 ### Public APIs
 
@@ -78,4 +78,4 @@ For information about a UI component in Magento 2, see [Overview of UI component
 
 [Learn detailed description of the Magento_Sales API.](https://devdocs.magento.com/guides/v2.4/mrg/ce/Sales/services.html)
 
-For information about a public API in Magento 2, see [Public interfaces & APIs](https://devdocs.magento.com/guides/v2.4/extension-dev-guide/api-concepts.html).  
+For information about a public API, see [Public interfaces & APIs](https://devdocs.magento.com/guides/v2.4/extension-dev-guide/api-concepts.html).  
