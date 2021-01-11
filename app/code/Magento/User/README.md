@@ -1,6 +1,6 @@
 # Magento_User module
 
-The **Magento_User** module enables admin users to manage and assign roles to administrators and other non-customer users, reset user passwords, and invalidate access tokens.
+The Magento_User module enables admin users to manage and assign roles to administrators and other non-customer users, reset user passwords, and invalidate access tokens.
 
 Different roles can be assigned to different users to define their permissions.
 
@@ -8,7 +8,7 @@ For admin passwords, it enables setting lifetimes and locking them when expired 
 
 ## Installation details
 
-Before installing this module, note that the **Magento_User** is dependent on the following modules:
+Before installing this module, note that the Magento_User is dependent on the following modules:
 
 - Magento_Authorization
 - Magento_Backend
@@ -19,7 +19,7 @@ Before installing this module, note that the **Magento_User** is dependent on th
 - Magento_Store
 - Magento_Ui
 
-Before disabling or uninstalling this module, please consider the following dependencies:
+Before disabling or uninstalling this module,note the following dependencies:
 
 - Magento_AsynchronousOperations
 - Magento_EncryptionKey
@@ -28,14 +28,14 @@ Before disabling or uninstalling this module, please consider the following depe
 - Magento_Shipping
 - Magento_Tax
 
-Please find here [how to enable or disable modules in Magento 2](https://devdocs.magento.com/guides/v2.4/install-gde/install/cli/install-cli-subcommands-enable.html).
+Refer to [how to enable or disable modules in Magento 2](https://devdocs.magento.com/guides/v2.4/install-gde/install/cli/install-cli-subcommands-enable.html).
 
 ## Structure
 
 - `Observer/` - directory that contains model for Authentication, ForceAdminPasswordChange, and TrackAdminNewPassword observer.
 - `Setup/` - directory that contains patch data file to upgrade password hashes and serialized fields.
 
-For information about a typical file structure of a module in Magento 2, see [Module file structure](https://devdocs.magento.com/guides/v2.4/extension-dev-guide/build/module-file-structure.html#module-file-structure).
+For information about a typical file structure of a module, see [Module file structure](https://devdocs.magento.com/guides/v2.4/extension-dev-guide/build/module-file-structure.html#module-file-structure).
 
 ### Layouts
 
@@ -59,4 +59,4 @@ This module introduces the following layouts and layout handles in the directori
     - `adminhtml_user_rolegrid`
     - `adminhtml_user_rolesgrid`
 
-For more information about a layout in Magento 2, see the [Layout documentation](https://devdocs.magento.com/guides/v2.4/frontend-dev-guide/layouts/layout-overview.html).
+For more information about a layout, see the [Layout documentation](https://devdocs.magento.com/guides/v2.4/frontend-dev-guide/layouts/layout-overview.html).
