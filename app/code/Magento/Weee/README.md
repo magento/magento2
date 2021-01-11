@@ -1,12 +1,12 @@
 # Magento_Weee module
 
-The **Magento_Weee** module enables the application of fees/fixed product taxes (FPT) on certain types of products, usually related to electronic devices and recycling.
+The Magento_Weee module enables the application of fees/fixed product taxes (FPT) on certain types of products, usually related to electronic devices and recycling.
 
 Fixed product taxes can be used to setup a WEEE tax that is a fixed amount, rather than a percentage of the product price. FPT can be configured to be displayed at various places in Magento. Rules, amounts, and display options can be configured in the backend.
 
-This module extends the existing functionality of **Magento_Tax**.
+This module extends the existing functionality of Magento_Tax.
 
-The **Magento_Weee** module includes the following:
+The Magento_Weee module includes the following:
 
 - Ability to add different number of fixed product taxes to product. They are treated as a product attribute.
 - Configuration of where WEEE appears (on category, product, sales, invoice, or credit memo pages) and whether FPT should be taxed.
@@ -14,9 +14,9 @@ The **Magento_Weee** module includes the following:
 
 ## Installation details
 
-The **Magento_Weee** module can be installed automatically (using native Magento install mechanism) without any additional actions.
+The Magento_Weee module can be installed automatically (using native Magento install mechanism) without any additional actions.
 
-Before installing this module, note that the **Magento_Weee** is dependent on the following modules:
+Before installing this module, note that the Magento_Weee is dependent on the following modules:
 
 - Magento_Catalog
 - Magento_Checkout
@@ -26,19 +26,19 @@ Before installing this module, note that the **Magento_Weee** is dependent on th
 - Magento_Store
 - Magento_Tax
 
-Please find here [how to enable or disable modules in Magento 2](https://devdocs.magento.com/guides/v2.4/install-gde/install/cli/install-cli-subcommands-enable.html).
+Refer to [how to enable or disable modules in Magento 2](https://devdocs.magento.com/guides/v2.4/install-gde/install/cli/install-cli-subcommands-enable.html).
 
 ## Structure
 
 `Pricing/` - directory that contain tax adjustment.
 
-For information about a typical file structure of a module in Magento 2, see [Module file structure](https://devdocs.magento.com/guides/v2.4/extension-dev-guide/build/module-file-structure.html#module-file-structure).
+For information about a typical file structure of a module, see [Module file structure](https://devdocs.magento.com/guides/v2.4/extension-dev-guide/build/module-file-structure.html#module-file-structure).
 
 ## Extensibility
 
-Extension developers can interact with the **Magento_Weee** module. For more information about the Magento extension mechanism, see [Magento plug-ins](https://devdocs.magento.com/guides/v2.4/extension-dev-guide/plugins.html).
+Extension developers can interact with the Magento_Weee module. For more information about the Magento extension mechanism, see [Magento plug-ins](https://devdocs.magento.com/guides/v2.4/extension-dev-guide/plugins.html).
 
-[The Magento dependency injection mechanism](https://devdocs.magento.com/guides/v2.4/extension-dev-guide/depend-inj.html) enables you to override the functionality of the **Magento_Weee** module.
+[The Magento dependency injection mechanism](https://devdocs.magento.com/guides/v2.4/extension-dev-guide/depend-inj.html) enables you to override the functionality of the Magento_Weee module.
 
 ### Layouts
 
@@ -84,7 +84,7 @@ This module introduces the following layouts and layout handles in the directori
     - `sales_order_printinvoice`
     - `sales_order_view`
 
-For more information about a layout in Magento 2, see the [Layout documentation](https://devdocs.magento.com/guides/v2.4/frontend-dev-guide/layouts/layout-overview.html).
+For more information about a layout, see the [Layout documentation](https://devdocs.magento.com/guides/v2.4/frontend-dev-guide/layouts/layout-overview.html).
 
 ### UI components
 
@@ -96,4 +96,4 @@ You can extend a customer form and widgets using the configuration files located
     - `widget_recently_compared`
     - `widget_recently_viewed`
 
-For information about a UI component in Magento 2, see [Overview of UI components](https://devdocs.magento.com/guides/v2.4/ui_comp_guide/bk-ui_comps.html).
+For information about a UI component, see [Overview of UI components](https://devdocs.magento.com/guides/v2.4/ui_comp_guide/bk-ui_comps.html).
