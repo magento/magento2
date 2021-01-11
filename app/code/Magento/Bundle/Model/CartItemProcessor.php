@@ -83,7 +83,8 @@ class CartItemProcessor implements CartItemProcessorInterface
         }
         $productOptions = [];
         $bundleOptions = $cartItem->getBuyRequest()->getBundleOption();
-        $bundleOptionsQty = $cartItem->getBuyRequest()->getBundleOptionQty() ?? [];
+        $bundleOptionsQty = $cartItem->getBuyRequest()->getBundleOptionQty();
+        $bundleOptionsQty = is_array($bundleOptionsQty) ? $bundleOptionsQty : [];
         if (is_array($bundleOptions)) {
             foreach ($bundleOptions as $optionId => $optionSelections) {
                 if (empty($optionSelections)) {
@@ -95,7 +96,7 @@ class CartItemProcessor implements CartItemProcessorInterface
                 $productOption = $this->bundleOptionFactory->create();
                 $productOption->setOptionId($optionId);
                 $productOption->setOptionSelections($optionSelections);
-                if (is_array($bundleOptionsQty) && isset($bundleOptionsQty[$optionId])) {
+                if (isset($bundleOptionsQty[$optionId])) {
                     $productOption->setOptionQty($bundleOptionsQty[$optionId]);
                 }
                 $productOptions[] = $productOption;
