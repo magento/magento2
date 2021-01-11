@@ -35,7 +35,7 @@ Before installing this module, note that the Magento_Tax is dependent on the fol
 - Magento_Store
 - Magento_User
 
-Before disabling or uninstalling this module, please consider the following dependencies:
+Before disabling or uninstalling this module, note the following dependencies:
 
 - Magento_TaxImportExport
 - Magento_Weee
