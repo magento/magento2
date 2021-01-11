@@ -124,7 +124,7 @@ The module dispatches the following events:
 - `sales_order_payment_cancel` event in the `\Magento\Sales\Model\Order\Payment::cancelInvoice()` method. Parameters:
     - `payment` is a Payment object (`\Magento\Sales\Model\Order\Payment` class).
 
-For information about the event system in Magento 2, see [Events and observers](https://devdocs.magento.com/guides/v2.4/extension-dev-guide/events-and-observers.html#events).
+For information about the event system, see [Events and observers](https://devdocs.magento.com/guides/v2.4/extension-dev-guide/events-and-observers.html#events).
 
 ### Layouts
 
@@ -254,7 +254,7 @@ This module introduces the following layouts and layout handles in the directori
     - `sales_order_shipment_renderers`
     - `sales_order_view`
 
-For more information about a layout in Magento 2, see the [Layout documentation](https://devdocs.magento.com/guides/v2.4/frontend-dev-guide/layouts/layout-overview.html).
+For more information about a layout, see the [Layout documentation](https://devdocs.magento.com/guides/v2.4/frontend-dev-guide/layouts/layout-overview.html).
 
 ### UI components
 
@@ -269,7 +269,7 @@ For more information about a layout in Magento 2, see the [Layout documentation]
 - `view/base/ui_component`:
     - `customer_form`
 
-For information about a UI component in Magento 2, see [Overview of UI components](https://devdocs.magento.com/guides/v2.4/ui_comp_guide/bk-ui_comps.html).
+For information about a UI component, see [Overview of UI components](https://devdocs.magento.com/guides/v2.4/ui_comp_guide/bk-ui_comps.html).
 
 ### Public APIs
 
