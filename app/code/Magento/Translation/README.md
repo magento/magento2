@@ -1,18 +1,18 @@
 # Magento_Translation module
 
-The **Magento_Translation** module enables localization of a store for multiple regions and markets. 
+The Magento_Translation module enables localization of a store for multiple regions and markets. 
 
-The **Magento_Translation** module provides the inline translation tool.
+The Magento_Translation module provides the inline translation tool.
 
 ## Installation details
 
-Before installing this module, note that the **Magento_Translation** is dependent on the following modules:
+Before installing this module, note that the Magento_Translation is dependent on the following modules:
 
 - Magento_Developer
 - Magento_Store
 - Magento_Theme
 
-Please find here [how to enable or disable modules in Magento 2](https://devdocs.magento.com/guides/v2.4/install-gde/install/cli/install-cli-subcommands-enable.html).
+Refer to [how to enable or disable modules in Magento 2](https://devdocs.magento.com/guides/v2.4/install-gde/install/cli/install-cli-subcommands-enable.html).
 
 ## Structure
 
