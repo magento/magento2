@@ -52,7 +52,9 @@ class QtyincrementsTest extends TestCase
     public function testAfterSaveWithDecimals(): void
     {
         $this->expectException(LocalizedException::class);
-        $this->expectExceptionMessage((string)__("Quantity increments can't use decimals. Enter a new increment and try again."));
+        $this->expectExceptionMessage(
+            (string)__("Quantity increments can't use decimals. Enter a new increment and try again.")
+        );
         $value = 10.5;
         $this->qtyIncrements->setValue((string)$value);
         $this->qtyIncrements->beforeSave();
