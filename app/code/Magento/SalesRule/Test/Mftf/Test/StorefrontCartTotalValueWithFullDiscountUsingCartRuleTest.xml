@@ -117,8 +117,10 @@
         <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="amOnPageShoppingCart"/>
         <waitForElementVisible selector="{{CheckoutCartSummarySection.orderTotal}}" stepKey="waitForOrderTotalVisible"/>
         <selectOption selector="{{CheckoutCartSummarySection.country}}" userInput="United States" stepKey="selectCountry"/>
-        <waitForElementVisible selector="{{CheckoutCartSummarySection.discountAmount}}" stepKey="waitForOrderTotalUpdate"/>
-        <see selector="{{CheckoutCartSummarySection.discountAmount}}" userInput="-$29.00" stepKey="seeDiscountAmount"/>
+        <comment userInput="Adding the comment to replace action for preserving Backward Compatibility" stepKey="waitForOrderTotalUpdate"/>
+        <actionGroup ref="AssertStorefrontCartDiscountActionGroup" stepKey="seeDiscountAmount">
+            <argument name="discount" value="29.00"/>
+        </actionGroup>
         <see selector="{{CheckoutCartSummarySection.subTotal}}" userInput="$29.00" stepKey="seeSubTotal"/>
         <see selector="{{CheckoutCartSummarySection.orderTotal}}" userInput="0.00" stepKey="seeOrderTotal"/>
     </test>
