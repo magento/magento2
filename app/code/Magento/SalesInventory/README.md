@@ -1,10 +1,10 @@
 # Magento_SalesInventory module
 
-The **Magento_SalesInventory** module allows retrieve and update stock attributes related to Magento_Sales, such as status and quantity.
+The Magento_SalesInventory module allows retrieve and update stock attributes related to Magento_Sales, such as status and quantity.
 
 ## Installation details
 
-Before installing this module, note that the **Magento_SalesInventory** is dependent on the following modules:
+Before installing this module, note that the Magento_SalesInventory is dependent on the following modules:
 
 - Magento_Catalog
 - Magento_CatalogInventory
