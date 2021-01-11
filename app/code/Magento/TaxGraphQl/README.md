@@ -9,4 +9,4 @@ Before installing this module, note that the Magento_TaxGraphQl is dependent on 
 - Magento_CatalogGraphQl
 - Magento_Tax
 
-Refer to [how to enable or disable modules in Magento 2](https://devdocs.magento.com/guides/v2.4/install-gde/install/cli/install-cli-subcommands-enable.html).
+For information about enabling or disabling a module, see [Enable or disable modules](https://devdocs.magento.com/guides/v2.4/install-gde/install/cli/install-cli-subcommands-enable.html).
