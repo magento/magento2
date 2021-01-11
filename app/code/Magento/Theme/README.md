@@ -1,10 +1,10 @@
 # Magento_Theme module
 
-The **Magento_Theme** module contains common infrastructure that provides an ability to apply and use themes in Magento application.
+The Magento_Theme module contains common infrastructure that provides an ability to apply and use themes in Magento application.
 
 ## Installation details
 
-Before installing this module, note that the **Magento_Theme** is dependent on the following modules:
+Before installing this module, note that the Magento_Theme is dependent on the following modules:
 
 - Magento_Cms
 - Magento_Config
@@ -25,7 +25,7 @@ Before disabling or uninstalling this module, please consider the following depe
 - Magento_Swatches
 - Magento_Vault
 
-Please find here [how to enable or disable modules in Magento 2](https://devdocs.magento.com/guides/v2.4/install-gde/install/cli/install-cli-subcommands-enable.html).
+Refer to [how to enable or disable modules in Magento 2](https://devdocs.magento.com/guides/v2.4/install-gde/install/cli/install-cli-subcommands-enable.html).
 
 ## Structure
 
@@ -35,9 +35,9 @@ For information about a typical file structure of a module in Magento 2, see [Mo
 
 ## Extensibility
 
-Extension developers can interact with the **Magento_Theme** module. For more information about the Magento extension mechanism, see [Magento plug-ins](https://devdocs.magento.com/guides/v2.4/extension-dev-guide/plugins.html).
+Extension developers can interact with the Magento_Theme module. For more information about the Magento extension mechanism, see [Magento plug-ins](https://devdocs.magento.com/guides/v2.4/extension-dev-guide/plugins.html).
 
-[The Magento dependency injection mechanism](https://devdocs.magento.com/guides/v2.4/extension-dev-guide/depend-inj.html) enables you to override the functionality of the **Magento_Theme** module.
+[The Magento dependency injection mechanism](https://devdocs.magento.com/guides/v2.4/extension-dev-guide/depend-inj.html) enables you to override the functionality of the Magento_Theme module.
 
 ### Events
 
