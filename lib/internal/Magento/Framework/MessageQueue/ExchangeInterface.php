@@ -9,7 +9,7 @@ namespace Magento\Framework\MessageQueue;
  * Interface message Exchange
  *
  * @api
- * @since 103.0.0
+ * @deplacated Use \Magento\Framework\MessageQueue\Bulk\ExchangeInterface instead
  * @since 100.0.2
  */
 interface ExchangeInterface

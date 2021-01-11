@@ -38,6 +38,7 @@ class Exchange implements ExchangeInterface
      */
     public function enqueue($topic, EnvelopeInterface $envelope)
     {
+        // Proxy to bulk exchange
         return $this->exchange->enqueue($topic, [$envelope]);
     }
 }

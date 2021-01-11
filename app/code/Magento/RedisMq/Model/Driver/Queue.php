@@ -16,7 +16,7 @@ use Psr\Log\LoggerInterface;
 class Queue implements QueueInterface
 {
     /**
-     * MILLISECONDS in one SECOND
+     * Milliseconds in one second
      */
     private const MILLISECONDS = 1000;
 
@@ -36,7 +36,6 @@ class Queue implements QueueInterface
      */
     private const FIELD_PAYLOAD = "#p";
 
-
     /**
      * @var EnvelopeFactory
      */
@@ -52,6 +51,9 @@ class Queue implements QueueInterface
      */
     private $interval = 200; //ms
 
+    /**
+     * @var int
+     */
     private $visibilityWindow = 2; //s
 
     /**
@@ -96,6 +98,10 @@ class Queue implements QueueInterface
         $this->groupName = $groupName;
     }
 
+    /**
+     * Get group name
+     * @return string
+     */
     private function getGroup()
     {
         if ($this->group === null) {
@@ -145,10 +151,9 @@ class Queue implements QueueInterface
                     $this->queueName,
                     $this->getGroup(),
                     '-',
-                    '+', //(time() - $this->visibilityWindow) * 1000, // in ms
+                    '+', //($this->connection->time() - $this->visibilityWindow) * 1000, // in ms
                     1
                 );
-
 
                 $claimableIds = [];
                 foreach ($pendingMessages as $pendingMessage) {
@@ -211,7 +216,6 @@ class Queue implements QueueInterface
     {
         $id = $envelope->getProperties()[self::FIELD_ID];
         if ($requeue) {
-
         } else {
             $this->connection->xDel($this->queueName, [$id]);
             $this->connection->xAck($this->queueName, $this->getGroup(), [$id]);
@@ -255,6 +259,6 @@ class Queue implements QueueInterface
     private function getConsumerName(): string
     {
         //@todo use $this->connection->rawCommand('CLIENT' 'ID')
-        return \gethostname() . ':' . getmypid();
+        return \gethostname() . ':' . \getmypid();
     }
 }

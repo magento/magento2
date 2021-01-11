@@ -8,7 +8,7 @@ use Magento\Framework\App\DeploymentConfig;
 class ExtClient implements RedisClientInterface
 {
     /**
-     * @var \Redis
+     * @var \Redis|null
      */
     private $redis;
 
@@ -18,7 +18,9 @@ class ExtClient implements RedisClientInterface
     private $config;
 
     /**
+     * ExtClient constructor.
      *
+     * @param DeploymentConfig $config
      */
     public function __construct(DeploymentConfig $config)
     {
@@ -33,11 +35,22 @@ class ExtClient implements RedisClientInterface
         $this->config = $config;
     }
 
+    /**
+     *
+     * @param $name
+     * @param $arguments
+     * @return mixed
+     */
     public function __call($name, $arguments)
     {
         return $this->getClient()->$name(...$arguments);
     }
 
+    /**
+     * @return \Redis
+     * @throws \Magento\Framework\Exception\FileSystemException
+     * @throws \Magento\Framework\Exception\RuntimeException
+     */
     private function getClient(): \Redis
     {
         if (!$this->redis) {
