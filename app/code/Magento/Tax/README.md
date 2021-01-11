@@ -1,8 +1,8 @@
 # Magento_Tax module
 
-The **Magento_Tax** module provides the calculations needed to compute the consumption tax on goods and services.
+The Magento_Tax module provides the calculations needed to compute the consumption tax on goods and services.
 
-The **Magento_Tax** module includes the following:
+The Magento_Tax module includes the following:
 - Configuration of the tax rates and rules to apply.
 - Configuration of tax classes that apply to:
     - Taxation on products.
@@ -12,7 +12,7 @@ The **Magento_Tax** module includes the following:
 - Specification of whether the tax total line can be toggled to display the tax details/subtotals.
 - Display of prices (presented with tax, without tax, or both with and without).
 
-The **Magento_Tax** module also handles special cases when computing tax, such as:
+The Magento_Tax module also handles special cases when computing tax, such as:
 - Determining the tax on an individual item (for example, one that is being returned) when the original tax has been computed on the entire shopping cart.
     - Example country: United States.
 - Being able to handle 2 or more tax rates that are applied separately (examples include a "luxury tax" on exclusive items).
@@ -20,7 +20,7 @@ The **Magento_Tax** module also handles special cases when computing tax, such a
 
 ## Installation details
 
-Before installing this module, note that the **Magento_Tax** is dependent on the following modules:
+Before installing this module, note that the Magento_Tax is dependent on the following modules:
 
 - Magento_Catalog
 - Magento_Checkout
@@ -40,7 +40,7 @@ Before disabling or uninstalling this module, please consider the following depe
 - Magento_TaxImportExport
 - Magento_Weee
 
-Please find here [how to enable or disable modules in Magento 2](https://devdocs.magento.com/guides/v2.4/install-gde/install/cli/install-cli-subcommands-enable.html).
+Refer to [how to enable or disable modules in Magento 2](https://devdocs.magento.com/guides/v2.4/install-gde/install/cli/install-cli-subcommands-enable.html).
 
 ## Structure
 
@@ -51,9 +51,9 @@ For information about a typical file structure of a module in Magento 2, see [Mo
 
 ## Extensibility
 
-Extension developers can interact with the **Magento_Tax** module. For more information about the Magento extension mechanism, see [Magento plug-ins](https://devdocs.magento.com/guides/v2.4/extension-dev-guide/plugins.html).
+Extension developers can interact with the Magento_Tax module. For more information about the Magento extension mechanism, see [Magento plug-ins](https://devdocs.magento.com/guides/v2.4/extension-dev-guide/plugins.html).
 
-[The Magento dependency injection mechanism](https://devdocs.magento.com/guides/v2.4/extension-dev-guide/depend-inj.html) enables you to override the functionality of the **Magento_Tax** module.
+[The Magento dependency injection mechanism](https://devdocs.magento.com/guides/v2.4/extension-dev-guide/depend-inj.html) enables you to override the functionality of the Magento_Tax module.
 
 ### Events
 
