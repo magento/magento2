@@ -19,4 +19,4 @@ This module introduces the following layouts and layout handles in the directori
     - `tax_rate_block`
     - `tax_rule_edit`
 
-For more information about a layout in Magento 2, see the [Layout documentation](https://devdocs.magento.com/guides/v2.4/frontend-dev-guide/layouts/layout-overview.html).
+For more information about a layout, see the [Layout documentation](https://devdocs.magento.com/guides/v2.4/frontend-dev-guide/layouts/layout-overview.html).
