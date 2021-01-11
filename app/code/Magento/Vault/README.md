@@ -14,7 +14,7 @@ Before installing this module, note that the **Magento_Vault** is dependent on t
 - Magento_Store
 - Magento_Theme
 
-Before disabling or uninstalling this module, please consider the following dependencies:
+Before disabling or uninstalling this module, note the following dependencies:
 
 - Magento_Paypal
 
@@ -34,7 +34,7 @@ The module dispatches the following events:
     - `method` is a method code (`\Magento\Vault\Model\Method\Vault` class).
     - `payment_model` is a payment information model object (`\Magento\Payment\Model\InfoInterface` class).
 
-For information about the event system in Magento 2, see [Events and observers](https://devdocs.magento.com/guides/v2.4/extension-dev-guide/events-and-observers.html#events).
+For more information about the event system, see [Events and observers](https://devdocs.magento.com/guides/v2.4/extension-dev-guide/events-and-observers.html#events).
 
 ### Layouts
 

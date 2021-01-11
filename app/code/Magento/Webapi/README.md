@@ -13,7 +13,7 @@ Before installing this module, note that the **Magento_VaultGraphQl** is depende
 - Magento_Integration
 - Magento_Store
 
-Before disabling or uninstalling this module, please consider the following dependencies:
+Before disabling or uninstalling this module, note the following dependencies:
 
 - Magento_WebapiAsync
 
