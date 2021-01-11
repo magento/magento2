@@ -411,6 +411,44 @@ QUERY;
     }
 
     /**
+     * @magentoApiDataFixture Magento/Sales/_files/customer_invoice_comments_for_search.php
+     */
+    public function testInvoiceCommentsQuery()
+    {
+        $query =
+            <<<QUERY
+{
+  customer {
+    orders {
+      items {
+        invoices {
+          comments {
+            message
+            timestamp
+          }
+        }
+      }
+    }
+  }
+}
+QUERY;
+
+        $currentEmail = 'customer@search.example.com';
+        $currentPassword = 'password';
+        $response = $this->graphQlQuery(
+            $query,
+            [],
+            '',
+            $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword)
+        );
+
+        $invoice = $response['customer']['orders']['items'][0]['invoices'][0];
+        $this->assertCount(1, $invoice['comments']);
+        $this->assertEquals('visible_comment', $invoice['comments'][0]['message']);
+        $this->assertNotEmpty($invoice['comments'][0]['timestamp']);
+    }
+
+    /**
      * Prepare invoice for the order
      *
      * @param string $orderNumber
