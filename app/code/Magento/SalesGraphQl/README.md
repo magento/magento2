@@ -1,10 +1,10 @@
 # Magento_SalesGraphQl module
 
-The **Magento_SalesGraphQl** module provides type and resolver information for the GraphQl module to generate sales orders information.
+The Magento_SalesGraphQl module provides type and resolver information for the GraphQl module to generate sales orders information.
 
 ## Installation details
 
-Before installing this module, note that the **Magento_SalesGraphQl** is dependent on the following modules:
+Before installing this module, note that the Magento_SalesGraphQl is dependent on the following modules:
 
 - Magento_Catalog
 - Magento_GraphQl
@@ -18,7 +18,7 @@ Please find here [how to enable or disable modules in Magento 2](https://devdocs
 
 ## Additional information
 
-For more information about the **Magento_SalesGraphQl** [Queries](#queries) and [Mutations](#mutations) see below:
+For more information about the Magento_SalesGraphQl [Queries](#queries) and [Mutations](#mutations) see below:
 
 ### Queries {#queries}
 
