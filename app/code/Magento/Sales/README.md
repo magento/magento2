@@ -36,7 +36,7 @@ Before installing this module, note that the Magento_Sales is dependent on the f
 - Magento_Widget
 - Magento_Wishlist
 
-Before disabling or uninstalling this module, please consider the following dependencies:
+Before disabling or uninstalling this module, note these dependencies:
 
 - Magento_Checkout
 - Magento_ConfigurableProduct
@@ -53,7 +53,7 @@ Before disabling or uninstalling this module, please consider the following depe
 - Magento_Vault
 - Magento_Weee
 
-Please find here [how to enable or disable modules in Magento 2](https://devdocs.magento.com/guides/v2.4/install-gde/install/cli/install-cli-subcommands-enable.html).
+Refer to [how to enable or disable modules in Magento 2](https://devdocs.magento.com/guides/v2.4/install-gde/install/cli/install-cli-subcommands-enable.html) for more information.
 
 ## Structure
 
@@ -61,7 +61,7 @@ Please find here [how to enable or disable modules in Magento 2](https://devdocs
 `CustomerData/` - It contains list of 5 salable products from the last placed order.
 `Exception/` - directory that contains exception classes.
 
-For information about a typical file structure of a module in Magento 2, see [Module file structure](https://devdocs.magento.com/guides/v2.4/extension-dev-guide/build/module-file-structure.html#module-file-structure).
+For more information about the typical file structure of a module, see [Module file structure](https://devdocs.magento.com/guides/v2.4/extension-dev-guide/build/module-file-structure.html#module-file-structure).
 
 ## Extensibility
 

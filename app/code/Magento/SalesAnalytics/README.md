@@ -9,4 +9,4 @@ Before installing this module, note that the Magento_SalesAnalytics is dependent
 - Magento_Analytics
 - Magento_Sales
 
-Please find here [how to enable or disable modules in Magento 2](https://devdocs.magento.com/guides/v2.4/install-gde/install/cli/install-cli-subcommands-enable.html).
+Refer to [how to enable or disable modules in Magento 2](https://devdocs.magento.com/guides/v2.4/install-gde/install/cli/install-cli-subcommands-enable.html) for more information.
