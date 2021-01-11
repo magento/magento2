@@ -3,6 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+/**
+ * @var \Magento\Framework\Escaper $escaper
+ */
 ?>
-<a class="link-copyright" href="http://magento.com" target="_blank" title="<?= $block->escapeHtmlAttr(__('Magento')) ?>"></a>
-<?= $block->escapeHtml(__('Copyright &copy; %1 Magento Commerce Inc. All rights reserved.', date('Y'))) ?>
+<a class="link-copyright" href="http://magento.com" target="_blank" title="<?= $escaper->escapeHtmlAttr(__('Magento')) ?>"></a>
+<?= $escaper->escapeHtml(__('Copyright &copy; %1 Magento Commerce Inc. All rights reserved.', date('Y'))) ?>

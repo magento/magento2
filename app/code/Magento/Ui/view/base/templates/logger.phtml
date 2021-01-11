@@ -4,14 +4,17 @@
  * See COPYING.txt for license details.
  */
 
-/** @var $block \Magento\Ui\Block\Logger */
+/**
+ * @var $block \Magento\Ui\Block\Logger
+ * @var \Magento\Framework\Escaper $escaper
+ */
 /** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
 <?php if ($block->isLoggingEnabled()): ?>
     <?php $scriptString = <<<script
 
         window.onerror = function(msg, url, line) {
-            var key = "{$block->escapeJs($block->getSessionStorageKey())}";
+            var key = "{$escaper->escapeJs($block->getSessionStorageKey())}";
             var errors = {};
             if (sessionStorage.getItem(key)) {
                 errors = JSON.parse(sessionStorage.getItem(key));

@@ -6,6 +6,7 @@
 //phpcs:disable Squiz.PHP.NonExecutableCode.Unreachable
 /**
  * @var \Magento\Shipping\Block\Adminhtml\Order\Packaging $block
+ * @var \Magento\Framework\Escaper $escaper
  * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
  */
 ?>
@@ -20,7 +21,7 @@
                         <input type="checkbox"
                                id="select-items-<?= /* @noEscape */ $randomId ?>"
                                class="checkbox admin__control-checkbox"
-                               title="<?= $block->escapeHtmlAttr(__('Select All')) ?>">
+                               title="<?= $escaper->escapeHtmlAttr(__('Select All')) ?>">
                         <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
                             'onchange',
                             'packaging.checkAllItems(this);',
@@ -29,10 +30,10 @@
                         <label for="select-items-<?= /* @noEscape */ $randomId ?>"></label>
                     </label>
                 </th>
-                <th class="data-grid-th"><?= $block->escapeHtml(__('Product Name')) ?></th>
-                <th class="data-grid-th"><?= $block->escapeHtml(__('Weight')) ?></th>
+                <th class="data-grid-th"><?= $escaper->escapeHtml(__('Product Name')) ?></th>
+                <th class="data-grid-th"><?= $escaper->escapeHtml(__('Weight')) ?></th>
                 <th class="data-grid-th custom-value">
-                    <?= $block->escapeHtml(__('Customs Value')) ?>
+                    <?= $escaper->escapeHtml(__('Customs Value')) ?>
                 </th>
                 <?php if (!$block->displayCustomsValue()): ?>
                     <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
@@ -40,8 +41,8 @@
                         '#packaging-data-grid-' . $randomId . ' th.custom-value'
                     ) ?>
                 <?php endif ?>
-                <th class="data-grid-th"><?= $block->escapeHtml(__('Qty Ordered')) ?></th>
-                <th class="data-grid-th"><?= $block->escapeHtml(__('Qty')) ?></th>
+                <th class="data-grid-th"><?= $escaper->escapeHtml(__('Qty Ordered')) ?></th>
+                <th class="data-grid-th"><?= $escaper->escapeHtml(__('Qty')) ?></th>
             </tr>
             </thead>
             <tbody>
@@ -71,10 +72,10 @@
                         </label>
                     </td>
                     <td>
-                        <?= $block->escapeHtml($item->getName()) ?>
+                        <?= $escaper->escapeHtml($item->getName()) ?>
                     </td>
                     <td data-role="item-weight">
-                        <?= $block->escapeHtml($item->getWeight()) ?>
+                        <?= $escaper->escapeHtml($item->getWeight()) ?>
                     </td>
                     <?php
                     if ($block->displayCustomsValue()) {
@@ -88,7 +89,7 @@
                         <input type="text"
                                name="customs_value"
                                class="input-text admin__control-text <?= /* @noEscape */ $customsValueValidation ?>"
-                               value="<?= $block->escapeHtmlAttr($block->formatPrice($item->getPrice())) ?>"
+                               value="<?= $escaper->escapeHtmlAttr($block->formatPrice($item->getPrice())) ?>"
                                size="10">
                     </td>
                     <?php if (!$block->displayCustomsValue()): ?>
@@ -101,7 +102,7 @@
                         <?= /* @noEscape */ $item->getOrderItem()->getQtyOrdered() * 1 ?>
                     </td>
                     <td>
-                        <input type="hidden" name="price" value="<?= $block->escapeHtml($item->getPrice()) ?>">
+                        <input type="hidden" name="price" value="<?= $escaper->escapeHtml($item->getPrice()) ?>">
                         <input type="text"
                                name="qty"
                                value="<?= /* @noEscape */ $item->getQty() * 1 ?>"
@@ -113,7 +114,7 @@
                                 id="packaging-delete-item-<?= /* @noEscape */ $randomId . '-' . $id ?>"
                                 class="action-delete"
                                 data-action="package-delete-item">
-                            <span><?= $block->escapeHtml(__('Delete')) ?></span>
+                            <span><?= $escaper->escapeHtml(__('Delete')) ?></span>
                         </button>
                         <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
                             'display:none',

@@ -3,12 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+/**
+ * @var \Magento\Framework\Escaper $escaper
+ */
 ?>
 <div class="wrapper-popup">
     <div class="middle" id="anchor-content">
         <div id="page:main-container">
         <?php if ($block->getChildHtml('left')) : ?>
-            <div class="columns <?= $block->escapeHtmlAttr($block->getContainerCssClass()) ?>" id="page:container">
+            <div class="columns <?= $escaper->escapeHtmlAttr($block->getContainerCssClass()) ?>" id="page:container">
                 <div id="page:left" class="side-col">
                     <?= $block->getChildHtml('left') ?>
                 </div>

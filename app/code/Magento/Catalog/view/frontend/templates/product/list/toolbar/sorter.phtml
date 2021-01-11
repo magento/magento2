@@ -9,36 +9,37 @@
  * Product list toolbar
  *
  * @var $block \Magento\Catalog\Block\Product\ProductList\Toolbar
+ * @var \Magento\Framework\Escaper $escaper
  */
 ?>
 <div class="toolbar-sorter sorter">
-    <label class="sorter-label" for="sorter"><?= $block->escapeHtml(__('Sort By')) ?></label>
+    <label class="sorter-label" for="sorter"><?= $escaper->escapeHtml(__('Sort By')) ?></label>
     <select id="sorter" data-role="sorter" class="sorter-options">
         <?php foreach ($block->getAvailableOrders() as $_key => $_order) :?>
-            <option value="<?= $block->escapeHtmlAttr($_key) ?>"
+            <option value="<?= $escaper->escapeHtmlAttr($_key) ?>"
                 <?php if ($block->isOrderCurrent($_key)) :?>
                     selected="selected"
                 <?php endif; ?>
                 >
-                <?= $block->escapeHtml(__($_order)) ?>
+                <?= $escaper->escapeHtml(__($_order)) ?>
             </option>
         <?php endforeach; ?>
     </select>
     <?php if ($block->getCurrentDirection() == 'desc') :?>
-        <a title="<?= $block->escapeHtmlAttr(__('Set Ascending Direction')) ?>"
+        <a title="<?= $escaper->escapeHtmlAttr(__('Set Ascending Direction')) ?>"
            href="#"
            class="action sorter-action sort-desc"
            data-role="direction-switcher"
            data-value="asc">
-            <span><?= $block->escapeHtml(__('Set Ascending Direction')) ?></span>
+            <span><?= $escaper->escapeHtml(__('Set Ascending Direction')) ?></span>
         </a>
     <?php else :?>
-        <a title="<?= $block->escapeHtmlAttr(__('Set Descending Direction')) ?>"
+        <a title="<?= $escaper->escapeHtmlAttr(__('Set Descending Direction')) ?>"
            href="#"
            class="action sorter-action sort-asc"
            data-role="direction-switcher"
            data-value="desc">
-            <span><?= $block->escapeHtml(__('Set Descending Direction')) ?></span>
+            <span><?= $escaper->escapeHtml(__('Set Descending Direction')) ?></span>
         </a>
     <?php endif; ?>
 </div>

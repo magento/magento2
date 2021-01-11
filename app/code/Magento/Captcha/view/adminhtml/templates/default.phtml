@@ -7,24 +7,25 @@
 /** @var \Magento\Captcha\Block\Captcha\DefaultCaptcha $block */
 /** @var \Magento\Captcha\Model\DefaultModel $captcha */
 /** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+/** @var \Magento\Framework\Escaper $escaper */
 
 $captcha = $block->getCaptchaModel();
 ?>
 <div class="admin__field _required">
     <label for="captcha" class="admin__field-label">
-        <span><?= $block->escapeHtml(__('Please enter the letters and numbers from the image')) ?></span>
+        <span><?= $escaper->escapeHtml(__('Please enter the letters and numbers from the image')) ?></span>
     </label>
     <div class="admin__field-control">
         <input
             id="captcha"
             class="admin__control-text"
             type="text"
-            name="<?= $block->escapeHtmlAttr(\Magento\Captcha\Helper\Data::INPUT_NAME_FIELD_VALUE)
-            ?>[<?= $block->escapeHtml($block->getFormId()) ?>]"
+            name="<?= $escaper->escapeHtmlAttr(\Magento\Captcha\Helper\Data::INPUT_NAME_FIELD_VALUE)
+            ?>[<?= $escaper->escapeHtml($block->getFormId()) ?>]"
             data-validate="{required:true}"/>
         <?php if ($captcha->isCaseSensitive()):?>
             <div class="admin__field-note">
-                <span><?= $block->escapeHtml(__('<strong>Attention</strong>: Captcha is case sensitive.'), ['strong'])
+                <span><?= $escaper->escapeHtml(__('<strong>Attention</strong>: Captcha is case sensitive.'), ['strong'])
                 ?></span>
             </div>
         <?php endif; ?>
@@ -34,18 +35,18 @@ $captcha = $block->getCaptchaModel();
     <img
         id="captcha-reload"
         class="captcha-reload"
-        src="<?= $block->escapeUrl($block->getViewFileUrl('Magento_Captcha::reload.png')) ?>"
-        alt="<?= $block->escapeHtmlAttr(__('Reload captcha')) ?>"/>
+        src="<?= $escaper->escapeUrl($block->getViewFileUrl('Magento_Captcha::reload.png')) ?>"
+        alt="<?= $escaper->escapeHtmlAttr(__('Reload captcha')) ?>"/>
     <img
-        id="<?= $block->escapeHtmlAttr($block->getFormId()) ?>"
+        id="<?= $escaper->escapeHtmlAttr($block->getFormId()) ?>"
         width="<?= /* @noEscape */ (float) $block->getImgWidth() ?>"
         height="<?= /* @noEscape */ (float) $block->getImgHeight() ?>"
-        src="<?= $block->escapeUrl($captcha->getImgSrc()) ?>" />
+        src="<?= $escaper->escapeUrl($captcha->getImgSrc()) ?>" />
 </div>
 
 <?php
-$url = $block->escapeJs($block->getRefreshUrl());
-$formId = $block->escapeJs($block->escapeHtml($block->getFormId()));
+$url = $escaper->escapeJs($block->getRefreshUrl());
+$formId = $escaper->escapeJs($escaper->escapeHtml($block->getFormId()));
 $scriptString = <<<script
 
     require(["prototype", "mage/captcha"], function(){

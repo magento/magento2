@@ -5,6 +5,7 @@
  */
 /**
  * @var \Magento\Shipping\Block\Adminhtml\View\Form $block
+ * @var \Magento\Framework\Escaper $escaper
  * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
  */
 
@@ -18,36 +19,36 @@ $order = $block->getShipment()->getOrder();
 <?= $block->getChildHtml('order_info'); ?>
 <section class="admin__page-section order-shipment-billing-shipping">
     <div class="admin__page-section-title">
-        <span class="title"><?= $block->escapeHtml(__('Payment &amp; Shipping Method')); ?></span>
+        <span class="title"><?= $escaper->escapeHtml(__('Payment &amp; Shipping Method')); ?></span>
     </div>
     <div class="admin__page-section-content">
         <div class="admin__page-section-item order-payment-method">
             <div class="admin__page-section-item-title">
-                <span class="title"><?= $block->escapeHtml(__('Payment Information')); ?></span>
+                <span class="title"><?= $escaper->escapeHtml(__('Payment Information')); ?></span>
             </div>
             <div class="admin__page-section-item-content">
                 <div><?= $block->getChildHtml('order_payment') ?></div>
                 <div class="order-payment-currency">
-                    <?= $block->escapeHtml(__('The order was placed using %1.', $order->getOrderCurrencyCode())); ?>
+                    <?= $escaper->escapeHtml(__('The order was placed using %1.', $order->getOrderCurrencyCode())); ?>
                 </div>
             </div>
         </div>
 
         <div class="admin__page-section-item order-shipping-address">
             <div class="admin__page-section-item-title">
-                <span class="title"><?= $block->escapeHtml(__('Shipping and Tracking Information')); ?></span>
+                <span class="title"><?= $escaper->escapeHtml(__('Shipping and Tracking Information')); ?></span>
             </div>
             <div class="admin__page-section-item-content">
                 <div class="shipping-description-wrapper">
                     <?php if ($block->getShipment()->getTracksCollection()->count()): ?>
                         <p>
-                            <a href="#" id="linkId" title="<?= $block->escapeHtml(__('Track this shipment')); ?>">
-                                <?= $block->escapeHtml(__('Track this shipment')); ?>
+                            <a href="#" id="linkId" title="<?= $escaper->escapeHtml(__('Track this shipment')); ?>">
+                                <?= $escaper->escapeHtml(__('Track this shipment')); ?>
                             </a>
                             <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
                                 'onclick',
                                 'event.preventDefault();' .
-                                "popWin('{$block->escapeJs($shippingHelper->getTrackingPopupUrlBySalesModel(
+                                "popWin('{$escaper->escapeJs($shippingHelper->getTrackingPopupUrlBySalesModel(
                                     $block->getShipment()
                                     ))}','trackshipment','width=800,height=600,resizable=yes,scrollbars=yes')",
                                 'a#linkId'
@@ -55,10 +56,10 @@ $order = $block->getShipment()->getOrder();
                         </p>
                     <?php endif; ?>
                     <div class="shipping-description-title">
-                        <?= $block->escapeHtml($order->getShippingDescription()); ?>
+                        <?= $escaper->escapeHtml($order->getShippingDescription()); ?>
                     </div>
 
-                    <?= $block->escapeHtml(__('Total Shipping Charges')); ?>:
+                    <?= $escaper->escapeHtml(__('Total Shipping Charges')); ?>:
 
                     <?php if ($taxHelper->displayShippingPriceIncludingTax()): ?>
                         <?php $excl = $block->displayShippingPriceInclTax($order); ?>
@@ -69,7 +70,7 @@ $order = $block->getShipment()->getOrder();
 
                     <?= /* @noEscape */ $excl; ?>
                     <?php if ($taxHelper->displayShippingBothPrices() && $incl != $excl): ?>
-                        (<?= $block->escapeHtml(__('Incl. Tax')); ?> <?= /* @noEscape */ $incl; ?>)
+                        (<?= $escaper->escapeHtml(__('Incl. Tax')); ?> <?= /* @noEscape */ $incl; ?>)
                     <?php endif; ?>
                 </div>
 
@@ -98,7 +99,7 @@ $order = $block->getShipment()->getOrder();
                                 window.packaging.sendCreateLabelRequest();
                             });
                             window.packaging.setLabelCreatedCallback(function () {
-                                setLocation("{$block->escapeJs($block->getUrl(
+                                setLocation("{$escaper->escapeJs($block->getUrl(
                                         'adminhtml/order_shipment/view',
                                         ['shipment_id' => $block->getShipment()->getId()]
                                     ))}");
@@ -123,21 +124,21 @@ script;
 
 <section class="admin__page-section">
     <div class="admin__page-section-title">
-        <span class="title"><?= $block->escapeHtml(__('Items Shipped')); ?></span>
+        <span class="title"><?= $escaper->escapeHtml(__('Items Shipped')); ?></span>
     </div>
     <?= $block->getChildHtml('shipment_items'); ?>
 </section>
 
 <section class="admin__page-section">
     <div class="admin__page-section-title">
-        <span class="title"><?= $block->escapeHtml(__('Order Total')); ?></span>
+        <span class="title"><?= $escaper->escapeHtml(__('Order Total')); ?></span>
     </div>
     <div class="admin__page-section-content">
         <?= $block->getChildHtml('shipment_packed'); ?>
 
         <div class="admin__page-section-item order-comments-history">
             <div class="admin__page-section-item-title">
-                <span class="title"><?= $block->escapeHtml(__('Shipment History')); ?></span>
+                <span class="title"><?= $escaper->escapeHtml(__('Shipment History')); ?></span>
             </div>
             <div class="admin__page-section-item-content"><?= $block->getChildHtml('order_comments'); ?></div>
         </div>

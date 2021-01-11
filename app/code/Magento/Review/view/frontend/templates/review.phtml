@@ -4,7 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-/** @var \Magento\Review\Block\Product\Review $block */
+/**
+ * @var \Magento\Review\Block\Product\Review $block
+ * @var \Magento\Framework\Escaper $escaper
+ */
 ?>
 <div id="product-review-container" data-role="product-review"></div>
 <?= $block->getChildHtml() ?>
@@ -13,7 +16,7 @@
     {
         "*": {
             "Magento_Review/js/process-reviews": {
-                "productReviewUrl": "<?= $block->escapeJs($block->getProductReviewUrl()) ?>",
+                "productReviewUrl": "<?= $escaper->escapeJs($block->getProductReviewUrl()) ?>",
                 "reviewsTabSelector": "#tab-label-reviews"
             }
         }

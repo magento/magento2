@@ -4,6 +4,9 @@
  * See COPYING.txt for license details.
  */
 
+/**
+ * @var \Magento\Framework\Escaper $escaper
+ */
 /** This changes need to valid applying filters and configuration before search process is started. */
 $productList = $block->getProductListHtml();
 ?>
@@ -25,7 +28,7 @@ $productList = $block->getProductListHtml();
 
 <div class="message notice">
     <div>
-        <?= $block->escapeHtml($block->getNoResultText() ? $block->getNoResultText() : __('Your search returned no results.')) ?>
+        <?= $escaper->escapeHtml($block->getNoResultText() ? $block->getNoResultText() : __('Your search returned no results.')) ?>
         <?= /* @noEscape */ $block->getAdditionalHtml() ?>
         <?php if ($messages = $block->getNoteMessages()) : ?>
             <?php foreach ($messages as $message) : ?>

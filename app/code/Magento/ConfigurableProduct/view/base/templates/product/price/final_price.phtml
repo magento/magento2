@@ -4,7 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-/** @var \Magento\ConfigurableProduct\Pricing\Render\FinalPriceBox$block */
+/**
+ * @var \Magento\ConfigurableProduct\Pricing\Render\FinalPriceBox $block
+ * @var \Magento\Framework\Escaper $escaper
+ */
 /** @var \Magento\Framework\Pricing\Price\PriceInterface $priceModel */
 $priceModel = $block->getPriceType('regular_price');
 /** @var \Magento\Framework\Pricing\Price\PriceInterface $finalPriceModel */
@@ -37,7 +40,7 @@ $schema = ($block->getZone() == 'item_view') ? true : false;
 
 <?php if ($block->showMinimalPrice()) : ?>
     <?php if ($block->getUseLinkForAsLowAs()) :?>
-        <a href="<?= $block->escapeUrl($block->getSaleableItem()->getProductUrl()) ?>" class="minimal-price-link">
+        <a href="<?= $escaper->escapeUrl($block->getSaleableItem()->getProductUrl()) ?>" class="minimal-price-link">
             <?= /* @noEscape */ $block->renderAmountMinimal() ?>
         </a>
     <?php else :?>

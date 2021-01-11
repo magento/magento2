@@ -5,7 +5,10 @@
  */
 
 /** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
-/** @var \Magento\Framework\View\Element\Html\Calendar $block */
+/**
+ * @var \Magento\Framework\View\Element\Html\Calendar $block
+ * @var \Magento\Framework\Escaper $escaper
+ */
 
 /**
  * Calendar localization script. Should be put into page header.
@@ -28,16 +31,16 @@ require([
             dayNamesMin: {$days['abbreviated']},
             monthNames: {$months['wide']},
             monthNamesShort: {$months['abbreviated']},
-            infoTitle: '{$block->escapeJs(__('About the calendar'))}',
+            infoTitle: '{$escaper->escapeJs(__('About the calendar'))}',
             firstDay: {$intFirstDay},
-            closeText: '{$block->escapeJs(__('Close'))}',
-            currentText: '{$block->escapeJs(__('Go Today'))}',
-            prevText: '{$block->escapeJs(__('Previous'))}',
-            nextText: '{$block->escapeJs(__('Next'))}',
-            weekHeader: '{$block->escapeJs(__('WK'))}',
-            timeText: '{$block->escapeJs(__('Time'))}',
-            hourText: '{$block->escapeJs(__('Hour'))}',
-            minuteText: '{$block->escapeJs(__('Minute'))}',
+            closeText: '{$escaper->escapeJs(__('Close'))}',
+            currentText: '{$escaper->escapeJs(__('Go Today'))}',
+            prevText: '{$escaper->escapeJs(__('Previous'))}',
+            nextText: '{$escaper->escapeJs(__('Next'))}',
+            weekHeader: '{$escaper->escapeJs(__('WK'))}',
+            timeText: '{$escaper->escapeJs(__('Time'))}',
+            hourText: '{$escaper->escapeJs(__('Hour'))}',
+            minuteText: '{$escaper->escapeJs(__('Minute'))}',
             dateFormat: "D, d M yy", // $.datepicker.RFC_2822
             showOn: 'button',
             showAnim: '',

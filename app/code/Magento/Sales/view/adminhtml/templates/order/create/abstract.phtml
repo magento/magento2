@@ -3,10 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+/**
+ * @var \Magento\Framework\Escaper $escaper
+ */
 ?>
 
 <div class="admin__page-section-title">
-    <span class="title"><?= $block->escapeHtml($block->getHeaderText()) ?></span>
+    <span class="title"><?= $escaper->escapeHtml($block->getHeaderText()) ?></span>
     <?php if ($block->getButtonsHtml()) : ?>
         <div class="actions"><?= $block->getButtonsHtml() ?></div>
     <?php endif; ?>

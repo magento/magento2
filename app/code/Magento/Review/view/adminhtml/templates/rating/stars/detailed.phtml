@@ -5,13 +5,16 @@
  */
 
 // @deprecated
+/**
+ * @var \Magento\Framework\Escaper $escaper
+ */
 ?>
 <?php if ($block->getRating() && $block->getRating()->getSize()) : ?>
     <div class="ratings-container">
         <?php foreach ($block->getRating() as $_rating) : ?>
             <?php if ($_rating->getPercent()) : ?>
                 <div class="ratings">
-                    <?= $block->escapeHtml($_rating->getRatingCode()) ?>
+                    <?= $escaper->escapeHtml($_rating->getRatingCode()) ?>
                     <div class="rating-box">
                         <div class="rating" style="width:<?= /* @noEscape */ ceil($_rating->getPercent()) ?>%;"></div>
                     </div>
@@ -20,5 +23,5 @@
         <?php endforeach; ?>
     </div>
 <?php else : ?>
-    <?= $block->escapeHtml(__("Rating isn't Available")) ?>
+    <?= $escaper->escapeHtml(__("Rating isn't Available")) ?>
 <?php endif; ?>

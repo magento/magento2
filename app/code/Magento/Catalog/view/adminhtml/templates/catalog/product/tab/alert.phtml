@@ -4,6 +4,9 @@
  * See COPYING.txt for license details.
  */
 
+/**
+ * @var \Magento\Framework\Escaper $escaper
+ */
 ?>
 <?php
 /**
@@ -12,7 +15,7 @@
 ?>
 <div id="alert_messages_block"><?= $block->getMessageHtml() ?></div>
 <div>
-    <h4 class="icon-head head-edit-form"><?= $block->escapeHtml(__('Product Alerts')) ?></h4>
+    <h4 class="icon-head head-edit-form"><?= $escaper->escapeHtml(__('Product Alerts')) ?></h4>
 </div>
 <div class="clear"></div>
 <?= $block->getAccordionHtml() ?>

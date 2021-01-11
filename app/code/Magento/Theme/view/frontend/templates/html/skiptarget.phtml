@@ -4,6 +4,9 @@
  * See COPYING.txt for license details.
  */
 
+/**
+ * @var \Magento\Framework\Escaper $escaper
+ */
 $target_id = $block->getTargetId();
 ?>
-<a id="<?= $block->escapeHtmlAttr($target_id) ?>" tabindex="-1"></a>
+<a id="<?= $escaper->escapeHtmlAttr($target_id) ?>" tabindex="-1"></a>

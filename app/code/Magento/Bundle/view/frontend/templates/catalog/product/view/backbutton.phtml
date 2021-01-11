@@ -3,8 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+/**
+ * @var \Magento\Framework\Escaper $escaper
+ */
 ?>
 <button type="button"
         class="action back customization">
-    <span><?= $block->escapeHtml(__('Go back to product details')) ?></span>
+    <span><?= $escaper->escapeHtml(__('Go back to product details')) ?></span>
 </button>

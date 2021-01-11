@@ -4,9 +4,12 @@
  * See COPYING.txt for license details.
  */
 
-/** @var $block \Magento\Catalog\Block\Category\Rss\Link */
+/**
+ * @var $block \Magento\Catalog\Block\Category\Rss\Link
+ * @var \Magento\Framework\Escaper $escaper
+ */
 ?>
 <?php if ($block->isRssAllowed() && $block->getLink() && $block->isTopCategory()) :?>
-    <a href="<?= $block->escapeUrl($block->getLink()) ?>"
-       class="action link rss"><span><?= $block->escapeHtml($block->getLabel()) ?></span></a>
+    <a href="<?= $escaper->escapeUrl($block->getLink()) ?>"
+       class="action link rss"><span><?= $escaper->escapeHtml($block->getLabel()) ?></span></a>
 <?php endif; ?>

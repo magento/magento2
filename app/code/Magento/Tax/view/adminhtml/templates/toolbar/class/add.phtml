@@ -4,15 +4,18 @@
  * See COPYING.txt for license details.
  */
 // @deprecated
-/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+/**
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ * @var \Magento\Framework\Escaper $escaper
+ */
 ?>
 <div data-mage-init='{"floatingHeader": {}}' class="page-actions">
     <button type="button" id="addNewClass">
-        <?= $block->escapeHtml(__('Add New Class')) ?>
+        <?= $escaper->escapeHtml(__('Add New Class')) ?>
     </button>
     <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
         'onclick',
-        "window.location.href='" . $block->escapeJs($createUrl) . "'",
+        "window.location.href='" . $escaper->escapeJs($createUrl) . "'",
         'button#addNewClass'
     ) ?>
 </div>

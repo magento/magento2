@@ -6,6 +6,7 @@
 
 /**
  * @var $block \Magento\Theme\Block\Html\Notices
+ * @var \Magento\Framework\Escaper $escaper
  * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
  */
 ?>
@@ -14,9 +15,9 @@
         <div class="message global noscript">
             <div class="content">
                 <p>
-                    <strong><?= $block->escapeHtml(__('JavaScript seems to be disabled in your browser.')) ?></strong>
+                    <strong><?= $escaper->escapeHtml(__('JavaScript seems to be disabled in your browser.')) ?></strong>
                     <span>
-                        <?= $block->escapeHtml(
+                        <?= $escaper->escapeHtml(
                             __('For the best experience on our site, be sure to turn on Javascript in your browser.')
                         ) ?>
                     </span>
@@ -29,9 +30,9 @@
     <div class="notice global site local_storage">
         <div class="content">
             <p>
-                <strong><?= $block->escapeHtml(__('Local Storage seems to be disabled in your browser.')) ?></strong>
+                <strong><?= $escaper->escapeHtml(__('Local Storage seems to be disabled in your browser.')) ?></strong>
                 <br />
-                <?= $block->escapeHtml(
+                <?= $escaper->escapeHtml(
                     __('For the best experience on our site, be sure to turn on Local Storage in your browser.')
                 ) ?>
             </p>
@@ -64,7 +65,7 @@ script;
 <?php if ($block->displayDemoNotice()): ?>
     <div class="message global demo">
         <div class="content">
-            <p><?= $block->escapeHtml(__('This is a demo store. No orders will be fulfilled.')) ?></p>
+            <p><?= $escaper->escapeHtml(__('This is a demo store. No orders will be fulfilled.')) ?></p>
         </div>
     </div>
 <?php endif; ?>

@@ -8,6 +8,7 @@
 <?php
 /**
  * @var $block \Magento\Sales\Block\Adminhtml\Items\Column\Name
+ * @var \Magento\Framework\Escaper $escaper
  * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
  */
 ?>
@@ -19,17 +20,17 @@ $catalogHelper = $block->getData('catalogHelper');
 <?php if ($_item = $block->getItem()): ?>
     <div id="order_item_<?= (int) $_item->getId() ?>_title"
          class="product-title">
-        <?= $block->escapeHtml($_item->getName()) ?>
+        <?= $escaper->escapeHtml($_item->getName()) ?>
     </div>
     <div class="product-sku-block">
-        <span><?= $block->escapeHtml(__('SKU'))?>:</span>
-        <?= /* @noEscape */ implode('<br />', $catalogHelper->splitSku($block->escapeHtml($block->getSku()))) ?>
+        <span><?= $escaper->escapeHtml(__('SKU'))?>:</span>
+        <?= /* @noEscape */ implode('<br />', $catalogHelper->splitSku($escaper->escapeHtml($block->getSku()))) ?>
     </div>
 
     <?php if ($block->getOrderOptions()): ?>
         <dl class="item-options">
             <?php foreach ($block->getOrderOptions() as $_option): ?>
-                <dt><?= $block->escapeHtml($_option['label']) ?>:</dt>
+                <dt><?= $escaper->escapeHtml($_option['label']) ?>:</dt>
                 <dd>
                     <?php if (isset($_option['custom_view']) && $_option['custom_view']): ?>
                         <?= /* @noEscape */ $block->getCustomizedOptionValue($_option) ?>
@@ -37,11 +38,11 @@ $catalogHelper = $block->getData('catalogHelper');
                         <?php $_option = $block->getFormattedOption($_option['value']); ?>
                         <?php $dots = 'dots' . uniqid(); ?>
                         <?php $id = 'id' . uniqid(); ?>
-                        <?= $block->escapeHtml($_option['value'], ['a', 'br']) ?>
+                        <?= $escaper->escapeHtml($_option['value'], ['a', 'br']) ?>
                         <?php if (isset($_option['remainder']) && $_option['remainder']): ?>
                             <span id="<?= /* @noEscape */ $dots; ?>"> ...</span>
                             <span id="<?= /* @noEscape */ $id; ?>">
-                                <?= $block->escapeHtml($_option['remainder'], ['a']) ?>
+                                <?= $escaper->escapeHtml($_option['remainder'], ['a']) ?>
                             </span>
                             <?php $scriptString = <<<script
                                 require(['prototype'], function() {
@@ -68,5 +69,5 @@ script;
             <?php endforeach; ?>
         </dl>
     <?php endif; ?>
-    <?= $block->escapeHtml($_item->getDescription()) ?>
+    <?= $escaper->escapeHtml($_item->getDescription()) ?>
 <?php endif; ?>

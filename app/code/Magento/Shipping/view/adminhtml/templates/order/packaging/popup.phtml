@@ -8,6 +8,7 @@
 
 /**
  * @var $block \Magento\Shipping\Block\Adminhtml\Order\Packaging
+ * @var \Magento\Framework\Escaper $escaper
  * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
  */
 ?>
@@ -37,7 +38,7 @@ $girthEnabled = $block->isDisplayGirthValue() && $block->isGirthAllowed() ? 1 : 
             packaging.sendCreateLabelRequest();
         });
         packaging.setLabelCreatedCallback(function(response){
-            setLocation("{$block->escapeJs($block->getUrl(
+            setLocation("{$escaper->escapeJs($block->getUrl(
                 'sales/order/view',
                 ['order_id' => $block->getShipment()->getOrderId()]
             ))}");
@@ -61,23 +62,23 @@ $girthEnabled = $block->isDisplayGirthValue() && $block->isGirthAllowed() ? 1 : 
         });
         jQuery('#packaging_window').modal({
             type: 'slide',
-            title: '{$block->escapeJs(__('Create Packages'))}',
+            title: '{$escaper->escapeJs(__('Create Packages'))}',
             buttons: [{
-                text: '{$block->escapeJs(__('Cancel'))}',
+                text: '{$escaper->escapeJs(__('Cancel'))}',
                 'class': 'action-secondary',
                 click: function () {
                     packaging.cancelPackaging();
                     this.closeModal();
                     }
                 }, {
-                text: '{$block->escapeJs(__('Save'))}',
+                text: '{$escaper->escapeJs(__('Save'))}',
                 'attr': {'disabled':'disabled', 'data-action':'save-packages'},
                 'class': 'action-primary _disabled',
                 click: function () {
                     packaging.confirmPackaging();
                     }
                 }, {
-                    text: '{$block->escapeJs(__('Add Package'))}',
+                    text: '{$escaper->escapeJs(__('Add Package'))}',
                     'attr': {'data-action':'add-packages'},
                     'class': 'action-secondary',
                     click: function () {

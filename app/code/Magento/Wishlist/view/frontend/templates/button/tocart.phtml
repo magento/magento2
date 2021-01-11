@@ -4,11 +4,14 @@
  * See COPYING.txt for license details.
  */
 
-/** @var \Magento\Wishlist\Block\Customer\Wishlist\Button $block */
+/**
+ * @var \Magento\Wishlist\Block\Customer\Wishlist\Button $block
+ * @var \Magento\Framework\Escaper $escaper
+ */
 ?>
 
 <?php if ($block->getWishlist()->getItemsCount() && $block->getWishlist()->isSalable()) : ?>
-    <button type="button" data-role="all-tocart" title="<?= $block->escapeHtmlAttr(__('Add All to Cart')) ?>" class="action tocart">
-        <span><?= $block->escapeHtml(__('Add All to Cart')) ?></span>
+    <button type="button" data-role="all-tocart" title="<?= $escaper->escapeHtmlAttr(__('Add All to Cart')) ?>" class="action tocart">
+        <span><?= $escaper->escapeHtml(__('Add All to Cart')) ?></span>
     </button>
 <?php endif;?>

@@ -8,6 +8,7 @@
 <?php
 /**
  * @var $block \Magento\Weee\Block\Renderer\Weee\Tax
+ * @var \Magento\Framework\Escaper $escaper
  * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
  */
 
@@ -25,19 +26,19 @@ $data = ['fptAttribute' => [
 <div id="attribute-<?= /* @noEscape */ $block->getElement()->getHtmlId() ?>-container" class="field"
      data-attribute-code="<?= /* @noEscape */ $block->getElement()->getHtmlId() ?>"
      data-mage-init="<?= /* @noEscape */ $jsonHelper->jsonEncode($data) ?>">
-    <label class="label"><span><?= $block->escapeHtml($block->getElement()->getLabel()) ?></span></label>
+    <label class="label"><span><?= $escaper->escapeHtml($block->getElement()->getLabel()) ?></span></label>
 
     <div class="control">
         <table class="data-table">
             <thead>
                 <tr>
-                    <th class="col-website"><?= $block->escapeHtml(__('Website')) ?></th>
+                    <th class="col-website"><?= $escaper->escapeHtml(__('Website')) ?></th>
                     <?php if (!$block->isMultiWebsites()): ?>
                         <?= /* @noEscape */ $secureRenderer->renderStyleAsTag('display: none;', 'th.col-website') ?>
                     <?php endif; ?>
-                    <th class="col-country required"><?= $block->escapeHtml(__('Country/State')) ?></th>
-                    <th class="col-tax required"><?= $block->escapeHtml(__('Tax')) ?></th>
-                    <th class="col-action"><?= $block->escapeHtml(__('Action')) ?></th>
+                    <th class="col-country required"><?= $escaper->escapeHtml(__('Country/State')) ?></th>
+                    <th class="col-tax required"><?= $escaper->escapeHtml(__('Tax')) ?></th>
+                    <th class="col-action"><?= $escaper->escapeHtml(__('Action')) ?></th>
                 </tr>
             </thead>
             <tfoot>
@@ -58,8 +59,8 @@ $data = ['fptAttribute' => [
 
     <script data-role="row-template" type="text/x-magento-template">
         <?php
-            $elementName = $block->escapeHtmlAttr($block->getElement()->getName());
-            $elementClass = $block->escapeHtmlAttr($block->getElement()->getClass());
+            $elementName = $escaper->escapeHtmlAttr($block->getElement()->getName());
+            $elementClass = $escaper->escapeHtmlAttr($block->getElement()->getClass());
         ?>
         <tr id="<?= /* @noEscape */ $block->getElement()->getHtmlId() ?>_weee_tax_row_<%- data.index %>"
             data-role="fpt-item-row">
@@ -68,7 +69,7 @@ $data = ['fptAttribute' => [
                         name="<?= /* @noEscape */ $elementName ?>[<%- data.index %>][website_id]"
                         class="<?= /* @noEscape */ $elementClass ?> website required-entry" data-role="select-website">
                     <?php foreach ($block->getWebsites() as $_websiteId => $_info): ?>
-                    <option value="<?= /* @noEscape */ $_websiteId ?>"><?= $block->escapeHtml($_info['name']) ?>
+                    <option value="<?= /* @noEscape */ $_websiteId ?>"><?= $escaper->escapeHtml($_info['name']) ?>
                         <?php if (!empty($_info['currency'])): ?>
                             [<?= /* @noEscape */ $_info['currency'] ?>]
                         <?php endif; ?>
@@ -84,8 +85,8 @@ $data = ['fptAttribute' => [
                         name="<?= /* @noEscape */ $elementName ?>[<%- data.index %>][country]"
                         class="<?= /* @noEscape */ $elementClass ?> country required-entry" data-role="select-country">
                     <?php foreach ($block->getCountries() as $_country): ?>
-                    <option value="<?= $block->escapeHtmlAttr($_country['value']) ?>">
-                        <?= $block->escapeHtml($_country['label']) ?>
+                    <option value="<?= $escaper->escapeHtmlAttr($_country['value']) ?>">
+                        <?= $escaper->escapeHtml($_country['label']) ?>
                     </option>
                     <?php endforeach ?>
                 </select>

@@ -4,11 +4,14 @@
  * See COPYING.txt for license details.
  */
 
-/** @var \Magento\Wishlist\Block\Customer\Wishlist\Item\Column\Actions $block */
+/**
+ * @var \Magento\Wishlist\Block\Customer\Wishlist\Item\Column\Actions $block
+ * @var \Magento\Framework\Escaper $escaper
+ */
 ?>
 <?php $children = $block->getChildNames(); ?>
 <?php if ($children) : ?>
-    <div class="<?= $block->escapeHtmlAttr($block->getCssClass()) ?>">
+    <div class="<?= $escaper->escapeHtmlAttr($block->getCssClass()) ?>">
         <?php foreach ($children as $childName) : ?>
             <?= /* @noEscape */ $block->getLayout()->renderElement($childName, false) ?>
         <?php endforeach;?>

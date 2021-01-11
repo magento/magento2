@@ -3,10 +3,14 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+/**
+ * @var \Magento\Framework\Escaper $escaper
+ */
 ?>
 <?php if ($block->getCanDisplayTotalRefunded()) : ?>
 <tr>
-    <td class="label"><strong><?= $block->escapeHtml(__('Total Refunded')) ?></strong></td>
+    <td class="label"><strong><?= $escaper->escapeHtml(__('Total Refunded')) ?></strong></td>
     <td class="emph"><?= /* @noEscape */ $block->displayPriceAttribute('total_refunded', true) ?></td>
 </tr>
 <?php endif; ?>

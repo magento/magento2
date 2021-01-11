@@ -4,11 +4,14 @@
  * See COPYING.txt for license details.
  */
 
-/** @var \Magento\Wishlist\Block\Item\Configure $block */
+/**
+ * @var \Magento\Wishlist\Block\Item\Configure $block
+ * @var \Magento\Framework\Escaper $escaper
+ */
 ?>
 <?php if ($this->helper(\Magento\Wishlist\Helper\Data::class)->isAllow()) : ?>
     <a href="#" data-post='<?= /* @noEscape */ $block->getUpdateParams() ?>' class="action towishlist updated" data-action="add-to-wishlist">
-        <span><?= $block->escapeHtml(__('Update Wish List')) ?></span>
+        <span><?= $escaper->escapeHtml(__('Update Wish List')) ?></span>
     </a>
 <?php endif; ?>
 <script type="text/x-magento-init">

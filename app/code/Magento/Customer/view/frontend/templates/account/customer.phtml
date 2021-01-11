@@ -4,7 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-/** @var Magento\Customer\Block\Account\Customer $block */
+/**
+ * @var Magento\Customer\Block\Account\Customer $block
+ * @var \Magento\Framework\Escaper $escaper
+ */
 ?>
 <?php if ($block->customerLoggedIn()) : ?>
     <li class="customer-welcome">
@@ -19,7 +22,7 @@
                     class="action switch"
                     tabindex="-1"
                     data-action="customer-menu-toggle">
-                <span><?= $block->escapeHtml(__('Change')) ?></span>
+                <span><?= $escaper->escapeHtml(__('Change')) ?></span>
             </button>
         </span>
         <script type="text/x-magento-init">

@@ -4,10 +4,13 @@
  * See COPYING.txt for license details.
  */
 
-/** @var $block \Magento\Sales\Block\Order\Info\Buttons\Rss */
+/**
+ * @var $block \Magento\Sales\Block\Order\Info\Buttons\Rss
+ * @var \Magento\Framework\Escaper $escaper
+ */
 ?>
 <?php if ($block->isRssAllowed() && $block->getLink()) : ?>
-    <a href="<?= $block->escapeHtmlAttr($block->getLink()) ?>" class="action rss">
-        <span><?= $block->escapeHtml($block->getLabel()) ?></span>
+    <a href="<?= $escaper->escapeHtmlAttr($block->getLink()) ?>" class="action rss">
+        <span><?= $escaper->escapeHtml($block->getLabel()) ?></span>
     </a>
 <?php endif; ?>

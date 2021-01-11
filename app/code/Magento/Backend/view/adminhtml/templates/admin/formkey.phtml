@@ -3,5 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+/**
+ * @var \Magento\Framework\Escaper $escaper
+ */
 ?>
-<div><input name="form_key" type="hidden" value="<?= $block->escapeHtmlAttr($block->getFormKey()) ?>" /></div>
+<div><input name="form_key" type="hidden" value="<?= $escaper->escapeHtmlAttr($block->getFormKey()) ?>" /></div>

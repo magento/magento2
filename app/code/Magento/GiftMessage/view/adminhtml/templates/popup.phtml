@@ -4,7 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+/**
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ * @var \Magento\Framework\Escaper $escaper
+ */
 ?>
 
 <?php if ($block->getChildHtml()):?>
@@ -15,10 +18,10 @@
         </div>
         <div class="ui-dialog-buttonset">
             <button type="button" class="action-close" id="gift_options_cancel_button">
-                <span><?= $block->escapeHtml(__('Cancel')) ?></span>
+                <span><?= $escaper->escapeHtml(__('Cancel')) ?></span>
             </button>
             <button type="button" class="action-primary" id="gift_options_ok_button">
-                <span><?= $block->escapeHtml(__('OK')) ?></span>
+                <span><?= $escaper->escapeHtml(__('OK')) ?></span>
             </button>
         </div>
     </div>

@@ -4,7 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-/** @var \Magento\Vault\Block\Customer\AccountTokens $block */
+/**
+ * @var \Magento\Vault\Block\Customer\AccountTokens $block
+ * @var \Magento\Framework\Escaper $escaper
+ */
 $tokens = $block->getPaymentTokens();
 ?>
 <?php if (count($tokens) !== 0) : ?>
@@ -12,7 +15,7 @@ $tokens = $block->getPaymentTokens();
         <table class="data table table-credit-cards" id="token-list-table">
             <thead>
             <tr>
-                <th scope="col" class="col"><?= $block->escapeHtml(__('PayPal Account')) ?></th>
+                <th scope="col" class="col"><?= $escaper->escapeHtml(__('PayPal Account')) ?></th>
                 <th scope="col" class="col actions">&nbsp;</th>
             </tr>
             </thead>

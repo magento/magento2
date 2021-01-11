@@ -4,10 +4,13 @@
  * See COPYING.txt for license details.
  */
 
-/* @var \Magento\Wishlist\Block\Link $block */
+/**
+ * @var \Magento\Wishlist\Block\Link $block
+ * @var \Magento\Framework\Escaper $escaper
+ */
 ?>
 <li class="link wishlist" data-bind="scope: 'wishlist'">
-    <a <?= /* @noEscape */ $block->getLinkAttributes() ?>><?= $block->escapeHtml($block->getLabel()) ?>
+    <a <?= /* @noEscape */ $block->getLinkAttributes() ?>><?= $escaper->escapeHtml($block->getLabel()) ?>
         <!-- ko if: wishlist().counter -->
         <span data-bind="text: wishlist().counter" class="counter qty"></span>
         <!-- /ko -->

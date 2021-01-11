@@ -6,6 +6,7 @@
 
 /** @var $block \Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle */
 /** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+/** @var \Magento\Framework\Escaper $escaper */
 ?>
 
 <?php $scriptString = <<<script
@@ -19,19 +20,19 @@ script;
 <div id="bundle_product_container" class="entry-edit form-inline">
     <fieldset class="fieldset">
         <div class="field field-ship-bundle-items">
-            <label for="shipment_type" class="label"><?= $block->escapeHtml(__('Ship Bundle Items')) ?></label>
+            <label for="shipment_type" class="label"><?= $escaper->escapeHtml(__('Ship Bundle Items')) ?></label>
             <div class="control">
                 <select <?php if ($block->isReadonly()): ?>disabled="disabled" <?php endif;?>
                         id="shipment_type"
-                        name="<?= $block->escapeHtmlAttr($block->getFieldSuffix()) ?>[shipment_type]"
+                        name="<?= $escaper->escapeHtmlAttr($block->getFieldSuffix()) ?>[shipment_type]"
                         class="select">
-                    <option value="1"><?= $block->escapeHtml(__('Separately')) ?></option>
+                    <option value="1"><?= $escaper->escapeHtml(__('Separately')) ?></option>
                     <option value="0"
                         <?php if ($block->getProduct()->getShipmentType() == 0): ?>
                             selected="selected"
                         <?php endif; ?>
                     >
-                        <?= $block->escapeHtml(__('Together')) ?>
+                        <?= $escaper->escapeHtml(__('Together')) ?>
                     </option>
                 </select>
             </div>

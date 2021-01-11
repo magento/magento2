@@ -4,7 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-/* @var \Magento\Wishlist\Block\Share\Email\Items $block */
+/**
+ * @var \Magento\Framework\Escaper $escaper
+ * @var \Magento\Wishlist\Block\Share\Email\Items $block
+ */
 ?>
 <?php $l = $block->getWishlistItemsCount() ?>
 <div>
@@ -17,26 +20,26 @@
                 <?php $_product = $item->getProduct(); ?>
                 <td class="col product">
                     <p>
-                        <a href="<?= $block->escapeUrl($block->getProductUrl($item)) ?>">
+                        <a href="<?= $escaper->escapeUrl($block->getProductUrl($item)) ?>">
                             <?php $productThumbnail = $block->getProductForThumbnail($item) ?>
                             <?= /* @noEscape */ $block->getImage($productThumbnail, 'product_small_image')->toHtml() ?>
                         </a>
                     </p>
 
                     <p>
-                        <a href="<?= $block->escapeUrl($block->getProductUrl($item)) ?>">
-                            <strong><?= $block->escapeHtml($_product->getName()) ?></strong>
+                        <a href="<?= $escaper->escapeUrl($block->getProductUrl($item)) ?>">
+                            <strong><?= $escaper->escapeHtml($_product->getName()) ?></strong>
                         </a>
                     </p>
                     <?php if ($block->hasDescription($item)): ?>
                         <p>
-                            <strong><?= $block->escapeHtml(__('Comment')) ?>:</strong>
+                            <strong><?= $escaper->escapeHtml(__('Comment')) ?>:</strong>
                             <br/><?= /* @noEscape */  $block->getEscapedDescription($item) ?>
                         </p>
                     <?php endif; ?>
                     <p>
-                        <a href="<?= $block->escapeUrl($block->getProductUrl($item)) ?>">
-                            <?= $block->escapeHtml(__('View Product')) ?>
+                        <a href="<?= $escaper->escapeUrl($block->getProductUrl($item)) ?>">
+                            <?= $escaper->escapeHtml(__('View Product')) ?>
                         </a>
                     </p>
                 </td>

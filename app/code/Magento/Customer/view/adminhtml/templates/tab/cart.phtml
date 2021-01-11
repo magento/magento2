@@ -11,7 +11,7 @@
 <div class="content-header skip-header">
     <table>
         <tr>
-            <td><h4><?= $block->escapeHtml($block->getCartHeader()) ?></h4></td>
+            <td><h4><?= $escaper->escapeHtml($block->getCartHeader()) ?></h4></td>
         </tr>
     </table>
     <?= /* @noEscape */ $secureRenderer->renderStyleAsTag("width:50%;", 'div.content-header.skip-header table tr td') ?>
@@ -27,19 +27,19 @@
             "Magento_Catalog/catalog/product/composite/configure"
         ], function(alert, confirm){
 
-        {$block->escapeJs($block->getJsObjectName())}cartControl = {
+        {$escaper->escapeJs($block->getJsObjectName())}cartControl = {
             reload: function (params) {
             if (!params) {
                 params = {};
             }
-            {$block->escapeJs($block->getJsObjectName())}.reloadParams = params;
-            {$block->escapeJs($block->getJsObjectName())}.reload();
-            {$block->escapeJs($block->getJsObjectName())}.reloadParams = {};
+            {$escaper->escapeJs($block->getJsObjectName())}.reloadParams = params;
+            {$escaper->escapeJs($block->getJsObjectName())}.reload();
+            {$escaper->escapeJs($block->getJsObjectName())}.reloadParams = {};
         },
 
         configureItem: function (itemId) {
-            productConfigure.setOnLoadIFrameCallback('{$block->escapeJs($listType)}', this.cbOnLoadIframe.bind(this));
-            productConfigure.showItemConfiguration('{$block->escapeJs($listType)}', itemId);
+            productConfigure.setOnLoadIFrameCallback('{$escaper->escapeJs($listType)}', this.cbOnLoadIframe.bind(this));
+            productConfigure.showItemConfiguration('{$escaper->escapeJs($listType)}', itemId);
             return false;
         },
 
@@ -55,14 +55,14 @@
 
             if (!itemId) {
                 alert({
-                    content: '{$block->escapeJs(__('No item specified.'))}'
+                    content: '{$escaper->escapeJs(__('No item specified.'))}'
                 });
 
                 return false;
             }
 
             confirm({
-                content: '{$block->escapeJs(__('Are you sure you want to remove this item?'))}',
+                content: '{$escaper->escapeJs(__('Are you sure you want to remove this item?'))}',
                 actions: {
                     confirm: function(){
                         self.reload({'delete':itemId});
@@ -80,10 +80,10 @@ script;
     ];
     $scriptString .= <<<script
     productConfigure.addListType(
-        '{$block->escapeJs($listType)}',
+        '{$escaper->escapeJs($listType)}',
         {
-            urlFetch: '{$block->escapeJs($block->getUrl('customer/cart_product_composite_cart/configure', $params))}',
-            urlConfirm: '{$block->escapeJs($block->getUrl('customer/cart_product_composite_cart/update', $params))}'
+            urlFetch: '{$escaper->escapeJs($block->getUrl('customer/cart_product_composite_cart/configure', $params))}',
+            urlConfirm: '{$escaper->escapeJs($block->getUrl('customer/cart_product_composite_cart/update', $params))}'
         }
     );
 

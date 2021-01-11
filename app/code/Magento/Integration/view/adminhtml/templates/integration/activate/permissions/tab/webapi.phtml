@@ -6,13 +6,17 @@
  * See COPYING.txt for license details.
  *
  * @var \Magento\Integration\Block\Adminhtml\Integration\Activate\Permissions\Tab\Webapi $block
+ * @var \Magento\Framework\Escaper $escaper
  */
 
-/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+/**
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ * @var \Magento\Framework\Escaper $escaper
+ */
 ?>
 <fieldset class="admin__fieldset form-inline entry-edit">
     <?php if ($block->isTreeEmpty()): ?>
-        <p class="empty"><?= $block->escapeHtml(__('No permissions requested')) ?></p>
+        <p class="empty"><?= $escaper->escapeHtml(__('No permissions requested')) ?></p>
     <?php else: ?>
         <div class="field" data-role="tree-resources-container">
             <div class="control">

@@ -4,18 +4,21 @@
  * See COPYING.txt for license details.
  */
 
-/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+/**
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ * @var \Magento\Framework\Escaper $escaper
+ */
 ?>
 <tr>
 <td colspan="2">
-<label for="gallery"><?= $block->escapeHtml(__('Images')) ?></label>
+<label for="gallery"><?= $escaper->escapeHtml(__('Images')) ?></label>
 <table id="gallery" class="gallery" border="0" cellspacing="3" cellpadding="0">
 <thead id="gallery_thead" class="gallery">
     <tr class="gallery">
-        <td class="gallery" valign="middle" align="center"><?= $block->escapeHtml(__('Big Image')) ?></td>
-        <td class="gallery" valign="middle" align="center"><?= $block->escapeHtml(__('Thumbnail')) ?></td>
-        <td class="gallery" valign="middle" align="center"><?= $block->escapeHtml(__('Sort Order')) ?></td>
-        <td class="gallery" valign="middle" align="center"><?= $block->escapeHtml(__('Delete')) ?></td>
+        <td class="gallery" valign="middle" align="center"><?= $escaper->escapeHtml(__('Big Image')) ?></td>
+        <td class="gallery" valign="middle" align="center"><?= $escaper->escapeHtml(__('Thumbnail')) ?></td>
+        <td class="gallery" valign="middle" align="center"><?= $escaper->escapeHtml(__('Sort Order')) ?></td>
+        <td class="gallery" valign="middle" align="center"><?= $escaper->escapeHtml(__('Delete')) ?></td>
     </tr>
 </thead>
 
@@ -29,19 +32,19 @@
 
 <?php $i = 0; if ($block->getValues() !== null): ?>
     <?php foreach ($block->getValues() as $image): $i++; ?>
-        <?php $trId = $block->getElement()->getHtmlId() . '_tr_' . $block->escapeHtmlAttr($image->getValueId()); ?>
+        <?php $trId = $block->getElement()->getHtmlId() . '_tr_' . $escaper->escapeHtmlAttr($image->getValueId()); ?>
         <tr id="<?= /* @noEscape */ $trId ?>" class="gallery">
         <?php foreach ($block->getValues()->getAttributeBackend()->getImageTypes() as $type): ?>
-            <?php $typeId = $block->getElement()->getHtmlId() . '_image_' . $block->escapeHtmlAttr($type);
-            $imgId =  $typeId . '_' . $block->escapeHtmlAttr($image->getValueId()); ?>
+            <?php $typeId = $block->getElement()->getHtmlId() . '_image_' . $escaper->escapeHtmlAttr($type);
+            $imgId =  $typeId . '_' . $escaper->escapeHtmlAttr($image->getValueId()); ?>
             <td class="gallery" align="center" id="<?= /* @noEscape */ $typeId ?>">
-            <a href="<?= $block->escapeUrl($image->setType($type)->getSourceUrl()) ?>"
+            <a href="<?= $escaper->escapeUrl($image->setType($type)->getSourceUrl()) ?>"
                id = <?= /* @noEscape */ 'a_' . $imgId ?>
                target="_blank"
             <img id="<?= /* @noEscape */ $imgId ?>"
-                 src="<?= $block->escapeUrl($image->setType($type)->getSourceUrl()) ?>?<?= /* @noEscape */ time() ?>"
-                 alt="<?= $block->escapeHtmlAttr($image->getValue()) ?>"
-                 title="<?= $block->escapeHtmlAttr($image->getValue()) ?>"
+                 src="<?= $escaper->escapeUrl($image->setType($type)->getSourceUrl()) ?>?<?= /* @noEscape */ time() ?>"
+                 alt="<?= $escaper->escapeHtmlAttr($image->getValue()) ?>"
+                 title="<?= $escaper->escapeHtmlAttr($image->getValue()) ?>"
                  height="25"
                  class="small-image-preview v-middle"/>
             </a><br/>
@@ -51,29 +54,29 @@
                     '#a_' . $imgId
                 ) ?>
             <input type="file"
-                   name="<?= $block->escapeHtmlAttr($block->getElement()->getName())
-                    ?>_<?= $block->escapeHtmlAttr($type) ?>[<?= $block->escapeHtmlAttr($image->getValueId()) ?>]"
+                   name="<?= $escaper->escapeHtmlAttr($block->getElement()->getName())
+                    ?>_<?= $escaper->escapeHtmlAttr($type) ?>[<?= $escaper->escapeHtmlAttr($image->getValueId()) ?>]"
                    size="1">
             </td>
             <?= /* @noEscape */ $secureRenderer->renderStyleAsTag('vertical-align:bottom;', 'td#' . $typeId) ?>
         <?php endforeach; ?>
         <td class="gallery" align="center" id="<?= /* @noEscape */ $trId . '_td_input' ?>">
             <input type="input"
-                   name="<?= $block->escapeHtmlAttr($block->getElement()->getParentName())
-                    ?>[position][<?= $block->escapeHtmlAttr($image->getValueId()) ?>]"
-                   value="<?= $block->escapeHtmlAttr($image->getPosition()) ?>"
+                   name="<?= $escaper->escapeHtmlAttr($block->getElement()->getParentName())
+                    ?>[position][<?= $escaper->escapeHtmlAttr($image->getValueId()) ?>]"
+                   value="<?= $escaper->escapeHtmlAttr($image->getPosition()) ?>"
                    id="<?= $block->getElement()->getHtmlId()
-                    ?>_position_<?= $block->escapeHtmlAttr($image->getValueId()) ?>"
+                    ?>_position_<?= $escaper->escapeHtmlAttr($image->getValueId()) ?>"
                    size="3"/>
         </td>
             <?= /* @noEscape */ $secureRenderer->renderStyleAsTag('vertical-align:bottom;', $trId . '_td_input') ?>
         <td class="gallery" align="center" id="<?= /* @noEscape */ $trId . '_td_delete' ?>">
             <?= $block->getDeleteButtonHtml($image->getValueId()) ?>
             <input type="hidden"
-                   name="<?= $block->escapeHtmlAttr($block->getElement()->getParentName())
-                    ?>[delete][<?= $block->escapeHtmlAttr($image->getValueId()) ?>]"
+                   name="<?= $escaper->escapeHtmlAttr($block->getElement()->getParentName())
+                    ?>[delete][<?= $escaper->escapeHtmlAttr($image->getValueId()) ?>]"
                    id="<?= $block->getElement()->getHtmlId()
-                    ?>_delete_<?= $block->escapeHtmlAttr($image->getValueId()) ?>"/>
+                    ?>_delete_<?= $escaper->escapeHtmlAttr($image->getValueId()) ?>"/>
         </td>
             <?= /* @noEscape */ $secureRenderer->renderStyleAsTag('vertical-align:bottom;', $trId . '_td_delete') ?>
         </tr>
@@ -110,10 +113,10 @@ window.addNewImage = function()
     num_of_images++;
 script;
 
-    $elementName = $block->escapeHtmlAttr($block->getElement()->getName());
-    $parentName = $block->escapeJs($block->getElement()->getParentName());
+    $elementName = $escaper->escapeHtmlAttr($block->getElement()->getName());
+    $parentName = $escaper->escapeJs($block->getElement()->getParentName());
     $deleteButton = /* @noEscape */ $jsonHelper->jsonEncode($block->getDeleteButtonHtml("this"));
-    $elementNameDel = $block->escapeJs($block->getElement()->getName());
+    $elementNameDel = $escaper->escapeJs($block->getElement()->getName());
     $scriptString .= <<<script
     new_file_input = '<input type="file" name="{$elementName}_%j%[%id%]" size="1">';
 

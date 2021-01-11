@@ -6,15 +6,16 @@
 
 /**
  * @var \Magento\Paypal\Block\Payment\Info $block
+ * @var \Magento\Framework\Escaper $escaper
  * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
  */
 ?>
-<div id="payment_form_<?= $block->escapeHtml($block->getMethodCode()) ?>" class="hss items">
-    <?= $block->escapeHtml(__(
+<div id="payment_form_<?= $escaper->escapeHtml($block->getMethodCode()) ?>" class="hss items">
+    <?= $escaper->escapeHtml(__(
         'You will be required to enter your payment details after you place an order.'
     )); ?>
 </div>
 <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
     'display:none',
-    'div#payment_form_' . $block->escapeHtml($block->getMethodCode())
+    'div#payment_form_' . $escaper->escapeHtml($block->getMethodCode())
 ) ?>

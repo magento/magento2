@@ -6,6 +6,7 @@
 
 /** @var $block \Magento\Backend\Block\Widget\Form\Container */
 /** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+/** @var \Magento\Framework\Escaper $escaper */
 ?>
 <?= /* @noEscape */ $block->getFormInitScripts() ?>
 <?php if ($block->getButtonsHtml('header')): ?>
@@ -38,7 +39,7 @@ require([
 
     $('#edit_form').form()
         .validation({
-            validationUrl: '{$block->escapeJs($block->getValidationUrl())}',
+            validationUrl: '{$escaper->escapeJs($block->getValidationUrl())}',
             highlight: function(element) {
                 var detailsElement = $(element).closest('details');
                 if (detailsElement.length && detailsElement.is('.details')) {

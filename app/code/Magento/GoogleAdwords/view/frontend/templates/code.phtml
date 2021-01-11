@@ -6,7 +6,9 @@
 ?>
 <?php
 /**
+ *
  * @var $block \Magento\GoogleAdwords\Block\Code
+ * @var \Magento\Framework\Escaper $escaper
  * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
  */
 ?>
@@ -16,16 +18,16 @@
 $helper = $block->getHelper();
 $scriptString = <<<script
     /* <![CDATA[ */
-    var google_conversion_id = {$block->escapeJs($helper->getConversionId())};
-    var google_conversion_language = "{$block->escapeJs($helper->getConversionLanguage())}";
-    var google_conversion_format = "{$block->escapeJs($helper->getConversionFormat())}";
-    var google_conversion_color = "{$block->escapeJs($helper->getConversionColor())}";
-    var google_conversion_label = "{$block->escapeJs($helper->getConversionLabel())}";
-    var google_conversion_value = {$block->escapeJs($helper->getConversionValue())};
+    var google_conversion_id = {$escaper->escapeJs($helper->getConversionId())};
+    var google_conversion_language = "{$escaper->escapeJs($helper->getConversionLanguage())}";
+    var google_conversion_format = "{$escaper->escapeJs($helper->getConversionFormat())}";
+    var google_conversion_color = "{$escaper->escapeJs($helper->getConversionColor())}";
+    var google_conversion_label = "{$escaper->escapeJs($helper->getConversionLabel())}";
+    var google_conversion_value = {$escaper->escapeJs($helper->getConversionValue())};
 script;
 if ($helper->hasSendConversionValueCurrency() && $helper->getConversionValueCurrency()):
         $scriptString .= <<<script
-    var google_conversion_currency = "{$block->escapeJs($helper->getConversionValueCurrency())}";
+    var google_conversion_currency = "{$escaper->escapeJs($helper->getConversionValueCurrency())}";
 script;
 endif;
 $scriptString .= <<<script
@@ -33,11 +35,11 @@ $scriptString .= <<<script
 script;
 ?>
 <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
-<script src="<?= $block->escapeHtmlAttr($helper->getConversionJsSrc()) ?>"></script>
+<script src="<?= $escaper->escapeHtmlAttr($helper->getConversionJsSrc()) ?>"></script>
 <noscript>
     <div style="display:inline;">
         <img height="1" width="1" style="border-style:none;" alt=""
-             src="<?= $block->escapeHtmlAttr($helper->getConversionImgSrc()) ?>"/>
+             src="<?= $escaper->escapeHtmlAttr($helper->getConversionImgSrc()) ?>"/>
     </div>
 </noscript>
 <!-- END Google Code for Sale Conversion Page -->

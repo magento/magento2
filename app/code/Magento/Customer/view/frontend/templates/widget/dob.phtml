@@ -5,7 +5,10 @@
  */
 
 /** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
-/** @var \Magento\Customer\Block\Widget\Dob $block */
+/**
+ * @var \Magento\Customer\Block\Widget\Dob $block
+ * @var \Magento\Framework\Escaper $escaper
+ */
 
 /*
 <?= $block->getLayout()->createBlock('Magento\Customer\Block\Widget\Dob')
@@ -28,14 +31,14 @@ $translatedCalendarConfigJson = $block->getTranslatedCalendarConfigJson();
 $fieldCssClass = 'field date field-' . $block->getHtmlId();
 $fieldCssClass .= $block->isRequired() ? ' required' : '';
 ?>
-<div class="<?= $block->escapeHtmlAttr($fieldCssClass) ?>">
-    <label class="label" for="<?= $block->escapeHtmlAttr($block->getHtmlId()) ?>">
-        <span><?= $block->escapeHtml($block->getStoreLabel('dob')) ?></span>
+<div class="<?= $escaper->escapeHtmlAttr($fieldCssClass) ?>">
+    <label class="label" for="<?= $escaper->escapeHtmlAttr($block->getHtmlId()) ?>">
+        <span><?= $escaper->escapeHtml($block->getStoreLabel('dob')) ?></span>
     </label>
     <div class="control customer-dob">
         <?= $block->getFieldHtml() ?>
         <?php if ($_message = $block->getAdditionalDescription()): ?>
-            <div class="note"><?= $block->escapeHtml($_message) ?></div>
+            <div class="note"><?= $escaper->escapeHtml($_message) ?></div>
         <?php endif; ?>
     </div>
 </div>
