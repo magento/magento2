@@ -15,7 +15,7 @@ Before installing this module, note that the Magento_Theme is dependent on the f
 - Magento_Store
 - Magento_Widget
 
-Before disabling or uninstalling this module, please consider the following dependencies:
+Before disabling or uninstalling this module, note the following dependencies:
 
 - Magento_Backend
 - Magento_Cms
