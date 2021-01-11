@@ -52,4 +52,19 @@ class Image extends \Magento\Framework\View\Element\Template
         }
         parent::__construct($context, $data);
     }
+
+    /**
+     * Get unique container ID for image
+     *
+     * @return string
+     */
+    public function getContainerId()
+    {
+        if (!$this->hasData('container_id')) {
+            $uniqId = uniqid($this->getProductId());
+            $this->setData('container_id', $uniqId);
+        }
+
+        return $this->getData('container_id');
+    }
 }
