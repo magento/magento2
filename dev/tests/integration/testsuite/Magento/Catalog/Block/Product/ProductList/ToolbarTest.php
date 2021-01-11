@@ -20,15 +20,27 @@ use Magento\TestFramework\Helper\Xpath;
  * @see \Magento\Catalog\Block\Product\ProductList\Toolbar
  * @magentoAppArea frontend
  * @magentoDbIsolation enabled
- * @magentoAppIsolation enabled
  */
 class ToolbarTest extends TestCase
 {
+    /** @var string */
+    private const XPATH_TEMPLATE_FOR_NOT_VISIBLE_ICON_CASES = '//div[contains(@class, "modes")]/*[@data-value="%s"]';
+
+    /** @var string */
+    private const ACTIVE_MODE_XPATH_TEMPLATE =
+        '//div[contains(@class, "modes")]/strong[@data-value="%s" and contains(@class, "active")]';
+
+    /** @var string */
+    private const NOT_ACTIVE_MODE_XPATH_TEMPLATE = '//div[contains(@class, "modes")]/a[@data-value="%s"]';
+
     /** @var ObjectManagerInterface */
     private $objectManager;
 
     /** @var LayoutInterface */
     private $layout;
+
+    /** @var Toolbar */
+    private $toolbarBlock;
 
     /**
      * @inheritdoc
@@ -36,14 +48,18 @@ class ToolbarTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+
         $this->objectManager = Bootstrap::getObjectManager();
         $this->layout = $this->objectManager->get(LayoutInterface::class);
+        $this->toolbarBlock = $this->layout->createBlock(Toolbar::class);
     }
 
-    public function testGetPagerHtml()
+    /**
+     * @return void
+     */
+    public function testGetPagerHtml(): void
     {
-        /** @var $block Toolbar */
-        $block = $this->layout->createBlock(Toolbar::class, 'block');
+        $this->toolbarBlock->setNameInLayout('block');
         /** @var $childBlock Text */
         $childBlock = $this->layout->addBlock(
             Text::class,
@@ -51,100 +67,114 @@ class ToolbarTest extends TestCase
             'block'
         );
         $expectedHtml = '<b>Any text there</b>';
-        $this->assertNotEquals($expectedHtml, $block->getPagerHtml());
+        $this->assertNotEquals($expectedHtml, $this->toolbarBlock->getPagerHtml());
         $childBlock->setText($expectedHtml);
-        $this->assertEquals($expectedHtml, $block->getPagerHtml());
+        $this->assertEquals($expectedHtml, $this->toolbarBlock->getPagerHtml());
     }
 
     /**
-     * @magentoConfigFixture default_store catalog/frontend/list_mode grid
+     * @magentoConfigFixture current_store catalog/frontend/list_mode grid
+     * @return void
      */
     public function testToHtmlGridOnly(): void
     {
-        $block = $this->layout->createBlock(Toolbar::class, 'block');
-        $block->setTemplate('Magento_Catalog::product/list/toolbar/viewmode.phtml');
+        $htmlOutput = $this->getModeSwitcherHtml();
+        $this->assertNotEmpty($htmlOutput);
         $this->assertEquals(
             0,
             Xpath::getElementsCountForXpath(
-                '//div[contains(@class, "modes")]/*[@data-value="grid"]',
-                $block->toHtml()
+                sprintf(self::XPATH_TEMPLATE_FOR_NOT_VISIBLE_ICON_CASES, 'grid'),
+                $htmlOutput
             )
         );
         $this->assertEquals(
             0,
             Xpath::getElementsCountForXpath(
-                '//div[contains(@class, "modes")]/*[@data-value="list"]',
-                $block->toHtml()
+                sprintf(self::XPATH_TEMPLATE_FOR_NOT_VISIBLE_ICON_CASES, 'list'),
+                $htmlOutput
             )
         );
     }
 
     /**
-     * @magentoConfigFixture default_store catalog/frontend/list_mode list
+     * @magentoConfigFixture current_store catalog/frontend/list_mode list
+     * @return void
      */
     public function testToHtmlListOnly(): void
     {
-        $block = $this->layout->createBlock(Toolbar::class, 'block');
-        $block->setTemplate('Magento_Catalog::product/list/toolbar/viewmode.phtml');
+        $htmlOutput = $this->getModeSwitcherHtml();
+        $this->assertNotEmpty($htmlOutput);
         $this->assertEquals(
             0,
             Xpath::getElementsCountForXpath(
-                '//div[contains(@class, "modes")]/*[@data-value="grid"]',
-                $block->toHtml()
+                sprintf(self::XPATH_TEMPLATE_FOR_NOT_VISIBLE_ICON_CASES, 'grid'),
+                $htmlOutput
             )
         );
         $this->assertEquals(
             0,
             Xpath::getElementsCountForXpath(
-                '//div[contains(@class, "modes")]/*[@data-value="list"]',
-                $block->toHtml()
+                sprintf(self::XPATH_TEMPLATE_FOR_NOT_VISIBLE_ICON_CASES, 'list'),
+                $htmlOutput
             )
         );
     }
 
     /**
-     * @magentoConfigFixture default_store catalog/frontend/list_mode grid-list
+     * @magentoConfigFixture current_store catalog/frontend/list_mode grid-list
+     * @return void
      */
     public function testToHtmlGridList(): void
     {
-        $block = $this->layout->createBlock(Toolbar::class, 'block');
-        $block->setTemplate('Magento_Catalog::product/list/toolbar/viewmode.phtml');
+        $htmlOutput = $this->getModeSwitcherHtml();
         $this->assertEquals(
             1,
             Xpath::getElementsCountForXpath(
-                '//div[contains(@class, "modes")]/strong[@data-value="grid" and contains(@class, "active")]',
-                $block->toHtml()
+                sprintf(self::ACTIVE_MODE_XPATH_TEMPLATE, 'grid'),
+                $htmlOutput
             )
         );
         $this->assertEquals(
             1,
             Xpath::getElementsCountForXpath(
-                '//div[contains(@class, "modes")]/a[@data-value="list"]',
-                $block->toHtml()
+                sprintf(self::NOT_ACTIVE_MODE_XPATH_TEMPLATE, 'list'),
+                $htmlOutput
             )
         );
     }
 
     /**
-     * @magentoConfigFixture default_store catalog/frontend/list_mode list-grid
+     * @magentoConfigFixture current_store catalog/frontend/list_mode list-grid
+     * @return void
      */
     public function testToHtmlListGrid(): void
     {
-        $block = $this->layout->createBlock(Toolbar::class, 'block');
-        $block->setTemplate('Magento_Catalog::product/list/toolbar/viewmode.phtml');
+        $htmlOutput = $this->getModeSwitcherHtml();
         $this->assertEquals(
             1,
             Xpath::getElementsCountForXpath(
-                '//div[contains(@class, "modes")]/strong[@data-value="list" and contains(@class, "active")]',
-                $block->toHtml()
+                sprintf(self::ACTIVE_MODE_XPATH_TEMPLATE, 'list'),
+                $htmlOutput
             )
         );
         $this->assertEquals(
             1,
             Xpath::getElementsCountForXpath(
-                '//div[contains(@class, "modes")]/a[@data-value="grid"]',
-                $block->toHtml()
+                sprintf(self::NOT_ACTIVE_MODE_XPATH_TEMPLATE, 'grid'),
+                $htmlOutput
             )
         );
+    }
+
+    /**
+     * Mode switcher html
+     *
+     * @return string
+     */
+    private function getModeSwitcherHtml(): string
+    {
+        $this->toolbarBlock->setTemplate('Magento_Catalog::product/list/toolbar/viewmode.phtml');
+
+        return $this->toolbarBlock->toHtml();
     }
 }
