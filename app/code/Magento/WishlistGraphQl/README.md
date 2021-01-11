@@ -1,12 +1,12 @@
 # Magento_WishlistGraphQl module
 
-The **Magento_WishlistGraphQl** module adds, removes, and updates products on the wishlist.
+The Magento_WishlistGraphQl module adds, removes, and updates products on the wishlist.
 
-The **Magento_WishlistGraphQl** module extends **Magento_GraphQl** and **Magento_Wishlist** modules. This module provides type and resolver information for GraphQL API.
+The Magento_WishlistGraphQl module extends Magento_GraphQl and Magento_Wishlist modules. This module provides type and resolver information for GraphQL API.
 
 ## Installation details
 
-Before installing this module, note that the **Magento_WishlistGraphQl** is dependent on the following modules:
+Before installing this module, note that the Magento_WishlistGraphQl is dependent on the following modules:
 
 - Magento_Catalog
 - Magento_Checkout
@@ -19,7 +19,7 @@ Before installing this module, note that the **Magento_WishlistGraphQl** is depe
 - Magento_Sales
 - Magento_Store
 
-For information about enabling or disabling a module in Magento 2, see [Enable or disable modules](https://devdocs.magento.com/guides/v2.4/install-gde/install/cli/install-cli-subcommands-enable.html).
+For information about enabling or disabling a module, see [Enable or disable modules](https://devdocs.magento.com/guides/v2.4/install-gde/install/cli/install-cli-subcommands-enable.html).
 
 ## Extensibility
 
@@ -29,7 +29,7 @@ Extension developers can interact with the Magento_WishlistGraphQl module. For m
 
 ## Additional information
 
-For more information about the **Magento_WishlistGraphQl** [Queries](#queries) and [Mutations](#mutations) see below:
+For more information about the Magento_WishlistGraphQl [Queries](#queries) and [Mutations](#mutations) see below:
 
 ### Queries {#queries}
 
