@@ -102,6 +102,7 @@ class Region extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     protected function _loadByCountry($object, $countryId, $value, $field)
     {
+        $object->unsetData();
         $connection = $this->getConnection();
         $locale = $this->_localeResolver->getLocale();
         $joinCondition = $connection->quoteInto('rname.region_id = region.region_id AND rname.locale = ?', $locale);
