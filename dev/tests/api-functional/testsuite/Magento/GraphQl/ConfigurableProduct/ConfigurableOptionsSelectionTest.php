@@ -12,6 +12,7 @@ use Magento\ConfigurableProductGraphQl\Model\Options\SelectionUidFormatter;
 use Magento\Eav\Api\Data\AttributeInterface;
 use Magento\Eav\Model\AttributeRepository;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\GraphQl\Query\Uid;
 use Magento\Indexer\Model\IndexerFactory;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
@@ -36,6 +37,11 @@ class ConfigurableOptionsSelectionTest extends GraphQlAbstract
      */
     private $indexerFactory;
 
+    /**
+     * @var Uid
+     */
+    private $idEncoder;
+
     private $firstConfigurableAttribute;
 
     private $secondConfigurableAttribute;
@@ -48,6 +54,7 @@ class ConfigurableOptionsSelectionTest extends GraphQlAbstract
         $this->attributeRepository = Bootstrap::getObjectManager()->create(AttributeRepository::class);
         $this->selectionUidFormatter = Bootstrap::getObjectManager()->create(SelectionUidFormatter::class);
         $this->indexerFactory = Bootstrap::getObjectManager()->create(IndexerFactory::class);
+        $this->idEncoder = Bootstrap::getObjectManager()->create(Uid::class);
     }
 
     /**
@@ -85,6 +92,8 @@ class ConfigurableOptionsSelectionTest extends GraphQlAbstract
                 $product['configurable_product_options_selection']['configurable_options'][0]['values']
             )
         );
+
+        $this->assertMediaGallery($product);
     }
 
     /**
@@ -120,6 +129,18 @@ class ConfigurableOptionsSelectionTest extends GraphQlAbstract
         self::assertEquals($sku, $product['sku']);
         self::assertEmpty($product['configurable_product_options_selection']['configurable_options']);
         self::assertNotNull($product['configurable_product_options_selection']['variant']);
+
+        $variantId = $this->idEncoder->decode($product['configurable_product_options_selection']['variant']['uid']);
+        self::assertIsNumeric($variantId);
+        self::assertIsString($product['configurable_product_options_selection']['variant']['sku']);
+        $urlKey = 'configurable-option-first-option-1-second-option-1';
+        self::assertEquals($urlKey, $product['configurable_product_options_selection']['variant']['url_key']);
+        self::assertMatchesRegularExpression(
+            "/{$urlKey}/",
+            $product['configurable_product_options_selection']['variant']['url_path']
+        );
+
+        $this->assertMediaGallery($product);
     }
 
     /**
@@ -161,6 +182,8 @@ class ConfigurableOptionsSelectionTest extends GraphQlAbstract
                 $product['configurable_product_options_selection']['configurable_options'][1]['values']
             )
         );
+
+        $this->assertMediaGallery($product);
     }
 
     /**
@@ -344,5 +367,18 @@ QUERY;
             $uids[] = $option['uid'];
         }
         return $uids;
+    }
+
+    /**
+     * Assert media gallery fields
+     *
+     * @param array $product
+     */
+    private function assertMediaGallery(array $product): void
+    {
+        self::assertNotEmpty($product['configurable_product_options_selection']['media_gallery']);
+        $image = current($product['configurable_product_options_selection']['media_gallery']);
+        self::assertIsString($image['url']);
+        self::assertEquals(false, $image['disabled']);
     }
 }
