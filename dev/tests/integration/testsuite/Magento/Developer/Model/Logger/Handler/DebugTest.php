@@ -122,7 +122,6 @@ class DebugTest extends \PHPUnit\Framework\TestCase
      */
     public function testDebugInProductionMode()
     {
-//        $this->markTestSkipped('SFAPP-207: failure on sync with 2.4-develop');
         $message = 'test message';
         $this->reinitDebugHandler(State::MODE_PRODUCTION);
 

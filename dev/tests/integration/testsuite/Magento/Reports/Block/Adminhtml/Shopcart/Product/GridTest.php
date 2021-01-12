@@ -22,7 +22,7 @@ class GridTest extends \Magento\Reports\Block\Adminhtml\Shopcart\GridTestAbstrac
      */
     public function testGridContent()
     {
-        $this->markTestSkipped('SFAPP-205 failure on sync with 2.4-develop');
+//        $this->markTestSkipped('SFAPP-205 failure on sync with 2.4-develop');
         /** @var \Magento\Framework\View\LayoutInterface $layout */
         $layout = Bootstrap::getObjectManager()->get(\Magento\Framework\View\LayoutInterface::class);
         /** @var Grid $grid */
