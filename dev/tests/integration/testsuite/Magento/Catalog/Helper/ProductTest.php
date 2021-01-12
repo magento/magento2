@@ -5,34 +5,69 @@
  */
 namespace Magento\Catalog\Helper;
 
-class ProductTest extends \PHPUnit\Framework\TestCase
+use Exception;
+use Magento\Catalog\Api\Data\CategoryInterfaceFactory;
+use Magento\Catalog\Api\Data\ProductInterfaceFactory;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\Category;
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Attribute\Source\Status;
+use Magento\Catalog\Model\Product\Visibility;
+use Magento\Catalog\Model\Session;
+use Magento\Catalog\Helper\Product as ProductHelper;
+use Magento\Framework\DataObject;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Registry;
+use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\TestCase;
+
+/**
+ * @magentoAppIsolation enabled
+ * @magentoAppArea frontend
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class ProductTest extends TestCase
 {
     /**
-     * @var \Magento\Catalog\Helper\Product
+     * @var ProductHelper
      */
     protected $helper;
 
     /**
-     * @var \Magento\Catalog\Api\ProductRepositoryInterface
+     * @var ProductRepositoryInterface
      */
     protected $productRepository;
 
+    /**
+     * @var ObjectManagerInterface
+     */
+    private $objectManager;
+
+    /**
+     * @var ProductInterfaceFactory
+     */
+    private $productFactory;
+
+    /**
+     * @var Registry
+     */
+    private $registry;
+
+    /**
+     * @inheridoc
+     */
     protected function setUp(): void
     {
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Framework\App\State::class)
-            ->setAreaCode('frontend');
-        $this->helper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            \Magento\Catalog\Helper\Product::class
-        );
-
-        /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
-        $this->productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+        $this->objectManager = Bootstrap::getObjectManager();
+        $this->helper = $this->objectManager->get(ProductHelper::class);
+        /** @var ProductInterfaceFactory $productInterfaceFactory */
+        $this->productFactory = $this->objectManager->get(ProductInterfaceFactory::class);
+        $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
+        $this->registry = $this->objectManager->get(Registry::class);
     }
 
     /**
      * @magentoDataFixture Magento/CatalogUrlRewrite/_files/product_simple.php
-     * @magentoAppIsolation enabled
      */
     public function testGetProductUrl()
     {
@@ -46,20 +81,16 @@ class ProductTest extends \PHPUnit\Framework\TestCase
 
     public function testGetPrice()
     {
-        /** @var $product \Magento\Catalog\Model\Product */
-        $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\Catalog\Model\Product::class
-        );
+        /** @var $product Product */
+        $product = $this->productFactory->create();
         $product->setPrice(49.95);
         $this->assertEquals(49.95, $this->helper->getPrice($product));
     }
 
     public function testGetFinalPrice()
     {
-        /** @var $product \Magento\Catalog\Model\Product */
-        $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\Catalog\Model\Product::class
-        );
+        /** @var $product Product */
+        $product = $this->productFactory->create();
         $product->setPrice(49.95);
         $product->setFinalPrice(49.95);
         $this->assertEquals(49.95, $this->helper->getFinalPrice($product));
@@ -67,10 +98,8 @@ class ProductTest extends \PHPUnit\Framework\TestCase
 
     public function testGetImageUrl()
     {
-        /** @var $product \Magento\Catalog\Model\Product */
-        $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\Catalog\Model\Product::class
-        );
+        /** @var $product Product */
+        $product = $this->productFactory->create();
         $this->assertStringEndsWith('placeholder/image.jpg', $this->helper->getImageUrl($product));
 
         $product->setImage('test_image.png');
@@ -79,10 +108,8 @@ class ProductTest extends \PHPUnit\Framework\TestCase
 
     public function testGetSmallImageUrl()
     {
-        /** @var $product \Magento\Catalog\Model\Product */
-        $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\Catalog\Model\Product::class
-        );
+        /** @var $product Product */
+        $product = $this->productFactory->create();
         $this->assertStringEndsWith('placeholder/small_image.jpg', $this->helper->getSmallImageUrl($product));
 
         $product->setSmallImage('test_image.png');
@@ -91,10 +118,8 @@ class ProductTest extends \PHPUnit\Framework\TestCase
 
     public function testGetThumbnailUrl()
     {
-        /** @var $product \Magento\Catalog\Model\Product */
-        $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\Catalog\Model\Product::class
-        );
+        /** @var $product Product */
+        $product = $this->productFactory->create();
         $this->assertStringEndsWith('placeholder/thumbnail.jpg', $this->helper->getThumbnailUrl($product));
         $product->setThumbnail('test_image.png');
         $this->assertStringEndsWith('/test_image.png', $this->helper->getThumbnailUrl($product));
@@ -102,26 +127,20 @@ class ProductTest extends \PHPUnit\Framework\TestCase
 
     public function testGetEmailToFriendUrl()
     {
-        $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\Catalog\Model\Product::class
-        );
+        $product = $this->productFactory->create();
         $product->setId(100);
-        $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\Catalog\Model\Category::class
-        );
+        $category = $this->objectManager->create(CategoryInterfaceFactory::class)->create();
         $category->setId(10);
-        /** @var $objectManager \Magento\TestFramework\ObjectManager */
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $objectManager->get(\Magento\Framework\Registry::class)->register('current_category', $category);
+        $this->registry->register('current_category', $category);
 
         try {
             $this->assertStringEndsWith(
                 'sendfriend/product/send/id/100/cat_id/10/',
                 $this->helper->getEmailToFriendUrl($product)
             );
-            $objectManager->get(\Magento\Framework\Registry::class)->unregister('current_category');
-        } catch (\Exception $e) {
-            $objectManager->get(\Magento\Framework\Registry::class)->unregister('current_category');
+            $this->registry->unregister('current_category');
+        } catch (Exception $e) {
+            $this->registry->unregister('current_category');
             throw $e;
         }
     }
@@ -137,17 +156,15 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     public function testCanShow()
     {
         // non-visible or disabled
-        /** @var $product \Magento\Catalog\Model\Product */
-        $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\Catalog\Model\Product::class
-        );
+        /** @var $product Product */
+        $product = $this->productFactory->create();
         $this->assertFalse($this->helper->canShow($product));
         $existingProduct = $this->productRepository->get('simple');
 
         // enabled and visible
         $product->setId($existingProduct->getId());
-        $product->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED);
-        $product->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH);
+        $product->setStatus(Status::STATUS_ENABLED);
+        $product->setVisibility(Visibility::VISIBILITY_BOTH);
         $this->assertTrue($this->helper->canShow($product));
 
         $this->assertTrue($this->helper->canShow((int)$product->getId()));
@@ -193,39 +210,27 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @magentoDataFixture Magento/Catalog/_files/categories.php
      * @magentoDbIsolation enabled
-     * @magentoAppIsolation enabled
+     * @magentoDataFixture Magento/Catalog/_files/categories.php
      */
     public function testInitProduct()
     {
-        /** @var $objectManager \Magento\TestFramework\ObjectManager */
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-
-        $objectManager->get(\Magento\Catalog\Model\Session::class)->setLastVisitedCategoryId(2);
+        $this->objectManager->get(Session::class)->setLastVisitedCategoryId(2);
         $product = $this->productRepository->get('simple');
         $this->helper->initProduct($product->getId(), 'view');
 
-        $this->assertInstanceOf(
-            \Magento\Catalog\Model\Product::class,
-            $objectManager->get(\Magento\Framework\Registry::class)->registry('current_product')
-        );
-        $this->assertInstanceOf(
-            \Magento\Catalog\Model\Category::class,
-            $objectManager->get(\Magento\Framework\Registry::class)->registry('current_category')
-        );
+        $this->assertInstanceOf(Product::class, $this->registry->registry('current_product'));
+        $this->assertInstanceOf(Category::class, $this->registry->registry('current_category'));
     }
 
     public function testPrepareProductOptions()
     {
-        /** @var $product \Magento\Catalog\Model\Product */
-        $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\Catalog\Model\Product::class
-        );
-        $buyRequest = new \Magento\Framework\DataObject(['qty' => 100, 'options' => ['option' => 'value']]);
+        /** @var $product Product */
+        $product = $this->productFactory->create();
+        $buyRequest = new DataObject(['qty' => 100, 'options' => ['option' => 'value']]);
         $this->helper->prepareProductOptions($product, $buyRequest);
         $result = $product->getPreconfiguredValues();
-        $this->assertInstanceOf(\Magento\Framework\DataObject::class, $result);
+        $this->assertInstanceOf(DataObject::class, $result);
         $this->assertEquals(100, $result->getQty());
         $this->assertEquals(['option' => 'value'], $result->getOptions());
     }

@@ -66,6 +66,10 @@
                     <item name="class" xsi:type="string">Magento\CatalogSearch\Model\Search\Catalog</item>
                     <item name="acl" xsi:type="string">Magento_Catalog::catalog</item>
                 </item>
+                <item name="categories" xsi:type="array">
+                    <item name="class" xsi:type="string">Magento\CatalogSearch\Model\Search\Category</item>
+                    <item name="acl" xsi:type="string">Magento_Catalog::categories</item>
+                </item>
             </argument>
         </arguments>
     </type>

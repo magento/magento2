@@ -11,7 +11,7 @@ use Monolog\Logger;
 class Monolog extends Logger
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function __construct($name, array $handlers = [], array $processors = [])
     {
@@ -29,7 +29,7 @@ class Monolog extends Logger
      * @param integer $level The logging level
      * @param string $message The log message
      * @param array $context The log context
-     * @return Boolean Whether the record has been processed
+     * @return bool Whether the record has been processed
      */
     public function addRecord($level, $message, array $context = [])
     {

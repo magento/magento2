@@ -39,7 +39,7 @@ class ProductDeleteTest extends GraphQlAbstract
     products(filter: {sku: {eq: "{$productSku}"}})
     {
         items {
-            attribute_set_id
+            id
         }
     }
 }

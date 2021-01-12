@@ -263,4 +263,40 @@ class PriceTest extends TestCase
             );
         }
     }
+
+    /**
+     * Get tier price with percent value type
+     *
+     * @return void
+     */
+    public function testGetPricesWithPercentType(): void
+    {
+        $tierPrices = [
+            0 => [
+                'record_id' => 0,
+                'cust_group' => 3200,
+                'price_qty' => 3,
+                'website_id' => 0,
+                'value_type' => 'percent',
+                'percentage_value' => 10,
+                ],
+        ];
+        $this->product->setData('tier_price', $tierPrices);
+        $this->tpFactory->expects($this->any())
+            ->method('create')
+            ->willReturnCallback(
+                function () {
+                    return $this->objectManagerHelper->getObject(TierPrice::class);
+                }
+            );
+        $tierPriceExtensionMock = $this->getMockBuilder(ProductTierPriceExtensionInterface::class)
+            ->onlyMethods(['getPercentageValue', 'setPercentageValue'])
+            ->getMockForAbstractClass();
+        $tierPriceExtensionMock->method('getPercentageValue')
+            ->willReturn(50);
+        $this->tierPriceExtensionFactoryMock->method('create')
+            ->willReturn($tierPriceExtensionMock);
+
+        $this->assertInstanceOf(TierPrice::class, $this->model->getTierPrices($this->product)[0]);
+    }
 }

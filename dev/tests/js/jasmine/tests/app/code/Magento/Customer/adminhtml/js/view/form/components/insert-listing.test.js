@@ -18,7 +18,8 @@ define(['Magento_Customer/js/form/components/insert-listing'], function (Constr)
                 }
             },
             selectionsProvider = {
-                selected: jasmine.createSpy().and.returnValue(ids)
+                selected: jasmine.createSpy().and.returnValue(ids),
+                deselect: jasmine.createSpy()
             };
 
         beforeEach(function () {
@@ -54,7 +55,7 @@ define(['Magento_Customer/js/form/components/insert-listing'], function (Constr)
                 expect(obj._delete).toHaveBeenCalledWith([1, 2]);
             });
 
-            it('Check removal of default addresses', function () {
+            it('Check removal of default addresses and selections by provided ids', function () {
                 obj.source = {
                     get: jasmine.createSpy().and.returnValues(2, 3),
                     set: jasmine.createSpy()
@@ -64,6 +65,7 @@ define(['Magento_Customer/js/form/components/insert-listing'], function (Constr)
                 expect(selectionsProvider.selected).not.toHaveBeenCalled();
                 expect(obj.source.get.calls.count()).toEqual(2);
                 expect(obj.source.set.calls.count()).toEqual(1);
+                expect(selectionsProvider.deselect.calls.count()).toEqual(2);
             });
         });
     });

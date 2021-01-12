@@ -35,6 +35,10 @@ return [
                         'type' => \Magento\Customer\Api\CustomerRepositoryInterface::class,
                         'method' => 'delete',
                     ],
+                    'customerCreatedExtra' => [
+                        'type' => \Magento\Customer\Api\CustomerRepositoryInterface::class,
+                        'method' => 'save',
+                    ],
                     'saveNameNotDisabled' => [
                         'type' => \Magento\Customer\Api\CustomerRepositoryInterface::class,
                         'method' => 'save',

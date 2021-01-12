@@ -18,7 +18,8 @@ use Magento\Framework\Exception\NoSuchEntityException;
 class Config
 {
     private const TABLE_CORE_CONFIG_DATA = 'core_config_data';
-    private const XML_PATH_ENABLED = 'system/media_gallery/enabled';
+    private const XML_PATH_MEDIA_GALLERY_ENABLED = 'system/media_gallery/enabled';
+    private const XML_PATH_ENABLED = 'system/media_gallery_renditions/enabled';
     private const XML_PATH_MEDIA_GALLERY_RENDITIONS_WIDTH_PATH = 'system/media_gallery_renditions/width';
     private const XML_PATH_MEDIA_GALLERY_RENDITIONS_HEIGHT_PATH = 'system/media_gallery_renditions/height';
 
@@ -46,6 +47,16 @@ class Config
 
     /**
      * Check if the media gallery is enabled
+     *
+     * @return bool
+     */
+    public function isMediaGalleryEnabled(): bool
+    {
+        return $this->scopeConfig->isSetFlag(self::XML_PATH_MEDIA_GALLERY_ENABLED);
+    }
+
+    /**
+     * Should the renditions be inserted in the content instead of original image
      *
      * @return bool
      */
