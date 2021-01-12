@@ -8,15 +8,18 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminCreateInvoiceTest">
+    <test name="AdminCreateInvoiceTest" deprecated="Use AdminInvoiceOrderTest instead">
         <annotations>
             <features value="Sales"/>
             <stories value="Create an Invoice via the Admin"/>
-            <title value="Admin should be able to create an invoice"/>
+            <title value="DEPRECATED. Admin should be able to create an invoice"/>
             <description value="Admin should be able to create an invoice"/>
             <severity value="MAJOR"/>
             <testCaseId value="MAGETWO-72096"/>
             <group value="sales"/>
+            <skip>
+             <issueId value="DEPRECATED">Use AdminInvoiceOrderTest instead</issueId>
+            </skip> 
         </annotations>
         <before>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
@@ -33,7 +36,7 @@
         <!-- todo: Create an order via the api instead of driving the browser  -->
         <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="onCategoryPage"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
-        <moveMouseOver selector="{{StorefrontCategoryMainSection.ProductItemInfo}}" stepKey="hoverProduct"/>
+        <actionGroup ref="StorefrontHoverProductOnCategoryPageActionGroup" stepKey="hoverProduct"/>
         <actionGroup ref="StorefrontClickAddToCartButtonActionGroup" stepKey="addToCart"/>
         <waitForElementVisible selector="{{StorefrontCategoryMainSection.SuccessMsg}}" time="30" stepKey="waitForProductAdded"/>
         <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="clickCart"/>

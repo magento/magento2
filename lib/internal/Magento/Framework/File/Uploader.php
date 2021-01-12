@@ -13,6 +13,7 @@ use Magento\Framework\Filesystem\Directory\TargetDirectory;
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\Filesystem\DriverPool;
 use Magento\Framework\Validation\ValidationException;
+use Psr\Log\LoggerInterface;
 
 /**
  * File upload class
@@ -132,6 +133,11 @@ class Uploader
      * @var \Magento\Framework\File\Mime
      */
     private $fileMime;
+
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
 
     /**#@+
      * File upload type (multiple or single)
@@ -329,24 +335,42 @@ class Uploader
      * @param string $tmpPath
      * @param string $destPath
      * @return bool
-     * @throws FileSystemException
      */
     protected function _moveFile($tmpPath, $destPath)
     {
         $rootCode = DirectoryList::PUB;
 
-        if (strpos($destPath, $this->getDirectoryList()->getPath($rootCode)) !== 0) {
-            $rootCode = DirectoryList::ROOT;
+        try {
+            if (strpos($destPath, $this->getDirectoryList()->getPath($rootCode)) !== 0) {
+                $rootCode = DirectoryList::ROOT;
+            }
+
+            $destPath = str_replace($this->getDirectoryList()->getPath($rootCode), '', $destPath);
+            $directory = $this->getTargetDirectory()->getDirectoryWrite($rootCode);
+
+            return $this->getFileDriver()->rename(
+                $tmpPath,
+                $directory->getAbsolutePath($destPath),
+                $directory->getDriver()
+            );
+        } catch (FileSystemException $exception) {
+            $this->getLogger()->critical($exception->getMessage());
+            return false;
         }
+    }
 
-        $destPath = str_replace($this->getDirectoryList()->getPath($rootCode), '', $destPath);
-        $directory = $this->getTargetDirectory()->getDirectoryWrite($rootCode);
-
-        return $this->getFileDriver()->rename(
-            $tmpPath,
-            $directory->getAbsolutePath($destPath),
-            $directory->getDriver()
-        );
+    /**
+     * Get logger instance.
+     *
+     * @deprecated
+     * @return LoggerInterface
+     */
+    private function getLogger(): LoggerInterface
+    {
+        if (!$this->logger) {
+            $this->logger = ObjectManager::getInstance()->get(LoggerInterface::class);
+        }
+        return $this->logger;
     }
 
     /**
