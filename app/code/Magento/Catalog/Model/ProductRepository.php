@@ -17,6 +17,7 @@ use Magento\Framework\Api\Data\ImageContentInterfaceFactory;
 use Magento\Framework\Api\ImageContentValidatorInterface;
 use Magento\Framework\Api\ImageProcessorInterface;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
+use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\DB\Adapter\ConnectionException;
 use Magento\Framework\DB\Adapter\DeadlockException;
 use Magento\Framework\DB\Adapter\LockWaitException;
@@ -619,7 +620,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     /**
      * @inheritdoc
      */
-    public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
+    public function getList(SearchCriteriaInterface $searchCriteria)
     {
         /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $collection */
         $collection = $this->collectionFactory->create();
@@ -628,6 +629,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         $collection->addAttributeToSelect('*');
         $collection->joinAttribute('status', 'catalog_product/status', 'entity_id', null, 'inner');
         $collection->joinAttribute('visibility', 'catalog_product/visibility', 'entity_id', null, 'inner');
+        $this->joinPositionField($collection, $searchCriteria);
 
         $this->collectionProcessor->process($searchCriteria, $collection);
 
@@ -853,6 +855,38 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             throw new CouldNotSaveException(
                 __('The product was unable to be saved. Please try again.'),
                 $e
+            );
+        }
+    }
+
+    /**
+     * Join category position field to make sorting by position possible.
+     *
+     * @param Collection $collection
+     * @param SearchCriteriaInterface $searchCriteria
+     * @return void
+     */
+    private function joinPositionField(
+        Collection $collection,
+        SearchCriteriaInterface $searchCriteria
+    ): void {
+        $categoryIds = [[]];
+        foreach ($searchCriteria->getFilterGroups() as $filterGroup) {
+            foreach ($filterGroup->getFilters() as $filter) {
+                if ($filter->getField() === 'category_id') {
+                    $categoryIds[] = explode(',', $filter->getValue());
+                }
+            }
+        }
+        $categoryIds = array_unique(array_merge(...$categoryIds));
+        if (count($categoryIds) === 1) {
+            $collection->joinField(
+                'position',
+                'catalog_category_product',
+                'position',
+                'product_id=entity_id',
+                ['category_id' => current($categoryIds)],
+                'left'
             );
         }
     }
