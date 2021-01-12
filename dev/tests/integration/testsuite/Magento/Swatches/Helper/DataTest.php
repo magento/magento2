@@ -13,7 +13,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Tests for helper swatch attributes for product.
+ * Tests for product swatch attribute helper.
  *
  * @see \Magento\Swatches\Helper\Data
  * @magentoDbIsolation enabled
@@ -39,6 +39,7 @@ class DataTest extends TestCase
         $this->objectManager = Bootstrap::getObjectManager();
         $this->helper = $this->objectManager->get(Data::class);
         $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
+        $this->productRepository->cleanCache();
     }
 
     /**
@@ -48,7 +49,6 @@ class DataTest extends TestCase
     public function testGetSwatchAttributesAsArray(): void
     {
         $product = $this->productRepository->get('simple2');
-        $result = $this->helper->getSwatchAttributesAsArray($product);
-        $this->assertEquals([], $result);
+        $this->assertEmpty($this->helper->getSwatchAttributesAsArray($product));
     }
 }
