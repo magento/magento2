@@ -45,11 +45,6 @@ class SaveAction
     private $linkManagement;
 
     /**
-     * @var StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
      * @param Option $optionResource
      * @param MetadataPool $metadataPool
      * @param Type $type
@@ -67,8 +62,6 @@ class SaveAction
         $this->metadataPool = $metadataPool;
         $this->type = $type;
         $this->linkManagement = $linkManagement;
-        $this->storeManager = $storeManager
-            ?: ObjectManager::getInstance()->get(StoreManagerInterface::class);
     }
 
     /**
