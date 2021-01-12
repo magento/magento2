@@ -159,7 +159,7 @@
         <!-- Add Bundle Product to cart -->
         <amOnPage url="{{StorefrontProductPage.url($$createFixedBundleProduct.custom_attributes[url_key]$$)}}" stepKey="navigateToBundleProductPage"/>
         <waitForPageLoad stepKey="waitForFixedBundleProductPageLoad"/>
-        <click selector="{{StorefrontBundleProductActionSection.customizeAndAddToCartButton}}" stepKey="clickCustomizeAndAddToCart"/>
+        <actionGroup ref="StorefrontSelectCustomizeAndAddToTheCartButtonActionGroup" stepKey="clickCustomizeAndAddToCart"/>
         <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFixedBundleProductFromStorefrontProductPage">
             <argument name="productName" value="$$createFixedBundleProduct.name$$"/>
         </actionGroup>
