@@ -114,7 +114,7 @@ class ProductSearch
         try {
             $collection->addMediaGalleryData();
         } catch (LocalizedException $e) {
-            throw new GraphQlNoSuchEntityException(__('Cannot load media galery'));
+            throw new GraphQlNoSuchEntityException(__('Cannot load media gallery'));
         }
 
         $collection->load();

@@ -12,8 +12,6 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\ConfigurableProduct\Helper\Data;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute;
 use Magento\ConfigurableProductGraphQl\Model\Formatter\Option;
-use Magento\ConfigurableProductGraphQl\Model\Options\DataProvider\Variant;
-use Magento\ConfigurableProductGraphQl\Model\Formatter\Variant as VariantFormatter;
 
 /**
  * Retrieve metadata for configurable option selection.
@@ -37,7 +35,6 @@ class Metadata
     public function __construct(
         Data $configurableProductHelper,
         Option $configurableOptionsFormatter
-
     ) {
         $this->configurableProductHelper = $configurableProductHelper;
         $this->configurableOptionsFormatter = $configurableOptionsFormatter;
@@ -54,7 +51,6 @@ class Metadata
     public function getAvailableSelections(ProductInterface $product, array $options, array $selectedOptions): array
     {
         $attributes = $this->getAttributes($product);
-
         $availableSelections = [];
 
         foreach ($options as $attributeId => $option) {
@@ -62,11 +58,13 @@ class Metadata
                 continue;
             }
 
-            $availableSelections[] = $this->configurableOptionsFormatter->format($attributes[$attributeId]);
+            $availableSelections[] = $this->configurableOptionsFormatter->format(
+                $attributes[$attributeId],
+                $options[$attributeId] ?? []
+            );
         }
 
         return $availableSelections;
-
     }
 
     /**

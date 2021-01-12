@@ -42,14 +42,15 @@ class Option
      *  Format configurable product options according to the GraphQL schema
      *
      * @param Attribute $attribute
+     * @param array $optionIds
      * @return array|null
      */
-    public function format(Attribute $attribute): ?array
+    public function format(Attribute $attribute, array $optionIds): ?array
     {
         $optionValues = [];
 
         foreach ($attribute->getOptions() as $option) {
-            $optionValues[] = $this->valueFormatter->format($option, $attribute);
+            $optionValues[] = $this->valueFormatter->format($option, $attribute, $optionIds);
         }
 
         return [
