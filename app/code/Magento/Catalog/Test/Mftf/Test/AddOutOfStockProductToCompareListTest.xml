@@ -56,7 +56,7 @@
 
         <comment userInput="Clear cache and reindex | Comment is kept to preserve the step key for backward compatibility" stepKey="cleanCache"/>
         <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-           <argument name="indices" value=""/>
+            <argument name="indices" value="catalog_product_price"/>
         </actionGroup>
         <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
            <argument name="tags" value=""/>
