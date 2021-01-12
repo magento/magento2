@@ -1,0 +1,3 @@
+sku,product_type,name,price,attribute_set_code,categories,additional_attributes
+SkuProductWithJson,simple,"Product With Json Attribute",100,Default,"Default Category/Category 1","text_attribute={""type"": ""basic"", ""unit"": ""inch"", ""sign"": ""(\"")"", ""size"": ""1.5\""""}"
+SkuProductWithMarkup,simple,"Product With Markup Attribute",100,Default,"Default Category/Category 1","text_attribute=<div data-content>Element type is basic, measured in inches (marked with sign (\"")) with size 1.5\"", mid-price range</div>"
