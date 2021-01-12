@@ -40,6 +40,11 @@ class PathValidator
      */
     public function validate($path)
     {
+        $element = $this->structure->getElementByConfigPath($path);
+        if ($element->getConfigPath()) {
+            $path = $element->getConfigPath();
+        }
+        
         $allPaths = $this->structure->getFieldPaths();
 
         if (!array_key_exists($path, $allPaths)) {
