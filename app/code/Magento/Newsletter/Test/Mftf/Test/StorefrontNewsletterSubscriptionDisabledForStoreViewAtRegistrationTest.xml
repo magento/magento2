@@ -21,11 +21,9 @@
         </annotations>
         <before>
             <magentoCLI command="config:set --scope=stores --scope-code=default newsletter/general/active 0" stepKey="disableSubscriptionForStore"/>
-            <magentoCLI command="cache:clean config" stepKey="cleanCache"/>
         </before>
         <after>
             <magentoCLI command="config:set --scope=stores --scope-code=default newsletter/general/active 1" stepKey="enableSubscriptionForStore"/>
-            <magentoCLI command="cache:clean config" stepKey="cleanCacheAgain"/>
         </after>
         <actionGroup ref="StorefrontOpenCustomerAccountCreatePageActionGroup" stepKey="openCreateAccountPage"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
