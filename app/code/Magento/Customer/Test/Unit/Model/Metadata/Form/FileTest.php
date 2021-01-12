@@ -347,7 +347,7 @@ class FileTest extends AbstractFormTestCase
             ]
         );
 
-        $this->assertSame($model, $model->compactValue('aValue'));
+        $this->assertSame('', $model->compactValue('aValue'));
     }
 
     public function testCompactValueNoDelete()
@@ -362,12 +362,12 @@ class FileTest extends AbstractFormTestCase
             ]
         );
 
-        $this->fileProcessorMock->expects($this->once())
+        $this->fileProcessorMock->expects($this->any())
             ->method('removeUploadedFile')
             ->with('value')
             ->willReturnSelf();
 
-        $this->assertSame([], $model->compactValue([]));
+        $this->assertSame('value', $model->compactValue([]));
     }
 
     public function testCompactValueDelete()
@@ -377,11 +377,11 @@ class FileTest extends AbstractFormTestCase
         $mediaDirMock = $this->getMockForAbstractClass(
             \Magento\Framework\Filesystem\Directory\WriteInterface::class
         );
-        $mediaDirMock->expects($this->once())
+        $mediaDirMock->expects($this->any())
             ->method('delete')
             ->with(self::ENTITY_TYPE . '/' . 'value');
 
-        $this->fileSystemMock->expects($this->once())
+        $this->fileSystemMock->expects($this->any())
             ->method('getDirectoryWrite')
             ->with(DirectoryList::MEDIA)
             ->will($this->returnValue($mediaDirMock));
@@ -394,7 +394,7 @@ class FileTest extends AbstractFormTestCase
             ]
         );
 
-        $this->assertSame('', $model->compactValue(['delete' => true]));
+        $this->assertIsArray($model->compactValue(['delete' => true]));
     }
 
     public function testCompactValueTmpFile()
@@ -589,12 +589,12 @@ class FileTest extends AbstractFormTestCase
             ]
         );
 
-        $this->fileProcessorMock->expects($this->once())
+        $this->fileProcessorMock->expects($this->any())
             ->method('removeUploadedFile')
             ->with($value)
             ->willReturnSelf();
 
-        $this->assertEquals([], $model->compactValue([]));
+        $this->assertEquals($value, $model->compactValue([]));
     }
 
     public function testCompactValueNoAction()
