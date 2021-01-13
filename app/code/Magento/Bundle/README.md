@@ -15,7 +15,7 @@ For information about a module enabling or disabling in Magento 2, see [Enable o
 
 ## Structure
 
-`Pricing/` - the directory that contain solutions for bundle product price.
+`Pricing/` - the directory that contains solutions for bundle product price.
 
 For information about a typical file structure of a module in Magento 2, see [Module file structure](http://devdocs.magento.com/guides/v2.4/extension-dev-guide/build/module-file-structure.html#module-file-structure).
 
@@ -34,7 +34,7 @@ The module dispatches the following events:
 - `catalog_product_get_final_price` in the methods `\Magento\Bundle\Pricing\Price\BundleSelectionPrice::getValue()`, `\Magento\Bundle\Model\Product\Price::getSelectionFinalTotalPrice()`, `\Magento\Bundle\Model\Product\Price::getFinalPrice`. 
   
     Parameters:
-    - `product` - a product with set final price (`\Magento\Catalog\Model\Product` class).
+    - `product` - a product with the final price set (`\Magento\Catalog\Model\Product` class).
     - `qty` - a qty of product(`int` type).
 - `prepare_catalog_product_collection_prices` in the `\Magento\Bundle\Pricing\Price\BundleSelectionPrice::getValue()` method. Parameters:
     - `collection` - bundle collection of selection before price calculation (`\Magento\Bundle\Model\ResourceModel\Selection\Collection` class).
