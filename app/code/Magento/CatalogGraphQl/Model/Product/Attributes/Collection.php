@@ -8,8 +8,9 @@ declare (strict_types = 1);
 namespace Magento\CatalogGraphQl\Model\Product\Attributes;
 
 use Magento\CatalogGraphQl\Model\Resolver\Products\Attributes\Collection as AttributesCollection;
-use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
+use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product as ProductDataProvider;
 use Magento\Eav\Model\Entity\Attribute\Frontend\DefaultFrontend;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Phrase;
 
 /**
@@ -33,9 +34,14 @@ class Collection
     private $attributesCollection;
 
     /**
-     * @var CollectionFactory
+     * @var ProductDataProvider
      */
-    private $collectionFactory;
+    private $productDataProvider;
+
+    /**
+     * @var SearchCriteriaBuilder
+     */
+    private $searchCriteriaBuilder;
 
     /**
      * @var DefaultFrontend
@@ -44,16 +50,19 @@ class Collection
 
     /**
      * @param AttributesCollection $attributesCollection
-     * @param CollectionFactory collectionFactory
+     * @param ProductDataProvider $productDataProvider
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param DefaultFrontend $frontend
      */
     public function __construct(
         AttributesCollection $attributesCollection,
-        CollectionFactory $collectionFactory,
+        ProductDataProvider $productDataProvider,
+        SearchCriteriaBuilder $searchCriteriaBuilder,
         DefaultFrontend $frontend
     ) {
         $this->attributesCollection = $attributesCollection;
-        $this->collectionFactory = $collectionFactory;
+        $this->productDataProvider = $productDataProvider;
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->frontend = $frontend;
     }
 
@@ -95,9 +104,17 @@ class Collection
         if (empty($this->productIds) || !empty($this->attributeValueMap)) {
             return $this->attributeValueMap;
         }
+
         $attributes = $this->attributesCollection->getAttributes();
-        $products = $this->collectionFactory->create()->addAttributeToSelect('*')
-            ->addAttributeToFilter('entity_id', array('in' => $this->productIds));
+
+        $this->searchCriteriaBuilder->addFilter('entity_id', $this->productIds, 'in');
+        $products = $this->productDataProvider->getList(
+            $this->searchCriteriaBuilder->create(),
+            ['*'],
+            false,
+            true
+        )->getItems();
+
         foreach ($products as $productId => $product) {
             $data = [];
             foreach ($attributes as $attribute) {
