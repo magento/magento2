@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\GraphQl\Test\Integration;
+namespace Magento\GraphQl\Controller;
 
 use Magento\Framework\App\Response\Http;
 use Magento\TestFramework\TestCase\AbstractController as ControllerTestCase;
