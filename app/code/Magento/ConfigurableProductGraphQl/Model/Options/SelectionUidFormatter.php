@@ -46,11 +46,7 @@ class SelectionUidFormatter
      */
     public function encode(int $attributeId, int $indexId): string
     {
-        return $this->idEncoder->encode(implode(self::UID_SEPARATOR, [
-            self::UID_PREFIX,
-            $attributeId,
-            $indexId
-        ]));
+        return $this->idEncoder->encode(implode(self::UID_SEPARATOR, [self::UID_PREFIX, $attributeId, $indexId]));
     }
 
     /**
