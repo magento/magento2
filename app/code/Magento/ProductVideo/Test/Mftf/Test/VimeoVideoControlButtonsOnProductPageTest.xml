@@ -30,7 +30,9 @@
         </after>
 
         <!-- Open product edit page -->
-        <amOnPage url="{{AdminProductEditPage.url($createProduct.id$)}}" stepKey="goToProductEditPage"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProductEditPage">
+            <argument name="productId" value="$createProduct.id$"/>
+        </actionGroup>
         <!-- Add image to product -->
         <actionGroup ref="AddProductImageActionGroup" stepKey="addImageForProduct">
             <argument name="image" value="MagentoLogo"/>
@@ -47,33 +49,27 @@
             <argument name="productUrl" value="$createProduct.custom_attributes[url_key]$"/>
         </actionGroup>
 
-        <!-- Assert product navigation arrows -->
-        <dontSeeElement selector="{{StorefrontProductMediaSection.imagePrevButton}}" stepKey="dontSeePrevButton"/>
-        <seeElement selector="{{StorefrontProductMediaSection.imageNextButton}}" stepKey="seeNextButton"/>
-        <click selector="{{StorefrontProductMediaSection.imageNextButton}}" stepKey="clickNextButton"/>
+        <!-- Click next button -->
+        <actionGroup ref="AssertPrevButtonHiddenProductVideoActionGroup" stepKey="assertPrevButtonIsHidden"/>
+        <actionGroup ref="ClickNextButtonProductVideoActionGroup" stepKey="clickNextNavigationButton"/>
 
         <!-- Assert product video present in the storefront product page -->
         <actionGroup ref="AssertProductVideoStorefrontProductPageActionGroup" stepKey="assertProductVideoPresentInStorefrontProductPage">
             <argument name="videoType" value="vimeo"/>
         </actionGroup>
-        <dontSeeElement selector="{{StorefrontProductInfoMainSection.clickCloseVideo}}" stepKey="dontSeeCloseVideo"/>
+        <actionGroup ref="AssertCloseButtonHiddenProductVideoActionGroup" stepKey="assertCloseVideoButtonIsHidden"/>
 
         <!-- Click Play video button -->
-        <click stepKey="clickToPlayVideo" selector="{{StorefrontProductInfoMainSection.clickPlayVideo}}"/>
-        <wait stepKey="waitFiveSecondsToPlayVideo" time="5"/>
+        <actionGroup ref="ClickPlayButtonProductVideoActionGroup" stepKey="clickPlayVideoButton"/>
 
         <!-- Assert product navigation arrows -->
-        <dontSeeElement selector="{{StorefrontProductMediaSection.imagePrevButton}}" stepKey="dontSeePrevButton2"/>
-        <dontSeeElement selector="{{StorefrontProductMediaSection.imageNextButton}}" stepKey="dontSeeNextButton"/>
+        <actionGroup ref="AssertPrevButtonHiddenProductVideoActionGroup" stepKey="assertPrevButtonIsHidden2"/>
+        <actionGroup ref="AssertNextButtonHiddenProductVideoActionGroup" stepKey="assertNextButtonIsHidden"/>
 
         <!-- Click Close video button -->
-        <seeElement selector="{{StorefrontProductInfoMainSection.clickCloseVideo}}" stepKey="seeCloseVideo"/>
-        <click stepKey="clickCloseVideo" selector="{{StorefrontProductInfoMainSection.clickCloseVideo}}"/>
-        <wait stepKey="waitTwoSecondsToCloseVideo" time="2"/>
+        <actionGroup ref="ClickCloseButtonProductVideoActionGroup" stepKey="clickCloseVideoButton"/>
 
-        <!-- Assert product navigation arrows -->
-        <moveMouseOver selector="{{StorefrontProductMediaSection.mainImageForJsActions}}" stepKey="hoverOverImage"/>
-        <seeElement selector="{{StorefrontProductMediaSection.imagePrevButton}}" stepKey="seePrevButton"/>
-        <click selector="{{StorefrontProductMediaSection.imagePrevButton}}" stepKey="clickPrevButton"/>
+        <!-- Click previous button -->
+        <actionGroup ref="ClickPrevButtonProductVideoActionGroup" stepKey="clickPrevNavigationButton"/>
     </test>
 </tests>

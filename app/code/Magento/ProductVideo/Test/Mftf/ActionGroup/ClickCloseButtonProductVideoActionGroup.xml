@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!-- Click close button in product video on Storefront Product page -->
+    <actionGroup name="ClickCloseButtonProductVideoActionGroup">
+        <annotations>
+            <description>Click close button in product video on the Storefront Product page.</description>
+        </annotations>
+
+        <seeElement selector="{{StorefrontProductInfoMainSection.clickCloseVideo}}" stepKey="seeCloseVideo"/>
+        <click stepKey="clickCloseVideo" selector="{{StorefrontProductInfoMainSection.clickCloseVideo}}"/>
+        <wait stepKey="waitTwoSecondsToCloseVideo" time="2"/>
+    </actionGroup>
+</actionGroups>
