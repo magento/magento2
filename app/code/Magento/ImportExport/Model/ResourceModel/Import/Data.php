@@ -204,7 +204,7 @@ class Data extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
         // check if the table has not been overridden for backward compatibility
         if ($this->getMainTable() === $this->getTable('importexport_importdata')) {
             // user_id is NULL part is for backward compatibility
-            $select->where('user_id=? OR user_id is NULL', $this->getCurrentUserId() ?? self::DEFAULT_USER_ID);
+            $select->where('user_id=? OR user_id is NULL', $this->getUserId());
         }
 
         return $select;
@@ -220,7 +220,7 @@ class Data extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
     {
         // check if the table has not been overridden for backward compatibility
         if ($this->getMainTable() === $this->getTable('importexport_importdata')) {
-            $data['user_id'] = $this->getCurrentUserId() ?? self::DEFAULT_USER_ID;
+            $data['user_id'] = $this->getUserId();
         }
 
         return $data;
@@ -237,7 +237,7 @@ class Data extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
         // check if the table has not been overridden for backward compatibility
         if ($this->getMainTable() === $this->getTable('importexport_importdata')) {
             // user_id is NULL part is for backward compatibility
-            $where['user_id=? OR user_id is NULL'] = $this->getCurrentUserId() ?? self::DEFAULT_USER_ID;
+            $where['user_id=? OR user_id is NULL'] = $this->getUserId();
         }
 
         return $where;
@@ -246,10 +246,10 @@ class Data extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
     /**
      * Get current user ID
      *
-     * @return int|null
+     * @return int
      */
-    private function getCurrentUserId(): ?int
+    private function getUserId(): int
     {
-        return $this->authSession->isLoggedIn() ? $this->authSession->getUser()->getId() : null;
+        return $this->authSession->isLoggedIn() ? $this->authSession->getUser()->getId() : self::DEFAULT_USER_ID;
     }
 }
