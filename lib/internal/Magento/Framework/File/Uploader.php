@@ -211,6 +211,7 @@ class Uploader
         TargetDirectory $targetDirectory = null
     ) {
         $this->directoryList = $directoryList ?: ObjectManager::getInstance()->get(DirectoryList::class);
+        $this->targetDirectory = $targetDirectory ?: ObjectManager::getInstance()->get(TargetDirectory::class);
 
         $this->_setUploadFileId($fileId);
         if (!file_exists($this->_file['tmp_name'])) {
@@ -221,7 +222,6 @@ class Uploader
         }
         $this->fileMime = $fileMime ?: ObjectManager::getInstance()->get(Mime::class);
         $this->driverPool = $driverPool ?: ObjectManager::getInstance()->get(DriverPool::class);
-        $this->targetDirectory = $targetDirectory ?: ObjectManager::getInstance()->get(TargetDirectory::class);
     }
 
     /**
@@ -716,7 +716,8 @@ class Uploader
             ];
 
             foreach ($allowedFolders as $allowedFolder) {
-                if (stripos($tmpName, $allowedFolder) === 0) {
+                $dir = $this->targetDirectory->getDirectoryReadByPath($allowedFolder);
+                if ($dir->isExist($tmpName)) {
                     $isValid = true;
                     break;
                 }
@@ -724,7 +725,7 @@ class Uploader
 
             foreach ($disallowedFolders as $disallowedFolder) {
                 $dir = $this->targetDirectory->getDirectoryReadByPath($disallowedFolder);
-                if (stripos($tmpName, $disallowedFolder) === 0 && $dir->isExist($tmpName)) {
+                if ($dir->isExist($tmpName)) {
                     $isValid = false;
                     break;
                 }
