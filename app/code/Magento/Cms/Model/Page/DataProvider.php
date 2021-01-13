@@ -5,6 +5,7 @@
  */
 namespace Magento\Cms\Model\Page;
 
+use Magento\Cms\Api\Data\PageInterface;
 use Magento\Cms\Api\PageRepositoryInterface;
 use Magento\Cms\Model\Page;
 use Magento\Cms\Model\ResourceModel\Page\CollectionFactory;
@@ -122,46 +123,53 @@ class DataProvider extends ModifierPoolDataProvider
             return $this->loadedData;
         }
 
-        try {
-            $page = $this->getCurrentPage();
-        } catch (LocalizedException $exception) {
-            return [];
-        }
-
-        $pageId = $page->getId();
-        $this->loadedData[$pageId] = $page->getData();
+        $page = $this->getCurrentPage();
+        $this->loadedData[$page->getId()] = $page->getData();
         if ($page->getCustomLayoutUpdateXml() || $page->getLayoutUpdateXml()) {
             //Deprecated layout update exists.
-            $this->loadedData[$pageId]['layout_update_selected'] = '_existing_';
+            $this->loadedData[$page->getId()]['layout_update_selected'] = '_existing_';
         }
-
-        $data = $this->dataPersistor->get('cms_page');
-        if (empty($data)) {
-            return $this->loadedData;
-        }
-
-        $page = $this->collection->getNewEmptyItem();
-        $page->setData($data);
-        $this->loadedData[$pageId] = $page->getData();
-        if ($page->getCustomLayoutUpdateXml() || $page->getLayoutUpdateXml()) {
-            $this->loadedData[$pageId]['layout_update_selected'] = '_existing_';
-        }
-        $this->dataPersistor->clear('cms_page');
 
         return $this->loadedData;
     }
 
     /**
-     * Loads the current page by current request params.
+     * Return current page
      *
-     * @return Page
-     * @throws LocalizedException
+     * @return PageInterface
      */
-    private function getCurrentPage(): Page
+    private function getCurrentPage(): PageInterface
     {
-        $pageId = $this->request->getParam($this->getRequestFieldName(), 0);
+        $newPage = $this->collection->getNewEmptyItem();
+        $pageId = $this->getPageId();
+        if ($pageId) {
+            try {
+                $page = $this->pageRepository->getById($pageId);
+            } catch (LocalizedException $exception) {
+                $page = $newPage;
+            }
 
-        return $this->pageRepository->getById($pageId);
+            return $page;
+        }
+
+        $data = $this->dataPersistor->get('cms_page');
+        if (empty($data)) {
+            return $newPage;
+        }
+        $this->dataPersistor->clear('cms_page');
+        $page = $newPage->setData($data);
+
+        return $page;
+    }
+
+    /**
+     * Returns current page id from request
+     *
+     * @return int
+     */
+    private function getPageId(): int
+    {
+        return (int) $this->request->getParam($this->getRequestFieldName());
     }
 
     /**
@@ -200,7 +208,7 @@ class DataProvider extends ModifierPoolDataProvider
 
         $page = null;
         try {
-            $page = $this->getCurrentPage();
+            $page = $this->pageRepository->getById($this->getPageId());
         } catch (LocalizedException $e) {
             $this->logger->error($e->getMessage());
         }
