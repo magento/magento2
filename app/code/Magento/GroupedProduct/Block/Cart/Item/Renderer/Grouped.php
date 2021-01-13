@@ -49,6 +49,6 @@ class Grouped extends Renderer implements IdentityInterface
         if ($this->getItem()) {
             $identities[] = $this->getGroupedProduct()->getIdentities();
         }
-        return array_merge(...$identities);
+        return array_merge([], ...$identities);
     }
 }

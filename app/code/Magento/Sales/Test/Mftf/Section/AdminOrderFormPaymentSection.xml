@@ -15,7 +15,7 @@
         <element name="flatRateOption" type="radio" selector="#s_method_flatrate_flatrate" timeout="30"/>
         <element name="shippingError" type="text" selector="#order[has_shipping]-error"/>
         <element name="freeShippingOption" type="radio" selector="#s_method_freeshipping_freeshipping" timeout="30"/>
-        <element name="linkPaymentOptions" type="button" selector="#order-billing_method_summary>a"/>
+        <element name="linkPaymentOptions" type="button" selector="#order-billing_method_summary>a" timeout="30"/>
         <element name="blockPayment" type="text" selector="#order-billing_method"/>
         <element name="checkMoneyOption" type="radio" selector="#p_method_checkmo" timeout="30"/>
         <element name="checkBankTransfer" type="radio" selector="#p_method_banktransfer" timeout="30"/>
@@ -28,5 +28,6 @@
         <element name="cashOnDeliveryOption" type="radio" selector="#p_method_cashondelivery" timeout="30"/>
         <element name="purchaseOrderOption" type="radio" selector="#p_method_purchaseorder" timeout="30"/>
         <element name="purchaseOrderNumber" type="input" selector="#po_number"/>
+        <element name="freePaymentLabel" type="text" selector="#order-billing_method_form label[for='p_method_free']"/>
     </section>
 </sections>

@@ -6,6 +6,8 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\GroupedProduct\Api\Data\GroupedOptionsInterface" type="Magento\GroupedProduct\Model\Quote\Item\GroupedOptions" />
+
     <type name="Magento\Quote\Model\Quote\Item\RelatedProducts">
         <arguments>
             <argument name="relatedProductTypes" xsi:type="array">
@@ -102,6 +104,27 @@
         <arguments>
             <argument name="itemResolvers" xsi:type="array">
                 <item name="grouped" xsi:type="string">Magento\GroupedProduct\Model\Product\Configuration\Item\ItemProductResolver</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Quote\Model\Quote\Item\Repository">
+        <arguments>
+            <argument name="cartItemProcessors" xsi:type="array">
+                <item name="grouped" xsi:type="object">Magento\GroupedProduct\Model\Quote\Item\CartItemProcessor\Proxy</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogInventory\Observer\SaveInventoryDataObserver">
+        <arguments>
+            <argument name="parentItemProcessorPool" xsi:type="array">
+                <item name="grouped" xsi:type="object"> Magento\GroupedProduct\Model\Inventory\ParentItemProcessor</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogInventory\Plugin\MassUpdateProductAttribute">
+        <arguments>
+            <argument name="parentItemProcessorPool" xsi:type="array">
+                <item name="grouped" xsi:type="object"> Magento\GroupedProduct\Model\Inventory\ParentItemProcessor</item>
             </argument>
         </arguments>
     </type>

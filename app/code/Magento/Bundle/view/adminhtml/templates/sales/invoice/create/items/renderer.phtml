@@ -15,6 +15,7 @@
 <?php $items = $block->getChildren($_item); ?>
 <?php $_count = count($items) ?>
 <?php $_index = 0 ?>
+<?php $canEditItemQty = true ?>
 <?php
 /** @var \Magento\Catalog\Helper\Data $catalogHelper */
 $catalogHelper = $block->getData('catalogHelper');
@@ -37,7 +38,7 @@ $catalogHelper = $block->getData('catalogHelper');
     <?php if ($_item->getOrderItem()->getParentItem()): ?>
         <?php
         if ($shipTogether) {
-            continue;
+            $canEditItemQty = false;
         }
         ?>
         <?php $attributes = $block->getSelectionAttributes($_item) ?>
@@ -130,7 +131,7 @@ $catalogHelper = $block->getData('catalogHelper');
         </td>
         <td class="col-qty-invoice">
             <?php if ($block->canShowPriceInfo($_item) || $shipTogether): ?>
-                <?php if ($block->canEditQty()): ?>
+                <?php if ($block->canEditQty() && $canEditItemQty): ?>
                     <input type="text"
                            class="input-text admin__control-text qty-input"
                            name="invoice[items][<?= $block->escapeHtmlAttr($_item->getOrderItemId()) ?>]"

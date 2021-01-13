@@ -24,7 +24,7 @@ class WishlistItemFactory
     public function create(array $data): WishlistItem
     {
         return new WishlistItem(
-            $data['quantity'],
+            $data['quantity'] ?? 0,
             $data['sku'] ?? null,
             $data['parent_sku'] ?? null,
             isset($data['wishlist_item_id']) ? (int) $data['wishlist_item_id'] : null,

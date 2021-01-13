@@ -50,7 +50,11 @@ $girthEnabled = $block->isDisplayGirthValue() && $block->isGirthAllowed() ? 1 : 
             }
         });
         packaging.setItemQtyCallback(function(itemId){
-            var item = $$('[name="shipment[items]['+itemId+']"]')[0];
+            var item = $$('[name="shipment[items]['+itemId+']"]')[0],
+                itemTitle = $('order_item_' + itemId + '_title');
+            if (!itemTitle && !item) {
+                return 0;
+            }
             if (item && !isNaN(item.value)) {
                 return item.value;
             }

@@ -68,7 +68,7 @@ abstract class AbstractDataFixture
     protected function getAnnotations(TestCase $test): array
     {
         $annotations = $test->getAnnotations();
-        return array_replace($annotations['class'], $annotations['method']);
+        return array_replace((array)$annotations['class'], (array)$annotations['method']);
     }
 
     /**

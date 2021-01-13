@@ -17,6 +17,9 @@
             <testCaseId value="MC-16225"/>
             <group value="sales"/>
             <group value="mtf_migrated"/>
+            <skip>
+                <issueId value="MQE-2288" />
+            </skip>
         </annotations>
         <before>
             <magentoCLI command="downloadable:domains:add" arguments="example.com static.magento.com" stepKey="addDownloadableDomain"/>
@@ -262,8 +265,11 @@
 
         <!--  Click on the "Print Order" button -->
         <click selector="{{StorefrontGuestOrderViewSection.printOrder}}" stepKey="printOrder"/>
+        <wait time="5" stepKey="waitForPrintWindowToOpen" />
         <switchToWindow stepKey="switchToWindow"/>
+        <wait time="5" stepKey="waitForPrintTabToOpen" />
         <switchToNextTab stepKey="switchToTab"/>
+        <wait stepKey="waitForPrintPreviewToLoad" time="5" />
         <seeInCurrentUrl url="sales/guest/print/order_id/" stepKey="seePrintPage"/>
 
         <!-- AssertSalesPrintOrderProducts -->

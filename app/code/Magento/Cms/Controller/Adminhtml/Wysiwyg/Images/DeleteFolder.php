@@ -10,7 +10,6 @@ declare(strict_types=1);
 namespace Magento\Cms\Controller\Adminhtml\Wysiwyg\Images;
 
 use Magento\Framework\App\Action\HttpPostActionInterface;
-use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Delete image folder.

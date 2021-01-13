@@ -525,12 +525,12 @@ class Address extends AbstractCustomer
     protected function _importData()
     {
         //Preparing data for mass validation/import.
-        $rows = [[]];
+        $rows = [];
         while ($bunch = $this->_dataSourceModel->getNextBunch()) {
             $rows[] = $bunch;
         }
 
-        $this->prepareCustomerData(array_merge(...$rows));
+        $this->prepareCustomerData(array_merge([], ...$rows));
         unset($bunch, $rows);
         $this->_dataSourceModel->getIterator()->rewind();
 

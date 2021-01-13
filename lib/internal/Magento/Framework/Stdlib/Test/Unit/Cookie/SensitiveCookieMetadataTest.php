@@ -189,6 +189,7 @@ class SensitiveCookieMetadataTest extends TestCase
                     SensitiveCookieMetadata::KEY_DOMAIN => 'domain',
                     SensitiveCookieMetadata::KEY_PATH => 'path',
                     SensitiveCookieMetadata::KEY_HTTP_ONLY => 1,
+                    SensitiveCookieMetadata::KEY_SAME_SITE => 'Lax',
                 ],
                 0,
             ],
@@ -203,6 +204,7 @@ class SensitiveCookieMetadataTest extends TestCase
                     SensitiveCookieMetadata::KEY_DOMAIN => 'domain',
                     SensitiveCookieMetadata::KEY_PATH => 'path',
                     SensitiveCookieMetadata::KEY_HTTP_ONLY => 1,
+                    SensitiveCookieMetadata::KEY_SAME_SITE => 'Lax',
                 ],
             ],
             'without secure 2' => [
@@ -216,6 +218,7 @@ class SensitiveCookieMetadataTest extends TestCase
                     SensitiveCookieMetadata::KEY_DOMAIN => 'domain',
                     SensitiveCookieMetadata::KEY_PATH => 'path',
                     SensitiveCookieMetadata::KEY_HTTP_ONLY => 1,
+                    SensitiveCookieMetadata::KEY_SAME_SITE => 'Lax',
                 ],
             ],
         ];
@@ -240,7 +243,8 @@ class SensitiveCookieMetadataTest extends TestCase
     {
         return [
             "getDomain" => ["setDomain", 'getDomain', "example.com"],
-            "getPath" => ["setPath", 'getPath', "path"]
+            "getPath" => ["setPath", 'getPath', "path"],
+            "getSameSite" => ["setSameSite", 'getSameSite', 'Lax']
         ];
     }
 }

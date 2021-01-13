@@ -11,6 +11,8 @@ namespace Magento\Cms\Model\PageRepository;
 use Magento\Cms\Api\Data\PageInterface;
 use Magento\Cms\Api\PageRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\EntityManager\HydratorInterface;
 
 /**
  * Validates and saves a page
@@ -28,12 +30,19 @@ class ValidationComposite implements PageRepositoryInterface
     private $validators;
 
     /**
+     * @var HydratorInterface
+     */
+    private $hydrator;
+
+    /**
      * @param PageRepositoryInterface $repository
      * @param ValidatorInterface[] $validators
+     * @param HydratorInterface|null $hydrator
      */
     public function __construct(
         PageRepositoryInterface $repository,
-        array $validators = []
+        array $validators = [],
+        ?HydratorInterface $hydrator = null
     ) {
         foreach ($validators as $validator) {
             if (!$validator instanceof ValidatorInterface) {
@@ -44,6 +53,7 @@ class ValidationComposite implements PageRepositoryInterface
         }
         $this->repository = $repository;
         $this->validators = $validators;
+        $this->hydrator = $hydrator ?? ObjectManager::getInstance()->get(HydratorInterface::class);
     }
 
     /**
@@ -51,6 +61,9 @@ class ValidationComposite implements PageRepositoryInterface
      */
     public function save(PageInterface $page)
     {
+        if ($page->getId()) {
+            $page = $this->hydrator->hydrate($this->getById($page->getId()), $this->hydrator->extract($page));
+        }
         foreach ($this->validators as $validator) {
             $validator->validate($page);
         }
