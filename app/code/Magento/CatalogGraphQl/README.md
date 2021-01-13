@@ -1,8 +1,8 @@
 # Magento_CatalogGraphQl module
 
-**Magento_CatalogGraphQl** module allows the getting of products and categories by GraphQl API requests.
+Magento_CatalogGraphQl module allows the getting of products and categories by GraphQl API requests.
 
-**Magento_CatalogGraphQl** module provides type and resolver information for the GraphQl API.
+Magento_CatalogGraphQl module provides type and resolver information for the GraphQl API.
 
 ## Installation details
 

@@ -1,8 +1,8 @@
 # Magento_CatalogCustomerGraphQl module
 
-**Magento_CatalogCustomerGraphQl** module allows the possibility to get tier price from the products.
+Magento_CatalogCustomerGraphQl module allows the possibility to get tier price from the products.
 
-**Magento_CatalogCustomerGraphQl** module provides type and resolver information for GraphQL attributes that have dependencies on the Magento_Catalog and Magento_Customer modules.
+Magento_CatalogCustomerGraphQl module provides type and resolver information for GraphQL attributes that have dependencies on the Magento_Catalog and Magento_Customer modules.
 
 ## Installation details
 

@@ -1,10 +1,10 @@
 # Magento_Catalog module
 
-**Magento_Catalog** module functionality is represented by the following sub-systems:
+Magento_Catalog module functionality is represented by the following sub-systems:
 - Products Management. It includes CRUD operation of the product, product media, product attributes, etc...
 - Category Management. It includes CRUD operation of category, category attributes
 
-**Magento_Catalog** module provides a mechanism for creating a new product type in the system and API filtering that allows limiting product selection with advanced filters.
+Magento_Catalog module provides a mechanism for creating a new product type in the system and API filtering that allows limiting product selection with advanced filters.
 
 ## Installation details
 

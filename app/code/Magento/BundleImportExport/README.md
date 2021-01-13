@@ -1,8 +1,8 @@
 # Magento_BundleImportExport module
 
-**Magento_BundleImportExport** module enables you to implements operate bundle products import/export functionality with bundle products.
+Magento_BundleImportExport module enables you to implements operate bundle products import/export functionality with bundle products.
 
-This module is designed to extend the existing functionality of the **Magento_CatalogImportExport** module by supporting a bundle product type.
+This module is designed to extend the existing functionality of the Magento_CatalogImportExport module by supporting a bundle product type.
 
 ## Installation details
 

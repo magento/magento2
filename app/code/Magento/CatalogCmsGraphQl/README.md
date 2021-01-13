@@ -1,8 +1,8 @@
 # Magento_CatalogCmsGraphQl module
 
-**Magento_CatalogCmsGraphQl** module allows the possibility to get the cms block from the category.
+Magento_CatalogCmsGraphQl module allows the possibility to get the cms block from the category.
 
-**Magento_CatalogCmsGraphQl** module provides type and resolver information for GraphQL API.
+Magento_CatalogCmsGraphQl module provides type and resolver information for GraphQL API.
 
 ## Installation details
 

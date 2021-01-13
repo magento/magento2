@@ -1,8 +1,8 @@
 # Magento_Captcha module
 
-The **Magento_Captcha** module allows applying Turing test in the process of user authentication or similar tasks.
+The Magento_Captcha module allows applying Turing test in the process of user authentication or similar tasks.
 
-The **Magento_Captcha** module extends **Magento_Customer** and **Magento_Checkout** modules to validating forms by Turing test there.
+The Magento_Captcha module extends Magento_Customer and Magento_Checkout modules to validating forms by Turing test there.
 
 ## Installation details
 

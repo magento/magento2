@@ -1,6 +1,6 @@
 # BundleGraphQl
 
-**Magento_BundleGraphQl** module extends **Magento_GraphQl** and **Magento_Bundle** modules. The module provides type and resolver information for  GraphQL API.
+Magento_BundleGraphQl module extends Magento_GraphQl and Magento_Bundle modules. The module provides type and resolver information for  GraphQL API.
 
 ## Installation details
 
