@@ -11,7 +11,8 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
+use Magento\ConfigurableProductGraphQl\Model\Product\Collection as ProductDataProvider;
 
 /**
  * Fetches the Product data according to the GraphQL schema
@@ -19,17 +20,26 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 class ProductResolver implements ResolverInterface
 {
     /**
-     * @var ProductRepositoryInterface
+     * @var ProductDataProvider
      */
-    private $productRepository;
+    private $productDataProvider;
 
     /**
-     * @param ProductRepositoryInterface $productRepository
+     * @var ValueFactory
      */
-    public function __construct(ProductRepositoryInterface $productRepository)
+    private $valueFactory;
+
+    /**
+     * @param ProductDataProvider $productDataProvider
+     * @param ValueFactory $valueFactory
+     */
+    public function __construct(
+        ProductDataProvider $productDataProvider,
+        ValueFactory $valueFactory   
+    )
     {
-        $this->productRepository = $productRepository;
-    }
+        $this->productDataProvider = $productDataProvider;
+        $this->valueFactory = $valueFactory;    }
 
     /**
      * @inheritdoc
@@ -46,9 +56,11 @@ class ProductResolver implements ResolverInterface
         }
 
         $cartItem = $value['model'];
-        $product = $this->productRepository->get($cartItem->getSku());
-        $productData = $product->toArray();
-        $productData['model'] = $product;
-        return $productData;
+        $sku = $cartItem->getSku();
+        $this->productDataProvider->addProductSku($sku);
+        $result = function () use ($sku) {
+            return $this->productDataProvider->getProductBySku($sku);
+        };
+        return $this->valueFactory->create($result);
     }
 }
