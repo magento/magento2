@@ -181,6 +181,7 @@ define([
                 this.pickerDateTimeFormat = this.options.timeFormat;
             } else {
                 this.pickerDateTimeFormat = this.options.dateFormat;
+
                 if (this.options.showsTime) {
                     this.pickerDateTimeFormat += ' ' + this.options.timeFormat;
                 }
