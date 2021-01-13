@@ -59,6 +59,14 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\UrlRewrite\Model\UrlRewrite">
+        <arguments>
+            <argument name="entityToCacheTagMap" xsi:type="array">
+                <item name="product" xsi:type="const">Magento\Catalog\Model\Product::CACHE_TAG</item>
+                <item name="category" xsi:type="const">Magento\Catalog\Model\Category::CACHE_TAG</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\Eav\Model\Config">
         <arguments>
             <argument name="attributesForPreload" xsi:type="array">

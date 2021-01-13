@@ -100,6 +100,7 @@ class File extends AbstractData
         FileProcessorFactory $fileProcessorFactory = null,
         IoFile $ioFile = null
     ) {
+        $value = $this->prepareFileValue($value);
         parent::__construct($localeDate, $logger, $attribute, $localeResolver, $value, $entityTypeCode, $isAjax);
         $this->urlEncoder = $urlEncoder;
         $this->_fileValidator = $fileValidator;
@@ -302,11 +303,11 @@ class File extends AbstractData
     public function compactValue($value)
     {
         if ($this->getIsAjaxRequest()) {
-            return $this;
+            return '';
         }
 
         // Remove outdated file (in the case of file uploader UI component)
-        if (empty($value) && !empty($this->_value)) {
+        if (!empty($this->_value) && !empty($value['delete'])) {
             $this->fileProcessor->removeUploadedFile($this->_value);
             return $value;
         }
@@ -419,5 +420,20 @@ class File extends AbstractData
     protected function getFileProcessor()
     {
         return $this->fileProcessor;
+    }
+
+    /**
+     * Prepare File value.
+     *
+     * @param array|string $value
+     * @return array|string
+     */
+    private function prepareFileValue($value)
+    {
+        if (is_array($value) && isset($value['value'])) {
+            $value = $value['value'];
+        }
+
+        return $value;
     }
 }
