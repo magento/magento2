@@ -1548,7 +1548,9 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     {
         $validTypes = array_keys($this->_productTypeModels);
         $validTypes = array_combine($validTypes, $validTypes);
-        $collection->addFieldToFilter('attribute_code', ['nin' => $this->_bannedAttributes]);
+        if (!empty($this->_bannedAttributes)) {
+            $collection->addFieldToFilter('attribute_code', ['nin' => $this->_bannedAttributes]);
+        }
         foreach (parent::filterAttributeCollection($collection) as $attribute) {
             $attrApplyTo = $attribute->getApplyTo();
             $attrApplyTo = array_combine($attrApplyTo, $attrApplyTo);

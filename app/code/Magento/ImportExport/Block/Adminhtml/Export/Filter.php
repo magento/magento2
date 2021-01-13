@@ -429,4 +429,15 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
         $this->setCollection($collection);
         return $this->getCollection();
     }
+
+    protected function _prepareCollection()
+    {
+        if ($this->getCollection()) {
+            if ($this->getCollection()->isLoaded()) {
+                $this->getCollection()->clear();
+            }
+        }
+
+        return parent::_prepareCollection();
+    }
 }
