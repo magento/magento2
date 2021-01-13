@@ -16,6 +16,7 @@
             <description value="Navigation arrow buttons not visible after video starts on product image"/>
             <severity value="MAJOR"/>
             <testCaseId value="MC-40398"/>
+            <useCaseId value="MC-39759"/>
             <group value="productVideo"/>
         </annotations>
         <before>
