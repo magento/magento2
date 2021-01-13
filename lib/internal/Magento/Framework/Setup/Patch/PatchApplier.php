@@ -300,7 +300,7 @@ class PatchApplier
     private function checkPatchAliases($dataPatch): bool
     {
         foreach ($dataPatch->getAliases() as $patchAlias) {
-            return  $this->patchHistory->isApplied($patchAlias);
+            return $this->patchHistory->isApplied($patchAlias);
         }
         return false;
     }
