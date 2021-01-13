@@ -15,7 +15,7 @@
             <title value="Checking vat id field at account create page  with 'Check Out with Multiple Addresses'"/>
             <description value="'VAT Number' field should be available at create account page  if 'Show VAT Number on Storefront' is Yes"/>
             <severity value="MAJOR"/>
-            <testCaseId value="MC-40016"/>
+            <testCaseId value="MC-40397"/>
             <group value="Multishipment"/>
         </annotations>
         <before>
