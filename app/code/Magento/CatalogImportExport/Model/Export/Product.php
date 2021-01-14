@@ -1548,10 +1548,12 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     {
         $validTypes = array_keys($this->_productTypeModels);
         $validTypes = array_combine($validTypes, $validTypes);
-        if (!empty($this->_bannedAttributes)) {
-            $collection->addFieldToFilter('attribute_code', ['nin' => $this->_bannedAttributes]);
-        }
+
         foreach (parent::filterAttributeCollection($collection) as $attribute) {
+            if (in_array($attribute->getAttributeCode(), $this->_bannedAttributes)) {
+                $collection->removeItemByKey($attribute->getId());
+                continue;
+            }
             $attrApplyTo = $attribute->getApplyTo();
             $attrApplyTo = array_combine($attrApplyTo, $attrApplyTo);
             $attrApplyTo = $attrApplyTo ? array_intersect_key($attrApplyTo, $validTypes) : $validTypes;
@@ -1565,7 +1567,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                 }
             } else {
                 // remove attributes of not-supported product types
-                $collection->addFieldToFilter('attribute_code',['nin' => $attribute->getAttributeCode()]);
+                $collection->removeItemByKey($attribute->getId());
             }
         }
         return $collection;

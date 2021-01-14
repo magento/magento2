@@ -430,14 +430,25 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
         return $this->getCollection();
     }
 
-    protected function _prepareCollection()
+    /**
+     * @inheritDoc
+     *
+     * @param \Magento\Backend\Block\Widget\Grid\Column $column
+     * @return $this
+     */
+    protected function _addColumnFilterToCollection($column)
     {
-        if ($this->getCollection()) {
-            if ($this->getCollection()->isLoaded()) {
-                $this->getCollection()->clear();
+        $collection = $this->getCollection();
+        $field = $column->getFilterIndex() ?? $column->getIndex();
+        $condition = $column->getFilter()->getData('value');
+        if ($field && isset($condition)) {
+            foreach ($this->getCollection() as $attribute) {
+                if (stripos($attribute->getData($field), $condition) === false) {
+                    $collection->removeItemByKey($attribute->getId());
+                }
             }
         }
 
-        return parent::_prepareCollection();
+        return $this;
     }
 }
