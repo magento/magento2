@@ -85,12 +85,39 @@ class SaveHandler implements ExtensionInterface
     }
 
     /**
+     * Save custom options
+     *
+     * @param array $options
+     * @param bool $hasChangedSku
+     * @param ProductInterface $product
+     * @return void
+     * @throws CouldNotSaveException
+     */
+    private function processOptionsSaving(array $options, bool $hasChangedSku, ProductInterface $product): void
+    {
+        $isProductHasRelations = $this->isProductHasRelations($product);
+        /** @var ProductCustomOptionInterface $option */
+        foreach ($options as $option) {
+            if (!$isProductHasRelations && $option->getIsRequire()) {
+                $message = 'Required custom options cannot be added to a simple product'
+                    . ' that is a part of a composite product.';
+                throw new CouldNotSaveException(__($message));
+            }
+
+            if ($hasChangedSku && $option->hasData('product_sku')) {
+                $option->setProductSku($product->getSku());
+            }
+            $this->optionRepository->save($option);
+        }
+    }
+
+    /**
      * Check if product doesn't belong to composite product
      *
      * @param ProductInterface $product
      * @return bool
      */
-    private function isProductValid(ProductInterface $product): bool
+    private function isProductHasRelations(ProductInterface $product): bool
     {
         $result = true;
         if ($product->getTypeId() !== Type::TYPE_BUNDLE
@@ -102,32 +129,5 @@ class SaveHandler implements ExtensionInterface
         }
 
         return $result;
-    }
-
-    /**
-     * Save custom options
-     *
-     * @param array $options
-     * @param bool $hasChangedSku
-     * @param ProductInterface $product
-     * @return void
-     * @throws CouldNotSaveException
-     */
-    private function processOptionsSaving(array $options, bool $hasChangedSku, ProductInterface $product): void
-    {
-        $isProductValid = $this->isProductValid($product);
-        /** @var ProductCustomOptionInterface $option */
-        foreach ($options as $option) {
-            if (!$isProductValid && $option->getIsRequire()) {
-                $message = 'Required custom options cannot be added to a simple product'
-                    . ' that is a part of a composite product.';
-                throw new CouldNotSaveException(__($message));
-            }
-
-            if ($hasChangedSku && $option->hasData('product_sku')) {
-                $option->setProductSku($product->getSku());
-            }
-            $this->optionRepository->save($option);
-        }
     }
 }
