@@ -41,10 +41,10 @@ class Name extends AbstractValidator
     /**
      * Check if name field is valid.
      *
-     * @param string $nameValue
+     * @param string|null $nameValue
      * @return bool
      */
-    private function isValidName(string $nameValue)
+    private function isValidName($nameValue)
     {
         if ($nameValue != null) {
             $pattern = '/(?:[\p{L}\p{M}\,\-\.\'\s]){1,255}+/u';
