@@ -47,6 +47,6 @@
         <!-- Assert Entered details should be retained and State/Province field should be displayed as an optional field (without * ) -->
         <seeOptionIsSelected selector="{{CheckoutShippingSection.country}}" userInput="{{UK_Address.country}}" stepKey="selectedCountryIsUnitedKingdom"/>
         <seeInField selector="{{CheckoutShippingSection.street}}" userInput="{{UK_Address.street[0]}}" stepKey="seeAddressStreetUnitedKingdom"/>
-        <dontSeeElement selector="{{CheckoutShippingSection.shippingAddressRequiredField('shippingAddress.region_id')}}" stepKey="assertStateProvinceIsNotRequired"/>
+        <dontSeeElement selector="{{CheckoutShippingSection.shippingAddressRequiredField('region_id')}}" stepKey="assertStateProvinceIsNotRequired"/>
     </test>
 </tests>
