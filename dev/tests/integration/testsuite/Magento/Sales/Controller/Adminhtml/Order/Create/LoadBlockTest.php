@@ -232,6 +232,40 @@ class LoadBlockTest extends AbstractBackendController
     }
 
     /**
+     * Check that customer notification is NOT disabled after comment is updated.
+     *
+     * @return void
+     * @magentoDataFixture Magento/Checkout/_files/quote_with_customer_without_address.php
+     */
+    public function testUpdateCustomerNote(): void
+    {
+        $customerNote = 'Example Comment';
+        $quoteId = $this->getQuoteByReservedOrderId->execute('test_order_with_customer_without_address')->getId();
+        $this->session->setQuoteId($quoteId);
+        $params = [
+            'json' => false,
+            'block' => 'totals',
+            'as_js_varname' => false,
+        ];
+        $post = $this->hydratePost([
+            'order' => [
+                'comment' => [
+                    CartInterface::KEY_CUSTOMER_NOTE => $customerNote
+                ],
+            ],
+        ]);
+        $this->dispatchWitParams($params, $post);
+
+        $quote = $this->session->getQuote();
+        $this->assertEquals($customerNote, $quote->getCustomerNote());
+        $this->assertTrue((bool)$quote->getCustomerNoteNotify());
+
+        preg_match('/id="notify_customer"(?<attributes>.*?)\/>/s', $this->getResponse()->getBody(), $matches);
+        $this->assertArrayHasKey('attributes', $matches);
+        $this->assertStringContainsString('checked="checked"', $matches['attributes']);
+    }
+
+    /**
      * Check customer quotes
      *
      * @param CartInterface $oldQuote
