@@ -71,7 +71,7 @@
         <!-- Import Configurable Product with Simple Child Products & Assert No Errors -->
         <actionGroup ref="AdminNavigateToImportPageActionGroup" stepKey="navigateToImportPage"/>
         <actionGroup ref="AdminFillImportFormActionGroup" stepKey="fillImportForm">
-            <argument name="importFile" value="configurable_and_simple_child_products.csv"/>
+            <argument name="importFile" value="import_configurable_product.csv"/>
         </actionGroup>
         <actionGroup ref="AdminClickCheckDataImportActionGroup" stepKey="clickCheckData"/>
         <see selector="{{AdminImportValidationMessagesSection.success}}" userInput="File is valid! To start import process press &quot;Import&quot; button" stepKey="seeCheckDataResultMessage"/>
