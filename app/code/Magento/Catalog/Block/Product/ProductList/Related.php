@@ -143,11 +143,11 @@ class Related extends AbstractProduct implements IdentityInterface
      */
     public function getIdentities()
     {
-        $identities = [[]];
+        $identities = [];
         foreach ($this->getItems() as $item) {
             $identities[] = $item->getIdentities();
         }
-        return array_merge(...$identities);
+        return array_merge([], ...$identities);
     }
 
     /**

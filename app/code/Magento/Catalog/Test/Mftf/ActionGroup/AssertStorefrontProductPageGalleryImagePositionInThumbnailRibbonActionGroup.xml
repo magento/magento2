@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertStorefrontProductPageGalleryImagePositionInThumbnailRibbonActionGroup">
+        <annotations>
+            <description>Check the expected image position in the fotorama ribbon on the product page</description>
+        </annotations>
+        <arguments>
+            <argument name="image" defaultValue="Magento2.filename" type="string"/>
+            <argument name="extension" defaultValue="Magento2.file_extension" type="string"/>
+            <argument name="position" defaultValue="0" type="string" />
+        </arguments>
+        <grabAttributeFrom userInput="src" selector="{{StorefrontProductMediaSection.fotoramaImageThumbnailImgByNumber(position)}}" stepKey="grabSrcFromThumbnailImageByPosition"/>
+        <assertRegExp stepKey="checkImagePositionInThumbnail">
+            <actualResult type="variable">$grabSrcFromThumbnailImageByPosition</actualResult>
+            <expectedResult type="string">|{{image}}[_\d]*.{{extension}}|</expectedResult>
+        </assertRegExp>
+    </actionGroup>
+</actionGroups>

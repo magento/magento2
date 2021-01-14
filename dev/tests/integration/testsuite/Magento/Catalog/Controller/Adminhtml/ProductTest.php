@@ -138,9 +138,6 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
         $urlPathAttribute = $product->getCustomAttribute('url_path');
         $this->assertEquals($urlPathAttribute->getValue(), $product->getSku());
 
-        // clean cache
-        CacheCleaner::cleanAll();
-
         // dispatch Save&Duplicate action and check it
         $this->assertSaveAndDuplicateAction($product);
     }

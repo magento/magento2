@@ -367,7 +367,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
                 $identities[] = $item->getIdentities();
             }
         }
-        $identities = array_merge(...$identities);
+        $identities = array_merge([], ...$identities);
 
         return $identities;
     }
