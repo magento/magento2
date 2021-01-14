@@ -142,6 +142,8 @@
         <actionGroup ref="AssertStorefrontProductStockStatusOnProductPageActionGroup" stepKey="assertStockAvailableOnProductPage">
             <argument name="productStockStatus" value="{{simpleProductRegularPriceCustomOptions.storefrontStatus}}"/>
         </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibilityr" stepKey="productPriceAmount"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibilityr" stepKey="assertOldPriceTextOnProductPage"/>
 
         <!--Verify customer see customizable options are Required -->
         <seeElement selector="{{StorefrontProductInfoMainSection.requiredCustomSelect(simpleProductCustomizableOption.title)}}" stepKey="verifyFirstCustomOptionIsRequired"/>
