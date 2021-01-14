@@ -61,7 +61,7 @@ class SaveTest extends TestCase
     /**
      * @var Save
      */
-    private $unit;
+    private $model;
 
     /**
      * @inheritDoc
@@ -76,7 +76,7 @@ class SaveTest extends TestCase
          $this->userContext = $this->createMock(UserContextInterface::class);
          $this->jsonDecoder = $this->createMock(DecoderInterface::class);
 
-        $this->unit = new Save(
+        $this->model = new Save(
             $this->context,
             $this->factory,
             $this->bookmarkRepository,
@@ -109,6 +109,6 @@ class SaveTest extends TestCase
         $this->userContext->method('getUserId')
             ->willReturn(null);
 
-        $this->unit->execute();
+        $this->model->execute();
     }
 }
