@@ -8,15 +8,18 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminUpdateSimpleProductWithRegularPriceInStockEnabledFlatTest">
+    <test name="AdminUpdateSimpleProductWithRegularPriceInStockEnabledFlatTest" deprecated="Use AdminUpdateSimpleProductWithRegularPriceInStockEnabledFlatCatalogTest instead">
         <annotations>
             <stories value="Update Simple Product"/>
-            <title value="Update Simple Product with Regular Price (In Stock) Enabled Flat"/>
+            <title value="DEPRECACTED. Update Simple Product with Regular Price (In Stock) Enabled Flat"/>
             <description value="Test log in to Update Simple Product and Update Simple Product with Regular Price (In Stock) Enabled Flat"/>
             <testCaseId value="MC-10818"/>
             <severity value="CRITICAL"/>
             <group value="catalog"/>
             <group value="mtf_migrated"/>
+            <skip>
+                <issueId value="DEPRECATED">Use AdminUpdateSimpleProductWithRegularPriceInStockEnabledFlatCatalogTest instead</issueId>
+            </skip> 
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
@@ -38,12 +41,12 @@
         </after>
 
         <!-- Search default simple product in the grid page -->
-        <actionGroup ref="AdminProductCatalogPageOpenActionGroup" stepKey="openProductCatalogPage"/>
-        <actionGroup ref="FilterProductGridBySku2ActionGroup" stepKey="filterProductGrid">
-            <argument name="sku" value="$$initialSimpleProduct.sku$$"/>
+        <actionGroup ref="AdminClearFiltersActionGroup" stepKey="openProductCatalogPage"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="filterProductGrid"/>
+        <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="clickFirstRowToOpenDefaultSimpleProduct">
+            <argument name="product" value="$$initialSimpleProduct$$"/>
         </actionGroup>
-        <click selector="{{AdminProductGridFilterSection.nthRow('1')}}" stepKey="clickFirstRowToOpenDefaultSimpleProduct"/>
-        <waitForPageLoad stepKey="waitUntilProductIsOpened"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitUntilProductIsOpened"/>
 
         <!-- Update simple product with regular price -->
         <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{simpleProductEnabledFlat.name}}" stepKey="fillSimpleProductName"/>
