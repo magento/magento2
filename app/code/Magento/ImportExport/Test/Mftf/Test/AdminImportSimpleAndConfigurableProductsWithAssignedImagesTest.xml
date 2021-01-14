@@ -81,6 +81,12 @@
         <see selector="{{AdminImportValidationMessagesSection.messageByType('success')}}" userInput="Import successfully done" stepKey="seeImportMessage"/>
         <dontSeeElementInDOM selector="{{AdminImportValidationMessagesSection.importErrorList}}" stepKey="dontSeeErrorMessage2"/>
 
+        <!-- Reindex -->
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
+        <pause stepKey="pause"/>
+
         <!-- Admin: Verify Simple Product 1 on Product Index Page -->
         <actionGroup ref="AssertProductOnAdminGridActionGroup" stepKey="assertSimpleProduct1InAdminGrid">
             <argument name="product" value="ImportSimple1"/>
