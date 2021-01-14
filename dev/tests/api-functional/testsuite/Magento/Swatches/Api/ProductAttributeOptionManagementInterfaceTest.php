@@ -12,6 +12,7 @@ use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Eav\Api\Data\AttributeOptionInterface;
 use Magento\Eav\Api\Data\AttributeOptionLabelInterface;
 use Magento\Eav\Model\AttributeRepository;
+use Magento\Framework\DataObject;
 use Magento\Framework\Webapi\Rest\Request;
 use Magento\Swatches\Model\ResourceModel\Swatch\Collection;
 use Magento\Swatches\Model\ResourceModel\Swatch\CollectionFactory;
@@ -33,6 +34,7 @@ class ProductAttributeOptionManagementInterfaceTest extends WebapiAbstract
     /**
      * Test add option to swatch attribute
      *
+     * @dataProvider addDataProvider
      * @magentoApiDataFixture Magento/Catalog/Model/Product/Attribute/_files/select_attribute.php
      * @param array $data
      * @param array $payload
@@ -40,7 +42,7 @@ class ProductAttributeOptionManagementInterfaceTest extends WebapiAbstract
      * @param string $expectedLabel
      * @param string $expectedValue
      *
-     * @dataProvider addDataProvider
+     * @return void
      */
     public function testAdd(
         array $data,
@@ -48,8 +50,7 @@ class ProductAttributeOptionManagementInterfaceTest extends WebapiAbstract
         int $expectedSwatchType,
         string $expectedLabel,
         string $expectedValue
-    )
-    {
+    ): void {
         $objectManager = Bootstrap::getObjectManager();
         /** @var $attributeRepository AttributeRepository */
         $attributeRepository = $objectManager->get(AttributeRepository::class);
@@ -87,8 +88,9 @@ class ProductAttributeOptionManagementInterfaceTest extends WebapiAbstract
 
     /**
      * @magentoApiDataFixture Magento/Swatches/_files/text_swatch_attribute.php
+     * @return void
      */
-    public function testUpdate()
+    public function testUpdate(): void
     {
         $testAttributeCode = 'test_configurable';
         $optionData = [
@@ -115,7 +117,7 @@ class ProductAttributeOptionManagementInterfaceTest extends WebapiAbstract
         $this->assertNotNull(
             $this->getAttributeOption(
                 $testAttributeCode,
-                $optionData[AttributeOptionLabelInterface::LABEL]
+                $optionData[AttributeOptionInterface::LABEL]
             )
         );
     }
@@ -124,7 +126,7 @@ class ProductAttributeOptionManagementInterfaceTest extends WebapiAbstract
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function addDataProvider()
+    public function addDataProvider(): array
     {
         return [
             'visual swatch option with value' => [
@@ -249,14 +251,15 @@ class ProductAttributeOptionManagementInterfaceTest extends WebapiAbstract
      * Get swatch model
      *
      * @param int $optionId
-     * @return Swatch
+     * @return DataObject
      */
-    private function getSwatch(int $optionId)
+    private function getSwatch(int $optionId): DataObject
     {
         /** @var Collection $collection */
         $collection = Bootstrap::getObjectManager()->get(CollectionFactory::class)->create();
         $collection->addFieldToFilter('option_id', $optionId);
         $collection->setPageSize(1);
+
         return $collection->getFirstItem();
     }
 
@@ -300,6 +303,8 @@ class ProductAttributeOptionManagementInterfaceTest extends WebapiAbstract
     }
 
     /**
+     * Get Attribute options by attribute code
+     *
      * @param string $testAttributeCode
      * @param string|null $storeCode
      * @return array|bool|float|int|string
@@ -317,6 +322,8 @@ class ProductAttributeOptionManagementInterfaceTest extends WebapiAbstract
     }
 
     /**
+     * Get Attribute option by attribute code
+     *
      * @param string $attributeCode
      * @param string $optionLabel
      * @param string|null $storeCode
@@ -326,8 +333,7 @@ class ProductAttributeOptionManagementInterfaceTest extends WebapiAbstract
         string $attributeCode,
         string $optionLabel,
         ?string $storeCode = null
-    ): ?array
-    {
+    ): ?array {
         $attributeOptions = $this->getAttributeOptions($attributeCode, $storeCode);
         $option = null;
         /** @var array $attributeOption */
