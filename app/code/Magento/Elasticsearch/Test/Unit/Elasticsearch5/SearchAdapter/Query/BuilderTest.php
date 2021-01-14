@@ -1,22 +1,21 @@
 <?php
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 declare(strict_types=1);
 
-namespace Magento\Elasticsearch\Test\Unit\SearchAdapter\Query;
+namespace Magento\Elasticsearch\Test\Unit\Elasticsearch5\SearchAdapter\Query;
 
+use Magento\Elasticsearch\Elasticsearch5\SearchAdapter\Query\Builder;
 use Magento\Elasticsearch\Model\Config;
-use Magento\Elasticsearch\SearchAdapter\Query\Builder;
 use Magento\Elasticsearch\SearchAdapter\Query\Builder\Aggregation as AggregationBuilder;
-use Magento\Elasticsearch\SearchAdapter\Query\Builder\Sort;
 use Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver;
 use Magento\Framework\App\ScopeInterface;
 use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\Search\Request\Dimension;
 use Magento\Framework\Search\RequestInterface;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -62,6 +61,7 @@ class BuilderTest extends TestCase
 
     /**
      * Setup method
+     *
      * @return void
      */
     protected function setUp(): void
@@ -95,19 +95,12 @@ class BuilderTest extends TestCase
             '',
             false
         );
-        $sortBuilder = $this->getMockForAbstractClass(
-            Sort::class,
-            [],
-            '',
-            false
-        );
 
         $this->model = new Builder(
             $this->clientConfig,
             $this->searchIndexNameResolver,
             $this->aggregationBuilder,
             $this->scopeResolver,
-            $sortBuilder,
         );
     }
 
@@ -192,17 +185,5 @@ class BuilderTest extends TestCase
             ->willReturn('document');
         $query = $this->model->initQuery($this->request);
         $this->assertLessThanOrEqual(2147483647, $query['body']['from']);
-    }
-
-    /**
-     * Test initQuery() method
-     */
-    public function testInitAggregations()
-    {
-        $this->aggregationBuilder->expects($this->any())
-            ->method('build')
-            ->willReturn([]);
-        $result = $this->model->initAggregations($this->request, []);
-        $this->assertNotNull($result);
     }
 }
