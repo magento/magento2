@@ -5,21 +5,21 @@
  */
 declare(strict_types=1);
 
+use Magento\Catalog\Api\Data\ProductInterfaceFactory;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Helper\DefaultCategory;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\Product\Type;
 use Magento\Catalog\Model\Product\Visibility;
-use Magento\Catalog\Model\ProductFactory;
 use Magento\CatalogInventory\Model\Stock;
 use Magento\Store\Api\WebsiteRepositoryInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
 $objectManager = Bootstrap::getObjectManager();
-/** @var ProductRepositoryInterface $productRepositoryFactory */
+/** @var ProductRepositoryInterface $productRepository */
 $productRepository = $objectManager->get(ProductRepositoryInterface::class);
-/** @var ProductFactory $productFactory */
-$productFactory = $objectManager->get(ProductFactory::class);
+/** @var ProductInterfaceFactory $productFactory */
+$productFactory = $objectManager->get(ProductInterfaceFactory::class);
 /** @var WebsiteRepositoryInterface $websiteRepository */
 $websiteRepository = $objectManager->get(WebsiteRepositoryInterface::class);
 /** @var DefaultCategory $defaultCategory */

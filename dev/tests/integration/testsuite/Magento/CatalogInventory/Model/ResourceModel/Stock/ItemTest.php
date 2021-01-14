@@ -11,6 +11,7 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Indexer\Product\Price\Processor as PriceProcessor;
 use Magento\CatalogInventory\Model\Configuration;
 use Magento\CatalogInventory\Model\Indexer\Stock\Processor as StockProcessor;
+use Magento\CatalogInventory\Model\ResourceModel\Stock\Item as ItemResource;
 use Magento\CatalogInventory\Model\Stock;
 use Magento\CatalogInventory\Model\StockRegistryStorage;
 use Magento\Framework\App\Config\MutableScopeConfigInterface;
@@ -34,7 +35,7 @@ class ItemTest extends TestCase
     /** @var MutableScopeConfigInterface */
     private $mutableConfig;
 
-    /** @var Item */
+    /** @var ItemResource */
     private $stockItemResource;
 
     /** @var StoreManagerInterface */
@@ -57,9 +58,11 @@ class ItemTest extends TestCase
      */
     protected function setUp(): void
     {
+        parent::setUp();
+
         $this->objectManager = Bootstrap::getObjectManager();
         $this->mutableConfig = $this->objectManager->get(MutableScopeConfigInterface::class);
-        $this->stockItemResource = $this->objectManager->get(Item::class);
+        $this->stockItemResource = $this->objectManager->get(ItemResource::class);
         $this->storeManager = $this->objectManager->get(StoreManagerInterface::class);
         $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
         $this->productRepository->cleanCache();
@@ -72,11 +75,11 @@ class ItemTest extends TestCase
      * @dataProvider updateSetOutOfStockDataProvider
      * @magentoDataFixture Magento/Catalog/_files/product_simple_duplicated.php
      * @magentoDataFixture Magento/Catalog/_files/product_simple_backorders_no.php
-     * @magentoConfigFixture default_store cataloginventory/item_options/min_qty 105
-     * @magentoConfigFixture default_store cataloginventory/item_options/manage_stock 1
+     * @magentoConfigFixture current_store cataloginventory/item_options/min_qty 105
+     * @magentoConfigFixture current_store cataloginventory/item_options/manage_stock 1
+     * @magentoDbIsolation disabled
      * @param int $backorders
      * @param array $expectedStockItems
-     * @magentoDbIsolation disabled
      * @return void
      */
     public function testUpdateSetOutOfStock(int $backorders, array $expectedStockItems): void
@@ -131,10 +134,10 @@ class ItemTest extends TestCase
      * @dataProvider updateUpdateSetInStockDataProvider
      * @magentoDataFixture Magento/Catalog/_files/out_of_stock_product_with_category.php
      * @magentoDataFixture Magento/Catalog/_files/product_simple_out_of_stock.php
-     * @magentoConfigFixture default_store cataloginventory/item_options/min_qty 50
+     * @magentoConfigFixture current_store cataloginventory/item_options/min_qty 50
+     * @magentoDbIsolation disabled
      * @param int $manageStock
      * @param array $expectedStockItems
-     * @magentoDbIsolation disabled
      * @return void
      */
     public function testUpdateSetInStock(int $manageStock, array $expectedStockItems): void
