@@ -14,7 +14,6 @@
             <description>Validates that the previous button is absent on the Storefront Product page.</description>
         </annotations>
 
-        <moveMouseOver selector="{{StorefrontProductMediaSection.mainImageForJsActions}}" stepKey="hoverOverImage"/>
         <dontSeeElement selector="{{StorefrontProductMediaSection.imagePrevButton}}" stepKey="dontSeePrevButton"/>
     </actionGroup>
 </actionGroups>
