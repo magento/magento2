@@ -16,10 +16,7 @@
             <title value="Admin should be able to see the full title of the selected custom option value in the order"/>
             <description value="Admin should be able to see the full title of the selected custom option value in the order"/>
             <severity value="MAJOR"/>
-            <testCaseId value="MC-3043"/>
-            <skip>
-                <issueId value="MQE-1128"/>
-            </skip>
+            <testCaseId value="MC-25479"/>
         </annotations>
         <before>
             <!--Create Simple Product with Custom Options-->
@@ -45,13 +42,13 @@
         <!-- Login Customer Storefront -->
         <actionGroup ref="StorefrontOpenCustomerLoginPageActionGroup" stepKey="goToSignInPage"/>
         <actionGroup ref="StorefrontFillCustomerLoginFormActionGroup" stepKey="fillLoginFormWithCorrectCredentials">
-            <argument name="customer" value="$$createCustomer$$"/>
+            <argument name="customer" value="$createCustomer$"/>
         </actionGroup>
         <actionGroup ref="StorefrontClickSignOnCustomerLoginFormActionGroup" stepKey="clickSignInAccountButton" />
 
         <!-- Checking the correctness of displayed prices for user parameters -->
 
-        <amOnPage url="{{StorefrontHomePage.url}}$$createProduct.custom_attributes[url_key]$$.html" stepKey="amOnProductPage"/>
+        <amOnPage url="{{StorefrontHomePage.url}}$createProduct.custom_attributes[url_key]$.html" stepKey="amOnProductPage"/>
         <seeElement selector="{{StorefrontProductInfoMainSection.productAttributeOptionsDropDown(ProductOptionDropDownWithLongValuesTitle.title, ProductOptionValueDropdownLongTitle1.price)}}" stepKey="checkDropDownProductOption"/>
 
         <!-- Adding items to the checkout -->
@@ -60,7 +57,7 @@
         <grabTextFrom selector="{{StorefrontProductInfoMainSection.productPrice}}" stepKey="finalProductPrice"/>
 
         <actionGroup ref="StorefrontAddToCartCustomOptionsProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage">
-            <argument name="productName" value="$$createProduct.name$$"/>
+            <argument name="productName" value="$createProduct.name$"/>
         </actionGroup>
 
         <!-- Checking the correctness of displayed custom options for user parameters on checkout -->
@@ -72,11 +69,11 @@
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskForCartItem"/>
         <waitForElement selector="{{CheckoutPaymentSection.cartItemsAreaActive}}" time="30" stepKey="waitForCartItemsAreaActive"/>
 
-        <see selector="{{CheckoutPaymentSection.cartItems}}" userInput="$$createProduct.name$$" stepKey="seeProductInCart"/>
+        <see selector="{{CheckoutPaymentSection.cartItems}}" userInput="$createProduct.name$" stepKey="seeProductInCart"/>
 
-        <conditionalClick selector="{{CheckoutPaymentSection.ProductOptionsByProductItemName($$createProduct.name$$)}}" dependentSelector="{{CheckoutPaymentSection.ProductOptionsActiveByProductItemName($$createProduct.name$$)}}" visible="false" stepKey="exposeProductOptions"/>
+        <conditionalClick selector="{{CheckoutPaymentSection.ProductOptionsByProductItemName($createProduct.name$)}}" dependentSelector="{{CheckoutPaymentSection.ProductOptionsActiveByProductItemName($createProduct.name$)}}" visible="false" stepKey="exposeProductOptions"/>
 
-        <see selector="{{CheckoutPaymentSection.ProductOptionsActiveByProductItemName($$createProduct.name$$)}}" userInput="{{ProductOptionValueDropdownLongTitle1.title}}" stepKey="seeProductOptionValueDropdown1Input1"/>
+        <see selector="{{CheckoutPaymentSection.ProductOptionsActiveByProductItemName($createProduct.name$)}}" userInput="{{ProductOptionValueDropdownLongTitle1.title}}" stepKey="seeProductOptionValueDropdown1Input1"/>
 
         <!--Select shipping method-->
 
@@ -117,6 +114,6 @@
         </assertEquals>
         <moveMouseOver selector="{{AdminOrderItemsOrderedSection.productNameOptions}} dd" stepKey="hoverProduct"/>
         <waitForElementVisible selector="{{AdminOrderItemsOrderedSection.productNameOptions}} dd:nth-child(2)" stepKey="waitForCustomOptionValueFullName"/>
-        <see selector="{{AdminOrderItemsOrderedSection.productNameOptions}}" userInput="Optisfvdklvfnkljvnfdklpvnfdjklfdvnjkvfdkjnvfdjkfvndj11111Optisfvdklvfnkljvnfdklpvnfdjklfdvnjkvfdkjnvfdjkfvndj11111" stepKey="seeAdminOrderProductOptionValueDropdown1"/>
+        <see selector="{{AdminOrderItemsOrderedSection.productNameOptions}}" userInput="Optisfvdklvfnkljvnfdklpvnfdjklfdvnjkvfdkjnvfdjkfvndj111 11Optisfvdklvfnkljvnfdklpvnfdjklfdvnjkvfdkjnvfdjkfvndj11111" stepKey="seeAdminOrderProductOptionValueDropdown1"/>
     </test>
 </tests>
