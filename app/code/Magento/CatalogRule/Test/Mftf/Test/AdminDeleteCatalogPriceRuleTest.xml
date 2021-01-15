@@ -84,7 +84,7 @@
         <!-- Apply and flush the cache -->
         <click selector="{{AdminCatalogPriceRuleGrid.applyRules}}" stepKey="clickApplyRules"/>
         <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-            <argument name="indices" value=""/>
+            <argument name="indices" value="catalog_product_price"/>
         </actionGroup>
         <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
             <argument name="tags" value=""/>
