@@ -65,7 +65,7 @@
         <see selector="{{AdminTaxRuleGridSection.successMessage}}" userInput="You saved the tax rule." stepKey="seeAssertTaxRuleSuccessMessage"/>
 
         <!-- Verify we see created tax rule with zip range(from the above step) on the tax rule grid page -->
-        <click selector="{{AdminDataGridHeaderSection.clearFilters}}" stepKey="clickClearFilters2"/>
+        <actionGroup ref="AdminClearGridFiltersActionGroup" stepKey="clickClearFilters2"/>
         <fillField selector="{{AdminTaxRuleGridSection.code}}" userInput="{{SimpleTaxRule.code}}" stepKey="fillTaxRuleCode2"/>
         <click selector="{{AdminTaxRuleGridSection.search}}" stepKey="clickSearch2"/>
         <waitForPageLoad stepKey="waitForTaxRuleSearch"/>
