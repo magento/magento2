@@ -7,7 +7,7 @@ namespace Magento\Cms\Model\Page;
 
 use Magento\Cms\Api\Data\PageInterface;
 use Magento\Cms\Api\PageRepositoryInterface;
-use Magento\Cms\Model\Page;
+use Magento\Cms\Model\PageFactory;
 use Magento\Cms\Model\ResourceModel\Page\CollectionFactory;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\Request\DataPersistorInterface;
@@ -54,6 +54,11 @@ class DataProvider extends ModifierPoolDataProvider
     private $customLayoutManager;
 
     /**
+     * @var PageFactory
+     */
+    private $pageFactory;
+
+    /**
      * @var LoggerInterface
      */
     private $logger;
@@ -71,6 +76,7 @@ class DataProvider extends ModifierPoolDataProvider
      * @param RequestInterface|null $request
      * @param CustomLayoutManagerInterface|null $customLayoutManager
      * @param PageRepositoryInterface|null $pageRepository
+     * @param PageFactory|null $pageFactory
      * @param LoggerInterface|null $logger
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -87,6 +93,7 @@ class DataProvider extends ModifierPoolDataProvider
         ?RequestInterface $request = null,
         ?CustomLayoutManagerInterface $customLayoutManager = null,
         ?PageRepositoryInterface $pageRepository = null,
+        ?PageFactory $pageFactory = null,
         ?LoggerInterface $logger = null
     ) {
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data, $pool);
@@ -98,6 +105,7 @@ class DataProvider extends ModifierPoolDataProvider
         $this->customLayoutManager = $customLayoutManager
             ?? ObjectManager::getInstance()->get(CustomLayoutManagerInterface::class);
         $this->pageRepository = $pageRepository ?? ObjectManager::getInstance()->get(PageRepositoryInterface::class);
+        $this->pageFactory = $pageFactory ?: ObjectManager::getInstance()->get(PageFactory::class);
         $this->logger = $logger ?: ObjectManager::getInstance()->get(LoggerInterface::class);
     }
 
@@ -140,13 +148,12 @@ class DataProvider extends ModifierPoolDataProvider
      */
     private function getCurrentPage(): PageInterface
     {
-        $newPage = $this->collection->getNewEmptyItem();
         $pageId = $this->getPageId();
         if ($pageId) {
             try {
                 $page = $this->pageRepository->getById($pageId);
             } catch (LocalizedException $exception) {
-                $page = $newPage;
+                $page = $this->pageFactory->create();
             }
 
             return $page;
@@ -154,10 +161,11 @@ class DataProvider extends ModifierPoolDataProvider
 
         $data = $this->dataPersistor->get('cms_page');
         if (empty($data)) {
-            return $newPage;
+            return $this->pageFactory->create();
         }
         $this->dataPersistor->clear('cms_page');
-        $page = $newPage->setData($data);
+        $page = $this->pageFactory->create()
+            ->setData($data);
 
         return $page;
     }
