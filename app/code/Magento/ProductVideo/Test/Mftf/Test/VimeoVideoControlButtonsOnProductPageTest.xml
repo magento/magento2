@@ -50,27 +50,9 @@
             <argument name="productUrl" value="$createProduct.custom_attributes[url_key]$"/>
         </actionGroup>
 
-        <!-- Click next button -->
-        <actionGroup ref="AssertPrevButtonHiddenProductVideoActionGroup" stepKey="assertPrevButtonIsHidden"/>
-        <actionGroup ref="ClickNextButtonProductVideoActionGroup" stepKey="clickNextNavigationButton"/>
-
-        <!-- Assert product video present in the storefront product page -->
-        <actionGroup ref="AssertProductVideoStorefrontProductPageActionGroup" stepKey="assertProductVideoPresentInStorefrontProductPage">
+        <!-- Check the navigation arrows on Storefront Product page -->
+        <actionGroup ref="AssertProductVideoNavigationArrowsActionGroup" stepKey="assertProductVideoNavigationArrowsOnStorefrontProductPage">
             <argument name="videoType" value="vimeo"/>
         </actionGroup>
-        <actionGroup ref="AssertCloseButtonHiddenProductVideoActionGroup" stepKey="assertCloseVideoButtonIsHidden"/>
-
-        <!-- Click Play video button -->
-        <actionGroup ref="ClickPlayButtonProductVideoActionGroup" stepKey="clickPlayVideoButton"/>
-
-        <!-- Assert product navigation arrows -->
-        <actionGroup ref="AssertPrevButtonHiddenProductVideoActionGroup" stepKey="assertPrevButtonIsHidden2"/>
-        <actionGroup ref="AssertNextButtonHiddenProductVideoActionGroup" stepKey="assertNextButtonIsHidden"/>
-
-        <!-- Click Close video button -->
-        <actionGroup ref="ClickCloseButtonProductVideoActionGroup" stepKey="clickCloseVideoButton"/>
-
-        <!-- Click previous button -->
-        <actionGroup ref="ClickPrevButtonProductVideoActionGroup" stepKey="clickPrevNavigationButton"/>
     </test>
 </tests>
