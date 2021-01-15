@@ -3,9 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Directory\Model;
 
 use Magento\Framework\App\ScopeInterface;
+use Magento\Framework\Pricing\Price\PricePrecisionInterface;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Psr\Log\LoggerInterface as Logger;
 use Magento\Store\Model\Store;
@@ -13,10 +17,10 @@ use Magento\Store\Model\Store;
 /**
  * Class PriceCurrency model for convert and format price value
  */
-class PriceCurrency implements \Magento\Framework\Pricing\PriceCurrencyInterface
+class PriceCurrency implements PriceCurrencyInterface
 {
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     protected $storeManager;
 
@@ -31,18 +35,26 @@ class PriceCurrency implements \Magento\Framework\Pricing\PriceCurrencyInterface
     protected $logger;
 
     /**
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @var PricePrecisionInterface
+     */
+    private $pricePrecision;
+
+    /**
+     * @param StoreManagerInterface $storeManager
      * @param CurrencyFactory $currencyFactory
      * @param Logger $logger
+     * @param PricePrecisionInterface $pricePrecision
      */
     public function __construct(
         StoreManagerInterface $storeManager,
         CurrencyFactory $currencyFactory,
-        Logger $logger
+        Logger $logger,
+        PricePrecisionInterface $pricePrecision
     ) {
         $this->storeManager = $storeManager;
         $this->currencyFactory = $currencyFactory;
         $this->logger = $logger;
+        $this->pricePrecision = $pricePrecision;
     }
 
     /**
@@ -60,8 +72,12 @@ class PriceCurrency implements \Magento\Framework\Pricing\PriceCurrencyInterface
     /**
      * @inheritdoc
      */
-    public function convertAndRound($amount, $scope = null, $currency = null, $precision = self::DEFAULT_PRECISION)
+    public function convertAndRound($amount, $scope = null, $currency = null, $precision = null)
     {
+        if ($precision === null) {
+            $precision = $this->pricePrecision->getPrecision();
+        }
+
         return $this->roundPrice($this->convert($amount, $scope, $currency), $precision);
     }
 
@@ -71,10 +87,14 @@ class PriceCurrency implements \Magento\Framework\Pricing\PriceCurrencyInterface
     public function format(
         $amount,
         $includeContainer = true,
-        $precision = self::DEFAULT_PRECISION,
+        $precision = null,
         $scope = null,
         $currency = null
     ) {
+        if ($precision === null) {
+            $precision = $this->pricePrecision->getPrecision();
+        }
+
         return $this->getCurrency($scope, $currency)
             ->formatPrecision($amount, $precision, [], $includeContainer);
     }
@@ -85,10 +105,14 @@ class PriceCurrency implements \Magento\Framework\Pricing\PriceCurrencyInterface
     public function convertAndFormat(
         $amount,
         $includeContainer = true,
-        $precision = self::DEFAULT_PRECISION,
+        $precision = null,
         $scope = null,
         $currency = null
     ) {
+        if ($precision === null) {
+            $precision = $this->pricePrecision->getPrecision();
+        }
+
         $amount = $this->convert($amount, $scope, $currency);
 
         return $this->format($amount, $includeContainer, $precision, $scope, $currency);
@@ -162,8 +186,12 @@ class PriceCurrency implements \Magento\Framework\Pricing\PriceCurrencyInterface
      * @param int $precision
      * @return float
      */
-    public function roundPrice($price, $precision = self::DEFAULT_PRECISION)
+    public function roundPrice($price, $precision = null)
     {
+        if ($precision === null) {
+            $precision = $this->pricePrecision->getPrecision();
+        }
+
         return round($price, $precision);
     }
 }
