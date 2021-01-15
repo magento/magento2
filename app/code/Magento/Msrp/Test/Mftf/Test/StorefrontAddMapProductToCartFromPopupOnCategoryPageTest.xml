@@ -12,12 +12,12 @@
         <annotations>
             <features value="Msrp"/>
             <stories value="Minimum advertised price"/>
-            <title value="Add simple product with MAP to cart from popup on category page"/>
-            <description value="Check that simple product with MAP is successfully added to cart from popup on category page"/>
+            <title value="Add simple product with minimum advertised price to cart from popup on category page"/>
+            <description value="Check that simple product with minimum advertised price is successfully added to cart from popup on category page"/>
             <severity value="MAJOR"/>
             <testCaseId value="MC-40419"/>
             <useCaseId value="MC-35640"/>
-            <group value="Msrp"/>
+            <group value="msrp"/>
         </annotations>
         <before>
             <!-- Enable Minimum advertised Price -->
@@ -51,15 +51,15 @@
         <!-- Grab and verify MAP price -->
         <grabTextFrom selector="{{StorefrontMsrpCategorySection.mapPrice($createProduct.name$)}}" stepKey="grabMapPrice"/>
         <assertEquals stepKey="assertMapPrice">
-            <actualResult type="const">($grabMapPrice)</actualResult>
+            <actualResult type="variable">grabMapPrice</actualResult>
             <expectedResult type="string">${{ApiProductMsrp.value}}</expectedResult>
         </assertEquals>
 
         <!-- Open 'Click for price' popup and click 'Add to Cart' button -->
         <click selector="{{StorefrontMsrpCategorySection.clickForPrice($createProduct.name$)}}" stepKey="clickForPrice"/>
-        <waitForElementVisible selector="{{StorefrontMsrpSection.popupAddToCartButton}}" stepKey="waitForAddToCartButton"/>
-        <click selector="{{StorefrontMsrpSection.popupAddToCartButton}}" stepKey="clickAddToCartButton"/>
-        <waitForElementVisible selector="{{StorefrontCategoryMainSection.SuccessMsg}}" stepKey="waitForSuccessMessage"/>
-        <see selector="{{StorefrontCategoryMainSection.SuccessMsg}}" userInput="You added $createProduct.name$ to your shopping cart." stepKey="assertSuccessMessage"/>
+        <waitForElementVisible selector="{{StorefrontMsrpPopupSection.addToCartButton}}" stepKey="waitForAddToCartButton"/>
+        <click selector="{{StorefrontMsrpPopupSection.addToCartButton}}" stepKey="clickAddToCartButton"/>
+        <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" stepKey="waitForSuccessMessage"/>
+        <see selector="{{StorefrontMessagesSection.success}}" userInput="You added $createProduct.name$ to your shopping cart." stepKey="assertSuccessMessage"/>
     </test>
 </tests>
