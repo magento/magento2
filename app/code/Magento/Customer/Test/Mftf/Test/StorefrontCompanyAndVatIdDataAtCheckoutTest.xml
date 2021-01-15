@@ -15,7 +15,7 @@
             <title value="Check if Company name and VAT Id visible at the checkout"/>
             <description value="Company name and VAT Id should be visible at the checkout step in address if it switched on at configuration"/>
             <severity value="MAJOR"/>
-            <testCaseId value="MC-*"/>
+            <testCaseId value="MC-40437"/>
             <group value="customer"/>
             <group value="create"/>
         </annotations>
