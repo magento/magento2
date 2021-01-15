@@ -59,17 +59,20 @@ class StockProcessor implements CollectionProcessorInterface
     ): Collection {
         $connection = $this->resourceConnection->getConnection();
 
-        if ($this->helper->isStockAlertAllowed() && 
+        if ($this->helper->isStockAlertAllowed() &&
             $context !== null &&
             $context->getUserId() &&
-            in_array('productalert_stock_subcribed', $attributeNames)) {
+            in_array('productalert_stock_subscribed', $attributeNames)) {
             $store = $context->getExtensionAttributes()->getStore();
-            $joinCondition = $connection->quoteInto(
-                'alert_stock.product_id = e.entity_id AND alert_stock.customer_id = ? AND alert_stock.store_id = ?', $context->getUserId(), $store->getId());
+            $joinCondition = 'alert_stock.product_id = e.entity_id AND ' .
+                $connection->quoteInto('alert_stock.customer_id = ?', $context->getUserId()) .
+                ' AND ' .
+                $connection->quoteInto('alert_stock.store_id = ?', $store->getId());
+
             $collection->getSelect()->joinLeft(
                 ['alert_stock' => $connection->getTableName('product_alert_stock')],
                 $joinCondition,
-                ['productalert_stock_subcribed' => 'alert_stock.alert_stock_id']
+                ['productalert_stock_subscribed' => 'alert_stock.alert_stock_id']
             );
         }
 

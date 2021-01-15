@@ -32,6 +32,7 @@ class Subscribe implements ResolverInterface
 
     /**
      * @param AlertsHelper $helper
+     * @param PriceFactory $priceFactory
      */
     public function __construct(
         AlertsHelper $helper,

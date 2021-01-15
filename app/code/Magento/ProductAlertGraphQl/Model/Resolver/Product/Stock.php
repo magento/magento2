@@ -30,6 +30,6 @@ class Stock implements ResolverInterface
         /** @var ProductInterface $product */
         $product = $value['model'];
 
-        return $product->getData('productalert_stock_subcribed') !== null;
+        return $product->getData('productalert_stock_subscribed') !== null;
     }
 }

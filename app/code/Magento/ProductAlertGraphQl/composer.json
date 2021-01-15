@@ -2,24 +2,22 @@
     "name": "magento/module-product-alert-graph-ql",
     "description": "N/A",
     "type": "magento2-module",
-    "require":{ 
+    "require": { 
         "php": "~7.3.0||~7.4.0",
         "magento/framework": "*",
-        "magento/module-catalog": "*",
         "magento/module-catalog-graph-ql": "*",
         "magento/module-graph-ql": "*",
-        "magento/module-product-alert": "*",
-        "magento/module-store": "*"
+        "magento/module-product-alert": "*"
     },
-    "license":[
+    "license": [
         "OSL-3.0",
         "AFL-3.0"
     ],
-    "autoload":{
-        "files":[
+    "autoload": {
+        "files": [
             "registration.php"
         ],
-        "psr-4":{
+        "psr-4": {
             "Magento\\ProductAlertGraphQl\\": ""
         }
     }

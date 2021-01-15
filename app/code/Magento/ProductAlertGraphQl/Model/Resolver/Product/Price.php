@@ -30,6 +30,6 @@ class Price implements ResolverInterface
         /** @var ProductInterface $product */
         $product = $value['model'];
 
-        return $product->getData('productalert_price_subcribed') !== null;
+        return $product->getData('productalert_price_subscribed') !== null;
     }
 }

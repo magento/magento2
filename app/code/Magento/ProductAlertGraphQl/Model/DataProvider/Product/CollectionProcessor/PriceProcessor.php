@@ -59,17 +59,20 @@ class PriceProcessor implements CollectionProcessorInterface
     ): Collection {
         $connection = $this->resourceConnection->getConnection();
         
-        if ($this->helper->isStockAlertAllowed() && 
+        if ($this->helper->isStockAlertAllowed() &&
             $context !== null &&
             $context->getUserId() &&
-            in_array('productalert_price_subcribed', $attributeNames)) {
+            in_array('productalert_price_subscribed', $attributeNames)) {
             $store = $context->getExtensionAttributes()->getStore();
-            $joinCondition = $connection->quoteInto(
-                'alert_price.product_id = e.entity_id AND alert_price.customer_id = ? AND alert_price.store_id = ?', $context->getUserId(), $store->getId());
+            $joinCondition = 'alert_price.product_id = e.entity_id AND ' .
+                $connection->quoteInto('alert_price.customer_id = ?', $context->getUserId()) .
+                ' AND ' .
+                $connection->quoteInto('alert_price.store_id = ?', $store->getId());
+
             $collection->getSelect()->joinLeft(
                 ['alert_price' => $connection->getTableName('product_alert_price')],
                 $joinCondition,
-                ['productalert_price_subcribed' => 'alert_price.alert_price_id']
+                ['productalert_price_subscribed' => 'alert_price.alert_price_id']
             );
         }
 
