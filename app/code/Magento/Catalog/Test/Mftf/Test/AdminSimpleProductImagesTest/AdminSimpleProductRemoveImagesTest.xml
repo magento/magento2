@@ -29,8 +29,7 @@
         <after>
             <deleteData createDataKey="category" stepKey="deletePreReqCategory"/>
             <deleteData createDataKey="product" stepKey="deleteProduct"/>
-            <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="goToProductsPage"/>
-            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductGridFilters"/>
+            <actionGroup ref="ClearProductsFilterActionGroup" stepKey="clearProductGridFilters"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
 
@@ -50,6 +49,7 @@
         <actionGroup ref="AdminOpenProductImagesSectionActionGroup" stepKey="expandImages"/>
 
         <!-- Upload and set Base image -->
+        <waitForPageLoad stepKey="waitBeforeAttachImages"/>
         <attachFile selector="{{AdminProductImagesSection.imageFileUpload}}" userInput="adobe-base.jpg" stepKey="attach1"/>
         <waitForPageLoad stepKey="waitForUpload1"/>
         <click selector="{{AdminProductImagesSection.nthProductImage('1')}}" stepKey="openImageDetails1"/>
@@ -116,6 +116,7 @@
         <actionGroup ref="AdminOpenProductImagesSectionActionGroup" stepKey="expandImages2"/>
 
         <!-- Remove all images -->
+        <waitForPageLoad stepKey="waitBeforeRemoveImages"/>
         <click selector="{{AdminProductImagesSection.nthRemoveImageBtn('1')}}" stepKey="removeImage1"/>
         <click selector="{{AdminProductImagesSection.nthRemoveImageBtn('2')}}" stepKey="removeImage2"/>
         <click selector="{{AdminProductImagesSection.nthRemoveImageBtn('3')}}" stepKey="removeImage3"/>

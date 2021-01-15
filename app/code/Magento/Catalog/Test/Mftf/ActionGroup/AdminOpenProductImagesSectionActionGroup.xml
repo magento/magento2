@@ -12,6 +12,7 @@
         <annotations>
             <description>Requires the navigation to the Product page. Opens 'Image and Videos' section.</description>
         </annotations>
+        <scrollTo selector="{{AdminProductImagesSection.productImagesToggle}}" stepKey="scrollToProductImagesTab"/>
         <conditionalClick selector="{{AdminProductImagesSection.productImagesToggle}}" dependentSelector="{{AdminProductImagesSection.imageUploadButton}}" visible="false" stepKey="openProductImagesSection"/>
         <waitForElementVisible selector="{{AdminProductImagesSection.imageUploadButton}}" stepKey="waitForImageUploadButton"/>
     </actionGroup>
