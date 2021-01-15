@@ -49,14 +49,14 @@
         </actionGroup>
 
         <!-- Grab and verify MAP price -->
-        <grabTextFrom selector="{{StorefrontMsrpCategorySection.mapPrice($createProduct.name$)}}" stepKey="grabMapPrice"/>
+        <grabTextFrom selector="{{StorefrontCategoryProductSection.mapPrice($createProduct.name$)}}" stepKey="grabMapPrice"/>
         <assertEquals stepKey="assertMapPrice">
             <actualResult type="variable">grabMapPrice</actualResult>
             <expectedResult type="string">${{ApiProductMsrp.value}}</expectedResult>
         </assertEquals>
 
         <!-- Open 'Click for price' popup and click 'Add to Cart' button -->
-        <click selector="{{StorefrontMsrpCategorySection.clickForPrice($createProduct.name$)}}" stepKey="clickForPrice"/>
+        <click selector="{{StorefrontCategoryProductSection.clickForPrice($createProduct.name$)}}" stepKey="clickForPrice"/>
         <waitForElementVisible selector="{{StorefrontMsrpPopupSection.addToCartButton}}" stepKey="waitForAddToCartButton"/>
         <click selector="{{StorefrontMsrpPopupSection.addToCartButton}}" stepKey="clickAddToCartButton"/>
         <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" stepKey="waitForSuccessMessage"/>
