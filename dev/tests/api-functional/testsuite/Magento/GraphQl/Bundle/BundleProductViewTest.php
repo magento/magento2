@@ -38,7 +38,6 @@ class BundleProductViewTest extends GraphQlAbstract
            type_id
            id
            name
-           attribute_set_id
            ... on PhysicalProductInterface {
              weight
            }
@@ -54,7 +53,7 @@ class BundleProductViewTest extends GraphQlAbstract
               required
               type
               position
-              sku              
+              sku
               options {
                 id
                 quantity
@@ -74,7 +73,7 @@ class BundleProductViewTest extends GraphQlAbstract
             }
            }
        }
-   }   
+   }
 }
 QUERY;
 
@@ -118,7 +117,6 @@ QUERY;
            type_id
            id
            name
-           attribute_set_id
            ... on PhysicalProductInterface {
              weight
            }
@@ -134,7 +132,7 @@ QUERY;
               required
               type
               position
-              sku              
+              sku
               options {
                 id
                 quantity
@@ -154,7 +152,7 @@ QUERY;
             }
            }
        }
-   }   
+   }
 }
 QUERY;
 
@@ -207,8 +205,7 @@ QUERY;
             ['response_field' => 'type_id', 'expected_value' => $product->getTypeId()],
             ['response_field' => 'id', 'expected_value' => $product->getId()],
             ['response_field' => 'name', 'expected_value' => $product->getName()],
-            ['response_field' => 'attribute_set_id', 'expected_value' => $product->getAttributeSetId()],
-             ['response_field' => 'weight', 'expected_value' => $product->getWeight()],
+            ['response_field' => 'weight', 'expected_value' => $product->getWeight()],
             ['response_field' => 'dynamic_price', 'expected_value' => !(bool)$product->getPriceType()],
             ['response_field' => 'dynamic_weight', 'expected_value' => !(bool)$product->getWeightType()],
             ['response_field' => 'dynamic_sku', 'expected_value' => !(bool)$product->getSkuType()]

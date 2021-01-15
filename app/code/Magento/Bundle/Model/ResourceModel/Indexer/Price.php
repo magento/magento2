@@ -17,6 +17,7 @@ use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\Query\JoinAttribut
 use Magento\Customer\Model\Indexer\CustomerGroupDimensionProvider;
 use Magento\Store\Model\Indexer\WebsiteDimensionProvider;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
+use Magento\CatalogInventory\Model\Stock;
 
 /**
  * Bundle products Price indexer resource model
@@ -624,6 +625,13 @@ class Price implements DimensionalIndexerInterface
                 'tier_price' => $tierExpr,
             ]
         );
+        $select->join(
+            ['si' => $this->getTable('cataloginventory_stock_status')],
+            'si.product_id = bs.product_id',
+            []
+        );
+        $select->where('si.stock_status = ?', Stock::STOCK_IN_STOCK);
+
         $this->tableMaintainer->insertFromSelect($select, $this->getBundleSelectionTable(), []);
     }
 

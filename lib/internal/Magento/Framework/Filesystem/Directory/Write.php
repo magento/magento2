@@ -116,7 +116,7 @@ class Write extends Read implements WriteInterface
         }
         $absolutePath = $this->driver->getAbsolutePath($this->path, $path);
         $absoluteNewPath = $targetDirectory->getAbsolutePath($newPath);
-        return $this->driver->rename($absolutePath, $absoluteNewPath, $targetDirectory->driver);
+        return $this->driver->rename($absolutePath, $absoluteNewPath, $targetDirectory->getDriver());
     }
 
     /**
@@ -349,7 +349,11 @@ class Write extends Read implements WriteInterface
      */
     public function writeFile($path, $content, $mode = 'w+')
     {
-        return $this->openFile($path, $mode)->write($content);
+         $file = $this->openFile($path, $mode);
+         $result = $file->write($content);
+         $file->close();
+
+         return $result;
     }
 
     /**
