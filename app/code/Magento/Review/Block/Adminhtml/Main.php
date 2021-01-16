@@ -100,13 +100,13 @@ class Main extends \Magento\Backend\Block\Widget\Grid\Container
         $customerName = '';
         if ($customerId) {
             $customer = $this->customerRepository->getById($customerId);
-            $customerName = $this->escapeHtml($this->_customerViewHelper->getCustomerName($customer));
+            $customerName = $this->_escaper->escapeHtml($this->_customerViewHelper->getCustomerName($customer));
         }
         $productId = $this->getRequest()->getParam('productId', false);
         $productName = null;
         if ($productId) {
             $product = $this->_productFactory->create()->load($productId);
-            $productName = $this->escapeHtml($product->getName());
+            $productName = $this->_escaper->escapeHtml($product->getName());
         }
 
         if ($this->_coreRegistry->registry('usePendingFilter') === true) {
