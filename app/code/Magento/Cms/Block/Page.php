@@ -113,7 +113,7 @@ class Page extends \Magento\Framework\View\Element\AbstractBlock implements
         if ($pageMainTitle) {
             // Setting empty page title if content heading is absent
             $cmsTitle = $page->getContentHeading() ?: ' ';
-            $pageMainTitle->setPageTitle($this->escapeHtml($cmsTitle));
+            $pageMainTitle->setPageTitle($this->_escaper->escapeHtml($cmsTitle));
         }
         return parent::_prepareLayout();
     }

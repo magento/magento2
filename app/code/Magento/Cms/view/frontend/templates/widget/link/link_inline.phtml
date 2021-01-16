@@ -6,10 +6,11 @@
 
 /**
  * @var \Magento\Cms\Block\Widget\Page\Link $block
+ * @var \Magento\Framework\Escaper $escaper
  */
 ?>
 <span class="widget block block-cms-link-inline">
     <a <?= /* @noEscape */ $block->getLinkAttributes() ?>>
-        <span><?= $block->escapeHtml($block->getLabel()) ?></span>
+        <span><?= $escaper->escapeHtml($block->getLabel()) ?></span>
     </a>
 </span>

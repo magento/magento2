@@ -4,10 +4,13 @@
  * See COPYING.txt for license details.
  */
 
- /** @var $block \Magento\Cms\Block\Adminhtml\Wysiwyg\Images\Content */
+ /**
+  * @var \Magento\Cms\Block\Adminhtml\Wysiwyg\Images\Content $block
+  * @var \Magento\Framework\Escaper $escaper
+  */
 ?>
 
-<div class="media-gallery-modal" data-mage-init='{"mediabrowser": <?= $block->escapeHtml($block->getFilebrowserSetupObject()) ?>}'>
+<div class="media-gallery-modal" data-mage-init='{"mediabrowser": <?= $escaper->escapeHtml($block->getFilebrowserSetupObject()) ?>}'>
     <div class="page-main-actions">
         <div class="page-actions">
             <div class="page-actions-inner">
