@@ -8,7 +8,10 @@
  * @see Magento_Backend::dashboard/chart/disabled.phtml
  * @phpcs:ignoreFile
  */
+/**
+ * @var \Magento\Framework\Escaper $escaper
+ */
 ?>
 <div class="dashboard-diagram-disabled">
-    <?= /* @noEscape */ __('Chart is disabled. To enable the chart, click <a href="%1">here</a>.', $block->escapeUrl($block->getConfigUrl())) ?>
+    <?= /* @noEscape */ __('Chart is disabled. To enable the chart, click <a href="%1">here</a>.', $escaper->escapeUrl($block->getConfigUrl())) ?>
 </div>

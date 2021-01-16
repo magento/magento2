@@ -103,7 +103,7 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
         $this->_transformActionData($action, $actionCaption, $row);
 
         $htmlAttributes = [
-            'value' => $this->escapeHtmlAttr($this->_jsonEncoder->encode($action), false)
+            'value' => $this->_escaper->escapeHtmlAttr($this->_jsonEncoder->encode($action), false)
         ];
         $actionAttributes->setData($htmlAttributes);
         return '<option ' . $actionAttributes->serialize() . '>' . $actionCaption . '</option>';
@@ -126,7 +126,7 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
         if (isset($action['confirm'])) {
             // phpcs:ignore Magento2.Functions.DiscouragedFunction
             $action['onclick'] = 'return window.confirm(\'' . addslashes(
-                $this->escapeHtml($action['confirm'])
+                $this->_escaper->escapeHtml($action['confirm'])
             ) . '\')';
             unset($action['confirm']);
         }

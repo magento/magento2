@@ -26,7 +26,7 @@ class Store extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractR
             href="' .
         $this->getUrl('adminhtml/*/editStore', ['store_id' => $row->getStoreId()]) .
         '">' .
-        $this->escapeHtml($row->getData($this->getColumn()->getIndex())) .
+        $this->_escaper->escapeHtml($row->getData($this->getColumn()->getIndex())) .
         '</a><br />' .
         '(' . __('Code') . ': ' . $row->getStoreCode() . ')';
     }

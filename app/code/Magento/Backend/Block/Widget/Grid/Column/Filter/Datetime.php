@@ -122,7 +122,7 @@ class Datetime extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Date
                         dateFormat: "' . $format . '",
                         timeFormat: "' . $timeFormat . '",
                         showsTime: ' . ($this->getColumn()->getFilterTime() ? 'true' : 'false') . ',
-                        buttonText: "' . $this->escapeHtml(__('Date selector')) . '",
+                        buttonText: "' . $this->_escaper->escapeHtml(__('Date selector')) . '",
                         from: {
                             id: "' . $htmlId . '_from"
                         },
@@ -151,7 +151,7 @@ class Datetime extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Date
             }
 
             if (is_string($value)) {
-                return $this->escapeHtml($value);
+                return $this->_escaper->escapeHtml($value);
             }
 
             return $value;

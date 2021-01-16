@@ -4,9 +4,12 @@
  * See COPYING.txt for license details.
  */
 
-/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+/**
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ * @var \Magento\Framework\Escaper $escaper
+ */
 ?>
-<form action="<?= $block->escapeUrl($block->getSaveUrl()) ?>" method="post" id="design-edit-form">
+<form action="<?= $escaper->escapeUrl($block->getSaveUrl()) ?>" method="post" id="design-edit-form">
     <?= $block->getBlockHtml('formkey') ?>
 </form>
 

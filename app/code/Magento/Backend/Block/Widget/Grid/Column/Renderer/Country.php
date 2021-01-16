@@ -44,7 +44,7 @@ class Country extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstrac
         if ($data = $row->getData($this->getColumn()->getIndex())) {
             $name = $this->localeLists->getCountryTranslation($data);
             if (empty($name)) {
-                $name = $this->escapeHtml($data);
+                $name = $this->_escaper->escapeHtml($data);
             }
             return $name;
         }

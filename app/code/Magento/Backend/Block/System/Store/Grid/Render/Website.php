@@ -23,7 +23,7 @@ class Website extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstrac
             href="' .
         $this->getUrl('adminhtml/*/editWebsite', ['website_id' => $row->getWebsiteId()]) .
         '">' .
-        $this->escapeHtml($row->getData($this->getColumn()->getIndex())) .
+        $this->_escaper->escapeHtml($row->getData($this->getColumn()->getIndex())) .
         '</a><br />' .
         '(' . __('Code') . ': ' . $row->getCode() . ')';
     }

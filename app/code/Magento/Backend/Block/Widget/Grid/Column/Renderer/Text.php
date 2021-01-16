@@ -50,7 +50,7 @@ class Text extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRe
         if (true === $this->getColumn()->getTranslate()) {
             $value = __($value);
         }
-        return $this->escapeHtml($value);
+        return $this->_escaper->escapeHtml($value);
     }
 
     /**
@@ -71,6 +71,6 @@ class Text extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRe
                 $value = str_replace($match, $replacement, $value);
             }
         }
-        return $this->escapeHtml($value);
+        return $this->_escaper->escapeHtml($value);
     }
 }

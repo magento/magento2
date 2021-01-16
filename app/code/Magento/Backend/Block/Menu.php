@@ -137,7 +137,7 @@ class Menu extends \Magento\Backend\Block\Template
      */
     protected function _getAnchorLabel($menuItem)
     {
-        return $this->escapeHtml(__($menuItem->getTitle()));
+        return $this->_escaper->escapeHtml(__($menuItem->getTitle()));
     }
 
     /**

@@ -49,7 +49,7 @@ class Store extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFil
 
         $allShow = $this->getColumn()->getStoreAll();
 
-        $html = '<select class="admin__control-select" name="' . $this->escapeHtml(
+        $html = '<select class="admin__control-select" name="' . $this->_escaper->escapeHtml(
             $this->_getHtmlName()
         ) . '" ' . $this->getColumn()->getValidateClass() . $this->getUiId(
             'filter',
@@ -76,11 +76,12 @@ class Store extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFil
                     }
                     if (!$websiteShow) {
                         $websiteShow = true;
-                        $html .= '<optgroup label="' . $this->escapeHtml($website->getName()) . '"></optgroup>';
+                        $websiteName = $this->_escaper->escapeHtml($website->getName());
+                        $html .= '<optgroup label="' . $websiteName . '"></optgroup>';
                     }
                     if (!$groupShow) {
                         $groupShow = true;
-                        $html .= '<optgroup label="&nbsp;&nbsp;&nbsp;&nbsp;' . $this->escapeHtml(
+                        $html .= '<optgroup label="&nbsp;&nbsp;&nbsp;&nbsp;' . $this->_escaper->escapeHtml(
                             $group->getName()
                         ) . '">';
                     }
@@ -91,7 +92,7 @@ class Store extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFil
                         '"' .
                         $selected .
                         '>&nbsp;&nbsp;&nbsp;&nbsp;' .
-                        $this->escapeHtml(
+                        $this->_escaper->escapeHtml(
                             $store->getName()
                         ) . '</option>';
                 }

@@ -4,7 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+/**
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ * @var \Magento\Framework\Escaper $escaper
+ */
 ?>
 <?php
 /**
@@ -16,7 +19,7 @@
  */
 ?>
 <div data-mage-init='{"floatingHeader": {}}' class="page-actions"><?= $block->getSaveButtonHtml() ?></div>
-<form action="<?= $block->escapeUrl($block->getSaveUrl()) ?>" method="post" id="config-edit-form"
+<form action="<?= $escaper->escapeUrl($block->getSaveUrl()) ?>" method="post" id="config-edit-form"
       enctype="multipart/form-data">
     <?= $block->getBlockHtml('formkey') ?>
 
@@ -36,7 +39,7 @@ script;
     <?= $block->getChildHtml('form') ?>
     <div class="entry-edit">
         <div class="entry-edit-head">
-            <h4 class="icon-head head-edit-form fieldset-legend"><?= $block->escapeHtml(__('Catalog')) ?></h4>
+            <h4 class="icon-head head-edit-form fieldset-legend"><?= $escaper->escapeHtml(__('Catalog')) ?></h4>
         </div>
         <fieldset id="catalog">
             <table class="form-list">
@@ -49,7 +52,7 @@ script;
                         }
                         ?>
                     <tr>
-                        <td class="label"><label><?= $block->escapeHtml($_item['label']) ?></label></td>
+                        <td class="label"><label><?= $escaper->escapeHtml($_item['label']) ?></label></td>
                         <td class="value">
                             <?php foreach ($_item['buttons'] as $_button): ?>
                                 <?php $clickAction = "setCacheAction('catalog_action',this)"; ?>
@@ -60,21 +63,21 @@ script;
                                     <?php //phpcs:enable ?>
                                 <?php endif; ?>
                                 <button
-                                    id="<?= $block->escapeHtmlAttr($_button['name']) ?>"
+                                    id="<?= $escaper->escapeHtmlAttr($_button['name']) ?>"
                                     type="button"
                                     class="scalable
                                 <?php if (isset($_button['disabled']) && $_button['disabled']):?>disabled<?php endif;?>"
-                                ><span><span><span><?= $block->escapeHtml($_button['action']) ?></span></span></span>
+                                ><span><span><span><?= $escaper->escapeHtml($_button['action']) ?></span></span></span>
                                 </button>
                                 <?php if (!isset($_button['disabled']) || !$_button['disabled']):?>
                                     <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
                                         'onclick',
                                         /* @noEscape */ $clickAction,
-                                        '#' . $block->escapeJs($_button['name'])
+                                        '#' . $escaper->escapeJs($_button['name'])
                                     ) ?>
                                 <?php endif; ?>
                                 <?php if (isset($_button['comment'])): ?> <br />
-                                    <small><?= $block->escapeHtml($_button['comment']) ?></small>
+                                    <small><?= $escaper->escapeHtml($_button['comment']) ?></small>
                                 <?php endif; ?>
                             <?php endforeach; ?>
                         </td>
@@ -88,19 +91,19 @@ script;
 
     <div class="entry-edit">
         <div class="entry-edit-head">
-            <h4 class="icon-head head-edit-form fieldset-legend"><?= $block->escapeHtml(__('JavaScript/CSS')) ?></h4>
+            <h4 class="icon-head head-edit-form fieldset-legend"><?= $escaper->escapeHtml(__('JavaScript/CSS')) ?></h4>
         </div>
 
         <fieldset id="jscss">
             <table class="form-list">
                 <tbody>
                     <tr>
-                        <td class="label"><label><?= $block->escapeHtml(__('JavaScript/CSS Cache')) ?></label></td>
+                        <td class="label"><label><?= $escaper->escapeHtml(__('JavaScript/CSS Cache')) ?></label></td>
                         <td class="value">
                             <button id='jscss_action'
                                     type="button"
                                     class="scalable">
-                                <span><span><span><?= $block->escapeHtml(__('Clear')) ?></span></span></span>
+                                <span><span><span><?= $escaper->escapeHtml(__('Clear')) ?></span></span></span>
                             </button>
                             <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
                                 'onclick',

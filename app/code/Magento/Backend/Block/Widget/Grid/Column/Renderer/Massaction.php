@@ -69,7 +69,7 @@ class Massaction extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Chec
         $html = '<label class="data-grid-checkbox-cell-inner" for="'. $id .'">';
         $html .= '<input type="checkbox" name="' . $this->getColumn()->getName() . '" ';
         $html .= 'id="' . $id . '" data-role="select-row"';
-        $html .= 'value="' . $this->escapeHtml($value) . '" class="admin__control-checkbox"' . $checked . '/>';
+        $html .= 'value="' . $this->_escaper->escapeHtml($value) . '" class="admin__control-checkbox"' . $checked . '/>';
         $html .= '<label for="'. $id .'"></label></label>';
         return $html;
     }

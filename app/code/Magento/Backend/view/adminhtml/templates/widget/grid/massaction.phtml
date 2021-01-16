@@ -4,7 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+/**
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ * @var \Magento\Framework\Escaper $escaper
+ */
 ?>
 <?= /* @noEscape */ $block->getSomething() ?>
 <div id="<?= $block->getHtmlId() ?>" class="admin__grid-massaction">
@@ -19,11 +22,11 @@
                 class="required-entry local-validation admin__control-select"
                 <?= /* @noEscape */ $block->getUiId('select') ?>>
                 <option class="admin__control-select-placeholder" value="" selected>
-                    <?= $block->escapeHtml(__('Actions')) ?></option>
+                    <?= $escaper->escapeHtml(__('Actions')) ?></option>
                 <?php foreach ($block->getItems() as $_item): ?>
-                    <option value="<?= $block->escapeHtmlAttr($_item->getId()) ?>"
+                    <option value="<?= $escaper->escapeHtmlAttr($_item->getId()) ?>"
                         <?= ($_item->getSelected() ? ' selected="selected"' : '') ?>>
-                        <?= $block->escapeHtml($_item->getLabel()) ?>
+                        <?= $escaper->escapeHtml($_item->getLabel()) ?>
                     </option>
                 <?php endforeach; ?>
             </select>
@@ -50,21 +53,21 @@
             class="action-select-multiselect _disabled"
             disabled="disabled"
             data-menu="grid-mass-select">
-            <optgroup label="<?= $block->escapeHtmlAttr(__('Mass Actions')) ?>">
+            <optgroup label="<?= $escaper->escapeHtmlAttr(__('Mass Actions')) ?>">
                 <option disabled selected></option>
                 <?php if ($block->getUseSelectAll()):?>
                     <option value="selectAll">
-                        <?= $block->escapeHtml(__('Select All')) ?>
+                        <?= $escaper->escapeHtml(__('Select All')) ?>
                     </option>
                     <option value="unselectAll">
-                        <?= $block->escapeHtml(__('Unselect All')) ?>
+                        <?= $escaper->escapeHtml(__('Unselect All')) ?>
                     </option>
                 <?php endif; ?>
                 <option value="selectVisible">
-                    <?= $block->escapeHtml(__('Select Visible')) ?>
+                    <?= $escaper->escapeHtml(__('Select Visible')) ?>
                 </option>
                 <option value="unselectVisible">
-                    <?= $block->escapeHtml(__('Unselect Visible')) ?>
+                    <?= $escaper->escapeHtml(__('Unselect Visible')) ?>
                 </option>
             </optgroup>
         </select>
@@ -87,26 +90,26 @@ script;
 if ($block->getUseSelectAll()):
     $scriptString .= '
                 case \'selectAll\':
-                    return ' . $block->escapeJs($block->getJsObjectName()) . '.selectAll();
+                    return ' . $escaper->escapeJs($block->getJsObjectName()) . '.selectAll();
                     break;
                 case \'unselectAll\':
-                    return ' . $block->escapeJs($block->getJsObjectName()) . '.unselectAll();
+                    return ' . $escaper->escapeJs($block->getJsObjectName()) . '.unselectAll();
                     break;';
 endif;
     $scriptString .= '
                 case \'selectVisible\':
-                    return  ' . $block->escapeJs($block->getJsObjectName()) . '.selectVisible();
+                    return  ' . $escaper->escapeJs($block->getJsObjectName()) . '.selectVisible();
                     break;
                 case \'unselectVisible\':
-                    return ' . $block->escapeJs($block->getJsObjectName()) . '.unselectVisible();
+                    return ' . $escaper->escapeJs($block->getJsObjectName()) . '.unselectVisible();
                     break;
             }
         });
     });';
 
 if (!$block->getParentBlock()->canDisplayContainer()):
-    $scriptString .= $block->escapeJs($block->getJsObjectName()) .
-        '.setGridIds(\'' . $block->escapeJs($block->getGridIdsJson()) .'\');';
+    $scriptString .= $escaper->escapeJs($block->getJsObjectName()) .
+        '.setGridIds(\'' . $escaper->escapeJs($block->getGridIdsJson()) .'\');';
 endif;
 ?>
     <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false); ?>

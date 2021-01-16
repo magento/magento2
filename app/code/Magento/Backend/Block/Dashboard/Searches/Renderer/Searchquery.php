@@ -43,13 +43,13 @@ class Searchquery extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abs
     {
         $value = $row->getData($this->getColumn()->getIndex());
         if ($this->stringHelper->strlen($value) > 30) {
-            $value = '<span title="' . $this->escapeHtml(
+            $value = '<span title="' . $this->_escaper->escapeHtml(
                 $value
-            ) . '">' . $this->escapeHtml(
+            ) . '">' . $this->_escaper->escapeHtml(
                 $this->filterManager->truncate($value, ['length' => 30])
             ) . '</span>';
         } else {
-            $value = $this->escapeHtml($value);
+            $value = $this->_escaper->escapeHtml($value);
         }
         return $value;
     }
