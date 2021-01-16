@@ -59,6 +59,6 @@ class ActiveEditor extends \Magento\Framework\View\Element\Template
         if ($adapterPath !== self::DEFAULT_EDITOR_PATH && !isset($this->availableAdapterPaths[$adapterPath])) {
             $adapterPath = self::DEFAULT_EDITOR_PATH;
         }
-        return $this->escapeHtml($adapterPath);
+        return $this->_escaper->escapeHtml($adapterPath);
     }
 }
