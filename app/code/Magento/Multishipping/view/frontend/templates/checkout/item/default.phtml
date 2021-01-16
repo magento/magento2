@@ -5,12 +5,12 @@
  */
 
 // phpcs:disable Magento2.Files.LineLength
-?>
-<?php
-/** @var \Magento\Checkout\Block\Cart\Item\Renderer\ $block */
-/** @var \Magento\Framework\Escaper $escaper */
-?>
 
+/**
+ * @var \Magento\Checkout\Block\Cart\Item\Renderer $block
+ * @var \Magento\Framework\Escaper $escaper
+ */
+?>
 <strong class="product name product-item-name"><a href="<?= $escaper->escapeUrl($block->getProductUrl()) ?>"><?= $escaper->escapeHtml($block->getProductName()) ?></a></strong>
 <?php if ($_options = $block->getOptionList()) : ?>
     <dl class="item-options">
