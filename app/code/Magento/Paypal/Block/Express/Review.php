@@ -179,10 +179,10 @@ class Review extends \Magento\Framework\View\Element\Template
 
             $incl = $this->_getShippingPrice($rate->getPrice(), true);
             if ($incl != $price && $this->_taxHelper->displayShippingBothPrices()) {
-                $renderedInclTax = sprintf($inclTaxFormat, $this->escapeHtml(__('Incl. Tax')), $incl);
+                $renderedInclTax = sprintf($inclTaxFormat, $this->_escaper->escapeHtml(__('Incl. Tax')), $incl);
             }
         }
-        return sprintf($format, $this->escapeHtml($rate->getMethodTitle()), $price, $renderedInclTax);
+        return sprintf($format, $this->_escaper->escapeHtml($rate->getMethodTitle()), $price, $renderedInclTax);
     }
 
     /**

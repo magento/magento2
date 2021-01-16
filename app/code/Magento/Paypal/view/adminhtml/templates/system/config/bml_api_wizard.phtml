@@ -5,23 +5,23 @@
  */
 
 /**
- * @see \Magento\Paypal\Block\Adminhtml\System\Config\BmlApiWizard
  * @var \Magento\Paypal\Block\Adminhtml\System\Config\BmlApiWizard $block
+ * @var \Magento\Framework\Escaper $escaper
  * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
  */
 ?>
 <div class="pp-buttons-container">
-    <button class="scalable" type="button" id="<?= $block->escapeHtml($block->getHtmlId()) ?>">
-        <span><span><span><?= $block->escapeHtml($block->getButtonLabel()) ?></span></span></span>
+    <button class="scalable" type="button" id="<?= $escaper->escapeHtml($block->getHtmlId()) ?>">
+        <span><span><span><?= $escaper->escapeHtml($block->getButtonLabel()) ?></span></span></span>
     </button>
 </div>
 <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
     'onclick',
     "window.open(
-            '" . $block->escapeUrl($block->getButtonUrl()) . "',
+            '" . $escaper->escapeUrl($block->getButtonUrl()) . "',
             'bmlapiwizard',
             'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, ,' +
             'left=100, top=100, width=550, height=550'
         );event.preventDefault()",
-    'button#' . $block->escapeHtml($block->getHtmlId())
+    'button#' . $escaper->escapeHtml($block->getHtmlId())
 ) ?>

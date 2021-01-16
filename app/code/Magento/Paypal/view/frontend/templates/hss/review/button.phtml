@@ -4,10 +4,11 @@
  * See COPYING.txt for license details.
  */
 
-
-
+/**
+ * @var \Magento\Framework\Escaper $escaper
+ */
 ?>
-<button type="submit" data-role="review-save" title="<?= $block->escapeHtml(__('Continue')) ?>"
+<button type="submit" data-role="review-save" title="<?= $escaper->escapeHtml(__('Continue')) ?>"
         class="button action checkout primary">
-    <span><?= $block->escapeHtml(__('Continue')) ?></span>
+    <span><?= $escaper->escapeHtml(__('Continue')) ?></span>
 </button>

@@ -142,7 +142,7 @@ class View extends \Magento\Framework\View\Element\Template
                 $value = $this->formatDate($order->getCreatedAt(), \IntlDateFormatter::SHORT, true);
                 break;
             case 'shipping_address':
-                $value = $order->getShippingAddress() ? $this->escapeHtml(
+                $value = $order->getShippingAddress() ? $this->_escaper->escapeHtml(
                     $order->getShippingAddress()->getName()
                 ) : __(
                     'N/A'
@@ -162,7 +162,7 @@ class View extends \Magento\Framework\View\Element\Template
                 $value = $order->getData($key) ? $order->getData($key) : __('N/A');
                 break;
         }
-        return $escape ? $this->escapeHtml($value) : $value;
+        return $escape ? $this->_escaper->escapeHtml($value) : $value;
     }
 
     /**

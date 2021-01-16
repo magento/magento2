@@ -7,25 +7,26 @@
 /**
  * Note: This mark is a requirement of PayPal
  * @var \Magento\Paypal\Block\Express\Form $block
+ * @var \Magento\Framework\Escaper $escaper
  * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
  * @see \Magento\Paypal\Block\Express\Form
  */
-$url = $block->escapeUrl($block->getPaymentAcceptanceMarkHref());
+$url = $escaper->escapeUrl($block->getPaymentAcceptanceMarkHref());
 ?>
 <!-- PayPal Logo -->
-<img src="<?= $block->escapeUrl($block->getPaymentAcceptanceMarkSrc()) ?>"
-     alt="<?= $block->escapeHtml(__('Acceptance Mark')) ?>" class="paypal icon"/>
+<img src="<?= $escaper->escapeUrl($block->getPaymentAcceptanceMarkSrc()) ?>"
+     alt="<?= $escaper->escapeHtml(__('Acceptance Mark')) ?>" class="paypal icon"/>
 <a href="<?= /* @noEscape */ $url ?>" class="action paypal about">
     <?php if ($block->getPaymentWhatIs()) {
-        echo $block->escapeHtml(__($block->getPaymentWhatIs()));
+        echo $escaper->escapeHtml(__($block->getPaymentWhatIs()));
     } else {
-        echo $block->escapeHtml(__('What is PayPal?'));
+        echo $escaper->escapeHtml(__('What is PayPal?'));
     } ?>
 </a>
 <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
     'onclick',
     "window.open(
-           '" . /* @noEscape */ $block->escapeJs($block->getPaymentAcceptanceMarkHref()) . "',
+           '" . /* @noEscape */ $escaper->escapeJs($block->getPaymentAcceptanceMarkHref()) . "',
            'olcwhatispaypal',
            'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, ,' +
            'left=0, top=0, width=400, height=350'
