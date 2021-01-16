@@ -107,7 +107,7 @@ class Info extends \Magento\Framework\View\Element\Template
         }
         if ($escapeHtml) {
             foreach ($value as $_key => $_val) {
-                $value[$_key] = $this->escapeHtml($_val);
+                $value[$_key] = $this->_escaper->escapeHtml($_val);
             }
         }
         return $value;
