@@ -4,14 +4,16 @@
  * See COPYING.txt for license details.
  */
 
-/** @var $block \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options */
-/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+/**
+ * @var \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options $block
+ * @var \Magento\Framework\Escaper $escaper
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ */
 ?>
-
 <div class="fieldset-wrapper" id="product-custom-options-wrapper" data-block="product-custom-options">
     <div class="fieldset-wrapper-title">
         <strong class="title">
-            <span><?= $block->escapeHtml(__('Custom Options')) ?></span>
+            <span><?= $escaper->escapeHtml(__('Custom Options')) ?></span>
         </strong>
     </div>
     <div class="fieldset-wrapper-content" id="product-custom-options-content"
@@ -21,7 +23,7 @@
                 <div class="message message-error" id="dynamic-price-warning">
                     <div class="message-inner">
                         <div class="message-content">
-                            <?= $block->escapeHtml(__(
+                            <?= $escaper->escapeHtml(__(
                                 'We can\'t save custom-defined options for bundles with dynamic pricing.'
                             )) ?></div>
                     </div>

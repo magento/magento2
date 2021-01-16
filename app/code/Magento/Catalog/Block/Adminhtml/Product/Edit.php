@@ -299,7 +299,7 @@ class Edit extends \Magento\Backend\Block\Widget
     public function getHeader()
     {
         if ($this->getProduct()->getId()) {
-            $header = $this->escapeHtml($this->getProduct()->getName());
+            $header = $this->_escaper->escapeHtml($this->getProduct()->getName());
         } else {
             $header = __('New Product');
         }

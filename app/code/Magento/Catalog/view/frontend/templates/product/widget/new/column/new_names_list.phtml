@@ -5,20 +5,24 @@
  */
 
 // phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
+
+/**
+ * @var \Magento\Framework\Escaper $escaper
+ */
 ?>
 <?php if (($_products = $block->getProductCollection()) && $_products->getSize()) :?>
     <div class="block widget block-new-products-names">
         <div class="block-title">
-            <strong><?= $block->escapeHtml(__('New Products')) ?></strong>
+            <strong><?= $escaper->escapeHtml(__('New Products')) ?></strong>
         </div>
         <div class="block-content">
             <?php $suffix = $block->getNameInLayout(); ?>
-            <ol id="widget-new-products-<?= $block->escapeHtmlAttr($suffix) ?>"
+            <ol id="widget-new-products-<?= $escaper->escapeHtmlAttr($suffix) ?>"
                 class="product-items product-items-names">
                 <?php foreach ($_products->getItems() as $_product) :?>
                     <li class="product-item">
                         <strong class="product-item-name">
-                            <a href="<?= $block->escapeUrl($_product->getProductUrl()) ?>"
+                            <a href="<?= $escaper->escapeUrl($_product->getProductUrl()) ?>"
                                title="<?= /* @noEscape */ $block->stripTags($_product->getName(), null, true) ?>)"
                                class="product-item-link">
                                 <?= /* @noEscape */ $this->helper(

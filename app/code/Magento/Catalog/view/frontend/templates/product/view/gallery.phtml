@@ -7,11 +7,9 @@
 /**
  * Product media data template
  *
- * @var $block \Magento\Catalog\Block\Product\View\Gallery
+ * @var \Magento\Catalog\Block\Product\View\Gallery $block
  */
-?>
 
-<?php
 $images = $block->getGalleryImages()->getItems();
 $mainImage = current(array_filter($images, function ($img) use ($block) {
     return $block->isMainImage($img);

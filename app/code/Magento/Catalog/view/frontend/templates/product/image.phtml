@@ -3,10 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-?>
-<?php
-/** @var $block \Magento\Catalog\Block\Product\Image */
-/** @var $escaper \Magento\Framework\Escaper */
+
+/**
+ * @var \Magento\Catalog\Block\Product\Image $block
+ * @var \Magento\Framework\Escaper $escaper
+ */
 ?>
 <!--deprecated template as image_with_borders is a primary one-->
 <img class="photo image <?= $escaper->escapeHtmlAttr($block->getClass()) ?>"

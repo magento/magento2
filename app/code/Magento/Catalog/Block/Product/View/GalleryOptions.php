@@ -60,7 +60,7 @@ class GalleryOptions extends AbstractView implements ArgumentInterface
         if (is_bool($this->getVar("gallery/nav"))) {
             $optionItems['nav'] = $this->getVar("gallery/nav") ? 'true' : 'false';
         } else {
-            $optionItems['nav'] = $this->escapeHtml($this->getVar("gallery/nav"));
+            $optionItems['nav'] = $this->_escaper->escapeHtml($this->getVar("gallery/nav"));
         }
 
         $optionItems['loop'] = $this->getVar("gallery/loop");
@@ -68,16 +68,16 @@ class GalleryOptions extends AbstractView implements ArgumentInterface
         $optionItems['arrows'] = $this->getVar("gallery/arrows");
         $optionItems['allowfullscreen'] = $this->getVar("gallery/allowfullscreen");
         $optionItems['showCaption'] = $this->getVar("gallery/caption");
-        $optionItems['width'] = (int)$this->escapeHtml(
+        $optionItems['width'] = (int)$this->_escaper->escapeHtml(
             $this->gallery->getImageAttribute('product_page_image_medium', 'width')
         );
-        $optionItems['thumbwidth'] = (int)$this->escapeHtml(
+        $optionItems['thumbwidth'] = (int)$this->_escaper->escapeHtml(
             $this->gallery->getImageAttribute('product_page_image_small', 'width')
         );
 
         if ($this->gallery->getImageAttribute('product_page_image_small', 'height') ||
             $this->gallery->getImageAttribute('product_page_image_small', 'width')) {
-            $optionItems['thumbheight'] = (int)$this->escapeHtml(
+            $optionItems['thumbheight'] = (int)$this->_escaper->escapeHtml(
                 $this->gallery->getImageAttribute('product_page_image_small', 'height') ?:
                     $this->gallery->getImageAttribute('product_page_image_small', 'width')
             );
@@ -85,7 +85,7 @@ class GalleryOptions extends AbstractView implements ArgumentInterface
 
         if ($this->gallery->getImageAttribute('product_page_image_medium', 'height') ||
             $this->gallery->getImageAttribute('product_page_image_medium', 'width')) {
-            $optionItems['height'] = (int)$this->escapeHtml(
+            $optionItems['height'] = (int)$this->_escaper->escapeHtml(
                 $this->gallery->getImageAttribute('product_page_image_medium', 'height') ?:
                     $this->gallery->getImageAttribute('product_page_image_medium', 'width')
             );
@@ -93,16 +93,16 @@ class GalleryOptions extends AbstractView implements ArgumentInterface
 
         if ($this->getVar("gallery/transition/duration")) {
             $optionItems['transitionduration'] =
-                (int)$this->escapeHtml($this->getVar("gallery/transition/duration"));
+                (int)$this->_escaper->escapeHtml($this->getVar("gallery/transition/duration"));
         }
 
-        $optionItems['transition'] = $this->escapeHtml($this->getVar("gallery/transition/effect"));
+        $optionItems['transition'] = $this->_escaper->escapeHtml($this->getVar("gallery/transition/effect"));
         $optionItems['navarrows'] = $this->getVar("gallery/navarrows");
-        $optionItems['navtype'] = $this->escapeHtml($this->getVar("gallery/navtype"));
-        $optionItems['navdir'] = $this->escapeHtml($this->getVar("gallery/navdir"));
+        $optionItems['navtype'] = $this->_escaper->escapeHtml($this->getVar("gallery/navtype"));
+        $optionItems['navdir'] = $this->_escaper->escapeHtml($this->getVar("gallery/navdir"));
 
         if ($this->getVar("gallery/thumbmargin")) {
-            $optionItems['thumbmargin'] = (int)$this->escapeHtml($this->getVar("gallery/thumbmargin"));
+            $optionItems['thumbmargin'] = (int)$this->_escaper->escapeHtml($this->getVar("gallery/thumbmargin"));
         }
 
         return $this->jsonSerializer->serialize($optionItems);
@@ -124,23 +124,23 @@ class GalleryOptions extends AbstractView implements ArgumentInterface
         if (is_bool($this->getVar("gallery/fullscreen/nav"))) {
             $fsOptionItems['nav'] = $this->getVar("gallery/fullscreen/nav") ? 'true' : 'false';
         } else {
-            $fsOptionItems['nav'] = $this->escapeHtml($this->getVar("gallery/fullscreen/nav"));
+            $fsOptionItems['nav'] = $this->_escaper->escapeHtml($this->getVar("gallery/fullscreen/nav"));
         }
 
         $fsOptionItems['loop'] = $this->getVar("gallery/fullscreen/loop");
-        $fsOptionItems['navdir'] = $this->escapeHtml($this->getVar("gallery/fullscreen/navdir"));
+        $fsOptionItems['navdir'] = $this->_escaper->escapeHtml($this->getVar("gallery/fullscreen/navdir"));
         $fsOptionItems['navarrows'] = $this->getVar("gallery/fullscreen/navarrows");
-        $fsOptionItems['navtype'] = $this->escapeHtml($this->getVar("gallery/fullscreen/navtype"));
+        $fsOptionItems['navtype'] = $this->_escaper->escapeHtml($this->getVar("gallery/fullscreen/navtype"));
         $fsOptionItems['arrows'] = $this->getVar("gallery/fullscreen/arrows");
         $fsOptionItems['showCaption'] = $this->getVar("gallery/fullscreen/caption");
 
         if ($this->getVar("gallery/fullscreen/transition/duration")) {
-            $fsOptionItems['transitionduration'] = (int)$this->escapeHtml(
+            $fsOptionItems['transitionduration'] = (int)$this->_escaper->escapeHtml(
                 $this->getVar("gallery/fullscreen/transition/duration")
             );
         }
 
-        $fsOptionItems['transition'] = $this->escapeHtml($this->getVar("gallery/fullscreen/transition/effect"));
+        $fsOptionItems['transition'] = $this->_escaper->escapeHtml($this->getVar("gallery/fullscreen/transition/effect"));
 
         if ($this->getVar("gallery/fullscreen/keyboard")) {
             $fsOptionItems['keyboard'] = $this->getVar("gallery/fullscreen/keyboard");
@@ -148,7 +148,7 @@ class GalleryOptions extends AbstractView implements ArgumentInterface
 
         if ($this->getVar("gallery/fullscreen/thumbmargin")) {
             $fsOptionItems['thumbmargin'] =
-                (int)$this->escapeHtml($this->getVar("gallery/fullscreen/thumbmargin"));
+                (int)$this->_escaper->escapeHtml($this->getVar("gallery/fullscreen/thumbmargin"));
         }
 
         return $this->jsonSerializer->serialize($fsOptionItems);

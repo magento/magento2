@@ -6,8 +6,11 @@
 
 // phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
 
-/** @var $block \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\Option */
-/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+/**
+ * @var \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\Option $block
+ * @var \Magento\Framework\Escaper $escaper
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ */
 ?>
 <?= $block->getTemplatesHtml() ?>
 <script id="custom-option-base-template" type="text/x-magento-template">
@@ -21,16 +24,16 @@
             </strong>
             <div class="actions">
                 <button type="button"
-                        title="<?= $block->escapeHtmlAttr(__('Delete Custom Option')) ?>"
+                        title="<?= $escaper->escapeHtmlAttr(__('Delete Custom Option')) ?>"
                         class="action-delete"
                         id="<?= /* @noEscape */ $block->getFieldId() ?>_<%- data.id %>_delete">
-                    <span><?= $block->escapeHtml(__('Delete Custom Option')) ?></span>
+                    <span><?= $escaper->escapeHtml(__('Delete Custom Option')) ?></span>
                 </button>
             </div>
             <div id="<?= /* @noEscape */ $block->getFieldId() ?>_<%- data.id %>_move"
                  data-role="draggable-handle"
                  class="draggable-handle"
-                 title="<?= $block->escapeHtmlAttr(__('Sort Custom Options')) ?>"></div>
+                 title="<?= $escaper->escapeHtmlAttr(__('Sort Custom Options')) ?>"></div>
         </div>
         <div class="fieldset-wrapper-content in collapse" id="<%- data.id %>-content">
             <fieldset class="fieldset">
@@ -61,7 +64,7 @@
 
                     <div class="field field-option-title required">
                         <label class="label" for="<?= /* @noEscape */ $block->getFieldId() ?>_<%- data.id %>_title">
-                            <?= $block->escapeHtml(__('Option Title')) ?>
+                            <?= $escaper->escapeHtml(__('Option Title')) ?>
                         </label>
                         <div class="control">
                             <input id="<?= /* @noEscape */ $block->getFieldId() ?>_<%- data.id %>_title"
@@ -79,7 +82,7 @@
 
                     <div class="field field-option-input-type required">
                         <label class="label" for="<?= /* @noEscape */ $block->getFieldId() ?>_<%- data.id %>_title">
-                            <?= $block->escapeHtml(__('Input Type')) ?>
+                            <?= $escaper->escapeHtml(__('Input Type')) ?>
                         </label>
                         <div class="control opt-type">
                             <?= $block->getTypeSelectHtml() ?>
@@ -93,7 +96,7 @@
                                    type="checkbox"
                                    checked="checked"/>
                             <label for="field-option-req">
-                                <?= $block->escapeHtml(__('Required')) ?>
+                                <?= $escaper->escapeHtml(__('Required')) ?>
                             </label>
                             <span id="span_<?= /* @noEscape */ $block->getFieldId() ?>">
                                 <?= $block->getRequireSelectHtml() ?>
@@ -122,9 +125,9 @@ $jsonHelper = $block->getData('jsonHelper');
 $customOptions = /* @noEscape */ $jsonHelper->jsonEncode(
     [
         'fieldId' => $block->getFieldId(),
-        'productGridUrl' => $block->escapeJs($block->getProductGridUrl()),
+        'productGridUrl' => $escaper->escapeJs($block->getProductGridUrl()),
         'formKey' => $block->getFormKey(),
-        'customOptionsUrl' => $block->escapeJs($block->getCustomOptionsUrl()),
+        'customOptionsUrl' => $escaper->escapeJs($block->getCustomOptionsUrl()),
         'isReadonly' => (bool) $block->isReadonly(),
         'itemCount' => (int) $block->getItemCount(),
         'currentProductId' => (int) $block->getCurrentProductId(),

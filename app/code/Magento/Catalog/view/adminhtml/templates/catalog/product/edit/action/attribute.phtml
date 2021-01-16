@@ -4,10 +4,12 @@
  * See COPYING.txt for license details.
  */
 
-/** @var $block Magento\Catalog\Block\Adminhtml\Product\Edit\Action\Attribute */
+/**
+ * @var Magento\Catalog\Block\Adminhtml\Product\Edit\Action\Attribute $block
+ * @var \Magento\Framework\Escaper $escaper
+ */
 ?>
-
-<form action="<?= $block->escapeUrl($block->getSaveUrl()) ?>"
+<form action="<?= $escaper->escapeUrl($block->getSaveUrl()) ?>"
       method="post"
       id="attributes-edit-form"
       class="attributes-edit-form"
@@ -19,7 +21,7 @@
         "#attributes-edit-form": {
             "Magento_Catalog/js/product/weight-handler": {},
             "Magento_Catalog/catalog/product/edit/attribute": {
-                "validationUrl": "<?= $block->escapeJs($block->escapeUrl($block->getValidationUrl())) ?>"
+                "validationUrl": "<?= $escaper->escapeJs($escaper->escapeUrl($block->getValidationUrl())) ?>"
             }
         }
     }

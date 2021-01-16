@@ -418,7 +418,7 @@ class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
      */
     public function buildNodeName($node)
     {
-        $result = $this->escapeHtml($node->getName());
+        $result = $this->_escaper->escapeHtml($node->getName());
         $result .= ' (ID: ' . $node->getId() . ')';
         if ($this->_withProductCount) {
             $result .= ' (' . $node->getProductCount() . ')';

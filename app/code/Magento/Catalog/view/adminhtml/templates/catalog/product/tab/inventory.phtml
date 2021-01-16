@@ -4,8 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-/** @var $block \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Inventory */
-/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+/**
+ * @var \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Inventory $block
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ */
 ?>
 <?php if ($block->isReadonly()):?>
     <?php $_readonly = ' disabled="disabled" '; ?>
@@ -13,25 +15,25 @@
     <?php $_readonly = ''; ?>
 <?php endif; ?>
 <fieldset class="fieldset form-inline">
-    <legend class="legend"><span><?= $block->escapeHtml(__('Advanced Inventory')) ?></span></legend>
+    <legend class="legend"><span><?= $escaper->escapeHtml(__('Advanced Inventory')) ?></span></legend>
     <br>
     <div id="table_cataloginventory">
         <div class="field">
             <label class="label" for="inventory_manage_stock">
-                <span><?= $block->escapeHtml(__('Manage Stock')) ?></span>
+                <span><?= $escaper->escapeHtml(__('Manage Stock')) ?></span>
             </label>
             <div class="control">
                 <select id="inventory_manage_stock"
                         name="<?= /* @noEscape */ $block->getFieldSuffix()
                         ?>[stock_data][manage_stock]" <?= /* @noEscape */ $_readonly ?>>
-                    <option value="1"><?= $block->escapeHtml(__('Yes')) ?></option>
+                    <option value="1"><?= $escaper->escapeHtml(__('Yes')) ?></option>
                     <option value="0"<?php if ($block->getFieldValue('manage_stock') == 0):?>
-                        selected="selected"<?php endif; ?>><?= $block->escapeHtml(__('No')) ?>
+                        selected="selected"<?php endif; ?>><?= $escaper->escapeHtml(__('No')) ?>
                     </option>
                 </select>
                 <input type="hidden"
                        id="inventory_manage_stock_default"
-                       value="<?= $block->escapeHtmlAttr($block->getDefaultConfigValue('manage_stock')) ?>">
+                       value="<?= $escaper->escapeHtmlAttr($block->getDefaultConfigValue('manage_stock')) ?>">
                 <?php $_checked = ($block->getFieldValue('use_config_manage_stock') || $block->isNew()) ?
                     'checked="checked"' : '' ?>
                 <input type="checkbox"
@@ -43,7 +45,7 @@
                     "toggleValueElements(this, this.parentNode);",
                     "#inventory_use_config_manage_stock"
                 ) ?>
-                <label for="inventory_use_config_manage_stock"><?= $block->escapeHtml(__('Use Config Settings')) ?>
+                <label for="inventory_use_config_manage_stock"><?= $escaper->escapeHtml(__('Use Config Settings')) ?>
                 </label>
                 <?php if (!$block->isReadonly()):?>
                     <?php $scriptString = <<<script
@@ -57,14 +59,14 @@ script;
                 <?php endif; ?>
             </div>
             <?php if (!$block->isSingleStoreMode()): ?>
-                <div class="field-service"><?= $block->escapeHtml(__('[GLOBAL]')) ?></div>
+                <div class="field-service"><?= $escaper->escapeHtml(__('[GLOBAL]')) ?></div>
             <?php endif; ?>
         </div>
 
         <?php if (!$block->getProduct()->isComposite()): ?>
             <div class="field">
                 <label class="label" for="inventory_qty">
-                    <span><?= $block->escapeHtml(__('Qty')) ?></span>
+                    <span><?= $escaper->escapeHtml(__('Qty')) ?></span>
                 </label>
                 <div class="control">
                     <?php if (!$_readonly): ?>
@@ -81,13 +83,13 @@ script;
                            value="<?= $block->getFieldValue('qty') * 1 ?>" <?= /* @noEscape */ $_readonly ?>>
                 </div>
                 <?php if (!$block->isSingleStoreMode()): ?>
-                    <div class="field-service"><?= $block->escapeHtml(__('[GLOBAL]')) ?></div>
+                    <div class="field-service"><?= $escaper->escapeHtml(__('[GLOBAL]')) ?></div>
                 <?php endif; ?>
             </div>
 
             <div class="field">
                 <label class="label" for="inventory_min_qty">
-                    <span><?= $block->escapeHtml(__('Out-of-Stock Threshold')) ?></span>
+                    <span><?= $escaper->escapeHtml(__('Out-of-Stock Threshold')) ?></span>
                 </label>
                 <div class="control">
                     <input type="text"
@@ -109,7 +111,7 @@ script;
                             "#inventory_use_config_min_qty"
                         ) ?>
 
-                        <label for="inventory_use_config_min_qty"><?= $block->escapeHtml(__('Use Config Settings')) ?>
+                        <label for="inventory_use_config_min_qty"><?= $escaper->escapeHtml(__('Use Config Settings')) ?>
                         </label>
                     </div>
 
@@ -125,13 +127,13 @@ script;
                     <?php endif; ?>
                 </div>
                 <?php if (!$block->isSingleStoreMode()):?>
-                    <div class="field-service"><?= $block->escapeHtml(__('[GLOBAL]')) ?></div>
+                    <div class="field-service"><?= $escaper->escapeHtml(__('[GLOBAL]')) ?></div>
                 <?php endif; ?>
             </div>
 
             <div class="field">
                 <label class="label" for="inventory_min_sale_qty">
-                    <span><?= $block->escapeHtml(__('Minimum Qty Allowed in Shopping Cart')) ?></span>
+                    <span><?= $escaper->escapeHtml(__('Minimum Qty Allowed in Shopping Cart')) ?></span>
                 </label>
                 <div class="control">
                     <input type="text" class="input-text validate-number" id="inventory_min_sale_qty"
@@ -152,7 +154,7 @@ script;
                             "#inventory_use_config_min_sale_qty"
                         ) ?>
                         <label for="inventory_use_config_min_sale_qty">
-                            <?= $block->escapeHtml(__('Use Config Settings')) ?>
+                            <?= $escaper->escapeHtml(__('Use Config Settings')) ?>
                         </label>
                     </div>
                     <?php if (!$block->isReadonly()):?>
@@ -167,13 +169,13 @@ script;
                     <?php endif; ?>
                 </div>
                 <?php if (!$block->isSingleStoreMode()): ?>
-                    <div class="field-service"><?= $block->escapeHtml(__('[GLOBAL]')) ?></div>
+                    <div class="field-service"><?= $escaper->escapeHtml(__('[GLOBAL]')) ?></div>
                 <?php endif; ?>
             </div>
 
             <div class="field">
                 <label class="label" for="inventory_max_sale_qty">
-                    <span><?= $block->escapeHtml(__('Maximum Qty Allowed in Shopping Cart')) ?></span>
+                    <span><?= $escaper->escapeHtml(__('Maximum Qty Allowed in Shopping Cart')) ?></span>
                 </label>
                 <div class="control">
                     <input type="text"
@@ -196,7 +198,7 @@ script;
                             "#inventory_use_config_max_sale_qty"
                         ) ?>
                         <label for="inventory_use_config_max_sale_qty">
-                            <?= $block->escapeHtml(__('Use Config Settings')) ?>
+                            <?= $escaper->escapeHtml(__('Use Config Settings')) ?>
                         </label>
                     </div>
                     <?php if (!$block->isReadonly()):?>
@@ -211,46 +213,46 @@ script;
                     <?php endif; ?>
                 </div>
                 <?php if (!$block->isSingleStoreMode()):?>
-                    <div class="field-service"><?= $block->escapeHtml(__('[GLOBAL]')) ?></div>
+                    <div class="field-service"><?= $escaper->escapeHtml(__('[GLOBAL]')) ?></div>
                 <?php endif; ?>
             </div>
 
             <?php if ($block->canUseQtyDecimals()): ?>
                 <div class="field">
                     <label class="label" for="inventory_is_qty_decimal">
-                        <span><?= $block->escapeHtml(__('Qty Uses Decimals')) ?></span>
+                        <span><?= $escaper->escapeHtml(__('Qty Uses Decimals')) ?></span>
                     </label>
                     <div class="control">
                         <select id="inventory_is_qty_decimal"
                                 name="<?= /* @noEscape */ $block->getFieldSuffix()
                                 ?>[stock_data][is_qty_decimal]" <?= /* @noEscape */ $_readonly ?>>
-                            <option value="0"><?= $block->escapeHtml(__('No')) ?></option>
+                            <option value="0"><?= $escaper->escapeHtml(__('No')) ?></option>
                             <option value="1"<?php if ($block->getFieldValue('is_qty_decimal') == 1):?>
-                                selected="selected"<?php endif; ?>><?= $block->escapeHtml(__('Yes')) ?>
+                                selected="selected"<?php endif; ?>><?= $escaper->escapeHtml(__('Yes')) ?>
                             </option>
                         </select>
                     </div>
                     <?php if (!$block->isSingleStoreMode()): ?>
-                        <div class="field-service"><?= $block->escapeHtml(__('[GLOBAL]')) ?></div>
+                        <div class="field-service"><?= $escaper->escapeHtml(__('[GLOBAL]')) ?></div>
                     <?php endif; ?>
                 </div>
 
                 <?php if (!$block->isVirtual()): ?>
                     <div class="field">
                         <label class="label" for="inventory_is_decimal_divided">
-                            <span><?= $block->escapeHtml(__('Allow Multiple Boxes for Shipping')) ?></span>
+                            <span><?= $escaper->escapeHtml(__('Allow Multiple Boxes for Shipping')) ?></span>
                         </label>
                         <div class="control">
                             <select id="inventory_is_decimal_divided"
                                     name="<?= /* @noEscape */ $block->getFieldSuffix()
                                     ?>[stock_data][is_decimal_divided]" <?= /* @noEscape */ $_readonly ?>>
-                                <option value="0"><?= $block->escapeHtml(__('No')) ?></option>
+                                <option value="0"><?= $escaper->escapeHtml(__('No')) ?></option>
                                 <option value="1"<?php if ($block->getFieldValue('is_decimal_divided') == 1): ?>
-                                    selected="selected"<?php endif; ?>><?= $block->escapeHtml(__('Yes')) ?></option>
+                                    selected="selected"<?php endif; ?>><?= $escaper->escapeHtml(__('Yes')) ?></option>
                             </select>
                         </div>
                         <?php if (!$block->isSingleStoreMode()):?>
-                            <div class="field-service"><?= $block->escapeHtml(__('[GLOBAL]')) ?></div>
+                            <div class="field-service"><?= $escaper->escapeHtml(__('[GLOBAL]')) ?></div>
                         <?php endif; ?>
                     </div>
                 <?php endif; ?>
@@ -258,7 +260,7 @@ script;
 
             <div class="field">
                 <label class="label" for="inventory_backorders">
-                    <span><?= $block->escapeHtml(__('Backorders')) ?></span>
+                    <span><?= $escaper->escapeHtml(__('Backorders')) ?></span>
                 </label>
                 <div class="control">
                     <select id="inventory_backorders"
@@ -267,8 +269,8 @@ script;
                         <?php foreach ($block->getBackordersOption() as $option):?>
                             <?php $_selected = ($option['value'] == $block->getFieldValue('backorders')) ?
                                 'selected="selected"' : '' ?>
-                            <option value="<?= $block->escapeHtmlAttr($option['value']) ?>"
-                                <?= /* @noEscape */ $_selected ?>><?= $block->escapeHtml($option['label']) ?>
+                            <option value="<?= $escaper->escapeHtmlAttr($option['value']) ?>"
+                                <?= /* @noEscape */ $_selected ?>><?= $escaper->escapeHtml($option['label']) ?>
                             </option>
                         <?php endforeach; ?>
                     </select>
@@ -286,7 +288,7 @@ script;
                             "#inventory_use_config_backorders"
                         ) ?>
                         <label for="inventory_use_config_backorders">
-                            <?= $block->escapeHtml(__('Use Config Settings')) ?>
+                            <?= $escaper->escapeHtml(__('Use Config Settings')) ?>
                         </label>
                     </div>
                     <?php if (!$block->isReadonly()): ?>
@@ -301,13 +303,13 @@ script;
                     <?php endif; ?>
                 </div>
                 <?php if (!$block->isSingleStoreMode()): ?>
-                    <div class="field-service"><?= $block->escapeHtml(__('[GLOBAL]')) ?></div>
+                    <div class="field-service"><?= $escaper->escapeHtml(__('[GLOBAL]')) ?></div>
                 <?php endif; ?>
             </div>
 
             <div class="field">
                 <label class="label" for="inventory_notify_stock_qty">
-                    <span><?= $block->escapeHtml(__('Notify for Quantity Below')) ?></span>
+                    <span><?= $escaper->escapeHtml(__('Notify for Quantity Below')) ?></span>
                 </label>
                 <div class="control">
                     <input type="text"
@@ -331,7 +333,7 @@ script;
                             "#inventory_use_config_notify_stock_qty"
                         ) ?>
                         <label for="inventory_use_config_notify_stock_qty">
-                            <?= $block->escapeHtml(__('Use Config Settings')) ?>
+                            <?= $escaper->escapeHtml(__('Use Config Settings')) ?>
                         </label>
                     </div>
                     <?php if (!$block->isReadonly()): ?>
@@ -346,14 +348,14 @@ script;
                     <?php endif; ?>
                 </div>
                 <?php if (!$block->isSingleStoreMode()):?>
-                    <div class="field-service"><?= $block->escapeHtml(__('[GLOBAL]')) ?></div>
+                    <div class="field-service"><?= $escaper->escapeHtml(__('[GLOBAL]')) ?></div>
                 <?php endif; ?>
             </div>
 
         <?php endif; ?>
         <div class="field">
             <label class="label" for="inventory_enable_qty_increments">
-                <span><?= $block->escapeHtml(__('Enable Qty Increments')) ?></span>
+                <span><?= $escaper->escapeHtml(__('Enable Qty Increments')) ?></span>
             </label>
             <div class="control">
                 <?php $qtyIncrementsEnabled = $block->getFieldValue('enable_qty_increments'); ?>
@@ -361,15 +363,15 @@ script;
                         name="<?= /* @noEscape */ $block->getFieldSuffix()
                         ?>[stock_data][enable_qty_increments]" <?= /* @noEscape */ $_readonly ?>>
                     <option value="1"<?php if ($qtyIncrementsEnabled):?> selected="selected"<?php endif; ?>>
-                        <?= $block->escapeHtml(__('Yes')) ?>
+                        <?= $escaper->escapeHtml(__('Yes')) ?>
                     </option>
                     <option value="0"<?php if (!$qtyIncrementsEnabled):?> selected="selected"<?php endif; ?>>
-                        <?= $block->escapeHtml(__('No')) ?>
+                        <?= $escaper->escapeHtml(__('No')) ?>
                     </option>
                 </select>
                 <input type="hidden"
                        id="inventory_enable_qty_increments_default"
-                       value="<?= $block->escapeHtmlAttr($block->getDefaultConfigValue('enable_qty_increments')) ?>">
+                       value="<?= $escaper->escapeHtmlAttr($block->getDefaultConfigValue('enable_qty_increments')) ?>">
 
                 <div class="control-inner-wrap">
                     <?php $_checked = ($block->getFieldValue('use_config_enable_qty_inc') || $block->isNew()) ?
@@ -385,7 +387,7 @@ script;
                         "#inventory_use_config_enable_qty_increments"
                     ) ?>
                     <label for="inventory_use_config_enable_qty_increments">
-                        <?= $block->escapeHtml(__('Use Config Settings')) ?>
+                        <?= $escaper->escapeHtml(__('Use Config Settings')) ?>
                     </label>
                 </div>
                 <?php if (!$block->isReadonly()): ?>
@@ -400,13 +402,13 @@ script;
                 <?php endif; ?>
             </div>
             <?php if (!$block->isSingleStoreMode()): ?>
-                <div class="field-service"><?= $block->escapeHtml(__('[GLOBAL]')) ?></div>
+                <div class="field-service"><?= $escaper->escapeHtml(__('[GLOBAL]')) ?></div>
             <?php endif; ?>
         </div>
 
         <div class="field">
             <label class="label" for="inventory_qty_increments">
-                <span><?= $block->escapeHtml(__('Qty Increments')) ?></span>
+                <span><?= $escaper->escapeHtml(__('Qty Increments')) ?></span>
             </label>
             <div class="control">
                 <input type="text"
@@ -427,7 +429,7 @@ script;
                         "#inventory_use_config_qty_increments"
                     ) ?>
                     <label for="inventory_use_config_qty_increments">
-                        <?= $block->escapeHtml(__('Use Config Settings')) ?>
+                        <?= $escaper->escapeHtml(__('Use Config Settings')) ?>
                     </label>
                 </div>
                 <?php if (!$block->isReadonly()): ?>
@@ -442,13 +444,13 @@ script;
                 <?php endif; ?>
             </div>
             <?php if (!$block->isSingleStoreMode()): ?>
-                <div class="field-service"><?= $block->escapeHtml(__('[GLOBAL]')) ?></div>
+                <div class="field-service"><?= $escaper->escapeHtml(__('[GLOBAL]')) ?></div>
             <?php endif; ?>
         </div>
 
         <div class="field">
             <label class="label" for="inventory_stock_availability">
-                <span><?= $block->escapeHtml(__('Stock Availability')) ?></span>
+                <span><?= $escaper->escapeHtml(__('Stock Availability')) ?></span>
             </label>
             <div class="control">
                 <select id="inventory_stock_availability"
@@ -457,14 +459,14 @@ script;
                     <?php foreach ($block->getStockOption() as $option):?>
                         <?php $_selected = ($block->getFieldValue('is_in_stock') !== null &&
                             $option['value'] == $block->getFieldValue('is_in_stock')) ? 'selected="selected"' : '' ?>
-                        <option value="<?= $block->escapeHtmlAttr($option['value']) ?>"
-                            <?= /* @noEscape */ $_selected ?>><?= $block->escapeHtml($option['label']) ?>
+                        <option value="<?= $escaper->escapeHtmlAttr($option['value']) ?>"
+                            <?= /* @noEscape */ $_selected ?>><?= $escaper->escapeHtml($option['label']) ?>
                         </option>
                     <?php endforeach; ?>
                 </select>
             </div>
             <?php if (!$block->isSingleStoreMode()):?>
-                <div class="field-service"><?= $block->escapeHtml(__('[GLOBAL]')) ?></div>
+                <div class="field-service"><?= $escaper->escapeHtml(__('[GLOBAL]')) ?></div>
             <?php endif; ?>
         </div>
     </div>

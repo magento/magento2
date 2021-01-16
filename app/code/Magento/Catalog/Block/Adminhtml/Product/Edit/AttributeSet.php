@@ -56,7 +56,7 @@ class AttributeSet extends \Magento\Backend\Block\Widget\Form
             'showRecent' => true,
             'storageKey' => 'product-template-key',
             'minLength' => 0,
-            'currentlySelected' => $this->escapeHtml(
+            'currentlySelected' => $this->_escaper->escapeHtml(
                 $this->_coreRegistry->registry('product')->getAttributeSetId()
             )
         ];
