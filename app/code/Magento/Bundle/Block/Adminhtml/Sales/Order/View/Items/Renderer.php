@@ -201,7 +201,7 @@ class Renderer extends \Magento\Sales\Block\Adminhtml\Order\View\Items\Renderer\
      */
     public function getValueHtml($item)
     {
-        $result = $this->escapeHtml($item->getName());
+        $result = $this->_escaper->escapeHtml($item->getName());
         if (!$this->isShipmentSeparately($item)) {
             $attributes = $this->getSelectionAttributes($item);
             if ($attributes) {
