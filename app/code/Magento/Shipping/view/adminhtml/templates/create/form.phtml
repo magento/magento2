@@ -6,44 +6,45 @@
 
 /**
  * @var \Magento\Shipping\Block\Adminhtml\Create\Form $block
+ * @var \Magento\Framework\Escaper $escaper
  * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
  */
 
 /** @var \Magento\Tax\Helper\Data $taxHelper */
 $taxHelper = $block->getData('taxHelper');
 ?>
-<form id="edit_form" method="post" action="<?= $block->escapeUrl($block->getSaveUrl()) ?>">
+<form id="edit_form" method="post" action="<?= $escaper->escapeUrl($block->getSaveUrl()) ?>">
     <?= $block->getBlockHtml('formkey') ?>
     <?php  $_order = $block->getShipment()->getOrder() ?>
     <?= $block->getChildHtml('order_info') ?>
     <div class="admin__page-section">
         <div class="admin__page-section-title">
-            <span class="title"><?= $block->escapeHtml(__('Payment &amp; Shipping Method')) ?></span>
+            <span class="title"><?= $escaper->escapeHtml(__('Payment &amp; Shipping Method')) ?></span>
         </div>
         <div class="admin__page-section-content">
             <div class="admin__page-section-item order-payment-method">
                 <?php /* Billing Address */ ?>
                 <div class="admin__page-section-item-title">
-                    <span class="title"><?=$block->escapeHtml(__('Payment Information')) ?></span>
+                    <span class="title"><?=$escaper->escapeHtml(__('Payment Information')) ?></span>
                 </div>
                 <div class="admin__page-section-item-content">
                     <div><?= $block->getPaymentHtml() ?></div>
                     <div class="order-payment-currency">
-                        <?= $block->escapeHtml(__('The order was placed using %1.', $_order->getOrderCurrencyCode())) ?>
+                        <?= $escaper->escapeHtml(__('The order was placed using %1.', $_order->getOrderCurrencyCode())) ?>
                     </div>
                 </div>
             </div>
             <div class="admin__page-section-item order-shipping-address">
                 <?php /* Shipping Address */ ?>
                 <div class="admin__page-section-item-title">
-                    <span class="title"><?= $block->escapeHtml(__('Shipping Information')) ?></span>
+                    <span class="title"><?= $escaper->escapeHtml(__('Shipping Information')) ?></span>
                 </div>
                 <div class="admin__page-section-item-content shipping-description-wrapper">
                     <div class="shipping-description-title">
-                        <?= $block->escapeHtml($_order->getShippingDescription()) ?>
+                        <?= $escaper->escapeHtml($_order->getShippingDescription()) ?>
                     </div>
                     <div class="shipping-description-content">
-                        <?= $block->escapeHtml(__('Total Shipping Charges')) ?>:
+                        <?= $escaper->escapeHtml(__('Total Shipping Charges')) ?>:
 
                         <?php if ($taxHelper->displayShippingPriceIncludingTax()): ?>
                             <?php $_excl = $block->displayShippingPriceInclTax($_order); ?>
@@ -54,7 +55,7 @@ $taxHelper = $block->getData('taxHelper');
                         <?= /** @noEscape */ $_excl ?>
                         <?php if ($taxHelper->displayShippingBothPrices()
                             && $_incl != $_excl): ?>
-                        (<?= $block->escapeHtml(__('Incl. Tax')) ?> <?= /** @noEscape */ $_incl ?>)
+                        (<?= $escaper->escapeHtml(__('Incl. Tax')) ?> <?= /** @noEscape */ $_incl ?>)
                         <?php endif; ?>
                     </div>
                 </div>
