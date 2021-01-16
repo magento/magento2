@@ -84,7 +84,7 @@ class Items extends \Magento\Backend\Block\Template
     {
         if ($this->getItem()->getGiftMessageId()) {
             $model = $this->_messageHelper->getGiftMessage($this->getItem()->getGiftMessageId());
-            return $this->escapeHtml($model->getMessage());
+            return $this->_escaper->escapeHtml($model->getMessage());
         }
         return '';
     }
