@@ -10,6 +10,7 @@ namespace Magento\Elasticsearch\Model\Indexer\Fulltext\Plugin\Category\Product;
 use Magento\Catalog\Model\ResourceModel\Attribute as AttributeResourceModel;
 use Magento\CatalogSearch\Model\Indexer\Fulltext\Processor;
 use Magento\Elasticsearch\Model\Config;
+use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeProvider;
 use Magento\Elasticsearch\Model\Indexer\IndexerHandler as ElasticsearchIndexerHandler;
 use Magento\Framework\Indexer\DimensionProviderInterface;
 use Magento\CatalogSearch\Model\Indexer\IndexerHandlerFactory;
@@ -42,6 +43,11 @@ class Attribute
     private $indexerHandlerFactory;
 
     /**
+     * @var AttributeProvider
+     */
+    private $attributeProvider;
+
+    /**
      * @var bool
      */
     private $isNewObject;
@@ -56,17 +62,20 @@ class Attribute
      * @param Processor $indexerProcessor
      * @param DimensionProviderInterface $dimensionProvider
      * @param IndexerHandlerFactory $indexerHandlerFactory
+     * @param AttributeProvider $attributeProvider
      */
     public function __construct(
         Config $config,
         Processor $indexerProcessor,
         DimensionProviderInterface $dimensionProvider,
-        IndexerHandlerFactory $indexerHandlerFactory
+        IndexerHandlerFactory $indexerHandlerFactory,
+        AttributeProvider $attributeProvider
     ) {
         $this->config = $config;
         $this->indexerProcessor = $indexerProcessor;
         $this->dimensionProvider = $dimensionProvider;
         $this->indexerHandlerFactory = $indexerHandlerFactory;
+        $this->attributeProvider = $attributeProvider;
     }
 
     /**
@@ -82,6 +91,7 @@ class Attribute
         AttributeResourceModel $subject,
         AttributeResourceModel $result
     ): AttributeResourceModel {
+        $this->attributeProvider->removeAttributeCacheByCode($this->attributeCode);
         $indexer = $this->indexerProcessor->getIndexer();
         if ($this->isNewObject
             && !$indexer->isScheduled()

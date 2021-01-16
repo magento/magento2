@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Mview\Test\Unit;
 
+use Laminas\Log\Filter\Mock;
 use Magento\Framework\Mview\ActionFactory;
 use Magento\Framework\Mview\ActionInterface;
 use Magento\Framework\Mview\ConfigInterface;
@@ -54,6 +55,11 @@ class ViewTest extends TestCase
     protected $subscriptionFactoryMock;
 
     /**
+     * @var MockObject|View\ChangeLogBatchIteratorInterface
+     */
+    private $iteratorMock;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -67,6 +73,7 @@ class ViewTest extends TestCase
             true,
             ['getView']
         );
+        $this->iteratorMock = $this->createMock(View\ChangeLogBatchIteratorInterface::class);
         $this->actionFactoryMock = $this->createPartialMock(ActionFactory::class, ['get']);
         $this->stateMock = $this->createPartialMock(
             State::class,
@@ -97,7 +104,10 @@ class ViewTest extends TestCase
             $this->actionFactoryMock,
             $this->stateMock,
             $this->changelogMock,
-            $this->subscriptionFactoryMock
+            $this->subscriptionFactoryMock,
+            [],
+            [],
+            $this->iteratorMock
         );
     }
 
@@ -340,7 +350,7 @@ class ViewTest extends TestCase
             $currentVersionId
         );
         $this->changelogMock->expects(
-            $this->once()
+            $this->any()
         )->method(
             'getList'
         )->with(
@@ -351,6 +361,7 @@ class ViewTest extends TestCase
         );
 
         $actionMock = $this->getMockForAbstractClass(ActionInterface::class);
+        $this->iteratorMock->expects($this->once())->method('walk')->willReturn($listId);
         $actionMock->expects($this->once())->method('execute')->with($listId)->willReturnSelf();
         $this->actionFactoryMock->expects(
             $this->once()
@@ -396,7 +407,7 @@ class ViewTest extends TestCase
             ->expects($this->once())
             ->method('getVersion')
             ->willReturn($currentVersionId);
-
+        $this->iteratorMock->expects($this->any())->method('walk')->willReturn($this->generateChangeLog(150, 1, 150));
         $this->changelogMock->method('getList')
             ->willReturnMap(
                 [
@@ -407,7 +418,7 @@ class ViewTest extends TestCase
             );
 
         $actionMock = $this->getMockForAbstractClass(ActionInterface::class);
-        $actionMock->expects($this->once())
+        $actionMock->expects($this->any())
             ->method('execute')
             ->with($this->generateChangeLog(150, 1, 150))
             ->willReturnSelf();
@@ -463,7 +474,7 @@ class ViewTest extends TestCase
         $this->stateMock->expects($this->atLeastOnce())
             ->method('getMode')
             ->willReturn(StateInterface::MODE_ENABLED);
-        $this->stateMock->expects($this->exactly(2))
+        $this->stateMock->expects($this->any())
             ->method('getStatus')
             ->willReturn(StateInterface::STATUS_IDLE);
         $this->stateMock->expects($this->exactly(2))
@@ -478,16 +489,9 @@ class ViewTest extends TestCase
         )->willReturn(
             $currentVersionId
         );
-        $this->changelogMock->expects(
-            $this->once()
-        )->method(
-            'getList'
-        )->with(
-            $lastVersionId,
-            $currentVersionId
-        )->willReturn(
-            $listId
-        );
+        $this->iteratorMock->expects($this->any())
+            ->method('walk')
+            ->willReturn([2,3]);
 
         $actionMock = $this->createPartialMock(ActionInterface::class, ['execute']);
         $actionMock->expects($this->once())->method('execute')->with($listId)->willReturnCallback(
@@ -773,8 +777,11 @@ class ViewTest extends TestCase
     protected function loadView()
     {
         $viewId = 'view_test';
+        $this->changelogMock->expects($this->any())
+            ->method('getViewId')
+            ->willReturn($viewId);
         $this->configMock->expects(
-            $this->once()
+            $this->any()
         )->method(
             'getView'
         )->with(
@@ -794,7 +801,7 @@ class ViewTest extends TestCase
             'view_id' => 'view_test',
             'action_class' => 'Some\Class\Name',
             'group' => 'some_group',
-            'subscriptions' => ['some_entity' => ['name' => 'some_entity', 'column' => 'entity_id']]
+            'subscriptions' => ['some_entity' => ['name' => 'some_entity', 'column' => 'entity_id']],
         ];
     }
 }

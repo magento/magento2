@@ -27,9 +27,7 @@
         </before>
         <after>
             <deleteData stepKey="deleteCustomer" createDataKey="customer"/>
-            <!-- Reset customer grid filter -->
-            <amOnPage stepKey="goToCustomersGridPage" url="{{AdminCustomerPage.url}}"/>
-            <waitForPageLoad stepKey="waitForCustomersGrid"/>
+            <actionGroup ref="AdminOpenCustomersGridActionGroup" stepKey="goToCustomersGridPage"/>
             <actionGroup stepKey="resetFilter" ref="AdminResetFilterInCustomerGrid"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
@@ -47,9 +45,7 @@
             <argument name="customerAddress" value="CustomerAddressSimple"/>
         </actionGroup>
         <actionGroup stepKey="saveAndCheckSuccessMessage" ref="AdminSaveCustomerAndAssertSuccessMessage"/>
-        <!-- Assert Customer in Customer grid -->
-        <amOnPage stepKey="goToCustomersGridPage" url="{{AdminCustomerPage.url}}"/>
-        <waitForPageLoad stepKey="waitForCustomersGrid"/>
+        <actionGroup ref="AdminOpenCustomersGridActionGroup" stepKey="goToCustomersGridPage"/>
         <actionGroup stepKey="resetFilter" ref="AdminResetFilterInCustomerGrid"/>
         <actionGroup stepKey="filterByEamil" ref="AdminFilterCustomerGridByEmail">
             <argument name="email" value="updated$$customer.email$$"/>

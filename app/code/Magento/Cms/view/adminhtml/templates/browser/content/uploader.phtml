@@ -11,14 +11,14 @@ $filters = $block->getConfig()->getFilters() ?? [];
 $allowedExtensions = [];
 $blockHtmlId = $block->getHtmlId();
 
-$listExtensions = [[]];
+$listExtensions = [];
 foreach ($filters as $media_type) {
     $listExtensions[] = array_map(function ($fileExt) {
         return ltrim($fileExt, '.*');
     }, $media_type['files']);
 }
 
-$allowedExtensions = array_merge(...$listExtensions);
+$allowedExtensions = array_merge([], ...$listExtensions);
 
 $resizeConfig = $block->getImageUploadConfigData()->getIsResizeEnabled()
     ? "{action: 'resize', maxWidth: "

@@ -6,8 +6,11 @@
 declare(strict_types=1);
 
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
 \Magento\TestFramework\Helper\Bootstrap::getInstance()->getInstance()->reinitialize();
+
+Resolver::getInstance()->requireDataFixture('Magento/CatalogUrlRewrite/_files/categories_with_stores_rollback.php');
 
 /** @var \Magento\Framework\Registry $registry */
 $registry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Framework\Registry::class);

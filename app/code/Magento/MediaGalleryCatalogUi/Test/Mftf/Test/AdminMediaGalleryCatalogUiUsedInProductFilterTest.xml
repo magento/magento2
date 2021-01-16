@@ -7,19 +7,19 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminMediaGalleryCatalogUiUsedInProductFilterTest">
+    <test name="AdminMediaGalleryCatalogUiUsedInProductFilterTest" deprecated="Use AdminMediaGalleryCatalogUiUsedInProductFilterOnTest instead">
         <annotations>
-            <skip>
-                <issueId value="https://github.com/magento/adobe-stock-integration/issues/1795"/>
-            </skip>
             <features value="AdminMediaGalleryUsedInProductsFilter"/>
             <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/1503"/>
-            <title value="User can open product entity the asset is associated"/>
+            <title value="Deprecated. User can open product entity the asset is associated"/>
             <stories value="Story 58: User sees entities where asset is used in" />
             <testCaseId value="https://studio.cucumber.io/projects/131313/test-plan/folders/943908/scenarios/4523889"/>
             <description value="User filters assets used in products"/>
             <severity value="CRITICAL"/>
             <group value="media_gallery_ui"/>
+            <skip>
+                <issueId value="DEPRECATED">Use AdminMediaGalleryCatalogUiUsedInProductFilterOnTest instead</issueId>
+            </skip>
         </annotations>
         <before>
             <magentoCLI command="config:set cms/wysiwyg/enabled enabled" stepKey="enableWYSIWYG"/>
@@ -46,6 +46,8 @@
         <actionGroup ref="AdminMediaGalleryClickAddSelectedActionGroup" stepKey="clickAddSelectedContentImage"/>
         <actionGroup ref="AdminMediaGalleryClickOkButtonTinyMce4ActionGroup" stepKey="clickOkButton"/>
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="openProductsGrid"/>
+        <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearFilters"/>
         <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openStandaloneMediaGallery"/>
         <actionGroup ref="AdminEnhancedMediaGalleryExpandFilterActionGroup" stepKey="expandFilters"/>
         <actionGroup ref="AdminEnhancedMediaGallerySelectUsedInFilterActionGroup" stepKey="setUsedInFilter">
@@ -59,12 +61,17 @@
             <argument name="entityName" value="Products"/>
         </actionGroup>
 
-        <actionGroup ref="AdminAssertMediaGalleryFilterPlaceHolderGridActionGroup" stepKey="assertFilterApplied">
+        <wait time="10" stepKey="waitForBookmarkToSaveView"/>
+        <reloadPage stepKey="reloadPage"/>
+        <waitForPageLoad stepKey="waitForGridReloaded"/>
+        <actionGroup ref="AdminAssertMediaGalleryFilterPlaceholderActionGroup" stepKey="assertFilterApplied">
             <argument name="filterPlaceholder" value="$$product.name$$"/>
         </actionGroup>
+        <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearFiltersOnProductGrid"/>
 
         <deleteData createDataKey="product" stepKey="deleteProduct"/>
         <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openMediaGallery"/>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
         <actionGroup ref="AdminEnhancedMediaGalleryViewImageDetails" stepKey="openViewImageDetailsToAssertEmptyUsedIn"/>
         <actionGroup ref="AssertAdminEnhancedMediaGalleryUsedInSectionNotDisplayedActionGroup" stepKey="assertThereIsNoUsedInSection"/>
         <actionGroup ref="AdminEnhancedMediaGalleryCloseViewDetailsActionGroup" stepKey="closeDetails"/>
@@ -73,8 +80,7 @@
         <actionGroup ref="AdminEnhancedMediaGallerySelectImageForMassActionActionGroup" stepKey="selectFirstImageToDelete">
             <argument name="imageName" value="{{ImageMetadata.title}}"/>
         </actionGroup>
-        <actionGroup ref="AdminEnhancedMediaGalleryClickDeleteImagesButtonActionGroup" stepKey="clikDeleteSelectedButton"/>
+        <actionGroup ref="AdminEnhancedMediaGalleryClickDeleteImagesButtonActionGroup" stepKey="clickDeleteSelectedButton"/>
         <actionGroup ref="AdminEnhancedMediaGalleryConfirmDeleteImagesActionGroup" stepKey="deleteImages"/>
-
    </test>
 </tests>

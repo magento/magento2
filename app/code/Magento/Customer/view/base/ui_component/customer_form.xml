@@ -511,7 +511,7 @@
                     <imports>true</imports>
                 </dataLinks>
                 <externalProvider>customer_address_listing.customer_address_listing_data_source</externalProvider>
-                <selectionsProvider>customer_address_listing.customer_address_listing.customer_address_listing_columns.ids</selectionsProvider>
+                <selectionsProvider>customer_address_listing.customer_address_listing.customer_address_columns.ids</selectionsProvider>
                 <autoRender>true</autoRender>
                 <dataScope>customer_address_listing</dataScope>
                 <ns>customer_address_listing</ns>

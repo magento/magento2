@@ -42,9 +42,8 @@ class GetAssetIdsByContentField implements GetAssetIdsByContentFieldApiInterface
         $ids = [];
         /** @var GetAssetIdsByContentFieldInterface $fieldHandler */
         foreach ($this->fieldHandlers[$field] as $fieldHandler) {
-            // phpcs:ignore Magento2.Performance.ForeachArrayMerge
-            $ids = array_merge($ids, $fieldHandler->execute($value));
+            $ids[] = $fieldHandler->execute($value);
         }
-        return array_unique($ids);
+        return array_unique(array_merge([], ...$ids));
     }
 }

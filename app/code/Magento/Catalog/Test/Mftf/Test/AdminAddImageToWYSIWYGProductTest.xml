@@ -10,18 +10,20 @@
     <test name="AdminAddImageToWYSIWYGProductTest">
         <annotations>
             <features value="Catalog"/>
-            <stories value="MAGETWO-42041-Default WYSIWYG toolbar configuration with Magento Media Gallery"/>
-            <group value="Catalog"/>
+            <stories value="Default WYSIWYG toolbar configuration with Magento Media Gallery"/>
             <title value="Admin should be able to add image to WYSIWYG Editor on Product Page"/>
             <description value="Admin should be able to add image to WYSIWYG Editor on Product Page"/>
             <severity value="CRITICAL"/>
-            <testCaseId value="MAGETWO-84375"/>
+            <testCaseId value="MC-25763"/>
+            <group value="catalog"/>
         </annotations>
+
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
             <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
-            <actionGroup ref="SwitchToVersion4ActionGroup" stepKey="switchToTinyMCE4" />
+            <actionGroup ref="CliEnableTinyMCE4ActionGroup" stepKey="switchToTinyMCE4" />
         </before>
+
         <after>
             <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
@@ -32,8 +34,9 @@
         <actionGroup ref="FillMainProductFormActionGroup" stepKey="fillBasicProductInfo" />
 
         <click selector="{{AdminProductFormSection.contentTab}}" stepKey="clickContentTab" />
-        <scrollTo selector="{{ProductDescriptionWYSIWYGToolbarSection.showHideBtn}}" y="-150" x="0" stepKey="scrollToDescription" />
+        <scrollTo selector="{{ProductDescriptionWYSIWYGToolbarSection.showHideBtn}}" y="-150" x="0" stepKey="scrollToDescription"/>
         <waitForElementVisible selector="{{ProductDescriptionWYSIWYGToolbarSection.TinyMCE4}}" stepKey="waitForDescription" />
+        <scrollTo selector="{{ProductDescriptionWYSIWYGToolbarSection.showHideBtn}}" y="-150" x="0" stepKey="scrollToDescriptionAgain"/>
         <click selector="{{ProductDescriptionWYSIWYGToolbarSection.InsertImageIcon}}" stepKey="clickInsertImageIcon1" />
         <click selector="{{ProductDescriptionWYSIWYGToolbarSection.Browse}}" stepKey="clickBrowse1" />
         <waitForLoadingMaskToDisappear stepKey="waitForBrowseModal" />

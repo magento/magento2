@@ -4,10 +4,8 @@
  * See COPYING.txt for license details.
  */
 
-use Magento\Backend\Block\Template;
-
 // phpcs:disable Magento2.Files.LineLength, Generic.Files.LineLength
-/** @var Template $block */
+/** @var \Magento\MediaGalleryUi\Block\Adminhtml\ImageDetails $block */
 /** @var \Magento\Framework\Escaper $escaper */
 ?>
 
@@ -20,15 +18,8 @@ use Magento\Backend\Block\Template;
             title: '<?= $escaper->escapeHtmlAttr(__('Image Details')); ?>'
         }
      }">
-    <div class="page-main-actions">
-        <div class="page-actions">
-            <div class="page-actions-inner">
-                <div class="page-action-buttons" id="media-gallery-image-actions"
-                     data-bind="scope: 'mediaGalleryImageActions'">
-                    <!-- ko template: getTemplate() --><!-- /ko -->
-                </div>
-            </div>
-        </div>
+    <div class="page-main-actions" data-bind="scope: 'mediaGalleryImageActions'">
+        <!-- ko template: getTemplate() --><!-- /ko -->
     </div>
     <div id="media-gallery-image-details-messages" data-bind="scope: 'mediaGalleryImageDetailsMessages'">
         <!-- ko template: getTemplate() --><!-- /ko -->
@@ -49,53 +40,20 @@ use Magento\Backend\Block\Template;
                         "modalSelector": ".media-gallery-image-details-modal",
                         "modalWindowSelector": ".media-gallery-image-details",
                         "mediaGridMessages": "standalone_media_gallery_listing.standalone_media_gallery_listing.messages"
-                    }
-                }
-            }
-        },
-        "#media-gallery-image-details-messages": {
-            "Magento_Ui/js/core/app": {
-                "components": {
-                    "mediaGalleryImageDetailsMessages": {
-                        "component": "Magento_MediaGalleryUi/js/grid/messages"
-                    }
-                }
-            }
-        },
-        "#media-gallery-image-actions": {
-            "Magento_Ui/js/core/app": {
-                "components": {
+                    },
                     "mediaGalleryImageActions": {
                         "component": "Magento_MediaGalleryUi/js/image/image-actions",
                         "modalSelector": ".media-gallery-image-details-modal",
                         "modalWindowSelector": ".media-gallery-image-details",
                         "mediaGalleryImageDetailsName": "mediaGalleryImageDetails",
                         "imageModelName" : "standalone_media_gallery_listing.standalone_media_gallery_listing.media_gallery_columns.thumbnail_url",
-                        "actionsList": [
-                            {
-                                "title": "<?= $escaper->escapeJs(__('Cancel')); ?>",
-                                "handler": "closeModal",
-                                "name": "cancel",
-                                "classes": "action-default scalable cancel action-quaternary"
-                            },
-                            {
-                                "title": "<?= $escaper->escapeJs(__('Delete Image')); ?>",
-                                "handler": "deleteImageAction",
-                                "name": "delete",
-                                "classes": "action-default scalable delete action-quaternary"
-                            },
-                            {
-                                "title": "<?= $escaper->escapeJs(__('Edit Details')); ?>",
-                                "handler": "editImageAction",
-                                "name": "edit",
-                                "classes": "action-default scalable edit action-quaternary"
-                            }
-                        ]
+                        "actionsList": <?= /* @noEscape */ $block->getActionsJson() ?>
+                    },
+                    "mediaGalleryImageDetailsMessages": {
+                        "component": "Magento_MediaGalleryUi/js/grid/messages"
                     }
                 }
             }
         }
     }
 </script>
-
-

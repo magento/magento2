@@ -15,6 +15,6 @@
 
         <switchToNextTab stepKey="switchToNewTab"/>
         <waitForPageLoad stepKey="waitForAdvancedReportingPageLoad"/>
-        <seeInCurrentUrl url="advancedreporting.rjmetrics.com/report" stepKey="seeAssertAdvancedReportingPageUrl"/>
+        <seeInCurrentUrl url="reports/advanced-reporting" stepKey="seeAssertAdvancedReportingPageUrl"/>
     </actionGroup>
 </actionGroups>
