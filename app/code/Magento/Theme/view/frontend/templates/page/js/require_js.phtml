@@ -4,12 +4,15 @@
  * See COPYING.txt for license details.
  */
 
-/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+/**
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ * @var \Magento\Framework\Escaper $escaper
+ */
 
 $scriptString = '
-    var BASE_URL = \'' . /* @noEscape */ $block->escapeJs($block->getBaseUrl()) .'\';
+    var BASE_URL = \'' . /* @noEscape */ $escaper->escapeJs($block->getBaseUrl()) .'\';
     var require = {
-        \'baseUrl\': \'' . /* @noEscape */ $block->escapeJs($block->getViewFileUrl('/')) . '\'
+        \'baseUrl\': \'' . /* @noEscape */ $escaper->escapeJs($block->getViewFileUrl('/')) . '\'
     };';
 
 echo /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false);
