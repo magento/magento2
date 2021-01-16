@@ -4,8 +4,11 @@
  * See COPYING.txt for license details.
  */
 
-/** @var \Magento\Framework\View\Element\Template $block */
+/**
+ * @var \Magento\Framework\View\Element\Template $block
+ * @var \Magento\Framework\Escaper $escaper
+ */
 ?>
 
-<?= $block->escapeHtml(__('%1 has been removed from your Wish List.', $block->getData('product_name'))); ?>
+<?= $escaper->escapeHtml(__('%1 has been removed from your Wish List.', $block->getData('product_name'))); ?>
 

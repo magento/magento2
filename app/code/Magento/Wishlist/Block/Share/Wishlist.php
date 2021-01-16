@@ -83,6 +83,6 @@ class Wishlist extends \Magento\Wishlist\Block\AbstractBlock
      */
     public function getHeader()
     {
-        return __("%1's Wish List", $this->escapeHtml($this->getWishlistCustomer()->getFirstname()));
+        return __("%1's Wish List", $this->_escaper->escapeHtml($this->getWishlistCustomer()->getFirstname()));
     }
 }
