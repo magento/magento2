@@ -12,24 +12,24 @@ $partners = $block->getPartners();
         <div class="partner">
             <img
                 class="partner-image"
-                src="<?= $block->escapeHtml($partner['img']) ?>"
-                alt="<?= $block->escapeHtml($partner['title']) ?>"/>
-            <h3 class="partner-title"><?= $block->escapeHtml($partner['title']) ?></h3>
+                src="<?= $escaper->escapeHtml($partner['img']) ?>"
+                alt="<?= $escaper->escapeHtml($partner['title']) ?>"/>
+            <h3 class="partner-title"><?= $escaper->escapeHtml($partner['title']) ?></h3>
             <p class="partner-description">
-                <?= $block->escapeHtml($partner['description']) ?>
+                <?= $escaper->escapeHtml($partner['description']) ?>
                 <br />
-                <a href="<?= $block->escapeHtml($partner['url_page']) ?>" target="_blank">
-                    <?= $block->escapeHtml(__('Read More')) ?>
+                <a href="<?= $escaper->escapeHtml($partner['url_page']) ?>" target="_blank">
+                    <?= $escaper->escapeHtml(__('Read More')) ?>
                 </a>
                 <br />
-                <a href="<?= $block->escapeHtml($partner['url_partner_page']) ?>" target="_blank">
-                    <?= $block->escapeHtml(__('Partner Page')) ?>
+                <a href="<?= $escaper->escapeHtml($partner['url_partner_page']) ?>" target="_blank">
+                    <?= $escaper->escapeHtml(__('Partner Page')) ?>
                 </a>
             </p>
         </div>
     <?php endforeach; ?>
 <?php else : ?>
     <p>
-        <?= $block->escapeHtml(__('No partners were found')) ?>
+        <?= $escaper->escapeHtml(__('No partners were found')) ?>
     </p>
 <?php endif; ?>
