@@ -4,6 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-/** @var \Magento\Framework\View\Element\Template $block */
+/**
+ * @var \Magento\Framework\View\Element\Template $block
+ * @var \Magento\Framework\Escaper $escaper
+ */
 ?>
-<?= $block->escapeHtml(__('If you are a registered VAT customer, please <a href="%1">click here</a> to enter your shipping address for proper VAT calculation.', $block->getData('url')), ['a']);
+<?= $escaper->escapeHtml(__('If you are a registered VAT customer, please <a href="%1">click here</a> to enter your shipping address for proper VAT calculation.', $block->getData('url')), ['a']);

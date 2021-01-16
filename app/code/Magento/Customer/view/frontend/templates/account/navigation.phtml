@@ -4,11 +4,14 @@
  * See COPYING.txt for license details.
  */
 
-/** @var $block \Magento\Framework\View\Element\Html\Links */
+/**
+ * @var $block \Magento\Framework\View\Element\Html\Links
+ * @var \Magento\Framework\Escaper $escaper
+ */
 ?>
 <div class="block account-nav">
     <div class="title">
-        <strong><?= $block->escapeHtml(__('My Account')) ?></strong>
+        <strong><?= $escaper->escapeHtml(__('My Account')) ?></strong>
     </div>
     <div class="content">
         <nav class="account-nav">

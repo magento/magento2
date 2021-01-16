@@ -194,7 +194,7 @@ class DefaultRenderer extends AbstractBlock implements RendererInterface
         }
         if ($this->getType()->getEscapeHtml()) {
             foreach ($data as $key => $value) {
-                $data[$key] = $this->escapeHtml($value);
+                $data[$key] = $this->_escaper->escapeHtml($value);
             }
         }
         $format = $format !== null ? $format : $this->getFormatArray($addressAttributes);

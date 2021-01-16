@@ -87,7 +87,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
             return __('New Customer Group');
         } else {
             $group = $this->groupRepository->getById($groupId);
-            return __('Edit Customer Group "%1"', $this->escapeHtml($group->getCode()));
+            return __('Edit Customer Group "%1"', $this->_escaper->escapeHtml($group->getCode()));
         }
     }
 

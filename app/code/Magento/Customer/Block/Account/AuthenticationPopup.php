@@ -57,7 +57,7 @@ class AuthenticationPopup extends \Magento\Framework\View\Element\Template
     public function getConfig()
     {
         return [
-            'autocomplete' => $this->escapeHtml($this->isAutocompleteEnabled()),
+            'autocomplete' => $this->_escaper->escapeHtml($this->isAutocompleteEnabled()),
             'customerRegisterUrl' => $this->escapeUrl($this->getCustomerRegisterUrlUrl()),
             'customerForgotPasswordUrl' => $this->escapeUrl($this->getCustomerForgotPasswordUrl()),
             'baseUrl' => $this->escapeUrl($this->getBaseUrl())
