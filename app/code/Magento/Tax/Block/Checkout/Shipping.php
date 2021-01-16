@@ -96,7 +96,7 @@ class Shipping extends \Magento\Checkout\Block\Total\DefaultTotal
     {
         return __(
             'Shipping Incl. Tax (%1)',
-            $this->escapeHtml($this->getQuote()->getShippingAddress()->getShippingDescription())
+            $this->_escaper->escapeHtml($this->getQuote()->getShippingAddress()->getShippingDescription())
         );
     }
 
@@ -109,7 +109,7 @@ class Shipping extends \Magento\Checkout\Block\Total\DefaultTotal
     {
         return __(
             'Shipping Excl. Tax (%1)',
-            $this->escapeHtml($this->getQuote()->getShippingAddress()->getShippingDescription())
+            $this->_escaper->escapeHtml($this->getQuote()->getShippingAddress()->getShippingDescription())
         );
     }
 

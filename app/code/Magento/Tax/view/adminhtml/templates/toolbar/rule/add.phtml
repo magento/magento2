@@ -4,15 +4,18 @@
  * See COPYING.txt for license details.
  */
 // @deprecated
-/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+/**
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ * @var \Magento\Framework\Escaper $escaper
+ */
 ?>
 <div data-mage-init='{"floatingHeader": {}}' class="page-actions">
     <button type="button" id="addNewTaxRule">
-        <?= $block->escapeHtml(__('Add New Tax Rule')) ?>
+        <?= $escaper->escapeHtml(__('Add New Tax Rule')) ?>
     </button>
     <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
         'onclick',
-        "window.location.href='" . $block->escapeJs($createUrl) . "'",
+        "window.location.href='" . $escaper->escapeJs($createUrl) . "'",
         'button#addNewClass'
     ) ?>
 </div>
