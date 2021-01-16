@@ -140,13 +140,13 @@ class Current extends Template
         if ($this->isCurrent()) {
             $html = '<li class="nav item current">';
             $html .= '<strong>'
-                . $this->escapeHtml(__($this->getLabel()))
+                . $this->_escaper->escapeHtml(__($this->getLabel()))
                 . '</strong>';
             $html .= '</li>';
         } else {
-            $html = '<li class="nav item' . $highlight . '"><a href="' . $this->escapeHtml($this->getHref()) . '"';
+            $html = '<li class="nav item' . $highlight . '"><a href="' . $this->_escaper->escapeHtml($this->getHref()) . '"';
             $html .= $this->getTitle()
-                ? ' title="' . $this->escapeHtml(__($this->getTitle())) . '"'
+                ? ' title="' . $this->_escaper->escapeHtml(__($this->getTitle())) . '"'
                 : '';
             $html .= $this->getAttributesHtml() . '>';
 
@@ -154,7 +154,7 @@ class Current extends Template
                 $html .= '<strong>';
             }
 
-            $html .= $this->escapeHtml(__($this->getLabel()));
+            $html .= $this->_escaper->escapeHtml(__($this->getLabel()));
 
             if ($this->getIsHighlighted()) {
                 $html .= '</strong>';
@@ -177,7 +177,7 @@ class Current extends Template
         $attributes = $this->getAttributes();
         if ($attributes) {
             foreach ($attributes as $attribute => $value) {
-                $attributesHtml .= ' ' . $attribute . '="' . $this->escapeHtml($value) . '"';
+                $attributesHtml .= ' ' . $attribute . '="' . $this->_escaper->escapeHtml($value) . '"';
             }
         }
 

@@ -19,7 +19,7 @@ class Date extends \Magento\Framework\View\Element\Template
     protected function _toHtml()
     {
         $html = '<input type="text" name="' . $this->getName() . '" id="' . $this->getId() . '" ';
-        $html .= 'value="' . $this->escapeHtml($this->getValue()) . '" ';
+        $html .= 'value="' . $this->_escaper->escapeHtml($this->getValue()) . '" ';
         $html .= 'class="' . $this->getClass() . '" ' . $this->getExtraParams() . '/> ';
         $calendarYearsRange = $this->getYearsRange();
         $changeMonth = $this->getChangeMonth();
@@ -78,7 +78,7 @@ class Date extends \Magento\Framework\View\Element\Template
         if ($this->getFormat() && $this->getValue()) {
             return strftime($this->getFormat(), strtotime($this->getValue()));
         }
-        return $this->escapeHtml($this->getValue());
+        return $this->_escaper->escapeHtml($this->getValue());
     }
 
     /**

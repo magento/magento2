@@ -140,7 +140,7 @@ class Select extends \Magento\Framework\View\Element\AbstractBlock
             '" class="' .
             $this->getClass() .
             '" title="' .
-            $this->escapeHtml($this->getTitle()) .
+            $this->_escaper->escapeHtml($this->getTitle()) .
             '" ' .
             $this->getExtraParams() .
             '>';
@@ -166,8 +166,8 @@ class Select extends \Magento\Framework\View\Element\AbstractBlock
             }
 
             if (is_array($value)) {
-                $html .= '<optgroup label="' . $this->escapeHtml($label)
-                    . '" data-optgroup-name="' . $this->escapeHtml($optgroupName) . '">';
+                $html .= '<optgroup label="' . $this->_escaper->escapeHtml($label)
+                    . '" data-optgroup-name="' . $this->_escaper->escapeHtml($optgroupName) . '">';
                 foreach ($value as $keyGroup => $optionGroup) {
                     if (!is_array($optionGroup)) {
                         $optionGroup = ['value' => $keyGroup, 'label' => $optionGroup];
@@ -205,20 +205,20 @@ class Select extends \Magento\Framework\View\Element\AbstractBlock
             foreach ($option['params'] as $key => $value) {
                 if (is_array($value)) {
                     foreach ($value as $keyMulti => $valueMulti) {
-                        $params .= sprintf(' %s="%s" ', $keyMulti, $this->escapeHtml($valueMulti));
+                        $params .= sprintf(' %s="%s" ', $keyMulti, $this->_escaper->escapeHtml($valueMulti));
                     }
                 } else {
-                    $params .= sprintf(' %s="%s" ', $key, $this->escapeHtml($value));
+                    $params .= sprintf(' %s="%s" ', $key, $this->_escaper->escapeHtml($value));
                 }
             }
         }
 
         return sprintf(
             '<option value="%s"%s %s>%s</option>',
-            $this->escapeHtml($option['value']),
+            $this->_escaper->escapeHtml($option['value']),
             $selectedHtml,
             $params,
-            $this->escapeHtml($option['label'])
+            $this->_escaper->escapeHtml($option['label'])
         );
     }
 
