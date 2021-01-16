@@ -54,15 +54,15 @@ class Editable extends AbstractBlock implements RendererInterface
 
         if ($element->getShowAsText()) {
             $html = ' <input type="hidden" class="hidden" id="' .
-                $this->escapeHtmlAttr($element->getHtmlId()) .
+                $this->_escaper->escapeHtmlAttr($element->getHtmlId()) .
                 '" name="' .
-                $this->escapeHtmlAttr($element->getName()) .
+                $this->_escaper->escapeHtmlAttr($element->getName()) .
                 '" value="' .
-                $this->escapeHtmlAttr($element->getValue()) .
+                $this->_escaper->escapeHtmlAttr($element->getValue()) .
                 '" data-form-part="' .
-                $this->escapeHtmlAttr($element->getData('data-form-part')) .
+                $this->_escaper->escapeHtmlAttr($element->getData('data-form-part')) .
                 '"/> ' .
-                $this->escapeHtml(
+                $this->_escaper->escapeHtml(
                     $valueName
                 ) . '&nbsp;';
         } else {
@@ -74,9 +74,9 @@ class Editable extends AbstractBlock implements RendererInterface
                 '<a href="javascript:void(0)" class="label">';
 
             if ($this->inlineTranslate->isAllowed()) {
-                $html .= $this->escapeHtml($valueName);
+                $html .= $this->_escaper->escapeHtml($valueName);
             } else {
-                $html .= $this->escapeHtml(
+                $html .= $this->_escaper->escapeHtml(
                     $this->filterManager->truncate($valueName, ['length' => 33, 'etc' => '...'])
                 );
             }
