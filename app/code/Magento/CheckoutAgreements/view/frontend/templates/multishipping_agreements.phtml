@@ -5,10 +5,10 @@
  */
 
 use Magento\CheckoutAgreements\Model\AgreementModeOptions;
-?>
-<?php
+
 /**
- * @var $block \Magento\CheckoutAgreements\Block\Agreements
+ * @var \Magento\CheckoutAgreements\Block\Agreements $block
+ * @var \Magento\Framework\Escaper $escaper
  * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
  */
 ?>
@@ -23,7 +23,7 @@ use Magento\CheckoutAgreements\Model\AgreementModeOptions;
                 <?php if ($agreement->getIsHtml()):?>
                     <?= /* @noEscape */ $agreement->getContent() ?>
                 <?php else:?>
-                    <?= $block->escapeHtml(nl2br($agreement->getContent())) ?>
+                    <?= $escaper->escapeHtml(nl2br($agreement->getContent())) ?>
                 <?php endif; ?>
             </div>
                 <?php if ($agreement->getContentHeight()): ?>
@@ -39,7 +39,7 @@ use Magento\CheckoutAgreements\Model\AgreementModeOptions;
                        id="agreement-<?= (int) $agreement->getAgreementId() ?>"
                        name="agreement[<?= (int) $agreement->getAgreementId() ?>]"
                        value="1"
-                       title="<?= $block->escapeHtml($agreement->getCheckboxText()) ?>"
+                       title="<?= $escaper->escapeHtml($agreement->getCheckboxText()) ?>"
                        class="checkbox"
                        data-validate="{required:true}"/>
                 <label class="label" for="agreement-<?= (int) $agreement->getAgreementId() ?>">
@@ -47,7 +47,7 @@ use Magento\CheckoutAgreements\Model\AgreementModeOptions;
                         <?php if ($agreement->getIsHtml()):?>
                             <?= /* @noEscape */ $agreement->getCheckboxText() ?>
                         <?php else:?>
-                            <?= $block->escapeHtml($agreement->getCheckboxText()) ?>
+                            <?= $escaper->escapeHtml($agreement->getCheckboxText()) ?>
                         <?php endif; ?>
                     </span>
                 </label>
@@ -58,7 +58,7 @@ use Magento\CheckoutAgreements\Model\AgreementModeOptions;
                     <?php if ($agreement->getIsHtml()):?>
                         <?= /* @noEscape */ $agreement->getCheckboxText() ?>
                     <?php else:?>
-                        <?= $block->escapeHtml($agreement->getCheckboxText()) ?>
+                        <?= $escaper->escapeHtml($agreement->getCheckboxText()) ?>
                     <?php endif; ?>
                 </span>
             </div>
