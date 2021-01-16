@@ -101,7 +101,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     public function getHeaderText()
     {
         if ($this->getVariable()->getId()) {
-            return __('Custom Variable "%1"', $this->escapeHtml($this->getVariable()->getName()));
+            return __('Custom Variable "%1"', $this->_escaper->escapeHtml($this->getVariable()->getName()));
         } else {
             return __('New Custom Variable');
         }
