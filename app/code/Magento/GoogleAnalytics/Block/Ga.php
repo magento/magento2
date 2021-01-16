@@ -92,7 +92,7 @@ class Ga extends \Magento\Framework\View\Element\Template
             $anonymizeIp = "\nga('set', 'anonymizeIp', true);";
         }
 
-        return "\nga('create', '" . $this->escapeHtmlAttr($accountId, false)
+        return "\nga('create', '" . $this->_escaper->escapeHtmlAttr($accountId, false)
            . "', 'auto');{$anonymizeIp}\nga('send', 'pageview'{$this->getOptPageUrl()});\n";
     }
 
@@ -129,8 +129,8 @@ class Ga extends \Magento\Framework\View\Element\Template
                         'price': '%s',
                         'quantity': %s
                     });",
-                    $this->escapeJsQuote($item->getSku()),
-                    $this->escapeJsQuote($item->getName()),
+                    $this->_escaper->escapeJsQuote($item->getSku()),
+                    $this->_escaper->escapeJsQuote($item->getName()),
                     $item->getPrice(),
                     $item->getQtyOrdered()
                 );
@@ -145,7 +145,7 @@ class Ga extends \Magento\Framework\View\Element\Template
                     'shipping': '%s'
                 });",
                 $order->getIncrementId(),
-                $this->escapeJsQuote($this->_storeManager->getStore()->getFrontendName()),
+                $this->_escaper->escapeJsQuote($this->_storeManager->getStore()->getFrontendName()),
                 $order->getGrandTotal(),
                 $order->getTaxAmount(),
                 $order->getShippingAmount()
@@ -207,7 +207,7 @@ class Ga extends \Magento\Framework\View\Element\Template
         return [
             'optPageUrl' => $this->getOptPageUrl(),
             'isAnonymizedIpActive' => $this->_googleAnalyticsData->isAnonymizedIpActive(),
-            'accountId' => $this->escapeHtmlAttr($accountId, false)
+            'accountId' => $this->_escaper->escapeHtmlAttr($accountId, false)
         ];
     }
 
@@ -235,15 +235,15 @@ class Ga extends \Magento\Framework\View\Element\Template
         foreach ($collection as $order) {
             foreach ($order->getAllVisibleItems() as $item) {
                 $result['products'][] = [
-                    'id' => $this->escapeJsQuote($item->getSku()),
-                    'name' =>  $this->escapeJsQuote($item->getName()),
+                    'id' => $this->_escaper->escapeJsQuote($item->getSku()),
+                    'name' =>  $this->_escaper->escapeJsQuote($item->getName()),
                     'price' => $item->getPrice(),
                     'quantity' => $item->getQtyOrdered(),
                 ];
             }
             $result['orders'][] = [
                 'id' =>  $order->getIncrementId(),
-                'affiliation' => $this->escapeJsQuote($this->_storeManager->getStore()->getFrontendName()),
+                'affiliation' => $this->_escaper->escapeJsQuote($this->_storeManager->getStore()->getFrontendName()),
                 'revenue' => $order->getGrandTotal(),
                 'tax' => $order->getTaxAmount(),
                 'shipping' => $order->getShippingAmount(),
@@ -263,7 +263,7 @@ class Ga extends \Magento\Framework\View\Element\Template
         $optPageURL = '';
         $pageName = trim($this->getPageName());
         if ($pageName && substr($pageName, 0, 1) == '/' && strlen($pageName) > 1) {
-            $optPageURL = ", '" . $this->escapeHtmlAttr($pageName, false) . "'";
+            $optPageURL = ", '" . $this->_escaper->escapeHtmlAttr($pageName, false) . "'";
         }
         return $optPageURL;
     }
