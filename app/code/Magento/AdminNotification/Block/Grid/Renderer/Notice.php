@@ -26,8 +26,8 @@ class Notice extends AbstractRenderer
     public function render(DataObject $row)
     {
         return '<span class="grid-row-title">' .
-            $this->escapeHtml($row->getTitle()) .
+            $this->_escaper->escapeHtml($row->getTitle()) .
             '</span>' .
-            ($row->getDescription() ? '<br />' . $this->escapeHtml($row->getDescription()) : '');
+            ($row->getDescription() ? '<br />' . $this->_escaper->escapeHtml($row->getDescription()) : '');
     }
 }

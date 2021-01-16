@@ -46,7 +46,7 @@ class Actions extends AbstractRenderer
     public function render(DataObject $row)
     {
         $readDetailsHtml = $row->getUrl() ? '<a class="action-details" target="_blank" href="' .
-            $this->escapeUrl($row->getUrl())
+            $this->_escaper->escapeUrl($row->getUrl())
             . '">' .
             __('Read Details') . '</a>' : '';
 
