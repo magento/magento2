@@ -370,7 +370,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
         if (isset($this->_filters[$name])) {
             return $this->_filters[$name];
         } else {
-            return $this->getRequest()->getParam($name) ? $this->escapeHtml($this->getRequest()->getParam($name)) : '';
+            return $this->getRequest()->getParam($name) ? $this->_escaper->escapeHtml($this->getRequest()->getParam($name)) : '';
         }
     }
 
