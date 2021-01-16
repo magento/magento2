@@ -4,7 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-/** @var $block \Magento\Checkout\Block\Total\DefaultTotal */
+/**
+ * @var $block \Magento\Checkout\Block\Total\DefaultTotal
+ * @var \Magento\Framework\Escaper $escaper
+ */
 /** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
 
@@ -13,23 +16,23 @@
 $checkoutHelper = $block->getData('checkoutHelper');
 ?>
 <tr class="totals">
-    <th colspan="<?= $block->escapeHtmlAttr($block->getColspan()) ?>"
+    <th colspan="<?= $escaper->escapeHtmlAttr($block->getColspan()) ?>"
         class="mark" scope="row">
         <?php if ($block->getRenderingArea() == $block->getTotal()->getArea()):?>
             <strong>
         <?php endif; ?>
-        <?= $block->escapeHtml($block->getTotal()->getTitle()) ?>
+        <?= $escaper->escapeHtml($block->getTotal()->getTitle()) ?>
         <?php if ($block->getRenderingArea() == $block->getTotal()->getArea()):?>
             </strong>
         <?php endif; ?>
     </th>
     <td class="amount"
-        data-th="<?= $block->escapeHtmlAttr($block->getTotal()->getTitle()) ?>">
+        data-th="<?= $escaper->escapeHtmlAttr($block->getTotal()->getTitle()) ?>">
         <?php if ($block->getRenderingArea() == $block->getTotal()->getArea()):?>
             <strong>
         <?php endif; ?>
             <span>
-                <?= $block->escapeHtml(
+                <?= $escaper->escapeHtml(
                     $checkoutHelper->formatPrice($block->getTotal()->getValue()),
                     ['span']
                 ) ?>

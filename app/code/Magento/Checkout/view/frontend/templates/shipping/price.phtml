@@ -5,7 +5,12 @@
  */
 
 ?>
-<?php /** @var $block \Magento\Checkout\Block\Shipping\Price */ ?>
+<?php
+/**
+ * @var $block \Magento\Checkout\Block\Shipping\Price
+ * @var \Magento\Framework\Escaper $escaper
+ */
+?>
 
 <?php $shippingPrice = $block->getShippingPrice(); ?>
-<?= $block->escapeHtml($shippingPrice) ?>
+<?= $escaper->escapeHtml($shippingPrice) ?>

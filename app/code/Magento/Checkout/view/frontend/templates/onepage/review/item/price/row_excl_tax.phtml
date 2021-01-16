@@ -6,12 +6,15 @@
 
 // phpcs:disable Magento2.Templates.ThisInTemplate
 
-/** @var $block \Magento\Checkout\Block\Item\Price\Renderer */
+/**
+ * @var $block \Magento\Checkout\Block\Item\Price\Renderer
+ * @var \Magento\Framework\Escaper $escaper
+ */
 
 $_item = $block->getItem();
 ?>
 <span class="cart-price">
-    <?= $block->escapeHtml(
+    <?= $escaper->escapeHtml(
         $this->helper(Magento\Checkout\Helper\Data::class)->formatPrice($_item->getRowTotal()),
         ['span']
     ) ?>
