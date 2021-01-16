@@ -4,7 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-/* @var $block \Magento\Newsletter\Block\Adminhtml\Queue\Edit */
+/**
+ * @var $block \Magento\Newsletter\Block\Adminhtml\Queue\Edit
+ * @var \Magento\Framework\Escaper $escaper
+ */
 /** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
 <div data-mage-init='{"floatingHeader": {}}' class="page-actions">
@@ -19,11 +22,11 @@
     <?php endif ?>
 </div>
 
-<form action="<?= $block->escapeUrl($block->getSaveUrl()) ?>" method="post" id="queue_edit_form">
+<form action="<?= $escaper->escapeUrl($block->getSaveUrl()) ?>" method="post" id="queue_edit_form">
     <?= $block->getBlockHtml('formkey') ?>
     <?= $block->getChildHtml('form') ?>
 </form>
-<form action="<?= $block->escapeUrl($block->getPreviewUrl()) ?>" method="post" id="newsletter_queue_preview_form"
+<form action="<?= $escaper->escapeUrl($block->getPreviewUrl()) ?>" method="post" id="newsletter_queue_preview_form"
       target="_blank">
     <?= $block->getBlockHtml('formkey') ?>
     <div class="no-display">
