@@ -8,7 +8,7 @@
 // phpcs:disable Magento2.Files.LineLength.MaxExceeded
 
 /**
- * @var $block \Magento\Checkout\Block\Cart\Item\Renderer
+ * @var \Magento\Checkout\Block\Cart\Item\Renderer $block
  * @var \Magento\Framework\Escaper $escaper
  */
 
@@ -51,8 +51,8 @@ $canApplyMsrp = $helper->isShowBeforeOrderConfirm($product) && $helper->isMinima
                             <dt><?= $escaper->escapeHtml($_option['label']) ?></dt>
                             <dd>
                                 <?php if (isset($_formatedOptionValue['full_view'])) :?>
-                                    <?= $escaper->escapeHtml($_formatedOptionValue['full_view']) ?>
-                                <?php else :?>
+                                        <?= $escaper->escapeHtml($_formatedOptionValue['full_view']) ?>
+                                    <?php else :?>
                                     <?= $escaper->escapeHtml($_formatedOptionValue['value'], ['span', 'a']) ?>
                                 <?php endif; ?>
                             </dd>

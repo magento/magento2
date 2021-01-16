@@ -117,7 +117,7 @@ class ValidationMessages extends \Magento\Framework\View\Element\Messages
         foreach ($this->cartHelper->getQuote()->getMessages() as $message) {
             if ($message) {
                 // Escape HTML entities in quote message to prevent XSS
-                $message->setText($this->escapeHtml($message->getText()));
+                $message->setText($this->_escaper->escapeHtml($message->getText()));
                 $messages[] = $message;
             }
         }
