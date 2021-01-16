@@ -63,7 +63,7 @@ class Header extends AbstractCreate
             return __('Edit Order #%1', $this->_getSession()->getOrder()->getIncrementId());
         }
         $out = $this->_getCreateOrderTitle();
-        return $this->escapeHtml($out);
+        return $this->_escaper->escapeHtml($out);
     }
 
     /**

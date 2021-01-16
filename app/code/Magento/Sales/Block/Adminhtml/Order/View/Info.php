@@ -202,7 +202,7 @@ class Info extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
                 $sortOrder = $this->_prepareAccountDataSortOrder($accountData, $sortOrder);
                 $accountData[$sortOrder] = [
                     'label' => $attribute->getFrontendLabel(),
-                    'value' => $this->escapeHtml($value, ['br']),
+                    'value' => $this->_escaper->escapeHtml($value, ['br']),
                 ];
             }
         }
@@ -225,7 +225,7 @@ class Info extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
                 $label = __('Edit');
             }
             $url = $this->getUrl('sales/order/address', ['address_id' => $address->getId()]);
-            return '<a href="' . $this->escapeUrl($url) . '">' . $this->escapeHtml($label) . '</a>';
+            return '<a href="' . $this->escapeUrl($url) . '">' . $this->_escaper->escapeHtml($label) . '</a>';
         }
 
         return '';

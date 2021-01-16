@@ -48,6 +48,6 @@ class Comment extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      */
     public function getCommentNote()
     {
-        return $this->escapeHtml($this->getQuote()->getCustomerNote());
+        return $this->_escaper->escapeHtml($this->getQuote()->getCustomerNote());
     }
 }

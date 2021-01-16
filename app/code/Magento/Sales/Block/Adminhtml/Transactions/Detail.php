@@ -126,17 +126,17 @@ class Detail extends \Magento\Backend\Block\Widget\Container
         ));
 
         $this->setParentTxnIdUrlHtml(
-            $this->escapeHtml($this->getUrl('sales/transactions/view', ['txn_id' => $this->_txn->getParentId()]))
+            $this->_escaper->escapeHtml($this->getUrl('sales/transactions/view', ['txn_id' => $this->_txn->getParentId()]))
         );
 
-        $this->setParentTxnIdHtml($this->escapeHtml($this->_txn->getParentTxnId()));
+        $this->setParentTxnIdHtml($this->_escaper->escapeHtml($this->_txn->getParentTxnId()));
 
-        $this->setOrderIncrementIdHtml($this->escapeHtml($this->_txn->getOrder()->getIncrementId()));
+        $this->setOrderIncrementIdHtml($this->_escaper->escapeHtml($this->_txn->getOrder()->getIncrementId()));
 
-        $this->setTxnTypeHtml($this->escapeHtml(__($this->_txn->getTxnType())));
+        $this->setTxnTypeHtml($this->_escaper->escapeHtml(__($this->_txn->getTxnType())));
 
         $this->setOrderIdUrlHtml(
-            $this->escapeHtml($this->getUrl('sales/order/view', ['order_id' => $this->_txn->getOrderId()]))
+            $this->_escaper->escapeHtml($this->getUrl('sales/order/view', ['order_id' => $this->_txn->getOrderId()]))
         );
 
         $this->setIsClosedHtml($this->_txn->getIsClosed() ? __('Yes') : __('No'));
@@ -150,7 +150,7 @@ class Detail extends \Magento\Backend\Block\Widget\Container
         ) : __(
             'N/A'
         );
-        $this->setCreatedAtHtml($this->escapeHtml($createdAt));
+        $this->setCreatedAtHtml($this->_escaper->escapeHtml($createdAt));
 
         return parent::_toHtml();
     }

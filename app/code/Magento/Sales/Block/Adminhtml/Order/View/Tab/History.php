@@ -173,7 +173,7 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
      */
     public function getItemTitle(array $item)
     {
-        return isset($item['title']) ? $this->escapeHtml($item['title']) : '';
+        return isset($item['title']) ? $this->_escaper->escapeHtml($item['title']) : '';
     }
 
     /**

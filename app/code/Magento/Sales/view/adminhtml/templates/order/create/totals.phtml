@@ -6,10 +6,11 @@
 
 /**
  * @var \Magento\Sales\Block\Adminhtml\Order\Create\Totals $block
+ * @var \Magento\Framework\Escaper $escaper
  * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
  */
 ?>
-<legend class="admin__legend"><span><?= $block->escapeHtml(__('Order Totals')) ?></span></legend>
+<legend class="admin__legend"><span><?= $escaper->escapeHtml(__('Order Totals')) ?></span></legend>
 <br>
 
 <table class="admin__table-secondary data-table">
@@ -25,7 +26,7 @@
                value="1"<?php if ($block->getNoteNotify()): ?> checked="checked"<?php endif; ?>
                class="admin__control-checkbox"/>
         <label for="notify_customer" class="admin__field-label">
-            <?= $block->escapeHtml(__('Append Comments')) ?>
+            <?= $escaper->escapeHtml(__('Append Comments')) ?>
         </label>
     </div>
     <?php if ($block->canSendNewOrderConfirmationEmail()): ?>
@@ -33,7 +34,7 @@
         <input type="checkbox" id="send_confirmation" name="order[send_confirmation]" value="1" checked="checked"
                class="admin__control-checkbox"/>
         <label for="send_confirmation" class="admin__field-label">
-            <?= $block->escapeHtml(__('Email Order Confirmation')) ?>
+            <?= $escaper->escapeHtml(__('Email Order Confirmation')) ?>
         </label>
     </div>
     <?php endif; ?>
