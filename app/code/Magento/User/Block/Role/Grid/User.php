@@ -206,7 +206,7 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
             if ($json) {
                 return $this->getJSONString($inRoleUser);
             }
-            return $this->escapeJs($this->escapeHtml($inRoleUser));
+            return $this->_escaper->escapeJs($this->_escaper->escapeHtml($inRoleUser));
         }
         $roleId = $this->getRoleId();
         $users = $this->getUsersFormData();
