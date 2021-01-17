@@ -44,7 +44,7 @@
                 </div>
                 <div class="field choice">
                     <input type="checkbox" name="show-password" title="Show Password" id="show-password" class="checkbox" data-role="show-password" data-mage-init='{"showPassword": {"passwordSelector": "#pass"}}'>
-                    <label for="show-password" class="label"><span><?= $block->escapeHtml(__('Show Password')) ?></span></label>
+                    <label for="show-password" class="label"><span><?= $escaper->escapeHtml(__('Show Password')) ?></span></label>
                 </div>
                 <?= $block->getChildHtml('form_additional_info') ?>
                 <div class="actions-toolbar">
