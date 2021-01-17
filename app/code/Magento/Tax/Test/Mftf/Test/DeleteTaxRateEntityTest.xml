@@ -36,7 +36,7 @@
 
         <!-- Confirm Deleted TaxIdentifier(from the above step) on the tax rate grid page -->
         <actionGroup ref="AdminTaxRateGridOpenPageActionGroup" stepKey="goToTaxRateIndex2"/>
-        <click selector="{{AdminDataGridHeaderSection.clearFilters}}" stepKey="clickClearFilters2"/>
+        <actionGroup ref="AdminClearGridFiltersActionGroup" stepKey="clickClearFilters2"/>
         <actionGroup ref="AdminFillTaxIdentifierFilterOnTaxRateGridActionGroup" stepKey="fillTaxIdentifierField3">
             <argument name="taxRateCode" value="{{defaultTaxRate.code}}"/>
         </actionGroup> 

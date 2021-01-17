@@ -45,7 +45,7 @@
 
         <actionGroup ref="AdminTaxRateGridOpenPageActionGroup" stepKey="goToTaxRateIndex2"/>
         <!-- Create a tax rate for large postcodes and verify we see expected values on the tax rate grid page -->
-        <click selector="{{AdminDataGridHeaderSection.clearFilters}}" stepKey="clickClearFilters2"/>
+        <actionGroup ref="AdminClearGridFiltersActionGroup" stepKey="clickClearFilters2"/>
         <actionGroup ref="AdminFillTaxIdentifierFilterOnTaxRateGridActionGroup" stepKey="fillTaxIdentifierField2">
             <argument name="taxRateCode" value="{{SimpleTaxRate.code}}"/>
         </actionGroup> 
