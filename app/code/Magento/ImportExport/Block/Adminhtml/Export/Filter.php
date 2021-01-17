@@ -7,6 +7,8 @@ namespace Magento\ImportExport\Block\Adminhtml\Export;
 
 use Magento\Eav\Model\Entity\Attribute;
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\ImportExport\Model\ResourceModel\Export\AttributeGridCollectionFactory;
 
 /**
  * Export filter block
@@ -41,19 +43,28 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
     ];
 
     /**
+     * @var AttributeGridCollectionFactory
+     */
+    private $attributeGridCollectionFactory;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\ImportExport\Helper\Data $importExportData
      * @param array $data
+     * @param AttributeGridCollectionFactory|null $attributeGridCollectionFactory
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Helper\Data $backendHelper,
         \Magento\ImportExport\Helper\Data $importExportData,
-        array $data = []
+        array $data = [],
+        ?AttributeGridCollectionFactory $attributeGridCollectionFactory = null
     ) {
         $this->_importExportData = $importExportData;
         parent::__construct($context, $backendHelper, $data);
+        $this->attributeGridCollectionFactory = $attributeGridCollectionFactory
+            ?: ObjectManager::getInstance()->get(AttributeGridCollectionFactory::class);
     }
 
     /**
@@ -422,33 +433,13 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
      * Prepare collection by setting page number, sorting etc..
      *
      * @param \Magento\Framework\Data\Collection $collection
-     * @return \Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection
+     * @return \Magento\Framework\Data\Collection|\Magento\ImportExport\Model\ResourceModel\Export\AttributeGridCollection
      */
     public function prepareCollection(\Magento\Framework\Data\Collection $collection)
     {
-        $this->setCollection($collection);
+        $attributeGridCollection = $this->attributeGridCollectionFactory->create();
+        $gridCollection = $attributeGridCollection->setItems($collection->getItems());
+        $this->setCollection($gridCollection);
         return $this->getCollection();
-    }
-
-    /**
-     * @inheritDoc
-     *
-     * @param \Magento\Backend\Block\Widget\Grid\Column $column
-     * @return $this
-     */
-    protected function _addColumnFilterToCollection($column)
-    {
-        $collection = $this->getCollection();
-        $field = $column->getFilterIndex() ?? $column->getIndex();
-        $condition = $column->getFilter()->getData('value');
-        if ($field && isset($condition)) {
-            foreach ($this->getCollection() as $attribute) {
-                if (stripos($attribute->getData($field), $condition) === false) {
-                    $collection->removeItemByKey($attribute->getId());
-                }
-            }
-        }
-
-        return $this;
     }
 }
