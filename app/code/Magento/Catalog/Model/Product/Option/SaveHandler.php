@@ -11,13 +11,10 @@ use Magento\Catalog\Api\Data\ProductCustomOptionInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductCustomOptionRepositoryInterface as OptionRepository;
 use Magento\Catalog\Model\Product\Option;
-use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Framework\App\ObjectManager;
-use Magento\Catalog\Model\Product\Type;
 use Magento\Framework\EntityManager\Operation\ExtensionInterface;
 use Magento\Catalog\Model\ResourceModel\Product\Relation;
 use Magento\Framework\Exception\CouldNotSaveException;
-use Magento\GroupedProduct\Model\Product\Type\Grouped;
 
 /**
  * SaveHandler for product option
@@ -26,6 +23,11 @@ use Magento\GroupedProduct\Model\Product\Type\Grouped;
  */
 class SaveHandler implements ExtensionInterface
 {
+    /**
+     * @var string[]
+     */
+    private $compositeProductTypes = ['grouped', 'configurable', 'bundle'];
+
     /**
      * @var OptionRepository
      */
@@ -120,9 +122,7 @@ class SaveHandler implements ExtensionInterface
     private function isProductHasRelations(ProductInterface $product): bool
     {
         $result = true;
-        if ($product->getTypeId() !== Type::TYPE_BUNDLE
-            && $product->getTypeId() !== Configurable::TYPE_CODE
-            && $product->getTypeId() !== Grouped::TYPE_CODE
+        if (!in_array($product->getId(), $this->compositeProductTypes)
             && $this->relation->getRelationsByChildren([$product->getId()])
         ) {
             $result = false;
