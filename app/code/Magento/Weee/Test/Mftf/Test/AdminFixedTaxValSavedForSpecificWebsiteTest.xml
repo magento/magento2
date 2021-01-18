@@ -22,7 +22,7 @@
         <before>
             <!-- Create product attribute and add it to default attribute set />-->
             <comment userInput="Create product attribute and add it to default attribute set" stepKey="createAttrAndAddToDefaultAttrSet"/>
-            <createData entity="productFPTAttribute" stepKey="createProductFPTAttribute"/>
+            <createData entity="FPTProductAttribute" stepKey="createProductFPTAttribute"/>
             <createData entity="AddToDefaultSet" stepKey="addToDefaultAttributeSet">
                 <requiredEntity createDataKey="createProductFPTAttribute"/>
             </createData>
