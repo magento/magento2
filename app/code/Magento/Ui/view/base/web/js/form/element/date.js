@@ -142,7 +142,7 @@ define([
                          */
                         shiftedValue = moment(value, this.outputDateFormat, true);
                     } else {
-                        shiftedValue = moment(value, this.inputDateFormat);
+                        shiftedValue = moment(value, this.inputDateFormat, true);
                     }
                 }
 
