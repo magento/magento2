@@ -433,13 +433,13 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
      * Prepare collection by setting page number, sorting etc..
      *
      * @param \Magento\Framework\Data\Collection $collection
-     * @return \Magento\Framework\Data\Collection|\Magento\ImportExport\Model\ResourceModel\Export\AttributeGridCollection
+     * @return \Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection
      */
     public function prepareCollection(\Magento\Framework\Data\Collection $collection)
     {
         $attributeGridCollection = $this->attributeGridCollectionFactory->create();
         $gridCollection = $attributeGridCollection->setItems($collection->getItems());
         $this->setCollection($gridCollection);
-        return $this->getCollection();
+        return $collection;
     }
 }
