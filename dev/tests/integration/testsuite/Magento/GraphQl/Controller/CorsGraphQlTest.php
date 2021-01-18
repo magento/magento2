@@ -7,9 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Controller;
 
-use Magento\Framework\App\Response\Http;
-use Magento\TestFramework\TestCase\AbstractController as ControllerTestCase;
 use Laminas\Http\Headers;
+use Magento\TestFramework\TestCase\AbstractController as ControllerTestCase;
 
 /**
  * Validates the headers for Graphql CORS requests
@@ -33,36 +32,18 @@ class CorsGraphQlTest extends ControllerTestCase
     }
 
     /**
-     * Returns GraphQl query string
-     *
-     * @return string
-     */
-    private function getQuery(): string
-    {
-        return <<<QUERY
- query{
-  products (search: "test", pageSize: 2){
-    items{
-      ... on SimpleProduct {
-        name
-      }
-    }
-  }
-}
-QUERY;
-    }
-
-    /**
      * Makes the GraphQl request
      *
      * @param string $origin
+     * @param string $method
      * @return void
      */
-    private function addOriginAndSendGraphQlRequest(string $origin): void
+    private function addOriginAndSendGraphQlRequest(string $origin, string $method = 'POST'): void
     {
-        $this->getRequest()->setMethod('POST')
+        $this->getRequest()->setMethod($method)
             ->setHeaders($this->getHeadersForGraphQlRequest($origin))
-            ->setContent($this->getQuery());
+            ->setContent('{"query": "{categoryList{name, id }}"}');
+
         $this->dispatch('/graphql');
     }
 
@@ -75,12 +56,19 @@ QUERY;
      */
     public function testIsCorsHeadersPresentInGraphQlResponse()
     {
-        $this->addOriginAndSendGraphQlRequest("https://www.example.com");
+        $this->addOriginAndSendGraphQlRequest('https://www.example.com');
         $response = $this->getResponse();
+
         $this->assertNotFalse($response->getHeader('Access-Control-Allow-Origin'));
         $this->assertNotFalse($response->getHeader('Access-Control-Allow-Headers'));
         $this->assertNotFalse($response->getHeader('Access-Control-Allow-Methods'));
         $this->assertNotFalse($response->getHeader('Access-Control-Max-Age'));
+
+        $result = json_decode($response->getContent(), true);
+
+        $this->assertArrayNotHasKey("error", $result);
+        $this->assertEquals("Default Category", $result['data']['categoryList'][0]['name']);
+        $this->assertEquals(2, $result['data']['categoryList'][0]['id']);
     }
 
     /**
@@ -112,7 +100,7 @@ QUERY;
      */
     public function testCorsNotAddedIfOriginIsNotAllowed()
     {
-        $this->addOriginAndSendGraphQlRequest("https://www.test.com");
+        $this->addOriginAndSendGraphQlRequest('https://www.test.com');
         $response = $this->getResponse();
         $this->assertFalse($response->getHeader('Access-Control-Allow-Origin'));
         $this->assertFalse($response->getHeader('Access-Control-Allow-Headers'));
@@ -122,11 +110,32 @@ QUERY;
 
     public function testCorsRequestFailsIfCorsConfigurationIsNotProvided()
     {
-        $this->addOriginAndSendGraphQlRequest("https://www.example.com");
+        $this->addOriginAndSendGraphQlRequest('https://www.example.com');
         $response = $this->getResponse();
         $this->assertFalse($response->getHeader('Access-Control-Allow-Origin'));
         $this->assertFalse($response->getHeader('Access-Control-Allow-Headers'));
         $this->assertFalse($response->getHeader('Access-Control-Allow-Methods'));
         $this->assertFalse($response->getHeader('Access-Control-Max-Age'));
+    }
+
+    /**
+     * @magentoConfigFixture default/web/graphql/cors_allowed_origins https://www.example.com
+     * @magentoConfigFixture default/web/graphql/cors_allowed_headers Content-Type
+     * @magentoConfigFixture default/web/graphql/cors_allowed_methods GET,POST,OPTIONS
+     * @magentoConfigFixture default/web/graphql/cors_max_age 86400
+     * @magentoConfigFixture default/web/graphql/cors_allow_credentials 1
+     */
+    public function testIsCorsHeadersPresentInGraphQlOptionsResponse()
+    {
+        $this->addOriginAndSendGraphQlRequest('https://www.example.com', 'OPTIONS');
+
+        $response = $this->getResponse();
+        $this->assertNotFalse($response->getHeader('Access-Control-Allow-Origin'));
+        $this->assertNotFalse($response->getHeader('Access-Control-Allow-Headers'));
+        $this->assertNotFalse($response->getHeader('Access-Control-Allow-Methods'));
+        $this->assertNotFalse($response->getHeader('Access-Control-Max-Age'));
+
+        $result = json_decode($response->getBody(), true);
+        $this->assertArrayNotHasKey("error", $result);
     }
 }
