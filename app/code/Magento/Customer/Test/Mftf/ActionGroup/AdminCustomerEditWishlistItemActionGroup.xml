@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminCustomerEditWishlistItemActionGroup">
+        <arguments>
+            <argument name="title" type="string"/>
+            <argument name="option" type="string"/>
+            <argument name="quantity" type="string"/>
+        </arguments>
+        <click selector="{{AdminCustomerWishlistSection.configureButton}}" stepKey="clickConfigureButton"/>
+        <waitForAjaxLoad stepKey="waitForPopupLoad"/>
+        <waitForElementVisible selector="{{AdminCustomerWishlistSection.productAttributeOptionsDropDown(title)}}" stepKey="waitForConfigurableOption"/>
+        <selectOption selector="{{AdminCustomerWishlistSection.productAttributeOptionsDropDown(title)}}" userInput="option" stepKey="selectConfigurableOption"/>
+        <fillField userInput="{{quantity}}" selector="{{AdminOrderFormConfigureProductSection.quantity}}" stepKey="fillQty"/>
+        <click selector="{{AdminOrderFormConfigureProductSection.ok}}" stepKey="confirmSave"/>
+        <waitForAjaxLoad stepKey="waitForPopupClose"/>
+    </actionGroup>
+</actionGroups>
