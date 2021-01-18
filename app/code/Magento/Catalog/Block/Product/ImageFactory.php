@@ -95,11 +95,11 @@ class ImageFactory
     /**
      * Calculate image ratio
      *
-     * @param int $width
-     * @param int $height
+     * @param int|null $width
+     * @param int|null $height
      * @return float
      */
-    private function getRatio(int $width, int $height): float
+    private function getRatio(?int $width, ?int $height): float
     {
         if ($width && $height) {
             return $height / $width;
