@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\Catalog\Controller\Adminhtml\Category;
 
 use Magento\Catalog\Api\Data\CategoryInterface;
-use Magento\Catalog\Model\ResourceModel\Category\Collection;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Store\Model\StoreManagerInterface;
@@ -23,7 +22,7 @@ use Magento\TestFramework\TestCase\AbstractBackendController;
  */
 class EditTest extends AbstractBackendController
 {
-    /** @var Collection */
+    /** @var CollectionFactory */
     private $categoryCollectionFactory;
 
     /** @var StoreManagerInterface */

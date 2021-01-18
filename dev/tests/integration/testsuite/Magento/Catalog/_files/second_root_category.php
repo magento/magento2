@@ -13,9 +13,10 @@ use Magento\TestFramework\Helper\Bootstrap;
 $objectManager = Bootstrap::getObjectManager();
 /** @var CategoryFactory $categoryFactory */
 $categoryFactory = $objectManager->get(CategoryFactory::class);
+/** @var CategoryRepositoryInterface $categoryRepository */
 $categoryRepository = $objectManager->get(CategoryRepositoryInterface::class);
 $rootCategory = $categoryFactory->create();
 $rootCategory->setName('Second Root Category')
     ->setParentId(Category::TREE_ROOT_ID)
     ->setIsActive(true);
-$rootCategory = $categoryRepository->save($rootCategory);
+$categoryRepository->save($rootCategory);
