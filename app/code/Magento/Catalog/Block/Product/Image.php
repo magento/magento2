@@ -58,7 +58,7 @@ class Image extends \Magento\Framework\View\Element\Template
      *
      * @return string
      */
-    public function getContainerId()
+    public function getContainerId() : string
     {
         if (!$this->hasData('container_id')) {
             $uniqId = uniqid($this->getProductId());
