@@ -79,9 +79,7 @@
             <argument name="targetSelectValue" value="is undefined"/>
         </actionGroup>
         <click selector="{{AdminNewCatalogPriceRule.saveAndApply}}" stepKey="clickSaveAndApplyRules"/>
-        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-            <argument name="indices" value=""/>
-        </actionGroup>
+        <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
         <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
             <argument name="tags" value=""/>
         </actionGroup>
@@ -129,9 +127,7 @@
             <argument name="targetSelectValue" value="is undefined"/>
         </actionGroup>
         <click selector="{{AdminNewCatalogPriceRule.saveAndApply}}" stepKey="clickSaveAndApplyRules1"/>
-        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexSecondTime">
-            <argument name="indices" value=""/>
-        </actionGroup>
+        <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindexSecondTime"/>
         <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCacheSecondTime">
             <argument name="tags" value=""/>
         </actionGroup>
