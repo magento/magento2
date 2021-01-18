@@ -168,7 +168,7 @@ class Operation extends DataObject implements OperationInterface
      */
     public function getOperationKey(): ?int
     {
-        return (int) $this->getData(self::OPERATION_KEY);
+        return $this->getData(self::OPERATION_KEY) ? (int) $this->getData(self::OPERATION_KEY) : null;
     }
 
     /**
