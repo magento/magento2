@@ -54,7 +54,7 @@ class DateTime
      * Forms GMT date
      *
      * @param  string $format
-     * @param  int|string $input date in current timezone
+     * @param  int|string|\DateTimeInterface|null $input date in current timezone
      * @return string
      */
     public function gmtDate($format = null, $input = null)
@@ -74,7 +74,7 @@ class DateTime
      * Converts input date into date with timezone offset. Input date must be in GMT timezone.
      *
      * @param  string $format
-     * @param  int|string $input date in GMT timezone
+     * @param  int|string|\DateTimeInterface|null $input date in GMT timezone
      * @return string
      */
     public function date($format = null, $input = null)
@@ -89,7 +89,7 @@ class DateTime
     /**
      * Forms GMT timestamp
      *
-     * @param  int|string|\DateTimeInterface $input date in current timezone
+     * @param  int|string|\DateTimeInterface|null $input date in current timezone
      * @return int
      */
     public function gmtTimestamp($input = null)
@@ -116,7 +116,7 @@ class DateTime
     /**
      * Converts input date into timestamp with timezone offset. Input date must be in GMT timezone.
      *
-     * @param  int|string $input date in GMT timezone
+     * @param  int|string|\DateTimeInterface|null $input date in GMT timezone
      * @return int
      */
     public function timestamp($input = null)

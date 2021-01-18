@@ -660,7 +660,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * Retrieve default address by type(attribute)
      *
      * @param   string $attributeCode address type attribute code
-     * @return  Address|false
+     * @return  Address|bool
      */
     public function getPrimaryAddress($attributeCode)
     {
@@ -672,7 +672,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     /**
      * Get customer default billing address
      *
-     * @return Address
+     * @return Address|bool
      */
     public function getPrimaryBillingAddress()
     {
@@ -682,7 +682,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     /**
      * Get customer default billing address
      *
-     * @return Address
+     * @return Address|bool
      */
     public function getDefaultBillingAddress()
     {
@@ -692,7 +692,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     /**
      * Get default customer shipping address
      *
-     * @return Address
+     * @return Address|bool
      */
     public function getPrimaryShippingAddress()
     {
