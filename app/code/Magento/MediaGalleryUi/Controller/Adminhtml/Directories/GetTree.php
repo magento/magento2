@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\MediaGalleryUi\Controller\Adminhtml\Directories;
 
+use Exception;
 use Magento\Backend\App\Action;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\Controller\Result\Json;
@@ -63,7 +64,7 @@ class GetTree extends Action implements HttpGetActionInterface
                 $this->getDirectoryTree->execute()
             ];
             $responseCode = self::HTTP_OK;
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             $this->logger->critical($exception);
             $responseCode = self::HTTP_INTERNAL_ERROR;
             $responseContent = [

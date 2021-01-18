@@ -7,11 +7,22 @@ declare(strict_types=1);
 
 namespace Magento\MediaGalleryUi\Model\Directories;
 
+use Exception;
+use FilesystemIterator;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Exception\ValidatorException;
+use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\Read;
+use Magento\Framework\Phrase;
 use Magento\MediaGalleryApi\Api\IsPathExcludedInterface;
+use RecursiveCallbackFilterIterator;
+use RecursiveDirectoryIterator;
+use RecursiveIterator;
+use RecursiveIteratorIterator;
+use SplFileInfo;
+use function count;
+use function explode;
+use function strcmp;
 
 /**
  * Build media gallery folder tree structure by path
@@ -44,15 +55,11 @@ class GetDirectoryTree
      * Return directory folder structure in array
      *
      * @return array
-     * @throws ValidatorException
+     * @throws FileSystemException
      */
     public function execute(): array
     {
-        $tree = [
-            'name' => 'root',
-            'path' => '/',
-            'children' => []
-        ];
+        $tree = ['children' => []];
         $directories = $this->getDirectories();
         foreach ($directories as $idx => &$node) {
             $node['children'] = [];
@@ -61,6 +68,7 @@ class GetDirectoryTree
 
             $parent['children'][] = &$directories[$idx];
         }
+
         return $tree['children'];
     }
 
@@ -68,7 +76,7 @@ class GetDirectoryTree
      * Build directory tree array in format for jstree strandart
      *
      * @return array
-     * @throws ValidatorException
+     * @throws FileSystemException
      */
     private function getDirectories(): array
     {
@@ -77,26 +85,46 @@ class GetDirectoryTree
         /** @var Read $directory */
         $directory = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA);
 
-        if (!$directory->isDirectory()) {
-            return $directories;
-        }
+        $isExcluded = function (string $path) use ($directory): bool {
+            return $this->isPathExcluded->execute($directory->getRelativePath($path));
+        };
+        $flags = FilesystemIterator::SKIP_DOTS |
+            FilesystemIterator::UNIX_PATHS |
+            RecursiveDirectoryIterator::FOLLOW_SYMLINKS;
 
-        // todo refactor not performant method
-        foreach ($directory->readRecursively() as $path) {
-            if (!$directory->isDirectory($path) || $this->isPathExcluded->execute($path)) {
-                continue;
+        try {
+            $iterator = new RecursiveIteratorIterator(
+                new RecursiveCallbackFilterIterator(
+                    new RecursiveDirectoryIterator($directory->getAbsolutePath(), $flags),
+                    static function (
+                        SplFileInfo $file,
+                        $key,
+                        RecursiveIterator $iterator
+                    ) use ($isExcluded): bool {
+                        return $file->isDir() && $iterator->hasChildren() && !$isExcluded($file->getPathname());
+                    }
+                ),
+                RecursiveIteratorIterator::CHILD_FIRST
+            );
+            /** @var FilesystemIterator $file */
+            foreach ($iterator as $file) {
+                $path = $directory->getRelativePath($file->getPathname());
+                $directories[] = [
+                    'data' => $file->getBasename(),
+                    'attr' => ['id' => $file->getPathname()],
+                    'metadata' => [
+                        'path' => $path
+                    ],
+                    'path_array' => explode('/', $path)
+                ];
             }
-
-            $pathArray = explode('/', $path);
-            $directories[] = [
-                'data' => count($pathArray) > 0 ? end($pathArray) : $path,
-                'attr' => ['id' => $path],
-                'metadata' => [
-                    'path' => $path
-                ],
-                'path_array' => $pathArray
-            ];
+        } catch (Exception $e) {
+            throw new FileSystemException(new Phrase($e->getMessage()), $e);
         }
+        usort($directories, static function (array $itemA, array $itemB): int {
+            return strcmp($itemA['metadata']['path'], $itemB['metadata']['path']);
+        });
+
         return $directories;
     }
 
@@ -112,7 +140,6 @@ class GetDirectoryTree
     {
         $nodePathLength = count($node['path_array']);
         $treeNodeParentLevel = $nodePathLength - 1;
-
         $result = ['treeNode' => &$treeNode];
 
         if ($nodePathLength <= 1 || $level > $treeNodeParentLevel) {
@@ -124,6 +151,7 @@ class GetDirectoryTree
                 return $this->findParent($node, $tnode, $level + 1);
             }
         }
+
         return $result;
     }
 }
