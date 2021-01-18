@@ -61,11 +61,11 @@ class OperationManagementTest extends \PHPUnit\Framework\TestCase
         }
         /** @var OperationInterface $operation */
         $operation = array_shift($operations);
-        $operationId = $operation->getOperationKey();
+        $operationKey = $operation->getOperationKey();
 
         $this->assertTrue($this->model->changeOperationStatus(
             'bulk-uuid-5',
-            $operationId,
+            $operationKey,
             OperationInterface::STATUS_TYPE_OPEN
         ));
 
@@ -74,7 +74,7 @@ class OperationManagementTest extends \PHPUnit\Framework\TestCase
         $select = $connection->select()
             ->from($table)
             ->where("bulk_uuid = ?", 'bulk-uuid-5')
-            ->where("operation_key = ?", $operationId);
+            ->where("operation_key = ?", $operationKey);
         $updatedOperation = $connection->fetchRow($select);
 
         $this->assertEquals(OperationInterface::STATUS_TYPE_OPEN, $updatedOperation['status']);
