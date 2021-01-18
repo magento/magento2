@@ -9,7 +9,7 @@ namespace Magento\Review\Test\Unit\Model;
 
 use Magento\Catalog\Model\Product;
 use Magento\Framework\DB\Select;
-use Magento\Review\Model\AppendSummaryDataToObjectByEntityCode;
+use Magento\Review\Model\AppendSummaryData;
 use Magento\Review\Model\ResourceModel\Review\Summary as ResourceSummary;
 use Magento\Review\Model\ResourceModel\Review\Summary\Collection as SummaryCollection;
 use Magento\Review\Model\ResourceModel\Review\Summary\CollectionFactory as SummaryCollectionFactory;
@@ -18,9 +18,9 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Unit tests for \Magento\Review\Model\AppendSummaryDataToObjectByEntityCode class
+ * Unit tests for \Magento\Review\Model\AppendSummaryData class
  */
-class AppendSummaryDataToObjectByEntityCodeTest extends TestCase
+class AppendSummaryDataTest extends TestCase
 {
     /**
      * @var SummaryCollectionFactory|MockObject
@@ -53,7 +53,7 @@ class AppendSummaryDataToObjectByEntityCodeTest extends TestCase
     private $resourceSummaryMock;
 
     /**
-     * @var AppendSummaryDataToObjectByEntityCode
+     * @var AppendSummaryData
      */
     private $model;
 
@@ -99,7 +99,7 @@ class AppendSummaryDataToObjectByEntityCodeTest extends TestCase
             ->onlyMethods(['getTable'])
             ->getMock();
 
-        $this->model = new AppendSummaryDataToObjectByEntityCode(
+        $this->model = new AppendSummaryData(
             $this->summaryCollectionFactoryMock
         );
     }

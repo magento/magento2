@@ -13,7 +13,7 @@ use Magento\Review\Model\ResourceModel\Review\Summary\CollectionFactory as Summa
 /**
  * Add review summary data to object by its entity code
  */
-class AppendSummaryDataToObjectByEntityCode
+class AppendSummaryData
 {
     /**
      * @var SummaryCollectionFactory
@@ -30,6 +30,8 @@ class AppendSummaryDataToObjectByEntityCode
     }
 
     /**
+     * Append summary data to object filtered by its entity code
+     *
      * @param AbstractModel $object
      * @param int $storeId
      * @param string $entityCode
@@ -45,7 +47,7 @@ class AppendSummaryDataToObjectByEntityCode
                 'main_table.entity_type = review_entity.entity_id',
                 'entity_code'
             )
-            ->where('entity_pk_value IN (?)', $object->getId())
+            ->where('entity_pk_value = ?', $object->getId())
             ->where('entity_code = ?', $entityCode);
         $summaryItem = $summaryCollection->getFirstItem();
 

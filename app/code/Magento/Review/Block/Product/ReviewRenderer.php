@@ -13,7 +13,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
-use Magento\Review\Model\AppendSummaryDataToObjectByEntityCodeFactory;
+use Magento\Review\Model\AppendSummaryDataFactory;
 use Magento\Review\Model\Review;
 use Magento\Review\Model\ReviewFactory;
 use Magento\Review\Model\ReviewSummaryFactory;
@@ -48,29 +48,29 @@ class ReviewRenderer extends Template implements ReviewRendererInterface
     private $reviewSummaryFactory;
 
     /**
-     * @var AppendSummaryDataToObjectByEntityCodeFactory
+     * @var AppendSummaryDataFactory
      */
-    private $appendSummaryDataToObjectByEntityCodeFactory;
+    private $appendSummaryDataFactory;
 
     /**
      * @param Context $context
      * @param ReviewFactory $reviewFactory
      * @param array $data
      * @param ReviewSummaryFactory|null $reviewSummaryFactory
-     * @param AppendSummaryDataToObjectByEntityCodeFactory|null $appendSummaryDataToObjectByEntityCodeFactory
+     * @param AppendSummaryDataFactory|null $appendSummaryDataFactory
      */
     public function __construct(
         Context $context,
         ReviewFactory $reviewFactory,
         array $data = [],
         ReviewSummaryFactory $reviewSummaryFactory = null,
-        AppendSummaryDataToObjectByEntityCodeFactory $appendSummaryDataToObjectByEntityCodeFactory = null
+        AppendSummaryDataFactory $appendSummaryDataFactory = null
     ) {
         $this->_reviewFactory = $reviewFactory;
         $this->reviewSummaryFactory = $reviewSummaryFactory ??
             ObjectManager::getInstance()->get(ReviewSummaryFactory::class);
-        $this->appendSummaryDataToObjectByEntityCodeFactory = $appendSummaryDataToObjectByEntityCodeFactory ??
-            ObjectManager::getInstance()->get(AppendSummaryDataToObjectByEntityCodeFactory::class);
+        $this->appendSummaryDataFactory = $appendSummaryDataFactory ??
+            ObjectManager::getInstance()->get(AppendSummaryDataFactory::class);
         parent::__construct($context, $data);
     }
 
@@ -104,7 +104,7 @@ class ReviewRenderer extends Template implements ReviewRendererInterface
         $displayIfNoReviews = false
     ) {
         if ($product->getRatingSummary() === null) {
-            $this->appendSummaryDataToObjectByEntityCodeFactory->create()
+            $this->appendSummaryDataFactory->create()
                 ->execute(
                     $product,
                     $this->_storeManager->getStore()->getId(),
