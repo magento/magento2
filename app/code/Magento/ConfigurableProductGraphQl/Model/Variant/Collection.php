@@ -9,6 +9,7 @@ namespace Magento\ConfigurableProductGraphQl\Model\Variant;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\Collection as ChildCollection;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\CollectionFactory;
 use Magento\Framework\EntityManager\MetadataPool;
@@ -175,19 +176,21 @@ class Collection
     }
 
     /**
-     * Get attributes code
+     * Get attributes codes for given product
      *
-     * @param \Magento\Catalog\Model\Product $currentProduct
+     * @param Product $currentProduct
      * @return array
      */
     private function getAttributesCodes(Product $currentProduct): array
     {
         $attributeCodes = $this->attributeCodes;
-        $allowAttributes = $currentProduct->getTypeInstance()->getConfigurableAttributes($currentProduct);
-        foreach ($allowAttributes as $attribute) {
-            $productAttribute = $attribute->getProductAttribute();
-            if (!\in_array($productAttribute->getAttributeCode(), $attributeCodes)) {
-                $attributeCodes[] = $productAttribute->getAttributeCode();
+        if ($currentProduct->getTypeId() == Configurable::TYPE_CODE) {
+            $allowAttributes = $currentProduct->getTypeInstance()->getConfigurableAttributes($currentProduct);
+            foreach ($allowAttributes as $attribute) {
+                $productAttribute = $attribute->getProductAttribute();
+                if (!\in_array($productAttribute->getAttributeCode(), $attributeCodes)) {
+                    $attributeCodes[] = $productAttribute->getAttributeCode();
+                }
             }
         }
 

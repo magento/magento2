@@ -19,6 +19,7 @@ class Helper extends \Magento\Framework\DB\Helper
      * @param \Magento\Framework\App\ResourceConnection $resource
      * @param string $modulePrefix
      * @codeCoverageIgnore
+     * phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
      */
     public function __construct(\Magento\Framework\App\ResourceConnection $resource, $modulePrefix = 'Magento_Eav')
     {
@@ -117,7 +118,7 @@ class Helper extends \Magento\Framework\DB\Helper
 
         if (array_key_exists('all', $mainGroup)) {
             // it is better to call array_merge once after loop instead of calling it on each loop
-            $mainGroup['all'] = array_merge(...$mainGroup['all']);
+            $mainGroup['all'] = array_merge([], ...$mainGroup['all']);
         }
 
         return array_values($mainGroup);

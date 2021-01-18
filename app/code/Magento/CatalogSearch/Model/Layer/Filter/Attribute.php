@@ -7,7 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\CatalogSearch\Model\Layer\Filter;
 
+use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Model\Layer\Filter\AbstractFilter;
+use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection;
+use Magento\Framework\App\RequestInterface;
 
 /**
  * Layer attribute filter
@@ -48,11 +51,10 @@ class Attribute extends AbstractFilter
     /**
      * Apply attribute option filter to product collection
      *
-     * @param \Magento\Framework\App\RequestInterface $request
+     * @param RequestInterface $request
      * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function apply(\Magento\Framework\App\RequestInterface $request)
+    public function apply(RequestInterface $request)
     {
         $attributeValue = $request->getParam($this->_requestVar);
         if (empty($attributeValue) && !is_numeric($attributeValue)) {
@@ -60,22 +62,26 @@ class Attribute extends AbstractFilter
         }
 
         $attribute = $this->getAttributeModel();
-        /** @var \Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection $productCollection */
+        /** @var Collection $productCollection */
         $productCollection = $this->getLayer()
             ->getProductCollection();
-        $productCollection->addFieldToFilter($attribute->getAttributeCode(), $attributeValue);
+        $productCollection->addFieldToFilter(
+            $attribute->getAttributeCode(),
+            $this->convertAttributeValue($attribute, $attributeValue)
+        );
 
         $labels = [];
-        foreach ((array) $attributeValue as $value) {
+        foreach ((array)$attributeValue as $value) {
             $label = $this->getOptionText($value);
             $labels[] = is_array($label) ? $label : [$label];
         }
-        $label = implode(',', array_unique(array_merge(...$labels)));
+        $label = implode(',', array_unique(array_merge([], ...$labels)));
         $this->getLayer()
             ->getState()
             ->addFilter($this->_createItem($label, $attributeValue));
 
         $this->setItems([]); // set items to disable show filtering
+
         return $this;
     }
 
@@ -88,7 +94,7 @@ class Attribute extends AbstractFilter
     protected function _getItemsData()
     {
         $attribute = $this->getAttributeModel();
-        /** @var \Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection $productCollection */
+        /** @var Collection $productCollection */
         $productCollection = $this->getLayer()
             ->getProductCollection();
         $optionsFacetedData = $productCollection->getFacetedData($attribute->getAttributeCode());
@@ -161,6 +167,22 @@ class Attribute extends AbstractFilter
         return isset($optionsFacetedData[$value]['count'])
             ? (int)$optionsFacetedData[$value]['count']
             : 0;
+    }
+
+    /**
+     * Convert attribute value according to its backend type.
+     *
+     * @param ProductAttributeInterface $attribute
+     * @param mixed $value
+     * @return int|string
+     */
+    private function convertAttributeValue(ProductAttributeInterface $attribute, $value)
+    {
+        if ($attribute->getBackendType() === 'int') {
+            return (int)$value;
+        }
+
+        return $value;
     }
 
     /**

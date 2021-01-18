@@ -116,8 +116,7 @@
         <waitForPageLoad stepKey="waitForCustomersPage"/>
         <!--Go to Customers grid and check that filter countries amount is the same as initial allowed countries amount-->
         <comment userInput="Go to Customers grid and check that filter countries amount is the same as initial allowed countries amount" stepKey="compareCountriesAmount"/>
-        <amOnPage url="{{AdminCustomerPage.url}}" stepKey="goToCustomersGrid"/>
-        <waitForPageLoad stepKey="waitForCustomersGrid"/>
+        <actionGroup ref="AdminOpenCustomersGridActionGroup" stepKey="goToCustomersGrid"/>
         <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openFiltersSectionOnCustomersGrid"/>
         <executeJS function="var len = document.querySelectorAll('{{AdminCustomerFiltersSection.countryOptions}}').length; return len-1;" stepKey="countriesAmount2"/>
         <assertEquals stepKey="assertCountryAmounts">

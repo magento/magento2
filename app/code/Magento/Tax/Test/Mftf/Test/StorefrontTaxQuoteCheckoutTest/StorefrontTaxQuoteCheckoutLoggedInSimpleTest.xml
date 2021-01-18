@@ -114,9 +114,8 @@
             <argument name="Address" value="US_Address_CA"/>
             <argument name="classPrefix" value="._show"/>
         </actionGroup>
-        <click stepKey="saveAddress" selector="{{CheckoutShippingSection.saveAddress}}"/>
-
-        <waitForPageLoad stepKey="waitForAddressSaved"/>
+        <actionGroup ref="StorefrontCheckoutClickSaveAddressButtonActionGroup" stepKey="saveAddress"/>
+        <comment userInput="Adding the comment to replace waitForAddressSaved action for preserving Backward Compatibility" stepKey="waitForAddressSaved"/>
         <see stepKey="seeAddress2" selector="{{CheckoutShippingSection.selectedShippingAddress}}" userInput="{{SimpleTaxCA.state}}"/>
         <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="clickNext2"/>
 

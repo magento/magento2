@@ -63,8 +63,8 @@
             <argument name="consumerName" value="{{AdminCodeGeneratorMessageConsumerData.consumerName}}"/>
             <argument name="maxMessages" value="{{AdminCodeGeneratorMessageConsumerData.messageLimit}}"/>
         </actionGroup>
-        <reloadPage stepKey="refreshPage"/>
-        <waitForPageLoad stepKey="waitFormToReload1"/>
+        <actionGroup ref="ReloadPageActionGroup" stepKey="refreshPage"/>
+        <comment userInput="Replacing reload action and preserve Backward Compatibility" stepKey="waitFormToReload1"/>
         <conditionalClick selector="{{AdminCartPriceRulesFormSection.manageCouponCodesHeader}}"
                           dependentSelector="{{AdminCartPriceRulesFormSection.manageCouponCodesHeader}}" visible="true"
                           stepKey="clickManageCouponCodes2"/>
@@ -92,7 +92,7 @@
                                stepKey="waitForElementDiscountVisible"/>
 
         <!-- Step 8. Go to Checkout and Click Place Order button -->
-        <click selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="clickProceedToCheckout"/>
+        <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="clickProceedToCheckout"/>
         <click selector="{{CheckoutShippingMethodsSection.checkShippingMethodByName('Flat Rate')}}"
                stepKey="selectFlatShippingMethod"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask"/>
@@ -101,6 +101,12 @@
         <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment"/>
         <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
         <waitForElement selector="{{CheckoutSuccessMainSection.success}}" time="30" stepKey="waitForLoadSuccessPage"/>
+
+        <!-- Start the usage processing consumer -->
+        <actionGroup ref="CliConsumerStartActionGroup" stepKey="startUsageProcessingMessageQueue1">
+            <argument name="consumerName" value="{{SalesRuleConsumerData.consumerName}}"/>
+            <argument name="maxMessages" value="{{SalesRuleConsumerData.messageLimit}}"/>
+        </actionGroup>
 
         <!-- Step: 9-10. Open the Product Page, add the product to Cart, go to Shopping Cart and Apply the same coupon code -->
         <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.name$$)}}" stepKey="openProductPage1"/>
@@ -132,7 +138,7 @@
                                stepKey="waitForElementDiscountVisible1"/>
 
         <!-- Step 14. Go to Checkout and Click Place Order button -->
-        <click selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="clickProceedToCheckout1"/>
+        <actionGroup ref="StorefrontClickProceedToCheckoutActionGroup" stepKey="clickProceedToCheckout1"/>
         <actionGroup ref="GuestCheckoutFillingShippingSectionActionGroup" stepKey="guestCheckoutFillingShippingSection">
             <argument name="customerVar" value="CustomerEntityOne"/>
             <argument name="customerAddressVar" value="CustomerAddressSimple"/>
@@ -141,6 +147,12 @@
         <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment2"/>
         <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder1"/>
         <waitForElement selector="{{CheckoutSuccessMainSection.success}}" time="30" stepKey="waitForLoadSuccessPage1"/>
+
+        <!-- Start the usage processing consumer -->
+        <actionGroup ref="CliConsumerStartActionGroup" stepKey="startUsageProcessingMessageQueue2">
+            <argument name="consumerName" value="{{SalesRuleConsumerData.consumerName}}"/>
+            <argument name="maxMessages" value="{{SalesRuleConsumerData.messageLimit}}"/>
+        </actionGroup>
 
         <!-- Step; 15-16. Open the Product Page, add the product to Cart, go to Shopping Cart and Apply the same coupon code -->
         <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.name$$)}}" stepKey="openProductPage3"/>

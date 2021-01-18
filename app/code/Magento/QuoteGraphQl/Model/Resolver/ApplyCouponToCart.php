@@ -85,6 +85,7 @@ class ApplyCouponToCart implements ResolverInterface
             throw new LocalizedException(__($e->getMessage()), $e);
         }
 
+        $cart = $this->getCartForUser->execute($maskedCartId, $currentUserId, $storeId);
         return [
             'cart' => [
                 'model' => $cart,
