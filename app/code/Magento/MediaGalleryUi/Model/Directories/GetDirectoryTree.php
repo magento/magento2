@@ -81,6 +81,7 @@ class GetDirectoryTree
             return $directories;
         }
 
+        // todo refactor not performant method
         foreach ($directory->readRecursively() as $path) {
             if (!$directory->isDirectory($path) || $this->isPathExcluded->execute($path)) {
                 continue;
