@@ -308,9 +308,7 @@ QUERY;
         page_size
       }
       items {
-        attribute_set_id
         country_of_manufacture
-        created_at
         description {
             html
         }
@@ -349,8 +347,6 @@ QUERY;
           }
         }
         name
-        new_from_date
-        new_to_date
         options_container
         price {
           minimalPrice {
@@ -409,7 +405,6 @@ QUERY;
         sku
         small_image { url, label }
         thumbnail { url, label }
-        special_from_date
         special_price
         special_to_date
         swatch_image
@@ -422,17 +417,8 @@ QUERY;
           website_id
         }
         type_id
-        updated_at
         url_key
         url_path
-        websites {
-          id
-          name
-          code
-          sort_order
-          default_group_id
-          is_default
-        }
       }
     }
     }
@@ -453,7 +439,6 @@ QUERY;
         $firstProductModel = $productRepository->get($firstProduct['sku'], false, null, true);
         $this->assertBaseFields($firstProductModel, $firstProduct);
         $this->assertAttributes($firstProduct);
-        $this->assertWebsites($firstProductModel, $firstProduct['websites']);
         $this->assertEquals('Category 1', $firstProduct['categories'][0]['name']);
         $this->assertEquals('category-1/category-1-1', $firstProduct['categories'][1]['url_path']);
         $this->assertCount(3, $firstProduct['categories']);
@@ -637,6 +622,37 @@ QUERY;
     }
 
     /**
+     * @magentoApiDataFixture Magento/Catalog/_files/categories.php
+     */
+    public function testGetCategoryWithIdAndUid()
+    {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('`ids` and `category_uid` can\'t be used at the same time');
+
+        $categoryId = 8;
+        $categoryUid = base64_encode((string) 8);
+        $query = <<<QUERY
+{
+categories(filters: {ids: {in: ["$categoryId"]}, category_uid: {in: ["$categoryUid"]}}) {
+  items {
+    id
+    name
+    url_key
+    image
+    children {
+      id
+      name
+      url_key
+      image
+    }
+  }
+}
+}
+QUERY;
+        $this->graphQlQuery($query);
+    }
+
+    /**
      * @return array
      */
     public function categoryImageDataProvider(): array
@@ -664,8 +680,6 @@ QUERY;
     private function assertBaseFields($product, $actualResponse)
     {
         $assertionMap = [
-            ['response_field' => 'attribute_set_id', 'expected_value' => $product->getAttributeSetId()],
-            ['response_field' => 'created_at', 'expected_value' => $product->getCreatedAt()],
             ['response_field' => 'name', 'expected_value' => $product->getName()],
             ['response_field' => 'price', 'expected_value' => [
                     'minimalPrice' => [
@@ -693,28 +707,8 @@ QUERY;
             ],
             ['response_field' => 'sku', 'expected_value' => $product->getSku()],
             ['response_field' => 'type_id', 'expected_value' => $product->getTypeId()],
-            ['response_field' => 'updated_at', 'expected_value' => $product->getUpdatedAt()],
         ];
         $this->assertResponseFields($actualResponse, $assertionMap);
-    }
-
-    /**
-     * @param ProductInterface $product
-     * @param array $actualResponse
-     */
-    private function assertWebsites($product, $actualResponse)
-    {
-        $assertionMap = [
-            [
-                'id' => current($product->getExtensionAttributes()->getWebsiteIds()),
-                'name' => 'Main Website',
-                'code' => 'base',
-                'sort_order' => 0,
-                'default_group_id' => '1',
-                'is_default' => true,
-            ]
-        ];
-        $this->assertEquals($actualResponse, $assertionMap);
     }
 
     /**
@@ -731,11 +725,8 @@ QUERY;
             'short_description',
             'country_of_manufacture',
             'gift_message_available',
-            'new_from_date',
-            'new_to_date',
             'options_container',
             'special_price',
-            'special_from_date',
             'special_to_date',
         ];
         foreach ($eavAttributes as $eavAttribute) {
