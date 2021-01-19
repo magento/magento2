@@ -10,7 +10,7 @@ namespace Magento\ImportExport\Model\ResourceModel\Export;
 use Magento\Framework\Data\Collection;
 
 /**
- * Class AttributeGridCollection
+ * Association of attributes for grid
  */
 class AttributeGridCollection extends Collection
 {
@@ -49,45 +49,41 @@ class AttributeGridCollection extends Collection
      */
     public function addFieldToFilter($field, $condition)
     {
-        $value = (string)$condition['like'];
-        $value = trim(trim($value, "'"), "%");
-        foreach ($this->getItems() as $item) {
-            if (stripos($item->getData($field), $value) === false) {
-                $this->removeItemByKey($item->getId());
+        if (isset($condition['like'])) {
+            $value = trim((string)$condition['like'], "'%");
+            $this->addFilter($field, $value);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @inheritDoc
+     *
+     * @param false $printQuery
+     * @param false $logQuery
+     * @return $this
+     */
+    public function load($printQuery = false, $logQuery = false)
+    {
+        if (!$this->getFlag('isFilter') && !empty($this->_filters)) {
+            foreach ($this->_filters as $filter) {
+                foreach ($this->_items as $item) {
+                    $field = $item->getData($filter->getData('field')) ?? '';
+                    if (stripos($field, $filter->getData('value')) === false) {
+                        $this->removeItemByKey($item->getId());
+                    }
+                }
+                $this->setFlag('isFilter', true);
             }
         }
 
-        return $this;
-    }
-
-    /**
-     * Add select order
-     *
-     * @param  string $field
-     * @param  string $direction
-     * @return $this
-     */
-    public function setOrder($field, $direction = self::SORT_ORDER_DESC)
-    {
-        $this->_orderField = $field;
-        uasort($this->_items, [$this, 'compareAttributes']);
-
-        if ($direction == self::SORT_ORDER_DESC) {
-            $this->_items = array_reverse($this->_items, true);
-        }
+        $sortOrder = $this->_orders['attribute_code'];
+        uasort($this->_items, function ($a, $b) use ($sortOrder) {
+            $cmp = strnatcmp($a->getData('attribute_code'), $b->getData('attribute_code'));
+            return $sortOrder === self::SORT_ORDER_ASC ? $cmp : -$cmp;
+        });
 
         return $this;
-    }
-
-    /**
-     * Compare two collection items
-     *
-     * @param \Magento\Framework\DataObject $a
-     * @param \Magento\Framework\DataObject $b
-     * @return int
-     */
-    public function compareAttributes(\Magento\Framework\DataObject $a, \Magento\Framework\DataObject $b)
-    {
-        return strnatcmp($a->getData($this->_orderField), $b->getData($this->_orderField));
     }
 }
