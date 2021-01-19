@@ -11,5 +11,6 @@
     <section name="StorefrontDownloadableLinkSection">
         <element name="downloadedImage" type="text" selector="//img[contains(@style, '-webkit-user-select')]"/>
         <element name="downloadedSvg" type="text" selector="//*[@id='{{id}}']" parameterized="true"/>
+        <element name="downloadableLinkTitle" type="text" parameterized="true" selector="//*[name()='title'][contains(.,'{{title}}')]"/>
     </section>
 </sections>
