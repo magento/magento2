@@ -98,6 +98,10 @@ class VersionTest extends \PHPUnit\Framework\TestCase
                 ->with(false)
                 ->will($this->returnSelf());
 
+            $publicCookieMetadataMock->expects($this->once())
+                ->method('setSameSite')
+                ->with('Lax')->willReturnSelf();
+
             $this->cookieMetadataFactoryMock->expects($this->once())
                 ->method('createPublicCookieMetadata')
                 ->with()
