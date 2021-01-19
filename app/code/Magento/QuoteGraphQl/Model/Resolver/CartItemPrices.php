@@ -100,7 +100,6 @@ class CartItemPrices implements ResolverInterface
 
     /**
      * Get Discount Values
-     *
      * @param Item $cartItem
      * @param string $currencyCode
      * @return array
@@ -128,8 +127,7 @@ class CartItemPrices implements ResolverInterface
     }
 
     /**
-     * Get Current Currency
-     *
+     * Get Current Currency code
      * @return string
      */
 
@@ -140,21 +138,18 @@ class CartItemPrices implements ResolverInterface
 
     /**
      * Get current currency price
-     *
-     * @param string $price
-     * @return string
+     * @param float $price
+     * @return float $price
      */
     public function setConvertPrice($price)
     {
         $storeId = $this->storeManager->getStore()->getStoreId();
         $currentCurrencyCode = $this->getCurrentCurrency();
         $baseCurrencyCode = $this->storeManager->getStore()->getBaseCurrencyCode();
-        if ($baseCurrencyCode === $currentCurrencyCode) {
-            return $price;
-        } else {
+        if ($baseCurrencyCode != $currentCurrencyCode) {
             $price = $this->priceCurrency->convert($price, $storeId, $currentCurrencyCode);
-            $price = round($price , 2);
-            return $price;
+            return round($price , 2);
         }
+        return $price;
     }
 }
