@@ -503,12 +503,12 @@ define([
                     }
                     respData = {
                         duration: this._formatVimeoDuration(data.duration),
-                        channel: data.author_name,
-                        channelId: data.author_url,
-                        uploaded: data.upload_date,
+                        channel: data['author_name'],
+                        channelId: data['author_url'],
+                        uploaded: data['upload_date'],
                         title: data.title,
                         description: data.description.replace(/(&nbsp;|<([^>]+)>)/ig, ''),
-                        thumbnail: data.thumbnail_url,
+                        thumbnail: data['thumbnail_url'],
                         videoId: videoInfo.id,
                         videoProvider: videoInfo.type
                     };
@@ -537,7 +537,7 @@ define([
                     );
                 } else if (type === 'vimeo') {
                     $.ajax({
-                        url: 'https://vimeo.com/api/oembed.json?url=https%3A//vimeo.com/'+id,
+                        url: 'https://vimeo.com/api/oembed.json?url=https%3A//vimeo.com/' + id,
                         dataType: 'jsonp',
                         data: {
                             format: 'json'
