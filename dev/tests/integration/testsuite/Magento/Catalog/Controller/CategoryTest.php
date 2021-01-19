@@ -9,12 +9,15 @@ namespace Magento\Catalog\Controller;
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Model\Category;
-use Magento\TestFramework\Catalog\Model\CategoryLayoutUpdateManager;
-use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Catalog\Model\Category\Attribute\LayoutUpdateManager;
+use Magento\Catalog\Model\Product\ProductList\Toolbar as ToolbarModel;
 use Magento\Catalog\Model\Session;
+use Magento\Framework\App\Http\Context;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\View\LayoutInterface;
+use Magento\TestFramework\Catalog\Model\CategoryLayoutUpdateManager;
+use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\AbstractController;
 
 /**
@@ -46,6 +49,11 @@ class CategoryTest extends AbstractController
     private $layout;
 
     /**
+     * @var Context
+     */
+    private $httpContext;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -54,14 +62,12 @@ class CategoryTest extends AbstractController
 
         $this->objectManager = Bootstrap::getObjectManager();
         $this->objectManager->configure([
-            'preferences' => [
-                \Magento\Catalog\Model\Category\Attribute\LayoutUpdateManager::class
-                => \Magento\TestFramework\Catalog\Model\CategoryLayoutUpdateManager::class
-            ]
+            'preferences' => [LayoutUpdateManager::class => CategoryLayoutUpdateManager::class]
         ]);
         $this->registry = $this->objectManager->get(Registry::class);
         $this->layout = $this->objectManager->get(LayoutInterface::class);
         $this->session = $this->objectManager->get(Session::class);
+        $this->httpContext = $this->objectManager->get(Context::class);
     }
 
     /**
@@ -204,5 +210,27 @@ class CategoryTest extends AbstractController
             ->getUpdate()
             ->getHandles();
         $this->assertContains("catalog_category_view_selectable_{$categoryId}_{$file}", $handles);
+    }
+
+    /**
+     * Checks that pagination value can be changed to a new one if remember pagination enabled and already have saved
+     * some value
+     *
+     * @magentoDataFixture Magento/Catalog/_files/category.php
+     * @magentoConfigFixture default/catalog/frontend/remember_pagination 1
+     *
+     * @return void
+     */
+    public function testViewWithRememberPaginationAndPreviousValue(): void
+    {
+        $this->session->setData(ToolbarModel::LIMIT_PARAM_NAME, 16);
+        $newPaginationValue = 24;
+        $this->getRequest()->setParams([ToolbarModel::LIMIT_PARAM_NAME => $newPaginationValue]);
+        $this->dispatch("catalog/category/view/id/333");
+        $block = $this->layout->getBlock('product_list_toolbar');
+        $this->assertNotFalse($block);
+        $this->assertEquals($newPaginationValue, $block->getLimit());
+        $this->assertEquals($newPaginationValue, $this->session->getData(ToolbarModel::LIMIT_PARAM_NAME));
+        $this->assertEquals($newPaginationValue, $this->httpContext->getValue(ToolbarModel::LIMIT_PARAM_NAME));
     }
 }
