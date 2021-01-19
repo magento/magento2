@@ -81,7 +81,7 @@ class Collection extends SearchResult
             return $this;
         }
 
-        if (is_string($field) && count(explode('.', $field)) === 1) {
+        if (is_string($field) && strpos($field, ".") !== false) {
             $field = 'main_table.' . $field;
         }
 
