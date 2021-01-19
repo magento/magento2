@@ -10,6 +10,7 @@ use Magento\Catalog\Api\CategoryLinkManagementInterface;
 use Magento\Catalog\Api\Data\ProductExtension;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product\Gallery\MimeTypeExtensionMap;
+use Magento\Catalog\Model\Product\Type;
 use Magento\Catalog\Model\ProductRepository\MediaGalleryProcessor;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Eav\Model\Entity\Attribute\Exception as AttributeException;
@@ -28,6 +29,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
 use Magento\Framework\Exception\TemporaryState\CouldNotSaveException as TemporaryCouldNotSaveException;
 use Magento\Framework\Exception\ValidatorException;
+use Magento\Catalog\Api\ProductRepositoryInterface;
 
 /**
  * @inheritdoc
@@ -35,7 +37,7 @@ use Magento\Framework\Exception\ValidatorException;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
  */
-class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterface
+class ProductRepository implements ProductRepositoryInterface
 {
     /**
      * @var \Magento\Catalog\Api\ProductCustomOptionRepositoryInterface
@@ -534,6 +536,10 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             }
         } catch (NoSuchEntityException $e) {
             $existingProduct = null;
+
+            if ($product->getTypeId() === null) {
+                $product->setTypeId(Type::DEFAULT_TYPE);
+            }
         }
 
         $productDataArray = $this->extensibleDataObjectConverter
@@ -737,6 +743,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     private function getCollectionProcessor()
     {
         if (!$this->collectionProcessor) {
+        // phpstan:ignore ProductCollectionProcessor not found.
             $this->collectionProcessor = \Magento\Framework\App\ObjectManager::getInstance()->get(
                 // phpstan:ignore "Class Magento\Catalog\Model\Api\SearchCriteria\ProductCollectionProcessor not found."
                 \Magento\Catalog\Model\Api\SearchCriteria\ProductCollectionProcessor::class

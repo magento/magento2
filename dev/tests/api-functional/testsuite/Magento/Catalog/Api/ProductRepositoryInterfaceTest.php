@@ -220,6 +220,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
      */
     private function loadWebsiteByCode($websiteCode)
     {
+        $website = null;
         $websiteRepository = Bootstrap::getObjectManager()->get(WebsiteRepository::class);
         try {
             $website = $websiteRepository->get($websiteCode);
@@ -442,6 +443,21 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     {
         $response = $this->saveProduct($product);
         $this->assertArrayHasKey(ProductInterface::SKU, $response);
+        $this->deleteProduct($product[ProductInterface::SKU]);
+    }
+
+    /**
+     * Verify that product creation is success with type_id null
+     *
+     * @dataProvider productCreationProvider
+     */
+    public function testSaveProductWithNonExistType($product): void
+    {
+        $product[ProductInterface::TYPE_ID] = null;
+        $response = $this->saveProduct($product);
+        $this->assertArrayHasKey(ProductInterface::PRICE, $response);
+        $this->assertArrayHasKey(ProductInterface::TYPE_ID, $response);
+        $this->assertArrayHasKey(ProductInterface::VISIBILITY, $response);
         $this->deleteProduct($product[ProductInterface::SKU]);
     }
 
