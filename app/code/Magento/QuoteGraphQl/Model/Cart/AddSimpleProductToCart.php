@@ -63,7 +63,7 @@ class AddSimpleProductToCart
 
         try {
             $result = $cart->addProduct($product, $this->buyRequestBuilder->build($cartItemData));
-        } catch (Exception $e) {die($e);
+        } catch (Exception $e) {
             throw new GraphQlInputException(
                 __(
                     'Could not add the product with SKU %sku to the shopping cart: %message',
