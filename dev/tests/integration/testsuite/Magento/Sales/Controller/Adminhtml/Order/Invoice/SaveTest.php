@@ -234,6 +234,40 @@ class SaveTest extends AbstractInvoiceControllerTest
     }
 
     /**
+     * Get order items qty ordered
+     *
+     * @param int $orderId
+     * @return array
+     */
+    private function getOrderItemsQtyOrdered(int $orderId): array
+    {
+        $connection = $this->orderItemResource->getConnection();
+        $select = $connection->select()
+            ->from($this->orderItemResource->getMainTable(), OrderItemInterface::QTY_ORDERED)
+            ->where(OrderItemInterface::ORDER_ID . ' = ?', $orderId);
+
+        return $connection->fetchCol($select);
+    }
+
+    /**
+     * @magentoDataFixture Magento/Sales/_files/order_with_bundle_dynamic_price_no.php
+     *
+     * @return void
+     */
+    public function testOrderItemsQtyInvoicedForBundleDynamicPriceFalse(): void
+    {
+        $order = $this->getOrder('100000001');
+        $entityId = $order->getEntityId();
+
+        $this->prepareRequest([], ['order_id' => $entityId]);
+        $this->dispatch('backend/sales/order_invoice/save');
+
+        $ordered = $this->getOrderItemsQtyOrdered((int)$entityId);
+        $invoiced = $this->getOrderItemsQtyInvoiced((int)$entityId);
+        $this->assertEquals($ordered, $invoiced);
+    }
+
+    /**
      * @inheritdoc
      */
     public function testAclHasAccess()
