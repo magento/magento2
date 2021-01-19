@@ -494,23 +494,21 @@ define([
                  * @private
                  */
                 function _onVimeoLoaded(data) {
-                    var tmp,
-                        respData;
+                    var respData;
 
                     if (data.length < 1) {
                         this._onRequestError($.mage.__('Video not found'));
 
                         return null;
                     }
-                    tmp = data[0];
                     respData = {
-                        duration: this._formatVimeoDuration(tmp.duration),
-                        channel: tmp['user_name'],
-                        channelId: tmp['user_url'],
-                        uploaded: tmp['upload_date'],
-                        title: tmp.title,
-                        description: tmp.description.replace(/(&nbsp;|<([^>]+)>)/ig, ''),
-                        thumbnail: tmp['thumbnail_large'],
+                        duration: this._formatVimeoDuration(data.duration),
+                        channel: data.author_name,
+                        channelId: data.author_url,
+                        uploaded: data.upload_date,
+                        title: data.title,
+                        description: data.description.replace(/(&nbsp;|<([^>]+)>)/ig, ''),
+                        thumbnail: data.thumbnail_url,
                         videoId: videoInfo.id,
                         videoProvider: videoInfo.type
                     };
@@ -539,7 +537,7 @@ define([
                     );
                 } else if (type === 'vimeo') {
                     $.ajax({
-                        url: 'https://www.vimeo.com/api/v2/video/' + id + '.json',
+                        url: 'https://vimeo.com/api/oembed.json?url=https%3A//vimeo.com/'+id,
                         dataType: 'jsonp',
                         data: {
                             format: 'json'
