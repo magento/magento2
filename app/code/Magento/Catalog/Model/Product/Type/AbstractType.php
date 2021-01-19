@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-declare(strict_types=1);
 
 namespace Magento\Catalog\Model\Product\Type;
 
@@ -605,7 +604,11 @@ abstract class AbstractType
                     if ($product->getSkipCheckRequiredOption() !== true) {
                         $group->validateUserValue($optionsFromRequest);
                     } elseif ($optionsFromRequest !== null && isset($optionsFromRequest[$option->getId()])) {
-                        $transport->options[$option->getId()] = $optionsFromRequest[$option->getId()];
+                        if (is_array($optionsFromRequest[$option->getId()])) {
+                            $group->validateUserValue($optionsFromRequest);
+                        } else {
+                            $transport->options[$option->getId()] = $optionsFromRequest[$option->getId()];
+                        }
                     }
 
                 } catch (LocalizedException $e) {
