@@ -1721,15 +1721,23 @@ class ProductTest extends TestCase
     }
 
     /**
+     * Test import product with product links and empty value
+     *
+     * @param string $pathToFile
+     * @param bool $expectedResultCrossell
+     * @param bool $expectedResultUpsell
+     *
      * @magentoDataFixture Magento/CatalogImportExport/_files/product_export_with_product_links_data.php
      * @magentoAppArea adminhtml
      * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
+     * @dataProvider getEmptyLinkedData
      */
-    public function testProductLinksWithEmptyValue()
-    {
-        // import data from CSV file
-        $pathToFile = __DIR__ . '/_files/products_to_import_with_product_links_with_empty_value.csv';
+    public function testProductLinksWithEmptyValue(
+        string $pathToFile,
+        bool $expectedResultCrossell,
+        bool $expectedResultUpsell
+    ): void {
         $filesystem = BootstrapHelper::getObjectManager()->create(Filesystem::class);
 
         $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
@@ -1759,8 +1767,29 @@ class ProductTest extends TestCase
         $product = BootstrapHelper::getObjectManager()->create(Product::class);
         $product->load($productId);
 
-        $this->assertEmpty($product->getCrossSellProducts());
-        $this->assertEmpty($product->getUpSellProducts());
+        $this->assertEquals(empty($product->getCrossSellProducts()), $expectedResultCrossell);
+        $this->assertEquals(empty($product->getUpSellProducts()), $expectedResultUpsell);
+    }
+
+    /**
+     * Get data for empty linked product
+     *
+     * @return array[]
+     */
+    public function getEmptyLinkedData(): array
+    {
+        return [
+            [
+                __DIR__ . '/_files/products_to_import_with_product_links_with_empty_value.csv',
+                true,
+                true,
+            ],
+            [
+                __DIR__ . '/_files/products_to_import_with_product_links_with_empty_data.csv',
+                false,
+                true,
+            ],
+        ];
     }
 
     /**
