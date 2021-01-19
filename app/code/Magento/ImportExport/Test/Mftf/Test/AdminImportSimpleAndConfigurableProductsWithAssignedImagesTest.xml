@@ -86,6 +86,14 @@
             <argument name="indices" value=""/>
         </actionGroup>
 
+        <!-- Admin: Verify Data on Import History Page -->
+        <actionGroup ref="AdminNavigateToImportHistoryPageActionGroup" stepKey="navigateToImportHistoryPage"/>
+        <actionGroup ref="AdminGridSortColumnDescendingActionGroup" stepKey="sortColumnByIdDescending">
+            <argument name="columnLabel" value="history_id"/>
+        </actionGroup>
+        <see userInput="import_configurable_product.csv" selector="{{AdminDataGridTableSection.firstRow}}" stepKey="seeImportedFile"/>
+        <see userInput="Created: 4, Updated: 0, Deleted: 0" selector="{{AdminDataGridTableSection.firstRow}}" stepKey="seeSummary"/>
+
         <!-- Admin: Verify Simple Product 1 on Product Index Page -->
         <actionGroup ref="AssertProductOnAdminGridActionGroup" stepKey="assertSimpleProduct1InAdminGrid">
             <argument name="product" value="ImportSimple1"/>
