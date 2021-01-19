@@ -19,11 +19,11 @@
         </annotations>
 
         <before>
-            <!-- Login as admin -->
-            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
-
             <!-- Create Simple Product -->
             <createData entity="defaultSimpleProduct" stepKey="simpleProduct"/>
+
+            <!-- Login as admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
             <!-- Perform reindex and flush cache -->
             <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
@@ -42,11 +42,10 @@
 
             <!-- Filter the search term -->
             <actionGroup ref="AdminSearchTermFilterBySearchQueryActionGroup" stepKey="filterByThirdSearchQuery">
-                <argument name="searchQuery" value="$$simpleProduct.name$$"/>
+                <argument name="searchQuery" value="$simpleProduct.name$"/>
             </actionGroup>
             <!-- Delete created below search terms -->
             <actionGroup ref="AdminDeleteSearchTermActionGroup" stepKey="deleteSearchTerms"/>
-            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Go to storefront home page -->
@@ -54,12 +53,12 @@
 
          <!-- Storefront quick search by product name -->
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchByProductName">
-            <argument name="phrase" value="$$simpleProduct.name$$"/>
+            <argument name="phrase" value="$simpleProduct.name$"/>
         </actionGroup>
 
         <!-- Verify search suggestions and select the suggestion from dropdown options -->
         <actionGroup ref="StoreFrontAssertDropDownSearchSuggestionActionGroup" stepKey="seeDropDownSearchSuggestion">
-            <argument name="searchQuery" value="$$simpleProduct.name$$"/>
+            <argument name="searchQuery" value="$simpleProduct.name$"/>
         </actionGroup>
     </test>
 </tests>

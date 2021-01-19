@@ -19,11 +19,10 @@
         <waitForElementVisible selector="{{StorefrontQuickSearchResultsSection.searchTextBox}}" stepKey="waitForQuickSearchToBeVisible"/>
         <fillField selector="{{StorefrontQuickSearchResultsSection.searchTextBox}}" userInput="{{searchQuery}}" stepKey="fillSearchInput"/>
         <waitForElementVisible selector="{{StorefrontQuickSearchSection.searchDropDownSuggestion}}" stepKey="WaitForSearchDropDownSuggestion"/>
-        <see selector="{{StorefrontQuickSearchSection.searchDropDownSuggestion}}" stepKey="seeDropDownSuggestion"/>
         <click selector="//div[@class='panel wrapper']" stepKey="clickOnSomewhere"/>
         <dontSee selector="{{StorefrontQuickSearchSection.searchDropDownSuggestion}}" stepKey="dontSeeDropDownSuggestion"/>
         <click selector="{{StorefrontQuickSearchSection.searchPhrase}}" stepKey="clickOnSearchPhrase"/>
         <pressKey selector="{{StorefrontQuickSearchSection.searchPhrase}}" parameterArray="[\Facebook\WebDriver\WebDriverKeys::DOWN]" stepKey="pressDown"/>
-        <see selector="{{StorefrontQuickSearchSection.searchDropDownSuggestion}}" stepKey="seeDropDownSuggestionSecond"/>
+        <waitForElementVisible selector="{{StorefrontQuickSearchSection.searchDropDownSuggestion}}" stepKey="WaitForSearchDropDownSuggestionSecond"/>
     </actionGroup>
 </actionGroups>
