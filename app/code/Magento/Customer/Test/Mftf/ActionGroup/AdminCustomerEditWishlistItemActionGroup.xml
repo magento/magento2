@@ -17,8 +17,8 @@
         <click selector="{{AdminCustomerWishlistSection.configureButton}}" stepKey="clickConfigureButton"/>
         <waitForAjaxLoad stepKey="waitForPopupLoad"/>
         <waitForElementVisible selector="{{AdminCustomerWishlistSection.productAttributeOptionsDropDown(title)}}" stepKey="waitForConfigurableOption"/>
-        <selectOption selector="{{AdminCustomerWishlistSection.productAttributeOptionsDropDown(title)}}" userInput="option" stepKey="selectConfigurableOption"/>
-        <fillField userInput="{{quantity}}" selector="{{AdminOrderFormConfigureProductSection.quantity}}" stepKey="fillQty"/>
+        <selectOption selector="{{AdminCustomerWishlistSection.productAttributeOptionsDropDown(title)}}" userInput="{{option}}" stepKey="selectConfigurableOption"/>
+        <fillField selector="{{AdminOrderFormConfigureProductSection.quantity}}" userInput="{{quantity}}" stepKey="fillQty"/>
         <click selector="{{AdminOrderFormConfigureProductSection.ok}}" stepKey="confirmSave"/>
         <waitForAjaxLoad stepKey="waitForPopupClose"/>
     </actionGroup>

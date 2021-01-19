@@ -103,7 +103,7 @@
         <actionGroup ref="AdminCustomerFindWishlistItemActionGroup" stepKey="findWishlistItem">
             <argument name="productName" value="$createConfigProduct.name$"/>
         </actionGroup>
-        <actionGroup ref="AdminCustomerEditWishlistItemActionGroup" stepKey="deleteItem">
+        <actionGroup ref="AdminCustomerEditWishlistItemActionGroup" stepKey="editItem">
             <argument name="title" value="$createConfigProductAttribute.attribute[frontend_labels][0][label]$"/>
             <argument name="option" value="$getConfigAttributeOption1.label$"/>
             <argument name="quantity" value="2"/>
