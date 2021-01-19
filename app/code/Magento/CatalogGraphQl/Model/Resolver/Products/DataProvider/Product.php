@@ -89,7 +89,7 @@ class Product
 
         $this->collectionPreProcessor->process($collection, $searchCriteria, $attributes, $context);
 
-        if (!$isChildSearch) {
+        if ($isChildSearch) {
             $visibilityIds = $isSearch
                 ? $this->visibility->getVisibleInSearchIds()
                 : $this->visibility->getVisibleInCatalogIds();
