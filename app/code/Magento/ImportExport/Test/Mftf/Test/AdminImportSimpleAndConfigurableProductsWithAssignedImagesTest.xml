@@ -71,14 +71,14 @@
         <!-- Import Configurable Product with Simple Child Products & Assert No Errors -->
         <actionGroup ref="AdminNavigateToImportPageActionGroup" stepKey="navigateToImportPage"/>
         <actionGroup ref="AdminFillImportFormActionGroup" stepKey="fillImportForm">
-            <argument name="importFile" value="import_configurable_product.csv"/>
+            <argument name="importFile" value="{{ImportConfigurable.fileName}}"/>
         </actionGroup>
         <actionGroup ref="AdminClickCheckDataImportActionGroup" stepKey="clickCheckData"/>
-        <see selector="{{AdminImportValidationMessagesSection.success}}" userInput="File is valid! To start import process press &quot;Import&quot; button" stepKey="seeCheckDataResultMessage"/>
+        <see selector="{{AdminImportValidationMessagesSection.success}}" userInput="{{ImportCommonMessages.validFile}}" stepKey="seeCheckDataResultMessage"/>
         <dontSeeElementInDOM selector="{{AdminImportValidationMessagesSection.importErrorList}}" stepKey="dontSeeErrorMessage"/>
         <actionGroup ref="AdminClickImportActionGroup" stepKey="clickImport"/>
-        <see selector="{{AdminImportValidationMessagesSection.notice}}" userInput="Created: 4, Updated: 0, Deleted: 0" stepKey="seeNoticeMessage"/>
-        <see selector="{{AdminImportValidationMessagesSection.messageByType('success')}}" userInput="Import successfully done" stepKey="seeImportMessage"/>
+        <see selector="{{AdminImportValidationMessagesSection.notice}}" userInput="{{ImportConfigurable.importSummary}}" stepKey="seeNoticeMessage"/>
+        <see selector="{{AdminImportValidationMessagesSection.messageByType('success')}}" userInput="{{ImportCommonMessages.success}}" stepKey="seeImportMessage"/>
         <dontSeeElementInDOM selector="{{AdminImportValidationMessagesSection.importErrorList}}" stepKey="dontSeeErrorMessage2"/>
 
         <!-- Reindex -->
@@ -91,8 +91,8 @@
         <actionGroup ref="AdminGridSortColumnDescendingActionGroup" stepKey="sortColumnByIdDescending">
             <argument name="columnLabel" value="history_id"/>
         </actionGroup>
-        <see userInput="import_configurable_product.csv" selector="{{AdminDataGridTableSection.firstRow}}" stepKey="seeImportedFile"/>
-        <see userInput="Created: 4, Updated: 0, Deleted: 0" selector="{{AdminDataGridTableSection.firstRow}}" stepKey="seeSummary"/>
+        <see userInput="{{ImportConfigurable.fileName}}" selector="{{AdminDataGridTableSection.firstRow}}" stepKey="seeImportedFile"/>
+        <see userInput="{{ImportConfigurable.importSummary}}" selector="{{AdminDataGridTableSection.firstRow}}" stepKey="seeSummary"/>
 
         <!-- Admin: Verify Simple Product 1 on Product Index Page -->
         <actionGroup ref="AssertProductOnAdminGridActionGroup" stepKey="assertSimpleProduct1InAdminGrid">

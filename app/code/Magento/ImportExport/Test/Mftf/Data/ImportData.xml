@@ -8,6 +8,12 @@
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <!-- Common Messages -->
+    <entity name="ImportCommonMessages">
+        <data key="validFile">File is valid! To start import process press &quot;Import&quot; button</data>
+        <data key="success">Import successfully done</data>
+    </entity>
+
     <!-- Categories -->
     <entity name="Import1" type="category">
         <data key="name">Import1</data>
@@ -60,6 +66,8 @@
         <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
     </entity>
     <entity name="ImportConfigurable" type="product">
+        <data key="fileName">import_configurable_product.csv</data>
+        <data key="importSummary">Created: 4, Updated: 0, Deleted: 0</data>
         <data key="name">import-configurable</data>
         <data key="sku">import-configurable</data>
         <data key="type_id">configurable</data>
