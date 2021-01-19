@@ -28,6 +28,8 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
 use Magento\Framework\Exception\TemporaryState\CouldNotSaveException as TemporaryCouldNotSaveException;
 use Magento\Framework\Exception\ValidatorException;
+use Magento\Store\Model\Store;
+use Magento\Catalog\Api\Data\EavAttributeInterface;
 
 /**
  * @inheritdoc
@@ -514,9 +516,12 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     {
         $assignToCategories = false;
         $tierPrices = $product->getData('tier_price');
+        $productDataToChange = $product->getData();
 
         try {
-            $existingProduct = $product->getId() ? $this->getById($product->getId()) : $this->get($product->getSku());
+            $existingProduct = $product->getId() ?
+                $this->getById($product->getId()) :
+                $this->get($product->getSku());
 
             $product->setData(
                 $this->resourceModel->getLinkField(),
@@ -548,7 +553,6 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             $productDataArray['store_id'] = (int) $this->storeManager->getStore()->getId();
         }
         $product = $this->initializeProductData($productDataArray, empty($existingProduct));
-
         $this->processLinks($product, $productLinks);
         if (isset($productDataArray['media_gallery'])) {
             $this->processMediaGallery($product, $productDataArray['media_gallery']['images']);
@@ -567,6 +571,42 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
 
         if ($tierPrices !== null) {
             $product->setData('tier_price', $tierPrices);
+        }
+
+        try {
+            $stores = $product->getStoreIds();
+            $websites = $product->getWebsiteIds();
+        } catch (NoSuchEntityException $exception) {
+            $stores = null;
+            $websites = null;
+        }
+
+        if (!empty($existingProduct) && is_array($stores) && is_array($websites)) {
+            $hasDataChanged = false;
+            $productAttributes = $product->getAttributes();
+            if ($productAttributes !== null
+                && $product->getStoreId() !== Store::DEFAULT_STORE_ID
+                && (count($stores) > 1 || count($websites) === 1)
+            ) {
+                foreach ($productAttributes as $attribute) {
+                    $attributeCode = $attribute->getAttributeCode();
+                    $value = $product->getData($attributeCode);
+                    if ($existingProduct->getData($attributeCode) === $value
+                        && $attribute->getScope() !== EavAttributeInterface::SCOPE_GLOBAL_TEXT
+                        && !is_array($value)
+                        && $attribute->getData('frontend_input') !== 'media_image'
+                        && !$attribute->isStatic()
+                        && !array_key_exists($attributeCode, $productDataToChange)
+                        && $value !== null
+                    ) {
+                        $product->setData($attributeCode);
+                        $hasDataChanged = true;
+                    }
+                }
+                if ($hasDataChanged) {
+                    $product->setData('_edit_mode', true);
+                }
+            }
         }
 
         $this->saveProduct($product);

@@ -220,7 +220,8 @@ class ProductRepositoryTest extends TestCase
                     'getStoreId',
                     'getMediaGalleryEntries',
                     'getExtensionAttributes',
-                    'getCategoryIds'
+                    'getCategoryIds',
+                    'getAttributes'
                 ]
             )
             ->disableOriginalConstructor()
@@ -243,7 +244,8 @@ class ProductRepositoryTest extends TestCase
                     'save',
                     'getMediaGalleryEntries',
                     'getExtensionAttributes',
-                    'getCategoryIds'
+                    'getCategoryIds',
+                    'getAttributes'
                 ]
             )
             ->disableOriginalConstructor()
