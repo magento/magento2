@@ -81,7 +81,7 @@ class Collection extends SearchResult
             return $this;
         }
 
-        if (is_string($field) && strpos($field, ".") !== false) {
+        if (is_string($field) && in_array($field, $this->getFulltextIndexColumns())) {
             $field = 'main_table.' . $field;
         }
 
