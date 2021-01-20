@@ -11,7 +11,9 @@ use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Catalog\Model\Category;
 use Magento\Cms\Api\GetBlockByIdentifierInterface;
+use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Message\MessageInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
@@ -86,5 +88,25 @@ class SaveCategoryTest extends AbstractSaveCategoryTest
         $this->createdCategoryId = $responseData['category']['entity_id'];
         $category = $this->categoryRepository->get($this->createdCategoryId);
         $this->assertEquals($blockId, $category->getLandingPage());
+    }
+
+    /**
+     * @return void
+     */
+    public function testTryToCreateCategoryWithEmptyValues(): void
+    {
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
+        $this->getRequest()->setPostValue([
+            CategoryInterface::KEY_NAME => 'test',
+            CategoryInterface::KEY_IS_ACTIVE => 1,
+            'use_config' => [],
+            'return_session_messages_only' => false,
+        ]);
+        $this->dispatch('backend/catalog/category/save');
+        $message = (string)__(
+            'The "%1" attribute is required. Enter and try again.',
+            'Available Product Listing Sort By'
+        );
+        $this->assertSessionMessages($this->containsEqual($message), MessageInterface::TYPE_ERROR);
     }
 }
