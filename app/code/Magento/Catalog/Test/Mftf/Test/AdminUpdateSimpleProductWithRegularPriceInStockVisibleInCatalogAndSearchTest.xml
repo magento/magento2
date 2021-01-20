@@ -89,7 +89,6 @@
         <actionGroup ref="AssertAdminProductIsAssignedToCategoryActionGroup" stepKey="selectedCategories">
             <argument name="categoryName" value="$$categoryEntity.name$$"/>
         </actionGroup>
-       
         <seeInField selector="{{AdminProductFormSection.visibility}}" userInput="{{simpleProductRegularPrice245InStock.visibility}}" stepKey="seeVisibility"/>
         <scrollTo selector="{{AdminProductSEOSection.sectionHeader}}" x="0" y="-80" stepKey="scrollToAdminProductSEOSection1"/>
         <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="clickAdminProductSEOSection1"/>
@@ -124,10 +123,15 @@
         <!--Verify customer see updated simple product link on magento storefront page and is searchable by sku -->
         <amOnPage url="{{StorefrontProductPage.url(simpleProductRegularPrice245InStock.urlKey)}}" stepKey="goToMagentoStorefrontPage"/>
         <waitForPageLoad stepKey="waitForStoreFrontProductPageLoad"/>
-        <fillField selector="{{StorefrontQuickSearchResultsSection.searchTextBox}}" userInput="{{simpleProductRegularPrice245InStock.sku}}" stepKey="fillSimpleProductSkuInSearchTextBox"/>
-        <waitForPageLoad stepKey="waitForSearchTextBox"/>
-        <click selector="{{StorefrontQuickSearchResultsSection.searchTextBoxButton}}" stepKey="clickSearchTextBoxButton"/>
-        <waitForPageLoad stepKey="waitForSearch"/>
-        <see selector="{{StorefrontQuickSearchResultsSection.productLink}}" userInput="{{simpleProductRegularPrice245InStock.name}}" stepKey="seeSimpleProductNameOnStorefrontPage"/>
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="fillSimpleProductSkuInSearchTextBox">
+            <argument name="phrase" value="{{simpleProductRegularPrice245InStock.sku}}"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForSearchTextBox"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickSearchTextBoxButton"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForSearch"/>
+        <actionGroup ref="StorefrontAssertProductNameOnProductMainPageActionGroup" stepKey="seeSimpleProductNameOnStorefrontPage">
+            <argument name="productName" value="{{simpleProductRegularPrice245InStock.name}}"/>
+        </actionGroup>
+
     </test>
 </tests>
