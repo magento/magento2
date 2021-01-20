@@ -52,7 +52,7 @@ $data = [
         'topic_name' => 'product_action_attribute.website.update',
         'serialized_data' => $jsonEncoder->serialize($dataToEncode),
         'status' => OperationInterface::STATUS_TYPE_OPEN,
-    ]
+    ],
 ];
 
 $bulkManagement->scheduleBulk(

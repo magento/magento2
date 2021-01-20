@@ -35,7 +35,7 @@ $productIds = [(int)$productRepository->get('unique-simple-azaza')->getId()];
 $websiteId = (int)$websiteRepository->get('second_website')->getId();
 $bulkDescription = __('Update attributes for ' . 1 . ' selected products');
 $dataToEncode = [
-    'meta_information' => 'Update website assign',
+    'meta_information' => 'Detach website',
     'product_ids' => $productIds,
     'store_id' => 0,
     'website_id' => $websiteId,
@@ -51,7 +51,7 @@ $data = [
         'topic_name' => 'product_action_attribute.website.update',
         'serialized_data' => $jsonEncoder->serialize($dataToEncode),
         'status' => OperationInterface::STATUS_TYPE_OPEN,
-    ]
+    ],
 ];
 
 $bulkManagement->scheduleBulk(

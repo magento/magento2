@@ -15,4 +15,4 @@ $deleteTopicRelatedMessages = $objectManager->get(DeleteTopicRelatedMessages::cl
 $deleteTopicRelatedMessages->execute('product_action_attribute.website.update');
 
 Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/second_product_simple_rollback.php');
-Resolver::getInstance()->requireDataFixture('Magento/Store/_files/second_website_with_store_group_and_store_rollback.php');
+Resolver::getInstance()->requireDataFixture('Magento/Store/_files/second_website_with_two_stores_rollback.php');

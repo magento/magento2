@@ -90,7 +90,7 @@ class ConsumerWebsiteAssignTest extends TestCase
     }
 
     /**
-     * @return void
+     * @inheritdoc
      */
     protected function tearDown(): void
     {
