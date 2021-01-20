@@ -29,10 +29,10 @@ use Magento\TestFramework\Indexer\TestCase;
 class FullTest extends TestCase
 {
     /** @var State */
-    protected $state;
+    private $state;
 
     /** @var Processor */
-    protected $processor;
+    private $processor;
 
     /** @var ObjectManagerInterface */
     private $objectManager;
@@ -45,6 +45,9 @@ class FullTest extends TestCase
 
     /** @var ProductRepositoryInterface */
     private $productRepository;
+
+    /** @var Full */
+    private $action;
 
     /**
      * @inheritdoc
@@ -75,6 +78,7 @@ class FullTest extends TestCase
         $this->flatResource = $this->objectManager->get(FlatResource::class);
         $this->optionManagement = $this->objectManager->get(AttributeOptionManagementInterface::class);
         $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
+        $this->action = $this->objectManager->get(Full::class);
     }
 
     /**
@@ -172,7 +176,7 @@ class FullTest extends TestCase
         $options = $this->optionManagement->getItems($this->flatResource->getTypeId(), $attributeCode);
         $attributeValue = $options[1]->getValue();
         $this->updateProduct('simple2', $attributeCode, $attributeValue);
-        $this->processor->reindexAll();
+        $this->action->execute();
         $this->assertFlatColumnValue($attributeCode, $attributeValue);
     }
 
