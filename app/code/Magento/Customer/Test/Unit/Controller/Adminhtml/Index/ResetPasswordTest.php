@@ -349,9 +349,8 @@ class ResetPasswordTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue($customerId)
         );
-        $customer = $this->createPartialMock(
-            \Magento\Customer\Api\Data\CustomerInterface::class,
-            ['getId', 'getEmail', 'getWebsiteId']
+        $customer = $this->createMock(
+            \Magento\Customer\Api\Data\CustomerInterface::class
         );
         $customer->expects($this->once())->method('getEmail')->will($this->returnValue($email));
         $customer->expects($this->once())->method('getWebsiteId')->will($this->returnValue($websiteId));
@@ -469,9 +468,8 @@ class ResetPasswordTest extends \PHPUnit\Framework\TestCase
             $this->returnValue($customerId)
         );
 
-        $customer = $this->createPartialMock(
-            \Magento\Customer\Api\Data\CustomerInterface::class,
-            ['getId', 'getEmail', 'getWebsiteId']
+        $customer = $this->createMock(
+            \Magento\Customer\Api\Data\CustomerInterface::class
         );
 
         $customer->expects($this->once())->method('getEmail')->will($this->returnValue($email));

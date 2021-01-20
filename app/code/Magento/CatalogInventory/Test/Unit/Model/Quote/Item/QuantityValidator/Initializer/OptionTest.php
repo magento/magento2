@@ -119,14 +119,12 @@ class OptionTest extends \PHPUnit\Framework\TestCase
         ];
         $this->resultMock = $this->createPartialMock(\Magento\Framework\DataObject::class, $resultMethods);
 
-        $this->stockRegistry = $this->createPartialMock(
-            \Magento\CatalogInventory\Api\StockRegistryInterface::class,
-            ['getStockItem']
+        $this->stockRegistry = $this->createMock(
+            \Magento\CatalogInventory\Api\StockRegistryInterface::class
         );
 
-        $this->stockState = $this->createPartialMock(
-            \Magento\CatalogInventory\Api\StockStateInterface::class,
-            ['checkQuoteItemQty']
+        $this->stockState = $this->createMock(
+            \Magento\CatalogInventory\Api\StockStateInterface::class
         );
 
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
