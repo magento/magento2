@@ -43,8 +43,8 @@
             <waitForPageLoad stepKey="waitForProductPageLoad"/>
             <waitForElementVisible selector="//legend[contains(., 'Store View Information')]" stepKey="waitForNewStorePageToOpen"/>
             <selectOption userInput="{{customStoreGroup.name}}" selector="{{AdminNewStoreSection.storeGrpDropdown}}" stepKey="selectStoreGroup"/>
-            <fillField userInput="Second Store View" selector="{{AdminNewStoreSection.storeNameTextField}}" stepKey="fillStoreViewName"/>
-            <fillField userInput="second_store_view" selector="{{AdminNewStoreSection.storeCodeTextField}}" stepKey="fillStoreViewCode"/>
+            <fillField userInput="{{customStore.name}}" selector="{{AdminNewStoreSection.storeNameTextField}}" stepKey="fillStoreViewName"/>
+            <fillField userInput="{{customStore.code}}" selector="{{AdminNewStoreSection.storeCodeTextField}}" stepKey="fillStoreViewCode"/>
             <selectOption selector="{{AdminNewStoreSection.statusDropdown}}" userInput="1" stepKey="enableStoreViewStatus"/>
             <click selector="{{AdminNewStoreViewActionsSection.saveButton}}" stepKey="clickSaveStoreView" />
             <waitForElementVisible selector="{{AdminConfirmationModalSection.ok}}" stepKey="waitForModal" />
@@ -67,19 +67,21 @@
             </actionGroup>
         </before>
         <after>
+            <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearFilters"/>
+
             <!--Delete website -->
             <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteSecondWebsite">
                 <argument name="websiteName" value="{{customWebsite.name}}"/>
             </actionGroup>
+
             <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
-            <waitForPageLoad stepKey="waitForProductGridPageLoad"/>
 
             <!--Delete Products -->
             <actionGroup ref="DeleteProductActionGroup" stepKey="deleteProduct1">
-                <argument name="name" value="simpleProductForMassUpdate.name"/>
+                <argument name="productName" value="simpleProductForMassUpdate.name"/>
             </actionGroup>
             <actionGroup ref="DeleteProductActionGroup" stepKey="deleteProduct2">
-                <argument name="name" value="simpleProductForMassUpdate2.name"/>
+                <argument name="productName" value="simpleProductForMassUpdate2.name"/>
             </actionGroup>
 
             <actionGroup ref="logout" stepKey="amOnLogoutPage"/>
@@ -95,7 +97,7 @@
 
         <!-- Filter to Second Store View -->
         <actionGroup ref="AdminFilterStoreViewActionGroup" stepKey="filterStoreView" >
-            <argument name="customStore" value="'Second Store View'" />
+            <argument name="customStore" value="customStore.name" />
         </actionGroup>
 
         <!-- Select Product 2 -->
@@ -195,8 +197,8 @@
             <waitForPageLoad stepKey="waitForProductPageLoad"/>
             <waitForElementVisible selector="//legend[contains(., 'Store View Information')]" stepKey="waitForNewStorePageToOpen"/>
             <selectOption userInput="{{customStoreGroup.name}}" selector="{{AdminNewStoreSection.storeGrpDropdown}}" stepKey="selectStoreGroup"/>
-            <fillField userInput="Second Store View" selector="{{AdminNewStoreSection.storeNameTextField}}" stepKey="fillStoreViewName"/>
-            <fillField userInput="second_store_view" selector="{{AdminNewStoreSection.storeCodeTextField}}" stepKey="fillStoreViewCode"/>
+            <fillField userInput="{{customStore.name}}" selector="{{AdminNewStoreSection.storeNameTextField}}" stepKey="fillStoreViewName"/>
+            <fillField userInput="{{customStore.code}}" selector="{{AdminNewStoreSection.storeCodeTextField}}" stepKey="fillStoreViewCode"/>
             <selectOption selector="{{AdminNewStoreSection.statusDropdown}}" userInput="1" stepKey="enableStoreViewStatus"/>
             <click selector="{{AdminNewStoreViewActionsSection.saveButton}}" stepKey="clickSaveStoreView" />
             <waitForElementVisible selector="{{AdminConfirmationModalSection.ok}}" stepKey="waitForModal" />
@@ -219,12 +221,13 @@
             </actionGroup>
         </before>
         <after>
+            <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearFilters"/>
+
             <!--Delete website -->
             <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteSecondWebsite">
                 <argument name="websiteName" value="{{customWebsite.name}}"/>
             </actionGroup>
             <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
-            <waitForPageLoad stepKey="waitForProductGridPageLoad"/>
 
             <!--Delete Products -->
             <actionGroup ref="DeleteProductActionGroup" stepKey="deleteProduct1">
@@ -246,7 +249,7 @@
 
         <!-- Filter to Second Store View -->
         <actionGroup ref="AdminFilterStoreViewActionGroup" stepKey="filterStoreView" >
-            <argument name="customStore" value="'Second Store View'" />
+            <argument name="customStore" value="customStore.name" />
         </actionGroup>
 
         <!-- Select Product 2 -->
