@@ -440,6 +440,7 @@ class Filter extends \Magento\Backend\Block\Widget\Grid\Extended
         $attributeGridCollection = $this->attributeGridCollectionFactory->create();
         $gridCollection = $attributeGridCollection->setItems($collection->getItems());
         $this->setCollection($gridCollection);
+
         return $collection;
     }
 }

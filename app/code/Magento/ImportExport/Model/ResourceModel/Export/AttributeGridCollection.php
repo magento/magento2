@@ -14,6 +14,7 @@ use Magento\Framework\Data\Collection;
  */
 class AttributeGridCollection extends Collection
 {
+    private const FILTERED_FLAG_NAME = 'agc_filtered';
 
     /**
      * Adding item to collection
@@ -32,8 +33,6 @@ class AttributeGridCollection extends Collection
 
     /**
      * @inheritDoc
-     *
-     * @return int
      */
     public function getSize(): int
     {
@@ -42,10 +41,6 @@ class AttributeGridCollection extends Collection
 
     /**
      * @inheritDoc
-     *
-     * @param string $field
-     * @param array|int|string $condition
-     * @return $this
      */
     public function addFieldToFilter($field, $condition)
     {
@@ -59,14 +54,23 @@ class AttributeGridCollection extends Collection
 
     /**
      * @inheritDoc
-     *
-     * @param false $printQuery
-     * @param false $logQuery
-     * @return $this
      */
     public function load($printQuery = false, $logQuery = false)
     {
-        if (!$this->getFlag('isFilter') && !empty($this->_filters)) {
+        $this->filterCollection();
+        $this->sortCollectionByAttributeCode();
+
+        return $this;
+    }
+
+    /**
+     * Add filters to collection
+     *
+     * @return $this
+     */
+    private function filterCollection()
+    {
+        if (!$this->getFlag(self::FILTERED_FLAG_NAME) && !empty($this->_filters)) {
             foreach ($this->_filters as $filter) {
                 foreach ($this->_items as $item) {
                     $field = $item->getData($filter->getData('field')) ?? '';
@@ -74,13 +78,24 @@ class AttributeGridCollection extends Collection
                         $this->removeItemByKey($item->getId());
                     }
                 }
-                $this->setFlag('isFilter', true);
             }
+            $this->setFlag(self::FILTERED_FLAG_NAME, true);
         }
 
+        return $this;
+    }
+
+    /**
+     * Sort collection by attribute code
+     *
+     * @return $this
+     */
+    private function sortCollectionByAttributeCode()
+    {
         $sortOrder = $this->_orders['attribute_code'];
         uasort($this->_items, function ($a, $b) use ($sortOrder) {
             $cmp = strnatcmp($a->getData('attribute_code'), $b->getData('attribute_code'));
+
             return $sortOrder === self::SORT_ORDER_ASC ? $cmp : -$cmp;
         });
 
