@@ -1060,4 +1060,80 @@ class CustomerRepositoryTest extends WebapiAbstract
             ],
         ];
     }
+
+    /**
+     * Test customer create with valid name's.
+     *
+     * @param string $fieldName
+     * @param string $fieldValue
+     * @return void
+     *
+     * @dataProvider customerValidNameDataProvider
+     */
+    public function testCreateCustomerWithValidName(string $fieldName, string $fieldValue): void
+    {
+        $customerData = $this->dataObjectProcessor->buildOutputDataArray(
+            $this->customerHelper->createSampleCustomerDataObject(),
+            Customer::class
+        );
+        $customerData[$fieldName] = $fieldValue;
+
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH,
+                'httpMethod' => Request::HTTP_METHOD_POST,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'Save',
+            ],
+        ];
+
+        $requestData = ['customer' => $customerData];
+
+        $response = $this->_webApiCall($serviceInfo, $requestData);
+
+        $this->assertNotNull($response);
+        $this->assertEquals($fieldValue, $response[$fieldName]);
+    }
+
+    /**
+     * Customer valid name data provider.
+     *
+     * @return array
+     */
+    public function customerValidNameDataProvider(): array
+    {
+        return [
+            [
+                'firstname',
+                'Anne-Marie',
+            ],
+            [
+                'lastname',
+                'D\'Artagnan',
+            ],
+            [
+                'lastname',
+                'Guðmundsdóttir',
+            ],
+            [
+                'lastname',
+                'María José Carreño Quiñones',
+            ],
+            [
+                'lastname',
+                'Q. Public',
+            ],
+            [
+                'firstname',
+                'Elizabeth II',
+            ],
+            [
+                'firstname',
+                'X Æ A-12 Musk',
+            ],
+        ];
+    }
 }
