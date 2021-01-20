@@ -9,13 +9,13 @@ use \Magento\Framework\HTTP\PhpEnvironment\Response;
 
 class ResponseTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\HTTP\PhpEnvironment\Response */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\HTTP\PhpEnvironment\Response */
     protected $response;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Zend\Http\Headers */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Zend\Http\Headers */
     protected $headers;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->response = $this->createPartialMock(
             \Magento\Framework\HTTP\PhpEnvironment\Response::class,
@@ -27,7 +27,7 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->response);
     }

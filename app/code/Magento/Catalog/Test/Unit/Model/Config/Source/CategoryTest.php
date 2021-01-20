@@ -6,7 +6,7 @@
 namespace Magento\Catalog\Test\Unit\Model\Config\Source;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 class CategoryTest extends \PHPUnit\Framework\TestCase
 {
@@ -25,7 +25,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
      */
     private $category;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->categoryCollection = $this->getMockBuilder(
             \Magento\Catalog\Model\ResourceModel\Category\Collection::class

@@ -11,12 +11,12 @@ use Magento\Framework\Message\MessageInterface;
 class ExceptionMessageLookupFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Message\ExceptionMessageFactoryPool | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Message\ExceptionMessageFactoryPool | \PHPUnit\Framework\MockObject\MockObject
      */
     private $exceptionMessageFactoryPool;
 
     /**
-     * @var \Magento\Framework\Message\Factory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Message\Factory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $messageFactory;
 
@@ -25,7 +25,7 @@ class ExceptionMessageLookupFactoryTest extends \PHPUnit\Framework\TestCase
      */
     private $exceptionMessageLookupFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->exceptionMessageFactoryPool = $this->createPartialMock(
             \Magento\Framework\Message\ExceptionMessageFactoryPool::class,

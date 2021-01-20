@@ -11,12 +11,12 @@ namespace Magento\Sales\Test\Unit\Model\ResourceModel\Order\Tax;
 class ItemTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $connectionMock;
 
     /**
-     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $appResourceMock;
 
@@ -28,7 +28,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
     /**
      * Initialization
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->connectionMock = $this->createMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class);
         $this->appResourceMock = $this->createMock(\Magento\Framework\App\ResourceConnection::class);

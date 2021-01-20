@@ -23,47 +23,47 @@ class ItemTest extends \PHPUnit\Framework\TestCase
     protected $item;
 
     /**
-     * @var \Magento\Framework\Event\Manager|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Event\Manager|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $eventManager;
 
     /**
-     * @var \Magento\Framework\Model\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\Context|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $context;
 
     /**
-     * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Registry|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $registry;
 
     /**
-     * @var \Magento\Customer\Model\Session|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\Session|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $customerSession;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeManager;
 
     /**
-     * @var \Magento\CatalogInventory\Api\StockConfigurationInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogInventory\Api\StockConfigurationInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $stockConfiguration;
 
     /**
-     * @var \Magento\CatalogInventory\Api\StockItemRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogInventory\Api\StockItemRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $stockItemRepository;
 
     /**
-     * @var \Magento\CatalogInventory\Model\ResourceModel\Stock\Item|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogInventory\Model\ResourceModel\Stock\Item|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resource;
 
     /**
-     * @var \Magento\CatalogInventory\Model\ResourceModel\Stock\Item\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogInventory\Model\ResourceModel\Stock\Item\Collection|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resourceCollection;
 
@@ -73,11 +73,11 @@ class ItemTest extends \PHPUnit\Framework\TestCase
     protected $storeId = 111;
 
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject
+     * @var PHPUnit\Framework\MockObject\MockObject
      */
     private $eventDispatcher;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->eventDispatcher = $this->getMockBuilder(\Magento\Framework\Event\ManagerInterface::class)
             ->disableOriginalConstructor()
@@ -93,7 +93,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
 
         $store = $this->createPartialMock(\Magento\Store\Model\Store::class, ['getId', '__wakeup']);
         $store->expects($this->any())->method('getId')->willReturn($this->storeId);
-        $this->storeManager = $this->getMockForAbstractClass(
+        $this->storeManager = $this->createPartialMock(
             \Magento\Store\Model\StoreManagerInterface::class,
             ['getStore']
         );
@@ -128,7 +128,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->item = null;
     }

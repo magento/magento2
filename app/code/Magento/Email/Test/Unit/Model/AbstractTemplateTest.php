@@ -15,56 +15,56 @@ namespace Magento\Email\Test\Unit\Model;
 class AbstractTemplateTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\View\DesignInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\DesignInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $design;
 
     /**
-     * @var \Magento\Store\Model\App\Emulation|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\App\Emulation|\PHPUnit\Framework\MockObject\MockObject
      */
     private $appEmulation;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeManager;
 
     /**
-     * @var \Magento\Store\Model\Store|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\Store|\PHPUnit\Framework\MockObject\MockObject
      */
     private $store;
 
     /**
-     * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem|\PHPUnit\Framework\MockObject\MockObject
      */
     private $filesystem;
 
     /**
-     * @var \Magento\Framework\View\Asset\Repository|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Asset\Repository|\PHPUnit\Framework\MockObject\MockObject
      */
     private $assetRepo;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $scopeConfig;
 
     /**
-     * @var \Magento\Email\Model\Template\FilterFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Email\Model\Template\FilterFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $filterFactory;
 
     /**
-     * @var \Magento\Email\Model\Template\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Email\Model\Template\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     private $emailConfig;
 
     /**
-     * @var \Magento\Email\Model\TemplateFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Email\Model\TemplateFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $templateFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->design = $this->getMockBuilder(\Magento\Framework\View\DesignInterface::class)
             ->disableOriginalConstructor()
@@ -116,7 +116,7 @@ class AbstractTemplateTest extends \PHPUnit\Framework\TestCase
      *
      * @param  array $mockedMethods
      * @param  array $data
-     * @return \Magento\Email\Model\Template|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Email\Model\Template|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getModelMock(array $mockedMethods = [], array $data = [])
     {
@@ -243,10 +243,11 @@ class AbstractTemplateTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \LogicException
      */
     public function testGetProcessedTemplateException()
     {
+        $this->expectException(\LogicException::class);
+
         $filterTemplate = $this->getMockBuilder(\Magento\Email\Model\Template\Filter::class)
             ->setMethods(
                 [
@@ -376,11 +377,12 @@ class AbstractTemplateTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param             array $config
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      * @dataProvider      invalidInputParametersDataProvider
      */
     public function testSetDesignConfigWithInvalidInputParametersThrowsException($config)
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+
         $this->getModelMock()->setDesignConfig($config);
     }
 

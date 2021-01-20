@@ -32,122 +32,122 @@ namespace Magento\Setup\Test\Unit\Model {
         private $object;
 
         /**
-         * @var \Magento\Framework\Setup\FilePermissions|\PHPUnit_Framework_MockObject_MockObject
+         * @var \Magento\Framework\Setup\FilePermissions|\PHPUnit\Framework\MockObject\MockObject
          */
         private $filePermissions;
 
         /**
-         * @var \Magento\Framework\App\DeploymentConfig\Writer|\PHPUnit_Framework_MockObject_MockObject
+         * @var \Magento\Framework\App\DeploymentConfig\Writer|\PHPUnit\Framework\MockObject\MockObject
          */
         private $configWriter;
 
         /**
-         * @var \Magento\Framework\App\DeploymentConfig\Reader|\PHPUnit_Framework_MockObject_MockObject
+         * @var \Magento\Framework\App\DeploymentConfig\Reader|\PHPUnit\Framework\MockObject\MockObject
          */
         private $configReader;
 
         /**
-         * @var \Magento\Framework\App\DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject
+         * @var \Magento\Framework\App\DeploymentConfig|\PHPUnit\Framework\MockObject\MockObject
          */
         private $config;
 
         /**
-         * @var \Magento\Framework\Module\ModuleListInterface|\PHPUnit_Framework_MockObject_MockObject
+         * @var \Magento\Framework\Module\ModuleListInterface|\PHPUnit\Framework\MockObject\MockObject
          */
         private $moduleList;
 
         /**
-         * @var \Magento\Framework\Module\ModuleList\Loader|\PHPUnit_Framework_MockObject_MockObject
+         * @var \Magento\Framework\Module\ModuleList\Loader|\PHPUnit\Framework\MockObject\MockObject
          */
         private $moduleLoader;
 
         /**
-         * @var \Magento\Framework\App\Filesystem\DirectoryList|\PHPUnit_Framework_MockObject_MockObject
+         * @var \Magento\Framework\App\Filesystem\DirectoryList|\PHPUnit\Framework\MockObject\MockObject
          */
         private $directoryList;
 
         /**
-         * @var \Magento\Setup\Model\AdminAccountFactory|\PHPUnit_Framework_MockObject_MockObject
+         * @var \Magento\Setup\Model\AdminAccountFactory|\PHPUnit\Framework\MockObject\MockObject
          */
         private $adminFactory;
 
         /**
-         * @var \Magento\Framework\Setup\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+         * @var \Magento\Framework\Setup\LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
          */
         private $logger;
 
         /**
-         * @var \Magento\Framework\Math\Random|\PHPUnit_Framework_MockObject_MockObject
+         * @var \Magento\Framework\Math\Random|\PHPUnit\Framework\MockObject\MockObject
          */
         private $random;
 
         /**
-         * @var \PHPUnit_Framework_MockObject_MockObject
+         * @var \PHPUnit\Framework\MockObject\MockObject
          */
         private $connection;
 
         /**
-         * @var \Magento\Framework\App\MaintenanceMode|\PHPUnit_Framework_MockObject_MockObject
+         * @var \Magento\Framework\App\MaintenanceMode|\PHPUnit\Framework\MockObject\MockObject
          */
         private $maintenanceMode;
 
         /**
-         * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+         * @var \Magento\Framework\Filesystem|\PHPUnit\Framework\MockObject\MockObject
          */
         private $filesystem;
 
         /**
-         * @var \PHPUnit_Framework_MockObject_MockObject
+         * @var \PHPUnit\Framework\MockObject\MockObject
          */
         private $objectManager;
 
         /**
-         * @var \Magento\Setup\Model\ConfigModel|\PHPUnit_Framework_MockObject_MockObject
+         * @var \Magento\Setup\Model\ConfigModel|\PHPUnit\Framework\MockObject\MockObject
          */
         private $configModel;
 
         /**
-         * @var CleanupFiles|\PHPUnit_Framework_MockObject_MockObject
+         * @var CleanupFiles|\PHPUnit\Framework\MockObject\MockObject
          */
         private $cleanupFiles;
 
         /**
-         * @var DbValidator|\PHPUnit_Framework_MockObject_MockObject
+         * @var DbValidator|\PHPUnit\Framework\MockObject\MockObject
          */
         private $dbValidator;
 
         /**
-         * @var \Magento\Setup\Module\SetupFactory|\PHPUnit_Framework_MockObject_MockObject
+         * @var \Magento\Setup\Module\SetupFactory|\PHPUnit\Framework\MockObject\MockObject
          */
         private $setupFactory;
 
         /**
-         * @var \Magento\Setup\Module\DataSetupFactory|\PHPUnit_Framework_MockObject_MockObject
+         * @var \Magento\Setup\Module\DataSetupFactory|\PHPUnit\Framework\MockObject\MockObject
          */
         private $dataSetupFactory;
 
         /**
-         * @var \Magento\Framework\Setup\SampleData\State|\PHPUnit_Framework_MockObject_MockObject
+         * @var \Magento\Framework\Setup\SampleData\State|\PHPUnit\Framework\MockObject\MockObject
          */
         private $sampleDataState;
 
         /**
-         * @var \Magento\Framework\Component\ComponentRegistrar|\PHPUnit_Framework_MockObject_MockObject
+         * @var \Magento\Framework\Component\ComponentRegistrar|\PHPUnit\Framework\MockObject\MockObject
          */
         private $componentRegistrar;
 
         /**
-         * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\PhpReadinessCheck
+         * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Setup\Model\PhpReadinessCheck
          */
         private $phpReadinessCheck;
 
         /**
-         * @var \Magento\Framework\Setup\DeclarationInstaller|\PHPUnit_Framework_MockObject_MockObject
+         * @var \Magento\Framework\Setup\DeclarationInstaller|\PHPUnit\Framework\MockObject\MockObject
          */
         private $declarationInstallerMock;
 
         /**
-         * @var SchemaListener|\PHPUnit_Framework_MockObject_MockObject
+         * @var SchemaListener|\PHPUnit\Framework\MockObject\MockObject
          */
         private $schemaListenerMock;
 
@@ -165,21 +165,21 @@ namespace Magento\Setup\Test\Unit\Model {
         ];
 
         /**
-         * @var \Magento\Framework\Model\ResourceModel\Db\Context|\PHPUnit_Framework_MockObject_MockObject
+         * @var \Magento\Framework\Model\ResourceModel\Db\Context|\PHPUnit\Framework\MockObject\MockObject
          */
         private $contextMock;
 
         /**
-         * @var PatchApplier|\PHPUnit_Framework_MockObject_MockObject
+         * @var PatchApplier|\PHPUnit\Framework\MockObject\MockObject
          */
         private $patchApplierMock;
 
         /**
-         * @var PatchApplierFactory|\PHPUnit_Framework_MockObject_MockObject
+         * @var PatchApplierFactory|\PHPUnit\Framework\MockObject\MockObject
          */
         private $patchApplierFactoryMock;
 
-        protected function setUp()
+        protected function setUp(): void
         {
             $this->filePermissions = $this->createMock(\Magento\Framework\Setup\FilePermissions::class);
             $this->configWriter = $this->createMock(\Magento\Framework\App\DeploymentConfig\Writer::class);
@@ -226,8 +226,8 @@ namespace Magento\Setup\Test\Unit\Model {
 
         /**
          * Instantiates the object with mocks
-         * @param \PHPUnit_Framework_MockObject_MockObject|bool $connectionFactory
-         * @param \PHPUnit_Framework_MockObject_MockObject|bool $objectManagerProvider
+         * @param \PHPUnit\Framework\MockObject\MockObject|bool $connectionFactory
+         * @param \PHPUnit\Framework\MockObject\MockObject|bool $objectManagerProvider
          * @return Installer
          */
         private function createObject($connectionFactory = false, $objectManagerProvider = false)

@@ -32,7 +32,7 @@ class BackupFactoryTest extends \PHPUnit\Framework\TestCase
      */
     protected $_data;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_data = [
             'id' => '1385661590_snapshot',

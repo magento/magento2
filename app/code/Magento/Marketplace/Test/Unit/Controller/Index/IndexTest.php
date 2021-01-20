@@ -9,11 +9,11 @@ namespace Magento\Marketplace\Test\Unit\Controller\Index;
 class IndexTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject| \Magento\Marketplace\Controller\Adminhtml\Index\Index
+     * @var \PHPUnit\Framework\MockObject\MockObject| \Magento\Marketplace\Controller\Adminhtml\Index\Index
      */
     private $indexControllerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->indexControllerMock = $this->getControllerIndexMock(['getResultPageFactory']);
     }
@@ -56,7 +56,7 @@ class IndexTest extends \PHPUnit\Framework\TestCase
     /**
      * Gets index controller mock
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Marketplace\Controller\Adminhtml\Index\Index
+     * @return \PHPUnit\Framework\MockObject\MockObject|\Magento\Marketplace\Controller\Adminhtml\Index\Index
      */
     public function getControllerIndexMock($methods = null)
     {
@@ -64,7 +64,7 @@ class IndexTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Result\PageFactory
+     * @return \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\View\Result\PageFactory
      */
     public function getResultPageFactoryMock($methods = null)
     {
@@ -72,7 +72,7 @@ class IndexTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Page\Config
+     * @return \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\View\Page\Config
      */
     public function getConfigMock($methods = null)
     {
@@ -80,7 +80,7 @@ class IndexTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Page\Title
+     * @return \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\View\Page\Title
      */
     public function getTitleMock($methods = null)
     {
@@ -88,7 +88,7 @@ class IndexTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Page\Title
+     * @return \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\View\Page\Title
      */
     public function getPageMock($methods = null)
     {

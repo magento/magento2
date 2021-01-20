@@ -19,36 +19,36 @@ class CompareTest extends \PHPUnit\Framework\TestCase
     protected $compareHelper;
 
     /**
-     * @var \Magento\Framework\App\Helper\Context | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Helper\Context | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $context;
 
     /**
-     * @var \Magento\Framework\Url | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Url | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $urlBuilder;
 
     /**
-     * @var \Magento\Framework\Data\Helper\PostHelper | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Data\Helper\PostHelper | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $postDataHelper;
 
     /**
-     * @var \Magento\Framework\App\Request\Http | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Request\Http | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $request;
 
     /**
-     * @var \Magento\Framework\Url\EncoderInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Url\EncoderInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $urlEncoder;
 
     /**
-     * @var \Magento\Catalog\Model\Session | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Session | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $catalogSessionMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -120,7 +120,7 @@ class CompareTest extends \PHPUnit\Framework\TestCase
             ->with($removeUrl, $postParams)
             ->will($this->returnValue(true));
 
-        /** @var \Magento\Catalog\Model\Product | \PHPUnit_Framework_MockObject_MockObject $product */
+        /** @var \Magento\Catalog\Model\Product | \PHPUnit\Framework\MockObject\MockObject $product */
         $product = $this->createPartialMock(\Magento\Catalog\Model\Product::class, ['getId', '__wakeup']);
         $product->expects($this->once())
             ->method('getId')

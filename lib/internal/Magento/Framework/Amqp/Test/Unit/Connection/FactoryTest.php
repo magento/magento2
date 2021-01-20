@@ -34,14 +34,14 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
     private $objectManagerInterface;
 
     /**
-     * @var FactoryOptions|\PHPUnit_Framework_MockObject_MockObject
+     * @var FactoryOptions|\PHPUnit\Framework\MockObject\MockObject
      */
     private $optionsMock;
 
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
 
@@ -125,7 +125,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->objectManager->setBackwardCompatibleProperty(
             null,

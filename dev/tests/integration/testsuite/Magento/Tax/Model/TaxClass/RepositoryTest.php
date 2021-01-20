@@ -40,7 +40,7 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
 
     const SAMPLE_TAX_CLASS_NAME = 'Wholesale Customer';
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->taxClassRepository = $this->objectManager->create(\Magento\Tax\Api\TaxClassRepositoryInterface::class);

@@ -45,7 +45,7 @@ class AddressTest extends TestCase
     /**
      * phpcs:ignoreFile
      */
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         $db = Bootstrap::getInstance()->getBootstrap()
             ->getApplication()
@@ -61,7 +61,7 @@ class AddressTest extends TestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->_quote = Bootstrap::getObjectManager()->create(
             Quote::class
@@ -94,7 +94,7 @@ class AddressTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         /** @var CustomerRegistry $customerRegistry */
         $customerRegistry = Bootstrap::getObjectManager()

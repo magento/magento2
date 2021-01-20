@@ -131,7 +131,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
      * Get CMS page model mock
      *
      * @param $stores
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Cms\Model\Page
+     * @return \PHPUnit\Framework\MockObject\MockObject|\Magento\Cms\Model\Page
      */
     protected function _getCmsPageWithStoresMock($stores)
     {

@@ -15,22 +15,22 @@ use Magento\Framework\Filesystem\DriverPool;
 class PublisherTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem|\PHPUnit\Framework\MockObject\MockObject
      */
     private $filesystem;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\WriteInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\Directory\WriteInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $sourceDirWrite;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\ReadInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\Directory\ReadInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $staticDirRead;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\WriteInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\Directory\WriteInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $staticDirWrite;
 
@@ -40,16 +40,16 @@ class PublisherTest extends \PHPUnit\Framework\TestCase
     private $object;
 
     /**
-     * @var MaterializationStrategy\Factory |\PHPUnit_Framework_MockObject_MockObject
+     * @var MaterializationStrategy\Factory |\PHPUnit\Framework\MockObject\MockObject
      */
     private $materializationStrategyFactory;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\WriteFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\Directory\WriteFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $writeFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->filesystem = $this->createMock(\Magento\Framework\Filesystem::class);
         $this->materializationStrategyFactory =
@@ -109,7 +109,7 @@ class PublisherTest extends \PHPUnit\Framework\TestCase
     /**
      * Create an asset mock
      *
-     * @return \Magento\Framework\View\Asset\File|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Framework\View\Asset\File|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getAsset()
     {

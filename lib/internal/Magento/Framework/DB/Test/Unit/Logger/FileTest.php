@@ -12,12 +12,12 @@ class FileTest extends \PHPUnit\Framework\TestCase
     const DEBUG_FILE = 'debug.file.log';
 
     /**
-     * @var \Magento\Framework\Filesystem\File\WriteInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\File\WriteInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $stream;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\WriteInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\Directory\WriteInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $dir;
 
@@ -26,7 +26,7 @@ class FileTest extends \PHPUnit\Framework\TestCase
      */
     private $object;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->stream = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\File\WriteInterface::class);
         $this->dir = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\Directory\WriteInterface::class);

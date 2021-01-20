@@ -39,7 +39,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
     /**
      * Initialize form
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_model = $this->getMockBuilder(
             \Magento\Eav\Model\Form::class
@@ -69,7 +69,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
     /**
      * Unset form
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_model);
     }

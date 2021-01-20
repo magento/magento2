@@ -23,7 +23,7 @@ class McryptTest extends \PHPUnit\Framework\TestCase
         MCRYPT_RIJNDAEL_256 => [MCRYPT_MODE_CBC],
     ];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->key = substr(__CLASS__, -32, 32);
     }

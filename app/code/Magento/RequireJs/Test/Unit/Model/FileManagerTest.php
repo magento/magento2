@@ -12,27 +12,27 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 class FileManagerTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\RequireJs\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\RequireJs\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configMock;
 
     /**
-     * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem|\PHPUnit\Framework\MockObject\MockObject
      */
     private $fileSystem;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\WriteInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\Directory\WriteInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $dir;
 
     /**
-     * @var \Magento\Framework\App\State|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\State|\PHPUnit\Framework\MockObject\MockObject
      */
     private $appState;
 
     /**
-     * @var \Magento\Framework\View\Asset\File|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Asset\File|\PHPUnit\Framework\MockObject\MockObject
      */
     private $asset;
 
@@ -42,11 +42,11 @@ class FileManagerTest extends \PHPUnit\Framework\TestCase
     private $object;
 
     /**
-     * @var \Magento\Framework\View\Asset\Repository|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Asset\Repository|\PHPUnit\Framework\MockObject\MockObject
      */
     private $assetRepoMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->configMock = $this->createMock(\Magento\Framework\RequireJs\Config::class);
         $this->fileSystem = $this->createMock(\Magento\Framework\Filesystem::class);

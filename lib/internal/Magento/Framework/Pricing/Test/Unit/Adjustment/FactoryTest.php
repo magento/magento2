@@ -15,7 +15,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
      */
     protected $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
     }
@@ -45,7 +45,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param string $adjustmentInterface
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\ObjectManager\ObjectManager
+     * @return \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\ObjectManager\ObjectManager
      */
     protected function prepareObjectManager($adjustmentInterface)
     {

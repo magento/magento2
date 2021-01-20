@@ -25,7 +25,7 @@ class ValidatorFileTest extends \PHPUnit\Framework\TestCase
     protected $objectManager;
 
     /**
-     * @var \Magento\Framework\HTTP\Adapter\FileTransferFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\HTTP\Adapter\FileTransferFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $httpFactoryMock;
 
@@ -39,7 +39,7 @@ class ValidatorFileTest extends \PHPUnit\Framework\TestCase
      */
     protected $maxFileSize;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->httpFactoryMock = $this->createPartialMock(

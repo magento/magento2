@@ -18,17 +18,17 @@ class CountryInformationAcquirerTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $countryInformationFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $regionInformationFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeManager;
 
@@ -40,7 +40,7 @@ class CountryInformationAcquirerTest extends \PHPUnit\Framework\TestCase
     /**
      * Setup the test
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -143,11 +143,12 @@ class CountryInformationAcquirerTest extends \PHPUnit\Framework\TestCase
     /**
      * test GetGetCountryInfoNotFound
      *
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage The country isn't available.
      */
     public function testGetCountryInfoNotFound()
     {
+        $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
+        $this->expectExceptionMessage('The country isn\'t available.');
+
         /** @var \Magento\Store\Model\Store $store */
         $store = $this->createMock(\Magento\Store\Model\Store::class);
         $this->storeManager->expects($this->once())->method('getStore')->willReturn($store);

@@ -32,7 +32,7 @@ class EntityAbstractTest extends \PHPUnit\Framework\TestCase
         $expected = $source->current();
 
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        /** @var $model \Magento\ImportExport\Model\Import\AbstractEntity|\PHPUnit_Framework_MockObject_MockObject */
+        /** @var $model \Magento\ImportExport\Model\Import\AbstractEntity|\PHPUnit\Framework\MockObject\MockObject */
         $model = $this->getMockForAbstractClass(
             \Magento\ImportExport\Model\Import\AbstractEntity::class,
             [

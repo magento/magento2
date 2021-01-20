@@ -13,13 +13,13 @@ class ForwardTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Framework\Controller\Result\Forward */
     protected $forward;
 
-    /** @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\Request\Http|\PHPUnit\Framework\MockObject\MockObject */
     protected $requestInterface;
 
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 

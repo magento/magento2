@@ -27,7 +27,7 @@ class ParamOverriderCartIdTest extends \PHPUnit\Framework\TestCase
      */
     private $userContext;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->userContext = $this->getMockBuilder(\Magento\Authorization\Model\UserContextInterface::class)
             ->getMockForAbstractClass();
@@ -68,10 +68,11 @@ class ParamOverriderCartIdTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testGetOverriddenValueIsCustomerAndCartDoesNotExist()
     {
+        $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
+
         $customerId = 1;
 
         $this->userContext->expects($this->once())

@@ -18,11 +18,11 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
     /**
      * Catalog helper
      *
-     * @var \Magento\Catalog\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Helper\Data|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_helper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_helper = $this->createPartialMock(\Magento\Catalog\Helper\Data::class, ['isPriceGlobal']);
         $this->_helper->expects($this->any())->method('isPriceGlobal')->will($this->returnValue(true));

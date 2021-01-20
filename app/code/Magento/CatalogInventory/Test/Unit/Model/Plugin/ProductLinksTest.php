@@ -13,16 +13,16 @@ class ProductLinksTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\CatalogInventory\Model\Configuration|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogInventory\Model\Configuration|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $configMock;
 
     /**
-     * @var \Magento\CatalogInventory\Helper\Stock|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogInventory\Helper\Stock|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $stockHelperMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->configMock = $this->createMock(\Magento\CatalogInventory\Model\Configuration::class);
         $this->stockHelperMock = $this->createMock(\Magento\CatalogInventory\Helper\Stock::class);

@@ -13,7 +13,7 @@ use Magento\Tax\Model\Calculation;
 class WeeeTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Pricing\PriceCurrencyInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Pricing\PriceCurrencyInterface
      */
     protected $priceCurrency;
 
@@ -28,7 +28,7 @@ class WeeeTest extends \PHPUnit\Framework\TestCase
      * Setup tax helper with an array of methodName, returnValue
      *
      * @param array $taxConfig
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Tax\Helper\Data
+     * @return \PHPUnit\Framework\MockObject\MockObject|\Magento\Tax\Helper\Data
      */
     protected function setupTaxHelper($taxConfig)
     {
@@ -45,7 +45,7 @@ class WeeeTest extends \PHPUnit\Framework\TestCase
      * Setup calculator to return tax rates
      *
      * @param array $taxRates
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Tax\Model\Calculation
+     * @return \PHPUnit\Framework\MockObject\MockObject|\Magento\Tax\Model\Calculation
      */
     protected function setupTaxCalculation($taxRates)
     {
@@ -78,7 +78,7 @@ class WeeeTest extends \PHPUnit\Framework\TestCase
      * Setup weee helper with an array of methodName, returnValue
      *
      * @param array $weeeConfig
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Weee\Helper\Data
+     * @return \PHPUnit\Framework\MockObject\MockObject|\Magento\Weee\Helper\Data
      */
     protected function setupWeeeHelper($weeeConfig)
     {
@@ -100,7 +100,7 @@ class WeeeTest extends \PHPUnit\Framework\TestCase
      * Setup the basics of an item mock
      *
      * @param float $itemTotalQty
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Quote\Model\Quote\Item
+     * @return \PHPUnit\Framework\MockObject\MockObject|\Magento\Quote\Model\Quote\Item
      */
     protected function setupItemMockBasics($itemTotalQty)
     {
@@ -127,7 +127,7 @@ class WeeeTest extends \PHPUnit\Framework\TestCase
      * Setup an item mock
      *
      * @param float $itemQty
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Quote\Model\Quote\Item
+     * @return \PHPUnit\Framework\MockObject\MockObject|\Magento\Quote\Model\Quote\Item
      */
     protected function setupItemMock($itemQty)
     {
@@ -146,7 +146,7 @@ class WeeeTest extends \PHPUnit\Framework\TestCase
      *
      * @param float $parentQty
      * @param float $itemQty
-     * @return \PHPUnit_Framework_MockObject_MockObject[]|\Magento\Quote\Model\Quote\Item[]
+     * @return \PHPUnit\Framework\MockObject\MockObject[]|\Magento\Quote\Model\Quote\Item[]
      */
     protected function setupParentItemWithChildrenMock($parentQty, $itemQty)
     {
@@ -173,8 +173,8 @@ class WeeeTest extends \PHPUnit\Framework\TestCase
     /**
      * Setup address mock
      *
-     * @param \PHPUnit_Framework_MockObject_MockObject[]|\Magento\Quote\Model\Quote\Item[] $items
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @param \PHPUnit\Framework\MockObject\MockObject[]|\Magento\Quote\Model\Quote\Item[] $items
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function setupAddressMock($items)
     {
@@ -203,9 +203,9 @@ class WeeeTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Setup shipping assignment mock.
-     * @param \PHPUnit_Framework_MockObject_MockObject $addressMock
-     * @param \PHPUnit_Framework_MockObject_MockObject $itemMock
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @param \PHPUnit\Framework\MockObject\MockObject $addressMock
+     * @param \PHPUnit\Framework\MockObject\MockObject $itemMock
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function setupShippingAssignmentMock($addressMock, $itemMock)
     {
@@ -221,7 +221,7 @@ class WeeeTest extends \PHPUnit\Framework\TestCase
     /**
      * Verify that correct fields of item has been set
      *
-     * @param \PHPUnit_Framework_MockObject_MockObject|\Magento\Quote\Model\Quote\Item $item
+     * @param \PHPUnit\Framework\MockObject\MockObject|\Magento\Quote\Model\Quote\Item $item
      * @param $itemData
      */
     public function verifyItem(\Magento\Quote\Model\Quote\Item $item, $itemData)
@@ -234,7 +234,7 @@ class WeeeTest extends \PHPUnit\Framework\TestCase
     /**
      * Verify that correct fields of address has been set
      *
-     * @param \PHPUnit_Framework_MockObject_MockObject|\Magento\Quote\Model\Quote\Address $address
+     * @param \PHPUnit\Framework\MockObject\MockObject|\Magento\Quote\Model\Quote\Address $address
      * @param $addressData
      */
     public function verifyAddress($address, $addressData)

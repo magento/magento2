@@ -13,26 +13,26 @@ class ProviderTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_configReaderMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_treeBuilderMock;
 
     /**
-     * @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit\Framework\MockObject\MockObject
      */
     private $serializerMock;
 
     /**
-     * @var \Magento\Framework\Acl\Data\CacheInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Acl\Data\CacheInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $aclDataCacheMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_configReaderMock = $this->createMock(\Magento\Framework\Config\ReaderInterface::class);
         $this->_treeBuilderMock = $this->createMock(\Magento\Framework\Acl\AclResource\TreeBuilder::class);

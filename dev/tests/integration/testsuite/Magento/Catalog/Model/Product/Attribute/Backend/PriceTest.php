@@ -30,7 +30,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
     /** @var ProductRepositoryInterface */
     private $productRepository;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var ReinitableConfigInterface $reinitiableConfig */
@@ -293,7 +293,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(100, $product->getPrice());
     }
 
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         parent::tearDownAfterClass();
         /** @var ReinitableConfigInterface $reinitiableConfig */

@@ -20,12 +20,12 @@ class StorageTest extends \PHPUnit\Framework\TestCase
     protected $_storageRoot;
 
     /**
-     * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_filesystem;
 
     /**
-     * @var \Magento\Theme\Helper\Storage|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Theme\Helper\Storage|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_helperStorage;
 
@@ -40,26 +40,26 @@ class StorageTest extends \PHPUnit\Framework\TestCase
     protected $_storageModel;
 
     /**
-     * @var \Magento\Framework\Image\AdapterFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Image\AdapterFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_imageFactory;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\Write|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\Directory\Write|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $directoryWrite;
 
     /**
-     * @var \Magento\Framework\Url\EncoderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Url\EncoderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $urlEncoder;
 
     /**
-     * @var \Magento\Framework\Url\DecoderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Url\DecoderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $urlDecoder;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_filesystem = $this->createMock(\Magento\Framework\Filesystem::class);
 
@@ -120,7 +120,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
         $this->_storageRoot = '/root';
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->_filesystem = null;
         $this->_helperStorage = null;
@@ -182,10 +182,11 @@ class StorageTest extends \PHPUnit\Framework\TestCase
 
     /**
      * cover \Magento\Theme\Model\Wysiwyg\Storage::uploadFile
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testUploadInvalidFile()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+
         $uploader = $this->_prepareUploader();
 
         $uploader->expects($this->once())->method('save')->will($this->returnValue(null));
@@ -194,7 +195,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function _prepareUploader()
     {
@@ -283,20 +284,22 @@ class StorageTest extends \PHPUnit\Framework\TestCase
 
     /**
      * cover \Magento\Theme\Model\Wysiwyg\Storage::createFolder
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testCreateFolderWithInvalidName()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+
         $newDirectoryName = 'dir2!#$%^&';
         $this->_storageModel->createFolder($newDirectoryName, $this->_storageRoot);
     }
 
     /**
      * cover \Magento\Theme\Model\Wysiwyg\Storage::createFolder
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testCreateFolderDirectoryAlreadyExist()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+
         $newDirectoryName = 'mew';
         $fullNewPath = $this->_storageRoot . '/' . $newDirectoryName;
 
@@ -349,10 +352,11 @@ class StorageTest extends \PHPUnit\Framework\TestCase
 
     /**
      * cover \Magento\Theme\Model\Wysiwyg\Storage::getDirsCollection
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testGetDirsCollectionWrongDirName()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+
         $this->directoryWrite->expects(
             $this->once()
         )->method(
@@ -545,10 +549,11 @@ class StorageTest extends \PHPUnit\Framework\TestCase
 
     /**
      * cover \Magento\Theme\Model\Wysiwyg\Storage::deleteDirectory
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testDeleteRootDirectory()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+
         $directoryPath = $this->_storageRoot;
 
         $this->_helperStorage->expects(

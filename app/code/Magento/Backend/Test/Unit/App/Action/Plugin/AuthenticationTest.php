@@ -14,7 +14,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class AuthenticationTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Backend\Model\Auth | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\Model\Auth | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $auth;
 
@@ -23,7 +23,7 @@ class AuthenticationTest extends \PHPUnit\Framework\TestCase
      */
     protected $plugin;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->auth = $this->createPartialMock(
             \Magento\Backend\Model\Auth::class,
@@ -36,7 +36,7 @@ class AuthenticationTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->auth = null;
         $this->plugin = null;

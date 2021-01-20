@@ -26,7 +26,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
     /** @var array */
     protected $_requestData = [];
 
-    public function setUp()
+    public function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
 

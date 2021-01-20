@@ -37,7 +37,7 @@ class CodeLimitManagerTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         /** @var ObjectManager $objectManager */
         $objectManager = Bootstrap::getObjectManager();
@@ -52,7 +52,7 @@ class CodeLimitManagerTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->customerSession->logout();
         $this->customerSession->clearStorage();

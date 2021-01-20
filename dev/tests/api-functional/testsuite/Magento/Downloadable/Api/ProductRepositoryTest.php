@@ -25,7 +25,7 @@ class ProductRepositoryTest extends WebapiAbstract
      */
     protected $testImagePath;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->testImagePath = __DIR__ . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'test_image.jpg';
@@ -40,7 +40,7 @@ class ProductRepositoryTest extends WebapiAbstract
     /**
      * Execute per test cleanup
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->deleteProductBySku(self::PRODUCT_SKU);
         parent::tearDown();

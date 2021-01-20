@@ -9,31 +9,31 @@ use Magento\Customer\Model\ResourceModel\Customer\Grid;
 
 class GridTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\ResourceConnection|\PHPUnit\Framework\MockObject\MockObject */
     protected $resource;
 
-    /** @var \Magento\Framework\Indexer\IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Indexer\IndexerRegistry|\PHPUnit\Framework\MockObject\MockObject */
     protected $indexerRegistry;
 
-    /** @var \Magento\Framework\Indexer\ScopeResolver\FlatScopeResolver|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Indexer\ScopeResolver\FlatScopeResolver|\PHPUnit\Framework\MockObject\MockObject */
     protected $flatScopeResolver;
 
-    /** @var \Magento\Framework\Indexer\IndexerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Indexer\IndexerInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $indexer;
 
-    /** @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $connection;
 
-    /** @var \Magento\Framework\DB\Select|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\DB\Select|\PHPUnit\Framework\MockObject\MockObject */
     protected $select;
 
     /** @var Grid */
     protected $observer;
 
-    /** @var \Zend_Db_Statement_Interface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Zend_Db_Statement_Interface|\PHPUnit\Framework\MockObject\MockObject */
     protected $queryResult;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->resource = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
         $this->indexerRegistry = $this->createMock(\Magento\Framework\Indexer\IndexerRegistry::class);

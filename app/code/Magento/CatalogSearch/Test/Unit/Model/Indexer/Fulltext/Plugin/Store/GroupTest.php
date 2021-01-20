@@ -26,26 +26,26 @@ class GroupTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
+     * @var IndexerRegistry|\PHPUnit\Framework\MockObject\MockObject
      */
     private $indexerRegistryMock;
 
     /**
-     * @var IndexerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var IndexerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $indexerMock;
 
     /**
-     * @var StoreGroupResourceModel|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreGroupResourceModel|\PHPUnit\Framework\MockObject\MockObject
      */
     private $subjectMock;
 
     /**
-     * @var StoreGroup|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreGroup|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeGroupMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->indexerRegistryMock = $this->getMockBuilder(IndexerRegistry::class)
             ->disableOriginalConstructor()

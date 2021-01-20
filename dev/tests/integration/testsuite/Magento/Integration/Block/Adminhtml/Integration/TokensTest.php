@@ -21,7 +21,7 @@ class TokensTest extends \PHPUnit\Framework\TestCase
      */
     protected $tokensBlock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->tokensBlock = Bootstrap::getObjectManager()
             ->create(\Magento\Integration\Block\Adminhtml\Integration\Tokens::class);

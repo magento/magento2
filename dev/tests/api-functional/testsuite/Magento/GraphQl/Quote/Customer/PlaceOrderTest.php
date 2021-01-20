@@ -49,7 +49,7 @@ class PlaceOrderTest extends GraphQlAbstract
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->getMaskedQuoteIdByReservedOrderId = $objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
@@ -174,7 +174,7 @@ class PlaceOrderTest extends GraphQlAbstract
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute($reservedOrderId);
         $query = $this->getQuery($maskedQuoteId);
 
-        self::expectExceptionMessageRegExp(
+        self::expectExceptionMessageMatches(
             '/Unable to place order: Please check the billing address information*/'
         );
         $this->graphQlMutation($query, [], '', $this->getHeaderMap());
@@ -250,7 +250,7 @@ class PlaceOrderTest extends GraphQlAbstract
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute($reservedOrderId);
         $query = $this->getQuery($maskedQuoteId);
 
-        self::expectExceptionMessageRegExp('/The current user cannot perform operations on cart*/');
+        self::expectExceptionMessageMatches('/The current user cannot perform operations on cart*/');
         $this->graphQlMutation($query, [], '', $this->getHeaderMap());
     }
 
@@ -279,7 +279,7 @@ class PlaceOrderTest extends GraphQlAbstract
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute($reservedOrderId);
         $query = $this->getQuery($maskedQuoteId);
 
-        self::expectExceptionMessageRegExp('/The current user cannot perform operations on cart*/');
+        self::expectExceptionMessageMatches('/The current user cannot perform operations on cart*/');
         $this->graphQlMutation($query, [], '', $this->getHeaderMap('customer3@search.example.com'));
     }
 
@@ -316,7 +316,7 @@ QUERY;
     /**
      * @inheritdoc
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->registry->unregister('isSecureArea');
         $this->registry->register('isSecureArea', true);

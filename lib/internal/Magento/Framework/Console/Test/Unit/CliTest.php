@@ -36,7 +36,7 @@ class CliTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->inputMock = $this->getMockBuilder(InputInterface::class)
             ->getMockForAbstractClass();
@@ -55,7 +55,7 @@ class CliTest extends \PHPUnit\Framework\TestCase
     {
         $e = new \Exception('Test message');
         $this->inputMock->expects($this->once())->method('getFirstArgument')->willThrowException($e);
-        $loggerMock = $this->createMock(LoggerInterface::class);
+        $loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
         $loggerMock->expects($this->once())
             ->method('error')
             ->with($e->getMessage() . PHP_EOL . $e->getTraceAsString());

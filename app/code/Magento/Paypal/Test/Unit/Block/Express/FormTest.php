@@ -18,17 +18,17 @@ use Magento\Paypal\Model\Express\Checkout;
 class FormTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var Data|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_paypalData;
 
     /**
-     * @var Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_paypalConfig;
 
     /**
-     * @var CurrentCustomer|\PHPUnit_Framework_MockObject_MockObject
+     * @var CurrentCustomer|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $currentCustomer;
 
@@ -37,7 +37,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_paypalData = $this->createMock(\Magento\Paypal\Helper\Data::class);
 

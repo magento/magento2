@@ -10,7 +10,7 @@ namespace Magento\Sales\Test\Unit\Model\Service;
 use Magento\Sales\Model\Order;
 
 use Magento\Sales\Api\Data\CreditmemoInterface;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * Class CreditmemoServiceTest
@@ -61,7 +61,7 @@ class CreditmemoServiceTest extends \PHPUnit\Framework\TestCase
     /**
      * SetUp
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->creditmemoRepositoryMock = $this->getMockForAbstractClass(
             \Magento\Sales\Api\CreditmemoRepositoryInterface::class,
@@ -103,11 +103,12 @@ class CreditmemoServiceTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Run test cancel method
-     * @expectedExceptionMessage You can not cancel Credit Memo
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testCancel()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('You can not cancel Credit Memo');
+
         $this->assertTrue($this->creditmemoService->cancel(1));
     }
 
@@ -321,11 +322,12 @@ class CreditmemoServiceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedExceptionMessage The most money available to refund is 1.
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testRefundExpectsMoneyAvailableToReturn()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('The most money available to refund is 1.');
+
         $baseGrandTotal = 10;
         $baseTotalRefunded = 9;
         $baseTotalPaid = 10;
@@ -363,11 +365,12 @@ class CreditmemoServiceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedExceptionMessage We cannot register an existing credit memo.
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testRefundDoNotExpectsId()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('We cannot register an existing credit memo.');
+
         $creditMemoMock = $this->getMockBuilder(\Magento\Sales\Api\Data\CreditmemoInterface::class)
             ->setMethods(['getId'])
             ->getMockForAbstractClass();
@@ -376,11 +379,12 @@ class CreditmemoServiceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedExceptionMessage The most money available to refund is $1.00.
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testMultiCurrencyRefundExpectsMoneyAvailableToReturn()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('The most money available to refund is $1.00.');
+
         $baseGrandTotal = 10.00;
         $baseTotalRefunded = 9.00;
         $baseTotalPaid = 10;

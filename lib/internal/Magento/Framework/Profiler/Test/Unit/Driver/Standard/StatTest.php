@@ -14,7 +14,7 @@ class StatTest extends \PHPUnit\Framework\TestCase
      */
     protected $_stat;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_stat = new \Magento\Framework\Profiler\Driver\Standard\Stat();
     }

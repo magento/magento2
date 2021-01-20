@@ -16,16 +16,16 @@ class NoRouteHandlerTest extends \Magento\Framework\TestFramework\Unit\BaseTestC
     private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Config\ScopeConfigInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\Config\ScopeConfigInterface
      */
     private $configMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Request\Http
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\Request\Http
      */
     private $requestMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->configMock = $this->basicMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);

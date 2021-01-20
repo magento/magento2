@@ -20,36 +20,36 @@ use Magento\Catalog\Model\Product\Action;
 class MassStatusTest extends \Magento\Catalog\Test\Unit\Controller\Adminhtml\ProductTest
 {
     /**
-     * @var Processor|\PHPUnit_Framework_MockObject_MockObject
+     * @var Processor|\PHPUnit\Framework\MockObject\MockObject
      */
     private $priceProcessorMock;
 
     /**
-     * @var Redirect|\PHPUnit_Framework_MockObject_MockObject
+     * @var Redirect|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resultRedirectMock;
 
     /**
-     * @var Filter|\PHPUnit_Framework_MockObject_MockObject
+     * @var Filter|\PHPUnit\Framework\MockObject\MockObject
      */
     private $filterMock;
 
     /**
-     * @var Builder|\PHPUnit_Framework_MockObject_MockObject
+     * @var Builder|\PHPUnit\Framework\MockObject\MockObject
      */
     private $productBuilderMock;
 
     /**
-     * @var AbstractDb|\PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractDb|\PHPUnit\Framework\MockObject\MockObject
      */
     private $abstractDbMock;
 
     /**
-     * @var Action|\PHPUnit_Framework_MockObject_MockObject
+     * @var Action|\PHPUnit\Framework\MockObject\MockObject
      */
     private $actionMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->priceProcessorMock = $this->getMockBuilder(Processor::class)
             ->disableOriginalConstructor()->getMock();

@@ -9,7 +9,7 @@ use Magento\Framework\App\Config\MetadataProcessor;
 use Magento\Framework\App\Config\Initial;
 use Magento\Framework\App\Config\Data\ProcessorFactory;
 use Magento\Framework\App\Config\Data\ProcessorInterface;
-use \PHPUnit_Framework_MockObject_MockObject as Mock;
+use \PHPUnit\Framework\MockObject\MockObject as Mock;
 
 /**
  * {@inheritdoc}
@@ -32,14 +32,14 @@ class MetadataProcessorTest extends \PHPUnit\Framework\TestCase
     protected $_modelPoolMock;
 
     /**
-     * @var ProcessorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProcessorInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_backendModelMock;
 
     /**
      * {@inheritdoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_modelPoolMock = $this->getMockBuilder(ProcessorFactory::class)
             ->disableOriginalConstructor()

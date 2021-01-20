@@ -31,7 +31,7 @@ class StartTest extends AbstractBackendController
     /**
      * @inheridoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -42,7 +42,7 @@ class StartTest extends AbstractBackendController
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->session->getInvoiceItemQtys(true);
 

@@ -20,107 +20,107 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
     private $attribute;
 
     /**
-     * @var \Magento\Framework\Model\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\Context|\PHPUnit\Framework\MockObject\MockObject
      */
     private $contextMock;
 
     /**
-     * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Registry|\PHPUnit\Framework\MockObject\MockObject
      */
     private $registryMock;
 
     /**
-     * @var \Magento\Framework\Api\MetadataServiceInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Api\MetadataServiceInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $metadataServiceMock;
 
     /**
-     * @var \Magento\Framework\Api\AttributeValueFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Api\AttributeValueFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $attributeValueFactoryMock;
 
     /**
-     * @var \Magento\Eav\Model\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Eav\Model\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configMock;
 
     /**
-     * @var \Magento\Eav\Model\Entity\TypeFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Eav\Model\Entity\TypeFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $typeFactoryMock;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeManagerMock;
 
     /**
-     * @var \Magento\Eav\Model\ResourceModel\Helper|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Eav\Model\ResourceModel\Helper|\PHPUnit\Framework\MockObject\MockObject
      */
     private $helperMock;
 
     /**
-     * @var \Magento\Framework\Validator\UniversalFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Validator\UniversalFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $universalFactoryMock;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $timezoneMock;
 
     /**
-     * @var \Magento\Catalog\Model\Product\ReservedAttributeList|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product\ReservedAttributeList|\PHPUnit\Framework\MockObject\MockObject
      */
     private $reservedAttributeListMock;
 
     /**
-     * @var \Magento\Framework\Locale\ResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Locale\ResolverInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resolverMock;
 
     /**
-     * @var \Magento\Catalog\Model\Attribute\LockValidatorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Attribute\LockValidatorInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $lockValidatorMock;
 
     /**
-     * @var \Magento\Framework\Model\ResourceModel\AbstractResource|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\ResourceModel\AbstractResource|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resourceMock;
 
     /**
-     * @var \Magento\Framework\App\CacheInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\CacheInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $cacheManager;
 
     /**
-     * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $eventDispatcher;
 
     /**
-     * @var \Magento\Eav\Api\Data\AttributeOptionInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Eav\Api\Data\AttributeOptionInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $attributeOptionFactoryMock;
 
     /**
-     * @var \Magento\Framework\Reflection\DataObjectProcessor|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Reflection\DataObjectProcessor|\PHPUnit\Framework\MockObject\MockObject
      */
     private $dataObjectProcessorMock;
 
     /**
-     * @var \Magento\Framework\Api\DataObjectHelper|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Api\DataObjectHelper|\PHPUnit\Framework\MockObject\MockObject
      */
     private $dataObjectHelperMock;
 
     /**
-     * @var \Magento\Framework\Api\ExtensionAttributesFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Api\ExtensionAttributesFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $extensionAttributesFactory;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $dateTimeFormatter;
 
@@ -128,7 +128,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->contextMock = $this->getMockBuilder(\Magento\Framework\Model\Context::class)
             ->setMethods(['getCacheManager', 'getEventDispatcher'])

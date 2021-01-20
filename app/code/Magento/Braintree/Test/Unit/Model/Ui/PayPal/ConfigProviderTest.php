@@ -8,7 +8,7 @@ namespace Magento\Braintree\Test\Unit\Model\Ui\PayPal;
 use Magento\Braintree\Gateway\Config\PayPal\Config;
 use Magento\Braintree\Model\Ui\PayPal\ConfigProvider;
 use Magento\Framework\Locale\ResolverInterface;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * Class ConfigProviderTest
@@ -32,7 +32,7 @@ class ConfigProviderTest extends \PHPUnit\Framework\TestCase
      */
     private $configProvider;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->config = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()

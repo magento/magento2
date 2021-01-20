@@ -29,31 +29,31 @@ class PluginListTest extends \PHPUnit\Framework\TestCase
     private $object;
 
     /**
-     * @var \Magento\Framework\Config\ScopeInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Config\ScopeInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configScopeMock;
 
     /**
-     * @var \Magento\Framework\Config\CacheInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Config\CacheInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $cacheMock;
 
     /**
-     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Psr\Log\LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $loggerMock;
 
     /**
-     * @var SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var SerializerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $serializerMock;
 
     /**
-     * @var ObjectManagerInterface||\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface||\PHPUnit\Framework\MockObject\MockObject
      */
     private $objectManagerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $readerMap = include __DIR__ . '/../_files/reader_mock_map.php';
         $readerMock = $this->createMock(\Magento\Framework\ObjectManager\Config\Reader\Dom::class);
@@ -80,7 +80,7 @@ class PluginListTest extends \PHPUnit\Framework\TestCase
         $this->objectManagerMock->expects($this->any())
             ->method('get')
             ->willReturnArgument(0);
-        $this->serializerMock = $this->createMock(SerializerInterface::class);
+        $this->serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
 
         $definitions = new \Magento\Framework\ObjectManager\Definition\Runtime();
 

@@ -12,14 +12,14 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
     /**
      * Integration service mock
      *
-     * @var \Magento\Integration\Api\IntegrationServiceInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Integration\Api\IntegrationServiceInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $integrationServiceMock;
 
     /**
      * Authorization service mock
      *
-     * @var \Magento\Integration\Api\AuthorizationServiceInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Integration\Api\AuthorizationServiceInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $integrationAuthorizationServiceMock;
 
@@ -31,16 +31,16 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
     protected $apiSetupPlugin;
 
     /**
-     * @var \Magento\Integration\Model\ConfigBasedIntegrationManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Integration\Model\ConfigBasedIntegrationManager|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $subjectMock;
 
     /**
-     * @var \Magento\Integration\Model\IntegrationConfig|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Integration\Model\IntegrationConfig|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $integrationConfigMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->integrationServiceMock = $this->getMockBuilder(
             \Magento\Integration\Api\IntegrationServiceInterface::class

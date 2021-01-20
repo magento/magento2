@@ -23,11 +23,11 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
     protected $productMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $subjectMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->closureMock = function () {
             return 'Expected';
@@ -47,8 +47,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue(\Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE)
         );
-        $this->assertEquals(
-            true,
+        $this->assertTrue(
             $this->model->aroundIsProductConfigured(
                 $this->subjectMock,
                 $this->closureMock,

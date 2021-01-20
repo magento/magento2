@@ -19,18 +19,18 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_storeManagerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
 
         $this->_model = new Website($this->_storeManagerMock);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_storeManagerMock);
     }
@@ -48,10 +48,11 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\State\InitException
      */
     public function testGetScopeWithInvalidScope()
     {
+        $this->expectException(\Magento\Framework\Exception\State\InitException::class);
+
         $scopeMock = new \StdClass();
         $this->_storeManagerMock
             ->expects($this->once())

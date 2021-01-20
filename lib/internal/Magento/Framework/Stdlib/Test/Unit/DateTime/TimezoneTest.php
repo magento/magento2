@@ -38,24 +38,24 @@ class TimezoneTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * @var ScopeResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeResolverInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $scopeResolver;
 
     /**
-     * @var ResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResolverInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $localeResolver;
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $scopeConfig;
 
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->defaultTimeZone = date_default_timezone_get();
         date_default_timezone_set('UTC');
@@ -71,7 +71,7 @@ class TimezoneTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         date_default_timezone_set($this->defaultTimeZone);
     }

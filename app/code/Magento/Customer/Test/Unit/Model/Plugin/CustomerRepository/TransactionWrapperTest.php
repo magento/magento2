@@ -13,12 +13,12 @@ class TransactionWrapperTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Customer\Model\ResourceModel\Customer
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Customer\Model\ResourceModel\Customer
      */
     protected $resourceMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Customer\Api\CustomerRepositoryInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Customer\Api\CustomerRepositoryInterface
      */
     protected $subjectMock;
 
@@ -33,7 +33,7 @@ class TransactionWrapperTest extends \PHPUnit\Framework\TestCase
     protected $rollbackClosureMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $customerMock;
 
@@ -44,7 +44,7 @@ class TransactionWrapperTest extends \PHPUnit\Framework\TestCase
 
     const ERROR_MSG = "error occurred";
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->resourceMock = $this->createMock(\Magento\Customer\Model\ResourceModel\Customer::class);
         $this->subjectMock = $this->createMock(\Magento\Customer\Api\CustomerRepositoryInterface::class);
@@ -72,11 +72,12 @@ class TransactionWrapperTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage error occurred
      */
     public function testAroundSaveRollBack()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('error occurred');
+
         $this->resourceMock->expects($this->once())->method('beginTransaction');
         $this->resourceMock->expects($this->once())->method('rollBack');
 

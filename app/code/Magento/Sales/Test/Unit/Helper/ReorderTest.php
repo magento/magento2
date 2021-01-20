@@ -16,34 +16,34 @@ class ReorderTest extends \PHPUnit\Framework\TestCase
     protected $helper;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\App\Config\ScopeConfigInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $scopeConfigMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Sales\Model\Store
+     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Sales\Model\Store
      */
     protected $storeParam;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Sales\Model\Order
+     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Sales\Model\Order
      */
     protected $orderMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Model\Session
+     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Customer\Model\Session
      */
     protected $customerSessionMock;
 
     /**
-     * @var \Magento\Sales\Api\OrderRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Api\OrderRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $repositoryMock;
 
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->scopeConfigMock = $this->getMockBuilder(\Magento\Framework\App\Config::class)
             ->setMethods(['getValue'])

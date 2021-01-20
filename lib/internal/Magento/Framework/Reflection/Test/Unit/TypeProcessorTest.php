@@ -30,7 +30,7 @@ class TypeProcessorTest extends \PHPUnit\Framework\TestCase
     /**
      * Set up helper.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->typeProcessor = new TypeProcessor();
     }

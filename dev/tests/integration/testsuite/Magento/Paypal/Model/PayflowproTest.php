@@ -28,7 +28,7 @@ class PayflowproTest extends \PHPUnit\Framework\TestCase
      */
     protected $gatewayMock;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $httpClientFactoryMock = $this->getMockBuilder(\Magento\Framework\HTTP\ZendClientFactory::class)

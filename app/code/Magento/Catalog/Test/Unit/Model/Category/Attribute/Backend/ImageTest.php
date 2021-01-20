@@ -39,24 +39,24 @@ class ImageTest extends \PHPUnit\Framework\TestCase
     private $logger;
 
     /**
-     * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem|\PHPUnit\Framework\MockObject\MockObject
      */
     private $filesystem;
 
     /**
-     * @var StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject;
+     * @var StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject;
      */
     private $storeManagerInterfaceMock;
 
     /**
-     * @var Store|\PHPUnit_Framework_MockObject_MockObject
+     * @var Store|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeMock;
 
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -126,7 +126,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
 
         $model->beforeSave($object);
 
-        $this->assertEquals(null, $object->getTestAttribute());
+        $this->assertNull($object->getTestAttribute());
     }
 
     /**
@@ -178,7 +178,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue('test_attribute'));
 
         $model = $this->setUpModelForTests();
-        $mediaDirectoryMock = $this->createMock(WriteInterface::class);
+        $mediaDirectoryMock = $this->getMockForAbstractClass(WriteInterface::class);
         $this->filesystem->expects($this->once())
             ->method('getDirectoryWrite')
             ->with(DirectoryList::MEDIA)
@@ -260,7 +260,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         $model = $this->setUpModelForTests();
         $model->setAttribute($this->attribute);
 
-        $mediaDirectoryMock = $this->createMock(WriteInterface::class);
+        $mediaDirectoryMock = $this->getMockForAbstractClass(WriteInterface::class);
         $this->filesystem->expects($this->once())
             ->method('getDirectoryWrite')
             ->with(DirectoryList::MEDIA)
@@ -421,7 +421,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
             ->method('getName')
             ->will($this->returnValue('_additional_data_test_attribute'));
 
-        $mediaDirectoryMock = $this->createMock(WriteInterface::class);
+        $mediaDirectoryMock = $this->getMockForAbstractClass(WriteInterface::class);
         $this->filesystem->expects($this->any())
             ->method('getDirectoryWrite')
             ->with(DirectoryList::MEDIA)

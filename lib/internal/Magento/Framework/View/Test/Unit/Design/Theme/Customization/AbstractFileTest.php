@@ -19,21 +19,21 @@ class AbstractFileTest extends \PHPUnit\Framework\TestCase
     protected $_modelBuilder;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_customizationPath;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_fileFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_filesystem;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_customizationPath = $this->createMock(\Magento\Framework\View\Design\Theme\Customization\Path::class);
         $this->_fileFactory =
@@ -49,7 +49,7 @@ class AbstractFileTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->_customizationPath = null;
         $this->_fileFactory = null;

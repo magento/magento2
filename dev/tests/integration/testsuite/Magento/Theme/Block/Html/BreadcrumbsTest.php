@@ -23,7 +23,7 @@ class BreadcrumbsTest extends \PHPUnit\Framework\TestCase
      */
     private $serializer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         Bootstrap::getObjectManager()->get(\Magento\Framework\App\State::class)->setAreaCode('frontend');
         $this->block = Bootstrap::getObjectManager()

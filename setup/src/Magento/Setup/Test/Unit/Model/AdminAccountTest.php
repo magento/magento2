@@ -12,12 +12,12 @@ use Magento\Setup\Model\AdminAccount;
 class AdminAccountTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Mysql
+     * @var \PHPUnit\Framework\MockObject\MockObject|Mysql
      */
     private $dbAdapter;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Encryption\EncryptorInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Encryption\EncryptorInterface
      */
     private $encryptor;
 
@@ -31,7 +31,7 @@ class AdminAccountTest extends \PHPUnit\Framework\TestCase
      */
     private $prefix;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->dbAdapter = $this->getMockBuilder(Mysql::class)
             ->disableOriginalConstructor()

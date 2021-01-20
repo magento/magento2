@@ -36,7 +36,7 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
      */
     protected $integrationManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->integrationServiceMock = $this->getMockBuilder(
             \Magento\Integration\Api\IntegrationServiceInterface::class
@@ -74,7 +74,7 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         unset($this->integrationServiceMock);
         unset($this->integrationManager);

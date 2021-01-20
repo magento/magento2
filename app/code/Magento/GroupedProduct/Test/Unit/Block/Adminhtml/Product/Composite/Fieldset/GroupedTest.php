@@ -13,26 +13,26 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
     protected $block;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $registryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $pricingHelperMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $productMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->registryMock = $this->createMock(\Magento\Framework\Registry::class);
         $this->productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
@@ -187,7 +187,7 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetCanShowProductPrice()
     {
-        $this->assertEquals(true, $this->block->getCanShowProductPrice($this->productMock));
+        $this->assertTrue($this->block->getCanShowProductPrice($this->productMock));
     }
 
     /**
@@ -199,7 +199,7 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
 
         $this->productMock->expects($this->never())->method('getOptions');
 
-        $this->assertEquals(true, $this->block->getIsLastFieldset());
+        $this->assertTrue($this->block->getIsLastFieldset());
     }
 
     /**

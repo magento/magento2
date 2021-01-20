@@ -34,7 +34,7 @@ class ProductListTest extends TestCase
      */
     protected $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->block = $this->objectManager->create(ProductsList::class);

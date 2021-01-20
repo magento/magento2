@@ -22,24 +22,24 @@ class WebhookMessageReaderTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var DecoderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var DecoderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $decoder;
 
     /**
-     * @var WebhookMessageFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var WebhookMessageFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $webhookMessageFactory;
 
     /**
-     * @var WebhookRequest|\PHPUnit_Framework_MockObject_MockObject
+     * @var WebhookRequest|\PHPUnit\Framework\MockObject\MockObject
      */
     private $webhookRequest;
 
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->decoder = $this->getMockBuilder(DecoderInterface::class)
             ->getMockForAbstractClass();
@@ -101,10 +101,11 @@ class WebhookMessageReaderTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests reading failure webhook message from request.
      *
-     * @expectedException \InvalidArgumentException
      */
     public function testReadFail()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $this->decoder->expects($this->once())
             ->method('decode')
             ->willThrowException(new \Exception('Error'));

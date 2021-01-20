@@ -14,7 +14,7 @@ namespace Magento\Eav\Test\Unit\Model\Validator\Attribute;
 class DataTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Eav\Model\AttributeDataFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Eav\Model\AttributeDataFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $attrDataFactory;
 
@@ -31,7 +31,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->attrDataFactory = $this->getMockBuilder(\Magento\Eav\Model\AttributeDataFactory::class)
@@ -417,7 +417,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param array $attributeData
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function _getAttributeMock($attributeData)
     {
@@ -472,7 +472,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
     /**
      * @param boolean $returnValue
      * @param string|null $argument
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function _getDataModelMock($returnValue, $argument = null)
     {
@@ -498,7 +498,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function _getEntityMock()
     {

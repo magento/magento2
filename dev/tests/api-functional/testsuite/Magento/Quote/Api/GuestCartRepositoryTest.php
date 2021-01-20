@@ -15,12 +15,12 @@ class GuestCartRepositoryTest extends WebapiAbstract
      */
     private $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         try {
             $cart = $this->getCart('test01');

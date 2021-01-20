@@ -14,16 +14,16 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class FactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var ObjectManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManager|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $objectManager;
 
     /**
-     * @var RouteFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var RouteFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $factory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
 

@@ -16,22 +16,22 @@ class CompositeValidatorTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $validatorOneMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $validatorTwoMock;
 
     /**
      * Initialize parameters
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->validatorOneMock = $this->createMock(ValidatorInterface::class);
-        $this->validatorTwoMock = $this->createMock(ValidatorInterface::class);
+        $this->validatorOneMock = $this->getMockForAbstractClass(ValidatorInterface::class);
+        $this->validatorTwoMock = $this->getMockForAbstractClass(ValidatorInterface::class);
 
         $this->model = new CompositeValidator([$this->validatorOneMock, $this->validatorTwoMock]);
     }

@@ -39,7 +39,7 @@ class CreateEmptyCartTest extends GraphQlAbstract
      */
     private $quoteIdMaskFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->guestCartRepository = $objectManager->get(GuestCartRepositoryInterface::class);
@@ -154,7 +154,7 @@ mutation {
 QUERY;
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $quoteCollection = $this->quoteCollectionFactory->create();
         foreach ($quoteCollection as $quote) {

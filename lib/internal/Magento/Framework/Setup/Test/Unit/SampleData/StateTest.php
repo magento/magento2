@@ -11,17 +11,17 @@ namespace Magento\Framework\Setup\Test\Unit\SampleData;
 class StateTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Setup\SampleData\State|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Setup\SampleData\State|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $state;
 
     /**
-     * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $filesystem;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\WriteInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\Directory\WriteInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $writeInterface;
 
@@ -30,7 +30,7 @@ class StateTest extends \PHPUnit\Framework\TestCase
      */
     protected $absolutePath;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->filesystem = $this->getMockBuilder(\Magento\Framework\Filesystem::class)
             ->setMethods(['getDirectoryWrite'])
@@ -79,7 +79,7 @@ class StateTest extends \PHPUnit\Framework\TestCase
     /**
      * Clear state file
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->filesystem->expects($this->any())->method('getDirectoryWrite')->willReturn($this->writeInterface);
         $this->writeInterface->expects($this->any())->method('openFile')->willReturnSelf($this->absolutePath);

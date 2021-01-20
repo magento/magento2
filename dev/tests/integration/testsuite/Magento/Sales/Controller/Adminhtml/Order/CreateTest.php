@@ -39,7 +39,7 @@ class CreateTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
      *
      * @throws \Magento\Framework\Exception\AuthenticationException
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()

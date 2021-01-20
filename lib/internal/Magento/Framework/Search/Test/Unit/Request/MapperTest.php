@@ -23,46 +23,46 @@ class MapperTest extends \PHPUnit\Framework\TestCase
     private $helper;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $objectManager;
 
     /**
-     * @var \Magento\Framework\Search\Request\Query\Match|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Search\Request\Query\Match|\PHPUnit\Framework\MockObject\MockObject
      */
     private $queryMatch;
 
     /**
-     * @var \Magento\Framework\Search\Request\Query\BoolExpression|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Search\Request\Query\BoolExpression|\PHPUnit\Framework\MockObject\MockObject
      */
     private $queryBool;
 
     /**
-     * @var \Magento\Framework\Search\Request\Query\Filter|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Search\Request\Query\Filter|\PHPUnit\Framework\MockObject\MockObject
      */
     private $queryFilter;
 
     /**
-     * @var \Magento\Framework\Search\Request\Filter\Term|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Search\Request\Filter\Term|\PHPUnit\Framework\MockObject\MockObject
      */
     private $filterTerm;
 
     /**
-     * @var \Magento\Framework\Search\Request\Filter\Wildcard|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Search\Request\Filter\Wildcard|\PHPUnit\Framework\MockObject\MockObject
      */
     private $filterWildcard;
 
     /**
-     * @var \Magento\Framework\Search\Request\Filter\Range|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Search\Request\Filter\Range|\PHPUnit\Framework\MockObject\MockObject
      */
     private $filterRange;
 
     /**
-     * @var \Magento\Framework\Search\Request\Filter\Bool|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Search\Request\Filter\Bool|\PHPUnit\Framework\MockObject\MockObject
      */
     private $filterBool;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->helper = new ObjectManager($this);
 

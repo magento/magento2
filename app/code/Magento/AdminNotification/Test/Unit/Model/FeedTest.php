@@ -20,37 +20,37 @@ class FeedTest extends \PHPUnit\Framework\TestCase
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    /** @var \Magento\AdminNotification\Model\InboxFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\AdminNotification\Model\InboxFactory|\PHPUnit\Framework\MockObject\MockObject */
     protected $inboxFactory;
 
-    /** @var \Magento\AdminNotification\Model\Inbox|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\AdminNotification\Model\Inbox|\PHPUnit\Framework\MockObject\MockObject */
     protected $inboxModel;
 
-    /** @var \Magento\Framework\HTTP\Adapter\CurlFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\HTTP\Adapter\CurlFactory|\PHPUnit\Framework\MockObject\MockObject */
     protected $curlFactory;
 
-    /** @var \Magento\Framework\HTTP\Adapter\Curl|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\HTTP\Adapter\Curl|\PHPUnit\Framework\MockObject\MockObject */
     protected $curl;
 
-    /** @var \Magento\Backend\App\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Backend\App\ConfigInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $backendConfig;
 
-    /** @var \Magento\Framework\App\CacheInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\CacheInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $cacheManager;
 
-    /** @var \Magento\Framework\App\State|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\State|\PHPUnit\Framework\MockObject\MockObject */
     protected $appState;
 
-    /** @var \Magento\Framework\App\DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\DeploymentConfig|\PHPUnit\Framework\MockObject\MockObject */
     protected $deploymentConfig;
 
-    /** @var \Magento\Framework\App\ProductMetadata|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\ProductMetadata|\PHPUnit\Framework\MockObject\MockObject */
     protected $productMetadata;
 
-    /** @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\UrlInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $urlBuilder;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->inboxFactory = $this->createPartialMock(
             \Magento\AdminNotification\Model\InboxFactory::class,

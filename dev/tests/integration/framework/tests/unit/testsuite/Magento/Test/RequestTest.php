@@ -14,7 +14,7 @@ class RequestTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model = null;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_model = new \Magento\TestFramework\Request(
             $this->createMock(\Magento\Framework\Stdlib\Cookie\CookieReaderInterface::class),

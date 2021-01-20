@@ -77,7 +77,7 @@ class InfoTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 
     /**
      * @param array $additionalOrderData
-     * @return \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Framework\Registry|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function _putOrderIntoRegistry(array $additionalOrderData = [])
     {

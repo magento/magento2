@@ -14,31 +14,31 @@ use Magento\Customer\Api\CustomerMetadataInterface;
  */
 class AddressTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \Magento\Customer\Helper\Address|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Customer\Helper\Address|\PHPUnit\Framework\MockObject\MockObject */
     protected $helper;
 
     /** @var \Magento\Framework\App\Helper\Context */
     protected $context;
 
-    /** @var \Magento\Framework\View\Element\BlockFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\View\Element\BlockFactory|\PHPUnit\Framework\MockObject\MockObject */
     protected $blockFactory;
 
-    /** @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $storeManager;
 
-    /** @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $scopeConfig;
 
-    /** @var CustomerMetadataInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var CustomerMetadataInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $customerMetadataService;
 
-    /** @var \Magento\Customer\Model\Address\Config|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Customer\Model\Address\Config|\PHPUnit\Framework\MockObject\MockObject */
     protected $addressConfig;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|AddressMetadataInterface */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|AddressMetadataInterface */
     private $addressMetadataService;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $className = \Magento\Customer\Helper\Address::class;

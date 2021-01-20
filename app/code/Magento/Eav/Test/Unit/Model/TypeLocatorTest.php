@@ -27,11 +27,11 @@ class TypeLocatorTest extends \PHPUnit\Framework\TestCase
     private $objectManger;
 
     /**
-     * @var ComplexTypeLocator|\PHPUnit_Framework_MockObject_MockObject
+     * @var ComplexTypeLocator|\PHPUnit\Framework\MockObject\MockObject
      */
     private $complexType;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManger = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->complexType = $this->getMockBuilder(ComplexTypeLocator::class)

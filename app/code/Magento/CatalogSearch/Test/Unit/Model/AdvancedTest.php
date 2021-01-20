@@ -13,46 +13,46 @@ namespace Magento\CatalogSearch\Test\Unit\Model;
 class AdvancedTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\CatalogSearch\Model\ResourceModel\Advanced\Collection
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\CatalogSearch\Model\ResourceModel\Advanced\Collection
      */
     protected $collection;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\CatalogSearch\Model\ResourceModel\Advanced
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\CatalogSearch\Model\ResourceModel\Advanced
      */
     protected $resource;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\CatalogSearch\Model\ResourceModel\ResourceProvider
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\CatalogSearch\Model\ResourceModel\ResourceProvider
      */
     protected $resourceProvider;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject[]|\Magento\Catalog\Model\ResourceModel\Eav\Attribute[]
+     * @var \PHPUnit\Framework\MockObject\MockObject[]|\Magento\Catalog\Model\ResourceModel\Eav\Attribute[]
      */
     protected $attributes;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Data\Collection
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Data\Collection
      */
     protected $dataCollection;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Directory\Model\Currency
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Directory\Model\Currency
      */
     private $currency;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Store\Model\StoreManagerInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Store\Model\StoreManagerInterface
      */
     private $storeManager;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Store\Model\Store
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Store\Model\Store
      */
     private $store;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->collection = $this->createPartialMock(
             \Magento\CatalogSearch\Model\ResourceModel\Advanced\Collection::class,
@@ -259,7 +259,7 @@ class AdvancedTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param $table
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
+     * @return \PHPUnit\Framework\MockObject\MockObject|\Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      */
     private function createBackend($table)
     {
@@ -275,7 +275,7 @@ class AdvancedTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param string $optionText
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     private function createSource($optionText = 'optionText')
     {
@@ -380,7 +380,7 @@ class AdvancedTest extends \PHPUnit\Framework\TestCase
      * @param null $storeLabel
      * @param null $frontendInput
      * @param null $backendType
-     * @return \Magento\Catalog\Model\ResourceModel\Eav\Attribute|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Catalog\Model\ResourceModel\Eav\Attribute|\PHPUnit\Framework\MockObject\MockObject
      */
     private function createAttribute(
         $backend,

@@ -16,16 +16,16 @@ class CompositeTest extends \PHPUnit\Framework\TestCase
     protected $object;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $rendererOne;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $rendererTwo;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->rendererOne = $this->createMock(\Magento\Framework\Phrase\RendererInterface::class);
         $this->rendererTwo = $this->createMock(\Magento\Framework\Phrase\RendererInterface::class);

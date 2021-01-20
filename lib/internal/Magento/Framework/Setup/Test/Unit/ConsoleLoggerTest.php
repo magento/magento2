@@ -11,16 +11,16 @@ use Magento\Framework\Setup\ConsoleLogger;
 class ConsoleLoggerTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Symfony\Component\Console\Output\OutputInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Symfony\Component\Console\Output\OutputInterface
      */
     private $console;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|ConsoleLogger
+     * @var \PHPUnit\Framework\MockObject\MockObject|ConsoleLogger
      */
     private $consoleLoggerModel;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->console = $this->createMock(\Symfony\Component\Console\Output\OutputInterface::class);
         $outputFormatter = $this->createMock(\Symfony\Component\Console\Formatter\OutputFormatterInterface::class);

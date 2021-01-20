@@ -17,10 +17,10 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
      */
     protected $model;
 
-    /** @var \Magento\Framework\Acl\AclResource\ProviderInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Acl\AclResource\ProviderInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $resourceProviderMock;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->resourceProviderMock = $this->getMockBuilder(\Magento\Framework\Acl\AclResource\ProviderInterface::class)
             ->disableOriginalConstructor()

@@ -12,27 +12,27 @@ use Magento\Framework\Search\EngineResolverInterface;
 class CustomerGroupTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Indexer\IndexerInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Indexer\IndexerInterface
      */
     protected $indexerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Customer\Model\ResourceModel\Group
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Customer\Model\ResourceModel\Group
      */
     protected $subjectMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\AdvancedSearch\Model\Client\ClientOptionsInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\AdvancedSearch\Model\Client\ClientOptionsInterface
      */
     protected $customerOptionsMock;
 
     /**
-     * @var \Magento\Framework\Indexer\IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Indexer\IndexerRegistry|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $indexerRegistryMock;
 
     /**
-     * @var EngineResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var EngineResolverInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $engineResolverMock;
 
@@ -41,7 +41,7 @@ class CustomerGroupTest extends \PHPUnit\Framework\TestCase
      */
     protected $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->subjectMock = $this->createMock(\Magento\Customer\Model\ResourceModel\Group::class);
         $this->customerOptionsMock = $this->createMock(

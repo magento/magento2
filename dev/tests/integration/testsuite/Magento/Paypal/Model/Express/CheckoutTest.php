@@ -28,22 +28,22 @@ class CheckoutTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * @var Info|\PHPUnit_Framework_MockObject_MockObject
+     * @var Info|\PHPUnit\Framework\MockObject\MockObject
      */
     private $paypalInfo;
 
     /**
-     * @var Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|\PHPUnit\Framework\MockObject\MockObject
      */
     private $paypalConfig;
 
     /**
-     * @var Factory|\PHPUnit_Framework_MockObject_MockObject
+     * @var Factory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $apiTypeFactory;
 
     /**
-     * @var Nvp|\PHPUnit_Framework_MockObject_MockObject
+     * @var Nvp|\PHPUnit\Framework\MockObject\MockObject
      */
     private $api;
 
@@ -57,7 +57,7 @@ class CheckoutTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
 

@@ -16,11 +16,11 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Framework\Cache\FrontendInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Cache\FrontendInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $frontendMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $cacheFrontendPoolMock = $this->getMockBuilder(\Magento\Framework\App\Cache\Type\FrontendPool::class)
             ->disableOriginalConstructor()

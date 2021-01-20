@@ -118,12 +118,12 @@ class ClassGeneratorTest extends \PHPUnit\Framework\TestCase
         'publicProperty' => ['name' => 'publicProperty'],
     ];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_model = new \Magento\Framework\Code\Generator\ClassGenerator();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_model);
     }

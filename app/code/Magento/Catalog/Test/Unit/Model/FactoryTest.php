@@ -30,14 +30,15 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testExceptionCreate()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+
         $this->factory->create('null', []);
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->model = $this->createMock(\Magento\Catalog\Model\Product\Option::class);
 

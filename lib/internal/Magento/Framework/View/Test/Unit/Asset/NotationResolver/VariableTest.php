@@ -14,12 +14,12 @@ use Magento\Framework\View\Asset\Repository;
 class VariableTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var FallbackContext|\PHPUnit_Framework_MockObject_MockObject
+     * @var FallbackContext|\PHPUnit\Framework\MockObject\MockObject
      */
     private $context;
 
     /**
-     * @var Repository|\PHPUnit_Framework_MockObject_MockObject
+     * @var Repository|\PHPUnit\Framework\MockObject\MockObject
      */
     private $assetRepo;
 
@@ -28,7 +28,7 @@ class VariableTest extends \PHPUnit\Framework\TestCase
      */
     private $object;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $area = 'frontend';
         $themePath = 'Magento/blank';

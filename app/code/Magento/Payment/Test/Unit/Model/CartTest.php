@@ -12,13 +12,13 @@ class CartTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Payment\Model\Cart */
     protected $_model;
 
-    /**  @var \PHPUnit_Framework_MockObject_MockObject */
+    /**  @var \PHPUnit\Framework\MockObject\MockObject */
     protected $_eventManagerMock;
 
-    /**  @var \PHPUnit_Framework_MockObject_MockObject */
+    /**  @var \PHPUnit\Framework\MockObject\MockObject */
     protected $_salesModelMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_eventManagerMock = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
         $this->_salesModelMock = $this->createMock(\Magento\Payment\Model\Cart\SalesModel\SalesModelInterface::class);

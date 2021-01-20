@@ -19,17 +19,17 @@ class DateTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var DateTime|\PHPUnit_Framework_MockObject_MockObject
+     * @var DateTime|\PHPUnit\Framework\MockObject\MockObject
      */
     private $dateTime;
 
     /**
-     * @var TimezoneInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var TimezoneInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $localeDate;
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $scopeConfig;
 
@@ -38,7 +38,7 @@ class DateTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->dateTime = $this->getMockBuilder(\Magento\Framework\Stdlib\DateTime::class)
             ->disableOriginalConstructor()

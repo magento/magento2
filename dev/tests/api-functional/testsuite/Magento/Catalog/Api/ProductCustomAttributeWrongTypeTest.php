@@ -18,7 +18,7 @@ class ProductCustomAttributeWrongTypeTest extends WebapiAbstract
     /**
      * Execute per test cleanup
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->deleteProductBySku(self::SIMPLE_PRODUCT_SKU);
         parent::tearDown();

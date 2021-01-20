@@ -8,14 +8,14 @@ namespace Magento\Captcha\Test\Unit\Helper\Adminhtml;
 class DataTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Captcha\Helper\Adminhtml\Data | |PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Captcha\Helper\Adminhtml\Data | |PHPUnit\Framework\MockObject\MockObject
      */
     protected $_model;
 
     /**
      * setUp
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $className = \Magento\Captcha\Helper\Adminhtml\Data::class;

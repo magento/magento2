@@ -14,37 +14,37 @@ use Magento\Framework\Convert\DataSize;
 class ServiceTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Theme\Model\Uploader\Service
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Theme\Model\Uploader\Service
      */
     protected $_service;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\MediaStorage\Model\File\Uploader
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\MediaStorage\Model\File\Uploader
      */
     protected $_uploader;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\MediaStorage\Model\File\UploaderFactory
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\MediaStorage\Model\File\UploaderFactory
      */
     protected $_uploaderFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\File\Size
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\File\Size
      */
     protected $_fileSizeMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Convert\DataSize
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Convert\DataSize
      */
     protected $dataSize;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Filesystem
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Filesystem
      */
     protected $_filesystemMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Filesystem\Directory\Read
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Filesystem\Directory\Read
      */
     protected $_directoryMock;
 
@@ -53,7 +53,7 @@ class ServiceTest extends \PHPUnit\Framework\TestCase
      */
     const MB_MULTIPLIER = 1048576;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_uploader = $this->createMock(\Magento\MediaStorage\Model\File\Uploader::class);
         $this->dataSize = new DataSize();
@@ -88,7 +88,7 @@ class ServiceTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->_service = null;
         $this->_uploader = null;
@@ -213,10 +213,11 @@ class ServiceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testUploadInvalidCssFile()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+
         $fileName = 'file.name';
 
         $this->_uploader->expects(
@@ -294,10 +295,11 @@ class ServiceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testUploadInvalidJsFile()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+
         $fileName = 'file.name';
         $this->_service = new \Magento\Theme\Model\Uploader\Service(
             $this->_filesystemMock,

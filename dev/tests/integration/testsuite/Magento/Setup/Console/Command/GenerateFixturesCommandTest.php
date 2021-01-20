@@ -38,7 +38,7 @@ class GenerateFixturesCommandTest extends \Magento\TestFramework\Indexer\TestCas
     /**
      * Setup
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
 
@@ -90,14 +90,14 @@ class GenerateFixturesCommandTest extends \Magento\TestFramework\Indexer\TestCas
     /**
      * teardown
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->setIncrement(1);
 
         parent::tearDown();
     }
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         $db = Bootstrap::getInstance()->getBootstrap()
             ->getApplication()

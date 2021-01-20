@@ -21,43 +21,43 @@ class GenerateTest extends \PHPUnit\Framework\TestCase
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    /** @var \Magento\Backend\App\Action\Context|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Backend\App\Action\Context|\PHPUnit\Framework\MockObject\MockObject */
     protected $contextMock;
 
-    /** @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Registry|\PHPUnit\Framework\MockObject\MockObject */
     protected $registryMock;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \PHPUnit\Framework\MockObject\MockObject */
     private $requestMock;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \PHPUnit\Framework\MockObject\MockObject */
     private $messageManager;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \PHPUnit\Framework\MockObject\MockObject */
     private $responseMock;
 
-    /** @var \Magento\Framework\App\Response\Http\FileFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\Response\Http\FileFactory|\PHPUnit\Framework\MockObject\MockObject */
     protected $fileFactoryMock;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \PHPUnit\Framework\MockObject\MockObject */
     private $view;
 
-    /** @var \Magento\Framework\Stdlib\DateTime\Filter\Date|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Stdlib\DateTime\Filter\Date|\PHPUnit\Framework\MockObject\MockObject */
     protected $dateMock;
 
-    /** @var  ObjectManager | \PHPUnit_Framework_MockObject_MockObject */
+    /** @var  ObjectManager | \PHPUnit\Framework\MockObject\MockObject */
     private $objectManagerMock;
 
-    /** @var  CouponGenerator | \PHPUnit_Framework_MockObject_MockObject */
+    /** @var  CouponGenerator | \PHPUnit\Framework\MockObject\MockObject */
     private $couponGenerator;
 
-    /** @var  CouponGenerationSpecInterfaceFactory | \PHPUnit_Framework_MockObject_MockObject */
+    /** @var  CouponGenerationSpecInterfaceFactory | \PHPUnit\Framework\MockObject\MockObject */
     private $couponGenerationSpec;
 
     /**
      * Test setup
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->contextMock = $this->getMockBuilder(\Magento\Backend\App\Action\Context::class)
             ->disableOriginalConstructor()

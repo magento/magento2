@@ -18,7 +18,7 @@ use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterfac
 class ColumnTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var ContextInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ContextInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $contextMock;
 
@@ -30,7 +30,7 @@ class ColumnTest extends \PHPUnit\Framework\TestCase
     /**
      * Set up
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
 
@@ -104,17 +104,17 @@ class ColumnTest extends \PHPUnit\Framework\TestCase
             'config' => ['dataType' => 'test_type', 'sortable' => true]
         ];
 
-        /** @var UiComponentFactory|\PHPUnit_Framework_MockObject_MockObject $uiComponentFactoryMock */
+        /** @var UiComponentFactory|\PHPUnit\Framework\MockObject\MockObject $uiComponentFactoryMock */
         $uiComponentFactoryMock = $this->createMock(\Magento\Framework\View\Element\UiComponentFactory::class);
 
-        /** @var UiComponentInterface|\PHPUnit_Framework_MockObject_MockObject $wrappedComponentMock */
+        /** @var UiComponentInterface|\PHPUnit\Framework\MockObject\MockObject $wrappedComponentMock */
         $wrappedComponentMock = $this->getMockForAbstractClass(
             \Magento\Framework\View\Element\UiComponentInterface::class,
             [],
             '',
             false
         );
-        /** @var DataProviderInterface|\PHPUnit_Framework_MockObject_MockObject $dataProviderMock */
+        /** @var DataProviderInterface|\PHPUnit\Framework\MockObject\MockObject $dataProviderMock */
         $dataProviderMock = $this->getMockForAbstractClass(
             \Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface::class,
             [],

@@ -10,7 +10,7 @@ use \Magento\Framework\Data\Argument\Interpreter\ArrayType;
 class ArrayTypeTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Data\Argument\InterpreterInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Data\Argument\InterpreterInterface
      */
     protected $_itemInterpreter;
 
@@ -19,7 +19,7 @@ class ArrayTypeTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_itemInterpreter = $this->getMockForAbstractClass(
             \Magento\Framework\Data\Argument\InterpreterInterface::class

@@ -17,12 +17,12 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class StructureManagerTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var Structure|\PHPUnit_Framework_MockObject_MockObject
+     * @var Structure|\PHPUnit\Framework\MockObject\MockObject
      */
     private $structureMock;
 
     /**
-     * @var ScheduledStructure|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScheduledStructure|\PHPUnit\Framework\MockObject\MockObject
      */
     private $scheduledStructureMock;
 
@@ -31,7 +31,7 @@ class StructureManagerTest extends \PHPUnit\Framework\TestCase
      */
     private $structureManager;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $this->structureMock = $this->getMockBuilder(Structure::class)

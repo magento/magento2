@@ -25,32 +25,32 @@ class CounterTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var ProductManagementInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductManagementInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $productManagement;
 
     /**
-     * @var ConfigurableProductManagementInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigurableProductManagementInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $configurableManagement;
 
     /**
-     * @var CategoryManagementInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CategoryManagementInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $categoryManagement;
 
     /**
-     * @var CustomerManagementInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CustomerManagementInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $customerManagement;
 
     /**
-     * @var WebsiteManagementInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var WebsiteManagementInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $websiteManagement;
 
     /**
-     * @var StoreManagementInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagementInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeManagement;
 
@@ -59,7 +59,7 @@ class CounterTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->productManagement = $this->getMockBuilder(\Magento\Catalog\Api\ProductManagementInterface::class)
             ->disableOriginalConstructor()

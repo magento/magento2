@@ -18,7 +18,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     /**
      * Set up.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_model = new \Magento\Framework\Data\Collection(
             $this->createMock(\Magento\Framework\Data\Collection\EntityFactory::class)

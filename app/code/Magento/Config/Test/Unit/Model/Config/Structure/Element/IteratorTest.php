@@ -13,11 +13,11 @@ class IteratorTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_flyweightMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $elementData = ['group1' => ['id' => 1], 'group2' => ['id' => 2], 'group3' => ['id' => 3]];
         $this->_flyweightMock = $this->createMock(\Magento\Config\Model\Config\Structure\Element\Group::class);
@@ -26,7 +26,7 @@ class IteratorTest extends \PHPUnit\Framework\TestCase
         $this->_model->setElements($elementData, 'scope');
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_model);
         unset($this->_flyweightMock);

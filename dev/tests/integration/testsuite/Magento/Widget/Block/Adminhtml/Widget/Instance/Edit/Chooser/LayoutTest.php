@@ -11,11 +11,11 @@ namespace Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser;
 class LayoutTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser\Layout|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser\Layout|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_block;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

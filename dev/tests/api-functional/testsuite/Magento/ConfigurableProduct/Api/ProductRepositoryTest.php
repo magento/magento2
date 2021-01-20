@@ -39,7 +39,7 @@ class ProductRepositoryTest extends WebapiAbstract
     /**
      * Execute per test initialization
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->eavConfig = $this->objectManager->get(\Magento\Eav\Model\Config::class);
@@ -48,7 +48,7 @@ class ProductRepositoryTest extends WebapiAbstract
     /**
      * Execute per test cleanup
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->deleteProductBySku(self::CONFIGURABLE_PRODUCT_SKU);
         parent::tearDown();

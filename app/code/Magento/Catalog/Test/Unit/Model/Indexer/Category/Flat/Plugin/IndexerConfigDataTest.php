@@ -18,16 +18,16 @@ class IndexerConfigDataTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var State|\PHPUnit_Framework_MockObject_MockObject
+     * @var State|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $stateMock;
 
     /**
-     * @var Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var Data|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $subjectMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->stateMock = $this->createPartialMock(State::class, ['isFlatEnabled']);
         $this->subjectMock = $this->createMock(Data::class);

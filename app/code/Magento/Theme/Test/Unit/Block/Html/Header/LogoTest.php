@@ -59,7 +59,7 @@ class LogoTest extends \PHPUnit\Framework\TestCase
         ];
         $block = $objectManager->getObject(\Magento\Theme\Block\Html\Header\Logo::class, $arguments);
 
-        $this->assertEquals(null, $block->getLogoHeight());
+        $this->assertNull($block->getLogoHeight());
     }
 
     /**

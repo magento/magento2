@@ -14,28 +14,28 @@ class CustomerTokenServiceTest extends \PHPUnit\Framework\TestCase
     /** \Magento\Integration\Model\CustomerTokenService */
     protected $_tokenService;
 
-    /** \Magento\Integration\Model\Oauth\TokenFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** \Magento\Integration\Model\Oauth\TokenFactory|\PHPUnit\Framework\MockObject\MockObject */
     protected $_tokenFactoryMock;
 
-    /** \Magento\Customer\Api\AccountManagementInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** \Magento\Customer\Api\AccountManagementInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $_accountManagementMock;
 
-    /** \Magento\Integration\Model\ResourceModel\Oauth\Token\Collection|\PHPUnit_Framework_MockObject_MockObject */
+    /** \Magento\Integration\Model\ResourceModel\Oauth\Token\Collection|\PHPUnit\Framework\MockObject\MockObject */
     protected $_tokenModelCollectionMock;
 
-    /** \PHPUnit_Framework_MockObject_MockObject */
+    /** \PHPUnit\Framework\MockObject\MockObject */
     protected $_tokenModelCollectionFactoryMock;
 
-    /** @var \Magento\Integration\Model\CredentialsValidator|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Integration\Model\CredentialsValidator|\PHPUnit\Framework\MockObject\MockObject */
     protected $validatorHelperMock;
 
-    /** @var \Magento\Integration\Model\Oauth\Token|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Integration\Model\Oauth\Token|\PHPUnit\Framework\MockObject\MockObject */
     private $_tokenMock;
 
-    /** @var \Magento\Framework\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Event\ManagerInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $manager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_tokenFactoryMock = $this->getMockBuilder(\Magento\Integration\Model\Oauth\TokenFactory::class)
             ->setMethods(['create'])
@@ -106,11 +106,12 @@ class CustomerTokenServiceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage This customer has no tokens.
      */
     public function testRevokeCustomerAccessTokenWithoutCustomerId()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('This customer has no tokens.');
+
         $this->_tokenModelCollectionMock->expects($this->once())
             ->method('addFilterByCustomerId')
             ->with(null)
@@ -122,11 +123,12 @@ class CustomerTokenServiceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The tokens couldn't be revoked.
      */
     public function testRevokeCustomerAccessTokenCannotRevoked()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('The tokens couldn\'t be revoked.');
+
         $exception = new \Exception();
         $customerId = 1;
         $this->_tokenModelCollectionMock->expects($this->once())

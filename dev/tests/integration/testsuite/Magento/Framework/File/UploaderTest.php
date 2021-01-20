@@ -27,7 +27,7 @@ class UploaderTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->uploaderFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->get(\Magento\MediaStorage\Model\File\UploaderFactory::class);
@@ -87,7 +87,7 @@ class UploaderTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
 

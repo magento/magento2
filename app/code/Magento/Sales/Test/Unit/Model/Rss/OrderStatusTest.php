@@ -27,47 +27,47 @@ class OrderStatusTest extends \PHPUnit\Framework\TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $objectManager;
 
     /**
-     * @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\UrlInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $urlInterface;
 
     /**
-     * @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\RequestInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $requestInterface;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $orderStatusFactory;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $timezoneInterface;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $orderFactory;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $scopeConfigInterface;
 
     /**
-     * @var \Magento\Sales\Model\Order|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $order;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Signature
+     * @var \PHPUnit\Framework\MockObject\MockObject|Signature
      */
     private $signature;
 
@@ -96,7 +96,7 @@ class OrderStatusTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->urlInterface = $this->createMock(\Magento\Framework\UrlInterface::class);
@@ -194,11 +194,12 @@ class OrderStatusTest extends \PHPUnit\Framework\TestCase
     /**
      * Case when invalid data is provided.
      *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Order not found.
      */
     public function testGetRssDataWithError()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Order not found.');
+
         $this->orderFactory->expects($this->once())->method('create')->willReturn($this->order);
         $requestData = base64_encode('{"order_id":"1","increment_id":true,"customer_id":true}');
         $this->signature->expects($this->never())->method('signData');
@@ -222,11 +223,12 @@ class OrderStatusTest extends \PHPUnit\Framework\TestCase
     /**
      * Case when invalid signature is provided.
      *
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Order not found.
      */
     public function testGetRssDataWithWrongSignature()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Order not found.');
+
         $requestData = base64_encode('{"order_id":"1","increment_id":true,"customer_id":true}');
         $this->signature->expects($this->never())
             ->method('signData');

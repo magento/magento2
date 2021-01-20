@@ -13,27 +13,27 @@ use Magento\Framework\View\Asset\Source;
 class ChecksumTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Asset\MergeStrategyInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\View\Asset\MergeStrategyInterface
      */
     private $mergerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Filesystem\Directory\ReadInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Filesystem\Directory\ReadInterface
      */
     private $sourceDir;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Filesystem\Directory\WriteInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Filesystem\Directory\WriteInterface
      */
     private $targetDir;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Asset\File
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\View\Asset\File
      */
     private $resultAsset;
 
     /**
-     * @var Source|\PHPUnit_Framework_MockObject_MockObject
+     * @var Source|\PHPUnit\Framework\MockObject\MockObject
      */
     private $assetSource;
 
@@ -42,7 +42,7 @@ class ChecksumTest extends \PHPUnit\Framework\TestCase
      */
     private $checksum;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->mergerMock = $this->getMockForAbstractClass(\Magento\Framework\View\Asset\MergeStrategyInterface::class);
         $this->sourceDir = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\Directory\ReadInterface::class);

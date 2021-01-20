@@ -9,42 +9,42 @@ namespace Magento\Captcha\Test\Unit\Model\Customer\Plugin;
 class AjaxLoginTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Checkout\Model\Session
+     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Checkout\Model\Session
      */
     protected $sessionManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Captcha\Helper\Data
+     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Captcha\Helper\Data
      */
     protected $captchaHelperMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Controller\Result\JsonFactory
+     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\Controller\Result\JsonFactory
      */
     protected $jsonFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $captchaMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $resultJsonMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $requestMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Controller\Ajax\Login
+     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Customer\Controller\Ajax\Login
      */
     protected $loginControllerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Serialize\Serializer\Json
+     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\Serialize\Serializer\Json
      */
     protected $serializerMock;
 
@@ -61,7 +61,7 @@ class AjaxLoginTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->sessionManagerMock = $this->createPartialMock(\Magento\Checkout\Model\Session::class, ['setUsername']);
         $this->captchaHelperMock = $this->createMock(\Magento\Captcha\Helper\Data::class);

@@ -22,41 +22,41 @@ class ImageTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_filesystemMock;
 
     /**
-     * @var \Magento\Framework\Image|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Image|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_imageMock;
 
     /**
-     * @var \Magento\Framework\View\Design\Theme\Image\Uploader|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Design\Theme\Image\Uploader|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_uploaderMock;
 
     /**
-     * @var \Magento\Theme\Model\Theme|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Theme\Model\Theme|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_themeMock;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\Write|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\Directory\Write|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_mediaDirectoryMock;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\Write|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\Directory\Write|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_rootDirectoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Theme\Model\Theme\Image\Path
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Theme\Model\Theme\Image\Path
      */
     protected $imagePathMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_mediaDirectoryMock = $this->createPartialMock(
             \Magento\Framework\Filesystem\Directory\Write::class,
@@ -102,7 +102,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->_model = null;
         $this->_filesystemMock = null;
@@ -112,7 +112,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Theme\Model\Theme\Image\Path
+     * @return \PHPUnit\Framework\MockObject\MockObject|\Magento\Theme\Model\Theme\Image\Path
      */
     protected function _getImagePathMock()
     {

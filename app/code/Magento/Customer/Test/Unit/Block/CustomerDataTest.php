@@ -12,16 +12,16 @@ use Magento\Framework\View\Element\Template\Context;
 class CustomerDataTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|\PHPUnit\Framework\MockObject\MockObject
      */
     private $contextMock;
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $scopeConfigMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)->getMock();
         $this->contextMock = $this->getMockBuilder(Context::class)->disableOriginalConstructor()->getMock();

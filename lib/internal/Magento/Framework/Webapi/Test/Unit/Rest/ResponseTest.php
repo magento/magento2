@@ -23,7 +23,7 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Framework\Webapi\ErrorProcessor */
     protected $errorProcessorMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         /** Mock all objects required for SUT. */
         $this->rendererMock = $this->getMockBuilder(
@@ -45,7 +45,7 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset(
             $this->responseRest,

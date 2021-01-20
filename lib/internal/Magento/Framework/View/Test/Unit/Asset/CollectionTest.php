@@ -17,7 +17,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      */
     protected $_asset;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_object = new \Magento\Framework\View\Asset\Collection();
         $this->_asset = new \Magento\Framework\View\Asset\Remote('http://127.0.0.1/magento/test.css');

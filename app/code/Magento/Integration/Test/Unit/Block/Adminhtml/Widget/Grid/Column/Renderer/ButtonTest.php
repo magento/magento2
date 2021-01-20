@@ -9,12 +9,12 @@ namespace Magento\Integration\Test\Unit\Block\Adminhtml\Widget\Grid\Column\Rende
 class ButtonTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Backend\Block\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\Block\Context|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $contextMock;
 
     /**
-     * @var \Magento\Framework\Escaper|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Escaper|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $escaperMock;
 
@@ -28,7 +28,7 @@ class ButtonTest extends \PHPUnit\Framework\TestCase
      */
     protected $buttonRenderer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->escaperMock = $this->createMock(\Magento\Framework\Escaper::class);
         $this->escaperMock->expects($this->any())->method('escapeHtml')->willReturnArgument(0);

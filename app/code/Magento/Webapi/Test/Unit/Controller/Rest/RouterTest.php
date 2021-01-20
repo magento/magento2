@@ -19,7 +19,7 @@ class RouterTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Webapi\Controller\Rest\Router */
     protected $_router;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         /** Prepare mocks for SUT constructor. */
         $this->_apiConfigMock = $this->getMockBuilder(
@@ -55,7 +55,7 @@ class RouterTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_routeMock);
         unset($this->_request);
@@ -88,10 +88,11 @@ class RouterTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Webapi\Exception
      */
     public function testNotMatch()
     {
+        $this->expectException(\Magento\Framework\Webapi\Exception::class);
+
         $this->_apiConfigMock->expects(
             $this->once()
         )->method(

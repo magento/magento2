@@ -8,16 +8,16 @@ namespace Magento\Setup\Test\Unit\Module\Dependency\Report\Writer\Csv;
 class AbstractWriterTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Setup\Module\Dependency\Report\Writer\Csv\AbstractWriter|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Setup\Module\Dependency\Report\Writer\Csv\AbstractWriter|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $writer;
 
     /**
-     * @var \Magento\Framework\File\Csv|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\File\Csv|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $csvMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->csvMock = $this->createMock(\Magento\Framework\File\Csv::class);
 

@@ -37,7 +37,7 @@ class SessionTest extends \PHPUnit\Framework\TestCase
      */
     private $response;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_customerSession = Bootstrap::getObjectManager()->create(
             \Magento\Customer\Model\Session::class

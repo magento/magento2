@@ -16,17 +16,17 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \Magento\Catalog\Model\Attribute\Config\Converter|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Attribute\Config\Converter|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_converter;
 
     /**
-     * @var \Magento\Framework\Module\Dir\ReverseResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Module\Dir\ReverseResolver|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_moduleDirResolver;
 
     /**
-     * @var \Magento\Framework\Filesystem\File\Read|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\File\Read|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $read;
 
@@ -37,7 +37,7 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
      */
     protected $_paths;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $fileResolver = $this->createMock(\Magento\Email\Model\Template\Config\FileResolver::class);
         $this->_paths = [
@@ -157,11 +157,12 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \UnexpectedValueException
-     * @expectedExceptionMessage Unable to determine a module
      */
     public function testReadUnknownModule()
     {
+        $this->expectException(\UnexpectedValueException::class);
+        $this->expectExceptionMessage('Unable to determine a module');
+
         $this->_moduleDirResolver->expects($this->once())->method('getModuleName')->will($this->returnValue(null));
         $this->_converter->expects($this->never())->method('convert');
         $this->_model->read('scope');

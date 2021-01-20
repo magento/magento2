@@ -89,7 +89,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -104,7 +104,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     /**
      * @inheritDoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->deleteFixtureProducts();
         parent::tearDown();

@@ -11,7 +11,7 @@ use Magento\Framework\DB\Select;
 use Magento\Framework\EntityManager\EntityMetadata;
 use Magento\Framework\Search\Request\FilterInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -21,7 +21,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 class PreprocessorTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var AliasResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var AliasResolver|\PHPUnit\Framework\MockObject\MockObject
      */
     private $aliasResolver;
 
@@ -81,7 +81,7 @@ class PreprocessorTest extends \PHPUnit\Framework\TestCase
     private $metadataPoolMock;
 
     /**
-     * @var \Magento\Customer\Model\Session|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\Session|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $customerSessionMock;
 
@@ -93,7 +93,7 @@ class PreprocessorTest extends \PHPUnit\Framework\TestCase
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
 

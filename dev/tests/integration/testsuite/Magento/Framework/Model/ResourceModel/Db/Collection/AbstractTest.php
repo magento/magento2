@@ -12,7 +12,7 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model = null;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $resourceModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->get(\Magento\Framework\App\ResourceConnection::class);

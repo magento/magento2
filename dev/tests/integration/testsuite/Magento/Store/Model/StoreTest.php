@@ -28,7 +28,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
     protected $modelParams;
 
     /**
-     * @var Store|\PHPUnit_Framework_MockObject_MockObject
+     * @var Store|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $model;
 
@@ -37,13 +37,13 @@ class StoreTest extends \PHPUnit\Framework\TestCase
      */
     private $request;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->model = $this->_getStoreModel();
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|Store
+     * @return \PHPUnit\Framework\MockObject\MockObject|Store
      */
     protected function _getStoreModel()
     {
@@ -79,7 +79,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
             ->getMock();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->model = null;
     }

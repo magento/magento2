@@ -17,17 +17,17 @@ class AppIsolationTest extends \PHPUnit\Framework\TestCase
     protected $_object;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_application;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_application = $this->createPartialMock(\Magento\TestFramework\Application::class, ['reinitialize']);
         $this->_object = new \Magento\TestFramework\Annotation\AppIsolation($this->_application);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->_application = null;
         $this->_object = null;

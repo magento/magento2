@@ -11,32 +11,32 @@ namespace Magento\Framework\DB\Test\Unit;
 class QueryTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\DB\Select|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Select|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $selectMock;
 
     /**
-     * @var \Magento\Framework\Api\CriteriaInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Api\CriteriaInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $criteriaMock;
 
     /**
-     * @var \Magento\Framework\Model\ResourceModel\Db\AbstractDb|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\ResourceModel\Db\AbstractDb|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resourceMock;
 
     /**
-     * @var \Zend_Db_Statement_Pdo|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Zend_Db_Statement_Pdo|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $fetchStmtMock;
 
     /**
-     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Psr\Log\LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $loggerMock;
 
     /**
-     * @var \Magento\Framework\Data\Collection\Db\FetchStrategyInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Data\Collection\Db\FetchStrategyInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $fetchStrategyMock;
 
@@ -50,7 +50,7 @@ class QueryTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 

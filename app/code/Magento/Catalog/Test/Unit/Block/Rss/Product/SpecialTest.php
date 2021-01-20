@@ -19,61 +19,61 @@ class SpecialTest extends \PHPUnit\Framework\TestCase
     protected $block;
 
     /**
-     * @var \Magento\Framework\App\Http\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Http\Context|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $httpContext;
 
     /**
-     * @var \Magento\Catalog\Helper\Image|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Helper\Image|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $imageHelper;
 
     /**
-     * @var \Magento\Catalog\Helper\Output|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Helper\Output|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $outputHelper;
 
     /**
-     * @var \Magento\Catalog\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Helper\Data|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $msrpHelper;
 
     /**
-     * @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $priceCurrency;
 
     /**
-     * @var \Magento\Catalog\Model\Rss\Product\Special|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Rss\Product\Special|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $rssModel;
 
     /**
-     * @var \Magento\Framework\App\Rss\UrlBuilderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Rss\UrlBuilderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $rssUrlBuilder;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeManager;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $scopeConfig;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $localeDate;
 
     /**
-     * @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\RequestInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $request;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->request = $this->createMock(\Magento\Framework\App\RequestInterface::class);
         $this->request->expects($this->at(0))->method('getParam')->with('store_id')->will($this->returnValue(null));
@@ -168,7 +168,7 @@ class SpecialTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getItemMock()
     {
@@ -206,7 +206,7 @@ class SpecialTest extends \PHPUnit\Framework\TestCase
         $this->scopeConfig->expects($this->once())->method('isSetFlag')
             ->with('rss/catalog/special', \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
             ->will($this->returnValue(true));
-        $this->assertEquals(true, $this->block->isAllowed());
+        $this->assertTrue($this->block->isAllowed());
     }
 
     public function testGetCacheLifetime()

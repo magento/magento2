@@ -23,44 +23,44 @@ class LibraryTest extends \PHPUnit\Framework\TestCase
     private $library;
 
     /**
-     * @var \Magento\Framework\View\File\FileList\Factory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\File\FileList\Factory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $fileListFactoryMock;
 
     /**
-     * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $fileSystemMock;
 
     /**
-     * @var \Magento\Framework\View\File\Factory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\File\Factory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $fileFactoryMock;
 
     /**
-     * @var \Magento\Framework\View\File\FileList|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\File\FileList|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $fileListMock;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\ReadInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\Directory\ReadInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $libraryDirectoryMock;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\ReadFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\Directory\ReadFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $readFactoryMock;
 
     /**
      * Component registry
      *
-     * @var \Magento\Framework\Component\ComponentRegistrarInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Component\ComponentRegistrarInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $componentRegistrarMock;
 
     /**
-     * @var \Magento\Framework\View\Design\ThemeInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Design\ThemeInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $themeMock;
 
@@ -68,7 +68,7 @@ class LibraryTest extends \PHPUnit\Framework\TestCase
      * Setup tests
      * @return void
      */
-    public function setup()
+    public function setup(): void
     {
         $this->fileListFactoryMock = $this->getMockBuilder(\Magento\Framework\View\File\FileList\Factory::class)
             ->disableOriginalConstructor()->getMock();

@@ -22,7 +22,7 @@ class HeaderTest extends \PHPUnit\Framework\TestCase
      */
     protected $_converter;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 

@@ -17,21 +17,21 @@ class RenderTest extends \PHPUnit\Framework\TestCase
     protected $object;
 
     /**
-     * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Registry|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $registry;
 
     /**
-     * @var \Magento\Framework\View\LayoutInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\LayoutInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $layout;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $pricingRenderBlock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->registry = $this->createPartialMock(\Magento\Framework\Registry::class, ['registry']);
 

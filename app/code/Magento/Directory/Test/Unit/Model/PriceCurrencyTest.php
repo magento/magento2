@@ -16,16 +16,16 @@ class PriceCurrencyTest extends \PHPUnit\Framework\TestCase
     protected $priceCurrency;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeManager;
 
     /**
-     * @var \Magento\Directory\Model\CurrencyFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Directory\Model\CurrencyFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $currencyFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->storeManager = $this->getMockBuilder(\Magento\Store\Model\StoreManager::class)
             ->disableOriginalConstructor()
@@ -184,7 +184,7 @@ class PriceCurrencyTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getCurrentCurrencyMock()
     {
@@ -197,7 +197,7 @@ class PriceCurrencyTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param $baseCurrency
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getStoreMock($baseCurrency)
     {
@@ -216,7 +216,7 @@ class PriceCurrencyTest extends \PHPUnit\Framework\TestCase
      * @param $amount
      * @param $convertedAmount
      * @param $currency
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getBaseCurrencyMock($amount, $convertedAmount, $currency)
     {

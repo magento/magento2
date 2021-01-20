@@ -20,21 +20,21 @@ class CountryTest extends \PHPUnit\Framework\TestCase
     protected $_element;
 
     /**
-     * @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\RequestInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_request;
 
     /**
-     * @var \Magento\Framework\View\Helper\Js|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Helper\Js|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_jsHelper;
 
     /**
-     * @var \Magento\Backend\Model\Url|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\Model\Url|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_url;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_element = $this->getMockForAbstractClass(

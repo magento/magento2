@@ -31,7 +31,7 @@ class CaseInfoTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->order = $this->objectManager->create(Order::class);

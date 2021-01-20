@@ -30,11 +30,11 @@ class GridTest extends AbstractBackendController
         $this->assertContains('data-column="last_login"', $body);
         $this->assertContains('data-column="failures_num"', $body);
         $this->assertContains('data-column="lock_expires"', $body);
-        $this->assertRegExp(
+        $this->assertMatchesRegularExpression(
             '/<td data-column\="username"\s*class\="[^"]*col-name[^"]*col-username[^"]*"\s*>\s*adminUser1\s*<\/td>/',
             $body
         );
-        $this->assertRegExp(
+        $this->assertMatchesRegularExpression(
             '/<td data-column\="username"\s*class\="[^"]*col-name[^"]*col-username[^"]*"\s*>\s*adminUser2\s*<\/td>/',
             $body
         );

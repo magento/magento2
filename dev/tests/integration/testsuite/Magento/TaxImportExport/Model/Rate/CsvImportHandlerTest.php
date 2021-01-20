@@ -12,13 +12,13 @@ class CsvImportHandlerTest extends \PHPUnit\Framework\TestCase
      */
     protected $_importHandler;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->_importHandler = $objectManager->create(\Magento\TaxImportExport\Model\Rate\CsvImportHandler::class);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->_importHandler = null;
     }

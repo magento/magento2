@@ -13,31 +13,31 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     protected $_config;
 
     /**
-     * @var \Magento\Framework\App\Route\Config\Reader|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Route\Config\Reader|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_readerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_cacheMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_configScopeMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_areaList;
 
     /**
-     * @var \Magento\Framework\Serialize\SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Serialize\SerializerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $serializerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_readerMock = $this->createMock(\Magento\Framework\App\Route\Config\Reader::class);
         $this->_cacheMock = $this->createMock(\Magento\Framework\Config\CacheInterface::class);

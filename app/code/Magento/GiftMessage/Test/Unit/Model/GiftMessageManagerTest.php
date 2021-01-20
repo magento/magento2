@@ -17,36 +17,36 @@ class GiftMessageManagerTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $messageFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $quoteMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $quoteItemMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $quoteAddressMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $quoteAddressItemMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $giftMessageMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->messageFactoryMock =
             $this->createPartialMock(\Magento\GiftMessage\Model\MessageFactory::class, ['create', '__wakeup']);
@@ -311,11 +311,12 @@ class GiftMessageManagerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\CouldNotSaveException
-     * @expectedExceptionMessage The gift message couldn't be added to Cart.
      */
     public function testSetMessageCouldNotAddGiftMessageException()
     {
+        $this->expectException(\Magento\Framework\Exception\CouldNotSaveException::class);
+        $this->expectExceptionMessage('The gift message couldn\'t be added to Cart.');
+
         $this->giftMessageMock->expects($this->once())->method('getSender')->will($this->returnValue('sender'));
         $this->giftMessageMock->expects($this->once())->method('getRecipient')->will($this->returnValue('recipient'));
         $this->giftMessageMock->expects($this->once())->method('getMessage')->will($this->returnValue('Message'));

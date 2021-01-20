@@ -37,7 +37,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
      */
     private $productRepository;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->productRepository = Bootstrap::getObjectManager()
             ->create(ProductRepositoryInterface::class);

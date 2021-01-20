@@ -22,21 +22,21 @@ class MethodListTest extends \PHPUnit\Framework\TestCase
     protected $objectManager;
 
     /**
-     * @var \Magento\Payment\Api\PaymentMethodListInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Payment\Api\PaymentMethodListInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $paymentMethodList;
 
     /**
-     * @var \Magento\Payment\Model\Method\InstanceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Payment\Model\Method\InstanceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $paymentMethodInstanceFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $specificationFactoryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 

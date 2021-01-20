@@ -33,7 +33,7 @@ use Magento\Wishlist\Model\ResourceModel\Wishlist as WishlistResource;
 use Magento\Wishlist\Model\ResourceModel\Wishlist\Collection as WishlistCollection;
 use Magento\Wishlist\Model\Wishlist;
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_MockObject_MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -42,67 +42,67 @@ use PHPUnit_Framework_MockObject_MockObject;
 class WishlistTest extends TestCase
 {
     /**
-     * @var Registry|PHPUnit_Framework_MockObject_MockObject
+     * @var Registry|PHPUnit\Framework\MockObject\MockObject
      */
     protected $registry;
 
     /**
-     * @var HelperProduct|PHPUnit_Framework_MockObject_MockObject
+     * @var HelperProduct|PHPUnit\Framework\MockObject\MockObject
      */
     protected $productHelper;
 
     /**
-     * @var Data|PHPUnit_Framework_MockObject_MockObject
+     * @var Data|PHPUnit\Framework\MockObject\MockObject
      */
     protected $helper;
 
     /**
-     * @var WishlistResource|PHPUnit_Framework_MockObject_MockObject
+     * @var WishlistResource|PHPUnit\Framework\MockObject\MockObject
      */
     protected $resource;
 
     /**
-     * @var WishlistCollection|PHPUnit_Framework_MockObject_MockObject
+     * @var WishlistCollection|PHPUnit\Framework\MockObject\MockObject
      */
     protected $collection;
 
     /**
-     * @var StoreManagerInterface|PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface|PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeManager;
 
     /**
-     * @var DateTime\DateTime|PHPUnit_Framework_MockObject_MockObject
+     * @var DateTime\DateTime|PHPUnit\Framework\MockObject\MockObject
      */
     protected $date;
 
     /**
-     * @var ItemFactory|PHPUnit_Framework_MockObject_MockObject
+     * @var ItemFactory|PHPUnit\Framework\MockObject\MockObject
      */
     protected $itemFactory;
 
     /**
-     * @var CollectionFactory|PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionFactory|PHPUnit\Framework\MockObject\MockObject
      */
     protected $itemsFactory;
 
     /**
-     * @var ProductFactory|PHPUnit_Framework_MockObject_MockObject
+     * @var ProductFactory|PHPUnit\Framework\MockObject\MockObject
      */
     protected $productFactory;
 
     /**
-     * @var Random|PHPUnit_Framework_MockObject_MockObject
+     * @var Random|PHPUnit\Framework\MockObject\MockObject
      */
     protected $mathRandom;
 
     /**
-     * @var DateTime|PHPUnit_Framework_MockObject_MockObject
+     * @var DateTime|PHPUnit\Framework\MockObject\MockObject
      */
     protected $dateTime;
 
     /**
-     * @var ManagerInterface|PHPUnit_Framework_MockObject_MockObject
+     * @var ManagerInterface|PHPUnit\Framework\MockObject\MockObject
      */
     protected $eventDispatcher;
 
@@ -112,26 +112,26 @@ class WishlistTest extends TestCase
     protected $wishlist;
 
     /**
-     * @var ProductRepositoryInterface|PHPUnit_Framework_MockObject_MockObject
+     * @var ProductRepositoryInterface|PHPUnit\Framework\MockObject\MockObject
      */
     protected $productRepository;
 
     /**
-     * @var Json|PHPUnit_Framework_MockObject_MockObject
+     * @var Json|PHPUnit\Framework\MockObject\MockObject
      */
     protected $serializer;
 
     /**
-     * @var StockItemRepository|PHPUnit_Framework_MockObject_MockObject
+     * @var StockItemRepository|PHPUnit\Framework\MockObject\MockObject
      */
     private $scopeConfig;
 
     /**
-     * @var StockRegistryInterface|PHPUnit_Framework_MockObject_MockObject
+     * @var StockRegistryInterface|PHPUnit\Framework\MockObject\MockObject
      */
     private $stockRegistry;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $context = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
@@ -177,13 +177,13 @@ class WishlistTest extends TestCase
         $this->dateTime = $this->getMockBuilder(DateTime::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->productRepository = $this->createMock(ProductRepositoryInterface::class);
-        $this->stockRegistry = $this->createMock(StockRegistryInterface::class);
-        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
+        $this->productRepository = $this->getMockForAbstractClass(ProductRepositoryInterface::class);
+        $this->stockRegistry = $this->getMockForAbstractClass(StockRegistryInterface::class);
+        $this->scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
 
         $this->scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->serializer = $this->getMockBuilder(Json::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -240,7 +240,7 @@ class WishlistTest extends TestCase
     }
 
     /**
-     * @param int|Item|PHPUnit_Framework_MockObject_MockObject $itemId
+     * @param int|Item|PHPUnit\Framework\MockObject\MockObject $itemId
      * @param DataObject $buyRequest
      * @param null|array|DataObject $param
      * @throws LocalizedException

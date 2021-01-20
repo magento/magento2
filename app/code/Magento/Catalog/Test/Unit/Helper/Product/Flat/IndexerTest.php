@@ -21,26 +21,26 @@ class IndexerTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_storeManagerMock;
 
     /**
-     * @var Resource|\PHPUnit_Framework_MockObject_MockObject
+     * @var Resource|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_resourceMock;
 
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_connectionMock;
 
     /**
-     * @var \Magento\Framework\Mview\View\Changelog|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Mview\View\Changelog|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_changelogMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $contextMock = $this->createMock(\Magento\Framework\App\Helper\Context::class);
 
@@ -94,7 +94,7 @@ class IndexerTest extends \PHPUnit\Framework\TestCase
     public function testGetFlatColumnsDdlDefinition()
     {
         foreach ($this->_model->getFlatColumnsDdlDefinition() as $column) {
-            $this->assertTrue(is_array($column), 'Columns must be an array value');
+            $this->assertInternalType('array', $column, 'Columns must be an array value');
             $this->assertArrayHasKey('type', $column, 'Column must have type definition at least');
         }
     }

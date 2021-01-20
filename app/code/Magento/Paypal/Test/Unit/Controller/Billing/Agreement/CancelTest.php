@@ -13,36 +13,36 @@ class CancelTest extends \PHPUnit\Framework\TestCase
     protected $_controller;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_objectManager;
 
     /**
-     * @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\RequestInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_request;
 
     /**
-     * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Registry|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_registry;
 
     /**
-     * @var \Magento\Customer\Model\Session|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\Session|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_session;
 
     /**
-     * @var \Magento\Framework\Message\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Message\ManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_messageManager;
 
     /**
-     * @var \Magento\Paypal\Model\Billing\Agreement|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Paypal\Model\Billing\Agreement|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_agreement;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_session = $this->createMock(\Magento\Customer\Model\Session::class);
 

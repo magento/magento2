@@ -19,17 +19,17 @@ class DataTest extends \PHPUnit\Framework\TestCase
     private static $txnId = 'XXX123123XXX';
 
     /**
-     * @var \Magento\Payment\Api\PaymentMethodListInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Payment\Api\PaymentMethodListInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $paymentMethodList;
 
     /**
-     * @var \Magento\Payment\Model\Method\InstanceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Payment\Model\Method\InstanceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $paymentMethodInstanceFactory;
 
     /**
-     * @var \Magento\Paypal\Model\Config | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Paypal\Model\Config | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $configMock;
 
@@ -38,7 +38,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
      */
     protected $_helper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->paymentMethodList = $this->getMockBuilder(\Magento\Payment\Api\PaymentMethodListInterface::class)
             ->disableOriginalConstructor()

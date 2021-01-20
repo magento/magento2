@@ -8,17 +8,17 @@ namespace Magento\ImportExport\Test\Unit\Model\Export;
 class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\ImportExport\Model\Export\Config\Reader|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\ImportExport\Model\Export\Config\Reader|\PHPUnit\Framework\MockObject\MockObject
      */
     private $readerMock;
 
     /**
-     * @var \Magento\Framework\Config\CacheInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Config\CacheInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $cacheMock;
 
     /**
-     * @var \Magento\Framework\Serialize\SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Serialize\SerializerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $serializerMock;
 
@@ -32,7 +32,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
      */
     private $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->readerMock = $this->createMock(\Magento\ImportExport\Model\Export\Config\Reader::class);
         $this->cacheMock = $this->createMock(\Magento\Framework\Config\CacheInterface::class);

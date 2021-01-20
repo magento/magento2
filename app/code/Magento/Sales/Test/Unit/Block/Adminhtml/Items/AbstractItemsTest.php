@@ -19,15 +19,15 @@ class AbstractItemsTest extends \PHPUnit\Framework\TestCase
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $stockItemMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $stockRegistry;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->stockRegistry = $this->getMockBuilder(\Magento\CatalogInventory\Model\StockRegistry::class)
@@ -79,11 +79,12 @@ class AbstractItemsTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Renderer for type "some-type" does not exist.
      */
     public function testGetItemRendererThrowsExceptionForNonexistentRenderer()
     {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Renderer for type "some-type" does not exist.');
+
         $renderer = $this->createMock(\stdClass::class);
         $layout = $this->createPartialMock(
             \Magento\Framework\View\Layout::class,
@@ -143,7 +144,7 @@ class AbstractItemsTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param \PHPUnit_Framework_MockObject_MockObject $item
+     * @param \PHPUnit\Framework\MockObject\MockObject $item
      * @param bool $canReturnToStock
      * @param int|null $productId
      * @param bool $manageStock

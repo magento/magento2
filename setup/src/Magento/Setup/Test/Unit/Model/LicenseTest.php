@@ -11,16 +11,16 @@ use \Magento\Setup\Model\License;
 class LicenseTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Filesystem\Directory\Read
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Filesystem\Directory\Read
      */
     private $directoryReadMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Filesystem
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Filesystem
      */
     private $filesystemMock;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->directoryReadMock = $this->createMock(\Magento\Framework\Filesystem\Directory\Read::class);
         $this->filesystemMock = $this->createMock(\Magento\Framework\Filesystem::class);

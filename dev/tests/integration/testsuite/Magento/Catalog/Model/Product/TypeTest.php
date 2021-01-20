@@ -12,7 +12,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
      */
     protected $_productType;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_productType = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             \Magento\Catalog\Model\Product\Type::class

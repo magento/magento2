@@ -68,7 +68,7 @@ class PlaceTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
 
     /**
      * @param array $requestToAuthorizenetData
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     private function getOrderCreateMock($requestToAuthorizenetData)
     {

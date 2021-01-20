@@ -41,7 +41,7 @@ class BundleTest extends \Magento\TestFramework\Indexer\TestCase
      */
     protected $optionSkuList = ['Simple 1', 'Simple 2', 'Simple 3'];
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         $db = Bootstrap::getInstance()->getBootstrap()
             ->getApplication()
@@ -54,7 +54,7 @@ class BundleTest extends \Magento\TestFramework\Indexer\TestCase
         parent::setUpBeforeClass();
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->model = $this->objectManager->create(\Magento\CatalogImportExport\Model\Import\Product::class);
@@ -197,7 +197,7 @@ class BundleTest extends \Magento\TestFramework\Indexer\TestCase
     /**
      * teardown
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
     }

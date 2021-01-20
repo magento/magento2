@@ -25,7 +25,7 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
      */
     protected $productFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->productFactory = $this->objectManager->get(\Magento\Catalog\Model\ProductFactory::class);

@@ -14,21 +14,21 @@ class CheckoutAgreementsListTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $collectionFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $attributesJoinProcessorMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $collectionProcessorMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->collectionFactoryMock = $this->createMock(
             \Magento\CheckoutAgreements\Model\ResourceModel\Agreement\CollectionFactory::class

@@ -17,12 +17,12 @@ use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\TierPrice;
 class TierPriceTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var ProductPriceOptionsInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductPriceOptionsInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $productPriceOptions;
 
     /**
-     * @var ArrayManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var ArrayManager|\PHPUnit\Framework\MockObject\MockObject
      */
     private $arrayManager;
 
@@ -35,9 +35,9 @@ class TierPriceTest extends \PHPUnit\Framework\TestCase
      * Set Up.
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->productPriceOptions = $this->createMock(ProductPriceOptionsInterface::class);
+        $this->productPriceOptions = $this->getMockForAbstractClass(ProductPriceOptionsInterface::class);
         $this->arrayManager = $this->createMock(ArrayManager::class);
 
         $this->tierPrice = (new ObjectManager($this))->getObject(TierPrice::class, [

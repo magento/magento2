@@ -13,11 +13,11 @@ class MongoDbTest extends \PHPUnit\Framework\TestCase
     protected $_model = null;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_collection = null;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_collection = $this->getMockBuilder('MongoCollection')
             ->setMethods(['find', 'findOne', 'distinct', 'save', 'update', 'remove', 'drop'])
@@ -26,7 +26,7 @@ class MongoDbTest extends \PHPUnit\Framework\TestCase
         $this->_model->expects($this->any())->method('_getCollection')->will($this->returnValue($this->_collection));
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->_model = null;
         $this->_collection = null;

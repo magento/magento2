@@ -15,16 +15,16 @@ class AttributeSetManagementTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $repositoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $eavConfigMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->repositoryMock = $this->createMock(\Magento\Eav\Api\AttributeSetRepositoryInterface::class);
         $this->eavConfigMock = $this->createPartialMock(\Magento\Eav\Model\Config::class, ['getEntityType']);
@@ -61,11 +61,12 @@ class AttributeSetManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Invalid value of "1" provided for the id field.
      */
     public function testCreateThrowsExceptionIfGivenAttributeSetAlreadyHasId()
     {
+        $this->expectException(\Magento\Framework\Exception\InputException::class);
+        $this->expectExceptionMessage('Invalid value of "1" provided for the id field.');
+
         $skeletonId = 1;
         $entityTypeCode = 'catalog_product';
         $attributeSetMock = $this->createPartialMock(
@@ -79,11 +80,12 @@ class AttributeSetManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Invalid value of "0" provided for the skeletonId field.
      */
     public function testCreateThrowsExceptionIfGivenSkeletonIdIsInvalid()
     {
+        $this->expectException(\Magento\Framework\Exception\InputException::class);
+        $this->expectExceptionMessage('Invalid value of "0" provided for the skeletonId field.');
+
         $skeletonId = 0;
         $entityTypeCode = 'catalog_product';
         $attributeSetMock = $this->createPartialMock(
@@ -96,11 +98,12 @@ class AttributeSetManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Wrong attribute properties
      */
     public function testCreateThrowsExceptionIfAttributeSetNotValid()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Wrong attribute properties');
+
         $entityTypeId = 4;
         $skeletonId = 5;
         $entityTypeCode = 'catalog_product';

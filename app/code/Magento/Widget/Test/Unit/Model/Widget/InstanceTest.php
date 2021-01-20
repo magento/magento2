@@ -15,16 +15,16 @@ use Magento\Framework\Serialize\Serializer\Json;
 class InstanceTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Widget\Model\Config\Data|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Widget\Model\Config\Data|PHPUnit\Framework\MockObject\MockObject
      */
     protected $_widgetModelMock;
 
     /**
-     * @var \Magento\Framework\View\FileSystem|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\FileSystem|PHPUnit\Framework\MockObject\MockObject
      */
     protected $_viewFileSystemMock;
 
-    /** @var  \Magento\Widget\Model\NamespaceResolver |PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \Magento\Widget\Model\NamespaceResolver |PHPUnit\Framework\MockObject\MockObject */
     protected $_namespaceResolver;
 
     /**
@@ -36,19 +36,19 @@ class InstanceTest extends \PHPUnit\Framework\TestCase
     protected $_readerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_cacheTypesListMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_directoryMock;
 
-    /** @var \Magento\Framework\Serialize\Serializer\Json | \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Serialize\Serializer\Json | \PHPUnit\Framework\MockObject\MockObject */
     private $serializer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_widgetModelMock = $this->getMockBuilder(
             \Magento\Widget\Model\Widget::class

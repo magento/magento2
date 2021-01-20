@@ -75,7 +75,7 @@ class ConditionBuilderTest extends \PHPUnit\Framework\TestCase
 
         $metadata = $this->getMockBuilder(EntityMetadataInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $scopes = [];
 
@@ -145,7 +145,7 @@ class ConditionBuilderTest extends \PHPUnit\Framework\TestCase
 
         $metadata = $this->getMockBuilder(EntityMetadataInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $scopes = [];
 
@@ -219,7 +219,7 @@ class ConditionBuilderTest extends \PHPUnit\Framework\TestCase
 
         $metadata = $this->getMockBuilder(EntityMetadataInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $scope = $this->getMockBuilder(ScopeInterface::class)
             ->disableOriginalConstructor()
@@ -228,7 +228,7 @@ class ConditionBuilderTest extends \PHPUnit\Framework\TestCase
                 'getValue',
                 'getFallback',
             ])
-            ->getMock();
+            ->getMockForAbstractClass();
         $scope->expects($this->once())
             ->method('getIdentifier')
             ->will(
@@ -431,7 +431,7 @@ class ConditionBuilderTest extends \PHPUnit\Framework\TestCase
 
         $metadata = $this->getMockBuilder(EntityMetadataInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $scopes = [];
 
@@ -546,7 +546,7 @@ class ConditionBuilderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     private function getValidAttributeMock()
     {
@@ -572,7 +572,7 @@ class ConditionBuilderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     private function getValidStoreMock()
     {
@@ -608,7 +608,7 @@ class ConditionBuilderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     private function getValidScopeMock()
     {
@@ -619,7 +619,7 @@ class ConditionBuilderTest extends \PHPUnit\Framework\TestCase
                 'getValue',
                 'getFallback',
             ])
-            ->getMock();
+            ->getMockForAbstractClass();
         $scope->expects($this->once())
             ->method('getIdentifier')
             ->will(

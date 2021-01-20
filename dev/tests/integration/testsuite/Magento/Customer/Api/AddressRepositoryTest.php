@@ -33,7 +33,7 @@ class AddressRepositoryTest extends \PHPUnit\Framework\TestCase
     /** @var  \Magento\Framework\Api\DataObjectHelper */
     protected $dataObjectHelper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->repository = $this->_objectManager->create(\Magento\Customer\Api\AddressRepositoryInterface::class);
@@ -78,7 +78,7 @@ class AddressRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->_expectedAddresses = [$address, $address2];
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var \Magento\Customer\Model\CustomerRegistry $customerRegistry */

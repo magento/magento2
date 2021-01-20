@@ -16,11 +16,11 @@ class DateTimeFormatterTest extends \PHPUnit\Framework\TestCase
     protected $objectManager;
 
     /**
-     * @var \Magento\Framework\Locale\ResolverInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Locale\ResolverInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $localeResolverMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         if (defined('HHVM_VERSION')) {
             $this->markTestSkipped('Skip this test for hhvm due to problem with \IntlDateFormatter::formatObject');

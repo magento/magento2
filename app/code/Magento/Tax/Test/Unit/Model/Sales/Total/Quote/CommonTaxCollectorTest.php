@@ -88,7 +88,7 @@ class CommonTaxCollectorTest extends TestCase
     /**
      * {@inheritdoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
 
@@ -162,7 +162,7 @@ class CommonTaxCollectorTest extends TestCase
         $shippingTaxClass,
         $shippingPriceInclTax
     ): void {
-        $shippingAssignmentMock = $this->createMock(ShippingAssignmentInterface::class);
+        $shippingAssignmentMock = $this->getMockForAbstractClass(ShippingAssignmentInterface::class);
         $methods = [
             'getShippingDiscountAmount',
             'getShippingTaxCalculationAmount',
@@ -174,7 +174,7 @@ class CommonTaxCollectorTest extends TestCase
         ];
         /** @var MockObject|QuoteAddressTotal $totalsMock */
         $totalsMock = $this->createPartialMock(QuoteAddressTotal::class, $methods);
-        $shippingMock = $this->createMock(ShippingInterface::class);
+        $shippingMock = $this->getMockForAbstractClass(ShippingInterface::class);
         /** @var MockObject|ShippingAssignmentInterface $shippingAssignmentMock */
         $shippingAssignmentMock->expects($this->once())->method('getShipping')->willReturn($shippingMock);
         $shippingMock->expects($this->once())->method('getAddress')->willReturn($this->address);
@@ -235,11 +235,11 @@ class CommonTaxCollectorTest extends TestCase
         /** @var MockObject|TaxDetailsItemInterface $itemTaxDetails */
         $itemTaxDetails = $this->getMockBuilder(TaxDetailsItemInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         /** @var MockObject|TaxDetailsItemInterface $baseItemTaxDetails */
         $baseItemTaxDetails = $this->getMockBuilder(TaxDetailsItemInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $quoteItem->expects($this->once())->method('setCustomPrice');
 

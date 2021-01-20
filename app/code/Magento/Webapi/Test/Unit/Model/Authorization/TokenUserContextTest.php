@@ -34,36 +34,36 @@ class TokenUserContextTest extends \PHPUnit\Framework\TestCase
     protected $tokenUserContext;
 
     /**
-     * @var TokenFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var TokenFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $tokenFactory;
 
     /**
-     * @var IntegrationServiceInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var IntegrationServiceInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $integrationService;
 
     /**
-     * @var Request|\PHPUnit_Framework_MockObject_MockObject
+     * @var Request|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $request;
 
     /**
-     * @var OauthHelper|\PHPUnit_Framework_MockObject_MockObject
+     * @var OauthHelper|\PHPUnit\Framework\MockObject\MockObject
      */
     private $oauthHelperMock;
 
     /**
-     * @var Date|\PHPUnit_Framework_MockObject_MockObject
+     * @var Date|\PHPUnit\Framework\MockObject\MockObject
      */
     private $dateMock;
 
     /**
-     * @var DateTime|\PHPUnit_Framework_MockObject_MockObject
+     * @var DateTime|\PHPUnit\Framework\MockObject\MockObject
      */
     private $dateTimeMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
 
@@ -91,7 +91,7 @@ class TokenUserContextTest extends \PHPUnit\Framework\TestCase
                     'getSelectedResources',
                 ]
             )
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->oauthHelperMock = $this->getMockBuilder(OauthHelper::class)
             ->disableOriginalConstructor()

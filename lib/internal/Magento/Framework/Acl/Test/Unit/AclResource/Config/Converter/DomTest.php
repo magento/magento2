@@ -12,7 +12,7 @@ class DomTest extends \PHPUnit\Framework\TestCase
      */
     protected $_converter;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_converter = new \Magento\Framework\Acl\AclResource\Config\Converter\Dom();
     }

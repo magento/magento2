@@ -26,14 +26,14 @@ class ValidatorInfoTest extends \PHPUnit\Framework\TestCase
     protected $maxFileSizeInMb;
 
     /**
-     * @var \Magento\Catalog\Model\Product\Option\Type\File\ValidateFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product\Option\Type\File\ValidateFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $validateFactoryMock;
 
     /**
      * {@inheritdoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var \Magento\Framework\File\Size $fileSize */

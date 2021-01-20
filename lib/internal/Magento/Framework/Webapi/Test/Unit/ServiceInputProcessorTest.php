@@ -31,27 +31,27 @@ class ServiceInputProcessorTest extends \PHPUnit\Framework\TestCase
     /** @var ServiceInputProcessor */
     protected $serviceInputProcessor;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $attributeValueFactoryMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $customAttributeTypeLocator;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject  */
+    /** @var \PHPUnit\Framework\MockObject\MockObject  */
     protected $objectManagerMock;
 
     /** @var  \Magento\Framework\Reflection\MethodsMap */
     protected $methodsMap;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $fieldNamer;
 
     /**
-     * @var ServiceTypeToEntityTypeMap|\PHPUnit_Framework_MockObject_MockObject
+     * @var ServiceTypeToEntityTypeMap|\PHPUnit\Framework\MockObject\MockObject
      */
     private $serviceTypeToEntityTypeMap;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->objectManagerMock = $this->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
@@ -104,7 +104,7 @@ class ServiceInputProcessorTest extends \PHPUnit\Framework\TestCase
                 'fieldNamer' => $this->fieldNamer
             ]
         );
-        $serializerMock = $this->createMock(SerializerInterface::class);
+        $serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
         $serializerMock->method('serialize')
             ->willReturn('serializedData');
         $serializerMock->method('unserialize')

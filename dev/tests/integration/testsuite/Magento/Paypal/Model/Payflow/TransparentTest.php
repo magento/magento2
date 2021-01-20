@@ -40,7 +40,7 @@ class TransparentTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->management = $this->objectManager->get(PaymentInformationManagementInterface::class);

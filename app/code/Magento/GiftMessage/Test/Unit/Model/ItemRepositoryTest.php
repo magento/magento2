@@ -20,27 +20,27 @@ class ItemRepositoryTest extends \PHPUnit\Framework\TestCase
     protected $itemRepository;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $quoteRepositoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $messageFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $quoteMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $messageMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $quoteItemMock;
 
@@ -50,26 +50,26 @@ class ItemRepositoryTest extends \PHPUnit\Framework\TestCase
     protected $cartId = 13;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $giftMessageManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $helperMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->quoteRepositoryMock = $this->createMock(\Magento\Quote\Api\CartRepositoryInterface::class);
         $this->messageFactoryMock = $this->createPartialMock(
@@ -115,11 +115,12 @@ class ItemRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage No item with the provided ID was found in the Cart. Verify the ID and try again.
      */
     public function testGetWithNoSuchEntityException()
     {
+        $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
+        $this->expectExceptionMessage('No item with the provided ID was found in the Cart. Verify the ID and try again.');
+
         $itemId = 2;
 
         $this->quoteMock->expects($this->once())->method('getItemById')->with($itemId)->will($this->returnValue(null));
@@ -163,10 +164,11 @@ class ItemRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testSaveWithNoSuchEntityException()
     {
+        $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
+
         $itemId = 1;
 
         $this->quoteMock->expects($this->once())->method('getItemById')->with($itemId)->will($this->returnValue(null));
@@ -178,11 +180,12 @@ class ItemRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\State\InvalidTransitionException
-     * @expectedExceptionMessage Gift messages can't be used for virtual products.
      */
     public function testSaveWithInvalidTransitionException()
     {
+        $this->expectException(\Magento\Framework\Exception\State\InvalidTransitionException::class);
+        $this->expectExceptionMessage('Gift messages can\'t be used for virtual products.');
+
         $itemId = 1;
 
         $quoteItem = $this->createPartialMock(\Magento\Quote\Model\Quote\Item::class, ['getIsVirtual', '__wakeup']);

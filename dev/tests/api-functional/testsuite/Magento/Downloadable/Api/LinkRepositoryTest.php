@@ -37,7 +37,7 @@ class LinkRepositoryTest extends WebapiAbstract
      */
     protected $testImagePath;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->createServiceInfo = [
             'rest' => [

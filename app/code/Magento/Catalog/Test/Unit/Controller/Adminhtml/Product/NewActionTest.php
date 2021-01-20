@@ -15,24 +15,24 @@ class NewActionTest extends \Magento\Catalog\Test\Unit\Controller\Adminhtml\Prod
     /** @var NewAction */
     protected $action;
 
-    /** @var \Magento\Backend\Model\View\Result\Page|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Backend\Model\View\Result\Page|\PHPUnit\Framework\MockObject\MockObject */
     protected $resultPage;
 
-    /** @var \Magento\Backend\Model\View\Result\Forward|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Backend\Model\View\Result\Forward|\PHPUnit\Framework\MockObject\MockObject */
     protected $resultForward;
 
-    /** @var \Magento\Catalog\Controller\Adminhtml\Product\Builder|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Catalog\Controller\Adminhtml\Product\Builder|\PHPUnit\Framework\MockObject\MockObject */
     protected $productBuilder;
 
-    /** @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Catalog\Model\Product|\PHPUnit\Framework\MockObject\MockObject */
     protected $product;
 
     /**
-     * @var Helper|\PHPUnit_Framework_MockObject_MockObject
+     * @var Helper|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $initializationHelper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->productBuilder = $this->createPartialMock(
             \Magento\Catalog\Controller\Adminhtml\Product\Builder::class,

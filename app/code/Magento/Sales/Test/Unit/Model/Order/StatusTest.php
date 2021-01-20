@@ -14,17 +14,17 @@ namespace Magento\Sales\Test\Unit\Model\Order;
 class StatusTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Sales\Model\ResourceModel\Order\Status|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\ResourceModel\Order\Status|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resourceMock;
 
     /**
-     * @var \Magento\Framework\Event\Manager|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Event\Manager|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $eventManagerMock;
 
     /**
-     * @var \Magento\Framework\Model\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\Context|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $contextMock;
 
@@ -36,7 +36,7 @@ class StatusTest extends \PHPUnit\Framework\TestCase
     /**
      * SetUp test
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->resourceMock = $this->createMock(\Magento\Sales\Model\ResourceModel\Order\Status::class);
@@ -86,11 +86,12 @@ class StatusTest extends \PHPUnit\Framework\TestCase
     /**
      *  Test for method unassignState state is last
      *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The last status can't be changed and needs to stay assigned to its current state.
      */
     public function testUnassignStateStateIsLast()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('The last status can\'t be changed and needs to stay assigned to its current state.');
+
         $params = [
             'status' => $this->model->getStatus(),
             'state' => 'test_state',
@@ -105,11 +106,12 @@ class StatusTest extends \PHPUnit\Framework\TestCase
     /**
      * Test for method unassignState status in use
      *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The status can't be unassigned because the status is currently used by an order.
      */
     public function testUnassignStateStatusUsed()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('The status can\'t be unassigned because the status is currently used by an order.');
+
         $params = [
             'status' => $this->model->getStatus(),
             'state' => 'test_state',
@@ -128,8 +130,8 @@ class StatusTest extends \PHPUnit\Framework\TestCase
     /**
      * Retrieve prepared for test \Magento\Sales\Model\Order\Status
      *
-     * @param null|\PHPUnit_Framework_MockObject_MockObject $resource
-     * @param null|\PHPUnit_Framework_MockObject_MockObject $eventDispatcher
+     * @param null|\PHPUnit\Framework\MockObject\MockObject $resource
+     * @param null|\PHPUnit\Framework\MockObject\MockObject $eventDispatcher
      * @return \Magento\Sales\Model\Order\Status
      */
     protected function _getPreparedModel($resource = null, $eventDispatcher = null)

@@ -43,12 +43,12 @@ class SoapTest extends \PHPUnit\Framework\TestCase
     protected $_errorProcessorMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Locale\ResolverInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Locale\ResolverInterface
      */
     protected $_localeMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\State
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\State
      */
     protected $_appStateMock;
 
@@ -57,7 +57,7 @@ class SoapTest extends \PHPUnit\Framework\TestCase
     /**
      * Set up Controller object.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         

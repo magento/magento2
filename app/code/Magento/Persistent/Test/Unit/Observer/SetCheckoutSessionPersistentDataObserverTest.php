@@ -19,49 +19,49 @@ class SetCheckoutSessionPersistentDataObserverTest extends \PHPUnit\Framework\Te
     private $model;
 
     /**
-     * @var \Magento\Persistent\Helper\Data| \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Persistent\Helper\Data| \PHPUnit\Framework\MockObject\MockObject
      */
     private $helperMock;
 
     /**
-     * @var \Magento\Persistent\Helper\Session| \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Persistent\Helper\Session| \PHPUnit\Framework\MockObject\MockObject
      */
     private $sessionHelperMock;
 
     /**
-     * @var \Magento\Checkout\Model\Session| \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Checkout\Model\Session| \PHPUnit\Framework\MockObject\MockObject
      */
     private $checkoutSessionMock;
 
     /**
-     * @var \Magento\Customer\Model\Session| \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\Session| \PHPUnit\Framework\MockObject\MockObject
      */
     private $customerSessionMock;
 
     /**
-     * @var \Magento\Persistent\Model\Session| \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Persistent\Model\Session| \PHPUnit\Framework\MockObject\MockObject
      */
     private $persistentSessionMock;
 
     /**
-     * @var \Magento\Customer\Api\CustomerRepositoryInterface| \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Api\CustomerRepositoryInterface| \PHPUnit\Framework\MockObject\MockObject
      */
     private $customerRepositoryMock;
 
     /**
-     * @var \Magento\Framework\Event\Observer|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Event\Observer|\PHPUnit\Framework\MockObject\MockObject
      */
     private $observerMock;
 
     /**
-     * @var \Magento\Framework\Event|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Event|\PHPUnit\Framework\MockObject\MockObject
      */
     private $eventMock;
 
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->helperMock = $this->createMock(\Magento\Persistent\Helper\Data::class);
         $this->sessionHelperMock = $this->createMock(\Magento\Persistent\Helper\Session::class);

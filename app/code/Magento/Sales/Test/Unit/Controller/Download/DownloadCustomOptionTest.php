@@ -46,36 +46,36 @@ class DownloadCustomOptionTest extends \PHPUnit\Framework\TestCase
     const SECRET_KEY = 'secret_key';
 
     /**
-     * @var \Magento\Quote\Model\Quote\Item\Option|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Model\Quote\Item\Option|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $itemOptionMock;
 
     /**
-     * @var \Magento\Catalog\Model\Product\Option|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product\Option|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $productOptionMock;
 
     /**
-     * @var \Magento\Framework\Unserialize\Unserialize|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Unserialize\Unserialize|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $serializerMock;
 
     /**
-     * @var \Magento\Framework\Controller\Result\Forward|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Controller\Result\Forward|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resultForwardMock;
 
     /**
-     * @var \Magento\Sales\Model\Download|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Download|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $downloadMock;
 
     /**
-     * @var \Magento\Sales\Controller\Download\DownloadCustomOption|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Controller\Download\DownloadCustomOption|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $objectMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $resultForwardFactoryMock = $this->getMockBuilder(\Magento\Framework\Controller\Result\ForwardFactory::class)
             ->disableOriginalConstructor()

@@ -71,7 +71,7 @@ class TaxRuleRepositoryTest extends \PHPUnit\Framework\TestCase
      */
     private $dataObjectHelper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->taxRuleRepository = $this->objectManager->get(\Magento\Tax\Api\TaxRuleRepositoryInterface::class);

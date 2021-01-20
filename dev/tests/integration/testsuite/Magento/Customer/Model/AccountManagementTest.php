@@ -49,7 +49,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
     /** @var  \Magento\Framework\Api\DataObjectHelper */
     protected $dataObjectHelper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->accountManagement = $this->objectManager
@@ -103,7 +103,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
     /**
      * Clean up shared dependencies
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         /** @var \Magento\Customer\Model\CustomerRegistry $customerRegistry */
         $customerRegistry = $this->objectManager->get(\Magento\Customer\Model\CustomerRegistry::class);

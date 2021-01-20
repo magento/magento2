@@ -17,31 +17,31 @@ use Magento\Swatches\Model\SwatchAttributesProvider;
  */
 class DataTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Helper\Image */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Helper\Image */
     protected $imageHelperMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\ResourceModel\Product\CollectionFactory */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Model\ResourceModel\Product\CollectionFactory */
     protected $productCollectionFactoryMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\ResourceModel\Product\Collection */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Model\ResourceModel\Product\Collection */
     protected $productCollectionMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\ConfigurableProduct\Model\Product\Type\Configurable */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\ConfigurableProduct\Model\Product\Type\Configurable */
     protected $configurableMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\ProductFactory */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Model\ProductFactory */
     protected $productModelFactoryMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Product */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Model\Product */
     protected $productMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Store\Model\StoreManager */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Store\Model\StoreManager */
     protected $storeManagerMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Swatches\Model\ResourceModel\Swatch\CollectionFactory */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Swatches\Model\ResourceModel\Swatch\CollectionFactory */
     protected $swatchCollectionFactoryMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|Attribute */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|Attribute */
     protected $attributeMock;
 
     /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
@@ -50,23 +50,23 @@ class DataTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager|\Magento\Swatches\Helper\Data */
     protected $swatchHelperObject;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Api\ProductRepositoryInterface */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Api\ProductRepositoryInterface */
     protected $productRepoMock;
 
-    /** @var   \PHPUnit_Framework_MockObject_MockObject|MetadataPool */
+    /** @var   \PHPUnit\Framework\MockObject\MockObject|MetadataPool */
     private $metaDataPoolMock;
 
     /**
-     * @var SwatchAttributesProvider|\PHPUnit_Framework_MockObject_MockObject
+     * @var SwatchAttributesProvider|\PHPUnit\Framework\MockObject\MockObject
      */
     private $swatchAttributesProvider;
 
     /**
-     * @var  \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Product\Image\UrlBuilder
+     * @var  \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Model\Product\Image\UrlBuilder
      */
     private $imageUrlBuilderMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->imageHelperMock = $this->createMock(\Magento\Catalog\Helper\Image::class);
@@ -806,6 +806,6 @@ class DataTest extends \PHPUnit\Framework\TestCase
     {
         $this->getSwatchAttributes();
         $result = $this->swatchHelperObject->isProductHasSwatch($this->productMock);
-        $this->assertEquals(true, $result);
+        $this->assertTrue($result);
     }
 }

@@ -24,41 +24,41 @@ class FileTest extends \PHPUnit\Framework\TestCase
     protected $objectManager;
 
     /**
-     * @var WriteInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var WriteInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $mediaDirectory;
 
     /**
-     * @var \Magento\MediaStorage\Helper\File\Storage\Database|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\MediaStorage\Helper\File\Storage\Database|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $coreFileStorageDatabase;
 
     /**
-     * @var Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var Filesystem|\PHPUnit\Framework\MockObject\MockObject
      */
     private $filesystemMock;
 
     /**
-     * @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit\Framework\MockObject\MockObject
      */
     private $serializer;
 
     /**
-     * @var \Magento\Catalog\Model\Product\Option\UrlBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product\Option\UrlBuilder|\PHPUnit\Framework\MockObject\MockObject
      */
     private $urlBuilder;
 
     /**
-     * @var \Magento\Framework\Escaper|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Escaper|\PHPUnit\Framework\MockObject\MockObject
      */
     private $escaper;
 
     /**
-     * @var \Magento\Quote\Model\Quote\Item\OptionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Model\Quote\Item\OptionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $itemOptionFactoryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -412,7 +412,7 @@ class FileTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->will($this->returnValue($itemMock));
 
-        $this->assertEquals(null, $fileObject->parseOptionValue($userInput, []));
+        $this->assertNull($fileObject->parseOptionValue($userInput, []));
     }
 
     public function testParseOptionValueInvalid()
@@ -439,7 +439,7 @@ class FileTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->will($this->returnValue($itemMock));
 
-        $this->assertEquals(null, $fileObject->parseOptionValue($userInput, []));
+        $this->assertNull($fileObject->parseOptionValue($userInput, []));
     }
 
     public function testPrepareOptionValueForRequest()

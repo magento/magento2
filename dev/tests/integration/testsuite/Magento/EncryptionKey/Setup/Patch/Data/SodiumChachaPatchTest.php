@@ -26,7 +26,7 @@ class SodiumChachaPatchTest extends \PHPUnit\Framework\TestCase
      */
     private $deployConfig;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->deployConfig = $this->objectManager->get(DeploymentConfig::class);

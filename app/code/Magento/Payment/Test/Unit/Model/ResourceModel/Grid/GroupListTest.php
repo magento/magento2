@@ -14,11 +14,11 @@ class GroupListTest extends \PHPUnit\Framework\TestCase
     protected $groupArrayModel;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $helperMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->helperMock = $this->createMock(\Magento\Payment\Helper\Data::class);
         $this->groupArrayModel = new \Magento\Payment\Model\ResourceModel\Grid\GroupList($this->helperMock);

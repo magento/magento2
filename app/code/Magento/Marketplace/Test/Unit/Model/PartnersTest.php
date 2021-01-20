@@ -9,7 +9,7 @@ namespace Magento\Marketplace\Test\Unit\Model;
 class PartnersTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Marketplace\Model\Partners
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Marketplace\Model\Partners
      */
     private $partnersModelMock;
 
@@ -33,7 +33,7 @@ class PartnersTest extends \PHPUnit\Framework\TestCase
                     }
                  }';
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->partnersModelMock = $this->getPartnersModelMock(
             [
@@ -119,7 +119,7 @@ class PartnersTest extends \PHPUnit\Framework\TestCase
     /**
      * Gets partners block mock
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Marketplace\Block\Partners
+     * @return \PHPUnit\Framework\MockObject\MockObject|\Magento\Marketplace\Block\Partners
      */
     public function getPartnersBlockMock($methods = null)
     {
@@ -129,7 +129,7 @@ class PartnersTest extends \PHPUnit\Framework\TestCase
     /**
      * Gets partners model mock
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Marketplace\Model\Partners
+     * @return \PHPUnit\Framework\MockObject\MockObject|\Magento\Marketplace\Model\Partners
      */
     public function getPartnersModelMock($methods)
     {
@@ -139,7 +139,7 @@ class PartnersTest extends \PHPUnit\Framework\TestCase
     /**
      * Gets partners model mock
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\HTTP\Client\Curl
+     * @return \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\HTTP\Client\Curl
      */
     public function getCurlMock($methods)
     {
@@ -149,7 +149,7 @@ class PartnersTest extends \PHPUnit\Framework\TestCase
     /**
      * Gets cache mock
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\HTTP\Client\Curl
+     * @return \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\HTTP\Client\Curl
      */
     public function getCacheMock($methods)
     {

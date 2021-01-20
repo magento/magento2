@@ -16,11 +16,11 @@ class ContextTest extends \PHPUnit\Framework\TestCase
     protected $context;
 
     /**
-     * @var \Magento\Framework\Component\ComponentRegistrar|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Component\ComponentRegistrar|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $componentRegistrar;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->componentRegistrar = $this->createMock(\Magento\Framework\Component\ComponentRegistrar::class);
     }

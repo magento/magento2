@@ -19,22 +19,22 @@ class UrlTest extends \PHPUnit\Framework\TestCase
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    /** @var \Magento\Catalog\Block\Product\AbstractProduct|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Catalog\Block\Product\AbstractProduct|\PHPUnit\Framework\MockObject\MockObject */
     protected $abstractProductMock;
 
-    /** @var \Magento\Catalog\Helper\Product\Compare|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Catalog\Helper\Product\Compare|\PHPUnit\Framework\MockObject\MockObject */
     protected $catalogProductHelperMock;
 
-    /** @var \Magento\Framework\Data\Helper\PostHelper|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Data\Helper\PostHelper|\PHPUnit\Framework\MockObject\MockObject */
     protected $postHelperMock;
 
-    /** @var ButtonInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ButtonInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject */
     private $buttonFactoryMock;
 
-    /** @var  ButtonInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  ButtonInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $buttonMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->abstractProductMock = $this->getMockBuilder(\Magento\Catalog\Block\Product\AbstractProduct::class)
             ->disableOriginalConstructor()
@@ -55,7 +55,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
 
         $this->buttonMock = $this->getMockBuilder(ButtonInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $this->objectManagerHelper->getObject(
@@ -74,7 +74,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         $product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $productRenderInfoDto = $this->createMock(ProductRenderInterface::class);
+        $productRenderInfoDto = $this->getMockForAbstractClass(ProductRenderInterface::class);
         $this->catalogProductHelperMock
             ->expects($this->once())
             ->method('getPostDataParams')

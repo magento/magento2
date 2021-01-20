@@ -16,26 +16,26 @@ class OperationManagementTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $entityManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $operationFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $operationMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $loggerMock;
     
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->entityManagerMock = $this->createMock(\Magento\Framework\EntityManager\EntityManager::class);
         $this->metadataPoolMock = $this->createMock(\Magento\Framework\EntityManager\MetadataPool::class);

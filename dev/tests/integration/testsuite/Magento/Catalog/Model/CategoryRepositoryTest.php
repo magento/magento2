@@ -46,7 +46,7 @@ class CategoryRepositoryTest extends TestCase
      *
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->repositoryFactory = Bootstrap::getObjectManager()->get(CategoryRepositoryInterfaceFactory::class);
         $this->layoutManager = Bootstrap::getObjectManager()->get(CategoryLayoutUpdateManager::class);

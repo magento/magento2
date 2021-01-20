@@ -30,36 +30,36 @@ class OptionSelectBuilderTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var Attribute|\PHPUnit_Framework_MockObject_MockObject
+     * @var Attribute|\PHPUnit\Framework\MockObject\MockObject
      */
     private $attributeResourceMock;
 
     /**
-     * @var OptionProvider|\PHPUnit_Framework_MockObject_MockObject
+     * @var OptionProvider|\PHPUnit\Framework\MockObject\MockObject
      */
     private $attributeOptionProviderMock;
 
     /**
-     * @var Select|\PHPUnit_Framework_MockObject_MockObject
+     * @var Select|\PHPUnit\Framework\MockObject\MockObject
      */
     private $select;
 
     /**
-     * @var AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $connectionMock;
 
     /**
-     * @var AbstractAttribute|\PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractAttribute|\PHPUnit\Framework\MockObject\MockObject
      */
     private $abstractAttributeMock;
 
     /**
-     * @var ScopeInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $scope;
     
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->connectionMock = $this->getMockBuilder(AdapterInterface::class)
             ->setMethods(['select', 'getIfNullSql'])

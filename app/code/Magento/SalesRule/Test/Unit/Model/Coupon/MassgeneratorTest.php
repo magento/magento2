@@ -20,7 +20,7 @@ class MassgeneratorTest extends \PHPUnit\Framework\TestCase
      */
     protected $charset;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->charset = str_split(sha1((string)time()));
@@ -154,11 +154,12 @@ class MassgeneratorTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Run test generatePool method (throw exception)
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage We cannot create the requested Coupon Qty. Please check your settings and try again.
      */
     public function testGeneratePoolException()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('We cannot create the requested Coupon Qty. Please check your settings and try again.');
+
         $data = [
             'qty' => 3,
             'length' => 15,

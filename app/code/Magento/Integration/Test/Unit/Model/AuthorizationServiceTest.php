@@ -28,7 +28,7 @@ class AuthorizationServiceTest extends \PHPUnit\Framework\TestCase
     const INTEGRATION_ID = 22;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Role
+     * @var \PHPUnit\Framework\MockObject\MockObject|Role
      */
     protected $roleMock;
 
@@ -38,12 +38,12 @@ class AuthorizationServiceTest extends \PHPUnit\Framework\TestCase
     protected $integrationAuthorizationService;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Rules
+     * @var \PHPUnit\Framework\MockObject\MockObject|Rules
      */
     protected $rulesMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|RootResource
+     * @var \PHPUnit\Framework\MockObject\MockObject|RootResource
      */
     protected $rootAclResourceMock;
 
@@ -52,7 +52,7 @@ class AuthorizationServiceTest extends \PHPUnit\Framework\TestCase
      */
     protected $resources;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->roleMock = $this->createPartialMock(
             \Magento\Authorization\Model\Role::class,
@@ -62,7 +62,7 @@ class AuthorizationServiceTest extends \PHPUnit\Framework\TestCase
         $this->roleMock->expects($this->any())->method('delete')->will($this->returnSelf());
         $this->roleMock->expects($this->any())->method('save')->will($this->returnSelf());
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Authorization\Model\RoleFactory $roleFactoryMock */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Authorization\Model\RoleFactory $roleFactoryMock */
         $roleFactoryMock = $this->createPartialMock(\Magento\Authorization\Model\RoleFactory::class, ['create']);
         $roleFactoryMock->expects($this->any())->method('create')->will($this->returnValue($this->roleMock));
 
@@ -111,11 +111,12 @@ class AuthorizationServiceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Something went wrong while deleting roles and permissions.
      */
     public function testRemovePermissionsException()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('Something went wrong while deleting roles and permissions.');
+
         $roleName = UserContextInterface::USER_TYPE_INTEGRATION . self::INTEGRATION_ID;
         $this->roleMock->expects($this->once())
             ->method('load')
@@ -177,10 +178,11 @@ class AuthorizationServiceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testGrantPermissionsException()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+
         $this->resources = [
             'Magento_Sales::sales',
             'Magento_Sales::sales_operations',

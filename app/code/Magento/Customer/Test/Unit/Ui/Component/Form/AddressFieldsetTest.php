@@ -20,7 +20,7 @@ class AddressFieldsetTest extends \PHPUnit\Framework\TestCase
     protected $fieldset;
 
     /**
-     * @var ContextInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ContextInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $context;
 
@@ -29,7 +29,7 @@ class AddressFieldsetTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->context = $this->getMockForAbstractClass(
             \Magento\Framework\View\Element\UiComponent\ContextInterface::class
@@ -64,6 +64,6 @@ class AddressFieldsetTest extends \PHPUnit\Framework\TestCase
     {
         $this->context->expects($this->atLeastOnce())->method('getRequestParam')->with('id')
             ->willReturn(null);
-        $this->assertEquals(false, $this->fieldset->isComponentVisible());
+        $this->assertFalse($this->fieldset->isComponentVisible());
     }
 }

@@ -8,7 +8,7 @@ namespace Magento\CatalogSearch\Test\Unit\Model\Layer\Filter;
 
 use Magento\Catalog\Model\Layer\Filter\AbstractFilter;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -50,7 +50,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
     /** @var  \Magento\Catalog\Model\Layer\Filter\Item\DataBuilder|MockObject */
     private $itemDataBuilder;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         /** @var \Magento\Catalog\Model\Layer\Filter\ItemFactory $filterItemFactory */
         $this->filterItemFactory = $this->getMockBuilder(\Magento\Catalog\Model\Layer\Filter\ItemFactory::class)

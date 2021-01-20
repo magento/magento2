@@ -20,39 +20,39 @@ require_once __DIR__ . '/../Custom/Module/Model/ItemPlugin/Advanced.php';
 class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $configScopeMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $readerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $omConfigMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $definitionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $relationsMock;
 
     /**
-     * @var \Magento\Framework\Interception\Config\CacheManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Interception\Config\CacheManager|\PHPUnit\Framework\MockObject\MockObject
      */
     private $cacheManagerMock;
 
     /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
     private $objectManagerHelper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->readerMock = $this->createMock(\Magento\Framework\ObjectManager\Config\Reader\Dom::class);
         $this->configScopeMock = $this->createMock(\Magento\Framework\Config\ScopeListInterface::class);

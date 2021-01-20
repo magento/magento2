@@ -68,7 +68,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
     protected $_uploaderFactory;
 
     /**
-     * @var \Magento\CatalogInventory\Model\Spi\StockStateProviderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogInventory\Model\Spi\StockStateProviderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_stockStateProvider;
 
@@ -78,7 +78,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
     protected $objectManager;
 
     /**
-     * @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $logger;
 
@@ -95,12 +95,12 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->logger = $this->getMockBuilder(LoggerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\CatalogImportExport\Model\Import\Product::class,
             ['logger' => $this->logger]
@@ -112,7 +112,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         parent::setUp();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         /* We rollback here the products created during the Import because they were
            created during test execution and we do not have the rollback for them */

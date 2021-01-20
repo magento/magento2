@@ -8,7 +8,7 @@ namespace Magento\Framework\Phrase\Test\Unit\Renderer;
 class InlineTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\TranslateInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\TranslateInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $translator;
 
@@ -18,16 +18,16 @@ class InlineTest extends \PHPUnit\Framework\TestCase
     protected $renderer;
 
     /**
-     * @var \Magento\Framework\Translate\Inline\ProviderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Translate\Inline\ProviderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $provider;
 
     /**
-     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Psr\Log\LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $loggerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->translator = $this->createMock(\Magento\Framework\TranslateInterface::class);
         $this->provider = $this->createMock(\Magento\Framework\Translate\Inline\ProviderInterface::class);

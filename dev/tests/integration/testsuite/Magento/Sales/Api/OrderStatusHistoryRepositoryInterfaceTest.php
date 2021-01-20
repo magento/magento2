@@ -19,7 +19,7 @@ class OrderStatusHistoryRepositoryInterfaceTest extends \PHPUnit\Framework\TestC
      */
     private $repository;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->repository = Bootstrap::getObjectManager()->create(OrderStatusHistoryRepositoryInterface::class);
     }

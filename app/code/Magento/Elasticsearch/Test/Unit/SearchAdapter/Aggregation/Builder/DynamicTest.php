@@ -16,37 +16,37 @@ class DynamicTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \Magento\Framework\Search\Request\BucketInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Search\Request\BucketInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $requestBuckedInterface;
 
     /**
-     * @var \Magento\Framework\Search\Dynamic\DataProviderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Search\Dynamic\DataProviderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $dataProviderContainer;
 
     /**
-     * @var \Magento\Framework\Search\Dynamic\Algorithm\AlgorithmInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Search\Dynamic\Algorithm\AlgorithmInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $algorithmRepository;
 
     /**
-     * @var \Magento\Framework\Search\Dynamic\EntityStorageFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Search\Dynamic\EntityStorageFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $entityStorageFactory;
 
     /**
-     * @var \Magento\Framework\Search\Dynamic\Algorithm\AlgorithmInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Search\Dynamic\Algorithm\AlgorithmInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $algorithmInterface;
 
     /**
-     * @var \Magento\Framework\Search\Request\Aggregation\DynamicBucket|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Search\Request\Aggregation\DynamicBucket|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $bucket;
 
     /**
-     * @var \Magento\Framework\Search\Dynamic\EntityStorage|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Search\Dynamic\EntityStorage|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $entityStorage;
 
@@ -55,7 +55,7 @@ class DynamicTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->requestBuckedInterface = $this->getMockBuilder(\Magento\Framework\Search\Request\BucketInterface::class)
             ->disableOriginalConstructor()

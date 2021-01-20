@@ -19,19 +19,19 @@ class ViewTest extends \PHPUnit\Framework\TestCase
     protected $view;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $productTypeConfig;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $registryMock;
 
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->productTypeConfig = $this->createMock(\Magento\Catalog\Model\ProductTypes\ConfigInterface::class);
@@ -67,7 +67,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
         )->will(
             $this->returnValue(true)
         );
-        $this->assertEquals(false, $this->view->shouldRenderQuantity());
+        $this->assertFalse($this->view->shouldRenderQuantity());
     }
 
     /**

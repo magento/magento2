@@ -17,7 +17,7 @@ class AttributeSetManagementTest extends WebapiAbstract
      */
     private $createServiceInfo;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->createServiceInfo = [
             'rest' => [

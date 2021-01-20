@@ -25,33 +25,33 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     /**
      * Mock for view file system
      *
-     * @var \Magento\Framework\FileSystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\FileSystem|\PHPUnit\Framework\MockObject\MockObject
      */
     private $fileSystemMock;
 
     /**
      * Mock for scope config
      *
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $scopeConfigMock;
 
     /**
      * Mock for root directory reader
      *
-     * @var \Magento\Framework\Filesystem\Directory\ReadInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\Directory\ReadInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $rootDirectoryMock;
 
     /**
      * Mock for compiled directory reader
      *
-     * @var \Magento\Framework\Filesystem\Directory\ReadInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\Directory\ReadInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $compiledDirectoryMock;
 
     /**
-     * @var ComponentRegistrar|\PHPUnit_Framework_MockObject_MockObject
+     * @var ComponentRegistrar|\PHPUnit\Framework\MockObject\MockObject
      */
     private $componentRegistrar;
 
@@ -60,7 +60,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->fileSystemMock = $this->createMock(\Magento\Framework\Filesystem::class);
         $this->scopeConfigMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);

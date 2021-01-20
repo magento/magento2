@@ -14,16 +14,16 @@ class ModuleOutputTest extends \PHPUnit\Framework\TestCase
     private $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $_fileSource;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $_moduleManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_fileSource = $this->getMockForAbstractClass(\Magento\Framework\View\File\CollectorInterface::class);
         $this->_moduleManager = $this->createMock(\Magento\Framework\Module\Manager::class);

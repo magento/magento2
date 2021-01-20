@@ -16,22 +16,22 @@ class FormTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\UrlRewrite\Block\Edit\Form */
     protected $form;
 
-    /** @var \Magento\Framework\Data\FormFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Data\FormFactory|\PHPUnit\Framework\MockObject\MockObject */
     protected $formFactory;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $urlRewriteFactory;
 
-    /** @var \Magento\Catalog\Model\ProductFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Catalog\Model\ProductFactory|\PHPUnit\Framework\MockObject\MockObject */
     protected $productFactory;
 
-    /** @var \Magento\Catalog\Model\CategoryFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Catalog\Model\CategoryFactory|\PHPUnit\Framework\MockObject\MockObject */
     protected $categoryFactory;
 
-    /** @var \Magento\Framework\View\LayoutInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\View\LayoutInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $layout;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->layout = $this->createMock(\Magento\Framework\View\LayoutInterface::class);
         $this->formFactory = $this->createPartialMock(\Magento\Framework\Data\FormFactory::class, ['create']);

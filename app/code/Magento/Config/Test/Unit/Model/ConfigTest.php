@@ -82,7 +82,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
      */
     private $scopeTypeNormalizer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->eventManagerMock = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
         $this->structureReaderMock = $this->createPartialMock(
@@ -386,11 +386,12 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \UnexpectedValueException
-     * @expectedExceptionMessage Path must not be empty
      */
     public function testSetDataByPathEmpty()
     {
+        $this->expectException(\UnexpectedValueException::class);
+        $this->expectExceptionMessage('Path must not be empty');
+
         $this->model->setDataByPath('', 'value');
     }
 

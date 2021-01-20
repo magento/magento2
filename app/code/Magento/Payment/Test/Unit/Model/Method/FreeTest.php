@@ -14,13 +14,13 @@ class FreeTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Payment\Model\Method\Free */
     protected $methodFree;
 
-    /**  @var \PHPUnit_Framework_MockObject_MockObject */
+    /**  @var \PHPUnit\Framework\MockObject\MockObject */
     protected $scopeConfig;
 
-    /**  @var \PHPUnit_Framework_MockObject_MockObject */
+    /**  @var \PHPUnit\Framework\MockObject\MockObject */
     protected $currencyPrice;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $paymentData  = $this->createMock(\Magento\Payment\Helper\Data::class);
         $this->scopeConfig = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);

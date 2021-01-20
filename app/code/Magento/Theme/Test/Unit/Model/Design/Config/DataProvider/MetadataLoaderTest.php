@@ -17,41 +17,41 @@ class MetadataLoaderTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var Http|\PHPUnit_Framework_MockObject_MockObject
+     * @var Http|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $request;
 
     /**
-     * @var ScopeFallbackResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeFallbackResolverInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $scopeFallbackResolver;
 
     /**
-     * @var \Magento\Theme\Api\DesignConfigRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Theme\Api\DesignConfigRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $designConfigRepository;
 
     /**
-     * @var \Magento\Theme\Api\Data\DesignConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Theme\Api\Data\DesignConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $designConfig;
 
     /**
-     * @var \Magento\Theme\Api\Data\DesignConfigDataInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Theme\Api\Data\DesignConfigDataInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $designConfigData;
 
     /**
-     * @var \Magento\Theme\Api\Data\DesignConfigExtensionInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Theme\Api\Data\DesignConfigExtensionInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $designConfigExtension;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->request = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
             ->disableOriginalConstructor()

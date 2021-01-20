@@ -15,7 +15,7 @@ class RegistryTest extends \PHPUnit\Framework\TestCase
      */
     protected $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->model = new Registry();
     }

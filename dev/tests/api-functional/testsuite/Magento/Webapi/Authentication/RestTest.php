@@ -30,7 +30,7 @@ class RestTest extends \Magento\TestFramework\TestCase\WebapiAbstract
     /** @var string */
     protected static $_verifier;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_markTestAsRestOnly();
         parent::setUp();
@@ -52,7 +52,7 @@ class RestTest extends \Magento\TestFramework\TestCase\WebapiAbstract
         self::$_token = $consumerCredentials['token'];
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
         $this->_oAuthClients = [];

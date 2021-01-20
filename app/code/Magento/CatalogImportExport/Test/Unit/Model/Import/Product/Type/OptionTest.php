@@ -218,7 +218,7 @@ class OptionTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
      *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -296,7 +296,7 @@ class OptionTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
     /**
      * Unset entity adapter model
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->model);
         unset($this->productEntity);
@@ -427,7 +427,7 @@ class OptionTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
             $this->returnValue($products)
         );
 
-        $fetchStrategy = $this->getMockForAbstractClass(
+        $fetchStrategy = $this->createPartialMock(
             \Magento\Framework\Data\Collection\Db\FetchStrategyInterface::class,
             ['fetchAll']
         );
@@ -506,7 +506,7 @@ class OptionTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
     /**
      * Get new object mock for \Magento\Catalog\Model\Product\Option
      *
-     * @return \Magento\Catalog\Model\Product\Option|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Catalog\Model\Product\Option|\PHPUnit\Framework\MockObject\MockObject
      */
     public function getNewOptionMock()
     {

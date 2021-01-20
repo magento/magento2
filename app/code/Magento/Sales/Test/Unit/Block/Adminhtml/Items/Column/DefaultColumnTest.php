@@ -18,11 +18,11 @@ class DefaultColumnTest extends \PHPUnit\Framework\TestCase
     protected $defaultColumn;
 
     /**
-     * @var \Magento\Sales\Model\Order\Item|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Item|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $itemMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->defaultColumn = $this->objectManagerHelper->getObject(

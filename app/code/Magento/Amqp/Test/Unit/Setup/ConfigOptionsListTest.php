@@ -24,12 +24,12 @@ class ConfigOptionsListTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \Magento\Amqp\Setup\ConnectionValidator|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Amqp\Setup\ConnectionValidator|\PHPUnit\Framework\MockObject\MockObject
      */
     private $connectionValidatorMock;
 
     /**
-     * @var \Magento\Framework\App\DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\DeploymentConfig|\PHPUnit\Framework\MockObject\MockObject
      */
     private $deploymentConfigMock;
 
@@ -38,7 +38,7 @@ class ConfigOptionsListTest extends \PHPUnit\Framework\TestCase
      */
     private $options;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->options = [
             ConfigOptionsList::INPUT_KEY_QUEUE_AMQP_HOST => 'host',

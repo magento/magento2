@@ -30,7 +30,7 @@ class BannersTest extends \PHPUnit\Framework\TestCase
         $methodWppBml,
         $methodWppPeBml
     ) {
-        /** @var \Magento\Paypal\Model\Config|\PHPUnit_Framework_MockObject_MockObject $paypalConfig */
+        /** @var \Magento\Paypal\Model\Config|\PHPUnit\Framework\MockObject\MockObject $paypalConfig */
         $paypalConfig = $this->createMock(\Magento\Paypal\Model\Config::class);
         $paypalConfig->expects($this->any())->method('getBmlPublisherId')->will($this->returnValue($publisherId));
         $paypalConfig->expects($this->any())->method('getBmlDisplay')->will($this->returnValue($display));

@@ -12,7 +12,7 @@ namespace Magento\Test;
 class BootstrapTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\TestFramework\Bootstrap|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\TestFramework\Bootstrap|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_object;
 
@@ -26,37 +26,37 @@ class BootstrapTest extends \PHPUnit\Framework\TestCase
     ];
 
     /**
-     * @var \Magento\TestFramework\Bootstrap\Settings|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\TestFramework\Bootstrap\Settings|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_settings;
 
     /**
-     * @var \Magento\TestFramework\Bootstrap\Environment|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\TestFramework\Bootstrap\Environment|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_envBootstrap;
 
     /**
-     * @var \Magento\TestFramework\Bootstrap\DocBlock|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\TestFramework\Bootstrap\DocBlock|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_docBlockBootstrap;
 
     /**
-     * @var \Magento\TestFramework\Bootstrap\Profiler|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\TestFramework\Bootstrap\Profiler|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_profilerBootstrap;
 
     /**
-     * @var \Magento\TestFramework\Bootstrap\MemoryFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\TestFramework\Bootstrap\MemoryFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $memoryFactory;
 
     /**
-     * @var \Magento\Framework\Shell|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Shell|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_shell;
 
     /**
-     * @var \Magento\TestFramework\Application|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\TestFramework\Application|\PHPUnit\Framework\MockObject\MockObject
      */
     private $application;
 
@@ -65,7 +65,7 @@ class BootstrapTest extends \PHPUnit\Framework\TestCase
      */
     protected $_integrationTestsDir;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_integrationTestsDir = realpath(__DIR__ . '/../../../../../../');
         $this->_settings = $this->createMock(\Magento\TestFramework\Bootstrap\Settings::class);
@@ -98,7 +98,7 @@ class BootstrapTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->_object = null;
         $this->_settings = null;

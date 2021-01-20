@@ -21,7 +21,7 @@ class GroupTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($this->model->hasSystemAttributes());
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $helper = new ObjectManager($this);
         $this->model = $helper->getObject(

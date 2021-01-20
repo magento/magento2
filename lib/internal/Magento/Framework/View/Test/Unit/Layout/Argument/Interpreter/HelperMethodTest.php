@@ -10,12 +10,12 @@ use \Magento\Framework\View\Layout\Argument\Interpreter\HelperMethod;
 class HelperMethodTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_objectManager;
 
     /**
-     * @var \Magento\Framework\View\Layout\Argument\Interpreter\NamedParams|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Layout\Argument\Interpreter\NamedParams|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_interpreter;
 
@@ -24,7 +24,7 @@ class HelperMethodTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->_interpreter = $this->createMock(\Magento\Framework\View\Layout\Argument\Interpreter\NamedParams::class);

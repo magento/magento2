@@ -42,71 +42,71 @@ class PlaceTest extends \PHPUnit\Framework\TestCase
     protected $placeOrderController;
 
     /**
-     * @var Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $contextMock;
 
     /**
-     * @var Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @var Registry|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $coreRegistryMock;
 
     /**
-     * @var DataFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var DataFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $dataFactoryMock;
 
     /**
-     * @var CartManagementInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CartManagementInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $cartManagementMock;
 
     /**
-     * @var Onepage|\PHPUnit_Framework_MockObject_MockObject
+     * @var Onepage|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $onepageCheckout;
 
     /**
-     * @var Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var Data|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $jsonHelperMock;
 
     /**
-     * @var RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var RequestInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $requestMock;
 
     /**
-     * @var Http|\PHPUnit_Framework_MockObject_MockObject
+     * @var Http|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $responseMock;
 
     /**
-     * @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $objectManagerMock;
 
     /**
-     * @var DirectpostSession|\PHPUnit_Framework_MockObject_MockObject
+     * @var DirectpostSession|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $directpostSessionMock;
 
     /**
-     * @var Quote|\PHPUnit_Framework_MockObject_MockObject
+     * @var Quote|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $quoteMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $loggerMock;
 
     /**
-     * @var CheckoutSession|\PHPUnit_Framework_MockObject_MockObject
+     * @var CheckoutSession|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $checkoutSessionMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->directpostSessionMock = $this
             ->getMockBuilder(\Magento\Authorizenet\Model\Directpost\Session::class)

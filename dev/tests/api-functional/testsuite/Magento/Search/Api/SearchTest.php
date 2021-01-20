@@ -24,7 +24,7 @@ class SearchTest extends WebapiAbstract
      */
     private $product;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $productSku = 'simple';
 

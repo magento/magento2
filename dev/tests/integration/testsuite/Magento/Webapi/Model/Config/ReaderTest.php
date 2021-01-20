@@ -13,13 +13,13 @@ use Magento\Webapi\Model\Config\Reader as ConfigReader;
  */
 class ReaderTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $_fileResolverMock;
 
     /** @var ConfigReader */
     protected $_configReader;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->_fileResolverMock = $this->createMock(\Magento\Framework\Config\FileResolverInterface::class);

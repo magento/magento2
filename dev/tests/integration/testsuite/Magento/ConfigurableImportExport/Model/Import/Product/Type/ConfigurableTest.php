@@ -34,7 +34,7 @@ class ConfigurableTest extends \PHPUnit\Framework\TestCase
      */
     protected $productMetadata;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->model = $this->objectManager->create(\Magento\CatalogImportExport\Model\Import\Product::class);

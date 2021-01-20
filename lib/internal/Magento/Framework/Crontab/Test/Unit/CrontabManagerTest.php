@@ -23,12 +23,12 @@ use Magento\Framework\Filesystem\DriverPool;
 class CrontabManagerTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var ShellInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ShellInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $shellMock;
 
     /**
-     * @var Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var Filesystem|\PHPUnit\Framework\MockObject\MockObject
      */
     private $filesystemMock;
 
@@ -40,7 +40,7 @@ class CrontabManagerTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->shellMock = $this->getMockBuilder(ShellInterface::class)
             ->getMockForAbstractClass();

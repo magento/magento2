@@ -56,7 +56,7 @@ class FlatTest extends \Magento\TestFramework\Indexer\TestCase
      */
     protected static $totalBefore = 0;
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         self::loadAttributeCodes();
 

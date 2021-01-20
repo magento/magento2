@@ -15,7 +15,7 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
      */
     private $responseModel;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $this->responseModel = $objectManager->getObject(

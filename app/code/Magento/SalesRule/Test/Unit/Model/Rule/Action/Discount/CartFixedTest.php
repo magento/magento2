@@ -20,7 +20,7 @@ use Magento\SalesRule\Model\Rule\Action\Discount\DataFactory;
 use Magento\SalesRule\Model\Validator;
 use Magento\Store\Model\Store;
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * Tests for Magento\SalesRule\Model\Rule\Action\Discount\CartFixed.
@@ -81,7 +81,7 @@ class CartFixedTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->rule = $this->getMockBuilder(Rule::class)
             ->setMethods(['getId', 'getApplyToShipping'])

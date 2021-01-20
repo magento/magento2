@@ -11,22 +11,22 @@ namespace Magento\Setup\Test\Unit\Module\I18n\Pack;
 class GeneratorTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Setup\Module\I18n\Dictionary\Loader\FileInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Setup\Module\I18n\Dictionary\Loader\FileInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $dictionaryLoaderMock;
 
     /**
-     * @var \Magento\Setup\Module\I18n\Pack\WriterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Setup\Module\I18n\Pack\WriterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $packWriterMock;
 
     /**
-     * @var \Magento\Setup\Module\I18n\Factory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Setup\Module\I18n\Factory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $factoryMock;
 
     /**
-     * @var \Magento\Setup\Module\I18n\Dictionary|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Setup\Module\I18n\Dictionary|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $dictionaryMock;
 
@@ -35,7 +35,7 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
      */
     protected $_generator;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->dictionaryLoaderMock =
             $this->createMock(\Magento\Setup\Module\I18n\Dictionary\Loader\FileInterface::class);

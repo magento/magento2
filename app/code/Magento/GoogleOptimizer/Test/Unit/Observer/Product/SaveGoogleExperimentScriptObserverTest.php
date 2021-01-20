@@ -55,7 +55,7 @@ class SaveGoogleExperimentScriptObserverTest extends TestCase
      */
     protected $_storeId;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_helperMock = $this->createMock(Data::class);
         $this->_productMock = $this->createMock(Product::class);
@@ -72,7 +72,7 @@ class SaveGoogleExperimentScriptObserverTest extends TestCase
         $this->_eventObserverMock = $this->createMock(Observer::class);
         $this->_eventObserverMock->expects($this->once())->method('getEvent')->will($this->returnValue($event));
         $this->_codeMock = $this->createMock(Code::class);
-        $this->_requestMock = $this->createMock(RequestInterface::class);
+        $this->_requestMock = $this->getMockForAbstractClass(RequestInterface::class);
 
         $objectManagerHelper = new ObjectManager($this);
         $this->_modelObserver = $objectManagerHelper->getObject(
@@ -248,11 +248,12 @@ class SaveGoogleExperimentScriptObserverTest extends TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Code does not exist
      */
     public function testEditingCodeIfCodeModelIsNotFound()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Code does not exist');
+
         $experimentScript = 'some string';
         $codeId = 5;
 

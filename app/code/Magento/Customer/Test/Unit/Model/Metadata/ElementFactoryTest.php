@@ -9,10 +9,10 @@ use Magento\Customer\Model\Metadata\ElementFactory;
 
 class ElementFactoryTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \Magento\Framework\ObjectManagerInterface | \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\ObjectManagerInterface | \PHPUnit\Framework\MockObject\MockObject */
     private $_objectManager;
 
-    /** @var \Magento\Customer\Model\Data\AttributeMetadata | \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Customer\Model\Data\AttributeMetadata | \PHPUnit\Framework\MockObject\MockObject */
     private $_attributeMetadata;
 
     /** @var string */
@@ -21,7 +21,7 @@ class ElementFactoryTest extends \PHPUnit\Framework\TestCase
     /** @var ElementFactory */
     private $_elementFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->_attributeMetadata = $this->createMock(\Magento\Customer\Model\Data\AttributeMetadata::class);

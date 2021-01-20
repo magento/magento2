@@ -10,16 +10,16 @@ namespace Magento\Framework\DataObject\Test\Unit\Copy;
 class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\DataObject\Copy\Config\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DataObject\Copy\Config\Data|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_storageMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\DataObject\Copy\Config
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\DataObject\Copy\Config
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_storageMock = $this->createPartialMock(\Magento\Framework\DataObject\Copy\Config\Data::class, ['get']);
 

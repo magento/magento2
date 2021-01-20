@@ -17,21 +17,21 @@ class DictionaryTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $readFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $componentRegistrar;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $configFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->readFactory = $this->createMock(\Magento\Framework\Filesystem\Directory\ReadFactory::class);
         $this->componentRegistrar = $this->createMock(\Magento\Framework\Component\ComponentRegistrar::class);

@@ -14,12 +14,12 @@ use Psr\Log\LoggerInterface;
 class CollectionTimeTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var WriterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var WriterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configWriterMock;
 
     /**
-     * @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $loggerMock;
 
@@ -36,15 +36,15 @@ class CollectionTimeTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->configWriterMock = $this->getMockBuilder(WriterInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
@@ -77,20 +77,22 @@ class CollectionTimeTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @return void
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testAfterSaveWrongValue()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+
         $this->collectionTime->setData('value', '00,01');
         $this->collectionTime->afterSave();
     }
 
     /**
      * @return void
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testAfterSaveWithLocalizedException()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+
         $exception = new \Exception('Test message');
         $this->collectionTime->setData('value', '05,04,03');
 

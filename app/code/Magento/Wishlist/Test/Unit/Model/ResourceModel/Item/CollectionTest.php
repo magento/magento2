@@ -44,14 +44,14 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
  WHERE (INSTR(product_name_table.value, 'TestProductName'))";
 
     /**
-     * @var MetadataPool|\PHPUnit_Framework_MockObject_MockObject
+     * @var MetadataPool|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $metadataPool;
 
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $connection = $this->createPartialMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class, ['quote', 'select']);

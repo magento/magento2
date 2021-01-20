@@ -15,7 +15,7 @@ class RouterListTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $objectManagerMock;
 
@@ -24,7 +24,7 @@ class RouterListTest extends \PHPUnit\Framework\TestCase
      */
     protected $routerList;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->routerList = [
             'adminRouter' => ['class' => 'AdminClass', 'disable' => true, 'sortOrder' => 10],

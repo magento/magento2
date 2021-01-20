@@ -15,11 +15,11 @@ class TabTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_iteratorMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_iteratorMock = $this->createMock(\Magento\Config\Model\Config\Structure\Element\Iterator\Field::class);
 
@@ -29,7 +29,7 @@ class TabTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_model);
         unset($this->_iteratorMock);

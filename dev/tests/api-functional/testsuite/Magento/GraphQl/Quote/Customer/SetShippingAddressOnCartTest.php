@@ -63,7 +63,7 @@ class SetShippingAddressOnCartTest extends GraphQlAbstract
      */
     private $customerRepository;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->quoteResource = $objectManager->get(QuoteResource::class);

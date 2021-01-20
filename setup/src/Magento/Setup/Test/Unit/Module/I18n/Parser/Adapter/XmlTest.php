@@ -17,7 +17,7 @@ class XmlTest extends \PHPUnit\Framework\TestCase
      */
     protected $_adapter;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_adapter = $objectManagerHelper->getObject(\Magento\Setup\Module\I18n\Parser\Adapter\Xml::class);

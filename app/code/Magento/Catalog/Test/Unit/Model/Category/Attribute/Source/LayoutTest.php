@@ -23,7 +23,7 @@ class LayoutTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($assertArray, $this->model->getAllOptions());
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $helper = new ObjectManager($this);
         $this->model = $helper->getObject(

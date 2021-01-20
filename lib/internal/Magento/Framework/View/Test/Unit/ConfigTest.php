@@ -16,15 +16,15 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    /** @var \Magento\Framework\View\Asset\Repository | \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\View\Asset\Repository | \PHPUnit\Framework\MockObject\MockObject */
     protected $repositoryMock;
 
     /**
-     * @var \Magento\Framework\Config\ViewFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Config\ViewFactory | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $viewConfigFactoryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->repositoryMock = $this->createMock(\Magento\Framework\View\Asset\Repository::class);
         $this->viewConfigFactoryMock = $this->createMock(\Magento\Framework\Config\ViewFactory::class);

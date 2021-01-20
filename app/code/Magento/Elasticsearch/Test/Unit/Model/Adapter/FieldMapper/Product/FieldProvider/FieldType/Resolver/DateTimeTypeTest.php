@@ -33,7 +33,7 @@ class DateTimeTypeTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->fieldTypeConverter = $this->getMockBuilder(FieldTypeConverterInterface::class)
             ->disableOriginalConstructor()

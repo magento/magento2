@@ -14,16 +14,16 @@ class MapperTest extends \PHPUnit\Framework\TestCase
     protected $mapper;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $fromMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $toMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->fromMock = $this->createMock(\Magento\Framework\DataObject::class);
         $this->toMock = $this->createMock(\Magento\Framework\DataObject::class);

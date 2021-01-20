@@ -17,16 +17,16 @@ class MassactionKeyTest extends \PHPUnit\Framework\TestCase
     protected $plugin;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|RequestInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|RequestInterface
      */
     protected $requestMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|AbstractAction
+     * @var \PHPUnit\Framework\MockObject\MockObject|AbstractAction
      */
     protected $subjectMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->closureMock = function () {
             return 'Expected';

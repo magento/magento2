@@ -14,16 +14,16 @@ class FilesystemTest extends \PHPUnit\Framework\TestCase
     /** @var Filesystem */
     protected $_filesystem;
 
-    /** @var \Magento\Framework\Filesystem\Directory\ReadFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Filesystem\Directory\ReadFactory|\PHPUnit\Framework\MockObject\MockObject */
     protected $_dirReadFactoryMock;
 
-    /** @var \Magento\Framework\Filesystem\Directory\WriteFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Filesystem\Directory\WriteFactory|\PHPUnit\Framework\MockObject\MockObject */
     protected $_dirWriteFactoryMock;
 
-    /** @var \Magento\Framework\App\Filesystem\DirectoryList|\PHPUnit_Framework_MockObject_MockObject  */
+    /** @var \Magento\Framework\App\Filesystem\DirectoryList|\PHPUnit\Framework\MockObject\MockObject  */
     protected $_directoryListMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_dirReadFactoryMock = $this->createMock(\Magento\Framework\Filesystem\Directory\ReadFactory::class);
         $this->_directoryListMock = $this->createMock(\Magento\Framework\App\Filesystem\DirectoryList::class);

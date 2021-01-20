@@ -10,12 +10,12 @@ use Magento\Catalog\Model\Indexer\Category\Flat\Plugin\StoreView;
 class StoreViewTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Indexer\IndexerInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Indexer\IndexerInterface
      */
     protected $indexerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Indexer\Category\Flat\State
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Model\Indexer\Category\Flat\State
      */
     protected $stateMock;
 
@@ -25,16 +25,16 @@ class StoreViewTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Framework\Indexer\IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Indexer\IndexerRegistry|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $indexerRegistryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $subjectMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->indexerMock = $this->getMockForAbstractClass(
             \Magento\Framework\Indexer\IndexerInterface::class,

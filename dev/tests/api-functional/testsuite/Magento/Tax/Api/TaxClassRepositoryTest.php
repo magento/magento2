@@ -49,7 +49,7 @@ class TaxClassRepositoryTest extends WebapiAbstract
     /**
      * Execute per test initialization.
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->searchCriteriaBuilder = Bootstrap::getObjectManager()->create(
             \Magento\Framework\Api\SearchCriteriaBuilder::class

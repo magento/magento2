@@ -16,14 +16,14 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
     private $converter;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $defaultConfigProviderMock;
 
     /**
      * Initialize parameters
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->defaultConfigProviderMock =
             $this->createMock(\Magento\Framework\MessageQueue\DefaultValueProvider::class);

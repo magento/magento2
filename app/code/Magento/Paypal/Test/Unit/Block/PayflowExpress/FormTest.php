@@ -12,7 +12,7 @@ use Magento\Paypal\Model\Config;
 class FormTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_paypalConfig;
 
@@ -21,7 +21,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_paypalConfig = $this->createMock(\Magento\Paypal\Model\Config::class);
         $this->_paypalConfig

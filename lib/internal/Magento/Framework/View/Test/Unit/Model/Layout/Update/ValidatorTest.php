@@ -16,26 +16,26 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     private $_objectHelper;
 
     /**
-     * @var \Magento\Framework\Config\DomFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Config\DomFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $domConfigFactory;
 
     /**
-     * @var \Magento\Framework\View\Model\Layout\Update\Validator|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Model\Layout\Update\Validator|\PHPUnit\Framework\MockObject\MockObject
      */
     private $model;
 
     /**
-     * @var \Magento\Framework\Config\Dom\UrnResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Config\Dom\UrnResolver|\PHPUnit\Framework\MockObject\MockObject
      */
     private $urnResolver;
 
     /**
-     * @var \Magento\Framework\Config\ValidationStateInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Config\ValidationStateInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $validationState;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->domConfigFactory = $this->getMockBuilder(

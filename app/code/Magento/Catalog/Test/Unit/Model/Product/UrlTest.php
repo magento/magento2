@@ -15,31 +15,31 @@ class UrlTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Framework\Filter\FilterManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filter\FilterManager|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $filter;
 
     /**
-     * @var \Magento\UrlRewrite\Model\UrlFinderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\UrlRewrite\Model\UrlFinderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $urlFinder;
 
     /**
-     * @var \Magento\Catalog\Helper\Category|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Helper\Category|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $catalogCategory;
 
     /**
-     * @var \Magento\Framework\Url|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Url|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $url;
 
     /**
-     * @var \Magento\Framework\Session\SidResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Session\SidResolverInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $sidResolver;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->filter = $this->getMockBuilder(
             \Magento\Framework\Filter\FilterManager::class

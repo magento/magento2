@@ -13,7 +13,7 @@ class MaliciousCodeTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Framework\Filter\Input\MaliciousCode */
     protected $filter;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->filter = new MaliciousCode();
         parent::setUp();

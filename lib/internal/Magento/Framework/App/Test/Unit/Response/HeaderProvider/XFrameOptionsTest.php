@@ -24,7 +24,7 @@ class XFrameOptionsTest extends \PHPUnit\Framework\TestCase
      */
     protected $object;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManagerHelper($this);
         $this->object = $objectManager->getObject(

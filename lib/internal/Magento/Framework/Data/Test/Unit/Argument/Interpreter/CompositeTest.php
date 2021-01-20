@@ -24,7 +24,7 @@ class CompositeTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_interpreterOne = $this->createMock(\Magento\Framework\Data\Argument\InterpreterInterface::class);
         $this->_interpreterTwo = $this->createMock(\Magento\Framework\Data\Argument\InterpreterInterface::class);

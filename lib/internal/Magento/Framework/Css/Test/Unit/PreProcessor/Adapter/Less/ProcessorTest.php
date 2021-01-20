@@ -33,29 +33,29 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
     private $processor;
 
     /**
-     * @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $loggerMock;
 
     /**
-     * @var State|\PHPUnit_Framework_MockObject_MockObject
+     * @var State|\PHPUnit\Framework\MockObject\MockObject
      */
     private $appStateMock;
 
     /**
-     * @var Source|\PHPUnit_Framework_MockObject_MockObject
+     * @var Source|\PHPUnit\Framework\MockObject\MockObject
      */
     private $assetSourceMock;
 
     /**
-     * @var Temporary|\PHPUnit_Framework_MockObject_MockObject
+     * @var Temporary|\PHPUnit\Framework\MockObject\MockObject
      */
     private $temporaryFileMock;
 
     /**
      * Set up
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->loggerMock = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)
             ->getMockForAbstractClass();
@@ -177,7 +177,7 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return File|\PHPUnit_Framework_MockObject_MockObject
+     * @return File|\PHPUnit\Framework\MockObject\MockObject
      */
     private function getAssetMock()
     {

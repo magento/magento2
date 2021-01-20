@@ -22,7 +22,7 @@ class AllRegionTest extends \PHPUnit\Framework\TestCase
      */
     protected $regionCollection;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 

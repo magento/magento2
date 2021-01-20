@@ -16,16 +16,16 @@ class AddStockStatusToCollectionTest extends \PHPUnit\Framework\TestCase
     protected $plugin;
 
     /**
-     * @var \Magento\CatalogInventory\Helper\Stock|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogInventory\Helper\Stock|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $stockHelper;
 
     /**
-     * @var EngineResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var EngineResolverInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $engineResolver;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->stockHelper = $this->createMock(\Magento\CatalogInventory\Helper\Stock::class);
         $this->engineResolver = $this->getMockBuilder(EngineResolverInterface::class)

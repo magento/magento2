@@ -13,43 +13,43 @@ namespace Magento\Catalog\Test\Unit\Model\Product\Price;
 class CostStorageTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Catalog\Model\Product\Price\PricePersistenceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product\Price\PricePersistenceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $pricePersistenceFactory;
 
     /**
-     * @var \Magento\Catalog\Model\Product\Price\PricePersistence|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product\Price\PricePersistence|\PHPUnit\Framework\MockObject\MockObject
      */
     private $pricePersistence;
 
     /**
-     * @var \Magento\Catalog\Api\Data\CostInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Api\Data\CostInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $costInterfaceFactory;
 
     /**
-     * @var \Magento\Catalog\Api\Data\CostInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Api\Data\CostInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $costInterface;
 
     /**
-     * @var \Magento\Catalog\Model\ProductIdLocatorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\ProductIdLocatorInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $productIdLocator;
 
     /**
-     * @var \Magento\Store\Api\StoreRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Api\StoreRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeRepository;
 
     /**
      * @var \Magento\Catalog\Model\Product\Price\Validation\InvalidSkuProcessor
-     *      |\PHPUnit_Framework_MockObject_MockObject
+     *      |\PHPUnit\Framework\MockObject\MockObject
      */
     private $invalidSkuProcessor;
 
     /**
-     * @var \Magento\Catalog\Model\Product\Price\Validation\Result|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product\Price\Validation\Result|\PHPUnit\Framework\MockObject\MockObject
      */
     private $validationResult;
 
@@ -63,7 +63,7 @@ class CostStorageTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->pricePersistenceFactory = $this->getMockBuilder(
             \Magento\Catalog\Model\Product\Price\PricePersistenceFactory::class

@@ -14,7 +14,7 @@ class ArgumentInterpreterTest extends \PHPUnit\Framework\TestCase
      */
     private $object;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $const = $this->createPartialMock(\Magento\Framework\Data\Argument\Interpreter\Constant::class, ['evaluate']);
         $const->expects(

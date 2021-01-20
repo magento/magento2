@@ -24,7 +24,7 @@ class IntegrationTest extends \Magento\TestFramework\TestCase\AbstractBackendCon
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         /** @var $integration \Magento\Integration\Model\Integration */

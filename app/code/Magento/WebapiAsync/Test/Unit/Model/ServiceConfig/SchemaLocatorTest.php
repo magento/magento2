@@ -11,7 +11,7 @@ namespace Magento\WebapiAsync\Test\Unit\Model\ServiceConfig;
 class SchemaLocatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $moduleReaderMock;
 
@@ -20,7 +20,7 @@ class SchemaLocatorTest extends \PHPUnit\Framework\TestCase
      */
     private $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->moduleReaderMock = $this->createPartialMock(
             \Magento\Framework\Module\Dir\Reader::class,
@@ -47,6 +47,6 @@ class SchemaLocatorTest extends \PHPUnit\Framework\TestCase
 
     public function testGetPerFileSchema()
     {
-        $this->assertEquals(null, $this->model->getPerFileSchema());
+        $this->assertNull($this->model->getPerFileSchema());
     }
 }

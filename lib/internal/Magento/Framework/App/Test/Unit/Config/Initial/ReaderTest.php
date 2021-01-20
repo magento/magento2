@@ -21,12 +21,12 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Framework\Config\FileResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Config\FileResolverInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $fileResolverMock;
 
     /**
-     * @var \Magento\Framework\App\Config\Initial\Converter|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\Initial\Converter|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $converterMock;
 
@@ -36,21 +36,21 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
     protected $filePath;
 
     /**
-     * @var \Magento\Framework\Config\ValidationStateInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Config\ValidationStateInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $validationStateMock;
 
     /**
-     * @var \Magento\Framework\App\Config\Initial\SchemaLocator|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\Initial\SchemaLocator|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $schemaLocatorMock;
 
     /**
-     * @var \Magento\Framework\Config\DomFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Config\DomFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $domFactoryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         if (!function_exists('libxml_set_external_entity_loader')) {
             $this->markTestSkipped('Skipped on HHVM. Will be fixed in MAGETWO-45033');

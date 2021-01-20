@@ -17,7 +17,7 @@ use Magento\Setup\Model\Cron\JobFactory;
 class JobFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\ObjectManagerInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\ObjectManagerInterface
      */
     private $objectManager;
 
@@ -26,7 +26,7 @@ class JobFactoryTest extends \PHPUnit\Framework\TestCase
      */
     private $jobFactory;
 
-    public function setUp()
+    public function setUp(): void
     {
         $serviceManager =
             $this->getMockForAbstractClass(\Zend\ServiceManager\ServiceLocatorInterface::class, [], '', false);

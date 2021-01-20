@@ -13,36 +13,36 @@ class CatalogPriceTest extends \PHPUnit\Framework\TestCase
     protected $catalogPrice;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $commonPriceMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $productMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $priceModelMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $productTypeMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $associatedProductMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
         $this->commonPriceMock = $this->createMock(\Magento\Catalog\Model\Product\CatalogPrice::class);
@@ -82,7 +82,7 @@ class CatalogPriceTest extends \PHPUnit\Framework\TestCase
         );
         $this->storeManagerMock->expects($this->never())->method('getStore');
         $this->storeManagerMock->expects($this->never())->method('setCurrentStore');
-        $this->assertEquals(null, $this->catalogPrice->getCatalogPrice($this->productMock));
+        $this->assertNull($this->catalogPrice->getCatalogPrice($this->productMock));
     }
 
     public function testGetCatalogPriceWithDefaultStoreAndSubProductIsNotSalable()
@@ -125,7 +125,7 @@ class CatalogPriceTest extends \PHPUnit\Framework\TestCase
         $this->productMock->expects($this->never())->method('setTaxClassId');
         $this->storeManagerMock->expects($this->never())->method('getStore');
         $this->storeManagerMock->expects($this->never())->method('setCurrentStore');
-        $this->assertEquals(null, $this->catalogPrice->getCatalogPrice($this->productMock));
+        $this->assertNull($this->catalogPrice->getCatalogPrice($this->productMock));
     }
 
     public function testGetCatalogPriceWithCustomStoreAndSubProductIsSalable()
@@ -197,6 +197,6 @@ class CatalogPriceTest extends \PHPUnit\Framework\TestCase
 
     public function testGetCatalogRegularPrice()
     {
-        $this->assertEquals(null, $this->catalogPrice->getCatalogRegularPrice($this->productMock));
+        $this->assertNull($this->catalogPrice->getCatalogRegularPrice($this->productMock));
     }
 }

@@ -20,7 +20,7 @@ class CompiledTest extends \PHPUnit\Framework\TestCase
      */
     private $compiled;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
 

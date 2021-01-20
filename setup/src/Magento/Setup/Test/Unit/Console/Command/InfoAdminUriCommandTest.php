@@ -12,11 +12,11 @@ use Magento\Framework\Setup\BackendFrontnameGenerator;
 class InfoAdminUriCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\App\DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\DeploymentConfig|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $deploymentConfig;
 
-    protected function setup()
+    protected function setup(): void
     {
         $this->deploymentConfig = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
     }
@@ -31,6 +31,6 @@ class InfoAdminUriCommandTest extends \PHPUnit\Framework\TestCase
         $regexp = '/' . BackendFrontnameGenerator::ADMIN_AREA_PATH_PREFIX
             . '[a-z0-9]{1,' . BackendFrontnameGenerator::ADMIN_AREA_PATH_RANDOM_PART_LENGTH .'}/';
 
-        $this->assertRegExp($regexp, $commandTester->getDisplay(), 'Unexpected Backend Frontname pattern.');
+        $this->assertMatchesRegularExpression($regexp, $commandTester->getDisplay(), 'Unexpected Backend Frontname pattern.');
     }
 }

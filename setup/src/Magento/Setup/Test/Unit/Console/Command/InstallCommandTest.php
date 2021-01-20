@@ -29,46 +29,46 @@ class InstallCommandTest extends \PHPUnit\Framework\TestCase
     private $input;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|InstallCommand
+     * @var \PHPUnit\Framework\MockObject\MockObject|InstallCommand
      */
     private $command;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\InstallerFactory
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Setup\Model\InstallerFactory
      */
     private $installerFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\Installer
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Setup\Model\Installer
      */
     private $installer;
 
     /**
-     * @var Application|\PHPUnit_Framework_MockObject_MockObject
+     * @var Application|\PHPUnit\Framework\MockObject\MockObject
      */
     private $applicationMock;
 
     /**
-     * @var HelperSet|\PHPUnit_Framework_MockObject_MockObject
+     * @var HelperSet|\PHPUnit\Framework\MockObject\MockObject
      */
     private $helperSetMock;
 
     /**
-     * @var InputDefinition|\PHPUnit_Framework_MockObject_MockObject
+     * @var InputDefinition|\PHPUnit\Framework\MockObject\MockObject
      */
     private $definitionMock;
 
     /**
-     * @var ConfigImportCommand|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigImportCommand|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configImportMock;
 
     /**
-     * @var AdminUserCreateCommand|\PHPUnit_Framework_MockObject_MockObject
+     * @var AdminUserCreateCommand|\PHPUnit\Framework\MockObject\MockObject
      */
     private $adminUserMock;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->input = [
             '--' . SetupConfigOptionsList::INPUT_KEY_DB_HOST => 'localhost',

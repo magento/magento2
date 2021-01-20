@@ -12,31 +12,31 @@ namespace Magento\Framework\View\Test\Unit\Design\Theme\Image;
 class UploaderTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\View\Design\Theme\Image\Uploader|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Design\Theme\Image\Uploader|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_helperMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_filesystemMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_transferAdapterMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_fileUploader;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_filesystemMock = $this->createMock(\Magento\Framework\Filesystem::class);
         $this->_transferAdapterMock = $this->createMock(\Zend_File_Transfer_Adapter_Http::class);
@@ -61,7 +61,7 @@ class UploaderTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->_model = null;
         $this->_transferAdapterMock = null;

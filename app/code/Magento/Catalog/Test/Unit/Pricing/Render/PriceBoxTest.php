@@ -17,16 +17,16 @@ class PriceBoxTest extends \PHPUnit\Framework\TestCase
     protected $object;
 
     /**
-     * @var \Magento\Framework\Json\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Json\Helper\Data|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $jsonHelperMock;
 
     /**
-     * @var \Magento\Framework\Math\Random|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Math\Random|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $mathRandom;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->jsonHelperMock = $this->createPartialMock(\Magento\Framework\Json\Helper\Data::class, ['jsonEncode']);
         $this->mathRandom = $this->createMock(\Magento\Framework\Math\Random::class);

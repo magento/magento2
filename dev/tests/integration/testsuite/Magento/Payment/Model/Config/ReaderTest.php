@@ -17,7 +17,7 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
     /** @var  \Magento\Framework\Config\FileResolverInterface/PHPUnit\Framework\MockObject_MockObject */
     protected $_fileResolverMock;
 
-    public function setUp()
+    public function setUp(): void
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var $cache \Magento\Framework\App\Cache */

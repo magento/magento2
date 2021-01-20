@@ -15,11 +15,11 @@ class ContentValidatorTest extends \PHPUnit\Framework\TestCase
     protected $validator;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $fileContentMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->validator = new \Magento\Downloadable\Model\File\ContentValidator();
 
@@ -37,11 +37,12 @@ class ContentValidatorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Provided content must be valid base64 encoded data.
      */
     public function testIsValidThrowsExceptionIfProvidedContentIsNotBase64Encoded()
     {
+        $this->expectException(\Magento\Framework\Exception\InputException::class);
+        $this->expectExceptionMessage('Provided content must be valid base64 encoded data.');
+
         $this->fileContentMock->expects($this->any())->method('getFileData')
             ->will($this->returnValue('not_a_base64_encoded_content'));
         $this->fileContentMock->expects($this->any())->method('getName')
@@ -50,13 +51,14 @@ class ContentValidatorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Provided file name contains forbidden characters.
      * @dataProvider getInvalidNames
      * @param string $fileName
      */
     public function testIsValidThrowsExceptionIfProvidedImageNameContainsForbiddenCharacters($fileName)
     {
+        $this->expectException(\Magento\Framework\Exception\InputException::class);
+        $this->expectExceptionMessage('Provided file name contains forbidden characters.');
+
         $this->fileContentMock->expects($this->any())->method('getFileData')
             ->will($this->returnValue(base64_encode('test content')));
         $this->fileContentMock->expects($this->any())->method('getName')

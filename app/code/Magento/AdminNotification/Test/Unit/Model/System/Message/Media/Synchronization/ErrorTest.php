@@ -8,12 +8,12 @@ namespace Magento\AdminNotification\Test\Unit\Model\System\Message\Media\Synchro
 class ErrorTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_syncFlagMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_fileStorage;
 
@@ -22,7 +22,7 @@ class ErrorTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_syncFlagMock = $this->createPartialMock(
             \Magento\MediaStorage\Model\File\Storage\Flag::class,

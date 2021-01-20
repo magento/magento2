@@ -15,40 +15,40 @@ class SaveTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Backend\Controller\Adminhtml\System\Account */
     protected $_controller;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\RequestInterface */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\RequestInterface */
     protected $_requestMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\ResponseInterface */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\ResponseInterface */
     protected $_responseMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\ObjectManager\ObjectManager */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\ObjectManager\ObjectManager */
     protected $_objectManagerMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Message\ManagerInterface */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Message\ManagerInterface */
     protected $_messagesMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Backend\Helper\Data */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Backend\Helper\Data */
     protected $_helperMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Backend\Model\Auth\Session */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Backend\Model\Auth\Session */
     protected $_authSessionMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\User\Model\User */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\User\Model\User */
     protected $_userMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Validator\locale */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Validator\locale */
     protected $_validatorMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Backend\Model\Locale\Manager */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Backend\Model\Locale\Manager */
     protected $_managerMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\TranslateInterface */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\TranslateInterface */
     protected $_translatorMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject |\Magento\Framework\Event\ManagerInterface */
+    /** @var \PHPUnit\Framework\MockObject\MockObject |\Magento\Framework\Event\ManagerInterface */
     protected $eventManagerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_requestMock = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
             ->disableOriginalConstructor()->setMethods(['getOriginalPathInfo'])

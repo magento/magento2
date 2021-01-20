@@ -22,21 +22,21 @@ class ContextTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var WriteInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var WriteInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $mediaDirectory;
 
     /**
-     * @var ContextInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ContextInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $mediaConfig;
 
     /**
-     * @var Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var Filesystem|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $filesystem;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->mediaConfig = $this->getMockBuilder(ConfigInterface::class)->getMockForAbstractClass();
         $this->mediaConfig->expects($this->any())->method('getBaseMediaPath')->willReturn('catalog/product');

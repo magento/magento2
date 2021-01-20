@@ -12,37 +12,37 @@ namespace Magento\Catalog\Test\Unit\Controller\Adminhtml\Category;
 class SaveTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Backend\Model\View\Result\RedirectFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\Model\View\Result\RedirectFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resultRedirectFactoryMock;
 
     /**
-     * @var \Magento\Framework\Controller\Result\JsonFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Controller\Result\JsonFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resultJsonFactoryMock;
 
     /**
-     * @var \Magento\Framework\View\LayoutFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\LayoutFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $layoutFactoryMock;
 
     /**
-     * @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\RequestInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $requestMock;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $objectManagerMock;
 
     /**
-     * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $eventManagerMock;
 
     /**
-     * @var \Magento\Framework\Message\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Message\ManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $messageManagerMock;
 
@@ -62,7 +62,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
      * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->resultRedirectFactoryMock = $this->createPartialMock(
@@ -146,12 +146,12 @@ class SaveTest extends \PHPUnit\Framework\TestCase
         }
         /**
          * @var \Magento\Backend\Model\View\Result\Redirect
-         * |\PHPUnit_Framework_MockObject_MockObject $resultRedirectMock
+         * |\PHPUnit\Framework\MockObject\MockObject $resultRedirectMock
          */
         $resultRedirectMock = $this->createMock(\Magento\Backend\Model\View\Result\Redirect::class);
         /**
          * @var \Magento\Framework\View\Element\Messages
-         * |\PHPUnit_Framework_MockObject_MockObject $blockMock
+         * |\PHPUnit\Framework\MockObject\MockObject $blockMock
          */
         $blockMock = $this->createPartialMock(
             \Magento\Framework\View\Element\Messages::class,
@@ -159,7 +159,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
         );
         /**
          * @var \Magento\Catalog\Model\Category
-         * |\PHPUnit_Framework_MockObject_MockObject $categoryMock
+         * |\PHPUnit\Framework\MockObject\MockObject $categoryMock
          */
         $categoryMock = $this->createPartialMock(\Magento\Catalog\Model\Category::class, [
                 'setStoreId',
@@ -182,7 +182,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             ]);
         /**
          * @var \Magento\Catalog\Model\Category
-         * |\PHPUnit_Framework_MockObject_MockObject $parentCategoryMock
+         * |\PHPUnit\Framework\MockObject\MockObject $parentCategoryMock
          */
         $parentCategoryMock = $this->createPartialMock(\Magento\Catalog\Model\Category::class, [
                 'setStoreId',
@@ -200,22 +200,22 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             ]);
         /**
          * @var \Magento\Backend\Model\Auth\Session
-         * |\PHPUnit_Framework_MockObject_MockObject $sessionMock
+         * |\PHPUnit\Framework\MockObject\MockObject $sessionMock
          */
         $sessionMock = $this->createMock(\Magento\Backend\Model\Auth\Session::class);
         /**
          * @var \Magento\Framework\Registry
-         * |\PHPUnit_Framework_MockObject_MockObject $registryMock
+         * |\PHPUnit\Framework\MockObject\MockObject $registryMock
          */
         $registryMock = $this->createPartialMock(\Magento\Framework\Registry::class, ['register']);
         /**
          * @var \Magento\Cms\Model\Wysiwyg\Config
-         * |\PHPUnit_Framework_MockObject_MockObject $wysiwygConfigMock
+         * |\PHPUnit\Framework\MockObject\MockObject $wysiwygConfigMock
          */
         $wysiwygConfigMock = $this->createPartialMock(\Magento\Cms\Model\Wysiwyg\Config::class, ['setStoreId']);
         /**
          * @var \Magento\Store\Model\StoreManagerInterface
-         * |\PHPUnit_Framework_MockObject_MockObject $storeManagerMock
+         * |\PHPUnit\Framework\MockObject\MockObject $storeManagerMock
          */
         $storeManagerMock = $this->getMockForAbstractClass(
             \Magento\Store\Model\StoreManagerInterface::class,
@@ -228,7 +228,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
         );
         /**
          * @var \Magento\Framework\View\Layout
-         * |\PHPUnit_Framework_MockObject_MockObject $layoutMock
+         * |\PHPUnit\Framework\MockObject\MockObject $layoutMock
          */
         $layoutMock = $this->getMockForAbstractClass(
             \Magento\Framework\View\Layout::class,
@@ -241,12 +241,12 @@ class SaveTest extends \PHPUnit\Framework\TestCase
         );
         /**
          * @var \Magento\Framework\Controller\Result\Json
-         * |\PHPUnit_Framework_MockObject_MockObject $resultJsonMock
+         * |\PHPUnit\Framework\MockObject\MockObject $resultJsonMock
          */
         $resultJsonMock = $this->createPartialMock(\Magento\Cms\Model\Wysiwyg\Config::class, ['setData']);
         /**
          * @var \Magento\Framework\Message\Collection
-         * |\PHPUnit_Framework_MockObject_MockObject $messagesMock
+         * |\PHPUnit\Framework\MockObject\MockObject $messagesMock
          */
         $messagesMock = $this->createMock(\Magento\Framework\Message\Collection::class);
 

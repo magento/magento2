@@ -18,7 +18,7 @@ class KeyValidatorTest extends \PHPUnit\Framework\TestCase
      */
     private $keyValidator;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->keyValidator = (new ObjectManager($this))->getObject(KeyValidator::class);
     }

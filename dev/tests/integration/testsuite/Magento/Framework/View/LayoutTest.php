@@ -28,7 +28,7 @@ class LayoutTest extends \PHPUnit\Framework\TestCase
      */
     protected $layoutFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->layoutFactory = $objectManager->get(\Magento\Framework\View\LayoutFactory::class);
@@ -183,7 +183,7 @@ class LayoutTest extends \PHPUnit\Framework\TestCase
 
         $block = $this->_layout->createBlock($blockType, $blockName, ['data' => $blockData]);
 
-        $this->assertRegExp($expectedName, $block->getNameInLayout());
+        $this->assertMatchesRegularExpression($expectedName, $block->getNameInLayout());
         $this->assertEquals($expectedData, $block->getData());
     }
 

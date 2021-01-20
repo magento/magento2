@@ -37,7 +37,7 @@ class ChangelogTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->resource = $this->objectManager->get(\Magento\Framework\App\ResourceConnection::class);
@@ -54,7 +54,7 @@ class ChangelogTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->model->drop();
     }

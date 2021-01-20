@@ -11,22 +11,22 @@ namespace Magento\Setup\Test\Unit\Module\I18n\Dictionary;
 class GeneratorTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Setup\Module\I18n\Parser\Parser|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Setup\Module\I18n\Parser\Parser|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $parserMock;
 
     /**
-     * @var \Magento\Setup\Module\I18n\Parser\Contextual|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Setup\Module\I18n\Parser\Contextual|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $contextualParserMock;
 
     /**
-     * @var \Magento\Setup\Module\I18n\Factory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Setup\Module\I18n\Factory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $factoryMock;
 
     /**
-     * @var \Magento\Setup\Module\I18n\Dictionary\WriterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Setup\Module\I18n\Dictionary\WriterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $writerMock;
 
@@ -36,11 +36,11 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
     protected $generator;
 
     /**
-     * @var \Magento\Setup\Module\I18n\Dictionary\Options\ResolverFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Setup\Module\I18n\Dictionary\Options\ResolverFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $optionsResolverFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->parserMock = $this->createMock(\Magento\Setup\Module\I18n\Parser\Parser::class);
         $this->contextualParserMock = $this->createMock(\Magento\Setup\Module\I18n\Parser\Contextual::class);

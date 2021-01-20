@@ -8,7 +8,7 @@ namespace Magento\OfflinePayments\Test\Unit\Block\Info;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\OfflinePayments\Block\Info\Checkmo;
 use Magento\Payment\Model\Info;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * CheckmoTest contains list of test for block methods testing
@@ -28,7 +28,7 @@ class CheckmoTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $context = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()

@@ -28,7 +28,7 @@ class RequestTest extends \PHPUnit\Framework\TestCase
      */
     protected $taxData;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 

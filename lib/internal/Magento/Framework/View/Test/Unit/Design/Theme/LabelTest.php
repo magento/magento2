@@ -16,11 +16,11 @@ class LabelTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var ListInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ListInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $labelList;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->labelList = $this->getMockBuilder(\Magento\Framework\View\Design\Theme\Label\ListInterface::class)
             ->getMockForAbstractClass();

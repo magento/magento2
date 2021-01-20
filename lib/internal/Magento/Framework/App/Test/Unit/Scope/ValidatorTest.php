@@ -12,7 +12,7 @@ use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\App\ScopeResolverPool;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\App\Scope\Validator;
-use \PHPUnit_Framework_MockObject_MockObject as MockObject;
+use \PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 class ValidatorTest extends \PHPUnit\Framework\TestCase
 {
@@ -29,7 +29,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->scopeResolverPoolMock = $this->getMockBuilder(ScopeResolverPool::class)
             ->disableOriginalConstructor()

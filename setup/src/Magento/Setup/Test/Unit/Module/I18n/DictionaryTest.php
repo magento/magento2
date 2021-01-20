@@ -12,7 +12,7 @@ class DictionaryTest extends \PHPUnit\Framework\TestCase
      */
     protected $_dictionary;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_dictionary = $objectManagerHelper->getObject(\Magento\Setup\Module\I18n\Dictionary::class);

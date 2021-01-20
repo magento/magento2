@@ -45,7 +45,7 @@ class BCPatchTest extends SetupTestCase
      */
     private $moduleResource;
 
-    public function setUp()
+    public function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->moduleManager = $objectManager->get(TestModuleManager::class);

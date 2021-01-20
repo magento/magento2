@@ -16,11 +16,11 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \Magento\Framework\Config\DataInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Config\DataInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $dataStorage;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->dataStorage = $this->getMockBuilder(\Magento\Framework\Config\DataInterface::class)
             ->disableOriginalConstructor()

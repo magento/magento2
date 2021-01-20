@@ -44,7 +44,7 @@ class ImageTest extends TestCase
         ];
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $helper = new ObjectManager($this);
         $this->model = $helper->getObject(

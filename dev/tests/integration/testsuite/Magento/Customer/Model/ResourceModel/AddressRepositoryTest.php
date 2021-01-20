@@ -45,7 +45,7 @@ class AddressRepositoryTest extends \PHPUnit\Framework\TestCase
     /**
      * Set up.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
@@ -97,7 +97,7 @@ class AddressRepositoryTest extends \PHPUnit\Framework\TestCase
     /**
      * Tear down.
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->customerRegistry->remove(1);
     }

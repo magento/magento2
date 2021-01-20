@@ -25,12 +25,12 @@ class IdentifierTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * @var Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|\PHPUnit\Framework\MockObject\MockObject
      */
     private $contextMock;
 
     /**
-     * @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject
+     * @var HttpRequest|\PHPUnit\Framework\MockObject\MockObject
      */
     private $requestMock;
 
@@ -40,14 +40,14 @@ class IdentifierTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var Json|\PHPUnit_Framework_MockObject_MockObject
+     * @var Json|\PHPUnit\Framework\MockObject\MockObject
      */
     private $serializerMock;
 
     /**
      * @return \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $this->contextMock = $this->getMockBuilder(Context::class)
@@ -80,7 +80,7 @@ class IdentifierTest extends \PHPUnit\Framework\TestCase
                 'serializer' => $this->serializerMock,
             ]
         );
-        return parent::setUp();
+        parent::setUp();
     }
 
     public function testSecureDifferentiator()

@@ -16,16 +16,16 @@ class ColumnTest extends \PHPUnit\Framework\TestCase
     protected $_block;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_layoutMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_blockMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_layoutMock = $this->createMock(\Magento\Framework\View\Layout::class);
         $this->_blockMock = $this->createPartialMock(
@@ -431,11 +431,12 @@ class ColumnTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Frame callback host must be instance of Magento\Backend\Block\Widget
      */
     public function testGetRowFieldExportWithInvalidCallback()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Frame callback host must be instance of Magento\\Backend\\Block\\Widget');
+
         $row = new DataObject(['id' => '2', 'title' => 'some item']);
         /** @var  $rendererMock */
         $rendererMock = $this->getMockBuilder(AbstractRenderer::class)
@@ -455,11 +456,12 @@ class ColumnTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Frame callback host must be instance of Magento\Backend\Block\Widget
      */
     public function testGetRowFieldWithInvalidCallback()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Frame callback host must be instance of Magento\\Backend\\Block\\Widget');
+
         $row = new DataObject(['id' => '2', 'title' => 'some item']);
         /** @var  $rendererMock */
         $rendererMock = $this->getMockBuilder(AbstractRenderer::class)

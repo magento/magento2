@@ -32,7 +32,7 @@ class TablesWhitelistGenerateCommandTest extends TestCase
     /** @var GenerateCommand $instance */
     private $instance;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->whitelistGenerator = $this->getMockBuilder(WhitelistGenerator::class)
             ->disableOriginalConstructor()

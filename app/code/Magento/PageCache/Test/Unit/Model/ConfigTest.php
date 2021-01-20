@@ -21,29 +21,29 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     private $config;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Config\ScopeConfigInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\Config\ScopeConfigInterface
      */
     private $coreConfigMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Cache\StateInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\Cache\StateInterface
      */
     private $cacheState;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Module\Dir\Reader
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Module\Dir\Reader
      */
     private $moduleReader;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Json
+     * @var \PHPUnit\Framework\MockObject\MockObject|Json
      */
     private $serializerMock;
 
     /**
      * setUp all mocks and data function
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $readFactoryMock = $this->createMock(\Magento\Framework\Filesystem\Directory\ReadFactory::class);
@@ -115,7 +115,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->moduleReader = $this->createMock(\Magento\Framework\Module\Dir\Reader::class);
         $this->serializerMock = $this->createMock(Json::class);
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject $vclTemplateLocator */
+        /** @var \PHPUnit\Framework\MockObject\MockObject $vclTemplateLocator */
         $vclTemplateLocator = $this->getMockBuilder(\Magento\PageCache\Model\Varnish\VclTemplateLocator::class)
             ->disableOriginalConstructor()
             ->setMethods(['getTemplate'])
@@ -123,7 +123,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $vclTemplateLocator->expects($this->any())
             ->method('getTemplate')
             ->will($this->returnValue(file_get_contents(__DIR__ . '/_files/test.vcl')));
-        /** @var \PHPUnit_Framework_MockObject_MockObject $vclTemplateLocator */
+        /** @var \PHPUnit\Framework\MockObject\MockObject $vclTemplateLocator */
         $vclGeneratorFactory = $this->getMockBuilder(\Magento\PageCache\Model\Varnish\VclGeneratorFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])

@@ -21,7 +21,7 @@ class GuestCartManagementTest extends WebapiAbstract
      */
     protected $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
     }
@@ -46,7 +46,7 @@ class GuestCartManagementTest extends WebapiAbstract
         $this->createdQuotes[] = $quoteId;
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);

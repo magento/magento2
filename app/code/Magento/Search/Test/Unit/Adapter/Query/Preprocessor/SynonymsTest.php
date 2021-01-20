@@ -10,7 +10,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class SynonymsTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Search\Api\SynonymAnalyzerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Search\Api\SynonymAnalyzerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $synonymAnalyzer;
 
@@ -19,7 +19,7 @@ class SynonymsTest extends \PHPUnit\Framework\TestCase
      */
     private $synonymPreprocessor;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
 

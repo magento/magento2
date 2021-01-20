@@ -59,7 +59,7 @@ class InitialConfigSourceTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->reader = $objectManager->get(FileReader::class);
@@ -76,7 +76,7 @@ class InitialConfigSourceTest extends TestCase
     /**
      * @inheritdoc
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->clearConfig(ConfigFilePool::APP_CONFIG);
         $this->clearConfig(ConfigFilePool::APP_ENV);

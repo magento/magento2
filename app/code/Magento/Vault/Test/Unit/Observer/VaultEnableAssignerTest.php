@@ -45,7 +45,7 @@ class VaultEnableAssignerTest extends \PHPUnit\Framework\TestCase
                 ]
             ]
         );
-        $paymentModel = $this->createMock(InfoInterface::class);
+        $paymentModel = $this->getMockForAbstractClass(InfoInterface::class);
 
         $paymentModel->expects(static::once())
             ->method('setAdditionalInformation')
@@ -88,7 +88,7 @@ class VaultEnableAssignerTest extends \PHPUnit\Framework\TestCase
                 PaymentInterface::KEY_ADDITIONAL_DATA => []
             ]
         );
-        $paymentModel = $this->createMock(InfoInterface::class);
+        $paymentModel = $this->getMockForAbstractClass(InfoInterface::class);
 
         $paymentModel->expects(static::never())
             ->method('setAdditionalInformation');
@@ -107,7 +107,7 @@ class VaultEnableAssignerTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param array $returnMap
-     * @return \PHPUnit_Framework_MockObject_MockObject|Observer
+     * @return \PHPUnit\Framework\MockObject\MockObject|Observer
      */
     private function getPreparedObserverWithMap(array $returnMap)
     {

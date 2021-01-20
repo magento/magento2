@@ -104,7 +104,7 @@ class ChangeCustomerPasswordTest extends GraphQlAbstract
         $headerMap = $this->getCustomerAuthHeaders($customerEmail, $currentPassword);
 
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessageRegExp('/Minimum of different classes of characters in password is.*/');
+        $this->expectExceptionMessageMatches('/Minimum of different classes of characters in password is.*/');
 
         $this->graphQlMutation($query, [], '', $headerMap);
     }

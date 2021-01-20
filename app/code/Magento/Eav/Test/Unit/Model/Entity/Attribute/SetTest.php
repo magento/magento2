@@ -16,7 +16,7 @@ class SetTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $resource = $this->createMock(\Magento\Eav\Model\ResourceModel\Entity\Attribute\Set::class);
         $attrGroupFactory = $this->createMock(\Magento\Eav\Model\Entity\Attribute\GroupFactory::class);
@@ -30,7 +30,7 @@ class SetTest extends \PHPUnit\Framework\TestCase
         $this->_model = $objectManagerHelper->getObject(\Magento\Eav\Model\Entity\Attribute\Set::class, $arguments);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->_model = null;
     }

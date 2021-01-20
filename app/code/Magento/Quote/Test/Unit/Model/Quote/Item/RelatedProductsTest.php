@@ -17,7 +17,7 @@ class RelatedProductsTest extends \PHPUnit\Framework\TestCase
      */
     protected $relatedProductTypes;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->relatedProductTypes = ['type1', 'type2', 'type3'];
         $this->model = new \Magento\Quote\Model\Quote\Item\RelatedProducts($this->relatedProductTypes);

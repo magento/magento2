@@ -18,22 +18,22 @@ class LoaderTest extends \PHPUnit\Framework\TestCase
     private static $sampleXml = '<?xml version="1.0"?><test></test>';
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $converter;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $parser;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $registry;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $driver;
 
@@ -47,7 +47,7 @@ class LoaderTest extends \PHPUnit\Framework\TestCase
      */
     private $loadFixture;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->converter = $this->createMock(\Magento\Framework\Module\Declaration\Converter\Dom::class);
         $this->parser = $this->createMock(\Magento\Framework\Xml\Parser::class);

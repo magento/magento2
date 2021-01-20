@@ -22,7 +22,7 @@ class ClassesScannerTest extends \PHPUnit\Framework\TestCase
 
     private $generation;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->generation = realpath(__DIR__ . '/../../_files/var/generation');
         $mock = $this->getMockBuilder(DirectoryList::class)->disableOriginalConstructor()->setMethods(

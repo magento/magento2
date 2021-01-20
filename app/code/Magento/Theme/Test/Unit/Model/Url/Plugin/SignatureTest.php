@@ -15,16 +15,16 @@ class SignatureTest extends \PHPUnit\Framework\TestCase
     private $object;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $config;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $deploymentVersion;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->config = $this->createMock(\Magento\Framework\View\Url\ConfigInterface::class);
         $this->deploymentVersion = $this->createMock(\Magento\Framework\App\View\Deployment\Version::class);

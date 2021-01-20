@@ -19,19 +19,19 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
  */
 class DataCategoryHashMapTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var CategoryRepository|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var CategoryRepository|\PHPUnit\Framework\MockObject\MockObject */
     private $categoryRepository;
 
-    /** @var CategoryResourceFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var CategoryResourceFactory|\PHPUnit\Framework\MockObject\MockObject */
     private $categoryResourceFactory;
 
-    /** @var Category|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Category|\PHPUnit\Framework\MockObject\MockObject */
     private $categoryResource;
 
-    /** @var DataCategoryHashMap|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var DataCategoryHashMap|\PHPUnit\Framework\MockObject\MockObject */
     private $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->categoryRepository = $this->createMock(CategoryRepository::class);
         $this->categoryResourceFactory = $this->createPartialMock(CategoryFactory::class, ['create']);
@@ -61,7 +61,7 @@ class DataCategoryHashMapTest extends \PHPUnit\Framework\TestCase
         $categoryMock = $this->getMockBuilder(CategoryInterface::class)
             ->setMethods(['getResource'])
             ->getMockForAbstractClass();
-        $connectionAdapterMock = $this->createMock(AdapterInterface::class);
+        $connectionAdapterMock = $this->getMockForAbstractClass(AdapterInterface::class);
         $selectMock = $this->createMock(Select::class);
 
         $this->categoryRepository->expects($this->any())

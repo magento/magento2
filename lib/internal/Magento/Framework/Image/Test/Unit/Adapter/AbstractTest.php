@@ -17,21 +17,21 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject |\Magento\Framework\Filesystem\Directory\Write
+     * @var \PHPUnit\Framework\MockObject\MockObject |\Magento\Framework\Filesystem\Directory\Write
      */
     protected $directoryWriteMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject |\Magento\Framework\Filesystem
+     * @var \PHPUnit\Framework\MockObject\MockObject |\Magento\Framework\Filesystem
      */
     protected $filesystemMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject |\Psr\Log\LoggerInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject |\Psr\Log\LoggerInterface
      */
     protected $loggerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->directoryWriteMock = $this->createMock(\Magento\Framework\Filesystem\Directory\Write::class);
         $this->filesystemMock =
@@ -51,7 +51,7 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->directoryWriteMock = null;
         $this->_model = null;

@@ -24,56 +24,56 @@ class RateRepositoryTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $rateConverterMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $rateRegistryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $searchResultFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $searchResultMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $rateFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $countryFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $regionFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $rateResourceMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $joinProcessorMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $collectionProcessor;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->rateConverterMock = $this->createMock(\Magento\Tax\Model\Calculation\Rate\Converter::class);
         $this->rateRegistryMock = $this->createMock(\Magento\Tax\Model\Calculation\RateRegistry::class);
@@ -152,11 +152,12 @@ class RateRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage No such entity with id 9999
      */
     public function testSaveThrowsExceptionIfTargetTaxRateDoesNotExist()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('No such entity with id 9999');
+
         $rateTitles = [
             'Label 1',
             'Label 2',
@@ -244,7 +245,7 @@ class RateRepositoryTest extends \PHPUnit\Framework\TestCase
      * Retrieve tax rate mock
      *
      * @param array $taxRateData
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     private function getTaxRateMock(array $taxRateData)
     {
@@ -364,11 +365,12 @@ class RateRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage One or more input exceptions have occurred.
      */
     public function testValidate()
     {
+        $this->expectException(\Magento\Framework\Exception\InputException::class);
+        $this->expectExceptionMessage('One or more input exceptions have occurred.');
+
         $regionId = 2;
         $rateTitles = ['Label 1', 'Label 2'];
         $regionMock = $this->createMock(\Magento\Directory\Model\Region::class);
@@ -394,11 +396,12 @@ class RateRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage "percentage_rate" is required. Enter and try again.
      */
     public function testValidateWithNoRate()
     {
+        $this->expectException(\Magento\Framework\Exception\InputException::class);
+        $this->expectExceptionMessage('"percentage_rate" is required. Enter and try again.');
+
         $rateTitles = ['Label 1', 'Label 2'];
 
         $countryCode = 'US';
@@ -432,11 +435,12 @@ class RateRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage "percentage_rate" is required. Enter and try again.
      */
     public function testValidateWithWrongRate()
     {
+        $this->expectException(\Magento\Framework\Exception\InputException::class);
+        $this->expectExceptionMessage('"percentage_rate" is required. Enter and try again.');
+
         $rateTitles = ['Label 1', 'Label 2'];
 
         $countryCode = 'US';

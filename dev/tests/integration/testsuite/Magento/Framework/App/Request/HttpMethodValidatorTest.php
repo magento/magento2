@@ -34,7 +34,7 @@ class HttpMethodValidatorTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->validator = $objectManager->get(HttpMethodValidator::class);

@@ -29,41 +29,41 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
     protected $processor;
 
     /**
-     * @var ItemFactory |\PHPUnit_Framework_MockObject_MockObject
+     * @var ItemFactory |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $quoteItemFactoryMock;
 
     /**
-     * @var StoreManagerInterface |\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeManagerMock;
 
     /**
-     * @var State |\PHPUnit_Framework_MockObject_MockObject
+     * @var State |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $stateMock;
 
     /**
-     * @var Product |\PHPUnit_Framework_MockObject_MockObject
+     * @var Product |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $productMock;
 
     /**
-     * @var Object |\PHPUnit_Framework_MockObject_MockObject
+     * @var Object |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $objectMock;
 
     /**
-     * @var Item |\PHPUnit_Framework_MockObject_MockObject
+     * @var Item |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $itemMock;
 
     /**
-     * @var Store |\PHPUnit_Framework_MockObject_MockObject
+     * @var Store |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->quoteItemFactoryMock = $this->createPartialMock(
             \Magento\Quote\Model\Quote\ItemFactory::class,

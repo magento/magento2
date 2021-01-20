@@ -22,7 +22,7 @@ class AttributeFactoryTest extends \PHPUnit\Framework\TestCase
      */
     protected $_className = 'Test_Class';
 
-    protected function setUp()
+    protected function setUp(): void
     {
         /** @var $objectManagerMock \Magento\Framework\ObjectManagerInterface */
         $objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
@@ -37,7 +37,7 @@ class AttributeFactoryTest extends \PHPUnit\Framework\TestCase
         $this->_factory = new \Magento\Eav\Model\AttributeFactory($objectManagerMock);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_factory);
     }

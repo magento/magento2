@@ -15,7 +15,7 @@ class AbstractDataTest extends \PHPUnit\Framework\TestCase
      */
     protected $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $timezoneMock = $this->createMock(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class);
         $loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
@@ -38,13 +38,14 @@ class AbstractDataTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Entity object is undefined
      *
      * @covers \Magento\Eav\Model\Attribute\Data\AbstractData::getEntity
      */
     public function testGetEntityWhenEntityNotSet()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('Entity object is undefined');
+
         $this->model->getEntity();
     }
 

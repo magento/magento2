@@ -16,19 +16,19 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Catalog\Controller\Adminhtml\Category\Delete */
     protected $unit;
 
-    /** @var \Magento\Backend\Model\View\Result\Redirect|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Backend\Model\View\Result\Redirect|\PHPUnit\Framework\MockObject\MockObject */
     protected $resultRedirect;
 
-    /** @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\RequestInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $request;
 
-    /** @var \Magento\Catalog\Api\CategoryRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Catalog\Api\CategoryRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $categoryRepository;
 
-    /** @var \Magento\Backend\Model\Auth\StorageInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Backend\Model\Auth\StorageInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $authStorage;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $context = $this->createMock(\Magento\Backend\App\Action\Context::class);
         $resultRedirectFactory = $this->createPartialMock(

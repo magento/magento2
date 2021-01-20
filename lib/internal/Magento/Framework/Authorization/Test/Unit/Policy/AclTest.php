@@ -13,16 +13,16 @@ class AclTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_aclMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_aclBuilderMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_aclMock = $this->createMock(\Magento\Framework\Acl::class);
         $this->_aclBuilderMock = $this->createMock(\Magento\Framework\Acl\Builder::class);

@@ -42,10 +42,10 @@ class DataTest extends \PHPUnit\Framework\TestCase
      */
     protected $helperData;
 
-    /** @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit\Framework\MockObject\MockObject */
     private $serializerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->product = $this->createMock(\Magento\Catalog\Model\Product::class);
         $weeeConfig = $this->createMock(\Magento\Weee\Model\Config::class);
@@ -79,7 +79,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \Magento\Sales\Model\Order\Item|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Sales\Model\Order\Item|\PHPUnit\Framework\MockObject\MockObject
      */
     private function setupOrderItem()
     {

@@ -58,7 +58,7 @@ class AssociatedProductsTest extends TestCase
         $store = $this->objectManager->create(\Magento\Store\Model\Store::class);
         $store->load('admin');
         $this->registry->register('current_store', $store);
-        /** @var \Magento\Framework\Locale\ResolverInterface|\PHPUnit_Framework_MockObject_MockObject $localeResolver */
+        /** @var \Magento\Framework\Locale\ResolverInterface|\PHPUnit\Framework\MockObject\MockObject $localeResolver */
         $localeResolver = $this->getMockBuilder(\Magento\Framework\Locale\ResolverInterface::class)
             ->setMethods(['getLocale'])
             ->getMockForAbstractClass();

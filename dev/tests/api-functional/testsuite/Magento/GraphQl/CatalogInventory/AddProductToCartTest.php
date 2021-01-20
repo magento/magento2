@@ -24,7 +24,7 @@ class AddProductToCartTest extends GraphQlAbstract
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->getMaskedQuoteIdByReservedOrderId = $objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
@@ -57,7 +57,7 @@ class AddProductToCartTest extends GraphQlAbstract
         $quantity = 7;
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
 
-        $this->expectExceptionMessageRegExp(
+        $this->expectExceptionMessageMatches(
             '/The most you may purchase is 5|The requested qty exceeds the maximum qty allowed in shopping cart/'
         );
 

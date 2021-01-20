@@ -23,7 +23,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
      */
     private $store;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->templateFilter = $objectManager->getObject(\Magento\Framework\Filter\Template::class);

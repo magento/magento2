@@ -27,7 +27,7 @@ class GeneralResponseValidatorTest extends TestCase
      */
     private $validator;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->resultFactoryMock = $this->createMock(ResultInterfaceFactory::class);
         $this->validator = new GeneralResponseValidator($this->resultFactoryMock, new SubjectReader());
@@ -44,7 +44,7 @@ class GeneralResponseValidatorTest extends TestCase
 
                 return true;
             }))
-            ->willReturn($this->createMock(ResultInterface::class));
+            ->willReturn($this->getMockForAbstractClass(ResultInterface::class));
 
         $this->validator->validate([
             'response' => [
@@ -76,7 +76,7 @@ class GeneralResponseValidatorTest extends TestCase
 
                 return true;
             }))
-            ->willReturn($this->createMock(ResultInterface::class));
+            ->willReturn($this->getMockForAbstractClass(ResultInterface::class));
 
         $this->validator->validate([
             'response' => [
@@ -108,7 +108,7 @@ class GeneralResponseValidatorTest extends TestCase
 
                 return true;
             }))
-            ->willReturn($this->createMock(ResultInterface::class));
+            ->willReturn($this->getMockForAbstractClass(ResultInterface::class));
 
         $this->validator->validate([
             'response' => [
@@ -140,7 +140,7 @@ class GeneralResponseValidatorTest extends TestCase
 
                 return true;
             }))
-            ->willReturn($this->createMock(ResultInterface::class));
+            ->willReturn($this->getMockForAbstractClass(ResultInterface::class));
 
         $this->validator->validate([
             'response' => [

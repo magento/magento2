@@ -35,7 +35,7 @@ class GetCustomerCartTest extends GraphQlAbstract
      */
     private $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->getMaskedQuoteIdByReservedOrderId = $this->objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
@@ -45,7 +45,7 @@ class GetCustomerCartTest extends GraphQlAbstract
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         /** @var \Magento\Quote\Model\Quote $quote */
         $quoteCollection = $this->objectManager->create(Collection::class);

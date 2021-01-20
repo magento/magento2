@@ -30,22 +30,22 @@ class MainTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var RequestInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $request;
 
     /**
-     * @var CustomerRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CustomerRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $customerRepository;
 
     /**
-     * @var ViewHelper|\PHPUnit_Framework_MockObject_MockObject
+     * @var ViewHelper|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $customerViewHelper;
 
     /**
-     * @var CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $collectionFactory;
 

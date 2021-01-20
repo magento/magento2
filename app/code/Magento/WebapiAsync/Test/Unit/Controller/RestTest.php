@@ -27,69 +27,69 @@ class RestTest extends \PHPUnit\Framework\TestCase
     private $restController;
 
     /**
-     * @var \Magento\Framework\Webapi\Rest\Request|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Webapi\Rest\Request|\PHPUnit\Framework\MockObject\MockObject
      */
     private $requestMock;
 
     /**
-     * @var \Magento\Framework\Webapi\Rest\Response|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Webapi\Rest\Response|\PHPUnit\Framework\MockObject\MockObject
      */
     private $responseMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Webapi\Controller\Rest\Router\Route
+     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Webapi\Controller\Rest\Router\Route
      */
     private $routeMock;
 
     /**
-     * @var \stdClass|\PHPUnit_Framework_MockObject_MockObject
+     * @var \stdClass|\PHPUnit\Framework\MockObject\MockObject
      */
     private $serviceMock;
 
     /**
-     * @var \Magento\Framework\Oauth\OauthInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Oauth\OauthInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $oauthServiceMock;
 
     /**
-     * @var \Magento\Framework\Webapi\Authorization|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Webapi\Authorization|\PHPUnit\Framework\MockObject\MockObject
      */
     private $authorizationMock;
 
     /**
-     * @var \Magento\Framework\Webapi\ServiceInputProcessor|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Webapi\ServiceInputProcessor|\PHPUnit\Framework\MockObject\MockObject
      */
     private $serviceInputProcessorMock;
 
     /**
-     * @var \Magento\Webapi\Model\Rest\Swagger\Generator | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Webapi\Model\Rest\Swagger\Generator | \PHPUnit\Framework\MockObject\MockObject
      */
     private $swaggerGeneratorMock;
 
     /**
-     * @var  \Magento\Store\Model\StoreManagerInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var  \Magento\Store\Model\StoreManagerInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     private $storeManagerMock;
 
     /**
-     * @var  \Magento\Store\Api\Data\StoreInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var  \Magento\Store\Api\Data\StoreInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     private $storeMock;
 
     /**
      * @var  \Magento\WebapiAsync\Controller\Rest\AsynchronousSchemaRequestProcessor |
-     *     \PHPUnit_Framework_MockObject_MockObject
+     *     \PHPUnit\Framework\MockObject\MockObject
      */
     private $asyncSchemaRequestProcessor;
 
     /**
      * @var  \Magento\WebapiAsync\Controller\Rest\AsynchronousRequestProcessor |
-     *     \PHPUnit_Framework_MockObject_MockObject
+     *     \PHPUnit\Framework\MockObject\MockObject
      */
     private $asyncRequestProcessor;
 
     /**
-     * @var  \Magento\Webapi\Controller\Rest\RequestProcessorPool | \PHPUnit_Framework_MockObject_MockObject
+     * @var  \Magento\Webapi\Controller\Rest\RequestProcessorPool | \PHPUnit\Framework\MockObject\MockObject
      */
     private $requestProcessorPool;
 
@@ -97,7 +97,7 @@ class RestTest extends \PHPUnit\Framework\TestCase
 
     const SERVICE_ID = \Magento\Webapi\Controller\Rest::class;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->requestMock = $this->getRequestMock();
@@ -274,7 +274,7 @@ class RestTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \Magento\Webapi\Controller\Rest\Router\Route | \PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Webapi\Controller\Rest\Router\Route | \PHPUnit\Framework\MockObject\MockObject
      */
     private function getRouteMock()
     {
@@ -290,7 +290,7 @@ class RestTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \Magento\Framework\Webapi\Rest\Request|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Framework\Webapi\Rest\Request|\PHPUnit\Framework\MockObject\MockObject
      */
     private function getRequestMock()
     {
@@ -310,7 +310,7 @@ class RestTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \Magento\Framework\Webapi\Rest\Response|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Framework\Webapi\Rest\Response|\PHPUnit\Framework\MockObject\MockObject
      */
     private function getResponseMock()
     {

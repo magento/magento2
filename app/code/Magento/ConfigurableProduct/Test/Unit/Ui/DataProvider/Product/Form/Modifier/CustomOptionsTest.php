@@ -10,7 +10,7 @@ use Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier\CustomOpti
 
 class CustomOptionsTest extends AbstractModifierTest
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->arrayManagerMock->expects($this->any())

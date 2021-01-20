@@ -16,10 +16,10 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     /** @var string */
     protected $entityType;
 
-    /** @var \Magento\Customer\Model\Metadata\ElementFactory | \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Customer\Model\Metadata\ElementFactory | \PHPUnit\Framework\MockObject\MockObject */
     protected $attrDataFactoryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->attrDataFactoryMock = $this->getMockBuilder(
             \Magento\Customer\Model\Metadata\ElementFactory::class
@@ -88,7 +88,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject | AttributeMetadata
+     * @return \PHPUnit\Framework\MockObject\MockObject | AttributeMetadata
      */
     protected function getMockAttribute()
     {

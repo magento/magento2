@@ -30,28 +30,28 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
 
     const REGION_ID_ATTRIBUTE_VALUE = '12';
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Directory\Helper\Data */
+    /** @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Directory\Helper\Data */
     private $directoryHelperMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\App\Config\ScopeConfigInterface */
+    /** @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\App\Config\ScopeConfigInterface */
     private $_scopeConfig;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Model\Session */
+    /** @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Customer\Model\Session */
     private $_customerSession;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Module\Manager */
+    /** @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\Module\Manager */
     private $_moduleManager;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Model\Url */
+    /** @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Customer\Model\Url */
     private $_customerUrl;
 
     /** @var Register */
     private $_block;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Newsletter\Model\Config */
+    /** @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Newsletter\Model\Config */
     private $newsletterConfig;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_scopeConfig = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
         $this->_moduleManager = $this->createMock(\Magento\Framework\Module\Manager::class);

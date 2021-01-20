@@ -13,22 +13,22 @@ class CurrencyTest extends \PHPUnit\Framework\TestCase
     protected $object;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $postDataHelperMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $urlBuilderMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->urlBuilderMock = $this->createMock(\Magento\Framework\UrlInterface::class);
         $this->urlBuilderMock->expects($this->any())->method('getUrl')->will($this->returnArgument(0));
 
         /**
-         * @var \Magento\Framework\View\Element\Template\Context|\PHPUnit_Framework_MockObject_MockObject $contextMock
+         * @var \Magento\Framework\View\Element\Template\Context|\PHPUnit\Framework\MockObject\MockObject $contextMock
          */
         $contextMock = $this->getMockBuilder(\Magento\Framework\View\Element\Template\Context::class)
             ->disableOriginalConstructor()

@@ -21,7 +21,7 @@ class TreeTest extends \PHPUnit\Framework\TestCase
     /**
      * Set up
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->_treeBlock = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(

@@ -19,7 +19,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     /**
      * Set up
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_validator = new \Magento\Framework\Validator();
     }
@@ -27,7 +27,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     /**
      * Cleanup validator instance to unset default translator if any
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_validator);
     }

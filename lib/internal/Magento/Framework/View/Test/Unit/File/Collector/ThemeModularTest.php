@@ -18,31 +18,31 @@ class ThemeModularTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var Read | \PHPUnit_Framework_MockObject_MockObject
+     * @var Read | \PHPUnit\Framework\MockObject\MockObject
      */
     private $themeDirectory;
 
     /**
-     * @var Factory | \PHPUnit_Framework_MockObject_MockObject
+     * @var Factory | \PHPUnit\Framework\MockObject\MockObject
      */
     private $fileFactory;
 
     /**
-     * @var \Magento\Framework\View\Helper\PathPattern|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Helper\PathPattern|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $pathPatternHelperMock;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\ReadFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\Directory\ReadFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $readDirFactory;
 
     /**
-     * @var \Magento\Framework\Component\ComponentRegistrarInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Component\ComponentRegistrarInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $componentRegistrar;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->themeDirectory = $this->createPartialMock(
             \Magento\Framework\Filesystem\Directory\Read::class,

@@ -19,34 +19,34 @@ class ContentValidatorTest extends \PHPUnit\Framework\TestCase
     protected $validator;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $fileValidatorMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $urlValidatorMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $linkFileMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $sampleFileMock;
 
     /**
-     * @var File|\PHPUnit_Framework_MockObject_MockObject
+     * @var File|\PHPUnit\Framework\MockObject\MockObject
      */
     private $fileMock;
 
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -83,11 +83,12 @@ class ContentValidatorTest extends \PHPUnit\Framework\TestCase
     /**
      * @param string|int|float $sortOrder
      * @dataProvider getInvalidSortOrder
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Sort order must be a positive integer.
      */
     public function testIsValidThrowsExceptionIfSortOrderIsInvalid($sortOrder)
     {
+        $this->expectException(\Magento\Framework\Exception\InputException::class);
+        $this->expectExceptionMessage('Sort order must be a positive integer.');
+
         $sampleContentData = [
             'title' => 'Title',
             'sort_order' => $sortOrder,
@@ -112,7 +113,7 @@ class ContentValidatorTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param array $sampleContentData
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getSampleContentMock(array $sampleContentData)
     {

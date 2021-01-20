@@ -13,16 +13,16 @@ class CsvTest extends \PHPUnit\Framework\TestCase
     protected $_testFile;
 
     /**
-     * @var \Magento\Setup\Module\I18n\Dictionary\Phrase|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Setup\Module\I18n\Dictionary\Phrase|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_phraseFirstMock;
 
     /**
-     * @var \Magento\Setup\Module\I18n\Dictionary\Phrase|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Setup\Module\I18n\Dictionary\Phrase|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_phraseSecondMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_testFile = str_replace('\\', '/', realpath(dirname(__FILE__))) . '/_files/test.csv';
 
@@ -30,7 +30,7 @@ class CsvTest extends \PHPUnit\Framework\TestCase
         $this->_phraseSecondMock = $this->createMock(\Magento\Setup\Module\I18n\Dictionary\Phrase::class);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         if (file_exists($this->_testFile)) {
             unlink($this->_testFile);

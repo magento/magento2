@@ -12,7 +12,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      */
     protected $_productHelper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $arguments = [
             'reindexPriceIndexerData' => [

@@ -27,32 +27,32 @@ class CreditmemoTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \Magento\Sales\Model\Order\Pdf\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Pdf\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_pdfConfigMock;
 
     /**
-     * @var Database|\PHPUnit_Framework_MockObject_MockObject
+     * @var Database|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $databaseMock;
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $scopeConfigMock;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\Write|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\Directory\Write|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $directoryMock;
 
     /**
-     * @var Renderer|\PHPUnit_Framework_MockObject_MockObject
+     * @var Renderer|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $addressRendererMock;
 
     /**
-     * @var \Magento\Payment\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Payment\Helper\Data|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $paymentDataMock;
 
@@ -61,7 +61,7 @@ class CreditmemoTest extends \PHPUnit\Framework\TestCase
      */
     private $appEmulation;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_pdfConfigMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Pdf\Config::class)
             ->disableOriginalConstructor()
@@ -83,7 +83,7 @@ class CreditmemoTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($this->directoryMock));
 
         $this->databaseMock = $this->createMock(Database::class);
-        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $this->addressRendererMock = $this->createMock(Renderer::class);
         $this->paymentDataMock = $this->createMock(\Magento\Payment\Helper\Data::class);
         $this->appEmulation = $this->createMock(\Magento\Store\Model\App\Emulation::class);

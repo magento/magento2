@@ -17,7 +17,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class RemoteAddressTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|HttpRequest
+     * @var \PHPUnit\Framework\MockObject\MockObject|HttpRequest
      */
     protected $_request;
 
@@ -29,7 +29,7 @@ class RemoteAddressTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_request = $this->getMockBuilder(HttpRequest::class)
             ->disableOriginalConstructor()

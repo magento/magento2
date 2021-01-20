@@ -14,7 +14,7 @@ class ProductOptionsConfigFilesTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         //init primary configs
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();

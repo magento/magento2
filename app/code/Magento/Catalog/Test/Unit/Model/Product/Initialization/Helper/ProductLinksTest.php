@@ -24,7 +24,7 @@ class ProductLinksTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $helper->getObject(\Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks::class);

@@ -19,27 +19,27 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 class AuthenticationTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Backend\App\ConfigInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\App\ConfigInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     private $backendConfigMock;
 
     /**
-     * @var \Magento\Customer\Model\CustomerRegistry | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\CustomerRegistry | \PHPUnit\Framework\MockObject\MockObject
      */
     private $customerRegistryMock;
 
     /**
-     * @var \Magento\Framework\Encryption\EncryptorInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Encryption\EncryptorInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $encryptorMock;
 
     /**
-     * @var CustomerRepositoryInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var CustomerRepositoryInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     private $customerRepositoryMock;
 
     /**
-     * @var \Magento\Customer\Model\Data\CustomerSecure | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\Data\CustomerSecure | \PHPUnit\Framework\MockObject\MockObject
      */
     private $customerSecureMock;
 
@@ -54,7 +54,7 @@ class AuthenticationTest extends \PHPUnit\Framework\TestCase
     private $dateTimeMock;
 
     /**
-     * @var \Magento\Customer\Model\CustomerAuthUpdate | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\CustomerAuthUpdate | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $customerAuthUpdate;
 
@@ -63,7 +63,7 @@ class AuthenticationTest extends \PHPUnit\Framework\TestCase
      */
     protected $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManagerHelper($this);
 
@@ -77,7 +77,7 @@ class AuthenticationTest extends \PHPUnit\Framework\TestCase
         );
         $this->customerRepositoryMock = $this->getMockBuilder(CustomerRepositoryInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->encryptorMock = $this->getMockBuilder(\Magento\Framework\Encryption\EncryptorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();

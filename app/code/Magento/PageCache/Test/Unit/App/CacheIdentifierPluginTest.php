@@ -38,7 +38,7 @@ class CacheIdentifierPluginTest extends \PHPUnit\Framework\TestCase
     /**
      * Set up data for test
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->designExceptionsMock = $this->createPartialMock(
             \Magento\Framework\View\DesignExceptions::class,

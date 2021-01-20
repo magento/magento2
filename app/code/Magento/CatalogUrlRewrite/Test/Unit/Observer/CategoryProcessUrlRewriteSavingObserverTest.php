@@ -23,12 +23,12 @@ use Magento\Catalog\Model\Category;
 class CategoryProcessUrlRewriteSavingObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Event\Observer|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Event\Observer|\PHPUnit\Framework\MockObject\MockObject
      */
     private $observer;
 
     /**
-     * @var \Magento\Catalog\Model\Category|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Category|\PHPUnit\Framework\MockObject\MockObject
      */
     private $category;
 
@@ -38,27 +38,27 @@ class CategoryProcessUrlRewriteSavingObserverTest extends \PHPUnit\Framework\Tes
     private $categoryProcessUrlRewriteSavingObserver;
 
     /**
-     * @var CategoryUrlRewriteGenerator|\PHPUnit_Framework_MockObject_MockObject
+     * @var CategoryUrlRewriteGenerator|\PHPUnit\Framework\MockObject\MockObject
      */
     private $categoryUrlRewriteGeneratorMock;
 
     /**
-     * @var UrlRewriteBunchReplacer|\PHPUnit_Framework_MockObject_MockObject
+     * @var UrlRewriteBunchReplacer|\PHPUnit\Framework\MockObject\MockObject
      */
     private $urlRewriteBunchReplacerMock;
 
     /**
-     * @var UrlRewriteHandler|\PHPUnit_Framework_MockObject_MockObject
+     * @var UrlRewriteHandler|\PHPUnit\Framework\MockObject\MockObject
      */
     private $urlRewriteHandlerMock;
 
     /**
-     * @var DatabaseMapPool|\PHPUnit_Framework_MockObject_MockObject
+     * @var DatabaseMapPool|\PHPUnit\Framework\MockObject\MockObject
      */
     private $databaseMapPoolMock;
 
     /**
-     * @var CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeGroupFactory;
 
@@ -70,7 +70,7 @@ class CategoryProcessUrlRewriteSavingObserverTest extends \PHPUnit\Framework\Tes
     /**
      * {@inheritDoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->observer = $this->createPartialMock(
             \Magento\Framework\Event\Observer::class,

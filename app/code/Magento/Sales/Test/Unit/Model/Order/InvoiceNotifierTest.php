@@ -16,7 +16,7 @@ use Magento\Sales\Model\ResourceModel\Order\Status\History\CollectionFactory;
 class InvoiceNotifierTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var CollectionFactory |\PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionFactory |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $historyCollectionFactory;
 
@@ -26,21 +26,21 @@ class InvoiceNotifierTest extends \PHPUnit\Framework\TestCase
     protected $notifier;
 
     /**
-     * @var \Magento\Sales\Model\Order\Invoice|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Invoice|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $invoice;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface |\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManagerInterface |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $loggerMock;
 
     /**
-     * @var \Magento\Framework\ObjectManager\ObjectManager |\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManager\ObjectManager |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $invoiceSenderMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->historyCollectionFactory = $this->createPartialMock(
             \Magento\Sales\Model\ResourceModel\Order\Status\History\CollectionFactory::class,

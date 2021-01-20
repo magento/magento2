@@ -21,47 +21,47 @@ use Magento\Store\Model\ScopeInterface;
 class QuoteTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Quote\Model\Quote\AddressFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Model\Quote\AddressFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $quoteAddressFactoryMock;
 
     /**
-     * @var \Magento\Quote\Model\Quote\Address|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Model\Quote\Address|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $quoteAddressMock;
 
     /**
-     * @var \Magento\Quote\Model\ResourceModel\Quote\Address\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Model\ResourceModel\Quote\Address\Collection|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $quoteAddressCollectionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $resourceMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $contextMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $customerFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $eventManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $groupRepositoryMock;
 
@@ -71,17 +71,17 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
     protected $quote;
 
     /**
-     * @var \Magento\Catalog\Model\Product |\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $productMock;
 
     /**
-     * @var \Magento\Framework\DataObject\Factory |\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DataObject\Factory |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $objectFactoryMock;
 
     /**
-     * @var \Magento\Quote\Model\ResourceModel\Quote\Item\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Model\ResourceModel\Quote\Item\CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $quoteItemCollectionFactoryMock;
 
@@ -96,64 +96,64 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
     protected $quotePaymentCollectionFactoryMock;
 
     /**
-     * @var \Magento\Framework\App\Config | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $scopeConfig;
 
     /**
-     * @var \Magento\Customer\Api\AddressRepositoryInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Api\AddressRepositoryInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $addressRepositoryMock;
 
     /**
-     * @var \Magento\Framework\Api\SearchCriteriaBuilder | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Api\SearchCriteriaBuilder | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $criteriaBuilderMock;
 
     /**
-     * @var \Magento\Framework\Api\FilterBuilder | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Api\FilterBuilder | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $filterBuilderMock;
 
     /**
-     * @var \Magento\Framework\Api\ExtensibleDataObjectConverter | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Api\ExtensibleDataObjectConverter | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $extensibleDataObjectConverterMock;
 
     /**
-     * @var \Magento\Customer\Api\CustomerRepositoryInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Api\CustomerRepositoryInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $customerRepositoryMock;
 
     /**
-     * @var \Magento\Framework\DataObject\Copy | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DataObject\Copy | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $objectCopyServiceMock;
 
     /**
-     * @var JoinProcessorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var JoinProcessorInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $extensionAttributesJoinProcessorMock;
 
     /**
-     * @var \Magento\Customer\Api\Data\CustomerInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Api\Data\CustomerInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $customerDataFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $itemProcessor;
 
     /**
-     * @var \Magento\Sales\Model\OrderIncrementIdChecker|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\OrderIncrementIdChecker|\PHPUnit\Framework\MockObject\MockObject
      */
     private $orderIncrementIdChecker;
 
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->quoteAddressFactoryMock = $this->createPartialMock(
             \Magento\Quote\Model\Quote\AddressFactory::class,
@@ -363,7 +363,7 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param string $type One of \Magento\Customer\Model\Address\AbstractAddress::TYPE_ const
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getAddressMock($type)
     {
@@ -814,10 +814,11 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testAddProductException()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+
         $this->quote->addProduct($this->productMock, 'test');
     }
 

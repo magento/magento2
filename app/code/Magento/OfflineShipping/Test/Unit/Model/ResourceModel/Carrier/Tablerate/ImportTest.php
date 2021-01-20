@@ -27,39 +27,39 @@ class ImportTest extends \PHPUnit\Framework\TestCase
     private $import;
 
     /**
-     * @var StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeManagerMock;
 
     /**
-     * @var Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var Filesystem|\PHPUnit\Framework\MockObject\MockObject
      */
     private $filesystemMock;
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $scopeConfigMock;
 
     /**
-     * @var RowParser|\PHPUnit_Framework_MockObject_MockObject
+     * @var RowParser|\PHPUnit\Framework\MockObject\MockObject
      */
     private $rowParserMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $columnResolverFactoryMock;
 
     /**
-     * @var DataHashGenerator|\PHPUnit_Framework_MockObject_MockObject
+     * @var DataHashGenerator|\PHPUnit\Framework\MockObject\MockObject
      */
     private $dataHashGeneratorMock;
 
     /**
      * {@inheritDoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
             ->getMockForAbstractClass();
@@ -205,12 +205,13 @@ class ImportTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The Table Rates File Format is incorrect. Verify the format and try again.
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function testGetDataFromEmptyFile()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('The Table Rates File Format is incorrect. Verify the format and try again.');
+
         $lines = [];
         $file = $this->createFileMock($lines);
         foreach ($this->import->getData($file, 1, 'short_name', 'full_name', 2) as $bunch) {
@@ -220,7 +221,7 @@ class ImportTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param array $lines
-     * @return ReadInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return ReadInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private function createFileMock(array $lines)
     {

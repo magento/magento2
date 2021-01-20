@@ -15,13 +15,13 @@ class EngineProviderTest extends \PHPUnit\Framework\TestCase
     /** @var EngineProvider */
     private $model;
 
-    /** @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $objectManagerMock;
 
-    /** @var EngineResolverInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var EngineResolverInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $engineResolverMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
             ->getMockForAbstractClass();
@@ -65,11 +65,12 @@ class EngineProviderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage There is no such engine: current_engine
      */
     public function testGetWithoutEngines()
     {
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('There is no such engine: current_engine');
+
         $currentEngine = 'current_engine';
         $engines = [];
 
@@ -90,11 +91,12 @@ class EngineProviderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage current_engine doesn't implement
      */
     public function testGetWithWrongEngine()
     {
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('current_engine doesn\'t implement');
+
         $currentEngine = 'current_engine';
         $currentEngineClass = \stdClass::class;
         $engines = [
@@ -123,11 +125,12 @@ class EngineProviderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Engine is not available: current_engine
      */
     public function testGetWithoutAvailableEngine()
     {
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('Engine is not available: current_engine');
+
         $currentEngine = 'current_engine';
         $currentEngineClass = EngineInterface::class;
         $engines = [

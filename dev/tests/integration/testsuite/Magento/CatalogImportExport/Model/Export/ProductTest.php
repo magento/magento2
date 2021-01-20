@@ -69,7 +69,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         'is_decimal_divided'
     ];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

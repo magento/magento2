@@ -15,19 +15,19 @@ class CategoryUrlPathGeneratorTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator */
     protected $categoryUrlPathGenerator;
 
-    /** @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $storeManager;
 
-    /** @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $scopeConfig;
 
-    /** @var \Magento\Catalog\Api\CategoryRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Catalog\Api\CategoryRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $categoryRepository;
 
-    /** @var \Magento\Catalog\Model\Category|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Catalog\Model\Category|\PHPUnit\Framework\MockObject\MockObject */
     protected $category;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $categoryMethods = [
             '__wakeup',

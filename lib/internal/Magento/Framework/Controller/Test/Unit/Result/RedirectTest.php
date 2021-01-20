@@ -17,24 +17,24 @@ class RedirectTest extends TestCase
     /** @var \Magento\Framework\Controller\Result\Redirect */
     protected $redirect;
 
-    /** @var \Magento\Framework\App\Response\RedirectInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\Response\RedirectInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $redirectInterface;
 
-    /** @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\UrlInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $urlBuilder;
 
-    /** @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\UrlInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $urlInterface;
 
-    /** @var HttpResponseInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var HttpResponseInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $response;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->redirectInterface = $this->createMock(RedirectInterface::class);
-        $this->urlBuilder = $this->createMock(UrlInterface::class);
-        $this->urlInterface = $this->createMock(UrlInterface::class);
-        $this->response = $this->createMock(HttpResponseInterface::class);
+        $this->redirectInterface = $this->getMockForAbstractClass(RedirectInterface::class);
+        $this->urlBuilder = $this->getMockForAbstractClass(UrlInterface::class);
+        $this->urlInterface = $this->getMockForAbstractClass(UrlInterface::class);
+        $this->response = $this->getMockForAbstractClass(HttpResponseInterface::class);
         $this->redirect = new Redirect($this->redirectInterface, $this->urlInterface);
     }
 

@@ -12,7 +12,7 @@ class MapperTest extends \PHPUnit\Framework\TestCase
      */
     private $mapper;
 
-    public function setUp()
+    public function setUp(): void
     {
         $config = [
             \Magento\Customer\Api\Data\CustomerInterface::class => ['entity_id' => 'id'],

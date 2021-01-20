@@ -9,12 +9,12 @@ namespace Magento\Framework\View\Test\Unit\Asset\NotationResolver;
 class ModuleTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\View\Asset\File|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Asset\File|\PHPUnit\Framework\MockObject\MockObject
      */
     private $asset;
 
     /**
-     * @var \Magento\Framework\View\Asset\Repository|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Asset\Repository|\PHPUnit\Framework\MockObject\MockObject
      */
     private $assetRepo;
 
@@ -23,7 +23,7 @@ class ModuleTest extends \PHPUnit\Framework\TestCase
      */
     private $object;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->asset = $this->createMock(\Magento\Framework\View\Asset\File::class);
         $this->assetRepo = $this->createPartialMock(

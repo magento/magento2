@@ -27,7 +27,7 @@ class SessionTest extends \PHPUnit\Framework\TestCase
      */
     protected $_session;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
     }
@@ -35,7 +35,7 @@ class SessionTest extends \PHPUnit\Framework\TestCase
     /**
      * @param int|null $orderId
      * @param int|null $incrementId
-     * @param \Magento\Sales\Model\Order|\PHPUnit_Framework_MockObject_MockObject $orderMock
+     * @param \Magento\Sales\Model\Order|\PHPUnit\Framework\MockObject\MockObject $orderMock
      * @dataProvider getLastRealOrderDataProvider
      */
     public function testGetLastRealOrder($orderId, $incrementId, $orderMock)
@@ -92,11 +92,11 @@ class SessionTest extends \PHPUnit\Framework\TestCase
     /**
      * @param int|null $incrementId
      * @param int|null $orderId
-     * @return \Magento\Sales\Model\Order|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Sales\Model\Order|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function _getOrderMock($incrementId, $orderId)
     {
-        /** @var $order \PHPUnit_Framework_MockObject_MockObject|\Magento\Sales\Model\Order */
+        /** @var $order \PHPUnit\Framework\MockObject\MockObject|\Magento\Sales\Model\Order */
         $order = $this->getMockBuilder(
             \Magento\Sales\Model\Order::class
         )->disableOriginalConstructor()->setMethods(

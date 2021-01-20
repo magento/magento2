@@ -19,10 +19,10 @@ class MessageValidatorTest extends \PHPUnit\Framework\TestCase
     /** @var MessageValidator */
     protected $model;
 
-    /** @var CommunicationConfig|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var CommunicationConfig|\PHPUnit\Framework\MockObject\MockObject */
     protected $communicationConfigMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 

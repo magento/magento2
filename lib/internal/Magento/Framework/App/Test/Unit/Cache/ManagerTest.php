@@ -11,22 +11,22 @@ use \Magento\Framework\App\Cache\Manager;
 class ManagerTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Cache\TypeListInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\Cache\TypeListInterface
      */
     private $cacheTypeList;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Cache\StateInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\Cache\StateInterface
      */
     private $cacheState;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Console\Response
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\Console\Response
      */
     private $response;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Cache\Type\FrontendPool
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\Cache\Type\FrontendPool
      */
     private $frontendPool;
 
@@ -35,7 +35,7 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
      */
     private $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->cacheTypeList = $this->getMockForAbstractClass(\Magento\Framework\App\Cache\TypeListInterface::class);
         $this->cacheState = $this->getMockForAbstractClass(\Magento\Framework\App\Cache\StateInterface::class);

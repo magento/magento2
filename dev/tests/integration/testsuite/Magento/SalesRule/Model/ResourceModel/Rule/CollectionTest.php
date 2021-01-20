@@ -30,7 +30,7 @@ class CollectionTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $scopeConfig = Bootstrap::getObjectManager()->get(ScopeConfigInterface::class);
         $this->defaultTimezone = $scopeConfig->getValue(AdminBackendConfig::XML_PATH_GENERAL_LOCALE_TIMEZONE);
@@ -305,7 +305,7 @@ class CollectionTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         // restore default timezone
         $this->setSpecificTimezone($this->defaultTimezone);

@@ -24,7 +24,7 @@ class ObjectManagerTest extends \PHPUnit\Framework\TestCase
      */
     protected $_object;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $config = new \Magento\Framework\ObjectManager\Config\Config(
             new \Magento\Framework\ObjectManager\Relations\Runtime()

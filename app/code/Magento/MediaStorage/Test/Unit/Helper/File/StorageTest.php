@@ -14,22 +14,22 @@ class StorageTest extends \PHPUnit\Framework\TestCase
      */
     protected $objectManager;
 
-    /** @var \Magento\MediaStorage\Model\File\Storage\File | \PHPUnit_Framework_MockObject_MockObject  */
+    /** @var \Magento\MediaStorage\Model\File\Storage\File | \PHPUnit\Framework\MockObject\MockObject  */
     protected $filesystemStorageMock;
 
-    /** @var \Magento\MediaStorage\Helper\File\Storage\Database | \PHPUnit_Framework_MockObject_MockObject  */
+    /** @var \Magento\MediaStorage\Helper\File\Storage\Database | \PHPUnit\Framework\MockObject\MockObject  */
     protected $coreFileStorageDbMock;
 
-    /** @var \Magento\MediaStorage\Model\File\Storage | \PHPUnit_Framework_MockObject_MockObject  */
+    /** @var \Magento\MediaStorage\Model\File\Storage | \PHPUnit\Framework\MockObject\MockObject  */
     protected $storageMock;
 
-    /** @var \Magento\Framework\App\Config\ScopeConfigInterface | \PHPUnit_Framework_MockObject_MockObject  */
+    /** @var \Magento\Framework\App\Config\ScopeConfigInterface | \PHPUnit\Framework\MockObject\MockObject  */
     protected $configMock;
 
     /** @var  Storage */
     protected $helper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $className = \Magento\MediaStorage\Helper\File\Storage::class;

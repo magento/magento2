@@ -15,11 +15,11 @@ class TypeTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \Magento\Catalog\Model\ProductOptions\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\ProductOptions\ConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $productOptionConfig;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->productOptionConfig = $this->getMockBuilder(\Magento\Catalog\Model\ProductOptions\ConfigInterface::class)
             ->setMethods(['getAll'])

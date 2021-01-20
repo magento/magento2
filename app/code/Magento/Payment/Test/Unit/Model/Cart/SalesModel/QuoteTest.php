@@ -10,10 +10,10 @@ class QuoteTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Payment\Model\Cart\SalesModel\Quote */
     protected $_model;
 
-    /** @var \Magento\Quote\Model\Quote|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Quote\Model\Quote|\PHPUnit\Framework\MockObject\MockObject */
     protected $_quoteMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_quoteMock = $this->createMock(\Magento\Quote\Model\Quote::class);
         $this->_model = new \Magento\Payment\Model\Cart\SalesModel\Quote($this->_quoteMock);

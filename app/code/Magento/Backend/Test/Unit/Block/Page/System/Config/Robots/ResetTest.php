@@ -22,11 +22,11 @@ class ResetTest extends \PHPUnit\Framework\TestCase
     private $_resetRobotsBlock;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $configMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->configMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
 

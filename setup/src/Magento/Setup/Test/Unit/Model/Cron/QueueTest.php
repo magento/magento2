@@ -10,17 +10,17 @@ use Magento\Setup\Model\Cron\Queue;
 class QueueTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\Cron\Queue\Reader
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Setup\Model\Cron\Queue\Reader
      */
     private $reader;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\Cron\Queue\Writer
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Setup\Model\Cron\Queue\Writer
      */
     private $writer;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\Cron\JobFactory
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Setup\Model\Cron\JobFactory
      */
     private $jobFactory;
 
@@ -29,7 +29,7 @@ class QueueTest extends \PHPUnit\Framework\TestCase
      */
     private $queue;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->reader = $this->createMock(\Magento\Setup\Model\Cron\Queue\Reader::class);
         $this->writer = $this->createMock(\Magento\Setup\Model\Cron\Queue\Writer::class);

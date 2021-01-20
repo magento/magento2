@@ -32,7 +32,7 @@ class OperationManagementTest extends \PHPUnit\Framework\TestCase
      */
     private $entityManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\AsynchronousOperations\Model\OperationManagement::class

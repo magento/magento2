@@ -55,7 +55,7 @@ class ViewTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->configMock = $this->getMockForAbstractClass(
             ConfigInterface::class,
@@ -353,7 +353,7 @@ class ViewTest extends TestCase
             $this->returnValue($listId)
         );
 
-        $actionMock = $this->createMock(ActionInterface::class);
+        $actionMock = $this->getMockForAbstractClass(ActionInterface::class);
         $actionMock->expects($this->once())->method('execute')->with($listId)->will($this->returnSelf());
         $this->actionFactoryMock->expects(
             $this->once()
@@ -409,7 +409,7 @@ class ViewTest extends TestCase
                 ]
             );
 
-        $actionMock = $this->createMock(ActionInterface::class);
+        $actionMock = $this->getMockForAbstractClass(ActionInterface::class);
         $actionMock->expects($this->once())
             ->method('execute')
             ->with($this->generateChangeLog(150, 1, 150))

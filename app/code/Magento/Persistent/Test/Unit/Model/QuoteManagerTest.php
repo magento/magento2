@@ -75,7 +75,7 @@ class QuoteManagerTest extends TestCase
      */
     private $shippingAssignmentProcessor;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->persistentSessionMock = $this->createMock(\Magento\Persistent\Helper\Session::class);
         $this->sessionMock =
@@ -97,7 +97,7 @@ class QuoteManagerTest extends TestCase
         $this->abstractCollectionMock =
             $this->createMock(AbstractCollection::class);
 
-        $this->quoteRepositoryMock = $this->createMock(CartRepositoryInterface::class);
+        $this->quoteRepositoryMock = $this->getMockForAbstractClass(CartRepositoryInterface::class);
         $this->quoteMock = $this->createPartialMock(
             Quote::class,
             [
@@ -232,7 +232,7 @@ class QuoteManagerTest extends TestCase
                 'getShippingAssignments'
             ]
         );
-        $shippingAssignment = $this->createMock(ShippingAssignmentInterface::class);
+        $shippingAssignment = $this->getMockForAbstractClass(ShippingAssignmentInterface::class);
         $extensionAttributes->expects($this->once())
             ->method('setShippingAssignments')
             ->with([$shippingAssignment]);

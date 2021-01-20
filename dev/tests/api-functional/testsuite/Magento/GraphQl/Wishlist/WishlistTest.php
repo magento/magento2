@@ -31,7 +31,7 @@ class WishlistTest extends GraphQlAbstract
      */
     private $wishlistResource;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->customerTokenService = Bootstrap::getObjectManager()->get(CustomerTokenServiceInterface::class);
         $this->wishlistFactory = Bootstrap::getObjectManager()->get(WishlistFactory::class);

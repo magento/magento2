@@ -15,7 +15,7 @@ abstract class AbstractPlugin extends \PHPUnit\Framework\TestCase
     /**
      * Config reader
      *
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_configReader;
 
@@ -36,7 +36,7 @@ abstract class AbstractPlugin extends \PHPUnit\Framework\TestCase
     /**
      * Set up
      */
-    public function setUp()
+    public function setUp(): void
     {
         if (!$this->_objectManager) {
             return;
@@ -49,7 +49,7 @@ abstract class AbstractPlugin extends \PHPUnit\Framework\TestCase
     /**
      * Tear down
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         \Magento\Framework\App\ObjectManager::setInstance($this->applicationObjectManager);
     }

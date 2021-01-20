@@ -10,12 +10,12 @@ use Magento\Framework\App\ResourceConnection;
 class TableDataTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_connectionMock;
 
     /**
-     * @var \Magento\Catalog\Helper\Product\Flat\Indexer|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Helper\Product\Flat\Indexer|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_productIndexerHelper;
 
@@ -25,11 +25,11 @@ class TableDataTest extends \PHPUnit\Framework\TestCase
     protected $_objectManager;
 
     /**
-     * @var Resource|\PHPUnit_Framework_MockObject_MockObject
+     * @var Resource|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_resourceMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_connectionMock = $this->createMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);

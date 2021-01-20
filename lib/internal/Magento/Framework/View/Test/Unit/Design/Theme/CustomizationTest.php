@@ -19,21 +19,21 @@ class CustomizationTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $fileProvider;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $customizationPath;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $theme;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->fileProvider = $this->createMock(\Magento\Framework\View\Design\Theme\FileProviderInterface::class);
         $collectionFactory = $this->createPartialMock(
@@ -47,7 +47,7 @@ class CustomizationTest extends \PHPUnit\Framework\TestCase
         $this->model = new Customization($this->fileProvider, $this->customizationPath, $this->theme);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->model = null;
         $this->fileProvider = null;

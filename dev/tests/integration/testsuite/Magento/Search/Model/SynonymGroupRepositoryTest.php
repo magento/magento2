@@ -17,7 +17,7 @@ class SynonymGroupRepositoryTest extends \PHPUnit\Framework\TestCase
      */
     private $objectManager;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->model = $this->objectManager->get(\Magento\Search\Model\SynonymGroupRepository::class);

@@ -17,31 +17,31 @@ use Magento\Framework\View\Design\Theme\Image\PathInterface;
 class PathTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Theme\Model\Theme\Image\Path|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Theme\Model\Theme\Image\Path|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $filesystem;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Asset\Repository
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\View\Asset\Repository
      */
     protected $_assetRepo;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Store\Model\StoreManager
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Store\Model\StoreManager
      */
     protected $_storeManager;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Filesystem\Directory\ReadInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Filesystem\Directory\ReadInterface
      */
     protected $mediaDirectory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->filesystem = $this->createMock(\Magento\Framework\Filesystem::class);
         $this->mediaDirectory = $this->createMock(\Magento\Framework\Filesystem\Directory\ReadInterface::class);
@@ -68,7 +68,7 @@ class PathTest extends \PHPUnit\Framework\TestCase
 
     public function testGetPreviewImageUrl()
     {
-        /** @var $theme \Magento\Theme\Model\Theme|\PHPUnit_Framework_MockObject_MockObject */
+        /** @var $theme \Magento\Theme\Model\Theme|\PHPUnit\Framework\MockObject\MockObject */
         $theme = $this->createPartialMock(
             \Magento\Theme\Model\Theme::class,
             ['getPreviewImage', 'isPhysical', '__wakeup']
@@ -88,7 +88,7 @@ class PathTest extends \PHPUnit\Framework\TestCase
         $previewImage = 'preview.jpg';
         $expectedPath = 'theme/preview/preview.jpg';
 
-        /** @var $theme \Magento\Theme\Model\Theme|\PHPUnit_Framework_MockObject_MockObject */
+        /** @var $theme \Magento\Theme\Model\Theme|\PHPUnit\Framework\MockObject\MockObject */
         $theme = $this->createPartialMock(
             \Magento\Theme\Model\Theme::class,
             ['getPreviewImage', 'isPhysical', '__wakeup']

@@ -36,26 +36,26 @@ class EmailNotificationTest extends TestCase
     private $model;
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $scopeConfigMock;
 
     /**
-     * @var TransportBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var TransportBuilder|\PHPUnit\Framework\MockObject\MockObject
      */
     private $transportBuilderMock;
 
     /**
-     * @var StateInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StateInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $inlineTranslationMock;
 
     /**
-     * @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $objectManagerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
             ->getMock();
@@ -81,7 +81,7 @@ class EmailNotificationTest extends TestCase
     public function testSendErrors()
     {
         $exception = 'Sitemap Exception';
-        $transport = $this->createMock(TransportInterface::class);
+        $transport = $this->getMockForAbstractClass(TransportInterface::class);
 
         $this->scopeConfigMock->expects($this->at(0))
             ->method('getValue')

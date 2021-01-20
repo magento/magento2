@@ -22,11 +22,11 @@ class IndexTest extends \PHPUnit\Framework\TestCase
     /**
      * Module config instance
      *
-     * @var ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->configMock = $this->getMockBuilder(ConfigInterface::class)->getMockForAbstractClass();
 
@@ -62,10 +62,11 @@ class IndexTest extends \PHPUnit\Framework\TestCase
     /**
      * Dispatch test
      *
-     * @expectedException \Magento\Framework\Exception\NotFoundException
      */
     public function testDispatch()
     {
+        $this->expectException(\Magento\Framework\Exception\NotFoundException::class);
+
         $this->configMock->method('isEnabled')->willReturn(false);
 
         $this->controller->dispatch(

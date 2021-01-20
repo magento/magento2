@@ -12,22 +12,22 @@ namespace Magento\Customer\Test\Unit\Controller\Adminhtml\Index;
 class ViewfileTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Controller\Result\RawFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Controller\Result\RawFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resultRawFactoryMock;
 
     /**
-     * @var \Magento\Framework\Controller\Result\Raw|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Controller\Result\Raw|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resultRawMock;
 
     /**
-     * @var \Magento\Framework\Url\DecoderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Url\DecoderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $urlDecoderMock;
 
     /**
-     * @var \Magento\Backend\App\Action\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\App\Action\Context|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $contextMock;
 
@@ -37,36 +37,36 @@ class ViewfileTest extends \PHPUnit\Framework\TestCase
     protected $objectManager;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $objectManagerMock;
 
     /**
-     * @var \Magento\MediaStorage\Helper\File\Storage|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\MediaStorage\Helper\File\Storage|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $storage;
 
     /**
-     * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $fileSystemMock;
 
     /**
-     * @var \Magento\Framework\App\ResponseInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResponseInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $responseMock;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\ReadInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\Directory\ReadInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $directoryMock;
 
     /**
-     * @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\RequestInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $requestMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->requestMock = $this->createMock(\Magento\Framework\App\RequestInterface::class);
@@ -92,10 +92,11 @@ class ViewfileTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @throws \Magento\Framework\Exception\NotFoundException
-     * @expectedException \Magento\Framework\Exception\NotFoundException
      */
     public function testExecuteNoParamsShouldThrowException()
     {
+        $this->expectException(\Magento\Framework\Exception\NotFoundException::class);
+
         /** @var \Magento\Customer\Controller\Adminhtml\Index\Viewfile $controller */
         $controller = $this->objectManager->getObject(\Magento\Customer\Controller\Adminhtml\Index\Viewfile::class);
         $controller->execute();
@@ -208,11 +209,12 @@ class ViewfileTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NotFoundException
-     * @expectedExceptionMessage Page not found.
      */
     public function testExecuteInvalidFile()
     {
+        $this->expectException(\Magento\Framework\Exception\NotFoundException::class);
+        $this->expectExceptionMessage('Page not found.');
+
         $file = '../../../app/etc/env.php';
         $decodedFile = base64_encode($file);
         $fileName = 'customer/' . $file;

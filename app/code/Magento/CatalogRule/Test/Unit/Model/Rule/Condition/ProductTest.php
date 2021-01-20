@@ -16,22 +16,22 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    /** @var \Magento\Eav\Model\Config|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Eav\Model\Config|\PHPUnit\Framework\MockObject\MockObject */
     protected $config;
 
-    /** @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Catalog\Model\Product|\PHPUnit\Framework\MockObject\MockObject */
     protected $productModel;
 
-    /** @var \Magento\Catalog\Model\ResourceModel\Product|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Catalog\Model\ResourceModel\Product|\PHPUnit\Framework\MockObject\MockObject */
     protected $productResource;
 
-    /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute|\PHPUnit\Framework\MockObject\MockObject */
     protected $eavAttributeResource;
 
-    /** @var \Magento\Catalog\Model\ProductCategoryList|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Catalog\Model\ProductCategoryList|\PHPUnit\Framework\MockObject\MockObject */
     private $productCategoryList;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->config = $this->createPartialMock(\Magento\Eav\Model\Config::class, ['getAttribute']);
         $this->productModel = $this->createPartialMock(\Magento\Catalog\Model\Product::class, [

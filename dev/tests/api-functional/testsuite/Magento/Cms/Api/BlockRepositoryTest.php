@@ -50,7 +50,7 @@ class BlockRepositoryTest extends WebapiAbstract
     /**
      * Execute per test initialization.
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->blockFactory = Bootstrap::getObjectManager()->create(\Magento\Cms\Api\Data\BlockInterfaceFactory::class);
         $this->blockRepository = Bootstrap::getObjectManager()
@@ -63,7 +63,7 @@ class BlockRepositoryTest extends WebapiAbstract
     /**
      * Clear temporary data
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         if ($this->currentBlock) {
             $this->blockRepository->delete($this->currentBlock);

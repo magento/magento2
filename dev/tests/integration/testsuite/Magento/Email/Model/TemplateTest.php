@@ -21,12 +21,12 @@ use Magento\TestFramework\Helper\Bootstrap;
 class TemplateTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var Template|\PHPUnit_Framework_MockObject_MockObject
+     * @var Template|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $model;
 
     /**
-     * @var \Zend_Mail|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Zend_Mail|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $mail;
 
@@ -35,7 +35,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
      */
     protected $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
     }
@@ -81,7 +81,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
     /**
      * Return a disposable \Zend_Mail instance
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Zend_Mail
+     * @return \PHPUnit\Framework\MockObject\MockObject|\Zend_Mail
      */
     public function getMail()
     {

@@ -12,12 +12,12 @@ use Symfony\Component\Console\Tester\CommandTester;
 class BackupCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $objectManager;
 
     /**
-     * @var \Magento\Framework\Setup\BackupRollback|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Setup\BackupRollback|\PHPUnit\Framework\MockObject\MockObject
      */
     private $backupRollback;
 
@@ -27,16 +27,16 @@ class BackupCommandTest extends \PHPUnit\Framework\TestCase
     private $tester;
 
     /**
-     * @var \Magento\Framework\Setup\BackupRollbackFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Setup\BackupRollbackFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $backupRollbackFactory;
 
     /**
-     * @var \Magento\Framework\App\DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\DeploymentConfig|\PHPUnit\Framework\MockObject\MockObject
      */
     private $deploymentConfig;
 
-    public function setUp()
+    public function setUp(): void
     {
         $maintenanceMode = $this->createMock(\Magento\Framework\App\MaintenanceMode::class);
         $objectManagerProvider = $this->createMock(\Magento\Setup\Model\ObjectManagerProvider::class);

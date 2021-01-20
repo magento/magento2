@@ -15,7 +15,7 @@ class CanUseCheckoutTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_model = new CanUseCheckout();
     }

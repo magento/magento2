@@ -15,7 +15,7 @@ use Magento\Framework\View\Asset\MergeStrategy\Direct;
 class DirectTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Math\Random|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Math\Random|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $mathRandomMock;
     /**
@@ -24,26 +24,26 @@ class DirectTest extends \PHPUnit\Framework\TestCase
     protected $object;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Url\CssResolver
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\View\Url\CssResolver
      */
     protected $cssUrlResolver;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|WriteInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|WriteInterface
      */
     protected $staticDir;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|WriteInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|WriteInterface
      */
     protected $tmpDir;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Asset\LocalInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\View\Asset\LocalInterface
      */
     protected $resultAsset;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->cssUrlResolver = $this->createMock(\Magento\Framework\View\Url\CssResolver::class);
         $filesystem = $this->createMock(\Magento\Framework\Filesystem::class);

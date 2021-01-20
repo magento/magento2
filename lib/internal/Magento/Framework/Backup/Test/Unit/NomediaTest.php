@@ -36,17 +36,17 @@ class NomediaTest extends \PHPUnit\Framework\TestCase
      */
     private $fsMock;
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         require __DIR__ . '/_files/app_dirs.php';
     }
 
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         require __DIR__ . '/_files/app_dirs_rollback.php';
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $this->_backupDbMock = $this->createMock(\Magento\Framework\Backup\Db::class);

@@ -15,35 +15,35 @@ class ShipmentServiceTest extends \PHPUnit\Framework\TestCase
     /**
      * Repository
      *
-     * @var \Magento\Sales\Api\ShipmentCommentRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Api\ShipmentCommentRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $commentRepositoryMock;
 
     /**
      * Search Criteria Builder
      *
-     * @var \Magento\Framework\Api\SearchCriteriaBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Api\SearchCriteriaBuilder|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $searchCriteriaBuilderMock;
 
     /**
      * Filter Builder
      *
-     * @var \Magento\Framework\Api\FilterBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Api\FilterBuilder|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $filterBuilderMock;
 
     /**
      * Repository
      *
-     * @var \Magento\Sales\Api\ShipmentRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Api\ShipmentRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $repositoryMock;
 
     /**
      * Shipment Notifier
      *
-     * @var \Magento\Shipping\Model\ShipmentNotifier|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Shipping\Model\ShipmentNotifier|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $notifierMock;
 
@@ -55,7 +55,7 @@ class ShipmentServiceTest extends \PHPUnit\Framework\TestCase
     /**
      * SetUp
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManagerHelper($this);
 

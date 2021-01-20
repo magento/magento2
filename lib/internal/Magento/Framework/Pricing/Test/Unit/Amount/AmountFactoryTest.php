@@ -17,19 +17,19 @@ class AmountFactoryTest extends \PHPUnit\Framework\TestCase
     protected $factory;
 
     /**
-     * @var \Magento\Framework\App\ObjectManager |\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ObjectManager |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $objectManagerMock;
 
     /**
-     * @var \Magento\Framework\Pricing\Amount\Base|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\Amount\Base|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $amountMock;
 
     /**
      * Test setUp
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerMock = $this->createMock(\Magento\Framework\App\ObjectManager::class);
         $this->amountMock = $this->createMock(\Magento\Framework\Pricing\Amount\Base::class);

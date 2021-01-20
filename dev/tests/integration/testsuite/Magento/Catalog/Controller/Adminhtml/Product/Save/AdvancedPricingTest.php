@@ -29,7 +29,7 @@ class AdvancedPricingTest extends AbstractBackendController
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->productRepository = $this->_objectManager->get(ProductRepositoryInterface::class);

@@ -37,7 +37,7 @@ class DeleteOutdatedPriceValuesTest extends \PHPUnit\Framework\TestCase
      */
     private $objectManager;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
@@ -128,7 +128,7 @@ class DeleteOutdatedPriceValuesTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
         /** @var ReinitableConfigInterface $reinitiableConfig */

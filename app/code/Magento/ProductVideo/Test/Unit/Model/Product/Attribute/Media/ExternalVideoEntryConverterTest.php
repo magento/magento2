@@ -11,34 +11,34 @@ use Magento\ProductVideo\Model\Product\Attribute\Media\ExternalVideoEntryConvert
 class ExternalVideoEntryConverterTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      * |\Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory
      */
     protected $mediaGalleryEntryFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      * |\Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface
      */
     protected $mediaGalleryEntryMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Api\DataObjectHelper */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Api\DataObjectHelper */
     protected $dataObjectHelperMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Api\Data\VideoContentInterfaceFactory */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Api\Data\VideoContentInterfaceFactory */
     protected $videoEntryFactoryMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Api\Data\VideoContentInterface */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Api\Data\VideoContentInterface */
     protected $videoEntryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      * |\Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryExtensionFactory
      */
     protected $mediaGalleryEntryExtensionFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      * |\Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryExtensionFactory
      */
     protected $mediaGalleryEntryExtensionMock;
@@ -49,7 +49,7 @@ class ExternalVideoEntryConverterTest extends \PHPUnit\Framework\TestCase
      */
     protected $modelObject;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->mediaGalleryEntryFactoryMock =
             $this->createPartialMock(
@@ -128,7 +128,7 @@ class ExternalVideoEntryConverterTest extends \PHPUnit\Framework\TestCase
 
     public function testConvertTo()
     {
-        /** @var  $product \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Product */
+        /** @var  $product \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Model\Product */
         $product = $this->createMock(\Magento\Catalog\Model\Product::class);
 
         $rowData = [

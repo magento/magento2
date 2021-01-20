@@ -13,29 +13,29 @@ class SubscriptionTest extends \PHPUnit\Framework\TestCase
     /**
      * Mysql PDO DB adapter mock
      *
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\DB\Adapter\Pdo\Mysql
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\DB\Adapter\Pdo\Mysql
      */
     protected $connectionMock;
 
     /** @var \Magento\Framework\Mview\View\Subscription */
     protected $model;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\ResourceConnection */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\ResourceConnection */
     protected $resourceMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\DB\Ddl\TriggerFactory */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\DB\Ddl\TriggerFactory */
     protected $triggerFactoryMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Mview\View\CollectionInterface */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Mview\View\CollectionInterface */
     protected $viewCollectionMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Mview\ViewInterface */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Mview\ViewInterface */
     protected $viewMock;
 
     /** @var  string */
     private $tableName;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->connectionMock = $this->createMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class);
         $this->resourceMock = $this->createMock(\Magento\Framework\App\ResourceConnection::class);

@@ -15,26 +15,26 @@ class DataTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Payment\Helper\Data */
     private $helper;
 
-    /**  @var \PHPUnit_Framework_MockObject_MockObject */
+    /**  @var \PHPUnit\Framework\MockObject\MockObject */
     private $scopeConfig;
 
-    /**  @var \PHPUnit_Framework_MockObject_MockObject */
+    /**  @var \PHPUnit\Framework\MockObject\MockObject */
     private $initialConfig;
 
-    /**  @var \PHPUnit_Framework_MockObject_MockObject */
+    /**  @var \PHPUnit\Framework\MockObject\MockObject */
     private $methodFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $layoutMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $appEmulation;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $className = \Magento\Payment\Helper\Data::class;
@@ -82,10 +82,11 @@ class DataTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \UnexpectedValueException
      */
     public function testGetMethodInstanceWithException()
     {
+        $this->expectException(\UnexpectedValueException::class);
+
         $this->scopeConfig->expects($this->once())
             ->method('getValue')
             ->willReturn(null);

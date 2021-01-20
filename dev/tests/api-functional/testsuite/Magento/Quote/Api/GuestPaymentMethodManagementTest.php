@@ -16,12 +16,12 @@ class GuestPaymentMethodManagementTest extends \Magento\TestFramework\TestCase\W
      */
     protected $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->deleteCart('test_order_1');
         $this->deleteCart('test_order_1_with_payment');

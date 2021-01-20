@@ -19,10 +19,10 @@ class SalableProcessorTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\ConfigurableProduct\Model\Product\Type\Collection\SalableProcessor */
     protected $model;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $stockStatusFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
 

@@ -28,7 +28,7 @@ class TotalsTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->layout = $this->_objectManager->get(LayoutInterface::class);

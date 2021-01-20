@@ -31,7 +31,7 @@ class LinkProviderTest extends WebapiAbstract
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
     }

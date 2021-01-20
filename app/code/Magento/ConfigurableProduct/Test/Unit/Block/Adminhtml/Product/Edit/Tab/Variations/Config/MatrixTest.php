@@ -18,11 +18,11 @@ class MatrixTest extends \PHPUnit\Framework\TestCase
     protected $_block;
 
     /**
-     * @var \Magento\CatalogInventory\Api\StockRegistryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogInventory\Api\StockRegistryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $stockRegistryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 

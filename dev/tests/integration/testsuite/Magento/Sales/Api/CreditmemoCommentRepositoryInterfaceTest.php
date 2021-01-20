@@ -19,7 +19,7 @@ class CreditmemoCommentRepositoryInterfaceTest extends \PHPUnit\Framework\TestCa
      */
     private $repository;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->repository = Bootstrap::getObjectManager()->create(CreditmemoCommentRepositoryInterface::class);
     }

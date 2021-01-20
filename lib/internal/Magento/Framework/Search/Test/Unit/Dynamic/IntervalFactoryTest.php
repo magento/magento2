@@ -15,13 +15,13 @@ class IntervalFactoryTest extends \PHPUnit\Framework\TestCase
     /** @var IntervalFactory */
     private $model;
 
-    /** @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $objectManagerMock;
 
-    /** @var EngineResolverInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var EngineResolverInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $engineResolverMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
             ->getMockForAbstractClass();

@@ -16,16 +16,16 @@ class CheckoutValidatorTest extends \PHPUnit\Framework\TestCase
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    /** @var \Magento\Checkout\Model\Session|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Checkout\Model\Session|\PHPUnit\Framework\MockObject\MockObject */
     protected $sessionMock;
 
-    /** @var \Magento\Paypal\Helper\Shortcut\Validator|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Paypal\Helper\Shortcut\Validator|\PHPUnit\Framework\MockObject\MockObject */
     protected $paypalShortcutHelperMock;
 
-    /** @var \Magento\Payment\Helper\Data|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Payment\Helper\Data|\PHPUnit\Framework\MockObject\MockObject */
     protected $paymentHelperMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->sessionMock = $this->createMock(\Magento\Checkout\Model\Session::class);
         $this->paypalShortcutHelperMock = $this->createMock(\Magento\Paypal\Helper\Shortcut\Validator::class);

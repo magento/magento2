@@ -137,7 +137,7 @@ class GetSelectedPaymentMethodTest extends GraphQlAbstract
         $this->graphQlQuery($query, [], '', $this->getHeaderMap('customer3@search.example.com'));
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->getMaskedQuoteIdByReservedOrderId = $objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);

@@ -20,7 +20,7 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
      */
     protected $observer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->observer = new Observer();
     }

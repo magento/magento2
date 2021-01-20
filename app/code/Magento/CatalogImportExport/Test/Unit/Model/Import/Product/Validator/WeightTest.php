@@ -21,7 +21,7 @@ class WeightTest extends \PHPUnit\Framework\TestCase
      */
     private $weight;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->weight = new Weight();
 

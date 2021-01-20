@@ -18,7 +18,7 @@ class HiddenTest extends \PHPUnit\Framework\TestCase
      */
     private $element;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $escaper = $objectManager->getObject(

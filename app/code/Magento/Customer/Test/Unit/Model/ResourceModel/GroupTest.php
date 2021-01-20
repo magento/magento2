@@ -17,26 +17,26 @@ class GroupTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Customer\Model\ResourceModel\Group */
     protected $groupResourceModel;
 
-    /** @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\ResourceConnection|\PHPUnit\Framework\MockObject\MockObject */
     protected $resource;
 
-    /** @var \Magento\Customer\Model\Vat|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Customer\Model\Vat|\PHPUnit\Framework\MockObject\MockObject */
     protected $customerVat;
 
-    /** @var \Magento\Customer\Model\Group|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Customer\Model\Group|\PHPUnit\Framework\MockObject\MockObject */
     protected $groupModel;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $customersFactory;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $groupManagement;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $relationProcessorMock;
 
     /**
-     * @var Snapshot|\PHPUnit_Framework_MockObject_MockObject
+     * @var Snapshot|\PHPUnit\Framework\MockObject\MockObject
      */
     private $snapshotMock;
 
@@ -45,7 +45,7 @@ class GroupTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->resource = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
         $this->customerVat = $this->createMock(\Magento\Customer\Model\Vat::class);

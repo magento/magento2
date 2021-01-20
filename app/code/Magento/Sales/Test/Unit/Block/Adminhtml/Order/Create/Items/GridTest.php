@@ -12,17 +12,17 @@ namespace Magento\Sales\Test\Unit\Block\Adminhtml\Order\Create\Items;
 class GridTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Sales\Block\Adminhtml\Order\Create\Items\Grid
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Sales\Block\Adminhtml\Order\Create\Items\Grid
      */
     protected $block;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Backend\Block\Template
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Backend\Block\Template
      */
     protected $priceRenderBlock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Layout
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\View\Layout
      */
     protected $layoutMock;
 
@@ -31,31 +31,31 @@ class GridTest extends \PHPUnit\Framework\TestCase
      */
     protected $objectManager;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Quote\Model\Quote\Item  */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Quote\Model\Quote\Item  */
     protected $itemMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Pricing\PriceCurrencyInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Pricing\PriceCurrencyInterface
      */
     protected $priceCurrency;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $stockItemMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $stockRegistry;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $stockState;
 
     /**
      * Initialize required data
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $orderCreateMock = $this->createPartialMock(\Magento\Sales\Model\AdminOrder\Create::class, ['__wakeup']);
         $taxData = $this->getMockBuilder(\Magento\Tax\Helper\Data::class)->disableOriginalConstructor()->getMock();
@@ -192,7 +192,7 @@ class GridTest extends \PHPUnit\Framework\TestCase
     /**
      * @param array|int $tierPrices
      * @param string $productType
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Quote\Model\Quote\Item
+     * @return \PHPUnit\Framework\MockObject\MockObject|\Magento\Quote\Model\Quote\Item
      */
     protected function prepareItem($tierPrices, $productType)
     {
@@ -265,7 +265,7 @@ class GridTest extends \PHPUnit\Framework\TestCase
         $items = $this->block->setLayout($layoutMock)->getItems();
 
         $this->assertEquals('Message', $items[0]->getMessage());
-        $this->assertEquals(true, $this->block->getQuote()->getIsSuperMode());
+        $this->assertTrue($this->block->getQuote()->getIsSuperMode());
     }
 
     /**

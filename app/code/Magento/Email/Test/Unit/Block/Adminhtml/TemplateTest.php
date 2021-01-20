@@ -16,22 +16,22 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Backend\Block\Template\Context */
     protected $context;
 
-    /** @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\UrlInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $urlBuilderMock;
 
-    /** @var \Magento\Backend\Block\Widget\Button\ItemFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Backend\Block\Widget\Button\ItemFactory|\PHPUnit\Framework\MockObject\MockObject */
     protected $itemFactoryMock;
 
     /** @var \Magento\Backend\Block\Widget\Button\ButtonList */
     protected $buttonList;
 
-    /** @var \Magento\Backend\Block\Widget\Button\Item|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Backend\Block\Widget\Button\Item|\PHPUnit\Framework\MockObject\MockObject */
     protected $buttonMock;
 
     /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
     protected $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->itemFactoryMock = $this->getMockBuilder(\Magento\Backend\Block\Widget\Button\ItemFactory::class)

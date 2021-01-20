@@ -13,16 +13,16 @@ class CacheTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject[]
+     * @var \PHPUnit\Framework\MockObject\MockObject[]
      */
     protected $_cacheTypeMocks;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_cacheFrontendMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_initCacheTypeMocks();
 
@@ -85,14 +85,14 @@ class CacheTest extends \PHPUnit\Framework\TestCase
      * Callback for the object manager to get different cache type mocks
      *
      * @param string $type Class of the cache type
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     public function getTypeMock($type)
     {
         return $this->_cacheTypeMocks[$type];
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->_cacheTypeMocks = [];
         $this->_cacheFrontendMock = null;

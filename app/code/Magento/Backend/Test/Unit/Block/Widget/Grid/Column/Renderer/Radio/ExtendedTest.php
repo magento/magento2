@@ -15,16 +15,16 @@ class ExtendedTest extends \PHPUnit\Framework\TestCase
     protected $_object;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_converter;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_column;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $context = $this->createMock(\Magento\Backend\Block\Context::class);
         $this->_converter = $this->createPartialMock(

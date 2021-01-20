@@ -17,11 +17,11 @@ class EntityTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_importConfigMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_importConfigMock = $this->createMock(\Magento\ImportExport\Model\Import\ConfigInterface::class);
         $this->_model = new \Magento\ImportExport\Model\Source\Import\Entity($this->_importConfigMock);

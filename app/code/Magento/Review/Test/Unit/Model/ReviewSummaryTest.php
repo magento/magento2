@@ -30,7 +30,7 @@ class ReviewSummaryTest extends \PHPUnit\Framework\TestCase
      */
     private $objectManagerHelper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->reviewSummaryCollectionFactoryMock = $this->createPartialMock(
             \Magento\Review\Model\ResourceModel\Review\Summary\CollectionFactory::class,

@@ -12,7 +12,7 @@ use Magento\Setup\Console\Command\DbStatusCommand;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Setup\Model\ObjectManagerProvider;
 use Magento\Framework\ObjectManagerInterface;
-use PHPUnit_Framework_MockObject_MockObject as Mock;
+use PHPUnit\Framework\MockObject\MockObject as Mock;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**
@@ -43,7 +43,7 @@ class DbStatusCommandTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->dbVersionInfo = $this->getMockBuilder(DbVersionInfo::class)
             ->disableOriginalConstructor()

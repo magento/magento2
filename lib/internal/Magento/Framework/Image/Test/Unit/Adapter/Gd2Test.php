@@ -48,7 +48,7 @@ class Gd2Test extends \PHPUnit\Framework\TestCase
     /**
      * Setup testing object
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         require_once __DIR__ . '/_files/global_php_mock.php';
         $this->objectManager = new ObjectManager($this);

@@ -18,16 +18,16 @@ class AbstractResourceTest extends \PHPUnit\Framework\TestCase
     private $abstractResource;
 
     /**
-     * @var Json|\PHPUnit_Framework_MockObject_MockObject
+     * @var Json|\PHPUnit\Framework\MockObject\MockObject
      */
     private $serializerMock;
 
     /**
-     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Psr\Log\LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $loggerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $this->serializerMock = $this->createMock(Json::class);
@@ -170,9 +170,9 @@ class AbstractResourceTest extends \PHPUnit\Framework\TestCase
     
     public function testCommitZeroLevel()
     {
-        /** @var AdapterInterface|\PHPUnit_Framework_MockObject_MockObject $connection */
-        $connection = $this->createMock(AdapterInterface::class);
-        /** @var DataObject|\PHPUnit_Framework_MockObject_MockObject $closureExpectation */
+        /** @var AdapterInterface|\PHPUnit\Framework\MockObject\MockObject $connection */
+        $connection = $this->getMockForAbstractClass(AdapterInterface::class);
+        /** @var DataObject|\PHPUnit\Framework\MockObject\MockObject $closureExpectation */
         $closureExpectation = $this->getMockBuilder(DataObject::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -206,8 +206,8 @@ class AbstractResourceTest extends \PHPUnit\Framework\TestCase
 
     public function testCommitZeroLevelCallbackException()
     {
-        /** @var AdapterInterface|\PHPUnit_Framework_MockObject_MockObject $connection */
-        $connection = $this->createMock(AdapterInterface::class);
+        /** @var AdapterInterface|\PHPUnit\Framework\MockObject\MockObject $connection */
+        $connection = $this->getMockForAbstractClass(AdapterInterface::class);
 
         $this->abstractResource->setConnection($connection);
         $this->abstractResource->addCommitCallback(
@@ -229,9 +229,9 @@ class AbstractResourceTest extends \PHPUnit\Framework\TestCase
 
     public function testCommitNotCompletedTransaction()
     {
-        /** @var AdapterInterface|\PHPUnit_Framework_MockObject_MockObject $connection */
-        $connection = $this->createMock(AdapterInterface::class);
-        /** @var DataObject|\PHPUnit_Framework_MockObject_MockObject $closureExpectation */
+        /** @var AdapterInterface|\PHPUnit\Framework\MockObject\MockObject $connection */
+        $connection = $this->getMockForAbstractClass(AdapterInterface::class);
+        /** @var DataObject|\PHPUnit\Framework\MockObject\MockObject $closureExpectation */
         $closureExpectation = $this->getMockBuilder(DataObject::class)
             ->disableOriginalConstructor()
             ->getMock();

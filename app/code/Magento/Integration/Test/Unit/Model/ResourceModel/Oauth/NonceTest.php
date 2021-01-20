@@ -11,12 +11,12 @@ namespace Magento\Integration\Test\Unit\Model\ResourceModel\Oauth;
 class NonceTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $connectionMock;
 
     /**
-     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resourceMock;
 
@@ -25,7 +25,7 @@ class NonceTest extends \PHPUnit\Framework\TestCase
      */
     protected $nonceResource;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->connectionMock = $this->createMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class);
 

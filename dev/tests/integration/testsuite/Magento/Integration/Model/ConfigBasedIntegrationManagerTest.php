@@ -14,7 +14,7 @@ namespace Magento\Integration\Model;
 class ConfigBasedIntegrationManagerTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $consolidatedMock;
 
@@ -36,7 +36,7 @@ class ConfigBasedIntegrationManagerTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
@@ -58,7 +58,7 @@ class ConfigBasedIntegrationManagerTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->objectManager->removeSharedInstance(\Magento\Integration\Model\ConsolidatedConfig::class);
         parent::tearDown();

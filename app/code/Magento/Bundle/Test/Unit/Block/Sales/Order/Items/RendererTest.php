@@ -7,16 +7,16 @@ namespace Magento\Bundle\Test\Unit\Block\Sales\Order\Items;
 
 class RendererTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \Magento\Sales\Model\Order\Item|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Sales\Model\Order\Item|\PHPUnit\Framework\MockObject\MockObject */
     protected $orderItem;
 
     /** @var \Magento\Bundle\Block\Sales\Order\Items\Renderer $model */
     protected $model;
 
-    /** @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit_Framework_MockObject_MockObject $serializer */
+    /** @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit\Framework\MockObject\MockObject $serializer */
     protected $serializer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->orderItem = $this->createPartialMock(
             \Magento\Sales\Model\Order\Item::class,
@@ -44,7 +44,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
         $item->expects($this->once())->method('getOrderItem')->will($this->returnValue($this->orderItem));
         $this->orderItem->expects($this->any())->method('getId')->will($this->returnValue(1));
 
-        $this->assertSame(null, $this->model->getChildren($item));
+        $this->assertNull($this->model->getChildren($item));
     }
 
     /**

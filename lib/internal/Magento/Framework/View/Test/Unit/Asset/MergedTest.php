@@ -20,36 +20,36 @@ use Magento\Framework\App\View\Deployment\Version\StorageInterface;
 class MergedTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $logger;
 
     /**
-     * @var MergeStrategyInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var MergeStrategyInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $mergeStrategy;
 
     /**
-     * @var MergeableInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var MergeableInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $assetJsOne;
 
     /**
-     * @var MergeableInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var MergeableInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $assetJsTwo;
 
     /**
-     * @var AssetRepository|\PHPUnit_Framework_MockObject_MockObject
+     * @var AssetRepository|\PHPUnit\Framework\MockObject\MockObject
      */
     private $assetRepo;
 
     /**
-     * @var StorageInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StorageInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $versionStorage;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->assetJsOne = $this->getMockForAbstractClass(MergeableInterface::class);
         $this->assetJsOne->expects($this->any())
@@ -67,12 +67,12 @@ class MergedTest extends \PHPUnit\Framework\TestCase
             ->method('getPath')
             ->willReturn('script_two.js');
 
-        $this->logger = $this->createMock(LoggerInterface::class);
-        $this->mergeStrategy = $this->createMock(MergeStrategyInterface::class);
+        $this->logger = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->mergeStrategy = $this->getMockForAbstractClass(MergeStrategyInterface::class);
         $this->assetRepo = $this->getMockBuilder(AssetRepository::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->versionStorage = $this->createMock(StorageInterface::class);
+        $this->versionStorage = $this->getMockForAbstractClass(StorageInterface::class);
     }
 
     /**

@@ -22,7 +22,7 @@ class TextTransformerTest extends \PHPUnit\Framework\TestCase
      * Setup method
      * @return void
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $objectManagerHelper->getObject(

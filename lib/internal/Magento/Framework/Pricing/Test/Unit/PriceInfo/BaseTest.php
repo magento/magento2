@@ -14,12 +14,12 @@ use \Magento\Framework\Pricing\PriceInfo\Base;
 class BaseTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Pricing\Price\Collection
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Pricing\Price\Collection
      */
     protected $priceCollection;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Pricing\Adjustment\Collection
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Pricing\Adjustment\Collection
      */
     protected $adjustmentCollection;
 
@@ -28,7 +28,7 @@ class BaseTest extends \PHPUnit\Framework\TestCase
      */
     protected $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->priceCollection = $this->createMock(\Magento\Framework\Pricing\Price\Collection::class);
         $this->adjustmentCollection = $this->createMock(\Magento\Framework\Pricing\Adjustment\Collection::class);

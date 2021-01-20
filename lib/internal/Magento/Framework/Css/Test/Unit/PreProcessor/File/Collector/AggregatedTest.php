@@ -13,37 +13,37 @@ use \Magento\Framework\Css\PreProcessor\File\Collector\Aggregated;
 class AggregatedTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\View\File\FileList\Factory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\File\FileList\Factory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $fileListFactoryMock;
 
     /**
-     * @var \Magento\Framework\View\File\FileList|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\File\FileList|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $fileListMock;
 
     /**
-     * @var \Magento\Framework\View\File\CollectorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\File\CollectorInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $libraryFilesMock;
 
     /**
-     * @var \Magento\Framework\View\File\CollectorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\File\CollectorInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $baseFilesMock;
 
     /**
-     * @var \Magento\Framework\View\File\CollectorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\File\CollectorInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $overriddenBaseFilesMock;
 
     /**
-     * @var \Magento\Framework\View\Design\ThemeInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Design\ThemeInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $themeMock;
 
     /**
-     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Psr\Log\LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $loggerMock;
 
@@ -51,7 +51,7 @@ class AggregatedTest extends \PHPUnit\Framework\TestCase
      * Setup tests
      * @return void
      */
-    public function setup()
+    public function setup(): void
     {
         $this->fileListFactoryMock = $this->getMockBuilder(\Magento\Framework\View\File\FileList\Factory::class)
             ->disableOriginalConstructor()->getMock();

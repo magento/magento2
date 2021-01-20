@@ -17,14 +17,14 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     protected $validator;
 
     /**
-     * @var \Magento\Sales\Model\Order\Invoice\Comment|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Invoice\Comment|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $commentModelMock;
 
     /**
      * Set up
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->commentModelMock = $this->createPartialMock(
             \Magento\Sales\Model\Order\Invoice\Comment::class,

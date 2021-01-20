@@ -19,49 +19,49 @@ class TranslateTest extends \PHPUnit\Framework\TestCase
     /** @var Translate */
     protected $translate;
 
-    /** @var \Magento\Framework\View\DesignInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\View\DesignInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $viewDesign;
 
-    /** @var \Magento\Framework\Cache\FrontendInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Cache\FrontendInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $cache;
 
-    /** @var \Magento\Framework\View\FileSystem|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\View\FileSystem|\PHPUnit\Framework\MockObject\MockObject */
     protected $viewFileSystem;
 
-    /** @var \Magento\Framework\Module\ModuleList|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Module\ModuleList|\PHPUnit\Framework\MockObject\MockObject */
     protected $moduleList;
 
-    /** @var \Magento\Framework\Module\Dir\Reader|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Module\Dir\Reader|\PHPUnit\Framework\MockObject\MockObject */
     protected $modulesReader;
 
-    /** @var \Magento\Framework\App\ScopeResolverInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\ScopeResolverInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $scopeResolver;
 
-    /** @var \Magento\Framework\Translate\ResourceInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Translate\ResourceInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $resource;
 
-    /** @var \Magento\Framework\Locale\ResolverInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Locale\ResolverInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $locale;
 
-    /** @var \Magento\Framework\App\State|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\State|\PHPUnit\Framework\MockObject\MockObject */
     protected $appState;
 
-    /** @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Filesystem|\PHPUnit\Framework\MockObject\MockObject */
     protected $filesystem;
 
-    /** @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\RequestInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $request;
 
-    /** @var \Magento\Framework\File\Csv|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\File\Csv|\PHPUnit\Framework\MockObject\MockObject */
     protected $csvParser;
 
-    /** @var  \Magento\Framework\App\Language\Dictionary|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \Magento\Framework\App\Language\Dictionary|\PHPUnit\Framework\MockObject\MockObject */
     protected $packDictionary;
 
-    /** @var \Magento\Framework\Filesystem\Directory\ReadInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Filesystem\Directory\ReadInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $directory;
 
-    /** @var \Magento\Framework\Filesystem\DriverInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Filesystem\DriverInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $fileDriver;
 
     protected function setUp(): void
@@ -109,7 +109,7 @@ class TranslateTest extends \PHPUnit\Framework\TestCase
             $this->fileDriver
         );
 
-        $serializerMock = $this->createMock(SerializerInterface::class);
+        $serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
         $serializerMock->method('serialize')
             ->willReturnCallback(function ($data) {
                 return json_encode($data);

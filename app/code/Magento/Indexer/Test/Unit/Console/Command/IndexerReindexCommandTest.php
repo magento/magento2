@@ -30,17 +30,17 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
     private $command;
 
     /**
-     * @var \Magento\Framework\Indexer\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Indexer\ConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $configMock;
 
     /**
-     * @var IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
+     * @var IndexerRegistry|\PHPUnit\Framework\MockObject\MockObject
      */
     private $indexerRegistryMock;
 
     /**
-     * @var DependencyInfoProvider|\PHPUnit_Framework_MockObject_MockObject
+     * @var DependencyInfoProvider|\PHPUnit\Framework\MockObject\MockObject
      */
     private $dependencyInfoProviderMock;
 
@@ -52,7 +52,7 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
     /**
      * Set up
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->configMock = $this->createMock(\Magento\Indexer\Model\Config::class);
@@ -86,7 +86,7 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
         $this->stateMock->expects($this->never())->method('setAreaCode');
         $this->command = new IndexerReindexCommand($this->objectManagerFactory);
         $optionsList = $this->command->getInputList();
-        $this->assertSame(1, count($optionsList));
+        $this->assertCount(1, $optionsList);
         $this->assertSame('index', $optionsList[0]->getName());
     }
 
@@ -187,7 +187,7 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
             );
         }
         $pattern .= '$#';
-        $this->assertRegExp($pattern, $commandTester->getDisplay());
+        $this->assertMatchesRegularExpression($pattern, $commandTester->getDisplay());
     }
 
     /**
@@ -221,11 +221,11 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
      * @param array|null $methods
      * @param array $data
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|StateInterface
+     * @return \PHPUnit\Framework\MockObject\MockObject|StateInterface
      */
     private function getStateMock(array $methods = null, array $data = [])
     {
-        /** @var \PHPUnit_Framework_MockObject_MockObject|StateInterface $state */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|StateInterface $state */
         $state = $this->getMockBuilder(StateInterface::class)
             ->setMethods($methods)
             ->disableOriginalConstructor()

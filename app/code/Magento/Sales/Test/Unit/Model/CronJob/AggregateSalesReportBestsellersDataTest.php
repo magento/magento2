@@ -13,17 +13,17 @@ use \Magento\Sales\Model\CronJob\AggregateSalesReportBestsellersData;
 class AggregateSalesReportBestsellersDataTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Locale\ResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Locale\ResolverInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $localeResolverMock;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $localeDateMock;
 
     /**
-     * @var \Magento\Sales\Model\ResourceModel\Report\BestsellersFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\ResourceModel\Report\BestsellersFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $bestsellersFactoryMock;
 
@@ -32,7 +32,7 @@ class AggregateSalesReportBestsellersDataTest extends \PHPUnit\Framework\TestCas
      */
     protected $observer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->localeResolverMock = $this->getMockBuilder(\Magento\Framework\Locale\ResolverInterface::class)
             ->disableOriginalConstructor()

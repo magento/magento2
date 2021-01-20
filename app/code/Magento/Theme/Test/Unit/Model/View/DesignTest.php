@@ -12,37 +12,37 @@ use Magento\Theme\Model\View\Design;
 class DesignTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\App\State|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\State|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $state;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeManager;
 
     /**
-     * @var \Magento\Framework\View\Design\Theme\FlyweightFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Design\Theme\FlyweightFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $flyweightThemeFactory;
 
     /**
-     * @var \Magento\Theme\Model\ThemeFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Theme\Model\ThemeFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $themeFactory;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $config;
 
     /**
-     * @var string|\PHPUnit_Framework_MockObject_MockObject
+     * @var string|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $defaultTheme = 'anyName4Theme';
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $objectManager;
 
@@ -51,7 +51,7 @@ class DesignTest extends \PHPUnit\Framework\TestCase
      */
     private $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->storeManager = $this->getMockForAbstractClass(\Magento\Store\Model\StoreManagerInterface::class);
         $this->flyweightThemeFactory = $this->createMock(\Magento\Framework\View\Design\Theme\FlyweightFactory::class);

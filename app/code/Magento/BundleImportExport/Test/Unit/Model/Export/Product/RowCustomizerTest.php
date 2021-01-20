@@ -18,47 +18,47 @@ class RowCustomizerTest extends \PHPUnit\Framework\TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var \Magento\BundleImportExport\Model\Export\RowCustomizer|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\BundleImportExport\Model\Export\RowCustomizer|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $rowCustomizerMock;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Collection|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $productResourceCollection;
 
     /**
-     * @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $product;
 
     /**
-     * @var \Magento\Bundle\Model\ResourceModel\Option\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Bundle\Model\ResourceModel\Option\Collection|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $optionsCollection;
 
     /**
-     * @var \Magento\Bundle\Model\Option|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Bundle\Model\Option|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $option;
 
     /**
-     * @var \Magento\Bundle\Model\ResourceModel\Selection\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Bundle\Model\ResourceModel\Selection\Collection|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $selectionsCollection;
 
     /**
-     * @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $selection;
 
-    /** @var \Magento\Framework\App\ScopeResolverInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\ScopeResolverInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $scopeResolver;
 
     /**
      * Set up
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->scopeResolver = $this->getMockBuilder(\Magento\Framework\App\ScopeResolverInterface::class)

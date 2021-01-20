@@ -19,7 +19,7 @@ class ParserFactoryTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->tokens = $this->getMockBuilder(
             \Magento\TestFramework\Integrity\Library\PhpParser\Tokens::class

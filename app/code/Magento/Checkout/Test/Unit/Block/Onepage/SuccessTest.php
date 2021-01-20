@@ -20,26 +20,26 @@ class SuccessTest extends \PHPUnit\Framework\TestCase
     protected $block;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $layout;
 
     /**
-     * @var \Magento\Sales\Model\Order\Config | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Config | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $orderConfig;
 
     /**
-     * @var \Magento\Checkout\Model\Session | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Checkout\Model\Session | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $checkoutSession;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeManagerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 

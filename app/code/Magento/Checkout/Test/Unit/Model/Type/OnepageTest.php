@@ -22,87 +22,87 @@ class OnepageTest extends \PHPUnit\Framework\TestCase
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    /** @var \Magento\Framework\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Event\ManagerInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $eventManagerMock;
 
-    /** @var \Magento\Checkout\Helper\Data|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Checkout\Helper\Data|\PHPUnit\Framework\MockObject\MockObject */
     protected $checkoutHelperMock;
 
-    /** @var \Magento\Customer\Model\Url|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Customer\Model\Url|\PHPUnit\Framework\MockObject\MockObject */
     protected $customerUrlMock;
 
-    /** @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Psr\Log\LoggerInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $loggerMock;
 
-    /** @var \Magento\Checkout\Model\Session|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Checkout\Model\Session|\PHPUnit\Framework\MockObject\MockObject */
     protected $checkoutSessionMock;
 
-    /** @var \Magento\Customer\Model\Session|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Customer\Model\Session|\PHPUnit\Framework\MockObject\MockObject */
     protected $customerSessionMock;
 
-    /** @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $storeManagerMock;
 
-    /** @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\Request\Http|\PHPUnit\Framework\MockObject\MockObject */
     protected $requestMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $addressFactoryMock;
 
-    /** @var \Magento\Customer\Model\FormFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Customer\Model\FormFactory|\PHPUnit\Framework\MockObject\MockObject */
     protected $customerFormFactoryMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $customerFactoryMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $quoteManagementMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $orderFactoryMock;
 
-    /** @var \Magento\Framework\DataObject\Copy|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\DataObject\Copy|\PHPUnit\Framework\MockObject\MockObject */
     protected $copyMock;
 
-    /** @var \Magento\Framework\Message\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Message\ManagerInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $messageManagerMock;
 
-    /** @var \Magento\Customer\Model\Metadata\FormFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Customer\Model\Metadata\FormFactory|\PHPUnit\Framework\MockObject\MockObject */
     protected $formFactoryMock;
 
-    /** @var \Magento\Customer\Api\Data\CustomerInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Customer\Api\Data\CustomerInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject */
     protected $customerDataFactoryMock;
 
-    /** @var \Magento\Framework\Math\Random|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Math\Random|\PHPUnit\Framework\MockObject\MockObject */
     protected $randomMock;
 
-    /** @var \Magento\Framework\Encryption\EncryptorInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Encryption\EncryptorInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $encryptorMock;
 
-    /** @var \Magento\Customer\Api\AddressRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Customer\Api\AddressRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $addressRepositoryMock;
 
-    /** @var \Magento\Customer\Api\CustomerRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Customer\Api\CustomerRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $customerRepositoryMock;
 
-    /** @var \Magento\Quote\Api\CartRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Quote\Api\CartRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $quoteRepositoryMock;
 
     /**
-     * @var \Magento\Customer\Api\AccountManagementInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Api\AccountManagementInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $accountManagementMock;
 
-    /** @var \Magento\Framework\Api\ExtensibleDataObjectConverter|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Api\ExtensibleDataObjectConverter|\PHPUnit\Framework\MockObject\MockObject */
     protected $extensibleDataObjectConverterMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $totalsCollectorMock;
 
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->addressRepositoryMock = $this->getMockForAbstractClass(
             \Magento\Customer\Api\AddressRepositoryInterface::class,
@@ -229,7 +229,7 @@ class OnepageTest extends \PHPUnit\Framework\TestCase
             '',
             false
         );
-        /** @var \Magento\Quote\Model\Quote|\PHPUnit_Framework_MockObject_MockObject $quoteMock */
+        /** @var \Magento\Quote\Model\Quote|\PHPUnit\Framework\MockObject\MockObject $quoteMock */
         $quoteMock = $this->createPartialMock(\Magento\Quote\Model\Quote::class, [
                 'isMultipleShippingAddresses',
                 'removeAllAddresses',
@@ -289,7 +289,7 @@ class OnepageTest extends \PHPUnit\Framework\TestCase
     public function testGetCheckoutMethod($isLoggedIn, $quoteCheckoutMethod, $isAllowedGuestCheckout, $expected)
     {
         $this->customerSessionMock->expects($this->once())->method('isLoggedIn')->will($this->returnValue($isLoggedIn));
-        /** @var \Magento\Quote\Model\Quote|\PHPUnit_Framework_MockObject_MockObject $quoteMock */
+        /** @var \Magento\Quote\Model\Quote|\PHPUnit\Framework\MockObject\MockObject $quoteMock */
         $quoteMock = $this->createMock(\Magento\Quote\Model\Quote::class);
         $quoteMock->expects($this->any())->method('setCheckoutMethod')->with($expected);
 
@@ -323,7 +323,7 @@ class OnepageTest extends \PHPUnit\Framework\TestCase
     public function testSaveCheckoutMethod()
     {
         $this->assertEquals(['error' => -1, 'message' => 'Invalid data'], $this->onepage->saveCheckoutMethod(null));
-        /** @var \Magento\Quote\Model\Quote|\PHPUnit_Framework_MockObject_MockObject $quoteMock */
+        /** @var \Magento\Quote\Model\Quote|\PHPUnit\Framework\MockObject\MockObject $quoteMock */
         $quoteMock = $this->createPartialMock(\Magento\Quote\Model\Quote::class, ['setCheckoutMethod', '__wakeup']);
         $quoteMock->expects($this->once())->method('setCheckoutMethod')->with('someMethod')->will($this->returnSelf());
         $this->quoteRepositoryMock->expects($this->once())->method('save')->with($quoteMock);

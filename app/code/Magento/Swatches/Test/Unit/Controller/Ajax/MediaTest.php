@@ -14,31 +14,31 @@ class MediaTest extends \PHPUnit\Framework\TestCase
     /** @var array */
     private $mediaGallery;
 
-    /** @var \Magento\Swatches\Helper\Data|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Swatches\Helper\Data|\PHPUnit\Framework\MockObject\MockObject */
     private $swatchHelperMock;
 
-    /** @var \Magento\Catalog\Model\ProductFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Catalog\Model\ProductFactory|\PHPUnit\Framework\MockObject\MockObject */
     private $productModelFactoryMock;
 
-    /** @var \Magento\PageCache\Model\Config|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\PageCache\Model\Config|\PHPUnit\Framework\MockObject\MockObject */
     private $config;
 
-    /** @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Catalog\Model\Product|\PHPUnit\Framework\MockObject\MockObject */
     private $productMock;
 
-    /** @var \Magento\Framework\App\Action\Context|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\Action\Context|\PHPUnit\Framework\MockObject\MockObject */
     private $contextMock;
 
-    /** @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\RequestInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $requestMock;
 
-    /** @var \Magento\Framework\App\ResponseInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\ResponseInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $responseMock;
 
-    /** @var \Magento\Framework\Controller\ResultFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Controller\ResultFactory|\PHPUnit\Framework\MockObject\MockObject */
     private $resultFactory;
 
-    /** @var \Magento\Framework\Controller\Result\Json|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Controller\Result\Json|\PHPUnit\Framework\MockObject\MockObject */
     private $jsonMock;
 
     /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
@@ -47,7 +47,7 @@ class MediaTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager|\Magento\Swatches\Controller\Ajax\Media */
     private $controller;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->mediaGallery = [
             'image' => '/m/a/magento.png',

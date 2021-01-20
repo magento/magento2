@@ -13,26 +13,26 @@ class PriceTest extends \PHPUnit\Framework\TestCase
     protected $priceObj;
 
     /**
-     * @var \Magento\Quote\Model\Quote|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Model\Quote|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $quote;
 
     /**
-     * @var \Magento\Store\Model\Store|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\Store|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $store;
 
     /**
-     * @var \Magento\Tax\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Tax\Helper\Data|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $taxHelper;
 
     /**
-     * @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $priceCurrency;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -81,7 +81,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param float $shippingPrice
-     * @return \Magento\Quote\Model\Quote\Address\Rate|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Quote\Model\Quote\Address\Rate|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function setupShippingRate($shippingPrice)
     {

@@ -17,31 +17,31 @@ class ExtendedTest extends \PHPUnit\Framework\TestCase
     protected $_block;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_layoutMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_gridMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_eventManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_urlModelMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_requestMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_gridMock = $this->createPartialMock(
             \Magento\Backend\Block\Widget\Grid::class,
@@ -92,7 +92,7 @@ class ExtendedTest extends \PHPUnit\Framework\TestCase
         $this->_block->setNameInLayout('test_grid_massaction');
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_layoutMock);
         unset($this->_eventManagerMock);

@@ -14,7 +14,7 @@ class RemoveTest extends \PHPUnit\Framework\TestCase
 
     protected $_params = ['id' => 'item'];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_model = new \Magento\Backend\Model\Menu\Builder\Command\Remove($this->_params);
     }

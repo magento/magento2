@@ -19,29 +19,29 @@ class CompareTest extends \PHPUnit\Framework\TestCase
     private $helper;
 
     /**
-     * @var \Magento\Quote\Model\Quote\Item|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Model\Quote\Item|\PHPUnit\Framework\MockObject\MockObject
      */
     private $itemMock;
 
     /**
-     * @var \Magento\Quote\Model\Quote\Item|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Model\Quote\Item|\PHPUnit\Framework\MockObject\MockObject
      */
     private $comparedMock;
 
     /**
-     * @var \Magento\Quote\Model\Quote\Item\Option|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Model\Quote\Item\Option|\PHPUnit\Framework\MockObject\MockObject
      */
     private $optionMock;
 
     /**
-     * @var \Magento\Framework\Serialize\JsonValidator|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Serialize\JsonValidator|\PHPUnit\Framework\MockObject\MockObject
      */
     private $jsonValidatorMock;
 
     /**
      * test setUp
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->itemMock = $this->createPartialMock(
             \Magento\Quote\Model\Quote\Item::class,
@@ -84,7 +84,7 @@ class CompareTest extends \PHPUnit\Framework\TestCase
     /**
      * @param string $code
      * @param mixed $value
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getOptionMock($code, $value)
     {

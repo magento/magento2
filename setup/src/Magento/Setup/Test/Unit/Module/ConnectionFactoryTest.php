@@ -15,7 +15,7 @@ class ConnectionFactoryTest extends \PHPUnit\Framework\TestCase
      */
     private $connectionFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $serviceLocatorMock = $this->createMock(\Zend\ServiceManager\ServiceLocatorInterface::class);

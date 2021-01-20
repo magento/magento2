@@ -12,7 +12,7 @@ class ExportTest extends \PHPUnit\Framework\TestCase
      */
     protected $_object;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $backendUrl = $this->createMock(\Magento\Backend\Model\UrlInterface::class);
         $backendUrl->expects($this->once())->method('getUrl')->with("*/*/exportTablerates", ['website' => 1]);

@@ -36,7 +36,7 @@ class AdvancedPricingTest extends \PHPUnit\Framework\TestCase
      */
     protected $expectedTierPrice;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->fileSystem = $this->objectManager->get(\Magento\Framework\Filesystem::class);

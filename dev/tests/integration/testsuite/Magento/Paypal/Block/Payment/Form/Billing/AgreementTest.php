@@ -12,7 +12,7 @@ class AgreementTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Paypal\Block\Payment\Form\Billing\Agreement */
     protected $_block;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $quote = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Quote\Model\ResourceModel\Quote\Collection::class

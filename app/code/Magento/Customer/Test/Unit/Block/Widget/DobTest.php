@@ -92,7 +92,7 @@ class DobTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $zendCacheCore = new Zend_Cache_Core();
         $zendCacheCore->setBackend(new Zend_Cache_Backend_BlackHole());
@@ -104,11 +104,11 @@ class DobTest extends TestCase
             false
         );
         $frontendCache->expects($this->any())->method('getLowLevelFrontend')->will($this->returnValue($zendCacheCore));
-        $cache = $this->createMock(CacheInterface::class);
+        $cache = $this->getMockForAbstractClass(CacheInterface::class);
         $cache->expects($this->any())->method('getFrontend')->will($this->returnValue($frontendCache));
 
         $objectManager = new ObjectManager($this);
-        $localeResolver = $this->createMock(ResolverInterface::class);
+        $localeResolver = $this->getMockForAbstractClass(ResolverInterface::class);
         $localeResolver->expects($this->any())
             ->method('getLocale')
             ->willReturnCallback(
@@ -201,7 +201,7 @@ class DobTest extends TestCase
                     )
                 )
             );
-        $this->assertSame(false, $this->_block->isEnabled());
+        $this->assertFalse($this->_block->isEnabled());
     }
 
     /**
@@ -230,7 +230,7 @@ class DobTest extends TestCase
                     )
                 )
             );
-        $this->assertSame(false, $this->_block->isRequired());
+        $this->assertFalse($this->_block->isRequired());
     }
 
     /**

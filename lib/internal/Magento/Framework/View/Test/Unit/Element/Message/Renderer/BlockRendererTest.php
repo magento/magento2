@@ -17,11 +17,11 @@ class BlockRendererTest extends \PHPUnit\Framework\TestCase
     private $renderer;
 
     /**
-     * @var BlockRenderer\Template | \PHPUnit_Framework_MockObject_MockObject
+     * @var BlockRenderer\Template | \PHPUnit\Framework\MockObject\MockObject
      */
     private $blockTemplate;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->blockTemplate = $this->getMockBuilder(
             \Magento\Framework\View\Element\Message\Renderer\BlockRenderer\Template::class
@@ -34,7 +34,7 @@ class BlockRendererTest extends \PHPUnit\Framework\TestCase
 
     public function testRender()
     {
-        /** @var MessageInterface | \PHPUnit_Framework_MockObject_MockObject $message */
+        /** @var MessageInterface | \PHPUnit\Framework\MockObject\MockObject $message */
         $message = $this->createMock(\Magento\Framework\Message\MessageInterface::class);
         $messageData = [
             'painting' => 'The Last Supper',
@@ -76,7 +76,7 @@ class BlockRendererTest extends \PHPUnit\Framework\TestCase
 
     public function testRenderNoTemplate()
     {
-        /** @var MessageInterface | \PHPUnit_Framework_MockObject_MockObject $message */
+        /** @var MessageInterface | \PHPUnit\Framework\MockObject\MockObject $message */
         $message = $this->createMock(\Magento\Framework\Message\MessageInterface::class);
         $messageData = [
             'who' => 'Brian',

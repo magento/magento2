@@ -10,17 +10,17 @@ namespace Magento\Catalog\Test\Unit\Model\Indexer\Product\Flat\Action;
 class EraserTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $connection;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $indexerHelper;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeManager;
 
@@ -29,7 +29,7 @@ class EraserTest extends \PHPUnit\Framework\TestCase
      */
     protected $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $resource = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
         $this->connection = $this->createMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);

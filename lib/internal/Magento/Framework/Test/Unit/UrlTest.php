@@ -15,56 +15,56 @@ use Magento\Framework\Url\HostChecker;
 class UrlTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Url\RouteParamsResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Url\RouteParamsResolver|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $routeParamsResolverMock;
 
     /**
-     * @var \Magento\Framework\Url\RouteParamsPreprocessorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Url\RouteParamsPreprocessorInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $routeParamsPreprocessorMock;
 
     /**
-     * @var \Magento\Framework\Url\ScopeResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Url\ScopeResolverInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $scopeResolverMock;
 
     /**
-     * @var \Magento\Framework\Url\ScopeInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Url\ScopeInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $scopeMock;
 
     /**
-     * @var \Magento\Framework\Url\QueryParamsResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Url\QueryParamsResolverInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $queryParamsResolverMock;
 
     /**
-     * @var \Magento\Framework\Session\SidResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Session\SidResolverInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $sidResolverMock;
 
     /**
-     * @var \Magento\Framework\Session\Generic|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Session\Generic|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $sessionMock;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $scopeConfig;
 
     /**
-     * @var \Magento\Framework\Url\ModifierInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Url\ModifierInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $urlModifier;
 
     /**
-     * @var HostChecker|\PHPUnit_Framework_MockObject_MockObject
+     * @var HostChecker|\PHPUnit\Framework\MockObject\MockObject
      */
     private $hostChecker;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->routeParamsResolverMock = $this->createPartialMock(
             \Magento\Framework\Url\RouteParamsResolver::class,
@@ -102,7 +102,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param bool $resolve
-     * @return \Magento\Framework\Url\RouteParamsResolverFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Framework\Url\RouteParamsResolverFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getRouteParamsResolverFactory($resolve = true)
     {
@@ -116,7 +116,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param array $mockMethods
-     * @return \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Framework\App\Request\Http|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getRequestMock()
     {

@@ -28,56 +28,56 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Framework\View\Asset\Repository|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Asset\Repository|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $assetRepo;
 
     /**
-     * @var \Magento\Framework\View\Asset\GroupedCollection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Asset\GroupedCollection|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $pageAssets;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $scopeConfig;
 
     /**
-     * @var \Magento\Framework\View\Page\FaviconInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Page\FaviconInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $favicon;
 
     /**
-     * @var \Magento\Framework\View\Layout\BuilderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Layout\BuilderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $builder;
 
     /**
-     * @var \Magento\Framework\View\Asset\File|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Asset\File|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $asset;
 
     /**
-     * @var \Magento\Framework\View\Asset\Remote|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Asset\Remote|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $remoteAsset;
 
     /**
-     * @var \Magento\Framework\View\Page\Title|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Page\Title|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $title;
 
     /**
-     * @var \Magento\Framework\App\State|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\State|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $areaResolverMock;
 
     /**
-     * @var \Magento\Framework\Locale\ResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Locale\ResolverInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $localeMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->assetRepo = $this->createMock(\Magento\Framework\View\Asset\Repository::class);
         $this->pageAssets = $this->createMock(\Magento\Framework\View\Asset\GroupedCollection::class);

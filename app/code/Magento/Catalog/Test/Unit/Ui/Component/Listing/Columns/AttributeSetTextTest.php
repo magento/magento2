@@ -18,16 +18,16 @@ class AttributeSetTextTest extends AbstractColumnTest
     const ATTRIBUTE_SET_NAME = 'Default';
 
     /**
-     * @var AttributeSetRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AttributeSetRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $attributeSetRepositoryMock;
 
     /**
-     * @var AttributeSetInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AttributeSetInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $attributeSetMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

@@ -36,7 +36,7 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->checkoutSession = $this->_objectManager->get(CheckoutSession::class);
@@ -46,7 +46,7 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->_objectManager->removeSharedInstance(CheckoutSession::class);
         parent::tearDown();

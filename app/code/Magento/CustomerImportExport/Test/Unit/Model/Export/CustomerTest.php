@@ -54,7 +54,7 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $storeManager = $this->createMock(\Magento\Store\Model\StoreManager::class);
 
@@ -86,7 +86,7 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_model);
     }

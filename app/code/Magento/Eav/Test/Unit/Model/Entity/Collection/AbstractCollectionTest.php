@@ -13,61 +13,61 @@ namespace Magento\Eav\Test\Unit\Model\Entity\Collection;
 class AbstractCollectionTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var AbstractCollectionStub|\PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractCollectionStub|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $model;
 
     /**
-     * @var \Magento\Framework\Data\Collection\EntityFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Data\Collection\EntityFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $coreEntityFactoryMock;
 
     /**
-     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Psr\Log\LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $loggerMock;
 
     /**
-     * @var \Magento\Framework\Data\Collection\Db\FetchStrategyInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Data\Collection\Db\FetchStrategyInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $fetchStrategyMock;
 
     /**
-     * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $eventManagerMock;
 
     /**
-     * @var \Magento\Eav\Model\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Eav\Model\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $configMock;
 
     /**
-     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $coreResourceMock;
 
     /**
-     * @var \Magento\Eav\Model\EntityFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Eav\Model\EntityFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $entityFactoryMock;
 
     /**
-     * @var \Magento\Eav\Model\ResourceModel\Helper|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Eav\Model\ResourceModel\Helper|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resourceHelperMock;
 
     /**
-     * @var \Magento\Framework\Validator\UniversalFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Validator\UniversalFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $validatorFactoryMock;
 
     /**
-     * @var \Magento\Framework\DB\Statement\Pdo\Mysql|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Statement\Pdo\Mysql|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $statementMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->coreEntityFactoryMock = $this->createMock(\Magento\Framework\Data\Collection\EntityFactory::class);
         $this->loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
@@ -80,10 +80,10 @@ class AbstractCollectionTest extends \PHPUnit\Framework\TestCase
         $this->resourceHelperMock = $this->createMock(\Magento\Eav\Model\ResourceModel\Helper::class);
         $this->validatorFactoryMock = $this->createMock(\Magento\Framework\Validator\UniversalFactory::class);
         $this->entityFactoryMock = $this->createMock(\Magento\Eav\Model\EntityFactory::class);
-        /** @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject */
+        /** @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit\Framework\MockObject\MockObject */
         $connectionMock = $this->createMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class);
         $this->statementMock = $this->createPartialMock(\Magento\Framework\DB\Statement\Pdo\Mysql::class, ['fetch']);
-        /** @var $selectMock \Magento\Framework\DB\Select|\PHPUnit_Framework_MockObject_MockObject */
+        /** @var $selectMock \Magento\Framework\DB\Select|\PHPUnit\Framework\MockObject\MockObject */
         $selectMock = $this->createMock(\Magento\Framework\DB\Select::class);
         $this->coreEntityFactoryMock->expects(
             $this->any()
@@ -130,7 +130,7 @@ class AbstractCollectionTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         $this->model = null;
     }

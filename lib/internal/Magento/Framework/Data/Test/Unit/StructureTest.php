@@ -15,7 +15,7 @@ class StructureTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_structure = new \Magento\Framework\Data\Structure();
     }

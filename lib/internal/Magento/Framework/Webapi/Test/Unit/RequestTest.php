@@ -10,14 +10,14 @@ class RequestTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Framework\Webapi\Request */
     protected $request;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         /** Initialize SUT. */
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->request = $objectManager->getObject(\Magento\Framework\Webapi\Request::class);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->request);
         parent::tearDown();

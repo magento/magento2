@@ -20,21 +20,21 @@ use Symfony\Component\Console\Tester\CommandTester;
 class AdminUserCreateCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Symfony\Component\Console\Helper\QuestionHelper
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Symfony\Component\Console\Helper\QuestionHelper
      */
     private $questionHelperMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\InstallerFactory
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Setup\Model\InstallerFactory
      */
     private $installerFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|AdminUserCreateCommand
+     * @var \PHPUnit\Framework\MockObject\MockObject|AdminUserCreateCommand
      */
     private $command;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->installerFactoryMock = $this->createMock(\Magento\Setup\Model\InstallerFactory::class);
         $this->command = new AdminUserCreateCommand($this->installerFactoryMock, new UserValidationRules());

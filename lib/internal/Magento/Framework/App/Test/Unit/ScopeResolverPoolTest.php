@@ -13,7 +13,7 @@ class ScopeResolverPoolTest extends \PHPUnit\Framework\TestCase
      */
     protected $_helper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
     }

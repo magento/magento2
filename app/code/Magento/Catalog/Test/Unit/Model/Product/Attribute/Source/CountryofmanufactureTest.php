@@ -33,11 +33,11 @@ class CountryofmanufactureTest extends \PHPUnit\Framework\TestCase
     private $countryOfManufacture;
 
     /**
-     * @var \Magento\Framework\Serialize\SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Serialize\SerializerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $serializerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
         $this->storeMock = $this->createMock(\Magento\Store\Model\Store::class);
@@ -51,7 +51,7 @@ class CountryofmanufactureTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $this->serializerMock = $this->createMock(SerializerInterface::class);
+        $this->serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
         $this->objectManagerHelper->setBackwardCompatibleProperty(
             $this->countryOfManufacture,
             'serializer',

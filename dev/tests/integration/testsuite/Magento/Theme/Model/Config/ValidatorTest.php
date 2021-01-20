@@ -21,7 +21,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $templateFactoryMock;
 
@@ -30,7 +30,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
      */
     private $templateModel;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $objectManager->get(\Magento\Framework\App\AreaList::class)

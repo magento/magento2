@@ -28,7 +28,7 @@ class BehaviorAbstractTest extends \Magento\ImportExport\Test\Unit\Model\Source\
         ['value' => 'key_2', 'label' => 'label_2'],
     ];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

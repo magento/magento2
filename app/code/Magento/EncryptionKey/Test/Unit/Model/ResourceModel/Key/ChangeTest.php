@@ -13,40 +13,40 @@ namespace Magento\EncryptionKey\Test\Unit\Model\ResourceModel\Key;
  */
 class ChangeTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \Magento\Framework\Encryption\EncryptorInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Encryption\EncryptorInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $encryptMock;
 
-    /** @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Filesystem|\PHPUnit\Framework\MockObject\MockObject */
     protected $filesystemMock;
 
-    /** @var \Magento\Config\Model\Config\Structure|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Config\Model\Config\Structure|\PHPUnit\Framework\MockObject\MockObject */
     protected $structureMock;
 
-    /** @var \Magento\Framework\App\DeploymentConfig\Writer|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\DeploymentConfig\Writer|\PHPUnit\Framework\MockObject\MockObject */
     protected $writerMock;
 
-    /** @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $adapterMock;
 
-    /** @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\ResourceConnection|\PHPUnit\Framework\MockObject\MockObject */
     protected $resourceMock;
 
-    /** @var \Magento\Framework\DB\Select|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\DB\Select|\PHPUnit\Framework\MockObject\MockObject */
     protected $selectMock;
 
     /** @var \Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface */
     protected $transactionMock;
 
-    /** @var |\PHPUnit_Framework_MockObject_MockObject */
+    /** @var |\PHPUnit\Framework\MockObject\MockObject */
     protected $objRelationMock;
 
-    /** @var \Magento\Framework\Math\Random|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Math\Random|\PHPUnit\Framework\MockObject\MockObject */
     protected $randomMock;
 
     /** @var \Magento\EncryptionKey\Model\ResourceModel\Key\Change */
     protected $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->encryptMock = $this->getMockBuilder(\Magento\Framework\Encryption\EncryptorInterface::class)
             ->disableOriginalConstructor()

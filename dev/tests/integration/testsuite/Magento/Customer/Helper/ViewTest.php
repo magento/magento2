@@ -13,10 +13,10 @@ class ViewTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Customer\Helper\View */
     protected $_helper;
 
-    /** @var CustomerMetadataInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var CustomerMetadataInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $_customerMetadataService;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_customerMetadataService = $this->createMock(\Magento\Customer\Api\CustomerMetadataInterface::class);
         $this->_helper = Bootstrap::getObjectManager()->create(

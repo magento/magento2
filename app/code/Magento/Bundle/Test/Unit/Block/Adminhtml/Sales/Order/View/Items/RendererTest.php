@@ -7,16 +7,16 @@ namespace Magento\Bundle\Test\Unit\Block\Adminhtml\Sales\Order\View\Items;
 
 class RendererTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \Magento\Sales\Model\Order\Item|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Sales\Model\Order\Item|\PHPUnit\Framework\MockObject\MockObject */
     protected $orderItem;
 
     /** @var \Magento\Bundle\Block\Adminhtml\Sales\Order\View\Items\Renderer $model */
     protected $model;
 
-    /** @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit_Framework_MockObject_MockObject $serializer */
+    /** @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit\Framework\MockObject\MockObject $serializer */
     protected $serializer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->orderItem = $this->createPartialMock(
             \Magento\Sales\Model\Order\Item::class,

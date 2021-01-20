@@ -17,7 +17,7 @@ class ArrayBackendTest extends \PHPUnit\Framework\TestCase
      */
     protected $_attribute;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_attribute = $this->createPartialMock(
             \Magento\Eav\Model\Entity\Attribute::class,
@@ -37,7 +37,7 @@ class ArrayBackendTest extends \PHPUnit\Framework\TestCase
         $product = new \Magento\Framework\DataObject(['code' => $data, 'empty' => '']);
         $this->_model->validate($product);
         $this->assertEquals('1,2,3', $product->getCode());
-        $this->assertEquals(null, $product->getEmpty());
+        $this->assertNull($product->getEmpty());
     }
 
     /**

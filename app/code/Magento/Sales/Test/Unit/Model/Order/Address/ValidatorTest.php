@@ -17,24 +17,24 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     protected $validator;
 
     /**
-     * @var \Magento\Sales\Model\Order\Address|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Address|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $addressMock;
 
     /**
-     * @var \Magento\Directory\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Directory\Helper\Data|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $directoryHelperMock;
 
     /**
-     * @var \Magento\Directory\Model\CountryFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Directory\Model\CountryFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $countryFactoryMock;
 
     /**
      * Mock order address model
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->addressMock = $this->createPartialMock(
             \Magento\Sales\Model\Order\Address::class,

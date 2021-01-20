@@ -37,7 +37,7 @@ class ShipOrderTest extends \Magento\TestFramework\TestCase\WebapiAbstract
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->shipmentRepository = $this->objectManager->get(ShipmentRepositoryInterface::class);

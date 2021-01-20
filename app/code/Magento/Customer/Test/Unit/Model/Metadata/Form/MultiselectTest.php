@@ -42,7 +42,7 @@ class MultiselectTest extends AbstractFormTestCase
      */
     public function testExtractValue($value, $expected)
     {
-        /** @var \PHPUnit_Framework_MockObject_MockObject | Multiselect $multiselect */
+        /** @var \PHPUnit\Framework\MockObject\MockObject | Multiselect $multiselect */
         $multiselect = $this->getMockBuilder(
             \Magento\Customer\Model\Metadata\Form\Multiselect::class
         )->disableOriginalConstructor()->setMethods(

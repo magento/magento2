@@ -14,7 +14,7 @@ use Magento\Framework\Filesystem\DriverPool;
 class CleanupFilesTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $filesystem;
 
@@ -23,7 +23,7 @@ class CleanupFilesTest extends \PHPUnit\Framework\TestCase
      */
     private $object;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->filesystem = $this->createMock(\Magento\Framework\Filesystem::class);
         $this->object = new CleanupFiles($this->filesystem);
@@ -61,7 +61,7 @@ class CleanupFilesTest extends \PHPUnit\Framework\TestCase
      * Gets a mock of directory with expectation to be cleaned
      *
      * @param string|null $subPath
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     private function getDirectoryCleanMock($subPath = null)
     {

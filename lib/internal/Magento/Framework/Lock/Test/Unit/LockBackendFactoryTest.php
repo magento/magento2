@@ -38,7 +38,7 @@ class LockBackendFactoryTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $this->deploymentConfigMock = $this->createMock(DeploymentConfig::class);

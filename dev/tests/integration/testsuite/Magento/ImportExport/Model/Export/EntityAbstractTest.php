@@ -16,7 +16,7 @@ class EntityAbstractTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

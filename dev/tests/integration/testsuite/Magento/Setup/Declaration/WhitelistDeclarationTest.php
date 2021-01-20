@@ -33,7 +33,7 @@ class WhitelistDeclarationTest extends \PHPUnit\Framework\TestCase
      */
     private $schemaConfig;
 
-    public function setUp()
+    public function setUp(): void
     {
         /** @var ObjectManagerInterface|ObjectManager $objectManager */
         $objectManager = Bootstrap::getObjectManager();

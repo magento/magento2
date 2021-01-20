@@ -12,22 +12,22 @@ use Magento\Framework\App\State;
 class FilePermissionsTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Filesystem\Directory\Write
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Filesystem\Directory\Write
      */
     private $directoryWriteMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Filesystem
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Filesystem
      */
     private $filesystemMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Filesystem\DirectoryList
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\Filesystem\DirectoryList
      */
     private $directoryListMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|State
+     * @var \PHPUnit\Framework\MockObject\MockObject|State
      */
     private $stateMock;
 
@@ -36,7 +36,7 @@ class FilePermissionsTest extends \PHPUnit\Framework\TestCase
      */
     private $filePermissions;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->directoryWriteMock = $this->createMock(\Magento\Framework\Filesystem\Directory\Write::class);
         $this->filesystemMock = $this->createMock(\Magento\Framework\Filesystem::class);

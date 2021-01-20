@@ -16,7 +16,7 @@ use Magento\Vault\Model\PaymentTokenRepository;
 use Magento\Vault\Model\ResourceModel\PaymentToken as PaymentTokenResourceModel;
 use Magento\Vault\Model\ResourceModel\PaymentToken\Collection;
 use Magento\Vault\Model\ResourceModel\PaymentToken\CollectionFactory;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * Class PaymentTokenRepositoryTest
@@ -83,14 +83,14 @@ class PaymentTokenRepositoryTest extends \PHPUnit\Framework\TestCase
     protected $collectionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $collectionProcessor;
 
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->resourceModelMock = $this->getMockBuilder(PaymentTokenResourceModel::class)
             ->disableOriginalConstructor()

@@ -28,7 +28,7 @@ class QuoteValidatorTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->quoteValidator = Bootstrap::getObjectManager()->create(QuoteValidator::class);
     }

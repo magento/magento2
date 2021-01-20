@@ -16,10 +16,10 @@ class GeneralTest extends \PHPUnit\Framework\TestCase
     /** @var  General */
     private $general;
 
-    /** @var  Attribute|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  Attribute|\PHPUnit\Framework\MockObject\MockObject */
     private $attribute;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->attribute = $this->getMockBuilder(Attribute::class)
             ->disableOriginalConstructor()

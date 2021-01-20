@@ -13,7 +13,7 @@ class CacheTest extends \PHPUnit\Framework\TestCase
      */
     protected $cache;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->cache = new \Magento\Framework\DataObject\Cache();
     }

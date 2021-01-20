@@ -12,7 +12,7 @@ class RequestDataTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $_FILES = [
             'groups' => [
@@ -38,7 +38,7 @@ class RequestDataTest extends \PHPUnit\Framework\TestCase
         $this->_model = new \Magento\Config\Model\Config\Backend\File\RequestData();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_model);
     }

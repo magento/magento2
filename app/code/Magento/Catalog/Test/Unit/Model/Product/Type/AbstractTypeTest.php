@@ -16,26 +16,26 @@ class AbstractTypeTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var \Magento\Catalog\Model\Product\Type\Simple|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product\Type\Simple|\PHPUnit\Framework\MockObject\MockObject
      */
     private $model;
 
     /**
-     * @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product|\PHPUnit\Framework\MockObject\MockObject
      */
     private $product;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\ResourceModel\Product|\PHPUnit\Framework\MockObject\MockObject
      */
     private $productResource;
 
     /**
-     * @var \Magento\Catalog\Model\Entity\Attribute|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Entity\Attribute|\PHPUnit\Framework\MockObject\MockObject
      */
     private $attribute;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManager($this);
         $this->model = $this->objectManagerHelper->getObject(\Magento\Catalog\Model\Product\Type\Simple::class);
@@ -63,7 +63,7 @@ class AbstractTypeTest extends \PHPUnit\Framework\TestCase
             $this->returnValue(Status::STATUS_ENABLED)
         );
         $this->product->setData('is_salable', 3);
-        $this->assertEquals(true, $this->model->isSalable($this->product));
+        $this->assertTrue($this->model->isSalable($this->product));
     }
 
     public function testGetAttributeById()
@@ -122,6 +122,6 @@ class AbstractTypeTest extends \PHPUnit\Framework\TestCase
     public function testHasOptions()
     {
         $this->product->expects($this->once())->method('getHasOptions')->will($this->returnValue(true));
-        $this->assertEquals(true, $this->model->hasOptions($this->product));
+        $this->assertTrue($this->model->hasOptions($this->product));
     }
 }

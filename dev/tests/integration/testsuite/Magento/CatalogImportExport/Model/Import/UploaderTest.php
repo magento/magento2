@@ -42,7 +42,7 @@ class UploaderTest extends \Magento\TestFramework\Indexer\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->fileReader = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\File\ReadInterface::class);

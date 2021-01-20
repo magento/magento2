@@ -22,69 +22,69 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
     private $controller;
 
     /**
-     * @var \Magento\Framework\App\Action\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Action\Context|\PHPUnit\Framework\MockObject\MockObject
      */
     private $contextMock;
 
     /**
-     * @var \Magento\Authorization\Model\RoleFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Authorization\Model\RoleFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $roleFactoryMock;
 
     /**
-     * @var \Magento\User\Model\UserFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\User\Model\UserFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $userFactoryMock;
 
     /**
-     * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Registry|\PHPUnit\Framework\MockObject\MockObject
      */
     private $coreRegistryMock;
 
     /**
-     * @var \Magento\Authorization\Model\RulesFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Authorization\Model\RulesFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $rulesFactoryMock;
 
     /**
-     * @var \Magento\Backend\Model\Auth\Session|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\Model\Auth\Session|\PHPUnit\Framework\MockObject\MockObject
      */
     private $authSessionMock;
 
     /**
-     * @var \Magento\Framework\Filter\FilterManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filter\FilterManager|\PHPUnit\Framework\MockObject\MockObject
      */
     private $filterManagerMock;
 
     /**
-     * @var \Magento\Backend\Model\View\Result\Redirect|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\Model\View\Result\Redirect|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resultRedirectMock;
 
     /**
-     * @var \Magento\Framework\Controller\ResultFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Controller\ResultFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resultFactoryMock;
 
     /**
-     * @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\RequestInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $requestMock;
 
     /**
-     * @var \Magento\Framework\Message\Manager|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Message\Manager|\PHPUnit\Framework\MockObject\MockObject
      */
     private $messageManagerMock;
 
     /**
-     * @var \Magento\Authorization\Model\Role|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Authorization\Model\Role|\PHPUnit\Framework\MockObject\MockObject
      */
     private $roleModelMock;
 
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
 

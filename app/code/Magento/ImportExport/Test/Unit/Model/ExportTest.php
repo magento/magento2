@@ -19,7 +19,7 @@ class ExportTest extends \PHPUnit\Framework\TestCase
     protected $_exportFileExtension = 'csv';
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_exportConfigMock;
 

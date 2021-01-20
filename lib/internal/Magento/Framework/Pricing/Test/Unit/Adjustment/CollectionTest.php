@@ -19,7 +19,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      */
     protected $adjustmentsData;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $adj1 = $this->createMock(\Magento\Framework\Pricing\Adjustment\AdjustmentInterface::class);
         $adj1->expects($this->any())
@@ -45,7 +45,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             'adj4' => $adj4,
         ];
 
-        /** @var \Magento\Framework\Pricing\Adjustment\Pool|\PHPUnit_Framework_MockObject_MockObject $adjustmentPool */
+        /** @var \Magento\Framework\Pricing\Adjustment\Pool|\PHPUnit\Framework\MockObject\MockObject $adjustmentPool */
         $adjustmentPool = $this->getMockBuilder(\Magento\Framework\Pricing\Adjustment\Pool::class)
             ->disableOriginalConstructor()
             ->setMethods(['getAdjustmentByCode'])

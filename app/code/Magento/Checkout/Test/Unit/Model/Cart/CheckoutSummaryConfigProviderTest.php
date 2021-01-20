@@ -14,12 +14,12 @@ use Magento\Store\Model\ScopeInterface;
 class CheckoutSummaryConfigProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\UrlInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\UrlInterface
      */
     private $urlBuilderMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Config\ScopeConfigInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\Config\ScopeConfigInterface
      */
     private $scopeConfigMock;
 
@@ -28,7 +28,7 @@ class CheckoutSummaryConfigProviderTest extends \PHPUnit\Framework\TestCase
      */
     private $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->urlBuilderMock = $this->getMockBuilder(UrlInterface::class)->getMock();
         $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)->getMock();

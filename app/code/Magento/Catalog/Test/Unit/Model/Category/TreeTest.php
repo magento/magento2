@@ -9,22 +9,22 @@ namespace Magento\Catalog\Test\Unit\Model\Category;
 class TreeTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Catalog\Model\ResourceModel\Category\Tree
+     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Catalog\Model\ResourceModel\Category\Tree
      */
     protected $categoryTreeMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Store\Model\StoreManagerInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Store\Model\StoreManagerInterface
      */
     protected $storeManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Catalog\Model\ResourceModel\Category\Collection
+     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Catalog\Model\ResourceModel\Category\Collection
      */
     protected $categoryCollection;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Catalog\Api\Data\CategoryTreeInterfaceFactory
+     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Catalog\Api\Data\CategoryTreeInterfaceFactory
      */
     protected $treeFactoryMock;
 
@@ -48,7 +48,7 @@ class TreeTest extends \PHPUnit\Framework\TestCase
      */
     private $treeResourceFactoryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 

@@ -16,19 +16,19 @@ class ProductFrontendActionSectionTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Catalog\CustomerData\ProductFrontendActionSection */
     protected $model;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $synchronizerMock;
 
-    /** @var \SafeReflectionClass|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \SafeReflectionClass|\PHPUnit\Framework\MockObject\MockObject */
     protected $safeReflectionClassMock;
 
-    /** @var Config|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Config|\PHPUnit\Framework\MockObject\MockObject */
     private $appConfigMock;
 
-    /** @var  LoggerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  LoggerInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $loggerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->synchronizerMock = $this
             ->getMockBuilder(Synchronizer::class)

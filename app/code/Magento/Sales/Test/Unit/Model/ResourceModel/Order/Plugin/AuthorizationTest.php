@@ -19,17 +19,17 @@ class AuthorizationTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * @var UserContextInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var UserContextInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $userContextMock;
 
     /**
-     * @var ResourceOrder|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResourceOrder|\PHPUnit\Framework\MockObject\MockObject
      */
     private $subjectMock;
 
     /**
-     * @var Order|\PHPUnit_Framework_MockObject_MockObject
+     * @var Order|\PHPUnit\Framework\MockObject\MockObject
      */
     private $orderMock;
 
@@ -38,7 +38,7 @@ class AuthorizationTest extends \PHPUnit\Framework\TestCase
      */
     private $plugin;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $this->userContextMock = $this->getMockBuilder(UserContextInterface::class)
@@ -69,11 +69,12 @@ class AuthorizationTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage No such entity with orderId = 1
      */
     public function testAfterLoadWithException()
     {
+        $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
+        $this->expectExceptionMessage('No such entity with orderId = 1');
+
         $this->userContextMock->expects($this->once())
             ->method('getUserType')
             ->willReturn(UserContextInterface::USER_TYPE_CUSTOMER);

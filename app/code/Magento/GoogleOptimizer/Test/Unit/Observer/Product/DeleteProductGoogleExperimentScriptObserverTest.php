@@ -8,12 +8,12 @@ namespace Magento\GoogleOptimizer\Test\Unit\Observer\Product;
 class DeleteProductGoogleExperimentScriptObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_codeMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_eventObserverMock;
 
@@ -22,7 +22,7 @@ class DeleteProductGoogleExperimentScriptObserverTest extends \PHPUnit\Framework
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $entityId = 3;
         $storeId = 0;

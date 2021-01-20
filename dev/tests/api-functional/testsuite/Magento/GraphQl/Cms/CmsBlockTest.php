@@ -28,7 +28,7 @@ class CmsBlockTest extends GraphQlAbstract
      */
     private $filterEmulate;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->blockRepository = Bootstrap::getObjectManager()->get(BlockRepositoryInterface::class);
         $this->filterEmulate = Bootstrap::getObjectManager()->get(FilterEmulate::class);

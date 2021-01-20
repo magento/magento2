@@ -46,7 +46,7 @@ class InputValidatorTest extends TestCase
     /**
      * @throws \Zend_Validate_Exception
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 

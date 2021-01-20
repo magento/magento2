@@ -34,17 +34,17 @@ class DumpTest extends \PHPUnit\Framework\TestCase
     ];
 
     /**
-     * @var ListInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ListInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $themeList;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->arrayManager = new ArrayManager();
         $this->themeList = $this->getMockBuilder(ListInterface::class)
             ->setMethods(['getItemById', 'getThemeByFullPath'])
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->prepareThemeMock();
 
         $this->dumpPlugin = new Dump($this->themeList, $this->arrayManager);

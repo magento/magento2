@@ -19,22 +19,22 @@ class FrontNameResolverTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Backend\App\Config
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Backend\App\Config
      */
     protected $configMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Config\ScopeConfigInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\Config\ScopeConfigInterface
      */
     protected $scopeConfigMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Zend\Uri\Uri
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Zend\Uri\Uri
      */
     protected $uri;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Request\Http
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\Request\Http
      */
     protected $request;
 
@@ -43,9 +43,9 @@ class FrontNameResolverTest extends \PHPUnit\Framework\TestCase
      */
     protected $_defaultFrontName = 'defaultFrontName';
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        /** @var \PHPUnit_Framework_MockObject_MockObject|DeploymentConfig $deploymentConfigMock */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|DeploymentConfig $deploymentConfigMock */
         $deploymentConfigMock = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
         $deploymentConfigMock->expects($this->once())
             ->method('get')

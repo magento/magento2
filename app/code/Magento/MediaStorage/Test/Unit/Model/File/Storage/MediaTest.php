@@ -35,7 +35,7 @@ class MediaTest extends \PHPUnit\Framework\TestCase
      */
     protected $_fileUtilityMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
         $this->_storageHelperMock = $this->createMock(\Magento\MediaStorage\Helper\File\Storage\Database::class);
@@ -50,7 +50,7 @@ class MediaTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_model);
     }

@@ -15,7 +15,7 @@ class CustomConditionProviderTest extends \PHPUnit\Framework\TestCase
     private $customConditionProcessorBuilder;
     private $customConditionMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 

@@ -24,12 +24,12 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
     private $builder;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|PreprocessorInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|PreprocessorInterface
      */
     private $preprocessor;
 
     /**
-     * @var ConditionManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConditionManager|\PHPUnit\Framework\MockObject\MockObject
      */
     private $conditionManager;
 
@@ -37,7 +37,7 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
 
@@ -158,7 +158,7 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param FilterInterface|\PHPUnit_Framework_MockObject_MockObject $filter
+     * @param FilterInterface|\PHPUnit\Framework\MockObject\MockObject $filter
      * @param string $conditionType
      * @param string $expectedResult
      * @dataProvider buildFilterDataProvider
@@ -203,7 +203,7 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
     /**
      * @param $field
      * @param $value
-     * @return \Magento\Framework\Search\Request\Filter\BoolExpression|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Framework\Search\Request\Filter\BoolExpression|\PHPUnit\Framework\MockObject\MockObject
      */
     private function createTermFilter($field, $value)
     {
@@ -247,7 +247,7 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
      * @param $field
      * @param $from
      * @param $to
-     * @return \Magento\Framework\Search\Request\Filter\BoolExpression|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Framework\Search\Request\Filter\BoolExpression|\PHPUnit\Framework\MockObject\MockObject
      */
     private function createRangeFilter($field, $from, $to)
     {
@@ -381,7 +381,7 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
      * @param array $must
      * @param array $should
      * @param array $mustNot
-     * @return \Magento\Framework\Search\Request\Filter\BoolExpression|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Framework\Search\Request\Filter\BoolExpression|\PHPUnit\Framework\MockObject\MockObject
      */
     private function createBoolFilter(array $must, array $should, array $mustNot)
     {
@@ -407,7 +407,7 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
      */
     public function testUnknownFilterType()
     {
-        /** @var FilterInterface|\PHPUnit_Framework_MockObject_MockObject $filter */
+        /** @var FilterInterface|\PHPUnit\Framework\MockObject\MockObject $filter */
         $filter = $this->getMockBuilder(\Magento\Framework\Search\Request\FilterInterface::class)
             ->setMethods(['getType'])
             ->getMockForAbstractClass();

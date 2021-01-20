@@ -17,7 +17,7 @@ class ExceptionsTest extends \PHPUnit\Framework\TestCase
     /** @var Json */
     private $serializer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->exceptions = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Theme\Model\Design\Backend\Exceptions::class

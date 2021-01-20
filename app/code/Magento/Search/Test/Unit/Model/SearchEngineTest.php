@@ -15,11 +15,11 @@ class SearchEngineTest extends \PHPUnit\Framework\TestCase
     private $searchEngine;
 
     /**
-     * @var \Magento\Framework\Search\AdapterInterface |\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Search\AdapterInterface |\PHPUnit\Framework\MockObject\MockObject
      */
     private $adapter;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $helper = new ObjectManager($this);
 

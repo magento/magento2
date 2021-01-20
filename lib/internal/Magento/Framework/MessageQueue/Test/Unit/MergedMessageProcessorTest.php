@@ -13,7 +13,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 class MergedMessageProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\MessageQueue\MessageStatusProcessor|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\MessageQueue\MessageStatusProcessor|\PHPUnit\Framework\MockObject\MockObject
      */
     private $messageStatusProcessor;
 
@@ -27,7 +27,7 @@ class MergedMessageProcessorTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->messageStatusProcessor = $this
             ->getMockBuilder(\Magento\Framework\MessageQueue\MessageStatusProcessor::class)

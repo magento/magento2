@@ -13,21 +13,21 @@ use Symfony\Component\Console\Tester\CommandTester;
 class ConfigSetCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\ConfigModel
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Setup\Model\ConfigModel
      */
     private $configModel;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\DeploymentConfig
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\DeploymentConfig
      */
     private $deploymentConfig;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Console\Command\ConfigSetCommand
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Setup\Console\Command\ConfigSetCommand
      */
     private $command;
 
-    public function setUp()
+    public function setUp(): void
     {
         $option = $this->createMock(\Magento\Framework\Setup\Option\TextConfigOption::class);
         $option
@@ -102,7 +102,7 @@ class ConfigSetCommandTest extends \PHPUnit\Framework\TestCase
             ->method('ask')
             ->will($this->returnValue($interactionType));
 
-        /** @var \Symfony\Component\Console\Helper\HelperSet|\PHPUnit_Framework_MockObject_MockObject $helperSet */
+        /** @var \Symfony\Component\Console\Helper\HelperSet|\PHPUnit\Framework\MockObject\MockObject $helperSet */
         $helperSet = $this->createMock(\Symfony\Component\Console\Helper\HelperSet::class);
         $helperSet
             ->expects($this->once())

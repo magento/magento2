@@ -43,7 +43,7 @@ class OauthUserContextTest extends \PHPUnit\Framework\TestCase
      */
     protected $oauthService;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -118,7 +118,7 @@ class OauthUserContextTest extends \PHPUnit\Framework\TestCase
 
         $this->setupUserId($integrationId, []);
 
-        $this->assertEquals(null, $this->oauthUserContext->getUserId());
+        $this->assertNull($this->oauthUserContext->getUserId());
     }
 
     /**

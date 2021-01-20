@@ -23,7 +23,7 @@ class OrderInvoiceCreateTest extends \Magento\TestFramework\TestCase\WebapiAbstr
      */
     private $invoiceRepository;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 

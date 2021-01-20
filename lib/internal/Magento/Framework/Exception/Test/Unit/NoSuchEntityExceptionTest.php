@@ -20,14 +20,14 @@ class NoSuchEntityExceptionTest extends \PHPUnit\Framework\TestCase
     private $renderedMessage;
 
     /**
-     * @var \Magento\Framework\Phrase\Renderer\Placeholder|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Phrase\Renderer\Placeholder|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $rendererMock;
 
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->defaultRenderer = \Magento\Framework\Phrase::getRenderer();
         $this->rendererMock = $this->getMockBuilder(\Magento\Framework\Phrase\Renderer\Placeholder::class)
@@ -39,7 +39,7 @@ class NoSuchEntityExceptionTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         \Magento\Framework\Phrase::setRenderer($this->defaultRenderer);
     }

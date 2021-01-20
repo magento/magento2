@@ -16,17 +16,17 @@ use Magento\Framework\Session\SessionManager;
 class FormKeyTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var Random|\PHPUnit_Framework_MockObject_MockObject
+     * @var Random|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $mathRandomMock;
 
     /**
-     * @var SessionManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var SessionManager|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $sessionMock;
 
     /**
-     * @var \Zend\Escaper\Escaper|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Zend\Escaper\Escaper|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $escaperMock;
 
@@ -35,7 +35,7 @@ class FormKeyTest extends \PHPUnit\Framework\TestCase
      */
     protected $formKey;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->mathRandomMock = $this->createMock(\Magento\Framework\Math\Random::class);
         $methods = ['setData', 'getData'];

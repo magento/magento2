@@ -14,21 +14,21 @@ use Magento\Setup\Model\Installer;
 class UninstallCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var InstallerFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var InstallerFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $installerFactory;
 
     /**
-     * @var Installer|\PHPUnit_Framework_MockObject_MockObject
+     * @var Installer|\PHPUnit\Framework\MockObject\MockObject
      */
     private $installer;
 
     /**
-     * @var UninstallCommand|\PHPUnit_Framework_MockObject_MockObject
+     * @var UninstallCommand|\PHPUnit\Framework\MockObject\MockObject
      */
     private $command;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->installerFactory = $this->createMock(\Magento\Setup\Model\InstallerFactory::class);
         $this->installer = $this->createMock(\Magento\Setup\Model\Installer::class);
@@ -62,7 +62,7 @@ class UninstallCommandTest extends \PHPUnit\Framework\TestCase
             ->method('ask')
             ->will($this->returnValue($answer));
 
-        /** @var \Symfony\Component\Console\Helper\HelperSet|\PHPUnit_Framework_MockObject_MockObject $helperSet */
+        /** @var \Symfony\Component\Console\Helper\HelperSet|\PHPUnit\Framework\MockObject\MockObject $helperSet */
         $helperSet = $this->createMock(\Symfony\Component\Console\Helper\HelperSet::class);
         $helperSet
             ->expects($this->once())

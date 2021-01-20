@@ -28,7 +28,7 @@ class PaymentTest extends TestCase
      */
     private $block;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $contextMock = $this->createMock(Context::class);
         $this->configMock = $this->createMock(ConfigProvider::class);

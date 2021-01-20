@@ -12,13 +12,13 @@ class RendererFactoryTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Framework\Webapi\Rest\Response\RendererFactory */
     protected $_factory;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $_requestMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $_objectManagerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->_requestMock = $this->getMockBuilder(

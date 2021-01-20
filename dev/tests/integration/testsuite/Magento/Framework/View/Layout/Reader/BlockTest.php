@@ -30,7 +30,7 @@ class BlockTest extends \PHPUnit\Framework\TestCase
      */
     private $childBlockName = 'test.child.block';
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Framework\View\Layout\Reader\Block::class

@@ -81,20 +81,20 @@ class DynamicFieldTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->groupRepository = $this->getMockBuilder(GroupRepositoryInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->searchCriteriaBuilder = $this->getMockBuilder(SearchCriteriaBuilder::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->fieldTypeConverter = $this->getMockBuilder(FieldTypeConverterInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->indexTypeConverter = $this->getMockBuilder(IndexTypeConverterInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->attributeAdapterProvider = $this->getMockBuilder(AttributeProvider::class)
             ->disableOriginalConstructor()
             ->setMethods(['getByAttributeCode', 'getByAttribute'])
@@ -105,7 +105,7 @@ class DynamicFieldTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->categoryList = $this->getMockBuilder(CategoryListInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->categoryCollection = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->setMethods(['getAllIds'])

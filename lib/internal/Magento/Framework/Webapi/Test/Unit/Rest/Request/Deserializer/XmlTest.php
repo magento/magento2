@@ -7,16 +7,16 @@ namespace Magento\Framework\Webapi\Test\Unit\Rest\Request\Deserializer;
 
 class XmlTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $_xmlParserMock;
 
     /** @var \Magento\Framework\Webapi\Rest\Request\Deserializer\Xml */
     protected $_xmlDeserializer;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $_appStateMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         /** Prepare mocks for SUT constructor. */
         $this->_xmlParserMock = $this->createPartialMock(
@@ -32,7 +32,7 @@ class XmlTest extends \PHPUnit\Framework\TestCase
         parent::setUp();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_xmlDeserializer);
         unset($this->_xmlParserMock);

@@ -13,16 +13,16 @@ class FieldTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_fieldMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_groupMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_fieldMock = $this->createMock(\Magento\Config\Model\Config\Structure\Element\Field::class);
         $this->_groupMock = $this->createMock(\Magento\Config\Model\Config\Structure\Element\Group::class);
@@ -41,7 +41,7 @@ class FieldTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_fieldMock);
         unset($this->_groupMock);

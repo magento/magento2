@@ -13,22 +13,22 @@ class ContentsTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Files */
     protected $controller;
 
-    /** @var \Magento\Framework\App\ViewInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\ViewInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $view;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\PHPUnit_Framework_MockObject_MockObject*/
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\PHPUnit\Framework\MockObject\MockObject*/
     protected $objectManager;
 
-    /** @var \Magento\Backend\Model\Session|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Backend\Model\Session|\PHPUnit\Framework\MockObject\MockObject */
     protected $session;
 
-    /** @var \Magento\Framework\App\Response\Http|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\Response\Http|\PHPUnit\Framework\MockObject\MockObject */
     protected $response;
 
-    /** @var \Magento\Theme\Helper\Storage|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Theme\Helper\Storage|\PHPUnit\Framework\MockObject\MockObject */
     protected $storage;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->view = $this->createMock(\Magento\Framework\App\ViewInterface::class);
         $this->objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);

@@ -13,11 +13,11 @@ class DataTest extends \PHPUnit\Framework\TestCase
     protected $_helper;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_frontResolverMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_frontResolverMock = $this->createMock(\Magento\Backend\App\Area\FrontNameResolver::class);
         $this->_helper = new \Magento\Backend\Helper\Data(

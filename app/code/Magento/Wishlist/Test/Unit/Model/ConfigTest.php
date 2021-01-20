@@ -15,21 +15,21 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_scopeConfig;
 
     /**
-     * @var \Magento\Catalog\Model\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_catalogConfig;
 
     /**
-     * @var \Magento\Catalog\Model\Attribute\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Attribute\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_attributeConfig;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_scopeConfig = $this->getMockBuilder(
             \Magento\Framework\App\Config\ScopeConfigInterface::class

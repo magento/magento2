@@ -20,12 +20,12 @@ class BootstrapTest extends \PHPUnit\Framework\TestCase
     protected $_object;
 
     /**
-     * @var \Magento\TestFramework\Bootstrap|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\TestFramework\Bootstrap|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_bootstrap;
 
     /**
-     * @var \Magento\TestFramework\Application|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\TestFramework\Application|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_application;
 
@@ -41,7 +41,7 @@ class BootstrapTest extends \PHPUnit\Framework\TestCase
         ],
     ];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_application = $this->createPartialMock(
             \Magento\TestFramework\Application::class,
@@ -61,7 +61,7 @@ class BootstrapTest extends \PHPUnit\Framework\TestCase
         $this->_object = new \Magento\TestFramework\Helper\Bootstrap($this->_bootstrap);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->_application = null;
         $this->_bootstrap = null;

@@ -28,7 +28,7 @@ class ProductOutputProcessorTest extends \PHPUnit\Framework\TestCase
      */
     private $productOutputProcessor;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->requestMock = $this->createPartialMock(
             Request::class,

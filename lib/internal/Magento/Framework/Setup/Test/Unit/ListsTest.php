@@ -56,11 +56,11 @@ class ListsTest extends TestCase
         'sr_Latn_RS' => 'Serbian (Latin, Serbia)'
     ];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->mockConfig = $this->getMockBuilder(ConfigInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->mockConfig->method('getAllowedLocales')
             ->willReturn(array_keys($this->expectedLocales));
         $this->mockConfig->method('getAllowedCurrencies')

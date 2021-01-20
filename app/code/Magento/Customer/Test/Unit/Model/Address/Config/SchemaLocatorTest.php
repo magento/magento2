@@ -13,7 +13,7 @@ class SchemaLocatorTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \Magento\Framework\Module\Dir\Reader|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Module\Dir\Reader|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_moduleReader;
 
@@ -27,7 +27,7 @@ class SchemaLocatorTest extends \PHPUnit\Framework\TestCase
      */
     protected $_xsdFile;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_xsdFile = $this->_xsdDir . '/address_formats.xsd';
         $this->_moduleReader = $this->createPartialMock(\Magento\Framework\Module\Dir\Reader::class, ['getModuleDir']);

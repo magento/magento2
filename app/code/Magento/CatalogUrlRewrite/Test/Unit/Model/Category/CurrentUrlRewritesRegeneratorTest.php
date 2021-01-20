@@ -16,25 +16,25 @@ class CurrentUrlRewritesRegeneratorTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\CatalogUrlRewrite\Model\Category\CurrentUrlRewritesRegenerator */
     private $currentUrlRewritesRegenerator;
 
-    /** @var \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator|\PHPUnit\Framework\MockObject\MockObject */
     private $categoryUrlPathGenerator;
 
-    /** @var \Magento\Catalog\Model\Category|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Catalog\Model\Category|\PHPUnit\Framework\MockObject\MockObject */
     private $category;
 
-    /** @var \Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory|\PHPUnit\Framework\MockObject\MockObject */
     private $urlRewriteFactory;
 
-    /** @var \Magento\UrlRewrite\Service\V1\Data\UrlRewrite|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\UrlRewrite\Service\V1\Data\UrlRewrite|\PHPUnit\Framework\MockObject\MockObject */
     private $urlRewrite;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     private $mergeDataProvider;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     private $urlRewriteFinder;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->urlRewriteFactory = $this->getMockBuilder(\Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory::class)
             ->setMethods(['create'])
@@ -247,7 +247,7 @@ class CurrentUrlRewritesRegeneratorTest extends \PHPUnit\Framework\TestCase
     {
         $rewrites = [];
         foreach ($currentRewrites as $urlRewrite) {
-            /** @var \PHPUnit_Framework_MockObject_MockObject */
+            /** @var \PHPUnit\Framework\MockObject\MockObject */
             $url = $this->getMockBuilder(\Magento\UrlRewrite\Service\V1\Data\UrlRewrite::class)
                 ->disableOriginalConstructor()->getMock();
             foreach ($urlRewrite as $key => $value) {

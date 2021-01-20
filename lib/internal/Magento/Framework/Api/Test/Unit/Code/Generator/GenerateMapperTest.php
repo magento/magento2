@@ -11,14 +11,14 @@ namespace Magento\Framework\Api\Test\Unit\Code\Generator;
 class GenerateMapperTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $ioObjectMock;
 
     /**
      * Prepare test env
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->ioObjectMock = $this->createMock(\Magento\Framework\Code\Generator\Io::class);
     }

@@ -31,7 +31,7 @@ use Magento\Framework\View\Layout\ScheduledStructure;
 use Magento\Framework\View\Model\Layout\Merge;
 use Magento\Framework\View\Page\Config\Structure;
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_MockObject_MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -46,97 +46,97 @@ class LayoutTest extends TestCase
     private $model;
 
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject
+     * @var PHPUnit\Framework\MockObject\MockObject
      */
     private $structureMock;
 
     /**
-     * @var ProcessorFactory|PHPUnit_Framework_MockObject_MockObject
+     * @var ProcessorFactory|PHPUnit\Framework\MockObject\MockObject
      */
     private $processorFactoryMock;
 
     /**
-     * @var ResolverInterface|PHPUnit_Framework_MockObject_MockObject
+     * @var ResolverInterface|PHPUnit\Framework\MockObject\MockObject
      */
     private $themeResolverMock;
 
     /**
-     * @var Merge|PHPUnit_Framework_MockObject_MockObject
+     * @var Merge|PHPUnit\Framework\MockObject\MockObject
      */
     private $processorMock;
 
     /**
-     * @var EventManager|PHPUnit_Framework_MockObject_MockObject
+     * @var EventManager|PHPUnit\Framework\MockObject\MockObject
      */
     private $eventManagerMock;
 
     /**
-     * @var Block|PHPUnit_Framework_MockObject_MockObject
+     * @var Block|PHPUnit\Framework\MockObject\MockObject
      */
     private $generatorBlockMock;
 
     /**
-     * @var Container|PHPUnit_Framework_MockObject_MockObject
+     * @var Container|PHPUnit\Framework\MockObject\MockObject
      */
     private $generatorContainerMock;
 
     /**
-     * @var FrontendInterface|PHPUnit_Framework_MockObject_MockObject
+     * @var FrontendInterface|PHPUnit\Framework\MockObject\MockObject
      */
     private $cacheMock;
 
     /**
-     * @var ReaderPool|PHPUnit_Framework_MockObject_MockObject
+     * @var ReaderPool|PHPUnit\Framework\MockObject\MockObject
      */
     private $readerPoolMock;
 
     /**
-     * @var GeneratorPool|PHPUnit_Framework_MockObject_MockObject
+     * @var GeneratorPool|PHPUnit\Framework\MockObject\MockObject
      */
     private $generatorPoolMock;
 
     /**
-     * @var ManagerInterface|PHPUnit_Framework_MockObject_MockObject
+     * @var ManagerInterface|PHPUnit\Framework\MockObject\MockObject
      */
     private $messageManagerMock;
 
     /**
-     * @var LayoutReaderContextFactory|PHPUnit_Framework_MockObject_MockObject
+     * @var LayoutReaderContextFactory|PHPUnit\Framework\MockObject\MockObject
      */
     private $readerContextFactoryMock;
 
     /**
-     * @var \Magento\Framework\View\Layout\Reader\Context|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Layout\Reader\Context|PHPUnit\Framework\MockObject\MockObject
      */
     private $readerContextMock;
 
     /**
-     * @var Structure|PHPUnit_Framework_MockObject_MockObject
+     * @var Structure|PHPUnit\Framework\MockObject\MockObject
      */
     private $pageConfigStructure;
 
     /**
-     * @var ScheduledStructure|PHPUnit_Framework_MockObject_MockObject
+     * @var ScheduledStructure|PHPUnit\Framework\MockObject\MockObject
      */
     private $layoutScheduledSructure;
 
     /**
-     * @var ContextFactory|PHPUnit_Framework_MockObject_MockObject
+     * @var ContextFactory|PHPUnit\Framework\MockObject\MockObject
      */
     private $generatorContextFactoryMock;
 
     /**
-     * @var State|PHPUnit_Framework_MockObject_MockObject
+     * @var State|PHPUnit\Framework\MockObject\MockObject
      */
     private $appStateMock;
 
     /**
-     * @var LoggerInterface|PHPUnit_Framework_MockObject_MockObject
+     * @var LoggerInterface|PHPUnit\Framework\MockObject\MockObject
      */
     private $loggerMock;
 
     /**
-     * @var SerializerInterface|PHPUnit_Framework_MockObject_MockObject
+     * @var SerializerInterface|PHPUnit\Framework\MockObject\MockObject
      */
     private $serializer;
 
@@ -144,7 +144,7 @@ class LayoutTest extends TestCase
      * @inheritdoc
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->structureMock = $this->getMockBuilder(LayoutStructure::class)
             ->disableOriginalConstructor()

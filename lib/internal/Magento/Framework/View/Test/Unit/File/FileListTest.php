@@ -24,11 +24,11 @@ class FileListTest extends \PHPUnit\Framework\TestCase
     private $_themeFile;
 
     /**
-     * @var \Magento\Framework\View\File\FileList\Collator|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\File\FileList\Collator|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $collator;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_baseFile = $this->_createViewFile('fixture.xml', 'Fixture_TestModule');
         $this->_themeFile = $this->_createViewFile('fixture.xml', 'Fixture_TestModule', 'area/theme/path');
@@ -43,7 +43,7 @@ class FileListTest extends \PHPUnit\Framework\TestCase
      * @param string $filename
      * @param string $module
      * @param string|null $themeFullPath
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Design\ThemeInterface
+     * @return \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\View\Design\ThemeInterface
      */
     protected function _createViewFile($filename, $module, $themeFullPath = null)
     {

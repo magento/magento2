@@ -23,7 +23,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->collection = Bootstrap::getObjectManager()
             ->create(Collection::class);

@@ -34,7 +34,7 @@ class SecurityManagerTest extends \PHPUnit\Framework\TestCase
     /**
      * Set up
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->accountManagement = $this->objectManager->create(
@@ -48,7 +48,7 @@ class SecurityManagerTest extends \PHPUnit\Framework\TestCase
     /**
      * Tear down
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->objectManager = null;
         $this->accountManagement  = null;

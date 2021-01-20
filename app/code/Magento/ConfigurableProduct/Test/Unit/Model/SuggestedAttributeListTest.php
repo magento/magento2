@@ -14,22 +14,22 @@ class SuggestedAttributeListTest extends \PHPUnit\Framework\TestCase
     protected $suggestedListModel;
 
     /**
-     * @var \Magento\ConfigurableProduct\Model\ConfigurableAttributeHandler|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\ConfigurableProduct\Model\ConfigurableAttributeHandler|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $configurableAttributeHandler;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $resourceHelperMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $collectionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $attributeMock;
 
@@ -38,7 +38,7 @@ class SuggestedAttributeListTest extends \PHPUnit\Framework\TestCase
      */
     protected $labelPart = 'labelPart';
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->configurableAttributeHandler = $this->createMock(
             \Magento\ConfigurableProduct\Model\ConfigurableAttributeHandler::class

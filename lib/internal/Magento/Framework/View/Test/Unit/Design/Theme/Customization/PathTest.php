@@ -19,24 +19,24 @@ class PathTest extends \PHPUnit\Framework\TestCase
     private $_model;
 
     /**
-     * @var \Magento\Theme\Model\Theme|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Theme\Model\Theme|\PHPUnit\Framework\MockObject\MockObject
      */
     private $_theme;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $_directory;
 
     /**
-     * @var \Magento\Framework\Component\ComponentRegistrarInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Component\ComponentRegistrarInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $componentRegistrar;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_theme = $this->getMockForAbstractClass(\Magento\Framework\View\Design\ThemeInterface::class);
-        /** @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject $filesystem */
+        /** @var \Magento\Framework\Filesystem|\PHPUnit\Framework\MockObject\MockObject $filesystem */
         $filesystem = $this->createMock(\Magento\Framework\Filesystem::class);
         $this->_directory = $this->createMock(\Magento\Framework\Filesystem\Directory\Read::class);
         $filesystem->expects($this->any())->method('getDirectoryRead')->will($this->returnValue($this->_directory));
@@ -50,7 +50,7 @@ class PathTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->_theme = null;
         $this->_directory = null;

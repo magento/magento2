@@ -21,12 +21,12 @@ class GetPriceConfigurationObserverTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Registry|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $registry;
 
     /**
-     * @var \Magento\Tax\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Tax\Helper\Data|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $taxData;
 

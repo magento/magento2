@@ -15,7 +15,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      */
     private $collection;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         /**
          * @var \Magento\Reports\Model\ResourceModel\Product\Sold\Collection

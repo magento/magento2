@@ -15,26 +15,26 @@ class JobDbRollbackTest extends \PHPUnit\Framework\TestCase
     private $jobDbRollback;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Setup\BackupRollbackFactory
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Setup\BackupRollbackFactory
      */
     private $backupRollbackFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Setup\BackupRollback
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Setup\BackupRollback
      */
     private $backupRollback;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\Cron\Status
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Setup\Model\Cron\Status
      */
     private $status;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\ObjectManagerProvider
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Setup\Model\ObjectManagerProvider
      */
     private $objectManagerProvider;
 
-    public function setup()
+    public function setup(): void
     {
         $this->backupRollbackFactory = $this->createMock(\Magento\Framework\Setup\BackupRollbackFactory::class);
         $this->backupRollback = $this->createMock(\Magento\Framework\Setup\BackupRollback::class);

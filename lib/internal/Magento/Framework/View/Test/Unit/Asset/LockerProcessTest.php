@@ -32,19 +32,19 @@ class LockerProcessTest extends \PHPUnit\Framework\TestCase
     private $lockerProcess;
 
     /**
-     * @var Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var Filesystem|\PHPUnit\Framework\MockObject\MockObject
      */
     private $filesystemMock;
 
     /**
-     * @var State|\PHPUnit_Framework_MockObject_MockObject
+     * @var State|\PHPUnit\Framework\MockObject\MockObject
      */
     private $stateMock;
 
     /**
      * Set up
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->fileName = DirectoryList::TMP . DIRECTORY_SEPARATOR . self::LOCK_NAME . LockerProcess::LOCK_EXTENSION;
 
@@ -82,7 +82,7 @@ class LockerProcessTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return WriteInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return WriteInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getTmpDirectoryMockTrue()
     {
@@ -107,7 +107,7 @@ class LockerProcessTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param int $exactly
-     * @return WriteInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return WriteInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getTmpDirectoryMockFalse($exactly = 0)
     {
@@ -133,7 +133,7 @@ class LockerProcessTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return WriteInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return WriteInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private function getTmpDirectoryMock()
     {

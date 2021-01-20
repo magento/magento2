@@ -17,14 +17,14 @@ class StaticCallsTest extends \PHPUnit\Framework\TestCase
     protected $staticCalls;
 
     /**
-     * @var \Magento\TestFramework\Integrity\Library\PhpParser\Tokens|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\TestFramework\Integrity\Library\PhpParser\Tokens|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $tokens;
 
     /**
      * @inheritdoc
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->tokens = $this->getMockBuilder(
             \Magento\TestFramework\Integrity\Library\PhpParser\Tokens::class

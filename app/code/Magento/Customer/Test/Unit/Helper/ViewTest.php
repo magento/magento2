@@ -9,16 +9,16 @@ use Magento\Customer\Api\CustomerMetadataInterface;
 
 class ViewTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \Magento\Framework\App\Helper\Context|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\Helper\Context|\PHPUnit\Framework\MockObject\MockObject */
     protected $context;
 
-    /** @var \Magento\Customer\Helper\View|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Customer\Helper\View|\PHPUnit\Framework\MockObject\MockObject */
     protected $object;
 
-    /** @var CustomerMetadataInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var CustomerMetadataInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $customerMetadataService;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->context = $this->getMockBuilder(\Magento\Framework\App\Helper\Context::class)
             ->disableOriginalConstructor()

@@ -72,7 +72,7 @@ class AsyncScheduleTest extends WebapiAbstract
      */
     private $registry;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->logFilePath = TESTS_TEMP_DIR . "/MessageQueueTestLog.txt";
@@ -132,7 +132,7 @@ class AsyncScheduleTest extends WebapiAbstract
         }
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->clearProducts();
         $this->publisherConsumerController->stopConsumers();

@@ -36,17 +36,17 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
         array $suggestionsFromLockFile,
         array $expectedPackages
     ) {
-        /** @var ComposerInformation|\PHPUnit_Framework_MockObject_MockObject $composerInformation */
+        /** @var ComposerInformation|\PHPUnit\Framework\MockObject\MockObject $composerInformation */
         $composerInformation = $this->getMockBuilder(ComposerInformation::class)
             ->disableOriginalConstructor()
             ->getMock();
         $composerInformation->method('getSuggestedPackages')
             ->willReturn($suggestionsFromLockFile);
 
-        /** @var Filesystem|\PHPUnit_Framework_MockObject_MockObject $filesystem */
+        /** @var Filesystem|\PHPUnit\Framework\MockObject\MockObject $filesystem */
         $filesystem = $this->getMockBuilder(Filesystem::class)->disableOriginalConstructor()->getMock();
 
-        /** @var PackageFactory|\PHPUnit_Framework_MockObject_MockObject $packageFactory */
+        /** @var PackageFactory|\PHPUnit\Framework\MockObject\MockObject $packageFactory */
         $packageFactory = $this->getMockBuilder(PackageFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
@@ -56,7 +56,7 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
                 return new Package($args['json']);
             });
 
-        /** @var ComponentRegistrarInterface|\PHPUnit_Framework_MockObject_MockObject $componentRegistrar */
+        /** @var ComponentRegistrarInterface|\PHPUnit\Framework\MockObject\MockObject $componentRegistrar */
         $componentRegistrar = $this->getMockBuilder(ComponentRegistrarInterface::class)
             ->getMockForAbstractClass();
         $componentRegistrar->method('getPaths')
@@ -178,7 +178,7 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param array $composerJsonContent
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     public function stubComposerJsonReader(array $composerJsonContent)
     {
@@ -197,7 +197,7 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     public function stubFileNotFoundReader()
     {

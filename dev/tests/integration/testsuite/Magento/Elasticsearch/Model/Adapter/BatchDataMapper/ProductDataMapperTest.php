@@ -43,10 +43,10 @@ class ProductDataMapperTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
-        $additionalFieldsProvider = $this->createMock(AdditionalFieldsProviderInterface::class);
+        $additionalFieldsProvider = $this->getMockForAbstractClass(AdditionalFieldsProviderInterface::class);
         $additionalFieldsProvider->method('getFields')->willReturn([]);
         $this->model = $this->objectManager->create(
             ProductDataMapper::class,

@@ -13,42 +13,42 @@ class OptionTest extends \PHPUnit\Framework\TestCase
     protected $validator;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $qtyItemListMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $optionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $quoteItemMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $stockItemMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $productMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $resultMock;
 
     /**
-     * @var \Magento\CatalogInventory\Api\StockRegistryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogInventory\Api\StockRegistryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $stockRegistry;
 
     /**
-     * @var \Magento\CatalogInventory\Api\StockStateInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogInventory\Api\StockStateInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $stockState;
 
@@ -67,7 +67,7 @@ class OptionTest extends \PHPUnit\Framework\TestCase
      */
     protected $websiteId = 111;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $optionMethods = [
             'getValue',
@@ -119,12 +119,12 @@ class OptionTest extends \PHPUnit\Framework\TestCase
         ];
         $this->resultMock = $this->createPartialMock(\Magento\Framework\DataObject::class, $resultMethods);
 
-        $this->stockRegistry = $this->getMockForAbstractClass(
+        $this->stockRegistry = $this->createPartialMock(
             \Magento\CatalogInventory\Api\StockRegistryInterface::class,
             ['getStockItem']
         );
 
-        $this->stockState = $this->getMockForAbstractClass(
+        $this->stockState = $this->createPartialMock(
             \Magento\CatalogInventory\Api\StockStateInterface::class,
             ['checkQuoteItemQty']
         );
@@ -265,11 +265,12 @@ class OptionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The stock item for Product in option is not valid.
      */
     public function testInitializeWithInvalidOptionQty()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('The stock item for Product in option is not valid.');
+
         $optionValue = 5;
         $qty = 10;
         $this->optionMock->expects($this->once())->method('getValue')->will($this->returnValue($optionValue));

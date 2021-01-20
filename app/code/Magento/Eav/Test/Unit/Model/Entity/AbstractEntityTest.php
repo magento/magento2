@@ -19,14 +19,14 @@ class AbstractEntityTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Entity model to be tested
-     * @var AbstractEntity|\PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractEntity|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_model;
 
     /** @var  \Magento\Eav\Model\Config */
     protected $eavConfig;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $this->eavConfig = $this->createMock(\Magento\Eav\Model\Config::class);
@@ -40,7 +40,7 @@ class AbstractEntityTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->_model = null;
     }
@@ -121,7 +121,7 @@ class AbstractEntityTest extends \PHPUnit\Framework\TestCase
     /**
      * Get adapter mock
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\DB\Adapter\Pdo\Mysql
+     * @return \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\DB\Adapter\Pdo\Mysql
      */
     protected function _getConnectionMock()
     {
@@ -191,7 +191,7 @@ class AbstractEntityTest extends \PHPUnit\Framework\TestCase
      *
      * @param string $attributeCode
      * @param int $attributeSetId
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Eav\Model\Entity\Attribute\AbstractAttribute
+     * @return \PHPUnit\Framework\MockObject\MockObject|\Magento\Eav\Model\Entity\Attribute\AbstractAttribute
      */
     protected function _getAttributeMock($attributeCode, $attributeSetId)
     {
@@ -297,7 +297,7 @@ class AbstractEntityTest extends \PHPUnit\Framework\TestCase
                 ]
             ]
         );
-        /** @var $model AbstractEntity|\PHPUnit_Framework_MockObject_MockObject */
+        /** @var $model AbstractEntity|\PHPUnit\Framework\MockObject\MockObject */
         $model = $this->getMockBuilder(AbstractEntity::class)
             ->setConstructorArgs($arguments)
             ->setMethods(['_getValue', 'beginTransaction', 'commit', 'rollback', 'getConnection'])
@@ -355,21 +355,22 @@ class AbstractEntityTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\AlreadyExistsException
      */
     public function testDuplicateExceptionProcessingOnSave()
     {
-        $connection = $this->createMock(AdapterInterface::class);
+        $this->expectException(\Magento\Framework\Exception\AlreadyExistsException::class);
+
+        $connection = $this->getMockForAbstractClass(AdapterInterface::class);
         $connection->expects($this->once())->method('rollback');
 
-        /** @var AbstractEntity|\PHPUnit_Framework_MockObject_MockObject $model */
+        /** @var AbstractEntity|\PHPUnit\Framework\MockObject\MockObject $model */
         $model = $this->getMockBuilder(AbstractEntity::class)
             ->disableOriginalConstructor()
             ->setMethods(['getConnection'])
             ->getMockForAbstractClass();
         $model->expects($this->any())->method('getConnection')->willReturn($connection);
 
-        /** @var AbstractModel|\PHPUnit_Framework_MockObject_MockObject $object */
+        /** @var AbstractModel|\PHPUnit\Framework\MockObject\MockObject $object */
         $object = $this->getMockBuilder(AbstractModel::class)
             ->disableOriginalConstructor()
             ->getMock();

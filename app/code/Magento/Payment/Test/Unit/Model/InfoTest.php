@@ -17,22 +17,22 @@ class InfoTest extends \PHPUnit\Framework\TestCase
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    /** @var \Magento\Framework\Model\Context|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Model\Context|\PHPUnit\Framework\MockObject\MockObject */
     protected $contextMock;
 
-    /** @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Registry|\PHPUnit\Framework\MockObject\MockObject */
     protected $registryMock;
 
-    /** @var \Magento\Payment\Helper\Data|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Payment\Helper\Data|\PHPUnit\Framework\MockObject\MockObject */
     protected $paymentHelperMock;
 
-    /** @var \Magento\Framework\Encryption\EncryptorInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Encryption\EncryptorInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $encryptorInterfaceMock;
 
-    /** @var \Magento\Payment\Helper\Data|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Payment\Helper\Data|\PHPUnit\Framework\MockObject\MockObject */
     protected $methodInstanceMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->contextMock = $this->createMock(\Magento\Framework\Model\Context::class);
         $this->registryMock = $this->createMock(\Magento\Framework\Registry::class);
@@ -124,11 +124,12 @@ class InfoTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The payment method you requested is not available.
      */
     public function testGetMethodInstanceWithNoMethod()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('The payment method you requested is not available.');
+
         $this->info->setData('method', false);
         $this->info->getMethodInstance();
     }
@@ -172,10 +173,11 @@ class InfoTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testSetAdditionalInformationException()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+
         $this->info->setAdditionalInformation('object', new \StdClass());
     }
 

@@ -12,26 +12,26 @@ namespace Magento\User\Test\Unit\Block\Role;
  */
 class EditTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \Magento\User\Block\Role\Edit|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\User\Block\Role\Edit|\PHPUnit\Framework\MockObject\MockObject */
     protected $model;
 
-    /** @var \Magento\Framework\Json\EncoderInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Json\EncoderInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $jsonEncoderMock;
 
-    /** @var \Magento\Backend\Model\Auth\Session|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Backend\Model\Auth\Session|\PHPUnit\Framework\MockObject\MockObject */
     protected $authSessionsMock;
 
-    /** @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Registry|\PHPUnit\Framework\MockObject\MockObject */
     protected $registryMock;
 
-    /** @var \Magento\Framework\View\LayoutInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\View\LayoutInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $layoutInterfaceMock;
 
     /**
      * Set required values
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->jsonEncoderMock = $this->getMockBuilder(\Magento\Framework\Json\EncoderInterface::class)
             ->disableOriginalConstructor()

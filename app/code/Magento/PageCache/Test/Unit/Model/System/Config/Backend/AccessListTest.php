@@ -23,7 +23,7 @@ class AccessListTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $configMock = $this->getMockForAbstractClass(
@@ -81,11 +81,12 @@ class AccessListTest extends TestCase
 
     /**
      * @param mixed $value
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      * @dataProvider getInvalidValues
      */
     public function testBeforeSaveInvalid($value)
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+
         $this->accessList->setValue($value);
         $this->accessList->beforeSave();
     }

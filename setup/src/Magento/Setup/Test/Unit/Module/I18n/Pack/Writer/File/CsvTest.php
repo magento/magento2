@@ -22,39 +22,39 @@ require_once __DIR__ . '/_files/ioMock.php';
 class CsvTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|\PHPUnit\Framework\MockObject\MockObject
      */
     private $contextMock;
 
     /**
-     * @var Locale|\PHPUnit_Framework_MockObject_MockObject
+     * @var Locale|\PHPUnit\Framework\MockObject\MockObject
      */
     private $localeMock;
 
     /**
-     * @var Dictionary|\PHPUnit_Framework_MockObject_MockObject
+     * @var Dictionary|\PHPUnit\Framework\MockObject\MockObject
      */
     private $dictionaryMock;
 
     /**
-     * @var Phrase|\PHPUnit_Framework_MockObject_MockObject
+     * @var Phrase|\PHPUnit\Framework\MockObject\MockObject
      */
     private $phraseMock;
 
     /**
-     * @var Factory|\PHPUnit_Framework_MockObject_MockObject
+     * @var Factory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $factoryMock;
 
     /**
-     * @var Csv|\PHPUnit_Framework_MockObject_MockObject
+     * @var Csv|\PHPUnit\Framework\MockObject\MockObject
      */
     private $object;
 
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         /** @var ObjectManagerHelper $objectManagerHelper */
         $objectManagerHelper = new ObjectManagerHelper($this);

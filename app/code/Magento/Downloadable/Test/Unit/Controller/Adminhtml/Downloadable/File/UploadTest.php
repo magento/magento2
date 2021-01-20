@@ -20,51 +20,51 @@ class UploadTest extends \PHPUnit\Framework\TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\RequestInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\RequestInterface
      */
     protected $request;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\ResponseInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\ResponseInterface
      */
     protected $response;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Downloadable\Model\Link
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Downloadable\Model\Link
      */
     protected $link;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Downloadable\Model\Sample
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Downloadable\Model\Sample
      */
     protected $sample;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Backend\App\Action\Context
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Backend\App\Action\Context
      */
     protected $context;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\MediaStorage\Model\File\UploaderFactory
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\MediaStorage\Model\File\UploaderFactory
      */
     private $uploaderFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\MediaStorage\Helper\File\Storage\Database
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\MediaStorage\Helper\File\Storage\Database
      */
     private $storageDatabase;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Downloadable\Helper\File
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Downloadable\Helper\File
      */
     protected $fileHelper;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Controller\ResultFactory
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Controller\ResultFactory
      */
     protected $resultFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 

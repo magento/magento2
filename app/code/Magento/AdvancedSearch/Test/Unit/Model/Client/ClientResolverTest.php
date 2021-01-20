@@ -16,26 +16,26 @@ use Magento\Framework\Search\EngineResolverInterface;
 class ClientResolverTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var ClientResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var ClientResolver|\PHPUnit\Framework\MockObject\MockObject
      */
     private $model;
 
     /**
-     * @var ObjectManagerInterface |\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface |\PHPUnit\Framework\MockObject\MockObject
      */
     private $objectManager;
 
     /**
-     * @var EngineResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var EngineResolverInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $engineResolverMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->engineResolverMock = $this->getMockBuilder(EngineResolverInterface::class)
             ->getMockForAbstractClass();
 
-        $this->objectManager = $this->createMock(ObjectManagerInterface::class);
+        $this->objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
 
         $this->model = new ClientResolver(
             $this->objectManager,
@@ -50,11 +50,11 @@ class ClientResolverTest extends \PHPUnit\Framework\TestCase
         $this->engineResolverMock->expects($this->once())->method('getCurrentSearchEngine')
             ->will($this->returnValue('engineName'));
 
-        $factoryMock = $this->createMock(ClientFactoryInterface::class);
+        $factoryMock = $this->getMockForAbstractClass(ClientFactoryInterface::class);
 
-        $clientMock = $this->createMock(ClientInterface::class);
+        $clientMock = $this->getMockForAbstractClass(ClientInterface::class);
 
-        $clientOptionsMock = $this->createMock(ClientOptionsInterface::class);
+        $clientOptionsMock = $this->getMockForAbstractClass(ClientOptionsInterface::class);
 
         $this->objectManager->expects($this->exactly(2))->method('create')
             ->withConsecutive(
@@ -79,10 +79,11 @@ class ClientResolverTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
      */
     public function testCreateExceptionThrown()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $this->objectManager->expects($this->once())->method('create')
             ->with($this->equalTo('engineFactoryClass'))
             ->will($this->returnValue('t'));
@@ -91,10 +92,11 @@ class ClientResolverTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException LogicException
      */
     public function testCreateLogicException()
     {
+        $this->expectException(\LogicException::class);
+
         $this->model->create('input');
     }
 

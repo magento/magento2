@@ -15,35 +15,35 @@ class InvoiceServiceTest extends \PHPUnit\Framework\TestCase
     /**
      * Repository
      *
-     * @var \Magento\Sales\Api\InvoiceRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Api\InvoiceRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $repositoryMock;
 
     /**
      * Repository
      *
-     * @var \Magento\Sales\Api\InvoiceCommentRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Api\InvoiceCommentRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $commentRepositoryMock;
 
     /**
      * Search Criteria Builder
      *
-     * @var \Magento\Framework\Api\SearchCriteriaBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Api\SearchCriteriaBuilder|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $searchCriteriaBuilderMock;
 
     /**
      * Filter Builder
      *
-     * @var \Magento\Framework\Api\FilterBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Api\FilterBuilder|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $filterBuilderMock;
 
     /**
      * Invoice Notifier
      *
-     * @var \Magento\Sales\Model\Order\InvoiceNotifier|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\InvoiceNotifier|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $invoiceNotifierMock;
 
@@ -55,7 +55,7 @@ class InvoiceServiceTest extends \PHPUnit\Framework\TestCase
     /**
      * SetUp
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManagerHelper($this);
 

@@ -74,7 +74,7 @@ class ObjectManagerTest extends \PHPUnit\Framework\TestCase
         10 => '_ten',
     ];
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         $config = new \Magento\Framework\ObjectManager\Config\Config();
         $factory = new Factory\Dynamic\Developer($config);
@@ -86,7 +86,7 @@ class ObjectManagerTest extends \PHPUnit\Framework\TestCase
         $factory->setObjectManager(self::$_objectManager);
     }
 
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         self::$_objectManager = null;
     }

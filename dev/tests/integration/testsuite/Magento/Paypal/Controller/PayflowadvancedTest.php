@@ -37,7 +37,7 @@ class PayflowadvancedTest extends \Magento\TestFramework\TestCase\AbstractContro
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

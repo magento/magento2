@@ -17,7 +17,7 @@ use Magento\PageCache\Model\Layout\LayoutPlugin;
 use Magento\PageCache\Model\Spi\PageCacheTagsPreprocessorInterface;
 use Magento\PageCache\Test\Unit\Block\Controller\StubBlock;
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_MockObject_MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Tests \Magento\PageCache\Model\Layout\LayoutPlugin.
@@ -30,12 +30,12 @@ class LayoutPluginTest extends TestCase
     private $model;
 
     /**
-     * @var ResponseInterface|PHPUnit_Framework_MockObject_MockObject
+     * @var ResponseInterface|PHPUnit\Framework\MockObject\MockObject
      */
     private $responseMock;
 
     /**
-     * @var Layout|PHPUnit_Framework_MockObject_MockObject
+     * @var Layout|PHPUnit\Framework\MockObject\MockObject
      */
     private $layoutMock;
 
@@ -47,12 +47,12 @@ class LayoutPluginTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->layoutMock = $this->createPartialMock(Layout::class, ['isCacheable', 'getAllBlocks']);
         $this->responseMock = $this->createMock(Http::class);
         $this->configMock = $this->createMock(Config::class);
-        $preprocessor = $this->createMock(PageCacheTagsPreprocessorInterface::class);
+        $preprocessor = $this->getMockForAbstractClass(PageCacheTagsPreprocessorInterface::class);
         $preprocessor->method('process')->willReturnArgument(0);
 
         $this->model = (new ObjectManagerHelper($this))->getObject(

@@ -15,12 +15,12 @@ use Magento\Framework\Css\PreProcessor\Instruction\Import;
 class ImportTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\View\Asset\NotationResolver\Module|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Asset\NotationResolver\Module|\PHPUnit\Framework\MockObject\MockObject
      */
     private $notationResolver;
 
     /**
-     * @var \Magento\Framework\View\Asset\File|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Asset\File|\PHPUnit\Framework\MockObject\MockObject
      */
     private $asset;
 
@@ -34,7 +34,7 @@ class ImportTest extends \PHPUnit\Framework\TestCase
      */
     private $relatedFileGeneratorMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
 
         $this->notationResolver = $this->createMock(\Magento\Framework\View\Asset\NotationResolver\Module::class);

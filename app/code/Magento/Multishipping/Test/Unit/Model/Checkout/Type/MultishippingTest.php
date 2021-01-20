@@ -47,7 +47,7 @@ use Magento\Sales\Model\Order\Email\Sender\OrderSender;
 use Magento\Sales\Model\OrderFactory;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
-use PHPUnit_Framework_MockObject_MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 use \PHPUnit\Framework\TestCase;
 use Magento\Quote\Model\Quote\Payment;
 use Magento\Payment\Model\Method\AbstractMethod;
@@ -65,116 +65,116 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject
+     * @var PHPUnit\Framework\MockObject\MockObject
      */
     protected $checkoutSessionMock;
 
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject
+     * @var PHPUnit\Framework\MockObject\MockObject
      */
     protected $customerSessionMock;
 
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject
+     * @var PHPUnit\Framework\MockObject\MockObject
      */
     protected $customerMock;
 
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject
+     * @var PHPUnit\Framework\MockObject\MockObject
      */
     protected $quoteMock;
 
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject
+     * @var PHPUnit\Framework\MockObject\MockObject
      */
     protected $helperMock;
 
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject
+     * @var PHPUnit\Framework\MockObject\MockObject
      */
     protected $filterBuilderMock;
 
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject
+     * @var PHPUnit\Framework\MockObject\MockObject
      */
     protected $addressRepositoryMock;
 
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject
+     * @var PHPUnit\Framework\MockObject\MockObject
      */
     protected $searchCriteriaBuilderMock;
 
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject
+     * @var PHPUnit\Framework\MockObject\MockObject
      */
     protected $totalsCollectorMock;
 
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject
+     * @var PHPUnit\Framework\MockObject\MockObject
      */
     private $cartExtensionFactoryMock;
 
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject
+     * @var PHPUnit\Framework\MockObject\MockObject
      */
     private $shippingAssignmentProcessorMock;
 
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject
+     * @var PHPUnit\Framework\MockObject\MockObject
      */
     private $quoteRepositoryMock;
 
     /**
-     * @var OrderFactory|PHPUnit_Framework_MockObject_MockObject
+     * @var OrderFactory|PHPUnit\Framework\MockObject\MockObject
      */
     private $orderFactoryMock;
 
     /**
-     * @var \Magento\Framework\Api\DataObjectHelper|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Api\DataObjectHelper|PHPUnit\Framework\MockObject\MockObject
      */
     private $dataObjectHelperMock;
 
     /**
-     * @var ToOrder|PHPUnit_Framework_MockObject_MockObject
+     * @var ToOrder|PHPUnit\Framework\MockObject\MockObject
      */
     private $toOrderMock;
 
     /**
-     * @var ToOrderAddress|PHPUnit_Framework_MockObject_MockObject
+     * @var ToOrderAddress|PHPUnit\Framework\MockObject\MockObject
      */
     private $toOrderAddressMock;
 
     /**
-     * @var ToOrderPayment|PHPUnit_Framework_MockObject_MockObject
+     * @var ToOrderPayment|PHPUnit\Framework\MockObject\MockObject
      */
     private $toOrderPaymentMock;
 
     /**
-     * @var PriceCurrencyInterface|PHPUnit_Framework_MockObject_MockObject
+     * @var PriceCurrencyInterface|PHPUnit\Framework\MockObject\MockObject
      */
     private $priceMock;
 
     /**
-     * @var ToOrderItem|PHPUnit_Framework_MockObject_MockObject
+     * @var ToOrderItem|PHPUnit\Framework\MockObject\MockObject
      */
     private $toOrderItemMock;
 
     /**
-     * @var PlaceOrderFactory|PHPUnit_Framework_MockObject_MockObject
+     * @var PlaceOrderFactory|PHPUnit\Framework\MockObject\MockObject
      */
     private $placeOrderFactoryMock;
 
     /**
-     * @var Generic|PHPUnit_Framework_MockObject_MockObject
+     * @var Generic|PHPUnit\Framework\MockObject\MockObject
      */
     private $sessionMock;
 
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject
+     * @var PHPUnit\Framework\MockObject\MockObject
      */
     private $scopeConfigMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->checkoutSessionMock = $this->createSimpleMock(Session::class);
         $this->customerSessionMock = $this->createSimpleMock(CustomerSession::class);
@@ -313,11 +313,12 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Verify the shipping address information and continue.
      */
     public function testSetShippingItemsInformationForAddressLeak()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('Verify the shipping address information and continue.');
+
         $info = [
             [
                 1 => [
@@ -359,11 +360,12 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Verify the shipping address information and continue.
      */
     public function testUpdateQuoteCustomerShippingAddressForAddressLeak()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('Verify the shipping address information and continue.');
+
         $addressId = 43;
         $customerAddressId = 42;
 
@@ -389,11 +391,12 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Verify the billing address information and continue.
      */
     public function testSetQuoteCustomerBillingAddressForAddressLeak()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('Verify the billing address information and continue.');
+
         $addressId = 43;
         $customerAddressId = 42;
 
@@ -531,9 +534,9 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param string $paymentProviderCode
-     * @return PHPUnit_Framework_MockObject_MockObject
+     * @return PHPUnit\Framework\MockObject\MockObject
      */
-    private function getPaymentMock(string $paymentProviderCode): PHPUnit_Framework_MockObject_MockObject
+    private function getPaymentMock(string $paymentProviderCode): PHPUnit\Framework\MockObject\MockObject
     {
         $abstractMethod = $this->getMockBuilder(AbstractMethod::class)
             ->disableOriginalConstructor()
@@ -552,10 +555,10 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param \Magento\Catalog\Model\Product\Type\Simple|PHPUnit_Framework_MockObject_MockObject $simpleProductTypeMock
-     * @return PHPUnit_Framework_MockObject_MockObject
+     * @param \Magento\Catalog\Model\Product\Type\Simple|PHPUnit\Framework\MockObject\MockObject $simpleProductTypeMock
+     * @return PHPUnit\Framework\MockObject\MockObject
      */
-    private function getProductMock($simpleProductTypeMock): PHPUnit_Framework_MockObject_MockObject
+    private function getProductMock($simpleProductTypeMock): PHPUnit\Framework\MockObject\MockObject
     {
         $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()
@@ -568,10 +571,10 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param string $productType
-     * @param \Magento\Catalog\Model\Product|PHPUnit_Framework_MockObject_MockObject $productMock
-     * @return PHPUnit_Framework_MockObject_MockObject
+     * @param \Magento\Catalog\Model\Product|PHPUnit\Framework\MockObject\MockObject $productMock
+     * @return PHPUnit\Framework\MockObject\MockObject
      */
-    private function getQuoteItemMock($productType, $productMock): PHPUnit_Framework_MockObject_MockObject
+    private function getQuoteItemMock($productType, $productMock): PHPUnit\Framework\MockObject\MockObject
     {
         $quoteItemMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item::class)
             ->disableOriginalConstructor()
@@ -584,16 +587,16 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param \Magento\Quote\Model\Quote\Item|PHPUnit_Framework_MockObject_MockObject $quoteItemMock
+     * @param \Magento\Quote\Model\Quote\Item|PHPUnit\Framework\MockObject\MockObject $quoteItemMock
      * @param string $productType
      * @param array $infoBuyRequest
-     * @return PHPUnit_Framework_MockObject_MockObject
+     * @return PHPUnit\Framework\MockObject\MockObject
      */
     private function getQuoteAddressItemMock(
         $quoteItemMock,
         string $productType,
         array $infoBuyRequest
-    ): PHPUnit_Framework_MockObject_MockObject {
+    ): PHPUnit\Framework\MockObject\MockObject {
         $quoteAddressItemMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Address\Item::class)
             ->disableOriginalConstructor()
             ->setMethods(['getQuoteItem', 'setProductType', 'setProductOptions', 'getParentItem'])
@@ -607,7 +610,7 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param \Magento\Quote\Model\Quote\Address\Item|PHPUnit_Framework_MockObject_MockObject $quoteAddressItemMock
+     * @param \Magento\Quote\Model\Quote\Address\Item|PHPUnit\Framework\MockObject\MockObject $quoteAddressItemMock
      * @param int $addressTotal
      * @return array
      */
@@ -651,8 +654,8 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param string $paymentProviderCode
-     * @param Address|PHPUnit_Framework_MockObject_MockObject $shippingAddressMock
-     * @param Address|PHPUnit_Framework_MockObject_MockObject $billingAddressMock
+     * @param Address|PHPUnit\Framework\MockObject\MockObject $shippingAddressMock
+     * @param Address|PHPUnit\Framework\MockObject\MockObject $billingAddressMock
      *
      * @return void
      */
@@ -675,16 +678,16 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param \Magento\Sales\Api\Data\OrderAddressInterface|PHPUnit_Framework_MockObject_MockObject $orderAddressMock
-     * @param \Magento\Sales\Api\Data\OrderPaymentInterface|PHPUnit_Framework_MockObject_MockObject $orderPaymentMock
-     * @param \Magento\Sales\Model\Order\Item|PHPUnit_Framework_MockObject_MockObject $orderItemMock
-     * @return PHPUnit_Framework_MockObject_MockObject
+     * @param \Magento\Sales\Api\Data\OrderAddressInterface|PHPUnit\Framework\MockObject\MockObject $orderAddressMock
+     * @param \Magento\Sales\Api\Data\OrderPaymentInterface|PHPUnit\Framework\MockObject\MockObject $orderPaymentMock
+     * @param \Magento\Sales\Model\Order\Item|PHPUnit\Framework\MockObject\MockObject $orderItemMock
+     * @return PHPUnit\Framework\MockObject\MockObject
      */
     private function getOrderMock(
         $orderAddressMock,
         $orderPaymentMock,
         $orderItemMock
-    ): PHPUnit_Framework_MockObject_MockObject {
+    ): PHPUnit\Framework\MockObject\MockObject {
         $orderMock = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
             ->disableOriginalConstructor()
             ->setMethods(
@@ -721,11 +724,12 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
     /**
      * Tests exception for addresses with country id not in the allowed countries list.
      *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Some addresses can't be used due to the configurations for specific countries.
      */
     public function testCreateOrdersCountryNotPresentInAllowedListException()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('Some addresses can\'t be used due to the configurations for specific countries.');
+
         $abstractMethod = $this->getMockBuilder(AbstractMethod::class)
             ->disableOriginalConstructor()
             ->setMethods(['isAvailable'])
@@ -763,7 +767,7 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param ShippingAssignment $shippingAssignmentMock
-     * @return CartExtension|PHPUnit_Framework_MockObject_MockObject
+     * @return CartExtension|PHPUnit\Framework\MockObject\MockObject
      */
     private function getExtensionAttributesMock(ShippingAssignment $shippingAssignmentMock)
     {
@@ -781,7 +785,7 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return ShippingAssignment | PHPUnit_Framework_MockObject_MockObject
+     * @return ShippingAssignment | PHPUnit\Framework\MockObject\MockObject
      */
     private function getShippingAssignmentMock()
     {
@@ -826,7 +830,7 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param $customerAddressId
-     * @return Address | PHPUnit_Framework_MockObject_MockObject
+     * @return Address | PHPUnit\Framework\MockObject\MockObject
      */
     private function getCustomerAddressMock($customerAddressId)
     {
@@ -843,7 +847,7 @@ class MultishippingTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param string $className
-     * @return PHPUnit_Framework_MockObject_MockObject
+     * @return PHPUnit\Framework\MockObject\MockObject
      */
     private function createSimpleMock($className)
     {

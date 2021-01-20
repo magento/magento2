@@ -11,31 +11,31 @@ namespace Magento\Sales\Test\Unit\Model\ResourceModel;
 class AttributeTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Sales\Model\ResourceModel\Attribute|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\ResourceModel\Attribute|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $attribute;
 
     /**
-     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $appResourceMock;
 
     /**
-     * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $eventManagerMock;
 
     /**
-     * @var \Magento\Sales\Model\AbstractModel|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\AbstractModel|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $modelMock;
 
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $connectionMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->appResourceMock = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
         $this->eventManagerMock = $this->getMockForAbstractClass(
@@ -109,12 +109,13 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Expected Exception
      * @throws \Exception
      */
     public function testSaveFailed()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Expected Exception');
+
         $this->modelMock->expects($this->any())
             ->method('getEventPrefix')
             ->will($this->returnValue('event_prefix'));

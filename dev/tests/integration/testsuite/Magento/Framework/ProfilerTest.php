@@ -9,7 +9,7 @@ namespace Magento\Framework;
 
 class ProfilerTest extends \PHPUnit\Framework\TestCase
 {
-    protected function tearDown()
+    protected function tearDown(): void
     {
         \Magento\Framework\Profiler::reset();
     }

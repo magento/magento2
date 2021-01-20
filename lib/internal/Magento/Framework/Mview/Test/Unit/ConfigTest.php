@@ -16,11 +16,11 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Mview\Config\Data
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Mview\Config\Data
      */
     protected $dataMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->dataMock = $this->createMock(\Magento\Framework\Mview\Config\Data::class);
         $this->model = new Config(

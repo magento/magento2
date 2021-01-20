@@ -14,7 +14,7 @@ class HeaderTest extends \PHPUnit\Framework\TestCase
      */
     protected $_header;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->_header = $objectManager->get(\Magento\Framework\HTTP\Header::class);

@@ -12,37 +12,37 @@ namespace Magento\Swatches\Test\Unit\Helper;
  */
 class MediaTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Product\Media\Config */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Model\Product\Media\Config */
     protected $mediaConfigMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Filesystem */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Filesystem */
     protected $fileSystemMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Filesystem\Directory\WriteInterface */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Filesystem\Directory\WriteInterface */
     protected $writeInstanceMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\MediaStorage\Helper\File\Storage\Database */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\MediaStorage\Helper\File\Storage\Database */
     protected $fileStorageDbMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Store\Model\StoreManager */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Store\Model\StoreManager */
     protected $storeManagerMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Image\Factory */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Image\Factory */
     protected $imageFactoryMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Config */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\View\Config */
     protected $viewConfigMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Filesystem\Directory\Write */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Filesystem\Directory\Write */
     protected $mediaDirectoryMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Store\Model\Store */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Store\Model\Store */
     protected $storeMock;
 
     /** @var \Magento\Swatches\Helper\Media|\Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
     protected $mediaHelperObject;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 

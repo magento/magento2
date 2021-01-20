@@ -20,13 +20,13 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
  */
 class CompiledTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var ObjectManagerInterface | \PHPUnit_Framework_MockObject_MockObject */
+    /** @var ObjectManagerInterface | \PHPUnit\Framework\MockObject\MockObject */
     protected $objectManagerMock;
 
-    /** @var ConfigInterface | \PHPUnit_Framework_MockObject_MockObject */
+    /** @var ConfigInterface | \PHPUnit\Framework\MockObject\MockObject */
     protected $config;
 
-    /** @var DefinitionInterface | \PHPUnit_Framework_MockObject_MockObject */
+    /** @var DefinitionInterface | \PHPUnit\Framework\MockObject\MockObject */
     private $definitionsMock;
 
     /** @var Compiled */
@@ -41,16 +41,16 @@ class CompiledTest extends \PHPUnit\Framework\TestCase
     /**
      * Setup tests
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
             ->setMethods([])
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->config = $this->getMockBuilder(ConfigInterface::class)
             ->setMethods([])
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->sharedInstances = [];
         $this->factory = new Compiled($this->config, $this->sharedInstances, []);

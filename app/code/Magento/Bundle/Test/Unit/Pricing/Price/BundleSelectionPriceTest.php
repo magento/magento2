@@ -22,47 +22,47 @@ class BundleSelectionPriceTest extends \PHPUnit\Framework\TestCase
     protected $selectionPrice;
 
     /**
-     * @var \Magento\Framework\Pricing\Adjustment\CalculatorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\Adjustment\CalculatorInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $calculatorMock;
 
     /**
-     * @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $productMock;
 
     /**
-     * @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $bundleMock;
 
     /**
-     * @var \Magento\Framework\Event\Manager|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Event\Manager|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $eventManagerMock;
 
     /**
-     * @var \Magento\Framework\Pricing\PriceInfo\Base|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\PriceInfo\Base|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $priceInfoMock;
 
     /**
-     * @var \Magento\Catalog\Pricing\Price\FinalPrice|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Pricing\Price\FinalPrice|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $finalPriceMock;
 
     /**
-     * @var \Magento\Catalog\Pricing\Price\RegularPrice|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Pricing\Price\RegularPrice|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $regularPriceMock;
 
     /**
-     * @var \Magento\Bundle\Pricing\Price\DiscountCalculator|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Bundle\Pricing\Price\DiscountCalculator|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $discountCalculatorMock;
 
     /**
-     * @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $priceCurrencyMock;
 
@@ -74,7 +74,7 @@ class BundleSelectionPriceTest extends \PHPUnit\Framework\TestCase
     /**
      * Test setUp
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->productMock = $this->createPartialMock(
             \Magento\Catalog\Model\Product::class,

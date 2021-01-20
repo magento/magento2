@@ -13,7 +13,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Integration\Helper\Oauth\Data */
     protected $_dataHelper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_scopeConfigMock = $this->getMockBuilder(
             \Magento\Framework\App\Config\ScopeConfigInterface::class
@@ -22,7 +22,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
         $this->_dataHelper = new \Magento\Integration\Helper\Oauth\Data($this->_scopeConfigMock);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_scopeConfigMock);
         unset($this->_dataHelper);

@@ -7,7 +7,7 @@
 namespace Magento\Catalog\Test\Unit\Model\Layer\Filter\DataProvider;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * Test for \Magento\Catalog\Model\Layer\Filter\DataProvider\Decimal
@@ -25,7 +25,7 @@ class DecimalTest extends \PHPUnit\Framework\TestCase
      */
     private $target;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->filter = $this->getMockBuilder(\Magento\Catalog\Model\Layer\Filter\FilterInterface::class)
             ->disableOriginalConstructor()

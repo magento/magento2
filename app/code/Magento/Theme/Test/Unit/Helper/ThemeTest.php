@@ -107,9 +107,9 @@ class ThemeTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param \PHPUnit_Framework_MockObject_MockObject $theme
+     * @param \PHPUnit\Framework\MockObject\MockObject $theme
      * @param string $layoutStr
-     * @return \Magento\Framework\View\Layout\ProcessorFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Framework\View\Layout\ProcessorFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function _getLayoutMergeFactory($theme, $layoutStr)
     {

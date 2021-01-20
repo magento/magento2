@@ -26,17 +26,17 @@ use Magento\CatalogSearch\Model\Indexer\Fulltext\Action\DataProvider;
 class StockedProductsFilterPluginTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var StockConfigurationInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StockConfigurationInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $stockConfigurationMock;
 
     /**
-     * @var StockStatusRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StockStatusRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $stockStatusRepositoryMock;
 
     /**
-     * @var StockStatusCriteriaInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var StockStatusCriteriaInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $stockStatusCriteriaFactoryMock;
 
@@ -48,14 +48,14 @@ class StockedProductsFilterPluginTest extends \PHPUnit\Framework\TestCase
     /**
      * {@inheritdoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->stockConfigurationMock = $this->getMockBuilder(StockConfigurationInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->stockStatusRepositoryMock = $this->getMockBuilder(StockStatusRepositoryInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->stockStatusCriteriaFactoryMock = $this->getMockBuilder(StockStatusCriteriaInterfaceFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -72,7 +72,7 @@ class StockedProductsFilterPluginTest extends \PHPUnit\Framework\TestCase
      */
     public function testBeforePrepareProductIndex(): void
     {
-        /** @var DataProvider|\PHPUnit_Framework_MockObject_MockObject $dataProviderMock */
+        /** @var DataProvider|\PHPUnit\Framework\MockObject\MockObject $dataProviderMock */
         $dataProviderMock = $this->getMockBuilder(DataProvider::class)->disableOriginalConstructor()->getMock();
         $indexData = [
             1 => [],

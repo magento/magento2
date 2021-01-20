@@ -16,7 +16,7 @@ class BooleanTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $this->_model = $objectManager->getObject(\Magento\Eav\Model\Entity\Attribute\Source\Boolean::class);
@@ -35,7 +35,7 @@ class BooleanTest extends \PHPUnit\Framework\TestCase
 
         $flatColumns = $this->_model->getFlatColumns();
 
-        $this->assertTrue(is_array($flatColumns), 'FlatColumns must be an array value');
+        $this->assertInternalType('array', $flatColumns, 'FlatColumns must be an array value');
         $this->assertTrue(!empty($flatColumns), 'FlatColumns must be not empty');
         foreach ($flatColumns as $result) {
             $this->assertArrayHasKey('unsigned', $result, 'FlatColumns must have "unsigned" column');
@@ -157,7 +157,7 @@ class BooleanTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getCollectionMock()
     {
@@ -176,7 +176,7 @@ class BooleanTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getAttributeMock()
     {

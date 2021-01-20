@@ -18,7 +18,7 @@ use Magento\Setup\Fixtures\ConfigurableProductsFixture;
 class ConfigurableProductsFixtureTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Fixtures\FixtureModel
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Setup\Fixtures\FixtureModel
      */
     private $fixtureModelMock;
 
@@ -37,7 +37,7 @@ class ConfigurableProductsFixtureTest extends \PHPUnit\Framework\TestCase
      */
     private $attributePatternMock;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->fixtureModelMock = $this->getMockBuilder(\Magento\Setup\Fixtures\FixtureModel::class)
             ->disableOriginalConstructor()

@@ -17,21 +17,21 @@ class MultilineTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Stdlib\StringUtils
+     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\Stdlib\StringUtils
      */
     protected $stringMock;
 
     /**
      * {@inheritDoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         /** @var TimezoneInterface $timezoneMock */
-        $timezoneMock = $this->createMock(TimezoneInterface::class);
+        $timezoneMock = $this->getMockForAbstractClass(TimezoneInterface::class);
         /** @var \Psr\Log\LoggerInterface $loggerMock */
         $loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
         /** @var ResolverInterface $localeResolverMock */
-        $localeResolverMock = $this->createMock(ResolverInterface::class);
+        $localeResolverMock = $this->getMockForAbstractClass(ResolverInterface::class);
         $this->stringMock = $this->createMock(\Magento\Framework\Stdlib\StringUtils::class);
 
         $this->model = new \Magento\Eav\Model\Attribute\Data\Multiline(
@@ -51,9 +51,9 @@ class MultilineTest extends \PHPUnit\Framework\TestCase
      */
     public function testExtractValue($param, $expectedResult)
     {
-        /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\App\RequestInterface $requestMock */
+        /** @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\App\RequestInterface $requestMock */
         $requestMock = $this->createMock(\Magento\Framework\App\RequestInterface::class);
-        /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Eav\Model\Attribute $attributeMock */
+        /** @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Eav\Model\Attribute $attributeMock */
         $attributeMock = $this->createMock(\Magento\Eav\Model\Attribute::class);
 
         $requestMock->expects($this->once())->method('getParam')->will($this->returnValue($param));
@@ -91,13 +91,13 @@ class MultilineTest extends \PHPUnit\Framework\TestCase
      */
     public function testOutputValue($format, $expectedResult)
     {
-        /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Model\AbstractModel $entityMock */
+        /** @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\Model\AbstractModel $entityMock */
         $entityMock = $this->createMock(\Magento\Framework\Model\AbstractModel::class);
         $entityMock->expects($this->once())
             ->method('getData')
             ->will($this->returnValue("value1\nvalue2"));
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Eav\Model\Attribute $attributeMock */
+        /** @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Eav\Model\Attribute $attributeMock */
         $attributeMock = $this->createMock(\Magento\Eav\Model\Attribute::class);
 
         $this->model->setEntity($entityMock);
@@ -142,13 +142,13 @@ class MultilineTest extends \PHPUnit\Framework\TestCase
      */
     public function testValidateValue($value, $isAttributeRequired, $rules, $expectedResult)
     {
-        /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Model\AbstractModel $entityMock */
+        /** @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\Model\AbstractModel $entityMock */
         $entityMock = $this->createMock(\Magento\Framework\Model\AbstractModel::class);
         $entityMock->expects($this->any())
             ->method('getDataUsingMethod')
             ->will($this->returnValue("value1\nvalue2"));
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Eav\Model\Attribute $attributeMock */
+        /** @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Eav\Model\Attribute $attributeMock */
         $attributeMock = $this->createMock(\Magento\Eav\Model\Attribute::class);
         $attributeMock->expects($this->any())->method('getMultilineCount')->will($this->returnValue(2));
         $attributeMock->expects($this->any())->method('getValidateRules')->will($this->returnValue($rules));

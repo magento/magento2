@@ -99,7 +99,7 @@ class ValidatorTest extends TestCase
      */
     private $cartFixedDiscountHelper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->helper = new ObjectManager($this);
         $this->rulesApplier = $this->createPartialMock(

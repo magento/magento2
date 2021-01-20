@@ -17,39 +17,39 @@ class CompositeReaderTest extends \PHPUnit\Framework\TestCase
     private $reader;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $validatorMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $readerOneMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $readerTwoMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $readerThreeMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $defaultConfigProviderMock;
 
     /**
      * Initialize parameters
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->validatorMock = $this->createMock(ValidatorInterface::class);
-        $this->readerOneMock = $this->createMock(ReaderInterface::class);
-        $this->readerTwoMock = $this->createMock(ReaderInterface::class);
-        $this->readerThreeMock = $this->createMock(ReaderInterface::class);
+        $this->validatorMock = $this->getMockForAbstractClass(ValidatorInterface::class);
+        $this->readerOneMock = $this->getMockForAbstractClass(ReaderInterface::class);
+        $this->readerTwoMock = $this->getMockForAbstractClass(ReaderInterface::class);
+        $this->readerThreeMock = $this->getMockForAbstractClass(ReaderInterface::class);
         $this->defaultConfigProviderMock =
             $this->createMock(\Magento\Framework\MessageQueue\DefaultValueProvider::class);
 

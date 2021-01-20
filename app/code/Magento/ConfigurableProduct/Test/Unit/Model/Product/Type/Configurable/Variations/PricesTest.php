@@ -13,7 +13,7 @@ use PHPUnit\Framework\TestCase;
 class PricesTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $localeFormatMock;
 
@@ -22,7 +22,7 @@ class PricesTest extends TestCase
      */
     private $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->localeFormatMock = $this->createMock(\Magento\Framework\Locale\Format::class);
         $this->model = new \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Variations\Prices(

@@ -29,7 +29,7 @@ class BasicTest extends \Magento\ImportExport\Test\Unit\Model\Source\Import\Abst
         \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE,
     ];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->_model = new \Magento\ImportExport\Model\Source\Import\Behavior\Basic();

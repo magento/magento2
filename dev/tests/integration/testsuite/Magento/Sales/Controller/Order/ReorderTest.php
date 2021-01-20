@@ -43,7 +43,7 @@ class ReorderTest extends AbstractController
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -56,7 +56,7 @@ class ReorderTest extends AbstractController
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         if ($this->quote instanceof CartInterface) {
             $this->quoteRepository->delete($this->quote);

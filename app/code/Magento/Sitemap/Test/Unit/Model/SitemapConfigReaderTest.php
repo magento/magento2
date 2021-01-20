@@ -22,9 +22,9 @@ class SitemapConfigReaderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
-    private function getScopeConfigMock(): \PHPUnit_Framework_MockObject_MockObject
+    private function getScopeConfigMock(): \PHPUnit\Framework\MockObject\MockObject
     {
         $scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $scopeConfigMock->expects($this->any())

@@ -13,7 +13,7 @@ class PagerTest extends \PHPUnit\Framework\TestCase
     /**
      * Prepare helper object
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $sessionMock = $this->getMockBuilder(
             \Magento\Backend\Model\Session::class

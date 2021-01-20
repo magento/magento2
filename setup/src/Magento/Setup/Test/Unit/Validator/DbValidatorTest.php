@@ -13,21 +13,21 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 class DbValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var DbValidator|\PHPUnit_Framework_MockObject_MockObject
+     * @var DbValidator|\PHPUnit\Framework\MockObject\MockObject
      */
     private $dbValidator;
 
     /**
-     * @var ConnectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConnectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $connectionFactory;
 
     /**
-     * @var AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $connection;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->connectionFactory = $this->createMock(\Magento\Setup\Module\ConnectionFactory::class);
         $this->connection = $this->getMockForAbstractClass(\Magento\Framework\DB\Adapter\AdapterInterface::class);

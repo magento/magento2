@@ -15,7 +15,7 @@ class NotProtectedExtensionTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_scopeConfig;
 
@@ -24,7 +24,7 @@ class NotProtectedExtensionTest extends \PHPUnit\Framework\TestCase
      */
     protected $_protectedList = 'exe,php,jar';
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_scopeConfig = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
         $this->_scopeConfig->expects(

@@ -23,7 +23,7 @@ class SaveRatesTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
     /**
      * Initial setup
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->currencyRate = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Directory\Model\Currency::class
@@ -38,7 +38,7 @@ class SaveRatesTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
     /**
      * Tear down
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->_model = null;
         parent::tearDown();

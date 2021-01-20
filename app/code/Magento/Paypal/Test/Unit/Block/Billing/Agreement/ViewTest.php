@@ -12,12 +12,12 @@ namespace Magento\Paypal\Test\Unit\Block\Billing\Agreement;
 class ViewTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Sales\Model\ResourceModel\Order\CollectionFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\ResourceModel\Order\CollectionFactory | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $orderCollectionFactory;
 
     /**
-     * @var \Magento\Sales\Model\Order\Config | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Config | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $orderConfig;
 
@@ -26,7 +26,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
      */
     protected $block;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 

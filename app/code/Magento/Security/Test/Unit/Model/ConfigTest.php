@@ -31,7 +31,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
      * Init mocks for tests
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->scopeConfigMock = $this->createPartialMock(
             \Magento\Framework\App\Config\ScopeConfigInterface::class,

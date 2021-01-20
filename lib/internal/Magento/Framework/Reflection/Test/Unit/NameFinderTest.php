@@ -19,7 +19,7 @@ class NameFinderTest extends \PHPUnit\Framework\TestCase
     /**
      * Set up helper.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->nameFinder = new \Magento\Framework\Reflection\NameFinder();
     }

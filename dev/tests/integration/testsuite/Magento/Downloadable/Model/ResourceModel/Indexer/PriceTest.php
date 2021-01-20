@@ -25,7 +25,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
      */
     private $productCollectionFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->indexer = Bootstrap::getObjectManager()->get(
             \Magento\Catalog\Model\Indexer\Product\Price\Processor::class

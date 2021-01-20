@@ -10,12 +10,12 @@ use \Magento\Framework\View\Layout\Argument\Interpreter\Url;
 class UrlTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\UrlInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_urlResolver;
 
     /**
-     * @var \Magento\Framework\View\Layout\Argument\Interpreter\NamedParams|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Layout\Argument\Interpreter\NamedParams|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_interpreter;
 
@@ -24,7 +24,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_urlResolver = $this->createMock(\Magento\Framework\UrlInterface::class);
         $this->_interpreter = $this->createMock(\Magento\Framework\View\Layout\Argument\Interpreter\NamedParams::class);

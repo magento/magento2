@@ -12,7 +12,7 @@ class MapperTest extends \PHPUnit\Framework\TestCase
      */
     protected $mapper;
 
-    public function setUp()
+    public function setUp(): void
     {
         $config = include __DIR__ . '/../_files/search_request_config.php';
         $request = reset($config);

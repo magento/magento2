@@ -23,7 +23,7 @@ class CartTest extends \PHPUnit\Framework\TestCase
     protected $_validItem;
 
     /**
-     * @var \Magento\Payment\Model\Cart\SalesModel\SalesModelInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Payment\Model\Cart\SalesModel\SalesModelInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_salesModel;
 
@@ -46,7 +46,7 @@ class CartTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_salesModel = $this->getMockForAbstractClass(
             \Magento\Payment\Model\Cart\SalesModel\SalesModelInterface::class

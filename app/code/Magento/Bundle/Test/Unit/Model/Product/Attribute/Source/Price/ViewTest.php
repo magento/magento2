@@ -15,21 +15,21 @@ class ViewTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $option;
 
     /**
-     * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $optionFactory;
 
     /**
-     * @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $attribute;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->option = $this->createMock(\Magento\Eav\Model\ResourceModel\Entity\Attribute\Option::class);
         $this->optionFactory = $this->createPartialMock(

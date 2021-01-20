@@ -7,7 +7,7 @@
 namespace Magento\Catalog\Test\Unit\Model\Layer\Filter\DataProvider;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * Test for \Magento\Catalog\Model\Layer\Filter\DataProvider\Category
@@ -37,7 +37,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
     /**
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         /** @var \Magento\Framework\Registry $var */
         $this->coreRegistry = $var = $this->getMockBuilder(\Magento\Framework\Registry::class)

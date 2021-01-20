@@ -15,41 +15,41 @@ use Symfony\Component\Console\Tester\CommandTester;
 class ModuleEnableDisableCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Setup\Model\ObjectManagerProvider|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Setup\Model\ObjectManagerProvider|\PHPUnit\Framework\MockObject\MockObject
      */
     private $objectManagerProviderMock;
 
     /**
-     * @var \Magento\Framework\Module\Status|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Module\Status|\PHPUnit\Framework\MockObject\MockObject
      */
     private $statusMock;
 
     /**
-     * @var \Magento\Framework\App\Cache|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Cache|\PHPUnit\Framework\MockObject\MockObject
      */
     private $cacheMock;
 
     /**
-     * @var \Magento\Framework\App\State\CleanupFiles|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\State\CleanupFiles|\PHPUnit\Framework\MockObject\MockObject
      */
     private $cleanupFilesMock;
 
     /**
-     * @var \Magento\Framework\Module\FullModuleList|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Module\FullModuleList|\PHPUnit\Framework\MockObject\MockObject
      */
     private $fullModuleListMock;
 
     /**
-     * @var \Magento\Framework\App\DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\DeploymentConfig|\PHPUnit\Framework\MockObject\MockObject
      */
     private $deploymentConfigMock;
 
     /**
-     * @var \Magento\Framework\Code\GeneratedFiles|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Code\GeneratedFiles|\PHPUnit\Framework\MockObject\MockObject
      */
     private $generatedFiles;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerProviderMock = $this->createMock(\Magento\Setup\Model\ObjectManagerProvider::class);
         $objectManager = $this->getMockForAbstractClass(\Magento\Framework\ObjectManagerInterface::class);

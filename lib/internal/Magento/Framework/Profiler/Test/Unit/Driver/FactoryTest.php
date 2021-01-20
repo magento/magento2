@@ -24,7 +24,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
      */
     protected $_defaultDriverType = 'default';
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_factory = new \Magento\Framework\Profiler\Driver\Factory(
             $this->_defaultDriverPrefix,

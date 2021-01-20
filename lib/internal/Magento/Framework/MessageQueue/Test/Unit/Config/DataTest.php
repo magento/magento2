@@ -11,31 +11,31 @@ use Magento\Framework\MessageQueue\Code\Generator\Config\RemoteServiceReader\Mes
 class DataTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\MessageQueue\Config\Reader\Xml|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\MessageQueue\Config\Reader\Xml|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $xmlReaderMock;
 
     /**
-     * @var \Magento\Framework\MessageQueue\Config\Reader\Env|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\MessageQueue\Config\Reader\Env|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $envReaderMock;
 
     /**
-     * @var RemoteServiceReader|\PHPUnit_Framework_MockObject_MockObject
+     * @var RemoteServiceReader|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $remoteServiceReaderMock;
 
     /**
-     * @var \Magento\Framework\Config\CacheInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Config\CacheInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $cacheMock;
 
     /**
-     * @var \Magento\Framework\Serialize\SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Serialize\SerializerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $serializerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->xmlReaderMock = $this->getMockBuilder(\Magento\Framework\MessageQueue\Config\Reader\Xml::class)
             ->disableOriginalConstructor()
