@@ -165,8 +165,9 @@ class OperationRepositoryInterfaceTest extends WebapiAbstract
         $this->assertEquals(2, $response['total_count']);
         $this->assertCount(2, $response['items']);
 
-        foreach ($response['items'] as $item) {
-            $this->assertEquals('0', $item['operation_key']);
-        }
+        $this->assertEquals(
+            ['bulk-uuid-searchable-6', 'bulk-uuid-searchable-8'],
+            array_column($response['items'], 'bulk_uuid')
+        );
     }
 }
