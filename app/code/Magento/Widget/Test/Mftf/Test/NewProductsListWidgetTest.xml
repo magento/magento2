@@ -34,7 +34,7 @@
 
         <amOnPage url="{{CmsPagesPage.url}}" stepKey="amOnCmsList"/>
         <waitForPageLoad stepKey="waitForCmsList"/>
-        <click selector="{{CmsPagesPageActionsSection.addNewPageButton}}" stepKey="clickAddNewPageButton"/>
+        <actionGroup ref="AdminClickAddNewPageOnPagesGridActionGroup" stepKey="clickAddNewPageButton"/>
         <fillField selector="{{CmsNewPagePageBasicFieldsSection.pageTitle}}" userInput="{{_newDefaultCmsPage.title}}" stepKey="fillPageTitle"/>
         <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="expandContentSection"/>
         <waitForPageLoad stepKey="waitForContentSection"/>
