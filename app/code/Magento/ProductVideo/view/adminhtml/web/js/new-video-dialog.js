@@ -721,6 +721,7 @@ define([
                     modalTitleElement = modal.find('.modal-title');
 
                     if (!file) {
+                        this._videoUrlWidget.trigger('cancelled_video_information');
                         widget._blockActionButtons(true);
 
                         modal.find('.video-delete-button').hide();
@@ -1122,6 +1123,7 @@ define([
                 this._previewImage = null;
             }
             this._tempPreviewImageData = null;
+            this._videoUrlWidget.trigger('cancelled_video_information');
             this.element.trigger('reset');
             newVideoForm = this.element.find(this._videoFormSelector);
 
