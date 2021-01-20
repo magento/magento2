@@ -49,20 +49,12 @@ class CatalogInventoryTest extends \PHPUnit\Framework\TestCase
             ['setStockData', '__wakeup']
         );
 
-        $this->stockItemDoMock = $this->createPartialMock(
-            \Magento\CatalogInventory\Api\Data\StockItemInterface::class,
-            [
-                'getItemId',
-                'getUseConfigEnableQtyInc',
-                'getEnableQtyIncrements',
-                'gerUseConfigQtyIncrements',
-                'getQtyIncrements'
-            ]
+        $this->stockItemDoMock = $this->createMock(
+            \Magento\CatalogInventory\Api\Data\StockItemInterface::class
         );
 
-        $this->stockRegistry = $this->createPartialMock(
-            \Magento\CatalogInventory\Api\StockRegistryInterface::class,
-            ['getStockItem']
+        $this->stockRegistry = $this->createMock(
+            \Magento\CatalogInventory\Api\StockRegistryInterface::class
         );
 
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);

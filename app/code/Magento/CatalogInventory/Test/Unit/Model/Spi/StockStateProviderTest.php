@@ -111,9 +111,8 @@ class StockStateProviderTest extends \PHPUnit\Framework\TestCase
 
         $this->mathDivision = $this->createPartialMock(\Magento\Framework\Math\Division::class, ['getExactDivision']);
 
-        $this->localeFormat = $this->createPartialMock(
-            \Magento\Framework\Locale\FormatInterface::class,
-            ['getNumber']
+        $this->localeFormat = $this->createMock(
+            \Magento\Framework\Locale\FormatInterface::class
         );
         $this->localeFormat->expects($this->any())
             ->method('getNumber')

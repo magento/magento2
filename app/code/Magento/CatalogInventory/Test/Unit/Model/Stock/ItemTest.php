@@ -93,9 +93,8 @@ class ItemTest extends \PHPUnit\Framework\TestCase
 
         $store = $this->createPartialMock(\Magento\Store\Model\Store::class, ['getId', '__wakeup']);
         $store->expects($this->any())->method('getId')->willReturn($this->storeId);
-        $this->storeManager = $this->createPartialMock(
-            \Magento\Store\Model\StoreManagerInterface::class,
-            ['getStore']
+        $this->storeManager = $this->createMock(
+            \Magento\Store\Model\StoreManagerInterface::class
         );
         $this->storeManager->expects($this->any())->method('getStore')->willReturn($store);
 

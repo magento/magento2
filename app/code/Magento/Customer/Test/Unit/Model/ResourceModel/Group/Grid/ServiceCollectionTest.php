@@ -53,9 +53,8 @@ class ServiceCollectionTest extends \PHPUnit\Framework\TestCase
         $this->groupRepositoryMock = $this->getMockBuilder(\Magento\Customer\Api\GroupRepositoryInterface::class)
             ->getMock();
 
-        $this->searchResults = $this->createPartialMock(
-            \Magento\Framework\Api\SearchResultsInterface::class,
-            ['getTotalCount', 'getItems']
+        $this->searchResults = $this->createMock(
+            \Magento\Framework\Api\SearchResultsInterface::class
         );
 
         $this->searchResults
