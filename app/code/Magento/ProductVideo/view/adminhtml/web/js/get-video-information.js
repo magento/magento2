@@ -316,7 +316,7 @@ define([
                 }
 
                 src = 'https://player.vimeo.com/video/' +
-                    this._code + '?api=1&player_id=vimeo' +
+                    this._code + '?api=2&player_id=vimeo' +
                     this._code +
                     timestamp +
                     additionalParams;
@@ -493,6 +493,9 @@ define([
                 /**
                  * @private
                  */
+                function jsonResults(json){
+                   return json;
+                }
                 function _onVimeoLoaded(data) {
                     var tmp,
                         respData;
@@ -539,8 +542,9 @@ define([
                     );
                 } else if (type === 'vimeo') {
                     $.ajax({
-                        url: 'https://www.vimeo.com/api/v2/video/' + id + '.json',
+                        url: 'https://vimeo.com/api/v2/video/' + id + '.json',
                         dataType: 'jsonp',
+                        jsonpCallback:"jsonResults",
                         data: {
                             format: 'json'
                         },
