@@ -494,23 +494,21 @@ define([
                  * @private
                  */
                 function _onVimeoLoaded(data) {
-                    var tmp,
-                        respData;
+                    var respData;
 
                     if (!data) {
                         this._onRequestError($.mage.__('Video not found'));
 
                         return null;
                     }
-                    tmp = data;
                     respData = {
-                        duration: this._formatVimeoDuration(tmp.duration),
-                        channel: tmp['author_name'],
-                        channelId: tmp['author_url'],
-                        uploaded: tmp['upload_date'],
-                        title: tmp.title,
-                        description: tmp.description.replace(/(&nbsp;|<([^>]+)>)/ig, ''),
-                        thumbnail: tmp['thumbnail_url'],
+                        duration: this._formatVimeoDuration(data.duration),
+                        channel: data['author_name'],
+                        channelId: data['author_url'],
+                        uploaded: data['upload_date'],
+                        title: data.title,
+                        description: data.description.replace(/(&nbsp;|<([^>]+)>)/ig, ''),
+                        thumbnail: data['thumbnail_url'],
                         videoId: videoInfo.id,
                         videoProvider: videoInfo.type
                     };
