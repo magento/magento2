@@ -10,7 +10,7 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminImportDownloadableProductsWithFileLinksTest">
         <annotations>
-            <features value="Import/Export"/>
+            <features value="DownloadableImportExport"/>
             <stories value="Import Products"/>
             <title value="Import Downloadable Products with File Links"/>
             <description value="Imports a .csv file containing a downloadable product with file links. Verifies that
@@ -18,6 +18,7 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-38325"/>
             <group value="importExport"/>
+            <group value="Downloadable"/>
             <skip>
                 <issueId value="B2B-1648">Import needs images in downloadable links in var/import/images directory. MFTF only has access to dev/tests/acceptance/tests/_data</issueId>
             </skip>
