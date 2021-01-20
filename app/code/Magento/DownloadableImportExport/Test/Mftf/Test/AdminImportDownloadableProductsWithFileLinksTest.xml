@@ -57,7 +57,6 @@
         </after>
 
         <!-- Import Downloadable Product & Assert No Errors -->
-        <pause stepKey="pause"/>
         <actionGroup ref="AdminNavigateToImportPageActionGroup" stepKey="navigateToImportPage"/>
         <actionGroup ref="AdminFillImportFormActionGroup" stepKey="fillImportForm">
             <argument name="importFile" value="{{ImportDownloadableProduct_FileLinks.fileName}}"/>
