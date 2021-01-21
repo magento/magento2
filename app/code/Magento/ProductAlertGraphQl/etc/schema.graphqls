@@ -6,9 +6,9 @@ type StoreConfig {
     catalog_productalert_allow_price: Boolean @doc(description: "Allow Alert When Product Price Changes")
 }
 
-type ProductInterface {
-    productalert_stock_subscribed: Boolean @resolver(class: "Magento\\ProductAlertGraphQl\\Model\\Resolver\\Product\\Stock") @doc(description: "Is Customer subscribed to Stock Alerts")
-    productalert_price_subscribed: Boolean @resolver(class: "Magento\\ProductAlertGraphQl\\Model\\Resolver\\Product\\Price") @doc(description: "Is Customer subscribed to Price Alerts")
+type Customer {
+    productAlertStock: [ProductAlert] @resolver(class:"Magento\\ProductAlertGraphQl\\Model\\Resolver\\Customer\\Stock") @doc(description: "Customer subscription to Stock Alerts") @cache(cacheable: false)
+    productAlertPrice: [ProductAlert] @resolver(class:"Magento\\ProductAlertGraphQl\\Model\\Resolver\\Customer\\Price") @doc(description: "Customer subscription to Price Alerts") @cache(cacheable: false)
 }
 
 type Mutation {
@@ -19,5 +19,7 @@ type Mutation {
 }
 
 type ProductAlert @doc(description: "Product Alert") {
-    id: Int!
+    id: Int! @doc(description: "Product Alert identifier")
+    add_date: String @doc(description: "Product Alert Add Date") 
+    product: ProductInterface @resolver(class: "Magento\\ProductAlertGraphQl\\Model\\Resolver\\ProductResolver")
 }

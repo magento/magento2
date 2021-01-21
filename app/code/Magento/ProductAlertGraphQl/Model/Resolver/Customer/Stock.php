@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\ProductAlertGraphQl\Model\Resolver\Stock;
+namespace Magento\ProductAlertGraphQl\Model\Resolver\Customer;
 
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
@@ -13,13 +13,18 @@ use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\ProductAlert\Helper\Data as AlertsHelper;
-use Magento\ProductAlert\Model\StockFactory;
+use Magento\ProductAlert\Model\ResourceModel\Stock\CollectionFactory;
 
 /**
- * Subscribe to product stock alert
+ * Product stock alerts for Customer
  */
-class Subscribe implements ResolverInterface
+class Stock implements ResolverInterface
 {
+    /**
+     * @var CollectionFactory
+     */
+    protected $stockCollectionFactory;
+
     /**
      * @var AlertsHelper
      */
@@ -31,15 +36,15 @@ class Subscribe implements ResolverInterface
     private $stockFactory;
 
     /**
+     * @param CollectionFactory $stockCollectionFactory
      * @param AlertsHelper $helper
-     * @param StockFactory $stockFactory
      */
     public function __construct(
-        AlertsHelper $helper,
-        StockFactory $stockFactory
+        CollectionFactory $stockCollectionFactory,
+        AlertsHelper $helper
     ) {
+        $this->stockCollectionFactory = $stockCollectionFactory;
         $this->helper = $helper;
-        $this->stockFactory = $stockFactory;
     }
 
     /**
@@ -64,25 +69,33 @@ class Subscribe implements ResolverInterface
             throw new GraphQlAuthorizationException(__('The current user cannot perform operations on product alerts'));
         }
 
-        $productId = ((int) $args['productId']) ?: null;
-
-        $model = $this->stockFactory->create()
-                ->setCustomerId($customerId)
-                ->setProductId($productId)
-                ->setWebsiteId($store->getWebsiteId())
-                ->setStoreId($store->getId())
-                ->loadByParam();
-
-        if ($model->getId()) {
-            throw new GraphQlInputException(__('The current user is currently subscribed to stock alert.'));
+        $alerts = $this->getProductAlertsForCustomer($customerId, $store->getId());
+        $data = [];
+        foreach ($alerts as $alert) {
+            $data[] = [
+                'id' => $alert->getId(),
+                'add_date' => $alert->getAddDate(),
+                'model' => $alert,
+            ];
         }
 
-        $model->save();
+        return $data;
+    }
 
-        return [
-            'id' => $model->getId(),
-            'add_date' => $model->getAddDate(),
-            'model' => $model
-        ];
+    /**
+     * Get customer alerts
+     *
+     * @param int $customerId
+     * @param int $$storeId
+     * @return array
+     */
+    private function getProductAlertsForCustomer($customerId, $storeId): array
+    {
+        $stockCollection = $this->stockCollectionFactory->create();
+        $connection = $stockCollection->getConnection();
+        $stockCollection->addFilter('customer_id', $connection->quoteInto('customer_id=?', $customerId), 'string')
+            ->addFilter('store_id', $connection->quoteInto('store_id=?', $storeId), 'string');
+
+        return $stockCollection->getItems();
     }
 }

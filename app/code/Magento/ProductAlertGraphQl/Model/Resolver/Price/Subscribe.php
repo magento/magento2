@@ -75,7 +75,9 @@ class Subscribe implements ResolverInterface
         $model->save();
 
         return [
-            'id' => $model->getId()
+            'id' => $model->getId(),
+            'add_date' => $model->getAddDate(),
+            'model' => $model
         ];
     }
 }
