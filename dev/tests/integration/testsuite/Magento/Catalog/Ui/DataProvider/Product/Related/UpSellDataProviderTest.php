@@ -58,7 +58,7 @@ class UpSellDataProviderTest extends TestCase
     /**
      * @dataProvider productDataProvider
      *
-     * @magentoDataFixture Magento/Catalog/_files/second_product_simple.php
+     * @magentoDataFixture Magento/Catalog/_files/products_upsell.php
      * @magentoDataFixture Magento/Catalog/_files/product_with_price_on_second_website.php
      *
      * @param string $storeCode
@@ -67,7 +67,7 @@ class UpSellDataProviderTest extends TestCase
      */
     public function testGetData(string $storeCode, float $price): void
     {
-        $this->prepareRequest('simple2', $storeCode);
+        $this->prepareRequest('simple_with_upsell', 'simple', $storeCode);
         $result = $this->getComponentProvidedData('upsell_product_listing')['items'];
         $this->assertCount(1, $result);
         $item = reset($result);
@@ -125,13 +125,26 @@ class UpSellDataProviderTest extends TestCase
      * Prepare request
      *
      * @param string $productSku
+     * @param string $relatedProductSku
      * @param string $storeCode
      * @return void
      */
-    private function prepareRequest(string $productSku, string $storeCode): void
+    private function prepareRequest(string $productSku, string $relatedProductSku, string $storeCode): void
     {
         $storeId = (int)$this->storeManager->getStore($storeCode)->getId();
         $productId = (int)$this->productRepository->get($productSku)->getId();
-        $this->request->setParams(['current_product_id' => $productId, 'current_store_id' => $storeId]);
+        $relatedProductId = (int)$this->productRepository->get($relatedProductSku)->getId();
+        $params = [
+            'current_product_id' => $productId,
+            'current_store_id' => $storeId,
+            'filters_modifier' => [
+                'entity_id' => [
+                    'condition_type' => 'nin',
+                    'value' => [$relatedProductId],
+                ],
+            ],
+        ];
+
+        $this->request->setParams($params);
     }
 }
