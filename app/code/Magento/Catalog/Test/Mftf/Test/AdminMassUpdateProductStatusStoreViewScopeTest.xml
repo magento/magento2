@@ -23,6 +23,8 @@
         <before>
             <actionGroup ref="LoginActionGroup" stepKey="loginAsAdmin"/>
 
+            <actionGroup ref="deleteAllProductsUsingProductGrid" stepKey="deleteAllProducts"/>
+
             <!--Create Website -->
             <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createAdditionalWebsite">
                 <argument name="newWebsiteName" value="{{customWebsite.name}}"/>
@@ -43,8 +45,8 @@
             <waitForPageLoad stepKey="waitForProductPageLoad"/>
             <waitForElementVisible selector="//legend[contains(., 'Store View Information')]" stepKey="waitForNewStorePageToOpen"/>
             <selectOption userInput="{{customStoreGroup.name}}" selector="{{AdminNewStoreSection.storeGrpDropdown}}" stepKey="selectStoreGroup"/>
-            <fillField userInput="{{customStore.name}}" selector="{{AdminNewStoreSection.storeNameTextField}}" stepKey="fillStoreViewName"/>
-            <fillField userInput="{{customStore.code}}" selector="{{AdminNewStoreSection.storeCodeTextField}}" stepKey="fillStoreViewCode"/>
+            <fillField userInput="Second Store View" selector="{{AdminNewStoreSection.storeNameTextField}}" stepKey="fillStoreViewName"/>
+            <fillField userInput="second_store_view" selector="{{AdminNewStoreSection.storeCodeTextField}}" stepKey="fillStoreViewCode"/>
             <selectOption selector="{{AdminNewStoreSection.statusDropdown}}" userInput="1" stepKey="enableStoreViewStatus"/>
             <click selector="{{AdminNewStoreViewActionsSection.saveButton}}" stepKey="clickSaveStoreView" />
             <waitForElementVisible selector="{{AdminConfirmationModalSection.ok}}" stepKey="waitForModal" />
@@ -75,6 +77,7 @@
             </actionGroup>
 
             <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
+            <waitForPageLoad stepKey="waitForProductGridPageLoad"/>
 
             <!--Delete Products -->
             <actionGroup ref="DeleteProductActionGroup" stepKey="deleteProduct1">
@@ -97,7 +100,7 @@
 
         <!-- Filter to Second Store View -->
         <actionGroup ref="AdminFilterStoreViewActionGroup" stepKey="filterStoreView" >
-            <argument name="customStore" value="customStore.name" />
+            <argument name="customStore" value="'Second Store View'" />
         </actionGroup>
 
         <!-- Select Product 2 -->
@@ -108,6 +111,10 @@
         <click selector="{{AdminProductGridSection.bulkActionOption('Change status')}}" stepKey="clickOption"/>
         <click selector="{{AdminProductGridSection.bulkActionOption('Disable')}}" stepKey="clickDisabled"/>
         <waitForPageLoad stepKey="waitForBulkUpdatePage"/>
+
+        <actionGroup ref="AdminFilterStoreViewActionGroup" stepKey="filterStoreViewAgain" >
+            <argument name="customStore" value="'Second Store View'" />
+        </actionGroup>
 
         <!-- Verify Product Statuses -->
         <see selector="{{AdminProductGridSection.productGridContentsOnRow('1')}}" userInput="Enabled" stepKey="checkIfProduct1IsEnabled"/>
@@ -177,6 +184,8 @@
         <before>
             <actionGroup ref="LoginActionGroup" stepKey="loginAsAdmin"/>
 
+            <actionGroup ref="deleteAllProductsUsingProductGrid" stepKey="deleteAllProducts"/>
+
             <!--Create Website -->
             <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createAdditionalWebsite">
                 <argument name="newWebsiteName" value="{{customWebsite.name}}"/>
@@ -197,8 +206,8 @@
             <waitForPageLoad stepKey="waitForProductPageLoad"/>
             <waitForElementVisible selector="//legend[contains(., 'Store View Information')]" stepKey="waitForNewStorePageToOpen"/>
             <selectOption userInput="{{customStoreGroup.name}}" selector="{{AdminNewStoreSection.storeGrpDropdown}}" stepKey="selectStoreGroup"/>
-            <fillField userInput="{{customStore.name}}" selector="{{AdminNewStoreSection.storeNameTextField}}" stepKey="fillStoreViewName"/>
-            <fillField userInput="{{customStore.code}}" selector="{{AdminNewStoreSection.storeCodeTextField}}" stepKey="fillStoreViewCode"/>
+            <fillField userInput="Second Store View" selector="{{AdminNewStoreSection.storeNameTextField}}" stepKey="fillStoreViewName"/>
+            <fillField userInput="second_store_view" selector="{{AdminNewStoreSection.storeCodeTextField}}" stepKey="fillStoreViewCode"/>
             <selectOption selector="{{AdminNewStoreSection.statusDropdown}}" userInput="1" stepKey="enableStoreViewStatus"/>
             <click selector="{{AdminNewStoreViewActionsSection.saveButton}}" stepKey="clickSaveStoreView" />
             <waitForElementVisible selector="{{AdminConfirmationModalSection.ok}}" stepKey="waitForModal" />
@@ -249,7 +258,7 @@
 
         <!-- Filter to Second Store View -->
         <actionGroup ref="AdminFilterStoreViewActionGroup" stepKey="filterStoreView" >
-            <argument name="customStore" value="customStore.name" />
+            <argument name="customStore" value="'Second Store View'" />
         </actionGroup>
 
         <!-- Select Product 2 -->
@@ -260,6 +269,10 @@
         <click selector="{{AdminProductGridSection.bulkActionOption('Change status')}}" stepKey="clickOption"/>
         <click selector="{{AdminProductGridSection.bulkActionOption('Disable')}}" stepKey="clickDisabled"/>
         <waitForPageLoad stepKey="waitForBulkUpdatePage"/>
+
+        <actionGroup ref="AdminFilterStoreViewActionGroup" stepKey="filterStoreViewAgain" >
+            <argument name="customStore" value="'Second Store View'" />
+        </actionGroup>
 
         <!-- Verify Product Statuses -->
         <see selector="{{AdminProductGridSection.productGridContentsOnRow('1')}}" userInput="Enabled" stepKey="checkIfProduct1IsEnabled"/>
