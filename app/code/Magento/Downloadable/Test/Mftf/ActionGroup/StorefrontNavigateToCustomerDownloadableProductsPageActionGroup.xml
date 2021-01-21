@@ -13,6 +13,6 @@
             <description>Navigates to the storefront My Downloadable Products page. Must be signed in as a customer.</description>
         </annotations>
         <amOnPage url="{{StorefrontCustomerDownloadableProductsPage.url}}" stepKey="navigateToImportPage"/>
-        <see userInput="My Downloadable Products" selector="{{StorefrontCustomerAccountMainSection.pageTitle}}" stepKey="seeTitle"/>
+        <waitForText userInput="My Downloadable Products" selector="{{StorefrontCustomerAccountMainSection.pageTitle}}" stepKey="waitForPageTitle"/>
     </actionGroup>
 </actionGroups>
