@@ -60,7 +60,7 @@
         </createData>
 
         <reloadPage stepKey="refreshPage"/>
-        <actionGroup ref="AssertAdminDashboardDisplayIsProperActionGroup" stepKey="assertAdminDashboardNotBroken"/>
+        <actionGroup ref="AssertAdminDashboardDisplayedWithNoErrorsActionGroup" stepKey="assertAdminDashboardNotBroken"/>
         <grabTextFrom selector="{{AdminDashboardSection.dashboardTotals('Quantity')}}" stepKey="grabQuantityAfter"/>
         <assertGreaterThan stepKey="checkQuantityWasChanged">
             <actualResult type="const">$grabQuantityAfter</actualResult>

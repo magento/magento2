@@ -8,7 +8,7 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AssertAdminDashboardDisplayIsProperActionGroup">
+    <actionGroup name="AssertAdminDashboardDisplayedWithNoErrorsActionGroup">
         <annotations>
             <description>Checks if Dashboard is displayed properly</description>
         </annotations>
