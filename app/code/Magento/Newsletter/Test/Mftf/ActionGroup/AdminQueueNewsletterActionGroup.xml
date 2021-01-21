@@ -11,11 +11,12 @@
 
     <actionGroup name="AdminQueueNewsletterActionGroup">
         <annotations>
-            <description>Sends Newsletter template to queue:
-                         Clicks the Queue Newsletter action.
-                         Sets Queue Date Start.
-                         Selects needed Storeview if applicable.
-                         Clicks the Save and Resume button.   
+            <description>
+                Sends Newsletter template to queue:
+                Clicks the Queue Newsletter action.
+                Sets Queue Date Start.
+                Selects needed Store view if applicable.
+                Clicks the Save and Resume button.
             </description>
         </annotations>
         <arguments>
