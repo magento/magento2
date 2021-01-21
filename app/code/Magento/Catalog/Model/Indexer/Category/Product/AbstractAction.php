@@ -13,6 +13,7 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Query\Generator as QueryGenerator;
 use Magento\Framework\DB\Select;
 use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\Store;
 
 // phpcs:disable Magento2.Classes.AbstractApi
@@ -126,9 +127,9 @@ abstract class AbstractAction
     private $queryGenerator;
 
     /**
-     * @var int
+     * @var StoreInterface
      */
-    private $currentStoreId = 0;
+    private $currentStore;
 
     /**
      * @param ResourceConnection $resource
@@ -171,7 +172,7 @@ abstract class AbstractAction
     {
         foreach ($this->storeManager->getStores() as $store) {
             if ($this->getPathFromCategoryId($store->getRootCategoryId())) {
-                $this->currentStoreId = $store->getId();
+                $this->currentStore = $store;
                 $this->reindexRootCategory($store);
                 $this->reindexAnchorCategories($store);
                 $this->reindexNonAnchorCategories($store);
@@ -379,13 +380,13 @@ abstract class AbstractAction
             []
         )->joinLeft(
             ['child_cpsd' => $this->getTable('catalog_product_entity_int')],
-            'child_cpsd.' . $linkField . ' = '. 'relation_product_entity.' . $linkField
+            'child_cpsd.' . $linkField . ' = ' . 'relation_product_entity.' . $linkField
             . ' AND child_cpsd.store_id = 0'
             . ' AND child_cpsd.attribute_id = ' . $statusAttributeId,
             []
         )->joinLeft(
             ['child_cpss' => $this->getTable('catalog_product_entity_int')],
-            'child_cpss.' . $linkField . ' = '. 'relation_product_entity.' . $linkField . ''
+            'child_cpss.' . $linkField . ' = ' . 'relation_product_entity.' . $linkField . ''
             . ' AND child_cpss.attribute_id = child_cpsd.attribute_id'
             . ' AND child_cpss.store_id = ' . $store->getId(),
             []
@@ -493,6 +494,7 @@ abstract class AbstractAction
         $rootCatIds = explode('/', $this->getPathFromCategoryId($store->getRootCategoryId()));
         array_pop($rootCatIds);
 
+        $this->currentStore = $store;
         $temporaryTreeTable = $this->makeTempCategoryTreeIndex();
 
         $productMetadata = $this->metadataPool->getMetadata(ProductInterface::class);
@@ -690,7 +692,7 @@ abstract class AbstractAction
                     ['ccacs' => $this->getTable('catalog_category_entity_int')],
                     'ccacs.' . $categoryLinkField . ' = c.' . $categoryLinkField
                     . ' AND ccacs.attribute_id = ccacd.attribute_id AND ccacs.store_id = ' .
-                    $this->currentStoreId,
+                    $this->currentStore->getId(),
                     []
                 )->where(
                     $this->connection->getIfNullSql('ccacs.value', 'ccacd.value') . ' = ?',
@@ -702,8 +704,14 @@ abstract class AbstractAction
         foreach ($selects as $select) {
             $values = [];
 
-            foreach ($this->connection->fetchAll($select) as $category) {
-                foreach (explode('/', $category['path']) as $parentId) {
+            $categories = $this->connection->fetchAll($select);
+            foreach ($categories as $category) {
+                $categoriesTree = explode('/', $category['path']);
+                foreach ($categoriesTree as $parentId) {
+                    if (!in_array($this->currentStore->getRootCategoryId(), $categoriesTree, true)) {
+                        break;
+                    }
+
                     if ($parentId !== $category['entity_id']) {
                         $values[] = [$parentId, $category['entity_id']];
                     }
