@@ -12,6 +12,9 @@ use Magento\Review\Model\ResourceModel\Review\Summary\CollectionFactory as Summa
 
 /**
  * ReviewSummary model.
+ *
+ * @deprecated Filtering collection by entity_type ID leads to wrong result if AUTO_INCREMENT begins not form 1.
+ * @see \Magento\Review\Model\AppendSummaryData
  */
 class ReviewSummary
 {
