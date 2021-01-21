@@ -11,17 +11,17 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class ImageMagickTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject |\Magento\Framework\Filesystem
+     * @var \PHPUnit\Framework\MockObject\MockObject |\Magento\Framework\Filesystem
      */
     protected $filesystemMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject |\Psr\Log\LoggerInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject |\Psr\Log\LoggerInterface
      */
     protected $loggerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Filesystem\Directory\WriteInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\Filesystem\Directory\WriteInterface
      */
     protected $writeMock;
 
@@ -30,7 +30,7 @@ class ImageMagickTest extends \PHPUnit\Framework\TestCase
      */
     protected $imageMagic;
 
-    public function setup()
+    public function setup(): void
     {
         $objectManager = new ObjectManager($this);
         $this->loggerMock = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)->getMock();

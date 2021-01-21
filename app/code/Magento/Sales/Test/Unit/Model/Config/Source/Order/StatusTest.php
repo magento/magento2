@@ -15,10 +15,10 @@ class StatusTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
     protected $objectManager;
 
-    /** @var \Magento\Sales\Model\Order\Config|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Sales\Model\Order\Config|\PHPUnit\Framework\MockObject\MockObject */
     protected $config;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->config = $this->createMock(\Magento\Sales\Model\Order\Config::class);
 

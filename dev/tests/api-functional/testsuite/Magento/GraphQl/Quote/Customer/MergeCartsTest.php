@@ -39,7 +39,7 @@ class MergeCartsTest extends GraphQlAbstract
      */
     private $customerTokenService;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->quoteResource = $objectManager->get(QuoteResource::class);
@@ -48,7 +48,7 @@ class MergeCartsTest extends GraphQlAbstract
         $this->customerTokenService = $objectManager->get(CustomerTokenServiceInterface::class);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $quote = $this->quoteFactory->create();
         $this->quoteResource->load($quote, '1', 'customer_id');

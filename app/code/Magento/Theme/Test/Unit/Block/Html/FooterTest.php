@@ -12,13 +12,13 @@ class FooterTest extends \PHPUnit\Framework\TestCase
      */
     protected $block;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->block = $objectManager->getObject(\Magento\Theme\Block\Html\Footer::class);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->block = null;
     }

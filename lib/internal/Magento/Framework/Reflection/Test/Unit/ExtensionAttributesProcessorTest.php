@@ -57,7 +57,7 @@ class ExtensionAttributesProcessorTest extends \PHPUnit\Framework\TestCase
     /**
      * Set up helper.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 

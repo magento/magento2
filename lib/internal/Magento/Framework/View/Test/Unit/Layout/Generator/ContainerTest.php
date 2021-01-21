@@ -20,31 +20,31 @@ class ContainerTest extends \PHPUnit\Framework\TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var Layout\Reader\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Layout\Reader\Context|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $readerContextMock;
 
     /**
-     * @var Layout\Generator\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Layout\Generator\Context|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $generatorContextMock;
 
     /**
-     * @var Container|\PHPUnit_Framework_MockObject_MockObject
+     * @var Container|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $container;
 
     /**
-     * @var ScheduledStructure|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScheduledStructure|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $scheduledStructureMock;
 
     /**
-     * @var \Magento\Framework\View\Layout\Data\Structure|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Layout\Data\Structure|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $structureMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 

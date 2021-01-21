@@ -25,19 +25,19 @@ class ConsumerRunnerTest extends \PHPUnit\Framework\TestCase
     private $consumerRunner;
 
     /**
-     * @var \Magento\Framework\MessageQueue\ConsumerFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\MessageQueue\ConsumerFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $consumerFactoryMock;
 
     /**
-     * @var \Magento\Framework\App\MaintenanceMode|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\MaintenanceMode|\PHPUnit\Framework\MockObject\MockObject
      */
     private $maintenanceModeMock;
 
     /**
      * {@inheritdoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->consumerFactoryMock = $this->getMockBuilder(\Magento\Framework\MessageQueue\ConsumerFactory::class)
@@ -64,7 +64,7 @@ class ConsumerRunnerTest extends \PHPUnit\Framework\TestCase
     public function testMagicMethod()
     {
         $isMaintenanceModeOn = false;
-        /** @var ConsumerInterface|\PHPUnit_Framework_MockObject_MockObject $consumerMock */
+        /** @var ConsumerInterface|\PHPUnit\Framework\MockObject\MockObject $consumerMock */
         $consumerMock = $this->getMockBuilder(\Magento\Framework\MessageQueue\ConsumerInterface::class)->getMock();
         $consumerMock->expects($this->once())->method('process');
         $consumerName = 'someConsumerName';
@@ -81,12 +81,13 @@ class ConsumerRunnerTest extends \PHPUnit\Framework\TestCase
     /**
      * Ensure that exception will be thrown if requested magic method does not correspond to any declared consumer.
      *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage "nonDeclaredConsumer" callback method specified in crontab.xml must
      * @return void
      */
     public function testMagicMethodNoRelatedConsumer()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('"nonDeclaredConsumer" callback method specified in crontab.xml must');
+
         $consumerName = 'nonDeclaredConsumer';
         $this->consumerFactoryMock
             ->expects($this->once())
@@ -105,7 +106,7 @@ class ConsumerRunnerTest extends \PHPUnit\Framework\TestCase
     public function testMagicMethodMaintenanceModeIsOn()
     {
         $isMaintenanceModeOn = true;
-        /** @var ConsumerInterface|\PHPUnit_Framework_MockObject_MockObject $consumerMock */
+        /** @var ConsumerInterface|\PHPUnit\Framework\MockObject\MockObject $consumerMock */
         $consumerMock = $this->getMockBuilder(\Magento\Framework\MessageQueue\ConsumerInterface::class)->getMock();
         $consumerMock->expects($this->never())->method('process');
         $consumerName = 'someConsumerName';

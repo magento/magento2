@@ -16,38 +16,38 @@ class RuleTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
     private $objectManager;
 
-    /** @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $storeManager;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $combineFactory;
 
-    /** @var \Magento\Store\Model\Store|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Store\Model\Store|\PHPUnit\Framework\MockObject\MockObject */
     protected $storeModel;
 
-    /** @var \Magento\Store\Model\Website|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Store\Model\Website|\PHPUnit\Framework\MockObject\MockObject */
     protected $websiteModel;
 
-    /** @var \Magento\Rule\Model\Condition\Combine|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Rule\Model\Condition\Combine|\PHPUnit\Framework\MockObject\MockObject */
     protected $condition;
 
     /**
-     * @var \Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_ruleProductProcessor;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_productCollectionFactory;
 
     /**
-     * @var \Magento\Framework\Model\ResourceModel\Iterator|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\ResourceModel\Iterator|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_resourceIterator;
 
     /**
-     * @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $productModel;
 
@@ -56,7 +56,7 @@ class RuleTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->storeManager = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
@@ -125,7 +125,7 @@ class RuleTest extends \PHPUnit\Framework\TestCase
     /**
      * Get mock for serializer
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     private function getSerializerMock()
     {

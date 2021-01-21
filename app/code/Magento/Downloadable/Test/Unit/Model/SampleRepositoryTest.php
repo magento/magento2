@@ -14,37 +14,37 @@ use Magento\Downloadable\Model\SampleRepository;
 class SampleRepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $repositoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $productTypeMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $contentValidatorMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $contentUploaderMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $jsonEncoderMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $sampleFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $productMock;
 
@@ -54,26 +54,26 @@ class SampleRepositoryTest extends \PHPUnit\Framework\TestCase
     protected $service;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $sampleDataObjectFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $metadataPoolMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $sampleHandlerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $entityMetadataMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->productMock = $this->createPartialMock(
             \Magento\Catalog\Model\Product::class,
@@ -139,7 +139,7 @@ class SampleRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param array $sampleData
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getSampleMock(array $sampleData)
     {
@@ -207,11 +207,12 @@ class SampleRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage The sample title is empty. Enter the title and try again.
      */
     public function testCreateThrowsExceptionIfTitleIsEmpty()
     {
+        $this->expectException(\Magento\Framework\Exception\InputException::class);
+        $this->expectExceptionMessage('The sample title is empty. Enter the title and try again.');
+
         $productSku = 'simple';
         $sampleData = [
             'title' => '',
@@ -342,11 +343,12 @@ class SampleRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage The sample title is empty. Enter the title and try again.
      */
     public function testUpdateThrowsExceptionIfTitleIsEmptyAndScopeIsGlobal()
     {
+        $this->expectException(\Magento\Framework\Exception\InputException::class);
+        $this->expectExceptionMessage('The sample title is empty. Enter the title and try again.');
+
         $sampleId = 1;
         $productSku = 'simple';
         $productId = 1;
@@ -391,11 +393,12 @@ class SampleRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage No downloadable sample with the provided ID was found. Verify the ID and try again.
      */
     public function testDeleteThrowsExceptionIfSampleIdIsNotValid()
     {
+        $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
+        $this->expectExceptionMessage('No downloadable sample with the provided ID was found. Verify the ID and try again.');
+
         $sampleId = 1;
         $sampleMock = $this->createMock(\Magento\Downloadable\Model\Sample::class);
         $this->sampleFactoryMock->expects($this->once())->method('create')->will($this->returnValue($sampleMock));

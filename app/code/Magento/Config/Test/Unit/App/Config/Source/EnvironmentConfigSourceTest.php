@@ -13,12 +13,12 @@ use Magento\Framework\Stdlib\ArrayManager;
 class EnvironmentConfigSourceTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var ArrayManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var ArrayManager|\PHPUnit\Framework\MockObject\MockObject
      */
     private $arrayManagerMock;
 
     /**
-     * @var PlaceholderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var PlaceholderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $placeholderMock;
 
@@ -27,7 +27,7 @@ class EnvironmentConfigSourceTest extends \PHPUnit\Framework\TestCase
      */
     private $source;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->arrayManagerMock = $this->getMockBuilder(ArrayManager::class)
             ->disableOriginalConstructor()
@@ -35,7 +35,7 @@ class EnvironmentConfigSourceTest extends \PHPUnit\Framework\TestCase
         $this->placeholderMock = $this->getMockBuilder(PlaceholderInterface::class)
             ->getMockForAbstractClass();
 
-        /** @var PlaceholderFactory|\PHPUnit_Framework_MockObject_MockObject $placeholderFactoryMock */
+        /** @var PlaceholderFactory|\PHPUnit\Framework\MockObject\MockObject $placeholderFactoryMock */
         $placeholderFactoryMock = $this->getMockBuilder(PlaceholderFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -106,7 +106,7 @@ class EnvironmentConfigSourceTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($expectedArray, $this->source->get());
     }
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         unset($_ENV['CONFIG__UNIT__TEST__VALUE']);
     }

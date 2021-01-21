@@ -13,47 +13,47 @@ namespace Magento\Shipping\Test\Unit\Controller\Adminhtml\Order\Shipment;
 class AddCommentTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $shipmentLoaderMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\Email\Sender\ShipmentCommentSender|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Email\Sender\ShipmentCommentSender|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $shipmentCommentSenderMock;
 
     /**
-     * @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Request\Http|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $requestMock;
 
     /**
-     * @var \Magento\Framework\App\Response\Http|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Response\Http|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $responseMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $resultPageMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\Shipment|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Shipment|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $shipmentMock;
 
     /**
-     * @var \Magento\Framework\App\ViewInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ViewInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $viewInterfaceMock;
 
     /**
-     * @var \Magento\Framework\View\Result\LayoutFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Result\LayoutFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resultLayoutFactoryMock;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $objectManagerMock;
 
@@ -62,7 +62,7 @@ class AddCommentTest extends \PHPUnit\Framework\TestCase
      */
     protected $controller;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->shipmentLoaderMock = $this->createPartialMock(
             \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader::class,

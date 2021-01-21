@@ -13,7 +13,7 @@ class CctypeTest extends \PHPUnit\Framework\TestCase
     /**
      * Payment config model
      *
-     * @var \Magento\Payment\Model\Config | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Payment\Model\Config | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_paymentConfig;
 
@@ -43,7 +43,7 @@ class CctypeTest extends \PHPUnit\Framework\TestCase
      */
     protected $_expectedToOptionsArray = [['value' => 'allowed_cc_type', 'label' => 'name']];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_paymentConfig = $this->getMockBuilder(
             \Magento\Payment\Model\Config::class

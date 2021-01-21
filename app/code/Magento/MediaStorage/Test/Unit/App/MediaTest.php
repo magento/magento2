@@ -27,12 +27,12 @@ class MediaTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \Magento\MediaStorage\Model\File\Storage\ConfigFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\MediaStorage\Model\File\Storage\ConfigFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configFactoryMock;
 
     /**
-     * @var \Magento\MediaStorage\Model\File\Storage\SynchronizationFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\MediaStorage\Model\File\Storage\SynchronizationFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $syncFactoryMock;
 
@@ -42,36 +42,36 @@ class MediaTest extends \PHPUnit\Framework\TestCase
     private $closure;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $configMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $sync;
 
     /**
-     * @var \Magento\MediaStorage\Model\File\Storage\Response|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\MediaStorage\Model\File\Storage\Response|\PHPUnit\Framework\MockObject\MockObject
      */
     private $responseMock;
 
     /**
-     * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem|\PHPUnit\Framework\MockObject\MockObject
      */
     private $filesystemMock;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\Read|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\Directory\Read|\PHPUnit\Framework\MockObject\MockObject
      */
     private $directoryMediaMock;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\Read|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\Directory\Read|\PHPUnit\Framework\MockObject\MockObject
      */
     private $directoryPubMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->closure = function () {
             return true;
@@ -143,7 +143,7 @@ class MediaTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->model);
     }

@@ -12,7 +12,7 @@ class SerializerTest extends \PHPUnit\Framework\TestCase
      */
     protected $_layoutMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_layoutMock = $this->getMockBuilder(
             \Magento\Framework\View\LayoutInterface::class

@@ -11,7 +11,7 @@ class ProcessingErrorAggregatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorFactory
-     * |\PHPUnit_Framework_MockObject_MockObject
+     * |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $processingErrorFactoryMock;
 
@@ -39,7 +39,7 @@ class ProcessingErrorAggregatorTest extends \PHPUnit\Framework\TestCase
     /**
      * Preparing mock objects
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->processingErrorFactoryMock = $this->createPartialMock(

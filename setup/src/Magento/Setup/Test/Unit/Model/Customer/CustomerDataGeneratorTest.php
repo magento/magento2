@@ -23,7 +23,7 @@ class CustomerDataGeneratorTest extends \PHPUnit\Framework\TestCase
     ];
 
     /**
-     * @var \Magento\Setup\Model\Address\AddressDataGenerator|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Setup\Model\Address\AddressDataGenerator|\PHPUnit\Framework\MockObject\MockObject
      */
     private $addressGeneratorMock;
 
@@ -32,7 +32,7 @@ class CustomerDataGeneratorTest extends \PHPUnit\Framework\TestCase
      */
     private $customerGenerator;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->groupCollectionFactoryMock =
             $this->createPartialMock(

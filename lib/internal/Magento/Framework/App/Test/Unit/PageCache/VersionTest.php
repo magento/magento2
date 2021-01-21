@@ -21,28 +21,28 @@ class VersionTest extends \PHPUnit\Framework\TestCase
     /**
      * Cookie manager mock
      *
-     * @var \Magento\Framework\Stdlib\CookieManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\CookieManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $cookieManagerMock;
 
     /**
      * Cookie manager mock
      *
-     * @var \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $cookieMetadataFactoryMock;
 
     /**
      * Request mock
      *
-     * @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Request\Http|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $requestMock;
 
     /**
      * Create cookie and request mock, version instance
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->cookieManagerMock = $this->createMock(\Magento\Framework\Stdlib\CookieManagerInterface::class);

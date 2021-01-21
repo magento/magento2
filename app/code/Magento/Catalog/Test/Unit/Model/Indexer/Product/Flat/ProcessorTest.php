@@ -20,21 +20,21 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \Magento\Indexer\Model\Indexer|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Indexer\Model\Indexer|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_indexerMock;
 
     /**
-     * @var \Magento\Catalog\Model\Indexer\Product\Flat\State|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Indexer\Product\Flat\State|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_stateMock;
 
     /**
-     * @var \Magento\Framework\Indexer\IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Indexer\IndexerRegistry|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $indexerRegistryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 

@@ -13,22 +13,22 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class RobotsTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\View\Element\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Element\Context|\PHPUnit\Framework\MockObject\MockObject
      */
     private $context;
 
     /**
-     * @var \Magento\Store\Model\StoreResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreResolver|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeResolver;
 
     /**
-     * @var \Magento\Sitemap\Model\ResourceModel\Sitemap\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sitemap\Model\ResourceModel\Sitemap\CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $sitemapCollectionFactory;
 
     /**
-     * @var \Magento\Sitemap\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sitemap\Helper\Data|\PHPUnit\Framework\MockObject\MockObject
      */
     private $sitemapHelper;
 
@@ -38,21 +38,21 @@ class RobotsTest extends \PHPUnit\Framework\TestCase
     private $block;
 
     /**
-     * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $eventManagerMock;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $scopeConfigMock;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->eventManagerMock = $this->getMockBuilder(\Magento\Framework\Event\ManagerInterface::class)
             ->getMockForAbstractClass();
@@ -277,7 +277,7 @@ class RobotsTest extends \PHPUnit\Framework\TestCase
      *
      * @param string $sitemapPath
      * @param string $sitemapFilename
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getSitemapMock($sitemapPath, $sitemapFilename)
     {

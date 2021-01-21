@@ -8,7 +8,7 @@ namespace Magento\ProductAlert\Test\Unit\Block\Product;
 class ImageProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Catalog\Block\Product\ImageBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Block\Product\ImageBuilder|\PHPUnit\Framework\MockObject\MockObject
      */
     private $imageBuilderMock;
 
@@ -17,7 +17,7 @@ class ImageProviderTest extends \PHPUnit\Framework\TestCase
      */
     private $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->imageBuilderMock = $this->getMockBuilder(\Magento\Catalog\Block\Product\ImageBuilder::class)
             ->disableOriginalConstructor()

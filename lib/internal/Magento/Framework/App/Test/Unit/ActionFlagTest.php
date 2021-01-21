@@ -13,11 +13,11 @@ class ActionFlagTest extends \PHPUnit\Framework\TestCase
     protected $_actionFlag;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_requestMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_requestMock = $this->createMock(\Magento\Framework\App\Request\Http::class);
         $this->_actionFlag = new \Magento\Framework\App\ActionFlag($this->_requestMock);

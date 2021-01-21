@@ -24,46 +24,46 @@ class RefreshSpecialPricesTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_storeManagerMock;
 
     /**
-     * @var Resource|\PHPUnit_Framework_MockObject_MockObject
+     * @var Resource|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_resourceMock;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\DateTime|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_dateTimeMock;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_localeDateMock;
 
     /**
-     * @var \Magento\Eav\Model\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Eav\Model\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_eavConfigMock;
 
     /**
-     * @var \Magento\Catalog\Model\Indexer\Product\Price\Processor|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Indexer\Product\Price\Processor|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_priceProcessorMock;
 
     /**
-     * @var MetadataPool|\PHPUnit_Framework_MockObject_MockObject
+     * @var MetadataPool|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $metadataPool;
 
     /**
-     * @var \Magento\Framework\EntityManager\EntityMetadata|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\EntityManager\EntityMetadata|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $metadataMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 

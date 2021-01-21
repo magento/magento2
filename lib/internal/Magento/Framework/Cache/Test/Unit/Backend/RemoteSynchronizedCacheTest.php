@@ -17,12 +17,12 @@ class RemoteSynchronizedCacheTest extends \PHPUnit\Framework\TestCase
     protected $objectManager;
 
     /**
-     * @var \Cm_Cache_Backend_File|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Cm_Cache_Backend_File|\PHPUnit\Framework\MockObject\MockObject
      */
     private $localCacheMockExample;
 
     /**
-     * @var Database|\PHPUnit_Framework_MockObject_MockObject
+     * @var Database|\PHPUnit\Framework\MockObject\MockObject
      */
     private $remoteCacheMockExample;
 
@@ -31,7 +31,7 @@ class RemoteSynchronizedCacheTest extends \PHPUnit\Framework\TestCase
      */
     private $remoteSyncCacheInstance;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 

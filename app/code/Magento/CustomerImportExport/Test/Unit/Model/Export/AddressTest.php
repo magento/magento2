@@ -67,7 +67,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $storeManager = $this->createMock(\Magento\Store\Model\StoreManager::class);
         $storeManager->expects(
@@ -93,7 +93,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_model);
         unset($this->_objectManager);
@@ -218,7 +218,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
             $this->createMock(\Magento\Customer\Model\GroupFactory::class),
             $this->createMock(\Magento\Customer\Model\AttributeFactory::class),
         ];
-        /** @var $customer \Magento\Customer\Model\Customer|\PHPUnit_Framework_MockObject_MockObject */
+        /** @var $customer \Magento\Customer\Model\Customer|\PHPUnit\Framework\MockObject\MockObject */
         $customer = $this->_objectManager->getObject(\Magento\Customer\Model\Customer::class, $arguments);
 
         foreach ($callbacks as $callback) {

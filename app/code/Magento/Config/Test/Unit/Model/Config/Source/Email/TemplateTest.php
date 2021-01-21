@@ -17,12 +17,12 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Registry|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_coreRegistry;
 
     /**
-     * @var \Magento\Email\Model\Template\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Email\Model\Template\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_emailConfig;
 
@@ -31,7 +31,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
      */
     protected $_templatesFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_coreRegistry = $this->createMock(\Magento\Framework\Registry::class);
         $this->_emailConfig = $this->createMock(\Magento\Email\Model\Template\Config::class);

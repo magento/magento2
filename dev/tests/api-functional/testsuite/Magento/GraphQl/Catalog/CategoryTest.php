@@ -45,7 +45,7 @@ class CategoryTest extends GraphQlAbstract
      */
     private $metadataPool;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->categoryRepository = $this->objectManager->get(CategoryRepository::class);

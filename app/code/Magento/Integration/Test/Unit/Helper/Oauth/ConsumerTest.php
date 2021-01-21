@@ -42,7 +42,7 @@ class ConsumerTest extends \PHPUnit\Framework\TestCase
     /** @var \Psr\Log\LoggerInterface */
     protected $_loggerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_consumerFactory = $this->getMockBuilder(\Magento\Integration\Model\Oauth\ConsumerFactory::class)
             ->disableOriginalConstructor()
@@ -112,7 +112,7 @@ class ConsumerTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_storeManagerMock);
         unset($this->_consumerFactory);

@@ -15,7 +15,7 @@ class CustomAttributesMapperTest extends \PHPUnit\Framework\TestCase
      */
     private $objectManager;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
     }

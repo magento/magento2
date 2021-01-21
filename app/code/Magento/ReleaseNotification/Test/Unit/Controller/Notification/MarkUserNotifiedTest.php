@@ -25,32 +25,32 @@ use Magento\ReleaseNotification\Controller\Adminhtml\Notification\MarkUserNotifi
 class MarkUserNotifiedTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|StorageInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|StorageInterface
      */
     private $storageMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Auth
+     * @var \PHPUnit\Framework\MockObject\MockObject|Auth
      */
     private $authMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|LoggerInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|LoggerInterface
      */
     private $loggerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Json
+     * @var \PHPUnit\Framework\MockObject\MockObject|Json
      */
     private $resultMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|ProductMetadataInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|ProductMetadataInterface
      */
     private $productMetadataMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|NotificationLogger
+     * @var \PHPUnit\Framework\MockObject\MockObject|NotificationLogger
      */
     private $notificationLoggerMock;
 
@@ -59,7 +59,7 @@ class MarkUserNotifiedTest extends \PHPUnit\Framework\TestCase
      */
     private $action;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->storageMock = $this->getMockBuilder(StorageInterface::class)
             ->setMethods(['getId'])

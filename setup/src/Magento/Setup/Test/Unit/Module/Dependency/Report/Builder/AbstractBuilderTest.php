@@ -8,21 +8,21 @@ namespace Magento\Setup\Test\Unit\Module\Dependency\Report\Builder;
 class AbstractBuilderTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Setup\Module\Dependency\ParserInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Setup\Module\Dependency\ParserInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $dependenciesParserMock;
 
     /**
-     * @var \Magento\Setup\Module\Dependency\Report\WriterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Setup\Module\Dependency\Report\WriterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $reportWriterMock;
 
     /**
-     * @var \Magento\Setup\Module\Dependency\Report\Builder\AbstractBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Setup\Module\Dependency\Report\Builder\AbstractBuilder|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $builder;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->dependenciesParserMock = $this->createMock(\Magento\Setup\Module\Dependency\ParserInterface::class);
         $this->reportWriterMock = $this->createMock(\Magento\Setup\Module\Dependency\Report\WriterInterface::class);

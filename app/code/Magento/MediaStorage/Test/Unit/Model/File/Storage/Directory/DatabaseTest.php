@@ -13,47 +13,47 @@ use Magento\MediaStorage\Model\ResourceModel\File\Storage\Directory\Database;
 class DatabaseTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\MediaStorage\Model\File\Storage\Directory\Database |\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\MediaStorage\Model\File\Storage\Directory\Database |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $directoryDatabase;
 
     /**
-     * @var \Magento\Framework\Model\Context |\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\Context |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $contextMock;
 
     /**
-     * @var \Magento\Framework\Registry |\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Registry |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $registryMock;
 
     /**
-     * @var \Magento\MediaStorage\Helper\File\Storage\Database |\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\MediaStorage\Helper\File\Storage\Database |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $helperStorageDatabase;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\DateTime |\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\DateTime\DateTime |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $dateModelMock;
 
     /**
-     * @var \Magento\MediaStorage\Model\File\Storage\Directory\Database |\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\MediaStorage\Model\File\Storage\Directory\Database |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $directoryMock;
 
     /**
-     * @var \Magento\MediaStorage\Model\File\Storage\Directory\DatabaseFactory |\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\MediaStorage\Model\File\Storage\Directory\DatabaseFactory |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $directoryFactoryMock;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface |\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $configMock;
 
     /**
-     * @var Database |\PHPUnit_Framework_MockObject_MockObject
+     * @var Database |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resourceDirectoryDatabaseMock;
 
@@ -70,7 +70,7 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
     /**
      * Setup preconditions
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->contextMock = $this->createMock(\Magento\Framework\Model\Context::class);
         $this->registryMock = $this->createMock(\Magento\Framework\Registry::class);

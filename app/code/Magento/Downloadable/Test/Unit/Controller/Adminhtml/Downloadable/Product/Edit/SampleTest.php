@@ -46,7 +46,7 @@ class SampleTest extends \PHPUnit\Framework\TestCase
      */
     protected $downloadHelper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 

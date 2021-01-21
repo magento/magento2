@@ -11,12 +11,12 @@ use Magento\AsynchronousOperations\Model\BulkSummary;
 class ActionsTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\View\Element\UiComponent\ContextInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Element\UiComponent\ContextInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $context;
 
     /**
-     * @var \Magento\Framework\View\Element\UiComponentFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Element\UiComponentFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $uiComponentFactory;
 
@@ -28,7 +28,7 @@ class ActionsTest extends \PHPUnit\Framework\TestCase
     /**
      * Set up
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->context = $this->createMock(\Magento\Framework\View\Element\UiComponent\ContextInterface::class);
         $this->uiComponentFactory = $this->createMock(\Magento\Framework\View\Element\UiComponentFactory::class);

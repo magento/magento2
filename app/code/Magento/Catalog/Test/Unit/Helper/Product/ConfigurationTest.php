@@ -8,7 +8,7 @@ namespace Magento\Catalog\Test\Unit\Helper\Product;
 class ConfigurationTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $serializer;
 
@@ -17,7 +17,7 @@ class ConfigurationTest extends \PHPUnit\Framework\TestCase
      */
     protected $helper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $contextMock = $this->createMock(\Magento\Framework\App\Helper\Context::class);
         $optionFactoryMock = $this->createMock(\Magento\Catalog\Model\Product\OptionFactory::class);

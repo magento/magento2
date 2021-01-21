@@ -20,26 +20,26 @@ class IndexTest extends \PHPUnit\Framework\TestCase
     protected $controller;
 
     /**
-     * @var \Magento\Rss\Model\RssManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Rss\Model\RssManager|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $rssManager;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $scopeConfigInterface;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $rssFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $response;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->rssManager = $this->createPartialMock(\Magento\Rss\Model\RssManager::class, ['getProvider']);
         $this->scopeConfigInterface = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);

@@ -15,17 +15,17 @@ class BundleTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $requestMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $productMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $subjectMock;
 
@@ -44,7 +44,7 @@ class BundleTest extends \PHPUnit\Framework\TestCase
      */
     protected $bundleOptionsCleaned;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->requestMock = $this->createMock(\Magento\Framework\App\Request\Http::class);
         $methods = [

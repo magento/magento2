@@ -17,7 +17,7 @@ class OrderRepositoryTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\GiftMessage\Model\OrderRepository */
     protected $giftMessageOrderRepository;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
@@ -31,7 +31,7 @@ class OrderRepositoryTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->objectManager = null;
         $this->message = null;

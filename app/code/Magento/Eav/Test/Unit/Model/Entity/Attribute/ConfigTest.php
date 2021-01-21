@@ -17,31 +17,31 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_readerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_cacheMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_cacheId;
 
     /**
-     * @var \Magento\Eav\Model\Entity\Attribute|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Eav\Model\Entity\Attribute|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_attribute;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_entityType;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_attribute = $this->createMock(\Magento\Eav\Model\Entity\Attribute::class);
         $this->_entityType = $this->createMock(\Magento\Eav\Model\Entity\Type::class);

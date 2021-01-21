@@ -32,41 +32,41 @@ class BuiltinPluginTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configMock;
 
     /**
-     * @var Kernel|\PHPUnit_Framework_MockObject_MockObject
+     * @var Kernel|\PHPUnit\Framework\MockObject\MockObject
      */
     private $kernelMock;
 
     /**
-     * @var AppState|\PHPUnit_Framework_MockObject_MockObject
+     * @var AppState|\PHPUnit\Framework\MockObject\MockObject
      */
     private $stateMock;
 
     /**
-     * @var Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @var Registry|\PHPUnit\Framework\MockObject\MockObject
      */
     private $registryMock;
 
     /**
-     * @var ResultInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResultInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resultMock;
 
     /**
-     * @var ResponseHttp|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResponseHttp|\PHPUnit\Framework\MockObject\MockObject
      */
     private $responseMock;
 
     /**
-     * @var HttpHeaderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var HttpHeaderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $httpHeaderMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->configMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()

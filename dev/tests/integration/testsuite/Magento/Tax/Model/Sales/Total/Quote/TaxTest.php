@@ -34,7 +34,7 @@ class TaxTest extends \Magento\TestFramework\Indexer\TestCase
     /**
      * test setup
      */
-    public function setUp()
+    public function setUp(): void
     {
         /** @var  \Magento\Framework\ObjectManagerInterface $objectManager */
         $objectManager = Bootstrap::getObjectManager();

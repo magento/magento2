@@ -19,36 +19,36 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     protected $collection;
 
     /**
-     * @var \Magento\Framework\Data\Collection\Db\FetchStrategy\Query|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Data\Collection\Db\FetchStrategy\Query|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $fetchStrategyMock;
 
     /**
-     * @var \Magento\Framework\Data\Collection\EntityFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Data\Collection\EntityFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $entityFactoryMock;
 
     /**
-     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Psr\Log\LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $loggerMock;
 
     /**
-     * @var \Magento\Framework\Model\ResourceModel\Db\AbstractDb|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\ResourceModel\Db\AbstractDb|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resourceMock;
 
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $connectionMock;
 
     /**
-     * @var \Magento\Framework\DB\Select|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Select|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $selectMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->fetchStrategyMock = $this->createPartialMock(
             \Magento\Framework\Data\Collection\Db\FetchStrategy\Query::class,

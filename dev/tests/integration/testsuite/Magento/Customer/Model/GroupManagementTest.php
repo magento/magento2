@@ -24,7 +24,7 @@ class GroupManagementTest extends \PHPUnit\Framework\TestCase
      */
     protected $groupManagement;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->groupManagement = $this->objectManager->get(\Magento\Customer\Api\GroupManagementInterface::class);

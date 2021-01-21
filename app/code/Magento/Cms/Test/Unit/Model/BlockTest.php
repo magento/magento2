@@ -34,17 +34,17 @@ class BlockTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * @var ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $eventManagerMock;
 
     /**
-     * @var Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|\PHPUnit\Framework\MockObject\MockObject
      */
     private $contextMock;
 
     /**
-     * @var BlockResource|\PHPUnit_Framework_MockObject_MockObject
+     * @var BlockResource|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resourceMock;
 
@@ -53,10 +53,10 @@ class BlockTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->resourceMock = $this->createMock(BlockResource::class);
-        $this->eventManagerMock = $this->createMock(ManagerInterface::class);
+        $this->eventManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
         $this->contextMock = $this->createMock(Context::class);
         $this->contextMock->expects($this->any())->method('getEventDispatcher')->willReturn($this->eventManagerMock);
         $this->objectManager = new ObjectManager($this);

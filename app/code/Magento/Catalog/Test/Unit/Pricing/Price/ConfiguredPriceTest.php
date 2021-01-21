@@ -19,22 +19,22 @@ class ConfiguredPriceTest extends \PHPUnit\Framework\TestCase
     protected $basePriceValue = 800.;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $item;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $product;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $calculator;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $priceInfo;
 
@@ -44,14 +44,14 @@ class ConfiguredPriceTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $priceCurrencyMock;
 
     /**
      * Initialize base dependencies
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $basePrice = $this->createMock(\Magento\Framework\Pricing\Price\PriceInterface::class);
         $basePrice->expects($this->any())->method('getValue')->will($this->returnValue($this->basePriceValue));
@@ -111,7 +111,7 @@ class ConfiguredPriceTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param int $optionId
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function createProductOptionStub($optionId)
     {
@@ -125,7 +125,7 @@ class ConfiguredPriceTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param \Magento\Catalog\Model\Product\Option $option
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function createOptionTypeStub(\Magento\Catalog\Model\Product\Option $option)
     {

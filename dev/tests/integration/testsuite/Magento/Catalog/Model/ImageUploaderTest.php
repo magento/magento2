@@ -37,7 +37,7 @@ class ImageUploaderTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var \Magento\Framework\Filesystem $filesystem */
@@ -152,7 +152,7 @@ class ImageUploaderTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         parent::tearDownAfterClass();
         $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(

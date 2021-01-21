@@ -17,31 +17,31 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \Magento\Framework\Config\ThemeFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Config\ThemeFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $themeConfigFactory;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\ReadInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\Directory\ReadInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $directory;
 
     /**
-     * @var \Magento\Framework\Data\Collection\EntityFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Data\Collection\EntityFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $entityFactory;
 
     /**
-     * @var \Magento\Framework\View\Design\Theme\ThemePackageList|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Design\Theme\ThemePackageList|\PHPUnit\Framework\MockObject\MockObject
      */
     private $themePackageList;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\ReadFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\Directory\ReadFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $readDirFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->entityFactory = $this->getMockBuilder(\Magento\Framework\Data\Collection\EntityFactory::class)
             ->disableOriginalConstructor()
@@ -151,11 +151,12 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \UnexpectedValueException
-     * @expectedExceptionMessage Constraint 'unsupported_type' is not supported
      */
     public function testAddConstraintUnsupportedType()
     {
+        $this->expectException(\UnexpectedValueException::class);
+        $this->expectExceptionMessage('Constraint \'unsupported_type\' is not supported');
+
         $this->model->addConstraint('unsupported_type', 'value');
     }
 

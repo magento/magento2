@@ -8,16 +8,16 @@ namespace Magento\Framework\Mview\Test\Unit;
 class ProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Mview\Processor|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Mview\Processor|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $model;
 
     /**
-     * @var \Magento\Framework\Mview\View\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Mview\View\CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $viewsFactoryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->viewsFactoryMock =
             $this->createPartialMock(\Magento\Framework\Mview\View\CollectionFactory::class, ['create']);
@@ -28,7 +28,7 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
      * Return array of mocked views
      *
      * @param string $method
-     * @return \Magento\Framework\Mview\ViewInterface[]|\PHPUnit_Framework_MockObject_MockObject[]
+     * @return \Magento\Framework\Mview\ViewInterface[]|\PHPUnit\Framework\MockObject\MockObject[]
      */
     protected function getViews($method)
     {
@@ -40,7 +40,7 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
     /**
      * Return view collection mock
      *
-     * @return \Magento\Framework\Mview\View\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Framework\Mview\View\Collection|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getViewsMock()
     {

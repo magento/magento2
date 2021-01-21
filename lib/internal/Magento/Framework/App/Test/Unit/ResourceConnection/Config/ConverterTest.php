@@ -22,7 +22,7 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
      */
     protected $_source;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_filePath = __DIR__ . '/_files/';
         $this->_source = new \DOMDocument();

@@ -18,17 +18,17 @@ class FileIteratorTest extends \PHPUnit\Framework\TestCase
     protected $fileIterator;
 
     /**
-     * @var \Magento\Framework\Filesystem\File\ReadFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\File\ReadFactory | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $fileReadFactory;
 
     /**
-     * @var \Magento\Framework\Filesystem\File\Read | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\File\Read | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $fileRead;
 
     /**
-     * @var \Magento\Framework\Module\Dir\ReverseResolver | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Module\Dir\ReverseResolver | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $moduleDirResolverMock;
 
@@ -39,7 +39,7 @@ class FileIteratorTest extends \PHPUnit\Framework\TestCase
      */
     protected $filePaths;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->filePaths = ['directory/path/file1', 'directory/path/file2'];
         $this->fileReadFactory = $this->createMock(\Magento\Framework\Filesystem\File\ReadFactory::class);
@@ -53,7 +53,7 @@ class FileIteratorTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->fileIterator = null;
         $this->filePaths = null;

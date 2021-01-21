@@ -13,11 +13,11 @@ class AllowspecificTest extends \PHPUnit\Framework\TestCase
     protected $_object;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_formMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $testHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_object = $testHelper->getObject(

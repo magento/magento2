@@ -19,7 +19,7 @@ use Magento\Signifyd\Model\SignifydGateway\Response\WebhookMessage;
 use Magento\Signifyd\Model\SignifydGateway\Response\WebhookMessageReader;
 use Magento\Signifyd\Model\SignifydGateway\Response\WebhookRequest;
 use Magento\Signifyd\Model\SignifydGateway\Response\WebhookRequestValidator;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -82,7 +82,7 @@ class HandlerTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->context = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
@@ -168,7 +168,7 @@ class HandlerTest extends \PHPUnit\Framework\TestCase
 
         $caseEntity = $this->getMockBuilder(CaseInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->caseRepository->expects(self::once())
             ->method('getByCaseId')
             ->with(self::equalTo($caseId))
@@ -218,7 +218,7 @@ class HandlerTest extends \PHPUnit\Framework\TestCase
 
         $caseEntity = $this->getMockBuilder(CaseInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->caseRepository->expects(self::once())
             ->method('getByCaseId')
             ->with(self::equalTo($caseId))

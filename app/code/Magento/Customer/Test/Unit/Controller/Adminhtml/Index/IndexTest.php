@@ -21,46 +21,46 @@ class IndexTest extends \PHPUnit\Framework\TestCase
     protected $context;
 
     /**
-     * @var \Magento\Framework\App\Request|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Request|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $requestMock;
 
     /**
-     * @var \Magento\Backend\Model\View\Result\ForwardFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\Model\View\Result\ForwardFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resultForwardFactoryMock;
 
     /**
-     * @var \Magento\Backend\Model\View\Result\Forward|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\Model\View\Result\Forward|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resultForwardMock;
 
     /**
-     * @var \Magento\Framework\View\Result\PageFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Result\PageFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resultPageFactoryMock;
 
     /**
-     * @var \Magento\Framework\View\Result\Page|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Result\Page|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resultPageMock;
 
     /**
-     * @var \Magento\Framework\View\Page\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Page\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $pageConfigMock;
 
     /**
-     * @var \Magento\Framework\View\Page\Title|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Page\Title|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $pageTitleMock;
 
     /**
-     * @var \Magento\Backend\Model\Session|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\Model\Session|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $sessionMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
             ->disableOriginalConstructor()->getMock();

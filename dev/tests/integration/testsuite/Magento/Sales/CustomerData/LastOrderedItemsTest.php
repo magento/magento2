@@ -22,7 +22,7 @@ class LastOrderedItemsTest extends TestCase
      */
     private $objectManager;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
     }

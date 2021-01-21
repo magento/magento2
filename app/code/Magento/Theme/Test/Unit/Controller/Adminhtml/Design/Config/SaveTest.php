@@ -13,43 +13,43 @@ use Magento\Theme\Controller\Adminhtml\Design\Config\Save;
  */
 class SaveTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \Magento\Theme\Model\DesignConfigRepository|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Theme\Model\DesignConfigRepository|\PHPUnit\Framework\MockObject\MockObject */
     protected $designConfigRepository;
 
-    /** @var \Magento\Backend\Model\View\Result\RedirectFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Backend\Model\View\Result\RedirectFactory|\PHPUnit\Framework\MockObject\MockObject */
     protected $redirectFactory;
 
-    /** @var \Magento\Backend\Model\View\Result\Redirect|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Backend\Model\View\Result\Redirect|\PHPUnit\Framework\MockObject\MockObject */
     protected $redirect;
 
-    /** @var \Magento\Theme\Model\Data\Design\ConfigFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Theme\Model\Data\Design\ConfigFactory|\PHPUnit\Framework\MockObject\MockObject */
     protected $configFactory;
 
-    /** @var \Magento\Framework\App\ScopeValidatorInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\ScopeValidatorInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $scopeValidator;
 
-    /** @var \Magento\Framework\Message\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Message\ManagerInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $messageManager;
 
-    /** @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\RequestInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $request;
 
-    /** @var \Magento\Backend\App\Action\Context|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Backend\App\Action\Context|\PHPUnit\Framework\MockObject\MockObject */
     protected $context;
 
-    /** @var \Zend\Stdlib\Parameters|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Zend\Stdlib\Parameters|\PHPUnit\Framework\MockObject\MockObject */
     protected $fileParams;
 
-    /** @var \Magento\Theme\Api\Data\DesignConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Theme\Api\Data\DesignConfigInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $designConfig;
 
     /** @var Save */
     protected $controller;
 
-    /** @var \Magento\Framework\App\Request\DataPersistorInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\Request\DataPersistorInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $dataPersistor;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $this->designConfigRepository = $this->createMock(\Magento\Theme\Model\DesignConfigRepository::class);

@@ -16,17 +16,17 @@ class ImageTest extends \PHPUnit\Framework\TestCase
     protected $helper;
 
     /**
-     * @var \Magento\Framework\App\Helper\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Helper\Context|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $context;
 
     /**
-     * @var \Magento\Catalog\Block\Product\ImageFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Block\Product\ImageFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $imageFactory;
 
     /**
-     * @var \Magento\Framework\View\Asset\Repository|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Asset\Repository|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $assetRepository;
 
@@ -36,26 +36,26 @@ class ImageTest extends \PHPUnit\Framework\TestCase
     protected $configView;
 
     /**
-     * @var \Magento\Framework\View\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\ConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $viewConfig;
 
     /**
-     * @var \Magento\Catalog\Model\Product\Image|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product\Image|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $image;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $scopeConfig;
 
     /**
-     * @var \Magento\Catalog\Model\View\Asset\PlaceholderFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\View\Asset\PlaceholderFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $placeholderFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->mockContext();
         $this->mockImage();

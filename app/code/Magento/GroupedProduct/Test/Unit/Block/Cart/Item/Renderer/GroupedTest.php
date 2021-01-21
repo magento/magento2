@@ -10,13 +10,13 @@ use Magento\GroupedProduct\Block\Cart\Item\Renderer\Grouped as Renderer;
 
 class GroupedTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $scopeConfig;
 
     /** @var Renderer */
     private $renderer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);

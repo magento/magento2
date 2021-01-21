@@ -14,7 +14,7 @@ class EavAttributesConfigFilesTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    public function setUp()
+    public function setUp(): void
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var $moduleDirSearch \Magento\Framework\Component\DirSearch */

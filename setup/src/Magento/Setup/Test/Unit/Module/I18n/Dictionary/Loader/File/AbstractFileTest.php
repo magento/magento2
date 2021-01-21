@@ -8,21 +8,21 @@ namespace Magento\Setup\Test\Unit\Module\I18n\Dictionary\Loader\File;
 class AbstractFileTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Setup\Module\I18n\Dictionary|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Setup\Module\I18n\Dictionary|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_dictionaryMock;
 
     /**
-     * @var \Magento\Setup\Module\I18n\Factory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Setup\Module\I18n\Factory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_factoryMock;
 
     /**
-     * @var \Magento\Setup\Module\I18n\Dictionary\Loader\File\AbstractFile|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Setup\Module\I18n\Dictionary\Loader\File\AbstractFile|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_abstractLoaderMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_dictionaryMock = $this->createMock(\Magento\Setup\Module\I18n\Dictionary::class);
         $this->_factoryMock = $this->createMock(\Magento\Setup\Module\I18n\Factory::class);

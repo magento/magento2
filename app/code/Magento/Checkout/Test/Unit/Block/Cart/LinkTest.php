@@ -12,7 +12,7 @@ class LinkTest extends \PHPUnit\Framework\TestCase
      */
     protected $_objectManagerHelper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
     }

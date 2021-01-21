@@ -20,62 +20,62 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
     protected $block;
 
     /**
-     * @var \Magento\Framework\App\Http\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Http\Context|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $httpContext;
 
     /**
-     * @var \Magento\Catalog\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Helper\Data|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $catalogHelper;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $categoryFactory;
 
     /**
-     * @var \Magento\Catalog\Model\Rss\Category|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Rss\Category|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $rssModel;
 
     /**
-     * @var \Magento\Framework\App\Rss\UrlBuilderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Rss\UrlBuilderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $rssUrlBuilder;
 
     /**
-     * @var \Magento\Catalog\Helper\Image|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Helper\Image|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $imageHelper;
 
     /**
-     * @var \Magento\Customer\Model\Session|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\Session|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $customerSession;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeManager;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $scopeConfig;
 
     /**
-     * @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\RequestInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $request;
 
     /**
-     * @var \Magento\Catalog\Api\CategoryRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Api\CategoryRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $categoryRepository;
 
     /**
-     * @var \Magento\Framework\View\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\ConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $viewConfig;
 
@@ -100,7 +100,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         ],
     ];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->request = $this->createMock(\Magento\Framework\App\RequestInterface::class);
         $this->request->expects($this->at(0))->method('getParam')->with('cid')->will($this->returnValue(1));
@@ -223,7 +223,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         $this->scopeConfig->expects($this->once())->method('isSetFlag')
             ->with('rss/catalog/category', \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
             ->will($this->returnValue(true));
-        $this->assertEquals(true, $this->block->isAllowed());
+        $this->assertTrue($this->block->isAllowed());
     }
 
     public function testGetFeeds()

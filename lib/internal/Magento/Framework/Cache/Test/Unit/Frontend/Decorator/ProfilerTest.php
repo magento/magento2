@@ -7,12 +7,12 @@ namespace Magento\Framework\Cache\Test\Unit\Frontend\Decorator;
 
 class ProfilerTest extends \PHPUnit\Framework\TestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         \Magento\Framework\Profiler::enable();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         \Magento\Framework\Profiler::reset();
     }

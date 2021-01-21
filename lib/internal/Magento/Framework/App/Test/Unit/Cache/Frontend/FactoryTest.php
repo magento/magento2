@@ -7,7 +7,7 @@ namespace Magento\Framework\App\Test\Unit\Cache\Frontend;
 
 class FactoryTest extends \PHPUnit\Framework\TestCase
 {
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         require_once __DIR__ . '/FactoryTest/CacheDecoratorDummy.php';
     }
@@ -138,7 +138,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
                     break;
             }
         };
-        /** @var $objectManager \PHPUnit_Framework_MockObject_MockObject */
+        /** @var $objectManager \PHPUnit\Framework\MockObject\MockObject */
         $objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $objectManager->expects($this->any())->method('create')->will($this->returnCallback($processFrontendFunc));
 

@@ -25,27 +25,27 @@ use Magento\Sales\Model\Order\ShipmentDocumentFactory\ExtensionAttributesProcess
 class ShipmentDocumentFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|ShipmentFactory
+     * @var \PHPUnit\Framework\MockObject\MockObject|ShipmentFactory
      */
     private $shipmentFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Order
+     * @var \PHPUnit\Framework\MockObject\MockObject|Order
      */
     private $orderMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|ShipmentItemCreationInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|ShipmentItemCreationInterface
      */
     private $itemMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|ShipmentCommentCreationInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|ShipmentCommentCreationInterface
      */
     private $commentMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|ShipmentInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|ShipmentInterface
      */
     private $shipmentMock;
 
@@ -55,31 +55,31 @@ class ShipmentDocumentFactoryTest extends \PHPUnit\Framework\TestCase
     private $shipmentDocumentFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|HydratorPool
+     * @var \PHPUnit\Framework\MockObject\MockObject|HydratorPool
      */
     private $hydratorPoolMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|TrackFactory
+     * @var \PHPUnit\Framework\MockObject\MockObject|TrackFactory
      */
     private $trackFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|HydratorInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|HydratorInterface
      */
     private $hydratorMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|ExtensionAttributesProcessor
+     * @var \PHPUnit\Framework\MockObject\MockObject|ExtensionAttributesProcessor
      */
     private $extensionAttributeProcessorMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Track
+     * @var \PHPUnit\Framework\MockObject\MockObject|Track
      */
     private $trackMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->shipmentFactoryMock = $this->getMockBuilder(ShipmentFactory::class)
             ->disableOriginalConstructor()
@@ -91,11 +91,11 @@ class ShipmentDocumentFactoryTest extends \PHPUnit\Framework\TestCase
 
         $this->itemMock = $this->getMockBuilder(ShipmentItemCreationInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->commentMock = $this->getMockBuilder(ShipmentCommentCreationInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->shipmentMock = $this->getMockBuilder(ShipmentInterface::class)
             ->disableOriginalConstructor()

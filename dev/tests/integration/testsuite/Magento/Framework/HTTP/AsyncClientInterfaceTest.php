@@ -25,7 +25,7 @@ class AsyncClientInterfaceTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->client = Bootstrap::getObjectManager()->get(AsyncClientInterface::class);
     }

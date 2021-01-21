@@ -20,12 +20,12 @@ class GuestCouponManagementTest extends WebapiAbstract
      */
     protected $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $createdQuotes = ['test_order_1', 'test01'];
         /** @var \Magento\Quote\Model\Quote $quote */

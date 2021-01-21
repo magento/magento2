@@ -29,7 +29,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
      */
     protected $_layer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         /** @var $attribute \Magento\Catalog\Model\Entity\Attribute */
         $attribute = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(

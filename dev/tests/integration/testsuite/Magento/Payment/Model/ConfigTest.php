@@ -20,7 +20,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
      */
     private $model = null;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         /** @var $cache \Magento\Framework\App\Cache */
@@ -72,7 +72,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $groups);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         /** @var $cache \Magento\Framework\App\Cache */

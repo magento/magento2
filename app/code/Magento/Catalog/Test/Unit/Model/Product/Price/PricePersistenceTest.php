@@ -12,32 +12,32 @@ namespace Magento\Catalog\Test\Unit\Model\Product\Price;
 class PricePersistenceTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Attribute|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\ResourceModel\Attribute|\PHPUnit\Framework\MockObject\MockObject
      */
     private $attributeResource;
 
     /**
-     * @var \Magento\Catalog\Api\ProductAttributeRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Api\ProductAttributeRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $attributeRepository;
 
     /**
-     * @var \Magento\Catalog\Api\Data\ProductAttributeInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Api\Data\ProductAttributeInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $productAttribute;
 
     /**
-     * @var \Magento\Catalog\Model\ProductIdLocatorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\ProductIdLocatorInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $productIdLocator;
 
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $connection;
 
     /**
-     * @var \Magento\Framework\EntityManager\MetadataPool|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\EntityManager\MetadataPool|\PHPUnit\Framework\MockObject\MockObject
      */
     private $metadataPool;
 
@@ -51,7 +51,7 @@ class PricePersistenceTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->attributeResource = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Attribute::class)
             ->disableOriginalConstructor()->getMock();
@@ -173,11 +173,12 @@ class PricePersistenceTest extends \PHPUnit\Framework\TestCase
     /**
      * Test update method throws exception.
      *
-     * @expectedException \Magento\Framework\Exception\CouldNotSaveException
-     * @expectedExceptionMessage Could not save Prices.
      */
     public function testUpdateWithException()
     {
+        $this->expectException(\Magento\Framework\Exception\CouldNotSaveException::class);
+        $this->expectExceptionMessage('Could not save Prices.');
+
         $attributeId = 5;
         $prices = [
             [
@@ -266,11 +267,12 @@ class PricePersistenceTest extends \PHPUnit\Framework\TestCase
     /**
      * Test delete method throws exception.
      *
-     * @expectedException \Magento\Framework\Exception\CouldNotDeleteException
-     * @expectedExceptionMessage Could not delete Prices
      */
     public function testDeleteWithException()
     {
+        $this->expectException(\Magento\Framework\Exception\CouldNotDeleteException::class);
+        $this->expectExceptionMessage('Could not delete Prices');
+
         $attributeId = 5;
         $skus = ['sku_1', 'sku_2'];
         $idsBySku = [

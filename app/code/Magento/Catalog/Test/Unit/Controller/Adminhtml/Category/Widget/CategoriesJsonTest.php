@@ -18,46 +18,46 @@ class CategoriesJsonTest extends \PHPUnit\Framework\TestCase
     protected $controller;
 
     /**
-     * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Registry|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $registryMock;
 
     /**
-     * @var \Magento\Framework\App\Response\Http|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Response\Http|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $responseMock;
 
     /**
-     * @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Request\Http|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $requestMock;
 
     /**
-     * @var \Magento\Framework\App\View|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\View|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $viewMock;
 
     /**
-     * @var \Magento\Catalog\Block\Adminhtml\Category\Widget\Chooser|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Block\Adminhtml\Category\Widget\Chooser|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $chooserBlockMock;
 
     /**
-     * @var \Magento\Framework\View\Layout|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Layout|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $layoutMock;
 
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager |\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $objectManagerMock;
 
     /**
-     * @var \Magento\Framework\Controller\Result\Json|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Controller\Result\Json|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resultJson;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->responseMock = $this->createMock(\Magento\Framework\App\Response\Http::class);
         $this->requestMock = $this->createMock(\Magento\Framework\App\Request\Http::class);

@@ -16,13 +16,13 @@ class ViewTest extends \PHPUnit\Framework\TestCase
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    /** @var \Magento\SendFriend\Model\SendFriend|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\SendFriend\Model\SendFriend|\PHPUnit\Framework\MockObject\MockObject */
     protected $sendfriendModel;
 
-    /** @var \Magento\Catalog\Block\Product\View|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Catalog\Block\Product\View|\PHPUnit\Framework\MockObject\MockObject */
     protected $productView;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->sendfriendModel = $this->createPartialMock(
             \Magento\SendFriend\Model\SendFriend::class,

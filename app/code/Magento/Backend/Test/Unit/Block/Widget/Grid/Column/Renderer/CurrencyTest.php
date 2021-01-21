@@ -13,32 +13,32 @@ class CurrencyTest extends \PHPUnit\Framework\TestCase
     protected $_blockCurrency;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_localeMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_curLocatorMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_columnMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_storeManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_requestMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_currencyMock;
 
@@ -47,7 +47,7 @@ class CurrencyTest extends \PHPUnit\Framework\TestCase
      */
     protected $_row;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
         $this->_localeMock = $this->createMock(\Magento\Framework\Locale\CurrencyInterface::class);
@@ -79,7 +79,7 @@ class CurrencyTest extends \PHPUnit\Framework\TestCase
         $this->_blockCurrency->setColumn($this->_columnMock);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_localeMock);
         unset($this->_curLocatorMock);

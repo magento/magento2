@@ -13,11 +13,11 @@ class AbstractSidebarTest extends \PHPUnit\Framework\TestCase
     protected $abstractSidebar;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $itemMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->itemMock = $this->createPartialMock(\Magento\Framework\DataObject::class, ['getQty']);
@@ -50,6 +50,6 @@ class AbstractSidebarTest extends \PHPUnit\Framework\TestCase
     public function testIsConfigurationRequired()
     {
         $productTypeMock = $this->createMock(\Magento\Catalog\Model\Product\Type::class);
-        $this->assertEquals(false, $this->abstractSidebar->isConfigurationRequired($productTypeMock));
+        $this->assertFalse($this->abstractSidebar->isConfigurationRequired($productTypeMock));
     }
 }

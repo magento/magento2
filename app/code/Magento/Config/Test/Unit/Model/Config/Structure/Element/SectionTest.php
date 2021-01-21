@@ -16,21 +16,21 @@ class SectionTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_storeManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_authorizationMock;
 
     /**
-     * @var ElementVisibilityInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ElementVisibilityInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $elementVisibilityMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $this->elementVisibilityMock = $this->getMockBuilder(ElementVisibilityInterface::class)
@@ -53,7 +53,7 @@ class SectionTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_model);
         unset($this->_storeManagerMock);

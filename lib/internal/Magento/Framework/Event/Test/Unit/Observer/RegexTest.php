@@ -17,12 +17,12 @@ class RegexTest extends \PHPUnit\Framework\TestCase
      */
     protected $regex;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->regex = new Regex();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->regex = null;
     }

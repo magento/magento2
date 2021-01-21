@@ -15,7 +15,7 @@ class SwitcherTest extends \PHPUnit\Framework\TestCase
 
     private $storeManagerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
         $objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);

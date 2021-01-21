@@ -11,22 +11,22 @@ namespace Magento\Framework\Event\Test\Unit\Invoker;
 class InvokerDefaultTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_observerFactoryMock;
 
     /**
-     * @var \Magento\Framework\Event\Observer|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Event\Observer|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_observerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_listenerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_appStateMock;
 
@@ -40,7 +40,7 @@ class InvokerDefaultTest extends \PHPUnit\Framework\TestCase
      */
     private $loggerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_observerFactoryMock = $this->createMock(\Magento\Framework\Event\ObserverFactory::class);
         $this->_observerMock = $this->createMock(\Magento\Framework\Event\Observer::class);

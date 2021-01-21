@@ -13,12 +13,12 @@ class CurrentCustomerAddressTest extends \PHPUnit\Framework\TestCase
     protected $currentCustomerAddress;
 
     /**
-     * @var \Magento\Customer\Helper\Session\CurrentCustomer|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Helper\Session\CurrentCustomer|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $currentCustomerMock;
 
     /**
-     * @var \Magento\Customer\Api\AccountManagementInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Api\AccountManagementInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $customerAccountManagementMock;
 
@@ -35,7 +35,7 @@ class CurrentCustomerAddressTest extends \PHPUnit\Framework\TestCase
     /**
      * Test setup
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->currentCustomerMock = $this->getMockBuilder(\Magento\Customer\Helper\Session\CurrentCustomer::class)
             ->disableOriginalConstructor()

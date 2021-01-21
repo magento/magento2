@@ -12,7 +12,7 @@ class WidgetTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model = null;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Widget\Model\Widget::class

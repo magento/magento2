@@ -21,63 +21,63 @@ class CartTest extends \PHPUnit\Framework\TestCase
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    /** @var \Magento\Checkout\Model\Session|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Checkout\Model\Session|\PHPUnit\Framework\MockObject\MockObject */
     protected $checkoutSessionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $customerSessionMock;
 
-    /** @var \Magento\CatalogInventory\Api\Data\StockItemInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\CatalogInventory\Api\Data\StockItemInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $stockItemMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $scopeConfigMock;
 
     /**
-     * @var \Magento\Quote\Model\Quote|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Model\Quote|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $quoteMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $eventManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $stockRegistry;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $stockState;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $storeManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $storeMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $productRepository;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $requestInfoFilterMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->checkoutSessionMock = $this->createMock(\Magento\Checkout\Model\Session::class);
         $this->customerSessionMock = $this->createMock(\Magento\Customer\Model\Session::class);
@@ -198,7 +198,7 @@ class CartTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param int|bool $itemId
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     public function prepareQuoteItemMock($itemId)
     {

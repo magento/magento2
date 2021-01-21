@@ -13,17 +13,17 @@ class CategoryManagementTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Catalog\Api\CategoryRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Api\CategoryRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $categoryRepositoryMock;
 
     /**
-     * @var \Magento\Catalog\Model\Category\Tree|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Category\Tree|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $categoryTreeMock;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $categoriesFactoryMock;
 
@@ -33,16 +33,16 @@ class CategoryManagementTest extends \PHPUnit\Framework\TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var \Magento\Framework\App\ScopeResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ScopeResolverInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $scopeResolverMock;
 
     /**
-     * @var \Magento\Framework\App\ScopeInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ScopeInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $scopeMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->categoryRepositoryMock = $this->createMock(\Magento\Catalog\Api\CategoryRepositoryInterface::class);
@@ -210,11 +210,12 @@ class CategoryManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Operation do not allow to move a parent category to any of children category
      */
     public function testMoveWithException()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('Operation do not allow to move a parent category to any of children category');
+
         $categoryId = 2;
         $parentId = 1;
         $afterId = null;
@@ -242,11 +243,12 @@ class CategoryManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Could not move category
      */
     public function testMoveWithCouldNotMoveException()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('Could not move category');
+
         $categoryId = 2;
         $parentId = 1;
         $afterId = null;

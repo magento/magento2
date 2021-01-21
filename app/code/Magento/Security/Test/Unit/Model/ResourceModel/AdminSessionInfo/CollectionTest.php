@@ -24,7 +24,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      * Init mocks for tests
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->dateTimeMock = $this->createMock(\Magento\Framework\Stdlib\DateTime\DateTime::class);
 

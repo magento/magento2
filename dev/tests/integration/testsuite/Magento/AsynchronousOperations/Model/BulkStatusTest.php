@@ -15,7 +15,7 @@ class BulkStatusTest extends \PHPUnit\Framework\TestCase
      */
     private $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\AsynchronousOperations\Model\BulkStatus::class

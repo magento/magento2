@@ -19,16 +19,16 @@ class CcTest extends \PHPUnit\Framework\TestCase
     protected $objectManager;
 
     /**
-     * @var \Magento\Payment\Model\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Payment\Model\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $paymentConfig;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $localeDate;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->paymentConfig = $this->createMock(\Magento\Payment\Model\Config::class);

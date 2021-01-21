@@ -10,7 +10,7 @@ use Magento\Sales\Api\Data\OrderStatusHistoryInterface;
 use Magento\Sales\Model\Order\Status\HistoryFactory;
 use Magento\Signifyd\Api\Data\CaseInterface;
 use Magento\Signifyd\Model\CommentsHistoryUpdater;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 use Magento\Sales\Api\OrderStatusHistoryRepositoryInterface;
 
 /**
@@ -61,7 +61,7 @@ class CommentsHistoryUpdaterTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
 
@@ -90,10 +90,11 @@ class CommentsHistoryUpdaterTest extends \PHPUnit\Framework\TestCase
      * Checks a test case when updater throws an exception while saving history comment.
      *
      * @covers \Magento\Signifyd\Model\CommentsHistoryUpdater::addComment
-     * @expectedException \Exception
      */
     public function testAddCommentWithException()
     {
+        $this->expectException(\Exception::class);
+
         $this->caseEntity->expects(self::once())
             ->method('getOrderId')
             ->willReturn(self::$orderId);

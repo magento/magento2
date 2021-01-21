@@ -25,21 +25,21 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var \Magento\Catalog\Model\Layer\Category|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Layer\Category|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $categoryLayer;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $collectionFactory;
 
     /**
-     * @var \Magento\Catalog\Model\Product\Visibility|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product\Visibility|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $visibility;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->categoryLayer = $this->createPartialMock(
             \Magento\Catalog\Model\Layer\Category::class,
@@ -54,7 +54,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
                 '__wakeup'
             ]);
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Layer\Resolver $layerResolver */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Model\Layer\Resolver $layerResolver */
         $layerResolver = $this->getMockBuilder(\Magento\Catalog\Model\Layer\Resolver::class)
             ->disableOriginalConstructor()
             ->setMethods(['get', 'create'])
@@ -172,7 +172,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
             ->method('getProductCollection')
             ->will($this->returnValue($products));
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Layer\Resolver $layerResolver */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Model\Layer\Resolver $layerResolver */
         $layerResolver = $this->getMockBuilder(\Magento\Catalog\Model\Layer\Resolver::class)
             ->disableOriginalConstructor()
             ->setMethods(['get', 'create'])

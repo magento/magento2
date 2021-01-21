@@ -13,12 +13,12 @@ use Magento\Framework\View\Design\Fallback\Rule\RuleInterface;
 class ModuleTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var RuleInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var RuleInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $rule;
 
     /**
-     * @var ComponentRegistrarInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ComponentRegistrarInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $componentRegistrar;
 
@@ -27,7 +27,7 @@ class ModuleTest extends \PHPUnit\Framework\TestCase
      */
     private $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->rule = $this->getMockForAbstractClass(\Magento\Framework\View\Design\Fallback\Rule\RuleInterface::class);
         $this->componentRegistrar = $this->getMockForAbstractClass(

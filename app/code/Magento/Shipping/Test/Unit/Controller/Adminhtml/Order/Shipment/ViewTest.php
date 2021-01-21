@@ -12,57 +12,57 @@ namespace Magento\Shipping\Test\Unit\Controller\Adminhtml\Order\Shipment;
 class ViewTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\RequestInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $requestMock;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $objectManagerMock;
 
     /**
-     * @var \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $shipmentLoaderMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\Shipment|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Shipment|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $shipmentMock;
 
     /**
-     * @var \Magento\Shipping\Block\Adminhtml\View|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Shipping\Block\Adminhtml\View|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $blockMock;
 
     /**
-     * @var \Magento\Framework\View\Result\PageFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Result\PageFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resultPageFactoryMock;
 
     /**
-     * @var \Magento\Backend\Model\View\Result\Page|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\Model\View\Result\Page|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resultPageMock;
 
     /**
-     * @var \Magento\Backend\Model\View\Result\ForwardFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\Model\View\Result\ForwardFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resultForwardFactoryMock;
 
     /**
-     * @var \Magento\Backend\Model\View\Result\Forward|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\Model\View\Result\Forward|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resultForwardMock;
 
     /**
-     * @var \Magento\Framework\View\Page\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Page\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $pageConfigMock;
 
     /**
-     * @var \Magento\Framework\View\Page\Title|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Page\Title|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $pageTitleMock;
 
@@ -71,7 +71,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
      */
     protected $controller;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
             ->getMock();

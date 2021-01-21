@@ -45,7 +45,7 @@ class CartRepositoryTest extends WebapiAbstract
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->filterBuilder = $this->objectManager->create(
@@ -59,7 +59,7 @@ class CartRepositoryTest extends WebapiAbstract
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         try {
             /** @var CartRepositoryInterface $quoteRepository */

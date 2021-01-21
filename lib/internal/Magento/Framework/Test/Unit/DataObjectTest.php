@@ -19,7 +19,7 @@ class DataObjectTest extends \PHPUnit\Framework\TestCase
     /**
      * Prepares the environment before running a test.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->dataObject = new \Magento\Framework\DataObject();
@@ -28,7 +28,7 @@ class DataObjectTest extends \PHPUnit\Framework\TestCase
     /**
      * Cleans up the environment after running a test.
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->dataObject = null;
         parent::tearDown();

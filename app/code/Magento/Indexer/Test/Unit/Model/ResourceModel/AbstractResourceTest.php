@@ -13,16 +13,16 @@ class AbstractResourceTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_resourceMock;
 
     /**
-     * @var \Magento\Framework\Indexer\Table\StrategyInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Indexer\Table\StrategyInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_tableStrategyInterface;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_resourceMock = $this->getMockBuilder(
             \Magento\Framework\App\ResourceConnection::class
@@ -93,10 +93,11 @@ class AbstractResourceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Exception
      */
     public function testSyncDataException()
     {
+        $this->expectException(\Exception::class);
+
         $describeTable = ['column' => 'column'];
         $connectionMock = $this->createMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
         $connectionMock->expects($this->any())->method('describeTable')->will($this->returnValue($describeTable));

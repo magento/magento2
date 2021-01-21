@@ -13,17 +13,17 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class ConfigurationTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Pricing\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\Helper\Data|\PHPUnit\Framework\MockObject\MockObject
      */
     private $pricingHelper;
 
     /**
-     * @var \Magento\Catalog\Helper\Product\Configuration|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Helper\Product\Configuration|\PHPUnit\Framework\MockObject\MockObject
      */
     private $productConfiguration;
 
     /**
-     * @var \Magento\Framework\Escaper|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Escaper|\PHPUnit\Framework\MockObject\MockObject
      */
     private $escaper;
 
@@ -33,7 +33,7 @@ class ConfigurationTest extends \PHPUnit\Framework\TestCase
     private $helper;
 
     /**
-     * @var \Magento\Catalog\Model\Product\Configuration\Item\ItemInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product\Configuration\Item\ItemInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $item;
 
@@ -42,7 +42,7 @@ class ConfigurationTest extends \PHPUnit\Framework\TestCase
      */
     private $serializer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->pricingHelper = $this->createPartialMock(\Magento\Framework\Pricing\Helper\Data::class, ['currency']);
         $this->productConfiguration = $this->createMock(\Magento\Catalog\Helper\Product\Configuration::class);

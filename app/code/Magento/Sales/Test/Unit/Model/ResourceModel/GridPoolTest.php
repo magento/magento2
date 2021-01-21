@@ -16,19 +16,19 @@ class GridPoolTest extends \PHPUnit\Framework\TestCase
      */
     protected $gridPool;
     /**
-     * @var \Magento\Sales\Model\ResourceModel\Order\Grid|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\ResourceModel\Order\Grid|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $orderGridMock;
     /**
-     * @var \Magento\Sales\Model\ResourceModel\Order\Invoice\Grid|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\ResourceModel\Order\Invoice\Grid|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $invoiceGridMock;
     /**
-     * @var \Magento\Sales\Model\ResourceModel\Order\Shipment\Grid|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\ResourceModel\Order\Shipment\Grid|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $shipmentGridMock;
     /**
-     * @var \Magento\Sales\Model\ResourceModel\Order\Creditmemo\Grid|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\ResourceModel\Order\Creditmemo\Grid|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $creditmemoGridMock;
     /**
@@ -39,7 +39,7 @@ class GridPoolTest extends \PHPUnit\Framework\TestCase
     /**
      * Prepare mock objects
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->orderGridMock = $this->createMock(\Magento\Sales\Model\ResourceModel\Grid::class);
         $this->invoiceGridMock = $this->createMock(\Magento\Sales\Model\ResourceModel\Grid::class);

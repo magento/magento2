@@ -22,7 +22,7 @@ class ParamOverriderCustomerIdTest extends \PHPUnit\Framework\TestCase
      */
     private $userContext;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->userContext = $this->getMockBuilder(\Magento\Authorization\Model\UserContextInterface::class)
             ->getMockForAbstractClass();

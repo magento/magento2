@@ -51,10 +51,10 @@ namespace Magento\Framework\Session {
         /** @var string Default value for session.save_path setting */
         private $defaultSavePath;
 
-        /** @var \Magento\Framework\App\DeploymentConfig | \PHPUnit_Framework_MockObject_MockObject */
+        /** @var \Magento\Framework\App\DeploymentConfig | \PHPUnit\Framework\MockObject\MockObject */
         private $deploymentConfigMock;
 
-        protected function setUp()
+        protected function setUp(): void
         {
             $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 

@@ -17,7 +17,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 class NewActionTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $shipmentLoader;
 
@@ -27,74 +27,74 @@ class NewActionTest extends \PHPUnit\Framework\TestCase
     protected $newAction;
 
     /**
-     * @var Action\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Action\Context|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $context;
 
     /**
-     * @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Request\Http|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $request;
 
     /**
-     * @var \Magento\Framework\App\ResponseInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResponseInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $response;
 
     /**
-     * @var \Magento\Framework\Message\Manager|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Message\Manager|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $messageManager;
 
     /**
-     * @var \Magento\Framework\ObjectManager\ObjectManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManager\ObjectManager|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $objectManager;
 
     /**
-     * @var \Magento\Backend\Model\Session|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\Model\Session|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $session;
 
     /**
-     * @var \Magento\Framework\App\ActionFlag|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ActionFlag|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $actionFlag;
 
     /**
-     * @var \Magento\Backend\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\Helper\Data|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $helper;
 
     /**
-     * @var  \Magento\Framework\App\ViewInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var  \Magento\Framework\App\ViewInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $view;
 
     /**
-     * @var \Magento\Framework\View\Result\Page|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Result\Page|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resultPageMock;
 
     /**
-     * @var \Magento\Framework\View\Page\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Page\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $pageConfigMock;
 
     /**
-     * @var \Magento\Framework\View\Page\Title|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Page\Title|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $pageTitleMock;
 
     /**
-     * @var \Magento\Shipping\Model\ShipmentProviderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Shipping\Model\ShipmentProviderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $shipmentProviderMock;
 
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->shipmentLoader = $this->getMockBuilder(

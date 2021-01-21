@@ -36,7 +36,7 @@ class SendFriendTest extends GraphQlAbstract
      */
     private $customerTokenService;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->sendFriendFactory = Bootstrap::getObjectManager()->get(SendFriendFactory::class);
         $this->productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);

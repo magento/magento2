@@ -13,16 +13,16 @@ use Symfony\Component\Console\Tester\CommandTester;
 class DbSchemaUpgradeCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Setup\Model\InstallerFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Setup\Model\InstallerFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $installerFactory;
 
     /**
-     * @var \Magento\Framework\App\DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\DeploymentConfig|\PHPUnit\Framework\MockObject\MockObject
      */
     private $deploymentConfig;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->installerFactory = $this->createMock(\Magento\Setup\Model\InstallerFactory::class);
         $this->deploymentConfig = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);

@@ -15,7 +15,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 class ShipmentTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Sales\Api\OrderRepositoryInterface |\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Api\OrderRepositoryInterface |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $orderRepository;
 
@@ -24,7 +24,7 @@ class ShipmentTest extends \PHPUnit\Framework\TestCase
      */
     protected $shipment;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->orderRepository = $this->createMock(\Magento\Sales\Api\OrderRepositoryInterface::class);
 

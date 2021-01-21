@@ -17,16 +17,16 @@ class PlaceholderFactoryTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $objectManagerMock;
 
     /**
-     * @var Environment|\PHPUnit_Framework_MockObject_MockObject
+     * @var Environment|\PHPUnit\Framework\MockObject\MockObject
      */
     private $environmentMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
             ->getMockForAbstractClass();
@@ -57,20 +57,22 @@ class PlaceholderFactoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage There is no defined type dummyClass
      */
     public function testCreateNonExisted()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('There is no defined type dummyClass');
+
         $this->model->create('dummyClass');
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Object is not instance of Magento\Config\Model\Placeholder\PlaceholderInterface
      */
     public function testCreateWrongImplementation()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('Object is not instance of Magento\\Config\\Model\\Placeholder\\PlaceholderInterface');
+
         $this->model->create('wrongClass');
     }
 }

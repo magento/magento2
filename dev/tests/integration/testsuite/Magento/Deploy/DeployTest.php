@@ -90,7 +90,7 @@ class DeployTest extends \PHPUnit\Framework\TestCase
         Options::STRATEGY => DeployStrategyFactory::DEPLOY_STRATEGY_COMPACT,
     ];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->prevMode = $objectManager->get(State::class)->getMode();
@@ -115,7 +115,7 @@ class DeployTest extends \PHPUnit\Framework\TestCase
         $this->filesystem->getDirectoryWrite(DirectoryList::VAR_DIR)->delete(DirectoryList::TMP_MATERIALIZATION_DIR);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $objectManager->get(State::class)->setMode($this->prevMode);

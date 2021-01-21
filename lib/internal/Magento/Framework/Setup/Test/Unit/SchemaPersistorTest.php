@@ -30,16 +30,16 @@ class SchemaPersistorTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var ComponentRegistrar|\PHPUnit_Framework_MockObject_MockObject
+     * @var ComponentRegistrar|\PHPUnit\Framework\MockObject\MockObject
      */
     private $componentRegistrarMock;
 
     /**
-     * @var XmlPersistor|\PHPUnit_Framework_MockObject_MockObject
+     * @var XmlPersistor|\PHPUnit\Framework\MockObject\MockObject
      */
     private $xmlPersistor;
 
-    protected function setUp() : void
+    protected function setUp(): void
     {
         $this->componentRegistrarMock = $this->getMockBuilder(ComponentRegistrar::class)
             ->disableOriginalConstructor()
@@ -64,7 +64,7 @@ class SchemaPersistorTest extends \PHPUnit\Framework\TestCase
     public function testPersist(array $tables, $expectedXML) : void
     {
         $moduleName = 'First_Module';
-        /** @var SchemaListener|\PHPUnit_Framework_MockObject_MockObject $schemaListenerMock */
+        /** @var SchemaListener|\PHPUnit\Framework\MockObject\MockObject $schemaListenerMock */
         $schemaListenerMock = $this->getMockBuilder(SchemaListener::class)
             ->disableOriginalConstructor()
             ->getMock();

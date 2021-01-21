@@ -16,16 +16,16 @@ class CreditmemoTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \Magento\Sales\Model\Order|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order|\PHPUnit\Framework\MockObject\MockObject
      */
     private $order;
 
     /**
-     * @var \Magento\Sales\Model\Order\Pdf\AbstractPdf|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Pdf\AbstractPdf|\PHPUnit\Framework\MockObject\MockObject
      */
     private $pdf;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->order = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
@@ -61,7 +61,7 @@ class CreditmemoTest extends \PHPUnit\Framework\TestCase
         $this->model->setPage(new \Zend_Pdf_Page('a4'));
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->model = null;
         $this->order = null;

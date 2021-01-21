@@ -45,7 +45,7 @@ class DbTableTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_model);
     }
@@ -147,7 +147,7 @@ class DbTableTest extends \PHPUnit\Framework\TestCase
     /**
      * Prepares mock for test model with specified connections
      *
-     * @param \PHPUnit_Framework_MockObject_MockObject $connection
+     * @param \PHPUnit\Framework\MockObject\MockObject $connection
      */
     protected function _prepareResourceMock($connection)
     {

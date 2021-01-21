@@ -32,64 +32,64 @@ class ProductDataMapperTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var Builder|\PHPUnit_Framework_MockObject_MockObject
+     * @var Builder|\PHPUnit\Framework\MockObject\MockObject
      */
     private $builderMock;
 
     /**
-     * @var AttributeContainer|\PHPUnit_Framework_MockObject_MockObject
+     * @var AttributeContainer|\PHPUnit\Framework\MockObject\MockObject
      */
     private $attributeContainerMock;
 
     /**
-     * @var Attribute|\PHPUnit_Framework_MockObject_MockObject
+     * @var Attribute|\PHPUnit\Framework\MockObject\MockObject
      */
     private $attribute;
 
     /**
-     * @var Index|\PHPUnit_Framework_MockObject_MockObject
+     * @var Index|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resourceIndex;
 
     /**
-     * @var AdvancedSearchIndex|\PHPUnit_Framework_MockObject_MockObject
+     * @var AdvancedSearchIndex|\PHPUnit\Framework\MockObject\MockObject
      */
     private $advancedSearchIndex;
 
     /**
-     * @var FieldMapperInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var FieldMapperInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $fieldMapperMock;
 
     /**
-     * @var DateTime|\PHPUnit_Framework_MockObject_MockObject
+     * @var DateTime|\PHPUnit\Framework\MockObject\MockObject
      */
     private $dateTimeMock;
 
     /**
-     * @var TimezoneInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var TimezoneInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $localeDateMock;
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $scopeConfigMock;
 
     /**
-     * @var StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeManagerMock;
 
     /**
-     * @var StoreInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeInterface;
 
     /**
      * Set up test environment.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->builderMock = $this->getMockBuilder(\Magento\Elasticsearch\Model\Adapter\Document\Builder::class)
             ->setMethods(['addField', 'addFields', 'build'])

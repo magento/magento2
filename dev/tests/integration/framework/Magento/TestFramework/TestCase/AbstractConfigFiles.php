@@ -23,7 +23,7 @@ abstract class AbstractConfigFiles extends \PHPUnit\Framework\TestCase
     protected $_reader;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_fileResolverMock;
 
@@ -37,7 +37,7 @@ abstract class AbstractConfigFiles extends \PHPUnit\Framework\TestCase
      */
     protected $componentRegistrar;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->componentRegistrar = new ComponentRegistrar();
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
@@ -66,7 +66,7 @@ abstract class AbstractConfigFiles extends \PHPUnit\Framework\TestCase
         }
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->_objectManager->removeSharedInstance($this->_getReaderClassName());
     }

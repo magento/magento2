@@ -17,14 +17,14 @@ class ConstraintTest extends \PHPUnit\Framework\TestCase
     protected $_constraint;
 
     /**
-     * @var \Magento\Framework\Validator\ValidatorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Validator\ValidatorInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_validatorMock;
 
     /**
      * Set up
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_validatorMock = $this->getMockBuilder(
             \Magento\Framework\Validator\AbstractValidator::class

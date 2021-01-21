@@ -13,32 +13,32 @@ class PluginTest extends \PHPUnit\Framework\TestCase
     protected $plugin;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $eventManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $productFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $jsonHelperMock;
 
     /**
-     * @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $productMock;
 
     /**
-     * @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Request\Http|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $requestMock;
 
     /**
-     * @var \Magento\Framework\DataObject|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DataObject|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $responseMock;
 
@@ -53,11 +53,11 @@ class PluginTest extends \PHPUnit\Framework\TestCase
     protected $proceedResult = [1, 2, 3];
 
     /**
-     * @var \Magento\Catalog\Model\Product\Validator|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product\Validator|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $subjectMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->eventManagerMock = $this->createMock(\Magento\Framework\Event\Manager::class);
         $this->productFactoryMock = $this->createPartialMock(\Magento\Catalog\Model\ProductFactory::class, ['create']);
@@ -313,7 +313,7 @@ class PluginTest extends \PHPUnit\Framework\TestCase
      * @param $id
      * @param bool $isValid
      * @internal param array $attributes
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Product
+     * @return \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Model\Product
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     private function createProduct($index, $id, $isValid = true)
@@ -336,7 +336,7 @@ class PluginTest extends \PHPUnit\Framework\TestCase
      * @param $attributeCode
      * @param $isUserDefined
      * @param $isRequired
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Eav\Model\Entity\Attribute\AbstractAttribute
+     * @return \PHPUnit\Framework\MockObject\MockObject|\Magento\Eav\Model\Entity\Attribute\AbstractAttribute
      */
     private function createAttribute($attributeCode, $isUserDefined, $isRequired)
     {

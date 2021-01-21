@@ -22,76 +22,76 @@ class ListProductTest extends \PHPUnit\Framework\TestCase
     protected $block;
 
     /**
-     * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Registry|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $registryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $layerMock;
 
     /**
-     * @var \Magento\Framework\Data\Helper\PostHelper|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Data\Helper\PostHelper|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $postDataHelperMock;
 
     /**
-     * @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $productMock;
 
     /**
-     * @var \Magento\Checkout\Helper\Cart|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Checkout\Helper\Cart|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $cartHelperMock;
 
     /**
-     * @var \Magento\Catalog\Model\Product\Type\Simple|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product\Type\Simple|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $typeInstanceMock;
 
     /**
-     * @var Data | \PHPUnit_Framework_MockObject_MockObject
+     * @var Data | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $urlHelperMock;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Category | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\ResourceModel\Category | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $catCollectionMock;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\ResourceModel\Product | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $prodCollectionMock;
 
     /**
-     * @var \Magento\Framework\View\LayoutInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\LayoutInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $layoutMock;
 
     /**
-     * @var \Magento\Catalog\Block\Product\ProductList\Toolbar | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Block\Product\ProductList\Toolbar | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $toolbarMock;
 
     /**
-     * @var Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|\PHPUnit\Framework\MockObject\MockObject
      */
     private $context;
 
     /**
-     * @var Render|\PHPUnit_Framework_MockObject_MockObject
+     * @var Render|\PHPUnit\Framework\MockObject\MockObject
      */
     private $renderer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->registryMock = $this->createMock(\Magento\Framework\Registry::class);
         $this->layerMock = $this->createMock(\Magento\Catalog\Model\Layer::class);
-        /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Layer\Resolver $layerResolver */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Model\Layer\Resolver $layerResolver */
         $layerResolver = $this->getMockBuilder(\Magento\Catalog\Model\Layer\Resolver::class)
             ->disableOriginalConstructor()
             ->setMethods(['get', 'create'])
@@ -132,7 +132,7 @@ class ListProductTest extends \PHPUnit\Framework\TestCase
         $this->block->setToolbarBlockName('mock');
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->block = null;
     }

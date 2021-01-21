@@ -22,7 +22,7 @@ class ScopeTest extends \PHPUnit\Framework\TestCase
      */
     private $areaListMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->areaListMock = $this->createPartialMock(AreaList::class, ['getCodes']);
         $this->model = new Scope($this->areaListMock);

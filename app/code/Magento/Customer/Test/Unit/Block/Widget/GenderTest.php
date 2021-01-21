@@ -18,23 +18,23 @@ class GenderTest extends \PHPUnit\Framework\TestCase
     const GENDER_ATTRIBUTE_CODE = 'gender';
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Api\CustomerMetadataInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Customer\Api\CustomerMetadataInterface
      */
     private $customerMetadata;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Api\Data\AttributeMetadataInterface */
+    /** @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Customer\Api\Data\AttributeMetadataInterface */
     private $attribute;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Model\Session */
+    /** @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Customer\Model\Session */
     private $customerSession;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Api\CustomerRepositoryInterface */
+    /** @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Customer\Api\CustomerRepositoryInterface */
     private $customerRepository;
 
     /** @var Gender */
     private $block;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->attribute = $this->getMockBuilder(\Magento\Customer\Api\Data\AttributeMetadataInterface::class)
             ->getMockForAbstractClass();
@@ -98,7 +98,7 @@ class GenderTest extends \PHPUnit\Framework\TestCase
                 )
             ))
         );
-        $this->assertSame(false, $this->block->isEnabled());
+        $this->assertFalse($this->block->isEnabled());
     }
 
     /**
@@ -139,7 +139,7 @@ class GenderTest extends \PHPUnit\Framework\TestCase
                 )
             ))
         );
-        $this->assertSame(false, $this->block->isRequired());
+        $this->assertFalse($this->block->isRequired());
     }
 
     /**

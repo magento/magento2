@@ -31,7 +31,7 @@ class AjaxLoadTest extends \PHPUnit\Framework\TestCase
     /*
      * test setup
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->request = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
             ->disableOriginalConstructor()

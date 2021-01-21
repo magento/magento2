@@ -10,7 +10,7 @@ use Magento\Braintree\Gateway\Response\PaymentDetailsHandler;
 use Magento\Payment\Gateway\Data\PaymentDataObject;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Braintree\Gateway\SubjectReader;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * Tests \\Magento\Braintree\Gateway\Response\PaymentDetailsHandler.
@@ -34,7 +34,7 @@ class PaymentDetailsHandlerTest extends \PHPUnit\Framework\TestCase
      */
     private $subjectReaderMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->paymentMock = $this->getMockBuilder(Payment::class)
             ->disableOriginalConstructor()

@@ -24,7 +24,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
      */
     protected $_category;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Catalog\Model\Category::class

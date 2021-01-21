@@ -13,7 +13,7 @@ namespace Magento\Framework\MessageQueue\Test\Unit;
 class MessageControllerTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\MessageQueue\LockInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\MessageQueue\LockInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $lockFactory;
 
@@ -27,7 +27,7 @@ class MessageControllerTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->lockFactory = $this->getMockBuilder(\Magento\Framework\MessageQueue\LockInterfaceFactory::class)
             ->disableOriginalConstructor()->setMethods(['create'])->getMock();

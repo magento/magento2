@@ -12,19 +12,19 @@ class StoreViewServiceTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\CatalogUrlRewrite\Service\V1\StoreViewService */
     protected $storeViewService;
 
-    /** @var \Magento\Eav\Model\Config|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Eav\Model\Config|\PHPUnit\Framework\MockObject\MockObject */
     protected $config;
 
-    /** @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\ResourceConnection|\PHPUnit\Framework\MockObject\MockObject */
     protected $resource;
 
-    /** @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $connection;
 
-    /** @var  \Magento\Framework\Db\Select|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \Magento\Framework\Db\Select|\PHPUnit\Framework\MockObject\MockObject */
     protected $select;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->config = $this->createMock(\Magento\Eav\Model\Config::class);
         $this->select = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
@@ -112,11 +112,12 @@ class StoreViewServiceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Cannot retrieve attribute for entity type "invalid_type"
      */
     public function testInvalidAttributeRetrieve()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Cannot retrieve attribute for entity type "invalid_type"');
+
         $invalidEntityType = 'invalid_type';
         $this->config->expects($this->once())->method('getAttribute')->will($this->returnValue(false));
 

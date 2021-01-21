@@ -21,7 +21,7 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
     /**
      * {@inheritdoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManagerHelper($this);
         $this->converter = $objectManager->getObject(

@@ -13,7 +13,7 @@ use Magento\Sales\Observer\Frontend\AddVatRequestParamsOrderComment;
 class AddVatRequestParamsOrderCommentTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Customer\Helper\Address|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Helper\Address|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $customerAddressHelperMock;
 
@@ -22,7 +22,7 @@ class AddVatRequestParamsOrderCommentTest extends \PHPUnit\Framework\TestCase
      */
     protected $observer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->customerAddressHelperMock = $this->getMockBuilder(\Magento\Customer\Helper\Address::class)
             ->disableOriginalConstructor()

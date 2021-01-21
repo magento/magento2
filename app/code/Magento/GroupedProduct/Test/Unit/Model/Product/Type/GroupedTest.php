@@ -18,17 +18,17 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $catalogProductLink;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $product;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $productStatusMock;
 
@@ -42,7 +42,7 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
      */
     private $serializer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $eventManager = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);

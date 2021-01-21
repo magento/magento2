@@ -8,32 +8,32 @@ namespace Magento\GroupedProduct\Test\Unit\Block\Product\Grouped\AssociatedProdu
 class ListAssociatedProductsTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $contextMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $registryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $productMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $typeInstanceMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeMock;
 
@@ -43,11 +43,11 @@ class ListAssociatedProductsTest extends \PHPUnit\Framework\TestCase
     protected $block;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Pricing\PriceCurrencyInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Pricing\PriceCurrencyInterface
      */
     protected $priceCurrency;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->contextMock = $this->createMock(\Magento\Backend\Block\Template\Context::class);
         $this->registryMock = $this->createMock(\Magento\Framework\Registry::class);
@@ -148,7 +148,7 @@ class ListAssociatedProductsTest extends \PHPUnit\Framework\TestCase
      * Generate associated product mock
      *
      * @param int $productKey
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function generateAssociatedProduct($productKey = 0)
     {

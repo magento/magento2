@@ -25,7 +25,7 @@ class GroupedProductViewTest extends GraphQlAbstract
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);

@@ -8,17 +8,17 @@ namespace Magento\Backend\Test\Unit\App\Router;
 class NoRouteHandlerTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_helperMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_requestMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_routeConfigMock;
 
@@ -27,7 +27,7 @@ class NoRouteHandlerTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_requestMock = $this->createMock(\Magento\Framework\App\Request\Http::class);
         $this->_routeConfigMock = $this->createMock(\Magento\Framework\App\Route\ConfigInterface::class);
@@ -82,7 +82,7 @@ class NoRouteHandlerTest extends \PHPUnit\Framework\TestCase
             $this->returnValue($this->_requestMock)
         );
 
-        $this->assertEquals(true, $this->_model->process($this->_requestMock));
+        $this->assertTrue($this->_model->process($this->_requestMock));
     }
 
     /**
@@ -104,6 +104,6 @@ class NoRouteHandlerTest extends \PHPUnit\Framework\TestCase
 
         $this->_requestMock->expects($this->never())->method('setActionName');
 
-        $this->assertEquals(false, $this->_model->process($this->_requestMock));
+        $this->assertFalse($this->_model->process($this->_requestMock));
     }
 }

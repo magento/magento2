@@ -17,16 +17,16 @@ class MemoryTest extends \PHPUnit\Framework\TestCase
     protected $_object;
 
     /**
-     * @var \Magento\TestFramework\MemoryLimit|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\TestFramework\MemoryLimit|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_memoryLimit;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_activationPolicy;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_memoryLimit = $this->createPartialMock(\Magento\TestFramework\MemoryLimit::class, ['printStats']);
         $this->_activationPolicy = $this->createPartialMock(\stdClass::class, ['register_shutdown_function']);
@@ -36,7 +36,7 @@ class MemoryTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->_memoryLimit = null;
         $this->_activationPolicy = null;

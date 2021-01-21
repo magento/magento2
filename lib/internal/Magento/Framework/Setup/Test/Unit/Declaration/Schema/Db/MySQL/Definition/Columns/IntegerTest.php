@@ -28,36 +28,36 @@ class IntegerTest extends \PHPUnit\Framework\TestCase
     private $integer;
 
     /**
-     * @var Nullable|\PHPUnit_Framework_MockObject_MockObject
+     * @var Nullable|\PHPUnit\Framework\MockObject\MockObject
      */
     private $nullableMock;
 
     /**
-     * @var Comment|\PHPUnit_Framework_MockObject_MockObject
+     * @var Comment|\PHPUnit\Framework\MockObject\MockObject
      */
     private $commentMock;
 
     /**
-     * @var ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resourceConnectionMock;
 
     /**
-     * @var Identity|\PHPUnit_Framework_MockObject_MockObject
+     * @var Identity|\PHPUnit\Framework\MockObject\MockObject
      */
     private $identityMock;
 
     /**
-     * @var Unsigned|\PHPUnit_Framework_MockObject_MockObject
+     * @var Unsigned|\PHPUnit\Framework\MockObject\MockObject
      */
     private $unsignedMock;
 
     /**
-     * @var Boolean|\PHPUnit_Framework_MockObject_MockObject
+     * @var Boolean|\PHPUnit\Framework\MockObject\MockObject
      */
     private $booleanMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $this->nullableMock = $this->getMockBuilder(Nullable::class)
@@ -96,7 +96,7 @@ class IntegerTest extends \PHPUnit\Framework\TestCase
      */
     public function testToDefinition()
     {
-        /** @var IntegerColumnDto|\PHPUnit_Framework_MockObject_MockObject $column */
+        /** @var IntegerColumnDto|\PHPUnit\Framework\MockObject\MockObject $column */
         $column = $this->getMockBuilder(IntegerColumnDto::class)
             ->disableOriginalConstructor()
             ->getMock();

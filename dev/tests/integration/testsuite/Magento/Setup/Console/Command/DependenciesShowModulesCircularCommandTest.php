@@ -20,7 +20,7 @@ class DependenciesShowModulesCircularCommandTest extends \PHPUnit\Framework\Test
      */
     private $commandTester;
 
-    public function setUp()
+    public function setUp(): void
     {
         $modules = [
             'Magento_A' => __DIR__ . '/_files/root/app/code/Magento/A',
@@ -45,7 +45,7 @@ class DependenciesShowModulesCircularCommandTest extends \PHPUnit\Framework\Test
         $this->commandTester = new CommandTester($this->command);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         if (file_exists(__DIR__ . '/_files/output/circular.csv')) {
             unlink(__DIR__ . '/_files/output/circular.csv');

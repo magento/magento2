@@ -22,7 +22,7 @@ class ProcessorFactoryTest extends \PHPUnit\Framework\TestCase
      */
     protected $_objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->_model = new \Magento\Framework\App\Config\Data\ProcessorFactory($this->_objectManager);

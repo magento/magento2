@@ -40,7 +40,7 @@ class DefaultResolverTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManagerHelper($this);
         $this->fieldTypeResolver = $this->getMockBuilder(FieldTypeResolver::class)

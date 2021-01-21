@@ -28,36 +28,36 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
     /**
      * Adapter for test
      *
-     * @var \Magento\Framework\DB\Adapter\Pdo\Mysql|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Adapter\Pdo\Mysql|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_adapter;
 
     /**
      * Mock DB adapter for DDL query tests
      *
-     * @var \Magento\Framework\DB\Adapter\Pdo\Mysql|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Adapter\Pdo\Mysql|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_mockAdapter;
 
     /**
-     * @var \Magento\Framework\DB\SelectFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\SelectFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $selectFactory;
 
     /**
-     * @var SchemaListener|\PHPUnit_Framework_MockObject_MockObject
+     * @var SchemaListener|\PHPUnit\Framework\MockObject\MockObject
      */
     private $schemaListenerMock;
 
     /**
-     * @var SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var SerializerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $serializerMock;
 
     /**
      * Setup
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $string = $this->createMock(\Magento\Framework\Stdlib\StringUtils::class);
         $dateTime = $this->createMock(\Magento\Framework\Stdlib\DateTime::class);
@@ -67,7 +67,7 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->serializerMock = $this->getMockBuilder(SerializerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->schemaListenerMock = $this->getMockBuilder(SchemaListener::class)
             ->disableOriginalConstructor()
             ->getMock();

@@ -21,19 +21,19 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
     private $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $_moduleList;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $_outputConfig;
 
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_moduleList = $this->getMockForAbstractClass(\Magento\Framework\Module\ModuleListInterface::class);
         $this->_moduleList->expects($this->any())

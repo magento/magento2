@@ -29,34 +29,34 @@ class StoreTest extends \PHPUnit\Framework\TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\App\RequestInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\App\RequestInterface
      */
     protected $requestMock;
 
     /**
-     * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $filesystemMock;
 
     /**
-     * @var ReinitableConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ReinitableConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configMock;
 
     /**
-     * @var SessionManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var SessionManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $sessionMock;
 
     /**
-     * @var \Magento\Framework\Url\ModifierInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Url\ModifierInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $urlModifierMock;
 
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->requestMock = $this->createPartialMock(\Magento\Framework\App\Request\Http::class, [
@@ -405,10 +405,11 @@ class StoreTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
      */
     public function testGetBaseUrlWrongType()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         /** @var \Magento\Store\Model\Store $model */
         $model = $this->objectManagerHelper->getObject(
             \Magento\Store\Model\Store::class
@@ -615,7 +616,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
         $useSecureInFrontend = true,
         $secureBaseUrl = 'https://example.com:443'
     ) {
-        /* @var ReinitableConfigInterface|PHPUnit_Framework_MockObject_MockObject $configMock */
+        /* @var ReinitableConfigInterface|PHPUnit\Framework\MockObject\MockObject $configMock */
         $configMock = $this->getMockForAbstractClass(\Magento\Framework\App\Config\ReinitableConfigInterface::class);
         $configMock->expects($this->any())
             ->method('getValue')

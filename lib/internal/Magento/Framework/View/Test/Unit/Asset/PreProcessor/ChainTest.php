@@ -16,7 +16,7 @@ use Magento\Framework\View\Asset\PreProcessor\Chain;
 class ChainTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\View\Asset\LocalInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Asset\LocalInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $asset;
 
@@ -25,7 +25,7 @@ class ChainTest extends \PHPUnit\Framework\TestCase
      */
     private $object;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->asset = $this->getMockForAbstractClass(\Magento\Framework\View\Asset\LocalInterface::class);
         $this->asset->expects($this->once())->method('getContentType')->will($this->returnValue('assetType'));

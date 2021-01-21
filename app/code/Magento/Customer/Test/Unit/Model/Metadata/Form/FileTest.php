@@ -17,41 +17,41 @@ class FileTest extends AbstractFormTestCase
     const ENTITY_TYPE = 0;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Url\EncoderInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Url\EncoderInterface
      */
     private $urlEncode;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|NotProtectedExtension
+     * @var \PHPUnit\Framework\MockObject\MockObject|NotProtectedExtension
      */
     private $fileValidatorMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Filesystem
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Filesystem
      */
     private $fileSystemMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Request\Http
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\Request\Http
      */
     private $requestMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\File\UploaderFactory
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\File\UploaderFactory
      */
     private $uploaderFactoryMock;
 
     /**
-     * @var \Magento\Customer\Model\FileProcessor|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\FileProcessor|\PHPUnit\Framework\MockObject\MockObject
      */
     private $fileProcessorMock;
 
     /**
-     * @var \Magento\Customer\Model\FileProcessorFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\FileProcessorFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $fileProcessorFactoryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->urlEncode = $this->getMockBuilder(\Magento\Framework\Url\EncoderInterface::class)

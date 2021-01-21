@@ -8,22 +8,22 @@ namespace Magento\Weee\Test\Unit\Model;
 class WeeeConfigProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $weeeHelperMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $weeeConfigMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeMock;
 
@@ -32,7 +32,7 @@ class WeeeConfigProviderTest extends \PHPUnit\Framework\TestCase
      */
     protected $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->weeeHelperMock = $this->createMock(\Magento\Weee\Helper\Data::class);
         $this->weeeConfigMock = $this->createMock(\Magento\Weee\Model\Config::class);

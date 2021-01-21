@@ -51,7 +51,7 @@ class ItemTest extends TestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -69,7 +69,7 @@ class ItemTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->cartFactory->create()->truncate();
 

@@ -147,7 +147,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $mockedPriceInfoFactory = $this->getMockedPriceInfoFactory();

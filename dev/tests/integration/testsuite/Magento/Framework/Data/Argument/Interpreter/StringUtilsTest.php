@@ -20,14 +20,14 @@ class StringUtilsTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var BooleanUtils|\PHPUnit_Framework_MockObject_MockObject
+     * @var BooleanUtils|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $booleanUtils;
 
     /**
      * Prepare subject for test.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->booleanUtils = $this->createMock(\Magento\Framework\Stdlib\BooleanUtils::class);
         $this->booleanUtils->expects(
@@ -40,7 +40,7 @@ class StringUtilsTest extends \PHPUnit\Framework\TestCase
 
         $baseStringUtils = new BaseStringUtils($this->booleanUtils);
         $this->model = new StringUtils($this->booleanUtils, $baseStringUtils);
-        /** @var RendererInterface|\PHPUnit_Framework_MockObject_MockObject $translateRenderer */
+        /** @var RendererInterface|\PHPUnit\Framework\MockObject\MockObject $translateRenderer */
         $translateRenderer = $this->getMockBuilder(RendererInterface::class)
           ->setMethods(['render'])
           ->getMockForAbstractClass();

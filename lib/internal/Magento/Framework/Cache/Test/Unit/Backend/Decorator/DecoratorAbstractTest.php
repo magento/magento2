@@ -16,12 +16,12 @@ class DecoratorAbstractTest extends \PHPUnit\Framework\TestCase
      */
     protected $_mockBackend;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_mockBackend = $this->createMock(\Zend_Cache_Backend_File::class);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_mockBackend);
     }

@@ -17,7 +17,7 @@ class JsTest extends \PHPUnit\Framework\TestCase
      */
     protected $_urlBuilder;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_urlBuilder = $this->createMock(\Magento\Backend\Model\Url::class);
 
@@ -37,7 +37,7 @@ class JsTest extends \PHPUnit\Framework\TestCase
             ->getMock();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_model);
     }

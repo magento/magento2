@@ -89,7 +89,7 @@ class QuoteRepositoryTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -107,7 +107,7 @@ class QuoteRepositoryTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         if ($this->quote instanceof CartInterface) {
             $this->quoteRepository->delete($this->quote);

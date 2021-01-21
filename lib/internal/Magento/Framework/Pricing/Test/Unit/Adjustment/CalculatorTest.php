@@ -17,11 +17,11 @@ class CalculatorTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Framework\Pricing\Amount\AmountFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\Amount\AmountFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $amountFactoryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->amountFactoryMock = $this->getMockBuilder(\Magento\Framework\Pricing\Amount\AmountFactory::class)
             ->disableOriginalConstructor()
@@ -29,7 +29,7 @@ class CalculatorTest extends \PHPUnit\Framework\TestCase
         $this->model = new \Magento\Framework\Pricing\Adjustment\Calculator($this->amountFactoryMock);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->model = null;
         $this->amountFactoryMock = null;

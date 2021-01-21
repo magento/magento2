@@ -21,7 +21,7 @@ class LoggerTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->logger = $objectManager->get(Logger::class);

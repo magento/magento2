@@ -30,7 +30,7 @@ class AttributeLoaderTest extends \PHPUnit\Framework\TestCase
      */
     private $resource;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         CacheCleaner::cleanAll();
         $this->objectManager = Bootstrap::getObjectManager();

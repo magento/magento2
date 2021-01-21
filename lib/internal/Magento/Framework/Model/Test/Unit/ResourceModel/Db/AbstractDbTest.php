@@ -27,16 +27,16 @@ class AbstractDbTest extends \PHPUnit\Framework\TestCase
     protected $_resourcesMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $transactionManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $relationProcessorMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_resourcesMock = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
 
@@ -210,7 +210,7 @@ class AbstractDbTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetChecksum($checksum, $expected)
     {
-        $connectionMock = $this->createMock(AdapterInterface::class);
+        $connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
         $connectionMock->expects($this->once())->method('getTablesChecksum')->with($checksum)->will(
             $this->returnValue([$checksum => 'checksum'])
         );
@@ -267,7 +267,7 @@ class AbstractDbTest extends \PHPUnit\Framework\TestCase
 
     public function testLoad()
     {
-        /** @var \Magento\Framework\Model\AbstractModel|\PHPUnit_Framework_MockObject_MockObject $object */
+        /** @var \Magento\Framework\Model\AbstractModel|\PHPUnit\Framework\MockObject\MockObject $object */
         $object = $this->getMockBuilder(\Magento\Framework\Model\AbstractModel::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -285,7 +285,7 @@ class AbstractDbTest extends \PHPUnit\Framework\TestCase
 
     public function testDelete()
     {
-        $connectionInterfaceMock = $this->createMock(AdapterInterface::class);
+        $connectionInterfaceMock = $this->getMockForAbstractClass(AdapterInterface::class);
         $contextMock = $this->createMock(\Magento\Framework\Model\Context::class);
         $registryMock = $this->createMock(\Magento\Framework\Registry::class);
         $abstractModelMock = $this->getMockForAbstractClass(
@@ -303,7 +303,7 @@ class AbstractDbTest extends \PHPUnit\Framework\TestCase
 
         $abstractModelMock->expects($this->atLeastOnce())->method('getId')->willReturn(1);
         $abstractModelMock->expects($this->once())->method('getData')->willReturn(['data' => 'value']);
-        $connectionMock = $this->createMock(AdapterInterface::class);
+        $connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
         $this->transactionManagerMock->expects($this->once())
             ->method('start')
             ->with($connectionInterfaceMock)
@@ -372,7 +372,7 @@ class AbstractDbTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetDataChanged($getOriginData, $expected)
     {
-        $connectionInterfaceMock = $this->createMock(AdapterInterface::class);
+        $connectionInterfaceMock = $this->getMockForAbstractClass(AdapterInterface::class);
         $this->_resourcesMock->expects($this->any())->method('getConnection')->will(
             $this->returnValue($connectionInterfaceMock)
         );
@@ -434,7 +434,7 @@ class AbstractDbTest extends \PHPUnit\Framework\TestCase
             AbstractDb::class,
             ['_construct', 'getConnection', '__wakeup', 'getIdFieldName']
         );
-        $connectionInterfaceMock = $this->createMock(AdapterInterface::class);
+        $connectionInterfaceMock = $this->getMockForAbstractClass(AdapterInterface::class);
         $resourceMock->expects($this->any())
             ->method('getConnection')
             ->will($this->returnValue($connectionInterfaceMock));
@@ -592,17 +592,17 @@ class AbstractDbTest extends \PHPUnit\Framework\TestCase
      */
     public function testDuplicateExceptionProcessingOnSave()
     {
-        $connection = $this->createMock(AdapterInterface::class);
+        $connection = $this->getMockForAbstractClass(AdapterInterface::class);
         $connection->expects($this->once())->method('rollback');
 
-        /** @var AbstractDb|\PHPUnit_Framework_MockObject_MockObject $model */
+        /** @var AbstractDb|\PHPUnit\Framework\MockObject\MockObject $model */
         $model = $this->getMockBuilder(AbstractDb::class)
             ->disableOriginalConstructor()
             ->setMethods(['getConnection'])
             ->getMockForAbstractClass();
         $model->expects($this->any())->method('getConnection')->willReturn($connection);
 
-        /** @var AbstractModel|\PHPUnit_Framework_MockObject_MockObject $object */
+        /** @var AbstractModel|\PHPUnit\Framework\MockObject\MockObject $object */
         $object = $this->getMockBuilder(AbstractModel::class)
             ->disableOriginalConstructor()
             ->getMock();

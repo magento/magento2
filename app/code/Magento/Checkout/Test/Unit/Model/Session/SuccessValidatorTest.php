@@ -12,7 +12,7 @@ class SuccessValidatorTest extends \PHPUnit\Framework\TestCase
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
     }
@@ -91,10 +91,10 @@ class SuccessValidatorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param \PHPUnit_Framework_MockObject_MockObject $checkoutSession
+     * @param \PHPUnit\Framework\MockObject\MockObject $checkoutSession
      * @return object
      */
-    protected function createSuccessValidator(\PHPUnit_Framework_MockObject_MockObject $checkoutSession)
+    protected function createSuccessValidator(\PHPUnit\Framework\MockObject\MockObject $checkoutSession)
     {
         return $this->objectManagerHelper->getObject(
             \Magento\Checkout\Model\Session\SuccessValidator::class,

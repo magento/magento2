@@ -16,36 +16,36 @@ class AddressTest extends \PHPUnit\Framework\TestCase
     protected $addressResource;
 
     /**
-     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $appResourceMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\Address|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Address|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $addressMock;
 
     /**
-     * @var \Magento\Sales\Model\Order|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $orderMock;
 
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $connectionMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\Address\Validator|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Address\Validator|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $validatorMock;
 
     /**
-     * @var \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $entitySnapshotMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->addressMock = $this->createPartialMock(
             \Magento\Sales\Model\Order\Address::class,
@@ -102,11 +102,12 @@ class AddressTest extends \PHPUnit\Framework\TestCase
     /**
      * test _beforeSaveMethod via save() with failed validation
      *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage We can't save the address:
      */
     public function testSaveValidationFailed()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('We can\'t save the address:');
+
         $this->entitySnapshotMock->expects($this->once())
             ->method('isModified')
             ->with($this->addressMock)

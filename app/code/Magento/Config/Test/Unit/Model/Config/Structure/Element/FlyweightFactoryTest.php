@@ -13,11 +13,11 @@ class FlyweightFactoryTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_objectManagerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->_model = new \Magento\Config\Model\Config\Structure\Element\FlyweightFactory(
@@ -25,7 +25,7 @@ class FlyweightFactoryTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_model);
         unset($this->_objectManagerMock);

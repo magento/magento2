@@ -43,7 +43,7 @@ use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * Class ProductRepositoryTest
@@ -192,7 +192,7 @@ class ProductRepositoryTest extends TestCase
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->productFactory = $this->createPartialMock(
             ProductFactory::class,
@@ -242,7 +242,7 @@ class ProductRepositoryTest extends TestCase
         $this->initializationHelper = $this->createMock(Helper::class);
         $this->collectionFactory = $this->createPartialMock(CollectionFactory::class, ['create']);
         $this->searchCriteriaBuilder = $this->createMock(SearchCriteriaBuilder::class);
-        $this->metadataService = $this->createMock(ProductAttributeRepositoryInterface::class);
+        $this->metadataService = $this->getMockForAbstractClass(ProductAttributeRepositoryInterface::class);
         $this->searchResultsFactory = $this->createPartialMock(
             ProductSearchResultsInterfaceFactory::class,
             ['create']
@@ -260,9 +260,9 @@ class ProductRepositoryTest extends TestCase
         $this->contentFactory = $this->createPartialMock(ImageContentInterfaceFactory::class, ['create']);
         $this->contentValidator = $this->getMockBuilder(ImageContentValidatorInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->linkTypeProvider = $this->createPartialMock(LinkTypeProvider::class, ['getLinkTypes']);
-        $this->imageProcessor = $this->createMock(ImageProcessorInterface::class);
+        $this->imageProcessor = $this->getMockForAbstractClass(ImageProcessorInterface::class);
 
         $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
             ->disableOriginalConstructor()
@@ -346,11 +346,12 @@ class ProductRepositoryTest extends TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage The product that was requested doesn't exist. Verify the product and try again.
      */
     public function testGetAbsentProduct()
     {
+        $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
+        $this->expectExceptionMessage('The product that was requested doesn\'t exist. Verify the product and try again.');
+
         $this->productFactory->expects($this->once())->method('create')
             ->will($this->returnValue($this->product));
         $this->resourceModel->expects($this->once())->method('getIdBySku')->with('test_sku')
@@ -412,11 +413,12 @@ class ProductRepositoryTest extends TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage The product that was requested doesn't exist. Verify the product and try again.
      */
     public function testGetByIdAbsentProduct()
     {
+        $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
+        $this->expectExceptionMessage('The product that was requested doesn\'t exist. Verify the product and try again.');
+
         $this->productFactory->expects($this->once())->method('create')
             ->will($this->returnValue($this->product));
         $this->product->expects($this->once())->method('load')->with('product_id');
@@ -640,11 +642,12 @@ class ProductRepositoryTest extends TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\CouldNotSaveException
-     * @expectedExceptionMessage The product was unable to be saved. Please try again.
      */
     public function testSaveUnableToSaveException()
     {
+        $this->expectException(\Magento\Framework\Exception\CouldNotSaveException::class);
+        $this->expectExceptionMessage('The product was unable to be saved. Please try again.');
+
         $this->storeManager->expects($this->any())->method('getWebsites')->willReturn([1 => 'default']);
         $this->resourceModel->expects($this->exactly(1))
             ->method('getIdBySku')->willReturn(null);
@@ -666,11 +669,12 @@ class ProductRepositoryTest extends TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Invalid value of "" provided for the  field.
      */
     public function testSaveException()
     {
+        $this->expectException(\Magento\Framework\Exception\InputException::class);
+        $this->expectExceptionMessage('Invalid value of "" provided for the  field.');
+
         $this->storeManager->expects($this->any())->method('getWebsites')->willReturn([1 => 'default']);
         $this->resourceModel->expects($this->exactly(1))->method('getIdBySku')->will($this->returnValue(null));
         $this->productFactory->expects($this->exactly(2))
@@ -692,11 +696,12 @@ class ProductRepositoryTest extends TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\CouldNotSaveException
-     * @expectedExceptionMessage Invalid product data: error1,error2
      */
     public function testSaveInvalidProductException()
     {
+        $this->expectException(\Magento\Framework\Exception\CouldNotSaveException::class);
+        $this->expectExceptionMessage('Invalid product data: error1,error2');
+
         $this->storeManager->expects($this->any())->method('getWebsites')->willReturn([1 => 'default']);
         $this->resourceModel->expects($this->exactly(1))->method('getIdBySku')->will($this->returnValue(null));
         $this->productFactory->expects($this->exactly(2))
@@ -716,11 +721,12 @@ class ProductRepositoryTest extends TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\TemporaryState\CouldNotSaveException
-     * @expectedExceptionMessage Database connection error
      */
     public function testSaveThrowsTemporaryStateExceptionIfDatabaseConnectionErrorOccurred()
     {
+        $this->expectException(\Magento\Framework\Exception\TemporaryState\CouldNotSaveException::class);
+        $this->expectExceptionMessage('Database connection error');
+
         $this->storeManager->expects($this->any())->method('getWebsites')->willReturn([1 => 'default']);
         $this->productFactory->expects($this->any())
             ->method('create')
@@ -754,11 +760,12 @@ class ProductRepositoryTest extends TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage The "product-42" product couldn't be removed.
      */
     public function testDeleteException()
     {
+        $this->expectException(\Magento\Framework\Exception\StateException::class);
+        $this->expectExceptionMessage('The "product-42" product couldn\'t be removed.');
+
         $this->product->expects($this->exactly(2))->method('getSku')->willReturn('product-42');
         $this->product->expects($this->exactly(2))->method('getId')->willReturn(42);
         $this->resourceModel->expects($this->once())->method('delete')->with($this->product)
@@ -780,7 +787,7 @@ class ProductRepositoryTest extends TestCase
 
     public function testGetList()
     {
-        $searchCriteriaMock = $this->createMock(SearchCriteriaInterface::class);
+        $searchCriteriaMock = $this->getMockForAbstractClass(SearchCriteriaInterface::class);
         $collectionMock = $this->createMock(Collection::class);
         $this->collectionFactory->expects($this->once())->method('create')->willReturn($collectionMock);
         $this->product->method('getSku')->willReturn('simple');
@@ -796,7 +803,7 @@ class ProductRepositoryTest extends TestCase
         $collectionMock->expects($this->once())->method('addCategoryIds');
         $collectionMock->expects($this->atLeastOnce())->method('getItems')->willReturn([$this->product]);
         $collectionMock->expects($this->once())->method('getSize')->willReturn(128);
-        $searchResultsMock = $this->createMock(ProductSearchResultsInterface::class);
+        $searchResultsMock = $this->getMockForAbstractClass(ProductSearchResultsInterface::class);
         $searchResultsMock->expects($this->once())->method('setSearchCriteria')->with($searchCriteriaMock);
         $searchResultsMock->expects($this->once())->method('setItems')->with([$this->product]);
         $this->searchResultsFactory->expects($this->once())->method('create')->willReturn($searchResultsMock);
@@ -1323,7 +1330,7 @@ class ProductRepositoryTest extends TestCase
 
     public function testSaveWithDifferentWebsites()
     {
-        $storeMock = $this->createMock(StoreInterface::class);
+        $storeMock = $this->getMockForAbstractClass(StoreInterface::class);
         $this->resourceModel->expects($this->at(0))->method('getIdBySku')->will($this->returnValue(null));
         $this->resourceModel->expects($this->at(3))->method('getIdBySku')->will($this->returnValue(100));
         $this->productFactory->expects($this->any())

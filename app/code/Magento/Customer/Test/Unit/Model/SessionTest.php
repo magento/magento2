@@ -13,37 +13,37 @@ namespace Magento\Customer\Test\Unit\Model;
 class SessionTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_storageMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_eventManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_httpContextMock;
 
     /**
-     * @var \Magento\Framework\UrlFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\UrlFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $urlFactoryMock;
 
     /**
-     * @var \Magento\Customer\Model\CustomerFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\CustomerFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $customerFactoryMock;
 
     /**
-     * @var \Magento\Customer\Api\CustomerRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Api\CustomerRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $customerRepositoryMock;
 
     /**
-     * @var \Magento\Framework\App\Response\Http|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Response\Http|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $responseMock;
 
@@ -55,7 +55,7 @@ class SessionTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_storageMock = $this->createPartialMock(
             \Magento\Customer\Model\Session\Storage::class,
@@ -181,7 +181,7 @@ class SessionTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param int $customerId
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function prepareLoginDataMock($customerId)
     {

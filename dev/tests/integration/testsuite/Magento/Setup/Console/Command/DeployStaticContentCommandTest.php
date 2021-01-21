@@ -73,7 +73,7 @@ class DeployStaticContentCommandTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->reader = $this->objectManager->get(FileReader::class);
@@ -91,7 +91,7 @@ class DeployStaticContentCommandTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->filesystem->getDirectoryWrite(DirectoryList::CONFIG)->writeFile(
             $this->configFilePool->getPath(ConfigFilePool::APP_CONFIG),

@@ -20,11 +20,11 @@ class BlockPoolTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Block factory
-     * @var \Magento\Framework\View\Element\BlockFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Element\BlockFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $blockFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->blockFactory = $this->getMockBuilder(\Magento\Framework\View\Element\BlockFactory::class)
             ->disableOriginalConstructor()

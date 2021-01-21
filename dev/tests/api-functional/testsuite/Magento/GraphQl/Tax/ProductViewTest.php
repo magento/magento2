@@ -48,7 +48,7 @@ class ProductViewTest extends GraphQlAbstract
      */
     private $storeManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
@@ -89,7 +89,7 @@ class ProductViewTest extends GraphQlAbstract
         $scopeConfig->clean();
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         /** @var \Magento\Config\Model\ResourceModel\Config $config */
         $config = $this->objectManager->get(\Magento\Config\Model\ResourceModel\Config::class);

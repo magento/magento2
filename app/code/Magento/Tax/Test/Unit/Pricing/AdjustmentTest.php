@@ -18,12 +18,12 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
     protected $adjustment;
 
     /**
-     * @var \Magento\Tax\Helper\Data | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Tax\Helper\Data | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $taxHelper;
 
     /**
-     * @var \Magento\Catalog\Helper\Data | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Helper\Data | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $catalogHelper;
 
@@ -32,7 +32,7 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
      */
     protected $sortOrder = 5;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->taxHelper = $this->createMock(\Magento\Tax\Helper\Data::class);
         $this->catalogHelper = $this->createMock(\Magento\Catalog\Helper\Data::class);

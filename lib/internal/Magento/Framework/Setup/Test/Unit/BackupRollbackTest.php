@@ -16,17 +16,17 @@ use Magento\Framework\Setup\LoggerInterface;
 class BackupRollbackTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $objectManager;
 
     /**
-     * @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $log;
 
     /**
-     * @var \Magento\Framework\App\Filesystem\DirectoryList|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Filesystem\DirectoryList|\PHPUnit\Framework\MockObject\MockObject
      */
     private $directoryList;
 
@@ -36,22 +36,22 @@ class BackupRollbackTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \Magento\Framework\Filesystem\Driver\File|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\Driver\File|\PHPUnit\Framework\MockObject\MockObject
      */
     private $file;
 
     /**
-     * @var \Magento\Framework\Backup\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Backup\Filesystem|\PHPUnit\Framework\MockObject\MockObject
      */
     private $filesystem;
 
     /**
-     * @var \Magento\Framework\Backup\Filesystem\Helper|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Backup\Filesystem\Helper|\PHPUnit\Framework\MockObject\MockObject
      */
     private $helper;
 
     /**
-     * @var \Magento\Framework\Backup\Db|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Backup\Db|\PHPUnit\Framework\MockObject\MockObject
      */
     private $database;
 
@@ -60,7 +60,7 @@ class BackupRollbackTest extends \PHPUnit\Framework\TestCase
      */
     private $path;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->log = $this->createMock(\Magento\Framework\Setup\LoggerInterface::class);

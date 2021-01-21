@@ -35,9 +35,9 @@ class VoidDataBuilderTest extends TestCase
      */
     private $paymentDOMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->paymentDOMock = $this->createMock(PaymentDataObjectInterface::class);
+        $this->paymentDOMock = $this->getMockForAbstractClass(PaymentDataObjectInterface::class);
         $this->paymentMock = $this->createMock(Payment::class);
         $this->paymentDOMock->method('getPayment')
             ->willReturn($this->paymentMock);

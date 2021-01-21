@@ -16,11 +16,11 @@ class SelectTest extends \PHPUnit\Framework\TestCase
     protected $select;
 
     /**
-     * @var Escaper|\PHPUnit_Framework_MockObject_MockObject
+     * @var Escaper|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $escaper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $eventManager = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
 

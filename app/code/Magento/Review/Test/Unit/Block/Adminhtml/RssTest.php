@@ -24,24 +24,24 @@ class RssTest extends \PHPUnit\Framework\TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeManagerInterface;
 
     /**
-     * @var \Magento\Review\Model\Rss|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Review\Model\Rss|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $rss;
 
     /**
-     * @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\UrlInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $urlBuilder;
 
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->storeManagerInterface = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
         $this->rss = $this->createPartialMock(\Magento\Review\Model\Rss::class, ['__wakeUp', 'getProductCollection']);
@@ -143,7 +143,7 @@ class RssTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsAllowed()
     {
-        $this->assertEquals(true, $this->block->isAllowed());
+        $this->assertTrue($this->block->isAllowed());
     }
 
     /**

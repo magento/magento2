@@ -18,7 +18,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
      */
     protected $addressFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->addressModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Customer\Model\Address::class

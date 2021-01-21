@@ -10,27 +10,27 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\App\Cache\Type\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Cache\Type\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     private $cacheInstanceMock;
 
     /**
-     * @var \Magento\Backend\Model\Menu\Config\Reader|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\Model\Menu\Config\Reader|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configReaderMock;
 
     /**
-     * @var \Magento\Backend\Model\Menu|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\Model\Menu|\PHPUnit\Framework\MockObject\MockObject
      */
     private $menuMock;
 
     /**
-     * @var \Magento\Backend\Model\Menu\Builder|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\Model\Menu\Builder|\PHPUnit\Framework\MockObject\MockObject
      */
     private $menuBuilderMock;
 
     /**
-     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Psr\Log\LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $logger;
 
@@ -39,7 +39,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
      */
     private $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->cacheInstanceMock = $this->createMock(\Magento\Framework\App\Cache\Type\Config::class);
 

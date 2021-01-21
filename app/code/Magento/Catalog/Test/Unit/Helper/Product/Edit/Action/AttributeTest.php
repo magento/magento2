@@ -11,7 +11,7 @@ namespace Magento\Catalog\Test\Unit\Helper\Product\Edit\Action;
 class AttributeTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeManagerMock;
 
@@ -25,7 +25,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 

@@ -12,22 +12,22 @@ class FlushCacheByTagsTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\PageCache\Observer\FlushCacheByTags */
     protected $_model;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\PageCache\Model\Config */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\PageCache\Model\Config */
     protected $_configMock;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\PageCache\Cache */
+    /** @var  \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\PageCache\Cache */
     protected $_cacheMock;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject|\Magento\PageCache\Model\Cache\Type */
+    /** @var  \PHPUnit\Framework\MockObject\MockObject|\Magento\PageCache\Model\Cache\Type */
     private $fullPageCacheMock;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Cache\Tag\Resolver */
+    /** @var  \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\Cache\Tag\Resolver */
     private $tagResolver;
 
     /**
      * Set up all mocks and data for test
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_configMock = $this->createPartialMock(\Magento\PageCache\Model\Config::class, ['getType', 'isEnabled']);

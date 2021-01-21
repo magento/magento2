@@ -13,31 +13,31 @@ namespace Magento\Framework\View\Test\Unit\Result;
 class LayoutTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Request\Http|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $request;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Event\ManagerInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Event\ManagerInterface
      */
     protected $eventManager;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Layout
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\View\Layout
      */
     protected $layout;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Translate\InlineInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Translate\InlineInterface
      */
     protected $translateInline;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Result\Layout
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\View\Result\Layout
      */
     protected $resultLayout;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->layout = $this->createMock(\Magento\Framework\View\Layout::class);
         $this->request = $this->createMock(\Magento\Framework\App\Request\Http::class);
@@ -127,7 +127,7 @@ class LayoutTest extends \PHPUnit\Framework\TestCase
             ->with($layoutOutput)
             ->willReturnSelf();
 
-        /** @var \Magento\Framework\App\Response\Http|\PHPUnit_Framework_MockObject_MockObject $response */
+        /** @var \Magento\Framework\App\Response\Http|\PHPUnit\Framework\MockObject\MockObject $response */
         $response = $this->createMock(\Magento\Framework\App\Response\Http::class);
         $response->expects($setHttpResponseCodeCount)->method('setHttpResponseCode')->with($httpCode);
         $response->expects($setHeaderCount)->method('setHeader')->with($headerName, $headerValue, $replaceHeader);

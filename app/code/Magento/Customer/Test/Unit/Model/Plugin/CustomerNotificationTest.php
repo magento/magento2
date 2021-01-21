@@ -19,22 +19,22 @@ use Psr\Log\LoggerInterface;
 
 class CustomerNotificationTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var Session|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Session|\PHPUnit\Framework\MockObject\MockObject */
     private $sessionMock;
 
-    /** @var NotificationStorage|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var NotificationStorage|\PHPUnit\Framework\MockObject\MockObject */
     private $notificationStorageMock;
 
-    /** @var CustomerRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var CustomerRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $customerRepositoryMock;
 
-    /** @var State|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var State|\PHPUnit\Framework\MockObject\MockObject */
     private $appStateMock;
 
-    /** @var RequestInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var RequestInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $requestMock;
 
-    /** @var AbstractAction|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var AbstractAction|\PHPUnit\Framework\MockObject\MockObject */
     private $abstractActionMock;
 
     /** @var LoggerInterface */
@@ -46,7 +46,7 @@ class CustomerNotificationTest extends \PHPUnit\Framework\TestCase
     /** @var int */
     private static $customerId = 1;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->sessionMock = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()

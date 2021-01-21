@@ -42,7 +42,7 @@ class EditTest extends AbstractController
     /**
      * Execute per test initialization.
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->layout = Bootstrap::getObjectManager()->get(\Magento\Framework\View\LayoutInterface::class);
@@ -58,7 +58,7 @@ class EditTest extends AbstractController
     /**
      * Execute per test cleanup.
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->registry->unregister(RegistryConstants::CURRENT_GROUP_ID);
     }

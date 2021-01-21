@@ -13,16 +13,16 @@ class TotalsTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_parserMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_factoryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         // prepare model
         $this->_parserMock = $this->createPartialMock(
@@ -50,7 +50,7 @@ class TotalsTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_parserMock);
         unset($this->_factoryMock);

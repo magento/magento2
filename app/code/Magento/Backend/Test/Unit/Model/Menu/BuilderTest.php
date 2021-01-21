@@ -15,16 +15,16 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \Magento\Backend\Model\Menu|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\Model\Menu|\PHPUnit\Framework\MockObject\MockObject
      */
     private $menuMock;
 
     /**
-     * @var \Magento\Backend\Model\Menu\Item\Factory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\Model\Menu\Item\Factory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $factoryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->factoryMock = $this->createMock(\Magento\Backend\Model\Menu\Item\Factory::class);
         $this->menuMock = $this->createPartialMock(\Magento\Backend\Model\Menu::class, ['addChild', 'add']);
@@ -124,10 +124,11 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \OutOfRangeException
      */
     public function testGetResultSkipItemsWithInvalidParent()
     {
+        $this->expectException(\OutOfRangeException::class);
+
         $item1 = $this->createMock(\Magento\Backend\Model\Menu\Item::class);
         $this->factoryMock->expects($this->any())->method('create')->will($this->returnValue($item1));
 

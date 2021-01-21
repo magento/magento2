@@ -45,7 +45,7 @@ class DataProviderTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->repo = $objectManager->get(GetPageByIdentifierInterface::class);

@@ -22,7 +22,7 @@ class LocalizedExceptionTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->defaultRenderer = \Magento\Framework\Phrase::getRenderer();
         $rendererMock = $this->getMockBuilder(\Magento\Framework\Phrase\Renderer\Placeholder::class)
@@ -38,7 +38,7 @@ class LocalizedExceptionTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         \Magento\Framework\Phrase::setRenderer($this->defaultRenderer);
     }

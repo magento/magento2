@@ -13,16 +13,16 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \Magento\Framework\Mview\Config\Converter|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Mview\Config\Converter|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_converter;
 
     /**
-     * @var \Magento\Framework\App\Config\FileResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\FileResolver|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_fileResolverMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_fileResolverMock = $this->createPartialMock(\Magento\Framework\App\Config\FileResolver::class, ['get']);
 

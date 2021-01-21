@@ -25,16 +25,16 @@ class PaymentTest extends \PHPUnit\Framework\TestCase
     protected $_element;
 
     /**
-     * @var \Magento\Config\Model\Config\Structure\Element\Group|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Config\Model\Config\Structure\Element\Group|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_group;
 
     /**
-     * @var \Magento\Config\Model\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Config\Model\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_backendConfig;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_group = $this->createMock(\Magento\Config\Model\Config\Structure\Element\Group::class);

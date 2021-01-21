@@ -33,7 +33,7 @@ class UserTest extends \PHPUnit\Framework\TestCase
      */
     private $encryptor;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\User\Model\User::class
@@ -354,7 +354,7 @@ class UserTest extends \PHPUnit\Framework\TestCase
         );
         $this->_model->save();
         $this->assertNotContains('123123q', $this->_model->getPassword(), 'Password is expected to be hashed');
-        $this->assertRegExp(
+        $this->assertMatchesRegularExpression(
             $pattern,
             $this->_model->getPassword(),
             'Salt is expected to be saved along with the password'

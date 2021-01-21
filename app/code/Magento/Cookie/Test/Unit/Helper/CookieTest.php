@@ -114,7 +114,7 @@ class CookieTest extends \PHPUnit\Framework\TestCase
     /**
      * Create config stub
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function _getConfigStub()
     {

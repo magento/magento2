@@ -22,16 +22,16 @@ class InvoiceSenderTest extends AbstractSenderTest
     protected $sender;
 
     /**
-     * @var \Magento\Sales\Model\Order\Invoice|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Invoice|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $invoiceMock;
 
     /**
-     * @var \Magento\Sales\Model\ResourceModel\EntityAbstract|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\ResourceModel\EntityAbstract|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $invoiceResourceMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->stepMockSetup();
 

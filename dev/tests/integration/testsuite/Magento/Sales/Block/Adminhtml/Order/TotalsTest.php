@@ -39,7 +39,7 @@ class TotalsTest extends TestCase
     /**
      * @inheritDoc
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->om = Bootstrap::getObjectManager();
         $this->layout = $this->om->get(LayoutInterface::class);

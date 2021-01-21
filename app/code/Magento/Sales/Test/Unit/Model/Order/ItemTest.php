@@ -28,16 +28,16 @@ class ItemTest extends \PHPUnit\Framework\TestCase
     protected $objectManager;
 
     /**
-     * @var OrderFactory |\PHPUnit_Framework_MockObject_MockObject
+     * @var OrderFactory |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $orderFactory;
 
     /**
-     * @var Json|\PHPUnit_Framework_MockObject_MockObject
+     * @var Json|\PHPUnit\Framework\MockObject\MockObject
      */
     private $serializerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 

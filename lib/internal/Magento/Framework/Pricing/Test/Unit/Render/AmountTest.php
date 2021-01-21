@@ -23,36 +23,36 @@ class AmountTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $priceCurrency;
 
     /**
-     * @var RendererPool|\PHPUnit_Framework_MockObject_MockObject
+     * @var RendererPool|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $rendererPool;
 
     /**
-     * @var \Magento\Framework\View\LayoutInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\LayoutInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $layout;
 
     /**
-     * @var SaleableInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var SaleableInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $saleableItemMock;
 
     /**
-     * @var \Magento\Framework\Pricing\Amount\AmountInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\Amount\AmountInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $amount;
 
     /**
-     * @var PriceInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var PriceInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $priceMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->priceCurrency = $this->createMock(\Magento\Framework\Pricing\PriceCurrencyInterface::class);
         $data = [
@@ -281,7 +281,7 @@ class AmountTest extends \PHPUnit\Framework\TestCase
      * @param array $data
      * @param string $html
      * @param string $code
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getAdjustmentRenderMock($data = [], $html = '', $code = 'adjustment_code')
     {

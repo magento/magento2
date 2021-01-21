@@ -24,51 +24,51 @@ class DiscountsTest extends \PHPUnit\Framework\TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeManagerInterface;
 
     /**
-     * @var \Magento\Store\Model\Store|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\Store|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeModel;
 
     /**
-     * @var \Magento\SalesRule\Model\Rss\Discounts|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\SalesRule\Model\Rss\Discounts|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $discounts;
 
     /**
-     * @var \Magento\Framework\App\Rss\UrlBuilderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Rss\UrlBuilderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $rssBuilderInterface;
 
     /**
-     * @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\UrlInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $urlBuilderInterface;
 
     /**
-     * @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\RequestInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $requestInterface;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $scopeConfigInterface;
 
     /**
-     * @var \Magento\SalesRule\Model\Rss\Discounts|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\SalesRule\Model\Rss\Discounts|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $rssModel;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $timezoneInterface;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->storeManagerInterface = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
         $this->requestInterface = $this->createMock(\Magento\Framework\App\RequestInterface::class);

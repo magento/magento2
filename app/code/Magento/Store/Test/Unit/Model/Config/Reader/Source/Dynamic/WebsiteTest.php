@@ -22,27 +22,27 @@ use Magento\Store\Model\Config\Reader\Source\Dynamic\DefaultScope;
 class WebsiteTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var ScopedFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopedFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $collectionFactory;
 
     /**
-     * @var Converter|\PHPUnit_Framework_MockObject_MockObject
+     * @var Converter|\PHPUnit\Framework\MockObject\MockObject
      */
     private $converter;
 
     /**
-     * @var WebsiteFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var WebsiteFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $websiteFactory;
 
     /**
-     * @var Website|\PHPUnit_Framework_MockObject_MockObject
+     * @var Website|\PHPUnit\Framework\MockObject\MockObject
      */
     private $website;
 
     /**
-     * @var DefaultScope|\PHPUnit_Framework_MockObject_MockObject
+     * @var DefaultScope|\PHPUnit\Framework\MockObject\MockObject
      */
     private $defaultScopeReader;
 
@@ -51,7 +51,7 @@ class WebsiteTest extends \PHPUnit\Framework\TestCase
      */
     private $websiteSource;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->collectionFactory = $this->getMockBuilder(ScopedFactory::class)
             ->disableOriginalConstructor()

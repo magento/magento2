@@ -38,7 +38,7 @@ class ManagementTest extends \PHPUnit\Framework\TestCase
      */
     private $dataObjectHelper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->taxClassRepository = $this->objectManager->create(\Magento\Tax\Api\TaxClassRepositoryInterface::class);

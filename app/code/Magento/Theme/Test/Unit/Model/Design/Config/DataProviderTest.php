@@ -25,17 +25,17 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var DataProvider\DataLoader|\PHPUnit_Framework_MockObject_MockObject
+     * @var DataProvider\DataLoader|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $dataLoader;
 
     /**
-     * @var DataProvider\MetadataLoader|\PHPUnit_Framework_MockObject_MockObject
+     * @var DataProvider\MetadataLoader|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $metadataLoader;
 
     /**
-     * @var Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var Collection|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $collection;
 
@@ -45,21 +45,21 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * @var RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var RequestInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $requestMock;
 
     /**
-     * @var ScopeCodeResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeCodeResolver|\PHPUnit\Framework\MockObject\MockObject
      */
     private $scopeCodeResolverMock;
 
     /**
-     * @var SettingChecker|\PHPUnit_Framework_MockObject_MockObject
+     * @var SettingChecker|\PHPUnit\Framework\MockObject\MockObject
      */
     private $settingCheckerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $this->dataLoader = $this->getMockBuilder(\Magento\Theme\Model\Design\Config\DataProvider\DataLoader::class)
@@ -86,7 +86,7 @@ class DataProviderTest extends \PHPUnit\Framework\TestCase
 
         $this->requestMock = $this->getMockBuilder(RequestInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->scopeCodeResolverMock = $this->getMockBuilder(ScopeCodeResolver::class)
             ->disableOriginalConstructor()
             ->getMock();

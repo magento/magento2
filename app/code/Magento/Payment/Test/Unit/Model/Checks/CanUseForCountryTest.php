@@ -16,7 +16,7 @@ class CanUseForCountryTest extends \PHPUnit\Framework\TestCase
     const EXPECTED_COUNTRY_ID = 1;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $countryProvider;
 
@@ -25,7 +25,7 @@ class CanUseForCountryTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->countryProvider = $this->createMock(
             \Magento\Payment\Model\Checks\CanUseForCountry\CountryProvider::class

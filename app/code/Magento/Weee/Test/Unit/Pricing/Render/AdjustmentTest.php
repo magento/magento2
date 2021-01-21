@@ -42,7 +42,7 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
     /**
      * Set up mocks for tested class
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->contextMock = $this->createPartialMock(
             \Magento\Framework\View\Element\Template\Context::class,

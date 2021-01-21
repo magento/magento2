@@ -20,31 +20,31 @@ class DbStatusValidatorTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_cacheMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $subjectMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $requestMock;
 
     /**
-     * @var \Magento\Framework\Module\Manager|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Module\Manager|\PHPUnit\Framework\MockObject\MockObject
      */
     private $moduleManager;
 
     /**
-     * @var \Magento\Framework\Module\DbVersionInfo|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Module\DbVersionInfo|\PHPUnit\Framework\MockObject\MockObject
      */
     private $dbVersionInfoMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_cacheMock = $this->getMockBuilder(\Magento\Framework\Cache\FrontendInterface::class)
             ->setMethods(['db_is_up_to_date'])

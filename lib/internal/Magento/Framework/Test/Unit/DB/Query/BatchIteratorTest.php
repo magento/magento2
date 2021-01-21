@@ -17,17 +17,17 @@ class BatchIteratorTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $selectMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $wrapperSelectMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $connectionMock;
 
@@ -56,7 +56,7 @@ class BatchIteratorTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->batchSize = 10;
         $this->correlationName = 'correlationName';
@@ -65,7 +65,7 @@ class BatchIteratorTest extends \PHPUnit\Framework\TestCase
 
         $this->selectMock = $this->createMock(Select::class);
         $this->wrapperSelectMock = $this->createMock(Select::class);
-        $this->connectionMock = $this->createMock(AdapterInterface::class);
+        $this->connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
         $this->connectionMock->expects($this->any())->method('select')->willReturn($this->wrapperSelectMock);
         $this->selectMock->expects($this->once())->method('getConnection')->willReturn($this->connectionMock);
         $this->connectionMock->expects($this->any())->method('quoteIdentifier')->willReturnArgument(0);

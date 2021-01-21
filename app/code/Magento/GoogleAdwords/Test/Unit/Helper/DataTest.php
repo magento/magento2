@@ -8,12 +8,12 @@ namespace Magento\GoogleAdwords\Test\Unit\Helper;
 class DataTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_scopeConfigMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_registryMock;
 
@@ -22,7 +22,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
      */
     protected $_helper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $className = \Magento\GoogleAdwords\Helper\Data::class;
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);

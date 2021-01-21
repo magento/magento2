@@ -23,7 +23,7 @@ class DeleteAbandonedStoreFlatTablesTest extends \PHPUnit\Framework\TestCase
     private $deleteAbandonedStoreFlatTables;
 
     /**
-     * @var Indexer|\PHPUnit_Framework_MockObject_MockObject
+     * @var Indexer|\PHPUnit\Framework\MockObject\MockObject
      */
     private $indexerMock;
 
@@ -32,7 +32,7 @@ class DeleteAbandonedStoreFlatTablesTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->indexerMock = $this->createMock(Indexer::class);
         $this->deleteAbandonedStoreFlatTables = new DeleteAbandonedStoreFlatTables($this->indexerMock);

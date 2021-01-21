@@ -33,9 +33,9 @@ class ConfigReaderPluginTest extends \PHPUnit\Framework\TestCase
      */
     private $subjectMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->configMock = $this->createMock(ConfigInterface::class);
+        $this->configMock = $this->getMockForAbstractClass(ConfigInterface::class);
         $this->subjectMock = $this->createMock(TopologyConfigCompositeReader::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);

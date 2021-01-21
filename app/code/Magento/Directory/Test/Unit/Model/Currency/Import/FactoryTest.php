@@ -13,16 +13,16 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_objectManager;
 
     /**
-     * @var \Magento\Directory\Model\Currency\Import\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Directory\Model\Currency\Import\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_importConfig;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->_importConfig = $this->createMock(\Magento\Directory\Model\Currency\Import\Config::class);
@@ -59,11 +59,12 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Currency import service 'test' is not defined
      */
     public function testCreateUndefinedServiceClass()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Currency import service \'test\' is not defined');
+
         $this->_importConfig->expects(
             $this->once()
         )->method(
@@ -78,12 +79,12 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \UnexpectedValueException
-     * @expectedExceptionMessage Class 'stdClass' has to implement
-     * \Magento\Directory\Model\Currency\Import\ImportInterface
      */
     public function testCreateIrrelevantServiceClass()
     {
+        $this->expectException(\UnexpectedValueException::class);
+        $this->expectExceptionMessage('Class \'stdClass\' has to implement \\Magento\\Directory\\Model\\Currency\\Import\\ImportInterface');
+
         $this->_importConfig->expects(
             $this->once()
         )->method(

@@ -11,12 +11,12 @@ use \Magento\Catalog\Model\Layer\Category\StateKey;
 class StateKeyTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $customerSessionMock;
 
@@ -25,7 +25,7 @@ class StateKeyTest extends \PHPUnit\Framework\TestCase
      */
     protected $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
         $this->customerSessionMock = $this->createMock(\Magento\Customer\Model\Session::class);

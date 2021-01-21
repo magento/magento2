@@ -33,7 +33,7 @@ class AbstractBlockTest extends \PHPUnit\Framework\TestCase
      */
     private $session;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         /** @var \Magento\Framework\App\State $state */
         $state = Bootstrap::getObjectManager()->get(\Magento\Framework\App\State::class);

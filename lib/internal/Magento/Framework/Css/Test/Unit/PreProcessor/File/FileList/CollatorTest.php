@@ -29,7 +29,7 @@ class CollatorTest extends \PHPUnit\Framework\TestCase
      */
     protected $themeFile;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->baseFile = $this->createLayoutFile('fixture_1.less', 'Fixture_TestModule');
         $this->themeFile = $this->createLayoutFile('fixture.less', 'Fixture_TestModule', 'area/theme/path');
@@ -46,7 +46,7 @@ class CollatorTest extends \PHPUnit\Framework\TestCase
      * @param string $filename
      * @param string $module
      * @param string|null $themeFullPath
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\File
+     * @return \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\View\File
      */
     protected function createLayoutFile($filename, $module, $themeFullPath = null)
     {

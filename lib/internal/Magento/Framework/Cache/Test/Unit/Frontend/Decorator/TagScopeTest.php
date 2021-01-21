@@ -13,17 +13,17 @@ class TagScopeTest extends \PHPUnit\Framework\TestCase
     protected $_object;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_frontend;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_frontend = $this->createMock(\Magento\Framework\Cache\FrontendInterface::class);
         $this->_object = new \Magento\Framework\Cache\Frontend\Decorator\TagScope($this->_frontend, 'enforced_tag');
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->_object = null;
         $this->_frontend = null;

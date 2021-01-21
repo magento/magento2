@@ -38,7 +38,7 @@ class SaveHandlerTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->store = $this->objectManager->create(\Magento\Store\Model\Store::class);

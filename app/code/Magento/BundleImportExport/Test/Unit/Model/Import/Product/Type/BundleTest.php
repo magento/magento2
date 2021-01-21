@@ -20,17 +20,17 @@ class BundleTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
     protected $bundle;
 
     /**
-     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resource;
 
     /**
-     * @var \Magento\Framework\DB\Select|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Select|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $select;
 
     /**
-     * @var \Magento\CatalogImportExport\Model\Import\Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogImportExport\Model\Import\Product|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $entityModel;
 
@@ -39,26 +39,26 @@ class BundleTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
      */
     protected $params;
 
-    /** @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+    /** @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $connection;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $attrSetColFac;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $prodAttrColFac;
 
     /**
-     * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $setCollection;
 
-    /** @var \Magento\Framework\App\ScopeResolverInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\ScopeResolverInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $scopeResolver;
 
     /**
@@ -113,7 +113,7 @@ class BundleTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
      * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

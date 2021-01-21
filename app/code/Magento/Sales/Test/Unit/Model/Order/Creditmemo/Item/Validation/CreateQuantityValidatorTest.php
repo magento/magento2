@@ -17,31 +17,31 @@ use Magento\Sales\Model\Order\Item;
 class CreateQuantityValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var OrderItemRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var OrderItemRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $orderItemRepositoryMock;
 
     /**
-     * @var Item|\PHPUnit_Framework_MockObject_MockObject
+     * @var Item|\PHPUnit\Framework\MockObject\MockObject
      */
     private $orderItemMock;
 
     /**
-     * @var CreationQuantityValidator|\PHPUnit_Framework_MockObject_MockObject
+     * @var CreationQuantityValidator|\PHPUnit\Framework\MockObject\MockObject
      */
     private $createQuantityValidator;
 
     /**
-     * @var OrderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var OrderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $contexMock;
 
     /**
-     * @var \stdClass|\PHPUnit_Framework_MockObject_MockObject
+     * @var \stdClass|\PHPUnit\Framework\MockObject\MockObject
      */
     private $entity;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->orderItemRepositoryMock = $this->getMockBuilder(OrderItemRepositoryInterface::class)
             ->disableOriginalConstructor()

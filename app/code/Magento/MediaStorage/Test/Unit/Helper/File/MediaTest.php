@@ -17,13 +17,13 @@ class MediaTest extends \PHPUnit\Framework\TestCase
      */
     protected $objectManager;
 
-    /** @var \Magento\Framework\Filesystem\Directory\ReadInterface | \PHPUnit_Framework_MockObject_MockObject  */
+    /** @var \Magento\Framework\Filesystem\Directory\ReadInterface | \PHPUnit\Framework\MockObject\MockObject  */
     protected $dirMock;
 
     /** @var  Media */
     protected $helper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->dirMock = $this->getMockBuilder(\Magento\Framework\Filesystem\Directory\ReadInterface::class)
@@ -99,11 +99,12 @@ class MediaTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The "mediaDir/path" file doesn't exist. Verify the file and try again.
      */
     public function testCollectFileInfoNotFile()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('The "mediaDir/path" file doesn\'t exist. Verify the file and try again.');
+
         $content = 'content';
         $mediaDirectory = 'mediaDir';
         $relativePath = 'relativePath';
@@ -129,11 +130,12 @@ class MediaTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage File mediaDir/path is not readable
      */
     public function testCollectFileInfoNotReadable()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('File mediaDir/path is not readable');
+
         $content = 'content';
         $mediaDirectory = 'mediaDir';
         $relativePath = 'relativePath';

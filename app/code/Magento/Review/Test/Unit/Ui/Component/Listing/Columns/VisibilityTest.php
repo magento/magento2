@@ -15,11 +15,11 @@ use Magento\Store\Model\System\Store;
 class VisibilityTest extends AbstractColumnTest
 {
     /**
-     * @var Store|\PHPUnit_Framework_MockObject_MockObject
+     * @var Store|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->storeMock = $this->getMockBuilder(Store::class)

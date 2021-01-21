@@ -15,7 +15,7 @@ class ContainerTest extends \PHPUnit\Framework\TestCase
      */
     protected $block = null;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

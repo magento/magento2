@@ -17,16 +17,16 @@ class GridTest extends \PHPUnit\Framework\TestCase
     protected $_block;
 
     /**
-     * @var \Magento\Framework\View\LayoutInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\LayoutInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_layoutMock;
 
     /**
-     * @var \Magento\Backend\Block\Widget\Grid\ColumnSet|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\Block\Widget\Grid\ColumnSet|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_columnSetMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_layoutMock = $this->createPartialMock(
             \Magento\Framework\View\Layout::class,
@@ -96,7 +96,7 @@ class GridTest extends \PHPUnit\Framework\TestCase
     /**
      * Retrieve the mocked column set block instance
      *
-     * @return \Magento\Backend\Block\Widget\Grid\ColumnSet|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Backend\Block\Widget\Grid\ColumnSet|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function _getColumnSetMock()
     {

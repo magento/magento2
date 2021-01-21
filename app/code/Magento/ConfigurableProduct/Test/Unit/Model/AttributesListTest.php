@@ -14,16 +14,16 @@ class AttributesListTest extends \PHPUnit\Framework\TestCase
     protected $attributeListModel;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $collectionMock;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $attributeMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->collectionMock = $this->createMock(
             \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection::class

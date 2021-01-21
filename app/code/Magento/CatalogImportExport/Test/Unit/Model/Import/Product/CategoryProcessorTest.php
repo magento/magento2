@@ -25,7 +25,7 @@ class CategoryProcessorTest extends \PHPUnit\Framework\TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var \Magento\CatalogImportExport\Model\Import\Product\CategoryProcessor|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogImportExport\Model\Import\Product\CategoryProcessor|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $categoryProcessor;
 
@@ -44,7 +44,7 @@ class CategoryProcessorTest extends \PHPUnit\Framework\TestCase
      */
     private $parentCategory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->objectManagerHelper = new ObjectManagerHelper($this);

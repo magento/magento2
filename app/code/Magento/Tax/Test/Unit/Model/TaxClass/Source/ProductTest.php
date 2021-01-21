@@ -13,17 +13,17 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class ProductTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Tax\Api\TaxClassRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Tax\Api\TaxClassRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $taxClassRepositoryMock;
 
     /**
-     * @var \Magento\Framework\Api\SearchCriteriaBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Api\SearchCriteriaBuilder|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $searchCriteriaBuilderMock;
 
     /**
-     * @var \Magento\Framework\Api\FilterBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Api\FilterBuilder|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $filterBuilderMock;
 
@@ -37,7 +37,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      */
     protected $product;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
 
@@ -82,7 +82,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
 
         $flatColumns = $this->product->getFlatColumns();
 
-        $this->assertTrue(is_array($flatColumns), 'FlatColumns must be an array value');
+        $this->assertInternalType('array', $flatColumns, 'FlatColumns must be an array value');
         $this->assertTrue(!empty($flatColumns), 'FlatColumns must be not empty');
         foreach ($flatColumns as $result) {
             $this->assertArrayHasKey('unsigned', $result, 'FlatColumns must have "unsigned" column');

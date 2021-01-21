@@ -77,7 +77,7 @@ class TransactionInterfaceTest extends \PHPUnit\Framework\TestCase
      * Instantiate specified adapter class and block all methods that would try to execute real queries
      *
      * @param string $class
-     * @return \Magento\TestFramework\Db\Adapter\TransactionInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\TestFramework\Db\Adapter\TransactionInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function _getConnectionMock($class)
     {

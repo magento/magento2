@@ -35,11 +35,11 @@ class WriteTest extends \PHPUnit\Framework\TestCase
     protected $mode = 'w';
 
     /**
-     * @var \Magento\Framework\Filesystem\DriverInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\DriverInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $driver;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->driver = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\DriverInterface::class);
         $this->driver->expects($this->any())
@@ -53,7 +53,7 @@ class WriteTest extends \PHPUnit\Framework\TestCase
         $this->file = new Write($this->path, $this->driver, $this->mode);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->file = null;
         $this->driver = null;

@@ -52,7 +52,7 @@ class BeforeTest extends \PHPUnit\Framework\TestCase
      */
     protected $_expectedBehaviors = ['behavior_1', 'behavior_2'];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $importModel = $this->createPartialMock(
             \Magento\ImportExport\Model\Import::class,

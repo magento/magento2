@@ -21,47 +21,47 @@ class TopmenuTest extends \PHPUnit\Framework\TestCase
     protected $block;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Store\Model\StoreManagerInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Store\Model\StoreManagerInterface
      */
     protected $storeManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Store\Model\Store
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Store\Model\Store
      */
     protected $storeMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Layer\Resolver
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Model\Layer\Resolver
      */
     protected $layerResolverMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Layer
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Model\Layer
      */
     protected $catalogLayerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\ResourceModel\Category\CollectionFactory
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Model\ResourceModel\Category\CollectionFactory
      */
     protected $categoryCollectionFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\ResourceModel\Category\Collection
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Model\ResourceModel\Category\Collection
      */
     protected $categoryCollectionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Helper\Category
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Helper\Category
      */
     protected $categoryHelperMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Category
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Model\Category
      */
     protected $childrenCategoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Category
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Model\Category
      */
     protected $categoryMock;
 
@@ -70,7 +70,7 @@ class TopmenuTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $rootCategoryId = 2;
         $categoryParentId = 3;
@@ -129,7 +129,7 @@ class TopmenuTest extends \PHPUnit\Framework\TestCase
      * Get clean mock by class name
      *
      * @param string $className
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function _getCleanMock($className)
     {

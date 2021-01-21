@@ -11,31 +11,31 @@ use Magento\Setup\Model\Cron\Status;
 class StatusTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Status
+     * @var \PHPUnit\Framework\MockObject\MockObject|Status
      */
     private $status;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Filesystem
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Filesystem
      */
     private $filesystem;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Filesystem\Directory\WriteInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Filesystem\Directory\WriteInterface
      */
     private $varReaderWriter;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Psr\Log\LoggerInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Psr\Log\LoggerInterface
      */
     private $logger;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\Cron\SetupLoggerFactory
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Setup\Model\Cron\SetupLoggerFactory
      */
     private $setupLoggerFactory;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->filesystem = $this->createMock(\Magento\Framework\Filesystem::class);
         $this->varReaderWriter = $this->getMockForAbstractClass(

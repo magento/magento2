@@ -24,7 +24,7 @@ class FieldsFilterTest extends \PHPUnit\Framework\TestCase
     protected $sampleResponseValue;
 
     /**
-     * @var \Magento\Framework\Webapi\Rest\Request|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Webapi\Rest\Request|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $requestMock;
 
@@ -36,7 +36,7 @@ class FieldsFilterTest extends \PHPUnit\Framework\TestCase
     /**
      * Setup SUT
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->requestMock = $this->createMock(\Magento\Framework\Webapi\Rest\Request::class);
         $this->processor = new FieldsFilter($this->requestMock);

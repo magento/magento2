@@ -13,14 +13,14 @@ class RoleLocatorTest extends \PHPUnit\Framework\TestCase
     private $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $_sessionMock = [];
 
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_sessionMock = $this->createPartialMock(
             \Magento\Backend\Model\Auth\Session::class,

@@ -14,17 +14,17 @@ use \Magento\Framework\Data\Form;
 class FormTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_factoryElementMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_factoryCollectionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_formKeyMock;
 
@@ -33,7 +33,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
      */
     protected $_form;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_factoryElementMock = $this->createMock(\Magento\Framework\Data\Form\Element\Factory::class);
 

@@ -14,14 +14,14 @@ class AbstractProductTest extends \PHPUnit\Framework\TestCase
     /**
      * Tested condition
      *
-     * @var \Magento\Rule\Model\Condition\Product\AbstractProduct|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Rule\Model\Condition\Product\AbstractProduct|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_condition;
 
     /**
      * Framework object
      *
-     * @var \Magento\Framework\DataObject|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DataObject|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_object;
 
@@ -46,7 +46,7 @@ class AbstractProductTest extends \PHPUnit\Framework\TestCase
      */
     private $productCategoryListProperty;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_condition = $this->getMockForAbstractClass(
             \Magento\Rule\Model\Condition\Product\AbstractProduct::class,

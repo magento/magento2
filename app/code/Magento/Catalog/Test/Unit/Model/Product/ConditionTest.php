@@ -34,7 +34,7 @@ class ConditionTest extends \PHPUnit\Framework\TestCase
         $this->assertEmpty($this->model->getIdsSelect($connection));
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $helper = new ObjectManager($this);
         $this->model = $helper->getObject(\Magento\Catalog\Model\Product\Condition::class);

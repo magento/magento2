@@ -12,12 +12,12 @@ namespace Magento\Framework\MessageQueue\Test\Unit\Bulk;
 class ExchangeFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\MessageQueue\ConnectionTypeResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\MessageQueue\ConnectionTypeResolver|\PHPUnit\Framework\MockObject\MockObject
      */
     private $connectionTypeResolver;
 
     /**
-     * @var \Magento\Framework\MessageQueue\Bulk\ExchangeInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\MessageQueue\Bulk\ExchangeInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $amqpExchangeFactory;
 
@@ -31,7 +31,7 @@ class ExchangeFactoryTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->connectionTypeResolver = $this
             ->getMockBuilder(\Magento\Framework\MessageQueue\ConnectionTypeResolver::class)

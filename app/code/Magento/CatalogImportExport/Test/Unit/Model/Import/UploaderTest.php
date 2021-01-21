@@ -14,51 +14,51 @@ namespace Magento\CatalogImportExport\Test\Unit\Model\Import;
 class UploaderTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\MediaStorage\Helper\File\Storage\Database|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\MediaStorage\Helper\File\Storage\Database|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $coreFileStorageDb;
 
     /**
-     * @var \Magento\MediaStorage\Helper\File\Storage|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\MediaStorage\Helper\File\Storage|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $coreFileStorage;
 
     /**
-     * @var \Magento\Framework\Image\AdapterFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Image\AdapterFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $imageFactory;
 
     /**
-     * @var \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $validator;
 
     /**
-     * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $filesystem;
 
     /**
-     * @var \Magento\Framework\Filesystem\File\ReadFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\File\ReadFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $readFactory;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\Writer| \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\Directory\Writer| \PHPUnit\Framework\MockObject\MockObject
      */
     protected $directoryMock;
 
     /**
-     * @var \Magento\Framework\Math\Random|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Math\Random|\PHPUnit\Framework\MockObject\MockObject
      */
     private $random;
 
     /**
-     * @var \Magento\CatalogImportExport\Model\Import\Uploader|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogImportExport\Model\Import\Uploader|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $uploader;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->coreFileStorageDb = $this->getMockBuilder(\Magento\MediaStorage\Helper\File\Storage\Database::class)
             ->disableOriginalConstructor()

@@ -33,7 +33,7 @@ class IoTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Framework\Code\Generator\Io */
     protected $_object;
 
-    /** @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Filesystem|\PHPUnit\Framework\MockObject\MockObject */
     protected $_filesystemDriverMock;
 
     /** @var string */
@@ -42,7 +42,7 @@ class IoTest extends \PHPUnit\Framework\TestCase
     /** @var string */
     protected $nonExistingFile = '/Magento/Class/Does/Not/Exists.php';
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_generationDirectory = rtrim(self::GENERATION_DIRECTORY, '/') . '/';
 
@@ -54,7 +54,7 @@ class IoTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_generationDirectory);
         unset($this->_filesystemMock);

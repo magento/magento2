@@ -16,16 +16,16 @@ class AppAreaTest extends \PHPUnit\Framework\TestCase
     protected $_object;
 
     /**
-     * @var \Magento\TestFramework\Application|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\TestFramework\Application|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_applicationMock;
 
     /**
-     * @var \PHPUnit\Framework\TestCase|\PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\TestCase|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_testCaseMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_testCaseMock = $this->createMock(\PHPUnit\Framework\TestCase::class);
         $this->_applicationMock = $this->createMock(\Magento\TestFramework\Application::class);

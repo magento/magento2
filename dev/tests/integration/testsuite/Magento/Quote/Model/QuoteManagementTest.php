@@ -69,7 +69,7 @@ class QuoteManagementTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -152,7 +152,7 @@ class QuoteManagementTest extends TestCase
     public function testSubmitWithEmptyCustomerEmail(): void
     {
         $quote = $this->getQuoteByReservedOrderId->execute('test01');
-        $orderManagement = $this->createMock(OrderManagementInterface::class);
+        $orderManagement = $this->getMockForAbstractClass(OrderManagementInterface::class);
         $orderManagement->expects($this->never())
             ->method('place');
         $cartManagement = $this->objectManager->create(

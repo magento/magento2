@@ -18,7 +18,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
      */
     protected $view;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $registry = $this->createMock(\Magento\Framework\Registry::class);
 

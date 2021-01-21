@@ -46,22 +46,22 @@ class NameTest extends \PHPUnit\Framework\TestCase
 
     /**#@-*/
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject | AttributeMetadataInterface */
+    /** @var  \PHPUnit\Framework\MockObject\MockObject | AttributeMetadataInterface */
     private $attribute;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Model\Options */
+    /** @var  \PHPUnit\Framework\MockObject\MockObject | \Magento\Customer\Model\Options */
     private $_options;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Escaper */
+    /** @var  \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\Escaper */
     private $_escaper;
 
     /** @var  Name */
     private $_block;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Api\CustomerMetadataInterface */
+    /** @var  \PHPUnit\Framework\MockObject\MockObject | \Magento\Customer\Api\CustomerMetadataInterface */
     private $customerMetadata;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Customer\Api\AddressMetadataInterface */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Customer\Api\AddressMetadataInterface */
     private $addressMetadata;
 
     /**
@@ -69,7 +69,7 @@ class NameTest extends \PHPUnit\Framework\TestCase
      */
     protected $_objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_escaper = $this->createMock(\Magento\Framework\Escaper::class);

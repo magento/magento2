@@ -18,7 +18,7 @@ use Magento\Framework\View\Element\UiComponent\ContextInterface;
 class MassActionTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var ContextInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ContextInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $contextMock;
 
@@ -28,7 +28,7 @@ class MassActionTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * @var AuthorizationInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AuthorizationInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $authorizationMock;
 
@@ -37,7 +37,7 @@ class MassActionTest extends \PHPUnit\Framework\TestCase
      */
     private $massAction;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
 

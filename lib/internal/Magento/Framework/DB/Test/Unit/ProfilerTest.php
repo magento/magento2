@@ -18,7 +18,7 @@ class ProfilerTest extends \PHPUnit\Framework\TestCase
     /**
      * Setup
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_profiler = new \Magento\Framework\DB\Profiler(true);
     }

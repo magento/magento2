@@ -10,27 +10,27 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class UrlRewriteCollectionTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeManager;
 
     /**
-     * @var \Magento\Framework\Model\ResourceModel\Db\AbstractDb|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\ResourceModel\Db\AbstractDb|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resource;
 
     /**
-     * @var \Magento\Framework\DB\Select|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Select|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $select;
 
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $connectionMock;
 
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $connection;
 
@@ -39,7 +39,7 @@ class UrlRewriteCollectionTest extends \PHPUnit\Framework\TestCase
      */
     protected $collection;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->storeManager = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
         $this->select = $this->createPartialMock(\Magento\Framework\DB\Select::class, ['from', 'where']);

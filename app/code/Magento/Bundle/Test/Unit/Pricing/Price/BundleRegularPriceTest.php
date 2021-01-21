@@ -18,16 +18,16 @@ class BundleRegularPriceTest extends \PHPUnit\Framework\TestCase
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    /** @var \Magento\Framework\Pricing\SaleableInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Pricing\SaleableInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $saleableInterfaceMock;
 
-    /** @var \Magento\Bundle\Pricing\Adjustment\BundleCalculatorInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Bundle\Pricing\Adjustment\BundleCalculatorInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $bundleCalculatorMock;
 
-    /** @var \Magento\Framework\Pricing\PriceInfo\Base |\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Pricing\PriceInfo\Base |\PHPUnit\Framework\MockObject\MockObject */
     protected $priceInfoMock;
 
-    /** @var CustomOptionPrice|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var CustomOptionPrice|\PHPUnit\Framework\MockObject\MockObject */
     protected $customOptionPriceMock;
 
     /**
@@ -36,14 +36,14 @@ class BundleRegularPriceTest extends \PHPUnit\Framework\TestCase
     protected $quantity = 1;
 
     /**
-     * @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $priceCurrencyMock;
 
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->saleableInterfaceMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->disableOriginalConstructor()

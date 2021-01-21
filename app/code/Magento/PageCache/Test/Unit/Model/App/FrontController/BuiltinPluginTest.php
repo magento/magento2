@@ -16,32 +16,32 @@ class BuiltinPluginTest extends \PHPUnit\Framework\TestCase
     protected $plugin;
 
     /**
-     * @var \Magento\PageCache\Model\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\PageCache\Model\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $configMock;
 
     /**
-     * @var \Magento\Framework\App\PageCache\Version|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\PageCache\Version|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $versionMock;
 
     /**
-     * @var \Magento\Framework\App\PageCache\Kernel|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\PageCache\Kernel|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $kernelMock;
 
     /**
-     * @var \Magento\Framework\App\State|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\State|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $stateMock;
 
     /**
-     * @var \Magento\Framework\App\Response\Http|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Response\Http|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $responseMock;
 
     /**
-     * @var \Magento\Framework\App\FrontControllerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\FrontControllerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $frontControllerMock;
 
@@ -51,14 +51,14 @@ class BuiltinPluginTest extends \PHPUnit\Framework\TestCase
     protected $closure;
 
     /**
-     * @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\RequestInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $requestMock;
 
     /**
      * SetUp
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->configMock = $this->createMock(\Magento\PageCache\Model\Config::class);
         $this->versionMock = $this->createMock(\Magento\Framework\App\PageCache\Version::class);

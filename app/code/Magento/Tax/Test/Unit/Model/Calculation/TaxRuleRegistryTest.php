@@ -21,18 +21,18 @@ class TaxRuleRegistryTest extends \PHPUnit\Framework\TestCase
     private $taxRuleRegistry;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Tax\Model\Calculation\RuleFactory
+     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Tax\Model\Calculation\RuleFactory
      */
     private $taxRuleModelFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Tax\Model\Calculation\Rule
+     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Tax\Model\Calculation\Rule
      */
     private $taxRuleModelMock;
 
     const TAX_RULE_ID = 1;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $this->taxRuleModelFactoryMock = $this->getMockBuilder(\Magento\Tax\Model\Calculation\RuleFactory::class)

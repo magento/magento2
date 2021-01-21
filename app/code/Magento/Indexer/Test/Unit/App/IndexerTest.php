@@ -13,21 +13,21 @@ class IndexerTest extends \PHPUnit\Framework\TestCase
     protected $entryPoint;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Indexer\Model\Processor
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Indexer\Model\Processor
      */
     protected $processor;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Filesystem
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Filesystem
      */
     protected $filesystem;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Console\Response
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\Console\Response
      */
     protected $_response;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->filesystem = $this->createPartialMock(\Magento\Framework\Filesystem::class, ['getDirectoryWrite']);
         $this->processor = $this->createMock(\Magento\Indexer\Model\Processor::class);

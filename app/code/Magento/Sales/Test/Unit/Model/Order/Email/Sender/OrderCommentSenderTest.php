@@ -14,7 +14,7 @@ class OrderCommentSenderTest extends AbstractSenderTest
      */
     protected $sender;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->stepMockSetup();
         $this->stepIdentityContainerInit(\Magento\Sales\Model\Order\Email\Container\OrderCommentIdentity::class);

@@ -18,40 +18,40 @@ class NvpTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Paypal\Model\Api\Nvp */
     protected $model;
 
-    /** @var \Magento\Customer\Helper\Address|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Customer\Helper\Address|\PHPUnit\Framework\MockObject\MockObject */
     protected $customerAddressHelper;
 
-    /** @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Psr\Log\LoggerInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $logger;
 
-    /** @var \Magento\Framework\Locale\ResolverInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Locale\ResolverInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $resolver;
 
-    /** @var \Magento\Directory\Model\RegionFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Directory\Model\RegionFactory|\PHPUnit\Framework\MockObject\MockObject */
     protected $regionFactory;
 
-    /** @var \Magento\Directory\Model\CountryFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Directory\Model\CountryFactory|\PHPUnit\Framework\MockObject\MockObject */
     protected $countryFactory;
 
-    /** @var \Magento\Paypal\Model\Api\ProcessableException|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Paypal\Model\Api\ProcessableException|\PHPUnit\Framework\MockObject\MockObject */
     protected $processableException;
 
-    /** @var LocalizedException|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var LocalizedException|\PHPUnit\Framework\MockObject\MockObject */
     protected $exception;
 
-    /** @var \Magento\Framework\HTTP\Adapter\Curl|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\HTTP\Adapter\Curl|\PHPUnit\Framework\MockObject\MockObject */
     protected $curl;
 
-    /** @var \Magento\Paypal\Model\Config|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Paypal\Model\Config|\PHPUnit\Framework\MockObject\MockObject */
     protected $config;
 
-    /** @var \Magento\Payment\Model\Method\Logger|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Payment\Model\Method\Logger|\PHPUnit\Framework\MockObject\MockObject */
     protected $customLoggerMock;
 
     /**
      * {@inheritDoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->customerAddressHelper = $this->createMock(\Magento\Customer\Helper\Address::class);
         $this->logger = $this->createMock(\Psr\Log\LoggerInterface::class);

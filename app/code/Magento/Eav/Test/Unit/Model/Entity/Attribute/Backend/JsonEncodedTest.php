@@ -16,19 +16,19 @@ class JsonEncodedTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \Magento\Eav\Model\Entity\Attribute|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Eav\Model\Entity\Attribute|\PHPUnit\Framework\MockObject\MockObject
      */
     private $attributeMock;
 
     /**
-     * @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit\Framework\MockObject\MockObject
      */
     private $serializerMock;
 
     /**
      * Set up before test
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->serializerMock = $this->getMockBuilder(\Magento\Framework\Serialize\Serializer\Json::class)
             ->disableOriginalConstructor()

@@ -21,11 +21,11 @@ class ConditionsTest extends \PHPUnit\Framework\TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var \Magento\Framework\Data\Form\Element\AbstractElement|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Data\Form\Element\AbstractElement|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_element;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->conditions = $this->objectManagerHelper->getObject(\Magento\Rule\Model\Renderer\Conditions::class);

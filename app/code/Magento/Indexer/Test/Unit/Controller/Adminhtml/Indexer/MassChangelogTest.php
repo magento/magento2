@@ -85,7 +85,7 @@ class MassChangelogTest extends \PHPUnit\Framework\TestCase
      * Set up test
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->contextMock = $this->createPartialMock(\Magento\Backend\App\Action\Context::class, [
                 'getAuthorization',

@@ -19,24 +19,24 @@ class CouponCodesFixtureTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Fixtures\FixtureModel
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Setup\Fixtures\FixtureModel
      */
     private $fixtureModelMock;
 
     /**
-     * @var \Magento\SalesRule\Model\RuleFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\SalesRule\Model\RuleFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $ruleFactoryMock;
 
     /**
-     * @var \Magento\SalesRule\Model\CouponFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\SalesRule\Model\CouponFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $couponCodeFactoryMock;
 
     /**
      * setUp
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->fixtureModelMock = $this->createMock(\Magento\Setup\Fixtures\FixtureModel::class);
         $this->ruleFactoryMock = $this->createPartialMock(\Magento\SalesRule\Model\RuleFactory::class, ['create']);

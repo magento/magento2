@@ -18,31 +18,31 @@ class RenderTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var Render\Layout|\PHPUnit_Framework_MockObject_MockObject
+     * @var Render\Layout|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $priceLayout;
 
     /**
-     * @var \Magento\Framework\Pricing\Price\PriceInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\Price\PriceInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $price;
 
     /**
-     * @var \Magento\Framework\Pricing\Amount\Base|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\Amount\Base|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $amount;
 
     /**
-     * @var \Magento\Framework\Pricing\SaleableInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\SaleableInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $saleableItem;
 
     /**
-     * @var \Magento\Framework\Pricing\Render\RendererPool|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\Render\RendererPool|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $renderPool;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->priceLayout = $this->getMockBuilder(\Magento\Framework\Pricing\Render\Layout::class)
             ->disableOriginalConstructor()

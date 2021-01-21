@@ -16,41 +16,41 @@ class ValidateTest extends \Magento\Catalog\Test\Unit\Controller\Adminhtml\Produ
     /** @var \Magento\Catalog\Controller\Adminhtml\Product\Validate */
     protected $action;
 
-    /** @var \Magento\Backend\Model\View\Result\Page|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Backend\Model\View\Result\Page|\PHPUnit\Framework\MockObject\MockObject */
     protected $resultPage;
 
-    /** @var \Magento\Backend\Model\View\Result\Forward|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Backend\Model\View\Result\Forward|\PHPUnit\Framework\MockObject\MockObject */
     protected $resultForward;
 
-    /** @var \Magento\Catalog\Controller\Adminhtml\Product\Builder|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Catalog\Controller\Adminhtml\Product\Builder|\PHPUnit\Framework\MockObject\MockObject */
     protected $productBuilder;
 
-    /** @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Catalog\Model\Product|\PHPUnit\Framework\MockObject\MockObject */
     protected $product;
 
-    /** @var \Magento\Backend\Model\View\Result\RedirectFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Backend\Model\View\Result\RedirectFactory|\PHPUnit\Framework\MockObject\MockObject */
     protected $resultRedirectFactory;
 
-    /** @var \Magento\Backend\Model\View\Result\Redirect|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Backend\Model\View\Result\Redirect|\PHPUnit\Framework\MockObject\MockObject */
     protected $resultRedirect;
 
-    /** @var Helper|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Helper|\PHPUnit\Framework\MockObject\MockObject */
     protected $initializationHelper;
 
-    /** @var \Magento\Catalog\Model\ProductFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Catalog\Model\ProductFactory|\PHPUnit\Framework\MockObject\MockObject */
     protected $productFactory;
 
-    /** @var \Magento\Framework\Controller\Result\Json|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Controller\Result\Json|\PHPUnit\Framework\MockObject\MockObject */
     protected $resultJson;
 
-    /** @var \Magento\Framework\Controller\Result\JsonFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Controller\Result\JsonFactory|\PHPUnit\Framework\MockObject\MockObject */
     protected $resultJsonFactory;
 
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->productBuilder = $this->createPartialMock(
             \Magento\Catalog\Controller\Adminhtml\Product\Builder::class,

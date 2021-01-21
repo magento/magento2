@@ -18,7 +18,7 @@ use Magento\Catalog\Model\Product\Copier;
 class CopierTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $optionRepositoryMock;
 
@@ -28,31 +28,31 @@ class CopierTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $copyConstructorMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $productFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $productMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $metadata;
 
     /**
-     * @var ScopeOverriddenValue|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeOverriddenValue|\PHPUnit\Framework\MockObject\MockObject
      */
     private $scopeOverriddenValue;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->copyConstructorMock = $this->createMock(\Magento\Catalog\Model\Product\CopyConstructorInterface::class);
         $this->productFactoryMock = $this->createPartialMock(

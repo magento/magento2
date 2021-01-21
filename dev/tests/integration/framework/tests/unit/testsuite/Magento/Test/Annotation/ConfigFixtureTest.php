@@ -12,11 +12,11 @@ namespace Magento\Test\Annotation;
 class ConfigFixtureTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\TestFramework\Annotation\ConfigFixture|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\TestFramework\Annotation\ConfigFixture|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_object;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_object = $this->createPartialMock(
             \Magento\TestFramework\Annotation\ConfigFixture::class,

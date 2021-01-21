@@ -24,10 +24,10 @@ class ProTest extends \PHPUnit\Framework\TestCase
      */
     protected $pro;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $apiMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectHelper = new ObjectManager($this);
         $infoFactory = $this->getInfoFactory();
@@ -135,7 +135,7 @@ class ProTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Create and return mock of info factory
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getInfoFactory()
     {
@@ -154,7 +154,7 @@ class ProTest extends \PHPUnit\Framework\TestCase
     /**
      * Create and return mock of config factory
      * @param $storeId
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getConfigFactory($storeId)
     {
@@ -180,7 +180,7 @@ class ProTest extends \PHPUnit\Framework\TestCase
     /**
      * Create mock object for paypal api factory
      * @param ObjectManager $objectHelper
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getApiFactory(ObjectManager $objectHelper)
     {
@@ -232,7 +232,7 @@ class ProTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Create mock object for payment model
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getPaymentMock()
     {
@@ -252,7 +252,7 @@ class ProTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Create mock object for order model
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getOrderMock()
     {

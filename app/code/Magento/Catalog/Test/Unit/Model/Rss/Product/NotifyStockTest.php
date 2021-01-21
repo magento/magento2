@@ -24,37 +24,37 @@ class NotifyStockTest extends \PHPUnit\Framework\TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
 
     protected $productFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Product
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Model\Product
      */
     protected $product;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\CatalogInventory\Model\ResourceModel\StockFactory
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\CatalogInventory\Model\ResourceModel\StockFactory
      */
     protected $stockFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\CatalogInventory\Model\ResourceModel\Stock
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\CatalogInventory\Model\ResourceModel\Stock
      */
     protected $stock;
 
     /**
-     * @var \Magento\Catalog\Model\Product\Attribute\Source\Status|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product\Attribute\Source\Status|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $status;
 
     /**
-     * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $eventManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->product = $this->createMock(\Magento\Catalog\Model\Product::class);
         $this->productFactory = $this->createPartialMock(\Magento\Catalog\Model\ProductFactory::class, ['create']);

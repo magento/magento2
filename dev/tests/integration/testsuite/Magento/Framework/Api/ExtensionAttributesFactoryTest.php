@@ -10,7 +10,7 @@ class ExtensionAttributesFactoryTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Framework\Api\ExtensionAttributesFactory */
     private $factory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         /** @var \Magento\Framework\ObjectManagerInterface */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();

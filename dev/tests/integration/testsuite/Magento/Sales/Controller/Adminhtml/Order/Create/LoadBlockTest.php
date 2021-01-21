@@ -48,7 +48,7 @@ class LoadBlockTest extends AbstractBackendController
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -62,7 +62,7 @@ class LoadBlockTest extends AbstractBackendController
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->quoteIdsToRemove[] = $this->session->getQuote()->getId();
         foreach ($this->quoteIdsToRemove as $quoteId) {

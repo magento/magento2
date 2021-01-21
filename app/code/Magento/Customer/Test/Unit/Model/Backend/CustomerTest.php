@@ -13,7 +13,7 @@ namespace Magento\Customer\Test\Unit\Model\Backend;
 
 class CustomerTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \Magento\Store\Model\StoreManager|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Store\Model\StoreManager|\PHPUnit\Framework\MockObject\MockObject */
     protected $_storeManager;
 
     /** @var \Magento\Customer\Model\Backend\Customer */
@@ -22,7 +22,7 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
     /**
      * Create model
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_storeManager = $this->createMock(\Magento\Store\Model\StoreManager::class);
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);

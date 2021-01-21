@@ -8,12 +8,12 @@ namespace Magento\Framework\View\Test\Unit\Element\Html\Link;
 class CurrentTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_urlBuilderMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_requestMock;
 
@@ -22,7 +22,7 @@ class CurrentTest extends \PHPUnit\Framework\TestCase
      */
     protected $_objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_urlBuilderMock = $this->createMock(\Magento\Framework\UrlInterface::class);

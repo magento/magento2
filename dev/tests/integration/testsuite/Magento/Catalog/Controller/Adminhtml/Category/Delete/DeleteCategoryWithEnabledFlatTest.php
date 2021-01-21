@@ -47,7 +47,7 @@ class DeleteCategoryWithEnabledFlatTest extends AbstractBackendController
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->indexerRegistry = $this->_objectManager->get(IndexerRegistry::class);
@@ -59,7 +59,7 @@ class DeleteCategoryWithEnabledFlatTest extends AbstractBackendController
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
         $categoryFlatIndexer = $this->indexerRegistry->get(State::INDEXER_ID);

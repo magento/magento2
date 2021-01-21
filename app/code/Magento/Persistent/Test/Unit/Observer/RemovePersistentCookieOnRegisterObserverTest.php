@@ -17,36 +17,36 @@ class RemovePersistentCookieOnRegisterObserverTest extends \PHPUnit\Framework\Te
     protected $model;
 
     /**
-     * @var \Magento\Persistent\Helper\Session|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Persistent\Helper\Session|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $persistentSessionMock;
 
     /**
-     * @var \Magento\Persistent\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Persistent\Helper\Data|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $persistentDataMock;
 
     /**
-     * @var \Magento\Customer\Model\Session|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\Session|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $customerSessionMock;
 
     /**
-     * @var \Magento\Persistent\Model\QuoteManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Persistent\Model\QuoteManager|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $quoteManagerMock;
 
     /**
-     * @var \Magento\Framework\Event\Observer|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Event\Observer|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $observerMock;
 
     /**
-     * @var \Magento\Persistent\Model\Session|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Persistent\Model\Session|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $sessionModelMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->persistentSessionMock = $this->createMock(\Magento\Persistent\Helper\Session::class);
         $this->sessionModelMock = $this->createMock(\Magento\Persistent\Model\Session::class);

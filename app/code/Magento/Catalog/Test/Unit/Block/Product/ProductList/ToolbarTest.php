@@ -14,51 +14,51 @@ class ToolbarTest extends \PHPUnit\Framework\TestCase
     protected $block;
 
     /**
-     * @var \Magento\Catalog\Model\Product\ProductList\Toolbar | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product\ProductList\Toolbar | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $model;
 
     /**
-     * @var \Magento\Catalog\Model\Product\ProductList\ToolbarMemorizer | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product\ProductList\ToolbarMemorizer | \PHPUnit\Framework\MockObject\MockObject
      */
     private $memorizer;
 
     /**
-     * @var \Magento\Framework\Url | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Url | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $urlBuilder;
 
     /**
-     * @var \Magento\Framework\Url\EncoderInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Url\EncoderInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $urlEncoder;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $scopeConfig;
 
     /**
-     * @var \Magento\Catalog\Model\Config | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Config | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $catalogConfig;
 
     /**
-     * @var \Magento\Catalog\Helper\Product\ProductList|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Helper\Product\ProductList|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $productListHelper;
 
     /**
-     * @var \Magento\Framework\View\Layout|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Layout|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $layout;
 
     /**
-     * @var \Magento\Theme\Block\Html\Pager|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Theme\Block\Html\Pager|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $pagerBlock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->model = $this->createPartialMock(\Magento\Catalog\Model\Product\ProductList\Toolbar::class, [
                 'getDirection',
@@ -138,7 +138,7 @@ class ToolbarTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->block = null;
     }

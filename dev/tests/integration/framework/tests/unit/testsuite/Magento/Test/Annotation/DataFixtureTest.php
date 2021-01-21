@@ -15,11 +15,11 @@ use Magento\Framework\Component\ComponentRegistrar;
 class DataFixtureTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\TestFramework\Annotation\DataFixture|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\TestFramework\Annotation\DataFixture|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_object;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_object = $this->getMockBuilder(\Magento\TestFramework\Annotation\DataFixture::class)
             ->setMethods(['_applyOneFixture'])

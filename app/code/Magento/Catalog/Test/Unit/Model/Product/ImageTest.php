@@ -24,71 +24,71 @@ class ImageTest extends \PHPUnit\Framework\TestCase
     private $image;
 
     /**
-     * @var \Magento\Framework\Model\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\Context|\PHPUnit\Framework\MockObject\MockObject
      */
     private $context;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeManager;
 
     /**
-     * @var \Magento\Catalog\Model\Product\Media\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product\Media\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     private $config;
 
     /**
-     * @var \Magento\MediaStorage\Helper\File\Storage\Database|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\MediaStorage\Helper\File\Storage\Database|\PHPUnit\Framework\MockObject\MockObject
      */
     private $coreFileHelper;
 
     /**
-     * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem|\PHPUnit\Framework\MockObject\MockObject
      */
     private $filesystem;
 
     /**
-     * @var \Magento\Framework\Image\Factory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Image\Factory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $factory;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\WriteInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\Directory\WriteInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $mediaDirectory;
 
     /**
-     * @var \Magento\Framework\View\Asset\LocalInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Asset\LocalInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $imageAsset;
 
     /**
-     * @var ImageFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ImageFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $viewAssetImageFactory;
 
     /**
-     * @var PlaceholderFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var PlaceholderFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $viewAssetPlaceholderFactory;
 
     /**
-     * @var \Magento\Framework\Serialize\SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Serialize\SerializerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $serializer;
 
     /**
-     * @var \Magento\Framework\App\CacheInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\CacheInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $cacheManager;
 
     /**
-     * @var ParamsBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var ParamsBuilder|\PHPUnit\Framework\MockObject\MockObject
      */
     private $paramsBuilder;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->context = $this->createMock(\Magento\Framework\Model\Context::class);
@@ -256,8 +256,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         $this->imageAsset->expects($this->any())->method('getSourceFile')->willReturn('catalog/product/somefile.png');
         $this->image->setBaseFile('/somefile.png');
         $this->assertEquals('catalog/product/somefile.png', $this->image->getBaseFile());
-        $this->assertEquals(
-            null,
+        $this->assertNull(
             $this->image->getNewFile()
         );
     }
@@ -453,6 +452,6 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         $this->imageAsset->expects($this->any())->method('getPath')->willReturn($absolutePath);
         $this->cacheManager->expects($this->once())->method('load')->willReturn(false);
         $this->cacheManager->expects($this->once())->method('save');
-        $this->assertTrue(is_array($this->image->getResizedImageInfo()));
+        $this->assertInternalType('array', $this->image->getResizedImageInfo());
     }
 }

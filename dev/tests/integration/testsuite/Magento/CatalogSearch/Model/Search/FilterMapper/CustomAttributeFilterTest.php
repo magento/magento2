@@ -25,7 +25,7 @@ class CustomAttributeFilterTest extends \PHPUnit\Framework\TestCase
     /** @var  */
     private $customAttributeFilter;
 
-    /** @var EavConfig|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var EavConfig|\PHPUnit\Framework\MockObject\MockObject */
     private $eavConfigMock;
 
     /** @var StoreManagerInterface */
@@ -34,7 +34,7 @@ class CustomAttributeFilterTest extends \PHPUnit\Framework\TestCase
     /** @var ConditionManager */
     private $conditionManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->resource = $this->objectManager->create(ResourceConnection::class);

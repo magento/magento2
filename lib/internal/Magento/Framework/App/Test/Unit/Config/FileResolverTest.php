@@ -19,23 +19,23 @@ class FileResolverTest extends \PHPUnit\Framework\TestCase
     /**
      * Filesystem
      *
-     * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $filesystem;
 
     /**
      * File iterator factory
      *
-     * @var \Magento\Framework\Config\FileIteratorFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Config\FileIteratorFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $iteratorFactory;
 
     /**
-     * @var \Magento\Framework\Module\Dir\Reader|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Module\Dir\Reader|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $moduleReader;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->iteratorFactory = $this->getMockBuilder(\Magento\Framework\Config\FileIteratorFactory::class)
             ->disableOriginalConstructor()

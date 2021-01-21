@@ -12,7 +12,7 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
      */
     protected $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
     }
@@ -132,7 +132,7 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param \Magento\Framework\DB\Adapter\Pdo\Mysql|\PHPUnit_Framework_MockObject_MockObject $connectionMock
+     * @param \Magento\Framework\DB\Adapter\Pdo\Mysql|\PHPUnit\Framework\MockObject\MockObject $connectionMock
      * @return array
      */
     public function getOptionsWithStoreData($connectionMock)
@@ -149,7 +149,7 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param null|\Magento\Framework\DB\Adapter\Pdo\Mysql|\PHPUnit_Framework_MockObject_MockObject $connectionMock
+     * @param null|\Magento\Framework\DB\Adapter\Pdo\Mysql|\PHPUnit\Framework\MockObject\MockObject $connectionMock
      * @return array
      */
     public function getOptionsWithoutStoreData($connectionMock = null)
@@ -229,7 +229,7 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param bool $result
-     * @return \Magento\Framework\DB\Adapter\Pdo\Mysql|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Framework\DB\Adapter\Pdo\Mysql|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getSaveAdapterMock($result)
     {

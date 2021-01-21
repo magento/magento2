@@ -18,17 +18,17 @@ use PHPUnit\Framework\TestCase;
 class DefaultItemsTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Sales\Block\Order\Email\Items\DefaultItem
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Sales\Block\Order\Email\Items\DefaultItem
      */
     protected $block;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Template
+     * @var \PHPUnit\Framework\MockObject\MockObject|Template
      */
     protected $priceRenderBlock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Layout
+     * @var \PHPUnit\Framework\MockObject\MockObject|Layout
      */
     protected $layoutMock;
 
@@ -37,16 +37,16 @@ class DefaultItemsTest extends TestCase
      */
     protected $objectManager;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|Item */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|Item */
     protected $itemMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|QuoteItem */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|QuoteItem */
     protected $quoteItemMock;
 
     /**
      * Initialize required data
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
 

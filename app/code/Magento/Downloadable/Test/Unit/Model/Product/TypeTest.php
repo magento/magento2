@@ -22,17 +22,17 @@ class TypeTest extends \PHPUnit\Framework\TestCase
     private $target;
 
     /**
-     * @var TypeHandlerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var TypeHandlerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $typeHandler;
 
     /**
-     * @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product|\PHPUnit\Framework\MockObject\MockObject
      */
     private $product;
 
     /**
-     * @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit\Framework\MockObject\MockObject
      */
     private $serializerMock;
 
@@ -42,14 +42,14 @@ class TypeTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * @var \Magento\Downloadable\Model\ResourceModel\Link\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Downloadable\Model\ResourceModel\Link\CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $linksFactory;
 
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $eventManager = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
@@ -227,11 +227,12 @@ class TypeTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Please specify product link(s).
      */
     public function testCheckProductBuyStateException()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('Please specify product link(s).');
+
         $optionMock = $this->createPartialMock(\Magento\Quote\Model\Quote\Item\Option::class, ['getValue']);
 
         $optionMock->expects($this->any())->method('getValue')->will($this->returnValue('{}'));

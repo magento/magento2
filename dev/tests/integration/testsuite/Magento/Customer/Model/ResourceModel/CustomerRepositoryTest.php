@@ -67,7 +67,7 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->customerRepository = $this->objectManager->create(CustomerRepositoryInterface::class);
@@ -88,7 +88,7 @@ class CustomerRepositoryTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         /** @var \Magento\Customer\Model\CustomerRegistry $customerRegistry */

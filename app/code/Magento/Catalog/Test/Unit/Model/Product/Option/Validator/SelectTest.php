@@ -14,19 +14,19 @@ class SelectTest extends \PHPUnit\Framework\TestCase
     protected $validator;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $valueMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $localeFormatMock;
 
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $configMock = $this->createMock(\Magento\Catalog\Model\ProductOptions\ConfigInterface::class);
         $storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);

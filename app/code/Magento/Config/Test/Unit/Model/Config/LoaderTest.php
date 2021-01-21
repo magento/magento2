@@ -16,16 +16,16 @@ class LoaderTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_configValueFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_configCollection;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_configValueFactory = $this->createPartialMock(
             \Magento\Framework\App\Config\ValueFactory::class,
@@ -72,7 +72,7 @@ class LoaderTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_configValueFactory);
         unset($this->_model);

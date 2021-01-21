@@ -39,7 +39,7 @@ namespace Magento\Developer\Console\Command {
          */
         private $command;
 
-        protected function setUp()
+        protected function setUp(): void
         {
             $this->command = new DevTestsRunCommand();
         }

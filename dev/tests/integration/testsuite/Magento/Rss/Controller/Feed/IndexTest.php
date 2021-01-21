@@ -29,7 +29,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
      */
     private $customerSession;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->urlBuilder = $this->_objectManager->get(\Magento\Rss\Model\UrlBuilder::class);

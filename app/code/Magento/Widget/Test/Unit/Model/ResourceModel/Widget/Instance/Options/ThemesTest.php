@@ -20,16 +20,16 @@ class ThemesTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $themeCollectionFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $themeCollectionMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->themeCollectionMock = $this->createMock(ThemeCollection::class);
         $this->themeCollectionFactoryMock = $this->createPartialMock(ThemeCollectionFactory::class, ['create']);

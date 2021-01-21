@@ -13,31 +13,31 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
     protected $options;
 
     /**
-     * @var \Magento\Store\Model\System\Store|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\System\Store|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $systemStoreMock;
 
     /**
-     * @var \Magento\Store\Model\Website|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\Website|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $websiteMock;
 
     /**
-     * @var \Magento\Store\Model\Group|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\Group|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $groupMock;
 
     /**
-     * @var \Magento\Store\Model\Store|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\Store|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeMock;
 
     /**
-     * @var \Magento\Framework\Escaper|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Escaper|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $escaperMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 

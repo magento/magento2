@@ -20,19 +20,19 @@ class DataTest extends \PHPUnit\Framework\TestCase
      */
     protected $helper;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \PHPUnit\Framework\MockObject\MockObject */
     protected $orderTaxManagementMock;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \PHPUnit\Framework\MockObject\MockObject */
     protected $priceCurrencyMock;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \PHPUnit\Framework\MockObject\MockObject */
     protected $taxConfigMock;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \PHPUnit\Framework\MockObject\MockObject */
     protected $serializer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -151,7 +151,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
      * Create OrderTaxDetails mock from array of data
      *
      * @param $inputArray
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Tax\Api\Data\OrderTaxDetailsInterface
+     * @return \PHPUnit\Framework\MockObject\MockObject|\Magento\Tax\Api\Data\OrderTaxDetailsInterface
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function mapOrderTaxItemDetail($inputArray)
@@ -221,7 +221,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
         $orderShippingTaxAmount = isset($orderData['shipping_tax_amount']) ? $orderData['shipping_tax_amount'] : 0;
         $orderTaxDetails = $orderData['order_tax_details'];
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Sales\Model\Order $orderMock */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Sales\Model\Order $orderMock */
         $orderMock = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -241,7 +241,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
         $invoiceShippingTaxAmount =
             isset($invoiceData['shipping_tax_amount']) ? $invoiceData['shipping_tax_amount'] : 0;
         $invoiceItems = $invoiceData['invoice_items'];
-        /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Sales\Model\Order\Invoice $source */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Sales\Model\Order\Invoice $source */
         $source = $this->getMockBuilder(\Magento\Sales\Model\Order\Invoice::class)
             ->disableOriginalConstructor()
             ->getMock();

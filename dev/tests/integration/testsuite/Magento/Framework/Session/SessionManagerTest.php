@@ -111,11 +111,11 @@ namespace Magento\Framework\Session {
         private $request;
 
         /**
-         * @var State|\PHPUnit_Framework_MockObject_MockObject
+         * @var State|\PHPUnit\Framework\MockObject\MockObject
          */
         private $appState;
 
-        protected function setUp()
+        protected function setUp(): void
         {
             $this->sessionName = 'frontEndSession';
 
@@ -141,7 +141,7 @@ namespace Magento\Framework\Session {
             $this->request = $this->objectManager->get(\Magento\Framework\App\RequestInterface::class);
         }
 
-        protected function tearDown()
+        protected function tearDown(): void
         {
             global $mockPHPFunctions;
             $mockPHPFunctions = false;

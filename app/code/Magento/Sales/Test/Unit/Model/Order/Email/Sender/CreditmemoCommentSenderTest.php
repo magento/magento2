@@ -15,14 +15,14 @@ class CreditmemoCommentSenderTest extends AbstractSenderTest
     protected $sender;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $creditmemoMock;
 
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->stepMockSetup();
         $this->stepIdentityContainerInit(\Magento\Sales\Model\Order\Email\Container\CreditmemoCommentIdentity::class);

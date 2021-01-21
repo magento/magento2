@@ -19,39 +19,39 @@ class ContentValidatorTest extends \PHPUnit\Framework\TestCase
     protected $validator;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $fileValidatorMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $urlValidatorMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $domainValidatorMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $linkFileMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $sampleFileMock;
 
     /**
-     * @var File|\PHPUnit_Framework_MockObject_MockObject
+     * @var File|\PHPUnit\Framework\MockObject\MockObject
      */
     private $fileMock;
 
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -140,11 +140,12 @@ class ContentValidatorTest extends \PHPUnit\Framework\TestCase
     /**
      * @param string|int|float $sortOrder
      * @dataProvider getInvalidSortOrder
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Sort order must be a positive integer.
      */
     public function testIsValidThrowsExceptionIfSortOrderIsInvalid($sortOrder)
     {
+        $this->expectException(\Magento\Framework\Exception\InputException::class);
+        $this->expectExceptionMessage('Sort order must be a positive integer.');
+
         $linkContentData = [
             'title' => 'Title',
             'sort_order' => $sortOrder,
@@ -176,11 +177,12 @@ class ContentValidatorTest extends \PHPUnit\Framework\TestCase
     /**
      * @param string|int|float $price
      * @dataProvider getInvalidPrice
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Link price must have numeric positive value.
      */
     public function testIsValidThrowsExceptionIfPriceIsInvalid($price)
     {
+        $this->expectException(\Magento\Framework\Exception\InputException::class);
+        $this->expectExceptionMessage('Link price must have numeric positive value.');
+
         $linkContentData = [
             'title' => 'Title',
             'sort_order' => 1,
@@ -211,11 +213,12 @@ class ContentValidatorTest extends \PHPUnit\Framework\TestCase
     /**
      * @param string|int|float $numberOfDownloads
      * @dataProvider getInvalidNumberOfDownloads
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Number of downloads must be a positive integer.
      */
     public function testIsValidThrowsExceptionIfNumberOfDownloadsIsInvalid($numberOfDownloads)
     {
+        $this->expectException(\Magento\Framework\Exception\InputException::class);
+        $this->expectExceptionMessage('Number of downloads must be a positive integer.');
+
         $linkContentData = [
             'title' => 'Title',
             'sort_order' => 1,
@@ -246,7 +249,7 @@ class ContentValidatorTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param array $linkData
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getLinkMock(array $linkData)
     {

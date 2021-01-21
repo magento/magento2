@@ -12,11 +12,11 @@ class DesignAbstractionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser\DesignAbstraction|
-     *      \PHPUnit_Framework_MockObject_MockObject
+     *      \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_block;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

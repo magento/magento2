@@ -12,49 +12,49 @@ namespace Magento\Catalog\Test\Unit\Pricing\Price;
 class BasePriceTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Catalog\Pricing\Price\BasePrice|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Pricing\Price\BasePrice|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $basePrice;
 
     /**
-     * @var \Magento\Framework\Pricing\PriceInfo\Base |\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\PriceInfo\Base |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $priceInfoMock;
 
     /**
-     * @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $saleableItemMock;
 
     /**
-     * @var \Magento\Framework\Pricing\Adjustment\Calculator|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\Adjustment\Calculator|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $calculatorMock;
 
     /**
-     * @var \Magento\Catalog\Pricing\Price\RegularPrice|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Pricing\Price\RegularPrice|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $regularPriceMock;
 
     /**
-     * @var \Magento\Catalog\Pricing\Price\TierPrice|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Pricing\Price\TierPrice|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $tierPriceMock;
 
     /**
-     * @var \Magento\Catalog\Pricing\Price\SpecialPrice|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Pricing\Price\SpecialPrice|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $specialPriceMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject[]
+     * @var \PHPUnit\Framework\MockObject\MockObject[]
      */
     protected $prices;
 
     /**
      * Set up
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $qty = 1;
         $this->saleableItemMock = $this->createMock(\Magento\Catalog\Model\Product::class);

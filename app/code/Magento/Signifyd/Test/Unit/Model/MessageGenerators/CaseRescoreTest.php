@@ -9,7 +9,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Signifyd\Api\CaseRepositoryInterface;
 use Magento\Signifyd\Api\Data\CaseInterface;
 use Magento\Signifyd\Model\MessageGenerators\CaseRescore;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * Tests for Signifyd CaseRescore message generator.
@@ -46,15 +46,15 @@ class CaseRescoreTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->case = $this->getMockBuilder(CaseInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->objectManager = new ObjectManager($this);
         $this->caseRepository = $this->getMockBuilder(CaseRepositoryInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->caseRescore = $this->objectManager->getObject(CaseRescore::class, [
             'caseRepository' => $this->caseRepository
@@ -64,22 +64,24 @@ class CaseRescoreTest extends \PHPUnit\Framework\TestCase
     /**
      * Data array without required attribute caseId.
      *
-     * @expectedException \Magento\Signifyd\Model\MessageGenerators\GeneratorException
-     * @expectedExceptionMessage The "caseId" should not be empty
      */
     public function testGenerateEmptyCaseIdException()
     {
+        $this->expectException(\Magento\Signifyd\Model\MessageGenerators\GeneratorException::class);
+        $this->expectExceptionMessage('The "caseId" should not be empty');
+
         $this->caseRescore->generate([]);
     }
 
     /**
      * Case entity was not found in DB.
      *
-     * @expectedException \Magento\Signifyd\Model\MessageGenerators\GeneratorException
-     * @expectedExceptionMessage Case entity not found.
      */
     public function testGenerateNotFoundException()
     {
+        $this->expectException(\Magento\Signifyd\Model\MessageGenerators\GeneratorException::class);
+        $this->expectExceptionMessage('Case entity not found.');
+
         $this->caseRepository->expects($this->once())
             ->method('getByCaseId')
             ->with(self::$data['caseId'])

@@ -20,7 +20,7 @@ class UrnResolverTest extends \PHPUnit\Framework\TestCase
      */
     protected $objectManagerHelper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->urnResolver = $this->objectManagerHelper->getObject(\Magento\Framework\Config\Dom\UrnResolver::class);

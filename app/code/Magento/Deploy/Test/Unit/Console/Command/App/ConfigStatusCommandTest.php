@@ -28,7 +28,7 @@ class ConfigStatusCommandTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->changeDetector = $this->getMockBuilder(ChangeDetector::class)
             ->disableOriginalConstructor()

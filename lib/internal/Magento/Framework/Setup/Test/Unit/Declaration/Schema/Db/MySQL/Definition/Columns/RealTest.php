@@ -29,26 +29,26 @@ class RealTest extends \PHPUnit\Framework\TestCase
     private $real;
 
     /**
-     * @var Nullable|\PHPUnit_Framework_MockObject_MockObject
+     * @var Nullable|\PHPUnit\Framework\MockObject\MockObject
      */
     private $nullableMock;
 
     /**
-     * @var Comment|\PHPUnit_Framework_MockObject_MockObject
+     * @var Comment|\PHPUnit\Framework\MockObject\MockObject
      */
     private $commentMock;
 
     /**
-     * @var ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resourceConnectionMock;
 
     /**
-     * @var Unsigned|\PHPUnit_Framework_MockObject_MockObject
+     * @var Unsigned|\PHPUnit\Framework\MockObject\MockObject
      */
     private $unsignedMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $this->nullableMock = $this->getMockBuilder(Nullable::class)
@@ -79,7 +79,7 @@ class RealTest extends \PHPUnit\Framework\TestCase
      */
     public function testToDefinitionNoScale()
     {
-        /** @var RealColumnDto|\PHPUnit_Framework_MockObject_MockObject $column */
+        /** @var RealColumnDto|\PHPUnit\Framework\MockObject\MockObject $column */
         $column = $this->getMockBuilder(RealColumnDto::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -129,7 +129,7 @@ class RealTest extends \PHPUnit\Framework\TestCase
      */
     public function testToDefinition()
     {
-        /** @var RealColumnDto|\PHPUnit_Framework_MockObject_MockObject $column */
+        /** @var RealColumnDto|\PHPUnit\Framework\MockObject\MockObject $column */
         $column = $this->getMockBuilder(RealColumnDto::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -179,7 +179,7 @@ class RealTest extends \PHPUnit\Framework\TestCase
      */
     public function testToDefinitionNoDefault()
     {
-        /** @var RealColumnDto|\PHPUnit_Framework_MockObject_MockObject $column */
+        /** @var RealColumnDto|\PHPUnit\Framework\MockObject\MockObject $column */
         $column = $this->getMockBuilder(RealColumnDto::class)
             ->disableOriginalConstructor()
             ->getMock();

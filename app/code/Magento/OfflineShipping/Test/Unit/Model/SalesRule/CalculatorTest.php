@@ -8,11 +8,11 @@ namespace Magento\OfflineShipping\Test\Unit\Model\SalesRule;
 class CalculatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\OfflineShipping\Model\SalesRule\Calculator|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\OfflineShipping\Model\SalesRule\Calculator|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_model = $this->createPartialMock(
             \Magento\OfflineShipping\Model\SalesRule\Calculator::class,

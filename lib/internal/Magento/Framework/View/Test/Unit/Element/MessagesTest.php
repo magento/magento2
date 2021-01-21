@@ -26,26 +26,26 @@ class MessagesTest extends \PHPUnit\Framework\TestCase
     protected $messages;
 
     /**
-     * @var \Magento\Framework\Message\Factory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Message\Factory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $messageFactory;
 
     /**
-     * @var \Magento\Framework\Message\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Message\CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $collectionFactory;
 
     /**
-     * @var InterpretationStrategyInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var InterpretationStrategyInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $messageInterpretationStrategy;
 
     /**
-     * @var Escaper|\PHPUnit_Framework_MockObject_MockObject
+     * @var Escaper|\PHPUnit\Framework\MockObject\MockObject
      */
     private $escaperMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->collectionFactory = $this->getMockBuilder(\Magento\Framework\Message\CollectionFactory::class)
             ->disableOriginalConstructor()
@@ -76,7 +76,7 @@ class MessagesTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Message\Collection
+     * @return \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Message\Collection
      */
     protected function initMessageCollection()
     {

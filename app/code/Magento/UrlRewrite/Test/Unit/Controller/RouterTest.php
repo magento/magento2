@@ -68,17 +68,17 @@ class RouterTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $this->actionFactory = $this->createMock(\Magento\Framework\App\ActionFactory::class);
-        $this->url = $this->createMock(UrlInterface::class);
+        $this->url = $this->getMockForAbstractClass(UrlInterface::class);
         $this->storeManager = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
         $this->response = $this->createPartialMock(
             \Magento\Framework\App\ResponseInterface::class,
             ['setRedirect', 'sendResponse']
         );
-        $this->requestQuery = $this->createMock(ParametersInterface::class);
+        $this->requestQuery = $this->getMockForAbstractClass(ParametersInterface::class);
         $this->request = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
             ->disableOriginalConstructor()->getMock();
         $this->request->method('getQuery')->willReturn($this->requestQuery);

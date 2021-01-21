@@ -21,7 +21,7 @@ class MessageEncoderTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Framework\ObjectManagerInterface */
     protected $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->encoder = $this->objectManager->create(MessageEncoder::class);

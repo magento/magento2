@@ -11,11 +11,11 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 class BuilderTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Rule\Model\Condition\Sql\Builder|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Rule\Model\Condition\Sql\Builder|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_builder;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $expressionMock = $this->createMock(\Magento\Rule\Model\Condition\Sql\Expression::class);
         $expressionFactory = $this->createPartialMock(

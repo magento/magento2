@@ -14,16 +14,16 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 class CombineTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\CatalogWidget\Model\Rule\Condition\Combine|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogWidget\Model\Rule\Condition\Combine|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $condition;
 
     /**
-     * @var \Magento\CatalogWidget\Model\Rule\Condition\ProductFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogWidget\Model\Rule\Condition\ProductFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $conditionFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
         $arguments = $objectManagerHelper->getConstructArguments(

@@ -13,18 +13,18 @@ use Magento\Framework\Session\Config\Validator\CookieDomainValidator;
  */
 class DomainTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \Magento\Framework\Model\ResourceModel\AbstractResource | \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Model\ResourceModel\AbstractResource | \PHPUnit\Framework\MockObject\MockObject */
     protected $resourceMock;
 
     /** @var \Magento\Cookie\Model\Config\Backend\Domain */
     protected $domain;
 
     /**
-     * @var  CookieDomainValidator | \PHPUnit_Framework_MockObject_MockObject
+     * @var  CookieDomainValidator | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $validatorMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $eventDispatcherMock = $this->createMock(\Magento\Framework\Event\Manager::class);
         $contextMock = $this->createMock(\Magento\Framework\Model\Context::class);

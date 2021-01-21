@@ -17,27 +17,27 @@ use Magento\Store\Model\ScopeInterface;
 class DataTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Directory\Model\ResourceModel\Country\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Directory\Model\ResourceModel\Country\Collection|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_countryCollection;
 
     /**
-     * @var \Magento\Directory\Model\ResourceModel\Region\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Directory\Model\ResourceModel\Region\CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_regionCollection;
 
     /**
-     * @var \Magento\Framework\Json\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Json\Helper\Data|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $jsonHelperMock;
 
     /**
-     * @var \Magento\Store\Model\Store|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\Store|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_store;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $scopeConfigMock;
 
@@ -46,12 +46,12 @@ class DataTest extends \PHPUnit\Framework\TestCase
      */
     protected $_object;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->scopeConfigMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
         $this->scopeConfigMock->expects($this->any())->method('isSetFlag')->willReturn(false);
-        $requestMock = $this->createMock(RequestInterface::class);
+        $requestMock = $this->getMockForAbstractClass(RequestInterface::class);
         $context = $this->createMock(\Magento\Framework\App\Helper\Context::class);
         $context->method('getRequest')
             ->willReturn($requestMock);

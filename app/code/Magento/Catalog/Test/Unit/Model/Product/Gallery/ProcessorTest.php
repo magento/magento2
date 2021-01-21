@@ -16,7 +16,7 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Catalog\Model\Product\Attribute\Repository|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product\Attribute\Repository|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $attributeRepository;
 
@@ -26,21 +26,21 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
     protected $objectHelper;
 
     /**
-     * @var \Magento\Framework\DataObject|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DataObject|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $dataObject;
 
     /**
-     * @var \Magento\Catalog\Model\Product\Media\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product\Media\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $mediaConfig;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\Write|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\Directory\Write|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $mediaDirectory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 

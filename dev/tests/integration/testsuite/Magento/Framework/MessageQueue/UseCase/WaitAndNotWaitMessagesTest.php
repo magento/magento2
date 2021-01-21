@@ -51,7 +51,7 @@ class WaitAndNotWaitMessagesTest extends QueueTestCaseAbstract
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->msgObject = $this->objectManager->create(AsyncTestData::class);
@@ -142,7 +142,7 @@ class WaitAndNotWaitMessagesTest extends QueueTestCaseAbstract
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
         $this->writeConfig($this->config);

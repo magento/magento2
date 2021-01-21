@@ -15,7 +15,7 @@ class ShippingTest extends \PHPUnit\Framework\TestCase
      */
     protected $testable;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $logger = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)->getMock();
         /** @var \Psr\Log\LoggerInterface $logger */

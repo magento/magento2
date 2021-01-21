@@ -10,12 +10,12 @@ use Magento\Setup\Model\Cron\Queue\Writer;
 class WriterTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Filesystem
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Filesystem
      */
     private $filesystem;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Filesystem\Directory\ReadInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Filesystem\Directory\ReadInterface
      */
     private $directoryWrite;
 
@@ -24,7 +24,7 @@ class WriterTest extends \PHPUnit\Framework\TestCase
      */
     private $writer;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->filesystem = $this->createMock(\Magento\Framework\Filesystem::class);
         $directoryRead = $this->getMockForAbstractClass(

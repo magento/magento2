@@ -14,7 +14,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $this->_model = $objectManager->getObject(\Magento\Msrp\Model\Product\Attribute\Source\Type\Price::class);
@@ -33,7 +33,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
 
         $flatColumns = $this->_model->getFlatColumns();
 
-        $this->assertTrue(is_array($flatColumns), 'FlatColumns must be an array value');
+        $this->assertInternalType('array', $flatColumns, 'FlatColumns must be an array value');
         $this->assertTrue(!empty($flatColumns), 'FlatColumns must be not empty');
         foreach ($flatColumns as $result) {
             $this->assertArrayHasKey('unsigned', $result, 'FlatColumns must have "unsigned" column');

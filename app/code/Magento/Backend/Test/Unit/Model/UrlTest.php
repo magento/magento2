@@ -24,42 +24,42 @@ class UrlTest extends \PHPUnit\Framework\TestCase
     protected $_areaFrontName = 'backendArea';
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_menuMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_formKey;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_scopeConfigMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_menuConfigMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_backendHelperMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_requestMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_authSessionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $routeParamsResolverFactoryMock;
 
@@ -69,7 +69,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
     protected $_encryptor;
 
     /**
-     * @var Json|\PHPUnit_Framework_MockObject_MockObject
+     * @var Json|\PHPUnit\Framework\MockObject\MockObject
      */
     private $serializerMock;
 
@@ -77,7 +77,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
      * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_menuMock = $this->createPartialMock(
@@ -144,7 +144,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         $this->routeParamsResolverFactoryMock->expects($this->any())
             ->method('create')
             ->willReturn($routeParamsResolver);
-        /** @var HostChecker|\PHPUnit_Framework_MockObject_MockObject $hostCheckerMock */
+        /** @var HostChecker|\PHPUnit\Framework\MockObject\MockObject $hostCheckerMock */
         $hostCheckerMock = $this->createMock(HostChecker::class);
         $this->serializerMock = $this->getMockBuilder(Json::class)
             ->setMethods(['serialize'])

@@ -41,7 +41,7 @@ class IndexTest extends \PHPUnit\Framework\TestCase
     /**
      * Prepare test preconditions
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->context = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
@@ -50,12 +50,12 @@ class IndexTest extends \PHPUnit\Framework\TestCase
         $this->productMetadata = $this->getMockBuilder(ProductMetadataInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getName', 'getEdition', 'getVersion'])
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->response = $this->getMockBuilder(ResponseInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['setBody', 'sendResponse'])
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->context->expects($this->any())
             ->method('getResponse')

@@ -18,13 +18,13 @@ class AbstractWidgetTest extends \PHPUnit\Framework\TestCase
 
     const FORMAT_S = '%s';
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Helper\Address */
+    /** @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Customer\Helper\Address */
     private $_addressHelper;
 
     /** @var AbstractWidget */
     private $_block;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_addressHelper = $this->createMock(\Magento\Customer\Helper\Address::class);
 

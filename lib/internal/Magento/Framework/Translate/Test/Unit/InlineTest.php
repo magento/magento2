@@ -10,36 +10,36 @@ use \Magento\Framework\Translate\Inline;
 class InlineTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\App\ScopeResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ScopeResolverInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $scopeResolverMock;
 
     /**
-     * @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\UrlInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $urlMock;
 
     /**
-     * @var \Magento\Framework\View\LayoutInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\LayoutInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $layoutMock;
 
     /**
-     * @var \Magento\Framework\Translate\Inline\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Translate\Inline\ConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $configMock;
 
     /**
-     * @var \Magento\Framework\Translate\Inline\ParserFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Translate\Inline\ParserFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $parserMock;
 
     /**
-     * @var \Magento\Framework\Translate\Inline\StateInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Translate\Inline\StateInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $stateMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->scopeResolverMock =
             $this->createMock(\Magento\Framework\App\ScopeResolverInterface::class);

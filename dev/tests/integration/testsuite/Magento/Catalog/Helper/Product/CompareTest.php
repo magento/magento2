@@ -17,7 +17,7 @@ class CompareTest extends \PHPUnit\Framework\TestCase
      */
     protected $_objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->_helper = $this->_objectManager->get(\Magento\Catalog\Helper\Product\Compare::class);

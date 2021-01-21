@@ -12,7 +12,7 @@ class AbstractTest extends \PHPUnit\Framework\TestCase
      */
     private $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->model = $this->getMockForAbstractClass(
             \Magento\Config\Block\System\Config\Form\Field\FieldArray\AbstractFieldArray::class,

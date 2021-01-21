@@ -29,7 +29,7 @@ class CustomTest extends \Magento\ImportExport\Test\Unit\Model\Source\Import\Abs
         \Magento\ImportExport\Model\Import::BEHAVIOR_CUSTOM,
     ];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->_model = new \Magento\ImportExport\Model\Source\Import\Behavior\Custom();

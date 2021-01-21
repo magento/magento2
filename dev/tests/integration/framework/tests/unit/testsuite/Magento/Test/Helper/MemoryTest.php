@@ -8,11 +8,11 @@ namespace Magento\Test\Helper;
 class MemoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $_shell;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_shell = $this->createPartialMock(\Magento\Framework\Shell::class, ['execute']);
     }

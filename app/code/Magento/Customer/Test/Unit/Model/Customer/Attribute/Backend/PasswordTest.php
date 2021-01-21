@@ -17,7 +17,7 @@ class PasswordTest extends \PHPUnit\Framework\TestCase
      */
     protected $testable;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $string = new StringUtils();
         $this->testable = new \Magento\Customer\Model\Customer\Attribute\Backend\Password($string);
@@ -27,7 +27,7 @@ class PasswordTest extends \PHPUnit\Framework\TestCase
     {
         $password = 'password';
 
-        /** @var DataObject|\PHPUnit_Framework_MockObject_MockObject $object */
+        /** @var DataObject|\PHPUnit\Framework\MockObject\MockObject $object */
         $object = $this->getMockBuilder(DataObject::class)
             ->disableOriginalConstructor()
             ->setMethods(['getPassword', 'getPasswordConfirm'])
@@ -53,11 +53,12 @@ class PasswordTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @dataProvider passwordNegativeDataProvider
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testBeforeSaveNegative($password)
     {
-        /** @var DataObject|\PHPUnit_Framework_MockObject_MockObject $object */
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+
+        /** @var DataObject|\PHPUnit\Framework\MockObject\MockObject $object */
         $object = $this->getMockBuilder(DataObject::class)
             ->disableOriginalConstructor()
             ->setMethods(['getPassword'])
@@ -73,7 +74,7 @@ class PasswordTest extends \PHPUnit\Framework\TestCase
         $password = 'more-then-6';
         $passwordHash = 'password-hash';
 
-        /** @var DataObject|\PHPUnit_Framework_MockObject_MockObject $object */
+        /** @var DataObject|\PHPUnit\Framework\MockObject\MockObject $object */
         $object = $this->getMockBuilder(DataObject::class)
             ->disableOriginalConstructor()
             ->setMethods(['getPassword', 'setPasswordHash', 'hashPassword'])
@@ -110,7 +111,7 @@ class PasswordTest extends \PHPUnit\Framework\TestCase
      */
     public function testCustomerGetPasswordAndGetPasswordConfirmAlwaysReturnsAString($randomValue)
     {
-        /** @var \Magento\Customer\Model\Customer|\PHPUnit_Framework_MockObject_MockObject $customer */
+        /** @var \Magento\Customer\Model\Customer|\PHPUnit\Framework\MockObject\MockObject $customer */
         $customer = $this->getMockBuilder(\Magento\Customer\Model\Customer::class)
             ->disableOriginalConstructor()
             ->setMethods(['getData'])

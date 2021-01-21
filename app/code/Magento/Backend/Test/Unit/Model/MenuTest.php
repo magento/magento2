@@ -31,7 +31,7 @@ class MenuTest extends \PHPUnit\Framework\TestCase
      */
     private $objectManagerHelper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_items['item1'] = $this->createMock(\Magento\Backend\Model\Menu\Item::class);
@@ -164,10 +164,11 @@ class MenuTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
      */
     public function testMoveNonExistentItemThrowsException()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $this->_model->add($this->_items['item1']);
         $this->_model->add($this->_items['item2']);
         $this->_model->add($this->_items['item3']);
@@ -176,10 +177,11 @@ class MenuTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
      */
     public function testMoveToNonExistentItemThrowsException()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $this->_model->add($this->_items['item1']);
         $this->_model->add($this->_items['item2']);
         $this->_model->add($this->_items['item3']);
@@ -343,7 +345,7 @@ class MenuTest extends \PHPUnit\Framework\TestCase
 
     public function testSerialize()
     {
-        $serializerMock = $this->createMock(SerializerInterface::class);
+        $serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
         $serializerMock->expects($this->once())
             ->method('serialize')
             ->with([['arrayData']])
@@ -366,7 +368,7 @@ class MenuTest extends \PHPUnit\Framework\TestCase
 
     public function testUnserialize()
     {
-        $serializerMock = $this->createMock(SerializerInterface::class);
+        $serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
         $serializerMock->expects($this->once())
             ->method('unserialize')
             ->willReturn([['unserializedData']]);

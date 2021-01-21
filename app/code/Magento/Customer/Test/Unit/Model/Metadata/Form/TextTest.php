@@ -19,7 +19,7 @@ class TextTest extends AbstractFormTestCase
     /**
      * {@inheritDoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->stringHelper = new \Magento\Framework\Stdlib\StringUtils();

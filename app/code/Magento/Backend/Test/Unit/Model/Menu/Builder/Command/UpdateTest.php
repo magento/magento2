@@ -14,7 +14,7 @@ class UpdateTest extends \PHPUnit\Framework\TestCase
 
     protected $_params = ['id' => 'item', 'title' => 'item', 'module' => 'Magento_Backend', 'parent' => 'parent'];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_model = new \Magento\Backend\Model\Menu\Builder\Command\Update($this->_params);
     }

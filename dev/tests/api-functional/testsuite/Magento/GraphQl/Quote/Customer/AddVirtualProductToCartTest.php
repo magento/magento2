@@ -29,7 +29,7 @@ class AddVirtualProductToCartTest extends GraphQlAbstract
      */
     private $getMaskedQuoteIdByReservedOrderId;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->customerTokenService = $objectManager->get(CustomerTokenServiceInterface::class);

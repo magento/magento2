@@ -17,17 +17,17 @@ class AclResourceTest extends \PHPUnit\Framework\TestCase
     const TABLE_PREFIX = 'prefix_';
 
     /**
-     * @var \Magento\Framework\App\ResourceConnection\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection\ConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $config;
 
     /**
-     * @var ConnectionFactoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConnectionFactoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $connectionFactory;
 
     /**
-     * @var \Magento\Framework\App\DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\DeploymentConfig|\PHPUnit\Framework\MockObject\MockObject
      */
     private $deploymentConfig;
 
@@ -37,11 +37,11 @@ class AclResourceTest extends \PHPUnit\Framework\TestCase
     protected $resource;
 
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $connection;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->connectionFactory = $this->getMockBuilder(ConnectionFactoryInterface::class)
             ->setMethods(['create'])

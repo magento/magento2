@@ -10,7 +10,7 @@ namespace Magento\Catalog\Test\Unit\Controller\Adminhtml;
  */
 abstract class ProductTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $context;
 
     /** @var \Magento\Catalog\Controller\Product */
@@ -19,14 +19,14 @@ abstract class ProductTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Framework\View\Layout  */
     protected $layout;
 
-    /** @var \Magento\Backend\Model\Session|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Backend\Model\Session|\PHPUnit\Framework\MockObject\MockObject */
     protected $session;
 
-    /** @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\Request\Http|\PHPUnit\Framework\MockObject\MockObject */
     protected $request;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $objectManagerMock;
 
@@ -35,7 +35,7 @@ abstract class ProductTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $additionalParams
      * @param array $objectManagerMap Object Manager mappings
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function initContext(array $additionalParams = [], array $objectManagerMap = [])
     {

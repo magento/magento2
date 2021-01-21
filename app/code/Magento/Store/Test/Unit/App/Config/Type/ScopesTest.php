@@ -19,11 +19,11 @@ class ScopesTest extends \PHPUnit\Framework\TestCase
     private $unit;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $sourceMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->sourceMock = $this->getMockBuilder(ConfigSourceInterface::class)->getMock();
         $this->unit = (new ObjectManager($this))->getObject(

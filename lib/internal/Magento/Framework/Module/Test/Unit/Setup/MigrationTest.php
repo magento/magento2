@@ -28,11 +28,11 @@ class MigrationTest extends \PHPUnit\Framework\TestCase
     protected $_actualWhere;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\DB\Select
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\DB\Select
      */
     protected $_selectMock;
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_actualUpdateResult);
         unset($this->_actualWhere);
@@ -111,7 +111,7 @@ class MigrationTest extends \PHPUnit\Framework\TestCase
      * Callback for \Magento\Framework\DB\Select::where
      *
      * @param string $condition
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\DB\Select
+     * @return \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\DB\Select
      */
     public function whereCallback($condition)
     {
@@ -241,7 +241,7 @@ class MigrationTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Filesystem
+     * @return \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Filesystem
      */
     protected function _getFilesystemMock()
     {
@@ -250,7 +250,7 @@ class MigrationTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Serialize\Serializer\Json
+     * @return \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Serialize\Serializer\Json
      * @throws \PHPUnit\Framework\Exception
      */
     private function getSerializerMock()

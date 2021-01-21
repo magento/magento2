@@ -14,7 +14,7 @@ class VoidHandlerTest extends \PHPUnit\Framework\TestCase
 {
     public function testHandle()
     {
-        $paymentDO = $this->createMock(PaymentDataObjectInterface::class);
+        $paymentDO = $this->getMockForAbstractClass(PaymentDataObjectInterface::class);
         $paymentInfo = $this->getMockBuilder(Payment::class)
             ->disableOriginalConstructor()
             ->getMock();

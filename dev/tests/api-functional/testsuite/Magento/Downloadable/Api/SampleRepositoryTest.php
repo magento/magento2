@@ -36,7 +36,7 @@ class SampleRepositoryTest extends WebapiAbstract
      */
     protected $deleteServiceInfo;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->createServiceInfo = [
             'rest' => [

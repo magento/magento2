@@ -21,11 +21,11 @@ class BodyTest extends \PHPUnit\Framework\TestCase
     protected $bodyGenerator;
 
     /**
-     * @var \Magento\Framework\View\Page\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Page\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $pageConfigMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->pageConfigMock = $this->getMockBuilder(\Magento\Framework\View\Page\Config::class)
             ->disableOriginalConstructor()

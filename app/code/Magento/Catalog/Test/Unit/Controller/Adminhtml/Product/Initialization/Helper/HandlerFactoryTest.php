@@ -15,11 +15,11 @@ class HandlerFactoryTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_objectManagerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->_model = new HandlerFactory($this->_objectManagerMock);

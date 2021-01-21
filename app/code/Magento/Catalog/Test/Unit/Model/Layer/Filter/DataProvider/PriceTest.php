@@ -9,7 +9,7 @@ namespace Magento\Catalog\Test\Unit\Model\Layer\Filter\DataProvider;
 use \Magento\Catalog\Model\Layer\Filter\DataProvider\Price;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * Test for \Magento\Catalog\Model\Layer\Filter\DataProvider\Price
@@ -36,7 +36,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
      */
     private $target;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->productCollection = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Product\Collection::class)
             ->disableOriginalConstructor()

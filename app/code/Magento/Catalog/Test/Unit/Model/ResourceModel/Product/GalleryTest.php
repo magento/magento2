@@ -11,27 +11,27 @@ namespace Magento\Catalog\Test\Unit\Model\ResourceModel\Product;
 class GalleryTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $connection;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product\Gallery | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Gallery | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $resource;
 
     /**
-     * @var \Magento\Catalog\Model\Product | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $product;
 
     /**
-     * @var \Magento\Framework\DB\Select | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Select | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $select;
 
     /**
-     * @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $attribute;
 
@@ -48,7 +48,7 @@ class GalleryTest extends \PHPUnit\Framework\TestCase
         'metadata' => ['DATA_TYPE' => 'text', 'NULLABLE' => true],
     ];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 

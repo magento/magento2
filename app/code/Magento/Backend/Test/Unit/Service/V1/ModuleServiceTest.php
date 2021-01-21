@@ -26,7 +26,7 @@ class ModuleServiceTest extends \PHPUnit\Framework\TestCase
     private $moduleService;
 
     /**
-     * @var ModuleListInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ModuleListInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $moduleListMock;
 
@@ -42,9 +42,9 @@ class ModuleServiceTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->moduleListMock = $this->createMock(ModuleListInterface::class);
+        $this->moduleListMock = $this->getMockForAbstractClass(ModuleListInterface::class);
         $this->objectManager = new ObjectManager($this);
         $this->moduleService = $this->objectManager->getObject(
             ModuleService::class,

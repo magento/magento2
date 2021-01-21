@@ -13,17 +13,17 @@ class ViewTest extends \PHPUnit\Framework\TestCase
     protected $block;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $scopeConfigMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->block = $objectManager->getObject(\Magento\Catalog\Block\Category\View::class, []);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->block = null;
     }

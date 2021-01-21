@@ -39,7 +39,7 @@ class MinifierTest extends \PHPUnit\Framework\TestCase
     /**
      * {@inheritDoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->objectManager = Bootstrap::getInstance()->getObjectManager();
@@ -60,7 +60,7 @@ class MinifierTest extends \PHPUnit\Framework\TestCase
     /**
      * {@inheritDoc}
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         /** @var \Magento\TestFramework\App\State $appState */
         $appState = $this->objectManager->get(\Magento\TestFramework\App\State::class);

@@ -8,22 +8,22 @@ namespace Magento\AdminNotification\Test\Unit\Model\System\Message;
 class SecurityTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_cacheMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_scopeConfigMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_configMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_curlFactoryMock;
 
@@ -32,7 +32,7 @@ class SecurityTest extends \PHPUnit\Framework\TestCase
      */
     protected $_messageModel;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         //Prepare objects for constructor
         $this->_cacheMock = $this->createMock(\Magento\Framework\App\CacheInterface::class);

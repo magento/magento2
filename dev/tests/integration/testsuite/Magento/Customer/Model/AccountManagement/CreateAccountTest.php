@@ -118,7 +118,7 @@ class CreateAccountTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->accountManagement = $this->objectManager->get(AccountManagementInterface::class);
@@ -139,7 +139,7 @@ class CreateAccountTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
         $this->mutableScopeConfig->clean();

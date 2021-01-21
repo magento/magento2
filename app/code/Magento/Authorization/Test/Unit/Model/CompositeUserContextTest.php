@@ -28,7 +28,7 @@ class CompositeUserContextTest extends \PHPUnit\Framework\TestCase
      */
     protected $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $this->compositeHelperMock = $this->getMockBuilder(\Magento\Framework\ObjectManager\Helper\Composite::class)
@@ -155,7 +155,7 @@ class CompositeUserContextTest extends \PHPUnit\Framework\TestCase
     /**
      * @param int|null $userId
      * @param string|null $userType
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function createUserContextMock($userId = null, $userType = null)
     {

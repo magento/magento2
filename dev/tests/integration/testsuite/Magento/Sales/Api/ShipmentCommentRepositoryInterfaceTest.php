@@ -19,7 +19,7 @@ class ShipmentCommentRepositoryInterfaceTest extends \PHPUnit\Framework\TestCase
      */
     private $repository;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->repository = Bootstrap::getObjectManager()->create(ShipmentCommentRepositoryInterface::class);
     }

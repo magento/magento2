@@ -19,29 +19,29 @@ class RegularPriceTest extends \PHPUnit\Framework\TestCase
     protected $regularPrice;
 
     /**
-     * @var \Magento\Framework\Pricing\PriceInfoInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\PriceInfoInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $priceInfoMock;
 
     /**
-     * @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $saleableItemMock;
 
     /**
-     * @var \Magento\Framework\Pricing\Adjustment\Calculator|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\Adjustment\Calculator|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $calculatorMock;
 
     /**
-     * @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $priceCurrencyMock;
 
     /**
      * Test setUp
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $qty = 1;
         $this->saleableItemMock = $this->createMock(\Magento\Catalog\Model\Product::class);

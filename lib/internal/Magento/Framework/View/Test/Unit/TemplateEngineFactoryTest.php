@@ -9,7 +9,7 @@ use \Magento\Framework\View\TemplateEngineFactory;
 
 class TemplateEngineFactoryTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $_objectManagerMock;
 
     /** @var  \Magento\Framework\View\TemplateEngineFactory */
@@ -18,7 +18,7 @@ class TemplateEngineFactoryTest extends \PHPUnit\Framework\TestCase
     /**
      * Setup a factory to test with an mocked object manager.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->_factory = new TemplateEngineFactory(

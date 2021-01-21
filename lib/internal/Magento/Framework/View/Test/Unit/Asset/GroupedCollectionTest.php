@@ -17,7 +17,7 @@ class GroupedCollectionTest extends \PHPUnit\Framework\TestCase
      */
     protected $_asset;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $factory = $this->createMock(\Magento\Framework\View\Asset\PropertyGroupFactory::class);
         $factory->expects(
@@ -32,7 +32,7 @@ class GroupedCollectionTest extends \PHPUnit\Framework\TestCase
         $this->_object->add('asset', $this->_asset);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->_object = null;
         $this->_asset = null;

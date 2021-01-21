@@ -13,17 +13,17 @@ class SidebarTest extends \PHPUnit\Framework\TestCase
     protected $sidebarMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $itemMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $productMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $subjectMock;
 
@@ -32,7 +32,7 @@ class SidebarTest extends \PHPUnit\Framework\TestCase
      */
     protected $closureMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->itemMock = $this->createPartialMock(\Magento\Framework\DataObject::class, ['getProduct']);
         $this->productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
@@ -70,8 +70,7 @@ class SidebarTest extends \PHPUnit\Framework\TestCase
 
     public function testAroundIsConfigurationRequiredWhenProductGrouped()
     {
-        $this->assertEquals(
-            true,
+        $this->assertTrue(
             $this->sidebarMock->aroundIsConfigurationRequired(
                 $this->subjectMock,
                 $this->closureMock,

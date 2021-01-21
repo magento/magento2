@@ -7,7 +7,7 @@
 
 namespace Magento\Quote\Test\Unit\Model\GuestCart;
 
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 use Magento\Quote\Model\QuoteIdMask;
 use Magento\Quote\Api\Data\AddressInterface;
 use Magento\Quote\Api\ShipmentEstimationInterface;
@@ -22,12 +22,12 @@ class GuestShippingMethodManagementTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $shippingMethodManagementMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $quoteIdMaskFactoryMock;
 
@@ -51,7 +51,7 @@ class GuestShippingMethodManagementTest extends \PHPUnit\Framework\TestCase
      */
     private $cartId = 867;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 

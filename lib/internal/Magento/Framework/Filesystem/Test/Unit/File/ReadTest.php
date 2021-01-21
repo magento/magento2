@@ -33,11 +33,11 @@ class ReadTest extends \PHPUnit\Framework\TestCase
     protected $mode = 'r';
 
     /**
-     * @var \Magento\Framework\Filesystem\DriverInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\DriverInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $driver;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->driver = $this->getMockForAbstractClass(\Magento\Framework\Filesystem\DriverInterface::class);
         $this->driver->expects($this->any())
@@ -51,7 +51,7 @@ class ReadTest extends \PHPUnit\Framework\TestCase
         $this->file = new Read($this->path, $this->driver);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->file = null;
         $this->driver = null;

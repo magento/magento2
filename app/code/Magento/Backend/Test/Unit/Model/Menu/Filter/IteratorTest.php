@@ -19,7 +19,7 @@ class IteratorTest extends \PHPUnit\Framework\TestCase
      */
     private $items = [];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->items['item1'] = $this->createMock(\Magento\Backend\Model\Menu\Item::class);
         $this->items['item1']->expects($this->any())->method('getId')->will($this->returnValue('item1'));

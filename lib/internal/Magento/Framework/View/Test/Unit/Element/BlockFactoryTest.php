@@ -13,11 +13,11 @@ class BlockFactoryTest extends \PHPUnit\Framework\TestCase
     protected $blockFactory;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $objectManagerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 

@@ -10,7 +10,7 @@ use Magento\Framework\Model\ResourceModel\Type\Db\Pdo\Mysql;
 class MysqlTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Serialize\SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Serialize\SerializerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $serializerMock;
 
@@ -20,11 +20,11 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
     private $selectFactoryMock;
 
     /**
-     * @var \Magento\Framework\DB\Adapter\Pdo\MysqlFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Adapter\Pdo\MysqlFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $mysqlFactoryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->serializerMock = $this->createMock(\Magento\Framework\Serialize\SerializerInterface::class);
         $this->selectFactoryMock = $this->createMock(\Magento\Framework\DB\SelectFactory::class);

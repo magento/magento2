@@ -10,26 +10,26 @@ use Magento\Theme\Model\Wysiwyg\Storage;
 class ContentTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Backend\Model\Url|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\Model\Url|PHPUnit\Framework\MockObject\MockObject
      */
     protected $_urlBuilder;
 
     /**
-     * @var \Magento\Theme\Helper\Storage|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Theme\Helper\Storage|PHPUnit\Framework\MockObject\MockObject
      */
     protected $_helperStorage;
 
     /**
-     * @var \Magento\Theme\Block\Adminhtml\Wysiwyg\Files\Content|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Theme\Block\Adminhtml\Wysiwyg\Files\Content|PHPUnit\Framework\MockObject\MockObject
      */
     protected $_filesContent;
 
     /**
-     * @var \Magento\Framework\App\RequestInterface|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\RequestInterface|PHPUnit\Framework\MockObject\MockObject
      */
     protected $_request;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_helperStorage = $this->createMock(\Magento\Theme\Helper\Storage::class);
         $this->_urlBuilder = $this->createMock(\Magento\Backend\Model\Url::class);

@@ -20,19 +20,19 @@ class ConditionsTest extends \PHPUnit\Framework\TestCase
     protected $conditions;
 
     /**
-     * @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit\Framework\MockObject\MockObject
      */
     private $serializer;
 
     /**
-     * @var Normalizer|\PHPUnit_Framework_MockObject_MockObject
+     * @var Normalizer|\PHPUnit\Framework\MockObject\MockObject
      */
     private $normalizer;
 
     /**
      * {@inheritdoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->serializer = $this->createMock(\Magento\Framework\Serialize\Serializer\Json::class);
         $this->normalizer = $this->createMock(Normalizer::class);

@@ -72,7 +72,7 @@ class PageRepositoryTest extends WebapiAbstract
     /**
      * Execute per test initialization.
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->pageFactory = Bootstrap::getObjectManager()->create(\Magento\Cms\Api\Data\PageInterfaceFactory::class);
         $this->pageRepository = Bootstrap::getObjectManager()->create(\Magento\Cms\Api\PageRepositoryInterface::class);
@@ -87,7 +87,7 @@ class PageRepositoryTest extends WebapiAbstract
     /**
      * Clear temporary data
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         if ($this->currentPage) {
             $this->pageRepository->delete($this->currentPage);

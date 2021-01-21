@@ -21,31 +21,31 @@ class ProductRenderListTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Catalog\Model\ProductRenderRepository */
     private $model;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     private $collectionFactoryMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     private $collectionProcessorMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     private $productRenderCollectorCompositeMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     private $productRenderSearchResultsFactoryMock;
 
-    /** @var \Magento\Catalog\Model\ProductRenderFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Catalog\Model\ProductRenderFactory|\PHPUnit\Framework\MockObject\MockObject */
     private $productRenderFactoryMock;
 
-    /** @var \Magento\Catalog\Model\Config|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Catalog\Model\Config|\PHPUnit\Framework\MockObject\MockObject */
     private $configMock;
 
-    /** @var Visibility|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Visibility|\PHPUnit\Framework\MockObject\MockObject */
     private $productVisibility;
 
-    /** @var CollectionModifier|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var CollectionModifier|\PHPUnit\Framework\MockObject\MockObject */
     private $collectionModifier;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->collectionFactoryMock = $this
             ->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Product\CollectionFactory::class)
@@ -102,14 +102,14 @@ class ProductRenderListTest extends \PHPUnit\Framework\TestCase
 
         $product = $this->getMockBuilder(ProductInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $iterator = new \IteratorIterator(new \ArrayIterator([$product]));
         $productRender = $this->getMockBuilder(ProductRenderInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $searchResult = $this->getMockBuilder(SearchResultInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $searchCriteria = $this->getMockBuilder(SearchCriteria::class)
             ->disableOriginalConstructor()
             ->getMock();

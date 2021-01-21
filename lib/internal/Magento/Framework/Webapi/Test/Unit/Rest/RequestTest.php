@@ -24,7 +24,7 @@ class RequestTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Framework\Webapi\Rest\Request\DeserializerFactory */
     protected $_deserializerFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         /** Prepare mocks for request constructor arguments. */
         $this->_deserializerFactory = $this->getMockBuilder(
@@ -58,7 +58,7 @@ class RequestTest extends \PHPUnit\Framework\TestCase
         parent::setUp();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_deserializerFactory);
         unset($this->_request);

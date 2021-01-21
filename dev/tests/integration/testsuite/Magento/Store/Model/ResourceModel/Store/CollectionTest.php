@@ -12,7 +12,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      */
     protected $_collection;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Store\Model\ResourceModel\Store\Collection::class

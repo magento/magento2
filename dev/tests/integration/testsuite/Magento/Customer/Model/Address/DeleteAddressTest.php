@@ -45,7 +45,7 @@ class DeleteAddressTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->customerRegistry = $this->objectManager->get(CustomerRegistry::class);

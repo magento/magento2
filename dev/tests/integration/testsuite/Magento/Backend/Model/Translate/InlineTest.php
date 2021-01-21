@@ -15,7 +15,7 @@ class InlineTest extends \PHPUnit\Framework\TestCase
      */
     protected $_translateInline;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_translateInline = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Framework\Translate\InlineInterface::class

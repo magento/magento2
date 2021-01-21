@@ -21,7 +21,7 @@ class FallbackTest extends \PHPUnit\Framework\TestCase
      */
     private $themeFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         /** @var \Magento\Theme\Model\Theme\Registration $registration */

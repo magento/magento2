@@ -27,22 +27,22 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
     protected $objectManager;
 
     /**
-     * @var Factory|\PHPUnit_Framework_MockObject_MockObject
+     * @var Factory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $messageFactory;
 
     /**
-     * @var CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $messagesFactory;
 
     /**
-     * @var Session|\PHPUnit_Framework_MockObject_MockObject
+     * @var Session|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $session;
 
     /**
-     * @var ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $eventManager;
 
@@ -52,21 +52,21 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var MessageInterface |\PHPUnit_Framework_MockObject_MockObject
+     * @var MessageInterface |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $messageMock;
 
     /**
-     * @var LoggerInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var LoggerInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     private $logger;
 
     /**
-     * @var ExceptionMessageLookupFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var ExceptionMessageLookupFactory | \PHPUnit\Framework\MockObject\MockObject
      */
     private $exceptionMessageFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->messagesFactory = $this->getMockBuilder(
             \Magento\Framework\Message\CollectionFactory::class
@@ -322,7 +322,7 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param \PHPUnit_Framework_MockObject_MockObject $messages
+     * @param \PHPUnit\Framework\MockObject\MockObject $messages
      * @param string $expectation
      * @dataProvider addUniqueMessagesWhenMessagesImplementMessageInterfaceDataProvider
      */

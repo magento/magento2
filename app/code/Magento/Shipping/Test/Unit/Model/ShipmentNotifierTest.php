@@ -18,7 +18,7 @@ use Magento\Shipping\Model\ShipmentNotifier;
 class ShipmentNotifierTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var CollectionFactory |\PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionFactory |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $historyCollectionFactory;
 
@@ -28,21 +28,21 @@ class ShipmentNotifierTest extends \PHPUnit\Framework\TestCase
     protected $notifier;
 
     /**
-     * @var \Magento\Sales\Model\Order|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $shipment;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface |\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManagerInterface |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $loggerMock;
 
     /**
-     * @var \Magento\Framework\ObjectManager\ObjectManager |\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManager\ObjectManager |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $shipmentSenderMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->historyCollectionFactory = $this->createPartialMock(
             \Magento\Sales\Model\ResourceModel\Order\Status\History\CollectionFactory::class,

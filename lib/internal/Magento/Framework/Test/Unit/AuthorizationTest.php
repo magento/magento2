@@ -19,11 +19,11 @@ class AuthorizationTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_policyMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_policyMock = $this->createMock(\Magento\Framework\Authorization\PolicyInterface::class);
         $roleLocatorMock = $this->createMock(\Magento\Framework\Authorization\RoleLocatorInterface::class);
@@ -31,7 +31,7 @@ class AuthorizationTest extends \PHPUnit\Framework\TestCase
         $this->_model = new \Magento\Framework\Authorization($this->_policyMock, $roleLocatorMock);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_model);
     }

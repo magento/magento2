@@ -18,7 +18,7 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\Phrase;
-use \PHPUnit_Framework_MockObject_MockObject as Mock;
+use \PHPUnit\Framework\MockObject\MockObject as Mock;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -70,7 +70,7 @@ class WriterTest extends \PHPUnit\Framework\TestCase
      */
     private $commentParserMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->commentParserMock = $this->getMockBuilder(CommentParser::class)
             ->disableOriginalConstructor()

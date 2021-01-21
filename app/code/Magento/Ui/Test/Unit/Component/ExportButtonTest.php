@@ -13,12 +13,12 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class ExportButtonTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\View\Element\UiComponent\ContextInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Element\UiComponent\ContextInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $context;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $urlBuilderMock;
 
@@ -32,7 +32,7 @@ class ExportButtonTest extends \PHPUnit\Framework\TestCase
      */
     protected $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->context = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\ContextInterface::class)
             ->getMockForAbstractClass();

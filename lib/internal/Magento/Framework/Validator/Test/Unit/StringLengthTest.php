@@ -16,7 +16,7 @@ class StringLengthTest extends \PHPUnit\Framework\TestCase
      */
     protected $_validator;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_validator = new \Magento\Framework\Validator\StringLength();
     }

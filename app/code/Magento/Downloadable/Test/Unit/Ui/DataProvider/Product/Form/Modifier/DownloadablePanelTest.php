@@ -26,17 +26,17 @@ class DownloadablePanelTest extends \PHPUnit\Framework\TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var LocatorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LocatorInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $locatorMock;
 
     /**
-     * @var ArrayManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var ArrayManager|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $arrayManagerMock;
 
     /**
-     * @var ProductInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $productMock;
 
@@ -48,11 +48,11 @@ class DownloadablePanelTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $this->productMock = $this->createMock(ProductInterface::class);
-        $this->locatorMock = $this->createMock(LocatorInterface::class);
+        $this->productMock = $this->getMockForAbstractClass(ProductInterface::class);
+        $this->locatorMock = $this->getMockForAbstractClass(LocatorInterface::class);
         $this->arrayManagerMock = $this->createMock(ArrayManager::class);
         $this->downloadablePanel = $this->objectManagerHelper->getObject(
             DownloadablePanel::class,

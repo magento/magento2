@@ -22,7 +22,7 @@ class AbstractEnableTest extends \PHPUnit\Framework\TestCase
     protected $abstractEnable;
 
     /**
-     * @var \Magento\Framework\Data\Form\Element\AbstractElement|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Data\Form\Element\AbstractElement|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $elementMock;
 
@@ -31,7 +31,7 @@ class AbstractEnableTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 

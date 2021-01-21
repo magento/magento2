@@ -27,7 +27,7 @@ class TaxTest extends \PHPUnit\Framework\TestCase
      */
     private $_extensibleDataObjectConverter;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $weeeConfig = $this->createMock(\Magento\Weee\Model\Config::class);

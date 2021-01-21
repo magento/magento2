@@ -8,7 +8,7 @@ namespace Magento\Bundle\Test\Unit\Model\Plugin;
 
 use Magento\Catalog\Model\Product;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 class ProductTest extends \PHPUnit\Framework\TestCase
 {
@@ -21,7 +21,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     /** @var  MockObject|\Magento\Catalog\Model\Product */
     private $product;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
 

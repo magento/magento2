@@ -68,7 +68,7 @@ class CollectionTest extends BaseCollection
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->eavConfig = $this->createMock(\Magento\Eav\Model\Config::class);
@@ -174,7 +174,7 @@ class CollectionTest extends BaseCollection
         $this->advancedCollection->setPageSize($pageSize);
         $this->advancedCollection->setCurPage(0);
 
-        $searchResultApplier = $this->createMock(SearchResultApplierInterface::class);
+        $searchResultApplier = $this->getMockForAbstractClass(SearchResultApplierInterface::class);
         $this->searchResultApplierFactory->expects($this->once())
             ->method('create')
             ->with(

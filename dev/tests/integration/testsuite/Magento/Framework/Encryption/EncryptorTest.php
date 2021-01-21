@@ -12,7 +12,7 @@ class EncryptorTest extends \PHPUnit\Framework\TestCase
      */
     private $encryptor;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->encryptor = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Framework\Encryption\Encryptor::class

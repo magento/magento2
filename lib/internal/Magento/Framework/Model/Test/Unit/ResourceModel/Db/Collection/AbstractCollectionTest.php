@@ -23,28 +23,28 @@ class AbstractCollectionTest extends \PHPUnit\Framework\TestCase
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    /** @var \Magento\Framework\Data\Collection\EntityFactoryInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Data\Collection\EntityFactoryInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $entityFactoryMock;
 
-    /** @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Psr\Log\LoggerInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $loggerMock;
 
-    /** @var \Magento\Framework\Data\Collection\Db\FetchStrategyInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Data\Collection\Db\FetchStrategyInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $fetchStrategyMock;
 
-    /** @var \Magento\Framework\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Event\ManagerInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $managerMock;
 
-    /** @var \Magento\Framework\Model\ResourceModel\Db\AbstractDb|\PHPUnit_Framework_MockObject_MockObject  */
+    /** @var \Magento\Framework\Model\ResourceModel\Db\AbstractDb|\PHPUnit\Framework\MockObject\MockObject  */
     protected $resourceMock;
 
-    /** @var \Magento\Framework\DB\Adapter\Pdo\Mysql|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\DB\Adapter\Pdo\Mysql|\PHPUnit\Framework\MockObject\MockObject */
     protected $connectionMock;
 
-    /** @var \Magento\Framework\DB\Select|\PHPUnit_Framework_MockObject_MockObject  */
+    /** @var \Magento\Framework\DB\Select|\PHPUnit\Framework\MockObject\MockObject  */
     protected $selectMock;
 
-    /** @var \Magento\Framework\App\ObjectManager|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\ObjectManager|\PHPUnit\Framework\MockObject\MockObject */
     protected $objectManagerMock;
 
     /**
@@ -52,7 +52,7 @@ class AbstractCollectionTest extends \PHPUnit\Framework\TestCase
      */
     protected $objectManagerBackup;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->entityFactoryMock = $this->createMock(\Magento\Framework\Data\Collection\EntityFactoryInterface::class);
         $this->loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
@@ -86,10 +86,10 @@ class AbstractCollectionTest extends \PHPUnit\Framework\TestCase
         $this->uut = $this->getUut();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
-        /** @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject $objectManagerMock*/
+        /** @var ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject $objectManagerMock*/
         $objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         \Magento\Framework\App\ObjectManager::setInstance($objectManagerMock);
     }
@@ -419,7 +419,7 @@ class AbstractCollectionTest extends \PHPUnit\Framework\TestCase
     public function testSave()
     {
         for ($i = 0; $i < 3; $i++) {
-            /** @var \Magento\Framework\DataObject|\PHPUnit_Framework_MockObject_MockObject $item */
+            /** @var \Magento\Framework\DataObject|\PHPUnit\Framework\MockObject\MockObject $item */
             $item = $this->createPartialMock(\Magento\Framework\DataObject::class, ['save']);
             $item->expects($this->once())->method('save');
             $this->uut->addItem($item);

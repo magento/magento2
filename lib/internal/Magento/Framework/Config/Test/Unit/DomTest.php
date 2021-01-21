@@ -11,11 +11,11 @@ namespace Magento\Framework\Config\Test\Unit;
 class DomTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Config\ValidationStateInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Config\ValidationStateInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $validationStateMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->validationStateMock = $this->getMockForAbstractClass(
             \Magento\Framework\Config\ValidationStateInterface::class

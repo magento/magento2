@@ -10,12 +10,12 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class ModuleTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Setup\Module\Dependency\Report\Dependency\Data\Dependency|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Setup\Module\Dependency\Report\Dependency\Data\Dependency|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $dependencyFirst;
 
     /**
-     * @var \Magento\Setup\Module\Dependency\Report\Dependency\Data\Dependency|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Setup\Module\Dependency\Report\Dependency\Data\Dependency|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $dependencySecond;
 
@@ -24,7 +24,7 @@ class ModuleTest extends \PHPUnit\Framework\TestCase
      */
     protected $module;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->dependencyFirst =
             $this->createMock(\Magento\Setup\Module\Dependency\Report\Dependency\Data\Dependency::class);

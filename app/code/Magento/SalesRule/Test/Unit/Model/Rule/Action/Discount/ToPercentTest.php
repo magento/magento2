@@ -13,16 +13,16 @@ class ToPercentTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\SalesRule\Model\Validator|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\SalesRule\Model\Validator|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $validator;
 
     /**
-     * @var \Magento\SalesRule\Model\Rule\Action\Discount\DataFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\SalesRule\Model\Rule\Action\Discount\DataFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $discountDataFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 

@@ -22,7 +22,7 @@ class RegistryTest extends \PHPUnit\Framework\TestCase
      */
     protected $data;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->registry = new Registry();
         $this->data = [
@@ -32,7 +32,7 @@ class RegistryTest extends \PHPUnit\Framework\TestCase
         $this->registry->register($this->data['key'], $this->data['value']);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         unset($this->registry);
     }

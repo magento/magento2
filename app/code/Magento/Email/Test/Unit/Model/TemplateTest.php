@@ -35,77 +35,77 @@ use PHPUnit\Framework\TestCase;
 class TemplateTest extends TestCase
 {
     /**
-     * @var Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|\PHPUnit\Framework\MockObject\MockObject
      */
     private $context;
 
     /**
-     * @var \Magento\Framework\View\DesignInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\DesignInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $design;
 
     /**
-     * @var Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @var Registry|\PHPUnit\Framework\MockObject\MockObject
      * @deprecated since 2.3.0 in favor of stateful global objects elimination.
      */
     private $registry;
 
     /**
-     * @var Emulation|\PHPUnit_Framework_MockObject_MockObject
+     * @var Emulation|\PHPUnit\Framework\MockObject\MockObject
      */
     private $appEmulation;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeManager;
 
     /**
-     * @var Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var Filesystem|\PHPUnit\Framework\MockObject\MockObject
      */
     private $filesystem;
 
     /**
-     * @var Repository|\PHPUnit_Framework_MockObject_MockObject
+     * @var Repository|\PHPUnit\Framework\MockObject\MockObject
      */
     private $assetRepo;
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $scopeConfig;
 
     /**
-     * @var FilterFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var FilterFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $filterFactory;
 
     /**
-     * @var FilterManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var FilterManager|\PHPUnit\Framework\MockObject\MockObject
      */
     private $filterManager;
 
     /**
-     * @var Url|\PHPUnit_Framework_MockObject_MockObject
+     * @var Url|\PHPUnit\Framework\MockObject\MockObject
      */
     private $urlModel;
 
     /**
-     * @var Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|\PHPUnit\Framework\MockObject\MockObject
      */
     private $emailConfig;
 
     /**
-     * @var TemplateFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var TemplateFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $templateFactory;
 
     /**
-     * @var Json|\PHPUnit_Framework_MockObject_MockObject
+     * @var Json|\PHPUnit\Framework\MockObject\MockObject
      */
     private $serializerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->context = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
@@ -137,7 +137,7 @@ class TemplateTest extends TestCase
 
         $this->scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->emailConfig = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
@@ -167,7 +167,7 @@ class TemplateTest extends TestCase
      * Return the model under test with additional methods mocked.
      *
      * @param array $mockedMethods
-     * @return Template|\PHPUnit_Framework_MockObject_MockObject
+     * @return Template|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getModelMock(array $mockedMethods = [])
     {
@@ -199,10 +199,10 @@ class TemplateTest extends TestCase
     {
         $model = $this->getModelMock();
         $model->setIsChildTemplate(true);
-        $this->assertSame(true, $model->isChildTemplate());
+        $this->assertTrue($model->isChildTemplate());
 
         $model->setIsChildTemplate(false);
-        $this->assertSame(false, $model->isChildTemplate());
+        $this->assertFalse($model->isChildTemplate());
     }
 
     public function testSetAndGetTemplateFilter()
@@ -702,10 +702,11 @@ class TemplateTest extends TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\MailException
      */
     public function testProcessTemplateThrowsExceptionNonExistentTemplate()
     {
+        $this->expectException(\Magento\Framework\Exception\MailException::class);
+
         $model = $this->getModelMock(['loadDefault', 'applyDesignConfig',]);
         $model->expects($this->once())
             ->method('loadDefault')
@@ -767,7 +768,7 @@ class TemplateTest extends TestCase
                     $this->createMock(StoreManager::class),
                     $this->createMock(Repository::class),
                     $this->createMock(Filesystem::class),
-                    $this->createMock(ScopeConfigInterface::class),
+                    $this->getMockForAbstractClass(ScopeConfigInterface::class),
                     $emailConfig,
                     $this->createMock(TemplateFactory::class),
                     $this->createMock(FilterManager::class),

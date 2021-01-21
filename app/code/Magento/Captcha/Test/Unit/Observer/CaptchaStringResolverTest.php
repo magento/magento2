@@ -25,11 +25,11 @@ class CaptchaStringResolverTest extends \PHPUnit\Framework\TestCase
     private $captchaStringResolver;
 
     /**
-     * @var HttpRequest|\PHPUnit_Framework_MockObject_MockObject
+     * @var HttpRequest|\PHPUnit\Framework\MockObject\MockObject
      */
     private $requestMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManager($this);
         $this->requestMock = $this->createMock(HttpRequest::class);

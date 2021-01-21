@@ -64,7 +64,7 @@ abstract class AbstractController extends \PHPUnit\Framework\TestCase
     /**
      * Bootstrap application before any test
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_assertSessionErrors = false;
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
@@ -75,7 +75,7 @@ abstract class AbstractController extends \PHPUnit\Framework\TestCase
     /**
      * @inheritDoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->_request = null;
         $this->_response = null;
@@ -85,7 +85,7 @@ abstract class AbstractController extends \PHPUnit\Framework\TestCase
     /**
      * Ensure that there were no error messages displayed on the admin panel
      */
-    protected function assertPostConditions()
+    protected function assertPostConditions(): void
     {
         if ($this->_assertSessionErrors) {
             // equalTo() is intentionally used instead of isEmpty() to provide the informative diff

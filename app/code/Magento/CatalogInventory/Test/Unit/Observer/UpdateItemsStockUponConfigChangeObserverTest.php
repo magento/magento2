@@ -15,21 +15,21 @@ class UpdateItemsStockUponConfigChangeObserverTest extends \PHPUnit\Framework\Te
     protected $observer;
 
     /**
-     * @var \Magento\CatalogInventory\Model\ResourceModel\Stock\Item|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogInventory\Model\ResourceModel\Stock\Item|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resourceStockItem;
 
     /**
-     * @var \Magento\Framework\Event|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Event|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $event;
 
     /**
-     * @var \Magento\Framework\Event\Observer|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Event\Observer|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $eventObserver;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->resourceStockItem = $this->createMock(\Magento\CatalogInventory\Model\ResourceModel\Stock\Item::class);
 

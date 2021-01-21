@@ -13,11 +13,11 @@ class ServiceTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \Magento\Directory\Model\Currency\Import\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Directory\Model\Currency\Import\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_importConfig;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_importConfig = $this->createMock(\Magento\Directory\Model\Currency\Import\Config::class);
         $this->_model = new \Magento\Directory\Model\Currency\Import\Source\Service($this->_importConfig);

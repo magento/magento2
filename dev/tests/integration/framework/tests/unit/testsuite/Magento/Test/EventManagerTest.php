@@ -17,16 +17,16 @@ class EventManagerTest extends \PHPUnit\Framework\TestCase
     protected $_eventManager;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_subscriberOne;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_subscriberTwo;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_subscriberOne = $this->createPartialMock(\stdClass::class, ['testEvent']);
         $this->_subscriberTwo = $this->createPartialMock(\stdClass::class, ['testEvent']);

@@ -22,30 +22,31 @@ class DeadlockRetrierTest extends \PHPUnit\Framework\TestCase
     private $retrier;
 
     /**
-     * @var AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $adapterMock;
 
     /**
-     * @var AbstractModel|\PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractModel|\PHPUnit\Framework\MockObject\MockObject
      */
     private $modelMock;
 
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->adapterMock = $this->createMock(AdapterInterface::class);
+        $this->adapterMock = $this->getMockForAbstractClass(AdapterInterface::class);
         $this->modelMock = $this->createMock(AbstractModel::class);
         $this->retrier = new DeadlockRetrier();
     }
 
     /**
-     * @expectedException \Magento\Framework\DB\Adapter\DeadlockException
      */
     public function testInsideTransaction(): void
     {
+        $this->expectException(\Magento\Framework\DB\Adapter\DeadlockException::class);
+
         $this->adapterMock->expects($this->once())
             ->method('getTransactionLevel')
             ->willReturn(1);
@@ -62,10 +63,11 @@ class DeadlockRetrierTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\DB\Adapter\DeadlockException
      */
     public function testRetry(): void
     {
+        $this->expectException(\Magento\Framework\DB\Adapter\DeadlockException::class);
+
         $this->adapterMock->expects($this->once())
             ->method('getTransactionLevel')
             ->willReturn(0);

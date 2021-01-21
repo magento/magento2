@@ -47,11 +47,11 @@ class ItemTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var \Magento\Quote\Model\Quote\Item\Compare|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Model\Quote\Item\Compare|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $compareHelper;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $stockItemMock;
 
     /**
@@ -67,7 +67,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
     const PRODUCT_TAX_CLASS_ID = 3;
     const PRODUCT_COST = '9.00';
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -403,7 +403,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
      * @param string $productWeight
      * @param int $productTaxClassId
      * @param float $productCost
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     private function generateProductMock(
         $productId,
@@ -847,7 +847,7 @@ class ItemTest extends \PHPUnit\Framework\TestCase
     /**
      * @param $optionCode
      * @param array $optionData
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     private function createOptionMock($optionCode, $optionData = [])
     {

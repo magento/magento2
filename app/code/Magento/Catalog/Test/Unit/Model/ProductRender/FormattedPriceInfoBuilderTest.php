@@ -15,12 +15,12 @@ use Magento\Catalog\Model\ProductRender\FormattedPriceInfoBuilder;
 class FormattedPriceInfoBuilderTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var PriceCurrencyInterface|\PHPUnit_Framework_MockObject_MockObject;
+     * @var PriceCurrencyInterface|\PHPUnit\Framework\MockObject\MockObject;
      */
     private $priceCurrencyMock;
 
     /**
-     * @var FormattedPriceInfoInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject;
+     * @var FormattedPriceInfoInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject;
      */
     private $formattedPriceInfoFactoryMock;
 
@@ -29,7 +29,7 @@ class FormattedPriceInfoBuilderTest extends \PHPUnit\Framework\TestCase
      */
     private $formattedPriceInfoBuilderMock;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->priceCurrencyMock = $this->getMockBuilder(PriceCurrencyInterface::class)
             ->getMockForAbstractClass();

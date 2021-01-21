@@ -14,12 +14,12 @@ class PriceModifierTest extends \PHPUnit\Framework\TestCase
     protected $priceModifier;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $productMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $productRepositoryMock;
 
@@ -28,7 +28,7 @@ class PriceModifierTest extends \PHPUnit\Framework\TestCase
      */
     protected $prices = [];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->productMock =
             $this->createPartialMock(\Magento\Catalog\Model\Product::class, ['getData', 'setData', '__wakeup']);
@@ -53,11 +53,12 @@ class PriceModifierTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage Product hasn't group price with such data: customerGroupId = '1', website = 1, qty = 3
      */
     public function testRemoveWhenTierPricesNotExists()
     {
+        $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
+        $this->expectExceptionMessage('Product hasn\'t group price with such data: customerGroupId = \'1\', website = 1, qty = 3');
+
         $this->productMock
             ->expects($this->once())
             ->method('getData')
@@ -69,11 +70,12 @@ class PriceModifierTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage Product hasn't group price with such data: customerGroupId = '10', website = 1, qty = 5
      */
     public function testRemoveTierPriceForNonExistingCustomerGroup()
     {
+        $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
+        $this->expectExceptionMessage('Product hasn\'t group price with such data: customerGroupId = \'10\', website = 1, qty = 5');
+
         $this->productMock
             ->expects($this->once())
             ->method('getData')

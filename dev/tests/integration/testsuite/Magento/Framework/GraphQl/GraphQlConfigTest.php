@@ -26,7 +26,7 @@ class GraphQlConfigTest extends \PHPUnit\Framework\TestCase
    /** @var \Magento\Framework\GraphQl\Config  */
     private $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         /** @var ObjectManagerInterface $objectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
@@ -231,7 +231,7 @@ class GraphQlConfigTest extends \PHPUnit\Framework\TestCase
     /**
      * {@inheritdoc}
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         /** @var ObjectManagerInterface $objectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();

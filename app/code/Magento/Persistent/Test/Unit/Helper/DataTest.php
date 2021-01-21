@@ -8,7 +8,7 @@ namespace Magento\Persistent\Test\Unit\Helper;
 class DataTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Module\Dir\Reader|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Module\Dir\Reader|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_modulesReader;
 
@@ -17,7 +17,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
      */
     protected $_helper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_modulesReader = $this->createMock(\Magento\Framework\Module\Dir\Reader::class);
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);

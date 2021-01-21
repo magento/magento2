@@ -8,7 +8,7 @@ namespace Magento\Framework\Logger\Test\Unit\Handler;
 class BaseTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Logger\Handler\Base|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Logger\Handler\Base|\PHPUnit\Framework\MockObject\MockObject
      */
     private $model;
 
@@ -17,7 +17,7 @@ class BaseTest extends \PHPUnit\Framework\TestCase
      */
     private $sanitizeMethod;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $driverMock = $this->getMockBuilder(\Magento\Framework\Filesystem\DriverInterface::class)
             ->disableOriginalConstructor()

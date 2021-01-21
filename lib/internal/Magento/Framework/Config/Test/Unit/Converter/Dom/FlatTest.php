@@ -19,7 +19,7 @@ class FlatTest extends \PHPUnit\Framework\TestCase
      */
     protected $_fixturePath;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $arrayNodeConfig = new \Magento\Framework\Config\Dom\ArrayNodeConfig(
             new \Magento\Framework\Config\Dom\NodePathMatcher(),

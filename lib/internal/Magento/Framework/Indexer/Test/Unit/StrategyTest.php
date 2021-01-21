@@ -21,14 +21,14 @@ class StrategyTest extends \PHPUnit\Framework\TestCase
     /**
      * Resource mock
      *
-     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_resourceMock;
 
     /**
      * {@inheritdoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_resourceMock = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
         $this->_model = new \Magento\Framework\Indexer\Table\Strategy(

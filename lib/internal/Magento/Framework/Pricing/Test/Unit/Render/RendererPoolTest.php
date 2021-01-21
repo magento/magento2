@@ -15,31 +15,31 @@ use Magento\Framework\Pricing\Render\RendererPool;
 class RendererPoolTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Pricing\Render\RendererPool | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\Render\RendererPool | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $object;
 
     /**
-     * @var \Magento\Framework\View\Layout | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Layout | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $layoutMock;
 
     /**
-     * @var \Magento\Catalog\Model\Product | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $productMock;
 
     /**
-     * @var \Magento\Catalog\Pricing\Price\BasePrice | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Pricing\Price\BasePrice | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $priceMock;
 
     /**
-     * @var \Magento\Framework\View\LayoutInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\LayoutInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $contextMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->layoutMock = $this->getMockBuilder(\Magento\Framework\View\Layout::class)
             ->disableOriginalConstructor()

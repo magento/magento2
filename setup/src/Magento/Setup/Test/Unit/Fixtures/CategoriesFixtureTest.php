@@ -17,7 +17,7 @@ use Magento\Store\Model\Store;
 class CategoriesFixtureTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|FixtureModel
+     * @var \PHPUnit\Framework\MockObject\MockObject|FixtureModel
      */
     private $fixtureModelMock;
 
@@ -27,24 +27,24 @@ class CategoriesFixtureTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $collectionFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $collectionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $categoryFactoryMock;
 
     /**
      * @inhertidoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->fixtureModelMock = $this->createMock(FixtureModel::class);
         $this->collectionFactoryMock = $this->createPartialMock(CollectionFactory::class, ['create']);

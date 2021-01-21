@@ -17,7 +17,7 @@ class ResultTest extends \PHPUnit\Framework\TestCase
      */
     protected $_block;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Framework\View\LayoutInterface::class

@@ -19,7 +19,7 @@ class UrlBuilderTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('testResult', $this->model->getUrl('router', []));
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $mockedFrontendUrlBuilder = $this->getMockedFrontendUrlBuilder();
         $helper = new ObjectManager($this);

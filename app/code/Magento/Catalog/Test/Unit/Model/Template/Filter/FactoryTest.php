@@ -8,7 +8,7 @@ namespace Magento\Catalog\Test\Unit\Model\Template\Filter;
 class FactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_objectManagerMock;
 
@@ -22,7 +22,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
 
@@ -85,12 +85,13 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
     /**
      * Test wrong type exception
      *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage WrongClass doesn't extend \Magento\Framework\Filter\Template
      * @return void
      */
     public function testWrongTypeException()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('WrongClass doesn\'t extend \\Magento\\Framework\\Filter\\Template');
+
         $className = 'WrongClass';
 
         $filterMock = $this->getMockBuilder($className)->disableOriginalConstructor()->getMock();

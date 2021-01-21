@@ -14,7 +14,7 @@ use Magento\Framework\Locale\ResolverInterface as LocaleResolver;
 use Magento\Framework\App\ResourceConnection;
 use Psr\Log\LoggerInterface;
 
-use PHPUnit_Framework_MockObject_MockObject as Mock;
+use PHPUnit\Framework\MockObject\MockObject as Mock;
 
 /**
  * Deployment Queue class unit tests
@@ -56,7 +56,7 @@ class QueueTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->appState = $this->createMock(AppState::class);
         $this->localeResolver = $this->getMockForAbstractClass(
@@ -93,7 +93,7 @@ class QueueTest extends \PHPUnit\Framework\TestCase
         $package = $this->createMock(Package::class);
         $package->expects($this->once())->method('getPath')->willReturn('path');
 
-        $this->assertEquals(true, $this->queue->add($package));
+        $this->assertTrue($this->queue->add($package));
         $packages = $this->queue->getPackages();
         $this->assertEquals(
             $package,

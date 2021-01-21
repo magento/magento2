@@ -20,7 +20,7 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
      */
     protected $objectManager;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->model = $this->objectManager->create(\Magento\Framework\Message\Manager::class);

@@ -31,7 +31,7 @@ class SchemaListenerTest extends \PHPUnit\Framework\TestCase
      */
     private $objectManagerHelper;
 
-    protected function setUp() : void
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $this->objectManagerHelper->getObject(

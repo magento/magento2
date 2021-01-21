@@ -74,7 +74,7 @@ class AsyncBulkScheduleTest extends WebapiAbstract
      */
     private $registry;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->logFilePath = TESTS_TEMP_DIR . "/MessageQueueTestLog.txt";
@@ -216,7 +216,7 @@ class AsyncBulkScheduleTest extends WebapiAbstract
         $this->assertNull($response);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->clearProducts();
         $this->publisherConsumerController->stopConsumers();

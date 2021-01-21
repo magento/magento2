@@ -13,21 +13,21 @@ class FileFactoryTest extends \PHPUnit\Framework\TestCase
     protected $objectManager;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Filesystem
+     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\Filesystem
      */
     protected $fileSystemMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\App\Response\Http
+     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\App\Response\Http
      */
     protected $responseMock;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\WriteInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\Directory\WriteInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $dirMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->fileSystemMock =
@@ -230,7 +230,7 @@ class FileFactoryTest extends \PHPUnit\Framework\TestCase
     /**
      * Get model mock
      *
-     * @return \Magento\Framework\App\Response\Http\FileFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Framework\App\Response\Http\FileFactory | \PHPUnit\Framework\MockObject\MockObject
      */
     private function getModelMock()
     {

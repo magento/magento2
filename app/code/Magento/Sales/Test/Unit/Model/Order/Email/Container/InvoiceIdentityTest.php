@@ -15,23 +15,23 @@ class InvoiceIdentityTest extends \PHPUnit\Framework\TestCase
     protected $identity;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $scopeConfigInterfaceMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeMock;
 
     protected $storeId;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->scopeConfigInterfaceMock = $this->getMockForAbstractClass(
             \Magento\Framework\App\Config\ScopeConfigInterface::class

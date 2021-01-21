@@ -12,22 +12,22 @@ namespace Magento\Theme\Test\Unit\Observer;
 class ApplyThemeCustomizationObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $themeCustomization;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $assetRepo;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $assetsMock;
 
     /**
-     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Psr\Log\LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $logger;
 
@@ -36,7 +36,7 @@ class ApplyThemeCustomizationObserverTest extends \PHPUnit\Framework\TestCase
      */
     protected $themeObserver;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->themeCustomization = $this->createMock(\Magento\Framework\View\Design\Theme\Customization::class);
         $themeMock = $this->createPartialMock(\Magento\Theme\Model\Theme::class, ['__wakeup', 'getCustomization']);

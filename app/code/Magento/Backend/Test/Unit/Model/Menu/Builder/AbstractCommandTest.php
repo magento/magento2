@@ -12,7 +12,7 @@ class AbstractCommandTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_model = $this->getMockForAbstractClass(
             \Magento\Backend\Model\Menu\Builder\AbstractCommand::class,
@@ -21,10 +21,11 @@ class AbstractCommandTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
      */
     public function testConstructorRequiresObligatoryParams()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $this->getMockForAbstractClass(\Magento\Backend\Model\Menu\Builder\AbstractCommand::class);
     }
 

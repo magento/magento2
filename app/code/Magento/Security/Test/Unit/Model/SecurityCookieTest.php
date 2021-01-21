@@ -35,7 +35,7 @@ class SecurityCookieTest extends \PHPUnit\Framework\TestCase
      * Init mocks for tests
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->phpCookieManagerMock = $this->createPartialMock(
             \Magento\Framework\Stdlib\Cookie\PhpCookieManager::class,

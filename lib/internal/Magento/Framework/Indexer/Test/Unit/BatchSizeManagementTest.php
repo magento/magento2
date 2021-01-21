@@ -16,16 +16,16 @@ class BatchSizeManagementTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \Magento\Framework\Indexer\IndexTableRowSizeEstimatorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Indexer\IndexTableRowSizeEstimatorInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $rowSizeEstimatorMock;
 
     /**
-     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Psr\Log\LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $loggerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->rowSizeEstimatorMock = $this->createMock(
             \Magento\Framework\Indexer\IndexTableRowSizeEstimatorInterface::class
@@ -43,7 +43,7 @@ class BatchSizeManagementTest extends \PHPUnit\Framework\TestCase
         $innodbPollSize = 100;
 
         $this->rowSizeEstimatorMock->expects($this->once())->method('estimateRowSize')->willReturn(100);
-        $adapterMock = $this->createMock(AdapterInterface::class);
+        $adapterMock = $this->getMockForAbstractClass(AdapterInterface::class);
         $adapterMock->expects($this->at(0))
             ->method('fetchOne')
             ->with('SELECT @@max_heap_table_size;', [])

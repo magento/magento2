@@ -11,16 +11,16 @@ use Magento\Framework\Config\File\ConfigFilePool;
 class StateTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $config;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $writer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->config = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
         $this->writer =

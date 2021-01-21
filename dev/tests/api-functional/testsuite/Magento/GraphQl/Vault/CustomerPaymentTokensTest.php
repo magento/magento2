@@ -39,7 +39,7 @@ class CustomerPaymentTokensTest extends GraphQlAbstract
      */
     private $tokenResource;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -49,7 +49,7 @@ class CustomerPaymentTokensTest extends GraphQlAbstract
         $this->tokenCollectionFactory = Bootstrap::getObjectManager()->get(CollectionFactory::class);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
 

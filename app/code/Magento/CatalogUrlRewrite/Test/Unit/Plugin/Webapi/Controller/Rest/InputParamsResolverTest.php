@@ -42,22 +42,22 @@ class InputParamsResolverTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * @var InputParamsResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var InputParamsResolver|\PHPUnit\Framework\MockObject\MockObject
      */
     private $subject;
 
     /**
-     * @var RestRequest|\PHPUnit_Framework_MockObject_MockObject
+     * @var RestRequest|\PHPUnit\Framework\MockObject\MockObject
      */
     private $request;
 
     /**
-     * @var Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var Product|\PHPUnit\Framework\MockObject\MockObject
      */
     private $product;
 
     /**
-     * @var Route|\PHPUnit_Framework_MockObject_MockObject
+     * @var Route|\PHPUnit\Framework\MockObject\MockObject
      */
     private $route;
 
@@ -69,7 +69,7 @@ class InputParamsResolverTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->saveRewritesHistory = 'save_rewrites_history';
         $this->requestBodyParams = [

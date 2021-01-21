@@ -14,22 +14,22 @@ use Magento\Framework\View\Element\UiComponent\ContextInterface;
 class HandleTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $contextMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $requestMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $responseMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $viewMock;
 
@@ -39,32 +39,32 @@ class HandleTest extends \PHPUnit\Framework\TestCase
     protected $controller;
 
     /**
-     * @var \Magento\Framework\AuthorizationInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\AuthorizationInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $authorizationMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $uiComponentContextMock;
 
     /**
-     * @var \Magento\Framework\View\Element\UiComponentInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Element\UiComponentInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $uiComponentMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $uiFactoryMock;
 
     /**
      * @var \Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface|
-     *      \PHPUnit_Framework_MockObject_MockObject
+     *      \PHPUnit\Framework\MockObject\MockObject
      */
     private $dataProviderMock;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->contextMock = $this->createMock(\Magento\Backend\App\Action\Context::class);
 

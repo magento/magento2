@@ -6,7 +6,7 @@
 
 namespace Magento\AdvancedSearch\Test\Unit\Block;
 
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 class SearchDataTest extends \PHPUnit\Framework\TestCase
 {
@@ -33,7 +33,7 @@ class SearchDataTest extends \PHPUnit\Framework\TestCase
      */
     private $block;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->dataProvider = $this->getMockBuilder(\Magento\AdvancedSearch\Model\SuggestedQueriesInterface::class)
             ->disableOriginalConstructor()

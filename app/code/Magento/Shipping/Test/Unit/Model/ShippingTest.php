@@ -18,7 +18,7 @@ use Magento\Shipping\Model\Shipping;
 use Magento\Quote\Model\Quote\Address\RateRequest;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Store\Model\Store;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * Unit tests for \Magento\Shipping\Model\Shipping class.
@@ -62,11 +62,11 @@ class ShippingTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->stockRegistry = $this->createMock(StockRegistry::class);
         $this->stockItemData = $this->createMock(StockItem::class);
-        $this->scopeConfig = $this->createMock(ScopeConfigInterface::class);
+        $this->scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
 
         $this->shipping = (new ObjectManagerHelper($this))->getObject(
             Shipping::class,

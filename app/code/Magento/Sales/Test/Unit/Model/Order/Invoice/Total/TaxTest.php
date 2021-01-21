@@ -13,7 +13,7 @@ class TaxTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Sales\Model\Order|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $order;
 
@@ -23,11 +23,11 @@ class TaxTest extends \PHPUnit\Framework\TestCase
     protected $objectManager;
 
     /**
-     * @var \Magento\Sales\Model\Order\Invoice|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Invoice|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $invoice;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         /** @var \Magento\Sales\Model\Order\Invoice\Total\Tax $model */
@@ -349,11 +349,11 @@ class TaxTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param $invoiceItemData array
-     * @return \Magento\Sales\Model\Order\Invoice\Item|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Sales\Model\Order\Invoice\Item|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getInvoiceItem($invoiceItemData)
     {
-        /** @var \Magento\Sales\Model\Order\Item|\PHPUnit_Framework_MockObject_MockObject $orderItem */
+        /** @var \Magento\Sales\Model\Order\Item|\PHPUnit\Framework\MockObject\MockObject $orderItem */
         $orderItem = $this->createPartialMock(\Magento\Sales\Model\Order\Item::class, [
                 'isDummy',
                 '__wakeup'
@@ -362,7 +362,7 @@ class TaxTest extends \PHPUnit\Framework\TestCase
             $orderItem->setData($key, $value);
         }
 
-        /** @var \Magento\Sales\Model\Order\Invoice\Item|\PHPUnit_Framework_MockObject_MockObject $invoiceItem */
+        /** @var \Magento\Sales\Model\Order\Invoice\Item|\PHPUnit\Framework\MockObject\MockObject $invoiceItem */
         $invoiceItem = $this->createPartialMock(\Magento\Sales\Model\Order\Invoice\Item::class, [
                 'getOrderItem',
                 'isLast',

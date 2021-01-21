@@ -14,19 +14,19 @@ class ProcessLayoutRenderElementTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\PageCache\Observer\ProcessLayoutRenderElement */
     private $_model;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|EntitySpecificHandlesList */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|EntitySpecificHandlesList */
     private $entitySpecificHandlesListMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\PageCache\Model\Config */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\PageCache\Model\Config */
     private $_configMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Element\AbstractBlock */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\View\Element\AbstractBlock */
     private $_blockMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Layout */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\View\Layout */
     private $_layoutMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Event\Observer */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Event\Observer */
     private $_observerMock;
 
     /** @var \Magento\Framework\DataObject */
@@ -35,7 +35,7 @@ class ProcessLayoutRenderElementTest extends \PHPUnit\Framework\TestCase
     /**
      * Set up all mocks and data for test
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_configMock = $this->createPartialMock(\Magento\PageCache\Model\Config::class, ['getType', 'isEnabled']);
         $this->entitySpecificHandlesListMock = $this->createMock(EntitySpecificHandlesList::class);

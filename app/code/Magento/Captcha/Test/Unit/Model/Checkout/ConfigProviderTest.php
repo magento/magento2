@@ -8,22 +8,22 @@ namespace Magento\Captcha\Test\Unit\Model\Checkout;
 class ConfigProviderTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $captchaHelperMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $captchaMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeMock;
 
@@ -37,7 +37,7 @@ class ConfigProviderTest extends \PHPUnit\Framework\TestCase
      */
     protected $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
         $this->captchaHelperMock = $this->createMock(\Magento\Captcha\Helper\Data::class);

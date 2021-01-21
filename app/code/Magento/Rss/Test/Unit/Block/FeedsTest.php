@@ -24,16 +24,16 @@ class FeedsTest extends \PHPUnit\Framework\TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var \Magento\Framework\View\Element\Template\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Element\Template\Context|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $context;
 
     /**
-     * @var \Magento\Framework\App\Rss\RssManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Rss\RssManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $rssManagerInterface;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->context = $this->createMock(\Magento\Framework\View\Element\Template\Context::class);
         $this->rssManagerInterface = $this->createMock(\Magento\Framework\App\Rss\RssManagerInterface::class);

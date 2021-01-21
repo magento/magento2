@@ -32,7 +32,7 @@ class LayoutDirectivesTest extends \PHPUnit\Framework\TestCase
      */
     protected $state;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->layoutFactory = $this->objectManager->get(\Magento\Framework\View\LayoutFactory::class);

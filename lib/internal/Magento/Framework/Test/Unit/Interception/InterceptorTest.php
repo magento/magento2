@@ -20,11 +20,11 @@ class InterceptorTest extends \PHPUnit\Framework\TestCase
     private $samplePlugins;
 
     /**
-     * @var Interception\PluginListInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var Interception\PluginListInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $pluginListMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->pluginListMock = $this->getMockBuilder(Interception\PluginListInterface::class)
             ->getMockForAbstractClass();

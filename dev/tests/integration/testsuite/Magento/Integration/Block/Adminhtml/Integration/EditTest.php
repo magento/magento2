@@ -23,7 +23,7 @@ class EditTest extends \PHPUnit\Framework\TestCase
      */
     protected $editBlock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->editBlock = Bootstrap::getObjectManager()
             ->create(\Magento\Integration\Block\Adminhtml\Integration\Edit::class);

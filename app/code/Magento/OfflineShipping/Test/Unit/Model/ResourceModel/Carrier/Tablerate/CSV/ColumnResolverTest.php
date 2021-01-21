@@ -114,11 +114,12 @@ class ColumnResolverTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @throws \Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\CSV\ColumnNotFoundException
-     * @expectedException \Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\CSV\ColumnNotFoundException
-     * @expectedExceptionMessage Requested column "custom_field" cannot be resolved
      */
     public function testGetColumnValueWithUnknownColumn()
     {
+        $this->expectException(\Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\CSV\ColumnNotFoundException::class);
+        $this->expectExceptionMessage('Requested column "custom_field" cannot be resolved');
+
         $columnResolver = $this->createColumnResolver();
         $values = array_values($this->values);
         $columnResolver->getColumnValue(self::CUSTOM_FIELD, $values);
@@ -126,11 +127,12 @@ class ColumnResolverTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @throws \Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\CSV\ColumnNotFoundException
-     * @expectedException \Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\CSV\ColumnNotFoundException
-     * @expectedExceptionMessage Column "new_custom_column" not found
      */
     public function testGetColumnValueWithUndefinedValue()
     {
+        $this->expectException(\Magento\OfflineShipping\Model\ResourceModel\Carrier\Tablerate\CSV\ColumnNotFoundException::class);
+        $this->expectExceptionMessage('Column "new_custom_column" not found');
+
         $columnName = 'new_custom_column';
 
         $headers = array_keys($this->values);

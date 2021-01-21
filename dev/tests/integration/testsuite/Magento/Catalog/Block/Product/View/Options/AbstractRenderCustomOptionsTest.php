@@ -54,7 +54,7 @@ abstract class AbstractRenderCustomOptionsTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
@@ -69,7 +69,7 @@ abstract class AbstractRenderCustomOptionsTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->productRepository->cleanCache();
         parent::tearDown();
@@ -125,12 +125,12 @@ abstract class AbstractRenderCustomOptionsTest extends TestCase
 
         if (isset($checkArray['file_width'])) {
             $checkArray['file_width'] = sprintf($checkArray['file_width'], __('Maximum image width'));
-            $this->assertRegExp($checkArray['file_width'], $optionHtml);
+            $this->assertMatchesRegularExpression($checkArray['file_width'], $optionHtml);
         }
 
         if (isset($checkArray['file_height'])) {
             $checkArray['file_height'] = sprintf($checkArray['file_height'], __('Maximum image height'));
-            $this->assertRegExp($checkArray['file_height'], $optionHtml);
+            $this->assertMatchesRegularExpression($checkArray['file_height'], $optionHtml);
         }
     }
 
@@ -160,7 +160,7 @@ abstract class AbstractRenderCustomOptionsTest extends TestCase
 
         if (isset($checkArray['not_contain_arr'])) {
             foreach ($checkArray['not_contain_arr'] as $notContainPattern) {
-                $this->assertNotRegExp($notContainPattern, $optionHtml);
+                $this->assertDoesNotMatchRegularExpression($notContainPattern, $optionHtml);
             }
         }
 
@@ -170,7 +170,7 @@ abstract class AbstractRenderCustomOptionsTest extends TestCase
                 $optionValue->getOptionTypeId(),
                 $optionValueData[Value::KEY_TITLE]
             );
-            $this->assertRegExp($checkArray['option_value_item'], $optionHtml);
+            $this->assertMatchesRegularExpression($checkArray['option_value_item'], $optionHtml);
         }
     }
 
@@ -251,7 +251,7 @@ abstract class AbstractRenderCustomOptionsTest extends TestCase
         }
 
         if (isset($checkArray['required_element'])) {
-            $this->assertRegExp($checkArray['required_element'], $optionHtml);
+            $this->assertMatchesRegularExpression($checkArray['required_element'], $optionHtml);
         }
     }
 

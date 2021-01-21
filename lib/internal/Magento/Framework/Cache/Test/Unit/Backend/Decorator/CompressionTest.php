@@ -26,7 +26,7 @@ class CompressionTest extends \PHPUnit\Framework\TestCase
      */
     protected static $_cacheStorage = [];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $options = [
             'concrete_backend' => $this->createMock(\Zend_Cache_Backend_File::class),
@@ -35,7 +35,7 @@ class CompressionTest extends \PHPUnit\Framework\TestCase
         $this->_decorator = new \Magento\Framework\Cache\Backend\Decorator\Compression($options);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_decorator);
         self::$_cacheStorage = [];

@@ -10,7 +10,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class CleanerTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var  \Magento\Framework\Search\Request\Aggregation\StatusInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \Magento\Framework\Search\Request\Aggregation\StatusInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $status;
 
     /**
@@ -18,7 +18,7 @@ class CleanerTest extends \PHPUnit\Framework\TestCase
      */
     private $cleaner;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $helper = new ObjectManager($this);
 

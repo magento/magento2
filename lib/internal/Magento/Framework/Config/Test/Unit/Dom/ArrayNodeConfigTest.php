@@ -21,11 +21,11 @@ class ArrayNodeConfigTest extends \PHPUnit\Framework\TestCase
     protected $object;
 
     /**
-     * @var NodePathMatcher|\PHPUnit_Framework_MockObject_MockObject
+     * @var NodePathMatcher|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $nodePathMatcher;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->nodePathMatcher = $this->createMock(NodePathMatcher::class);
         $this->object = new ArrayNodeConfig(

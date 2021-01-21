@@ -54,7 +54,7 @@ class WishlistTest extends \PHPUnit\Framework\TestCase
     protected $catalogOutputMock;
 
     /**
-     * @var \Magento\Catalog\Helper\Output|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Helper\Output|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $layoutMock;
 
@@ -68,7 +68,7 @@ class WishlistTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->catalogOutputMock = $this->createMock(\Magento\Catalog\Helper\Output::class);
         $this->rssFactoryMock = $this->createPartialMock(\Magento\Rss\Model\RssFactory::class, ['create']);
@@ -323,7 +323,7 @@ class WishlistTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue('somesharingcode'));
         $this->wishlistHelperMock->expects($this->any())->method('getWishlist')
             ->will($this->returnValue($wishlist));
-        $this->assertEquals(false, $this->model->isAuthRequired());
+        $this->assertFalse($this->model->isAuthRequired());
     }
 
     public function testGetProductPriceHtmlBlockDoesntExists()

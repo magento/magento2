@@ -22,7 +22,7 @@ class EavSetupTest extends \PHPUnit\Framework\TestCase
     /**
      * {@inheritdoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->eavSetup = $objectManager->create(\Magento\Eav\Setup\EavSetup::class);

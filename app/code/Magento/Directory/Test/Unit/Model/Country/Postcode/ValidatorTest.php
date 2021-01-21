@@ -8,7 +8,7 @@ namespace Magento\Directory\Test\Unit\Model\Country\Postcode;
 class ValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $postcodesConfigMock;
 
@@ -17,7 +17,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
      */
     protected $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->postcodesConfigMock = $this->createMock(\Magento\Directory\Model\Country\Postcode\Config::class);
         $postCodes = [
@@ -45,11 +45,12 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Provided countryId does not exist.
      */
     public function testValidateThrowExceptionIfCountryDoesNotExist()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Provided countryId does not exist.');
+
         $postcode = '12345-6789';
         $countryId = 'QQ';
         $this->assertFalse($this->model->validate($postcode, $countryId));

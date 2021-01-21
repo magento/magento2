@@ -20,18 +20,18 @@ class GroupTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeManagerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
 
         $this->model = new Group($this->storeManagerMock);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->storeManagerMock);
     }
@@ -49,10 +49,11 @@ class GroupTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\State\InitException
      */
     public function testGetScopeWithInvalidScope()
     {
+        $this->expectException(\Magento\Framework\Exception\State\InitException::class);
+
         $scopeMock = new \StdClass();
         $this->storeManagerMock
             ->expects($this->once())

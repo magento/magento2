@@ -87,7 +87,7 @@ class SaveTest extends AbstractBackendController
     /**
      * @inheritDoc
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->logger = $this->_objectManager->get(Monolog::class);
@@ -109,7 +109,7 @@ class SaveTest extends AbstractBackendController
     /**
      * @inheritdoc
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->attributeRepository->get('country_of_manufacture')->setIsUserDefined(false);
         parent::tearDown();

@@ -14,31 +14,31 @@ class CustomerQuoteObserverTest extends \PHPUnit\Framework\TestCase
     protected $customerQuote;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Store\Model\StoreManagerInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Store\Model\StoreManagerInterface
      */
     protected $storeManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Customer\Model\Config\Share
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Customer\Model\Config\Share
      */
     protected $configMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Quote\Api\CartRepositoryInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Quote\Api\CartRepositoryInterface
      */
     protected $quoteRepositoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Event\Observer
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Event\Observer
      */
     protected $observerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Event
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Event
      */
     protected $eventMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->storeManagerMock = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
             ->disableOriginalConstructor()
@@ -126,7 +126,7 @@ class CustomerQuoteObserverTest extends \PHPUnit\Framework\TestCase
         $this->eventMock->expects($this->any())
             ->method('getCustomerDataObject')
             ->will($this->returnValue($customerDataObjectMock));
-        /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Quote\Model\Quote $quoteMock */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Quote\Model\Quote $quoteMock */
         $quoteMock = $this->getMockBuilder(
             \Magento\Quote\Model\Quote::class
         )->setMethods(

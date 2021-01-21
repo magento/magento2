@@ -15,11 +15,11 @@ class TemplateEnginePoolTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var\PHPUnit_Framework_MockObject_MockObject
+     * @var\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_factory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_factory = $this->createMock(\Magento\Framework\View\TemplateEngineFactory::class);
         $this->_model = new TemplateEnginePool($this->_factory);

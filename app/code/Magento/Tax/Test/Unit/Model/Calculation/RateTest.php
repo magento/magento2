@@ -14,14 +14,14 @@ class RateTest extends \PHPUnit\Framework\TestCase
     protected $objectHelper;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $resourceMock;
 
     /**
      *  Init data
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->resourceMock = $this->createPartialMock(

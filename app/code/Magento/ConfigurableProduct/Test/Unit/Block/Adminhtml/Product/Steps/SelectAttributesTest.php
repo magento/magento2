@@ -21,34 +21,34 @@ class SelectAttributesTest extends \PHPUnit\Framework\TestCase
     private $selectAttributes;
 
     /**
-     * @var Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|\PHPUnit\Framework\MockObject\MockObject
      */
     private $contextMock;
 
     /**
-     * @var Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @var Registry|\PHPUnit\Framework\MockObject\MockObject
      */
     private $registryMock;
 
     /**
-     * @var Button|\PHPUnit_Framework_MockObject_MockObject
+     * @var Button|\PHPUnit\Framework\MockObject\MockObject
      */
     private $buttonMock;
 
     /**
-     * @var LayoutInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LayoutInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $layoutMock;
 
     /**
-     * @var UrlInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var UrlInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $urlBuilderMock;
 
     /**
      * {@inheritDoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
@@ -61,10 +61,10 @@ class SelectAttributesTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->layoutMock = $this->getMockBuilder(LayoutInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->urlBuilderMock = $this->getMockBuilder(UrlInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->contextMock->expects($this->any())
             ->method('getLayout')

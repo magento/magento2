@@ -32,46 +32,46 @@ class ConvertToXmlTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var Filesystem | \PHPUnit_Framework_MockObject_MockObject
+     * @var Filesystem | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $filesystem;
 
     /**
-     * @var Filter | \PHPUnit_Framework_MockObject_MockObject
+     * @var Filter | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $filter;
 
     /**
-     * @var MetadataProvider | \PHPUnit_Framework_MockObject_MockObject
+     * @var MetadataProvider | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $metadataProvider;
 
     /**
-     * @var ExcelFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var ExcelFactory | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $excelFactory;
 
     /**
-     * @var SearchResultIteratorFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var SearchResultIteratorFactory | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $iteratorFactory;
 
     /**
-     * @var DirectoryWriteInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var DirectoryWriteInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $directory;
 
     /**
-     * @var FileWriteInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var FileWriteInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $stream;
 
     /**
-     * @var UiComponentInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var UiComponentInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $component;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->directory = $this->getMockBuilder(DirectoryWriteInterface::class)
             ->getMockForAbstractClass();
@@ -173,7 +173,7 @@ class ConvertToXmlTest extends \PHPUnit\Framework\TestCase
             ->with($document, $componentName);
 
         $result = $this->model->getXmlFile();
-        $this->assertTrue(is_array($result));
+        $this->assertInternalType('array', $result);
         $this->assertArrayHasKey('type', $result);
         $this->assertArrayHasKey('value', $result);
         $this->assertArrayHasKey('rm', $result);

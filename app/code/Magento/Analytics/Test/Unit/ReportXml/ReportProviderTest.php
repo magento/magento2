@@ -16,32 +16,32 @@ class ReportProviderTest extends \PHPUnit\Framework\TestCase
     private $subject;
 
     /**
-     * @var \Magento\Analytics\ReportXml\Query|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Analytics\ReportXml\Query|\PHPUnit\Framework\MockObject\MockObject
      */
     private $queryMock;
 
     /**
-     * @var \Magento\Framework\DB\Select|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Select|\PHPUnit\Framework\MockObject\MockObject
      */
     private $selectMock;
 
     /**
-     * @var \IteratorIterator|\PHPUnit_Framework_MockObject_MockObject
+     * @var \IteratorIterator|\PHPUnit\Framework\MockObject\MockObject
      */
     private $iteratorMock;
 
     /**
-     * @var \Magento\Framework\DB\Statement\Pdo\Mysql|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Statement\Pdo\Mysql|\PHPUnit\Framework\MockObject\MockObject
      */
     private $statementMock;
 
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $connectionMock;
 
     /**
-     * @var \Magento\Analytics\ReportXml\QueryFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Analytics\ReportXml\QueryFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $queryFactoryMock;
 
@@ -51,19 +51,19 @@ class ReportProviderTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var \Magento\Analytics\ReportXml\ConnectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Analytics\ReportXml\ConnectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $connectionFactoryMock;
 
     /**
-     * @var \Magento\Analytics\ReportXml\IteratorFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Analytics\ReportXml\IteratorFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $iteratorFactoryMock;
 
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->selectMock = $this->getMockBuilder(
             \Magento\Framework\DB\Select::class

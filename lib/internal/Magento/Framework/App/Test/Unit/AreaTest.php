@@ -21,42 +21,42 @@ class AreaTest extends \PHPUnit\Framework\TestCase
     protected $objectManager;
 
     /**
-     * @var \Magento\Framework\Event\ManagerInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Event\ManagerInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $eventManagerMock;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManagerInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $objectManagerMock;
 
     /**
-     * @var \Magento\Framework\App\ObjectManager\ConfigLoader | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ObjectManager\ConfigLoader | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $diConfigLoaderMock;
 
     /**
-     * @var \Magento\Framework\TranslateInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\TranslateInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $translatorMock;
 
     /**
-     * @var \Psr\Log\LoggerInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Psr\Log\LoggerInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $loggerMock;
 
     /**
-     * @var \Magento\Framework\App\DesignInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\DesignInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $designMock;
 
     /**
-     * @var \Magento\Framework\App\ScopeResolverInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ScopeResolverInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $scopeResolverMock;
 
     /**
-     * @var \Magento\Framework\View\DesignExceptions | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\DesignExceptions | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $designExceptionsMock;
 
@@ -73,7 +73,7 @@ class AreaTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Framework\Phrase\RendererInterface */
     private $defaultRenderer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->defaultRenderer = \Magento\Framework\Phrase::getRenderer();
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -128,7 +128,7 @@ class AreaTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         \Magento\Framework\Phrase::setRenderer($this->defaultRenderer);
     }

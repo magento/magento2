@@ -18,17 +18,17 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 class ExportVarnishConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Request\Http|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $requestMock;
 
     /**
-     * @var \Magento\Framework\App\Response\Http|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Response\Http|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $responseMock;
 
     /**
-     * @var \Magento\Framework\App\View|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\View|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $viewMock;
 
@@ -38,19 +38,19 @@ class ExportVarnishConfigTest extends \PHPUnit\Framework\TestCase
     protected $action;
 
     /**
-     * @var \Magento\Framework\App\Response\Http\FileFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Response\Http\FileFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $fileFactoryMock;
 
     /**
-     * @var \Magento\PageCache\Model\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\PageCache\Model\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $configMock;
 
     /**
      * Set up before test
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->fileFactoryMock = $this->getMockBuilder(
             \Magento\Framework\App\Response\Http\FileFactory::class

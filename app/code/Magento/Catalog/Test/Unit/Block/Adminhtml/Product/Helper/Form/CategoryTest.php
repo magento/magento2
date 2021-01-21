@@ -17,7 +17,7 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
      */
     protected $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->authorization = $this->getMockBuilder(\Magento\Framework\AuthorizationInterface::class)
             ->disableOriginalConstructor()

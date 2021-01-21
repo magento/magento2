@@ -36,25 +36,25 @@ class RowBaseAndTotalBaseCalculatorTestCase extends \PHPUnit\Framework\TestCase
     /** @var ObjectManager */
     protected $objectManager;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $taxItemDetailsDataObjectFactory;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $mockCalculationTool;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $mockConfig;
 
-    /** @var \Magento\Tax\Api\Data\QuoteDetailsItemInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Tax\Api\Data\QuoteDetailsItemInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $mockItem;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $appliedTaxDataObjectFactory;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $appliedTaxRateDataObjectFactory;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $mockAppliedTax;
 
     protected $addressRateRequest;
@@ -68,7 +68,7 @@ class RowBaseAndTotalBaseCalculatorTestCase extends \PHPUnit\Framework\TestCase
     protected $taxDetailsItem;
 
     /**
-     * @var \Magento\Tax\Api\Data\QuoteDetailsItemExtensionInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Tax\Api\Data\QuoteDetailsItemExtensionInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $quoteDetailsItemExtension;
 
@@ -85,7 +85,7 @@ class RowBaseAndTotalBaseCalculatorTestCase extends \PHPUnit\Framework\TestCase
         $this->initMockAppliedTaxDataObjectFactory();
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $this->taxItemDetailsDataObjectFactory = $this->createPartialMock(
@@ -274,7 +274,7 @@ class RowBaseAndTotalBaseCalculatorTestCase extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param \PHPUnit_Framework_MockObject_MockObject $mockObject
+     * @param \PHPUnit\Framework\MockObject\MockObject $mockObject
      * @param array $mockMap
      */
     private function mockReturnValues($mockObject, $mockMap)

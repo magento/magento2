@@ -18,7 +18,7 @@ class VariablesSupportQueryTest extends GraphQlAbstract
      */
     private $productRepository;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);
     }

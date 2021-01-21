@@ -18,7 +18,7 @@ class MimeTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->object = new \Magento\Framework\File\Mime();
     }

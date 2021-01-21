@@ -12,27 +12,27 @@ use Magento\Framework\Config\File\ConfigFilePool;
 class StatusTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $loader;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $moduleList;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $writer;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $conflictChecker;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $dependencyChecker;
 
@@ -41,7 +41,7 @@ class StatusTest extends \PHPUnit\Framework\TestCase
      */
     private $object;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->loader = $this->createMock(\Magento\Framework\Module\ModuleList\Loader::class);
         $this->moduleList = $this->createMock(\Magento\Framework\Module\ModuleList::class);

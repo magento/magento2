@@ -22,7 +22,7 @@ class StoresFixtureTest extends \PHPUnit\Framework\TestCase
 {
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|FixtureModel
+     * @var \PHPUnit\Framework\MockObject\MockObject|FixtureModel
      */
     private $fixtureModelMock;
 
@@ -80,7 +80,7 @@ class StoresFixtureTest extends \PHPUnit\Framework\TestCase
 
         $this->eventManagerMock = $this->getMockBuilder(ManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->categoryFactoryMock = $this->getMockBuilder(CategoryFactory::class)
             ->disableOriginalConstructor()

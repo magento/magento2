@@ -26,13 +26,13 @@ class IntegrationServiceTest extends \PHPUnit\Framework\TestCase
 
     const VALUE_INTEGRATION_CONSUMER_ID = 1;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     private $_integrationFactory;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     private $_integrationMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     private $_emptyIntegrationMock;
 
     /** @var \Magento\Integration\Model\IntegrationService */
@@ -41,7 +41,7 @@ class IntegrationServiceTest extends \PHPUnit\Framework\TestCase
     /** @var array */
     private $_integrationData;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_integrationFactory = $this->getMockBuilder(\Magento\Integration\Model\IntegrationFactory::class)
             ->disableOriginalConstructor()
@@ -149,11 +149,12 @@ class IntegrationServiceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\IntegrationException
-     * @expectedExceptionMessage The integration with name "Integration Name" exists.
      */
     public function testCreateIntegrationAlreadyExistsException()
     {
+        $this->expectException(\Magento\Framework\Exception\IntegrationException::class);
+        $this->expectExceptionMessage('The integration with name "Integration Name" exists.');
+
         $this->_integrationMock->expects(
             $this->any()
         )->method(
@@ -244,11 +245,12 @@ class IntegrationServiceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\IntegrationException
-     * @expectedExceptionMessage The integration with name "Another Integration Name" exists.
      */
     public function testUpdateException()
     {
+        $this->expectException(\Magento\Framework\Exception\IntegrationException::class);
+        $this->expectExceptionMessage('The integration with name "Another Integration Name" exists.');
+
         $this->_integrationMock->expects(
             $this->any()
         )->method(
@@ -297,11 +299,12 @@ class IntegrationServiceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\IntegrationException
-     * @expectedExceptionMessage The integration with ID "1" doesn't exist.
      */
     public function testGetException()
     {
+        $this->expectException(\Magento\Framework\Exception\IntegrationException::class);
+        $this->expectExceptionMessage('The integration with ID "1" doesn\'t exist.');
+
         $this->_integrationMock->expects($this->any())->method('getId')->will($this->returnValue(null));
         $this->_integrationMock->expects($this->once())->method('load')->will($this->returnSelf());
         $this->_integrationMock->expects($this->never())->method('save');
@@ -385,11 +388,12 @@ class IntegrationServiceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\IntegrationException
-     * @expectedExceptionMessage The integration with ID "1" doesn't exist.
      */
     public function testDeleteException()
     {
+        $this->expectException(\Magento\Framework\Exception\IntegrationException::class);
+        $this->expectExceptionMessage('The integration with ID "1" doesn\'t exist.');
+
         $this->_integrationMock->expects($this->any())->method('getId')->will($this->returnValue(null));
         $this->_integrationMock->expects($this->once())->method('load')->will($this->returnSelf());
         $this->_integrationMock->expects($this->never())->method('delete');

@@ -18,7 +18,7 @@ class SortOrderTest extends \PHPUnit\Framework\TestCase
      */
     private $sortOrder;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->sortOrder = new SortOrder();
     }

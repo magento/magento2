@@ -13,12 +13,12 @@ use Magento\Setup\Module\Di\Code\Reader\ClassesScanner;
 class ProxyGeneratorTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var Scanner\XmlScanner | \PHPUnit_Framework_MockObject_MockObject
+     * @var Scanner\XmlScanner | \PHPUnit\Framework\MockObject\MockObject
      */
     private $proxyScannerMock;
 
     /**
-     * @var \Magento\Setup\Module\Di\Code\Scanner\ConfigurationScanner | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Setup\Module\Di\Code\Scanner\ConfigurationScanner | \PHPUnit\Framework\MockObject\MockObject
      */
     private $configurationScannerMock;
 
@@ -27,7 +27,7 @@ class ProxyGeneratorTest extends \PHPUnit\Framework\TestCase
      */
     private $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->proxyScannerMock = $this->getMockBuilder(\Magento\Setup\Module\Di\Code\Scanner\XmlScanner::class)
             ->disableOriginalConstructor()

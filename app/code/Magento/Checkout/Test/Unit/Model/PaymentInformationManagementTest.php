@@ -12,17 +12,17 @@ namespace Magento\Checkout\Test\Unit\Model;
 class PaymentInformationManagementTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $billingAddressManagementMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $paymentMethodManagementMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $cartManagementMock;
 
@@ -32,16 +32,16 @@ class PaymentInformationManagementTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $loggerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $cartRepositoryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->billingAddressManagementMock = $this->createMock(
@@ -84,10 +84,11 @@ class PaymentInformationManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\CouldNotSaveException
      */
     public function testSavePaymentInformationAndPlaceOrderException()
     {
+        $this->expectException(\Magento\Framework\Exception\CouldNotSaveException::class);
+
         $cartId = 100;
         $paymentMock = $this->createMock(\Magento\Quote\Api\Data\PaymentInterface::class);
         $billingAddressMock = $this->createMock(\Magento\Quote\Api\Data\AddressInterface::class);
@@ -143,11 +144,12 @@ class PaymentInformationManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedExceptionMessage DB exception
-     * @expectedException \Magento\Framework\Exception\CouldNotSaveException
      */
     public function testSavePaymentInformationAndPlaceOrderWithLocolizedException()
     {
+        $this->expectException(\Magento\Framework\Exception\CouldNotSaveException::class);
+        $this->expectExceptionMessage('DB exception');
+
         $cartId = 100;
         $paymentMock = $this->createMock(\Magento\Quote\Api\Data\PaymentInterface::class);
         $billingAddressMock = $this->createMock(\Magento\Quote\Api\Data\AddressInterface::class);
@@ -189,7 +191,7 @@ class PaymentInformationManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param int $cartId
-     * @param \PHPUnit_Framework_MockObject_MockObject $billingAddressMock
+     * @param \PHPUnit\Framework\MockObject\MockObject $billingAddressMock
      */
     private function getMockForAssignBillingAddress($cartId, $billingAddressMock)
     {

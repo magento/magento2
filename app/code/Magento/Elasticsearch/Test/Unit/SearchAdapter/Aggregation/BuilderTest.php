@@ -15,7 +15,7 @@ use Magento\Elasticsearch\SearchAdapter\Aggregation\Builder\BucketBuilderInterfa
 class BuilderTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var DataProviderFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var DataProviderFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $dataProviderFactory;
 
@@ -25,22 +25,22 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \Magento\Framework\Search\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Search\RequestInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $requestInterface;
 
     /**
-     * @var \Magento\Framework\Search\Request\BucketInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Search\Request\BucketInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $requestBuckedInterface;
 
     /**
-     * @var DataProviderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var DataProviderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $dataProviderContainer;
 
     /**
-     * @var BucketBuilderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var BucketBuilderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $aggregationContainer;
 
@@ -49,7 +49,7 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->dataProviderContainer = $this->getMockBuilder(
             \Magento\Framework\Search\Dynamic\DataProviderInterface::class

@@ -11,7 +11,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 
 class AddAttributeTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \Magento\Framework\Controller\ResultFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Controller\ResultFactory|\PHPUnit\Framework\MockObject\MockObject */
     private $resultFactory;
 
     /** @var \Magento\ConfigurableProduct\Controller\Adminhtml\Product\AddAttribute */
@@ -21,31 +21,31 @@ class AddAttributeTest extends \PHPUnit\Framework\TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\RequestInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\RequestInterface
      */
     protected $request;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\ResponseInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\ResponseInterface
      */
     protected $response;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Controller\Adminhtml\Product\Builder
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Controller\Adminhtml\Product\Builder
      */
     protected $productBuilder;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\ViewInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\ViewInterface
      */
     protected $view;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Backend\App\Action\Context
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Backend\App\Action\Context
      */
     protected $context;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 

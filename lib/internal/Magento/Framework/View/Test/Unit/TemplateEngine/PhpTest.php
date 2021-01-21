@@ -18,14 +18,14 @@ class PhpTest extends \PHPUnit\Framework\TestCase
     protected $_phpEngine;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_helperFactoryMock;
 
     /**
      * Create a PHP template engine to test.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_helperFactoryMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $this->_phpEngine = new \Magento\Framework\View\TemplateEngine\Php($this->_helperFactoryMock);

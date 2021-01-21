@@ -35,7 +35,7 @@ class ProxyDeferredFactoryTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->factory = Bootstrap::getObjectManager()->get(ProxyDeferredFactory::class);
         $this->callbackDeferredFactory = Bootstrap::getObjectManager()->get(CallbackDeferredFactory::class);

@@ -9,32 +9,32 @@ namespace Magento\Persistent\Test\Unit\Model\Checkout;
 class GuestPaymentInformationManagementPluginTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Persistent\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Persistent\Helper\Data|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $persistentHelperMock;
 
     /**
-     * @var \Magento\Persistent\Helper\Session|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Persistent\Helper\Session|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $persistentSessionMock;
 
     /**
-     * @var \Magento\Checkout\Model\Session|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Checkout\Model\Session|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $checkoutSessionMock;
 
     /**
-     * @var \Magento\Persistent\Model\QuoteManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Persistent\Model\QuoteManager|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $quoteManagerMock;
 
     /**
-     * @var \Magento\Customer\Model\Session|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\Session|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $customerSessionMock;
 
     /**
-     * @var \Magento\Quote\Api\CartRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Api\CartRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $cartRepositoryMock;
 
@@ -44,11 +44,11 @@ class GuestPaymentInformationManagementPluginTest extends \PHPUnit\Framework\Tes
     protected $plugin;
 
     /**
-     * @var \Magento\Checkout\Model\GuestPaymentInformationManagement|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Checkout\Model\GuestPaymentInformationManagement|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $subjectMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->persistentHelperMock = $this->createMock(\Magento\Persistent\Helper\Data::class);
         $this->persistentSessionMock = $this->createMock(\Magento\Persistent\Helper\Session::class);
@@ -79,7 +79,7 @@ class GuestPaymentInformationManagementPluginTest extends \PHPUnit\Framework\Tes
         $walkMethod = 'setEmail';
         $walkArgs = ['email' => $email];
         /**
-         * @var \Magento\Quote\Api\Data\PaymentInterface|\PHPUnit_Framework_MockObject_MockObject $paymentInterfaceMock
+         * @var \Magento\Quote\Api\Data\PaymentInterface|\PHPUnit\Framework\MockObject\MockObject $paymentInterfaceMock
          */
         $paymentInterfaceMock = $this->createMock(\Magento\Quote\Api\Data\PaymentInterface::class);
 
@@ -91,7 +91,7 @@ class GuestPaymentInformationManagementPluginTest extends \PHPUnit\Framework\Tes
         $this->customerSessionMock->expects($this->once())->method('setCustomerGroupId')->with(null);
         $this->quoteManagerMock->expects($this->once())->method('convertCustomerCartToGuest');
 
-        /** @var \Magento\Quote\Api\Data\CartInterface|\PHPUnit_Framework_MockObject_MockObject $quoteMock */
+        /** @var \Magento\Quote\Api\Data\CartInterface|\PHPUnit\Framework\MockObject\MockObject $quoteMock */
         $quoteMock = $this->getMockForAbstractClass(
             \Magento\Quote\Api\Data\CartInterface::class,
             [],
@@ -105,7 +105,7 @@ class GuestPaymentInformationManagementPluginTest extends \PHPUnit\Framework\Tes
         $this->checkoutSessionMock->method('getQuoteId')->willReturn($cartId);
         $this->cartRepositoryMock->expects($this->once())->method('get')->with($cartId)->willReturn($quoteMock);
         $quoteMock->expects($this->once())->method('setCustomerEmail')->with($email);
-        /** @var \Magento\Framework\Data\Collection|\PHPUnit_Framework_MockObject_MockObject $collectionMock */
+        /** @var \Magento\Framework\Data\Collection|\PHPUnit\Framework\MockObject\MockObject $collectionMock */
         $collectionMock = $this->createMock(\Magento\Framework\Data\Collection::class);
         $quoteMock->expects($this->once())->method('getAddressesCollection')->willReturn($collectionMock);
         $collectionMock->expects($this->once())->method('walk')->with($walkMethod, $walkArgs);
@@ -126,7 +126,7 @@ class GuestPaymentInformationManagementPluginTest extends \PHPUnit\Framework\Tes
         $email = 'guest@example.com';
 
         /**
-         * @var \Magento\Quote\Api\Data\PaymentInterface|\PHPUnit_Framework_MockObject_MockObject $paymentInterfaceMock
+         * @var \Magento\Quote\Api\Data\PaymentInterface|\PHPUnit\Framework\MockObject\MockObject $paymentInterfaceMock
          */
         $paymentInterfaceMock = $this->createMock(\Magento\Quote\Api\Data\PaymentInterface::class);
 
@@ -149,7 +149,7 @@ class GuestPaymentInformationManagementPluginTest extends \PHPUnit\Framework\Tes
         $email = 'guest@example.com';
 
         /**
-         * @var \Magento\Quote\Api\Data\PaymentInterface|\PHPUnit_Framework_MockObject_MockObject $paymentInterfaceMock
+         * @var \Magento\Quote\Api\Data\PaymentInterface|\PHPUnit\Framework\MockObject\MockObject $paymentInterfaceMock
          */
         $paymentInterfaceMock = $this->createMock(\Magento\Quote\Api\Data\PaymentInterface::class);
 
@@ -170,7 +170,7 @@ class GuestPaymentInformationManagementPluginTest extends \PHPUnit\Framework\Tes
         $email = 'guest@example.com';
 
         /**
-         * @var \Magento\Quote\Api\Data\PaymentInterface|\PHPUnit_Framework_MockObject_MockObject $paymentInterfaceMock
+         * @var \Magento\Quote\Api\Data\PaymentInterface|\PHPUnit\Framework\MockObject\MockObject $paymentInterfaceMock
          */
         $paymentInterfaceMock = $this->createMock(\Magento\Quote\Api\Data\PaymentInterface::class);
 
@@ -192,7 +192,7 @@ class GuestPaymentInformationManagementPluginTest extends \PHPUnit\Framework\Tes
         $email = 'guest@example.com';
 
         /**
-         * @var \Magento\Quote\Api\Data\PaymentInterface|\PHPUnit_Framework_MockObject_MockObject $paymentInterfaceMock
+         * @var \Magento\Quote\Api\Data\PaymentInterface|\PHPUnit\Framework\MockObject\MockObject $paymentInterfaceMock
          */
         $paymentInterfaceMock = $this->createMock(\Magento\Quote\Api\Data\PaymentInterface::class);
 

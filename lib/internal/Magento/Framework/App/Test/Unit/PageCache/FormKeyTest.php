@@ -27,24 +27,24 @@ class FormKeyTest extends \PHPUnit\Framework\TestCase
     /**
      * Cookie mock
      *
-     * @var CookieManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CookieManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $cookieManagerMock;
 
     /**
-     * @var CookieMetadataFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CookieMetadataFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $cookieMetadataFactory;
 
     /**
-     * @var SessionManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var SessionManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $sessionManager;
 
     /**
      * Create cookie mock and FormKey instance
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->cookieManagerMock = $this->createMock(\Magento\Framework\Stdlib\CookieManagerInterface::class);
         $this->cookieMetadataFactory = $this->getMockBuilder(
@@ -77,7 +77,7 @@ class FormKeyTest extends \PHPUnit\Framework\TestCase
     public function testSet()
     {
         $formKeyValue = 'form_key';
-        /** @var PublicCookieMetadata|\PHPUnit_Framework_MockObject_MockObject $metadata */
+        /** @var PublicCookieMetadata|\PHPUnit\Framework\MockObject\MockObject $metadata */
         $metadata = $this->getMockBuilder(
             \Magento\Framework\Stdlib\Cookie\PublicCookieMetadata::class
         )
@@ -99,7 +99,7 @@ class FormKeyTest extends \PHPUnit\Framework\TestCase
     {
         $cookiePath = '/';
         $cookieDomain = 'example.com';
-        /** @var PublicCookieMetadata|\PHPUnit_Framework_MockObject_MockObject $metadata */
+        /** @var PublicCookieMetadata|\PHPUnit\Framework\MockObject\MockObject $metadata */
         $metadata = $this->getMockBuilder(
             \Magento\Framework\Stdlib\Cookie\PublicCookieMetadata::class
         )

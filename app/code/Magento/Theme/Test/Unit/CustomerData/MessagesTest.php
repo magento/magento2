@@ -11,12 +11,12 @@ use Magento\Theme\CustomerData\Messages;
 class MessagesTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Message\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Message\ManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $messageManager;
 
     /**
-     * @var InterpretationStrategyInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var InterpretationStrategyInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $messageInterpretationStrategy;
 
@@ -25,7 +25,7 @@ class MessagesTest extends \PHPUnit\Framework\TestCase
      */
     protected $object;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->messageManager = $this->getMockBuilder(\Magento\Framework\Message\ManagerInterface::class)->getMock();
         $this->messageInterpretationStrategy = $this->createMock(

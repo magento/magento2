@@ -12,26 +12,26 @@ use Magento\Search\Model\AdapterFactory;
 class AdapterFactoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var AdapterFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var AdapterFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $adapterFactory;
 
     /**
-     * @var ObjectManagerInterface |\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface |\PHPUnit\Framework\MockObject\MockObject
      */
     private $objectManager;
 
     /**
-     * @var EngineResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var EngineResolverInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $engineResolverMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->engineResolverMock = $this->getMockBuilder(EngineResolverInterface::class)
             ->getMockForAbstractClass();
 
-        $this->objectManager = $this->createMock(ObjectManagerInterface::class);
+        $this->objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
 
         $this->adapterFactory = new AdapterFactory(
             $this->objectManager,
@@ -58,10 +58,11 @@ class AdapterFactoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
      */
     public function testCreateExceptionThrown()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $this->engineResolverMock->expects($this->once())->method('getCurrentSearchEngine')
             ->will($this->returnValue('ClassName'));
 
@@ -73,10 +74,11 @@ class AdapterFactoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \LogicException
      */
     public function testCreateLogicException()
     {
+        $this->expectException(\LogicException::class);
+
         $this->engineResolverMock->expects($this->once())->method('getCurrentSearchEngine')
             ->will($this->returnValue('Class'));
 

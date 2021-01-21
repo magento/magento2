@@ -29,7 +29,7 @@ use Magento\Vault\Model\Ui\Adminhtml\TokensConfigProvider;
 use Magento\Vault\Model\Ui\TokenUiComponentInterface;
 use Magento\Vault\Model\Ui\TokenUiComponentProviderInterface;
 use Magento\Vault\Model\VaultPaymentInterface;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * Test for TokensConfigProvider
@@ -119,7 +119,7 @@ class TokensConfigProviderTest extends \PHPUnit\Framework\TestCase
      */
     private $configProvider;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->paymentTokenRepository = $this->getMockBuilder(PaymentTokenRepositoryInterface::class)
             ->getMockForAbstractClass();
@@ -151,7 +151,7 @@ class TokensConfigProviderTest extends \PHPUnit\Framework\TestCase
 
         $this->initStoreMock();
 
-        $this->tokenComponentProvider = $this->createMock(TokenUiComponentProviderInterface::class);
+        $this->tokenComponentProvider = $this->getMockForAbstractClass(TokenUiComponentProviderInterface::class);
 
         $this->configProvider = new TokensConfigProvider(
             $this->session,
@@ -470,12 +470,12 @@ class TokensConfigProviderTest extends \PHPUnit\Framework\TestCase
      */
     private function initStoreMock()
     {
-        $this->store = $this->createMock(StoreInterface::class);
+        $this->store = $this->getMockForAbstractClass(StoreInterface::class);
         $this->store->expects(static::any())
             ->method('getId')
             ->willReturn(self::STORE_ID);
 
-        $this->storeManager = $this->createMock(StoreManagerInterface::class);
+        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $this->storeManager->expects(static::any())
             ->method('getStore')
             ->with(null)
@@ -512,7 +512,7 @@ class TokensConfigProviderTest extends \PHPUnit\Framework\TestCase
      */
     private function getTokenUiComponentProvider($token)
     {
-        $tokenUiComponent = $this->createMock(TokenUiComponentInterface::class);
+        $tokenUiComponent = $this->getMockForAbstractClass(TokenUiComponentInterface::class);
         $this->tokenComponentProvider->expects(static::once())
             ->method('getComponentForToken')
             ->with($token)
@@ -526,7 +526,7 @@ class TokensConfigProviderTest extends \PHPUnit\Framework\TestCase
      * @param mixed $value
      * @param int $atIndex
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     private function createExpectedFilter($field, $value, $atIndex)
     {
@@ -553,7 +553,7 @@ class TokensConfigProviderTest extends \PHPUnit\Framework\TestCase
      * @param int $customerId
      * @param int $entityId
      * @param string $vaultProviderCode
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     private function getSearchCriteria($customerId, $entityId, $vaultProviderCode)
     {

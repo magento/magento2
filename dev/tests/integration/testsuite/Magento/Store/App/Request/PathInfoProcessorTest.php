@@ -16,7 +16,7 @@ class PathInfoProcessorTest extends \PHPUnit\Framework\TestCase
      */
     private $pathProcessor;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->pathProcessor = Bootstrap::getObjectManager()->create(
             \Magento\Store\App\Request\PathInfoProcessor::class

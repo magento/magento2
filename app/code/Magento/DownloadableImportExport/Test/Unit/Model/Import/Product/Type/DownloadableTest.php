@@ -19,24 +19,24 @@ class DownloadableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
     /** @var ObjectManager|\Magento\DownloadableImportExport\Model\Import\Product\Type\Downloadable */
     protected $downloadableModelMock;
 
-    /** @var \Magento\Framework\DB\Adapter\Pdo\Mysql|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\DB\Adapter\Pdo\Mysql|\PHPUnit\Framework\MockObject\MockObject */
     protected $connectionMock;
 
-    /** @var \Magento\Framework\DB\Select|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\DB\Select|\PHPUnit\Framework\MockObject\MockObject */
     protected $select;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $attrSetColFacMock;
 
     /**
-     * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $attrSetColMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $prodAttrColFacMock;
 
@@ -46,32 +46,32 @@ class DownloadableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
     private $domainValidator;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $prodAttrColMock;
 
-    /** @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\ResourceConnection|\PHPUnit\Framework\MockObject\MockObject */
     protected $resourceMock;
 
-    /** @var \Magento\CatalogImportExport\Model\Import\Product|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\CatalogImportExport\Model\Import\Product|\PHPUnit\Framework\MockObject\MockObject */
     protected $entityModelMock;
 
     /** @var array|mixed */
     protected $paramsArray;
 
-    /** @var \Magento\CatalogImportExport\Model\Import\Uploader|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\CatalogImportExport\Model\Import\Uploader|\PHPUnit\Framework\MockObject\MockObject */
     protected $uploaderMock;
 
-    /** @var \Magento\Framework\Filesystem\Directory\Write|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Filesystem\Directory\Write|\PHPUnit\Framework\MockObject\MockObject */
     protected $directoryWriteMock;
 
     /**
-     * @var |\PHPUnit_Framework_MockObject_MockObject
+     * @var |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $uploaderHelper;
 
     /**
-     * @var |\PHPUnit_Framework_MockObject_MockObject
+     * @var |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $downloadableHelper;
 
@@ -79,7 +79,7 @@ class DownloadableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
      * Set up
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

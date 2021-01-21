@@ -16,16 +16,16 @@ class DomFactoryTest extends \PHPUnit\Framework\TestCase
     protected $_factory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_object;
 
     /**
-     * @var \Magento\Framework\ObjectManager\ObjectManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManager\ObjectManager|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_object = $this->createMock(\Magento\Framework\ObjectManager\Config\Reader\Dom::class);
         $this->_objectManager =

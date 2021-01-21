@@ -8,11 +8,11 @@ namespace Magento\Test;
 class EntityTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Model\AbstractModel|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\AbstractModel|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_model = $this->createPartialMock(
             \Magento\Framework\Model\AbstractModel::class,

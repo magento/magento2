@@ -15,24 +15,24 @@ class RendererTest extends \PHPUnit\Framework\TestCase
     protected $renderer;
 
     /**
-     * @var \Magento\Weee\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Weee\Helper\Data|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $weeeHelper;
 
     /**
-     * @var \Magento\Directory\Model\PriceCurrency|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Directory\Model\PriceCurrency|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $priceCurrency;
 
     /**
-     * @var \Magento\Quote\Model\Quote\Item|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Model\Quote\Item|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $item;
 
     const STORE_ID = 'store_id';
     const ZONE = 'zone';
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 

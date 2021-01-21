@@ -11,12 +11,12 @@ use Magento\Framework\App\State;
 class StructureTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Psr\Log\LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $loggerMock;
 
     /**
-     * @var State|\PHPUnit_Framework_MockObject_MockObject
+     * @var State|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $stateMock;
 
@@ -33,7 +33,7 @@ class StructureTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
         $this->stateMock = $this->createMock(\Magento\Framework\App\State::class);

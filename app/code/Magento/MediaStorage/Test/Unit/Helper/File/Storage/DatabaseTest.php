@@ -15,22 +15,22 @@ class DatabaseTest extends \PHPUnit\Framework\TestCase
      */
     protected $objectManager;
 
-    /** @var \Magento\MediaStorage\Model\File\Storage\DatabaseFactory | \PHPUnit_Framework_MockObject_MockObject  */
+    /** @var \Magento\MediaStorage\Model\File\Storage\DatabaseFactory | \PHPUnit\Framework\MockObject\MockObject  */
     protected $dbStorageFactoryMock;
 
-    /** @var \Magento\Framework\Filesystem | \PHPUnit_Framework_MockObject_MockObject  */
+    /** @var \Magento\Framework\Filesystem | \PHPUnit\Framework\MockObject\MockObject  */
     protected $filesystemMock;
 
-    /** @var \Magento\MediaStorage\Model\File\Storage\File | \PHPUnit_Framework_MockObject_MockObject  */
+    /** @var \Magento\MediaStorage\Model\File\Storage\File | \PHPUnit\Framework\MockObject\MockObject  */
     protected $fileStorageMock;
 
-    /** @var \Magento\Framework\App\Config\ScopeConfigInterface | \PHPUnit_Framework_MockObject_MockObject  */
+    /** @var \Magento\Framework\App\Config\ScopeConfigInterface | \PHPUnit\Framework\MockObject\MockObject  */
     protected $configMock;
 
     /** @var Database */
     protected $helper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->dbStorageFactoryMock = $this->getMockBuilder(
             \Magento\MediaStorage\Model\File\Storage\DatabaseFactory::class

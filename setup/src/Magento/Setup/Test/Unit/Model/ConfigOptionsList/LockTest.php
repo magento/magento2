@@ -32,7 +32,7 @@ class LockTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->deploymentConfigMock = $this->createMock(DeploymentConfig::class);
         $this->lockConfigOptionsList = new LockConfigOptionsList();

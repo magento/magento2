@@ -30,19 +30,19 @@ class ChangeQuoteControlTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $userContextMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $quoteMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-        $this->userContextMock = $this->createMock(UserContextInterface::class);
+        $this->userContextMock = $this->getMockForAbstractClass(UserContextInterface::class);
 
         $this->model = $this->objectManager->getObject(
             ChangeQuoteControl::class,
@@ -75,7 +75,7 @@ class ChangeQuoteControlTest extends \PHPUnit\Framework\TestCase
         $this->userContextMock->expects($this->any())->method('getUserId')
             ->will($this->returnValue($quoteCustomerId));
 
-        $this->assertEquals(true, $this->model->isAllowed($this->quoteMock));
+        $this->assertTrue($this->model->isAllowed($this->quoteMock));
     }
 
     /**
@@ -93,7 +93,7 @@ class ChangeQuoteControlTest extends \PHPUnit\Framework\TestCase
         $this->userContextMock->expects($this->any())->method('getUserId')
             ->will($this->returnValue($currentCustomerId));
 
-        $this->assertEquals(false, $this->model->isAllowed($this->quoteMock));
+        $this->assertFalse($this->model->isAllowed($this->quoteMock));
     }
 
     /**
@@ -106,7 +106,7 @@ class ChangeQuoteControlTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($quoteCustomerId));
         $this->userContextMock->expects($this->any())->method('getUserType')
             ->will($this->returnValue(UserContextInterface::USER_TYPE_GUEST));
-        $this->assertEquals(true, $this->model->isAllowed($this->quoteMock));
+        $this->assertTrue($this->model->isAllowed($this->quoteMock));
     }
 
     /**
@@ -119,7 +119,7 @@ class ChangeQuoteControlTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($quoteCustomerId));
         $this->userContextMock->expects($this->any())->method('getUserType')
             ->will($this->returnValue(UserContextInterface::USER_TYPE_GUEST));
-        $this->assertEquals(false, $this->model->isAllowed($this->quoteMock));
+        $this->assertFalse($this->model->isAllowed($this->quoteMock));
     }
 
     /**
@@ -129,7 +129,7 @@ class ChangeQuoteControlTest extends \PHPUnit\Framework\TestCase
     {
         $this->userContextMock->expects($this->any())->method('getUserType')
             ->will($this->returnValue(UserContextInterface::USER_TYPE_ADMIN));
-        $this->assertEquals(true, $this->model->isAllowed($this->quoteMock));
+        $this->assertTrue($this->model->isAllowed($this->quoteMock));
     }
 
     /**
@@ -139,6 +139,6 @@ class ChangeQuoteControlTest extends \PHPUnit\Framework\TestCase
     {
         $this->userContextMock->expects($this->any())->method('getUserType')
             ->will($this->returnValue(UserContextInterface::USER_TYPE_INTEGRATION));
-        $this->assertEquals(true, $this->model->isAllowed($this->quoteMock));
+        $this->assertTrue($this->model->isAllowed($this->quoteMock));
     }
 }

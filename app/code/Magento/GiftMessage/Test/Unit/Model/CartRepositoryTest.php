@@ -17,27 +17,27 @@ class CartRepositoryTest extends \PHPUnit\Framework\TestCase
     protected $cartRepository;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $quoteRepositoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $messageFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $quoteMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $messageMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $quoteItemMock;
 
@@ -47,26 +47,26 @@ class CartRepositoryTest extends \PHPUnit\Framework\TestCase
     protected $cartId = 13;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $giftMessageManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $helperMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->quoteRepositoryMock = $this->createMock(\Magento\Quote\Api\CartRepositoryInterface::class);
         $this->messageFactoryMock = $this->createPartialMock(
@@ -134,21 +134,23 @@ class CartRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Gift messages can't be used for an empty cart. Add an item and try again.
      */
     public function testSaveWithInputException()
     {
+        $this->expectException(\Magento\Framework\Exception\InputException::class);
+        $this->expectExceptionMessage('Gift messages can\'t be used for an empty cart. Add an item and try again.');
+
         $this->quoteMock->expects($this->once())->method('getItemsCount')->will($this->returnValue(0));
         $this->cartRepository->save($this->cartId, $this->messageMock);
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\State\InvalidTransitionException
-     * @expectedExceptionMessage Gift messages can't be used for virtual products.
      */
     public function testSaveWithInvalidTransitionException()
     {
+        $this->expectException(\Magento\Framework\Exception\State\InvalidTransitionException::class);
+        $this->expectExceptionMessage('Gift messages can\'t be used for virtual products.');
+
         $this->quoteMock->expects($this->once())->method('getItemsCount')->will($this->returnValue(1));
         $this->quoteMock->expects($this->once())->method('isVirtual')->will($this->returnValue(true));
         $this->cartRepository->save($this->cartId, $this->messageMock);

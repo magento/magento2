@@ -16,11 +16,11 @@ use Magento\Framework\Component\ComponentRegistrar;
 class FilesTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Component\DirSearch|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Component\DirSearch|\PHPUnit\Framework\MockObject\MockObject
      */
     private $dirSearchMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->dirSearchMock = $this->createMock(\Magento\Framework\Component\DirSearch::class);
@@ -33,7 +33,7 @@ class FilesTest extends \PHPUnit\Framework\TestCase
         Files::setInstance($fileUtilities);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         Files::setInstance();
     }

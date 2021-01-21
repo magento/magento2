@@ -22,7 +22,7 @@ class FlatTest extends \PHPUnit\Framework\TestCase
      */
     protected $_storeManagerInterface;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_store = $this->createMock(\Magento\Store\Model\Store::class);
 

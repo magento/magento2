@@ -13,21 +13,21 @@ class StateTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $scopeConfigMock;
 
     /**
-     * @var \Magento\Framework\Indexer\IndexerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Indexer\IndexerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $flatIndexerMock;
 
     /**
-     * @var \Magento\Framework\Indexer\IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Indexer\IndexerRegistry|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $indexerRegistryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->scopeConfigMock = $this->getMockForAbstractClass(
             \Magento\Framework\App\Config\ScopeConfigInterface::class
@@ -65,7 +65,7 @@ class StateTest extends \PHPUnit\Framework\TestCase
             $this->scopeConfigMock,
             $this->indexerRegistryMock
         );
-        $this->assertEquals(true, $this->model->isFlatEnabled());
+        $this->assertTrue($this->model->isFlatEnabled());
     }
 
     /**

@@ -48,7 +48,7 @@ class AllowedQuantityTest extends TestCase
     /**
      * Set Up
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->stockRegistryMock = $this->createMock(StockRegistry::class);
         $this->itemMock = $this->getMockForAbstractClass(

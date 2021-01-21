@@ -23,12 +23,12 @@ class ResolverTest extends \PHPUnit\Framework\TestCase
     /**
      * Mock for view file system
      *
-     * @var \Magento\Framework\View\FileSystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\FileSystem|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_viewFileSystemMock;
 
     /**
-     * @var Json|\PHPUnit_Framework_MockObject_MockObject
+     * @var Json|\PHPUnit\Framework\MockObject\MockObject
      */
     private $serializerMock;
 
@@ -37,7 +37,7 @@ class ResolverTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_viewFileSystemMock = $this->createMock(\Magento\Framework\View\FileSystem::class);
         $this->serializerMock = $this->getMockBuilder(Json::class)

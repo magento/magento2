@@ -22,38 +22,38 @@ class InfoTest extends \PHPUnit\Framework\TestCase
 
     const EMAIL_ADDRESS = 'john.doe@example.com';
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\View\Element\Template\Context */
+    /** @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\View\Element\Template\Context */
     private $_context;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Model\Session */
+    /** @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Customer\Model\Session */
     private $_customerSession;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Api\Data\CustomerInterface */
+    /** @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Customer\Api\Data\CustomerInterface */
     private $_customer;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Helper\View
+     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Customer\Helper\View
      */
     private $_helperView;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Newsletter\Model\Subscriber */
+    /** @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Newsletter\Model\Subscriber */
     private $_subscriber;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Newsletter\Model\SubscriberFactory */
+    /** @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Newsletter\Model\SubscriberFactory */
     private $_subscriberFactory;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Block\Form\Register */
+    /** @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Customer\Block\Form\Register */
     private $_formRegister;
 
     /** @var Info */
     private $_block;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Helper\Session\CurrentCustomer
+     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Customer\Helper\Session\CurrentCustomer
      */
     protected $currentCustomer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->currentCustomer = $this->createMock(\Magento\Customer\Helper\Session\CurrentCustomer::class);
 

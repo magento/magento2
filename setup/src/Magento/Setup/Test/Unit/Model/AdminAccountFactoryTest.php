@@ -13,7 +13,7 @@ class AdminAccountFactoryTest extends \PHPUnit\Framework\TestCase
     public function testCreate()
     {
         $serviceLocatorMock =
-            $this->getMockForAbstractClass(\Zend\ServiceManager\ServiceLocatorInterface::class, ['get']);
+            $this->createPartialMock(\Zend\ServiceManager\ServiceLocatorInterface::class, ['get']);
         $serviceLocatorMock
             ->expects($this->once())
             ->method('get')

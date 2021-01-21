@@ -17,16 +17,16 @@ class CostTest extends \PHPUnit\Framework\TestCase
     protected $total;
 
     /**
-     * @var \Magento\Sales\Model\Order\Creditmemo|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Creditmemo|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $creditmemoMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\Creditmemo\Item|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Creditmemo\Item|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $creditmemoItemMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->creditmemoMock = $this->createPartialMock(
             \Magento\Sales\Model\Order\Creditmemo::class,

@@ -23,19 +23,19 @@ class DataTest extends \PHPUnit\Framework\TestCase
     protected $data;
 
     /**
-     * @var Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $contextMock;
 
     /**
-     * @var ItemFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ItemFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $itemFactoryMock;
 
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()

@@ -28,7 +28,7 @@ class RulePoolTest extends \PHPUnit\Framework\TestCase
      */
     protected $defaultParams;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         /** @var \Magento\Theme\Model\Theme\Registration $registration */
@@ -50,7 +50,7 @@ class RulePoolTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->model = null;
         $this->defaultParams = [];

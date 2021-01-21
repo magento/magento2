@@ -68,7 +68,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
      */
     private $scopeConfig;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->helper = $this->objectManager->get(\Magento\Catalog\Helper\Data::class);
@@ -76,7 +76,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
         $this->scopeConfig = $this->objectManager->get(\Magento\Framework\App\MutableScopeConfig::class);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->tearDownDefaultRules();
     }

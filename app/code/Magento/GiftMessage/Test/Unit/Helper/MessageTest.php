@@ -8,7 +8,7 @@ namespace Magento\GiftMessage\Test\Unit\Helper;
 class MessageTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $layoutFactoryMock;
 
@@ -17,7 +17,7 @@ class MessageTest extends \PHPUnit\Framework\TestCase
      */
     protected $helper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->layoutFactoryMock = $this->createMock(\Magento\Framework\View\LayoutFactory::class);

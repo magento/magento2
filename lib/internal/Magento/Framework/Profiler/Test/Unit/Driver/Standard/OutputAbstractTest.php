@@ -10,11 +10,11 @@ namespace Magento\Framework\Profiler\Test\Unit\Driver\Standard;
 class OutputAbstractTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Profiler\Driver\Standard\AbstractOutput|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Profiler\Driver\Standard\AbstractOutput|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_output;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_output = $this->getMockForAbstractClass(
             \Magento\Framework\Profiler\Driver\Standard\AbstractOutput::class
@@ -102,7 +102,7 @@ class OutputAbstractTest extends \PHPUnit\Framework\TestCase
     {
         $method = new \ReflectionMethod($this->_output, '_renderCaption');
         $method->setAccessible(true);
-        $this->assertRegExp(
+        $this->assertMatchesRegularExpression(
             '/Code Profiler \(Memory usage: real - \d+, emalloc - \d+\)/',
             $method->invoke($this->_output)
         );

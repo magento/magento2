@@ -25,17 +25,17 @@ class CustomerAuthUpdateTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var CustomerRegistry|\PHPUnit_Framework_MockObject_MockObject
+     * @var CustomerRegistry|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $customerRegistry;
 
     /**
-     * @var CustomerResourceModel|\PHPUnit_Framework_MockObject_MockObject
+     * @var CustomerResourceModel|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $customerResourceModel;
 
     /**
-     * @var CustomerModel|\PHPUnit_Framework_MockObject_MockObject
+     * @var CustomerModel|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $customerModel;
 
@@ -47,7 +47,7 @@ class CustomerAuthUpdateTest extends \PHPUnit\Framework\TestCase
     /**
      * Setup the test
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
 
@@ -78,7 +78,7 @@ class CustomerAuthUpdateTest extends \PHPUnit\Framework\TestCase
 
         $customerSecureMock = $this->createMock(CustomerSecure::class);
 
-        $dbAdapter = $this->createMock(AdapterInterface::class);
+        $dbAdapter = $this->getMockForAbstractClass(AdapterInterface::class);
 
         $this->customerRegistry->expects($this->once())
             ->method('retrieveSecureData')

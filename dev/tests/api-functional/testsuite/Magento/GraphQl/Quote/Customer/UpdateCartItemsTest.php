@@ -45,7 +45,7 @@ class UpdateCartItemsTest extends GraphQlAbstract
      */
     private $productRepository;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->quoteResource = $objectManager->get(QuoteResource::class);

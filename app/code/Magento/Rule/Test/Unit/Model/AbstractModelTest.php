@@ -17,36 +17,36 @@ class AbstractModelTest extends \PHPUnit\Framework\TestCase
 {
 
     /**
-     * @var \Magento\Rule\Model\AbstractModel|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Rule\Model\AbstractModel|\PHPUnit\Framework\MockObject\MockObject
      */
     private $model;
 
     /**
-     * @var \Magento\Framework\Model\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\Context|\PHPUnit\Framework\MockObject\MockObject
      */
     private $contextMock;
 
     /**
-     * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Registry|\PHPUnit\Framework\MockObject\MockObject
      */
     private $registryMock;
 
     /**
-     * @var \Magento\Framework\Data\FormFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Data\FormFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $formFactoryMock;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $localeDateMock;
 
     /**
-     * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $eventManagerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->localeDateMock = $this->getMockBuilder(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class)
             ->disableOriginalConstructor()
@@ -106,7 +106,7 @@ class AbstractModelTest extends \PHPUnit\Framework\TestCase
     /**
      * Get mock for serializer
      *
-     * @return \Magento\Framework\Serialize\Serializer\Json|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Framework\Serialize\Serializer\Json|\PHPUnit\Framework\MockObject\MockObject
      */
     private function getSerializerMock()
     {

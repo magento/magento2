@@ -16,11 +16,11 @@ class GroupRegistryTest extends \PHPUnit\Framework\TestCase
     private $unit;
 
     /**
-     * @var \Magento\Customer\Model\CustomerGroupFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\CustomerGroupFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $groupFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->groupFactory = $this->getMockBuilder(\Magento\Customer\Model\GroupFactory::class)
             ->disableOriginalConstructor()
@@ -61,10 +61,11 @@ class GroupRegistryTest extends \PHPUnit\Framework\TestCase
      * Tests that attempting to retrieve a non-existing entity will result in an exception.
      *
      * @return void
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testRetrieveException()
     {
+        $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
+
         $groupId = 1;
         $group = $this->getMockBuilder(\Magento\Customer\Model\Group::class)
             ->setMethods(['load', 'getId', '__wakeup'])

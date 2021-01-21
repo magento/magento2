@@ -18,20 +18,20 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
     /**  @var \Magento\Webapi\Model\Rest\Swagger\Generator */
     protected $generator;
 
-    /**  @var \Magento\Webapi\Model\ServiceMetadata|\PHPUnit_Framework_MockObject_MockObject */
+    /**  @var \Magento\Webapi\Model\ServiceMetadata|\PHPUnit\Framework\MockObject\MockObject */
     protected $serviceMetadataMock;
 
-    /**  @var \Magento\Webapi\Model\Rest\SwaggerFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /**  @var \Magento\Webapi\Model\Rest\SwaggerFactory|\PHPUnit\Framework\MockObject\MockObject */
     protected $swaggerFactoryMock;
 
-    /** @var \Magento\Webapi\Model\Cache\Type\Webapi|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Webapi\Model\Cache\Type\Webapi|\PHPUnit\Framework\MockObject\MockObject */
     protected $cacheMock;
 
-    /** @var \Magento\Framework\Reflection\TypeProcessor|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Reflection\TypeProcessor|\PHPUnit\Framework\MockObject\MockObject */
     protected $typeProcessorMock;
 
     /**
-     * @var \Magento\Framework\Webapi\CustomAttributeTypeLocatorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Webapi\CustomAttributeTypeLocatorInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $customAttributeTypeLocatorMock;
 
@@ -41,11 +41,11 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
     protected $objectManager;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $serializer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->serviceMetadataMock = $this->getMockBuilder(
             \Magento\Webapi\Model\ServiceMetadata::class
@@ -90,7 +90,7 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
             ->method('getCode')
             ->will($this->returnValue('store_code'));
 
-        /** @var \Magento\Framework\Webapi\Authorization|\PHPUnit_Framework_MockObject_MockObject $authorizationMock */
+        /** @var \Magento\Framework\Webapi\Authorization|\PHPUnit\Framework\MockObject\MockObject $authorizationMock */
         $authorizationMock = $this->getMockBuilder(\Magento\Framework\Webapi\Authorization::class)
             ->disableOriginalConstructor()
             ->getMock();

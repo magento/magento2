@@ -10,7 +10,7 @@ namespace Magento\Webapi\Test\Unit\Model\Config;
  */
 class ClassReflectorTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \Magento\Framework\Reflection\TypeProcessor|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Reflection\TypeProcessor|\PHPUnit\Framework\MockObject\MockObject */
     protected $_typeProcessor;
 
     /** @var \Magento\Webapi\Model\Config\ClassReflector */
@@ -19,7 +19,7 @@ class ClassReflectorTest extends \PHPUnit\Framework\TestCase
     /**
      * Set up helper.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_typeProcessor = $this->createPartialMock(
             \Magento\Framework\Reflection\TypeProcessor::class,

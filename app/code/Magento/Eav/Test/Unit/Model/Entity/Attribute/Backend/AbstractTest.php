@@ -8,11 +8,11 @@ namespace Magento\Eav\Test\Unit\Model\Entity\Attribute\Backend;
 class AbstractTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_model = $this->getMockForAbstractClass(
             \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend::class,

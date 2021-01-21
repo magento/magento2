@@ -8,7 +8,7 @@ namespace Magento\GoogleOptimizer\Test\Unit\Helper;
 class CodeTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_codeModelMock;
 
@@ -17,7 +17,7 @@ class CodeTest extends \PHPUnit\Framework\TestCase
      */
     protected $_helper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_codeModelMock = $this->createMock(\Magento\GoogleOptimizer\Model\Code::class);
 
@@ -107,11 +107,12 @@ class CodeTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The model class is not valid
      */
     public function testExceptionNotValidEntityType()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('The model class is not valid');
+
         $entity = $this->createMock(\Magento\Cms\Model\Block::class);
 
         $entityId = 1;
@@ -126,11 +127,12 @@ class CodeTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The model is empty
      */
     public function testExceptionEmptyEntity()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('The model is empty');
+
         $entity = $this->createMock(\Magento\Cms\Model\Block::class);
 
         $entityId = 0;

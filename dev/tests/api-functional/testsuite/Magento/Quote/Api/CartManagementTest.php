@@ -29,14 +29,14 @@ class CartManagementTest extends WebapiAbstract
      */
     protected $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $appConfig = $this->objectManager->get(Config::class);
         $appConfig->clean();
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);

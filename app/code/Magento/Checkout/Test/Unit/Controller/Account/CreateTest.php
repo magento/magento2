@@ -13,17 +13,17 @@ use Magento\Framework\Controller\ResultFactory;
 class CreateTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $customerSession;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $checkoutSession;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $messageManager;
 
@@ -33,21 +33,21 @@ class CreateTest extends \PHPUnit\Framework\TestCase
     protected $action;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $orderCustomerService;
 
     /**
-     * @var \Magento\Framework\Controller\ResultFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Controller\ResultFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resultFactory;
 
     /**
-     * @var \Magento\Framework\Controller\ResultInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Controller\ResultInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resultPage;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->checkoutSession = $this->createPartialMock(\Magento\Checkout\Model\Session::class, ['getLastOrderId']);

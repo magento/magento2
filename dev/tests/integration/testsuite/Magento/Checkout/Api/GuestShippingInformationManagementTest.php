@@ -53,7 +53,7 @@ class GuestShippingInformationManagementTest extends TestCase
      */
     private $maskFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->management = $objectManager->get(GuestShippingInformationManagementInterface::class);

@@ -15,7 +15,7 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
     private $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\TranslateInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\TranslateInterface
      */
     private $_translator;
 
@@ -25,19 +25,19 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
     private $_session;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Backend\Model\Auth\Session
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Backend\Model\Auth\Session
      */
     private $_authSession;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Backend\App\ConfigInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Backend\App\ConfigInterface
      */
     private $_backendConfig;
 
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_session = $this->createMock(\Magento\Backend\Model\Session::class);
 

@@ -17,31 +17,31 @@ class HistoryTest extends \PHPUnit\Framework\TestCase
     protected $historyResource;
 
     /**
-     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $appResourceMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\Status\History|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Status\History|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $historyMock;
 
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $connectionMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\Status\History\Validator|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Status\History\Validator|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $validatorMock;
 
     /**
-     * @var \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $entitySnapshotMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->appResourceMock = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
         $this->connectionMock = $this->createMock(\Magento\Framework\DB\Adapter\Pdo\Mysql::class);
@@ -97,11 +97,12 @@ class HistoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * test _beforeSaveMethod via save()
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Cannot save comment:
      */
     public function testValidate()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('Cannot save comment:');
+
         $historyMock = $this->createMock(\Magento\Sales\Model\Order\Status\History::class);
         $this->entitySnapshotMock->expects($this->once())->method('isModified')->with($historyMock)->willReturn(true);
         $historyMock->expects($this->any())->method('isSaveAllowed')->will($this->returnValue(true));

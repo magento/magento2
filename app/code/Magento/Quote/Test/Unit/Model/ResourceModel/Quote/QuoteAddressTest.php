@@ -18,39 +18,39 @@ class QuoteAddressTest extends \PHPUnit\Framework\TestCase
     protected $addressResource;
 
     /**
-     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $appResourceMock;
 
     /**
-     * @var \Magento\Quote\Model\Quote\Address|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Model\Quote\Address|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $addressMock;
 
     /**
-     * @var \Magento\Quote\Model\Quote|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Model\Quote|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $quoteMock;
 
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $connectionMock;
 
     /**
-     * @var \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $entitySnapshotMock;
 
     /**
-     * @var RelationComposite|\PHPUnit_Framework_MockObject_MockObject
+     * @var RelationComposite|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $relationCompositeMock;
 
     /**
      * Init
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->addressMock = $this->createPartialMock(
             \Magento\Quote\Model\Quote\Address::class,

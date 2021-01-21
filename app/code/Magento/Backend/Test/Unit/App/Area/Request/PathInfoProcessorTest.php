@@ -13,17 +13,17 @@ class PathInfoProcessorTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_backendHelperMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_subjectMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_requestMock;
 
@@ -32,7 +32,7 @@ class PathInfoProcessorTest extends \PHPUnit\Framework\TestCase
      */
     protected $_pathInfo = '/storeCode/node_one/';
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_requestMock = $this->createMock(\Magento\Framework\App\RequestInterface::class);
         $this->_subjectMock = $this->createMock(\Magento\Store\App\Request\PathInfoProcessor::class);

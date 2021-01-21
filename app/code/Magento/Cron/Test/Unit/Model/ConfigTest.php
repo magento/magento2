@@ -11,7 +11,7 @@ namespace Magento\Cron\Test\Unit\Model;
 class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Cron\Model\Config\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Cron\Model\Config\Data|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_configData;
 
@@ -23,7 +23,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     /**
      * Prepare data
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_configData = $this->getMockBuilder(
             \Magento\Cron\Model\Config\Data::class

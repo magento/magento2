@@ -8,17 +8,17 @@ namespace Magento\Backend\Test\Unit\Model\Widget\Grid;
 class AbstractTotalsTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var $_model \PHPUnit_Framework_MockObject_MockObject
+     * @var $_model \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_parserMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_factoryMock;
 
@@ -29,7 +29,7 @@ class AbstractTotalsTest extends \PHPUnit\Framework\TestCase
      */
     protected $_columnsValueMap;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_prepareParserMock();
         $this->_prepareFactoryMock();
@@ -50,7 +50,7 @@ class AbstractTotalsTest extends \PHPUnit\Framework\TestCase
         $this->_setUpColumns();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_parserMock);
         unset($this->_factoryMock);

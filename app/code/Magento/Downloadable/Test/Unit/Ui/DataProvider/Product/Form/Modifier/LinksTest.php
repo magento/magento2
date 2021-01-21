@@ -28,42 +28,42 @@ class LinksTest extends \PHPUnit\Framework\TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var LocatorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LocatorInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $locatorMock;
 
     /**
-     * @var LinksData|\PHPUnit_Framework_MockObject_MockObject
+     * @var LinksData|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $linksDataMock;
 
     /**
-     * @var ProductInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $productMock;
 
     /**
-     * @var StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeManagerMock;
 
     /**
-     * @var TypeUpload|\PHPUnit_Framework_MockObject_MockObject
+     * @var TypeUpload|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $typeUploadMock;
 
     /**
-     * @var Shareable|\PHPUnit_Framework_MockObject_MockObject
+     * @var Shareable|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $shareableMock;
 
     /**
-     * @var UrlInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var UrlInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $urlBuilderMock;
 
     /**
-     * @var ArrayManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var ArrayManager|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $arrayManagerMock;
 
@@ -75,13 +75,13 @@ class LinksTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $this->locatorMock = $this->createMock(LocatorInterface::class);
-        $this->productMock = $this->createMock(ProductInterface::class);
-        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
-        $this->urlBuilderMock = $this->createMock(UrlInterface::class);
+        $this->locatorMock = $this->getMockForAbstractClass(LocatorInterface::class);
+        $this->productMock = $this->getMockForAbstractClass(ProductInterface::class);
+        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->urlBuilderMock = $this->getMockForAbstractClass(UrlInterface::class);
         $this->linksDataMock = $this->createMock(LinksData::class);
         $this->typeUploadMock = $this->createMock(TypeUpload::class);
         $this->shareableMock = $this->createMock(Shareable::class);

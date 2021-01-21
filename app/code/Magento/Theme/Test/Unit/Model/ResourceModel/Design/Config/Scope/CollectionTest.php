@@ -17,22 +17,22 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     /** @var Collection */
     protected $collection;
 
-    /** @var  EntityFactoryInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  EntityFactoryInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $entityFactoryMock;
 
-    /** @var ScopeTreeProviderInterface|\PHPUnit_Framework_MockObject_MockObject*/
+    /** @var ScopeTreeProviderInterface|\PHPUnit\Framework\MockObject\MockObject*/
     protected $scopeTreeMock;
 
-    /** @var MetadataProviderInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var MetadataProviderInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $metadataProviderMock;
 
-    /** @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $appConfigMock;
 
-    /** @var \Magento\Theme\Model\Design\Config\ValueProcessor|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Theme\Model\Design\Config\ValueProcessor|\PHPUnit\Framework\MockObject\MockObject */
     protected $valueProcessor;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->entityFactoryMock = $this->getMockBuilder(
             \Magento\Framework\Data\Collection\EntityFactoryInterface::class

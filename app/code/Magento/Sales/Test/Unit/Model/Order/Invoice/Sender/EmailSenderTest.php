@@ -18,89 +18,89 @@ class EmailSenderTest extends \PHPUnit\Framework\TestCase
     private $subject;
 
     /**
-     * @var \Magento\Sales\Model\Order|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order|\PHPUnit\Framework\MockObject\MockObject
      */
     private $orderMock;
 
     /**
-     * @var \Magento\Store\Model\Store|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\Store|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\Email\Sender|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Email\Sender|\PHPUnit\Framework\MockObject\MockObject
      */
     private $senderMock;
 
     /**
-     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Psr\Log\LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $loggerMock;
 
     /**
-     * @var \Magento\Sales\Api\Data\InvoiceInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Api\Data\InvoiceInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $invoiceMock;
 
     /**
-     * @var \Magento\Sales\Api\Data\InvoiceCommentCreationInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Api\Data\InvoiceCommentCreationInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $commentMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\Address|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Address|\PHPUnit\Framework\MockObject\MockObject
      */
     private $addressMock;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $globalConfigMock;
 
     /**
-     * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $eventManagerMock;
 
     /**
-     * @var \Magento\Payment\Model\Info|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Payment\Model\Info|\PHPUnit\Framework\MockObject\MockObject
      */
     private $paymentInfoMock;
 
     /**
-     * @var \Magento\Payment\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Payment\Helper\Data|\PHPUnit\Framework\MockObject\MockObject
      */
     private $paymentHelperMock;
 
     /**
-     * @var \Magento\Sales\Model\ResourceModel\Order\Invoice|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\ResourceModel\Order\Invoice|\PHPUnit\Framework\MockObject\MockObject
      */
     private $invoiceResourceMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\Address\Renderer|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Address\Renderer|\PHPUnit\Framework\MockObject\MockObject
      */
     private $addressRendererMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\Email\Container\Template|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Email\Container\Template|\PHPUnit\Framework\MockObject\MockObject
      */
     private $templateContainerMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\Email\Container\InvoiceIdentity|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Email\Container\InvoiceIdentity|\PHPUnit\Framework\MockObject\MockObject
      */
     private $identityContainerMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\Email\SenderBuilderFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Email\SenderBuilderFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $senderBuilderFactoryMock;
 
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->orderMock = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
             ->disableOriginalConstructor()

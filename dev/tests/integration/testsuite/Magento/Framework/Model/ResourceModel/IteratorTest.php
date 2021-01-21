@@ -19,7 +19,7 @@ class IteratorTest extends \PHPUnit\Framework\TestCase
      */
     protected $_callbackCounter = 0;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Framework\Model\ResourceModel\Iterator::class

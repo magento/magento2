@@ -14,12 +14,12 @@ use \Magento\Setup\Model\PackagesAuth;
 class PackagesAuthTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\HTTP\Client\Curl
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\HTTP\Client\Curl
      */
     private $curl;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Filesystem
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Filesystem
      */
     private $filesystem;
 
@@ -28,10 +28,10 @@ class PackagesAuthTest extends \PHPUnit\Framework\TestCase
      */
     private $packagesAuth;
 
-    /** @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit\Framework\MockObject\MockObject */
     private $serializerMock;
 
-    public function setUp()
+    public function setUp(): void
     {
         $zendServiceLocator = $this->createMock(\Zend\ServiceManager\ServiceLocatorInterface::class);
         $zendServiceLocator

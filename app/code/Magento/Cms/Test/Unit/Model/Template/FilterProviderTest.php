@@ -13,16 +13,16 @@ class FilterProviderTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_objectManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_filterMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_filterMock = $this->createMock(\Magento\Cms\Model\Template\Filter::class);
         $this->_objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
@@ -58,10 +58,11 @@ class FilterProviderTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @covers \Magento\Cms\Model\Template\FilterProvider::getPageFilter
-     * @expectedException \Exception
      */
     public function testGetPageWrongInstance()
     {
+        $this->expectException(\Exception::class);
+
         $someClassMock = $this->createMock('SomeClass');
         $objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
         $objectManagerMock->expects($this->once())->method('get')->will($this->returnValue($someClassMock));

@@ -12,7 +12,7 @@ namespace Magento\Framework\Data\Test\Unit\Form\Element;
 class ImagefileTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_objectManagerMock;
 
@@ -21,7 +21,7 @@ class ImagefileTest extends \PHPUnit\Framework\TestCase
      */
     protected $_imagefile;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $factoryMock = $this->createMock(\Magento\Framework\Data\Form\Element\Factory::class);
         $collectionFactoryMock = $this->createMock(\Magento\Framework\Data\Form\Element\CollectionFactory::class);

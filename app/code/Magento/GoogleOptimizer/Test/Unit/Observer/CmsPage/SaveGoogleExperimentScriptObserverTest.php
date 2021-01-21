@@ -8,27 +8,27 @@ namespace Magento\GoogleOptimizer\Test\Unit\Observer\CmsPage;
 class SaveGoogleExperimentScriptObserverTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_helperMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_eventObserverMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_pageMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_codeMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_requestMock;
 
@@ -42,7 +42,7 @@ class SaveGoogleExperimentScriptObserverTest extends \PHPUnit\Framework\TestCase
      */
     protected $_storeId;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_helperMock = $this->createMock(\Magento\GoogleOptimizer\Helper\Data::class);
         $this->_codeMock = $this->createMock(\Magento\GoogleOptimizer\Model\Code::class);
@@ -171,11 +171,12 @@ class SaveGoogleExperimentScriptObserverTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Code does not exist
      */
     public function testEditingCodeIfCodeModelIsNotFound()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Code does not exist');
+
         $experimentScript = 'some string';
         $codeId = 5;
 

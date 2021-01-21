@@ -13,11 +13,11 @@ class TaxSetupTest extends \PHPUnit\Framework\TestCase
     protected $taxSetup;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $typeConfigMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->typeConfigMock = $this->createMock(\Magento\Catalog\Model\ProductTypes\ConfigInterface::class);
 

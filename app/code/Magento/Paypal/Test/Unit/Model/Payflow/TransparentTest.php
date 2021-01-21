@@ -26,7 +26,7 @@ use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
 use Magento\Vault\Api\Data\PaymentTokenInterfaceFactory;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * Paypal transparent test class
@@ -75,7 +75,7 @@ class TransparentTest extends \PHPUnit\Framework\TestCase
      */
     private $order;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->initPayment();
 
@@ -200,7 +200,7 @@ class TransparentTest extends \PHPUnit\Framework\TestCase
                 ['setVaultPaymentToken', 'getVaultPaymentToken', 'setNotificationMessage', 'getNotificationMessage']
             )
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $paymentExtensionInterfaceFactory->method('create')->willReturn($orderPaymentExtension);
 

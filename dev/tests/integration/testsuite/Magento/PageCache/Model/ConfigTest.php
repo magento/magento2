@@ -12,7 +12,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
      */
     private $config;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $readFactoryMock = $this->createMock(\Magento\Framework\Filesystem\Directory\ReadFactory::class);
         $modulesDirectoryMock = $this->createMock(\Magento\Framework\Filesystem\Directory\Write::class);
@@ -31,7 +31,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             $this->returnValue(file_get_contents(__DIR__ . '/_files/test.vcl'))
         );
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject $vclTemplateLocator */
+        /** @var \PHPUnit\Framework\MockObject\MockObject $vclTemplateLocator */
         $vclTemplateLocator = $this->getMockBuilder(\Magento\PageCache\Model\Varnish\VclTemplateLocator::class)
             ->disableOriginalConstructor()
             ->setMethods(['getTemplate'])
@@ -40,7 +40,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             ->method('getTemplate')
             ->will($this->returnValue(file_get_contents(__DIR__ . '/_files/test.vcl')));
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject $vclTemplateLocator */
+        /** @var \PHPUnit\Framework\MockObject\MockObject $vclTemplateLocator */
         $vclGeneratorFactory = $this->getMockBuilder(\Magento\PageCache\Model\Varnish\VclGeneratorFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])

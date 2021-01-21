@@ -16,12 +16,12 @@ use Magento\Framework\View\Element\UiComponent\ObserverInterface;
 class ProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var UiComponentInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var UiComponentInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $component;
 
     /**
-     * @var ObserverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObserverInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $observer;
 
@@ -30,7 +30,7 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
      */
     protected $processor;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->component = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponentInterface::class)
             ->getMockForAbstractClass();

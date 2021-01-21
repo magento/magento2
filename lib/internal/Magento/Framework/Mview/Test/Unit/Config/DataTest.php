@@ -13,17 +13,17 @@ class DataTest extends \PHPUnit\Framework\TestCase
     private $config;
 
     /**
-     * @var \Magento\Framework\Mview\Config\Reader|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Mview\Config\Reader|\PHPUnit\Framework\MockObject\MockObject
      */
     private $reader;
 
     /**
-     * @var \Magento\Framework\Config\CacheInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Config\CacheInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $cache;
 
     /**
-     * @var \Magento\Framework\Mview\View\State\CollectionInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Mview\View\State\CollectionInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $stateCollection;
 
@@ -38,11 +38,11 @@ class DataTest extends \PHPUnit\Framework\TestCase
     private $views = ['view1' => [], 'view3' => []];
 
     /**
-     * @var \Magento\Framework\Serialize\SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Serialize\SerializerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $serializerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->reader = $this->createPartialMock(\Magento\Framework\Mview\Config\Reader::class, ['read']);
         $this->cache = $this->getMockForAbstractClass(

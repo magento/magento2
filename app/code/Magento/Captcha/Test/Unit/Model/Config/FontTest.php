@@ -26,14 +26,14 @@ class FontTest extends TestCase
     private $model;
 
     /**
-     * @var HelperData|\PHPUnit_Framework_MockObject_MockObject
+     * @var HelperData|\PHPUnit\Framework\MockObject\MockObject
      */
     private $helperDataMock;
 
     /**
      * Setup Environment For Testing
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->helperDataMock = $this->createMock(HelperData::class);
 

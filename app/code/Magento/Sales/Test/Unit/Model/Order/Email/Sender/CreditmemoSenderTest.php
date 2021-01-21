@@ -22,16 +22,16 @@ class CreditmemoSenderTest extends AbstractSenderTest
     protected $sender;
 
     /**
-     * @var \Magento\Sales\Model\Order\Creditmemo|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Creditmemo|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $creditmemoMock;
 
     /**
-     * @var \Magento\Sales\Model\ResourceModel\EntityAbstract|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\ResourceModel\EntityAbstract|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $creditmemoResourceMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->stepMockSetup();
 

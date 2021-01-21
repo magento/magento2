@@ -21,21 +21,21 @@ use Symfony\Component\Console\Output\OutputInterface;
 class JobSetMaintenanceModeTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var Status|\PHPUnit_Framework_MockObject_MockObject
+     * @var Status|\PHPUnit\Framework\MockObject\MockObject
      */
     private $statusMock;
 
     /**
-     * @var OutputInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var OutputInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $outputMock;
 
     /**
-     * @var ObjectManagerProvider|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerProvider|\PHPUnit\Framework\MockObject\MockObject
      */
     private $objectManagerProviderMock;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->objectManagerProviderMock = $this->createMock(ObjectManagerProvider::class);
         $objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class, [], '', false);
@@ -50,7 +50,7 @@ class JobSetMaintenanceModeTest extends \PHPUnit\Framework\TestCase
         $this->objectManagerProviderMock->expects($this->once())->method('get')->willReturn($objectManager);
 
         $this->statusMock = $this->createMock(Status::class);
-        $this->outputMock = $this->createMock(OutputInterface::class);
+        $this->outputMock = $this->getMockForAbstractClass(OutputInterface::class);
     }
 
     public function testExecuteMaintenanceModeDisable()

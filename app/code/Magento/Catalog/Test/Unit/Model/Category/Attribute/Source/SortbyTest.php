@@ -20,7 +20,7 @@ class SortbyTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($validResult, $this->model->getAllOptions());
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $helper = new ObjectManager($this);
         $this->model = $helper->getObject(

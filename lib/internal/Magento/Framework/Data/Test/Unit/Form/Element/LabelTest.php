@@ -18,7 +18,7 @@ class LabelTest extends \PHPUnit\Framework\TestCase
      */
     protected $_label;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $factoryMock = $this->createMock(\Magento\Framework\Data\Form\Element\Factory::class);
         $collectionFactoryMock = $this->createMock(\Magento\Framework\Data\Form\Element\CollectionFactory::class);

@@ -14,21 +14,21 @@ class DesignLoaderTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_areaListMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_requestMock;
 
     /**
-     * @var \Magento\Framework\App\State|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\State|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $appState;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_areaListMock = $this->createMock(\Magento\Framework\App\AreaList::class);
         $this->_requestMock = $this->createMock(\Magento\Framework\App\Request\Http::class);

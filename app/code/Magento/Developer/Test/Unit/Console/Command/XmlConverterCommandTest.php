@@ -15,7 +15,7 @@ use Magento\Framework\XsltProcessor\XsltProcessorFactory;
 class XmlConverterCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var Formatter|\PHPUnit_Framework_MockObject_MockObject
+     * @var Formatter|\PHPUnit\Framework\MockObject\MockObject
      */
     private $formatter;
 
@@ -25,16 +25,16 @@ class XmlConverterCommandTest extends \PHPUnit\Framework\TestCase
     private $command;
 
     /**
-     * @var DomDocumentFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var DomDocumentFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $domFactory;
 
     /**
-     * @var XsltProcessorFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var XsltProcessorFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $xsltProcessorFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         if (!function_exists('libxml_set_external_entity_loader')) {
             $this->markTestSkipped('Skipped on HHVM. Will be fixed in MAGETWO-45033');
@@ -74,11 +74,12 @@ class XmlConverterCommandTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Not enough arguments
      */
     public function testWrongParameter()
     {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Not enough arguments');
+
         $commandTester = new CommandTester($this->command);
         $commandTester->execute([]);
     }

@@ -22,13 +22,13 @@ class ErrorProcessorTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Framework\Json\Encoder */
     protected $encoderMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $_appStateMock;
 
     /** @var \Psr\Log\LoggerInterface */
     protected $_loggerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         /** Set up mocks for SUT. */
         $this->encoderMock = $this->getMockBuilder(\Magento\Framework\Json\Encoder::class)
@@ -57,7 +57,7 @@ class ErrorProcessorTest extends \PHPUnit\Framework\TestCase
         parent::setUp();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_errorProcessor);
         unset($this->encoderMock);

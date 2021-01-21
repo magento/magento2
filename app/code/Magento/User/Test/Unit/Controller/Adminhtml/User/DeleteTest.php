@@ -20,44 +20,44 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
     private $controller;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\RequestInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\RequestInterface
      */
     private $requestMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\ResponseInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\ResponseInterface
      */
     private $responseMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Session
+     * @var \PHPUnit\Framework\MockObject\MockObject|Session
      */
     private $authSessionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\ObjectManagerInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\ObjectManagerInterface
      */
     private $objectManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\User\Model\UserFactory
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\User\Model\UserFactory
      */
     private $userFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\User\Model\User
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\User\Model\User
      */
     private $userMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Message\ManagerInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Message\ManagerInterface
      */
     private $messageManagerMock;
 
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerMock = $this->getMockBuilder(\Magento\Framework\ObjectManager\ObjectManager::class)
             ->disableOriginalConstructor()

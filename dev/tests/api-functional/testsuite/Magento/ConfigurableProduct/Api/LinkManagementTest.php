@@ -35,7 +35,7 @@ class LinkManagementTest extends WebapiAbstract
     /**
      * Execute per test initialization
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->attributeRepository = $this->objectManager->get(\Magento\Eav\Model\AttributeRepository::class);

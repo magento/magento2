@@ -26,7 +26,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
     /**
      * Customer address entity adapter mock
      *
-     * @var Address|\PHPUnit_Framework_MockObject_MockObject
+     * @var Address|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_model;
 
@@ -37,7 +37,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
      */
     protected $_websites = [1 => 'website1', 2 => 'website2'];
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject |\Magento\Store\Model\StoreManager  */
+    /** @var \PHPUnit\Framework\MockObject\MockObject |\Magento\Store\Model\StoreManager  */
     protected $_storeManager;
 
     /**
@@ -115,19 +115,19 @@ class AddressTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @var \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface
-     * |\PHPUnit_Framework_MockObject_MockObject
+     * |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $errorAggregator;
 
     /**
-     * @var AddressAttribute\Source\CountryWithWebsites|\PHPUnit_Framework_MockObject_MockObject
+     * @var AddressAttribute\Source\CountryWithWebsites|\PHPUnit\Framework\MockObject\MockObject
      */
     private $countryWithWebsites;
 
     /**
      * Init entity adapter model
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_objectManagerMock = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_stringLib = new \Magento\Framework\Stdlib\StringUtils();
@@ -156,7 +156,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
     /**
      * Unset entity adapter model
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_model);
     }
@@ -208,7 +208,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
     /**
      * Create mock of attribute collection, so it can be used for tests
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Data\Collection
+     * @return \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Data\Collection
      */
     protected function _createAttrCollectionMock()
     {
@@ -250,11 +250,11 @@ class AddressTest extends \PHPUnit\Framework\TestCase
     /**
      * Create mock of customer storage, so it can be used for tests
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function _createCustomerStorageMock()
     {
-        /** @var $customerStorage Storage|\PHPUnit_Framework_MockObject_MockObject */
+        /** @var $customerStorage Storage|\PHPUnit\Framework\MockObject\MockObject */
         $customerStorage = $this->createMock(Storage::class);
         $customerStorage->expects($this->any())
             ->method('getCustomerId')
@@ -279,7 +279,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
     /**
      * Create simple mock of customer entity, so it can be used for tests
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function _createCustomerEntityMock()
     {
@@ -330,7 +330,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
     /**
      * Create mock for customer address model class
      *
-     * @return Address|\PHPUnit_Framework_MockObject_MockObject
+     * @return Address|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function _getModelMock()
     {
@@ -519,7 +519,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
      *
      * @param array $addRows
      * @param array $updateRows
-     * @return Address|\PHPUnit_Framework_MockObject_MockObject
+     * @return Address|\PHPUnit\Framework\MockObject\MockObject
      */
     public function validateSaveAddressEntities(array $addRows, array $updateRows)
     {
@@ -533,7 +533,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
      * Validation method for _deleteAddressEntities (callback for _deleteAddressEntities)
      *
      * @param array $deleteRowIds
-     * @return Address|\PHPUnit_Framework_MockObject_MockObject
+     * @return Address|\PHPUnit\Framework\MockObject\MockObject
      */
     public function validateDeleteAddressEntities(array $deleteRowIds)
     {

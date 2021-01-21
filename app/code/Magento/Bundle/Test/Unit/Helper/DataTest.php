@@ -10,7 +10,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class DataTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Catalog\Model\ProductTypes\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\ProductTypes\ConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $config;
 
@@ -19,7 +19,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
      */
     protected $helper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->config = $this->createMock(\Magento\Catalog\Model\ProductTypes\ConfigInterface::class);
         $this->helper = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))->getObject(

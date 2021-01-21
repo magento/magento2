@@ -65,7 +65,7 @@ class ImportTest extends \PHPUnit\Framework\TestCase
         'custom_behavior' => \Magento\ImportExport\Model\Source\Import\Behavior\Custom::class,
     ];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_importConfig = Bootstrap::getObjectManager()->create(
             Import\Config::class
@@ -134,7 +134,7 @@ class ImportTest extends \PHPUnit\Framework\TestCase
         $this->_model->setData(Import::FIELD_NAME_VALIDATION_STRATEGY, $validationStrategy);
         $this->_model->setData(Import::FIELD_NAME_ALLOWED_ERROR_COUNT, 0);
 
-        /** @var \Magento\ImportExport\Model\Import\AbstractSource|\PHPUnit_Framework_MockObject_MockObject $source */
+        /** @var \Magento\ImportExport\Model\Import\AbstractSource|\PHPUnit\Framework\MockObject\MockObject $source */
         $source = $this->getMockForAbstractClass(
             \Magento\ImportExport\Model\Import\AbstractSource::class,
             [['sku', 'name']]

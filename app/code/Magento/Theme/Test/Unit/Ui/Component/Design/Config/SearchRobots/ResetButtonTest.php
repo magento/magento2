@@ -15,27 +15,27 @@ use Magento\Ui\Component\Form\Field;
 class ResetButtonTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | ContextInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject | ContextInterface
      */
     private $contextMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | UiComponentFactory
+     * @var \PHPUnit\Framework\MockObject\MockObject | UiComponentFactory
      */
     private $componentFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | ScopeConfigInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject | ScopeConfigInterface
      */
     private $scopeConfigMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject |
+     * @var \PHPUnit\Framework\MockObject\MockObject |
      */
     private $processorMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject |
+     * @var \PHPUnit\Framework\MockObject\MockObject |
      */
     private $wrappingComponentMock;
 
@@ -44,17 +44,17 @@ class ResetButtonTest extends \PHPUnit\Framework\TestCase
      */
     private $resetButton;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->contextMock = $this->getMockBuilder(ContextInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->componentFactoryMock = $this->getMockBuilder(UiComponentFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->processorMock = $this->getMockBuilder(Processor::class)
             ->disableOriginalConstructor()
             ->getMock();

@@ -27,24 +27,24 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     private $collection;
 
     /**
-     * @var ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $configMock;
 
     /**
-     * @var CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $statesFactoryMock;
 
     /**
-     * @var EntityFactoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var EntityFactoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $entityFactoryMock;
 
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
@@ -294,11 +294,11 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|IndexerInterface
+     * @return \PHPUnit\Framework\MockObject\MockObject|IndexerInterface
      */
     private function getIndexerMock(array $data = [])
     {
-        /** @var \PHPUnit_Framework_MockObject_MockObject|IndexerInterface $indexer */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|IndexerInterface $indexer */
         $indexer = $this->getMockBuilder(IndexerInterface::class)
             ->getMockForAbstractClass();
         if (isset($data['indexer_id'])) {
@@ -310,11 +310,11 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param array $data
-     * @return \PHPUnit_Framework_MockObject_MockObject|State
+     * @return \PHPUnit\Framework\MockObject\MockObject|State
      */
     private function getStateMock(array $data = [])
     {
-        /** @var \PHPUnit_Framework_MockObject_MockObject|State $state */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|State $state */
         $state = $this->getMockBuilder(State::class)
             ->disableOriginalConstructor()
             ->getMock();

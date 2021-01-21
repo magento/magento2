@@ -14,27 +14,27 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class UpdaterTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Quote\Model\Quote\Item\Updater |\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Model\Quote\Item\Updater |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $object;
 
     /**
-     * @var \Magento\Quote\Model\Quote\Item |\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Model\Quote\Item |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $itemMock;
 
     /**
-     * @var \Magento\CatalogInventory\Model\Stock\Item |\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogInventory\Model\Stock\Item |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $stockItemMock;
 
     /**
-     * @var \Magento\Framework\Locale\Format |\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Locale\Format |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $localeFormat;
 
     /**
-     * @var \Magento\Catalog\Model\Product |\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $productMock;
 
@@ -43,7 +43,7 @@ class UpdaterTest extends \PHPUnit\Framework\TestCase
      */
     private $serializer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->productMock = $this->createPartialMock(\Magento\Catalog\Model\Product::class, [
                 'getStockItem',
@@ -91,11 +91,12 @@ class UpdaterTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The qty value is required to update quote item.
      */
     public function testUpdateNoQty()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('The qty value is required to update quote item.');
+
         $this->object->update($this->itemMock, []);
     }
 

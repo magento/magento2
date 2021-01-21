@@ -9,16 +9,16 @@ namespace Magento\Framework\Test\Unit;
 class ShellTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Shell\CommandRendererInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Shell\CommandRendererInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $commandRenderer;
 
     /**
-     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Psr\Log\LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $logger;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->logger = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)
             ->disableOriginalConstructor()

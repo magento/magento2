@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\CatalogSearch\Test\Unit\Model\Layer\Filter;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * Test for \Magento\CatalogSearch\Model\Layer\Filter\Price
@@ -53,7 +53,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
     /** @var  \Magento\Catalog\Model\Layer\State|MockObject */
     private $state;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->request = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
             ->disableOriginalConstructor()

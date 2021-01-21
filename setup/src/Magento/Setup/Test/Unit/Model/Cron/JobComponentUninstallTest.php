@@ -21,51 +21,51 @@ class JobComponentUninstallTest extends \PHPUnit\Framework\TestCase
     private $job;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Symfony\Component\Console\Output\OutputInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Symfony\Component\Console\Output\OutputInterface
      */
     private $output;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\Cron\Status
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Setup\Model\Cron\Status
      */
     private $status;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\Updater
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Setup\Model\Updater
      */
     private $updater;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|ObjectManagerInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|ObjectManagerInterface
      */
     private $objectManager;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\ObjectManagerProvider
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Setup\Model\ObjectManagerProvider
      */
     private $objectManagerProvider;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\Cron\Helper\ModuleUninstall
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Setup\Model\Cron\Helper\ModuleUninstall
      */
     private $moduleUninstallHelper;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\Cron\Helper\ThemeUninstall
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Setup\Model\Cron\Helper\ThemeUninstall
      */
     private $themeUninstallHelper;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Composer\ComposerInformation
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Composer\ComposerInformation
      */
     private $composerInformation;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\Cron\Queue
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Setup\Model\Cron\Queue
      */
     private $quence;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->output = $this->getMockForAbstractClass(
             \Symfony\Component\Console\Output\OutputInterface::class,

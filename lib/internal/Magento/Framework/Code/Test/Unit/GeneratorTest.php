@@ -16,7 +16,7 @@ use Psr\Log\LoggerInterface;
 use Magento\Framework\ObjectManager\Code\Generator\Factory;
 use Magento\Framework\ObjectManager\Code\Generator\Proxy;
 use Magento\Framework\Interception\Code\Generator\Interceptor;
-use PHPUnit_Framework_MockObject_MockObject as Mock;
+use PHPUnit\Framework\MockObject\MockObject as Mock;
 use PHPUnit\Framework\TestCase;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Code\Generator\EntityAbstract;
@@ -81,7 +81,7 @@ class GeneratorTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->definedClassesMock = $this->createMock(DefinedClasses::class);
         $this->ioObjectMock = $this->getMockBuilder(Io::class)
@@ -90,10 +90,10 @@ class GeneratorTest extends TestCase
         $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
         $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->objectManagerConfigMock = $this->getMockBuilder(ConfigInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->model = new Generator(
             $this->ioObjectMock,

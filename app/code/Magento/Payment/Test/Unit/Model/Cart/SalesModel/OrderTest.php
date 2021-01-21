@@ -10,10 +10,10 @@ class OrderTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Payment\Model\Cart\SalesModel\Order */
     protected $_model;
 
-    /** @var \Magento\Sales\Model\Order|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Sales\Model\Order|\PHPUnit\Framework\MockObject\MockObject */
     protected $_orderMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_orderMock = $this->createMock(\Magento\Sales\Model\Order::class);
         $this->_model = new \Magento\Payment\Model\Cart\SalesModel\Order($this->_orderMock);

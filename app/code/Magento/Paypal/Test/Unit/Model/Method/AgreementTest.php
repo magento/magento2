@@ -18,11 +18,11 @@ class AgreementTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_apiNvpMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 

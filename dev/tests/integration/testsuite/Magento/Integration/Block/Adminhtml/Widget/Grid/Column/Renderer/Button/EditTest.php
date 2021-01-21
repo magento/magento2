@@ -19,7 +19,7 @@ class EditTest extends \PHPUnit\Framework\TestCase
      */
     protected $editButtonBlock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();

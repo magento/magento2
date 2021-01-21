@@ -19,11 +19,11 @@ class DataSourcePoolTest extends \PHPUnit\Framework\TestCase
     protected $dataSourcePool;
 
     /**
-     * @var \Magento\Framework\View\Element\BlockFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Element\BlockFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $blockFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->blockFactory = $this->getMockBuilder(\Magento\Framework\View\Element\BlockFactory::class)
             ->disableOriginalConstructor()
@@ -47,7 +47,7 @@ class DataSourcePoolTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param $blockClass
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function createBlock($blockClass)
     {

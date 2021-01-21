@@ -18,11 +18,11 @@ class ListCompareTest extends \PHPUnit\Framework\TestCase
     protected $block;
 
     /**
-     * @var \Magento\Framework\View\LayoutInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\LayoutInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $layout;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->layout = $this->createPartialMock(\Magento\Framework\View\Layout::class, ['getBlock']);
 
@@ -38,7 +38,7 @@ class ListCompareTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->block = null;
     }

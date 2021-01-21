@@ -16,18 +16,18 @@ class EmailLinkTest extends \PHPUnit\Framework\TestCase
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    /** @var \Magento\Wishlist\Helper\Data|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Wishlist\Helper\Data|\PHPUnit\Framework\MockObject\MockObject */
     protected $wishlistHelper;
 
-    /** @var \Magento\Framework\App\Rss\UrlBuilderInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\Rss\UrlBuilderInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $urlBuilder;
 
     /**
-     * @var \Magento\Framework\Url\EncoderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Url\EncoderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $urlEncoder;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $wishlist = $this->createPartialMock(\Magento\Wishlist\Model\Wishlist::class, ['getId', 'getSharingCode']);
         $wishlist->expects($this->any())->method('getId')->will($this->returnValue(5));

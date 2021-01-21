@@ -11,10 +11,10 @@ use Magento\Framework\Controller\ResultFactory;
 
 class MassDeleteTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \Magento\Framework\Message\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Message\ManagerInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $messageManager;
 
-    /** @var  \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $objectManager;
 
     /** @var \Magento\Search\Controller\Adminhtml\Term\MassDelete */
@@ -23,26 +23,26 @@ class MassDeleteTest extends \PHPUnit\Framework\TestCase
     /** @var ObjectManagerHelper */
     private $objectManagerHelper;
 
-    /** @var \Magento\Backend\App\Action\Context|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Backend\App\Action\Context|\PHPUnit\Framework\MockObject\MockObject */
     private $context;
 
-    /** @var \Magento\Framework\View\Result\PageFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\View\Result\PageFactory|\PHPUnit\Framework\MockObject\MockObject */
     private $pageFactory;
 
-    /** @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\RequestInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $request;
 
     /**
-     * @var \Magento\Framework\Controller\ResultFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Controller\ResultFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resultFactoryMock;
 
     /**
-     * @var \Magento\Backend\Model\View\Result\Redirect|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\Model\View\Result\Redirect|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resultRedirectMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->request = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
             ->disableOriginalConstructor()
@@ -120,7 +120,7 @@ class MassDeleteTest extends \PHPUnit\Framework\TestCase
     /**
      * @param $index
      * @param $id
-     * @return \Magento\Search\Model\Query|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Search\Model\Query|\PHPUnit\Framework\MockObject\MockObject
      */
     private function createQuery($index, $id)
     {

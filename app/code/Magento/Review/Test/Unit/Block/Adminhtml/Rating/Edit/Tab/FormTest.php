@@ -93,7 +93,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
      */
     protected $block;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->ratingOptionCollection = $this->createMock(
             \Magento\Review\Model\ResourceModel\Rating\Option\Collection::class

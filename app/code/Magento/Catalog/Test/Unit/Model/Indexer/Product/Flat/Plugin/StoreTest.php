@@ -8,21 +8,21 @@ namespace Magento\Catalog\Test\Unit\Model\Indexer\Product\Flat\Plugin;
 class StoreTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Catalog\Model\Indexer\Product\Flat\Processor|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Indexer\Product\Flat\Processor|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $processorMock;
 
     /**
-     * @var \Magento\Store\Model\Store|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\Store|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $subjectMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->processorMock = $this->createPartialMock(
             \Magento\Catalog\Model\Indexer\Product\Flat\Processor::class,

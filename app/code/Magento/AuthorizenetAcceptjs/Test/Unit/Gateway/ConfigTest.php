@@ -26,9 +26,9 @@ class ConfigTest extends TestCase
      */
     private $scopeConfigMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
+        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
 
         $objectManager = new ObjectManager($this);
         $this->model = $objectManager->getObject(

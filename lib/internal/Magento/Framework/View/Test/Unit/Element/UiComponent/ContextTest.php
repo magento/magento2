@@ -33,7 +33,7 @@ class ContextTest extends \PHPUnit\Framework\TestCase
      */
     private $authorization;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $pageLayout = $this->getMockBuilder(\Magento\Framework\View\LayoutInterface::class)->getMock();
         $request = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
@@ -49,7 +49,7 @@ class ContextTest extends \PHPUnit\Framework\TestCase
                 ->getMock();
         $this->actionPool = $this->getMockBuilder(ActionPoolInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $actionPoolFactory->method('create')->willReturn($this->actionPool);
         $contentTypeFactory =
             $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\ContentType\ContentTypeFactory::class)

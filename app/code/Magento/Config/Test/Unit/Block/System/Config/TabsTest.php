@@ -13,21 +13,21 @@ class TabsTest extends \PHPUnit\Framework\TestCase
     protected $_object;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_structureMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_requestMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_urlBuilderMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_requestMock = $this->createMock(\Magento\Framework\App\RequestInterface::class);
         $this->_requestMock->expects(
@@ -52,7 +52,7 @@ class TabsTest extends \PHPUnit\Framework\TestCase
         $this->_object = $helper->getObject(\Magento\Config\Block\System\Config\Tabs::class, $data);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_object);
         unset($this->_requestMock);

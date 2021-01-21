@@ -14,7 +14,7 @@ class MultiselectTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $testHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $escaper = new Escaper();

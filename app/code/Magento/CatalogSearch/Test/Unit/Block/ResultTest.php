@@ -12,34 +12,34 @@ use \Magento\CatalogSearch\Block\Result;
  */
 class ResultTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var  \Magento\Search\Model\Query|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \Magento\Search\Model\Query|\PHPUnit\Framework\MockObject\MockObject */
     private $queryMock;
 
-    /** @var  \Magento\Search\Model\QueryFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \Magento\Search\Model\QueryFactory|\PHPUnit\Framework\MockObject\MockObject */
     private $queryFactoryMock;
 
     /** @var \Magento\CatalogSearch\Block\Result */
     protected $model;
 
-    /** @var \Magento\Framework\View\Element\Template\Context|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\View\Element\Template\Context|\PHPUnit\Framework\MockObject\MockObject */
     protected $contextMock;
 
-    /** @var \Magento\Catalog\Model\Layer|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Catalog\Model\Layer|\PHPUnit\Framework\MockObject\MockObject */
     protected $layerMock;
 
-    /** @var \Magento\CatalogSearch\Helper\Data|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\CatalogSearch\Helper\Data|\PHPUnit\Framework\MockObject\MockObject */
     protected $dataMock;
 
     /**
-     * @var \Magento\Catalog\Block\Product\ListProduct|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Block\Product\ListProduct|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $childBlockMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->contextMock = $this->createMock(\Magento\Framework\View\Element\Template\Context::class);
         $this->layerMock = $this->createMock(\Magento\Catalog\Model\Layer\Search::class);
-        /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Layer\Resolver $layerResolver */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Model\Layer\Resolver $layerResolver */
         $layerResolver = $this->getMockBuilder(\Magento\Catalog\Model\Layer\Resolver::class)
             ->disableOriginalConstructor()
             ->setMethods(['get', 'create'])

@@ -84,7 +84,7 @@ class AccountManagementTest extends WebapiAbstract
     /**
      * Execute per test initialization.
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->accountManagement = Bootstrap::getObjectManager()->get(
             \Magento\Customer\Api\AccountManagementInterface::class
@@ -125,7 +125,7 @@ class AccountManagementTest extends WebapiAbstract
         }
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         if (!empty($this->currentCustomerId)) {
             foreach ($this->currentCustomerId as $customerId) {

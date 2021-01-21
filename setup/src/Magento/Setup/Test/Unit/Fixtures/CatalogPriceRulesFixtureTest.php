@@ -14,7 +14,7 @@ use \Magento\Setup\Fixtures\CatalogPriceRulesFixture;
 class CatalogPriceRulesFixtureTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Fixtures\FixtureModel
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Setup\Fixtures\FixtureModel
      */
     private $fixtureModelMock;
 
@@ -23,7 +23,7 @@ class CatalogPriceRulesFixtureTest extends \PHPUnit\Framework\TestCase
      */
     private $model;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->fixtureModelMock = $this->createMock(\Magento\Setup\Fixtures\FixtureModel::class);
 

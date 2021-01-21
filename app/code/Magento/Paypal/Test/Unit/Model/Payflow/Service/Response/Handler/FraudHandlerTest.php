@@ -14,12 +14,12 @@ use Magento\Paypal\Model\Payflowpro;
 class FraudHandlerTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var InfoInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var InfoInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     private $paymentMock;
 
     /**
-     * @var Object | \PHPUnit_Framework_MockObject_MockObject
+     * @var Object | \PHPUnit\Framework\MockObject\MockObject
      */
     private $responseMock;
 
@@ -29,11 +29,11 @@ class FraudHandlerTest extends \PHPUnit\Framework\TestCase
     private $fraudHandler;
 
     /**
-     * @var Info | \PHPUnit_Framework_MockObject_MockObject
+     * @var Info | \PHPUnit\Framework\MockObject\MockObject
      */
     private $paypalInfoManagerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->paymentMock = $this->getMockBuilder(\Magento\Payment\Model\InfoInterface::class)
             ->getMock();

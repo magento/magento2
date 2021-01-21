@@ -13,7 +13,7 @@ use Magento\Framework\View\Design\Fallback\RulePool;
 class LocaleFileTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $resolver;
 
@@ -22,7 +22,7 @@ class LocaleFileTest extends \PHPUnit\Framework\TestCase
      */
     protected $object;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->resolver = $this->createMock(
             \Magento\Framework\View\Design\FileResolution\Fallback\ResolverInterface::class

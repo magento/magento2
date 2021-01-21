@@ -16,7 +16,7 @@ use Magento\Framework\Config\ScopeInterface;
 use Magento\Framework\Flag;
 use Magento\Framework\FlagManager;
 use Magento\Framework\Stdlib\ArrayUtils;
-use PHPUnit_Framework_MockObject_MockObject as Mock;
+use PHPUnit\Framework\MockObject\MockObject as Mock;
 
 /**
  * Test for Importer.
@@ -79,7 +79,7 @@ class ImporterTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->flagManagerMock = $this->getMockBuilder(FlagManager::class)
             ->setMethods(['create', 'getFlagData', 'saveFlag'])
@@ -167,11 +167,12 @@ class ImporterTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\State\InvalidTransitionException
-     * @expectedExceptionMessage Some error
      */
     public function testImportWithException()
     {
+        $this->expectException(\Magento\Framework\Exception\State\InvalidTransitionException::class);
+        $this->expectExceptionMessage('Some error');
+
         $data = [];
         $currentData = ['current' => '2'];
 

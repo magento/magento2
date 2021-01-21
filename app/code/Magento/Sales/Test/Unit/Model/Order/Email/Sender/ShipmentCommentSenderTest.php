@@ -15,11 +15,11 @@ class ShipmentCommentSenderTest extends AbstractSenderTest
     protected $sender;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $shipmentMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->stepMockSetup();
         $this->stepIdentityContainerInit(\Magento\Sales\Model\Order\Email\Container\ShipmentCommentIdentity::class);

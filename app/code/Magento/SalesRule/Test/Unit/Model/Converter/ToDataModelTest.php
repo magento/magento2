@@ -14,32 +14,32 @@ use Magento\SalesRule\Api\Data\RuleExtensionInterface;
 class ToDataModelTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\SalesRule\Model\RuleFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\SalesRule\Model\RuleFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $ruleFactory;
 
     /**
-     * @var \Magento\SalesRule\Api\Data\RuleInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\SalesRule\Api\Data\RuleInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $ruleDataFactory;
 
     /**
-     * @var \Magento\SalesRule\Api\Data\ConditionInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\SalesRule\Api\Data\ConditionInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $conditionDataFactory;
 
     /**
-     * @var \Magento\Framework\Reflection\DataObjectProcessor|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Reflection\DataObjectProcessor|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $dataObjectProcessor;
 
     /**
-     * @var \Magento\SalesRule\Api\Data\RuleLabelInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\SalesRule\Api\Data\RuleLabelInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $ruleLabelFactory;
 
     /**
-     * @var \Magento\SalesRule\Model\Rule|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\SalesRule\Model\Rule|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $salesRule;
 
@@ -54,11 +54,11 @@ class ToDataModelTest extends \PHPUnit\Framework\TestCase
     protected $serializer;
 
     /**
-     * @var RuleExtensionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var RuleExtensionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $extensionFactoryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->ruleFactory = $this->getMockBuilder(\Magento\SalesRule\Model\RuleFactory::class)
             ->disableOriginalConstructor()
@@ -175,7 +175,7 @@ class ToDataModelTest extends \PHPUnit\Framework\TestCase
         $array = $this->getArrayData();
         $arrayAttributes = $array;
 
-        /** @var RuleExtensionInterface|\PHPUnit_Framework_MockObject_MockObject $attributesMock */
+        /** @var RuleExtensionInterface|\PHPUnit\Framework\MockObject\MockObject $attributesMock */
         $attributesMock = $this->getMockBuilder(RuleExtensionInterface::class)
             ->getMock();
         $arrayAttributes['extension_attributes'] = $attributesMock;

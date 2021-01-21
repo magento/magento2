@@ -13,11 +13,11 @@ class AttributeSelectorTest extends \PHPUnit\Framework\TestCase
     protected $attributeSelector;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $urlBuilder;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->urlBuilder = $this->createMock(\Magento\Framework\UrlInterface::class);

@@ -24,7 +24,7 @@ class ValueTest extends \PHPUnit\Framework\TestCase
      */
     private $customOptionPriceCalculatorMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $mockedResource = $this->getMockedResource();
         $mockedCollectionFactory = $this->getMockedValueCollectionFactory();

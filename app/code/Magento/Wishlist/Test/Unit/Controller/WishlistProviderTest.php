@@ -37,7 +37,7 @@ class WishlistProviderTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -155,6 +155,6 @@ class WishlistProviderTest extends \PHPUnit\Framework\TestCase
             ->method('getParam')
             ->will($this->returnValue(1));
 
-        $this->assertEquals(false, $this->wishlistProvider->getWishlist());
+        $this->assertFalse($this->wishlistProvider->getWishlist());
     }
 }

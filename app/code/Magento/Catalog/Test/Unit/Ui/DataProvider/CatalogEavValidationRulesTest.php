@@ -7,7 +7,7 @@ namespace Magento\Catalog\Test\Unit\Ui\DataProvider;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Catalog\Ui\DataProvider\CatalogEavValidationRules;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 class CatalogEavValidationRulesTest extends \PHPUnit\Framework\TestCase
 {
@@ -24,7 +24,7 @@ class CatalogEavValidationRulesTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->catalogEavValidationRules = $this->objectManagerHelper->getObject(CatalogEavValidationRules::class);

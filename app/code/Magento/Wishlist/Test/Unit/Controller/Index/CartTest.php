@@ -150,7 +150,7 @@ class CartTest extends TestCase
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->wishlistProviderMock = $this->getMockBuilder(
             WishlistProviderInterface::class
@@ -258,7 +258,7 @@ class CartTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->cookieManagerMock = $this->createMock(CookieManagerInterface::class);
+        $this->cookieManagerMock = $this->getMockForAbstractClass(CookieManagerInterface::class);
 
         $this->cookieMetadataFactoryMock = $this->getMockBuilder(CookieMetadataFactory::class)
             ->disableOriginalConstructor()

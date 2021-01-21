@@ -15,16 +15,16 @@ class RendererTest extends \PHPUnit\Framework\TestCase
     protected $renderer;
 
     /**
-     * @var \Magento\Tax\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Tax\Helper\Data|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $taxHelper;
 
     /**
-     * @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $priceCurrency;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -57,7 +57,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param $storeId
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Sales\Model\Order\Item
+     * @return \PHPUnit\Framework\MockObject\MockObject|\Magento\Sales\Model\Order\Item
      */
     protected function getItemMockWithStoreId($storeId)
     {
@@ -341,7 +341,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
     {
         $price = 10;
 
-        /** @var \Magento\Quote\Model\Quote\Item|\PHPUnit_Framework_MockObject_MockObject $quoteItemMock */
+        /** @var \Magento\Quote\Model\Quote\Item|\PHPUnit\Framework\MockObject\MockObject $quoteItemMock */
         $quoteItemMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item::class)
             ->disableOriginalConstructor()
             ->setMethods(['getCalculationPrice', '__wakeup'])
@@ -359,7 +359,7 @@ class RendererTest extends \PHPUnit\Framework\TestCase
     {
         $price = 10;
 
-        /** @var \Magento\Sales\Model\Order\Item|\PHPUnit_Framework_MockObject_MockObject $orderItemMock */
+        /** @var \Magento\Sales\Model\Order\Item|\PHPUnit\Framework\MockObject\MockObject $orderItemMock */
         $orderItemMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Item::class)
             ->disableOriginalConstructor()
             ->setMethods(['getPrice', '__wakeup'])

@@ -21,23 +21,23 @@ class CartTest extends \PHPUnit\Framework\TestCase
     private $cartBlock;
 
     /**
-     * @var \Magento\Framework\Escaper|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Escaper|\PHPUnit\Framework\MockObject\MockObject
      */
     private $escaper;
 
-    /** @var \Magento\Checkout\Block\Cart|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Checkout\Block\Cart|\PHPUnit\Framework\MockObject\MockObject */
     private $context;
 
-    /** @var \Magento\Framework\View\LayoutInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\View\LayoutInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $layoutMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $this->context = $this->createPartialMock(Context::class, ['getEscaper', 'getLayout']);
         $quoteMock = $this->createMock(Quote::class);
         $checkoutSession = $this->createMock(Session::class);
-        $this->layoutMock = $this->createMock(LayoutInterface::class);
+        $this->layoutMock = $this->getMockForAbstractClass(LayoutInterface::class);
         $this->escaper = $objectManager->getObject(Escaper::class);
         $quoteMock->expects($this->once())->method('getAllVisibleItems')->willReturn([]);
         $checkoutSession->expects($this->any())->method('getQuote')->willReturn($quoteMock);

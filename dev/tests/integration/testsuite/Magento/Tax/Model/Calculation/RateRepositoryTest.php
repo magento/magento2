@@ -61,7 +61,7 @@ class RateRepositoryTest extends \PHPUnit\Framework\TestCase
      */
     private $dataObjectHelper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->rateRepository = $this->objectManager->get(\Magento\Tax\Api\TaxRateRepositoryInterface::class);

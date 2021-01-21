@@ -40,7 +40,7 @@ class HttpTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->response = $this->createPartialMock(
             Response::class,

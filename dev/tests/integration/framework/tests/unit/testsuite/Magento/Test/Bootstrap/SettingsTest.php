@@ -34,7 +34,7 @@ class SettingsTest extends \PHPUnit\Framework\TestCase
         $this->_fixtureDir = realpath(__DIR__ . '/_files') . '/';
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_object = new \Magento\TestFramework\Bootstrap\Settings(
             $this->_fixtureDir,
@@ -56,7 +56,7 @@ class SettingsTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->_object = null;
     }

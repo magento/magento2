@@ -11,12 +11,12 @@ use \Magento\Setup\Model\Navigation;
 class NavigationTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Zend\ServiceManager\ServiceLocatorInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Zend\ServiceManager\ServiceLocatorInterface
      */
     private $serviceLocatorMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\DeploymentConfig
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\DeploymentConfig
      */
     private $deploymentConfig;
 
@@ -25,10 +25,10 @@ class NavigationTest extends \PHPUnit\Framework\TestCase
      */
     private $navigation;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->serviceLocatorMock =
-            $this->getMockForAbstractClass(\Zend\ServiceManager\ServiceLocatorInterface::class, ['get']);
+            $this->createPartialMock(\Zend\ServiceManager\ServiceLocatorInterface::class, ['get']);
         $this->serviceLocatorMock
             ->expects($this->exactly(2))
             ->method('get')

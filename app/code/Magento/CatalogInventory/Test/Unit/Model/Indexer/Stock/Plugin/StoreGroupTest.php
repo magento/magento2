@@ -17,11 +17,11 @@ class StoreGroupTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \Magento\Framework\Indexer\IndexerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Indexer\IndexerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_indexerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_indexerMock = $this->createMock(\Magento\CatalogInventory\Model\Indexer\Stock\Processor::class);
         $this->_model = new \Magento\CatalogInventory\Model\Indexer\Stock\Plugin\StoreGroup($this->_indexerMock);

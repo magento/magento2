@@ -39,7 +39,7 @@ class CartTest extends \PHPUnit\Framework\TestCase
     /**
      * Execute per test initialization.
      */
-    public function setUp()
+    public function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $objectManager->get(\Magento\Framework\App\State::class)->setAreaCode('adminhtml');
@@ -61,7 +61,7 @@ class CartTest extends \PHPUnit\Framework\TestCase
     /**
      * Execute per test cleanup.
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->coreRegistry->unregister(RegistryConstants::CURRENT_CUSTOMER_ID);
     }

@@ -17,11 +17,11 @@ class OrderSenderTest extends AbstractSenderTest
     protected $sender;
 
     /**
-     * @var \Magento\Sales\Model\ResourceModel\EntityAbstract|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\ResourceModel\EntityAbstract|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $orderResourceMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->stepMockSetup();
 

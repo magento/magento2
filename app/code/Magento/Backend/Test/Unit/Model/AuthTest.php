@@ -18,21 +18,21 @@ class AuthTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_eventManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_credentialStorage;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_modelFactoryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_eventManagerMock = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
         $this->_credentialStorage = $this->getMockBuilder(
@@ -53,10 +53,11 @@ class AuthTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\AuthenticationException
      */
     public function testLoginFailed()
     {
+        $this->expectException(\Magento\Framework\Exception\AuthenticationException::class);
+
         $this->_modelFactoryMock
             ->expects($this->once())
             ->method('create')

@@ -17,36 +17,36 @@ class ColumnSetTest extends \PHPUnit\Framework\TestCase
     protected $_block;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_layoutMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_columnMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_factoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_subtotalsMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_totalsMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_gridMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_columnMock = $this->createPartialMock(
             \Magento\Backend\Block\Widget\Grid\Column::class,
@@ -81,7 +81,7 @@ class ColumnSetTest extends \PHPUnit\Framework\TestCase
         $this->_block->setNameInLayout('grid.columnSet');
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_block);
         unset($this->_layoutMock);
@@ -308,7 +308,7 @@ class ColumnSetTest extends \PHPUnit\Framework\TestCase
      * Retrieve prepared mock for \Magento\Backend\Model\Widget\Grid with collection
      *
      * @param \Magento\Framework\Data\Collection $collection
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function _prepareGridMock($collection)
     {
@@ -344,7 +344,7 @@ class ColumnSetTest extends \PHPUnit\Framework\TestCase
     /**
      * Prepare layout for receiving grid block
      *
-     * @param \PHPUnit_Framework_MockObject_MockObject $gridMock
+     * @param \PHPUnit\Framework\MockObject\MockObject $gridMock
      */
     protected function _prepareLayoutWithGrid($gridMock)
     {

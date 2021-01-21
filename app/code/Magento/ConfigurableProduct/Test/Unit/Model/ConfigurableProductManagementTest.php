@@ -17,12 +17,12 @@ class ConfigurableProductManagementTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Catalog\Api\ProductAttributeRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Api\ProductAttributeRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $attributeRepository;
 
     /**
-     * @var \Magento\ConfigurableProduct\Model\ProductVariationsBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\ConfigurableProduct\Model\ProductVariationsBuilder|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $productVariationBuilder;
 
@@ -32,16 +32,16 @@ class ConfigurableProductManagementTest extends \PHPUnit\Framework\TestCase
     protected $product;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $option;
 
     /**
-     * @var CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $productsFactoryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->attributeRepository = $this->createMock(\Magento\Catalog\Api\ProductAttributeRepositoryInterface::class);
         $this->product = $this->createMock(\Magento\Catalog\Api\Data\ProductInterface::class);

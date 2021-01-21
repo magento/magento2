@@ -17,12 +17,12 @@ class FsTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * @var \Magento\Framework\Backup\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Backup\Filesystem|\PHPUnit\Framework\MockObject\MockObject
      */
     private $snapshotMock;
 
     /**
-     * @var \Magento\Framework\Backup\Filesystem\Helper|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Backup\Filesystem\Helper|\PHPUnit\Framework\MockObject\MockObject
      */
     private $fsHelperMock;
 
@@ -46,7 +46,7 @@ class FsTest extends \PHPUnit\Framework\TestCase
      */
     private $ignorePaths;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->backupPath = '/some/test/path';
         $this->rootDir = '/';

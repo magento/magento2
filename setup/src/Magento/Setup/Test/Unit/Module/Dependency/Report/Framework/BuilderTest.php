@@ -14,7 +14,7 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
      */
     protected $builder;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManagerHelper = new ObjectManager($this);
         $this->builder = $objectManagerHelper->getObject(

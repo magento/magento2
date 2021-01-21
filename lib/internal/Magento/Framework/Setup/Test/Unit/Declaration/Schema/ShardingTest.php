@@ -17,10 +17,10 @@ class ShardingTest extends \PHPUnit\Framework\TestCase
     /** @var ObjectManagerHelper */
     private $objectManagerHelper;
 
-    /** @var DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var DeploymentConfig|\PHPUnit\Framework\MockObject\MockObject */
     private $deploymentConfigMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->deploymentConfigMock = $this->getMockBuilder(DeploymentConfig::class)
             ->disableOriginalConstructor()

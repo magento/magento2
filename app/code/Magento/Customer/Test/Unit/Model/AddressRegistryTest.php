@@ -15,11 +15,11 @@ class AddressRegistryTest extends \PHPUnit\Framework\TestCase
     private $unit;
 
     /**
-     * @var \Magento\Customer\Model\AddressFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\AddressFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $addressFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->addressFactory = $this->getMockBuilder(\Magento\Customer\Model\AddressFactory::class)
             ->disableOriginalConstructor()
@@ -52,10 +52,11 @@ class AddressRegistryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testRetrieveException()
     {
+        $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
+
         $addressId = 1;
         $address = $this->getMockBuilder(\Magento\Customer\Model\Address::class)
             ->setMethods(['load', 'getId', '__wakeup'])

@@ -141,7 +141,7 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         /** @var \Magento\Eav\Model\Config $eavConfig */
         $eavConfig = Bootstrap::getObjectManager()->get(\Magento\Eav\Model\Config::class);

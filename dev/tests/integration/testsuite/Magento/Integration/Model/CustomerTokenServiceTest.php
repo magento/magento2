@@ -34,7 +34,7 @@ class CustomerTokenServiceTest extends \PHPUnit\Framework\TestCase
     /**
      * Setup CustomerTokenService
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->tokenService = Bootstrap::getObjectManager()->get(
             \Magento\Integration\Model\CustomerTokenService::class

@@ -28,31 +28,31 @@ class CheckoutTest extends \PHPUnit\Framework\TestCase
     protected $objectManager;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \'Magento\Quote\Model\Quote
+     * @var \PHPUnit\Framework\MockObject\MockObject | \'Magento\Quote\Model\Quote
      */
     protected $quoteMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Api\AccountManagementInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Customer\Api\AccountManagementInterface
      */
     protected $customerAccountManagementMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\DataObject\Copy
+     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\DataObject\Copy
      */
     protected $objectCopyServiceMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Model\Session
+     * @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Customer\Model\Session
      */
     protected $customerSessionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Customer\Model\Customer
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Customer\Model\Customer
      */
     protected $customerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->customerMock = $this->createMock(\Magento\Customer\Model\Customer::class);

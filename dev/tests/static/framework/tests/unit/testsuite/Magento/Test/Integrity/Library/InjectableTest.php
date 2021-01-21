@@ -22,19 +22,19 @@ class InjectableTest extends \PHPUnit\Framework\TestCase
     protected $fileReflection;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $parameterReflection;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $declaredClass;
 
     /**
      * @inheritdoc
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->injectable = new Injectable();
         $this->fileReflection = $this->getMockBuilder(

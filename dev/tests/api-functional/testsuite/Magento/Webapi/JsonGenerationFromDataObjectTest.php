@@ -29,7 +29,7 @@ class JsonGenerationFromDataObjectTest extends \Magento\TestFramework\TestCase\W
      */
     protected $productMetadata;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_markTestAsRestOnly("JSON generation tests are intended to be executed for REST adapter only.");
 

@@ -18,17 +18,17 @@ class SearchWeightTest extends \PHPUnit\Framework\TestCase
     private $closure;
 
     /**
-     * @var \Magento\Framework\Model\AbstractModel|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\AbstractModel|\PHPUnit\Framework\MockObject\MockObject
      */
     private $attribute;
 
     /**
-     * @var \Magento\Framework\Search\Request\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Search\Request\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     private $config;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Attribute|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\ResourceModel\Attribute|\PHPUnit\Framework\MockObject\MockObject
      */
     private $attributeResourceModel;
 
@@ -40,7 +40,7 @@ class SearchWeightTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->config = $this->getMockBuilder(\Magento\Framework\Search\Request\Config::class)
             ->setMethods(['reset'])

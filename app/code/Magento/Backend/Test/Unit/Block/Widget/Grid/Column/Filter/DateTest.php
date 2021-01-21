@@ -15,28 +15,28 @@ class DateTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Backend\Block\Widget\Grid\Column\Filter\Date */
     protected $model;
 
-    /** @var \Magento\Framework\Math\Random|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Math\Random|\PHPUnit\Framework\MockObject\MockObject */
     protected $mathRandomMock;
 
-    /** @var \Magento\Framework\Locale\ResolverInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Locale\ResolverInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $localeResolverMock;
 
-    /** @var \Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $dateTimeFormatterMock;
 
-    /** @var \Magento\Backend\Block\Widget\Grid\Column|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Backend\Block\Widget\Grid\Column|\PHPUnit\Framework\MockObject\MockObject */
     protected $columnMock;
 
-    /** @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $localeDateMock;
 
-    /** @var \Magento\Framework\Escaper|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Escaper|\PHPUnit\Framework\MockObject\MockObject */
     private $escaperMock;
 
-    /** @var \Magento\Backend\Block\Context|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Backend\Block\Context|\PHPUnit\Framework\MockObject\MockObject */
     private $contextMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->mathRandomMock = $this->getMockBuilder(\Magento\Framework\Math\Random::class)
             ->disableOriginalConstructor()

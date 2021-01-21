@@ -13,57 +13,57 @@ namespace Magento\Shipping\Test\Unit\Controller\Adminhtml\Order\Shipment;
 class PrintLabelTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $shipmentLoaderMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\Shipment|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Shipment|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $shipmentMock;
 
     /**
-     * @var \Magento\Framework\App\Response\Http\FileFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Response\Http\FileFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $fileFactoryMock;
 
     /**
-     * @var \Magento\Shipping\Model\Shipping\LabelGenerator|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Shipping\Model\Shipping\LabelGenerator|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $labelGenerator;
 
     /**
-     * @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Request\Http|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $requestMock;
 
     /**
-     * @var \Magento\Framework\App\Response\Http|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Response\Http|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $responseMock;
 
     /**
-     * @var \Magento\Framework\Message\Manager|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Message\Manager|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $messageManagerMock;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $objectManagerMock;
 
     /**
-     * @var \Magento\Backend\Model\Session|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\Model\Session|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $sessionMock;
 
     /**
-     * @var \Magento\Framework\App\ActionFlag|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ActionFlag|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $actionFlag;
 
     /**
-     * @var \Magento\Backend\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\Helper\Data|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $helperMock;
 
@@ -72,7 +72,7 @@ class PrintLabelTest extends \PHPUnit\Framework\TestCase
      */
     protected $controller;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->shipmentLoaderMock = $this->createPartialMock(
             \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader::class,

@@ -10,24 +10,24 @@ class DeleteExpiredImagesTest extends \PHPUnit\Framework\TestCase
     /**
      * CAPTCHA helper
      *
-     * @var \Magento\Captcha\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Captcha\Helper\Data|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_helper;
 
     /**
      * CAPTCHA helper
      *
-     * @var \Magento\Captcha\Helper\Adminhtml\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Captcha\Helper\Adminhtml\Data|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_adminHelper;
 
     /**
-     * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_filesystem;
 
     /**
-     * @var \Magento\Store\Model\StoreManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManager|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_storeManager;
 
@@ -37,7 +37,7 @@ class DeleteExpiredImagesTest extends \PHPUnit\Framework\TestCase
     protected $_deleteExpiredImages;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\WriteInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\Directory\WriteInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_directory;
 
@@ -49,7 +49,7 @@ class DeleteExpiredImagesTest extends \PHPUnit\Framework\TestCase
     /**
      * Create mocks and model
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_helper = $this->createMock(\Magento\Captcha\Helper\Data::class);
         $this->_adminHelper = $this->createMock(\Magento\Captcha\Helper\Adminhtml\Data::class);

@@ -31,54 +31,54 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
     protected $manager;
 
     /**
-     * @var ComponentDefinition|\PHPUnit_Framework_MockObject_MockObject
+     * @var ComponentDefinition|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $componentConfigProvider;
 
     /**
-     * @var CacheInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CacheInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $cacheConfig;
 
     /**
-     * @var InterpreterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var InterpreterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $argumentInterpreter;
 
     /**
-     * @var UiReaderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var UiReaderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $uiReader;
 
     /**
-     * @var \Magento\Framework\View\Element\UiComponent\Config\ReaderFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Element\UiComponent\Config\ReaderFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $readerFactory;
 
     /**
-     * @var AggregatedFileCollector|\PHPUnit_Framework_MockObject_MockObject
+     * @var AggregatedFileCollector|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $aggregatedFileCollector;
 
     /**
-     * @var DomMergerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var DomMergerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $domMerger;
 
     /**
-     * @var ArrayObjectFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ArrayObjectFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $arrayObjectFactory;
 
     /**
-     * @var AggregatedFileCollectorFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var AggregatedFileCollectorFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $aggregatedFileCollectorFactory;
 
-    /** @var \Magento\Framework\Serialize\SerializerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Serialize\SerializerInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $serializer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->componentConfigProvider = $this->getMockBuilder(
             \Magento\Framework\View\Element\UiComponent\Config\Provider\Component\Definition::class

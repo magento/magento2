@@ -22,7 +22,7 @@ class PageTest extends \PHPUnit\Framework\TestCase
     protected $_menuSubModel;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_factoryMock;
 
@@ -31,7 +31,7 @@ class PageTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $logger = $this->createMock(\Psr\Log\LoggerInterface::class);
         $this->_menuModel = new \Magento\Backend\Model\Menu($logger);

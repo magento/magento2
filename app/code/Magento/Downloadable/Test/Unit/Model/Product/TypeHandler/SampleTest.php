@@ -16,22 +16,22 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 class SampleTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $metadataPoolMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $metadataMock;
 
     /**
-     * @var \Magento\Downloadable\Model\ResourceModel\Link|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Downloadable\Model\ResourceModel\Link|\PHPUnit\Framework\MockObject\MockObject
      */
     private $sampleResource;
 
     /**
-     * @var \Magento\Downloadable\Model\SampleFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Downloadable\Model\SampleFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $sampleFactory;
 
@@ -40,7 +40,7 @@ class SampleTest extends \PHPUnit\Framework\TestCase
      */
     private $target;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->sampleFactory = $this->getMockBuilder(\Magento\Downloadable\Model\SampleFactory::class)
@@ -79,7 +79,7 @@ class SampleTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @dataProvider saveDataProvider
-     * @param \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject $product
+     * @param \Magento\Catalog\Model\Product|\PHPUnit\Framework\MockObject\MockObject $product
      * @param array $data
      * @param array $modelData
      */
@@ -124,7 +124,7 @@ class SampleTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject $product
+     * @param \Magento\Catalog\Model\Product|\PHPUnit\Framework\MockObject\MockObject $product
      * @param array $data
      * @param array $expectedItems
      * @dataProvider deleteDataProvider
@@ -175,9 +175,9 @@ class SampleTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject $product
+     * @param \Magento\Catalog\Model\Product|\PHPUnit\Framework\MockObject\MockObject $product
      * @param array $modelData
-     * @return \Magento\Downloadable\Model\Sample|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Downloadable\Model\Sample|\PHPUnit\Framework\MockObject\MockObject
      */
     private function createSampleModel($product, array $modelData)
     {
@@ -223,7 +223,7 @@ class SampleTest extends \PHPUnit\Framework\TestCase
      * @param int $storeId
      * @param int $storeWebsiteId
      * @param array $websiteIds
-     * @return \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Catalog\Model\Product|\PHPUnit\Framework\MockObject\MockObject
      * @internal param bool $isUnlimited
      */
     private function createProductMock($id, $storeId, $storeWebsiteId, array $websiteIds)

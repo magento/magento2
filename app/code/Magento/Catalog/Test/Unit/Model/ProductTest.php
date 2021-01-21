@@ -26,7 +26,7 @@ use Magento\Store\Model\StoreManagerInterface;
 class ProductTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $productLinkRepositoryMock;
 
@@ -41,150 +41,150 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Framework\Module\Manager|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Module\Manager|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $moduleManager;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $stockItemFactoryMock;
 
     /**
-     * @var \Magento\Framework\Indexer\IndexerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Indexer\IndexerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $categoryIndexerMock;
 
     /**
-     * @var \Magento\Catalog\Model\Indexer\Product\Flat\Processor|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Indexer\Product\Flat\Processor|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $productFlatProcessor;
 
     /**
-     * @var \Magento\Catalog\Model\Indexer\Product\Price\Processor|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Indexer\Product\Price\Processor|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $productPriceProcessor;
 
     /**
-     * @var Product\Type|\PHPUnit_Framework_MockObject_MockObject
+     * @var Product\Type|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $productTypeInstanceMock;
 
     /**
-     * @var Product\Option|\PHPUnit_Framework_MockObject_MockObject
+     * @var Product\Option|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $optionInstanceMock;
 
     /**
-     * @var \Magento\Framework\Pricing\PriceInfo\Base|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\PriceInfo\Base|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_priceInfoMock;
 
     /**
-     * @var \Magento\Catalog\Model\FilterProductCustomAttribute|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\FilterProductCustomAttribute|\PHPUnit\Framework\MockObject\MockObject
      */
     private $filterCustomAttribute;
 
     /**
-     * @var \Magento\Store\Model\Store|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\Store|\PHPUnit\Framework\MockObject\MockObject
      */
     private $store;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\ResourceModel\Product|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resource;
 
     /**
-     * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Registry|\PHPUnit\Framework\MockObject\MockObject
      */
     private $registry;
 
     /**
-     * @var \Magento\Catalog\Model\Category|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Category|\PHPUnit\Framework\MockObject\MockObject
      */
     private $category;
 
     /**
-     * @var \Magento\Store\Model\Website|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\Website|\PHPUnit\Framework\MockObject\MockObject
      */
     private $website;
 
     /**
-     * @var \Magento\Framework\Indexer\IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Indexer\IndexerRegistry|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $indexerRegistryMock;
 
     /**
-     * @var \Magento\Catalog\Api\CategoryRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Api\CategoryRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $categoryRepository;
 
     /**
-     * @var \Magento\Catalog\Helper\Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Helper\Product|\PHPUnit\Framework\MockObject\MockObject
      */
     private $_catalogProduct;
 
     /**
-     * @var \Magento\Catalog\Model\Product\Image\Cache|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product\Image\Cache|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $imageCache;
 
     /**
-     * @var \Magento\Catalog\Model\Product\Image\CacheFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product\Image\CacheFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $imageCacheFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $mediaGalleryEntryFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $dataObjectHelperMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $metadataServiceMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $attributeValueFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $mediaGalleryEntryConverterPoolMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $converterMock;
 
     /**
-     * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $eventManagerMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $mediaConfig;
 
     /**
-     * @var \Magento\Framework\App\State|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\State|\PHPUnit\Framework\MockObject\MockObject
      */
     private $appStateMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $extensionAttributes;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $extensionAttributesFactory;
 
@@ -199,24 +199,24 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     private $collectionFactoryMock;
 
     /**
-     * @var ProductExtensionInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductExtensionInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $productExtAttributes;
 
     /**
-     * @var \Magento\Eav\Model\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Eav\Model\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     private $eavConfig;
 
     /**
-     * @var StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $storeManager;
 
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->categoryIndexerMock = $this->getMockForAbstractClass(\Magento\Framework\Indexer\IndexerInterface::class);
 
@@ -859,7 +859,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @param \PHPUnit_Framework_MockObject_MockObject $extensionAttributesMock
+     * @param \PHPUnit\Framework\MockObject\MockObject $extensionAttributesMock
      * @return array
      */
     private function getStatusStockProviderData($extensionAttributesMock)
@@ -1367,7 +1367,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $attributeValue2 = new \Magento\Framework\Api\AttributeValue();
         $this->attributeValueFactory->expects($this->exactly(2))->method('create')
             ->willReturnOnConsecutiveCalls($attributeValue, $attributeValue2);
-        $this->assertEquals(1, count($this->model->getCustomAttributes()));
+        $this->assertCount(1, $this->model->getCustomAttributes());
         $this->assertNotNull($this->model->getCustomAttribute($customAttributeCode));
         $this->assertEquals(
             $initialCustomAttributeValue,
@@ -1376,7 +1376,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
 
         //Change the attribute value, should reflect in getCustomAttribute
         $this->model->setCustomAttribute($customAttributeCode, $newCustomAttributeValue);
-        $this->assertEquals(1, count($this->model->getCustomAttributes()));
+        $this->assertCount(1, $this->model->getCustomAttributes());
         $this->assertNotNull($this->model->getCustomAttribute($customAttributeCode));
         $this->assertEquals(
             $newCustomAttributeValue,

@@ -14,7 +14,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
      */
     private $helper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->helper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             \Magento\Shipping\Helper\Data::class
@@ -101,7 +101,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param $code
-     * @return \Magento\Sales\Api\OrderRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Sales\Api\OrderRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private function getMockOrderRepository($code)
     {
@@ -115,7 +115,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param $code
-     * @return \Magento\Sales\Model\Order\ShipmentRepository|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Sales\Model\Order\ShipmentRepository|\PHPUnit\Framework\MockObject\MockObject
      */
     private function getMockShipmentRepository($code)
     {

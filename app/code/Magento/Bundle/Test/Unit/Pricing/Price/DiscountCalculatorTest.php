@@ -17,29 +17,29 @@ class DiscountCalculatorTest extends \PHPUnit\Framework\TestCase
     protected $calculator;
 
     /**
-     * @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $productMock;
 
     /**
-     * @var \Magento\Framework\Pricing\PriceInfo\Base |\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\PriceInfo\Base |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $priceInfoMock;
 
     /**
-     * @var \Magento\Catalog\Pricing\Price\FinalPrice|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Pricing\Price\FinalPrice|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $finalPriceMock;
 
     /**
-     * @var \Magento\Bundle\Pricing\Price\DiscountProviderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Bundle\Pricing\Price\DiscountProviderInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $priceMock;
 
     /**
      * Test setUp
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
         $this->priceInfoMock = $this->createPartialMock(
@@ -57,7 +57,7 @@ class DiscountCalculatorTest extends \PHPUnit\Framework\TestCase
      * Returns price mock with specified %
      *
      * @param int $value
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getPriceMock($value)
     {

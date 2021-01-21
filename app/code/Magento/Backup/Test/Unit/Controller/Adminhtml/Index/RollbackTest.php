@@ -19,7 +19,7 @@ class RollbackTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $objectManagerMock;
 
@@ -34,66 +34,66 @@ class RollbackTest extends \PHPUnit\Framework\TestCase
     private $rollbackController;
 
     /**
-     * @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\RequestInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $requestMock;
 
     /**
-     * @var \Magento\Framework\App\ResponseInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResponseInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $responseMock;
 
     /**
-     * @var \Magento\Backup\Model\BackupFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backup\Model\BackupFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $backupModelFactoryMock;
 
     /**
-     * @var \Magento\Backup\Model\Backup|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backup\Model\Backup|\PHPUnit\Framework\MockObject\MockObject
      */
     private $backupModelMock;
 
     /**
-     * @var \Magento\Backup\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backup\Helper\Data|\PHPUnit\Framework\MockObject\MockObject
      */
     private $dataHelperMock;
 
     /**
-     * @var \Magento\Framework\App\Response\Http\FileFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Response\Http\FileFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $fileFactoryMock;
 
     /**
-     * @var \Magento\Backend\Model\View\Result\RedirectFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\Model\View\Result\RedirectFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resultRedirectFactoryMock;
 
     /**
-     * @var \Magento\Backend\Model\View\Result\Redirect|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\Model\View\Result\Redirect|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resultRedirectMock;
 
     /**
-     * @var \Magento\Backend\Model\View\Result\Forward|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\Model\View\Result\Forward|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resultForwardMock;
 
     /**
-     * @var \Magento\Framework\Backup\Factory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Backup\Factory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $backupFactoryMock;
 
     /**
-     * @var \Magento\Framework\Backup\BackupInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Backup\BackupInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $backupManagerMock;
 
     /**
-     * @var \Magento\Backup\Model\ResourceModel\Db|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backup\Model\ResourceModel\Db|\PHPUnit\Framework\MockObject\MockObject
      */
     private $backupResourceModelMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerMock = $this->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
             ->getMock();

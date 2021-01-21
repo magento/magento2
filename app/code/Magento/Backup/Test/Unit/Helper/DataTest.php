@@ -17,11 +17,11 @@ class DataTest extends \PHPUnit\Framework\TestCase
     protected $helper;
 
     /**
-     * @var \Magento\Framework\Filesystem | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $filesystem;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->filesystem = $this->getMockBuilder(\Magento\Framework\Filesystem::class)->disableOriginalConstructor()
             ->getMock();

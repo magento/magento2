@@ -13,22 +13,22 @@ class BaseTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Sales\Model\Order\Total\Config\Base */
     private $object;
 
-    /** @var  SerializerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  SerializerInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $serializer;
 
-    /** @var \Magento\Framework\App\Cache\Type\Config|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\Cache\Type\Config|\PHPUnit\Framework\MockObject\MockObject */
     private $configCacheType;
 
-    /** @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Psr\Log\LoggerInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $logger;
 
-    /** @var \Magento\Sales\Model\Config|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Sales\Model\Config|\PHPUnit\Framework\MockObject\MockObject */
     private $salesConfig;
 
-    /** @var \Magento\Sales\Model\Order\TotalFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Sales\Model\Order\TotalFactory|\PHPUnit\Framework\MockObject\MockObject */
     private $orderTotalFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->configCacheType = $this->createMock(\Magento\Framework\App\Cache\Type\Config::class);
         $this->logger = $this->createMock(\Psr\Log\LoggerInterface::class);
@@ -81,11 +81,12 @@ class BaseTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The total model should be extended from \Magento\Sales\Model\Order\Total\AbstractTotal.
      */
     public function testGetTotalModelsInvalidTotalModel()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('The total model should be extended from \\Magento\\Sales\\Model\\Order\\Total\\AbstractTotal.');
+
         $this->salesConfig->expects($this->once())->method('getGroupTotals')->will(
             $this->returnValue([
                 'some_code' =>

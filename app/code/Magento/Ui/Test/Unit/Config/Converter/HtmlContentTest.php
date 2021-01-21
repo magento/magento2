@@ -20,7 +20,7 @@ class HtmlContentTest extends \PHPUnit\Framework\TestCase
     /**
      * Set up mocks
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->converter = new HtmlContent();
     }

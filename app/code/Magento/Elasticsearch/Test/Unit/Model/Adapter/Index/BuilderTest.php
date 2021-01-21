@@ -18,12 +18,12 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var LocaleResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var LocaleResolver|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $localeResolver;
 
     /**
-     * @var EsConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var EsConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $esConfig;
 
@@ -31,7 +31,7 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
      * Setup method
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->localeResolver = $this->getMockBuilder(\Magento\Framework\Locale\Resolver::class)
             ->disableOriginalConstructor()

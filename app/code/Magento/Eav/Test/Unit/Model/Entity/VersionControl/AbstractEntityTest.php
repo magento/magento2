@@ -15,16 +15,16 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class AbstractEntityTest extends \Magento\Eav\Test\Unit\Model\Entity\AbstractEntityTest
 {
     /**
-     * @var \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $entitySnapshot;
 
     /**
-     * @var RelationComposite|\PHPUnit_Framework_MockObject_MockObject
+     * @var RelationComposite|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $entityRelationComposite;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->entitySnapshot = $this->createPartialMock(
             \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot::class,
@@ -122,7 +122,7 @@ class AbstractEntityTest extends \Magento\Eav\Test\Unit\Model\Entity\AbstractEnt
             ]
         );
 
-        /** @var $model AbstractEntity|\PHPUnit_Framework_MockObject_MockObject */
+        /** @var $model AbstractEntity|\PHPUnit\Framework\MockObject\MockObject */
         $model = $this->getMockBuilder(\Magento\Eav\Model\Entity\VersionControl\AbstractEntity::class)
             ->setConstructorArgs($arguments)
             ->setMethods(['_getValue', 'beginTransaction', 'commit', 'rollback', 'getConnection'])
@@ -147,7 +147,7 @@ class AbstractEntityTest extends \Magento\Eav\Test\Unit\Model\Entity\AbstractEnt
     {
         $objectManager = new ObjectManager($this);
 
-        /** @var $object \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject */
+        /** @var $object \Magento\Catalog\Model\Product|\PHPUnit\Framework\MockObject\MockObject */
         $object = $this->createMock(\Magento\Catalog\Model\Product::class);
 
         $arguments = $objectManager->getConstructArguments(
@@ -158,7 +158,7 @@ class AbstractEntityTest extends \Magento\Eav\Test\Unit\Model\Entity\AbstractEnt
             ]
         );
 
-        /** @var $model AbstractEntity|\PHPUnit_Framework_MockObject_MockObject */
+        /** @var $model AbstractEntity|\PHPUnit\Framework\MockObject\MockObject */
         $model = $this->getMockBuilder(\Magento\Eav\Model\Entity\VersionControl\AbstractEntity::class)
             ->setConstructorArgs($arguments)
             ->setMethods(['beginTransaction', 'commit'])

@@ -27,22 +27,22 @@ class FrontControllerTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $request;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $routerList;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $router;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Response\Http
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\Response\Http
      */
     protected $response;
 
@@ -76,7 +76,7 @@ class FrontControllerTest extends \PHPUnit\Framework\TestCase
      */
     private $areaMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->request = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
             ->disableOriginalConstructor()
@@ -86,14 +86,14 @@ class FrontControllerTest extends \PHPUnit\Framework\TestCase
         $this->router = $this->createMock(\Magento\Framework\App\RouterInterface::class);
         $this->routerList = $this->createMock(\Magento\Framework\App\RouterList::class);
         $this->response = $this->createMock(\Magento\Framework\App\Response\Http::class);
-        $this->requestValidator = $this->createMock(ValidatorInterface::class);
+        $this->requestValidator = $this->getMockForAbstractClass(ValidatorInterface::class);
         $this->messages = $this->createMock(MessageManager::class);
-        $this->logger = $this->createMock(LoggerInterface::class);
+        $this->logger = $this->getMockForAbstractClass(LoggerInterface::class);
         $this->appStateMock  = $this->getMockBuilder(State::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->areaListMock = $this->createMock(AreaList::class);
-        $this->areaMock = $this->createMock(AreaInterface::class);
+        $this->areaMock = $this->getMockForAbstractClass(AreaInterface::class);
         $this->model = new \Magento\Framework\App\FrontController(
             $this->routerList,
             $this->response,

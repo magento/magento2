@@ -14,31 +14,31 @@ class ReadHandlerTest extends \PHPUnit\Framework\TestCase
      * Subject of testing.
      *
      * @var \Magento\ProductVideo\Model\Plugin\Catalog\Product\Gallery\ReadHandler
-     *      |\PHPUnit_Framework_MockObject_MockObject
+     *      |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $subject;
 
     /**
-     * @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $product;
 
     /**
-     * @var \Magento\Eav\Model\Entity\Attribute|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Eav\Model\Entity\Attribute|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $attribute;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product\Gallery|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Gallery|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resourceModel;
 
     /**
-     * @var \Magento\Catalog\Model\Product\Gallery\ReadHandler|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product\Gallery\ReadHandler|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $mediaGalleryReadHandler;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->product = $this->createMock(\Magento\Catalog\Model\Product::class);
 

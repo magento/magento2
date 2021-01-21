@@ -22,7 +22,7 @@ class GenderTest extends \PHPUnit\Framework\TestCase
      * Test initialization and set up. Create the Gender block.
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $objectManager->get(\Magento\Framework\App\State::class)->setAreaCode('frontend');

@@ -15,11 +15,11 @@ class StateTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \Magento\Catalog\Model\Layer\Filter\Item|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Layer\Filter\Item|\PHPUnit\Framework\MockObject\MockObject
      */
     private $item;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->item = $this->getMockBuilder(\Magento\Catalog\Model\Layer\Filter\Item::class)
             ->disableOriginalConstructor()
@@ -30,10 +30,11 @@ class StateTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testSetFiltersException()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+
         $this->model->setFilters($this->item);
     }
 

@@ -19,22 +19,22 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $searchResultFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $searchResultMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $taxClassResourceMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $classModelRegistryMock;
 
@@ -44,25 +44,25 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
     protected $objectManager;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $taxClassCollectionFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $extensionAttributesJoinProcessorMock;
 
     /**
      * @var \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface |
-     *  \PHPUnit_Framework_MockObject_MockObject
+     *  \PHPUnit\Framework\MockObject\MockObject
      */
     private $collectionProcessor;
 
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->searchResultFactory = $this->createPartialMock(
@@ -114,11 +114,12 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @return void
-     * @expectedException \Magento\Framework\Exception\CouldNotDeleteException
-     * @expectedExceptionMessage Some Message
      */
     public function testDeleteResourceException()
     {
+        $this->expectException(\Magento\Framework\Exception\CouldNotDeleteException::class);
+        $this->expectExceptionMessage('Some Message');
+
         $taxClass = $this->createMock(\Magento\Tax\Model\ClassModel::class);
         $taxClass->expects($this->once())->method('getClassId')->willReturn(1);
         $this->taxClassResourceMock
@@ -236,11 +237,12 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @return void
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Updating classType is not allowed.
      */
     public function testSaveWithInputException()
     {
+        $this->expectException(\Magento\Framework\Exception\InputException::class);
+        $this->expectExceptionMessage('Updating classType is not allowed.');
+
         $taxClass = $this->createMock(\Magento\Tax\Model\ClassModel::class);
         $originalTax = $this->createMock(\Magento\Tax\Model\ClassModel::class);
         $taxClass->expects($this->exactly(2))->method('getClassId')->willReturn(10);
@@ -252,11 +254,12 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @return void
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Something went wrong
      */
     public function testSaveWithLocalizedException()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('Something went wrong');
+
         $taxClass = $this->createMock(\Magento\Tax\Model\ClassModel::class);
         $taxClass->expects($this->any())->method('getClassName')->willReturn('Class Name');
         $taxClass->expects($this->atLeastOnce())->method('getClassType')->willReturn('PRODUCT');
@@ -278,11 +281,12 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @return void
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage A class with the same name already exists for ClassType PRODUCT.
      */
     public function testSaveWithSameClassException()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('A class with the same name already exists for ClassType PRODUCT.');
+
         $taxClass = $this->createMock(\Magento\Tax\Model\ClassModel::class);
         $taxClass->expects($this->any())->method('getClassName')->willReturn('Class Name');
         $taxClass->expects($this->atLeastOnce())->method('getClassType')->willReturn('PRODUCT');
@@ -306,11 +310,12 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
      * @param string $classType
      * @return void
      * @dataProvider validateTaxClassDataProvider
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage One or more input exceptions have occurred.
      */
     public function testSaveWithValidateTaxClassDataException($classType)
     {
+        $this->expectException(\Magento\Framework\Exception\InputException::class);
+        $this->expectExceptionMessage('One or more input exceptions have occurred.');
+
         $taxClass = $this->createMock(\Magento\Tax\Model\ClassModel::class);
         $taxClass->expects($this->any())->method('getClassName')->willReturn('');
         $taxClass->expects($this->atLeastOnce())->method('getClassType')->willReturn($classType);

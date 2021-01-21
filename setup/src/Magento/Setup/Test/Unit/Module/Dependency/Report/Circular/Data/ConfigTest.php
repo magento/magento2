@@ -10,12 +10,12 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class ConfigTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Setup\Module\Dependency\Report\Circular\Data\Module|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Setup\Module\Dependency\Report\Circular\Data\Module|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $moduleFirst;
 
     /**
-     * @var \Magento\Setup\Module\Dependency\Report\Circular\Data\Module|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Setup\Module\Dependency\Report\Circular\Data\Module|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $moduleSecond;
 
@@ -24,7 +24,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
      */
     protected $config;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->moduleFirst = $this->createMock(\Magento\Setup\Module\Dependency\Report\Circular\Data\Module::class);
         $this->moduleSecond = $this->createMock(\Magento\Setup\Module\Dependency\Report\Circular\Data\Module::class);

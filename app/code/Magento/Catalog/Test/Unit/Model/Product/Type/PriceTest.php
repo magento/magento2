@@ -38,28 +38,28 @@ class PriceTest extends \PHPUnit\Framework\TestCase
     protected $product;
 
     /**
-     * @var \Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $tpFactory;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $scopeConfigMock;
 
     /**
-     * @var \Magento\Customer\Api\GroupManagementInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Api\GroupManagementInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $groupManagementMock;
 
     /**
-     * @var \Magento\Store\Model\Website|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\Website|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $websiteMock;
 
     private $tierPriceExtensionFactoryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->product = $this->objectManagerHelper->getObject(\Magento\Catalog\Model\Product::class);
@@ -176,7 +176,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         // create sample TierPrice objects that would be coming from a REST call
         $tierPriceExtensionMock = $this->getMockBuilder(ProductTierPriceExtensionInterface::class)
             ->setMethods(['getWebsiteId', 'setWebsiteId', 'getPercentageValue', 'setPercentageValue'])
-            ->getMock();
+            ->getMockForAbstractClass();
         $tierPriceExtensionMock->expects($this->any())->method('getWebsiteId')->willReturn($expectedWebsiteId);
         $tierPriceExtensionMock->expects($this->any())->method('getPercentageValue')->willReturn(null);
         $tp1 = $this->objectManagerHelper->getObject(\Magento\Catalog\Model\Product\TierPrice::class);
@@ -201,7 +201,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         // test the data actually set on the product
         $tpArray = $this->product->getData($this::KEY_TIER_PRICE);
         $this->assertNotNull($tpArray);
-        $this->assertTrue(is_array($tpArray));
+        $this->assertInternalType('array', $tpArray);
         $this->assertEquals(count($tps), count($tpArray));
 
         $count = count($tps);
@@ -220,7 +220,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
 
         $tierPriceExtensionMock = $this->getMockBuilder(ProductTierPriceExtensionInterface::class)
             ->setMethods(['getWebsiteId', 'setWebsiteId', 'getPercentageValue', 'setPercentageValue'])
-            ->getMock();
+            ->getMockForAbstractClass();
         $tierPriceExtensionMock->expects($this->any())->method('getPercentageValue')->willReturn(50);
         $tierPriceExtensionMock->expects($this->any())->method('setWebsiteId');
         $this->tierPriceExtensionFactoryMock->expects($this->any())
@@ -230,7 +230,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
         // test with the data retrieved as a REST object
         $tpRests = $this->model->getTierPrices($this->product);
         $this->assertNotNull($tpRests);
-        $this->assertTrue(is_array($tpRests));
+        $this->assertInternalType('array', $tpRests);
         $this->assertEquals(count($tps), count($tpRests));
         foreach ($tpRests as $tpRest) {
             $this->assertEquals(50, $tpRest->getExtensionAttributes()->getPercentageValue());

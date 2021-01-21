@@ -20,36 +20,36 @@ class CategoryRepositoryTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $categoryFactoryMock;
 
     /**
-     * @var  \PHPUnit_Framework_MockObject_MockObject
+     * @var  \PHPUnit\Framework\MockObject\MockObject
      */
     protected $categoryResourceMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $extensibleDataObjectConverterMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeManagerMock;
 
     /**
-     * @var \Magento\Framework\EntityManager\MetadataPool|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\EntityManager\MetadataPool|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $metadataPoolMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->categoryFactoryMock = $this->createPartialMock(
             \Magento\Catalog\Model\CategoryFactory::class,
@@ -116,11 +116,12 @@ class CategoryRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage No such entity with id = 5
      */
     public function testGetWhenCategoryDoesNotExist()
     {
+        $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
+        $this->expectExceptionMessage('No such entity with id = 5');
+
         $categoryId = 5;
         $categoryMock = $this->createMock(\Magento\Catalog\Model\Category::class);
         $categoryMock->expects(
@@ -227,11 +228,12 @@ class CategoryRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\CouldNotSaveException
-     * @expectedExceptionMessage Could not save category
      */
     public function testSaveWithException()
     {
+        $this->expectException(\Magento\Framework\Exception\CouldNotSaveException::class);
+        $this->expectExceptionMessage('Could not save category');
+
         $categoryId = 5;
         $categoryMock = $this->createMock(\Magento\Catalog\Model\Category::class);
         $this->extensibleDataObjectConverterMock
@@ -304,11 +306,12 @@ class CategoryRepositoryTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @throws \Magento\Framework\Exception\StateException
-     * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage Cannot delete category with id
      */
     public function testDeleteWithException()
     {
+        $this->expectException(\Magento\Framework\Exception\StateException::class);
+        $this->expectExceptionMessage('Cannot delete category with id');
+
         $categoryMock = $this->createMock(\Magento\Catalog\Model\Category::class);
         $this->categoryResourceMock->expects($this->once())->method('delete')->willThrowException(new \Exception());
         $this->model->delete($categoryMock);
@@ -337,11 +340,12 @@ class CategoryRepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage No such entity with id = 5
      */
     public function testDeleteByIdentifierWithException()
     {
+        $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
+        $this->expectExceptionMessage('No such entity with id = 5');
+
         $categoryId = 5;
         $categoryMock = $this->createMock(\Magento\Catalog\Model\Category::class);
         $categoryMock->expects(

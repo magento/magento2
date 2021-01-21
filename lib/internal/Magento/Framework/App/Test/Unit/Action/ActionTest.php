@@ -19,37 +19,37 @@ class ActionTest extends \PHPUnit\Framework\TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Request\Http|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_requestMock;
 
     /**
-     * @var \Magento\Framework\App\ResponseInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResponseInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_responseMock;
 
     /**
-     * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_eventManagerMock;
 
     /**
-     * @var \Magento\Framework\App\ActionFlag|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ActionFlag|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_actionFlagMock;
 
     /**
-     * @var \Magento\Framework\App\Response\RedirectInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Response\RedirectInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_redirectMock;
 
     /**
-     * @var \Magento\Framework\App\ViewInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ViewInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $viewMock;
 
     /**
-     * @var \Magento\Framework\View\Page\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Page\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $pageConfigMock;
 
@@ -80,7 +80,7 @@ class ActionTest extends \PHPUnit\Framework\TestCase
 
     public static $actionParams = ['param' => 'value'];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_eventManagerMock = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
         $this->_actionFlagMock = $this->createMock(\Magento\Framework\App\ActionFlag::class);

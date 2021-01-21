@@ -15,7 +15,7 @@ class FormFactoryTest extends \PHPUnit\Framework\TestCase
     /** @var array */
     private $_expectedData;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->_requestData = [
             'id' => 13,

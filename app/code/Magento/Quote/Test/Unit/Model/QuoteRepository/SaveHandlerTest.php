@@ -31,46 +31,46 @@ class SaveHandlerTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var QuoteResourceModel|\PHPUnit_Framework_MockObject_MockObject
+     * @var QuoteResourceModel|\PHPUnit\Framework\MockObject\MockObject
      */
     private $quoteResourceModelMock;
 
     /**
-     * @var CartItemPersister|\PHPUnit_Framework_MockObject_MockObject
+     * @var CartItemPersister|\PHPUnit\Framework\MockObject\MockObject
      */
     private $cartItemPersisterMock;
 
     /**
-     * @var BillingAddressPersister|\PHPUnit_Framework_MockObject_MockObject
+     * @var BillingAddressPersister|\PHPUnit\Framework\MockObject\MockObject
      */
     private $billingAddressPersisterMock;
 
     /**
-     * @var ShippingAssignmentPersister|\PHPUnit_Framework_MockObject_MockObject
+     * @var ShippingAssignmentPersister|\PHPUnit\Framework\MockObject\MockObject
      */
     private $shippingAssignmentPersisterMock;
 
     /**
-     * @var AddressRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AddressRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $addressRepositoryMock;
 
     /**
-     * @var Quote|\PHPUnit_Framework_MockObject_MockObject
+     * @var Quote|\PHPUnit\Framework\MockObject\MockObject
      */
     private $quoteMock;
 
     /**
-     * @var QuoteAddress|\PHPUnit_Framework_MockObject_MockObject
+     * @var QuoteAddress|\PHPUnit\Framework\MockObject\MockObject
      */
     private $billingAddressMock;
 
     /**
-     * @var CartExtensionInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CartExtensionInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $extensionAttributesMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->quoteResourceModelMock = $this->getMockBuilder(QuoteResourceModel::class)
             ->disableOriginalConstructor()
@@ -204,7 +204,7 @@ class SaveHandlerTest extends \PHPUnit\Framework\TestCase
      * Create quote item mock
      *
      * @param bool $isDeleted
-     * @return QuoteItem|\PHPUnit_Framework_MockObject_MockObject
+     * @return QuoteItem|\PHPUnit\Framework\MockObject\MockObject
      */
     private function createQuoteItemMock($isDeleted)
     {

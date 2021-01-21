@@ -9,7 +9,7 @@ namespace Magento\Framework\Test\Unit;
 
 class ProfilerTest extends \PHPUnit\Framework\TestCase
 {
-    protected function tearDown()
+    protected function tearDown(): void
     {
         \Magento\Framework\Profiler::reset();
     }
@@ -56,7 +56,7 @@ class ProfilerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function _getDriverMock()
     {

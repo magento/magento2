@@ -16,16 +16,16 @@ class AuthorizationTest extends \PHPUnit\Framework\TestCase
     private $plugin;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $userContextMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $quoteManagementMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->userContextMock = $this->createMock(\Magento\Authorization\Model\UserContextInterface::class);
         $this->quoteManagementMock = $this->createMock(\Magento\Quote\Model\GuestCart\GuestCartManagement::class);
@@ -35,11 +35,12 @@ class AuthorizationTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage You don't have the correct permissions to assign the customer to the cart.
      */
     public function testBeforeAssignCustomer()
     {
+        $this->expectException(\Magento\Framework\Exception\StateException::class);
+        $this->expectExceptionMessage('You don\'t have the correct permissions to assign the customer to the cart.');
+
         $this->userContextMock->expects($this->once())->method('getUserId')->willReturn('10');
         $this->plugin->beforeAssignCustomer($this->quoteManagementMock, 1, 2, 1);
     }

@@ -13,31 +13,31 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Catalog\Model\Indexer\Category\Product\Action\FullFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Indexer\Category\Product\Action\FullFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $fullMock;
 
     /**
-     * @var \Magento\Catalog\Model\Indexer\Product\Category\Action\RowsFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Indexer\Product\Category\Action\RowsFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $rowsMock;
 
     /**
-     * @var \Magento\Framework\Indexer\IndexerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Indexer\IndexerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $indexerMock;
 
     /**
-     * @var \Magento\Framework\Indexer\IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Indexer\IndexerRegistry|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $indexerRegistryMock;
 
     /**
-     * @var \Magento\Framework\Indexer\CacheContext|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Indexer\CacheContext|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $cacheContextMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->fullMock = $this->createPartialMock(
             \Magento\Catalog\Model\Indexer\Category\Product\Action\FullFactory::class,

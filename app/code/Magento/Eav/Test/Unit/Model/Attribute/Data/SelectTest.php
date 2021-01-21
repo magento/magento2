@@ -12,7 +12,7 @@ class SelectTest extends \PHPUnit\Framework\TestCase
      */
     protected $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $timezoneMock = $this->createMock(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class);
         $loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);

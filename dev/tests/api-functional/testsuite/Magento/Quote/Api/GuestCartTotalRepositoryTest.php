@@ -30,7 +30,7 @@ class GuestCartTotalRepositoryTest extends WebapiAbstract
      */
     private $filterBuilder;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->searchCriteriaBuilder = $this->objectManager->create(

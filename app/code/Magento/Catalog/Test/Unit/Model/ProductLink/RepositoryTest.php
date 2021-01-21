@@ -12,32 +12,32 @@ namespace Magento\Catalog\Test\Unit\Model\ProductLink;
 class RepositoryTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $metadataPoolMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $hydratorPoolMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $hydratorMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $metadataMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $linkTypeProvider;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $linkResourceMock;
 
@@ -47,25 +47,25 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
 
     protected $productRepositoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $entityCollectionProviderMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $linkInitializerMock;
 
     /**
      * Test method
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $linkManagementMock = $this->createMock(\Magento\Catalog\Model\ProductLink\Management::class);
         $this->productRepositoryMock = $this->createMock(\Magento\Catalog\Model\ProductRepository::class);
@@ -136,11 +136,12 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\CouldNotSaveException
-     * @expectedExceptionMessage The linked products data is invalid. Verify the data and try again.
      */
     public function testSaveWithException()
     {
+        $this->expectException(\Magento\Framework\Exception\CouldNotSaveException::class);
+        $this->expectExceptionMessage('The linked products data is invalid. Verify the data and try again.');
+
         $entityMock = $this->createMock(\Magento\Catalog\Model\ProductLink\Link::class);
         $productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
         $linkedProductMock = $this->createMock(\Magento\Catalog\Model\Product::class);
@@ -207,11 +208,12 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\CouldNotSaveException
-     * @expectedExceptionMessage The linked products data is invalid. Verify the data and try again.
      */
     public function testDeleteWithInvalidDataException()
     {
+        $this->expectException(\Magento\Framework\Exception\CouldNotSaveException::class);
+        $this->expectExceptionMessage('The linked products data is invalid. Verify the data and try again.');
+
         $entityMock = $this->createMock(\Magento\Catalog\Model\ProductLink\Link::class);
         $productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
         $linkedProductMock = $this->createMock(\Magento\Catalog\Model\Product::class);
@@ -245,11 +247,12 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage Product with SKU 'linkedProduct' is not linked to product with SKU 'product'
      */
     public function testDeleteWithNoSuchEntityException()
     {
+        $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
+        $this->expectExceptionMessage('Product with SKU \'linkedProduct\' is not linked to product with SKU \'product\'');
+
         $entityMock = $this->createMock(\Magento\Catalog\Model\ProductLink\Link::class);
         $productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
         $linkedProductMock = $this->createMock(\Magento\Catalog\Model\Product::class);

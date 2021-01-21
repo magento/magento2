@@ -13,21 +13,21 @@ class CookieTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Element\Template\Context
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\View\Element\Template\Context
      */
     protected $contextMock;
 
     /**
-     * @var \Magento\Framework\Session\Config\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Session\Config\ConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $sessionConfigMock;
 
     /**
-     * @var \Magento\Framework\Validator\Ip|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Validator\Ip|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $ipValidatorMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->contextMock = $this->getMockBuilder(\Magento\Framework\View\Element\Template\Context::class)
             ->disableOriginalConstructor()

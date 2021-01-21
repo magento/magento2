@@ -22,20 +22,20 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    /** @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $scopeConfig;
 
-    /** @var \Magento\Payment\Model\Method\Factory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Payment\Model\Method\Factory|\PHPUnit\Framework\MockObject\MockObject */
     protected $paymentMethodFactory;
 
-    /** @var \Magento\Framework\Locale\ResolverInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Locale\ResolverInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $localeResolver;
 
-    /** @var \Magento\Framework\Config\DataInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Config\DataInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $dataStorage;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\DateTime|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\DateTime\DateTime|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $date;
 
@@ -95,7 +95,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
      */
     const CURRENT_YEAR = '2250';
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->scopeConfig = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
         $this->paymentMethodFactory = $this->createMock(\Magento\Payment\Model\Method\Factory::class);
@@ -123,7 +123,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetActiveMethods($isActive)
     {
-        $adapter = $this->createMock(MethodInterface::class);
+        $adapter = $this->getMockForAbstractClass(MethodInterface::class);
         $this->scopeConfig->expects(static::once())
             ->method('getValue')
             ->with('payment', ScopeInterface::SCOPE_STORE, null)

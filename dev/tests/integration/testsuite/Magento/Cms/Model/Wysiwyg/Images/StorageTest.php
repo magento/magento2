@@ -42,7 +42,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
      * @inheritdoc
      */
     // phpcs:disable
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         self::$_baseDir = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             \Magento\Cms\Helper\Wysiwyg\Images::class
@@ -58,7 +58,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
      * @inheritdoc
      */
     // phpcs:ignore
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Framework\Filesystem\Driver\File::class
@@ -70,7 +70,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->filesystem = $this->objectManager->get(\Magento\Framework\Filesystem::class);

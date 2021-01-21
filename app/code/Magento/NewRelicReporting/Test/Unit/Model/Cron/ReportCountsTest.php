@@ -21,43 +21,43 @@ class ReportCountsTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\NewRelicReporting\Model\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\NewRelicReporting\Model\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $configMock;
 
     /**
-     * @var ProductManagementInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductManagementInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $productManagementMock;
 
     /**
-     * @var ConfigurableProductManagementInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigurableProductManagementInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $configurableManagementMock;
 
     /**
-     * @var CategoryManagementInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CategoryManagementInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $categoryManagementMock;
 
     /**
-     * @var \Magento\NewRelicReporting\Model\CountsFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\NewRelicReporting\Model\CountsFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $countsFactoryMock;
 
     /**
-     * @var \Magento\NewRelicReporting\Model\Counts|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\NewRelicReporting\Model\Counts|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $countsModelMock;
 
     /**
      * @var \Magento\NewRelicReporting\Model\ResourceModel\Counts\CollectionFactory
-     * |\PHPUnit_Framework_MockObject_MockObject
+     * |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $countsCollectionFactoryMock;
 
     /**
-     * @var \Magento\NewRelicReporting\Model\ResourceModel\Counts\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\NewRelicReporting\Model\ResourceModel\Counts\Collection|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $countsCollectionMock;
 
@@ -66,7 +66,7 @@ class ReportCountsTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->configMock = $this->getMockBuilder(\Magento\NewRelicReporting\Model\Config::class)
             ->disableOriginalConstructor()

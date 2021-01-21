@@ -13,16 +13,16 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $configDataMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $stateMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->configDataMock = $this->getMockBuilder(\Magento\Sales\Model\Config\Data::class)
             ->disableOriginalConstructor()

@@ -18,21 +18,21 @@ class GridToXmlTest extends \PHPUnit\Framework\TestCase
     protected $controller;
 
     /**
-     * @var Context | \PHPUnit_Framework_MockObject_MockObject
+     * @var Context | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $context;
 
     /**
-     * @var ConvertToXml | \PHPUnit_Framework_MockObject_MockObject
+     * @var ConvertToXml | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $converter;
 
     /**
-     * @var FileFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var FileFactory | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $fileFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->context = $this->getMockBuilder(\Magento\Backend\App\Action\Context::class)
             ->disableOriginalConstructor()

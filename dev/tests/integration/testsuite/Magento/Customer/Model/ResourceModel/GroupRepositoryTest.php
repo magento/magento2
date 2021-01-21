@@ -32,7 +32,7 @@ class GroupRepositoryTest extends \PHPUnit\Framework\TestCase
     /** @var  \Magento\Framework\Api\SortOrderBuilder */
     private $sortOrderBuilder;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->groupRepository = $this->objectManager->create(\Magento\Customer\Api\GroupRepositoryInterface::class);

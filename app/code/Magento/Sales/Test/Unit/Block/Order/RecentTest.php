@@ -22,31 +22,31 @@ class RecentTest extends \PHPUnit\Framework\TestCase
     protected $block;
 
     /**
-     * @var \Magento\Framework\View\Element\Template\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Element\Template\Context|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $context;
 
     /**
-     * @var \Magento\Sales\Model\ResourceModel\Order\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\ResourceModel\Order\CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $orderCollectionFactory;
 
     /**
-     * @var \Magento\Customer\Model\Session|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\Session|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $customerSession;
 
     /**
-     * @var \Magento\Sales\Model\Order\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Config|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $orderConfig;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeManagerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->context = $this->createMock(Context::class);
         $this->orderCollectionFactory = $this->createPartialMock(

@@ -12,16 +12,16 @@ class PurgeCacheTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\CacheInvalidate\Model\PurgeCache */
     protected $model;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Zend\Http\Client\Adapter\Socket */
+    /** @var \PHPUnit\Framework\MockObject\MockObject | \Zend\Http\Client\Adapter\Socket */
     protected $socketAdapterMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Cache\InvalidateLogger */
+    /** @var \PHPUnit\Framework\MockObject\MockObject | \Magento\Framework\Cache\InvalidateLogger */
     protected $loggerMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\PageCache\Model\Cache\Server */
+    /** @var \PHPUnit\Framework\MockObject\MockObject | \Magento\PageCache\Model\Cache\Server */
     protected $cacheServer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $socketFactoryMock = $this->createMock(\Magento\CacheInvalidate\Model\SocketFactory::class);
         $this->socketAdapterMock = $this->createMock(\Zend\Http\Client\Adapter\Socket::class);

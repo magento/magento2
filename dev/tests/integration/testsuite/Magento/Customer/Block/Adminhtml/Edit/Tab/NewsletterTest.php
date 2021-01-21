@@ -30,7 +30,7 @@ class NewsletterTest extends \Magento\TestFramework\TestCase\AbstractBackendCont
     /**
      * Execute per test initialization.
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $objectManager = Bootstrap::getObjectManager();
@@ -51,7 +51,7 @@ class NewsletterTest extends \Magento\TestFramework\TestCase\AbstractBackendCont
     /**
      * Execute post test cleanup
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->coreRegistry->unregister(RegistryConstants::CURRENT_CUSTOMER_ID);
     }

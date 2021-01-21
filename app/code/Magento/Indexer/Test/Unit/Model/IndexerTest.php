@@ -10,36 +10,36 @@ use Magento\Framework\Indexer\StateInterface;
 class IndexerTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Indexer\Model\Indexer|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Indexer\Model\Indexer|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $model;
 
     /**
-     * @var \Magento\Framework\Indexer\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Indexer\ConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $configMock;
 
     /**
-     * @var \Magento\Framework\Indexer\ActionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Indexer\ActionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $actionFactoryMock;
 
     /**
-     * @var \Magento\Framework\Mview\ViewInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Mview\ViewInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $viewMock;
 
     /**
-     * @var \Magento\Indexer\Model\Indexer\StateFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Indexer\Model\Indexer\StateFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $stateFactoryMock;
 
     /**
-     * @var \Magento\Indexer\Model\Indexer\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Indexer\Model\Indexer\CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $indexFactoryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->configMock = $this->getMockForAbstractClass(
             \Magento\Framework\Indexer\ConfigInterface::class,
@@ -88,11 +88,12 @@ class IndexerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage indexer_id indexer does not exist.
      */
     public function testLoadWithException()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('indexer_id indexer does not exist.');
+
         $indexId = 'indexer_id';
         $this->configMock->expects(
             $this->once()
@@ -231,11 +232,12 @@ class IndexerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Test exception
      */
     public function testReindexAllWithException()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Test exception');
+
         $indexId = 'indexer_internal_name';
         $this->loadIndexer($indexId);
 
@@ -280,11 +282,12 @@ class IndexerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Error
-     * @expectedExceptionMessage Test Engine Error
      */
     public function testReindexAllWithError()
     {
+        $this->expectException(\Error::class);
+        $this->expectExceptionMessage('Test Engine Error');
+
 
         $indexId = 'indexer_internal_name';
         $this->loadIndexer($indexId);
@@ -441,7 +444,7 @@ class IndexerTest extends \PHPUnit\Framework\TestCase
 
         $this->stateFactoryMock->expects($this->once())->method('create')->will($this->returnValue($stateMock));
         $stateMock->expects($this->once())->method('getStatus')->will($this->returnValue($status));
-        $this->assertEquals(true, $this->model->$method());
+        $this->assertTrue($this->model->$method());
     }
 
     /**

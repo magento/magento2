@@ -17,17 +17,17 @@ class TaxvatTest extends \PHPUnit\Framework\TestCase
     const TAXVAT_ATTRIBUTE_CODE = 'taxvat';
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Customer\Api\CustomerMetadataInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Customer\Api\CustomerMetadataInterface
      */
     private $customerMetadata;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Customer\Api\Data\AttributeMetadataInterface */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Customer\Api\Data\AttributeMetadataInterface */
     private $attribute;
 
     /** @var Taxvat */
     private $_block;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->attribute = $this->getMockBuilder(\Magento\Customer\Api\Data\AttributeMetadataInterface::class)
             ->getMockForAbstractClass();
@@ -85,7 +85,7 @@ class TaxvatTest extends \PHPUnit\Framework\TestCase
                 )
             ))
         );
-        $this->assertSame(false, $this->_block->isEnabled());
+        $this->assertFalse($this->_block->isEnabled());
     }
 
     /**
@@ -123,6 +123,6 @@ class TaxvatTest extends \PHPUnit\Framework\TestCase
                 )
             ))
         );
-        $this->assertSame(false, $this->_block->isRequired());
+        $this->assertFalse($this->_block->isRequired());
     }
 }

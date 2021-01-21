@@ -17,43 +17,43 @@ use Magento\Store\Model\StoreManagerInterface;
  */
 class ProductScopeRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     private $canonicalUrlRewriteGenerator;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     private $currentUrlRewritesRegenerator;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     private $categoriesUrlRewriteGenerator;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     private $anchorUrlRewriteGenerator;
 
-    /** @var \Magento\CatalogUrlRewrite\Service\V1\StoreViewService|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\CatalogUrlRewrite\Service\V1\StoreViewService|\PHPUnit\Framework\MockObject\MockObject */
     private $storeViewService;
 
-    /** @var \Magento\CatalogUrlRewrite\Model\ObjectRegistryFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\CatalogUrlRewrite\Model\ObjectRegistryFactory|\PHPUnit\Framework\MockObject\MockObject */
     private $objectRegistryFactory;
 
-    /** @var  StoreManagerInterface | \PHPUnit_Framework_MockObject_MockObject */
+    /** @var  StoreManagerInterface | \PHPUnit\Framework\MockObject\MockObject */
     private $storeManager;
 
     /** @var  ProductScopeRewriteGenerator */
     private $productScopeGenerator;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     private $mergeDataProvider;
 
-    /** @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit\Framework\MockObject\MockObject */
     private $serializer;
 
-    /** @var \Magento\Catalog\Model\Category|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Catalog\Model\Category|\PHPUnit\Framework\MockObject\MockObject */
     private $categoryMock;
 
-    /** @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $configMock;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->serializer = $this->createMock(\Magento\Framework\Serialize\Serializer\Json::class);
         $this->serializer->expects($this->any())
@@ -88,7 +88,7 @@ class ProductScopeRewriteGeneratorTest extends \PHPUnit\Framework\TestCase
         )->disableOriginalConstructor()->setMethods(['create'])->getMock();
         $this->storeViewService = $this->getMockBuilder(\Magento\CatalogUrlRewrite\Service\V1\StoreViewService::class)
             ->disableOriginalConstructor()->getMock();
-        $this->storeManager = $this->createMock(StoreManagerInterface::class);
+        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $storeRootCategoryId = 2;
         $store = $this->getMockBuilder(\Magento\Store\Model\Store::class)->disableOriginalConstructor()->getMock();
         $store->expects($this->any())->method('getRootCategoryId')->will($this->returnValue($storeRootCategoryId));

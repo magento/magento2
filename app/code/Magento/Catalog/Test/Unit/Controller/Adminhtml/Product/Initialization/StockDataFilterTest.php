@@ -13,12 +13,12 @@ use Magento\Catalog\Controller\Adminhtml\Product\Initialization\StockDataFilter;
 class StockDataFilterTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $scopeConfigMock;
 
@@ -27,10 +27,10 @@ class StockDataFilterTest extends \PHPUnit\Framework\TestCase
      */
     protected $stockDataFilter;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $stockConfiguration;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->scopeConfigMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
 

@@ -24,37 +24,37 @@ class ProductsListTest extends \PHPUnit\Framework\TestCase
     protected $productsList;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $collectionFactory;
 
     /**
-     * @var \Magento\Catalog\Model\Product\Visibility|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product\Visibility|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $visibility;
 
     /**
-     * @var \Magento\Framework\App\Http\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Http\Context|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $httpContext;
 
     /**
-     * @var \Magento\Rule\Model\Condition\Sql\Builder|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Rule\Model\Condition\Sql\Builder|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $builder;
 
     /**
-     * @var \Magento\CatalogWidget\Model\Rule|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogWidget\Model\Rule|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $rule;
 
     /**
-     * @var \Magento\Widget\Helper\Conditions|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Widget\Helper\Conditions|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $widgetConditionsHelper;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeManager;
 
@@ -74,16 +74,16 @@ class ProductsListTest extends \PHPUnit\Framework\TestCase
     protected $layout;
 
     /**
-     * @var PriceCurrencyInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var PriceCurrencyInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $priceCurrency;
 
     /**
-     * @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Serialize\Serializer\Json|\PHPUnit\Framework\MockObject\MockObject
      */
     private $serializer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->collectionFactory =
             $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Product\CollectionFactory::class)
@@ -120,7 +120,7 @@ class ProductsListTest extends \PHPUnit\Framework\TestCase
         );
         $this->request = $arguments['context']->getRequest();
         $this->layout = $arguments['context']->getLayout();
-        $this->priceCurrency = $this->createMock(PriceCurrencyInterface::class);
+        $this->priceCurrency = $this->getMockForAbstractClass(PriceCurrencyInterface::class);
 
         $this->productsList = $objectManagerHelper->getObject(
             \Magento\CatalogWidget\Block\Product\ProductsList::class,
@@ -360,9 +360,9 @@ class ProductsListTest extends \PHPUnit\Framework\TestCase
 
     public function testShowPager()
     {
-        $this->assertEquals(false, $this->productsList->showPager());
+        $this->assertFalse($this->productsList->showPager());
         $this->productsList->setData('show_pager', true);
-        $this->assertEquals(true, $this->productsList->showPager());
+        $this->assertTrue($this->productsList->showPager());
     }
 
     public function testGetIdentities()
@@ -394,7 +394,7 @@ class ProductsListTest extends \PHPUnit\Framework\TestCase
     /**
      * @param $collection
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     private function getConditionsForCollection($collection)
     {

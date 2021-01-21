@@ -26,7 +26,7 @@ class ResetAttemptForFrontendObserverTest extends \PHPUnit\Framework\TestCase
      */
     private $objectManager;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
     }

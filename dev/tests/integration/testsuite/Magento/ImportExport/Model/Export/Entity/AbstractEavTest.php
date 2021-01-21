@@ -30,7 +30,7 @@ class AbstractEavTest extends \PHPUnit\Framework\TestCase
      */
     protected $_entityCode = 'customer';
 
-    protected function setUp()
+    protected function setUp(): void
     {
         /** @var \Magento\TestFramework\ObjectManager  $objectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();

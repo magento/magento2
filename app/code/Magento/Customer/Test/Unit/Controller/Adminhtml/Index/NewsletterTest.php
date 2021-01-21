@@ -15,82 +15,82 @@ class NewsletterTest extends \PHPUnit\Framework\TestCase
     /**
      * Request mock instance
      *
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\RequestInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\RequestInterface
      */
     protected $_request;
 
     /**
      * Response mock instance
      *
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\ResponseInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\ResponseInterface
      */
     protected $_response;
 
     /**
      * Instance of mocked tested object
      *
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Customer\Controller\Adminhtml\Index
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Customer\Controller\Adminhtml\Index
      */
     protected $_testedObject;
 
     /**
      * ObjectManager mock instance
      *
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\ObjectManager
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\ObjectManager
      */
     protected $_objectManager;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Customer\Api\AccountManagementInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Customer\Api\AccountManagementInterface
      */
     protected $customerAccountManagement;
 
     /**
      * Session mock instance
      *
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Backend\Model\Session
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Backend\Model\Session
      */
     protected $_session;
 
     /**
      * Backend helper mock instance
      *
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Backend\Helper\Data
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Backend\Helper\Data
      */
     protected $_helper;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Message\ManagerInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Message\ManagerInterface
      */
     protected $messageManager;
 
     /**
-     * @var \Magento\Framework\View\Result\Layout|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Result\Layout|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resultLayoutMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $pageConfigMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $titleMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $layoutInterfaceMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $viewInterfaceMock;
 
     /**
-     * @var \Magento\Framework\View\Result\LayoutFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Result\LayoutFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resultLayoutFactoryMock;
 
@@ -100,7 +100,7 @@ class NewsletterTest extends \PHPUnit\Framework\TestCase
      * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_request = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
             ->disableOriginalConstructor()

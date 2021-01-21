@@ -17,17 +17,17 @@ class InitializerTest extends \PHPUnit\Framework\TestCase
     protected $objectManager;
 
     /**
-     * @var \Magento\Quote\Model\Quote|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Model\Quote|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $quoteMock;
 
     /**
-     * @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $productMock;
 
     /**
-     * @var \Magento\Framework\DataObject|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DataObject|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $configMock;
 
@@ -36,15 +36,15 @@ class InitializerTest extends \PHPUnit\Framework\TestCase
      */
     protected $model;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $stockItemMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $stockRegistry;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->quoteMock = $this->createPartialMock(
             \Magento\Quote\Model\Quote::class,

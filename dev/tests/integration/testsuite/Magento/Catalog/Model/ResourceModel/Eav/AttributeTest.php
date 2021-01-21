@@ -38,7 +38,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->model = $this->objectManager->get(Attribute::class);

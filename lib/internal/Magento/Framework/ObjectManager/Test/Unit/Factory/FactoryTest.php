@@ -33,7 +33,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
     /**
      * Setup tests
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->config = new Config();
         $this->factory = new Developer($this->config);

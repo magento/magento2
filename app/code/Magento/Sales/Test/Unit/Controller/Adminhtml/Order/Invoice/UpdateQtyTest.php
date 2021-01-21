@@ -16,37 +16,37 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class UpdateQtyTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $viewMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $resultPageMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $pageConfigMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $objectManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $requestMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $responseMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $titleMock;
 
@@ -56,22 +56,22 @@ class UpdateQtyTest extends \PHPUnit\Framework\TestCase
     protected $controller;
 
     /**
-     * @var \Magento\Framework\View\Result\PageFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Result\PageFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resultPageFactoryMock;
 
     /**
-     * @var \Magento\Framework\Controller\Result\RawFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Controller\Result\RawFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resultRawFactoryMock;
 
     /**
-     * @var \Magento\Framework\Controller\Result\JsonFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Controller\Result\JsonFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resultJsonFactoryMock;
 
     /**
-     * @var \Magento\Sales\Model\Service\InvoiceService|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Service\InvoiceService|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $invoiceServiceMock;
 
@@ -80,7 +80,7 @@ class UpdateQtyTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
 
@@ -303,7 +303,7 @@ class UpdateQtyTest extends \PHPUnit\Framework\TestCase
             ->method('prepend')
             ->with('Invoices');
 
-        /** @var \Magento\Framework\Controller\Result\Json|\PHPUnit_Framework_MockObject_MockObject */
+        /** @var \Magento\Framework\Controller\Result\Json|\PHPUnit\Framework\MockObject\MockObject */
         $resultJsonMock = $this->getMockBuilder(\Magento\Framework\Controller\Result\Json::class)
             ->disableOriginalConstructor()
             ->setMethods([])
@@ -346,7 +346,7 @@ class UpdateQtyTest extends \PHPUnit\Framework\TestCase
             ->method('prepend')
             ->with('Invoices');
 
-        /** @var \Magento\Framework\Controller\Result\Json|\PHPUnit_Framework_MockObject_MockObject */
+        /** @var \Magento\Framework\Controller\Result\Json|\PHPUnit\Framework\MockObject\MockObject */
         $resultJsonMock = $this->getMockBuilder(\Magento\Framework\Controller\Result\Json::class)
             ->disableOriginalConstructor()
             ->setMethods([])

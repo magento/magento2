@@ -40,7 +40,7 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
      */
     protected $_converter;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $fixturePath = realpath(__DIR__ . '/_files') . '/';
         $this->_fileList = [

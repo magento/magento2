@@ -23,14 +23,14 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
     /**
      * Price currency model mock
      *
-     * @var \Magento\Directory\Model\PriceCurrency | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Directory\Model\PriceCurrency | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $priceCurrencyMock;
 
     /**
      * Price helper mock
      *
-     * @var \Magento\Tax\Helper\Data | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Tax\Helper\Data | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $taxHelperMock;
 
@@ -42,7 +42,7 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
     /**
      * Init mocks and model
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->contextMock = $this->createPartialMock(
             \Magento\Framework\View\Element\Template\Context::class,

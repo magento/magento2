@@ -19,64 +19,64 @@ class ComparedTest extends \PHPUnit\Framework\TestCase
     protected $compared;
 
     /**
-     * @var \Magento\Framework\Model\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\Context|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $contextMock;
 
     /**
-     * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Registry|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $registryMock;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeManagerMock;
 
     /**
-     * @var \Magento\Customer\Model\Visitor|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\Visitor|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $visitorMock;
 
     /**
-     * @var \Magento\Customer\Model\Session|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\Session|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $sessionMock;
 
     /**
-     * @var \Magento\Framework\Session\Generic|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Session\Generic|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $genericMock;
 
     /**
-     * @var \Magento\Catalog\Model\Product\Visibility|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product\Visibility|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $visibilityMock;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\DateTime|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $dateTimeMock;
 
     /**
-     * @var \Magento\Catalog\Helper\Product\Compare|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Helper\Product\Compare|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $catalogProductHelperMock;
 
     /**
-     * @var \Magento\Framework\Model\ResourceModel\AbstractResource|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\ResourceModel\AbstractResource|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resourceMock;
 
     /**
-     * @var \Magento\Framework\Data\Collection\AbstractDb|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Data\Collection\AbstractDb|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $dbMock;
 
     /**
      * {@inheritDoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->contextMock = $this->getMockBuilder(\Magento\Framework\Model\Context::class)
             ->disableOriginalConstructor()

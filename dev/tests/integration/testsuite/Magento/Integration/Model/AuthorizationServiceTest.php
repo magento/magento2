@@ -19,10 +19,10 @@ class AuthorizationServiceTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Framework\Authorization */
     protected $libAuthorization;
 
-    /** @var \Magento\Authorization\Model\UserContextInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Authorization\Model\UserContextInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $userContextMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();

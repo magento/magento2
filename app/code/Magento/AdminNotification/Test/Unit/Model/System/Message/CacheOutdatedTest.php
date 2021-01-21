@@ -8,17 +8,17 @@ namespace Magento\AdminNotification\Test\Unit\Model\System\Message;
 class CacheOutdatedTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_authorizationMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_cacheTypeListMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_urlInterfaceMock;
 
@@ -27,7 +27,7 @@ class CacheOutdatedTest extends \PHPUnit\Framework\TestCase
      */
     protected $_messageModel;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_authorizationMock = $this->createMock(\Magento\Framework\AuthorizationInterface::class);
         $this->_urlInterfaceMock = $this->createMock(\Magento\Framework\UrlInterface::class);

@@ -21,13 +21,13 @@ class MessageEncoderTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
     protected $objectManager;
 
-    /** @var CommunicationConfig|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var CommunicationConfig|\PHPUnit\Framework\MockObject\MockObject */
     protected $communicationConfigMock;
 
-    /** @var \Magento\Framework\Webapi\ServiceOutputProcessor|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Webapi\ServiceOutputProcessor|\PHPUnit\Framework\MockObject\MockObject */
     protected $dataObjectEncoderMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 

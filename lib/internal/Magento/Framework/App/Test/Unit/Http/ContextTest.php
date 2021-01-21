@@ -22,11 +22,11 @@ class ContextTest extends \PHPUnit\Framework\TestCase
     protected $object;
 
     /**
-     * @var Json|\PHPUnit_Framework_MockObject_MockObject
+     * @var Json|\PHPUnit\Framework\MockObject\MockObject
      */
     private $serializerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->serializerMock = $this->getMockBuilder(Json::class)

@@ -16,14 +16,14 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     protected $validator;
 
     /**
-     * @var \Magento\Sales\Model\Order\Shipment\Track|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Shipment\Track|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $trackModelMock;
 
     /**
      * Set up
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->trackModelMock = $this->createPartialMock(
             \Magento\Sales\Model\Order\Shipment\Track::class,

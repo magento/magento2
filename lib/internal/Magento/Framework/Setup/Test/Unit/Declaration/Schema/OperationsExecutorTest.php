@@ -41,41 +41,41 @@ class OperationsExecutorTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var Sharding|\PHPUnit_Framework_MockObject_MockObject
+     * @var Sharding|\PHPUnit\Framework\MockObject\MockObject
      */
     private $shardingMock;
 
     /**
-     * @var ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResourceConnection|\PHPUnit\Framework\MockObject\MockObject
      */
     private $resourceConnectionMock;
 
     /**
-     * @var StatementFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var StatementFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $statementFactoryMock;
 
     /**
-     * @var DbSchemaWriterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var DbSchemaWriterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $dbSchemaWriterMock;
 
     /**
-     * @var StatementAggregatorFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var StatementAggregatorFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $statementAggregatorFactoryMock;
 
     /**
-     * @var CreateTable|\PHPUnit_Framework_MockObject_MockObject
+     * @var CreateTable|\PHPUnit\Framework\MockObject\MockObject
      */
     private $createTableOperation;
 
     /**
-     * @var DropElement|\PHPUnit_Framework_MockObject_MockObject
+     * @var DropElement|\PHPUnit\Framework\MockObject\MockObject
      */
     private $dropElement;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->shardingMock = $this->getMockBuilder(Sharding::class)
             ->disableOriginalConstructor()
@@ -148,7 +148,7 @@ class OperationsExecutorTest extends \PHPUnit\Framework\TestCase
 
     public function testExecute()
     {
-        /** @var DiffInterface|\PHPUnit_Framework_MockObject_MockObject $diff */
+        /** @var DiffInterface|\PHPUnit\Framework\MockObject\MockObject $diff */
         $diff = $this->getMockBuilder(DiffInterface::class)
             ->getMock();
         $this->shardingMock->expects(self::exactly(2))

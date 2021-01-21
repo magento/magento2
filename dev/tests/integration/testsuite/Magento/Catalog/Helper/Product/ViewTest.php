@@ -33,7 +33,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
      */
     protected $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
@@ -61,7 +61,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
     /**
      * Cleanup session, contaminated by product initialization methods
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->objectManager->get(\Magento\Catalog\Model\Session::class)->unsLastViewedProductId();
         $this->_controller = null;

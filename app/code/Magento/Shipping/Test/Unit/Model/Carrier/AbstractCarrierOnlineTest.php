@@ -21,21 +21,21 @@ class AbstractCarrierOnlineTest extends \PHPUnit\Framework\TestCase
     protected $productId = 1;
 
     /**
-     * @var AbstractCarrierOnline|\PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractCarrierOnline|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $carrier;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $stockRegistry;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $stockItemData;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->stockRegistry = $this->createMock(\Magento\CatalogInventory\Model\StockRegistry::class);
         $this->stockItemData = $this->createMock(\Magento\CatalogInventory\Model\Stock\Item::class);
@@ -118,11 +118,12 @@ class AbstractCarrierOnlineTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The security validation of the XML document has failed.
      */
     public function testParseXmlXXEXml()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('The security validation of the XML document has failed.');
+
         $xmlString = '<!DOCTYPE scan [
             <!ENTITY test SYSTEM "php://filter/read=convert.base64-encode/resource='
             . __DIR__ . '/AbstractCarrierOnline/xxe-xml.txt">]><scan>&test;</scan>';
@@ -134,11 +135,12 @@ class AbstractCarrierOnlineTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The security validation of the XML document has failed.
      */
     public function testParseXmlXQBXml()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('The security validation of the XML document has failed.');
+
         $xmlString = '<?xml version="1.0"?>
             <!DOCTYPE test [
               <!ENTITY value "value">

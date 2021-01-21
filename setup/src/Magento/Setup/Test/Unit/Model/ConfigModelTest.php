@@ -12,41 +12,41 @@ use Magento\Setup\Model\ConfigModel;
 class ConfigModelTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\ConfigModel
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Setup\Model\ConfigModel
      */
     private $configModel;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\ConfigOptionsListCollector
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Setup\Model\ConfigOptionsListCollector
      */
     private $collector;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\DeploymentConfig\Writer
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\DeploymentConfig\Writer
      */
     private $writer;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\DeploymentConfig
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\DeploymentConfig
      */
     private $deploymentConfig;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject |\Magento\Framework\Config\Data\ConfigData
+     * @var \PHPUnit\Framework\MockObject\MockObject |\Magento\Framework\Config\Data\ConfigData
      */
     private $configData;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Setup\FilePermissions
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Setup\FilePermissions
      */
     private $filePermissions;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Backend\Setup\ConfigOptionsList
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Backend\Setup\ConfigOptionsList
      */
     private $configOptionsList;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->collector = $this->createMock(\Magento\Setup\Model\ConfigOptionsListCollector::class);
         $this->writer = $this->createMock(\Magento\Framework\App\DeploymentConfig\Writer::class);

@@ -18,14 +18,14 @@ class ToolbarTest extends \PHPUnit\Framework\TestCase
     protected $toolbarModel;
 
     /**
-     * @var \Magento\Framework\App\Request\Http |\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Request\Http |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $requestMock;
 
     /**
      * Set up
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
             ->disableOriginalConstructor()

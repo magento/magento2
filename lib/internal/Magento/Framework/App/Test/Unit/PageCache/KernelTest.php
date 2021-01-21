@@ -17,40 +17,40 @@ class KernelTest extends \PHPUnit\Framework\TestCase
     /** @var Kernel */
     protected $kernel;
 
-    /** @var \Magento\Framework\App\PageCache\Cache|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\PageCache\Cache|\PHPUnit\Framework\MockObject\MockObject */
     protected $cacheMock;
 
-    /** @var \Magento\Framework\App\PageCache\Identifier|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\PageCache\Identifier|\PHPUnit\Framework\MockObject\MockObject */
     protected $identifierMock;
 
-    /** @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\Request\Http|\PHPUnit\Framework\MockObject\MockObject */
     protected $requestMock;
 
-    /** @var \Magento\Framework\App\Response\Http|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\Response\Http|\PHPUnit\Framework\MockObject\MockObject */
     protected $responseMock;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject|\Magento\PageCache\Model\Cache\Type */
+    /** @var  \PHPUnit\Framework\MockObject\MockObject|\Magento\PageCache\Model\Cache\Type */
     private $fullPageCacheMock;
 
-    /** @var \Magento\Framework\App\Response\Http|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\Response\Http|\PHPUnit\Framework\MockObject\MockObject */
     private $httpResponseMock;
 
-    /** @var ContextFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ContextFactory|\PHPUnit\Framework\MockObject\MockObject */
     private $contextFactoryMock;
 
-    /** @var HttpFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var HttpFactory|\PHPUnit\Framework\MockObject\MockObject */
     private $httpFactoryMock;
 
-    /** @var \Magento\Framework\Serialize\SerializerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Serialize\SerializerInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $serializer;
 
-    /** @var \Magento\Framework\App\Http\Context|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\Http\Context|\PHPUnit\Framework\MockObject\MockObject */
     private $contextMock;
 
     /**
      * Setup
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $headersMock = $this->createMock(\Zend\Http\Headers::class);
         $this->cacheMock = $this->createMock(\Magento\Framework\App\PageCache\Cache::class);

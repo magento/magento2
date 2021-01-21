@@ -15,12 +15,12 @@ use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 class LinkManagementTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $productRepository;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $productFactory;
 
@@ -30,7 +30,7 @@ class LinkManagementTest extends \PHPUnit\Framework\TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $configurableType;
 
@@ -40,11 +40,11 @@ class LinkManagementTest extends \PHPUnit\Framework\TestCase
     protected $object;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Api\DataObjectHelper
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Api\DataObjectHelper
      */
     protected $dataObjectHelperMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->productRepository = $this->createMock(\Magento\Catalog\Api\ProductRepositoryInterface::class);
         $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -234,11 +234,12 @@ class LinkManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\StateException
-     * @expectedExceptionMessage The product is already attached.
      */
     public function testAddChildStateException()
     {
+        $this->expectException(\Magento\Framework\Exception\StateException::class);
+        $this->expectExceptionMessage('The product is already attached.');
+
         $productSku = 'configurable-sku';
         $childSku = 'simple-sku';
 
@@ -310,10 +311,11 @@ class LinkManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InputException
      */
     public function testRemoveChildForbidden()
     {
+        $this->expectException(\Magento\Framework\Exception\InputException::class);
+
         $productSku = 'configurable';
         $childSku = 'simple_10';
 
@@ -327,10 +329,11 @@ class LinkManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testRemoveChildInvalidChildSku()
     {
+        $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
+
         $productSku = 'configurable';
         $childSku = 'simple_10';
 

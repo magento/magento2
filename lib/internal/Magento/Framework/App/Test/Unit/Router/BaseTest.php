@@ -18,41 +18,41 @@ class BaseTest extends \Magento\Framework\TestFramework\Unit\BaseTestCase
     private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Request\Http
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\Request\Http
      */
     private $requestMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Route\ConfigInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\Route\ConfigInterface
      */
     private $routeConfigMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\State
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\State
      */
     private $appStateMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Router\ActionList
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\Router\ActionList
      */
     private $actionListMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\ActionFactory
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\ActionFactory
      */
     private $actionFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Code\NameBuilder
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Code\NameBuilder
      */
     private $nameBuilderMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\DefaultPathInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\DefaultPathInterface
      */
     private $defaultPathMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         // Create mocks

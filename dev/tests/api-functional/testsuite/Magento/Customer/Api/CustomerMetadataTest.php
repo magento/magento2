@@ -28,7 +28,7 @@ class CustomerMetadataTest extends WebapiAbstract
     /**
      * Execute per test initialization.
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->customerMetadata = Bootstrap::getObjectManager()->create(CustomerMetadataInterface::class);
     }

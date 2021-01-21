@@ -24,26 +24,26 @@ class NewProductsTest extends \PHPUnit\Framework\TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\ProductFactory
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Model\ProductFactory
      */
     protected $productFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Product
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Model\Product
      */
     protected $product;
 
     /**
-     * @var \Magento\Catalog\Model\Product\Visibility|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product\Visibility|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $visibility;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $timezone;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->product = $this->createMock(\Magento\Catalog\Model\Product::class);
         $this->productFactory = $this->createPartialMock(\Magento\Catalog\Model\ProductFactory::class, ['create']);
@@ -64,7 +64,7 @@ class NewProductsTest extends \PHPUnit\Framework\TestCase
 
     public function testGetProductsCollection()
     {
-        /** @var \DateTime|\PHPUnit_Framework_MockObject_MockObject $dateObject */
+        /** @var \DateTime|\PHPUnit\Framework\MockObject\MockObject $dateObject */
         $dateObject = $this->createMock(\DateTime::class);
         $dateObject->expects($this->any())
             ->method('setTime')

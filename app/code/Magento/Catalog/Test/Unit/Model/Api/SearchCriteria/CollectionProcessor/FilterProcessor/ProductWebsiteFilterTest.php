@@ -14,19 +14,19 @@ class ProductWebsiteFilterTest extends \PHPUnit\Framework\TestCase
     /** @var ProductWebsiteFilter */
     private $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->model = new ProductWebsiteFilter();
     }
 
     public function testApply()
     {
-        /** @var Filter|\PHPUnit_Framework_MockObject_MockObject $filterMock */
+        /** @var Filter|\PHPUnit\Framework\MockObject\MockObject $filterMock */
         $filterMock = $this->getMockBuilder(Filter::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        /** @var Collection|\PHPUnit_Framework_MockObject_MockObject $collectionMock */
+        /** @var Collection|\PHPUnit\Framework\MockObject\MockObject $collectionMock */
         $collectionMock = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();

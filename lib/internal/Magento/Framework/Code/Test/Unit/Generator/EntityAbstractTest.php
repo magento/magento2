@@ -33,7 +33,7 @@ class EntityAbstractTest extends \PHPUnit\Framework\TestCase
     /**
      * Model under test
      *
-     * @var \Magento\Framework\Code\Generator\EntityAbstract| \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Code\Generator\EntityAbstract| \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_model;
 
@@ -47,14 +47,14 @@ class EntityAbstractTest extends \PHPUnit\Framework\TestCase
      */
     private $resultClass;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->sourceClass = '\\' . \Magento\Framework\DataObject::class;
         $this->resultClass = '\\' . \Magento\Framework\DataObject_MyResult::class;
         $this->_model = $this->getMockForAbstractClass(\Magento\Framework\Code\Generator\EntityAbstract::class);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_model);
     }
@@ -289,7 +289,7 @@ class EntityAbstractTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($willWriteCode ? self::RESULT_CODE : null));
 
         // Add configuration for the generation step
-        /** @var $ioObject \PHPUnit_Framework_MockObject_MockObject */
+        /** @var $ioObject \PHPUnit\Framework\MockObject\MockObject */
         $ioObject = $mocks['io_object'];
         if ($willWriteCode) {
             $ioObject->expects($this->once())->method('writeResultFile')->with(self::RESULT_FILE, self::RESULT_CODE);

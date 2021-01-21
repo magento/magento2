@@ -13,7 +13,7 @@ class AbstractAgreementTest extends \Magento\TestFramework\Indexer\TestCase
     /** @var \Magento\Paypal\Model\Method\Agreement */
     protected $_model;
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         $db = Bootstrap::getInstance()->getBootstrap()
             ->getApplication()
@@ -26,7 +26,7 @@ class AbstractAgreementTest extends \Magento\TestFramework\Indexer\TestCase
         parent::setUpBeforeClass();
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $config = $this->getMockBuilder(\Magento\Paypal\Model\Config::class)->disableOriginalConstructor()->getMock();
         $config->expects($this->any())->method('isMethodAvailable')->will($this->returnValue(true));
@@ -90,7 +90,7 @@ class AbstractAgreementTest extends \Magento\TestFramework\Indexer\TestCase
     /**
      * teardown
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
     }

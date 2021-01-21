@@ -21,7 +21,7 @@ class NotificationServiceTest extends \PHPUnit\Framework\TestCase
     {
         /**
          * @var
-         *  $notificationFactory \PHPUnit_Framework_MockObject_MockObject|\Magento\AdminNotification\Model\InboxFactory
+         *  $notificationFactory \PHPUnit\Framework\MockObject\MockObject|\Magento\AdminNotification\Model\InboxFactory
          */
         $notificationFactory = $this->createPartialMock(
             \Magento\AdminNotification\Model\InboxFactory::class,
@@ -52,11 +52,12 @@ class NotificationServiceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Wrong notification ID specified.
      */
     public function testMarkAsReadThrowsExceptionWhenNotificationIdIsInvalid()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('Wrong notification ID specified.');
+
         $notificationId = null;
         $service = $this->_getServiceInstanceForMarkAsReadTest($notificationId);
         $service->markAsRead($notificationId);

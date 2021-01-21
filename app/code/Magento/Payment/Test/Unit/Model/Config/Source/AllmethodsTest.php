@@ -13,7 +13,7 @@ class AllmethodsTest extends \PHPUnit\Framework\TestCase
     /**
      * Payment data
      *
-     * @var \Magento\Payment\Helper\Data | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Payment\Helper\Data | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_paymentData;
 
@@ -22,7 +22,7 @@ class AllmethodsTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_paymentData = $this->getMockBuilder(
             \Magento\Payment\Helper\Data::class

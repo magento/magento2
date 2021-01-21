@@ -20,12 +20,12 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class CalculatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Framework\Pricing\SaleableInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\SaleableInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $saleableItem;
 
     /**
-     * @var \Magento\Framework\Pricing\Price\PriceInterface[]|\PHPUnit_Framework_MockObject_MockObject[]
+     * @var \Magento\Framework\Pricing\Price\PriceInterface[]|\PHPUnit\Framework\MockObject\MockObject[]
      */
     protected $priceMocks = [];
 
@@ -35,27 +35,27 @@ class CalculatorTest extends \PHPUnit\Framework\TestCase
     protected $baseAmount = 50.;
 
     /**
-     * @var \Magento\Framework\Pricing\Adjustment\Calculator|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\Adjustment\Calculator|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $baseCalculator;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $amountFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $selectionFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $taxData;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $selectionPriceListProvider;
 
@@ -64,7 +64,7 @@ class CalculatorTest extends \PHPUnit\Framework\TestCase
      */
     protected $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->saleableItem = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->setMethods(['getPriceInfo', 'getPriceType', '__wakeup', 'getStore', 'getTypeInstance'])
@@ -187,7 +187,7 @@ class CalculatorTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->priceMocks = [];
     }
@@ -196,11 +196,11 @@ class CalculatorTest extends \PHPUnit\Framework\TestCase
      * Create amount mock
      *
      * @param array $amountData
-     * @return \Magento\Framework\Pricing\Amount\Base|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Framework\Pricing\Amount\Base|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function createAmountMock($amountData)
     {
-        /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Pricing\Amount\Base $amount */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\Pricing\Amount\Base $amount */
         $amount = $this->getMockBuilder(\Magento\Framework\Pricing\Amount\Base::class)
             ->setMethods(['getAdjustmentAmounts', 'getValue', '__wakeup'])
             ->disableOriginalConstructor()
@@ -215,11 +215,11 @@ class CalculatorTest extends \PHPUnit\Framework\TestCase
      * Create option mock
      *
      * @param array $optionData
-     * @return \Magento\Bundle\Model\Option|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Bundle\Model\Option|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function createOptionMock($optionData)
     {
-        /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Bundle\Model\Option $option */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Bundle\Model\Option $option */
         $option = $this->createPartialMock(\Magento\Bundle\Model\Option::class, ['isMultiSelection', '__wakeup']);
         $option->expects($this->any())->method('isMultiSelection')
             ->will($this->returnValue($optionData['isMultiSelection']));
@@ -238,11 +238,11 @@ class CalculatorTest extends \PHPUnit\Framework\TestCase
      * Create selection product mock
      *
      * @param array $selectionData
-     * @return \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Catalog\Model\Product|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function createSelectionMock($selectionData)
     {
-        /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Product $selection */
+        /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Catalog\Model\Product $selection */
         $selection = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->setMethods(['isSalable', 'getQuantity', 'getAmount', 'getProduct', '__wakeup'])
             ->disableOriginalConstructor()
@@ -485,7 +485,7 @@ class CalculatorTest extends \PHPUnit\Framework\TestCase
         $amount = 1;
         $result = 5;
 
-        /** @var $calculatorMock Calculator|PHPUnit_Framework_MockObject_MockObject */
+        /** @var $calculatorMock Calculator|PHPUnit\Framework\MockObject\MockObject */
         $calculatorMock = $this->getMockBuilder(\Magento\Bundle\Pricing\Adjustment\Calculator::class)
             ->disableOriginalConstructor()
             ->setMethods(['calculateBundleAmount'])
@@ -506,7 +506,7 @@ class CalculatorTest extends \PHPUnit\Framework\TestCase
 
         $exclude = 'false';
 
-        /** @var $calculatorMock Calculator|PHPUnit_Framework_MockObject_MockObject */
+        /** @var $calculatorMock Calculator|PHPUnit\Framework\MockObject\MockObject */
         $calculatorMock = $this->getMockBuilder(\Magento\Bundle\Pricing\Adjustment\Calculator::class)
             ->disableOriginalConstructor()
             ->setMethods(['getOptionsAmount'])
@@ -529,7 +529,7 @@ class CalculatorTest extends \PHPUnit\Framework\TestCase
 
         $exclude = 'false';
 
-        /** @var $calculatorMock Calculator|PHPUnit_Framework_MockObject_MockObject */
+        /** @var $calculatorMock Calculator|PHPUnit\Framework\MockObject\MockObject */
         $calculatorMock = $this->getMockBuilder(\Magento\Bundle\Pricing\Adjustment\Calculator::class)
             ->disableOriginalConstructor()
             ->setMethods(['getOptionsAmount'])
@@ -555,7 +555,7 @@ class CalculatorTest extends \PHPUnit\Framework\TestCase
 
         $exclude = 'false';
 
-        /** @var $calculatorMock Calculator|PHPUnit_Framework_MockObject_MockObject */
+        /** @var $calculatorMock Calculator|PHPUnit\Framework\MockObject\MockObject */
         $calculatorMock = $this->getMockBuilder(\Magento\Bundle\Pricing\Adjustment\Calculator::class)
             ->disableOriginalConstructor()
             ->setMethods(['calculateBundleAmount', 'getSelectionAmounts'])

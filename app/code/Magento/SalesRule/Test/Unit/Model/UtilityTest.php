@@ -13,52 +13,52 @@ namespace Magento\SalesRule\Test\Unit\Model;
 class UtilityTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\SalesRule\Model\ResourceModel\Coupon\UsageFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\SalesRule\Model\ResourceModel\Coupon\UsageFactory | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $usageFactory;
 
     /**
-     * @var \Magento\SalesRule\Model\CouponFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\SalesRule\Model\CouponFactory | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $couponFactory;
 
     /**
-     * @var \Magento\SalesRule\Model\Coupon | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\SalesRule\Model\Coupon | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $coupon;
 
     /**
-     * @var \Magento\Quote\Model\Quote | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Model\Quote | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $quote;
 
     /**
-     * @var \Magento\SalesRule\Model\Rule\CustomerFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\SalesRule\Model\Rule\CustomerFactory | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $customerFactory;
 
     /**
-     * @var \Magento\SalesRule\Model\Rule\Customer | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\SalesRule\Model\Rule\Customer | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $customer;
 
     /**
-     * @var \Magento\Quote\Model\Quote\Address | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Model\Quote\Address | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $address;
 
     /**
-     * @var \Magento\SalesRule\Model\Rule | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\SalesRule\Model\Rule | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $rule;
 
     /**
-     * @var \Magento\Framework\DataObjectFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DataObjectFactory | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $objectFactory;
 
     /**
-     * @var \Magento\Quote\Model\Quote\Item\AbstractItem | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Model\Quote\Item\AbstractItem | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $item;
 
@@ -68,11 +68,11 @@ class UtilityTest extends \PHPUnit\Framework\TestCase
     protected $utility;
 
     /**
-     * @var \Magento\Framework\Pricing\PriceCurrencyInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\PriceCurrencyInterface | \PHPUnit\Framework\MockObject\MockObject
      */
     protected $priceCurrency;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->usageFactory = $this->createPartialMock(
             \Magento\SalesRule\Model\ResourceModel\Coupon\UsageFactory::class,

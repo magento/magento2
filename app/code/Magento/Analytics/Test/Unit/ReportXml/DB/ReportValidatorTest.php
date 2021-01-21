@@ -16,27 +16,27 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 class ReportValidatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var ConnectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConnectionFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $connectionFactoryMock;
 
     /**
-     * @var QueryFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var QueryFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     private $queryFactoryMock;
 
     /**
-     * @var Query|\PHPUnit_Framework_MockObject_MockObject
+     * @var Query|\PHPUnit\Framework\MockObject\MockObject
      */
     private $queryMock;
 
     /**
-     * @var AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $connectionMock;
 
     /**
-     * @var Select|\PHPUnit_Framework_MockObject_MockObject
+     * @var Select|\PHPUnit\Framework\MockObject\MockObject
      */
     private $selectMock;
 
@@ -53,7 +53,7 @@ class ReportValidatorTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->connectionFactoryMock = $this->getMockBuilder(ConnectionFactory::class)
             ->disableOriginalConstructor()->getMock();

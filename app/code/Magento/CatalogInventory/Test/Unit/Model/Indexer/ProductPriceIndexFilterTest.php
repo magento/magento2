@@ -48,9 +48,9 @@ class ProductPriceIndexFilterTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->stockConfiguration = $this->createMock(StockConfigurationInterface::class);
+        $this->stockConfiguration = $this->getMockForAbstractClass(StockConfigurationInterface::class);
         $this->item = $this->createMock(Item::class);
         $this->resourceCnnection = $this->createMock(ResourceConnection::class);
         $this->generator = $this->createMock(Generator::class);

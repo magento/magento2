@@ -10,11 +10,11 @@ use Magento\Framework\App\State;
 class JobStaticRegenerateTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\Cron\JobStaticRegenerate
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Setup\Model\Cron\JobStaticRegenerate
      */
     private $jobStaticRegenerate;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->jobStaticRegenerate = $this->getJobStaticRegenerateMock(
             [
@@ -139,7 +139,7 @@ class JobStaticRegenerateTest extends \PHPUnit\Framework\TestCase
     /**
      * Gets JobStaticRegenerate mock
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\Cron\JobStaticRegenerate
+     * @return \PHPUnit\Framework\MockObject\MockObject|\Magento\Setup\Model\Cron\JobStaticRegenerate
      */
     protected function getJobStaticRegenerateMock($methods = null)
     {
@@ -149,7 +149,7 @@ class JobStaticRegenerateTest extends \PHPUnit\Framework\TestCase
     /**
      * Gets ObjectManagerProvider mock
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Deploy\Model\Filesystem
+     * @return \PHPUnit\Framework\MockObject\MockObject|\Magento\Deploy\Model\Filesystem
      */
     protected function getFilesystemObjectMock($methods = null)
     {
@@ -159,7 +159,7 @@ class JobStaticRegenerateTest extends \PHPUnit\Framework\TestCase
     /**
      * Gets status object mock
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\Cron\Status
+     * @return \PHPUnit\Framework\MockObject\MockObject|\Magento\Setup\Model\Cron\Status
      */
     protected function getStatusObjectMock($methods = null)
     {
@@ -169,7 +169,7 @@ class JobStaticRegenerateTest extends \PHPUnit\Framework\TestCase
     /**
      * Gets clean files object mock
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\State\CleanupFiles
+     * @return \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\State\CleanupFiles
      */
     protected function getCleanFilesObjectMock($methods = null)
     {
@@ -179,7 +179,7 @@ class JobStaticRegenerateTest extends \PHPUnit\Framework\TestCase
     /**
      * Gets cache object mock
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\State\CleanupFiles
+     * @return \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\App\State\CleanupFiles
      */
     protected function getCacheObjectMock($methods = null)
     {
@@ -189,7 +189,7 @@ class JobStaticRegenerateTest extends \PHPUnit\Framework\TestCase
     /**
      * Gets output object mock
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Symfony\Component\Console\Output\OutputInterface
+     * @return \PHPUnit\Framework\MockObject\MockObject|\Symfony\Component\Console\Output\OutputInterface
      */
     protected function getOutputObjectMock()
     {
@@ -199,7 +199,7 @@ class JobStaticRegenerateTest extends \PHPUnit\Framework\TestCase
     /**
      * Gets mode mock
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Deploy\Model\Mode
+     * @return \PHPUnit\Framework\MockObject\MockObject|\Magento\Deploy\Model\Mode
      */
     protected function getModeObjectMock($methods = null)
     {

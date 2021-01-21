@@ -24,114 +24,114 @@ class CreatePostTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Customer\Model\Session|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\Session|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $customerSessionMock;
 
     /**
-     * @var \Magento\Customer\Model\Url|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\Url|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $customerUrl;
 
     /**
-     * @var \Magento\Customer\Model\Registration|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\Registration|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $registration;
 
     /**
-     * @var \Magento\Framework\App\Response\RedirectInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Response\RedirectInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $redirectMock;
 
     /**
-     * @var \Magento\Customer\Api\CustomerRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Api\CustomerRepositoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $customerRepository;
 
     /**
-     * @var \Magento\Customer\Api\AccountManagementInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Api\AccountManagementInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $accountManagement;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $responseMock;
 
     /**
-     * @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Request\Http|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $requestMock;
 
     /**
-     * @var \Magento\Framework\Url|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Url|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $urlMock;
 
     /**
-     * @var \Magento\Customer\Model\CustomerExtractor|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\CustomerExtractor|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $customerExtractorMock;
 
     /**
-     * @var \Magento\Customer\Api\Data\CustomerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Api\Data\CustomerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $customerMock;
 
     /**
-     * @var \Magento\Customer\Api\Data\CustomerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Api\Data\CustomerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $customerDetailsMock;
 
     /**
-     * @var \Magento\Customer\Api\Data\CustomerInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Api\Data\CustomerInterfaceFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $customerDetailsFactoryMock;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $scopeConfigMock;
 
     /**
-     * @var \Magento\Store\Model\StoreManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\StoreManager|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeManagerMock;
 
     /**
-     * @var \Magento\Store\Model\Store|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Store\Model\Store|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $storeMock;
 
     /**
-     * @var \Magento\Customer\Helper\Address|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Helper\Address|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $addressHelperMock;
 
     /**
-     * @var \Magento\Newsletter\Model\Subscriber|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Newsletter\Model\Subscriber|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $subscriberMock;
 
     /**
-     * @var \Magento\Framework\Message\Manager|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Message\Manager|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $messageManagerMock;
 
     /**
-     * @var \Magento\Framework\Api\DataObjectHelper|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Api\DataObjectHelper|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $dataObjectHelperMock;
 
     /**
-     * @var \Magento\Framework\Controller\Result\RedirectFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Controller\Result\RedirectFactory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $resultRedirectFactoryMock;
 
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         /**

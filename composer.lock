@@ -5941,23 +5941,23 @@
         },
         {
             "name": "allure-framework/allure-phpunit",
-            "version": "1.2.3",
+            "version": "1.2.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/allure-framework/allure-phpunit.git",
-                "reference": "45504aeba41304cf155a898fa9ac1aae79f4a089"
+                "reference": "9399629c6eed79da4be18fd22adf83ef36c2d2e0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/allure-framework/allure-phpunit/zipball/45504aeba41304cf155a898fa9ac1aae79f4a089",
-                "reference": "45504aeba41304cf155a898fa9ac1aae79f4a089",
+                "url": "https://api.github.com/repos/allure-framework/allure-phpunit/zipball/9399629c6eed79da4be18fd22adf83ef36c2d2e0",
+                "reference": "9399629c6eed79da4be18fd22adf83ef36c2d2e0",
                 "shasum": ""
             },
             "require": {
                 "allure-framework/allure-php-api": "~1.1.0",
                 "mikey179/vfsstream": "1.*",
-                "php": ">=7.0.0",
-                "phpunit/phpunit": ">=6.0.0"
+                "php": ">=7.1.0",
+                "phpunit/phpunit": ">=7.0.0"
             },
             "type": "library",
             "autoload": {
@@ -5987,7 +5987,7 @@
                 "steps",
                 "testing"
             ],
-            "time": "2017-11-03T13:08:21+00:00"
+            "time": "2018-10-25T12:03:54+00:00"
         },
         {
             "name": "aws/aws-sdk-php",

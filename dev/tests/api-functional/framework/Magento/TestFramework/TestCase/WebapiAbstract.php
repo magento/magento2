@@ -105,7 +105,7 @@ abstract class WebapiAbstract extends \PHPUnit\Framework\TestCase
      * Initialize fixture namespaces.
      * //phpcs:disable
      */
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         //phpcs:enable
         parent::setUpBeforeClass();
@@ -118,7 +118,7 @@ abstract class WebapiAbstract extends \PHPUnit\Framework\TestCase
      * @return void
      * //phpcs:disable
      */
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         //phpcs:enable
         //clear garbage in memory
@@ -142,7 +142,7 @@ abstract class WebapiAbstract extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $fixtureNamespace = self::_getFixtureNamespace();
         if (isset(self::$_methodLevelFixtures[$fixtureNamespace])

@@ -22,21 +22,21 @@ class ContextTest extends \PHPUnit\Framework\TestCase
     protected $context;
 
     /**
-     * @var \Magento\Framework\App\State|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\State|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $appState;
 
     /**
-     * @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Request\Http|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $request;
 
     /**
-     * @var \Magento\Framework\View\DesignInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\DesignInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $design;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->markTestSkipped('Testcase needs to be refactored.');
         $this->appState = $this->getMockBuilder(\Magento\Framework\App\State::class)

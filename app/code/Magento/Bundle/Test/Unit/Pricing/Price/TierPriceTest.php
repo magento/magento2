@@ -16,17 +16,17 @@ use Magento\Customer\Model\Group;
 class TierPriceTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $priceInfo;
 
     /**
-     * @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $product;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $calculator;
 
@@ -36,19 +36,19 @@ class TierPriceTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $priceCurrencyMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $groupManagement;
 
     /**
      * Initialize base dependencies
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->priceInfo = $this->createMock(\Magento\Framework\Pricing\PriceInfo\Base::class);
 
@@ -182,7 +182,7 @@ class TierPriceTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetSavePercent($baseAmount, $tierPrice, $savePercent)
     {
-        /** @var \Magento\Framework\Pricing\Amount\AmountInterface|\PHPUnit_Framework_MockObject_MockObject $amount */
+        /** @var \Magento\Framework\Pricing\Amount\AmountInterface|\PHPUnit\Framework\MockObject\MockObject $amount */
         $amount = $this->getMockForAbstractClass(\Magento\Framework\Pricing\Amount\AmountInterface::class);
         $amount->expects($this->any())
             ->method('getValue')

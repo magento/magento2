@@ -25,17 +25,17 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     protected $pool;
 
     /**
-     * @var \Magento\Framework\Pricing\Price\PriceInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\Price\PriceInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $priceMock;
 
     /**
-     * @var \Magento\Framework\Pricing\SaleableInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\SaleableInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $saleableItemMock;
 
     /**
-     * @var \Magento\Framework\Pricing\Price\Factory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\Price\Factory|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $factoryMock;
 
@@ -47,7 +47,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     /**
      * Test setUp
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->pool = new Pool(
             [

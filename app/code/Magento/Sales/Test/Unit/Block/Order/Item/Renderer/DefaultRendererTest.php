@@ -9,17 +9,17 @@ namespace Magento\Sales\Test\Unit\Block\Order\Item\Renderer;
 class DefaultRendererTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer
      */
     protected $block;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Backend\Block\Template
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Backend\Block\Template
      */
     protected $priceRenderBlock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Layout
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Framework\View\Layout
      */
     protected $layoutMock;
 
@@ -28,13 +28,13 @@ class DefaultRendererTest extends \PHPUnit\Framework\TestCase
      */
     protected $objectManager;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Quote\Model\Quote\Item  */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Magento\Quote\Model\Quote\Item  */
     protected $itemMock;
 
     /**
      * Initialize required data
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 

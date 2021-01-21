@@ -19,7 +19,7 @@ use Magento\Framework\App\ObjectManager\ConfigLoader;
 use Magento\Framework\App\StaticResource;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 use Psr\Log\LoggerInterface;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -81,7 +81,7 @@ class StaticResourceTest extends \PHPUnit\Framework\TestCase
      */
     private $object;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->stateMock = $this->createMock(State::class);
         $this->responseMock = $this->getMockForAbstractClass(FileInterface::class);

@@ -60,7 +60,7 @@ class EmailNotificationTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -82,7 +82,7 @@ class EmailNotificationTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         if ($this->moduleManager->isEnabled('Magento_Email')) {
             $this->mutableScopeConfig->clean();
