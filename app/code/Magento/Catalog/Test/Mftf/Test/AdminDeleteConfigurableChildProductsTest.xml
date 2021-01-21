@@ -108,11 +108,9 @@
         <actionGroup ref="AssertStorefrontProductStockStatusOnProductPageActionGroup" stepKey="seeProductStatusInStoreFront">
             <argument name="productStockStatus" value="In Stock"/>
         </actionGroup>
-        <!--<see selector="{{StorefrontProductInfoMainSection.productAttributeTitle1}}" userInput="$$createConfigProductAttribute.default_value$$" stepKey="seeProductAttributeLabel"/>-->
         <actionGroup ref="StorefrontAssertProductAttributeLabelVisibleActionGroup" stepKey="seeProductAttributeLabel">
             <argument name="productAttributeLabel" value="$$createConfigProductAttribute.default_value$$"/>
         </actionGroup>
-        <!--<seeElement selector="{{StorefrontProductInfoMainSection.productAttributeOptions1}}" stepKey="seeProductAttributeOptions"/>-->
         <actionGroup ref="StorefrontAssertProductAttributeOptionVisibleActionGroup" stepKey="seeProductAttributeOptions"/>
         <!-- Delete Child products -->
         <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteFirstChildProduct">
