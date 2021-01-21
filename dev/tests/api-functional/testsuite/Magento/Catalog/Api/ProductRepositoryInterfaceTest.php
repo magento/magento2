@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -23,6 +24,7 @@ use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Api\SortOrderBuilder;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Webapi\Exception as HTTPExceptionCodes;
+use Magento\Framework\Webapi\Rest\Request;
 use Magento\Integration\Api\AdminTokenServiceInterface;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Api\StoreWebsiteRelationInterface;
@@ -64,7 +66,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             ProductInterface::SKU => 'simple_with_cross',
             ProductInterface::NAME => 'Simple Product With Related Product',
             ProductInterface::TYPE_ID => 'simple',
-            ProductInterface::PRICE => 10
+            ProductInterface::PRICE => 10,
         ],
     ];
 
@@ -143,7 +145,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . '/' . $sku,
-                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
+                'httpMethod' => Request::HTTP_METHOD_GET,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -165,7 +167,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . '/' . $invalidSku,
-                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
+                'httpMethod' => Request::HTTP_METHOD_GET,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -245,7 +247,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $websitesData = [
             'website_ids' => [
                 $website->getId(),
-            ]
+            ],
         ];
         $productBuilder[ProductInterface::EXTENSION_ATTRIBUTES_KEY] = $websitesData;
         $response = $this->updateProduct($productBuilder);
@@ -345,7 +347,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             'website_ids' => [
                 1,
                 (int)$website->getId(),
-            ]
+            ],
         ];
         $productBuilder[ProductInterface::EXTENSION_ATTRIBUTES_KEY] = $websitesData;
         $response = $this->saveProduct($productBuilder);
@@ -372,7 +374,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $websitesData = [
             'website_ids' => [
                 $website->getId(),
-            ]
+            ],
         ];
         $productBuilder[ProductInterface::EXTENSION_ATTRIBUTES_KEY] = $websitesData;
         $response = $this->saveProduct($productBuilder);
@@ -400,7 +402,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $websitesData = [
             'website_ids' => [
                 $website->getId(),
-            ]
+            ],
         ];
         $productBuilder[ProductInterface::EXTENSION_ATTRIBUTES_KEY] = $websitesData;
         $response = $this->updateProduct($productBuilder);
@@ -557,8 +559,8 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             ProductInterface::STATUS => 1,
             ProductInterface::ATTRIBUTE_SET_ID => 4,
             ProductInterface::EXTENSION_ATTRIBUTES_KEY => [
-                'stock_item' => $this->getStockItemData()
-            ]
+                'stock_item' => $this->getStockItemData(),
+            ],
         ];
 
         $this->saveProduct($productData);
@@ -568,7 +570,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             "link_type" => "related",
             "linked_product_sku" => "product_simple_500",
             "linked_product_type" => "simple",
-            "position" => 0
+            "position" => 0,
         ];
         $productWithRelatedData = [
             ProductInterface::SKU => "product_simple_with_related_500",
@@ -578,7 +580,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             ProductInterface::PRICE => 100,
             ProductInterface::STATUS => 1,
             ProductInterface::ATTRIBUTE_SET_ID => 4,
-            "product_links" => [$productLinkData]
+            "product_links" => [$productLinkData],
         ];
 
         $this->saveProduct($productWithRelatedData);
@@ -595,7 +597,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             "link_type" => "upsell",
             "linked_product_sku" => "product_simple_500",
             "linked_product_type" => "simple",
-            "position" => 0
+            "position" => 0,
         ];
         $productWithUpsellData = [
             ProductInterface::SKU => "product_simple_with_related_500",
@@ -605,7 +607,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             ProductInterface::PRICE => 100,
             ProductInterface::STATUS => 1,
             ProductInterface::ATTRIBUTE_SET_ID => 4,
-            "product_links" => [$productLinkData]
+            "product_links" => [$productLinkData],
         ];
 
         $this->saveProduct($productWithUpsellData);
@@ -625,7 +627,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             ProductInterface::PRICE => 100,
             ProductInterface::STATUS => 1,
             ProductInterface::ATTRIBUTE_SET_ID => 4,
-            "product_links" => []
+            "product_links" => [],
         ];
 
         $this->saveProduct($productWithNoLinkData);
@@ -809,7 +811,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
                 'disabled' => false,
                 'types' => [],
                 'file' => '/t/i/' . $filename1,
-            ]
+            ],
         ];
         $this->assertEquals($expectedValue, $mediaGalleryEntries);
         //don't set the media_gallery_entries field, existing entry should not be touched
@@ -895,7 +897,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . '/' . $sku,
-                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
+                'httpMethod' => Request::HTTP_METHOD_PUT,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -950,7 +952,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . '?' . http_build_query($searchCriteria),
-                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
+                'httpMethod' => Request::HTTP_METHOD_GET,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -1006,8 +1008,8 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . '?' . http_build_query($searchCriteria) . '&fields=' .
                     $additionalParams,
-                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
-            ]
+                'httpMethod' => Request::HTTP_METHOD_GET,
+            ],
         ];
 
         $response = $this->_webApiCall($serviceInfo, $searchCriteria);
@@ -1056,7 +1058,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . '?' . http_build_query($searchCriteria),
-                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
+                'httpMethod' => Request::HTTP_METHOD_GET,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -1089,7 +1091,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . '?' . http_build_query($searchCriteria),
-                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
+                'httpMethod' => Request::HTTP_METHOD_GET,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -1155,8 +1157,8 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
                     ],
                 ],
                 ['simple-2', 'simple-1'],
-                null
-            ]
+                null,
+            ],
         ];
     }
 
@@ -1194,7 +1196,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . '?' . http_build_query($requestData),
-                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
+                'httpMethod' => Request::HTTP_METHOD_GET,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -1220,23 +1222,23 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             'expect-all-items' => [
                 'pageSize' => 10,
                 'currentPage' => 1,
-                'expectedCount' => 5
+                'expectedCount' => 5,
             ],
             'expect-page=size-items' => [
                 'pageSize' => 2,
                 'currentPage' => 1,
-                'expectedCount' => 2
+                'expectedCount' => 2,
             ],
             'expect-less-than-pagesize-elements' => [
                 'pageSize' => 3,
                 'currentPage' => 2,
-                'expectedCount' => 2
+                'expectedCount' => 2,
             ],
             'expect-no-items' => [
                 'pageSize' => 100,
                 'currentPage' => 99,
-                'expectedCount' => 0
-            ]
+                'expectedCount' => 0,
+            ],
         ];
     }
 
@@ -1292,7 +1294,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . '?' . http_build_query($requestData),
-                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
+                'httpMethod' => Request::HTTP_METHOD_GET,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -1309,6 +1311,79 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $this->assertNotNull(
             $searchResult['items'][0][ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['website_ids']
         );
+    }
+
+    /**
+     * Test get list filter by category sorting by position.
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/products_for_search.php
+     * @dataProvider getListSortingByPositionDataProvider
+     *
+     * @param string $sortOrder
+     * @param array $expectedItems
+     */
+    public function testGetListSortingByPosition(string $sortOrder, array $expectedItems): void
+    {
+        $sortOrderBuilder = Bootstrap::getObjectManager()->create(SortOrderBuilder::class);
+        $searchCriteriaBuilder = Bootstrap::getObjectManager()->create(SearchCriteriaBuilder::class);
+        $sortOrder = $sortOrderBuilder->setField('position')->setDirection($sortOrder)->create();
+        $searchCriteriaBuilder->addFilter('category_id', 333);
+        $searchCriteriaBuilder->addSortOrder($sortOrder);
+        $searchCriteriaBuilder->setPageSize(5);
+        $searchCriteriaBuilder->setCurrentPage(1);
+        $searchData = $searchCriteriaBuilder->create()->__toArray();
+        $requestData = ['searchCriteria' => $searchData];
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH . '?' . http_build_query($requestData),
+                'httpMethod' => Request::HTTP_METHOD_GET,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'GetList',
+            ],
+        ];
+
+        $searchResult = $this->_webApiCall($serviceInfo, $requestData);
+
+        $this->assertEquals(5, $searchResult['total_count']);
+        $this->assertEquals($expectedItems[0], $searchResult['items'][0]['sku']);
+        $this->assertEquals($expectedItems[1], $searchResult['items'][1]['sku']);
+        $this->assertEquals($expectedItems[2], $searchResult['items'][2]['sku']);
+        $this->assertEquals($expectedItems[3], $searchResult['items'][3]['sku']);
+        $this->assertEquals($expectedItems[4], $searchResult['items'][4]['sku']);
+    }
+
+    /**
+     * Provides data for testGetListSortingByPosition().
+     *
+     * @return array[]
+     */
+    public function getListSortingByPositionDataProvider(): array
+    {
+        return [
+            'sort_by_position_descending' => [
+                'direction' => SortOrder::SORT_DESC,
+                'expectedItems' => [
+                    'search_product_5',
+                    'search_product_4',
+                    'search_product_3',
+                    'search_product_2',
+                    'search_product_1',
+                ],
+            ],
+            'sort_by_position_ascending' => [
+                'direction' => SortOrder::SORT_ASC,
+                'expectedItems' => [
+                    'search_product_1',
+                    'search_product_2',
+                    'search_product_3',
+                    'search_product_4',
+                    'search_product_5',
+                ],
+            ],
+        ];
     }
 
     /**
@@ -1393,7 +1468,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             'custom_attributes' => [
                 ['attribute_code' => 'cost', 'value' => ''],
                 ['attribute_code' => 'description', 'value' => 'Description'],
-            ]
+            ],
         ];
     }
 
@@ -1419,7 +1494,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH,
-                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
+                'httpMethod' => Request::HTTP_METHOD_POST,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -1446,7 +1521,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . '/' . $sku,
-                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_DELETE,
+                'httpMethod' => Request::HTTP_METHOD_DELETE,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,
@@ -1478,7 +1553,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
                 'customer_group_id' => $custGroup2,
                 'value' => 3.45,
                 'qty' => 10,
-            ]
+            ],
         ];
         $this->saveProduct($productData);
         $response = $this->getProduct($productData[ProductInterface::SKU]);
@@ -1587,7 +1662,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         // Create simple product
         $productData = $this->getSimpleProductData();
         $productData[ProductInterface::EXTENSION_ATTRIBUTES_KEY] = [
-            self::KEY_CATEGORY_LINKS => [['category_id' => 333, 'position' => 0]]
+            self::KEY_CATEGORY_LINKS => [['category_id' => 333, 'position' => 0]],
         ];
         $response = $this->saveProduct($productData);
         $this->assertEquals(
@@ -1634,7 +1709,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $response = $this->getProduct('simple333');
         // update category_link position
         $response[ProductInterface::EXTENSION_ATTRIBUTES_KEY][self::KEY_CATEGORY_LINKS] = [
-            ['category_id' => 333, 'position' => 10]
+            ['category_id' => 333, 'position' => 10],
         ];
         $response = $this->updateProduct($response);
         $this->assertEquals(
@@ -1686,7 +1761,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
                 'type' => 'image/jpeg',
                 'name' => $filename,
                 'base64_encoded_data' => $encodedImage,
-            ]
+            ],
         ];
     }
 
@@ -1697,7 +1772,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     {
         $productData = $this->getSimpleProductData();
         $productData['custom_attributes'] = [
-            ['attribute_code' => self::KEY_SPECIAL_PRICE, 'value' => '1']
+            ['attribute_code' => self::KEY_SPECIAL_PRICE, 'value' => '1'],
         ];
         $this->saveProduct($productData);
         $response = $this->getProduct($productData[ProductInterface::SKU]);
@@ -1727,14 +1802,14 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         );
         $productData = $this->getSimpleProductData();
         $productData['custom_attributes'] = [
-            ['attribute_code' => self::KEY_SPECIAL_PRICE, 'value' => 5.00]
+            ['attribute_code' => self::KEY_SPECIAL_PRICE, 'value' => 5.00],
         ];
         $this->saveProduct($productData);
         $response = $this->getProduct($productData[ProductInterface::SKU]);
         $customAttributes = array_column($response['custom_attributes'], 'value', 'attribute_code');
         $this->assertEquals(5, $customAttributes[self::KEY_SPECIAL_PRICE]);
         $productData['custom_attributes'] = [
-            ['attribute_code' => self::KEY_SPECIAL_PRICE, 'value' => null]
+            ['attribute_code' => self::KEY_SPECIAL_PRICE, 'value' => null],
         ];
         $this->saveProduct($productData);
         $response = $this->getProduct($productData[ProductInterface::SKU]);
@@ -1794,7 +1869,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
 
         $productData = $this->getSimpleProductData();
         $productData['custom_attributes'] = [
-            ['attribute_code' => $multiselectAttributeCode, 'value' => "{$option1},{$option2}"]
+            ['attribute_code' => $multiselectAttributeCode, 'value' => "{$option1},{$option2}"],
         ];
         $this->saveProduct($productData, 'all');
 
@@ -1805,7 +1880,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         );
 
         $productData['custom_attributes'] = [
-            ['attribute_code' => $multiselectAttributeCode, 'value' => ""]
+            ['attribute_code' => $multiselectAttributeCode, 'value' => ""],
         ];
         $this->saveProduct($productData, 'all');
         $this->assertMultiselectValue(
@@ -1826,7 +1901,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => '/V1/products/attributes/' . $attributeCode . '/options',
-                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
+                'httpMethod' => Request::HTTP_METHOD_GET,
             ],
             'soap' => [
                 'service' => 'catalogProductAttributeOptionManagementV1',
@@ -1985,7 +2060,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             $this->getMediaGalleryData(basename($img2), $encodedImage, 2, 'back', false, ['small_image', 'thumbnail']),
         ];
         $productData[ProductInterface::EXTENSION_ATTRIBUTES_KEY]['website_ids'] = [
-            $defaultWebsiteId
+            $defaultWebsiteId,
         ];
         $response = $this->saveProduct($productData, 'all');
         if (isset($response['id'])) {
@@ -2062,7 +2137,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             $this->getMediaGalleryData(basename($img2), $encodedImage, 2, 'back', false, ['small_image', 'thumbnail']),
         ];
         $productData[ProductInterface::EXTENSION_ATTRIBUTES_KEY]['website_ids'] = [
-            $defaultWebsiteId
+            $defaultWebsiteId,
         ];
         $response = $this->saveProduct($productData, 'all');
         if (isset($response['id'])) {
