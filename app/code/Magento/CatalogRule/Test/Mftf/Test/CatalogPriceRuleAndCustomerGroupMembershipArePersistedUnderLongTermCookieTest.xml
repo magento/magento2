@@ -40,10 +40,7 @@
             <actionGroup ref="AdminCatalogPriceRuleFillActionsActionGroup" stepKey="fillActionsForThirdPriceRule"/>
             <actionGroup ref="AdminCatalogPriceRuleSaveAndApplyActionGroup" stepKey="clickSaveAndApplyRule"/>
 
-            <!-- Perform reindex -->
-            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-                <argument name="indices" value="catalogrule_rule"/>
-            </actionGroup>
+            <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
         </before>
         <after>
             <createData entity="PersistentConfigDefault" stepKey="setDefaultPersistentState"/>
