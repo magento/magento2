@@ -73,7 +73,7 @@
             <argument name="adjustmentFee" value="10"/>
         </actionGroup>
 
-        <actionGroup ref="AdminClickRefundOfflineOnMemoDetailPageActionGroup" stepKey="clickRefundOffline"/>
+        <actionGroup ref="AdminClickRefundOfflineOnCreditMemoDetailPageActionGroup" stepKey="clickRefundOffline"/>
 
         <actionGroup ref="AdminOpenCreditMemoFromOrderPageActionGroup" stepKey="openCreditMemo"/>
 
