@@ -153,7 +153,7 @@ class Filter extends \Magento\Framework\Filter\Template
     protected $urlModel;
 
     /**
-     * @var \Pelago\Emogrifier
+     * @var \Pelago\Emogrifier\CssInliner
      * @deprecated 100.2.0
      */
     protected $emogrifier;
@@ -195,7 +195,7 @@ class Filter extends \Magento\Framework\Filter\Template
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
      * @param \Magento\Framework\App\State $appState
      * @param \Magento\Framework\UrlInterface $urlModel
-     * @param \Pelago\Emogrifier $emogrifier
+     * @param \Pelago\Emogrifier\CssInliner $emogrifier
      * @param \Magento\Variable\Model\Source\Variables $configVariables
      * @param array $variables
      * @param \Magento\Framework\Css\PreProcessor\Adapter\CssInliner|null $cssInliner
@@ -217,7 +217,7 @@ class Filter extends \Magento\Framework\Filter\Template
         \Magento\Framework\View\LayoutFactory $layoutFactory,
         \Magento\Framework\App\State $appState,
         \Magento\Framework\UrlInterface $urlModel,
-        \Pelago\Emogrifier $emogrifier,
+        \Pelago\Emogrifier\CssInliner $emogrifier,
         \Magento\Variable\Model\Source\Variables $configVariables,
         $variables = [],
         \Magento\Framework\Css\PreProcessor\Adapter\CssInliner $cssInliner = null,
@@ -1040,15 +1040,9 @@ class Filter extends \Magento\Framework\Filter\Template
                         __('<pre> %1 </pre>', PHP_EOL . $cssToInline . PHP_EOL)
                     );
                 }
-
-                $this->cssInliner->setHtml($html);
-
-                $this->cssInliner->setCss($cssToInline);
-
                 // Don't parse inline <style> tags, since existing tag is intentionally for non-inline styles
-                $this->cssInliner->disableStyleBlocksParsing();
+                $processedHtml = $this->cssInliner->setHtmlCss($html, $cssToInline)->disableStyleBlocksParsing()->render();
 
-                $processedHtml = $this->cssInliner->process();
             } catch (\Exception $e) {
                 if ($this->_appState->getMode() == \Magento\Framework\App\State::MODE_DEVELOPER) {
                     $processedHtml = __('CSS inlining error:') . PHP_EOL . $e->getMessage()

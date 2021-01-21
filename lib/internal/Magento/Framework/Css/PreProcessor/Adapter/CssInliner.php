@@ -6,7 +6,7 @@
 namespace Magento\Framework\Css\PreProcessor\Adapter;
 
 use Magento\Framework\App\State;
-use Pelago\Emogrifier;
+use Pelago\Emogrifier\CssInliner as EmogrifierCssInliner;
 
 /**
  * This class will inline the css of an html to each tag to be used for applications such as a styled email.
@@ -14,59 +14,21 @@ use Pelago\Emogrifier;
 class CssInliner
 {
     /**
-     * @var Emogrifier
+     * @var State
      */
-    private $emogrifier;
+    private $appState;
 
     /**
      * @param State $appState
      */
     public function __construct(State $appState)
     {
-        $this->emogrifier = new Emogrifier();
-        $this->emogrifier->setDebug($appState->getMode() === State::MODE_DEVELOPER);
+        $this->appState = $appState;
     }
 
-    /**
-     * Sets the HTML to be used with the css. This method should be used with setCss.
-     *
-     * @param string $html
-     * @return void
-     */
-    public function setHtml($html)
+    public function setHtmlCss(string $html, string $css = '')
     {
-        $this->emogrifier->setHtml($html);
-    }
-
-    /**
-     * Sets the CSS to be merged with the HTML. This method should be used with setHtml.
-     *
-     * @param string $css
-     * @return void
-     */
-    public function setCss($css)
-    {
-        $this->emogrifier->setCss($css);
-    }
-
-    /**
-     * Disables the parsing of <style> blocks.
-     *
-     * @return void
-     */
-    public function disableStyleBlocksParsing()
-    {
-        $this->emogrifier->disableStyleBlocksParsing();
-    }
-
-    /**
-     * Processes the html by placing the css inline. Set first the css by using setCss and html by using setHtml.
-     *
-     * @return string
-     * @throws \BadMethodCallException
-     */
-    public function process()
-    {
-        return $this->emogrifier->emogrify();
+        return EmogrifierCssInliner::fromHtml($html)->inlineCss($css)
+            ->setDebug($this->appState->getMode() === State::MODE_DEVELOPER);
     }
 }
