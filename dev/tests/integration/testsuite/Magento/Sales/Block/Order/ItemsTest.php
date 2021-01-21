@@ -82,6 +82,19 @@ class ItemsTest extends TestCase
     }
 
     /**
+     * @magentoDataFixture Magento/Sales/_files/order_configurable_product.php
+     *
+     * @return void
+     */
+    public function testGetOrderItemsConfigurable(): void
+    {
+        $order = $this->orderFactory->create()->loadByIncrementId('100000001');
+        $this->registerOrder($order);
+        $this->block = $this->layout->createBlock(Items::class);
+        $this->assertCount(1, $this->block->getItems());
+    }
+
+    /**
      * @magentoConfigFixture default/sales/orders/items_per_page 3
      * @magentoDataFixture Magento/Sales/_files/order_item_list.php
      *
