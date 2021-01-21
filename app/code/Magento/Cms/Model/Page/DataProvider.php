@@ -164,10 +164,9 @@ class DataProvider extends ModifierPoolDataProvider
             return $this->pageFactory->create();
         }
         $this->dataPersistor->clear('cms_page');
-        $page = $this->pageFactory->create()
-            ->setData($data);
 
-        return $page;
+        return $this->pageFactory->create()
+            ->setData($data);
     }
 
     /**
@@ -217,17 +216,14 @@ class DataProvider extends ModifierPoolDataProvider
         $page = null;
         try {
             $page = $this->pageRepository->getById($this->getPageId());
-        } catch (LocalizedException $e) {
-            $this->logger->error($e->getMessage());
-        }
-
-        if ($page) {
             if ($page->getCustomLayoutUpdateXml() || $page->getLayoutUpdateXml()) {
                 $options[] = ['label' => 'Use existing layout update XML', 'value' => '_existing_'];
             }
             foreach ($this->customLayoutManager->fetchAvailableFiles($page) as $layoutFile) {
                 $options[] = ['label' => $layoutFile, 'value' => $layoutFile];
             }
+        } catch (LocalizedException $e) {
+            $this->logger->error($e->getMessage());
         }
 
         $customLayoutMeta = [
