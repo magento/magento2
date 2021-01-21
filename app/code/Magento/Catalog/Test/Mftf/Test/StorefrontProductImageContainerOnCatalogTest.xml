@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontProductImageContainerOnCatalogTest">
+        <annotations>
+            <stories value="Product with image has unique image container on catalog page"/>
+            <title value="Product with image has unique image container on catalog page."/>
+            <description value="Simple product container with image doesn't contain product id."/>
+            <group value="catalog"/>
+            <severity value="MAJOR"/>
+        </annotations>
+        <before>
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <createData entity="ApiSimpleProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="ApiProductAttributeMediaGalleryEntryWithoutTypesTestImage" stepKey="createSimpleProductImage">
+                <requiredEntity createDataKey="createSimpleProduct"/>
+            </createData>
+        </before>
+        <after>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+        </after>
+
+        <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="navigateToCategoryPage">
+            <argument name="category" value="$$createCategory$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertProductImageUniqueContainerActionGroup" stepKey="assertProductImageContainer">
+            <argument name="productId" value="$$createSimpleProduct.id$$"/>
+        </actionGroup>
+    </test>
+</tests>
