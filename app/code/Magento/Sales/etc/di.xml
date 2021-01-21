@@ -834,7 +834,7 @@
                 <item name="sales_order_creditmemo_grid_data_source" xsi:type="string">Magento\Sales\Model\ResourceModel\Order\Creditmemo\Grid\Collection</item>
                 <item name="sales_order_view_invoice_grid_data_source" xsi:type="string">Magento\Sales\Model\ResourceModel\Order\Invoice\Orders\Grid\Collection</item>
                 <item name="sales_order_view_shipment_grid_data_source" xsi:type="string">Magento\Sales\Model\ResourceModel\Order\Shipment\Order\Grid\Collection</item>
-                <item name="sales_order_view_creditmemo_grid_data_source" xsi:type="string">Magento\Sales\Model\ResourceModel\Order\Creditmemo\Order\Grid\Collection</item>
+                <item name="sales_order_view_creditmemo_grid_data_source" xsi:type="string">Magento\Sales\Model\ResourceModel\Order\Creditmemo\Grid\Collection</item>
             </argument>
         </arguments>
     </type>
