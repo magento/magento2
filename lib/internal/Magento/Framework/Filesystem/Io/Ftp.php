@@ -313,9 +313,10 @@ class Ftp extends AbstractIo
      */
     public function ls($grep = null)
     {
-        $ls = @ftp_nlist($this->_conn, '.');
+        $ls = @ftp_nlist($this->_conn, '.') ?: [];
 
         $list = [];
+        
         foreach ($ls as $file) {
             $list[] = ['text' => $file, 'id' => $this->pwd() . '/' . $file];
         }
