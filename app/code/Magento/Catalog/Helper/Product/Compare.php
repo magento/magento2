@@ -279,7 +279,7 @@ class Compare extends \Magento\Framework\Url\Helper\Data
             // cannot be placed in constructor because of the cyclic dependency which cannot be fixed with proxy class
             // collection uses this helper in constructor when calling isEnabledFlat() method
             $this->_itemCollection = $this->_itemCollectionFactory->create();
-            $this->_itemCollection->useProductItem(true)->setStoreId($this->_storeManager->getStore()->getId());
+            $this->_itemCollection->useProductItem()->setStoreId($this->_storeManager->getStore()->getId());
 
             if ($this->_customerSession->isLoggedIn()) {
                 $this->_itemCollection->setCustomerId($this->_customerSession->getCustomerId());
@@ -313,7 +313,7 @@ class Compare extends \Magento\Framework\Url\Helper\Data
     {
         /** @var $collection Collection */
         $collection = $this->_itemCollectionFactory->create()
-            ->useProductItem(true);
+            ->useProductItem();
         if (!$logout && $this->_customerSession->isLoggedIn()) {
             $collection->setCustomerId($this->_customerSession->getCustomerId());
         } elseif ($this->_customerId) {

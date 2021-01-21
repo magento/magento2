@@ -129,7 +129,9 @@ define([
              * Abstract destroying command
              */
             destroy: function () {
-                this._player.destroy();
+                if (this._player) {
+                    this._player.destroy();
+                }
             },
 
             /**
@@ -288,7 +290,10 @@ define([
              */
             destroy: function () {
                 this.stop();
-                this._player.destroy();
+
+                if (this._player) {
+                    this._player.destroy();
+                }
             }
         });
 
@@ -492,20 +497,20 @@ define([
                     var tmp,
                         respData;
 
-                    if (data.length < 1) {
+                    if (!data) {
                         this._onRequestError($.mage.__('Video not found'));
 
                         return null;
                     }
-                    tmp = data[0];
+                    tmp = data;
                     respData = {
                         duration: this._formatVimeoDuration(tmp.duration),
-                        channel: tmp['user_name'],
-                        channelId: tmp['user_url'],
+                        channel: tmp['author_name'],
+                        channelId: tmp['author_url'],
                         uploaded: tmp['upload_date'],
                         title: tmp.title,
                         description: tmp.description.replace(/(&nbsp;|<([^>]+)>)/ig, ''),
-                        thumbnail: tmp['thumbnail_large'],
+                        thumbnail: tmp['thumbnail_url'],
                         videoId: videoInfo.id,
                         videoProvider: videoInfo.type
                     };
@@ -534,10 +539,11 @@ define([
                     );
                 } else if (type === 'vimeo') {
                     $.ajax({
-                        url: 'https://www.vimeo.com/api/v2/video/' + id + '.json',
+                        url: 'https://vimeo.com/api/oembed.json',
                         dataType: 'jsonp',
                         data: {
-                            format: 'json'
+                            format: 'json',
+                            url: 'https://vimeo.com/' + id
                         },
                         timeout: 5000,
                         success:  $.proxy(_onVimeoLoaded, self),

@@ -4,8 +4,8 @@
  */
 
 var config = {
-    'waitSeconds': 0,
-    'map': {
+    waitSeconds: 0,
+    map: {
         '*': {
             'ko': 'knockoutjs/knockout',
             'knockout': 'knockoutjs/knockout',
@@ -13,7 +13,7 @@ var config = {
             'rjsResolver': 'mage/requirejs/resolver'
         }
     },
-    'shim': {
+    shim: {
         'jquery/jquery-migrate': ['jquery'],
         'jquery/jstree/jquery.hotkeys': ['jquery'],
         'jquery/hover-intent': ['jquery'],
@@ -28,10 +28,10 @@ var config = {
         },
         'magnifier/magnifier': ['jquery']
     },
-    'paths': {
+    paths: {
         'jquery/validate': 'jquery/jquery.validate',
         'jquery/hover-intent': 'jquery/jquery.hoverIntent',
-        'jquery/file-uploader': 'jquery/fileUploader/jquery.fileupload-fp',
+        'jquery/file-uploader': 'jquery/fileUploader/jquery.fileuploader',
         'prototype': 'legacy-build.min',
         'jquery/jquery-storageapi': 'jquery/jquery.storageapi.min',
         'text': 'mage/requirejs/text',
@@ -40,11 +40,11 @@ var config = {
         'tinycolor': 'jquery/spectrum/tinycolor',
         'jquery-ui-modules': 'jquery/ui-modules'
     },
-    'deps': [
+    deps: [
         'jquery/jquery-migrate'
     ],
-    'config': {
-        'mixins': {
+    config: {
+        mixins: {
             'jquery/jstree/jquery.jstree': {
                 'mage/backend/jstree-mixin': true
             },
@@ -52,7 +52,7 @@ var config = {
                 'jquery/patches/jquery': true
             }
         },
-        'text': {
+        text: {
             'headers': {
                 'X-Requested-With': 'XMLHttpRequest'
             }

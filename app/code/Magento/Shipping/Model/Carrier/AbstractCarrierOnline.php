@@ -303,7 +303,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      *
      * @param \Magento\Framework\DataObject $request
      * @return $this|bool|\Magento\Framework\DataObject
-     * @deprecated
+     * @deprecated 100.2.6
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -319,6 +319,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      * @return $this|bool|\Magento\Framework\DataObject
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @since 100.2.6
      */
     public function processAdditionalValidation(\Magento\Framework\DataObject $request)
     {

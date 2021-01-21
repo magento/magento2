@@ -116,7 +116,7 @@ class LockGuardedCacheLoader
         callable $dataSaver
     ) {
         $cachedData = $dataLoader(); //optimistic read
-        $deadline = microtime(true) + $this->loadTimeout / 100;
+        $deadline = microtime(true) + $this->loadTimeout / 1000;
 
         if (empty($this->allowParallelGenerationConfigValue)) {
             $cacheConfig = $this
@@ -131,7 +131,7 @@ class LockGuardedCacheLoader
                 return $dataCollector();
             }
 
-            if ($this->locker->lock($lockName, $this->lockTimeout / 1000)) {
+            if ($this->locker->lock($lockName, 0)) {
                 try {
                     $data = $dataCollector();
                     $dataSaver($data);

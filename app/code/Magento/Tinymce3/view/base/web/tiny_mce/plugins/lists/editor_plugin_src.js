@@ -82,9 +82,9 @@
 		}
 	}
 
-	function attemptMerge(e1, e2, differentStylesMasterElement, mergeParagraphs) {
-		if (canMerge(e1, e2, !!differentStylesMasterElement, mergeParagraphs)) {
-			return merge(e1, e2, differentStylesMasterElement);
+	function attemptMerge(e1, e2, differentStylesMainElement, mergeParagraphs) {
+		if (canMerge(e1, e2, !!differentStylesMainElement, mergeParagraphs)) {
+			return merge(e1, e2, differentStylesMainElement);
 		} else if (e1 && e1.tagName === 'LI' && isList(e2)) {
 			// Fix invalidly nested lists.
 			e1.appendChild(e2);
@@ -112,7 +112,7 @@
 		return firstChild && lastChild && firstChild === lastChild && isList(firstChild);
 	}
 
-	function merge(e1, e2, masterElement) {
+	function merge(e1, e2, mainElement) {
 		var lastOriginal = skipWhitespaceNodesBackwards(e1.lastChild), firstNew = skipWhitespaceNodesForwards(e2.firstChild);
 		if (e1.tagName === 'P') {
 			e1.appendChild(e1.ownerDocument.createElement('br'));
@@ -120,8 +120,8 @@
 		while (e2.firstChild) {
 			e1.appendChild(e2.firstChild);
 		}
-		if (masterElement) {
-			e1.style.listStyleType = masterElement.style.listStyleType;
+		if (mainElement) {
+			e1.style.listStyleType = mainElement.style.listStyleType;
 		}
 		e2.parentNode.removeChild(e2);
 		attemptMerge(lastOriginal, firstNew, false);
@@ -164,7 +164,7 @@
                 }
                 return false;
             }
-			
+
             // If we are at the end of a paragraph in a list item, pressing enter should create a new list item instead of a new paragraph.
             function isEndOfParagraph() {
 				var node = ed.selection.getNode();
@@ -241,7 +241,7 @@
 					Event.cancel(e);
 				}
 			}
-			
+
             // Creates a new list item after the current selection's list item parent
             function createNewLi(ed, e) {
                 if (state == LIST_PARAGRAPH) {

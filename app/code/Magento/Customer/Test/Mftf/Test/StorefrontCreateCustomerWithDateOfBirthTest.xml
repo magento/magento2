@@ -35,7 +35,9 @@
             <argument name="Customer" value="CustomerEntityOne"/>
             <argument name="dob" value="{{EN_US_DATE.short4DigitYear}}"/>
         </actionGroup>
-        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
         <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteNewUser">
             <argument name="email" value="{{CustomerEntityOne.email}}"/>
         </actionGroup>

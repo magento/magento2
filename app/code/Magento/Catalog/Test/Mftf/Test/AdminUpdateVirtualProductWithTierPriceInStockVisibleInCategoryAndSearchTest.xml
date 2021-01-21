@@ -97,7 +97,7 @@
             <actualResult type="variable">selectedCategories</actualResult>
             <expectedResult type="array">[$categoryEntity.name$]</expectedResult>
         </assertEquals>
-        <click selector="{{AdminProductFormSection.done}}" stepKey="clickOnDoneOnCategorySelect"/>
+        <actionGroup ref="AdminSubmitCategoriesPopupActionGroup" stepKey="clickOnDoneOnCategorySelect"/>
         <seeInField selector="{{AdminProductFormSection.visibility}}" userInput="{{updateVirtualProductTierPriceInStock.visibility}}" stepKey="seeVisibility"/>
 
         <conditionalClick selector="{{AdminProductSEOSection.sectionHeader}}" dependentSelector="{{AdminProductSEOSection.useDefaultUrl}}" visible="false" stepKey="openSearchEngineOptimizationSection"/>

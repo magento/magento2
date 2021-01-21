@@ -14,13 +14,14 @@
             <stories value="Delete a CMS Page via the Admin"/>
             <title value="Admin should be able to delete CMS Pages"/>
             <description value="Admin should be able to delete CMS Pages"/>
+            <severity value="CRITICAL"/>
             <group value="Cms"/>
             <group value="WYSIWYGDisabled"/>
         </annotations>
 
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
-            <actionGroup ref="AdminNavigateToPageGridActionGroup" stepKey="navigateToCmsPageGrid"/>
+            <actionGroup ref="AdminOpenCMSPagesGridActionGroup" stepKey="navigateToCmsPageGrid"/>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearGridSearchFilters"/>
             <actionGroup ref="CreateNewPageWithBasicValues" stepKey="createNewPageWithBasicValues"/>
             <actionGroup ref="SaveCmsPageActionGroup" stepKey="clickSaveCmsPageButton"/>

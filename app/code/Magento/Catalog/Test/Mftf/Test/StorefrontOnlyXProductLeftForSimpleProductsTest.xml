@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontOnlyXProductLeftForSimpleProductsTest">
+        <annotations>
+            <features value="Catalog"/>
+            <title value="See Only * Left block"/>
+            <stories value="See Only * Left on product page if Only X left Threshold was set"/>
+            <description value="See Only * Left on product page if Only X left Threshold was set"/>
+            <testCaseId value="MC-35235"/>
+            <severity value="MINOR"/>
+        </annotations>
+        <before>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="ApiSimpleProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <magentoCLI command="config:set {{CatalogInventoryOptionsOnlyXleftThreshold.path}} 10000" stepKey="setStockThresholdQty"/>
+            <comment userInput="Adding the comment to replace 'cache:flush' command for preserving Backward Compatibility" stepKey="flushCache"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <magentoCLI command="config:set {{CatalogInventoryOptionsOnlyXleftThreshold.path}} {{CatalogInventoryOptionsOnlyXleftThreshold.value}}" stepKey="removedStockThresholdQty"/>
+        </after>
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductPage">
+            <argument name="productUrl" value="$createProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+        <seeElement selector="{{StorefrontProductPageSection.onlyProductsLeft}}" stepKey="seeOnlyLeftBlock"/>
+    </test>
+</tests>

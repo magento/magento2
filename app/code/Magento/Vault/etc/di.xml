@@ -53,4 +53,8 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Checkout\Api\PaymentInformationManagementInterface">
+        <plugin name="ProcessPaymentVaultInformationManagement"
+                type="Magento\Vault\Plugin\PaymentVaultInformationManagement"/>
+    </type>
 </config>

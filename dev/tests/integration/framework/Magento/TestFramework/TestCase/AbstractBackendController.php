@@ -58,7 +58,14 @@ abstract class AbstractBackendController extends \Magento\TestFramework\TestCase
         parent::setUp();
 
         $this->_objectManager->get(\Magento\Backend\Model\UrlInterface::class)->turnOffSecretKey();
-
+        /**
+         * Authorization can be created on test bootstrap...
+         * If it will be created on test bootstrap we will have invalid RoleLocator object.
+         * As tests by default are run not from adminhtml area...
+         */
+        \Magento\TestFramework\ObjectManager::getInstance()->removeSharedInstance(
+            \Magento\Framework\Authorization::class
+        );
         $this->_auth = $this->_objectManager->get(\Magento\Backend\Model\Auth::class);
         $this->_session = $this->_auth->getAuthStorage();
         $credentials = $this->_getAdminCredentials();

@@ -246,7 +246,7 @@ class DynamicFieldTest extends TestCase
                     if ($type === 'string') {
                         return 'string';
                     } elseif ($type === 'float') {
-                        return 'float';
+                        return 'double';
                     } elseif ($type === 'integer') {
                         return 'integer';
                     } else {
@@ -281,7 +281,7 @@ class DynamicFieldTest extends TestCase
                         'index' => 'no_index'
                     ],
                     'price_1_1' => [
-                        'type' => 'float',
+                        'type' => 'double',
                         'store' => true
                     ]
                 ]
@@ -300,7 +300,7 @@ class DynamicFieldTest extends TestCase
                         'index' => 'no_index'
                     ],
                     'price_1_1' => [
-                        'type' => 'float',
+                        'type' => 'double',
                         'store' => true
                     ]
                 ],
@@ -319,7 +319,7 @@ class DynamicFieldTest extends TestCase
                         'index' => 'no_index'
                     ],
                     'price_1_1' => [
-                        'type' => 'float',
+                        'type' => 'double',
                         'store' => true
                     ]
                 ]

@@ -54,7 +54,7 @@ class Save extends AbstractAction implements HttpPostActionInterface
 
     /**
      * @var DecoderInterface
-     * @deprecated
+     * @deprecated 101.1.0
      */
     protected $jsonDecoder;
 
@@ -103,6 +103,10 @@ class Save extends AbstractAction implements HttpPostActionInterface
      */
     public function execute()
     {
+        if (!$this->userContext->getUserId()) {
+            return;
+        }
+
         $bookmark = $this->bookmarkFactory->create();
         $jsonData = $this->_request->getParam('data');
         if (!$jsonData) {

@@ -15,9 +15,9 @@ use Magento\Framework\Config\ConverterInterface;
 class Converter implements ConverterInterface
 {
     /**
-     * Blacklist tag name
+     * Excluded list tag name
      */
-    private const BLACKLIST_TAG_NAME = 'blacklist';
+    private const EXCLUDED_LIST_TAG_NAME = 'exclude';
 
     /**
      * Patterns tag name
@@ -43,12 +43,12 @@ class Converter implements ConverterInterface
             throw new \InvalidArgumentException('The source should be instance of DOMDocument');
         }
 
-        foreach ($source->getElementsByTagName(self::BLACKLIST_TAG_NAME) as $blacklist) {
-            $result[self::BLACKLIST_TAG_NAME] = [];
-            foreach ($blacklist->getElementsByTagName(self::PATTERNS_TAG_NAME) as $patterns) {
-                $result[self::BLACKLIST_TAG_NAME][self::PATTERNS_TAG_NAME] = [];
+        foreach ($source->getElementsByTagName(self::EXCLUDED_LIST_TAG_NAME) as $excludedList) {
+            $result[self::EXCLUDED_LIST_TAG_NAME] = [];
+            foreach ($excludedList->getElementsByTagName(self::PATTERNS_TAG_NAME) as $patterns) {
+                $result[self::EXCLUDED_LIST_TAG_NAME][self::PATTERNS_TAG_NAME] = [];
                 foreach ($patterns->getElementsByTagName(self::PATTERN_TAG_NAME) as $pattern) {
-                    $result[self::BLACKLIST_TAG_NAME][self::PATTERNS_TAG_NAME]
+                    $result[self::EXCLUDED_LIST_TAG_NAME][self::PATTERNS_TAG_NAME]
                     [$pattern->attributes->getNamedItem('name')->nodeValue] = $pattern->nodeValue;
                 }
             }

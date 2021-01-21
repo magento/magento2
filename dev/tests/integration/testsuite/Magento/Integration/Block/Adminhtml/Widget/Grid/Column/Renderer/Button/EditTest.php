@@ -38,9 +38,9 @@ class EditTest extends \PHPUnit\Framework\TestCase
         $integration = $this->getFixtureIntegration();
         $buttonHtml = $this->editButtonBlock->render($integration);
         $this->assertStringContainsString('title="Edit"', $buttonHtml);
-        $this->assertStringContainsString('class="action edit"', $buttonHtml);
+        $this->assertStringContainsString('class="' .$this->editButtonBlock->escapeHtmlAttr('action edit') .'"', $buttonHtml);
         $this->assertStringContainsString(
-            'onclick="window.location.href=&#039;http://localhost/index.php/backend/admin/integration/edit/id/'
+            'window.location.href=\'http://localhost/index.php/backend/admin/integration/edit/id/'
             . $integration->getId(),
             $buttonHtml
         );
@@ -52,7 +52,7 @@ class EditTest extends \PHPUnit\Framework\TestCase
         $integration->setSetupType(Integration::TYPE_CONFIG);
         $buttonHtml = $this->editButtonBlock->render($integration);
         $this->assertStringContainsString('title="View"', $buttonHtml);
-        $this->assertStringContainsString('class="action info"', $buttonHtml);
+        $this->assertStringContainsString('class="' .$this->editButtonBlock->escapeHtmlAttr('action info') .'"', $buttonHtml);
     }
 
     /**

@@ -18,7 +18,11 @@ use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Email\Sender\OrderSender;
 use Magento\TestFramework\TestCase\AbstractController;
 use PHPUnit\Framework\MockObject_MockObject as MockObject;
+use Psr\Log\LoggerInterface;
 
+/**
+ * @magentoAppIsolation enabled
+ */
 class SilentPostTest extends AbstractController
 {
     /**
@@ -114,7 +118,7 @@ class SilentPostTest extends AbstractController
         $logger = $this->getMockBuilder(Monolog::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->_objectManager->addSharedInstance($logger, Monolog::class);
+        $this->_objectManager->addSharedInstance($logger, LoggerInterface::class, true);
 
         $exception = new CommandException(__('Response message from PayPal gateway'));
         $logger->expects(self::once())
@@ -125,7 +129,7 @@ class SilentPostTest extends AbstractController
 
         self::assertEquals(200, $this->getResponse()->getStatusCode());
 
-        $this->_objectManager->removeSharedInstance(Monolog::class);
+        $this->_objectManager->removeSharedInstance(LoggerInterface::class, true);
     }
 
     /**

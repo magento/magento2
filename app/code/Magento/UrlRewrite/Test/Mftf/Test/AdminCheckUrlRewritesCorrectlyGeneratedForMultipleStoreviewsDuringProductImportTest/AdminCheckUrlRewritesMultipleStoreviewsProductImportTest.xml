@@ -47,84 +47,103 @@
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFiltersIfSet"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
+        <!--Change category name and URL key for EN Store View-->
         <actionGroup ref="SwitchCategoryStoreViewActionGroup" stepKey="switchToStoreViewEn">
             <argument name="Store" value="customStoreENNotUnique.name"/>
             <argument name="CatName" value="$$createCategory.name$$"/>
         </actionGroup>
-        <uncheckOption selector="{{AdminCategoryBasicFieldSection.categoryNameUseDefault}}" stepKey="uncheckUseDefaultValueENStoreView"/>
-        <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="category-english" stepKey="changeNameField"/>
-        <click selector="{{AdminCategorySEOSection.SectionHeader}}" stepKey="clickOnSectionHeader"/>
+        <actionGroup ref="AdminChangeCategoryNameOnStoreViewLevelActionGroup" stepKey="changeCategoryNameForENStoreView">
+            <argument name="categoryName" value="categoryEN"/>
+        </actionGroup>
         <actionGroup ref="ChangeSeoUrlKeyForSubCategoryActionGroup" stepKey="changeSeoUrlKeyENStoreView">
             <argument name="value" value="category-english"/>
         </actionGroup>
+
+        <!--Change category name and URL key for NL Store View-->
         <actionGroup ref="SwitchCategoryStoreViewActionGroup" stepKey="switchToStoreViewNl">
             <argument name="Store" value="customStoreNLNotUnique.name"/>
             <argument name="CatName" value="$$createCategory.name$$"/>
         </actionGroup>
-        <uncheckOption selector="{{AdminCategoryBasicFieldSection.categoryNameUseDefault}}" stepKey="uncheckUseDefaultValue1"/>
-        <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="category-dutch" stepKey="changeNameFieldNLStoreView"/>
-        <click selector="{{AdminCategorySEOSection.SectionHeader}}" stepKey="clickOnSectionHeader2"/>
+        <actionGroup ref="AdminChangeCategoryNameOnStoreViewLevelActionGroup" stepKey="changeCategoryNameForNLStoreView">
+            <argument name="categoryName" value="categoryNL"/>
+        </actionGroup>
         <actionGroup ref="ChangeSeoUrlKeyForSubCategoryActionGroup" stepKey="changeSeoUrlKeyNLStoreView">
             <argument name="value" value="category-dutch"/>
         </actionGroup>
-        <amOnPage url="{{AdminImportIndexPage.url}}" stepKey="navigateToSystemImport"/>
-        <selectOption selector="{{AdminImportMainSection.entityType}}" userInput="Products" stepKey="selectProductsOption"/>
-        <waitForElementVisible selector="{{AdminImportMainSection.importBehavior}}" stepKey="waitForImportBehaviorElementVisible"/>
-        <selectOption selector="{{AdminImportMainSection.importBehavior}}" userInput="Add/Update" stepKey="selectAddUpdateOption"/>
-        <attachFile selector="{{AdminImportMainSection.selectFileToImport}}" userInput="import_updated.csv" stepKey="attachFileForImport"/>
-        <click selector="{{AdminImportHeaderSection.checkDataButton}}" stepKey="clickCheckDataButton"/>
-        <see selector="{{AdminImportValidationMessagesSection.notice}}" userInput="Checked rows: 3, checked entities: 1, invalid rows: 0, total errors: 0" stepKey="assertNotice"/>
-        <see selector="{{AdminImportValidationMessagesSection.success}}" userInput="File is valid! To start import process press &quot;Import&quot; button" stepKey="assertSuccessMessage"/>
-        <click selector="{{AdminImportMainSection.importButton}}" stepKey="clickImportButton"/>
-        <see selector="{{AdminImportValidationMessagesSection.success}}" userInput="Import successfully done" stepKey="assertSuccessMessage1"/>
-        <see selector="{{AdminImportValidationMessagesSection.notice}}" userInput="Created: 1, Updated: 0, Deleted: 0" stepKey="assertNotice1"/>
-        <actionGroup ref="SearchForProductOnBackendByNameActionGroup" stepKey="searchForProductOnBackend">
-            <argument name="productName" value="productformagetwo68980"/>
+
+        <!-- Import products with add/update behavior -->
+        <actionGroup ref="AdminImportProductsWithCheckValidationResultActionGroup" stepKey="importProduct">
+            <argument name="behavior" value="Add/Update"/>
+            <argument name="importFile" value="import_updated.csv"/>
+            <argument name="importNoticeMessage" value="Created: 1, Updated: 0, Deleted: 0"/>
+            <argument name="validationNoticeMessage" value="Checked rows: 3, checked entities: 1, invalid rows: 0, total errors: 0"/>
         </actionGroup>
-        <click selector="{{AdminProductGridSection.productRowBySku('productformagetwo68980')}}" stepKey="clickOnProductRow"/>
+
+        <!--Filter Product in product page and get the Product ID -->
+        <actionGroup ref="FilterAndSelectProductActionGroup" stepKey="filterProduct">
+            <argument name="productSku" value="productformagetwo68980"/>
+        </actionGroup>
         <grabFromCurrentUrl regex="~/id/(\d+)/~" stepKey="grabProductIdFromUrl"/>
-        <amOnPage url="{{AdminUrlRewriteIndexPage.url}}" stepKey="goToUrlRewritesIndexPage"/>
 
-        <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openUrlRewriteGridFilters"/>
-        <fillField selector="{{AdminDataGridHeaderSection.filterFieldInput('request_path')}}" userInput="category-english.html" stepKey="inputCategoryUrlForENStoreView"/>
-        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickOrderApplyFilters"/>
-        <waitForPageLoad stepKey="waitForPageToLoad"/>
-        <seeElement selector="{{AdminUrlRewriteIndexSection.gridCellByColumnValue('Request Path', 'category-english.html')}}" stepKey="seeUrlInRequestPathColumn"/>
-        <seeElement selector="{{AdminUrlRewriteIndexSection.gridCellByColumnValue('Target Path', catalog/category/view/id/$$createCategory.id$$)}}" stepKey="seeUrlInTargetPathColumn"/>
+        <!--Open Marketing - SEO & Search - URL Rewrites-->
+        <actionGroup ref="AdminSearchUrlRewriteByRequestPathActionGroup" stepKey="searchingCategoryUrlRewriteForENStoreView">
+            <argument name="requestPath" value="category-english.html"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminRequestPathInUrlRewriteGrigActionGroup" stepKey="seeCategoryUrlInRequestPathColumnForENStoreView">
+            <argument name="requestPath" value="category-english.html"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminTargetPathInUrlRewriteGrigActionGroup" stepKey="seeCategoryUrlInTargetPathColumnForENStoreView">
+            <argument name="targetPath" value="catalog/category/view/id/$$createCategory.id$$"/>
+        </actionGroup>
 
-        <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openUrlRewriteGridFilters1"/>
-        <fillField selector="{{AdminDataGridHeaderSection.filterFieldInput('request_path')}}" userInput="category-dutch.html" stepKey="inputCategoryUrlForNLStoreView"/>
-        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickOrderApplyFilters1"/>
-        <waitForPageLoad stepKey="waitForPageToLoad1"/>
-        <seeElement selector="{{AdminUrlRewriteIndexSection.gridCellByColumnValue('Request Path', 'category-dutch.html')}}" stepKey="seeUrlInRequestPathColumn1"/>
-        <seeElement selector="{{AdminUrlRewriteIndexSection.gridCellByColumnValue('Target Path', catalog/category/view/id/$$createCategory.id$$)}}" stepKey="seeUrlInTargetPathColumn1"/>
+        <actionGroup ref="AdminSearchUrlRewriteByRequestPathActionGroup" stepKey="searchingCategoryUrlRewriteForNLStoreView">
+            <argument name="requestPath" value="category-dutch.html"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminRequestPathInUrlRewriteGrigActionGroup" stepKey="seeCategoryUrlInRequestPathColumnForNLStoreView">
+            <argument name="requestPath" value="category-dutch.html"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminTargetPathInUrlRewriteGrigActionGroup" stepKey="seeCategoryUrlInTargetPathColumnForNLStoreView">
+            <argument name="targetPath" value="catalog/category/view/id/$$createCategory.id$$"/>
+        </actionGroup>
 
-        <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openUrlRewriteGridFilters2"/>
-        <fillField selector="{{AdminDataGridHeaderSection.filterFieldInput('request_path')}}" userInput="productformagetwo68980-english.html" stepKey="inputProductUrlForENStoreView"/>
-        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickOrderApplyFilters2"/>
-        <waitForPageLoad stepKey="waitForPageToLoad2"/>
-        <seeElement selector="{{AdminUrlRewriteIndexSection.gridCellByColumnValue('Request Path', 'productformagetwo68980-english.html')}}" stepKey="seeUrlInRequestPathColumn2"/>
-        <seeElement selector="{{AdminUrlRewriteIndexSection.gridCellByColumnValue('Target Path', 'catalog/product/view/id/$grabProductIdFromUrl')}}" stepKey="seeUrlInTargetPathColumn2"/>
+        <actionGroup ref="AdminSearchUrlRewriteByRequestPathActionGroup" stepKey="searchingProductUrlRewriteForENStoreView">
+            <argument name="requestPath" value="productformagetwo68980-english.html"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminRequestPathInUrlRewriteGrigActionGroup" stepKey="seeProductUrlInRequestPathColumnForENStoreView">
+            <argument name="requestPath" value="productformagetwo68980-english.html"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminTargetPathInUrlRewriteGrigActionGroup" stepKey="seeProductUrlInTargetPathColumnForENStoreView">
+            <argument name="targetPath" value="catalog/product/view/id/$grabProductIdFromUrl"/>
+        </actionGroup>
 
-        <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openUrlRewriteGridFilters3"/>
-        <fillField selector="{{AdminDataGridHeaderSection.filterFieldInput('request_path')}}" userInput="productformagetwo68980-dutch.html" stepKey="inputProductUrlForENStoreView1"/>
-        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickOrderApplyFilters3"/>
-        <waitForPageLoad stepKey="waitForPageToLoad3"/>
-        <seeElement selector="{{AdminUrlRewriteIndexSection.gridCellByColumnValue('Request Path', 'productformagetwo68980-dutch.html')}}" stepKey="seeUrlInRequestPathColumn3"/>
-        <seeElement selector="{{AdminUrlRewriteIndexSection.gridCellByColumnValue('Target Path', 'catalog/product/view/id/$grabProductIdFromUrl')}}" stepKey="seeUrlInTargetPathColumn3"/>
+        <actionGroup ref="AdminSearchUrlRewriteByRequestPathActionGroup" stepKey="searchingProductUrlRewriteForNLStoreView">
+            <argument name="requestPath" value="productformagetwo68980-dutch.html"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminRequestPathInUrlRewriteGrigActionGroup" stepKey="seeProductUrlInRequestPathColumnForNLStoreView">
+            <argument name="requestPath" value="productformagetwo68980-dutch.html"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminTargetPathInUrlRewriteGrigActionGroup" stepKey="seeProductUrlInTargetPathColumnForNLStoreView">
+            <argument name="targetPath" value="catalog/product/view/id/$grabProductIdFromUrl"/>
+        </actionGroup>
 
-        <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openUrlRewriteGridFilters4"/>
-        <fillField selector="{{AdminDataGridHeaderSection.filterFieldInput('request_path')}}" userInput="category-english/productformagetwo68980-english.html" stepKey="inputProductUrlForENStoreView2"/>
-        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickOrderApplyFilters4"/>
-        <waitForPageLoad stepKey="waitForPageToLoad4"/>
-        <seeElement selector="{{AdminUrlRewriteIndexSection.gridCellByColumnValue('Request Path', 'category-english/productformagetwo68980-english.html')}}" stepKey="seeUrlInRequestPathColumn4"/>
-        <seeElement selector="{{AdminUrlRewriteIndexSection.gridCellByColumnValue('Target Path', catalog/product/view/id/$grabProductIdFromUrl/category/$$createCategory.id$$)}}" stepKey="seeUrlInTargetPathColumn4"/>
+        <actionGroup ref="AdminSearchUrlRewriteByRequestPathActionGroup" stepKey="searchingUrlRewriteForENStoreView">
+            <argument name="requestPath" value="category-english/productformagetwo68980-english.html"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminRequestPathInUrlRewriteGrigActionGroup" stepKey="seeUrlInRequestPathColumnForENStoreView">
+            <argument name="requestPath" value="category-english/productformagetwo68980-english.html"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminTargetPathInUrlRewriteGrigActionGroup" stepKey="seeUrlInTargetPathColumnForENStoreView">
+            <argument name="targetPath" value="catalog/product/view/id/$grabProductIdFromUrl/category/$$createCategory.id$$"/>
+        </actionGroup>
 
-        <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openUrlRewriteGridFilters5"/>
-        <fillField selector="{{AdminDataGridHeaderSection.filterFieldInput('request_path')}}" userInput="category-dutch/productformagetwo68980-dutch.html" stepKey="inputProductUrlForENStoreView3"/>
-        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickOrderApplyFilters5"/>
-        <waitForPageLoad stepKey="waitForPageToLoad5"/>
-        <seeElement selector="{{AdminUrlRewriteIndexSection.gridCellByColumnValue('Request Path', 'category-dutch/productformagetwo68980-dutch.html')}}" stepKey="seeUrlInRequestPathColumn5"/>
-        <seeElement selector="{{AdminUrlRewriteIndexSection.gridCellByColumnValue('Target Path', catalog/product/view/id/$grabProductIdFromUrl/category/$$createCategory.id$$)}}" stepKey="seeUrlInTargetPathColumn5"/>
+        <actionGroup ref="AdminSearchUrlRewriteByRequestPathActionGroup" stepKey="searchingUrlRewriteForNLStoreView">
+            <argument name="requestPath" value="category-dutch/productformagetwo68980-dutch.html"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminRequestPathInUrlRewriteGrigActionGroup" stepKey="seeUrlInRequestPathColumnForNLStoreView">
+            <argument name="requestPath" value="category-dutch/productformagetwo68980-dutch.html"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminTargetPathInUrlRewriteGrigActionGroup" stepKey="seeUrlInTargetPathColumnForNLStoreView">
+            <argument name="targetPath" value="catalog/product/view/id/$grabProductIdFromUrl/category/$$createCategory.id$$"/>
+        </actionGroup>
     </test>
 </tests>

@@ -69,7 +69,8 @@
         },
         "index": {
             "CATALOG_PRODUCT_ENTITY_INT_ATTRIBUTE_ID": true,
-            "CATALOG_PRODUCT_ENTITY_INT_STORE_ID": true
+            "CATALOG_PRODUCT_ENTITY_INT_STORE_ID": true,
+            "CATALOG_PRODUCT_ENTITY_INT_ATTRIBUTE_ID_STORE_ID_VALUE": true
         },
         "constraint": {
             "PRIMARY": true,
@@ -307,7 +308,8 @@
             "visitor_id": true,
             "customer_id": true,
             "product_id": true,
-            "store_id": true
+            "store_id": true,
+            "list_id": true
         },
         "index": {
             "CATALOG_COMPARE_ITEM_PRODUCT_ID": true,
@@ -319,7 +321,8 @@
             "PRIMARY": true,
             "CATALOG_COMPARE_ITEM_CUSTOMER_ID_CUSTOMER_ENTITY_ENTITY_ID": true,
             "CATALOG_COMPARE_ITEM_PRODUCT_ID_CATALOG_PRODUCT_ENTITY_ENTITY_ID": true,
-            "CATALOG_COMPARE_ITEM_STORE_ID_STORE_STORE_ID": true
+            "CATALOG_COMPARE_ITEM_STORE_ID_STORE_STORE_ID": true,
+            "CATALOG_COMPARE_ITEM_LIST_ID_CATALOG_COMPARE_LIST_LIST_ID": true
         }
     },
     "catalog_product_website": {
@@ -1120,6 +1123,21 @@
             "CAT_PRD_FRONTEND_ACTION_PRD_ID_CAT_PRD_ENTT_ENTT_ID": true,
             "CATALOG_PRODUCT_FRONTEND_ACTION_VISITOR_ID_PRODUCT_ID_TYPE_ID": true,
             "CATALOG_PRODUCT_FRONTEND_ACTION_CUSTOMER_ID_PRODUCT_ID_TYPE_ID": true
+        }
+    },
+    "catalog_compare_list": {
+        "column": {
+            "list_id": true,
+            "list_id_mask": true,
+            "customer_id": true
+        },
+        "index": {
+            "CATALOG_COMPARE_LIST_LIST_ID_MASK": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "CATALOG_COMPARE_LIST_CUSTOMER_ID": true,
+            "CATALOG_COMPARE_LIST_CUSTOMER_ID_CUSTOMER_ENTITY_ENTITY_ID": true
         }
     }
 }

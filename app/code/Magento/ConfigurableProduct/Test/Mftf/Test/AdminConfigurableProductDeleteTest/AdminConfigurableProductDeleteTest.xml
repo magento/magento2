@@ -81,8 +81,7 @@
 
         <!-- go to admin and delete -->
         <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToProductList"/>
-        <waitForPageLoad stepKey="wait2"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="goToProductList"/>
         <conditionalClick selector="{{AdminProductGridFilterSection.clearAll}}" dependentSelector="{{AdminProductGridFilterSection.clearAll}}" stepKey="clearAll" visible="true"/>
         <actionGroup ref="SearchProductGridByKeywordActionGroup" stepKey="searchForProduct">
             <argument name="keyword" value="ApiConfigurableProduct.name"/>

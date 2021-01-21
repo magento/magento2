@@ -24,7 +24,7 @@ use Magento\Framework\View\Element\UiComponent\Config\UiReaderInterface;
 /**
  * @inheritdoc
  *
- * @deprecated 100.2.0
+ * @deprecated 101.0.0
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Manager implements ManagerInterface
@@ -298,6 +298,7 @@ class Manager implements ManagerInterface
         $createdComponents = [];
         $rootComponent = $this->createRawComponentData($name, false);
         foreach ($componentsPool as $key => $component) {
+            $resultConfiguration = [];
             $resultConfiguration = [ManagerInterface::CHILDREN_KEY => []];
             $instanceName = $this->createName($component, $key, $name);
             $resultConfiguration[ManagerInterface::COMPONENT_ARGUMENTS_KEY] = $this->mergeArguments(
@@ -312,15 +313,16 @@ class Manager implements ManagerInterface
             unset($component[Converter::DATA_ATTRIBUTES_KEY]);
 
             // Create inner components
+            $children = [];
             foreach ($component as $subComponentName => $subComponent) {
                 if (is_array($subComponent)) {
-                    // phpcs:ignore Magento2.Performance.ForeachArrayMerge
-                    $resultConfiguration[ManagerInterface::CHILDREN_KEY] = array_merge(
-                        $resultConfiguration[ManagerInterface::CHILDREN_KEY],
-                        $this->createDataForComponent($subComponentName, $subComponent)
-                    );
+                    $children[] = $this->createDataForComponent($subComponentName, $subComponent);
                 }
             }
+
+            // phpcs:ignore Magento2.Performance.ForeachArrayMerge
+            $resultConfiguration[ManagerInterface::CHILDREN_KEY] = array_merge([], ...$children);
+
             $createdComponents[$instanceName] = $resultConfiguration;
         }
 

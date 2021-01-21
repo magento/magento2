@@ -40,7 +40,7 @@ class MassInvalidate extends \Magento\Indexer\Controller\Adminhtml\Indexer imple
     {
         $indexerIds = $this->getRequest()->getParam('indexer_ids');
         if (!is_array($indexerIds)) {
-            $this->messageManager->addError(__('Please select indexers.'));
+            $this->messageManager->addErrorMessage(__('Please select indexers.'));
         } else {
             try {
                 foreach ($indexerIds as $indexerId) {
@@ -52,7 +52,7 @@ class MassInvalidate extends \Magento\Indexer\Controller\Adminhtml\Indexer imple
                     __('%1 indexer(s) were invalidated.', count($indexerIds))
                 );
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addErrorMessage($e->getMessage());
             } catch (\Exception $e) {
                 $this->messageManager->addException(
                     $e,

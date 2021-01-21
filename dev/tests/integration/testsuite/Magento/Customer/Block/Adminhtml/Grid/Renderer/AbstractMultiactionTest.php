@@ -99,12 +99,12 @@ abstract class AbstractMultiactionTest extends TestCase
     private function assertUrl(int $quoteItemId, array $action, string $html): void
     {
         $jsFunction = str_replace('url_', '', $action['url']);
-        $configureXPath = "//a[contains(@onclick, 'return cartControl.$jsFunction($quoteItemId)')"
-            . " and text()='{$action['caption']}' and @href='{$action['url']}']";
+        $configureXPath = "//a[text()='{$action['caption']}' and @href='{$action['url']}']";
         $this->assertEquals(
             1,
             Xpath::getElementsCountForXpath($configureXPath, $html),
             sprintf('Expected %s link is incorrect or missing', $action['caption'])
         );
+        $this->assertStringContainsString("return cartControl.$jsFunction($quoteItemId)", $html);
     }
 }

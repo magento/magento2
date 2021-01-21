@@ -22,6 +22,12 @@
             </skip>
         </annotations>
         <before>
+            <!--Set price scope global-->
+            <magentoCLI command="config:set {{CatalogPriceScopeGlobalConfigData.path}} {{CatalogPriceScopeGlobalConfigData.value}}" stepKey="setCatalogPriceScopeWebsite"/>
+            <!--Remove Currency options for Website-->
+            <remove keyForRemoval="setCurrencyBaseEURWebsites"/>
+            <remove keyForRemoval="setAllowedCurrencyWebsitesForEURandUSD"/>
+            <remove keyForRemoval="setCurrencyDefaultEURWebsites"/>
             <!--Set merchant country-->
             <magentoCLI command="config:set {{MerchantUnitedKingdom.path}} {{MerchantUnitedKingdom.value}}" stepKey="setMerchantCountryUK"/>
             <!--Enable Advanced Setting-->

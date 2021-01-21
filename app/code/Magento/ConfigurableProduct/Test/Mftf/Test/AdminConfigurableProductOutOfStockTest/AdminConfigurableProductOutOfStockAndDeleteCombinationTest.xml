@@ -102,19 +102,17 @@
         <see stepKey="checkForOutOfStock2" selector="{{StorefrontProductInfoMainSection.stockIndication}}" userInput="IN STOCK"/>
 
         <!-- Find the second simple product that we just created using the product grid and go to its page-->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPage2"/>
-        <waitForPageLoad stepKey="waitForAdminProductGridLoad2"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="visitAdminProductPage2"/>
         <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFiltersInitial2"/>
         <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="findCreatedProduct2">
             <argument name="product" value="ApiSimpleTwo"/>
         </actionGroup>
         <waitForPageLoad stepKey="waitForFiltersToBeApplied2"/>
-        <click selector="{{AdminProductGridSection.firstRow}}" stepKey="clickOnProductPage2"/>
-        <waitForPageLoad stepKey="waitForProductPageLoad2"/>
+        <actionGroup ref="AdminProductGridSectionClickFirstRowActionGroup" stepKey="clickOnProductPage2"/>
 
         <!-- Edit the quantity of the second simple product as 0 -->
         <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="0" stepKey="fillProductQuantity2"/>
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveProduct2"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSaveProduct2"/>
 
         <!-- Check to make sure that the configurable product shows up as out of stock -->
         <amOnPage url="/{{ApiConfigurableProduct.urlKey}}2.html" stepKey="goToConfigProductPage3"/>

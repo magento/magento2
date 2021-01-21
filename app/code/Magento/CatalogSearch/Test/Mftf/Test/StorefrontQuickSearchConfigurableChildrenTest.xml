@@ -32,7 +32,7 @@
 
             <!-- Assign attribute to set -->
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
-            <actionGroup ref="GoToAttributeGridPageActionGroup" stepKey="goToAttributeSetPage"/>
+            <actionGroup ref="AdminOpenAttributeSetGridPageActionGroup" stepKey="goToAttributeSetPage"/>
             <actionGroup ref="GoToAttributeSetByNameActionGroup" stepKey="openAttributeSetByName">
                 <argument name="name" value="$createAttributeSet.attribute_set_name$"/>
             </actionGroup>
@@ -73,7 +73,9 @@
             </createData>
 
             <!-- Perform reindex -->
-            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </before>
         <after>
             <deleteData createDataKey="createConfigurableProduct" stepKey="deleteConfigurableProduct"/>
@@ -83,7 +85,7 @@
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
-        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToHomePage"/>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToFrontPage"/>
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="searchStorefront">
             <argument name="phrase" value="$createConfigurableProduct.name$"/>
         </actionGroup>
@@ -98,7 +100,7 @@
         <actionGroup ref="ToggleProductEnabledActionGroup" stepKey="disableProduct"/>
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
 
-        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToHomePageAgain"/>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomePageAgain"/>
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="searchStorefrontAgain">
             <argument name="phrase" value="$createConfigurableProduct.name$"/>
         </actionGroup>

@@ -484,6 +484,7 @@ class ConfigFixtureTest extends TestCase
      */
     private function setConfig(array $config): void
     {
+        $this->object->setGlobalConfig([]);
         $this->object->setClassConfig([]);
         $this->object->setDataSetConfig([]);
         $this->object->setMethodConfig($config);

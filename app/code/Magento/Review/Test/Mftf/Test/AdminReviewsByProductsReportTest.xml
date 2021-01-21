@@ -16,6 +16,9 @@
             <description value="Review By Products Grid Filters"/>
             <severity value="AVERAGE"/>
             <testCaseId value="MC-32333"/>
+            <skip>
+                <issueId value="MQE-2288" />
+            </skip>
         </annotations>
         <before>
             <!--Login-->

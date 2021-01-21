@@ -142,7 +142,7 @@ class Data extends \Magento\Framework\View\Element\Template
         )->setId(
             $id
         )->setTitle(
-            __($title)
+            $this->escapeHtmlAttr(__($title))
         )->setValue(
             $defValue
         )->setOptions(
@@ -175,7 +175,7 @@ class Data extends \Magento\Framework\View\Element\Template
      * Returns region html select
      *
      * @return string
-     * @deprecated
+     * @deprecated 100.3.3
      * @see getRegionSelect() method for more configurations
      */
     public function getRegionHtmlSelect()

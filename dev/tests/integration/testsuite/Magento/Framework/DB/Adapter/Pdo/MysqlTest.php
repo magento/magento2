@@ -10,6 +10,11 @@ use Magento\TestFramework\Helper\CacheCleaner;
 use Magento\Framework\DB\Ddl\Table;
 use Magento\TestFramework\Helper\Bootstrap;
 
+/**
+ * Class checks Mysql adapter behaviour
+ *
+ * @magentoDbIsolation disabled
+ */
 class MysqlTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -22,7 +27,6 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
         set_error_handler(null);
         $this->resourceConnection = Bootstrap::getObjectManager()
             ->get(ResourceConnection::class);
-        CacheCleaner::cleanAll();
     }
 
     protected function tearDown(): void

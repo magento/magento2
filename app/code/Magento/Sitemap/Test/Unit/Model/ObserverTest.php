@@ -142,4 +142,39 @@ class ObserverTest extends TestCase
 
         $this->observer->scheduledGenerateSitemaps();
     }
+
+    /**
+     * Test if cron scheduled XML sitemap generation will start and stop the store environment emulation
+     *
+     * @throws \Exception
+     */
+    public function testCronGenerateSitemapEnvironmentEmulation()
+    {
+        $storeId = 1;
+
+        $this->scopeConfigMock->expects($this->once())->method('isSetFlag')->willReturn(true);
+
+        $this->collectionFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($this->sitemapCollectionMock);
+
+        $this->sitemapCollectionMock->expects($this->any())
+            ->method('getIterator')
+            ->willReturn(new \ArrayIterator([$this->sitemapMock]));
+
+        $this->sitemapMock->expects($this->at(0))
+            ->method('getStoreId')
+            ->willReturn($storeId);
+
+        $this->sitemapMock->expects($this->once())
+            ->method('generateXml');
+
+        $this->appEmulationMock->expects($this->once())
+            ->method('startEnvironmentEmulation');
+
+        $this->appEmulationMock->expects($this->once())
+            ->method('stopEnvironmentEmulation');
+
+        $this->observer->scheduledGenerateSitemaps();
+    }
 }

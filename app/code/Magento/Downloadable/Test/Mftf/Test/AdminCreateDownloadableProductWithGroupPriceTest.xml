@@ -42,8 +42,7 @@
         </after>
 
         <!-- Create downloadable product -->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductGridPage"/>
-        <waitForPageLoad stepKey="waitForProductGridPageLoad"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="amOnProductGridPage"/>
         <actionGroup ref="GoToSpecifiedCreateProductPageActionGroup" stepKey="createProduct">
             <argument name="productType" value="downloadable"/>
         </actionGroup>
@@ -82,13 +81,11 @@
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
 
         <!-- Find downloadable product in grid -->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPage"/>
-        <waitForPageLoad stepKey="waitForAdminProductPageLoad"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="visitAdminProductPage"/>
         <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="findCreatedConfigurableProduct">
             <argument name="product" value="ApiDownloadableProduct"/>
         </actionGroup>
-        <click selector="{{AdminProductGridSection.firstRow}}" stepKey="clickOnProduct"/>
-        <waitForPageLoad stepKey="waitForProductFormPageLoad"/>
+        <actionGroup ref="AdminProductGridSectionClickFirstRowActionGroup" stepKey="clickOnProduct"/>
 
         <!-- Assert downloadable links in product form -->
         <scrollTo selector="{{AdminProductDownloadableSection.sectionLinkGrid}}" stepKey="scrollToLinks"/>

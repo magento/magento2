@@ -148,7 +148,7 @@
             <deleteData createDataKey="createConfigChildProduct" stepKey="deleteConfigChildProduct"/>
             <deleteData createDataKey="createConfigProductAttr" stepKey="deleteConfigProductAttr"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
+            <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
             <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetProductGridColumnsInitial"/>
             <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
             <!-- Admin logout-->

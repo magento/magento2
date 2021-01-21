@@ -11,7 +11,7 @@ use Magento\Framework\App\ResponseInterface;
 /**
  * Abstract redirect/forward action class
  *
- * @deprecated Inheritance in controllers should be avoided in favor of composition
+ * @deprecated 103.0.0 Inheritance in controllers should be avoided in favor of composition
  * @see \Magento\Framework\App\ActionInterface
  */
 abstract class AbstractAction implements \Magento\Framework\App\ActionInterface

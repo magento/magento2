@@ -14,6 +14,7 @@ use Magento\Framework\MessageQueue\Consumer\Config\ConsumerConfigItemInterface;
 use Magento\Framework\MessageQueue\Consumer\ConfigInterface as ConsumerConfigInterface;
 use Magento\Framework\ShellInterface;
 use Magento\MessageQueue\Model\Cron\ConsumersRunner;
+use Magento\MessageQueue\Model\CheckIsAvailableMessagesInQueue;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Process\PhpExecutableFinder;
@@ -49,9 +50,14 @@ class ConsumersRunnerTest extends TestCase
     private $phpExecutableFinderMock;
 
     /**
+     * @var CheckIsAvailableMessagesInQueue|MockObject
+     */
+    private $checkIsAvailableMessagesMock;
+
+    /**
      * @var ConnectionTypeResolver
      */
-    private $connectionTypeResover;
+    private $connectionTypeResolver;
 
     /**
      * @var ConsumersRunner
@@ -77,10 +83,11 @@ class ConsumersRunnerTest extends TestCase
         $this->deploymentConfigMock = $this->getMockBuilder(DeploymentConfig::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->connectionTypeResover = $this->getMockBuilder(ConnectionTypeResolver::class)
+        $this->checkIsAvailableMessagesMock = $this->createMock(CheckIsAvailableMessagesInQueue::class);
+        $this->connectionTypeResolver = $this->getMockBuilder(ConnectionTypeResolver::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->connectionTypeResover->method('getConnectionType')->willReturn('something');
+        $this->connectionTypeResolver->method('getConnectionType')->willReturn('something');
 
         $this->consumersRunner = new ConsumersRunner(
             $this->phpExecutableFinderMock,
@@ -88,7 +95,9 @@ class ConsumersRunnerTest extends TestCase
             $this->deploymentConfigMock,
             $this->shellBackgroundMock,
             $this->lockManagerMock,
-            $this->connectionTypeResover
+            $this->connectionTypeResolver,
+            null,
+            $this->checkIsAvailableMessagesMock
         );
     }
 
@@ -137,22 +146,21 @@ class ConsumersRunnerTest extends TestCase
     ) {
         $consumerName = 'consumerName';
 
-        $this->deploymentConfigMock->expects($this->exactly(3))
+        $this->deploymentConfigMock
             ->method('get')
             ->willReturnMap(
                 [
                     ['cron_consumers_runner/cron_run', true, true],
                     ['cron_consumers_runner/max_messages', 10000, $maxMessages],
                     ['cron_consumers_runner/consumers', [], $allowedConsumers],
+                    ['queue/only_spawn_when_message_available', null, 0],
                 ]
             );
 
         /** @var ConsumerConfigInterface|MockObject $firstCunsumer */
         $consumer = $this->getMockBuilder(ConsumerConfigItemInterface::class)
             ->getMockForAbstractClass();
-        $consumer->expects($this->any())
-            ->method('getName')
-            ->willReturn($consumerName);
+        $consumer->method('getName')->willReturn($consumerName);
 
         $this->phpExecutableFinderMock->expects($this->once())
             ->method('find')
@@ -259,6 +267,127 @@ class ConsumersRunnerTest extends TestCase
                 'allowedConsumers' => ['consumerName'],
                 'shellBackgroundExpects' => 1,
                 'isRunExpects' => 1,
+            ],
+        ];
+    }
+
+    /**
+     * @param boolean $onlySpawnWhenMessageAvailable
+     * @param boolean $isMassagesAvailableInTheQueue
+     * @param int $shellBackgroundExpects
+     * @param boolean $globalOnlySpawnWhenMessageAvailable
+     * @param int $getOnlySpawnWhenMessageAvailableCallCount
+     * @param int $isMassagesAvailableInTheQueueCallCount
+     * @dataProvider runBasedOnOnlySpawnWhenMessageAvailableConsumerConfigurationDataProvider
+     */
+    public function testRunBasedOnOnlySpawnWhenMessageAvailableConsumerConfiguration(
+        $onlySpawnWhenMessageAvailable,
+        $isMassagesAvailableInTheQueue,
+        $shellBackgroundExpects,
+        $globalOnlySpawnWhenMessageAvailable,
+        $getOnlySpawnWhenMessageAvailableCallCount,
+        $isMassagesAvailableInTheQueueCallCount
+    ) {
+        $consumerName = 'consumerName';
+        $connectionName = 'connectionName';
+        $queueName = 'queueName';
+        $this->deploymentConfigMock->expects($this->exactly(4))
+            ->method('get')
+            ->willReturnMap(
+                [
+                    ['cron_consumers_runner/cron_run', true, true],
+                    ['cron_consumers_runner/max_messages', 10000, 1000],
+                    ['cron_consumers_runner/consumers', [], []],
+                    ['queue/only_spawn_when_message_available', true, $globalOnlySpawnWhenMessageAvailable],
+                ]
+            );
+
+        /** @var ConsumerConfigInterface|MockObject $firstCunsumer */
+        $consumer = $this->getMockBuilder(ConsumerConfigItemInterface::class)
+            ->getMockForAbstractClass();
+        $consumer->method('getName')->willReturn($consumerName);
+        $consumer->expects($this->once())
+            ->method('getConnection')
+            ->willReturn($connectionName);
+        $consumer->method('getQueue')->willReturn($queueName);
+        $consumer->expects($this->exactly($getOnlySpawnWhenMessageAvailableCallCount))
+            ->method('getOnlySpawnWhenMessageAvailable')
+            ->willReturn($onlySpawnWhenMessageAvailable);
+        $this->consumerConfigMock->expects($this->once())
+            ->method('getConsumers')
+            ->willReturn([$consumer]);
+
+        $this->phpExecutableFinderMock->expects($this->once())
+            ->method('find')
+            ->willReturn('');
+
+        $this->lockManagerMock->expects($this->once())
+            ->method('isLocked')
+            ->willReturn(false);
+
+        $this->checkIsAvailableMessagesMock->expects($this->exactly($isMassagesAvailableInTheQueueCallCount))
+            ->method('execute')
+            ->willReturn($isMassagesAvailableInTheQueue);
+
+        $this->shellBackgroundMock->expects($this->exactly($shellBackgroundExpects))
+            ->method('execute');
+
+        $this->consumersRunner->run();
+    }
+
+    /**
+     * @return array
+     */
+    public function runBasedOnOnlySpawnWhenMessageAvailableConsumerConfigurationDataProvider()
+    {
+        return [
+            [
+                'onlySpawnWhenMessageAvailable' => true,
+                'isMassagesAvailableInTheQueue' => true,
+                'shellBackgroundExpects' => 1,
+                'globalOnlySpawnWhenMessageAvailable' => false,
+                'getOnlySpawnWhenMessageAvailableCallCount' => 1,
+                'isMassagesAvailableInTheQueueCallCount' => 1
+            ],
+            [
+                'onlySpawnWhenMessageAvailable' => true,
+                'isMassagesAvailableInTheQueue' => false,
+                'shellBackgroundExpects' => 0,
+                'globalOnlySpawnWhenMessageAvailable' => false,
+                'getOnlySpawnWhenMessageAvailableCallCount' => 1,
+                'isMassagesAvailableInTheQueueCallCount' => 1
+            ],
+            [
+                'onlySpawnWhenMessageAvailable' => false,
+                'isMassagesAvailableInTheQueue' => true,
+                'shellBackgroundExpects' => 1,
+                'globalOnlySpawnWhenMessageAvailable' => false,
+                'getOnlySpawnWhenMessageAvailableCallCount' => 2,
+                'isMassagesAvailableInTheQueueCallCount' => 0
+            ],
+            [
+                'onlySpawnWhenMessageAvailable' => null,
+                'isMassagesAvailableInTheQueue' => true,
+                'shellBackgroundExpects' => 1,
+                'globalOnlySpawnWhenMessageAvailable' => true,
+                'getOnlySpawnWhenMessageAvailableCallCount' => 2,
+                'isMassagesAvailableInTheQueueCallCount' => 1
+            ],
+            [
+                'onlySpawnWhenMessageAvailable' => null,
+                'isMassagesAvailableInTheQueue' => true,
+                'shellBackgroundExpects' => 1,
+                'globalOnlySpawnWhenMessageAvailable' => false,
+                'getOnlySpawnWhenMessageAvailableCallCount' => 2,
+                'isMassagesAvailableInTheQueueCallCount' => 0
+            ],
+            [
+                'onlySpawnWhenMessageAvailable' => false,
+                'isMassagesAvailableInTheQueue' => true,
+                'shellBackgroundExpects' => 1,
+                'globalOnlySpawnWhenMessageAvailable' => true,
+                'getOnlySpawnWhenMessageAvailableCallCount' => 2,
+                'isMassagesAvailableInTheQueueCallCount' => 0
             ],
         ];
     }

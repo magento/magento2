@@ -1,0 +1,63 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+use Magento\MediaGalleryUi\Block\Adminhtml\ImageDetails;
+use Magento\Framework\Escaper;
+
+// phpcs:disable Magento2.Files.LineLength, Generic.Files.LineLength
+/** @var ImageDetails $block */
+/** @var Escaper $escaper */
+
+?>
+
+<div class="media-gallery-image-details-modal"
+     data-bind="mageInit: {
+        'Magento_Ui/js/modal/modal': {
+            type: 'slide',
+            buttons: [],
+            modalClass: 'media-gallery-image-details',
+            title: '<?= $escaper->escapeHtmlAttr(__('Image Details')); ?>'
+        }
+     }">
+    <div class="page-main-actions" data-bind="scope: 'mediaGalleryImageActions'">
+        <!-- ko template: getTemplate() --><!-- /ko -->
+    </div>
+    <div id="media-gallery-image-details-messages" data-bind="scope: 'mediaGalleryImageDetailsMessages'">
+        <!-- ko template: getTemplate() --><!-- /ko -->
+    </div>
+    <div id="media-gallery-image-details" data-bind="scope: 'mediaGalleryImageDetails'">
+        <!-- ko template: getTemplate() --><!-- /ko -->
+    </div>
+</div>
+
+<script type="text/x-magento-init">
+    {
+        "#media-gallery-image-details": {
+            "Magento_Ui/js/core/app": {
+                "components": {
+                    "mediaGalleryImageDetails": {
+                        "component": "Magento_MediaGalleryUi/js/image/image-details",
+                        "imageDetailsUrl": "<?= $escaper->escapeJs($block->getData('imageDetailsUrl')); ?>",
+                        "modalSelector": ".media-gallery-image-details-modal",
+                        "modalWindowSelector": ".media-gallery-image-details",
+                        "mediaGridMessages": "media_gallery_listing.media_gallery_listing.messages"
+                    },
+                    "mediaGalleryImageDetailsMessages": {
+                        "component": "Magento_MediaGalleryUi/js/grid/messages"
+                    },
+                    "mediaGalleryImageActions": {
+                        "component": "Magento_MediaGalleryUi/js/image/image-actions",
+                        "modalSelector": ".media-gallery-image-details-modal",
+                        "modalWindowSelector": ".media-gallery-image-details",
+                        "imageModelName" : "media_gallery_listing.media_gallery_listing.media_gallery_columns.thumbnail_url",
+                        "mediaGalleryImageDetailsName": "mediaGalleryImageDetails",
+                        "actionsList": <?= /* @noEscape */ $block->getActionsJson() ?>
+                    }
+                }
+            }
+        }
+    }
+</script>

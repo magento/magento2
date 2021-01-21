@@ -39,6 +39,7 @@ class WishlistTest extends GraphQlAbstract
     }
 
     /**
+     * @magentoConfigFixture default_store wishlist/general/active 1
      * @magentoApiDataFixture Magento/Wishlist/_files/wishlist.php
      */
     public function testGetCustomerWishlist(): void
@@ -94,6 +95,7 @@ QUERY;
     }
 
     /**
+     * @magentoConfigFixture default_store wishlist/general/active 1
      */
     public function testGetGuestWishlist()
     {

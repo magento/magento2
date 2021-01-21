@@ -49,8 +49,7 @@
         </after>
 
         <!-- Delete the simple product and catalog price rule -->
-        <amOnPage url="{{CatalogRulePage.url}}" stepKey="goToPriceRulePage1"/>
-        <waitForPageLoad stepKey="waitForPriceRulePage"/>
+        <actionGroup ref="AdminOpenCatalogPriceRulePageActionGroup" stepKey="goToPriceRulePage1"/>
         <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deletePriceRule1">
             <argument name="name" value="{{DeleteActiveCatalogPriceRuleWithConditions.name}}"/>
             <argument name="searchInput" value="{{AdminSecondaryGridSection.catalogRuleIdentifierSearch}}"/>
@@ -60,9 +59,10 @@
         <!-- Assert that the Success message is present after the delete -->
         <see selector="{{AdminMessagesSection.success}}" userInput="You deleted the rule." stepKey="seeDeletedRuleMessage1"/>
 
-        <!-- Reindex -->
-        <magentoCLI command="cache:flush" stepKey="flushCache1"/>
-        <magentoCLI command="indexer:reindex" stepKey="reindex1"/>
+        <comment userInput="Adding the comment to replace CliIndexerReindexActionGroup action group ('indexer:reindex' commands) for preserving Backward Compatibility" stepKey="reindex"/>
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+            <argument name="tags" value=""/>
+        </actionGroup>
 
         <!-- Assert that the rule isn't present on the Category page -->
         <amOnPage url="$$createCategory1.name$$.html" stepKey="goToStorefrontCategoryPage1"/>

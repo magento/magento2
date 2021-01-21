@@ -292,6 +292,8 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      */
     public function getUseSession()
     {
+        trigger_error('Session ID is not used as URL parameter anymore.', E_USER_DEPRECATED);
+
         return false;
     }
 
@@ -756,12 +758,12 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
     }
 
     /**
-     * Add session param
-     *
-     * @return \Magento\Framework\UrlInterface
+     * @inheritDoc
      */
     public function addSessionParam()
     {
+        trigger_error('Session ID is not used as URL parameter anymore.', E_USER_DEPRECATED);
+
         return $this;
     }
 
@@ -933,7 +935,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
             if (is_string($query)) {
                 $this->_setQuery($query);
             } elseif (is_array($query)) {
-                $this->addQueryParams($query, !empty($routeParams['_current']));
+                $this->addQueryParams($query);
             }
             if ($query === false) {
                 $this->addQueryParams([]);
@@ -1005,7 +1007,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      *
      * @param string $value
      * @return string
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      */
     public function escape($value)
     {
@@ -1152,7 +1154,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      * Gets URL modifier.
      *
      * @return \Magento\Framework\Url\ModifierInterface
-     * @deprecated 100.1.0
+     * @deprecated 101.0.0
      */
     private function getUrlModifier()
     {
@@ -1169,7 +1171,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      * Get escaper
      *
      * @return Escaper
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      */
     private function getEscaper()
     {

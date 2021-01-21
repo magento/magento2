@@ -20,7 +20,6 @@ class RequestInfoFilterComposite implements RequestInfoFilterInterface
 
     /**
      * @param RequestInfoFilter[] $filters
-     * @since 100.1.2
      */
     public function __construct(
         $filters = []

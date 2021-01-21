@@ -12,6 +12,7 @@ namespace Magento\Framework\App\Area;
  * Keeping it for backward compatibility
  *
  * @api
+ * @since 100.0.2
  */
 class FrontNameResolverFactory
 {

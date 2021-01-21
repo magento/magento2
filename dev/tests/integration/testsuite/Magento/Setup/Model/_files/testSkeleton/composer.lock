@@ -820,10 +820,6 @@
                         "LICENSE.txt"
                     ],
                     [
-                        ".travis.yml",
-                        ".travis.yml"
-                    ],
-                    [
                         "app/bootstrap.php",
                         "app/bootstrap.php"
                     ],

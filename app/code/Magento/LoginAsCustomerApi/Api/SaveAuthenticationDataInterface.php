@@ -14,6 +14,7 @@ use Magento\LoginAsCustomerApi\Api\Data\AuthenticationDataInterface;
  * Save authentication data. Return secret key
  *
  * @api
+ * @since 100.4.0
  */
 interface SaveAuthenticationDataInterface
 {
@@ -23,6 +24,7 @@ interface SaveAuthenticationDataInterface
      * @param Data\AuthenticationDataInterface $authenticationData
      * @return string
      * @throws LocalizedException
+     * @since 100.4.0
      */
     public function execute(AuthenticationDataInterface $authenticationData): string;
 }

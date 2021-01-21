@@ -10,6 +10,8 @@
         "magento/module-quote": "*",
         "magento/module-quote-graph-ql": "*",
         "magento/module-store": "*",
+        "magento/module-sales": "*",
+        "magento/module-sales-graph-ql": "*",
         "magento/framework": "*"
     },
     "license": [

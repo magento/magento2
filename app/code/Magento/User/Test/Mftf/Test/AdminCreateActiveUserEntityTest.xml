@@ -32,7 +32,7 @@
             <argument name="user" value="activeAdmin"/>
             <argument name="role" value="roleDefaultAdministrator"/>
         </actionGroup>
-        <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutMasterAdmin"/>
+        <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutMainAdmin"/>
 
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginToNewAdmin">
             <argument name="username" value="{{activeAdmin.username}}"/>

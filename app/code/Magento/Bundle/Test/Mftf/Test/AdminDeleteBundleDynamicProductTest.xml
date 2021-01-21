@@ -7,17 +7,17 @@
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminDeleteBundleDynamicProductTest">
+    <test name="AdminDeleteBundleDynamicProductTest" deprecated="Use AdminDeleteBundleDynamicPriceProductTest instead">
         <annotations>
             <features value="Bundle"/>
             <stories value="Delete products"/>
-            <title value="Delete Bundle Dynamic Product"/>
-            <description value="Admin should be able to delete a bundle dynamic product"/>
+            <title value="Deprecated. Delete Bundle Dynamic Product"/>
+            <description value="Deprecated. Admin should be able to delete a bundle dynamic product"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-11016"/>
             <group value="mtf_migrated"/>
             <skip>
-                <issueId value="MC-16393"/>
+                <issueId value="DEPRECATED">Use AdminDeleteBundleDynamicPriceProductTest instead</issueId>
             </skip>
         </annotations>
         <before>
@@ -40,10 +40,9 @@
         <amOnPage url="{{StorefrontProductPage.url($$createDynamicBundleProduct.name$$)}}" stepKey="amOnBundleProductPage"/>
         <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="Whoops, our bad..." stepKey="seeWhoops"/>
         <!-- Search for the product by sku -->
-        <fillField selector="{{StorefrontQuickSearchSection.searchPhrase}}" userInput="$$createDynamicBundleProduct.sku$$" stepKey="fillSearchBarByProductSku"/>
-        <waitForPageLoad stepKey="waitForSearchButton"/>
-        <click selector="{{StorefrontQuickSearchSection.searchButton}}" stepKey="clickSearchButton"/>
-        <waitForPageLoad stepKey="waitForSearchResults"/>
+        <actionGroup ref="StoreFrontQuickSearchActionGroup" stepKey="searchByCreatedTerm">
+            <argument name="query" value="$$createDynamicBundleProduct.sku$$"/>
+        </actionGroup>
          <!-- Should not see any search results -->
         <dontSee userInput="$$createDynamicBundleProduct.sku$$" selector="{{StorefrontCatalogSearchMainSection.searchResults}}" stepKey="dontSeeProduct"/>
         <see selector="{{StorefrontCatalogSearchMainSection.message}}" userInput="Your search returned no results." stepKey="seeCantFindProductOneMessage"/>

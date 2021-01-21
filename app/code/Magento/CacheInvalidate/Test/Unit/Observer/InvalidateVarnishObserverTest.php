@@ -82,7 +82,7 @@ class InvalidateVarnishObserverTest extends TestCase
     public function testInvalidateVarnish()
     {
         $tags = ['cache_1', 'cache_group'];
-        $pattern = '((^|,)cache_1(,|$))|((^|,)cache_group(,|$))';
+        $pattern = ['((^|,)cache_1(,|$))', '((^|,)cache_group(,|$))'];
 
         $this->configMock->expects($this->once())->method('isEnabled')->willReturn(true);
         $this->configMock->expects(

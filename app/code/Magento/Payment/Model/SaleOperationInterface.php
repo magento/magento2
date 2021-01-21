@@ -11,6 +11,7 @@ namespace Magento\Payment\Model;
  * Responsible for support of `sale` payment operation via Magento payment provider gateway.
  *
  * @api
+ * @since 100.4.0
  */
 interface SaleOperationInterface
 {
@@ -18,6 +19,7 @@ interface SaleOperationInterface
      * Checks `sale` payment operation availability.
      *
      * @return bool
+     * @since 100.4.0
      */
     public function canSale(): bool;
 
@@ -27,6 +29,7 @@ interface SaleOperationInterface
      * @param InfoInterface $payment
      * @param float $amount
      * @return void
+     * @since 100.4.0
      */
     public function sale(InfoInterface $payment, float $amount);
 }

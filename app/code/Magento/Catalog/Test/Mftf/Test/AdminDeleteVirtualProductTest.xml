@@ -38,10 +38,9 @@
         <amOnPage url="{{StorefrontProductPage.url($$createVirtualProduct.name$$)}}" stepKey="amOnVirtualProductPage"/>
         <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="Whoops, our bad..." stepKey="seeWhoops"/>
         <!-- Search for the product by sku -->
-        <fillField selector="{{StorefrontQuickSearchSection.searchPhrase}}" userInput="$$createVirtualProduct.sku$$" stepKey="fillSearchBarByProductSku"/>
-        <waitForPageLoad stepKey="waitForSearchButton"/>
-        <click selector="{{StorefrontQuickSearchSection.searchButton}}" stepKey="clickSearchButton"/>
-        <waitForPageLoad stepKey="waitForSearchResults"/>
+        <actionGroup ref="StoreFrontQuickSearchActionGroup" stepKey="searchByCreatedTerm">
+            <argument name="query" value="$$createVirtualProduct.sku$$"/>
+        </actionGroup>
         <!-- Should not see any search results -->
         <dontSee userInput="$$createVirtualProduct.sku$$" selector="{{StorefrontCatalogSearchMainSection.searchResults}}" stepKey="dontSeeProduct"/>
         <see selector="{{StorefrontCatalogSearchMainSection.message}}" userInput="Your search returned no results." stepKey="seeCantFindProductOneMessage"/>

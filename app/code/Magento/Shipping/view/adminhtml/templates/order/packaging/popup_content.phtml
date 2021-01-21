@@ -3,12 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-//phpcs:disable Magento2.Files.LineLength.MaxExceeded
+
+/**
+ * @var \Magento\Shipping\Block\Adminhtml\Order\Packaging $block
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ */
 ?>
-<?php /** @var $block \Magento\Shipping\Block\Adminhtml\Order\Packaging */ ?>
 <div id="packaging_window">
-    <div class="message message-warning" style="display: none"></div>
-    <section class="admin__page-section" id="package_template" style="display:none;">
+    <div class="message message-warning"></div>
+    <section class="admin__page-section" id="package_template">
         <div class="admin__page-section-title">
             <span class="title">
                 <?= $block->escapeHtml(__('Package')) ?> <span data-role="package-number"></span>
@@ -16,14 +19,12 @@
             <div class="actions _primary">
                 <button type="button"
                         class="action-secondary"
-                        data-action="package-save-items"
-                        onclick="packaging.packItems(this);">
+                        data-action="package-save-items">
                     <span><?= $block->escapeHtml(__('Add Selected Product(s) to Package')) ?></span>
                 </button>
                 <button type="button"
                         class="action-secondary"
-                        data-action="package-add-items"
-                        onclick="packaging.getItemsForPack(this);">
+                        data-action="package-add-items">
                     <span><?= $block->escapeHtml(__('Add Products to Package')) ?></span>
                 </button>
             </div>
@@ -33,51 +34,54 @@
                 <thead>
                     <tr>
                         <th class="col-type"><?= $block->escapeHtml(__('Type')) ?></th>
-                        <?php if ($girthEnabled == 1) : ?>
+                        <?php if ($girthEnabled == 1): ?>
                         <th class="col-size"><?= $block->escapeHtml(__('Size')) ?></th>
                         <th class="col-girth"><?= $block->escapeHtml(__('Girth')) ?></th>
                         <th>&nbsp;</th>
                         <?php endif; ?>
-                        <th class="col-custom" <?= $block->displayCustomsValue() ? '' : 'style="display: none;"' ?>>
+                        <th class="col-custom">
                             <?= $block->escapeHtml(__('Customs Value')) ?>
                         </th>
+                        <?php if (!$block->displayCustomsValue()): ?>
+                            <?= /* @noEscape */ $secureRenderer->renderStyleAsTag('display: none', 'th.col-custom') ?>
+                        <?php endif ?>
                         <th class="col-total-weight"><?= $block->escapeHtml(__('Total Weight')) ?></th>
                         <th class="col-length"><?= $block->escapeHtml(__('Length')) ?></th>
                         <th class="col-width"><?= $block->escapeHtml(__('Width')) ?></th>
                         <th class="col-height"><?= $block->escapeHtml(__('Height')) ?></th>
                         <th>&nbsp;</th>
-                        <?php if ($block->getDeliveryConfirmationTypes()) : ?>
+                        <?php if ($block->getDeliveryConfirmationTypes()): ?>
                         <th class="col-signature"><?= $block->escapeHtml(__('Signature Confirmation')) ?></th>
                         <?php endif; ?>
                         <th class="col-actions">&nbsp;</th>
                     </tr>
                 </thead>
+
                 <tbody>
                     <tr>
                         <td class="col-type">
                             <?php $containers = $block->getContainers(); ?>
                             <select name="package_container"
-                                    onchange="packaging.changeContainerType(this);packaging.checkSizeAndGirthParameter(this, <?= $block->escapeJs($girthEnabled) ?>);"
-                                    <?php if (empty($containers)) : ?>
-                                        title="<?= $block->escapeHtmlAttr(__('USPS domestic shipments don\'t use package types.')) ?>"
+                                    <?php if (empty($containers)): ?>
+                                        title="<?= $block->escapeHtmlAttr(__(
+                                            'USPS domestic shipments don\'t use package types.'
+                                        )) ?>"
                                         disabled=""
                                         class="admin__control-select disabled"
-                                    <?php else : ?>
+                                    <?php else: ?>
                                         class="admin__control-select"
                                     <?php endif; ?>>
-                                <?php foreach ($containers as $key => $value) : ?>
+                                <?php foreach ($containers as $key => $value): ?>
                                     <option value="<?= $block->escapeHtmlAttr($key) ?>" >
                                         <?= $block->escapeHtml($value) ?>
                                     </option>
                                 <?php endforeach; ?>
                             </select>
                         </td>
-                        <?php if ($girthEnabled == 1 && !empty($sizeSource)) : ?>
+                        <?php if ($girthEnabled == 1 && !empty($sizeSource)): ?>
                         <td>
-                            <select name="package_size"
-                                    class="admin__control-select"
-                                    onchange="packaging.checkSizeAndGirthParameter(this, <?= $block->escapeJs($girthEnabled) ?>);">
-                                <?php foreach ($sizeSource as $key => $value) : ?>
+                            <select name="package_size" class="admin__control-select">
+                                <?php foreach ($sizeSource as $key => $value): ?>
                                 <option value="<?= $block->escapeHtmlAttr($sizeSource[$key]['value']) ?>">
                                     <?= $block->escapeHtml($sizeSource[$key]['label']) ?>
                                 </option>
@@ -91,26 +95,28 @@
                         </td>
                         <td>
                             <select name="container_girth_dimension_units"
-                                    class="options-units-dimensions measures admin__control-select"
-                                    onchange="packaging.changeMeasures(this);">
-                                <option value="<?= /* @noEscape */ Zend_Measure_Length::INCH ?>" selected="selected" ><?= $block->escapeHtml(__('in')) ?></option>
-                                <option value="<?= /* @noEscape */ Zend_Measure_Length::CENTIMETER ?>" ><?= $block->escapeHtml(__('cm')) ?></option>
+                                    class="options-units-dimensions measures admin__control-select">
+                                <option value="<?= /* @noEscape */ Zend_Measure_Length::INCH ?>" selected="selected" >
+                                    <?= $block->escapeHtml(__('in')) ?>
+                                </option>
+                                <option value="<?= /* @noEscape */ Zend_Measure_Length::CENTIMETER ?>" >
+                                    <?= $block->escapeHtml(__('cm')) ?>
+                                </option>
                             </select>
                         </td>
                         <?php endif; ?>
                         <?php
                         if ($block->displayCustomsValue()) {
-                            $customsValueDisplay = '';
                             $customsValueValidation = ' validate-zero-or-greater ';
                         } else {
-                            $customsValueDisplay = ' style="display: none;" ';
                             $customsValueValidation = '';
                         }
                         ?>
-                        <td class="col-custom" <?= /* @noEscape */ $customsValueDisplay ?>>
+                        <td class="col-custom">
                             <div class="admin__control-addon">
                                 <input type="text"
-                                       class="customs-value input-text admin__control-text <?= /* @noEscape */ $customsValueValidation ?>"
+                                       class="customs-value input-text admin__control-text <?=
+                                       /* @noEscape */ $customsValueValidation ?>"
                                        name="package_customs_value" />
                                 <span class="admin__addon-suffix">
                                     <span class="customs-value-currency">
@@ -119,16 +125,23 @@
                                 </span>
                             </div>
                         </td>
+                        <?php if (!$block->displayCustomsValue()): ?>
+                            <?= /* @noEscape */ $secureRenderer->renderStyleAsTag('display: none', 'td.col-custom') ?>
+                        <?php endif ?>
                         <td class="col-total-weight">
                             <div class="admin__control-addon">
                             <input type="text"
-                                   class="options-weight input-text admin__control-text required-entry validate-greater-than-zero"
+                                   class="options-weight input-text admin__control-text required-entry
+                                    validate-greater-than-zero"
                                    name="container_weight" />
                                     <select name="container_weight_units"
-                                            class="options-units-weight measures admin__control-select"
-                                            onchange="packaging.changeMeasures(this);">
-                                        <option value="<?= /* @noEscape */ Zend_Measure_Weight::POUND ?>" selected="selected"  ><?= $block->escapeHtml(__('lb')) ?></option>
-                                        <option value="<?= /* @noEscape */ Zend_Measure_Weight::KILOGRAM ?>" ><?= $block->escapeHtml(__('kg')) ?></option>
+                                            class="options-units-weight measures admin__control-select">
+                                        <option value="<?= /* @noEscape */ Zend_Measure_Weight::POUND
+                                        ?>" selected="selected"  ><?= $block->escapeHtml(__('lb')) ?>
+                                        </option>
+                                        <option value="<?= /* @noEscape */ Zend_Measure_Weight::KILOGRAM ?>" >
+                                            <?= $block->escapeHtml(__('kg')) ?>
+                                        </option>
                                     </select>
                                 <span class="admin__addon-prefix"></span>
                             </div>
@@ -150,16 +163,19 @@
                         </td>
                         <td class="col-measure">
                             <select name="container_dimension_units"
-                                    class="options-units-dimensions measures admin__control-select"
-                                    onchange="packaging.changeMeasures(this);">
-                                <option value="<?= /* @noEscape */ Zend_Measure_Length::INCH ?>" selected="selected" ><?= $block->escapeHtml(__('in')) ?></option>
-                                <option value="<?= /* @noEscape */ Zend_Measure_Length::CENTIMETER ?>" ><?= $block->escapeHtml(__('cm')) ?></option>
+                                    class="options-units-dimensions measures admin__control-select">
+                                <option value="<?= /* @noEscape */ Zend_Measure_Length::INCH ?>" selected="selected" >
+                                    <?= $block->escapeHtml(__('in')) ?>
+                                </option>
+                                <option value="<?= /* @noEscape */ Zend_Measure_Length::CENTIMETER ?>" >
+                                    <?= $block->escapeHtml(__('cm')) ?>
+                                </option>
                             </select>
                         </td>
-                        <?php if ($block->getDeliveryConfirmationTypes()) : ?>
+                        <?php if ($block->getDeliveryConfirmationTypes()): ?>
                         <td>
                             <select name="delivery_confirmation_types" class="admin__control-select">
-                                <?php foreach ($block->getDeliveryConfirmationTypes() as $key => $value) : ?>
+                                <?php foreach ($block->getDeliveryConfirmationTypes() as $key => $value): ?>
                                 <option value="<?= $block->escapeHtmlAttr($key) ?>" >
                                     <?= $block->escapeHtml($value) ?>
                                 </option>
@@ -169,15 +185,14 @@
                         <?php endif; ?>
                         <td class="col-actions">
                             <button type="button"
-                                    class="action-delete DeletePackageBtn"
-                                    onclick="packaging.deletePackage(this);">
+                                    class="action-delete DeletePackageBtn">
                                 <span><?= $block->escapeHtml(__('Delete Package')) ?></span>
                             </button>
                         </td>
                     </tr>
                 </tbody>
             </table>
-            <?php if ($block->getContentTypes()) : ?>
+            <?php if ($block->getContentTypes()): ?>
                 <table class="data-table admin__control-table" cellspacing="0">
                     <thead>
                         <tr>
@@ -189,9 +204,8 @@
                     <tr>
                         <td>
                             <select name="content_type"
-                                    class="admin__control-select"
-                                    onchange="packaging.changeContentTypes(this);">
-                                <?php foreach ($block->getContentTypes() as $key => $value) : ?>
+                                    class="admin__control-select">
+                                <?php foreach ($block->getContentTypes() as $key => $value): ?>
                                     <option value="<?= $block->escapeHtmlAttr($key) ?>" >
                                         <?= $block->escapeHtml($value) ?>
                                     </option>
@@ -214,4 +228,46 @@
         </div>
     </section>
     <div id="packages_content"></div>
+    <?= /* @noEscape */ $secureRenderer->renderStyleAsTag('display:none', '#package_template') ?>
+    <?php $scriptString = <<<script
+require(['jquery'], function($){
+    $("div#packages_content").on('click', "button[data-action='package-save-items']",
+        function(){packaging.packItems(this)});
+    $("div#packages_content").on('click', "button[data-action='package-add-items']",
+        function(){packaging.getItemsForPack(this)});
+    $("div#packages_content").on('change', "select[name='package_container']",
+        function(){
+            packaging.changeContainerType(this);
+            packaging.checkSizeAndGirthParameter(this, {$block->escapeJs($girthEnabled)})
+        });
+    $("div#packages_content").on('change', "select[name='container_weight_units']",
+        function(){packaging.changeMeasures(this)});
+    $("div#packages_content").on('change', "select[name='container_dimension_units']",
+        function(){packaging.changeMeasures(this)});
+    $("div#packages_content").on('click', "button.action-delete.DeletePackageBtn",
+        function(){packaging.deletePackage(this)});
+script;
+    if ($girthEnabled == 1 && !empty($sizeSource)) {
+        $scriptString .= <<<script
+    $("div#packages_content").on('change', "select[name='package_size']",
+        function(){packaging.checkSizeAndGirthParameter(this, {$block->escapeJs($girthEnabled)})});
+    $("div#packages_content").on('change', "select[name='container_girth_dimension_units']",
+        function(){packaging.changeMeasures(this)});
+script;
+    }
+    if ($block->getContentTypes()) {
+        $scriptString .= <<<script
+    $("div#packages_content").on('change', "select[name='content_type']",
+        function(){packaging.changeContentTypes(this)});
+script;
+    }
+    $scriptString .= <<<script
+})
+script;
+    ?>
+    <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
 </div>
+<?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
+    'display:none',
+    'div#packaging_window div.message.message-warning'
+) ?>

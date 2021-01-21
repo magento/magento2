@@ -179,7 +179,7 @@ class Handler
      * @param string $serviceMethod
      * @param array $arguments
      * @return array
-     * @deprecated
+     * @deprecated 100.3.2
      * @see Handler::prepareOperationInput()
      */
     protected function _prepareRequestData($serviceClass, $serviceMethod, $arguments)

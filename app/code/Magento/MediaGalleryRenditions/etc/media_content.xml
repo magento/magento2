@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_MediaContentApi:etc/media_content.xsd">
+    <search>
+        <patterns>
+            <pattern name="media_gallery_renditions">/{{media url=(?:"|&amp;quot;)(?:.renditions)?(.*?)(?:"|&amp;quot;)}}/</pattern>
+            <pattern name="media_gallery">/{{media url="?((?!.*.renditions).*?)"?}}/</pattern>
+            <pattern name="wysiwyg">/src=".*\/media\/(?:.renditions\/)*(.*?)"/</pattern>
+            <pattern name="catalog_image">/^\/?media\/(?:.renditions\/)?(.*)/</pattern>
+            <pattern name="catalog_image_with_pub">/^\/pub\/?media\/(?:.renditions\/)?(.*)/</pattern>
+        </patterns>
+    </search>
+</config>

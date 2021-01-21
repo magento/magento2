@@ -72,6 +72,7 @@ class OperationRepository implements OperationRepositoryInterface
      */
     public function create($topicName, $entityParams, $groupId, $operationId): OperationInterface
     {
+
         $this->messageValidator->validate($topicName, $entityParams);
         $requestData = $this->inputParamsResolver->getInputData();
         if ($operationId === null || !isset($requestData[$operationId])) {
@@ -88,13 +89,13 @@ class OperationRepository implements OperationRepositoryInterface
         ];
         $data = [
             'data' => [
-                OperationInterface::BULK_ID         => $groupId,
-                OperationInterface::TOPIC_NAME      => $topicName,
+                OperationInterface::ID => $operationId,
+                OperationInterface::BULK_ID => $groupId,
+                OperationInterface::TOPIC_NAME => $topicName,
                 OperationInterface::SERIALIZED_DATA => $this->jsonSerializer->serialize($serializedData),
-                OperationInterface::STATUS          => OperationInterface::STATUS_TYPE_OPEN,
+                OperationInterface::STATUS => OperationInterface::STATUS_TYPE_OPEN,
             ],
         ];
-
         /** @var OperationInterface $operation */
         $operation = $this->operationFactory->create($data);
         return $operation;

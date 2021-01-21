@@ -22,7 +22,7 @@
             <createData entity="_defaultCategory" stepKey="createPreReqCategory"/>
         </before>
         <after>
-            <actionGroup ref="GoToProductCatalogPageActionGroup" stepKey="goToProductCatalogPage"/>
+            <actionGroup ref="AdminOpenCatalogProductPageActionGroup" stepKey="goToProductCatalogPage"/>
             <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteSimpleProduct">
                 <argument name="product" value="_defaultProduct"/>
             </actionGroup>
@@ -49,12 +49,16 @@
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductForm"/>
         <!-- Check that product was added with implicit type change -->
         <comment stepKey="beforeVerify" userInput="Verify Product Type Assigned Correctly"/>
-        <actionGroup ref="GoToProductCatalogPageActionGroup" stepKey="goToProductCatalogPage"/>
+        <actionGroup ref="AdminOpenCatalogProductPageActionGroup" stepKey="goToProductCatalogPage"/>
         <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetSearch"/>
         <actionGroup ref="FilterProductGridByNameActionGroup" stepKey="searchForProduct">
             <argument name="product" value="_defaultProduct"/>
         </actionGroup>
-        <see selector="{{AdminProductGridSection.productGridCell('1', 'Type')}}" userInput="Virtual Product" stepKey="seeProductTypeInGrid"/>
+        <actionGroup ref="AssertAdminProductGridCellActionGroup" stepKey="seeProductTypeInGrid">
+            <argument name="row" value="1"/>
+            <argument name="column" value="Type"/>
+            <argument name="value" value="Virtual Product"/>
+        </actionGroup>
         <actionGroup ref="AssertProductInStorefrontProductPageActionGroup" stepKey="AssertProductInStorefrontProductPage">
             <argument name="product" value="_defaultProduct"/>
         </actionGroup>

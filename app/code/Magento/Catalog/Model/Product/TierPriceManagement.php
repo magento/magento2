@@ -12,11 +12,12 @@ use Magento\Customer\Api\GroupManagementInterface;
 use Magento\Customer\Api\GroupRepositoryInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\TemporaryStateExceptionInterface;
+use Magento\Store\Api\Data\WebsiteInterface;
+use Magento\Store\Model\ScopeInterface;
 
 /**
- * Product tier price management
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class TierPriceManagement implements \Magento\Catalog\Api\ProductTierPriceManagementInterface
@@ -100,7 +101,7 @@ class TierPriceManagement implements \Magento\Catalog\Api\ProductTierPriceManage
         $product = $this->productRepository->get($sku, ['edit_mode' => true]);
         $tierPrices = $product->getData('tier_price');
         $websiteIdentifier = 0;
-        $value = $this->config->getValue('catalog/price/scope', \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE);
+        $value = $this->config->getValue('catalog/price/scope', ScopeInterface::SCOPE_WEBSITE);
         if ($value != 0) {
             $websiteIdentifier = $this->storeManager->getWebsite()->getId();
         }
@@ -160,9 +161,8 @@ class TierPriceManagement implements \Magento\Catalog\Api\ProductTierPriceManage
     {
         $product = $this->productRepository->get($sku, ['edit_mode' => true]);
         $websiteIdentifier = 0;
-        $value = $this->config->getValue('catalog/price/scope', \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE);
-        if ($value != 0) {
-            $websiteIdentifier = $this->storeManager->getWebsite()->getId();
+        if ($this->getPriceScopeConfig() !== 0) {
+            $websiteIdentifier = $this->getCurrentWebsite()->getId();
         }
         $this->priceModifier->removeTierPrice($product, $customerGroupId, $qty, $websiteIdentifier);
         return true;
@@ -175,23 +175,17 @@ class TierPriceManagement implements \Magento\Catalog\Api\ProductTierPriceManage
     {
         $product = $this->productRepository->get($sku, ['edit_mode' => true]);
 
-        $priceKey = 'website_price';
-        $value = $this->config->getValue('catalog/price/scope', \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE);
-        if ($value == 0) {
-            $priceKey = 'price';
-        }
-
-        $cgi = ($customerGroupId === 'all'
+        $cgi = $customerGroupId === 'all'
             ? $this->groupManagement->getAllCustomersGroup()->getId()
-            : $customerGroupId);
+            : $customerGroupId;
 
         $prices = [];
         $tierPrices = $product->getData('tier_price');
         if ($tierPrices !== null) {
+            $priceKey = $this->getPriceKey();
+
             foreach ($tierPrices as $price) {
-                if ((is_numeric($customerGroupId) && (int) $price['cust_group'] === (int) $customerGroupId)
-                    || ($customerGroupId === 'all' && $price['all_groups'])
-                ) {
+                if ($this->isCustomerGroupApplicable($customerGroupId, $price)) {
                     /** @var \Magento\Catalog\Api\Data\ProductTierPriceInterface $tierPrice */
                     $tierPrice = $this->priceFactory->create();
                     $tierPrice->setValue($price[$priceKey])
@@ -202,5 +196,49 @@ class TierPriceManagement implements \Magento\Catalog\Api\ProductTierPriceManage
             }
         }
         return $prices;
+    }
+
+    /**
+     * Returns attribute code (key) that contains price
+     *
+     * @return string
+     */
+    private function getPriceKey(): string
+    {
+        return $this->getPriceScopeConfig() === 0 ? 'price' : 'website_price';
+    }
+
+    /**
+     * Returns whether Price is applicable for provided Customer Group
+     *
+     * @param string $customerGroupId
+     * @param array $priceArray
+     * @return bool
+     */
+    private function isCustomerGroupApplicable(string $customerGroupId, array $priceArray): bool
+    {
+        return ($customerGroupId === 'all' && $priceArray['all_groups'])
+            || (is_numeric($customerGroupId) && (int)$priceArray['cust_group'] === (int)$customerGroupId);
+    }
+
+    /**
+     * Returns current Price Scope configuration value
+     *
+     * @return int
+     */
+    private function getPriceScopeConfig(): int
+    {
+        return (int)$this->config->getValue('catalog/price/scope', ScopeInterface::SCOPE_WEBSITE);
+    }
+
+    /**
+     * Returns current Website object
+     *
+     * @return WebsiteInterface
+     * @throws LocalizedException
+     */
+    private function getCurrentWebsite(): WebsiteInterface
+    {
+        return $this->storeManager->getWebsite();
     }
 }

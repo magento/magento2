@@ -10,12 +10,12 @@
             <translate args="maxCartItemsToDisplay" if="maxCartItemsToDisplay < getCartLineItemsCount()"/>
             <translate args="'of'" if="maxCartItemsToDisplay < getCartLineItemsCount()"/>
             <span data-bind="text: getCartSummaryItemsCount()"></span>
-            <translate args="'Item in Cart'" if="getCartLineItemsCount() === 1"/>
-            <translate args="'Items in Cart'" if="getCartLineItemsCount() > 1"/>
+            <translate args="'Item in Cart'" if="getCartSummaryItemsCount() === 1"/>
+            <translate args="'Items in Cart'" if="getCartSummaryItemsCount() > 1"/>
         </strong>
     </div>
     <div class="content minicart-items" data-role="content">
-        <div class="minicart-items-wrapper overflowed">
+        <div class="minicart-items-wrapper">
             <ol class="minicart-items">
                 <each args="items()">
                     <li class="product-item">

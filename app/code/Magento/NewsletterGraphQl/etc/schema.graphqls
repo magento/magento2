@@ -1,0 +1,17 @@
+# Copyright © Magento, Inc. All rights reserved.
+# See COPYING.txt for license details.
+
+type Mutation {
+    subscribeEmailToNewsletter(email: String!): SubscribeEmailToNewsletterOutput @doc(description:"Subscribes the specified email to a newsletter") @resolver(class: "Magento\\NewsletterGraphQl\\Model\\Resolver\\SubscribeEmailToNewsletter")
+}
+
+type SubscribeEmailToNewsletterOutput {
+    status: SubscriptionStatusesEnum @doc(description: "Returns the status of the subscription request")
+}
+
+enum SubscriptionStatusesEnum {
+    NOT_ACTIVE
+    SUBSCRIBED
+    UNSUBSCRIBED
+    UNCONFIRMED
+}

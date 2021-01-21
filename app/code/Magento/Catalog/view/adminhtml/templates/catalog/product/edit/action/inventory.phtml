@@ -5,8 +5,10 @@
  */
 
 /** @var Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Inventory $block */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
-<script>
+
+<?php $scriptString = <<<script
     require(['jquery'], function($){
         $('[data-role=toggle-editability-all]').change(function(e) {
             var toggler = $(this);
@@ -27,7 +29,9 @@
             someEditable.prop('disabled', useConfigSettings.prop('checked'));
         });
     });
-</script>
+script;
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
 
 <?php
 $defaultMinSaleQty = $block->getDefaultConfigValue('min_sale_qty');
@@ -243,9 +247,10 @@ if (!is_numeric($defaultMinSaleQty)) {
                                 class="select"
                                 disabled="disabled">
                             <?php foreach ($block->getBackordersOption() as $option):?>
-                                <?php $_selected = ($option['value'] == $block->getDefaultConfigValue('backorders'))
-                                    ? ' selected="selected"' : '' ?>
-                                <option value="<?= $block->escapeHtmlAttr($option['value']) ?>"
+                                <?php $_selected = ($option['value'] == $block->getDefaultConfigValue('backorders')) ?
+                                    ' selected="selected"' : '' ?>
+                                <option
+                                    value="<?= $block->escapeHtmlAttr($option['value']) ?>"
                                     <?= /* @noEscape */ $_selected ?>><?= $block->escapeHtml($option['label']) ?>
                                 </option>
                             <?php endforeach; ?>
@@ -329,7 +334,7 @@ if (!is_numeric($defaultMinSaleQty)) {
                     </div>
                     <div class="field choice">
                         <input type="checkbox" id="inventory_use_config_enable_qty_increments"
-                               name="<?= /* @noEscape */ $block->getFieldSuffix() ?>[use_config_enable_qty_increments]"
+                               name="<?= /* @noEscape */ $block->getFieldSuffix() ?>[use_config_enable_qty_inc]"
                                value="1"
                                data-role="toggle-editability"
                                checked="checked"
@@ -397,8 +402,9 @@ if (!is_numeric($defaultMinSaleQty)) {
                                 name="<?= /* @noEscape */ $block->getFieldSuffix() ?>[is_in_stock]" class="select"
                                 disabled="disabled">
                             <option value="1"><?= $block->escapeHtml(__('In Stock')) ?></option>
-                            <option value="0"<?php if ($block->getDefaultConfigValue('is_in_stock') == 0):?>
-                                selected<?php endif; ?>><?= $block->escapeHtml(__('Out of Stock')) ?>
+                            <option value="0"
+                                <?php if ($block->getDefaultConfigValue('is_in_stock') == 0):?> selected<?php endif; ?>>
+                                <?= $block->escapeHtml(__('Out of Stock')) ?>
                             </option>
                         </select>
                     </div>

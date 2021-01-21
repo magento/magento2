@@ -25,6 +25,10 @@
         <actionGroup ref="FillMainProductFormActionGroup" stepKey="fillProductForm">
             <argument name="product" value="_defaultProduct"/>
         </actionGroup>
-        <see selector="{{AdminProductGridSection.productGridCell('1', 'Type')}}" userInput="Simple Product" stepKey="seeProductTypeInGrid"/>
+        <actionGroup ref="AssertAdminProductGridCellActionGroup" stepKey="seeProductTypeInGrid">
+            <argument name="row" value="1"/>
+            <argument name="column" value="Type"/>
+            <argument name="value" value="Simple Product"/>
+        </actionGroup>
     </test>
 </tests>

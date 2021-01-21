@@ -9,4 +9,7 @@
     <type name="Magento\Webapi\Controller\Rest\InputParamsResolver">
         <plugin name="product_save_rewrites_history_rest_plugin" type="Magento\CatalogUrlRewrite\Plugin\Webapi\Controller\Rest\InputParamsResolver" sortOrder="1" disabled="false" />
     </type>
+    <type name="Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator">
+        <plugin name="category_set_save_rewrites_history_rest_plugin" type="Magento\CatalogUrlRewrite\Plugin\Model\CategorySetSaveRewriteHistory" disabled="false" />
+    </type>
 </config>

@@ -2353,10 +2353,6 @@
                         ".php_cs.dist"
                     ],
                     [
-                        ".travis.yml",
-                        ".travis.yml"
-                    ],
-                    [
                         ".user.ini",
                         ".user.ini"
                     ],
@@ -2555,10 +2551,6 @@
                     [
                         "dev/tools",
                         "dev/tools"
-                    ],
-                    [
-                        "dev/travis",
-                        "dev/travis"
                     ],
                     [
                         "generated",
@@ -4775,7 +4767,7 @@
                 "shasum": "ed1da1137848560dde1a85f0f54dc2fac262359e"
             },
             "require": {
-                "elasticsearch/elasticsearch": "~7.6",
+                "elasticsearch/elasticsearch": "~7.7.0",
                 "magento/framework": "102.0.*",
                 "magento/module-advanced-search": "100.3.*",
                 "magento/module-catalog": "103.0.*",
@@ -4815,7 +4807,7 @@
                 "shasum": "a9da3243900390ad163efc7969b07116d2eb793f"
             },
             "require": {
-                "elasticsearch/elasticsearch": "~7.6",
+                "elasticsearch/elasticsearch": "~7.7.0",
                 "magento/framework": "102.0.*",
                 "magento/module-advanced-search": "100.3.*",
                 "magento/module-catalog-search": "101.0.*",
@@ -9408,7 +9400,7 @@
                 "colinmollenhour/php-redis-session-abstract": "~1.4.0",
                 "composer/composer": "^1.6",
                 "dotmailer/dotmailer-magento2-extension": "3.1.1",
-                "elasticsearch/elasticsearch": "~7.6",
+                "elasticsearch/elasticsearch": "~7.7.0",
                 "ext-bcmath": "*",
                 "ext-ctype": "*",
                 "ext-curl": "*",

@@ -81,6 +81,13 @@
         <data key="label">All Allowed Countries</data>
         <data key="value">0</data>
     </entity>
+    <entity name="EnableFlatRateShowMethodNoApplicableConfigData">
+        <data key="path">carriers/flatrate/showmethod</data>
+        <data key="scope">carriers</data>
+        <data key="scope_id">1</data>
+        <data key="label">Show Method if Not Applicable</data>
+        <data key="value">1</data>
+    </entity>
     <entity name="DisableFlatRateConfigData">
         <data key="path">carriers/flatrate/active</data>
         <data key="scope">carriers</data>
@@ -99,5 +106,18 @@
         <data key="path">checkout/cart_link/use_qty</data>
         <data key="label">Display number of items in cart</data>
         <data key="value">0</data>
+    </entity>
+
+    <entity name="EnableClearShoppingCart">
+        <data key="path">checkout/cart/enable_clear_shopping_cart</data>
+        <data key="label">Display clear shopping cart button on the cart page</data>
+        <data key="value">1</data>
+        <data key="textValue">Yes</data>
+    </entity>
+    <entity name="DisableClearShoppingCart">
+        <data key="path">checkout/cart/enable_clear_shopping_cart</data>
+        <data key="label">Do not display clear shopping cart button on the cart page</data>
+        <data key="value">0</data>
+        <data key="textValue">No</data>
     </entity>
 </entities>

@@ -48,6 +48,12 @@
             <argument name="productVar" value="$createProduct$"/>
         </actionGroup>
 
-        <actionGroup ref="StorefrontCustomerShareWishlistActionGroup" stepKey="shareWishlist"/>
+        <actionGroup ref="StorefrontShareCustomerWishlistActionGroup" stepKey="shareWishlist">
+            <argument name="email" value="{{Wishlist.shareInfo_emails}}"/>
+            <argument name="message" value="{{Wishlist.shareInfo_message}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontCustomerMessagesActionGroup" stepKey="assertSuccessMessage">
+            <argument name="message" value="Your wish list has been shared."/>
+        </actionGroup>
     </test>
 </tests>

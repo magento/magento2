@@ -40,6 +40,7 @@
                 <field id="default_group" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Default Group</label>
                     <source_model>Magento\Customer\Model\Config\Source\Group</source_model>
+                    <validate>required-entry</validate>
                 </field>
                 <field id="viv_domestic_group" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Group for Valid VAT ID - Domestic</label>

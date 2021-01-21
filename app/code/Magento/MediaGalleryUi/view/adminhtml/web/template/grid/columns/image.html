@@ -1,0 +1,45 @@
+<!--
+    /**
+    * Copyright © Magento, Inc. All rights reserved.
+    * See COPYING.txt for license details.
+    */
+-->
+<div class="media-gallery-wrap" collapsible>
+  <div class="mediagallery-massaction-checkbox" if="isMassActionMode()">
+      <input type="checkbox" attr="{ 'data-ui-id': $row().title }" visible="isMassActionMode()" ko-checked="isSelected($row())" click="function () { return select($row()); }"/>
+  </div>
+    <div class="media-gallery-image">
+        <div data-row="file"
+             class="masonry-image-block media-gallery-image-block"
+             attr="'data-id': $col.getId($row())"
+             css="{ selected: isSelected($row()) }"
+             click="function(){ clickOnImage($row(), $collapsible.opened()) }"
+        >
+            <img attr="src: $col.getUrl($row()), alt: $col.getImageAlt($row())"
+                 class="media-gallery-image-column"
+                 data-role="thumbnail"/>
+        </div>
+        <ul class="action-menu" css="_active: $collapsible.opened">
+            <scope args="actions">
+                <render args="template"/>
+            </scope>
+        </ul>
+    </div>
+    <div class="masonry-image-description">
+        <ul class="media-gallery-image-details">
+            <li class="name" data-ui-id="title" text="$row().title"></li>
+            <li class="source">
+                <img if="$row().source" class="media-gallery-source-icon" attr="{ src: $row().source }"/>
+            </li>
+            <li class="type" data-ui-id="content-type" text="$row().content_type"></li> &#8226;
+            <li class="dimensions" data-ui-id="dimensions" text="$row().width + 'x' + $row().height"></li>
+        </ul>
+        <div class="media-gallery-image-actions">
+            <div class="action-select-wrap">
+                <span class="three-dots" ifnot="isMassActionMode()"
+                      toggleCollapsible
+                      click="function () { clickOnThreeDots($row(), $collapsible.opened()); }"></span>
+            </div>
+        </div>
+    </div>
+</div>

@@ -97,7 +97,7 @@ QUERY;
     public function testSetNewShippingAddressOnCartWithVirtualProduct()
     {
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('The Cart includes virtual product(s) only, so a shipping address is not used.');
+        $this->expectExceptionMessage('Shipping address is not allowed on cart: cart contains no items for shipment.');
 
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
 

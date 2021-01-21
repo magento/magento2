@@ -61,6 +61,7 @@ class SetLinkStatusObserver implements ObserverInterface
             'payment_pending' => \Magento\Downloadable\Model\Link\Purchased\Item::LINK_STATUS_PENDING_PAYMENT,
             'payment_review' => \Magento\Downloadable\Model\Link\Purchased\Item::LINK_STATUS_PAYMENT_REVIEW,
         ];
+        $expiredOrderItemIds = [];
 
         $downloadableItemsStatuses = [];
         $orderItemStatusToEnable = $this->_scopeConfig->getValue(
@@ -114,6 +115,10 @@ class SetLinkStatusObserver implements ObserverInterface
                     if (in_array($item->getStatusId(), $availableStatuses)) {
                         $downloadableItemsStatuses[$item->getId()] = $linkStatuses['avail'];
                     }
+
+                    if ($item->getQtyOrdered() - $item->getQtyRefunded() == 0) {
+                        $expiredOrderItemIds[] = $item->getId();
+                    }
                 }
             }
         }
@@ -141,10 +146,22 @@ class SetLinkStatusObserver implements ObserverInterface
             }
         }
 
+        if ($expiredOrderItemIds) {
+            $linkPurchased = $this->_createItemsCollection()->addFieldToFilter(
+                'order_item_id',
+                ['in' => $expiredOrderItemIds]
+            );
+            foreach ($linkPurchased as $link) {
+                $link->setStatus(\Magento\Downloadable\Model\Link\Purchased\Item::LINK_STATUS_EXPIRED)->save();
+            }
+        }
+
         return $this;
     }
 
     /**
+     * Returns purchased item collection
+     *
      * @return \Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item\Collection
      */
     protected function _createItemsCollection()

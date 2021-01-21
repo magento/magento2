@@ -45,9 +45,10 @@ class AssignCouponDataAfterOrderCustomerAssignObserver implements ObserverInterf
         $event = $observer->getEvent();
         /** @var OrderInterface $order */
         $order = $event->getData(self::EVENT_KEY_ORDER);
-
-        if ($order->getCustomerId()) {
-            $this->updateCouponUsages->execute($order, true);
+        if (!$order->getCustomerId()) {
+            return;
         }
+
+        $this->updateCouponUsages->execute($order, true);
     }
 }

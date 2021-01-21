@@ -15,6 +15,7 @@ use Magento\Webapi\Model\Config;
 
 /**
  * @api
+ * @since 100.2.0
  */
 class BulkServiceConfig implements \Magento\Webapi\Model\ConfigInterface
 {
@@ -58,6 +59,7 @@ class BulkServiceConfig implements \Magento\Webapi\Model\ConfigInterface
      * Return services loaded from cache if enabled or from files merged previously
      *
      * @return array
+     * @since 100.2.0
      */
     public function getServices()
     {

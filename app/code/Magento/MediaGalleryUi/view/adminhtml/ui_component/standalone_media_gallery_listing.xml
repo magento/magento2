@@ -1,0 +1,369 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">
+                standalone_media_gallery_listing.media_gallery_listing_data_source
+            </item>
+        </item>
+    </argument>
+    <settings>
+        <spinner>media_gallery_columns</spinner>
+        <deps>
+            <dep>standalone_media_gallery_listing.media_gallery_listing_data_source</dep>
+        </deps>
+        <buttons>
+            <button name="upload_image" class="Magento\MediaGalleryUi\Ui\Component\Control\UploadAssets"/>
+            <button name="delete_folder" class="Magento\MediaGalleryUi\Ui\Component\Control\DeleteFolder"/>
+            <button name="create_folder" class="Magento\MediaGalleryUi\Ui\Component\Control\CreateFolder"/>
+            <button name="delete_massaction" class="Magento\MediaGalleryUi\Ui\Component\Control\DeleteAssets"/>
+        </buttons>
+    </settings>
+    <dataSource name="media_gallery_listing_data_source" component="Magento_Ui/js/grid/provider">
+        <settings>
+            <storageConfig>
+                <param name="indexField" xsi:type="string">id</param>
+            </storageConfig>
+            <updateUrl path="mui/index/render"/>
+        </settings>
+        <aclResource>Magento_Cms::media_gallery</aclResource>
+        <dataProvider class="Magento\MediaGalleryUi\Model\Listing\DataProvider" name="media_gallery_listing_data_source">
+            <settings>
+                <requestFieldName>id</requestFieldName>
+                <primaryFieldName>id</primaryFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+    <container name="messages"
+               sortOrder="20"
+               component="Magento_MediaGalleryUi/js/grid/messages">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="messageDelay" xsi:type="number">10</item>
+            </item>
+        </argument>
+    </container>
+    <listingToolbar name="listing_top" template="Magento_MediaGalleryUi/grid/toolbar">
+        <bookmark name="bookmarks"/>
+        <filterSearch name="fulltext" />
+        <filters name="listing_filters">
+            <filterInput name="path" provider="${ $.parentName }" sortOrder="2000">
+                <settings>
+                    <visible>false</visible>
+                    <dataScope>path</dataScope>
+                    <label translate="true">Directory</label>
+                </settings>
+            </filterInput>
+            <filterRange name="created_at"
+                         class="Magento\Ui\Component\Filters\Type\Date"
+                         provider="${ $.parentName }"
+                         template="ui/grid/filters/elements/group" sortOrder="10">
+                <settings>
+                    <rangeType>date</rangeType>
+                    <label translate="true">Uploaded Date</label>
+                    <dataScope>created_at</dataScope>
+                </settings>
+            </filterRange>
+            <filterRange name="updated_at"
+                         class="Magento\Ui\Component\Filters\Type\Date"
+                         provider="${ $.parentName }"
+                         template="ui/grid/filters/elements/group" sortOrder="20">
+                <settings>
+                    <rangeType>date</rangeType>
+                    <label translate="true">Modification Date</label>
+                    <dataScope>updated_at</dataScope>
+                </settings>
+            </filterRange>
+            <filterSelect name="entity_type" provider="${ $.parentName }" sortOrder="210"  component="Magento_Ui/js/form/element/ui-select" template="ui/grid/filters/elements/ui-select">
+                <settings>
+                    <caption translate="true">All</caption>
+                    <options class="Magento\MediaGalleryUi\Ui\Component\Listing\Filters\Options\UsedIn"/>
+                    <label translate="true">Show Images Used In</label>
+                    <dataScope>entity_type</dataScope>
+                </settings>
+            </filterSelect>
+            <filterSelect name="source" provider="${ $.parentName }" sortOrder="60">
+                <settings>
+                    <caption translate="true">All</caption>
+                    <options class="Magento\MediaGalleryUi\Ui\Component\Listing\Columns\Source\Options"/>
+                    <label translate="true">Source</label>
+                    <dataScope>source</dataScope>
+                </settings>
+            </filterSelect>
+            <filterSelect name="content_status" provider="${ $.parentName }" sortOrder="220">
+                <settings>
+                    <options class="Magento\MediaGalleryUi\Ui\Component\Listing\Filters\Options\Status"/>
+                    <label translate="true">Content Status</label>
+                    <caption>All</caption>
+                    <dataScope>content_status</dataScope>
+                </settings>
+            </filterSelect>
+            <filterSelect name="store_id" provider="${ $.parentName }" sortOrder="200">
+                <settings>
+                    <captionValue>0</captionValue>
+                    <options class="Magento\MediaGalleryUi\Ui\Component\Listing\Filters\Options\Store"/>
+                    <label translate="true">Store View</label>
+                    <dataScope>store_id</dataScope>
+                    <imports>
+                        <link name="visible">componentType = column, index = ${ $.index }:visible</link>
+                    </imports>
+                </settings>
+            </filterSelect>
+            <filterInput
+		    name="duplicated"
+		    provider="${ $.parentName }"
+		    sortOrder="300"
+                    template="Magento_MediaGalleryUi/grid/filter/checkbox"
+                    component="Magento_Ui/js/form/element/single-checkbox">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="description" xsi:type="string" translate="true">Show duplicates</item>
+                        <item name="valueMap" xsi:type="array">
+                            <item name="true" xsi:type="string">Yes</item>
+                        </item>
+                    </item>
+                </argument>
+                <settings>
+                    <dataScope>duplicated</dataScope>
+                    <label translate="true">Show duplicates</label>
+                </settings>
+            </filterInput>
+        </filters>
+        <paging name="listing_paging">
+            <settings>
+                <options>
+                    <option name="32" xsi:type="array">
+                        <item name="value" xsi:type="number">32</item>
+                        <item name="label" xsi:type="string">32</item>
+                    </option>
+                    <option name="48" xsi:type="array">
+                        <item name="value" xsi:type="number">48</item>
+                        <item name="label" xsi:type="string">48</item>
+                    </option>
+                    <option name="64" xsi:type="array">
+                        <item name="value" xsi:type="number">64</item>
+                        <item name="label" xsi:type="string">64</item>
+                    </option>
+                </options>
+                <pageSize>32</pageSize>
+            </settings>
+        </paging>
+        <container
+            name="sorting"
+            provider="standalone_media_gallery_listing.media_gallery_listing_data_source"
+            displayArea="sorting"
+            sortOrder="20"
+            component="Magento_MediaGalleryUi/js/grid/sortBy">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="deps" xsi:type="array">
+                        <item name="0" xsi:type="string">
+                            standalone_media_gallery_listing.standalone_media_gallery_listing.media_gallery_columns
+                        </item>
+                    </item>
+                </item>
+            </argument>
+        </container>
+        <container name="media_gallery_massactions"
+                   displayArea="sorting"
+                   sortOrder="10"
+                   class="Magento\MediaGalleryUi\Ui\Component\Listing\Massactions\Massaction"
+                   component="Magento_MediaGalleryUi/js/grid/massaction/massactions"
+                   template="Magento_MediaGalleryUi/grid/massactions/count" >
+              <argument name="data" xsi:type="array">
+                  <item name="config" xsi:type="array">
+                      <item name="checkboxComponentName" xsi:type="string">standalone_media_gallery_listing.standalone_media_gallery_listing.media_gallery_columns.massaction_checkbox</item>
+                      <item name="imageModelName" xsi:type="string">standalone_media_gallery_listing.standalone_media_gallery_listing.media_gallery_columns.thumbnail_url</item>
+                      <item name="mediaGalleryProvider" xsi:type="string">standalone_media_gallery_listing.media_gallery_listing_data_source</item>
+                  </item>
+            </argument>
+        </container>
+    </listingToolbar>
+    <container name="media_gallery_directories"
+               class="Magento\MediaGalleryUi\Ui\Component\DirectoryTree"
+               template="Magento_MediaGalleryUi/grid/directories/directoryTree"
+               component="Magento_MediaGalleryUi/js/directory/directoryTree"/>
+    <columns name="media_gallery_columns" component="Magento_MediaGalleryUi/js/grid/masonry">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="containerId" xsi:type="string">media-gallery-masonry-grid</item>
+            </item>
+        </argument>
+        <column name="source" component="Magento_Ui/js/grid/columns/overlay" class="Magento\MediaGalleryUi\Ui\Component\Listing\Columns\SourceIconProvider">
+            <settings>
+                <label translate="true">Source</label>
+                <visible>false</visible>
+                <sortable>false</sortable>
+            </settings>
+        </column>
+        <column name="thumbnail_url" component="Magento_MediaGalleryUi/js/grid/columns/image" class="Magento\MediaGalleryUi\Ui\Component\Listing\Columns\Url">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="fields" xsi:type="array">
+                        <item name="url" xsi:type="string">thumbnail_url</item>
+                    </item>
+                    <item name="url" xsi:type="string">thumbnail_url</item>
+                    <item name="deleteImageUrl" xsi:type="url" path="media_gallery/image/delete"/>
+                    <item name="massactionComponentName" xsi:type="string">standalone_media_gallery_listing.standalone_media_gallery_listing.listing_top.media_gallery_massactions</item>
+                    <item name="messagesName" xsi:type="string">standalone_media_gallery_listing.standalone_media_gallery_listing.messages</item>
+                    <item name="mediaGalleryDirectoryComponent" xsi:type="string">standalone_media_gallery_listing.standalone_media_gallery_listing.media_gallery_directories</item>
+                </item>
+            </argument>
+            <settings>
+                <label translate="true">Thumbnail Image</label>
+                <visible>true</visible>
+                <sortable>false</sortable>
+            </settings>
+        </column>
+        <column name="newest_first">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sort_by" xsi:type="array">
+                        <item name="field" xsi:type="string">created_at</item>
+                        <item name="direction" xsi:type="string">desc</item>
+                    </item>
+                </item>
+            </argument>
+            <settings>
+                <label translate="true">Newest first</label>
+                <visible>false</visible>
+                <sortable>true</sortable>
+            </settings>
+        </column>
+        <column name="oldest_first">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sort_by" xsi:type="array">
+                        <item name="field" xsi:type="string">created_at</item>
+                    </item>
+                </item>
+            </argument>
+            <settings>
+                <label translate="true">Oldest first</label>
+                <visible>false</visible>
+                <sortable>true</sortable>
+            </settings>
+        </column>
+        <column name="created_at">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sort_by" xsi:type="array">
+                        <item name="excluded" xsi:type="boolean">true</item>
+                    </item>
+                </item>
+            </argument>
+            <settings>
+                <label translate="true">Uploaded Date</label>
+                <dataType>date</dataType>
+                <visible>false</visible>
+                <sortable>true</sortable>
+            </settings>
+        </column>
+        <column name="path">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sort_by" xsi:type="array">
+                        <item name="excluded" xsi:type="boolean">true</item>
+                    </item>
+                </item>
+            </argument>
+            <settings>
+                <visible>false</visible>
+                <sortable>true</sortable>
+            </settings>
+        </column>
+        <column name="directory_desc">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sort_by" xsi:type="array">
+                        <item name="field" xsi:type="string">path</item>
+                        <item name="direction" xsi:type="string">desc</item>
+                    </item>
+                </item>
+            </argument>
+            <settings>
+                <label translate="true">Directory: Descending</label>
+                <visible>false</visible>
+                <sortable>true</sortable>
+            </settings>
+        </column>
+        <column name="directory_asc">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sort_by" xsi:type="array">
+                        <item name="field" xsi:type="string">path</item>
+                    </item>
+                </item>
+            </argument>
+            <settings>
+                <label translate="true">Directory: Ascending</label>
+                <visible>false</visible>
+                <sortable>true</sortable>
+            </settings>
+        </column>
+        <column name="title">
+           <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sort_by" xsi:type="array">
+                        <item name="excluded" xsi:type="boolean">true</item>
+                    </item>
+                </item>
+            </argument>
+            <settings>
+                <visible>false</visible>
+                <sortable>true</sortable>
+            </settings>
+        </column>
+        <column name="name_az">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sort_by" xsi:type="array">
+                        <item name="field" xsi:type="string">title</item>
+                    </item>
+                </item>
+            </argument>
+            <settings>
+                <label translate="true">Name: A to Z</label>
+                <visible>false</visible>
+                <sortable>true</sortable>
+            </settings>
+        </column>
+        <column name="name_za">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sort_by" xsi:type="array">
+                        <item name="field" xsi:type="string">title</item>
+                        <item name="direction" xsi:type="string">desc</item>
+                    </item>
+                </item>
+            </argument>
+            <settings>
+                <label translate="true">Name: Z to A</label>
+                <visible>false</visible>
+                <sortable>true</sortable>
+            </settings>
+        </column>
+    </columns>
+    <container name="media_gallery_image_uploader"
+               class="Magento\MediaGalleryUi\Ui\Component\ImageUploaderStandAlone"
+               template="Magento_MediaGalleryUi/image-uploader"
+               component="Magento_MediaGalleryUi/js/image-uploader">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="sortByName" xsi:type="string">
+                    standalone_media_gallery_listing.standalone_media_gallery_listing.listing_top.sorting
+                </item>
+                <item name="listingPagingName" xsi:type="string">
+                    standalone_media_gallery_listing.standalone_media_gallery_listing.listing_top.listing_paging
+                </item>
+            </item>
+        </argument>
+    </container>
+</listing>

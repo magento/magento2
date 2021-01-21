@@ -249,10 +249,10 @@ class DataTest extends TestCase
     }
 
     /**
-     * @dataProvider whiteBlackListProvider
+     * @dataProvider allowDenyListProvider
      * @param callable $callback
      */
-    public function testIsValidBlackListWhiteListChecks($callback)
+    public function testIsValidExclusionInclusionListChecks($callback)
     {
         $attribute = $this->_getAttributeMock(
             [
@@ -302,19 +302,19 @@ class DataTest extends TestCase
     /**
      * @return array
      */
-    public function whiteBlackListProvider()
+    public function allowDenyListProvider()
     {
-        $whiteCallback = function ($validator) {
-            $validator->setAttributesWhiteList(['attribute']);
+        $allowedCallbackList = function ($validator) {
+            $validator->setAllowedAttributesList(['attribute']);
         };
 
-        $blackCallback = function ($validator) {
-            $validator->setAttributesBlackList(['attribute2']);
+        $deniedCallbackList = function ($validator) {
+            $validator->setDeniedAttributesList(['attribute2']);
         };
-        return ['white_list' => [$whiteCallback], 'black_list' => [$blackCallback]];
+        return ['allowed' => [$allowedCallbackList], 'denied' => [$deniedCallbackList]];
     }
 
-    public function testSetAttributesWhiteList()
+    public function testSetAttributesAllowedList()
     {
         $this->markTestSkipped('Skipped in #27500 due to testing protected/private methods and properties');
 
@@ -328,12 +328,14 @@ class DataTest extends TestCase
             )
             ->getMock();
         $validator = new Data($attrDataFactory);
-        $result = $validator->setAttributesWhiteList($attributes);
-        $this->assertAttributeEquals($attributes, '_attributesWhiteList', $validator);
+        $result = $validator->setIncludedAttributesList($attributes);
+
+        // phpstan:ignore
+        $this->assertAttributeEquals($attributes, '_attributesAllowed', $validator);
         $this->assertEquals($validator, $result);
     }
 
-    public function testSetAttributesBlackList()
+    public function testSetAttributesDeniedList()
     {
         $this->markTestSkipped('Skipped in #27500 due to testing protected/private methods and properties');
 
@@ -347,8 +349,9 @@ class DataTest extends TestCase
             )
             ->getMock();
         $validator = new Data($attrDataFactory);
-        $result = $validator->setAttributesBlackList($attributes);
-        $this->assertAttributeEquals($attributes, '_attributesBlackList', $validator);
+        $result = $validator->setDeniedAttributesList($attributes);
+        // phpstan:ignore
+        $this->assertAttributeEquals($attributes, '_attributesDenied', $validator);
         $this->assertEquals($validator, $result);
     }
 

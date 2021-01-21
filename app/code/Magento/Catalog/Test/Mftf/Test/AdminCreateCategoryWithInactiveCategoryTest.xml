@@ -26,20 +26,12 @@
         </after>
         <!-- Create In active Category -->
         <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openAdminCategoryIndexPage"/>
-        <click selector="{{AdminCategorySidebarActionSection.AddSubcategoryButton}}" stepKey="clickOnAddSubCategoryButton"/>
-        <click selector="{{AdminCategoryBasicFieldSection.enableCategoryLabel}}" stepKey="disableCategory"/>
-        <checkOption selector="{{AdminCategoryBasicFieldSection.IncludeInMenu}}" stepKey="enableIncludeInMenu"/>
-        <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{_defaultCategory.name}}" stepKey="fillCategoryName"/>
-        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="clickSaveButton"/>
-        <waitForPageLoad stepKey="waitForCategorySaved"/>
-        <actionGroup ref="AssertAdminCategorySaveSuccessMessageActionGroup" stepKey="assertSuccessMessage"/>
-        <see selector="{{AdminCategoryContentSection.categoryPageTitle}}" userInput="{{_defaultCategory.name}}" stepKey="seePageTitle" />
-        <dontSeeCheckboxIsChecked selector="{{AdminCategoryBasicFieldSection.EnableCategory}}" stepKey="dontCategoryIsChecked"/>
-        <!--Verify InActive Category is created-->
-        <seeElement  selector="{{AdminCategoryContentSection.categoryInTree(_defaultCategory.name)}}" stepKey="seeCategoryInTree" />
+        <actionGroup ref="AdminCreateInactiveCategoryActionGroup" stepKey="createInactiveCategory"/>
+        <actionGroup ref="AssertAdminCategoryIsInactiveActionGroup" stepKey="seeDisabledCategory"/>
         <!--Verify Category is not listed store front page-->
-        <amOnPage url="{{StorefrontCategoryPage.url(_defaultCategory.name)}}"  stepKey="amOnCategoryPage"/>
-        <waitForPageLoad stepKey="waitForPageToBeLoaded"/>
-        <dontSeeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName(_defaultCategory.name)}}" stepKey="dontSeeCategoryOnStoreFrontPage"/>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStoreFront"/>
+        <actionGroup ref="StorefrontAssertCategoryNameIsNotShownInMenuActionGroup" stepKey="doNotSeeCategoryNameInMenu">
+            <argument name="categoryName" value="{{_defaultCategory.name}}"/>
+        </actionGroup>
     </test>
 </tests>

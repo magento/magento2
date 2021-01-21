@@ -12,6 +12,8 @@ use Magento\Framework\Locale\ResolverInterface;
 use Magento\Paypal\Model\Config;
 use Magento\Paypal\Model\ConfigFactory;
 use Magento\Paypal\Model\SmartButtonConfig;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -56,10 +58,22 @@ class SmartButtonConfigTest extends TestCase
             ->setMethods(['create'])
             ->getMock();
         $configFactoryMock->expects($this->once())->method('create')->willReturn($this->configMock);
+
+        /** @var Store|MockObject $storeMock */
+        $storeMock = $this->createMock(Store::class);
+        $storeMock->method('getBaseCurrencyCode')
+            ->willReturn('USD');
+
+        /** @var StoreManagerInterface|MockObject $storeManagerMock */
+        $storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $storeManagerMock->method('getStore')
+            ->willReturn($storeMock);
+
         $this->model = new SmartButtonConfig(
             $this->localeResolverMock,
             $configFactoryMock,
             $scopeConfigMock,
+            $storeManagerMock,
             $this->getDefaultStyles(),
             $this->getDisallowedFundingMap(),
             $this->getUnsupportedPaymentMethods()
