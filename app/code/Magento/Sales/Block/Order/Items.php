@@ -71,6 +71,7 @@ class Items extends \Magento\Sales\Block\Items\AbstractItems
 
         $this->itemCollection = $this->itemCollectionFactory->create();
         $this->itemCollection->setOrderFilter($this->getOrder());
+        $this->itemCollection->addFieldToFilter('parent_item_id', ['null' => true]);
 
         /** @var \Magento\Theme\Block\Html\Pager $pagerBlock */
         $pagerBlock = $this->getChildBlock('sales_order_item_pager');
