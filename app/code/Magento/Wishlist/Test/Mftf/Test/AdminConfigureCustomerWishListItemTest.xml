@@ -12,18 +12,16 @@
         <annotations>
             <features value="Wishlist"/>
             <stories value="Wishlist item configuration"/>
-            <title value="Admin configures an item from customer wishlist"/>
+            <title value="Admin can configure a customer wishlist item"/>
             <description value="Admin should be able to configure items from customer wishlist"/>
             <severity value="MAJOR"/>
             <testCaseId value="MC-40455"/>
+            <useCaseId value="MC-36575"/>
             <group value="wishlist"/>
         </annotations>
         <before>
-            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
             <!-- Create the configurable product based on the data in the /data folder -->
-            <createData entity="ApiConfigurableProduct" stepKey="createConfigProduct">
-                <requiredEntity createDataKey="createCategory"/>
-            </createData>
+            <createData entity="ApiConfigurableProductWithOutCategory" stepKey="createConfigProduct"/>
 
             <!-- Make the configurable product have two options, that are children of the default attribute set -->
             <createData entity="productAttributeWithTwoOptions" stepKey="createConfigProductAttribute"/>
@@ -69,32 +67,26 @@
                 <requiredEntity createDataKey="createConfigChildProduct2"/>
             </createData>
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <magentoCron groups="index" stepKey="reindexBrokenIndices"/>
         </before>
         <after>
-            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
             <deleteData createDataKey="createConfigChildProduct1" stepKey="deleteConfigChildProduct1"/>
             <deleteData createDataKey="createConfigChildProduct2" stepKey="deleteConfigChildProduct2"/>
             <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logout"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
-            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-                <argument name="indices" value=""/>
-            </actionGroup>
+            <magentoCron groups="index" stepKey="reindexBrokenIndices"/>
         </after>
 
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefrontAccount">
             <argument name="Customer" value="$createCustomer$"/>
         </actionGroup>
-        <actionGroup ref="OpenProductFromCategoryPageActionGroup" stepKey="openProductFromCategory">
-            <argument name="category" value="$createCategory$"/>
-            <argument name="product" value="$createConfigProduct$"/>
-        </actionGroup>
+        <amOnPage url="{{StorefrontProductPage.url($createConfigProduct.custom_attributes[url_key]$)}}" stepKey="goToProductPage"/>
         <actionGroup ref="StorefrontCustomerAddProductToWishlistActionGroup" stepKey="addToWishlistProduct">
             <argument name="productVar" value="$createConfigProduct$"/>
         </actionGroup>
-        <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logout"/>
-        <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogoutBeforeCheck"/>
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         <actionGroup ref="OpenEditCustomerFromAdminActionGroup" stepKey="navigateToCustomerEditPage">
             <argument name="customer" value="$createCustomer$"/>
@@ -103,13 +95,14 @@
         <actionGroup ref="AdminCustomerFindWishlistItemActionGroup" stepKey="findWishlistItem">
             <argument name="productName" value="$createConfigProduct.name$"/>
         </actionGroup>
-        <actionGroup ref="AdminCustomerEditWishlistItemActionGroup" stepKey="editItem">
+        <actionGroup ref="AdminCustomerWishlistConfigureItemActionGroup" stepKey="editItem">
             <argument name="title" value="$createConfigProductAttribute.attribute[frontend_labels][0][label]$"/>
             <argument name="option" value="$getConfigAttributeOption1.label$"/>
             <argument name="quantity" value="2"/>
         </actionGroup>
-        <click selector="{{AdminCustomerMainActionsSection.saveButton}}" stepKey="saveCustomer"/>
-        <seeElement selector="{{AdminCustomerMessagesSection.successMessage}}" stepKey="assertSuccessMessage"/>
+        <click selector="{{AdminMainActionsSection.save}}" stepKey="saveCustomer"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitForSuccessMessage"/>
+        <seeElement selector="{{AdminMessagesSection.success}}" stepKey="assertSuccessMessage"/>
         <actionGroup ref="OpenEditCustomerFromAdminActionGroup" stepKey="navigateToCustomerEditPage2">
             <argument name="customer" value="$createCustomer$"/>
         </actionGroup>

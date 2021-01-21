@@ -8,18 +8,16 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminCustomerEditWishlistItemActionGroup">
+    <actionGroup name="AdminCustomerWishlistConfigureItemActionGroup">
         <arguments>
-            <argument name="title" type="string"/>
-            <argument name="option" type="string"/>
-            <argument name="quantity" type="string"/>
+            <argument name="title" type="string" defaultValue="{{Attribute.label}}"/>
+            <argument name="option" type="string" defaultValue="option1"/>
+            <argument name="quantity" type="string" defaultValue="2"/>
         </arguments>
         <click selector="{{AdminCustomerWishlistSection.configureButton}}" stepKey="clickConfigureButton"/>
-        <waitForAjaxLoad stepKey="waitForPopupLoad"/>
         <waitForElementVisible selector="{{AdminCustomerWishlistSection.productAttributeOptionsDropDown(title)}}" stepKey="waitForConfigurableOption"/>
         <selectOption selector="{{AdminCustomerWishlistSection.productAttributeOptionsDropDown(title)}}" userInput="{{option}}" stepKey="selectConfigurableOption"/>
         <fillField selector="{{AdminOrderFormConfigureProductSection.quantity}}" userInput="{{quantity}}" stepKey="fillQty"/>
         <click selector="{{AdminOrderFormConfigureProductSection.ok}}" stepKey="confirmSave"/>
-        <waitForAjaxLoad stepKey="waitForPopupClose"/>
     </actionGroup>
 </actionGroups>
