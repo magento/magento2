@@ -13,6 +13,8 @@
         <element name="imageFileUpload" type="input" selector="#fileupload"/>
         <element name="imageUploadButton" type="button" selector="div.image div.fileinput-button"/>
         <element name="imageFile" type="text" selector="//*[@id='media_gallery_content']//img[contains(@src, '{{url}}')]" parameterized="true"/>
+        <element name="imageFileRoleByImage" type="text" selector="//*[@id='media_gallery_content']//img[contains(@src, '{{url}}')]/ancestor::div[@data-role='image']//*[@data-role-code='{{roleCode}}']" parameterized="true"/>
+        <element name="imageElement" type="text" selector="#media_gallery_content img"/>
         <element name="removeImageButton" type="button" selector=".action-remove"/>
         <element name="removeImageButtonForExactImage" type="button" selector="[id='media_gallery_content'] img[src*='{{imageName}}'] + div[class='actions']  button[class='action-remove']" parameterized="true"/>
         <element name="modalOkBtn" type="button" selector="button.action-primary.action-accept"/>
