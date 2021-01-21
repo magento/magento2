@@ -24,7 +24,6 @@
 @message-global-caution-link__color-active: @link__active__color;
 @message-global-caution__border-color: none;
 
-@header__background-color: false;
 @header-panel__background-color: @color-gray-middle4;
 @header-panel__text-color: @color-white;
 @header-icons-color: @color-gray46;
@@ -331,6 +330,7 @@
             }
         }
     }
+
     .page-header .panel.wrapper {
         .switcher {
             .options {
@@ -404,6 +404,10 @@
 //  _____________________________________________
 
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
+    .page-header {
+        .lib-sticky();
+    }
+
     .customer-name,
     .customer-welcome + .authorization-link {
         display: none;
@@ -499,6 +503,10 @@
     html,
     body {
         height: 100%; // Stretch screen area for sticky footer
+    }
+
+    .nav-sections {
+        .lib-sticky();
     }
 
     .navigation ul {
