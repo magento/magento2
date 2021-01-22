@@ -10,8 +10,6 @@ namespace Magento\WishlistGraphQl\Model\Resolver;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
-use Magento\Framework\App\ObjectManager;
-use Magento\Framework\GraphQl\Query\Uid;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
@@ -35,25 +33,16 @@ class WishlistItems implements ResolverInterface
      */
     private $storeManager;
 
-    /** 
-     * @var Uid 
-     */
-    private $uidEncoder;
-
     /**
      * @param WishlistItemCollectionFactory $wishlistItemCollectionFactory
      * @param StoreManagerInterface $storeManager
-     * @param Uid|null $uidEncoder
      */
     public function __construct(
         WishlistItemCollectionFactory $wishlistItemCollectionFactory,
-        StoreManagerInterface $storeManager,
-        Uid $uidEncoder = null
+        StoreManagerInterface $storeManager
     ) {
         $this->wishlistItemCollectionFactory = $wishlistItemCollectionFactory;
         $this->storeManager = $storeManager;
-        $this->uidEncoder = $uidEncoder ?: ObjectManager::getInstance()
-            ->get(Uid::class);
     }
 
     /**
@@ -80,7 +69,6 @@ class WishlistItems implements ResolverInterface
         foreach ($wishlistItems as $wishlistItem) {
             $data[] = [
                 'id' => $wishlistItem->getId(),
-                'uid' => $this->uidEncoder->encode($wishlistItem->getId()),
                 'quantity' => $wishlistItem->getData('qty'),
                 'description' => $wishlistItem->getDescription(),
                 'added_at' => $wishlistItem->getAddedAt(),

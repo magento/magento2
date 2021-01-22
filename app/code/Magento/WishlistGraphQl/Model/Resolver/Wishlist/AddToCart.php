@@ -11,7 +11,6 @@ use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
-use Magento\Framework\GraphQl\Query\Uid;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\QuoteGraphQl\Model\Cart\CreateEmptyCartForCustomer;
 use Magento\Quote\Model\Cart\AddProductsToCart as AddProductsToCartService;
@@ -78,11 +77,6 @@ class AddToCart implements ResolverInterface
     private $cartItemsRequestBuilder;
 
     /**
-     * @var Uid
-     */
-    private $uidEncoder;
-
-    /**
      * @param WishlistResourceModel $wishlistResource
      * @param WishlistFactory $wishlistFactory
      * @param WishlistConfig $wishlistConfig
@@ -91,7 +85,6 @@ class AddToCart implements ResolverInterface
      * @param LocaleQuantityProcessor $quantityProcessor
      * @param CreateEmptyCartForCustomer $createEmptyCartForCustomer
      * @param CartItemsRequestBuilder $cartItemsRequestBuilder
-     * @param Uid $uidEncoder
      */
     public function __construct(
         WishlistResourceModel $wishlistResource,
@@ -102,8 +95,7 @@ class AddToCart implements ResolverInterface
         LocaleQuantityProcessor $quantityProcessor,
         CreateEmptyCartForCustomer $createEmptyCartForCustomer,
         AddProductsToCartService $addProductsToCart,
-        CartItemsRequestBuilder $cartItemsRequestBuilder,
-        Uid $uidEncoder
+        CartItemsRequestBuilder $cartItemsRequestBuilder
     ) {
         $this->wishlistResource = $wishlistResource;
         $this->wishlistFactory = $wishlistFactory;
@@ -114,7 +106,6 @@ class AddToCart implements ResolverInterface
         $this->createEmptyCartForCustomer = $createEmptyCartForCustomer;
         $this->addProductsToCartService = $addProductsToCart;
         $this->cartItemsRequestBuilder = $cartItemsRequestBuilder;
-        $this->uidEncoder = $uidEncoder;
     }
 
     /**
@@ -138,55 +129,59 @@ class AddToCart implements ResolverInterface
             throw new GraphQlAuthorizationException(__('The current user cannot perform operations on wishlist'));
         }
 
-        if (empty($args['wishlistUid'])) {
-            throw new GraphQlInputException(__('"wishlistUid" value should be specified'));
+        if (empty($args['wishlistId'])) {
+            throw new GraphQlInputException(__('"wishlistId" value should be specified'));
         }
-        $wishlistId = (int) $this->uidEncoder->decode($args['wishlistUid']);
+        $wishlistId = (int) $args['wishlistId'];
         $wishlist = $this->getWishlist($wishlistId, $customerId);
+        $isOwner = $wishlist->isOwner($customerId);
 
         if (null === $wishlist->getId() || $customerId !== (int) $wishlist->getCustomerId()) {
             throw new GraphQlInputException(__('The wishlist was not found.'));
         }
 
         $itemIds = [];
-        if (isset($args['wishlistItemUids'])) {
-            $itemIds = array_map(
-                function ($id) {
-                    return $this->uidEncoder->decode($id);
-                },
-                $args['wishlistItemUids']
-            );
+        if (isset($args['wishlistItemIds'])) {
+            $itemIds = $args['wishlistItemIds'];
         }
 
         $collection = $this->getWishlistItems($wishlist, $itemIds);
 
         $maskedCartId = $this->createEmptyCartForCustomer->execute($customerId);
 
-        $cartItems = [];
+        $cartErrors = [];
+        $addedProducts = [];
+        $errors = [];
         foreach ($collection as $item) {
             $disableAddToCart = $item->getProduct()->getDisableAddToCart();
             $item->getProduct()->setDisableAddToCart($disableAddToCart);
-            $cartItemsData = $this->cartItemsRequestBuilder->build($item);
-            foreach ($cartItemsData as $cartItemData) {
-                $cartItems[] = (new CartItemFactory())->create($cartItemData);
-            }
-        }
 
-        /** @var AddProductsToCartOutput $addProductsToCartOutput */
-        $addProductsToCartOutput = $this->addProductsToCartService->execute($maskedCartId, $cartItems);
+            $cartItemData = $this->cartItemsRequestBuilder->build($item);
+            $cartItem = (new CartItemFactory())->create($cartItemData);
 
-        return [
-            'status' => !$addProductsToCartOutput->getCart()->hasError(),
-            'add_wishlist_items_to_cart_user_errors' => array_map(
+            /** @var AddProductsToCartOutput $addProductsToCartOutput */
+            $addProductsToCartOutput = $this->addProductsToCartService->execute($maskedCartId, [$cartItem]);
+            $errors = array_map(
                 function (Error $error) {
                     return [
                         'code' => $error->getCode(),
                         'message' => $error->getMessage(),
-                        'path' => [$error->getCartItemPosition()],
                     ];
                 },
                 $addProductsToCartOutput->getErrors()
-            ),
+            );
+            if ($isOwner && empty($errors)) {
+                $item->delete();
+                $addedProducts[] = $item->getProductId();
+            }
+            $cartErrors = array_merge($cartErrors, $errors);
+        }
+        if (!empty($addedProducts)) {
+            $wishlist->save();
+        }
+        return [
+            'status' => isset($cartErrors) ? false : true,
+            'add_wishlist_items_to_cart_user_errors' => $cartErrors,
         ];
     }
 

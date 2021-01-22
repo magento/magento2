@@ -41,11 +41,11 @@ class AddWishlistItemsToCartTest extends GraphQlAbstract
     {
         $wishlist = $this->getWishlist();
         $customerWishlist = $wishlist['customer']['wishlists'][0];
-        $wishlistUid = $customerWishlist['uid'];
+        $wishlistId = $customerWishlist['id'];
         $wishlistItem = $customerWishlist['items_v2']['items'][0];
-        $itemUid = $wishlistItem['uid'];
+        $itemId = $wishlistItem['id'];
 
-        $query = $this->getQuery($wishlistUid, $itemUid);
+        $query = $this->getQuery($wishlistId, $itemId);
         $response = $this->graphQlMutation($query, [], '', $this->getHeaderMap());
 
         $this->assertArrayHasKey('addWishlistItemsToCart', $response);
@@ -65,11 +65,11 @@ class AddWishlistItemsToCartTest extends GraphQlAbstract
 
         $wishlist = $this->getWishlist();
         $customerWishlist = $wishlist['customer']['wishlists'][0];
-        $wishlistUid = $customerWishlist['uid'];
+        $wishlistId = $customerWishlist['id'];
         $wishlistItem = $customerWishlist['items_v2']['items'][0];
-        $itemUid = $wishlistItem['uid'];
+        $itemId = $wishlistItem['id'];
 
-        $query = $this->getQuery($wishlistUid, $itemUid);
+        $query = $this->getQuery($wishlistId, $itemId);
         $this->graphQlMutation($query, [], '', $this->getHeaderMap('customer2@example.com', 'password'));
     }
 
@@ -85,11 +85,11 @@ class AddWishlistItemsToCartTest extends GraphQlAbstract
 
         $wishlist = $this->getWishlist();
         $customerWishlist = $wishlist['customer']['wishlists'][0];
-        $wishlistUid = $customerWishlist['uid'];
+        $wishlistId = $customerWishlist['id'];
         $wishlistItem = $customerWishlist['items_v2']['items'][0];
-        $itemUid = $wishlistItem['uid'];
+        $itemId = $wishlistItem['id'];
 
-        $query = $this->getQuery($wishlistUid, $itemUid);
+        $query = $this->getQuery($wishlistId, $itemId);
 
         $this->graphQlMutation($query, [], '', ['Authorization' => 'Bearer test_token']);
     }
@@ -102,14 +102,14 @@ class AddWishlistItemsToCartTest extends GraphQlAbstract
     public function testAddItemsToCartWithoutId(): void
     {
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('"wishlistUid" value should be specified');
+        $this->expectExceptionMessage('"wishlistId" value should be specified');
 
-        $wishlistUid = '';
+        $wishlistId = '';
         $wishlist = $this->getWishlist();
         $customerWishlist = $wishlist['customer']['wishlists'][0];
         $wishlistItem = $customerWishlist['items_v2']['items'][0];
-        $itemUid = $wishlistItem['uid'];
-        $query = $this->getQuery($wishlistUid, $itemUid);
+        $itemId = $wishlistItem['id'];
+        $query = $this->getQuery($wishlistId, $itemId);
         $this->graphQlMutation($query, [], '', $this->getHeaderMap());
     }
 
@@ -120,18 +120,17 @@ class AddWishlistItemsToCartTest extends GraphQlAbstract
      */
     public function testAddItemsToCartWithInvalidId(): void
     {
-        $wishlistUid = '9999';
+        $wishlistId = '9999';
 
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('The wishlist was not found.');
 
-        $wishlistUid = base64_encode((string) $wishlistUid);
         $wishlist = $this->getWishlist();
         $customerWishlist = $wishlist['customer']['wishlists'][0];
         $wishlistItem = $customerWishlist['items_v2']['items'][0];
-        $itemUid = $wishlistItem['uid'];
+        $itemId = $wishlistItem['id'];
 
-        $query = $this->getQuery($wishlistUid, $itemUid);
+        $query = $this->getQuery($wishlistId, $itemId);
         $this->graphQlMutation($query, [], '', $this->getHeaderMap());
     }
 
@@ -155,20 +154,20 @@ class AddWishlistItemsToCartTest extends GraphQlAbstract
     /**
      * Returns GraphQl mutation string
      *
-     * @param string $wishlistUid
+     * @param string $wishlistId
      * @param string $itemId
      * @return string
      */
     private function getQuery(
-        string $wishlistUid,
+        string $wishlistId,
         string $itemId
     ): string {
         return <<<MUTATION
 mutation {
     addWishlistItemsToCart
     (
-      wishlistUid: "{$wishlistUid}"
-      wishlistItemUids: ["{$itemId}"]
+      wishlistId: "{$wishlistId}"
+      wishlistItemIds: ["{$itemId}"]
     ) {
     status
     add_wishlist_items_to_cart_user_errors{
@@ -205,14 +204,12 @@ query {
   customer {
     wishlists {
       id
-      uid
       items_count
       sharing_code
       updated_at
       items_v2 {
        items {
         id
-        uid
         quantity
         description
          product {

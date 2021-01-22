@@ -53,6 +53,6 @@ class CartItemsRequestBuilder
         foreach ($this->providers as $provider) {
             $cartItems = array_merge_recursive($cartItems, $provider->execute($wishlistItem, $parentsku));
         }
-        return [$cartItems];
+        return $cartItems;
     }
 }

@@ -9,8 +9,6 @@ namespace Magento\WishlistGraphQl\Mapper;
 
 use Magento\Framework\GraphQl\Schema\Type\Enum\DataMapperInterface;
 use Magento\Wishlist\Model\Wishlist;
-use Magento\Framework\App\ObjectManager;
-use Magento\Framework\GraphQl\Query\Uid;
 
 /**
  * Prepares the wishlist output as associative array
@@ -22,22 +20,13 @@ class WishlistDataMapper
      */
     private $enumDataMapper;
 
-    /** 
-     * @var Uid 
-     */
-    private $uidEncoder;
-
     /**
      * @param DataMapperInterface $enumDataMapper
-     * @param Uid|null $uidEncoder
      */
     public function __construct(
-        DataMapperInterface $enumDataMapper,
-        Uid $uidEncoder = null
+        DataMapperInterface $enumDataMapper
     ) {
         $this->enumDataMapper = $enumDataMapper;
-        $this->uidEncoder = $uidEncoder ?: ObjectManager::getInstance()
-            ->get(Uid::class);
     }
 
     /**
@@ -51,7 +40,6 @@ class WishlistDataMapper
     {
         return [
             'id' => $wishlist->getId(),
-            'uid' => $this->uidEncoder->encode($wishlist->getId()),
             'sharing_code' => $wishlist->getSharingCode(),
             'updated_at' => $wishlist->getUpdatedAt(),
             'items_count' => $wishlist->getItemsCount(),
