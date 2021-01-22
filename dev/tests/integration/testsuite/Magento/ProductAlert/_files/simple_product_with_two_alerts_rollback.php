@@ -36,4 +36,4 @@ $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', false);
 
 Resolver::getInstance()->requireDataFixture('Magento/Customer/_files/customer_rollback.php');
-Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/product_simple_rollback.php');
+Resolver::getInstance()->requireDataFixture('Magento/ProductAlert/_files/product_alert_rollback.php');
