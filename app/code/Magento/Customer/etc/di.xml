@@ -533,4 +533,7 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Customer\Model\ResourceModel\AddressRepository">
+        <plugin name="clear_quote_session_after_modifying_address" type="Magento\Customer\Model\Plugin\ClearQuoteSessionAfterChangingCustomerAddress" />
+    </type>
 </config>
