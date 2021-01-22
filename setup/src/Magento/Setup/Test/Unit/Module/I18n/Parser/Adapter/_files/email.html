@@ -31,5 +31,9 @@
     <label data-bind="i18n: '\\\\ '"></label>
     <span><translate args="'This is test content in translate tag'" /></span>
     <span translate="'This is test content in translate attribute'"></span>
+    <a data-bind="attr: { title: $t('This is \' test \' data for attribute translation with single quotes'), href: '#'} "></a>
+    <a data-bind="attr: { title: $t('This is test data for attribute translation with a quote after\'\''), href: '#'} "></a>
+    <a data-bind="attr: { title: $t('This is test data for attribute translation with a quote after\' \' '), href: '#'} "></a>
+    <input type="text" data-bind="attr: { placeholder: $t('Attribute translation - Placeholder'), title: $t('Attribute translation - Title') }" />
 </body>
 </html>

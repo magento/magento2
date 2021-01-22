@@ -103,6 +103,41 @@ class HtmlTest extends TestCase
                 'line' => '',
                 'quote' => '',
             ],
+            [
+                // en_US.csv: "This is ' test ' data for attribute translation with single quotes","This is ' test ' data for attribute translation with single quotes"
+                'phrase' => 'This is \\\' test \\\' data for attribute translation with single quotes',
+                'file' => $this->testFile,
+                'line' => '',
+                'quote' => '',
+            ],
+            [
+                // en_US.csv: "This is test data for attribute translation with a quote after''","This is test data for attribute translation with a quote after''"
+                'phrase' => 'This is test data for attribute translation with a quote after\\\'\\\'',
+                'file' => $this->testFile,
+                'line' => '',
+                'quote' => '',
+            ],
+            [
+                // en_US.csv: "This is test data for attribute translation with a quote after' ' ","This is test data for attribute translation with a quote after' ' "
+                'phrase' => 'This is test data for attribute translation with a quote after\\\' \\\' ',
+                'file' => $this->testFile,
+                'line' => '',
+                'quote' => '',
+            ],
+            [
+                // en_US.csv: "Attribute translation - Placeholder","Attribute translation - Placeholder"
+                'phrase' => 'Attribute translation - Placeholder',
+                'file' => $this->testFile,
+                'line' => '',
+                'quote' => '',
+            ],
+            [
+                // en_US.csv: "Attribute translation - Title","Attribute translation - Title"
+                'phrase' => 'Attribute translation - Title',
+                'file' => $this->testFile,
+                'line' => '',
+                'quote' => '',
+            ]
         ];
 
         $this->model->parse($this->testFile);

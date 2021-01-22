@@ -30,7 +30,11 @@ class Html extends AbstractAdapter
         "/i18n:\s?'(?<value>[^'\\\\]*(?:\\\\.[^'\\\\]*)*)'/i",
         // <translate args="'System Messages'"/>
         // <span translate="'Examples'"></span>
-        "/translate( args|)=\"'(?<value>[^\"\\\\]*(?:\\\\.[^\"\\\\]*)*)'\"/i"
+        "/translate( args|)=\"'(?<value>[^\"\\\\]*(?:\\\\.[^\"\\\\]*)*)'\"/i",
+        // <a data-bind="attr: { title: $t('This is \' test \' data'), href: '#'} "></a>
+        // <input type="text" data-bind="attr: { placeholder: $t('Placeholder'), title: $t('Title') }" />
+        // Double quotes are not handled correctly in the `attr` binding. Move phrase to the UI component property if needed
+        '/\\$t\(\s*([\'"])(?<value>.*?[^\\\])\1.*?[),]/i'
     ];
 
     /**
