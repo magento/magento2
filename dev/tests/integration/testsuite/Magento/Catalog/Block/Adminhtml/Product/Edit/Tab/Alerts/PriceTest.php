@@ -10,15 +10,15 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Alerts;
 use Magento\Framework\View\LayoutInterface;
 
 /**
- * Check stock alert grid
+ * Check price alert grid
  *
- * @see \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Alerts\Stock
+ * @see \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Alerts\Price
  *
  * @magentoAppArea adminhtml
  */
-class StockTest extends AbstractAlertTest
+class PriceTest extends AbstractAlertTest
 {
-    /** @var Stock */
+    /** @var Price */
     private $block;
 
     /**
@@ -28,15 +28,16 @@ class StockTest extends AbstractAlertTest
     {
         parent::setUp();
 
-        $this->block = $this->objectManager->get(LayoutInterface::class)->createBlock(Stock::class);
+        $this->block = $this->objectManager->get(LayoutInterface::class)->createBlock(Price::class);
     }
 
     /**
      * @dataProvider alertsDataProvider
      *
      * @magentoDbIsolation disabled
+     *
      * @magentoDataFixture Magento/ProductAlert/_files/product_alert.php
-     * @magentoDataFixture Magento/ProductAlert/_files/stock_alert_on_second_website.php
+     * @magentoDataFixture Magento/ProductAlert/_files/price_alert_on_second_website.php
      *
      * @param string $sku
      * @param string $expectedEmail
@@ -62,7 +63,7 @@ class StockTest extends AbstractAlertTest
                 'expected_customer_emails' => 'customer@example.com',
             ],
             'with_store_id_filter' => [
-                'product_sku' => 'simple_on_second_website',
+                'product_sku' => 'simple_on_second_website_for_price_alert',
                 'expected_customer_emails' => 'customer_second_ws_with_addr@example.com',
                 'store_code' => 'fixture_third_store',
             ],
