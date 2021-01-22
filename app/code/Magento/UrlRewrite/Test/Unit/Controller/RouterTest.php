@@ -78,7 +78,7 @@ class RouterTest extends \PHPUnit\Framework\TestCase
             \Magento\Framework\App\ResponseInterface::class,
             ['setRedirect', 'sendResponse']
         );
-        $this->requestQuery = $this->createMock(ParametersInterface::class);
+        $this->requestQuery = $this->getMockForAbstractClass(ParametersInterface::class);
         $this->request = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
             ->disableOriginalConstructor()->getMock();
         $this->request->method('getQuery')->willReturn($this->requestQuery);
