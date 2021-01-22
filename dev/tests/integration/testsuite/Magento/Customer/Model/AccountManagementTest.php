@@ -316,13 +316,6 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
      */
     public function testCreateAccountWithInvalidAddress()
     {
-        // Unset flag previously added in one of fixture files. Example:
-        // dev/tests/integration/testsuite/Magento/Customer/_files/customer_rollback.php
-        // @todo: remove this line, when test will cleanup the registry after their job.
-        $this->objectManager->get(\Magento\Framework\Registry::class)->unregister('isSecureArea');
-
-        $this->expectException(InputException::class);
-
         /** @var \Magento\Customer\Api\Data\CustomerInterface $customer */
         $customer = $this->objectManager->create(\Magento\Customer\Api\Data\CustomerInterface::class);
         $customer->setWebsiteId(1)
@@ -337,10 +330,9 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
 
         try {
             $this->accountManagement->createAccountWithPasswordHash($customer, null);
-            $this->fail('Expected InputException not thrown.');
+            $this->assertFalse($this->accountManagement->isEmailAvailable($customer->getEmail()));
         } catch (InputException $e) {
-            $this->assertTrue($this->accountManagement->isEmailAvailable($customer->getEmail()));
-            throw $e;
+            $this->fail('InputException is thrown.');
         }
     }
 
