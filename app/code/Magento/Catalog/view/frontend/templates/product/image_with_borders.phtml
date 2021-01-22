@@ -11,7 +11,7 @@
 $width = (int)$block->getWidth();
 $paddingBottom = $block->getRatio() * 100;
 ?>
-<span class="product-image-container product-image-container-<?= /* @noEscape */ $this->getContainerId() ?>">
+<span class="product-image-container product-image-container-<?= /* @noEscape */ $block->getContainerId() ?>">
     <span class="product-image-wrapper">
         <img class="<?= $escaper->escapeHtmlAttr($block->getClass()) ?>"
             <?php foreach ($block->getCustomAttributes() as $name => $value): ?>
@@ -25,21 +25,21 @@ $paddingBottom = $block->getRatio() * 100;
 </span>
 <?php
 $styles = <<<STYLE
-.product-image-container-{$this->getContainerId()} {
+.product-image-container-{$block->getContainerId()} {
     width: {$width}px;
 }
-.product-image-container-{$this->getContainerId()} span.product-image-wrapper {
+.product-image-container-{$block->getContainerId()} span.product-image-wrapper {
     padding-bottom: {$paddingBottom}%;
 }
 STYLE;
 //In case a script was using "style" attributes of these elements
 $script = <<<SCRIPT
-prodImageContainers = document.querySelectorAll(".product-image-container-{$this->getContainerId()}");
+prodImageContainers = document.querySelectorAll(".product-image-container-{$block->getContainerId()}");
 for (var i = 0; i < prodImageContainers.length; i++) {
     prodImageContainers[i].style.width = "{$width}px";
 }
 prodImageContainersWrappers = document.querySelectorAll(
-    ".product-image-container-{$this->getContainerId()}  span.product-image-wrapper"
+    ".product-image-container-{$block->getContainerId()}  span.product-image-wrapper"
 );
 for (var i = 0; i < prodImageContainersWrappers.length; i++) {
     prodImageContainersWrappers[i].style.paddingBottom = "{$paddingBottom}%";
