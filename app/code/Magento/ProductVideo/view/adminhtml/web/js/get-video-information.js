@@ -482,7 +482,7 @@ define([
                         return;
                     }
 
-                    if(this._shouldCancelVideoRequest){
+                    if (this._shouldCancelVideoRequest) {
                         return;
                     }
 
@@ -519,7 +519,7 @@ define([
                         return null;
                     }
 
-                    if(this._shouldCancelVideoRequest){
+                    if (this._shouldCancelVideoRequest) {
                         return;
                     }
 
