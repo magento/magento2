@@ -23,17 +23,19 @@
         <before>
             <actionGroup ref="LoginActionGroup" stepKey="loginAsAdmin"/>
 
+            <actionGroup ref="deleteAllProductsUsingProductGrid" stepKey="deleteAllProducts"/>
+
             <!--Create Website -->
             <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createAdditionalWebsite">
-                <argument name="newWebsiteName" value="Second Website"/>
-                <argument name="websiteCode" value="second_website"/>
+                <argument name="newWebsiteName" value="{{customWebsite.name}}"/>
+                <argument name="websiteCode" value="{{customWebsite.code}}"/>
             </actionGroup>
 
             <!--Create Store -->
             <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="createNewStore">
-                <argument name="website" value="Second Website"/>
-                <argument name="storeGroupName" value="Second Store"/>
-                <argument name="storeGroupCode" value="second_store"/>
+                <argument name="website" value="{{customWebsite.name}}"/>
+                <argument name="storeGroupName" value="{{customStoreGroup.name}}"/>
+                <argument name="storeGroupCode" value="{{customStoreGroup.code}}"/>
             </actionGroup>
 
             <!--Create Store view -->
@@ -42,7 +44,7 @@
             <click selector="{{AdminStoresMainActionsSection.createStoreViewButton}}" stepKey="createStoreViewButton"/>
             <waitForPageLoad stepKey="waitForProductPageLoad"/>
             <waitForElementVisible selector="//legend[contains(., 'Store View Information')]" stepKey="waitForNewStorePageToOpen"/>
-            <selectOption userInput="Second Store" selector="{{AdminNewStoreSection.storeGrpDropdown}}" stepKey="selectStoreGroup"/>
+            <selectOption userInput="{{customStoreGroup.name}}" selector="{{AdminNewStoreSection.storeGrpDropdown}}" stepKey="selectStoreGroup"/>
             <fillField userInput="Second Store View" selector="{{AdminNewStoreSection.storeNameTextField}}" stepKey="fillStoreViewName"/>
             <fillField userInput="second_store_view" selector="{{AdminNewStoreSection.storeCodeTextField}}" stepKey="fillStoreViewCode"/>
             <selectOption selector="{{AdminNewStoreSection.statusDropdown}}" userInput="1" stepKey="enableStoreViewStatus"/>
@@ -57,21 +59,25 @@
             <!--Create a Simple Product 1 -->
             <actionGroup ref="createSimpleProductAndAddToWebsite" stepKey="createSimpleProduct1">
                 <argument name="product" value="simpleProductForMassUpdate"/>
-                <argument name="website" value="Second Website"/>
+                <argument name="website" value="{{customWebsite.name}}"/>
             </actionGroup>
 
             <!--Create a Simple Product 2 -->
             <actionGroup ref="createSimpleProductAndAddToWebsite" stepKey="createSimpleProduct2">
                 <argument name="product" value="simpleProductForMassUpdate2"/>
-                <argument name="website" value="Second Website"/>
+                <argument name="website" value="{{customWebsite.name}}"/>
             </actionGroup>
         </before>
         <after>
+            <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearFilters"/>
+
             <!--Delete website -->
             <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteSecondWebsite">
-                <argument name="websiteName" value="Second Website"/>
+                <argument name="websiteName" value="{{customWebsite.name}}"/>
             </actionGroup>
+
             <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
+            <waitForPageLoad stepKey="waitForProductGridPageLoad"/>
 
             <!--Delete Products -->
             <actionGroup ref="DeleteProductActionGroup" stepKey="deleteProduct1">
@@ -80,6 +86,7 @@
             <actionGroup ref="DeleteProductActionGroup" stepKey="deleteProduct2">
                 <argument name="productName" value="simpleProductForMassUpdate2.name"/>
             </actionGroup>
+
             <actionGroup ref="logout" stepKey="amOnLogoutPage"/>
         </after>
 
@@ -104,6 +111,10 @@
         <click selector="{{AdminProductGridSection.bulkActionOption('Change status')}}" stepKey="clickOption"/>
         <click selector="{{AdminProductGridSection.bulkActionOption('Disable')}}" stepKey="clickDisabled"/>
         <waitForPageLoad stepKey="waitForBulkUpdatePage"/>
+
+        <actionGroup ref="AdminFilterStoreViewActionGroup" stepKey="filterStoreViewAgain" >
+            <argument name="customStore" value="'Second Store View'" />
+        </actionGroup>
 
         <!-- Verify Product Statuses -->
         <see selector="{{AdminProductGridSection.productGridContentsOnRow('1')}}" userInput="Enabled" stepKey="checkIfProduct1IsEnabled"/>
@@ -157,7 +168,7 @@
         </actionGroup>
         <actionGroup ref="StorefrontCheckAdvancedSearchResultActionGroup" stepKey="StorefrontCheckAdvancedSearchResultDefault2"/>
         <see userInput="We can't find any items matching these search criteria." selector="{{StorefrontCatalogSearchAdvancedResultMainSection.message}}" stepKey="seeInDefault2"/>
-   </test>
+    </test>
     <test name="AdminMassUpdateProductStatusStoreViewScopeMysqlTest">
         <annotations>
             <features value="Catalog"/>
@@ -173,17 +184,19 @@
         <before>
             <actionGroup ref="LoginActionGroup" stepKey="loginAsAdmin"/>
 
+            <actionGroup ref="deleteAllProductsUsingProductGrid" stepKey="deleteAllProducts"/>
+
             <!--Create Website -->
             <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createAdditionalWebsite">
-                <argument name="newWebsiteName" value="Second Website"/>
-                <argument name="websiteCode" value="second_website"/>
+                <argument name="newWebsiteName" value="{{customWebsite.name}}"/>
+                <argument name="websiteCode" value="{{customWebsite.code}}"/>
             </actionGroup>
 
             <!--Create Store -->
             <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="createNewStore">
-                <argument name="website" value="Second Website"/>
-                <argument name="storeGroupName" value="Second Store"/>
-                <argument name="storeGroupCode" value="second_store"/>
+                <argument name="website" value="{{customWebsite.name}}"/>
+                <argument name="storeGroupName" value="{{customStoreGroup.name}}"/>
+                <argument name="storeGroupCode" value="{{customStoreGroup.code}}"/>
             </actionGroup>
 
             <!--Create Store view -->
@@ -192,7 +205,7 @@
             <click selector="{{AdminStoresMainActionsSection.createStoreViewButton}}" stepKey="createStoreViewButton"/>
             <waitForPageLoad stepKey="waitForProductPageLoad"/>
             <waitForElementVisible selector="//legend[contains(., 'Store View Information')]" stepKey="waitForNewStorePageToOpen"/>
-            <selectOption userInput="Second Store" selector="{{AdminNewStoreSection.storeGrpDropdown}}" stepKey="selectStoreGroup"/>
+            <selectOption userInput="{{customStoreGroup.name}}" selector="{{AdminNewStoreSection.storeGrpDropdown}}" stepKey="selectStoreGroup"/>
             <fillField userInput="Second Store View" selector="{{AdminNewStoreSection.storeNameTextField}}" stepKey="fillStoreViewName"/>
             <fillField userInput="second_store_view" selector="{{AdminNewStoreSection.storeCodeTextField}}" stepKey="fillStoreViewCode"/>
             <selectOption selector="{{AdminNewStoreSection.statusDropdown}}" userInput="1" stepKey="enableStoreViewStatus"/>
@@ -207,19 +220,21 @@
             <!--Create a Simple Product 1 -->
             <actionGroup ref="createSimpleProductAndAddToWebsite" stepKey="createSimpleProduct1">
                 <argument name="product" value="simpleProductForMassUpdate"/>
-                <argument name="website" value="Second Website"/>
+                <argument name="website" value="{{customWebsite.name}}"/>
             </actionGroup>
 
             <!--Create a Simple Product 2 -->
             <actionGroup ref="createSimpleProductAndAddToWebsite" stepKey="createSimpleProduct2">
                 <argument name="product" value="simpleProductForMassUpdate2"/>
-                <argument name="website" value="Second Website"/>
+                <argument name="website" value="{{customWebsite.name}}"/>
             </actionGroup>
         </before>
         <after>
+            <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearFilters"/>
+
             <!--Delete website -->
             <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteSecondWebsite">
-                <argument name="websiteName" value="Second Website"/>
+                <argument name="websiteName" value="{{customWebsite.name}}"/>
             </actionGroup>
             <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
 
@@ -254,6 +269,10 @@
         <click selector="{{AdminProductGridSection.bulkActionOption('Change status')}}" stepKey="clickOption"/>
         <click selector="{{AdminProductGridSection.bulkActionOption('Disable')}}" stepKey="clickDisabled"/>
         <waitForPageLoad stepKey="waitForBulkUpdatePage"/>
+
+        <actionGroup ref="AdminFilterStoreViewActionGroup" stepKey="filterStoreViewAgain" >
+            <argument name="customStore" value="'Second Store View'" />
+        </actionGroup>
 
         <!-- Verify Product Statuses -->
         <see selector="{{AdminProductGridSection.productGridContentsOnRow('1')}}" userInput="Enabled" stepKey="checkIfProduct1IsEnabled"/>
