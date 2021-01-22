@@ -29,6 +29,11 @@ interface CartItemRepositoryInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException The specified cart does not exist.
      * @throws \Magento\Framework\Exception\CouldNotSaveException The specified item could not be saved to the cart.
      * @throws \Magento\Framework\Exception\InputException The specified item or cart is not valid.
+     *
+     * @deprecated Post and put endpoint should be separated
+     *
+     * @see \Magento\Quote\Api\AddCartItemInterface
+     * @see \Magento\Quote\Api\UpdateCartItemInterface
      */
     public function save(\Magento\Quote\Api\Data\CartItemInterface $cartItem);
 
