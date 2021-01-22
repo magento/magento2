@@ -721,7 +721,7 @@ define([
                     modalTitleElement = modal.find('.modal-title');
 
                     if (!file) {
-                        this._videoUrlWidget.trigger('cancelled_video_information');
+                        widget._videoUrlWidget.trigger('cancelled_video_information');
                         widget._blockActionButtons(true);
 
                         modal.find('.video-delete-button').hide();
