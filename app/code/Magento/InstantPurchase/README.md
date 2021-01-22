@@ -1,19 +1,61 @@
-# Magento_InstantPurchase module
+## Magento_InstantPurchase module
 
-Instant Purchase feature allows the Customer to place the order in seconds without going through full checkout. Once clicked, system places the order using default shipping and billing addresses and stored payment method. Order is placed and customer gets confirmation message in notification area.
+This module allows the Customer to place the order in seconds without going through full checkout. Once clicked, system places the order using default shipping and billing addresses and stored payment method. Order is placed and customer gets confirmation message in notification area.
 
-Prerequisites to display the Instant Purchase button:
+## Installation
 
-1. Instant purchase enabled for a store at `Store / Configurations / Sales / Sales / Instant Purchase`
-2. Customer is logged in
-3. Customer has default shipping and billing address defined
-4. Customer has valid stored payment method with instant purchase support
+For information about a module installation in Magento 2, see [Enable or disable modules](https://devdocs.magento.com/guides/v2.4/install-gde/install/cli/install-cli-subcommands-enable.html).
 
 ## Structure
 
-In addition to [a typical file structure for a Magento 2 module](https://devdocs.magento.com/guides/v2.4/extension-dev-guide/build/module-file-structure.html) `PaymentMethodsIntegration` directory contains interfaces and basic implementation of integration vault payment method to the instant purchase.
+`PaymentMethodsIntegration` - directory contains interfaces and basic implementation of integration vault payment method to the instant purchase.
+
+For information about a typical file structure of a module in Magento 2, see [Module file structure](http://devdocs.magento.com/guides/v2.4/extension-dev-guide/build/module-file-structure.html#module-file-structure).
 
 ## Extensibility
+
+Extension developers can interact with the Magento_InstantPurchase module. For more information about the Magento extension mechanism, see [Magento plugins](https://devdocs.magento.com/guides/v2.4/extension-dev-guide/plugins.html).
+
+[The Magento dependency injection mechanism](https://devdocs.magento.com/guides/v2.4/extension-dev-guide/depend-inj.html) enables you to override the functionality of the Magento_InstantPurchase module.
+
+### Layouts
+
+This module introduces the following layouts in the `view/frontend/layout` directory:
+- `catalog_product_view`
+- `catalog_product_view_type_bundle`
+
+For more information about layouts in Magento 2, see the [Layout documentation](https://devdocs.magento.com/guides/v2.3/frontend-dev-guide/layouts/layout-overview.html).
+
+### Public APIs
+
+- `\Magento\InstantPurchase\Model\BillingAddressChoose\BillingAddressChooserInterface`
+    - choose billing address for a customer if available
+
+- `\Magento\InstantPurchase\Model\PaymentMethodChoose\PaymentTokenChooserInterface`
+    - choose one of the stored payment methods for a customer if available
+
+- `\Magento\InstantPurchase\Model\ShippingAddressChoose\ShippingAddressChooserInterface`
+    - choose shipping address for a customer if available
+
+- `\Magento\InstantPurchase\Model\ShippingMethodChoose\DeferredShippingMethodChooserInterface`
+    - choose shipping method for a quote address
+
+- `\Magento\InstantPurchase\Model\ShippingMethodChoose\ShippingMethodChooserInterface`
+    - choose shipping method for customer address if available
+    
+- `\Magento\InstantPurchase\Model\InstantPurchaseInterface`
+    - detects instant purchase options for a customer in a store
+    
+- `\Magento\InstantPurchase\PaymentMethodIntegration\AvailabilityCheckerInterface`
+    - checks if payment method may be used for instant purchase
+    
+- `\Magento\InstantPurchase\PaymentMethodIntegration\PaymentAdditionalInformationProviderInterface`
+    - provides additional information part specific for payment method
+
+- `\Magento\InstantPurchase\PaymentMethodIntegration\PaymentTokenFormatterInterface`
+    - provides mechanism to create string presentation of token for payment method
+
+For information about a public API in Magento 2, see [Public interfaces & APIs](http://devdocs.magento.com/guides/v2.4/extension-dev-guide/api-concepts.html).
 
 ### Instant purchase customization
 
@@ -48,6 +90,15 @@ Basic implementation is a good start point but it's recommended to provide own i
 - `Magento\InstantPurchase\PaymentMethodIntegration\PaymentAdditionalInformationProviderInterface` - allows to add some extra values to payment additional information array. Default implementation returns empty array.
 
 ## Additional information
+
+#Prerequisites to display the Instant Purchase button
+
+1. Instant purchase enabled for a store at `Store / Configurations / Sales / Sales / Instant Purchase`
+2. Customer is logged in
+3. Customer has default shipping and billing address defined
+4. Customer has valid stored payment method with instant purchase support
+
+[Learn more about Instant Purchase](https://docs.magento.com/user-guide/sales/checkout-instant-purchase.html).
 
 ### Backward incompatible changes
 
