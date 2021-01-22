@@ -14,14 +14,6 @@
         <data key="success">Import successfully done</data>
     </entity>
 
-    <!-- Categories -->
-    <entity name="Import1" type="category">
-        <data key="name">Import1</data>
-        <data key="name_lwr">import1</data>
-        <data key="is_active">true</data>
-        <data key="include_in_menu">true</data>
-    </entity>
-
     <!-- Images -->
     <entity name="TestImageImageContentExportImport" extends="TestImageContent" type="ImageContent">
         <data key="name">test_image.jpg</data>
