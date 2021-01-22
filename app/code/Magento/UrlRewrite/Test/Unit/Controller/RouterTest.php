@@ -5,13 +5,13 @@
  */
 namespace Magento\UrlRewrite\Test\Unit\Controller;
 
+use Laminas\Stdlib\ParametersInterface;
 use Magento\Framework\App\Action\Forward;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\UrlInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Magento\Store\Model\Store;
 use PHPUnit\Framework\MockObject\MockObject;
-use Zend\Stdlib\ParametersInterface;
 
 /**
  * Test class for UrlRewrite Controller Router
@@ -78,7 +78,7 @@ class RouterTest extends \PHPUnit\Framework\TestCase
             \Magento\Framework\App\ResponseInterface::class,
             ['setRedirect', 'sendResponse']
         );
-        $this->requestQuery = $this->getMockForAbstractClass(ParametersInterface::class);
+        $this->requestQuery = $this->createMock(ParametersInterface::class);
         $this->request = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
             ->disableOriginalConstructor()->getMock();
         $this->request->method('getQuery')->willReturn($this->requestQuery);

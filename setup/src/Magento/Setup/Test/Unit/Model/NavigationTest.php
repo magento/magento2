@@ -28,7 +28,7 @@ class NavigationTest extends \PHPUnit\Framework\TestCase
     public function setUp(): void
     {
         $this->serviceLocatorMock =
-            $this->createPartialMock(\Zend\ServiceManager\ServiceLocatorInterface::class, ['get']);
+            $this->createMock(\Zend\ServiceManager\ServiceLocatorInterface::class);
         $this->serviceLocatorMock
             ->expects($this->exactly(2))
             ->method('get')

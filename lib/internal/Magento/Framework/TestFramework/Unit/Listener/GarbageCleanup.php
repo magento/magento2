@@ -19,7 +19,7 @@ class GarbageCleanup implements \PHPUnit\Framework\TestListener
      * @SuppressWarnings(PHPMD.ShortVariable)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function addError(\PHPUnit\Framework\Test $test, \Exception $e, $time)
+    public function addError(\PHPUnit\Framework\Test $test, \Throwable $e, float $time):void
     {
     }
 
@@ -28,7 +28,7 @@ class GarbageCleanup implements \PHPUnit\Framework\TestListener
      * @SuppressWarnings(PHPMD.ShortVariable)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function addFailure(\PHPUnit\Framework\Test $test, \PHPUnit\Framework\AssertionFailedError $e, $time)
+    public function addFailure(\PHPUnit\Framework\Test $test, \PHPUnit\Framework\AssertionFailedError $e, float $time): void
     {
     }
 
@@ -37,7 +37,7 @@ class GarbageCleanup implements \PHPUnit\Framework\TestListener
      * @SuppressWarnings(PHPMD.ShortVariable)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function addIncompleteTest(\PHPUnit\Framework\Test $test, \Exception $e, $time)
+    public function addIncompleteTest(\PHPUnit\Framework\Test $test, \Throwable $e, float $time):void
     {
     }
 
@@ -46,7 +46,7 @@ class GarbageCleanup implements \PHPUnit\Framework\TestListener
      * @SuppressWarnings(PHPMD.ShortVariable)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function addRiskyTest(\PHPUnit\Framework\Test $test, \Exception $e, $time)
+    public function addRiskyTest(\PHPUnit\Framework\Test $test, \Throwable $e, float $time):void
     {
     }
 
@@ -55,7 +55,7 @@ class GarbageCleanup implements \PHPUnit\Framework\TestListener
      * @SuppressWarnings(PHPMD.ShortVariable)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function addSkippedTest(\PHPUnit\Framework\Test $test, \Exception $e, $time)
+    public function addSkippedTest(\PHPUnit\Framework\Test $test, \Throwable $e, float $time):void
     {
     }
 
@@ -63,7 +63,7 @@ class GarbageCleanup implements \PHPUnit\Framework\TestListener
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function startTestSuite(\PHPUnit\Framework\TestSuite $suite)
+    public function startTestSuite(\PHPUnit\Framework\TestSuite $suite): void
     {
     }
 
@@ -71,7 +71,7 @@ class GarbageCleanup implements \PHPUnit\Framework\TestListener
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function endTestSuite(\PHPUnit\Framework\TestSuite $suite)
+    public function endTestSuite(\PHPUnit\Framework\TestSuite $suite): void
     {
         gc_collect_cycles();
     }
@@ -80,7 +80,7 @@ class GarbageCleanup implements \PHPUnit\Framework\TestListener
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function startTest(\PHPUnit\Framework\Test $test)
+    public function startTest(\PHPUnit\Framework\Test $test): void
     {
     }
 
@@ -88,7 +88,7 @@ class GarbageCleanup implements \PHPUnit\Framework\TestListener
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function endTest(\PHPUnit\Framework\Test $test, $time)
+    public function endTest(\PHPUnit\Framework\Test $test, float $time): void
     {
     }
 
@@ -96,7 +96,7 @@ class GarbageCleanup implements \PHPUnit\Framework\TestListener
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function addWarning(Test $test, Warning $e, $time)
+    public function addWarning(Test $test, Warning $e, float $time): void
     {
     }
 }

@@ -12,7 +12,7 @@ use Magento\Framework\Setup\SchemaPersistor;
 use Magento\Setup\Model\DeclarationInstaller;
 use Magento\Setup\Model\InstallerFactory;
 use Magento\Setup\Module\ResourceFactory;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -47,9 +47,8 @@ class InstallerFactoryTest extends \PHPUnit\Framework\TestCase
             ->method('get')
             ->willReturn($objectManagerMock);
         /** @var ServiceLocatorInterface|\PHPUnit\Framework\MockObject\MockObject $serviceLocatorMock */
-        $serviceLocatorMock = $this->createPartialMock(
-            ServiceLocatorInterface::class,
-            ['get']
+        $serviceLocatorMock = $this->createMock(
+            ServiceLocatorInterface::class
         );
         $serviceLocatorMock->expects($this->any())->method('get')
             ->will($this->returnValueMap($this->getReturnValueMap()));

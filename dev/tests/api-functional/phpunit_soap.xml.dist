@@ -13,8 +13,6 @@
          columns="max"
          beStrictAboutTestsThatDoNotTestAnything="false"
          bootstrap="./framework/bootstrap.php"
-         testSuiteLoaderClass="Magento\TestFramework\ApiSuiteLoader"
-         testSuiteLoaderFile="framework/Magento/TestFramework/ApiSuiteLoader.php"
 >
     <!-- Test suites definition -->
     <testsuites>
