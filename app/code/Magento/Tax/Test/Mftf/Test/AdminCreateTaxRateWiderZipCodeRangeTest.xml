@@ -45,7 +45,7 @@
 
         <actionGroup ref="AdminTaxRateGridOpenPageActionGroup" stepKey="goToTaxRateIndex2"/>
         <!-- Create a tax rate for zipCodeRange and verify we see expected values on the tax rate grid page -->
-        <click selector="{{AdminDataGridHeaderSection.clearFilters}}" stepKey="clickClearFilters2"/>
+        <actionGroup ref="AdminClearGridFiltersActionGroup" stepKey="clickClearFilters2"/>
         <fillField selector="{{AdminTaxRateGridSection.filterByTaxIdentifier}}" userInput="{{SimpleTaxRate.code}}" stepKey="fillTaxIdentifierField2"/>
         <selectOption selector="{{AdminTaxRateGridSection.filterByCountry}}" userInput="United Kingdom" stepKey="selectCountry2" />
         <fillField selector="{{AdminTaxRateGridSection.filterByPostCode}}" userInput="1-7800935" stepKey="seeTaxPostCode1"/>
