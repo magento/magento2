@@ -180,7 +180,7 @@ class AddToCart implements ResolverInterface
             $wishlist->save();
         }
         return [
-            'status' => isset($cartErrors) ? false : true,
+            'status' => empty($cartErrors) ? true : false,
             'add_wishlist_items_to_cart_user_errors' => $cartErrors,
         ];
     }

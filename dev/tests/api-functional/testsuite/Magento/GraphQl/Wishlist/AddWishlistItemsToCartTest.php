@@ -50,7 +50,7 @@ class AddWishlistItemsToCartTest extends GraphQlAbstract
 
         $this->assertArrayHasKey('addWishlistItemsToCart', $response);
         $this->assertArrayHasKey('status', $response['addWishlistItemsToCart']);
-        $this->assertEquals($response['addWishlistItemsToCart']['status'], 1);
+        $this->assertEquals($response['addWishlistItemsToCart']['status'], true);
     }
 
     /**
