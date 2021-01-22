@@ -13,8 +13,9 @@
             <argument name="title" type="string" defaultValue="{{Attribute.label}}"/>
             <argument name="option" type="string" defaultValue="option1"/>
             <argument name="quantity" type="string" defaultValue="2"/>
+            <argument name="productName" type="string" defaultValue="{{ApiConfigurableProductWithOutCategory.name}}"/>
         </arguments>
-        <click selector="{{AdminCustomerWishlistSection.configureButton}}" stepKey="clickConfigureButton"/>
+        <click selector="{{AdminCustomerWishlistSection.configureButton(productName)}}" stepKey="clickConfigureButton"/>
         <waitForElementVisible selector="{{AdminCustomerWishlistSection.productAttributeOptionsDropDown(title)}}" stepKey="waitForConfigurableOption"/>
         <selectOption selector="{{AdminCustomerWishlistSection.productAttributeOptionsDropDown(title)}}" userInput="{{option}}" stepKey="selectConfigurableOption"/>
         <fillField selector="{{AdminOrderFormConfigureProductSection.quantity}}" userInput="{{quantity}}" stepKey="fillQty"/>

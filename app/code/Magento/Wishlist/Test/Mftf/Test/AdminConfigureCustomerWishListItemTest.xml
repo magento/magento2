@@ -16,7 +16,7 @@
             <description value="Admin should be able to configure items from customer wishlist"/>
             <severity value="MAJOR"/>
             <testCaseId value="MC-40455"/>
-            <useCaseId value="MC-36575"/>
+            <useCaseId value="MC-37418"/>
             <group value="wishlist"/>
         </annotations>
         <before>
@@ -68,6 +68,7 @@
             </createData>
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
             <magentoCron groups="index" stepKey="reindexBrokenIndices"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
@@ -83,22 +84,21 @@
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefrontAccount">
             <argument name="Customer" value="$createCustomer$"/>
         </actionGroup>
-        <amOnPage url="{{StorefrontProductPage.url($createConfigProduct.custom_attributes[url_key]$)}}" stepKey="goToProductPage"/>
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductPage">
+            <argument name="productUrl" value="$createConfigProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
         <actionGroup ref="StorefrontCustomerAddProductToWishlistActionGroup" stepKey="addToWishlistProduct">
             <argument name="productVar" value="$createConfigProduct$"/>
         </actionGroup>
-        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         <actionGroup ref="OpenEditCustomerFromAdminActionGroup" stepKey="navigateToCustomerEditPage">
             <argument name="customer" value="$createCustomer$"/>
         </actionGroup>
         <actionGroup ref="AdminNavigateCustomerWishlistTabActionGroup" stepKey="navigateToWishlistTab"/>
-        <actionGroup ref="AdminCustomerFindWishlistItemActionGroup" stepKey="findWishlistItem">
-            <argument name="productName" value="$createConfigProduct.name$"/>
-        </actionGroup>
         <actionGroup ref="AdminCustomerWishlistConfigureItemActionGroup" stepKey="editItem">
             <argument name="title" value="$createConfigProductAttribute.attribute[frontend_labels][0][label]$"/>
             <argument name="option" value="$getConfigAttributeOption1.label$"/>
             <argument name="quantity" value="2"/>
+            <argument name="productName" value="$createConfigProduct.name$"/>
         </actionGroup>
         <click selector="{{AdminMainActionsSection.save}}" stepKey="saveCustomer"/>
         <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitForSuccessMessage"/>
