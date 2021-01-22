@@ -517,6 +517,7 @@ define([
 
                         return null;
                     }
+
                     if (this._shouldCancelVideoRequest) {
                         return;
                     }
