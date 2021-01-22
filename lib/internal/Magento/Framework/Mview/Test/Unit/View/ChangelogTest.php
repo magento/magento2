@@ -11,6 +11,8 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\Pdo\Mysql;
 use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\DB\Select;
+use Magento\Framework\Mview\Config;
+use Magento\Framework\Mview\View\AdditionalColumnsProcessor\ProcessorFactory;
 use Magento\Framework\Mview\View\Changelog;
 use Magento\Framework\Mview\View\ChangelogInterface;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -40,13 +42,33 @@ class ChangelogTest extends TestCase
      */
     protected $resourceMock;
 
+    /**
+     * @var ProcessorFactory|MockObject
+     */
+    protected $processorFactory;
+
     protected function setUp(): void
     {
         $this->connectionMock = $this->createMock(Mysql::class);
         $this->resourceMock = $this->createMock(ResourceConnection::class);
         $this->mockGetConnection($this->connectionMock);
+        $this->processorFactory = $this->createMock(ProcessorFactory::class);
 
-        $this->model = new Changelog($this->resourceMock);
+        $this->model = new Changelog($this->resourceMock, $this->getMviewConfigMock(), $this->processorFactory);
+    }
+
+    /**
+     * @return Config|MockObject
+     */
+    private function getMviewConfigMock()
+    {
+        $mviewConfigMock = $this->createMock(Config::class);
+        $mviewConfigMock->expects($this->any())
+            ->method('getView')
+            ->willReturn([
+                'subscriptions' => []
+            ]);
+        return $mviewConfigMock;
     }
 
     public function testInstanceOf()
@@ -54,7 +76,7 @@ class ChangelogTest extends TestCase
         $resourceMock =
             $this->createMock(ResourceConnection::class);
         $resourceMock->expects($this->once())->method('getConnection')->willReturn(true);
-        $model = new Changelog($resourceMock);
+        $model = new Changelog($resourceMock, $this->getMviewConfigMock(), $this->processorFactory);
         $this->assertInstanceOf(ChangelogInterface::class, $model);
     }
 
@@ -65,7 +87,7 @@ class ChangelogTest extends TestCase
         $resourceMock =
             $this->createMock(ResourceConnection::class);
         $resourceMock->expects($this->once())->method('getConnection')->willReturn(null);
-        $model = new Changelog($resourceMock);
+        $model = new Changelog($resourceMock, $this->getMviewConfigMock(), $this->processorFactory);
         $model->setViewId('ViewIdTest');
         $this->assertNull($model);
     }

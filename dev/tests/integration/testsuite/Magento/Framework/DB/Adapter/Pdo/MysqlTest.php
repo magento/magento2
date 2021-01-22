@@ -27,7 +27,6 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
         set_error_handler(null);
         $this->resourceConnection = Bootstrap::getObjectManager()
             ->get(ResourceConnection::class);
-        CacheCleaner::cleanAll();
     }
 
     protected function tearDown(): void
