@@ -36,13 +36,13 @@
                 </thead>
                 <tbody>
                 <?php foreach ($block->getChildProducts() as $childProduct): ?>
-                    <?php $childProductStockQty = $block->getProductStockQty($childProduct); ?>
+                    <?php $childProductStockQty = (int)$block->getProductStockQty($childProduct); ?>
                     <?php if ($childProductStockQty > 0): ?>
                         <tr>
                             <td data-th="<?= $block->escapeHtmlAttr(__('Product Name')) ?>" class="col item">
                                 <?= $block->escapeHtml($childProduct->getName()) ?>
                             </td>
-                            <td data-th="<?= $block->escapeHtmlAttr(__('Qty')) ?>" class="col qty">
+                            <td data-th="<?= $block->escapeHtmlAttr(__('Qty')) ?>" class="col qty-leftover">
                                 <?= $block->escapeHtml($childProductStockQty) ?>
                             </td>
                         </tr>
