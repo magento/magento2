@@ -51,7 +51,6 @@ class Filter extends \Magento\Cms\Model\Template\Filter
         \Magento\Framework\View\LayoutFactory $layoutFactory,
         \Magento\Framework\App\State $appState,
         \Magento\Framework\UrlInterface $urlModel,
-        \Pelago\Emogrifier\CssInliner $emogrifier,
         \Magento\Variable\Model\Source\Variables $configVariables,
         \Magento\Widget\Model\ResourceModel\Widget $widgetResource,
         \Magento\Widget\Model\Widget $widget
@@ -70,7 +69,6 @@ class Filter extends \Magento\Cms\Model\Template\Filter
             $layoutFactory,
             $appState,
             $urlModel,
-            $emogrifier,
             $configVariables
         );
     }

@@ -38,7 +38,6 @@ use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Variable\Model\Source\Variables;
 use Magento\Variable\Model\VariableFactory;
-use Pelago\Emogrifier\CssInliner as EmogrifierCssInliner;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -113,11 +112,6 @@ class FilterTest extends TestCase
      * @var Variables|MockObject
      */
     private $configVariables;
-
-    /**
-     * @var EmogrifierCssInliner
-     */
-    private $emogrifier;
 
     /**
      * @var CssInliner
@@ -195,8 +189,6 @@ class FilterTest extends TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $this->emogrifier = $this->objectManager->getObject(EmogrifierCssInliner::class);
-
         $this->configVariables = $this->getMockBuilder(Variables::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -257,7 +249,6 @@ class FilterTest extends TestCase
                     $this->layoutFactory,
                     $this->appState,
                     $this->backendUrlBuilder,
-                    $this->emogrifier,
                     $this->configVariables,
                     [],
                     $this->cssInliner,

@@ -153,12 +153,6 @@ class Filter extends \Magento\Framework\Filter\Template
     protected $urlModel;
 
     /**
-     * @var \Pelago\Emogrifier\CssInliner
-     * @deprecated 100.2.0
-     */
-    protected $emogrifier;
-
-    /**
      * @var \Magento\Framework\Css\PreProcessor\Adapter\CssInliner
      */
     private $cssInliner;
@@ -195,7 +189,6 @@ class Filter extends \Magento\Framework\Filter\Template
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
      * @param \Magento\Framework\App\State $appState
      * @param \Magento\Framework\UrlInterface $urlModel
-     * @param \Pelago\Emogrifier\CssInliner $emogrifier
      * @param \Magento\Variable\Model\Source\Variables $configVariables
      * @param array $variables
      * @param \Magento\Framework\Css\PreProcessor\Adapter\CssInliner|null $cssInliner
@@ -217,7 +210,6 @@ class Filter extends \Magento\Framework\Filter\Template
         \Magento\Framework\View\LayoutFactory $layoutFactory,
         \Magento\Framework\App\State $appState,
         \Magento\Framework\UrlInterface $urlModel,
-        \Pelago\Emogrifier\CssInliner $emogrifier,
         \Magento\Variable\Model\Source\Variables $configVariables,
         $variables = [],
         \Magento\Framework\Css\PreProcessor\Adapter\CssInliner $cssInliner = null,
@@ -237,7 +229,6 @@ class Filter extends \Magento\Framework\Filter\Template
         $this->_layoutFactory = $layoutFactory;
         $this->_appState = $appState;
         $this->urlModel = $urlModel;
-        $this->emogrifier = $emogrifier;
         $this->cssInliner = $cssInliner ?: \Magento\Framework\App\ObjectManager::getInstance()
             ->get(\Magento\Framework\Css\PreProcessor\Adapter\CssInliner::class);
         $this->cssProcessor = $cssProcessor ?: ObjectManager::getInstance()
@@ -1041,7 +1032,7 @@ class Filter extends \Magento\Framework\Filter\Template
                     );
                 }
                 // Don't parse inline <style> tags, since existing tag is intentionally for non-inline styles
-                $processedHtml = $this->cssInliner->setHtmlCss($html, $cssToInline)->disableStyleBlocksParsing()->render();
+                $processedHtml = $this->cssInliner->setHtmlCss($html, $cssToInline)->render();
 
             } catch (\Exception $e) {
                 if ($this->_appState->getMode() == \Magento\Framework\App\State::MODE_DEVELOPER) {
