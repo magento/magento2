@@ -14,7 +14,7 @@
 >
     <testsuites>
         <testsuite name="Magento Unit Tests for Static Code Analysis Framework">
-            <directory>testsuite/Magento/TestFramework</directory>
+            <directory suffix="Test.php">testsuite/Magento/TestFramework</directory>
         </testsuite>
     </testsuites>
     <php>
