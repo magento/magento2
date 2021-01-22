@@ -7,13 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\Quote\Model\Quote\Item;
 
-use Magento\Quote\Api\AddCartItemInterface;
 use Magento\Quote\Api\Data\CartItemInterface;
+use Magento\Quote\Api\UpdateCartItemInterface;
 
 /**
  * Update the specified cart item
  */
-class UpdateCartItem implements AddCartItemInterface
+class UpdateCartItem implements UpdateCartItemInterface
 {
     /**
      * @var Repository
