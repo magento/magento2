@@ -21,6 +21,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Model\Website;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\RuntimeException;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -289,14 +290,30 @@ class PriceTest extends TestCase
                     return $this->objectManagerHelper->getObject(TierPrice::class);
                 }
             );
-        $tierPriceExtensionMock = $this->getMockBuilder(ProductTierPriceExtensionInterface::class)
-            ->onlyMethods(['getPercentageValue', 'setPercentageValue'])
-            ->getMockForAbstractClass();
+        $tierPriceExtensionMock = $this->getProductTierPriceExtensionInterfaceMock();
         $tierPriceExtensionMock->method('getPercentageValue')
             ->willReturn(50);
         $this->tierPriceExtensionFactoryMock->method('create')
             ->willReturn($tierPriceExtensionMock);
 
         $this->assertInstanceOf(TierPrice::class, $this->model->getTierPrices($this->product)[0]);
+    }
+
+    /**
+     * Build ProductTierPriceExtensionInterface mock.
+     *
+     * @return MockObject
+     */
+    private function getProductTierPriceExtensionInterfaceMock(): MockObject
+    {
+        $mockBuilder = $this->getMockBuilder(ProductTierPriceExtensionInterface::class)
+            ->disableOriginalConstructor();
+        try {
+            $mockBuilder->addMethods(['getPercentageValue', 'setPercentageValue', 'setWebsiteId']);
+        } catch (RuntimeException $e) {
+            // ProductTierPriceExtensionInterface already generated and has all necessary methods.
+        }
+
+        return $mockBuilder->getMock();
     }
 }
