@@ -5,13 +5,35 @@
  */
 namespace Magento\Email\Model\Template;
 
-use Magento\Framework\App\ObjectManager;
+use Exception;
+use Magento\Cms\Block\Block;
+use Magento\Framework\App\Area;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\State;
+use Magento\Framework\Css\PreProcessor\Adapter\CssInliner;
+use Magento\Framework\Escaper;
 use Magento\Framework\Exception\MailException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\Read;
+use Magento\Framework\Filter\Template;
+use Magento\Framework\Filter\Template\Tokenizer\Parameter;
 use Magento\Framework\Filter\VariableResolverInterface;
+use Magento\Framework\Stdlib\StringUtils;
+use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Asset\ContentProcessorException;
 use Magento\Framework\View\Asset\ContentProcessorInterface;
+use Magento\Framework\View\Asset\File\NotFoundException;
+use Magento\Framework\View\Asset\Repository;
+use Magento\Framework\View\Element\AbstractBlock;
+use Magento\Framework\View\LayoutFactory;
+use Magento\Framework\View\LayoutInterface;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Variable\Model\Source\Variables;
+use Magento\Variable\Model\Variable;
+use Magento\Variable\Model\VariableFactory;
+use Psr\Log\LoggerInterface;
 
 /**
  * Core Email Template Filter Model
@@ -22,7 +44,7 @@ use Magento\Framework\View\Asset\ContentProcessorInterface;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
  */
-class Filter extends \Magento\Framework\Filter\Template
+class Filter extends Template
 {
     /**
      * The name used in the {{trans}} directive
@@ -89,17 +111,17 @@ class Filter extends \Magento\Framework\Filter\Template
     private $plainTemplateMode = false;
 
     /**
-     * @var \Magento\Framework\View\Asset\Repository
+     * @var Repository
      */
     protected $_assetRepo;
 
     /**
-     * @var \Psr\Log\LoggerInterface
+     * @var LoggerInterface
      */
     protected $_logger;
 
     /**
-     * @var \Magento\Framework\Escaper
+     * @var Escaper
      */
     protected $_escaper;
 
@@ -107,29 +129,29 @@ class Filter extends \Magento\Framework\Filter\Template
      * Core store config
      * Variable factory
      *
-     * @var \Magento\Variable\Model\VariableFactory
+     * @var VariableFactory
      */
     protected $_variableFactory;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * @var \Magento\Framework\View\LayoutInterface
+     * @var LayoutInterface
      */
     protected $_layout;
 
     /**
-     * @var \Magento\Framework\View\LayoutFactory
+     * @var LayoutFactory
      */
     protected $_layoutFactory;
 
     /**
      * Setup callbacks for filters
      *
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @var ScopeConfigInterface
      */
     protected $_scopeConfig;
 
@@ -143,22 +165,22 @@ class Filter extends \Magento\Framework\Filter\Template
     /**
      * App state
      *
-     * @var \Magento\Framework\App\State
+     * @var State
      */
     protected $_appState;
 
     /**
-     * @var \Magento\Framework\UrlInterface
+     * @var UrlInterface
      */
     protected $urlModel;
 
     /**
-     * @var \Magento\Framework\Css\PreProcessor\Adapter\CssInliner
+     * @var CssInliner
      */
     private $cssInliner;
 
     /**
-     * @var \Magento\Variable\Model\Source\Variables
+     * @var Variables
      */
     protected $configVariables;
 
@@ -173,50 +195,52 @@ class Filter extends \Magento\Framework\Filter\Template
     private $pubDirectory;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\Read
+     * @var Read
      */
     private $pubDirectoryRead;
 
+
     /**
-     * @param \Magento\Framework\Stdlib\StringUtils $string
-     * @param \Psr\Log\LoggerInterface $logger
-     * @param \Magento\Framework\Escaper $escaper
-     * @param \Magento\Framework\View\Asset\Repository $assetRepo
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Variable\Model\VariableFactory $coreVariableFactory
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\View\LayoutInterface $layout
-     * @param \Magento\Framework\View\LayoutFactory $layoutFactory
-     * @param \Magento\Framework\App\State $appState
-     * @param \Magento\Framework\UrlInterface $urlModel
-     * @param \Magento\Variable\Model\Source\Variables $configVariables
+     * Filter constructor.
+     * @param StringUtils $string
+     * @param LoggerInterface $logger
+     * @param Escaper $escaper
+     * @param Repository $assetRepo
+     * @param ScopeConfigInterface $scopeConfig
+     * @param VariableFactory $coreVariableFactory
+     * @param StoreManagerInterface $storeManager
+     * @param LayoutInterface $layout
+     * @param LayoutFactory $layoutFactory
+     * @param State $appState
+     * @param UrlInterface $urlModel
+     * @param Variables $configVariables
+     * @param VariableResolverInterface $variableResolver
+     * @param Css\Processor $cssProcessor
+     * @param Filesystem $pubDirectory
+     * @param CssInliner $cssInliner
      * @param array $variables
-     * @param \Magento\Framework\Css\PreProcessor\Adapter\CssInliner|null $cssInliner
      * @param array $directiveProcessors
-     * @param VariableResolverInterface|null $variableResolver
-     * @param Css\Processor|null $cssProcessor
-     * @param Filesystem|null $pubDirectory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Framework\Stdlib\StringUtils $string,
-        \Psr\Log\LoggerInterface $logger,
-        \Magento\Framework\Escaper $escaper,
-        \Magento\Framework\View\Asset\Repository $assetRepo,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Variable\Model\VariableFactory $coreVariableFactory,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\View\LayoutInterface $layout,
-        \Magento\Framework\View\LayoutFactory $layoutFactory,
-        \Magento\Framework\App\State $appState,
-        \Magento\Framework\UrlInterface $urlModel,
-        \Magento\Variable\Model\Source\Variables $configVariables,
+        StringUtils $string,
+        LoggerInterface $logger,
+        Escaper $escaper,
+        Repository $assetRepo,
+        ScopeConfigInterface $scopeConfig,
+        VariableFactory $coreVariableFactory,
+        StoreManagerInterface $storeManager,
+        LayoutInterface $layout,
+        LayoutFactory $layoutFactory,
+        State $appState,
+        UrlInterface $urlModel,
+        Variables $configVariables,
+        VariableResolverInterface $variableResolver,
+        Css\Processor $cssProcessor,
+        Filesystem $pubDirectory,
+        CssInliner $cssInliner,
         $variables = [],
-        \Magento\Framework\Css\PreProcessor\Adapter\CssInliner $cssInliner = null,
-        array $directiveProcessors = [],
-        VariableResolverInterface $variableResolver = null,
-        Css\Processor $cssProcessor = null,
-        Filesystem $pubDirectory = null
+        array $directiveProcessors = []
     ) {
         $this->_escaper = $escaper;
         $this->_assetRepo = $assetRepo;
@@ -229,12 +253,9 @@ class Filter extends \Magento\Framework\Filter\Template
         $this->_layoutFactory = $layoutFactory;
         $this->_appState = $appState;
         $this->urlModel = $urlModel;
-        $this->cssInliner = $cssInliner ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(\Magento\Framework\Css\PreProcessor\Adapter\CssInliner::class);
-        $this->cssProcessor = $cssProcessor ?: ObjectManager::getInstance()
-            ->get(Css\Processor::class);
-        $this->pubDirectory = $pubDirectory ?: ObjectManager::getInstance()
-            ->get(Filesystem::class);
+        $this->cssInliner = $cssInliner;
+        $this->cssProcessor = $cssProcessor;
+        $this->pubDirectory = $pubDirectory;
         $this->configVariables = $configVariables;
         parent::__construct($string, $variables, $directiveProcessors, $variableResolver);
     }
@@ -386,7 +407,7 @@ class Filter extends \Magento\Framework\Filter\Template
         if (isset($blockParameters['class'])) {
             $block = $this->_layout->createBlock($blockParameters['class'], null, ['data' => $blockParameters]);
         } elseif (isset($blockParameters['id'])) {
-            $block = $this->_layout->createBlock(\Magento\Cms\Block\Block::class);
+            $block = $this->_layout->createBlock(Block::class);
             if ($block) {
                 $block->setBlockId($blockParameters['id']);
             }
@@ -427,7 +448,7 @@ class Filter extends \Magento\Framework\Filter\Template
     {
         $this->_directiveParams = $this->getParameters($construction[2]);
         if (!isset($this->_directiveParams['area'])) {
-            $this->_directiveParams['area'] = \Magento\Framework\App\Area::AREA_FRONTEND;
+            $this->_directiveParams['area'] = Area::AREA_FRONTEND;
         }
         if ($this->_directiveParams['area'] != $this->_appState->getAreaCode()) {
             return $this->_appState->emulateAreaCode(
@@ -448,7 +469,7 @@ class Filter extends \Magento\Framework\Filter\Template
     {
         $skipParams = ['handle', 'area'];
 
-        /** @var $layout \Magento\Framework\View\LayoutInterface */
+        /** @var $layout LayoutInterface */
         $layout = $this->_layoutFactory->create(['cacheable' => false]);
         $layout->getUpdate()->addHandle($this->_directiveParams['handle'])->load();
 
@@ -457,7 +478,7 @@ class Filter extends \Magento\Framework\Filter\Template
 
         $rootBlock = false;
         foreach ($layout->getAllBlocks() as $block) {
-            /* @var $block \Magento\Framework\View\Element\AbstractBlock */
+            /* @var $block AbstractBlock */
             if (!$block->getParentBlock() && !$rootBlock) {
                 $rootBlock = $block;
             }
@@ -490,7 +511,7 @@ class Filter extends \Magento\Framework\Filter\Template
      */
     protected function _getBlockParameters($value)
     {
-        $tokenizer = new \Magento\Framework\Filter\Template\Tokenizer\Parameter();
+        $tokenizer = new Parameter();
         $tokenizer->setString($value);
 
         return $tokenizer->tokenize();
@@ -520,7 +541,7 @@ class Filter extends \Magento\Framework\Filter\Template
         // phpcs:disable Magento2.Functions.DiscouragedFunction
         $params = $this->getParameters(html_entity_decode($construction[2], ENT_QUOTES));
         return $this->_storeManager->getStore()
-            ->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA) . $params['url'];
+            ->getBaseUrl(UrlInterface::URL_TYPE_MEDIA) . $params['url'];
     }
 
     /**
@@ -564,10 +585,10 @@ class Filter extends \Magento\Framework\Filter\Template
     /**
      * Set current URL model, which will be used for URLs generation.
      *
-     * @param \Magento\Framework\UrlInterface $urlModel
+     * @param UrlInterface $urlModel
      * @return $this
      */
-    public function setUrlModel(\Magento\Framework\UrlInterface $urlModel)
+    public function setUrlModel(UrlInterface $urlModel)
     {
         $this->urlModel = $urlModel;
         return $this;
@@ -743,7 +764,7 @@ class Filter extends \Magento\Framework\Filter\Template
         if (isset($params['store'])) {
             try {
                 $store = $this->_storeManager->getStore($params['store']);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 throw new MailException(
                     __('Requested invalid store "%1"', $params['store'])
                 );
@@ -811,7 +832,7 @@ class Filter extends \Magento\Framework\Filter\Template
         if (isset($params['path']) && $this->isAvailableConfigVariable($params['path'])) {
             $configValue = $this->_scopeConfig->getValue(
                 $params['path'],
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                ScopeInterface::SCOPE_STORE,
                 $storeId
             );
         }
@@ -849,8 +870,8 @@ class Filter extends \Magento\Framework\Filter\Template
                 $params['code']
             );
             $mode = $this->isPlainTemplateMode()
-                ? \Magento\Variable\Model\Variable::TYPE_TEXT
-                : \Magento\Variable\Model\Variable::TYPE_HTML;
+                ? Variable::TYPE_TEXT
+                : Variable::TYPE_HTML;
             $value = $variable->getValue($mode);
             if ($value) {
                 $customVarValue = $value;
@@ -913,7 +934,7 @@ class Filter extends \Magento\Framework\Filter\Template
      *
      * @param string[] $construction
      * @return string
-     * @throws \Magento\Framework\Exception\MailException
+     * @throws MailException
      */
     public function inlinecssDirective($construction)
     {
@@ -930,7 +951,7 @@ class Filter extends \Magento\Framework\Filter\Template
 
         $params = $this->getParameters($construction[2]);
         if (!isset($params['file']) || !$params['file']) {
-            throw new \Magento\Framework\Exception\MailException(
+            throw new MailException(
                 __('"file" parameter must be specified and must not be empty')
             );
         }
@@ -969,7 +990,7 @@ class Filter extends \Magento\Framework\Filter\Template
      *
      * @param [] $files
      * @return string
-     * @throws \Magento\Framework\Exception\MailException
+     * @throws MailException
      */
     public function getCssFilesContent(array $files)
     {
@@ -978,7 +999,7 @@ class Filter extends \Magento\Framework\Filter\Template
 
         $designParams = $this->getDesignParams();
         if (!count($designParams)) {
-            throw new \Magento\Framework\Exception\MailException(
+            throw new MailException(
                 __('Design params must be set before calling this method')
             );
         }
@@ -995,7 +1016,7 @@ class Filter extends \Magento\Framework\Filter\Template
             }
         } catch (ContentProcessorException $exception) {
             $css = $exception->getMessage();
-        } catch (\Magento\Framework\View\Asset\File\NotFoundException $exception) {
+        } catch (NotFoundException $exception) {
             $css = '';
         }
 
@@ -1010,7 +1031,7 @@ class Filter extends \Magento\Framework\Filter\Template
      *
      * @param string $html
      * @return string
-     * @throws \Magento\Framework\Exception\MailException
+     * @throws MailException
      */
     public function applyInlineCss($html)
     {
@@ -1027,7 +1048,7 @@ class Filter extends \Magento\Framework\Filter\Template
                 if (strpos($cssToInline, ContentProcessorInterface::ERROR_MESSAGE_PREFIX)
                     !== false
                 ) {
-                    throw new \Magento\Framework\Exception\MailException(
+                    throw new MailException(
                         __('<pre> %1 </pre>', PHP_EOL . $cssToInline . PHP_EOL)
                     );
                 }
@@ -1040,8 +1061,8 @@ class Filter extends \Magento\Framework\Filter\Template
 
                 $processedHtml = $this->cssInliner->process();
 
-            } catch (\Exception $e) {
-                if ($this->_appState->getMode() == \Magento\Framework\App\State::MODE_DEVELOPER) {
+            } catch (Exception $e) {
+                if ($this->_appState->getMode() == State::MODE_DEVELOPER) {
                     $processedHtml = __('CSS inlining error:') . PHP_EOL . $e->getMessage()
                         . PHP_EOL
                         . $html;
@@ -1069,12 +1090,12 @@ class Filter extends \Magento\Framework\Filter\Template
     {
         try {
             $value = parent::filter($value);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             // Since a single instance of this class can be used to filter content multiple times, reset callbacks to
             // prevent callbacks running for unrelated content (e.g., email subject and email body)
             $this->resetAfterFilterCallbacks();
 
-            if ($this->_appState->getMode() == \Magento\Framework\App\State::MODE_DEVELOPER) {
+            if ($this->_appState->getMode() == State::MODE_DEVELOPER) {
                 $value = sprintf(__('Error filtering template: %s'), $e->getMessage());
             } else {
                 $value = __("We're sorry, an error has occurred while generating this content.");
