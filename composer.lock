@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "75dbcd621097ad659fe5f49b5ce60fff",
+    "content-hash": "f6241267d1ae96341ac1fd72c6a80e3e",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
@@ -7109,16 +7109,16 @@
         },
         {
             "name": "friendsofphp/php-cs-fixer",
-            "version": "v2.17.4",
+            "version": "v2.18.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfPHP/PHP-CS-Fixer.git",
-                "reference": "8714455fb5095c21caff121eaf9a8f8c2d8f75b0"
+                "reference": "c68ff6231adb276857761e43b7ed082f164dce0b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfPHP/PHP-CS-Fixer/zipball/8714455fb5095c21caff121eaf9a8f8c2d8f75b0",
-                "reference": "8714455fb5095c21caff121eaf9a8f8c2d8f75b0",
+                "url": "https://api.github.com/repos/FriendsOfPHP/PHP-CS-Fixer/zipball/c68ff6231adb276857761e43b7ed082f164dce0b",
+                "reference": "c68ff6231adb276857761e43b7ed082f164dce0b",
                 "shasum": ""
             },
             "require": {
@@ -7198,7 +7198,13 @@
                 }
             ],
             "description": "A tool to automatically fix PHP code style",
-            "time": "2021-01-18T03:06:22+00:00"
+            "funding": [
+                {
+                    "url": "https://github.com/keradus",
+                    "type": "github"
+                }
+            ],
+            "time": "2021-01-21T18:50:42+00:00"
         },
         {
             "name": "hoa/consistency",
