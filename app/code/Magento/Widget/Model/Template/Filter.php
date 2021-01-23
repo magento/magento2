@@ -57,11 +57,12 @@ class Filter extends \Magento\Cms\Model\Template\Filter
      * @param VariableResolverInterface $variableResolver
      * @param Css\Processor $cssProcessor
      * @param Filesystem $pubDirectory
+     * @param CssInliner $cssInliner
      * @param \Magento\Widget\Model\ResourceModel\Widget $widgetResource
      * @param Widget $widget
-     * @param CssInliner $cssInliner
      * @param array $variables
      * @param array $directiveProcessors
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         StringUtils $string,
@@ -79,9 +80,9 @@ class Filter extends \Magento\Cms\Model\Template\Filter
         VariableResolverInterface $variableResolver,
         Css\Processor $cssProcessor,
         Filesystem $pubDirectory,
+        CssInliner $cssInliner,
         \Magento\Widget\Model\ResourceModel\Widget $widgetResource,
         Widget $widget,
-        CssInliner $cssInliner,
         $variables = [],
         array $directiveProcessors = []
     ) {
@@ -174,6 +175,7 @@ class Filter extends \Magento\Cms\Model\Template\Filter
      */
     public function mediaDirective($construction)
     {
+        // phpcs:disable Magento2.Functions.DiscouragedFunction
         $params = $this->getParameters(html_entity_decode($construction[2], ENT_QUOTES));
         return $this->_storeManager->getStore()
             ->getBaseUrl(UrlInterface::URL_TYPE_MEDIA) . $params['url'];
