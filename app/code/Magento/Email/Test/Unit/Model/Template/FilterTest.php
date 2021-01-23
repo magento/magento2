@@ -139,6 +139,11 @@ class FilterTest extends TestCase
     private $variableResolver;
 
     /**
+     * @var MockObject|VariableResolverInterface
+     */
+    private $variableResolverInterface;
+
+    /**
      * @var array
      */
     private $directiveProcessors;
@@ -250,12 +255,12 @@ class FilterTest extends TestCase
                     $this->appState,
                     $this->backendUrlBuilder,
                     $this->configVariables,
-                    [],
-                    $this->cssInliner,
-                    $this->directiveProcessors,
                     $this->variableResolver,
                     $this->cssProcessor,
-                    $this->pubDirectory
+                    $this->pubDirectory,
+                    $this->cssInliner,
+                    [],
+                    $this->directiveProcessors
                 ]
             )
             ->setMethods($mockedMethods)
