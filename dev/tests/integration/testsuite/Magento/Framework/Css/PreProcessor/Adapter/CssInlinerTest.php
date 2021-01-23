@@ -36,7 +36,9 @@ class CssInlinerTest extends \PHPUnit\Framework\TestCase
     {
         $html = file_get_contents($htmlFilePath);
         $css = file_get_contents($cssFilePath);
-        $result = $this->model->setHtmlCss($html, $css)->render();
+        $this->model->setHtml($html);
+        $this->model->setCss($css);
+        $result = $this->model->process();
         $this->assertStringContainsString($cssExpected, $result);
     }
 

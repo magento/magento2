@@ -1031,8 +1031,14 @@ class Filter extends \Magento\Framework\Filter\Template
                         __('<pre> %1 </pre>', PHP_EOL . $cssToInline . PHP_EOL)
                     );
                 }
+                $this->cssInliner->setHtml($html);
+
                 // Don't parse inline <style> tags, since existing tag is intentionally for non-inline styles
-                $processedHtml = $this->cssInliner->setHtmlCss($html, $cssToInline)->render();
+                $this->cssInliner->disableStyleBlocksParsing();
+
+                $this->cssInliner->setCss($cssToInline);
+
+                $processedHtml = $this->cssInliner->process();
 
             } catch (\Exception $e) {
                 if ($this->_appState->getMode() == \Magento\Framework\App\State::MODE_DEVELOPER) {

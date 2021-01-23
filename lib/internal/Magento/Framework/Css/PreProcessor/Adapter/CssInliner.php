@@ -7,7 +7,6 @@ namespace Magento\Framework\Css\PreProcessor\Adapter;
 
 use Magento\Framework\App\State;
 use Pelago\Emogrifier\CssInliner as EmogrifierCssInliner;
-use Symfony\Component\CssSelector\Exception\ParseException;
 
 /**
  * This class will inline the css of an html to each tag to be used for applications such as a styled email.
@@ -20,6 +19,11 @@ class CssInliner
     private $appState;
 
     /**
+     * @var EmogrifierCssInliner
+     */
+    private $emogrifier;
+
+    /**
      * @param State $appState
      */
     public function __construct(State $appState)
@@ -28,15 +32,46 @@ class CssInliner
     }
 
     /**
+     * Sets the HTML to be used with the css. This method should be used with setCss.
+     *
      * @param string $html
-     * @param string $css
-     * @return EmogrifierCssInliner
-     * @throws ParseException
+     * @return void
      */
-    public function setHtmlCss(string $html, string $css = '')
+    public function setHtml($html)
     {
-        return EmogrifierCssInliner::fromHtml($html)->disableStyleBlocksParsing()
-            ->inlineCss($css)
+        $this->emogrifier = EmogrifierCssInliner::fromHtml($html)
             ->setDebug($this->appState->getMode() === State::MODE_DEVELOPER);
+    }
+
+    /**
+     * Sets the CSS to be merged with the HTML. This method should be used with setHtml.
+     *
+     * @param string $css
+     * @return void
+     */
+    public function setCss($css)
+    {
+        $this->emogrifier->inlineCss($css);
+    }
+
+    /**
+     * Disables the parsing of <style> blocks.
+     *
+     * @return void
+     */
+    public function disableStyleBlocksParsing()
+    {
+        $this->emogrifier->disableStyleBlocksParsing();
+    }
+
+    /**
+     * Processes the html by placing the css inline. Set first the css by using setCss and html by using setHtml.
+     *
+     * @return string
+     * @throws \BadMethodCallException
+     */
+    public function process()
+    {
+        return $this->emogrifier->render();
     }
 }
