@@ -7,6 +7,7 @@
 namespace Magento\Sales\Block\Order\Email\Items\Order;
 
 use Magento\Sales\Model\Order\Item as OrderItem;
+use Magento\Sales\Model\Order\Creditmemo\Item as CreditMemoItem;
 
 /**
  * Sales Order Email items default renderer
@@ -95,10 +96,10 @@ class DefaultOrder extends \Magento\Framework\View\Element\Template
     /**
      * Get the html for item price
      *
-     * @param OrderItem $item
+     * @param OrderItem|CreditMemoItem $item
      * @return string
      */
-    public function getItemPrice(OrderItem $item)
+    public function getItemPrice($item)
     {
         $block = $this->getLayout()->getBlock('item_price');
         $block->setItem($item);
