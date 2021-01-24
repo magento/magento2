@@ -187,8 +187,8 @@
         <fillField selector="{{CheckoutShippingGuestInfoSection.telephone}}" userInput="{{CustomerAddressSimple.telephone}}" stepKey="fillPhone" />
 
         <!-- Click next button to open payment section -->
-        <click selector="{{CheckoutShippingGuestInfoSection.next}}" stepKey="clickNextBtn"/>
-        <waitForPageLoad stepKey="waitForShipmentPageLoad"/>
+        <actionGroup ref="StorefrontGuestCheckoutProceedToPaymentStepActionGroup" stepKey="clickNextBtn"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForShipmentPageLoad"/>
 
         <!-- Check order summary in checkout -->
         <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" stepKey="waitForPaymentSectionLoaded"/>
