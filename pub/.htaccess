@@ -148,6 +148,13 @@
     RewriteRule .* - [L,R=405]
 
 ############################################
+    RewriteCond %{REQUEST_URI} ^/media
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-l
+    RewriteRule media/(.*) get.php?$1 [L]
+
+############################################
 ## Never rewrite for existing files, directories and links
 
     RewriteCond %{REQUEST_FILENAME} !-f
