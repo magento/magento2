@@ -8,8 +8,6 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Catalog\Product;
 
-use Magento\Framework\ObjectManagerInterface;
-use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
@@ -17,19 +15,6 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
  */
 class ProductCategoriesTest extends GraphQlAbstract
 {
-    /**
-     * @var ObjectManagerInterface
-     */
-    private $objectManager;
-
-    /**
-     * @inheritdoc
-     */
-    protected function setUp(): void
-    {
-        $this->objectManager = Bootstrap::getObjectManager();
-    }
-
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/product_in_two_root_categories.php
      */
@@ -71,12 +56,27 @@ class ProductCategoriesTest extends GraphQlAbstract
         self::assertEquals('Second Root Subcategory', $categories[0]['name']);
         self::assertEquals('second-root-subcategory', $categories[0]['url_path']);
         self::assertNull($categories[0]['breadcrumbs']);
-        self::assertEquals('Second Root Subcategory', $categories[1]['name']);
+        self::assertEquals('Second Root Subsubcategory', $categories[1]['name']);
         self::assertEquals('second-root-subcategory/second-root-subsubcategory', $categories[1]['url_path']);
-        self::assertNotNull($categories[1]['breadcrumbs']);
-        self::assertEquals('Second Root Subcategory', $categories[1]['category_name']);
-        self::assertEquals('Second Root Subcategory', $categories[1]['category_name']);
-        self::assertEquals(2, $categories[1]['category_level']);
+        self::assertCount(1, $categories[1]['breadcrumbs']);
+        self::assertEquals('Second Root Subcategory', $categories[1]['breadcrumbs'][0]['category_name']);
+        self::assertEquals(2, $categories[1]['breadcrumbs'][0]['category_level']);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/product_in_two_root_categories.php
+     * @magentoApiDataFixture Magento/Store/_files/second_store.php
+     */
+    public function testProductCategoriesInNotRelevantStore(): void
+    {
+        $response = $this->graphQlQuery(
+            $this->getQuery('in-stock-product'),
+            [],
+            '',
+            ['Store' => 'fixture_second_store']
+        );
+
+        self::assertEmpty($response['products']['items']);
     }
 
     /**
