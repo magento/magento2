@@ -14,7 +14,7 @@
 <?php list($_defaultQty, $_canChangeQty) = $block->getDefaultValues(); ?>
 
 <div class="field admin__field option<?= $_option->getDecoratedIsLast() ? ' last' : '' ?><?= $_option->getRequired() ? ' _required' : '' ?>">
-    <label class="label admin__field-label"><span><?= $block->escapeHtml($_option->getTitle()) ?></span></label>
+    <label class="label admin__field-label"><span><?= $escaper->escapeHtml($_option->getTitle()) ?></span></label>
     <div class="control admin__field-control">
         <?php if ($block->showSingle()) : ?>
             <?= /* @noEscape */ $block->getSelectionTitlePrice($_selections[0]) ?>
@@ -48,7 +48,7 @@
     <div class="field admin__field qty">
         <label class="label admin__field-label"
                for="bundle-option-<?= $escaper->escapeHtmlAttr($_option->getId()) ?>-qty-input">
-            <span><?= $block->escapeHtml(__('Quantity:')) ?></span>
+            <span><?= $escaper->escapeHtml(__('Quantity:')) ?></span>
         </label>
         <div class="control admin__field-control">
             <input <?php if (!$_canChangeQty) : ?>
