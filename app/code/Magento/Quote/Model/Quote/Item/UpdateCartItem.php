@@ -31,7 +31,7 @@ class UpdateCartItem implements UpdateCartItemInterface
     /**
      * @inheritDoc
      */
-    public function execute(CartItemInterface $cartItem)
+    public function execute(CartItemInterface $cartItem): CartItemInterface
     {
         return $this->quoteItemRepository->save($cartItem);
     }

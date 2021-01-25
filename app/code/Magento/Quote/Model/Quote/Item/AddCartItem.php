@@ -31,7 +31,7 @@ class AddCartItem implements AddCartItemInterface
     /**
      * @inheritDoc
      */
-    public function execute(CartItemInterface $cartItem)
+    public function execute(CartItemInterface $cartItem): CartItemInterface
     {
         if (isset($cartItem[CartItemInterface::KEY_ITEM_ID])) {
             unset($cartItem[CartItemInterface::KEY_ITEM_ID]);
