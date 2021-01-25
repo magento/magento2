@@ -28,7 +28,7 @@
 
         <!-- Search the tax rate on tax grid page -->
         <actionGroup ref="AdminTaxRateGridOpenPageActionGroup" stepKey="goToTaxRateIndex1"/>
-        <click selector="{{AdminDataGridHeaderSection.clearFilters}}" stepKey="clickClearFilters1"/>
+        <actionGroup ref="AdminClearGridFiltersActionGroup" stepKey="clickClearFilters1"/>
         <fillField selector="{{AdminTaxRateGridSection.filterByTaxIdentifier}}" userInput="$$initialTaxRate.code$$" stepKey="fillCode"/>
         <click selector="{{AdminTaxRateGridSection.search}}" stepKey="clickSearch1"/>
         <click selector="{{AdminTaxRateGridSection.nthRow('1')}}" stepKey="clickFirstRow1"/>
@@ -43,7 +43,7 @@
 
         <!-- Verify we see updated large tax rate(from the above step) on the tax rate grid page -->
         <actionGroup ref="AdminTaxRateGridOpenPageActionGroup" stepKey="goToTaxRateIndex4"/>
-        <click selector="{{AdminDataGridHeaderSection.clearFilters}}" stepKey="clickClearFilters2"/>
+        <actionGroup ref="AdminClearGridFiltersActionGroup" stepKey="clickClearFilters2"/>
         <fillField selector="{{AdminTaxRateGridSection.filterByTaxIdentifier}}" userInput="{{defaultTaxRateWithLargeRate.code}}" stepKey="fillTaxIdentifierField3"/>
         <click selector="{{AdminTaxRateGridSection.search}}" stepKey="clickSearch2"/>
         <click selector="{{AdminTaxRateGridSection.nthRow('1')}}" stepKey="clickFirstRow2"/>
