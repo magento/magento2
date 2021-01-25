@@ -51,8 +51,8 @@
         <scrollTo selector="{{WidgetSection.BlockPage($$createPreReqBlock.identifier$$)}}"  stepKey="scrollToBlockIdentifier" />
         <click selector="{{WidgetSection.BlockPage($$createPreReqBlock.identifier$$)}}" stepKey="selectPreCreateBlock" />
         <waitForElementNotVisible selector="{{WidgetSection.SelectBlockTitle}}" stepKey="waitForSlideoutCloses" />
-        <click selector="{{WidgetSection.InsertWidget}}" stepKey="clickInsertWidget" />
-        <waitForLoadingMaskToDisappear stepKey="waitingForLoading" />
+        <actionGroup ref="AdminClickInsertWidgetActionGroup" stepKey="clickInsertWidget"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitingForLoading"/>
         <scrollTo selector="{{CmsNewPagePageSeoSection.header}}" stepKey="scrollToSearchEngineTab" />
         <click selector="{{CmsNewPagePageSeoSection.header}}" stepKey="clickExpandSearchEngineOptimisation"/>
         <fillField selector="{{CmsNewPagePageSeoSection.urlKey}}" userInput="{{_defaultCmsPage.identifier}}" stepKey="fillFieldUrlKey"/>

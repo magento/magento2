@@ -39,7 +39,7 @@
             </after>
 
         <actionGroup ref="AdminTaxRuleGridOpenPageActionGroup" stepKey="goToTaxRuleIndex1"/>
-        <click selector="{{AdminDataGridHeaderSection.clearFilters}}" stepKey="clickClearFilters1"/>
+        <actionGroup ref="AdminClearGridFiltersActionGroup" stepKey="clickClearFilters1"/>
         <fillField selector="{{AdminTaxRuleGridSection.code}}" userInput="$$initialTaxRule.code$$" stepKey="fillTaxCodeSearch"/>
         <click selector="{{AdminTaxRuleGridSection.search}}" stepKey="clickSearch1"/>
         <click selector="{{AdminTaxRuleGridSection.nthRow('1')}}" stepKey="clickFirstRow1"/>
@@ -64,7 +64,7 @@
         <see selector="{{AdminTaxRuleGridSection.successMessage}}" userInput="You saved the tax rule." stepKey="seeAssertTaxRuleSuccessMessage"/>
 
         <!-- Verify we see updated tax rule with default(from the above step) on the tax rule grid page -->
-        <click selector="{{AdminDataGridHeaderSection.clearFilters}}" stepKey="clickClearFilters2"/>
+        <actionGroup ref="AdminClearGridFiltersActionGroup" stepKey="clickClearFilters2"/>
         <fillField selector="{{AdminTaxRuleGridSection.code}}" userInput="{{SimpleTaxRule.code}}" stepKey="fillTaxRuleCode2"/>
         <click selector="{{AdminTaxRuleGridSection.search}}" stepKey="clickSearch2"/>
         <waitForPageLoad stepKey="waitForTaxRuleSearch"/>
