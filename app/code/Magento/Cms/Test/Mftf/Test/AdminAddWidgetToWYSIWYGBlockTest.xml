@@ -40,9 +40,9 @@
         <waitForElementVisible selector="{{WidgetSection.CMSPage}}" stepKey="waitForPageVisible" />
         <click selector="{{WidgetSection.CMSPage}}" stepKey="selectPreCreateCMS" />
         <waitForElementNotVisible selector="{{WidgetSection.SelectPageTitle}}" stepKey="waitForSlideOutCloses" />
-        <click selector="{{WidgetSection.InsertWidget}}" stepKey="clickInsertWidget" />
-        <waitForLoadingMaskToDisappear stepKey="waitForLoading" />
-        <waitForElementNotVisible selector="{{WidgetSection.InsertWidgetTitle}}" stepKey="waitForSlideOutCloses1" />
+        <actionGroup ref="AdminClickInsertWidgetActionGroup" stepKey="clickInsertWidget"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForLoading"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForSlideOutCloses1"/>
         <click selector="{{BlockNewPagePageActionsSection.expandSplitButton}}" stepKey="expandSplitButton"/>
         <click selector="{{BlockNewPagePageActionsSection.saveAndClose}}" stepKey="clickSaveBlock"/>
         <actionGroup ref="NavigateToCreatedCMSPageActionGroup" stepKey="navigateToCreatedCMSPage">
@@ -62,9 +62,9 @@
         </actionGroup>
         <click selector="{{WidgetSection.BlockPage(_defaultBlock.identifier)}}" stepKey="selectPreCreateBlock" />
         <wait time="3" stepKey="wait1" />
-        <click selector="{{WidgetSection.InsertWidget}}" stepKey="clickInsertWidgetBtn" />
-        <waitForLoadingMaskToDisappear stepKey="waitForLoading2" />
-        <waitForPageLoad stepKey="waitForPageLoad6" />
+        <actionGroup ref="AdminClickInsertWidgetActionGroup" stepKey="clickInsertWidgetBtn"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForLoading2"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForPageLoad6"/>
         <click selector="{{CmsNewPagePageActionsSection.expandSplitButton}}" stepKey="expandButtonMenu"/>
         <waitForElementVisible selector="{{CmsNewPagePageActionsSection.splitButtonMenu}}" stepKey="waitForSplitButtonMenuVisible"/>
         <click selector="{{CmsNewPagePageActionsSection.savePage}}" stepKey="clickSavePage"/>
@@ -85,4 +85,3 @@
         </after>
     </test>
 </tests>
-
