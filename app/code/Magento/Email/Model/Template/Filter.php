@@ -1046,6 +1046,8 @@ class Filter extends Template
             try {
                 // Don't try to compile CSS that has compilation errors
                 if (strpos($cssToInline, ContentProcessorInterface::ERROR_MESSAGE_PREFIX)
+                    !== false ||
+                    strpos($cssToInline, 'undefined')
                     !== false
                 ) {
                     throw new MailException(
