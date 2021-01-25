@@ -16,6 +16,6 @@
         <element name="gridTable" type="text" selector="#wishlistGrid_table"/>
         <element name="configureButton" type="text" selector="//table[@id='wishlistGrid_table']//tbody//td[@data-column='product_name' and contains(text(),'{{var1}}')]/parent::tr//td[@data-column='action']//a[@class='configure-item-link']" timeout="30" parameterized="true"/>
         <element name="productAttributeOptionsDropDown" type="text" selector="//label[contains(.,'{{var1}}')]/following::div[contains(@class,'control')]//select" parameterized="true"/>
-        <element name="productQty" type="text" selector="//table[@id='wishlistGrid_table']//td[@data-column='qty' and contains(@class, 'col-number')]"/>
+        <element name="productQty" type="text" selector="table#wishlistGrid_table td.col-number[data-column=qty]"/>
     </section>
 </sections>
