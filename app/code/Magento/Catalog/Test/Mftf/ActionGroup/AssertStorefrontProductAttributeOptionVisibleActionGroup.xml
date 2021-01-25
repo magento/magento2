@@ -8,10 +8,8 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="StorefrontAssertProductAttributeLabelVisibleActionGroup">
-        <arguments>
-            <argument name="productAttributeLabel" type="string"/>
-        </arguments>
-        <see selector="{{StorefrontProductInfoMainSection.productAttributeTitle1}}" userInput="{{productAttributeLabel}}" stepKey="seeProductAttributeLabel"/>
+    <actionGroup name="AssertStorefrontProductAttributeOptionVisibleActionGroup">
+
+        <seeElement selector="{{StorefrontProductInfoMainSection.productAttributeOptions1}}" stepKey="seeProductAttributeOption"/>
     </actionGroup>
 </actionGroups>
