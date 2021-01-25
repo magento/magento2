@@ -116,11 +116,15 @@
         <!-- Verify customer don't see updated virtual product link on storefront page and is searchable by sku -->
         <amOnPage url="{{StorefrontProductPage.url(updateVirtualProductRegularPrice.urlKey)}}" stepKey="goToProductPage"/>
         <waitForPageLoad stepKey="waitForStoreFrontProductPageLoad"/>
-        <fillField selector="{{StorefrontQuickSearchResultsSection.searchTextBox}}" userInput="{{updateVirtualProductRegularPrice.sku}}" stepKey="fillVirtualProductSkuOnStorefrontPage"/>
-        <waitForPageLoad stepKey="waitForSearchTextBox"/>
-        <click selector="{{StorefrontQuickSearchResultsSection.searchTextBoxButton}}" stepKey="clickSearchTextBoxButton"/>
-        <waitForPageLoad stepKey="waitForSearch"/>
-        <dontSee selector="{{StorefrontQuickSearchResultsSection.productLink}}" userInput="{{updateVirtualProductRegularPrice.name}}" stepKey="dontSeeVirtualProductName"/>
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="fillVirtualProductSkuOnStorefrontPage">
+            <argument name="phrase" value="{{updateVirtualProductRegularPrice.sku}}"/>
+        </actionGroup>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForSearchTextBox"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="clickSearchTextBoxButton"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitForSearch"/>
+        <actionGroup ref="AssertStorefrontProductNameIsNotOnProductMainPageActionGroup" stepKey="dontSeeVirtualProductName">
+            <argument name="productName" value="{{updateVirtualProductRegularPrice.name}}"/>
+        </actionGroup>
 
         <!-- Verify customer see updated virtual product in category page -->
         <amOnPage url="{{StorefrontCategoryPage.url($$categoryEntity.name$$)}}" stepKey="openCategoryPage"/>
