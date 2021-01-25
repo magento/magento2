@@ -33,32 +33,4 @@ class Collection extends \Magento\Framework\View\Element\UiComponent\DataProvide
     ) {
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $mainTable, $resourceModel);
     }
-
-    /**
-     * @inheritDoc
-     */
-    protected function _translateCondition($field, $condition)
-    {
-        if ($field !== 'order_currency_code'
-            && !isset($this->_map['fields'][$field])
-        ) {
-            $this->_map['fields'][$field] = 'main_table.' . $field;
-        }
-
-        return parent::_translateCondition($field, $condition);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    protected function _renderFiltersBefore()
-    {
-        $this->getSelect()->joinLeft(
-            ['cgf' => $this->getTable('sales_order_grid')],
-            'main_table.order_id = cgf.entity_id',
-            [
-                'order_currency_code' => 'order_currency_code',
-            ]
-        );
-    }
 }
