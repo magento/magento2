@@ -45,7 +45,6 @@ class StartdateTest extends TestCase
         $this->productFactory = $this->objectManager->get(ProductInterfaceFactory::class);
         $this->startDate = $this->objectManager->get(Startdate::class);
         $attribute = $this->objectManager->get(Config::class)->getAttribute(Product::ENTITY, 'news_from_date');
-        //$attribute->setMaxValue(date('Y-m-d H:i:s', strtotime('-10 days')));
         $attribute->setMaxValue(new \DateTime('-10 days'));
         $this->startDate->setAttribute($attribute);
     }
@@ -67,7 +66,6 @@ class StartdateTest extends TestCase
     public function testValidate(): void
     {
         $product = $this->productFactory->create();
-        //$product->setNewsFromDate(date('d-m-Y'));
         $product->setNewsFromDate(new \DateTime());
         $this->expectException(Exception::class);
         $msg = __('Make sure the To Date is later than or the same as the From Date.');
