@@ -10,9 +10,9 @@
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminClickCreateNewStatusButtonOnOrderStatusPageActionGroup">
         <annotations>
-            <description></description>
+            <description>Click create new status button</description>
         </annotations>
-        
+
         <click selector="{{AdminMainActionsSection.add}}" stepKey="clickCreateNewStatus"/>
         <waitForPageLoad stepKey="waitForPageLoaded"/>
     </actionGroup>
