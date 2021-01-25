@@ -37,7 +37,7 @@ class CompareTest extends AbstractController
     private $visitor;
 
     /** @var ParametersFactory */
-    private $parameters;
+    private $parametersFactory;
 
     /**
      * @inheritDoc
@@ -50,7 +50,7 @@ class CompareTest extends AbstractController
         $this->productRepository = $this->_objectManager->get(ProductRepository::class);
         $this->customerSession = $this->_objectManager->get(Session::class);
         $this->visitor = $this->_objectManager->get(Visitor::class);
-        $this->parameters = $this->_objectManager->get(ParametersFactory::class);
+        $this->parametersFactory = $this->_objectManager->get(ParametersFactory::class);
     }
 
     /**
@@ -285,7 +285,7 @@ class CompareTest extends AbstractController
      */
     private function prepareReferer(): void
     {
-        $parameters = $this->parameters->create();
+        $parameters = $this->parametersFactory->create();
         $parameters->set('HTTP_REFERER', 'http://localhost/not_existing');
         $this->getRequest()->setServer($parameters);
     }
