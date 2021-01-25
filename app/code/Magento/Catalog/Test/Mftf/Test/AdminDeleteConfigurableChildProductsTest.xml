@@ -111,7 +111,7 @@
         <actionGroup ref="AssertStorefrontProductAttributeLabelVisibleActionGroup" stepKey="seeProductAttributeLabel">
             <argument name="productAttributeLabel" value="$$createConfigProductAttribute.default_value$$"/>
         </actionGroup>
-        <actionGroup ref="AssertStorefrontProductAttributeOptionVisibleActionGroup" stepKey="seeProductAttributeOptions"/>
+        <seeElement selector="{{StorefrontProductInfoMainSection.productAttributeOptions1}}" stepKey="seeProductAttributeOptions"/>
         <!-- Delete Child products -->
         <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteFirstChildProduct">
             <argument name="sku" value="$$createConfigChildProduct1.sku$$"/>
