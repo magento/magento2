@@ -13,7 +13,7 @@ use Magento\Framework\Message\MessageInterface;
 use Magento\TestFramework\TestCase\AbstractController;
 use Magento\Customer\Model\Session;
 use Magento\Customer\Model\Visitor;
-use Laminas\Stdlib\Parameters;
+use Laminas\Stdlib\ParametersFactory;
 
 /**
  * Test compare product.
@@ -36,7 +36,7 @@ class CompareTest extends AbstractController
     /** @var Visitor */
     private $visitor;
 
-    /** @var Parameters */
+    /** @var ParametersFactory */
     private $parameters;
 
     /**
@@ -50,7 +50,7 @@ class CompareTest extends AbstractController
         $this->productRepository = $this->_objectManager->get(ProductRepository::class);
         $this->customerSession = $this->_objectManager->get(Session::class);
         $this->visitor = $this->_objectManager->get(Visitor::class);
-        $this->parameters = $this->_objectManager->get(Parameters::class);
+        $this->parameters = $this->_objectManager->get(ParametersFactory::class);
     }
 
     /**
@@ -273,7 +273,7 @@ class CompareTest extends AbstractController
         $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setParams(['product' => 787586534]);
         $this->dispatch('catalog/product_compare/add/');
-        $this->assertSessionMessages($this->isEmpty(), MessageInterface::TYPE_ERROR);
+        $this->assertSessionMessages($this->isEmpty());
         $this->_assertCompareListEquals([]);
         $this->assertRedirect($this->stringContains('not_existing'));
     }
@@ -285,8 +285,9 @@ class CompareTest extends AbstractController
      */
     private function prepareReferer(): void
     {
-        $this->parameters->set('HTTP_REFERER', 'http://localhost/not_existing');
-        $this->getRequest()->setServer($this->parameters);
+        $parameters = $this->parameters->create();
+        $parameters->set('HTTP_REFERER', 'http://localhost/not_existing');
+        $this->getRequest()->setServer($parameters);
     }
 
     /**
