@@ -36,6 +36,9 @@ class CompareTest extends AbstractController
     /** @var Visitor */
     private $visitor;
 
+    /** @var Parameters */
+    private $parameters;
+
     /**
      * @inheritDoc
      */
@@ -47,6 +50,7 @@ class CompareTest extends AbstractController
         $this->productRepository = $this->_objectManager->get(ProductRepository::class);
         $this->customerSession = $this->_objectManager->get(Session::class);
         $this->visitor = $this->_objectManager->get(Visitor::class);
+        $this->parameters = $this->_objectManager->get(Parameters::class);
     }
 
     /**
@@ -262,13 +266,14 @@ class CompareTest extends AbstractController
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @return void
      */
-    public function testAddNotExistingProductToCompactionList() : void
+    public function testAddNotExistingProductToCompareList(): void
     {
         $this->customerSession->loginById(1);
         $this->prepareReferer();
         $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->getRequest()->setParams(['product' => 787586534]);
         $this->dispatch('catalog/product_compare/add/');
+        $this->assertSessionMessages($this->isEmpty(), MessageInterface::TYPE_ERROR);
         $this->_assertCompareListEquals([]);
         $this->assertRedirect($this->stringContains('not_existing'));
     }
@@ -280,9 +285,8 @@ class CompareTest extends AbstractController
      */
     private function prepareReferer(): void
     {
-        $parameters = $this->_objectManager->create(Parameters::class);
-        $parameters->set('HTTP_REFERER', 'http://localhost/not_existing');
-        $this->getRequest()->setServer($parameters);
+        $this->parameters->set('HTTP_REFERER', 'http://localhost/not_existing');
+        $this->getRequest()->setServer($this->parameters);
     }
 
     /**
