@@ -179,6 +179,7 @@ class Validator extends \Magento\Framework\Model\AbstractModel
         $key = $this->getWebsiteId() . '_'
             . $this->getCustomerGroupId() . '_'
             . $this->getCouponCode() . '_'
+            . $address->getQuote()->getItemsQty() . '_'
             . $addressId;
         if (!isset($this->_rules[$key])) {
             $this->_rules[$key] = $this->_collectionFactory->create()
