@@ -37,15 +37,16 @@ class CartItemAddTest extends WebapiAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_items_saved.php
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
      * @magentoApiDataFixture Magento/Bundle/_files/product.php
      */
     public function testAddItem(): void
     {
         /** @var Product $product */
         $product = $this->objectManager->create(Product::class)->load(3);
+        /** @var Quote  $quote */
         $quote = $this->objectManager->create(Quote::class)->load(
-            'test_order_item_with_items',
+            'test_order_1',
             'reserved_order_id'
         );
 
@@ -57,13 +58,11 @@ class CartItemAddTest extends WebapiAbstract
             'bundle_option' => [$bundleOptionId => [$optionSelections]],
             'bundle_option_qty' => [$bundleOptionId => 1],
             'qty' => $itemQty,
-            'original_qty' => $itemQty
+            'original_qty' => $itemQty,
         ];
 
         $productSku = $product->getSku();
         $productId = $product->getId();
-        /** @var Quote  $quote */
-
         $cartId = $quote->getId();
 
         $serviceInfo = [
@@ -89,12 +88,12 @@ class CartItemAddTest extends WebapiAbstract
                             [
                                 "option_id" => (int)$bundleOptionId,
                                 "option_qty" => $itemQty,
-                                "option_selections" => [(int)$optionSelections]
-                            ]
-                        ]
-                    ]
-                ]
-            ]
+                                "option_selections" => [(int)$optionSelections],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
         ];
         $response = $this->_webApiCall($serviceInfo, $requestData);
         $this->assertTrue($quote->hasProductId($productId));
