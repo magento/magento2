@@ -99,15 +99,8 @@
     <entity name="TestImageImageContentExportImport" extends="TestImageContent" type="ImageContent">
         <data key="name">test_image.jpg</data>
     </entity>
-    <entity name="AdobeBaseContentExportImport" extends="AdobeBaseContent" type="ImageContent">
-        <data key="name">adobe-base.jpg</data>
-    </entity>
     <entity name="ApiProductAttributeMediaGalleryForExportImport2" extends="ApiProductAttributeMediaGalleryEntryTestImage" type="ProductAttributeMediaGalleryEntry">
         <data key="label">Test Image</data>
         <requiredEntity type="ImageContent">TestImageImageContentExportImport</requiredEntity>
-    </entity>
-    <entity name="ApiProductAttributeMediaGalleryForExportImport3" extends="ApiProductAttributeMediaGalleryEntryTestImage2" type="ProductAttributeMediaGalleryEntry">
-        <data key="label">Adobe Base</data>
-        <requiredEntity type="ImageContent">AdobeBaseContentExportImport</requiredEntity>
     </entity>
 </entities>
