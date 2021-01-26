@@ -1755,10 +1755,9 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
 
         if (isset($data['comment'])) {
             $this->getQuote()->addData($data['comment']);
-            if (empty($data['comment']['customer_note_notify'])) {
-                $this->getQuote()->setCustomerNoteNotify(false);
-            } else {
-                $this->getQuote()->setCustomerNoteNotify(true);
+            if ($this->getIsValidate()) {
+                $notify = !empty($data['comment']['customer_note_notify']);
+                $this->getQuote()->setCustomerNoteNotify($notify);
             }
         }
 
