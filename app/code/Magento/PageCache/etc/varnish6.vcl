@@ -62,13 +62,13 @@ sub vcl_recv {
         return (pass);
     }
 
-    # Bypass shopping cart and checkout
-    if (req.url ~ "/checkout") {
+    # Bypass customer, shopping cart, checkout
+    if (req.url ~ "/customer" || req.url ~ "/checkout") {
         return (pass);
     }
 
     # Bypass health check requests
-    if (req.url ~ "/pub/health_check.php") {
+    if (req.url ~ "^/(pub/)?(health_check.php)$") {
         return (pass);
     }
 
