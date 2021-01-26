@@ -9,7 +9,7 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="StorefrontProductInfoMainSection">
-        <element name="groupedProductsTable" type="text" selector="#super-product-table .product-item-name" deprecated="asddas"/>
+        <element name="groupedProductsTable" type="text" selector="#super-product-table .product-item-name"/>
         <element name="groupedProductsTableAllRows" type="text" selector="#super-product-table tbody tr"/>
         <element name="groupedProductsAssociatedProductName" type="text" parameterized="true" selector="#super-product-table tbody tr:nth-of-type({{index}}) .product-item-name"/>
         <element name="groupedProductsAssociatedProductPrice" type="text" parameterized="true" selector="#super-product-table tbody tr:nth-of-type({{index}}) .price"/>
