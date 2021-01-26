@@ -1056,13 +1056,12 @@ class Filter extends Template
                 }
                 $this->cssInliner->setHtml($html);
 
+                $this->cssInliner->setCss($cssToInline);
+
                 // Don't parse inline <style> tags, since existing tag is intentionally for non-inline styles
                 $this->cssInliner->disableStyleBlocksParsing();
 
-                $this->cssInliner->setCss($cssToInline);
-
                 $processedHtml = $this->cssInliner->process();
-
             } catch (Exception $e) {
                 if ($this->_appState->getMode() == State::MODE_DEVELOPER) {
                     $processedHtml = __('CSS inlining error:') . PHP_EOL . $e->getMessage()

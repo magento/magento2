@@ -19,9 +19,19 @@ class CssInliner
     private $appState;
 
     /**
-     * @var EmogrifierCssInliner
+     * @var string
      */
-    private $emogrifier;
+    private $html;
+
+    /**
+     * @var string
+     */
+    private $css;
+
+    /**
+     * @var bool
+     */
+    private $disableStyleBlocksParsing = false;
 
     /**
      * @param State $appState
@@ -39,8 +49,7 @@ class CssInliner
      */
     public function setHtml($html)
     {
-        $this->emogrifier = EmogrifierCssInliner::fromHtml($html)
-            ->setDebug($this->appState->getMode() === State::MODE_DEVELOPER);
+        $this->html = $html;
     }
 
     /**
@@ -51,7 +60,7 @@ class CssInliner
      */
     public function setCss($css)
     {
-        $this->emogrifier->inlineCss($css);
+        $this->css = $css;
     }
 
     /**
@@ -61,7 +70,7 @@ class CssInliner
      */
     public function disableStyleBlocksParsing()
     {
-        $this->emogrifier->disableStyleBlocksParsing();
+        $this->disableStyleBlocksParsing = true;
     }
 
     /**
@@ -72,6 +81,14 @@ class CssInliner
      */
     public function process()
     {
-        return $this->emogrifier->render();
+        $emogrifier = EmogrifierCssInliner::fromHtml($this->html)
+            ->inlineCss($this->css)
+            ->setDebug($this->appState->getMode() === State::MODE_DEVELOPER);
+
+        if ($this->disableStyleBlocksParsing) {
+            $emogrifier->disableStyleBlocksParsing();
+        }
+
+        return $emogrifier->render();
     }
 }
