@@ -50,6 +50,9 @@
             <createData entity="ApiProductAttributeMediaGalleryForExportImport2" stepKey="productImage2">
                 <requiredEntity createDataKey="productForImages"/>
             </createData>
+            <createData entity="ApiProductAttributeMediaGalleryForExportImport3" stepKey="productImage3">
+                <requiredEntity createDataKey="productForImages"/>
+            </createData>
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
 
             <!-- Login as Admin -->
