@@ -89,7 +89,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     /**
      * Default links can be purchased separately
      */
-    const DEFAULT_PURCHASED_SEPARATELY = 1;
+    const DEFAULT_PURCHASED_SEPARATELY = 0;
 
     /**
      * Error codes.
