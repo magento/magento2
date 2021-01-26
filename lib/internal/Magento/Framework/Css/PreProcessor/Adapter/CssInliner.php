@@ -21,12 +21,12 @@ class CssInliner
     /**
      * @var string
      */
-    private $html;
+    private $html = '';
 
     /**
      * @var string
      */
-    private $css;
+    private $css = '';
 
     /**
      * @var bool
