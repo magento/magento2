@@ -46,7 +46,8 @@ class AttributeGridCollection extends Collection
     public function addFieldToFilter($field, $condition)
     {
         if (isset($condition['like'])) {
-            $value = trim((string)$condition['like'], "\'%");
+            $value = trim((string)$condition['like'], "'%");
+            $value = str_replace('\\','',$value);
             $this->addFilter($field, $value);
         }
 
