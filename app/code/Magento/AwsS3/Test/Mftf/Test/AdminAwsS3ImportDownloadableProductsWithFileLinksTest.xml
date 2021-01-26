@@ -8,12 +8,12 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AwsS3AdminImportDownloadableProductsWithUrlLinksTest" extends="AdminImportDownloadableProductsWithUrlLinksTest">
+    <test name="AdminAwsS3ImportDownloadableProductsWithFileLinksTest" extends="AdminImportDownloadableProductsWithFileLinksTest">
         <annotations>
             <features value="AwsS3"/>
             <stories value="Import Products"/>
-            <title value="S3 - Import Downloadable Products with Url Links"/>
-            <description value="Imports a .csv file containing a downloadable product with url links. Verifies that
+            <title value="S3 - Import Downloadable Products with File Links"/>
+            <description value="Imports a .csv file containing a downloadable product with file links. Verifies that
             products are imported successfully."/>
             <severity value="MAJOR"/>
             <group value="importExport"/>
@@ -26,12 +26,12 @@
 
         <before>
             <!-- Enable AWS S3 Remote Storage -->
-            <magentoCLI command="setup:config:set {{RemoteStorageAwsS3ConfigData.enable_options}}" stepKey="enableRemoteStorage"/>
+            <magentoCLI command="setup:config:set {{RemoteStorageAwsS3ConfigData.enable_options}}" stepKey="enableRemoteStorage" before="createImportCategory"/>
         </before>
 
         <after>
             <!-- Disable AWS S3 Remote Storage -->
-            <magentoCLI command="setup:config:set {{RemoteStorageAwsS3ConfigData.disable_options}}" stepKey="disableRemoteStorage"/>
+            <magentoCLI command="setup:config:set {{RemoteStorageAwsS3ConfigData.disable_options}}" stepKey="disableRemoteStorage" after="logoutFromAdmin"/>
         </after>
     </test>
 </tests>
