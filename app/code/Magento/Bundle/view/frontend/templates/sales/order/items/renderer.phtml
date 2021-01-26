@@ -6,7 +6,9 @@
 // phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
 /** @var $block \Magento\Bundle\Block\Sales\Order\Items\Renderer */
 $parentItem = $block->getItem();
-$items = array_merge([$parentItem], $parentItem->getChildrenItems());
+$parentItemId = $parentItem->getId();
+$childrenItems = $block->getOrder()->getItemById($parentItemId)->getChildrenItems();
+$items = array_merge([$parentItem], $childrenItems);
 $index = 0;
 $prevOptionId = '';
 ?>

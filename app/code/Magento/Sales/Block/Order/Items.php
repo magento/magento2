@@ -70,7 +70,9 @@ class Items extends \Magento\Sales\Block\Items\AbstractItems
         $this->itemsPerPage = $this->_scopeConfig->getValue('sales/orders/items_per_page');
 
         $this->itemCollection = $this->itemCollectionFactory->create();
-        $this->itemCollection->setOrderFilter($this->getOrder());
+        $this->itemCollection
+            ->addFieldToFilter('parent_item_id', ['null' => true])
+            ->setOrderFilter($this->getOrder());
 
         /** @var \Magento\Theme\Block\Html\Pager $pagerBlock */
         $pagerBlock = $this->getChildBlock('sales_order_item_pager');
@@ -80,7 +82,6 @@ class Items extends \Magento\Sales\Block\Items\AbstractItems
             $pagerBlock->setCollection($this->itemCollection);
             $pagerBlock->setAvailableLimit([$this->itemsPerPage]);
             $pagerBlock->setShowAmounts($this->isPagerDisplayed());
-            $pagerBlock->setTotalItemCount($this->getOrder()->getTotalItemCount());
         }
 
         return parent::_prepareLayout();
