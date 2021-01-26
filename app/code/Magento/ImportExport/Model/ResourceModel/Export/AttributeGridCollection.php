@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\ImportExport\Model\ResourceModel\Export;
 
 use Magento\Framework\Data\Collection;
+use Magento\Framework\Phrase;
 
 /**
  * Association of attributes for grid
@@ -45,7 +46,7 @@ class AttributeGridCollection extends Collection
     public function addFieldToFilter($field, $condition)
     {
         if (isset($condition['like'])) {
-            $value = trim((string)$condition['like'], "'%");
+            $value = trim((string)$condition['like'], "\'%");
             $this->addFilter($field, $value);
         }
 
@@ -74,6 +75,9 @@ class AttributeGridCollection extends Collection
             foreach ($this->_filters as $filter) {
                 foreach ($this->_items as $item) {
                     $field = $item->getData($filter->getData('field')) ?? '';
+                    if ($field instanceof Phrase) {
+                        $field = (string)$field;
+                    }
                     if (stripos($field, $filter->getData('value')) === false) {
                         $this->removeItemByKey($item->getId());
                     }
