@@ -27,7 +27,7 @@
             <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
                 <argument name="tags" value="config full_page"/>
             </actionGroup>
-            <createData entity="Import1" stepKey="createImportCategory"/>
+            <createData entity="ImportCategory_Downloadable_UrlLinks" stepKey="createImportCategory"/>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
             <createData entity="ApiSimpleProduct" stepKey="productForImages">
                 <requiredEntity createDataKey="createCategory"/>
@@ -57,7 +57,7 @@
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="productForImages" stepKey="deleteProductForImages"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
-            <deleteData url="/V1/products/{{ImportDownloadableProduct_UrlLinks.urlKey}}" stepKey="deleteImportedDownloadableProduct"/>
+            <deleteData url="/V1/products/{{ImportProduct_Downloadable_UrlLinks.urlKey}}" stepKey="deleteImportedDownloadableProduct"/>
             <actionGroup ref="NavigateToAndResetProductGridToDefaultViewActionGroup" stepKey="navigateToAndResetProductGridToDefaultView"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
@@ -65,13 +65,13 @@
         <!-- Import Downloadable Product & Assert No Errors -->
         <actionGroup ref="AdminNavigateToImportPageActionGroup" stepKey="navigateToImportPage"/>
         <actionGroup ref="AdminFillImportFormActionGroup" stepKey="fillImportForm">
-            <argument name="importFile" value="{{ImportDownloadableProduct_UrlLinks.fileName}}"/>
+            <argument name="importFile" value="{{ImportProduct_Downloadable_UrlLinks.fileName}}"/>
         </actionGroup>
         <actionGroup ref="AdminClickCheckDataImportActionGroup" stepKey="clickCheckData"/>
         <see selector="{{AdminImportValidationMessagesSection.success}}" userInput="{{ImportCommonMessages.validFile}}" stepKey="seeCheckDataResultMessage"/>
         <dontSeeElementInDOM selector="{{AdminImportValidationMessagesSection.importErrorList}}" stepKey="dontSeeErrorMessage"/>
         <actionGroup ref="AdminClickImportActionGroup" stepKey="clickImport"/>
-        <see selector="{{AdminImportValidationMessagesSection.notice}}" userInput="{{ImportDownloadableProduct_UrlLinks.importSummary}}" stepKey="seeNoticeMessage"/>
+        <see selector="{{AdminImportValidationMessagesSection.notice}}" userInput="{{ImportProduct_Downloadable_UrlLinks.importSummary}}" stepKey="seeNoticeMessage"/>
         <see selector="{{AdminImportValidationMessagesSection.messageByType('success')}}" userInput="{{ImportCommonMessages.success}}" stepKey="seeImportMessage"/>
         <dontSeeElementInDOM selector="{{AdminImportValidationMessagesSection.importErrorList}}" stepKey="dontSeeErrorMessage2"/>
 
@@ -85,18 +85,22 @@
         <actionGroup ref="AdminGridSortColumnDescendingActionGroup" stepKey="sortColumnByIdDescending">
             <argument name="columnLabel" value="history_id"/>
         </actionGroup>
-        <see userInput="{{ImportDownloadableProduct_UrlLinks.fileName}}" selector="{{AdminDataGridTableSection.firstRow}}" stepKey="seeImportedFile"/>
-        <see userInput="{{ImportDownloadableProduct_UrlLinks.importSummary}}" selector="{{AdminDataGridTableSection.firstRow}}" stepKey="seeSummary"/>
+        <see userInput="{{ImportProduct_Downloadable_UrlLinks.fileName}}" selector="{{AdminDataGridTableSection.firstRow}}" stepKey="seeImportedFile"/>
+        <see userInput="{{ImportProduct_Downloadable_UrlLinks.importSummary}}" selector="{{AdminDataGridTableSection.firstRow}}" stepKey="seeSummary"/>
 
-        <!-- Admin: Verify Downloadable Product on Product Index Page -->
-        <actionGroup ref="AssertProductOnAdminGridActionGroup" stepKey="assertProductInAdminGrid">
-            <argument name="product" value="ImportDownloadableProduct_UrlLinks"/>
+        <!-- Admin: Verify Simple Product 1 on Edit Product Page -->
+        <actionGroup ref="NavigateToCreatedProductEditPageActionGroup" stepKey="goToDownloadableProductEditPage">
+            <argument name="product" value="ImportProduct_Downloadable_UrlLinks"/>
         </actionGroup>
-        <seeNumberOfElements selector="{{AdminProductGridSection.productGridRows}}" userInput="1" stepKey="seeOnly1Product"/>
-
-        <!-- Admin: Verify Downloadable Product on Edit Product Page -->
-        <actionGroup ref="AssertProductInfoOnEditPageActionGroup" stepKey="assertProductOnEditPage">
-            <argument name="product" value="ImportDownloadableProduct_UrlLinks"/>
+        <actionGroup ref="AdminAssertProductInfoOnEditPageActionGroup" stepKey="assertDownloadableProductOnEditPage">
+            <argument name="productStatus" value="{{ImportProduct_Downloadable_UrlLinks.status}}"/>
+            <argument name="productName" value="{{ImportProduct_Downloadable_UrlLinks.name}}"/>
+            <argument name="productSku" value="{{ImportProduct_Downloadable_UrlLinks.sku}}"/>
+            <argument name="productPrice" value="{{ImportProduct_Downloadable_UrlLinks.price}}"/>
+            <argument name="productQuantity" value="{{ImportProduct_Downloadable_UrlLinks.quantity}}"/>
+            <argument name="productWeight" value="{{ImportProduct_Downloadable_UrlLinks.weight}}"/>
+            <argument name="productVisibility" value="{{ImportProduct_Downloadable_UrlLinks.visibilityText}}"/>
+            <argument name="categoryNames" value="{{ImportCategory_Downloadable_UrlLinks.name}}"/>
         </actionGroup>
         <actionGroup ref="AssertProductImageAdminProductPageActionGroup" stepKey="assertProductBaseImageOnEditPage">
             <argument name="image" value="MagentoLogo"/>
@@ -117,24 +121,24 @@
             <argument name="sectionDependentSelector" value="{{AdminProductDownloadableSection.sectionLinkGrid}}"/>
         </actionGroup>
         <seeCheckboxIsChecked selector="{{AdminProductDownloadableSection.isDownloadableProduct}}" stepKey="seeDownloadableProductChecked"/>
-        <seeInField userInput="{{ImportDownloadableProduct_UrlLinks.linksTitle}}" selector="{{AdminProductDownloadableSection.linksTitleInput}}" stepKey="seeLinksTitle"/>
+        <seeInField userInput="{{ImportProduct_Downloadable_UrlLinks.linksTitle}}" selector="{{AdminProductDownloadableSection.linksTitleInput}}" stepKey="seeLinksTitle"/>
         <seeCheckboxIsChecked selector="{{AdminProductDownloadableSection.isLinksPurchasedSeparately}}" stepKey="seeLinksPurchasedSeparateChecked"/>
         <actionGroup ref="AdminAssertDownloadableLinkInformationActionGroup" stepKey="verifyDownloadableLinkAdmin">
-            <argument name="title" value="{{ImportDownloadableProduct_UrlLinks.linkTitle}}"/>
-            <argument name="price" value="{{ImportDownloadableProduct_UrlLinks.linkPrice}}"/>
-            <argument name="fileType" value="{{ImportDownloadableProduct_UrlLinks.linkFileType}}"/>
-            <argument name="fileNameOrUrl" value="{{ImportDownloadableProduct_UrlLinks.linkFileUrl}}"/>
-            <argument name="sampleType" value="{{ImportDownloadableProduct_UrlLinks.linkSampleFileType}}"/>
-            <argument name="sampleFileNameOrUrl" value="{{ImportDownloadableProduct_UrlLinks.linkSampleFileUrl}}"/>
-            <argument name="shareable" value="{{ImportDownloadableProduct_UrlLinks.linkShareable}}"/>
-            <argument name="maxDownloads" value="{{ImportDownloadableProduct_UrlLinks.linkMaxDownloads}}"/>
+            <argument name="title" value="{{ImportProduct_Downloadable_UrlLinks.linkTitle}}"/>
+            <argument name="price" value="{{ImportProduct_Downloadable_UrlLinks.linkPrice}}"/>
+            <argument name="fileType" value="{{ImportProduct_Downloadable_UrlLinks.linkFileType}}"/>
+            <argument name="fileNameOrUrl" value="{{ImportProduct_Downloadable_UrlLinks.linkFileUrl}}"/>
+            <argument name="sampleType" value="{{ImportProduct_Downloadable_UrlLinks.linkSampleFileType}}"/>
+            <argument name="sampleFileNameOrUrl" value="{{ImportProduct_Downloadable_UrlLinks.linkSampleFileUrl}}"/>
+            <argument name="shareable" value="{{ImportProduct_Downloadable_UrlLinks.linkShareable}}"/>
+            <argument name="maxDownloads" value="{{ImportProduct_Downloadable_UrlLinks.linkMaxDownloads}}"/>
         </actionGroup>
         <seeCheckboxIsChecked selector="{{AdminProductDownloadableSection.addLinkIsUnlimitedDownloads('0')}}" stepKey="seeLinkMaxDownloadsUnlimitedChecked"/>
-        <seeInField userInput="{{ImportDownloadableProduct_UrlLinks.samplesTitle}}" selector="{{AdminProductDownloadableSection.samplesTitleInput}}" stepKey="seeSamplesTitle"/>
+        <seeInField userInput="{{ImportProduct_Downloadable_UrlLinks.samplesTitle}}" selector="{{AdminProductDownloadableSection.samplesTitleInput}}" stepKey="seeSamplesTitle"/>
         <actionGroup ref="AdminAssertDownloadableSampleLinkInformationActionGroup" stepKey="verifyDownloadableSampleLinkAdmin">
-            <argument name="title" value="{{ImportDownloadableProduct_UrlLinks.sampleTitle}}"/>
-            <argument name="fileType" value="{{ImportDownloadableProduct_UrlLinks.sampleFileType}}"/>
-            <argument name="fileNameOrUrl" value="{{ImportDownloadableProduct_UrlLinks.sampleFileUrl}}"/>
+            <argument name="title" value="{{ImportProduct_Downloadable_UrlLinks.sampleTitle}}"/>
+            <argument name="fileType" value="{{ImportProduct_Downloadable_UrlLinks.sampleFileType}}"/>
+            <argument name="fileNameOrUrl" value="{{ImportProduct_Downloadable_UrlLinks.sampleFileUrl}}"/>
         </actionGroup>
 
         <!-- Storefront: Verify Downloadable Product In Category -->
@@ -142,36 +146,36 @@
             <argument name="Customer" value="$$createCustomer$$"/>
         </actionGroup>
         <actionGroup ref="StorefrontNavigateToCategoryUrlActionGroup" stepKey="goToCategoryPage">
-            <argument name="categoryUrl" value="{{Import1.name_lwr}}"/>
+            <argument name="categoryUrl" value="{{ImportCategory_Downloadable_UrlLinks.name_lwr}}"/>
         </actionGroup>
         <seeNumberOfElements selector="{{StorefrontCategoryMainSection.productName}}" userInput="1" stepKey="seeOnly1Product2"/>
-        <see selector="{{StorefrontCategoryMainSection.productName}}" userInput="{{ImportDownloadableProduct_UrlLinks.name}}" stepKey="seeProduct"/>
+        <see selector="{{StorefrontCategoryMainSection.productName}}" userInput="{{ImportProduct_Downloadable_UrlLinks.name}}" stepKey="seeProduct"/>
 
         <!-- Storefront: Verify Downloadable Product Info & Image -->
         <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductStorefrontPage">
-            <argument name="productUrl" value="{{ImportDownloadableProduct_UrlLinks.urlKey}}"/>
+            <argument name="productUrl" value="{{ImportProduct_Downloadable_UrlLinks.urlKey}}"/>
         </actionGroup>
-        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{ImportDownloadableProduct_UrlLinks.name}}" stepKey="seeProductName"/>
-        <see selector="{{StorefrontProductInfoMainSection.productSku}}" userInput="{{ImportDownloadableProduct_UrlLinks.sku}}" stepKey="seeSku"/>
-        <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="${{ImportDownloadableProduct_UrlLinks.price}}" stepKey="seePrice"/>
+        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{ImportProduct_Downloadable_UrlLinks.name}}" stepKey="seeProductName"/>
+        <see selector="{{StorefrontProductInfoMainSection.productSku}}" userInput="{{ImportProduct_Downloadable_UrlLinks.sku}}" stepKey="seeSku"/>
+        <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="${{ImportProduct_Downloadable_UrlLinks.price}}" stepKey="seePrice"/>
         <seeElement selector="{{StorefrontProductInfoMainSection.productImageSrc(MagentoLogo.filename)}}" stepKey="seeMagentoLogo"/>
         <seeElement selector="{{StorefrontProductInfoMainSection.productImageSrc(TestImage.filename)}}" stepKey="seeTestImage"/>
         <seeElement selector="{{StorefrontProductInfoMainSection.productImageSrc(TestImageAdobe.filename)}}" stepKey="seeTestImageAdobe"/>
 
         <!-- Storefront: Verify Downloadable Product Link Data -->
-        <seeElement selector="{{StorefrontDownloadableProductSection.downloadableSampleLabel(ImportDownloadableProduct_UrlLinks.sampleTitle)}}" stepKey="seeDownloadableSampleLink"/>
-        <click selector="{{StorefrontDownloadableProductSection.downloadableSampleLabel(ImportDownloadableProduct_UrlLinks.sampleTitle)}}" stepKey="clickDownloadableSampleLink"/>
+        <seeElement selector="{{StorefrontDownloadableProductSection.downloadableSampleLabel(ImportProduct_Downloadable_UrlLinks.sampleTitle)}}" stepKey="seeDownloadableSampleLink"/>
+        <click selector="{{StorefrontDownloadableProductSection.downloadableSampleLabel(ImportProduct_Downloadable_UrlLinks.sampleTitle)}}" stepKey="clickDownloadableSampleLink"/>
         <switchToNextTab stepKey="switchToDownloadedLinkTab"/>
-        <waitForElement selector="{{StorefrontDownloadableLinkSection.downloadableLinkTitle(ImportDownloadableProduct_UrlLinks.sampleFileName)}}" stepKey="seeImageTitle"/>
+        <waitForElement selector="{{StorefrontDownloadableLinkSection.downloadableLinkTitle(ImportProduct_Downloadable_UrlLinks.sampleFileName)}}" stepKey="seeImageTitle"/>
         <closeTab stepKey="closeTab"/>
-        <seeElement selector="{{StorefrontDownloadableProductSection.downloadableLinkByTitle(ImportDownloadableProduct_UrlLinks.linkTitle)}}" stepKey="seeDownloadableLink"/>
+        <seeElement selector="{{StorefrontDownloadableProductSection.downloadableLinkByTitle(ImportProduct_Downloadable_UrlLinks.linkTitle)}}" stepKey="seeDownloadableLink"/>
         <seeElement selector="{{StorefrontDownloadableProductSection.downloadableLinkSampleByTitle('sample')}}" stepKey="seeDownloadableLinkSampleLink"/>
         <click selector="{{StorefrontDownloadableProductSection.downloadableLinkSampleByTitle('sample')}}" stepKey="clickDownloadableLinkSampleLink"/>
         <switchToNextTab stepKey="switchToDownloadedLinkTab2"/>
-        <waitForElement selector="{{StorefrontDownloadableLinkSection.downloadableLinkTitle(ImportDownloadableProduct_UrlLinks.linkSampleFileName)}}" stepKey="seeImageTitle2"/>
+        <waitForElement selector="{{StorefrontDownloadableLinkSection.downloadableLinkTitle(ImportProduct_Downloadable_UrlLinks.linkSampleFileName)}}" stepKey="seeImageTitle2"/>
         <closeTab stepKey="closeTab2"/>
-        <checkOption selector="{{StorefrontDownloadableProductSection.downloadableLinkByTitle(ImportDownloadableProduct_UrlLinks.linkTitle)}}" stepKey="selectDownloadableLink"/>
-        <waitForText selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="${{ImportDownloadableProduct_UrlLinks.totalPriceWithLink}}" stepKey="seeUpdatedPrice"/>
+        <checkOption selector="{{StorefrontDownloadableProductSection.downloadableLinkByTitle(ImportProduct_Downloadable_UrlLinks.linkTitle)}}" stepKey="selectDownloadableLink"/>
+        <waitForText selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="${{ImportProduct_Downloadable_UrlLinks.totalPriceWithLink}}" stepKey="seeUpdatedPrice"/>
 
         <!-- Purchase Downloadable Product -->
         <actionGroup ref="StorefrontAddToTheCartActionGroup" stepKey="addProductToCart"/>
@@ -189,10 +193,10 @@
 
         <!-- Storefront: Go to Purchased Downloadable Product & Verify Link -->
         <actionGroup ref="StorefrontNavigateToCustomerDownloadableProductsPageActionGroup" stepKey="goToCustomerDownloadableProductsPage"/>
-        <see userInput="{{ImportDownloadableProduct_UrlLinks.linkTitle}}" selector="{{StorefrontCustomerDownloadableProductsSection.downloadableLinkByOrderNumber({$grabOrderNumber})}}" stepKey="seeDownloadableLink2"/>
+        <see userInput="{{ImportProduct_Downloadable_UrlLinks.linkTitle}}" selector="{{StorefrontCustomerDownloadableProductsSection.downloadableLinkByOrderNumber({$grabOrderNumber})}}" stepKey="seeDownloadableLink2"/>
         <click selector="{{StorefrontCustomerDownloadableProductsSection.downloadableLinkByOrderNumber({$grabOrderNumber})}}" stepKey="clickDownloadableLink"/>
         <switchToNextTab stepKey="switchToDownloadedLinkTab3"/>
-        <waitForElement selector="{{StorefrontDownloadableLinkSection.downloadableLinkTitle(ImportDownloadableProduct_UrlLinks.linkFileName)}}" stepKey="seeImageTitle3"/>
+        <waitForElement selector="{{StorefrontDownloadableLinkSection.downloadableLinkTitle(ImportProduct_Downloadable_UrlLinks.linkFileName)}}" stepKey="seeImageTitle3"/>
         <closeTab stepKey="closeTab3"/>
     </test>
 </tests>

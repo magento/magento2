@@ -8,19 +8,36 @@
 
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <!-- Categories -->
+    <entity name="ImportCategory_Downloadable_UrlLinks" type="category">
+        <data key="name">import-category-downloadable-url-links</data>
+        <data key="name_lwr">import-category-downloadable-url-links</data>
+        <data key="is_active">true</data>
+        <data key="include_in_menu">true</data>
+        <data key="urlKey">import-category-downloadable-url-links</data>
+    </entity>
+    <entity name="ImportCategory_Downloadable_FileLinks" type="category">
+        <data key="name">import-category-downloadable-file-links</data>
+        <data key="name_lwr">import-category-downloadable-file-links</data>
+        <data key="is_active">true</data>
+        <data key="include_in_menu">true</data>
+        <data key="urlKey">import-category-downloadable-file-links</data>
+    </entity>
+
     <!-- Products -->
-    <entity name="ImportDownloadableProduct_UrlLinks" type="product">
+    <entity name="ImportProduct_Downloadable_UrlLinks" type="product">
         <data key="fileName">import_downloadable_product_url_links.csv</data>
         <data key="importSummary">Created: 1, Updated: 0, Deleted: 0</data>
-        <data key="sku">import-downloadable-url-links</data>
+        <data key="sku">import-product-downloadable-url-links</data>
         <data key="type_id">downloadable</data>
         <data key="attribute_set_id">4</data>
-        <data key="name">import-downloadable-url-links</data>
+        <data key="name">import-product-downloadable-url-links</data>
         <data key="price">99.00</data>
         <data key="quantity">100</data>
-        <data key="weight">0</data>
+        <data key="weight"/>
+        <data key="visibilityText">Catalog, Search</data>
         <data key="status">1</data>
-        <data key="urlKey">import-downloadable-url-links</data>
+        <data key="urlKey">import-product-downloadable-url-links</data>
         <data key="linksTitle">Links</data>
         <data key="linkTitle">Link1</data>
         <data key="linkPrice">2.00</data>
@@ -39,18 +56,19 @@
         <data key="sampleFileUrl">https://static.magento.com/sites/all/themes/mag_redesign/images/magento-logo.svg</data>
         <data key="sampleFileName">magento-logo</data>
     </entity>
-    <entity name="ImportDownloadableProduct_FileLinks" type="product">
+    <entity name="ImportProduct_Downloadable_FileLinks" type="product">
         <data key="fileName">import_downloadable_product_file_links.csv</data>
         <data key="importSummary">Created: 1, Updated: 0, Deleted: 0</data>
-        <data key="sku">import_downloadable_product_file_links</data>
+        <data key="sku">import-product-downloadable-file-links</data>
         <data key="type_id">downloadable</data>
         <data key="attribute_set_id">4</data>
-        <data key="name">import-downloadable-file-links</data>
+        <data key="name">import-product-downloadable-file-links</data>
         <data key="price">100.00</data>
         <data key="quantity">100</data>
-        <data key="weight">0</data>
+        <data key="weight"/>
+        <data key="visibilityText">Catalog, Search</data>
         <data key="status">1</data>
-        <data key="urlKey">import-downloadable-file-links</data>
+        <data key="urlKey">import-product-downloadable-file-links</data>
         <data key="linksTitle">Links</data>
         <data key="linkTitle">Link1</data>
         <data key="linkPrice">3.00</data>
