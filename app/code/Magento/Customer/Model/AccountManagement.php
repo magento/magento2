@@ -849,7 +849,8 @@ class AccountManagement implements AccountManagementInterface
      */
     public function createAccount(CustomerInterface $customer, $password = null, $redirectUrl = '')
     {
-        if ($customer->getGroupId() && !$this->authorization->isAllowed(self::ADMIN_RESOURCE)) {
+        $groupId = $customer->getGroupId();
+        if ($groupId && $groupId !== 0 && !$this->authorization->isAllowed(self::ADMIN_RESOURCE)) {
             $customer->setGroupId(null);
         }
 
