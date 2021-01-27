@@ -71,7 +71,7 @@ class PrimaryKeyTest extends TestCase
     }
 
     /**
-     * Get database schema declaration from file.
+     * Get database schema declarations from file.
      *
      * @param string $filePath
      * @return array
@@ -84,7 +84,7 @@ class PrimaryKeyTest extends TestCase
     }
 
     /**
-     * Get database schema declaration for whole application
+     * Get database schema declarations for whole application
      *
      * @return array
      * @throws LocalizedException
@@ -94,8 +94,8 @@ class PrimaryKeyTest extends TestCase
         $declarations = [];
         foreach (Files::init()->getDbSchemaFiles() as $filePath) {
             $filePath = reset($filePath);
-            preg_match('#app/code/(\w+/\w+)#', $filePath, $result);
-            $moduleName = str_replace('/', '\\', $result[1]);
+            preg_match('#/(\w+/\w+)/etc/db_schema.xml#', $filePath, $result);
+            $moduleName = str_replace('/', '_', $result[1]);
             $moduleDeclaration = $this->getDbSchemaDeclarationByFile($filePath);
 
             foreach ($moduleDeclaration['table'] as $tableName => $tableDeclaration) {
