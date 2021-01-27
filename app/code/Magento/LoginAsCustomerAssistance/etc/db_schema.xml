@@ -15,5 +15,8 @@
         <constraint xsi:type="unique" referenceId="LOGIN_AS_CUSTOMER_ASSISTANCE_ALLOWED_CUSTOMER_ID">
             <column name="customer_id"/>
         </constraint>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="customer_id"/>
+        </constraint>
     </table>
 </schema>

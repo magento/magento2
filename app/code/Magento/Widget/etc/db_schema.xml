@@ -74,6 +74,10 @@
             <column name="layout_update_id"/>
             <column name="page_id"/>
         </constraint>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="layout_update_id"/>
+            <column name="page_id"/>
+        </constraint>
         <index referenceId="WIDGET_INSTANCE_PAGE_LAYOUT_PAGE_ID" indexType="btree">
             <column name="page_id"/>
         </index>

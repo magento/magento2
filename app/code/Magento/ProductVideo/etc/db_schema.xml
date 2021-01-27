@@ -29,5 +29,9 @@
             <column name="value_id"/>
             <column name="store_id"/>
         </constraint>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="value_id"/>
+            <column name="store_id"/>
+        </constraint>
     </table>
 </schema>

@@ -1697,6 +1697,10 @@
             <column name="value_id"/>
             <column name="entity_id"/>
         </constraint>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="value_id"/>
+            <column name="entity_id"/>
+        </constraint>
     </table>
     <table name="catalog_product_index_eav_replica" resource="default" engine="innodb"
            comment="Catalog Product EAV Index Table">

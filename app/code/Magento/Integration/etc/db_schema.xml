@@ -91,6 +91,10 @@
         <index referenceId="OAUTH_NONCE_TIMESTAMP" indexType="btree">
             <column name="timestamp"/>
         </index>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="nonce"/>
+            <column name="consumer_id"/>
+        </constraint>
     </table>
     <table name="integration" resource="default" engine="innodb" comment="integration">
         <column xsi:type="int" name="integration_id" unsigned="true" nullable="false" identity="true"
