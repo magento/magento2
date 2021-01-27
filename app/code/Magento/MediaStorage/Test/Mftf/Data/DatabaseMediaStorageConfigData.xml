@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="DatabaseSystemMediaStorage">
+        <data key="path">system/media_storage_configuration/media_storage</data>
+        <data key="scope_id">0</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="FilesystemSystemMediaStorage">
+        <data key="path">system/media_storage_configuration/media_storage</data>
+        <data key="scope_id">0</data>
+        <data key="value">0</data>
+    </entity>
+    <entity name="DefaultSetupSystemMediaDatabase">
+        <data key="path">system/media_storage_configuration/media_database</data>
+        <data key="scope_id">0</data>
+        <data key="value">default_setup</data>
+    </entity>
+</entities>

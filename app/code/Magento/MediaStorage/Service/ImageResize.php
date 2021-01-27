@@ -314,18 +314,18 @@ class ImageResize
         $usingDbAsStorage = $this->fileStorageDatabase->checkDbUsage();
         $mediaStorageFilename = $this->mediaDirectory->getRelativePath($imageAssetPath);
 
-        $alreadyResized = $usingDbAsStorage ?
-            $this->fileStorageDatabase->fileExists($mediaStorageFilename) :
-            $this->mediaDirectory->isFile($imageAssetPath);
-
-        if (!$alreadyResized) {
-            $this->generateResizedImage(
-                $imageParams,
-                $originalImagePath,
-                $imageAssetPath,
-                $usingDbAsStorage,
-                $mediaStorageFilename
-            );
+        if (!$this->mediaDirectory->isFile($imageAssetPath)) {
+            if ($this->fileStorageDatabase->fileExists($mediaStorageFilename)) {
+                $this->fileStorageDatabase->saveFileToFilesystem($mediaStorageFilename);
+            } else {
+                $this->generateResizedImage(
+                    $imageParams,
+                    $originalImagePath,
+                    $imageAssetPath,
+                    $usingDbAsStorage,
+                    $mediaStorageFilename
+                );
+            }
         }
     }
 
