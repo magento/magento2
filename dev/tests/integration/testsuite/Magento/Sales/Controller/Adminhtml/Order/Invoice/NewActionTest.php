@@ -47,7 +47,7 @@ class NewActionTest extends AbstractBackendController
     {
         $this->dispatchWithOrderId(863521);
         $expectedMessage = (string)__("The entity that was requested doesn't exist. Verify the entity and try again.");
-        $this->assertSessionMessages($this->contains($this->escaper->escapeHtml($expectedMessage)));
+        $this->assertSessionMessages($this->containsEqual($this->escaper->escapeHtml($expectedMessage)));
     }
 
     /**
@@ -60,7 +60,7 @@ class NewActionTest extends AbstractBackendController
         $expectedMessage = __('The order does not allow an invoice to be created.');
         $order = $this->orderFactory->create()->loadByIncrementId('100000001');
         $this->dispatchWithOrderId((int)$order->getEntityId());
-        $this->assertSessionMessages($this->contains((string)$expectedMessage), MessageInterface::TYPE_ERROR);
+        $this->assertSessionMessages($this->containsEqual((string)$expectedMessage), MessageInterface::TYPE_ERROR);
     }
 
     /**

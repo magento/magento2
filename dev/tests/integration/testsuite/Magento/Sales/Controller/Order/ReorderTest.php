@@ -97,7 +97,7 @@ class ReorderTest extends AbstractController
         $this->customerSession->setCustomerId($order->getCustomerId());
         $this->dispatchReorderRequest((int)$order->getId());
         $this->assertSessionMessages(
-            $this->contains((string)__('The requested qty is not available')),
+            $this->containsEqual((string)__('The requested qty is not available')),
             MessageInterface::TYPE_ERROR
         );
         $this->quote = $this->checkoutSession->getQuote();

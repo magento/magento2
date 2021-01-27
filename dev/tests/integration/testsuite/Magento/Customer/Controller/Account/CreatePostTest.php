@@ -91,7 +91,7 @@ class CreatePostTest extends AbstractController
         $this->assertCustomerNotExists('test1@email.com');
         $this->assertRedirect($this->stringEndsWith('customer/account/create/'));
         $this->assertSessionMessages(
-            $this->contains(__('Invalid Form Key. Please refresh the page.')),
+            $this->containsEqual(__('Invalid Form Key. Please refresh the page.')),
             MessageInterface::TYPE_ERROR
         );
     }
@@ -111,7 +111,7 @@ class CreatePostTest extends AbstractController
         $this->dispatch('customer/account/createPost');
         $this->assertRedirect($this->stringEndsWith('customer/account/'));
         $this->assertSessionMessages(
-            $this->contains(
+            $this->containsEqual(
                 (string)__('Thank you for registering with %1.', $this->storeManager->getStore()->getFrontendName())
             ),
             MessageInterface::TYPE_SUCCESS
@@ -137,7 +137,7 @@ class CreatePostTest extends AbstractController
         $this->dispatch('customer/account/createPost');
         $this->assertRedirect($this->stringEndsWith('customer/account/'));
         $this->assertSessionMessages(
-            $this->contains(
+            $this->containsEqual(
                 (string)__('Thank you for registering with %1.', $this->storeManager->getStore()->getFrontendName())
             ),
             MessageInterface::TYPE_SUCCESS
@@ -167,7 +167,7 @@ class CreatePostTest extends AbstractController
             . ' Please check your email for the confirmation link or <a href="%1">click here</a> for a new link.';
         $url = $this->urlBuilder->getUrl('customer/account/confirmation', ['_query' => ['email' => $email]]);
         $this->assertSessionMessages(
-            $this->contains((string)__($message, $url)),
+            $this->containsEqual((string)__($message, $url)),
             MessageInterface::TYPE_SUCCESS
         );
     }
@@ -186,7 +186,7 @@ class CreatePostTest extends AbstractController
             . ' If you are sure that it is your email address, <a href="%1">click here</a> '
             . 'to get your password and access your account.';
         $url = $this->urlBuilder->getUrl('customer/account/forgotpassword');
-        $this->assertSessionMessages($this->contains((string)__($message, $url)), MessageInterface::TYPE_ERROR);
+        $this->assertSessionMessages($this->containsEqual((string)__($message, $url)), MessageInterface::TYPE_ERROR);
     }
 
     /**
@@ -230,7 +230,7 @@ class CreatePostTest extends AbstractController
         $this->dispatch('customer/account/confirm');
         $this->assertRedirect($this->stringContains('customer/account/index/'));
         $this->assertSessionMessages(
-            $this->contains(
+            $this->containsEqual(
                 (string)__('Thank you for registering with %1.', $this->storeManager->getStore()->getFrontendName())
             ),
             MessageInterface::TYPE_SUCCESS
