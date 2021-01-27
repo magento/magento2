@@ -22,19 +22,19 @@ class Html extends AbstractAdapter
      * @deprecated Not used anymore because of newly introduced constant
      * @see self::HTML_REGEX_LIST
      */
-    const HTML_FILTER = "/i18n:\s?'(?<value>[^'\\\\]*(?:\\\\.[^'\\\\]*)*)'/i";
+    const HTML_FILTER = "/i18n:\s?'(?<value>[^'\\\\]*(?:\\\\.[^'\\\\]*)*)'/";
 
     private const HTML_REGEX_LIST = [
         // <span><!-- ko i18n: 'Next'--><!-- /ko --></span>
         // <th class="col col-method" data-bind="i18n: 'Select Method'"></th>
-        "/i18n:\s?'(?<value>[^'\\\\]*(?:\\\\.[^'\\\\]*)*)'/i",
+        "/i18n:\s?'(?<value>[^'\\\\]*(?:\\\\.[^'\\\\]*)*)'/",
         // <translate args="'System Messages'"/>
         // <span translate="'Examples'"></span>
-        "/translate( args|)=\"'(?<value>[^\"\\\\]*(?:\\\\.[^\"\\\\]*)*)'\"/i",
+        "/translate( args|)=\"'(?<value>[^\"\\\\]*(?:\\\\.[^\"\\\\]*)*)'\"/",
         // <a data-bind="attr: { title: $t('This is \' test \' data'), href: '#'} "></a>
         // <input type="text" data-bind="attr: { placeholder: $t('Placeholder'), title: $t('Title') }" />
         // Double quotes are not handled correctly in the `attr` binding. Move phrase to the UI component property if needed
-        '/\\$t\(\s*([\'"])(?<value>.*?[^\\\])\1.*?[),]/i'
+        '/\\$t\(\s*([\'"])(?<value>.*?[^\\\])\1.*?[),]/'
     ];
 
     /**
