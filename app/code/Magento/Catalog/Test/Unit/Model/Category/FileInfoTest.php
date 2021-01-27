@@ -169,7 +169,7 @@ class FileInfoTest extends TestCase
 
         $result = $this->model->getStat($fileName);
 
-        $this->assertInternalType('array', $result);
+        $this->assertIsArray($result);
         $this->assertArrayHasKey('size', $result);
         $this->assertEquals(1, $result['size']);
     }

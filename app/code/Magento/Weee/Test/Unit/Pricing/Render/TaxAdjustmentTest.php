@@ -60,11 +60,11 @@ class TaxAdjustmentTest extends \PHPUnit\Framework\TestCase
         $this->assertNotEmpty($defaultExclusions, 'Expected to have at least one default exclusion: tax');
 
         $taxCode = $this->model->getAdjustmentCode(); // since Weee's TaxAdjustment is a subclass of Tax's Adjustment
-        $this->assertContains($taxCode, $defaultExclusions);
+        $this->assertStringContainsString($taxCode, $defaultExclusions);
 
         $weeeCode = \Magento\Weee\Pricing\Adjustment::ADJUSTMENT_CODE;
         if ($weeeIsExcluded) {
-            $this->assertContains($weeeCode, $defaultExclusions);
+            $this->assertStringContainsString($weeeCode, $defaultExclusions);
         } else {
             $this->assertNotContains($weeeCode, $defaultExclusions);
         }

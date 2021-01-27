@@ -73,7 +73,7 @@ class SelectTest extends AbstractFormTestCase
         if (is_bool($actual)) {
             $this->assertEquals($expected, $actual);
         } else {
-            $this->assertContains($expected, $actual);
+            $this->assertStringContainsString($expected, $actual);
         }
     }
 

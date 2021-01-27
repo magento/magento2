@@ -49,10 +49,7 @@ class SetModeCommandTest extends \PHPUnit\Framework\TestCase
 
         $tester = new CommandTester($this->command);
         $tester->execute(['mode' => 'production']);
-        $this->assertContains(
-            "production mode",
-            $tester->getDisplay()
-        );
+        $this->assertStringContainsString("production mode", $tester->getDisplay());
     }
 
     public function testSetDeveloperMode()
@@ -61,10 +58,7 @@ class SetModeCommandTest extends \PHPUnit\Framework\TestCase
 
         $tester = new CommandTester($this->command);
         $tester->execute(['mode' => 'developer']);
-        $this->assertContains(
-            "developer mode",
-            $tester->getDisplay()
-        );
+        $this->assertStringContainsString("developer mode", $tester->getDisplay());
     }
 
     public function testSetDefaultMode()
@@ -73,10 +67,7 @@ class SetModeCommandTest extends \PHPUnit\Framework\TestCase
 
         $tester = new CommandTester($this->command);
         $tester->execute(['mode' => 'default']);
-        $this->assertContains(
-            "default mode",
-            $tester->getDisplay()
-        );
+        $this->assertStringContainsString("default mode", $tester->getDisplay());
     }
 
     public function testSetProductionSkipCompilation()
@@ -85,19 +76,13 @@ class SetModeCommandTest extends \PHPUnit\Framework\TestCase
 
         $tester = new CommandTester($this->command);
         $tester->execute(['mode' => 'production', '--skip-compilation' => true]);
-        $this->assertContains(
-            "production mode",
-            $tester->getDisplay()
-        );
+        $this->assertStringContainsString("production mode", $tester->getDisplay());
     }
 
     public function testSetInvalidMode()
     {
         $tester = new CommandTester($this->command);
         $tester->execute(['mode' => 'invalid-mode']);
-        $this->assertContains(
-            'The mode can\'t be switched to "invalid-mode".',
-            $tester->getDisplay()
-        );
+        $this->assertStringContainsString('The mode can\'t be switched to "invalid-mode".', $tester->getDisplay());
     }
 }

@@ -122,7 +122,7 @@ class InputValidatorTest extends TestCase
                 new ArrayInput([], $inputDefinition)
             );
         } catch (\Exception $e) {
-            $this->assertContains('--area (-a) and --exclude-area cannot be used at the same time', $e->getMessage());
+            $this->assertStringContainsString('--area (-a) and --exclude-area cannot be used at the same time', $e->getMessage());
             $this->assertInstanceOf(InvalidArgumentException::class, $e);
         }
     }
@@ -146,7 +146,7 @@ class InputValidatorTest extends TestCase
                 new ArrayInput([], $inputDefinition)
             );
         } catch (\Exception $e) {
-            $this->assertContains('--theme (-t) and --exclude-theme cannot be used at the same time', $e->getMessage());
+            $this->assertStringContainsString('--theme (-t) and --exclude-theme cannot be used at the same time', $e->getMessage());
             $this->assertInstanceOf(InvalidArgumentException::class, $e);
         }
     }
@@ -169,10 +169,7 @@ class InputValidatorTest extends TestCase
                 new ArrayInput([], $inputDefinition)
             );
         } catch (\Exception $e) {
-            $this->assertContains(
-                '--language (-l) and --exclude-language cannot be used at the same time',
-                $e->getMessage()
-            );
+            $this->assertStringContainsString('--language (-l) and --exclude-language cannot be used at the same time', $e->getMessage());
 
             $this->assertInstanceOf(InvalidArgumentException::class, $e);
         }
@@ -197,12 +194,9 @@ class InputValidatorTest extends TestCase
                 new ArrayInput([], $inputDefinition)
             );
         } catch (\Exception $e) {
-            $this->assertContains(
-                'Argument "' .
+            $this->assertStringContainsString('Argument "' .
                 Options::CONTENT_VERSION
-                . '" has invalid value, content version should contain only characters, digits and dots',
-                $e->getMessage()
-            );
+                . '" has invalid value, content version should contain only characters, digits and dots', $e->getMessage());
 
             $this->assertInstanceOf(InvalidArgumentException::class, $e);
         }

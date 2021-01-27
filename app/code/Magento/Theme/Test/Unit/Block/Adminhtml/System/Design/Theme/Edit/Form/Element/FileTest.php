@@ -18,7 +18,7 @@ class FileTest extends \PHPUnit\Framework\TestCase
             ['factoryCollection' => $collectionFactory]
         );
 
-        $this->assertContains('accept', $fileBlock->getHtmlAttributes());
-        $this->assertContains('multiple', $fileBlock->getHtmlAttributes());
+        $this->assertStringContainsString('accept', $fileBlock->getHtmlAttributes());
+        $this->assertStringContainsString('multiple', $fileBlock->getHtmlAttributes());
     }
 }

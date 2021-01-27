@@ -67,7 +67,7 @@ class AbstractEnableTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetUiId()
     {
-        $this->assertContains(self::EXPECTED_ATTRIBUTE, $this->abstractEnable->getUiId());
+        $this->assertStringContainsString(self::EXPECTED_ATTRIBUTE, $this->abstractEnable->getUiId());
     }
 
     /**
@@ -96,6 +96,6 @@ class AbstractEnableTest extends \PHPUnit\Framework\TestCase
             ->method('getFieldNameSuffix')
             ->willReturn('');
 
-        $this->assertContains(self::EXPECTED_ATTRIBUTE, $this->abstractEnable->render($this->elementMock));
+        $this->assertStringContainsString(self::EXPECTED_ATTRIBUTE, $this->abstractEnable->render($this->elementMock));
     }
 }

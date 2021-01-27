@@ -2668,10 +2668,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
         try {
             $this->model->checkProductBuyState($product);
         } catch (LocalizedException $e) {
-            $this->assertContains(
-                $expectedMessage,
-                $e->getMessage()
-            );
+            $this->assertStringContainsString($expectedMessage, $e->getMessage());
             throw $e;
         }
     }
@@ -2705,10 +2702,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
         try {
             $this->model->checkProductBuyState($product);
         } catch (LocalizedException $e) {
-            $this->assertContains(
-                'Please select all required options',
-                $e->getMessage()
-            );
+            $this->assertStringContainsString('Please select all required options', $e->getMessage());
 
             throw $e;
         }

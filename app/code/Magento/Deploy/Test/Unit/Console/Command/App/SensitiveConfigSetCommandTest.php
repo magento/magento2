@@ -108,10 +108,7 @@ class SensitiveConfigSetCommandTest extends \PHPUnit\Framework\TestCase
             Cli::RETURN_FAILURE,
             $tester->getStatusCode()
         );
-        $this->assertContains(
-            'This command is unavailable right now.',
-            $tester->getDisplay()
-        );
+        $this->assertStringContainsString('This command is unavailable right now.', $tester->getDisplay());
     }
 
     public function testExecuteWithException()
@@ -130,9 +127,6 @@ class SensitiveConfigSetCommandTest extends \PHPUnit\Framework\TestCase
             Cli::RETURN_FAILURE,
             $tester->getStatusCode()
         );
-        $this->assertContains(
-            'Some exception',
-            $tester->getDisplay()
-        );
+        $this->assertStringContainsString('Some exception', $tester->getDisplay());
     }
 }

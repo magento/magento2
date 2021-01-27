@@ -452,6 +452,6 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         $this->imageAsset->expects($this->any())->method('getPath')->willReturn($absolutePath);
         $this->cacheManager->expects($this->once())->method('load')->willReturn(false);
         $this->cacheManager->expects($this->once())->method('save');
-        $this->assertInternalType('array', $this->image->getResizedImageInfo());
+        $this->assertIsArray($this->image->getResizedImageInfo());
     }
 }

@@ -201,16 +201,10 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($this->rssFeed['description'], $data['description']);
         $this->assertEquals($this->rssFeed['entries'][0]['title'], $data['entries'][0]['title']);
         $this->assertEquals($this->rssFeed['entries'][0]['link'], $data['entries'][0]['link']);
-        $this->assertContains('<a href="http://magento.com/product.html">', $data['entries'][0]['description']);
-        $this->assertContains(
-            '<img src="image_link" border="0" align="left" height="75" width="75">',
-            $data['entries'][0]['description']
-        );
+        $this->assertStringContainsString('<a href="http://magento.com/product.html">', $data['entries'][0]['description']);
+        $this->assertStringContainsString('<img src="image_link" border="0" align="left" height="75" width="75">', $data['entries'][0]['description']);
 
-        $this->assertContains(
-            '<td  style="text-decoration:none;">Product Description </td>',
-            $data['entries'][0]['description']
-        );
+        $this->assertStringContainsString('<td  style="text-decoration:none;">Product Description </td>', $data['entries'][0]['description']);
     }
 
     public function testGetCacheLifetime()

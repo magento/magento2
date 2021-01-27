@@ -35,8 +35,8 @@ class UrlGeneratorTest extends \PHPUnit\Framework\TestCase
 
         $url = $model->getUrl($itemMock);
 
-        $this->assertContains($urlPath, $url);
-        $this->assertContains('flag/1', $url);
-        $this->assertContains('item_id/' . $itemId, $url);
+        $this->assertStringContainsString($urlPath, $url);
+        $this->assertStringContainsString('flag/1', $url);
+        $this->assertStringContainsString('item_id/' . $itemId, $url);
     }
 }

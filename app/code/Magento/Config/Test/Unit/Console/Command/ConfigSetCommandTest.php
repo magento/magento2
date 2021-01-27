@@ -109,10 +109,7 @@ class ConfigSetCommandTest extends \PHPUnit\Framework\TestCase
             ConfigSetCommand::ARG_VALUE => 'value'
         ]);
 
-        $this->assertContains(
-            __('Some message')->render(),
-            $tester->getDisplay()
-        );
+        $this->assertStringContainsString(__('Some message')->render(), $tester->getDisplay());
         $this->assertSame(Cli::RETURN_SUCCESS, $tester->getStatusCode());
     }
 
@@ -130,10 +127,7 @@ class ConfigSetCommandTest extends \PHPUnit\Framework\TestCase
             ConfigSetCommand::ARG_VALUE => 'value'
         ]);
 
-        $this->assertContains(
-            __('You cannot run this command because the Magento application is not installed.')->render(),
-            $tester->getDisplay()
-        );
+        $this->assertStringContainsString(__('You cannot run this command because the Magento application is not installed.')->render(), $tester->getDisplay());
         $this->assertSame(Cli::RETURN_FAILURE, $tester->getStatusCode());
     }
 
@@ -154,10 +148,7 @@ class ConfigSetCommandTest extends \PHPUnit\Framework\TestCase
             ConfigSetCommand::ARG_VALUE => 'value'
         ]);
 
-        $this->assertContains(
-            __('This command is unavailable right now.')->render(),
-            $tester->getDisplay()
-        );
+        $this->assertStringContainsString(__('This command is unavailable right now.')->render(), $tester->getDisplay());
         $this->assertSame(Cli::RETURN_FAILURE, $tester->getStatusCode());
     }
 
@@ -179,10 +170,7 @@ class ConfigSetCommandTest extends \PHPUnit\Framework\TestCase
             ConfigSetCommand::ARG_VALUE => 'value'
         ]);
 
-        $this->assertContains(
-            __('The "test/test/test" path does not exists')->render(),
-            $tester->getDisplay()
-        );
+        $this->assertStringContainsString(__('The "test/test/test" path does not exists')->render(), $tester->getDisplay());
         $this->assertSame(Cli::RETURN_FAILURE, $tester->getStatusCode());
     }
 }

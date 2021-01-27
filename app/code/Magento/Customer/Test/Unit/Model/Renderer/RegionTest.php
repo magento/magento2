@@ -96,8 +96,8 @@ class RegionTest extends \PHPUnit\Framework\TestCase
 
         $html = $model->render($elementMock);
 
-        $this->assertContains('required', $html);
-        $this->assertContains('required-entry', $html);
+        $this->assertStringContainsString('required', $html);
+        $this->assertStringContainsString('required-entry', $html);
     }
 
     /**

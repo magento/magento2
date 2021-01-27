@@ -123,9 +123,9 @@ class ReviewTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($shippingRate, $this->model->getCurrentShippingRate());
         $this->assertNotNull($this->model->getCanEditShippingAddress());
         $this->assertEquals($quote->getMayEditShippingMethod(), $this->model->getCanEditShippingMethod());
-        $this->assertContains('paypal/express/saveShippingMethod', $this->model->getShippingMethodSubmitUrl());
-        $this->assertContains('paypal/express/edit', $this->model->getEditUrl());
-        $this->assertContains('paypal/express/placeOrder', $this->model->getPlaceOrderUrl());
+        $this->assertStringContainsString('paypal/express/saveShippingMethod', $this->model->getShippingMethodSubmitUrl());
+        $this->assertStringContainsString('paypal/express/edit', $this->model->getEditUrl());
+        $this->assertStringContainsString('paypal/express/placeOrder', $this->model->getPlaceOrderUrl());
     }
 
     public function testBeforeToHtmlWhenQuoteIsVirtual()
@@ -139,8 +139,8 @@ class ReviewTest extends \PHPUnit\Framework\TestCase
             $quote->getPayment()->getMethodInstance()->getTitle()
         );
         $this->assertFalse($this->model->getShippingRateRequired());
-        $this->assertContains('paypal/express/edit', $this->model->getEditUrl());
-        $this->assertContains('paypal/express/placeOrder', $this->model->getPlaceOrderUrl());
+        $this->assertStringContainsString('paypal/express/edit', $this->model->getEditUrl());
+        $this->assertStringContainsString('paypal/express/placeOrder', $this->model->getPlaceOrderUrl());
     }
 
     /**

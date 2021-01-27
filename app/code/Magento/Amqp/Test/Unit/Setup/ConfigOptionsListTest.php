@@ -133,7 +133,7 @@ class ConfigOptionsListTest extends \PHPUnit\Framework\TestCase
     public function testCreateConfig($options, $expectedConfigData)
     {
         $result = $this->model->createConfig($options, $this->deploymentConfigMock);
-        $this->assertInternalType('array', $result);
+        $this->assertIsArray($result);
         $this->assertNotEmpty($result);
         /** @var \Magento\Framework\Config\Data\ConfigData $configData */
         $configData = $result[0];

@@ -50,9 +50,6 @@ class ShowModeCommandTest extends \PHPUnit\Framework\TestCase
 
         $tester = new CommandTester($this->command);
         $tester->execute([]);
-        $this->assertContains(
-            $currentMode,
-            $tester->getDisplay()
-        );
+        $this->assertStringContainsString($currentMode, $tester->getDisplay());
     }
 }

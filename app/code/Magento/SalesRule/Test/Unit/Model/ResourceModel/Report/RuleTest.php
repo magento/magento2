@@ -113,8 +113,8 @@ class RuleTest extends \PHPUnit\Framework\TestCase
     {
         $whereParts = $select->getPart(\Magento\Framework\DB\Select::WHERE);
         $this->assertCount(2, $whereParts);
-        $this->assertContains("rule_name IS NOT NULL", $whereParts[0]);
-        $this->assertContains("rule_name <> ''", $whereParts[1]);
+        $this->assertStringContainsString("rule_name IS NOT NULL", $whereParts[0]);
+        $this->assertStringContainsString("rule_name <> ''", $whereParts[1]);
 
         $orderParts = $select->getPart(\Magento\Framework\DB\Select::ORDER);
         $this->assertCount(1, $orderParts);

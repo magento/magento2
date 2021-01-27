@@ -35,7 +35,7 @@ class BooleanTest extends \PHPUnit\Framework\TestCase
 
         $flatColumns = $this->_model->getFlatColumns();
 
-        $this->assertInternalType('array', $flatColumns, 'FlatColumns must be an array value');
+        $this->assertIsArray($flatColumns, 'FlatColumns must be an array value');
         $this->assertTrue(!empty($flatColumns), 'FlatColumns must be not empty');
         foreach ($flatColumns as $result) {
             $this->assertArrayHasKey('unsigned', $result, 'FlatColumns must have "unsigned" column');

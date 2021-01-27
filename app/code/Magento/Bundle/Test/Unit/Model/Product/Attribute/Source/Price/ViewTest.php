@@ -55,7 +55,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
     {
         $options = $this->model->getAllOptions();
 
-        $this->assertInternalType('array', $options);
+        $this->assertIsArray($options);
         $this->assertNotEmpty($options);
 
         foreach ($options as $option) {
@@ -93,7 +93,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
 
         $columns = $this->model->getFlatColumns();
 
-        $this->assertInternalType('array', $columns);
+        $this->assertIsArray($columns);
         $this->assertArrayHasKey($code, $columns);
 
         foreach ($columns as $column) {

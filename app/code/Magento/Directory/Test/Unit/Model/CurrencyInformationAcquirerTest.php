@@ -107,7 +107,7 @@ class CurrencyInformationAcquirerTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('USD', $result->getDefaultDisplayCurrencyCode());
         $this->assertEquals('$', $result->getDefaultDisplayCurrencySymbol());
         $this->assertEquals(['AUD'], $result->getAvailableCurrencyCodes());
-        $this->assertInternalType('array', $result->getExchangeRates());
+        $this->assertIsArray($result->getExchangeRates());
         $this->assertEquals([$exchangeRate], $result->getExchangeRates());
         $this->assertEquals('0.80', $result->getExchangeRates()[0]->getRate());
         $this->assertEquals('AUD', $result->getExchangeRates()[0]->getCurrencyTo());

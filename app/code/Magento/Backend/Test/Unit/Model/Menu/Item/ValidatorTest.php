@@ -75,7 +75,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
             unset($this->_params[$requiredParam]);
             $this->_model->validate($this->_params);
         } catch (\BadMethodCallException $e) {
-            $this->assertContains($requiredParam, $e->getMessage());
+            $this->assertStringContainsString($requiredParam, $e->getMessage());
             throw $e;
         }
     }
@@ -102,7 +102,7 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
             $this->_params[$param] = $invalidValue;
             $this->_model->validate($this->_params);
         } catch (\InvalidArgumentException $e) {
-            $this->assertContains($param, $e->getMessage());
+            $this->assertStringContainsString($param, $e->getMessage());
             throw $e;
         }
     }

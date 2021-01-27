@@ -478,9 +478,9 @@ class ImportTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
         $this->assertTrue($this->import->validateSource($csvMock));
 
         $logTrace = $this->import->getFormatedLogTrace();
-        $this->assertContains('Begin data validation', $logTrace);
-        $this->assertContains('This file does not contain any data', $logTrace);
-        $this->assertContains('Import data validation is complete', $logTrace);
+        $this->assertStringContainsString('Begin data validation', $logTrace);
+        $this->assertStringContainsString('This file does not contain any data', $logTrace);
+        $this->assertStringContainsString('Import data validation is complete', $logTrace);
     }
 
     public function testInvalidateIndex()

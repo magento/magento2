@@ -501,7 +501,7 @@ class AddressTest extends \PHPUnit\Framework\TestCase
     public function testGetDefaultAddressAttributeMapping()
     {
         $attributeMapping = $this->_model->getDefaultAddressAttributeMapping();
-        $this->assertInternalType('array', $attributeMapping, 'Default address attribute mapping must be an array.');
+        $this->assertIsArray($attributeMapping, 'Default address attribute mapping must be an array.');
         $this->assertArrayHasKey(
             Address::COLUMN_DEFAULT_BILLING,
             $attributeMapping,

@@ -125,8 +125,8 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         // Verify custom plugin config is present
         $this->assertSame($customVal, $customPluginConfig[$customKey]);
         // Verify added plugin config is present
-        $this->assertContains($this->actionUrl, $addedPluginConfig['options']['onclick']['subject']);
-        $this->assertContains($this->actionUrl, $addedPluginConfig['options']['url']);
-        $this->assertContains($this->jsPluginSourceUrl, $addedPluginConfig['src']);
+        $this->assertStringContainsString($this->actionUrl, $addedPluginConfig['options']['onclick']['subject']);
+        $this->assertStringContainsString($this->actionUrl, $addedPluginConfig['options']['url']);
+        $this->assertStringContainsString($this->jsPluginSourceUrl, $addedPluginConfig['src']);
     }
 }

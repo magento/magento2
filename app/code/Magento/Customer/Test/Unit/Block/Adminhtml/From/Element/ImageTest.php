@@ -62,6 +62,6 @@ class ImageTest extends \PHPUnit\Framework\TestCase
             ->with('customer/index/viewfile', ['image' => $value])
             ->will($this->returnValue($url));
 
-        $this->assertContains($url, $this->image->getElementHtml());
+        $this->assertStringContainsString($url, $this->image->getElementHtml());
     }
 }

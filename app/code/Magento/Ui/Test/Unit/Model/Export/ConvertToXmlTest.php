@@ -173,12 +173,12 @@ class ConvertToXmlTest extends \PHPUnit\Framework\TestCase
             ->with($document, $componentName);
 
         $result = $this->model->getXmlFile();
-        $this->assertInternalType('array', $result);
+        $this->assertIsArray($result);
         $this->assertArrayHasKey('type', $result);
         $this->assertArrayHasKey('value', $result);
         $this->assertArrayHasKey('rm', $result);
-        $this->assertContains($componentName, $result);
-        $this->assertContains('.xml', $result);
+        $this->assertStringContainsString($componentName, $result);
+        $this->assertStringContainsString('.xml', $result);
     }
 
     protected function mockStream()

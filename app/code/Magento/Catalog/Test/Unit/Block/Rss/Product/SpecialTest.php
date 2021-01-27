@@ -156,15 +156,9 @@ class SpecialTest extends \PHPUnit\Framework\TestCase
         $description = $rssData['entries'][0]['description'];
         unset($rssData['entries'][0]['description']);
         $this->assertEquals($data, $rssData);
-        $this->assertContains('<a href="http://magento.com/product-name.html"><', $description);
-        $this->assertContains(
-            sprintf('<p>Price:  Special Price: 10<br />Special Expires On: %s</p>', date('Y-m-d')),
-            $description
-        );
-        $this->assertContains(
-            '<img src="image_link" alt="" border="0" align="left" height="75" width="75" />',
-            $description
-        );
+        $this->assertStringContainsString('<a href="http://magento.com/product-name.html"><', $description);
+        $this->assertStringContainsString(sprintf('<p>Price:  Special Price: 10<br />Special Expires On: %s</p>', date('Y-m-d')), $description);
+        $this->assertStringContainsString('<img src="image_link" alt="" border="0" align="left" height="75" width="75" />', $description);
     }
 
     /**

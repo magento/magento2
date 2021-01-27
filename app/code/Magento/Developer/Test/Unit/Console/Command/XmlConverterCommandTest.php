@@ -70,7 +70,7 @@ class XmlConverterCommandTest extends \PHPUnit\Framework\TestCase
                 XmlConverterCommand::PROCESSOR_ARGUMENT => 'file.xsl'
             ]
         );
-        $this->assertContains('result', $commandTester->getDisplay());
+        $this->assertStringContainsString('result', $commandTester->getDisplay());
     }
 
     /**

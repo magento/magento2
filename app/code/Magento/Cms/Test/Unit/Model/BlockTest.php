@@ -114,7 +114,7 @@ class BlockTest extends \PHPUnit\Framework\TestCase
     public function testGetIdentities()
     {
         $result = $this->blockModel->getIdentities();
-        self::assertInternalType('array', $result);
+        self::assertIsArray($result);
     }
 
     /**
@@ -332,6 +332,6 @@ class BlockTest extends \PHPUnit\Framework\TestCase
     public function testGetAvailableStatuses()
     {
         $result = $this->blockModel->getAvailableStatuses();
-        self::assertInternalType('array', $result);
+        self::assertIsArray($result);
     }
 }

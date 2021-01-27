@@ -62,7 +62,7 @@ class DependencyUpdaterPluginTest extends \PHPUnit\Framework\TestCase
         $indexerId = CatalogSearchFulltextIndexer::INDEXER_ID;
 
         $indexerIds = $this->plugin->afterGetIndexerIdsToRunBefore($this->providerMock, $dependencies, $indexerId);
-        $this->assertContains(CatalogInventoryStockIndexer::INDEXER_ID, $indexerIds);
+        $this->assertStringContainsString(CatalogInventoryStockIndexer::INDEXER_ID, $indexerIds);
 
         $indexerIds = $this->plugin->afterGetIndexerIdsToRunBefore($this->providerMock, $dependencies, $indexerId);
         $this->assertNotContains(CatalogInventoryStockIndexer::INDEXER_ID, $indexerIds);
@@ -79,7 +79,7 @@ class DependencyUpdaterPluginTest extends \PHPUnit\Framework\TestCase
         $indexerId = CatalogInventoryStockIndexer::INDEXER_ID;
 
         $indexerIds = $this->plugin->afterGetIndexerIdsToRunAfter($this->providerMock, $dependencies, $indexerId);
-        $this->assertContains(CatalogSearchFulltextIndexer::INDEXER_ID, $indexerIds);
+        $this->assertStringContainsString(CatalogSearchFulltextIndexer::INDEXER_ID, $indexerIds);
 
         $indexerIds = $this->plugin->afterGetIndexerIdsToRunAfter($this->providerMock, $dependencies, $indexerId);
         $this->assertNotContains(CatalogSearchFulltextIndexer::INDEXER_ID, $indexerIds);

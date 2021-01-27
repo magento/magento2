@@ -74,11 +74,11 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     public function testGetCountryMethods()
     {
         $this->assertNotContains('payflow_direct', $this->model->getCountryMethods('GB'));
-        $this->assertContains(Config::METHOD_WPP_PE_EXPRESS, $this->model->getCountryMethods('CA'));
+        $this->assertStringContainsString(Config::METHOD_WPP_PE_EXPRESS, $this->model->getCountryMethods('CA'));
         $this->assertNotContains(Config::METHOD_WPP_PE_EXPRESS, $this->model->getCountryMethods('GB'));
-        $this->assertContains(Config::METHOD_WPP_PE_EXPRESS, $this->model->getCountryMethods('CA'));
-        $this->assertContains(Config::METHOD_WPP_EXPRESS, $this->model->getCountryMethods('DE'));
-        $this->assertContains(Config::METHOD_BILLING_AGREEMENT, $this->model->getCountryMethods('DE'));
+        $this->assertStringContainsString(Config::METHOD_WPP_PE_EXPRESS, $this->model->getCountryMethods('CA'));
+        $this->assertStringContainsString(Config::METHOD_WPP_EXPRESS, $this->model->getCountryMethods('DE'));
+        $this->assertStringContainsString(Config::METHOD_BILLING_AGREEMENT, $this->model->getCountryMethods('DE'));
         $this->assertNotContains(Config::METHOD_WPP_PE_BML, $this->model->getCountryMethods('other'));
         $this->assertNotContains(Config::METHOD_WPP_BML, $this->model->getCountryMethods('other'));
         $this->assertNotContains(Config::METHOD_WPP_PE_BML, $this->model->getCountryMethods('CA'));

@@ -57,7 +57,7 @@ class AttributeFactoryTest extends \PHPUnit\Framework\TestCase
      */
     public function getModelInstance($className, $arguments)
     {
-        $this->assertInternalType('array', $arguments);
+        $this->assertIsArray($arguments);
         $this->assertArrayHasKey('data', $arguments);
         $this->assertEquals($this->_arguments, $arguments['data']);
 

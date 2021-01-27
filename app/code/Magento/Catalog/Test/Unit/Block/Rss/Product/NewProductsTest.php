@@ -168,9 +168,9 @@ class NewProductsTest extends \PHPUnit\Framework\TestCase
         $description = $rssData['entries'][0]['description'];
         unset($rssData['entries'][0]['description']);
         $this->assertEquals($data, $rssData);
-        $this->assertContains('<a href="http://magento.com/product-name.html">', $description);
-        $this->assertContains('<img src="image_link" border="0" align="left" height="75" width="75">', $description);
-        $this->assertContains('<td style="text-decoration:none;">Product Description </td>', $description);
+        $this->assertStringContainsString('<a href="http://magento.com/product-name.html">', $description);
+        $this->assertStringContainsString('<img src="image_link" border="0" align="left" height="75" width="75">', $description);
+        $this->assertStringContainsString('<td style="text-decoration:none;">Product Description </td>', $description);
     }
 
     public function testGetCacheLifetime()

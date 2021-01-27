@@ -27,7 +27,7 @@ class SelectTest extends \PHPUnit\Framework\TestCase
 
         $result = $this->block->setValidationContainer($elementId, $containerId);
 
-        $this->assertContains($elementId, $result);
-        $this->assertContains($containerId, $result);
+        $this->assertStringContainsString($elementId, $result);
+        $this->assertStringContainsString($containerId, $result);
     }
 }

@@ -48,7 +48,7 @@ namespace Magento\Developer\Console\Command {
         {
             $commandTester = new CommandTester($this->command);
             $commandTester->execute([DevTestsRunCommand::INPUT_ARG_TYPE => 'bad']);
-            $this->assertContains('Invalid type: "bad"', $commandTester->getDisplay());
+            $this->assertStringContainsString('Invalid type: "bad"', $commandTester->getDisplay());
         }
 
         public function testPassArgumentsToPHPUnit()

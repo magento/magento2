@@ -220,10 +220,10 @@ class WidgetTest extends \PHPUnit\Framework\TestCase
             \Magento\CatalogWidget\Block\Product\ProductsList::class,
             $params
         );
-        $this->assertContains('{{widget type="Magento\CatalogWidget\Block\Product\ProductsList"', $result);
-        $this->assertContains('title="my &quot;widget&quot;"', $result);
-        $this->assertContains('conditions_encoded="encoded-conditions-string"', $result);
-        $this->assertContains('page_var_name="pasdf"', $result);
+        $this->assertStringContainsString('{{widget type="Magento\CatalogWidget\Block\Product\ProductsList"', $result);
+        $this->assertStringContainsString('title="my &quot;widget&quot;"', $result);
+        $this->assertStringContainsString('conditions_encoded="encoded-conditions-string"', $result);
+        $this->assertStringContainsString('page_var_name="pasdf"', $result);
     }
 
     /**
@@ -272,8 +272,8 @@ class WidgetTest extends \PHPUnit\Framework\TestCase
             \Magento\CatalogWidget\Block\Product\ProductsList::class,
             $params
         );
-        $this->assertContains('{{widget type="Magento\CatalogWidget\Block\Product\ProductsList"', $result);
-        $this->assertContains('page_var_name="pasdf"', $result);
-        $this->assertContains('products_count=""', $result);
+        $this->assertStringContainsString('{{widget type="Magento\CatalogWidget\Block\Product\ProductsList"', $result);
+        $this->assertStringContainsString('page_var_name="pasdf"', $result);
+        $this->assertStringContainsString('products_count=""', $result);
     }
 }
