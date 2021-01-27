@@ -98,7 +98,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
 
         try {
             $path = $this->helper->getBreadcrumbPath();
-            $this->assertInternalType('array', $path);
+            $this->assertIsArray($path);
             $this->assertEquals(['category3', 'category4', 'category5'], array_keys($path));
             $this->assertArrayHasKey('label', $path['category3']);
             $this->assertArrayHasKey('link', $path['category3']);

@@ -5,6 +5,8 @@
  */
 namespace Magento\ImportExport\Model;
 
+use ReflectionClass;
+
 class ExportTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -33,12 +35,13 @@ class ExportTest extends \PHPUnit\Framework\TestCase
     {
         $this->_model->setData(['entity' => $entity]);
         $this->_model->getEntityAttributeCollection();
-        $this->assertAttributeInstanceOf(
-            $expectedEntityType,
-            '_entityAdapter',
-            $this->_model,
-            'Entity adapter property has wrong type'
-        );
+        $this->assertClassHasAttribute('_entityAdapter', get_class($this->_model));
+        $object = new ReflectionClass(get_class($this->_model));
+        $attribute = $object->getProperty('_entityAdapter');
+        $attribute->setAccessible(true);
+        $propertyObject = $attribute->getValue($this->_model);
+        $attribute->setAccessible(false);
+        $this->assertInstanceOf($expectedEntityType, $propertyObject);
     }
 
     /**

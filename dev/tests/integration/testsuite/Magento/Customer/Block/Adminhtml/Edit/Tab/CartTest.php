@@ -63,10 +63,7 @@ class CartTest extends AbstractCartTest
         if ($contains) {
             $this->assertStringContainsString("We couldn&#039;t find any records", $this->block->getGridParentHtml());
         } else {
-            $this->assertNotContains(
-                "We couldn&#039;t find any records",
-                $this->block->getGridParentHtml()
-            );
+            $this->assertStringNotContainsString("We couldn&#039;t find any records", $this->block->getGridParentHtml());
         }
     }
 

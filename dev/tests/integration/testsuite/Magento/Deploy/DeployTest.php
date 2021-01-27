@@ -186,7 +186,7 @@ class DeployTest extends \PHPUnit\Framework\TestCase
     {
         //_testA is included from Magento/zoom3
         //_testB is included from Magento/zoom2
-        $this->assertContains('color:#111', $actualRootCssContent);
+        $this->assertStringContainsString('color:#111', $actualRootCssContent);
     }
 
     /**
@@ -259,7 +259,7 @@ class DeployTest extends \PHPUnit\Framework\TestCase
                     $bundleContent = $this->staticDir->readFile(
                         $this->staticDir->getRelativePath($file->getPathname())
                     );
-                    $this->assertNotContains('"' . $path . '":"', $bundleContent);
+                    $this->assertStringNotContainsString('"' . $path . '":"', $bundleContent);
                 }
             }
         }

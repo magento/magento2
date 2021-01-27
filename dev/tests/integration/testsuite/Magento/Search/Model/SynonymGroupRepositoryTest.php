@@ -94,7 +94,7 @@ class SynonymGroupRepositoryTest extends \PHPUnit\Framework\TestCase
 
     public function testSaveUpdateMergeConflict()
     {
-        $this->expectExceptionMessage("");
+        $this->expectExceptionMessage("(d,e,f)");
         $this->expectException(\Magento\Search\Model\Synonym\MergeConflictException::class);
         /** @var \Magento\Search\Api\Data\SynonymGroupInterface $synonymGroup */
         $synonymGroup = $this->objectManager->create(\Magento\Search\Api\Data\SynonymGroupInterface::class);

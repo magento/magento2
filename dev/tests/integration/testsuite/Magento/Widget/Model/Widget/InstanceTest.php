@@ -76,7 +76,7 @@ class InstanceTest extends \PHPUnit\Framework\TestCase
     {
         $this->_model->setType(\Magento\Catalog\Block\Product\Widget\NewWidget::class);
         $containers = $this->_model->getWidgetSupportedContainers();
-        $this->assertInternalType('array', $containers);
+        $this->assertIsArray($containers);
         $this->assertContains('sidebar.main', $containers);
         $this->assertContains('content', $containers);
         $this->assertContains('sidebar.additional', $containers);
@@ -91,7 +91,7 @@ class InstanceTest extends \PHPUnit\Framework\TestCase
     {
         $templates = $model->getWidgetSupportedTemplatesByContainer('content');
         $this->assertNotEmpty($templates);
-        $this->assertInternalType('array', $templates);
+        $this->assertIsArray($templates);
         foreach ($templates as $row) {
             $this->assertArrayHasKey('value', $row);
             $this->assertArrayHasKey('label', $row);

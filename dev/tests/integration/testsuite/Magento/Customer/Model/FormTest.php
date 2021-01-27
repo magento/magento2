@@ -23,7 +23,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
     public function testGetAttributes()
     {
         $attributes = $this->_model->getAttributes();
-        $this->assertInternalType('array', $attributes);
+        $this->assertIsArray($attributes);
         $this->assertNotEmpty($attributes);
     }
 }

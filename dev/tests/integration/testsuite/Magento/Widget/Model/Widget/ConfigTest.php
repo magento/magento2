@@ -50,7 +50,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             $jsFilename
         );
 
-        $this->assertInternalType('array', $plugins['options']['placeholders']);
+        $this->assertIsArray($plugins['options']['placeholders']);
 
         $this->assertStringStartsWith(
             'http://localhost/index.php/backend/admin/widget/index/key',

@@ -172,7 +172,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->assertArrayHasKey('multiselect', $types);
         $this->assertArrayHasKey('boolean', $types);
         foreach ($types as $type) {
-            $this->assertInternalType('array', $type);
+            $this->assertIsArray($type);
             $this->assertNotEmpty($type);
         }
 

@@ -321,8 +321,8 @@ class ProductTest extends \PHPUnit\Framework\TestCase
 
         $this->assertStringContainsString('Simple Product', $exportData);
         $this->assertStringContainsString('Simple Product Three', $exportData);
-        $this->assertNotContains('Simple Product Two', $exportData);
-        $this->assertNotContains('Simple Product Not Visible On Storefront', $exportData);
+        $this->assertStringNotContainsString('Simple Product Two', $exportData);
+        $this->assertStringNotContainsString('Simple Product Not Visible On Storefront', $exportData);
     }
 
     /**
@@ -591,7 +591,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             $this->assertStringContainsString($productName, $exportData);
         }
         foreach ($productsNotIncluded as $productName) {
-            $this->assertNotContains($productName, $exportData);
+            $this->assertStringNotContainsString($productName, $exportData);
         }
     }
     /**

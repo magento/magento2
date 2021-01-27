@@ -22,8 +22,8 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractController
         $product = $productRepository->get('bundle-product');
         $this->dispatch('catalog/product/view/id/' . $product->getEntityId());
         $responseBody = $this->getResponse()->getBody();
-        $this->assertContains('Bundle Product', $responseBody);
-        $this->assertContains(
+        $this->assertStringContainsString('Bundle Product', $responseBody);
+        $this->assertStringContainsString(
             'In stock',
             $responseBody,
             'Bundle Product Detailed Page does not contain In Stock field'

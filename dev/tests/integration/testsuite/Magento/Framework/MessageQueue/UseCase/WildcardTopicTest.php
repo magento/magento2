@@ -35,7 +35,7 @@ class WildcardTopicTest extends QueueTestCaseAbstract
 
         $this->assertTrue(file_exists($this->logFilePath), "No handlers invoked (log file was not created).");
         foreach ($nonMatchingQueues as $queueName) {
-            $this->assertNotContains($queueName, file_get_contents($this->logFilePath));
+            $this->assertStringNotContainsString($queueName, file_get_contents($this->logFilePath));
         }
         foreach ($matchingQueues as $queueName) {
             $this->assertStringContainsString($queueName, file_get_contents($this->logFilePath));

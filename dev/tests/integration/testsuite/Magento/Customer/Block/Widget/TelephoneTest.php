@@ -45,7 +45,7 @@ class TelephoneTest extends \PHPUnit\Framework\TestCase
         );
 
         $this->assertStringContainsString('title="Phone&#x20;Number"', $block->toHtml());
-        $this->assertNotContains('required', $block->toHtml());
+        $this->assertStringNotContainsString('required', $block->toHtml());
     }
 
     protected function tearDown(): void

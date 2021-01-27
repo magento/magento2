@@ -339,7 +339,7 @@ class AbstractBlockTest extends \PHPUnit\Framework\TestCase
         $block1->setText('Block text');
         $block1->setNameInLayout('block');
         $html = $this->_block->getBlockHtml('block');
-        $this->assertInternalType('string', $html);
+        $this->assertIsString($html);
         $this->assertEmpty($html);
 
         // With layout
@@ -348,7 +348,7 @@ class AbstractBlockTest extends \PHPUnit\Framework\TestCase
         $block3 = $this->_createBlockWithLayout('block3', 'block3');
         $block2->setText($expected);
         $html = $block3->getBlockHtml('block2');
-        $this->assertInternalType('string', $html);
+        $this->assertIsString($html);
         $this->assertEquals($expected, $html);
     }
 

@@ -127,7 +127,7 @@ class DesignTest extends \PHPUnit\Framework\TestCase
         $serializer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(SerializerInterface::class);
         $cachedDesign = $serializer->unserialize($cachedDesign);
 
-        $this->assertInternalType('array', $cachedDesign);
+        $this->assertIsArray($cachedDesign);
         $this->assertArrayHasKey('design', $cachedDesign);
         $this->assertEquals($cachedDesign['design'], $design->getDesign());
 

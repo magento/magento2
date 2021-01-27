@@ -237,7 +237,7 @@ class SaveTest extends AbstractBackendController
         $this->dispatch('backend/catalog/product/edit/id/' . $product->getEntityId());
         $syslogPath = $this->getSyslogPath();
         $syslogContent = file_exists($syslogPath) ? file_get_contents($syslogPath) : '';
-        $this->assertNotContains($message, $syslogContent);
+        $this->assertStringNotContainsString($message, $syslogContent);
     }
 
     /**

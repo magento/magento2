@@ -393,7 +393,7 @@ class ConfigImportCommandTest extends \PHPUnit\Framework\TestCase
             'Processing configurations data from configuration file...',
             $commandTester->getDisplay()
         );
-        $this->assertContains('Stores were processed', $commandTester->getDisplay());
+        $this->assertStringContainsString('Stores were processed', $commandTester->getDisplay());
         $this->assertSame(Cli::RETURN_SUCCESS, $commandTester->getStatusCode());
     }
 }

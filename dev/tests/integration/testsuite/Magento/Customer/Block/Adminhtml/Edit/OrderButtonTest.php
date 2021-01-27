@@ -78,6 +78,6 @@ class OrderButtonTest extends TestCase
         $data = $this->button->getButtonData();
         $this->assertNotEmpty($data);
         $this->assertEquals(__('Create Order'), $data['label']);
-        $this->assertContains('sales/order_create/start/customer_id/1/', $data['on_click']);
+        $this->assertStringContainsString('sales/order_create/start/customer_id/1/', $data['on_click']);
     }
 }

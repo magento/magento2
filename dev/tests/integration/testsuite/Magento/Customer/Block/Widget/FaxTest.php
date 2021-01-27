@@ -23,7 +23,7 @@ class FaxTest extends \PHPUnit\Framework\TestCase
         );
 
         $this->assertStringContainsString('title="Fax"', $block->toHtml());
-        $this->assertNotContains('required', $block->toHtml());
+        $this->assertStringNotContainsString('required', $block->toHtml());
     }
 
     /**

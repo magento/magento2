@@ -63,7 +63,7 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
         ->setShowAddressFields(true);
         $this->setAttributeDataProvider($block);
 
-        $this->assertNotContains('title="Fax"', $block->toHtml());
+        $this->assertStringNotContainsString('title="Fax"', $block->toHtml());
     }
 
     /**
@@ -87,7 +87,7 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
         ->setShowAddressFields(true);
         $this->setAttributeDataProvider($block);
 
-        $this->assertNotContains('title="Company"', $block->toHtml());
+        $this->assertStringNotContainsString('title="Company"', $block->toHtml());
     }
 
     /**
@@ -111,7 +111,7 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
         ->setShowAddressFields(true);
         $this->setAttributeDataProvider($block);
 
-        $this->assertNotContains('title="Phone&#x20;Number"', $block->toHtml());
+        $this->assertStringNotContainsString('title="Phone&#x20;Number"', $block->toHtml());
     }
 
     /**

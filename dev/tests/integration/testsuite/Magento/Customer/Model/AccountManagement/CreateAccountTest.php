@@ -735,7 +735,7 @@ class CreateAccountTest extends TestCase
         $messageFrom = reset($messageFrom);
         $this->assertEquals($expectedData['name'], $messageFrom->getName());
         $this->assertEquals($expectedData['email'], $messageFrom->getEmail());
-        $this->assertContains(
+        $this->assertStringContainsString(
             $expectedData['message'],
             $message->getBody()->getParts()[0]->getRawContent(),
             'Expected message wasn\'t found in email content.'

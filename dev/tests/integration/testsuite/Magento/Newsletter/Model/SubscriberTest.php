@@ -88,7 +88,7 @@ class SubscriberTest extends TestCase
         $subscriber = $this->subscriberFactory->create();
         $subscriber->subscribe('customer_confirm@example.com');
         // confirmationCode 'ysayquyajua23iq29gxwu2eax2qb6gvy' is taken from fixture
-        $this->assertContains(
+        $this->assertStringContainsString(
             '/newsletter/subscriber/confirm/id/' . $subscriber->getSubscriberId()
             . '/code/ysayquyajua23iq29gxwu2eax2qb6gvy',
             $this->transportBuilder->getSentMessage()->getBody()->getParts()[0]->getRawContent()

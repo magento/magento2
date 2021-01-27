@@ -58,7 +58,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
             );
         }
         $form = $this->_getFormInstance($args);
-        $this->assertContains($action, $form->getAction());
+        $this->assertStringContainsString($action, $form->getAction());
 
         $this->assertEquals($requestPath, $form->getElement('request_path')->getValue());
         $this->assertEquals($targetPath, $form->getElement('target_path')->getValue());

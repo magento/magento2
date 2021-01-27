@@ -47,9 +47,9 @@ class NameTest extends \PHPUnit\Framework\TestCase
         $this->assertStringContainsString('value="Jane"', $html);
         $this->assertStringContainsString('title="Last&#x20;Name"', $html);
         $this->assertStringContainsString('value="Doe"', $html);
-        $this->assertNotContains('title="Middle&#x20;Name&#x2F;Initial"', $html);
-        $this->assertNotContains('title="Name&#x20;Prefix"', $html);
-        $this->assertNotContains('title="Name&#x20;Suffix"', $html);
+        $this->assertStringNotContainsString('title="Middle&#x20;Name&#x2F;Initial"', $html);
+        $this->assertStringNotContainsString('title="Name&#x20;Prefix"', $html);
+        $this->assertStringNotContainsString('title="Name&#x20;Suffix"', $html);
     }
 
     /**

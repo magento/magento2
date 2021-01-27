@@ -23,7 +23,7 @@ class CompanyTest extends \PHPUnit\Framework\TestCase
         );
 
         $this->assertStringContainsString('title="Company"', $block->toHtml());
-        $this->assertNotContains('required', $block->toHtml());
+        $this->assertStringNotContainsString('required', $block->toHtml());
     }
 
     /**

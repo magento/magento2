@@ -65,7 +65,9 @@ class WaitAndNotWaitMessagesTest extends QueueTestCaseAbstract
      */
     public function testWaitForMessages()
     {
-        $this->assertArraySubset(['queue' => ['consumers_wait_for_messages' => 1]], $this->config);
+        $this->assertArrayHasKey('queue', $this->config);
+        $this->assertArrayHasKey('consumers_wait_for_messages', $this->config['queue']);
+        $this->assertEquals(1, $this->config['queue']['consumers_wait_for_messages']);
 
         foreach ($this->messages as $message) {
             $this->publishMessage($message);
@@ -93,7 +95,10 @@ class WaitAndNotWaitMessagesTest extends QueueTestCaseAbstract
         $config['queue']['consumers_wait_for_messages'] = 0;
         $this->writeConfig($config);
 
-        $this->assertArraySubset(['queue' => ['consumers_wait_for_messages' => 0]], $this->loadConfig());
+        $loadedConfig = $this->loadConfig();
+        $this->assertArrayHasKey('queue', $loadedConfig);
+        $this->assertArrayHasKey('consumers_wait_for_messages', $loadedConfig['queue']);
+        $this->assertEquals(0, $loadedConfig['queue']['consumers_wait_for_messages']);
         foreach ($this->messages as $message) {
             $this->publishMessage($message);
         }

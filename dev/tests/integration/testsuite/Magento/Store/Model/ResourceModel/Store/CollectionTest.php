@@ -104,7 +104,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
 
         $this->_collection->removeFieldFromSelect('test_field');
         $this->_collection->addFieldToSelect('store_id');
-        $this->assertNotContains('test_field', (string)$this->_collection->getSelect());
+        $this->assertStringNotContainsString('test_field', (string)$this->_collection->getSelect());
     }
 
     /**

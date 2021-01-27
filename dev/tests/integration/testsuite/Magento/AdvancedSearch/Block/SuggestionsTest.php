@@ -39,7 +39,7 @@ class SuggestionsTest extends \PHPUnit\Framework\TestCase
         $this->assertStringContainsString('test+item', $html);
         $this->assertStringContainsString('test item', $html);
 
-        $this->assertNotContains('<script>', $html);
+        $this->assertStringNotContainsString('<script>', $html);
         $this->assertStringContainsString('%3Cscript%3Ealert%28%27Test%27%29%3B%3C%2Fscript%3E', $html);
         $this->assertStringContainsString("&lt;script&gt;alert(&#039;Test&#039;);&lt;/script&gt;", $html);
     }

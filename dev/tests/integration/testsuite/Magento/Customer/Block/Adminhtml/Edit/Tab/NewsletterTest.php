@@ -65,10 +65,10 @@ class NewsletterTest extends \Magento\TestFramework\TestCase\AbstractBackendCont
         $this->dispatch('backend/customer/index/edit');
         $body = $this->getResponse()->getBody();
 
-        $this->assertContains('\u003Cspan\u003ENewsletter Information\u003C\/span\u003E', $body);
-        $this->assertContains('\u003Cinput id=\"_newslettersubscription\"', $body);
-        $this->assertNotContains('checked="checked"', $body);
-        $this->assertContains('\u003Cspan\u003ESubscribed to Newsletter\u003C\/span\u003E', $body);
-        $this->assertContains('\u003ENo Newsletter Found\u003C', $body);
+        $this->assertStringContainsString('\u003Cspan\u003ENewsletter Information\u003C\/span\u003E', $body);
+        $this->assertStringContainsString('\u003Cinput id=\"_newslettersubscription\"', $body);
+        $this->assertStringNotContainsString('checked="checked"', $body);
+        $this->assertStringContainsString('\u003Cspan\u003ESubscribed to Newsletter\u003C\/span\u003E', $body);
+        $this->assertStringContainsString('\u003ENo Newsletter Found\u003C', $body);
     }
 }

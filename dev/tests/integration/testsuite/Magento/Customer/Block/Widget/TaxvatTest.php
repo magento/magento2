@@ -29,7 +29,7 @@ class TaxvatTest extends \PHPUnit\Framework\TestCase
         $attributeLabel = $model->getStoreLabel();
 
         $this->assertStringContainsString('title="' . $block->escapeHtmlAttr($attributeLabel) . '"', $block->toHtml());
-        $this->assertNotContains('required', $block->toHtml());
+        $this->assertStringNotContainsString('required', $block->toHtml());
     }
 
     /**

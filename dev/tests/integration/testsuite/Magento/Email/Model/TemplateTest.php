@@ -110,7 +110,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
         $this->assertNotEmpty($this->model->getTemplateText());
         $this->assertNotEmpty($this->model->getTemplateSubject());
         $this->assertNotEmpty($this->model->getOrigTemplateVariables());
-        $this->assertInternalType('array', json_decode($this->model->getOrigTemplateVariables(), true));
+        $this->assertIsArray(json_decode($this->model->getOrigTemplateVariables(), true));
     }
 
     /**
@@ -271,7 +271,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
 
         $this->assertStringContainsString($assertContains, $this->model->getProcessedTemplate());
         if ($assertNotContains) {
-            $this->assertNotContains($assertNotContains, $this->model->getProcessedTemplate());
+            $this->assertStringNotContainsString($assertNotContains, $this->model->getProcessedTemplate());
         }
     }
 
@@ -477,7 +477,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
         $processedTemplate = $this->model->getProcessedTemplate();
 
         foreach ($unexpectedOutputs as $unexpectedOutput) {
-            $this->assertNotContains($unexpectedOutput, $processedTemplate);
+            $this->assertStringNotContainsString($unexpectedOutput, $processedTemplate);
         }
 
         $this->assertStringContainsString($expectedOutput, $processedTemplate);

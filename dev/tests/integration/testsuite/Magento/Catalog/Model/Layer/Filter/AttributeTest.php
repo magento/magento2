@@ -91,7 +91,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
     {
         $items = $this->_model->getItems();
 
-        $this->assertInternalType('array', $items);
+        $this->assertIsArray($items);
         $this->assertEquals(1, count($items));
 
         /** @var $item \Magento\Catalog\Model\Layer\Filter\Item */

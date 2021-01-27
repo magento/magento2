@@ -90,7 +90,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
         $childBlock = $layout->addBlock(\Magento\Framework\View\Element\Text::class, 'element_dependence', 'block');
 
         $expectedValue = 'dependence_html_relations';
-        $this->assertNotContains($expectedValue, $block->toHtml());
+        $this->assertStringNotContainsString($expectedValue, $block->toHtml());
 
         $childBlock->setText($expectedValue);
         $this->assertStringContainsString($expectedValue, $block->toHtml());

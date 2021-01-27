@@ -62,6 +62,6 @@ class AttributeValuesTest extends TestCase
         $isAllowedToManageAttributes = $block->getPermissions()->isAllowedToManageAttributes();
         $html = $block->toHtml();
         $this->assertFalse($isAllowedToManageAttributes);
-        $this->assertNotContains('<button class="action-create-new action-tertiary"', $html);
+        $this->assertStringNotContainsString('<button class="action-create-new action-tertiary"', $html);
     }
 }

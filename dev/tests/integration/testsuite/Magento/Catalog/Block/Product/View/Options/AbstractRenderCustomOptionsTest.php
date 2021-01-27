@@ -98,7 +98,7 @@ abstract class AbstractRenderCustomOptionsTest extends TestCase
         if ($optionData[Option::KEY_MAX_CHARACTERS] > 0) {
             $this->assertStringContainsString($checkArray['max_characters'], $optionHtml);
         } else {
-            $this->assertNotContains('class="character-counter', $optionHtml);
+            $this->assertStringNotContainsString('class="character-counter', $optionHtml);
         }
     }
 
@@ -199,9 +199,9 @@ abstract class AbstractRenderCustomOptionsTest extends TestCase
                 $this->assertStringContainsString("<select name=\"options[{$option->getOptionId()}][month]\"", $optionHtml);
                 $this->assertStringContainsString("<select name=\"options[{$option->getOptionId()}][day]\"", $optionHtml);
                 $this->assertStringContainsString("<select name=\"options[{$option->getOptionId()}][year]\"", $optionHtml);
-                $this->assertNotContains("<select name=\"options[{$option->getOptionId()}][hour]\"", $optionHtml);
-                $this->assertNotContains("<select name=\"options[{$option->getOptionId()}][minute]\"", $optionHtml);
-                $this->assertNotContains("<select name=\"options[{$option->getOptionId()}][day_part]\"", $optionHtml);
+                $this->assertStringNotContainsString("<select name=\"options[{$option->getOptionId()}][hour]\"", $optionHtml);
+                $this->assertStringNotContainsString("<select name=\"options[{$option->getOptionId()}][minute]\"", $optionHtml);
+                $this->assertStringNotContainsString("<select name=\"options[{$option->getOptionId()}][day_part]\"", $optionHtml);
                 break;
             case ProductCustomOptionInterface::OPTION_TYPE_DATE_TIME:
                 $this->assertStringContainsString("<select name=\"options[{$option->getOptionId()}][month]\"", $optionHtml);
@@ -212,9 +212,9 @@ abstract class AbstractRenderCustomOptionsTest extends TestCase
                 $this->assertStringContainsString("<select name=\"options[{$option->getOptionId()}][day_part]\"", $optionHtml);
                 break;
             case ProductCustomOptionInterface::OPTION_TYPE_TIME:
-                $this->assertNotContains("<select name=\"options[{$option->getOptionId()}][month]\"", $optionHtml);
-                $this->assertNotContains("<select name=\"options[{$option->getOptionId()}][day]\"", $optionHtml);
-                $this->assertNotContains("<select name=\"options[{$option->getOptionId()}][year]\"", $optionHtml);
+                $this->assertStringNotContainsString("<select name=\"options[{$option->getOptionId()}][month]\"", $optionHtml);
+                $this->assertStringNotContainsString("<select name=\"options[{$option->getOptionId()}][day]\"", $optionHtml);
+                $this->assertStringNotContainsString("<select name=\"options[{$option->getOptionId()}][year]\"", $optionHtml);
                 $this->assertStringContainsString("<select name=\"options[{$option->getOptionId()}][hour]\"", $optionHtml);
                 $this->assertStringContainsString("<select name=\"options[{$option->getOptionId()}][minute]\"", $optionHtml);
                 $this->assertStringContainsString("<select name=\"options[{$option->getOptionId()}][day_part]\"", $optionHtml);

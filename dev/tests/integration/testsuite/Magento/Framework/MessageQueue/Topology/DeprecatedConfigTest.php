@@ -37,7 +37,7 @@ class DeprecatedConfigTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(false, $topology->isInternal());
 
         $arguments = $topology->getArguments();
-        $this->assertInternalType('array', $arguments);
+        $this->assertIsArray($arguments);
         $this->assertCount(0, $arguments);
 
         // Verify bindings
@@ -54,7 +54,7 @@ class DeprecatedConfigTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(false, $binding->isDisabled());
         $this->assertEquals('deprecated.config.async.bool.topic', $binding->getTopic());
         $arguments = $binding->getArguments();
-        $this->assertInternalType('array', $arguments);
+        $this->assertIsArray($arguments);
         $this->assertCount(0, $arguments);
     }
 
@@ -71,7 +71,7 @@ class DeprecatedConfigTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(false, $topology->isInternal());
 
         $arguments = $topology->getArguments();
-        $this->assertInternalType('array', $arguments);
+        $this->assertIsArray($arguments);
         $this->assertCount(0, $arguments);
 
         // Verify bindings
@@ -89,7 +89,7 @@ class DeprecatedConfigTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(false, $binding->isDisabled());
         $this->assertEquals('overlapping.topic.declaration', $binding->getTopic());
         $arguments = $binding->getArguments();
-        $this->assertInternalType('array', $arguments);
+        $this->assertIsArray($arguments);
         $this->assertCount(0, $arguments);
 
         $bindingId = 'binding1';
@@ -100,7 +100,7 @@ class DeprecatedConfigTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(false, $binding->isDisabled());
         $this->assertEquals('overlapping.topic.declaration', $binding->getTopic());
         $arguments = $binding->getArguments();
-        $this->assertInternalType('array', $arguments);
+        $this->assertIsArray($arguments);
         $this->assertCount(0, $arguments);
 
         $bindingId = 'binding2';
@@ -111,7 +111,7 @@ class DeprecatedConfigTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(false, $binding->isDisabled());
         $this->assertEquals('deprecated.config.async.string.topic', $binding->getTopic());
         $arguments = $binding->getArguments();
-        $this->assertInternalType('array', $arguments);
+        $this->assertIsArray($arguments);
         $this->assertCount(0, $arguments);
     }
 }

@@ -71,28 +71,28 @@ class TokensTest extends \PHPUnit\Framework\TestCase
         $htmlContent = $this->tokensBlock->toHtml();
 
         $this->assertStringContainsString('name="consumer_key"', $htmlContent);
-        $this->assertContains(
+        $this->assertStringContainsString(
             '<span>Consumer Key</span>',
             $htmlContent,
             "HTML content of token block should contain information about 'Consumer Key'."
         );
 
         $this->assertStringContainsString('name="consumer_secret"', $htmlContent);
-        $this->assertContains(
+        $this->assertStringContainsString(
             '<span>Consumer Secret</span>',
             $htmlContent,
             "HTML content of token block should contain information about 'Consumer Secret'."
         );
 
         $this->assertStringContainsString('name="token"', $htmlContent);
-        $this->assertContains(
+        $this->assertStringContainsString(
             '<span>Access Token</span>',
             $htmlContent,
             "HTML content of token block should contain information about 'Access Token'."
         );
 
         $this->assertStringContainsString('name="token_secret"', $htmlContent);
-        $this->assertContains(
+        $this->assertStringContainsString(
             '<span>Access Token Secret</span>',
             $htmlContent,
             "HTML content of token block should contain information about 'Access Token Secret'."

@@ -468,9 +468,9 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
         $this->dhlCarrier->collectRates($request)->getAllRates();
 
         $requestXml = $this->httpClient->getLastRequest()->getBody();
-        $this->assertNotContains('<Width>', $requestXml);
-        $this->assertNotContains('<Height>', $requestXml);
-        $this->assertNotContains('<Depth>', $requestXml);
+        $this->assertStringNotContainsString('<Width>', $requestXml);
+        $this->assertStringNotContainsString('<Height>', $requestXml);
+        $this->assertStringNotContainsString('<Depth>', $requestXml);
 
         $this->config->reinit();
     }

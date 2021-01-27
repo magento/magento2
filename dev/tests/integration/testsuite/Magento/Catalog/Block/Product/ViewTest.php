@@ -183,7 +183,7 @@ class ViewTest extends TestCase
         $this->block->setTemplate('Magento_Catalog::product/view/addtocart.phtml');
         $output = $this->block->toHtml();
 
-        $this->assertNotContains((string)__('Add to Cart'), $output);
+        $this->assertStringNotContainsString((string)__('Add to Cart'), $output);
     }
 
     /**

@@ -41,7 +41,7 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
         $this->assertStringContainsString('onclick="this.setAttribute(&#039;data-url&#039;, '
             . '&#039;http://localhost/index.php/backend/admin/integration/delete/id/'
             . $integration->getId(), $buttonHtml);
-        $this->assertNotContains('disabled', $buttonHtml);
+        $this->assertStringNotContainsString('disabled', $buttonHtml);
     }
 
     public function testRenderDisabled()

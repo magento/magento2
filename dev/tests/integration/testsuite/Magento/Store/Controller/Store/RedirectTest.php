@@ -35,7 +35,7 @@ class RedirectTest extends AbstractController
 
         $result = (string)$this->getResponse()->getHeader('location');
         $this->assertNotEmpty($result);
-        $this->assertNotContains(SidResolverInterface::SESSION_ID_QUERY_PARAM .'=', $result);
+        $this->assertStringNotContainsString(SidResolverInterface::SESSION_ID_QUERY_PARAM . '=', $result);
     }
 
     /**
