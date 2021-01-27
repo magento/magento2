@@ -102,8 +102,15 @@ class ValidatorTest extends TestCase
      */
     private $cartFixedDiscountHelper;
 
+    /**
+     * @var Quote|MockObject
+     */
+    private $quoteMock;
+
     protected function setUp(): void
     {
+        $this->quoteMock = $this->createMock(Quote::class);
+
         $this->helper = new ObjectManager($this);
         $this->rulesApplier = $this->createPartialMock(
             RulesApplier::class,
@@ -182,8 +189,8 @@ class ValidatorTest extends TestCase
             ->method('setValidationFilter')
             ->with(
                 $this->model->getWebsiteId(),
-                $this->model->getCustomerGroupId(),
-                $this->model->getCouponCode(),
+                $this->quoteMock->getCustomerGroupId(),
+                $this->quoteMock->getCouponCode(),
                 null,
                 $this->addressMock
             )
@@ -225,8 +232,7 @@ class ValidatorTest extends TestCase
     {
         $this->model->init(
             $this->model->getWebsiteId(),
-            $this->model->getCustomerGroupId(),
-            $this->model->getCouponCode()
+            $this->quoteMock
         );
         $item = $this->getQuoteItemMock();
         $rule = $this->createMock(Rule::class);
@@ -274,8 +280,7 @@ class ValidatorTest extends TestCase
 
         $this->model->init(
             $this->model->getWebsiteId(),
-            $this->model->getCustomerGroupId(),
-            $this->model->getCouponCode()
+            $this->quoteMock
         );
         $this->model->process($this->item);
     }
@@ -286,8 +291,7 @@ class ValidatorTest extends TestCase
         $nonZeroDiscount = 123;
         $this->model->init(
             $this->model->getWebsiteId(),
-            $this->model->getCustomerGroupId(),
-            $this->model->getCouponCode()
+            $this->quoteMock
         );
 
         $this->item->setDiscountCalculationPrice($negativePrice);
@@ -312,8 +316,7 @@ class ValidatorTest extends TestCase
         $expectedRuleIds = [$ruleId1 => $ruleId1, $ruleId2 => $ruleId2];
         $this->model->init(
             $this->model->getWebsiteId(),
-            $this->model->getCustomerGroupId(),
-            $this->model->getCouponCode()
+            $this->quoteMock
         );
 
         $this->item->setDiscountCalculationPrice($positivePrice);
@@ -345,8 +348,7 @@ class ValidatorTest extends TestCase
             Validator::class,
             $this->model->init(
                 $this->model->getWebsiteId(),
-                $this->model->getCustomerGroupId(),
-                $this->model->getCouponCode()
+                $this->quoteMock
             )
         );
     }
@@ -369,8 +371,7 @@ class ValidatorTest extends TestCase
 
         $this->model->init(
             $this->model->getWebsiteId(),
-            $this->model->getCustomerGroupId(),
-            $this->model->getCouponCode()
+            $this->quoteMock
         );
         $this->assertFalse($this->model->canApplyDiscount($this->item));
     }
@@ -448,8 +449,7 @@ class ValidatorTest extends TestCase
 
         $this->model->init(
             $this->model->getWebsiteId(),
-            $this->model->getCustomerGroupId(),
-            $this->model->getCouponCode()
+            $this->quoteMock
         );
         $this->model->initTotals($items, $this->addressMock);
         $this->assertArrayHasKey('items_price', $this->model->getRuleItemTotalsInfo($rule->getId()));
@@ -465,8 +465,7 @@ class ValidatorTest extends TestCase
             ->method('getParentItemId');
         $this->model->init(
             $this->model->getWebsiteId(),
-            $this->model->getCustomerGroupId(),
-            $this->model->getCouponCode()
+            $this->quoteMock
         );
         $this->model->initTotals([], $address);
     }
@@ -502,8 +501,7 @@ class ValidatorTest extends TestCase
             ->willReturn($iterator);
         $this->model->init(
             $this->model->getWebsiteId(),
-            $this->model->getCustomerGroupId(),
-            $this->model->getCouponCode()
+            $this->quoteMock
         );
         $this->assertInstanceOf(
             Validator::class,
@@ -523,8 +521,7 @@ class ValidatorTest extends TestCase
             ->willReturn($iterator);
         $this->model->init(
             $this->model->getWebsiteId(),
-            $this->model->getCustomerGroupId(),
-            $this->model->getCouponCode()
+            $this->quoteMock
         );
         $this->assertInstanceOf(
             Validator::class,
@@ -572,8 +569,7 @@ class ValidatorTest extends TestCase
 
         $this->model->init(
             $this->model->getWebsiteId(),
-            $this->model->getCustomerGroupId(),
-            $this->model->getCouponCode()
+            $this->quoteMock
         );
 
         $addressMock = $this->setupAddressMock($shippingAmount, $quoteBaseSubTotal);
@@ -641,8 +637,7 @@ class ValidatorTest extends TestCase
 
         $this->model->init(
             $this->model->getWebsiteId(),
-            $this->model->getCustomerGroupId(),
-            $this->model->getCouponCode()
+            $this->quoteMock
         );
 
         $addressMock = $this->setupAddressMock($shippingAmount, $quoteBaseSubTotal);
@@ -760,8 +755,7 @@ class ValidatorTest extends TestCase
             ->willReturn($quoteMock);
         $this->model->init(
             $this->model->getWebsiteId(),
-            $this->model->getCustomerGroupId(),
-            $this->model->getCouponCode()
+            $this->quoteMock
         );
         $this->assertInstanceOf(Validator::class, $this->model->reset($addressMock));
     }

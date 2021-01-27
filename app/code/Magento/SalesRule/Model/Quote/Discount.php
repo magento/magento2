@@ -130,7 +130,7 @@ class Discount extends AbstractTotal
             'coupon_code' => $quote->getCouponCode(),
         ];
 
-        $this->calculator->init($store->getWebsiteId(), $quote->getCustomerGroupId(), $quote->getCouponCode());
+        $this->calculator->init($store->getWebsiteId(), $quote);
         $this->calculator->initTotals($items, $address);
 
         $address->setDiscountDescription([]);

@@ -7,6 +7,7 @@
 namespace Magento\SalesRule\Model;
 
 use Magento\Framework\App\ObjectManager;
+use Magento\Quote\Api\Data\CartInterface;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Item\AbstractItem;
@@ -23,6 +24,8 @@ use Magento\SalesRule\Model\ResourceModel\Rule\CollectionFactory;
  * @method mixed getWebsiteId()
  * @method Validator setWebsiteId($id)
  * @method mixed getCustomerGroupId()
+ * @method CartInterface getQuote()
+ * @method Validator setQuote($quote)
  * @method Validator setCustomerGroupId($id)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -154,15 +157,16 @@ class Validator extends \Magento\Framework\Model\AbstractModel
      * Init process load collection of rules for specific website,
      * customer group and coupon code
      *
-     * @param int $websiteId
-     * @param int $customerGroupId
-     * @param string $couponCode
+     * @param $websiteId
+     * @param CartInterface $quote
      * @return $this
      */
-    public function init($websiteId, $customerGroupId, $couponCode)
+    public function init($websiteId, CartInterface $quote): self
     {
-        $this->setWebsiteId($websiteId)->setCustomerGroupId($customerGroupId)->setCouponCode($couponCode);
-
+        $this->setQuote($quote)
+            ->setWebsiteId($websiteId)
+            ->setCustomerGroupId($quote->getCustomerGroupId())
+            ->setCouponCode($quote->getCouponCode());
         return $this;
     }
 
@@ -179,7 +183,7 @@ class Validator extends \Magento\Framework\Model\AbstractModel
         $key = $this->getWebsiteId() . '_'
             . $this->getCustomerGroupId() . '_'
             . $this->getCouponCode() . '_'
-            . $address->getQuote()->getItemsQty() . '_'
+            . $this->getQuote()->getItemsQty() . '_'
             . $addressId;
         if (!isset($this->_rules[$key])) {
             $this->_rules[$key] = $this->_collectionFactory->create()

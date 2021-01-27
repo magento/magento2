@@ -50,11 +50,7 @@ class FreeShipping implements FreeShippingInterface
         $result = false;
         $addressFreeShipping = true;
         $store = $this->storeManager->getStore($quote->getStoreId());
-        $this->calculator->init(
-            $store->getWebsiteId(),
-            $quote->getCustomerGroupId(),
-            $quote->getCouponCode()
-        );
+        $this->calculator->init($store->getWebsiteId(), $quote);
         $shippingAddress = $quote->getShippingAddress();
         $shippingAddress->setFreeShipping(0);
         /** @var \Magento\Quote\Api\Data\CartItemInterface $item */
