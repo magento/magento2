@@ -78,6 +78,7 @@ class AttributesJoiner
 
                     foreach ($spreadFragmentNode->selectionSet->selections as $spreadNode) {
                         if (isset($spreadNode->selectionSet->selections)) {
+                            $selectedFields[] = $spreadNode->name->value;
                             $fragmentFields[] = $this->getQueryFields($spreadNode, $resolveInfo);
                         } else {
                             $selectedFields[] = $spreadNode->name->value;
