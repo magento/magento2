@@ -88,7 +88,7 @@
         <see userInput="{{ImportProduct_Downloadable_UrlLinks.fileName}}" selector="{{AdminDataGridTableSection.firstRow}}" stepKey="seeImportedFile"/>
         <see userInput="{{ImportProduct_Downloadable_UrlLinks.importSummary}}" selector="{{AdminDataGridTableSection.firstRow}}" stepKey="seeSummary"/>
 
-        <!-- Admin: Verify Simple Product 1 on Edit Product Page -->
+        <!-- Admin: Verify Downloadable Product on Edit Product Page -->
         <actionGroup ref="NavigateToCreatedProductEditPageActionGroup" stepKey="goToDownloadableProductEditPage">
             <argument name="product" value="ImportProduct_Downloadable_UrlLinks"/>
         </actionGroup>
