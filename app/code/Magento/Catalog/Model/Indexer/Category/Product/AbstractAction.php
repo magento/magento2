@@ -172,12 +172,34 @@ abstract class AbstractAction
     {
         foreach ($this->storeManager->getStores() as $store) {
             if ($this->getPathFromCategoryId($store->getRootCategoryId())) {
-                $this->currentStore = $store;
+                $this->setCurrentStore($store);
                 $this->reindexRootCategory($store);
                 $this->reindexAnchorCategories($store);
                 $this->reindexNonAnchorCategories($store);
             }
         }
+    }
+
+    /**
+     * Set current store
+     *
+     * @param StoreInterface $store
+     * @return $this
+     */
+    private function setCurrentStore(StoreInterface $store): self
+    {
+        $this->currentStore = $store;
+        return $this;
+    }
+
+    /**
+     * Get current store
+     *
+     * @return StoreInterface
+     */
+    private function getCurrentStore(): StoreInterface
+    {
+        return $this->currentStore;
     }
 
     /**
@@ -485,6 +507,7 @@ abstract class AbstractAction
      */
     protected function createAnchorSelect(Store $store)
     {
+        $this->setCurrentStore($store);
         $isAnchorAttributeId = $this->config->getAttribute(
             \Magento\Catalog\Model\Category::ENTITY,
             'is_anchor'
@@ -494,7 +517,6 @@ abstract class AbstractAction
         $rootCatIds = explode('/', $this->getPathFromCategoryId($store->getRootCategoryId()));
         array_pop($rootCatIds);
 
-        $this->currentStore = $store;
         $temporaryTreeTable = $this->makeTempCategoryTreeIndex();
 
         $productMetadata = $this->metadataPool->getMetadata(ProductInterface::class);
@@ -692,7 +714,7 @@ abstract class AbstractAction
                     ['ccacs' => $this->getTable('catalog_category_entity_int')],
                     'ccacs.' . $categoryLinkField . ' = c.' . $categoryLinkField
                     . ' AND ccacs.attribute_id = ccacd.attribute_id AND ccacs.store_id = ' .
-                    $this->currentStore->getId(),
+                    $this->getCurrentStore()->getId(),
                     []
                 )->where(
                     $this->connection->getIfNullSql('ccacs.value', 'ccacd.value') . ' = ?',
@@ -708,7 +730,7 @@ abstract class AbstractAction
             foreach ($categories as $category) {
                 $categoriesTree = explode('/', $category['path']);
                 foreach ($categoriesTree as $parentId) {
-                    if (!in_array($this->currentStore->getRootCategoryId(), $categoriesTree, true)) {
+                    if (!in_array($this->getCurrentStore()->getRootCategoryId(), $categoriesTree, true)) {
                         break;
                     }
 
