@@ -46,8 +46,7 @@ class AttributeGridCollection extends Collection
     public function addFieldToFilter($field, $condition)
     {
         if (isset($condition['like'])) {
-            $value = trim((string)$condition['like'], "'%");
-            $value = str_replace('\\','',$value);
+            $value = $this->unescapeLikeValue((string)$condition['like']);
             $this->addFilter($field, $value);
         }
 
@@ -105,5 +104,21 @@ class AttributeGridCollection extends Collection
         });
 
         return $this;
+    }
+
+    /**
+     * Unescape 'like' value from condition
+     *
+     * @param string $likeValue
+     * @return string
+     */
+    private function unescapeLikeValue(string $likeValue): string
+    {
+        $replaceFrom = ['\\\\', '\_', '\%'];
+        $replaceTo = ['\\', '_', '%'];
+        $value = trim($likeValue, "'%");
+        $value = str_replace($replaceFrom, $replaceTo, $value);
+
+        return $value;
     }
 }
