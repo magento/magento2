@@ -331,7 +331,8 @@
         "magento/module-tinymce-3": "*",
         "magento/module-csp": "*",
         "magento/module-aws-s3": "*",
-        "magento/module-remote-storage": "*"
+        "magento/module-remote-storage": "*",
+        "magento/module-jwt-framework-adapter": "*"
     },
     "conflict": {
         "gene/bluefoot": "*"
