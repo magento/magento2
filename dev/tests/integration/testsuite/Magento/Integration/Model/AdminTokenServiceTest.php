@@ -71,11 +71,9 @@ class AdminTokenServiceTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\AuthenticationException
-     */
     public function testCreateAdminAccessTokenInvalidCustomer()
     {
+        $this->expectException(\Magento\Framework\Exception\AuthenticationException::class);
         $adminUserName = 'invalid';
         $password = 'invalid';
         $this->tokenService->createAdminAccessToken($adminUserName, $password);

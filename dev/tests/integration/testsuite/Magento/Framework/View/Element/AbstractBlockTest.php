@@ -401,10 +401,11 @@ class AbstractBlockTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoAppIsolation enabled
-     * @expectedException \OutOfBoundsException
+     *
      */
     public function testInsertWithoutCreateBlock()
     {
+        $this->expectException(\OutOfBoundsException::class);
         $parent = $this->_createBlockWithLayout('parent', 'parent');
         $parent->insert('block');
     }

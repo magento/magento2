@@ -63,12 +63,10 @@ class I18nCollectPhrasesCommandTest extends \PHPUnit\Framework\TestCase
         unlink($outputPath);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Specified path doesn't exist
-     */
     public function testExecuteNonExistingPath()
     {
+        $this->expectExceptionMessage("Specified path doesn't exist");
+        $this->expectException(\InvalidArgumentException::class);
         $this->tester->execute(
             [
                 'directory' => BP . '/dev/tests/integration/testsuite/Magento/Setup/Console/Command/_files/non_exist',
@@ -76,21 +74,17 @@ class I18nCollectPhrasesCommandTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Directory path is not needed when --magento flag is set.
-     */
     public function testExecuteMagentoFlagDirectoryPath()
     {
+        $this->expectExceptionMessage("Directory path is not needed when --magento flag is set.");
+        $this->expectException(\InvalidArgumentException::class);
         $this->tester->execute(['directory' => 'a', '--magento' => true]);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Directory path is needed when --magento flag is not set.
-     */
     public function testExecuteNoMagentoFlagNoDirectoryPath()
     {
+        $this->expectExceptionMessage("Directory path is needed when --magento flag is not set.");
+        $this->expectException(\InvalidArgumentException::class);
         $this->tester->execute([]);
     }
 }

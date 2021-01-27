@@ -281,7 +281,7 @@ class DeclarativeInstallerTest extends SetupTestCase
         } catch (\Exception $e) {
             $installException = $e->getPrevious();
             self::assertSame(1, $installException->getCode());
-            self::assertContains(
+            self::assertStringContainsString(
                 'The reference table named "reference_table" is disabled',
                 $installException->getMessage()
             );

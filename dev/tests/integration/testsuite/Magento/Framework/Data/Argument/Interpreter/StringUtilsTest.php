@@ -92,11 +92,13 @@ class StringUtilsTest extends \PHPUnit\Framework\TestCase
      * @param array $input
      *
      * @dataProvider evaluateExceptionDataProvider
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage String value is expected
+     *
+     *
      */
     public function testEvaluateException($input)
     {
+        $this->expectExceptionMessage("String value is expected");
+        $this->expectException(\InvalidArgumentException::class);
         $this->model->evaluate($input);
     }
 

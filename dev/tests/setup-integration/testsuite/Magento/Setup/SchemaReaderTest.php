@@ -61,12 +61,14 @@ class SchemaReaderTest extends SetupTestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessageRegExp /The attribute 'scale' is not allowed./
+     *
+     *
      * @moduleName Magento_TestSetupDeclarationModule1
      */
     public function testFailOnInvalidColumnDeclaration()
     {
+        $this->expectExceptionMessageMatches("/The attribute 'scale' is not allowed./");
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
         $this->updateRevisionTo('fail_on_column_declaration');
         $this->reader->read('all');
     }

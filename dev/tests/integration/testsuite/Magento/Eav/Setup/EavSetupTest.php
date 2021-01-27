@@ -65,11 +65,13 @@ class EavSetupTest extends \PHPUnit\Framework\TestCase
      * @param string|null $attributeCode
      *
      * @dataProvider addAttributeThrowExceptionDataProvider
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage An attribute code must not be less than 1 and more than 60 characters.
+     *
+     *
      */
     public function testAddAttributeThrowException($attributeCode)
     {
+        $this->expectExceptionMessage("An attribute code must not be less than 1 and more than 60 characters.");
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
         $attributeData = $this->getAttributeData();
 
         $this->eavSetup->addAttribute(\Magento\Catalog\Model\Product::ENTITY, $attributeCode, $attributeData);
@@ -96,11 +98,13 @@ class EavSetupTest extends \PHPUnit\Framework\TestCase
      * @param string|null $attributeCode
      *
      * @dataProvider addInvalidAttributeThrowExceptionDataProvider
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Please use only letters (a-z or A-Z), numbers (0-9) or underscore (_) in this field,
+     *
+     *
      */
     public function testAddInvalidAttributeThrowException($attributeCode)
     {
+        $this->expectExceptionMessage("Please use only letters (a-z or A-Z), numbers (0-9) or underscore (_) in this field,");
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
         $attributeData = $this->getAttributeData();
         $this->eavSetup->addAttribute(\Magento\Catalog\Model\Product::ENTITY, $attributeCode, $attributeData);
     }

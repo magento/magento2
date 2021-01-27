@@ -147,11 +147,13 @@ class ObjectManagerTest extends \PHPUnit\Framework\TestCase
     /**
      * Test creating an object and passing incorrect type of arguments to the constructor.
      *
-     * @expectedException \Magento\Framework\Exception\RuntimeException
-     * @expectedExceptionMessage Error occurred when creating object
+     *
+     *
      */
     public function testNewInstanceWithTypeError()
     {
+        $this->expectExceptionMessage("Error occurred when creating object");
+        $this->expectException(\Magento\Framework\Exception\RuntimeException::class);
         self::$_objectManager->create(self::TEST_CLASS_WITH_TYPE_ERROR, [
             'testArgument' => new \stdClass()
         ]);

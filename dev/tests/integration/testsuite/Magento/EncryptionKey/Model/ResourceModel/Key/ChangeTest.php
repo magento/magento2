@@ -20,12 +20,10 @@ class ChangeTest extends \PHPUnit\Framework\TestCase
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
     }
 
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Deployment configuration file is not writable
-     */
     public function testChangeEncryptionKeyConfigNotWritable()
     {
+        $this->expectExceptionMessage("Deployment configuration file is not writable");
+        $this->expectException(\Exception::class);
         $writerMock = $this->createMock(\Magento\Framework\App\DeploymentConfig\Writer::class);
         $writerMock->expects($this->once())->method('checkIfWritable')->will($this->returnValue(false));
 

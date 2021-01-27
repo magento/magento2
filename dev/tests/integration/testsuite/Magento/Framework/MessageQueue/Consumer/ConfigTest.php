@@ -67,12 +67,10 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
         $this->assertCount(0, $handlers);
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Consumer 'undeclaredConsumer' is not declared.
-     */
     public function testGetUndeclaredConsumer()
     {
+        $this->expectExceptionMessage("Consumer 'undeclaredConsumer' is not declared.");
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
         /** @var \Magento\Framework\MessageQueue\Consumer\ConfigInterface $config */
         $config = $this->objectManager->create(\Magento\Framework\MessageQueue\Consumer\ConfigInterface::class);
         $config->getConsumer('undeclaredConsumer');

@@ -127,11 +127,13 @@ class ProxyDeferredFactoryTest extends TestCase
     /**
      * Test with deferred value having different type.
      *
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Wrong instance returned by deferred
+     *
+     *
      */
     public function testCreateWrongValue(): void
     {
+        $this->expectExceptionMessage("Wrong instance returned by deferred");
+        $this->expectException(\RuntimeException::class);
         $callback = function () {
             return new class {
                 public function getValue()

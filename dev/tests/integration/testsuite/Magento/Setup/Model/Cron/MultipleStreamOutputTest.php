@@ -28,12 +28,10 @@ class MultipleStreamOutputTest extends \PHPUnit\Framework\TestCase
         file_put_contents(__DIR__ . '/_files/b.txt', '');
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage The StreamOutput class needs a stream as its first argument
-     */
     public function testCreateException()
     {
+        $this->expectExceptionMessage("The StreamOutput class needs a stream as its first argument");
+        $this->expectException(\InvalidArgumentException::class);
         $this->multipleStreamOutput = new MultipleStreamOutput(['a', 'b']);
     }
 

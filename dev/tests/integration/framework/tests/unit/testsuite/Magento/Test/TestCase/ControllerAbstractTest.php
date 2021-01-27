@@ -119,11 +119,9 @@ class ControllerAbstractTest extends \Magento\TestFramework\TestCase\AbstractCon
         $this->fail('Failed response body validation');
     }
 
-    /**
-     * @expectedException \PHPUnit\Framework\AssertionFailedError
-     */
     public function testAssertRedirectFailure()
     {
+        $this->expectException(\PHPUnit\Framework\AssertionFailedError::class);
         $this->assertRedirect();
     }
 

@@ -62,11 +62,9 @@ class AppAreaTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     */
     public function testGetTestAppAreaWithInvalidArea()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
         $annotations = ['method' => ['magentoAppArea' => ['some_invalid_area']]];
         $this->_testCaseMock->expects($this->once())->method('getAnnotations')->will($this->returnValue($annotations));
         $this->_object->startTest($this->_testCaseMock);

@@ -61,12 +61,10 @@ class SettingsTest extends \PHPUnit\Framework\TestCase
         $this->_object = null;
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Base path 'non_existing_dir' has to be an existing directory.
-     */
     public function testConstructorNonExistingBaseDir()
     {
+        $this->expectExceptionMessage("Base path 'non_existing_dir' has to be an existing directory.");
+        $this->expectException(\InvalidArgumentException::class);
         new \Magento\TestFramework\Bootstrap\Settings('non_existing_dir', []);
     }
 

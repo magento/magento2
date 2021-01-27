@@ -148,10 +148,11 @@ class PriceIndexerDimensionsModeSetCommandTest extends \Magento\TestFramework\In
      * @magentoAppArea adminhtml
      * @magentoAppIsolation enabled
      *
-     * @expectedException \InvalidArgumentException
+     *
      */
     public function testSwitchModeWithInvalidArgument()
     {
+        $this->expectException(\InvalidArgumentException::class);
         $this->commandTester->execute(
             [
                 'indexer' => 'indexer_not_valid'

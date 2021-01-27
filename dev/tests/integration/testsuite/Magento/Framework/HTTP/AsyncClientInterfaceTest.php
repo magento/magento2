@@ -50,11 +50,13 @@ class AsyncClientInterfaceTest extends TestCase
     /**
      * Test cancelling a request.
      *
-     * @expectedException \Magento\Framework\Async\CancelingDeferredException
-     * @expectedExceptionMessage Deferred is canceled
+     *
+     *
      */
     public function testCancel(): void
     {
+        $this->expectException(\Magento\Framework\Async\CancelingDeferredException::class);
+        $this->expectExceptionMessage("Deferred is canceled");
         $request = new Request('https://magento.com/home-page', Request::METHOD_GET, [], null);
         $response = $this->client->request($request);
         $response->cancel(true);
@@ -65,11 +67,13 @@ class AsyncClientInterfaceTest extends TestCase
     /**
      * Test failing cancelling a request.
      *
-     * @expectedException \Magento\Framework\Async\CancelingDeferredException
-     * @expectedExceptionMessage Failed to cancel HTTP request
+     *
+     *
      */
     public function testCancelFail(): void
     {
+        $this->expectExceptionMessage("Failed to cancel HTTP request");
+        $this->expectException(\Magento\Framework\Async\CancelingDeferredException::class);
         $request = new Request('https://magento.com/home-page', Request::METHOD_GET, [], null);
         $response = $this->client->request($request);
         $response->cancel();

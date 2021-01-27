@@ -126,11 +126,13 @@ class StorageTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @return void
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage We cannot delete directory /downloadable.
+     *
+     *
      */
     public function testDeleteDirectoryWithExcludedDirPath(): void
     {
+        $this->expectExceptionMessage("We cannot delete directory /downloadable.");
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
         $dir = $this->objectManager->get(\Magento\Cms\Helper\Wysiwyg\Images::class)->getCurrentPath() . 'downloadable';
         $this->storage->deleteDirectory($dir);
     }
@@ -162,11 +164,13 @@ class StorageTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @return void
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage We can't upload the file to current folder right now. Please try another folder.
+     *
+     *
      */
     public function testUploadFileWithExcludedDirPath(): void
     {
+        $this->expectExceptionMessage("We can't upload the file to current folder right now. Please try another folder.");
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
         $fileName = 'magento_small_image.jpg';
         $tmpDirectory = $this->filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem\DirectoryList::SYS_TMP);
         $filePath = $tmpDirectory->getAbsolutePath($fileName);
@@ -194,11 +198,13 @@ class StorageTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      * @dataProvider testUploadFileWithWrongExtensionDataProvider
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage File validation failed.
+     *
+     *
      */
     public function testUploadFileWithWrongExtension(string $fileName, string $fileType, ?string $storageType): void
     {
+        $this->expectExceptionMessage("File validation failed.");
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
         $tmpDirectory = $this->filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem\DirectoryList::SYS_TMP);
         $filePath = $tmpDirectory->getAbsolutePath($fileName);
         // phpcs:disable
@@ -238,12 +244,14 @@ class StorageTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage File validation failed.
+     *
+     *
      * @return void
      */
     public function testUploadFileWithWrongFile(): void
     {
+        $this->expectExceptionMessage("File validation failed.");
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
         $fileName = 'file.gif';
         $tmpDirectory = $this->filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem\DirectoryList::SYS_TMP);
         $filePath = $tmpDirectory->getAbsolutePath($fileName);

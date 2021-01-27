@@ -405,10 +405,11 @@ class StoreTest extends \PHPUnit\Framework\TestCase
      * @magentoAppIsolation enabled
      * @magentoAppArea adminhtml
      * @magentoDbIsolation enabled
-     * @expectedException \Magento\Framework\Exception\LocalizedException
+     *
      */
     public function testSaveValidation($badStoreData)
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
         $normalStoreData = [
             'code' => 'test',
             'website_id' => 1,

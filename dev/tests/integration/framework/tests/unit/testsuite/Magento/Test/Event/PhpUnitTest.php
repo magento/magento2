@@ -42,11 +42,9 @@ class PhpUnitTest extends \PHPUnit\Framework\TestCase
         $this->testStartTestSuiteFireEvent();
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     */
     public function testConstructorException()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
         new \Magento\TestFramework\Event\Magento();
     }
 

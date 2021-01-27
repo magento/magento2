@@ -47,11 +47,9 @@ class IteratorTest extends \PHPUnit\Framework\TestCase
         return true;
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     */
     public function testWalkException()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
         $this->_model->walk('test', [[$this, 'walkCallback']]);
     }
 }

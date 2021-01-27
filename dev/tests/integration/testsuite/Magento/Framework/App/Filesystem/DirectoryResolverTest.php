@@ -57,12 +57,13 @@ class DirectoryResolverTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\FileSystemException
+     *
      * @magentoAppIsolation enabled
      * @return void
      */
     public function testValidatePathWithException()
     {
+        $this->expectException(\Magento\Framework\Exception\FileSystemException::class);
         $directory = $this->filesystem
             ->getDirectoryWrite(\Magento\Framework\App\Filesystem\DirectoryList::MEDIA);
         $path = $directory->getAbsolutePath();

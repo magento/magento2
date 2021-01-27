@@ -66,13 +66,15 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoDataFixture Magento/Catalog/_files/product_attribute.php
      *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Do not change entity type.
+     *
+     *
      *
      * @return void
      */
     public function testAttributeSaveWithChangedEntityType(): void
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage("Do not change entity type.");
         $attribute = $this->attributeRepository->get($this->catalogProductEntityType, 'test_attribute_code_333');
         $attribute->setEntityTypeId(1);
         $attribute->save();

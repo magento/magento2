@@ -38,19 +38,15 @@ class DataSetupTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * @expectedException \Magento\Framework\DB\Adapter\TableNotFoundException
-     */
     public function testDeleteTableRow()
     {
+        $this->expectException(\Magento\Framework\DB\Adapter\TableNotFoundException::class);
         $this->_model->deleteTableRow('setup/module', 'module', 'integration_test_fixture_setup');
     }
 
-    /**
-     * @expectedException \Magento\Framework\DB\Adapter\TableNotFoundException
-     */
     public function testUpdateTableRowNameConversion()
     {
+        $this->expectException(\Magento\Framework\DB\Adapter\TableNotFoundException::class);
         $original = $this->_model->getTableRow('setup_module', 'module', 'core_setup', 'schema_version');
         $this->_model->updateTableRow('setup/module', 'module', 'core_setup', 'schema_version', $original);
     }

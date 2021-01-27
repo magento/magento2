@@ -205,10 +205,11 @@ class LayoutTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @dataProvider blockNotExistsDataProvider
-     * @expectedException \Magento\Framework\Exception\LocalizedException
+     *
      */
     public function testCreateBlockNotExists($name)
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
         $this->_layout->createBlock($name);
     }
 
@@ -360,11 +361,9 @@ class LayoutTest extends \PHPUnit\Framework\TestCase
         $this->assertSame(['block1' => $block1, 'block2' => $block2], $this->_layout->getChildBlocks('parent'));
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     */
     public function testAddBlockInvalidType()
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
         $this->_layout->addBlock('invalid_name', 'child');
     }
 

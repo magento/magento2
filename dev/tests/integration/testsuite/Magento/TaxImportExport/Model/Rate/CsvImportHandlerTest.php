@@ -56,11 +56,13 @@ class CsvImportHandlerTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDbIsolation enabled
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Country code is invalid: ZZ
+     *
+     *
      */
     public function testImportFromCsvFileThrowsExceptionWhenCountryCodeIsInvalid()
     {
+        $this->expectExceptionMessage("Country code is invalid: ZZ");
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
         $importFileName = __DIR__ . '/_files/rates_import_file_incorrect_country.csv';
         $this->_importHandler->importFromCsvFile(['tmp_name' => $importFileName]);
     }

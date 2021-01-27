@@ -104,11 +104,12 @@ class SecurityManagerTest extends \PHPUnit\Framework\TestCase
      * @magentoConfigFixture current_store customer/password/max_number_password_reset_requests 1
      * @magentoConfigFixture current_store customer/password/min_time_between_password_reset_requests 0
      * @magentoConfigFixture current_store contact/email/recipient_email hi@example.com
-     * @expectedException \Magento\Framework\Exception\SecurityViolationException
+     *
      * @magentoDbIsolation enabled
      */
     public function testPerformSecurityCheckLimitNumber()
     {
+        $this->expectException(\Magento\Framework\Exception\SecurityViolationException::class);
         $attempts = 2;
         $requestType = \Magento\Security\Model\PasswordResetRequestEvent::CUSTOMER_PASSWORD_RESET_REQUEST;
         $longIp = 127001;
@@ -138,11 +139,12 @@ class SecurityManagerTest extends \PHPUnit\Framework\TestCase
      * @magentoConfigFixture current_store customer/password/max_number_password_reset_requests 0
      * @magentoConfigFixture current_store customer/password/min_time_between_password_reset_requests 1
      * @magentoConfigFixture current_store contact/email/recipient_email hi@example.com
-     * @expectedException \Magento\Framework\Exception\SecurityViolationException
+     *
      * @magentoDbIsolation enabled
      */
     public function testPerformSecurityCheckLimitTime()
     {
+        $this->expectException(\Magento\Framework\Exception\SecurityViolationException::class);
         $attempts = 2;
         $requestType = \Magento\Security\Model\PasswordResetRequestEvent::CUSTOMER_PASSWORD_RESET_REQUEST;
         $longIp = 127001;

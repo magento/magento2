@@ -75,11 +75,9 @@ class VersionTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    /**
-     * @expectedException \UnexpectedValueException
-     */
     public function testGetValueInProductionModeWithoutVersion()
     {
+        $this->expectException(\UnexpectedValueException::class);
         $this->assertFalse($this->directoryWrite->isExist($this->fileName));
         $this->getVersionModel(State::MODE_PRODUCTION)->getValue();
     }
