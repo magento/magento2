@@ -75,7 +75,7 @@ class FreeShippingTest extends TestCase
         $items = [$fItem, $sItem];
 
         $this->calculator->method('init')
-            ->with(self::$websiteId, self::$customerGroupId, self::$couponCode);
+            ->with(self::$websiteId, $quote);
         $this->calculator->method('processFreeShipping')
             ->withConsecutive(
                 [$fItem],
