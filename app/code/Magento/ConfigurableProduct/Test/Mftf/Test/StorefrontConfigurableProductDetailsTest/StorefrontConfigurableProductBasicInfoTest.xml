@@ -38,7 +38,7 @@
         </after>
 
         <!-- Verify configurable product details in storefront product view -->
-        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openStorefrontProductPage">
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="amOnConfigurableProductPage">
             <argument name="productUrl" value="{{_defaultProduct.urlKey}}"/>
         </actionGroup>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="wait"/>
@@ -49,7 +49,7 @@
             <argument name="productSku" value="{{_defaultProduct.sku}}"/>
         </actionGroup>
         <see userInput="As low as" selector="{{StorefrontProductInfoMainSection.productPriceLabel}}" stepKey="seeProductPriceLabel"/>
-        <actionGroup ref="AssertStorefrontProductStockStatusOnProductPageActionGroup" stepKey="seeProductStatusInStoreFront">
+        <actionGroup ref="AssertStorefrontProductStockStatusOnProductPageActionGroup" stepKey="seeProductStockStatus">
             <argument name="productStockStatus" value="In Stock"/>
         </actionGroup>
         <actionGroup ref="StorefrontAssertProductPriceOnProductPageActionGroup" stepKey="seeProductPrice">
@@ -59,13 +59,13 @@
             <argument name="productAttributeLabel" value="{{colorProductAttribute.default_label}}"/>
         </actionGroup>
         <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="seeColorAttributeName1"/>
-        <actionGroup ref="AssertStorefrontProductAtttributeOptionVisibleActionGroup" stepKey="seeInDropDown1">
+        <actionGroup ref="AssertStorefrontProductAttributeOptionVisibleActionGroup" stepKey="seeInDropDown1">
             <argument name="productAttributeOption" value="{{colorProductAttribute1.name}}"/>
         </actionGroup>
-        <actionGroup ref="AssertStorefrontProductAtttributeOptionVisibleActionGroup" stepKey="seeInDropDown2">
+        <actionGroup ref="AssertStorefrontProductAttributeOptionVisibleActionGroup" stepKey="seeInDropDown2">
             <argument name="productAttributeOption" value="{{colorProductAttribute2.name}}"/>
         </actionGroup>
-        <actionGroup ref="AssertStorefrontProductAtttributeOptionVisibleActionGroup" stepKey="seeInDropDown3">
+        <actionGroup ref="AssertStorefrontProductAttributeOptionVisibleActionGroup" stepKey="seeInDropDown3">
             <argument name="productAttributeOption" value="{{colorProductAttribute3.name}}"/>
         </actionGroup>
     </test>
