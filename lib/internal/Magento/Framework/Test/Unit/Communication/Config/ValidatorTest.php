@@ -10,29 +10,31 @@ namespace Magento\Framework\Test\Unit\Communication\Config;
 use Magento\Framework\Communication\Config\Validator;
 use Magento\Framework\Reflection\MethodsMap;
 use Magento\Framework\Reflection\TypeProcessor;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit test for \Magento\Framework\Communication\Config\Validator class
  */
-class ValidatorTest extends \PHPUnit\Framework\TestCase
+class ValidatorTest extends TestCase
 {
     /**
-     * @var TypeProcessor|\PHPUnit\Framework\MockObject\MockObject
+     * @var TypeProcessor|MockObject
      */
     protected $typeProcessor;
 
     /**
-     * @var MethodsMap|\PHPUnit\Framework\MockObject\MockObject
+     * @var MethodsMap|MockObject
      */
     protected $methodsMap;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->methodsMap = $this->createMock(MethodsMap::class);
 
         $this->methodsMap->expects(static::any())
             ->method('getMethodsMap')
-            ->will($this->throwException(new \InvalidArgumentException('message', 333)));
+            ->willThrowException(new \InvalidArgumentException('message', 333));
 
         $this->typeProcessor = $this->createMock(TypeProcessor::class);
         $this->typeProcessor->expects(static::any())
@@ -44,26 +46,20 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
             ->willReturn(false);
     }
 
-    /**
-     * @expectedException  \LogicException
-     * @expectedExceptionCode 333
-     * @expectedExceptionMessage Response schema definition has service class with wrong annotated methods
-     */
     public function testValidateResponseSchemaType()
     {
-        /** @var Validator $validator */
+        $this->expectException('LogicException');
+        $this->expectExceptionCode('333');
+        $this->expectExceptionMessage('Response schema definition has service class with wrong annotated methods');
         $validator = new Validator($this->typeProcessor, $this->methodsMap);
         $validator->validateResponseSchemaType('123', '123');
     }
 
-    /**
-     * @expectedException  \LogicException
-     * @expectedExceptionCode 333
-     * @expectedExceptionMessage Request schema definition has service class with wrong annotated methods
-     */
     public function testValidateRequestSchemaType()
     {
-        /** @var Validator $validator */
+        $this->expectException('LogicException');
+        $this->expectExceptionCode('333');
+        $this->expectExceptionMessage('Request schema definition has service class with wrong annotated methods');
         $validator = new Validator($this->typeProcessor, $this->methodsMap);
         $validator->validateRequestSchemaType('123', '123');
     }

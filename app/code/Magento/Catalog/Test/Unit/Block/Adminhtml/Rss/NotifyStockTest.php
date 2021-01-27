@@ -98,9 +98,9 @@ class NotifyStockTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue('http://magento.com/catalog/product/edit/id/1'));
 
         $data = $this->block->getRssData();
-        $this->assertInternalType('string', $data['title']);
-        $this->assertInternalType('string', $data['description']);
-        $this->assertInternalType('string', $data['entries'][0]['description']);
+        $this->assertIsString($data['title']);
+        $this->assertIsString($data['description']);
+        $this->assertIsString($data['entries'][0]['description']);
         $this->assertEquals($this->rssFeed, $data);
     }
 

@@ -131,6 +131,8 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
      */
     public function testAddValidator()
     {
+        $this->markTestSkipped('Skipped in #27500 due to testing protected/private methods and properties');
+
         $fooValidator = new \Magento\Framework\Validator\Test\Unit\Test\IsTrue();
         $classConstraint = new \Magento\Framework\Validator\Constraint($fooValidator, 'id');
         $propertyValidator = new \Magento\Framework\Validator\Constraint\Property($classConstraint, 'name', 'id');

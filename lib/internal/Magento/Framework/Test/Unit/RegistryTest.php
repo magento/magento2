@@ -54,11 +54,10 @@ class RegistryTest extends \PHPUnit\Framework\TestCase
         $this->registry->register($key, $value, $graceful);
     }
 
-    /**
-     * @expectedException \RuntimeException
-     */
+
     public function testRegisterKeyExists()
     {
+        $this->expectException('RuntimeException');
         $this->registry->register($this->data['key'], $this->data['value']);
     }
 

@@ -203,7 +203,7 @@ class AbstractTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abstract
      */
     public function testGetUpdatedItemsCount()
     {
-        $this->assertInternalType('integer', $this->_model->getUpdatedItemsCount());
+        $this->assertIsInt($this->_model->getUpdatedItemsCount());
     }
 
     /**

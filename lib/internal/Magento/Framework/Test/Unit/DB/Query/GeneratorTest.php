@@ -87,12 +87,12 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
     /**
      * Test batch generation with invalid select object.
      *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage The select object must have the correct "FROM" part. Verify and try again.
      * @return void
      */
     public function testGenerateWithoutFromPart()
     {
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
+        $this->expectExceptionMessage('The select object must have the correct "FROM" part. Verify and try again.');
         $map = [
             [Select::FROM, []],
             [

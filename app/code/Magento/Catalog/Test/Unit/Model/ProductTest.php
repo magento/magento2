@@ -1337,8 +1337,8 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             ]
         );
         $imagesCollectionMock->expects(self::exactly(2))->method('addItem')->withConsecutive(
-            $expectedImageDataObject,
-            $expectedSmallImageDataObject
+            [$expectedImageDataObject],
+            [$expectedSmallImageDataObject]
         );
         $this->collectionFactoryMock->method('create')->willReturn($imagesCollectionMock);
 
