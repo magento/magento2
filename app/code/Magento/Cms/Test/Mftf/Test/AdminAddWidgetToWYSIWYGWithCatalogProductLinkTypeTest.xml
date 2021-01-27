@@ -55,9 +55,9 @@
         <waitForLoadingMaskToDisappear stepKey="waitLoadingMask" />
         <click selector="{{WidgetSection.PreCreateProduct('$$createPreReqProduct.name$$')}}" stepKey="selectPreProduct" />
         <waitForElementNotVisible selector="{{WidgetSection.SelectProductTitle}}" stepKey="waitForSlideOutCloses" />
-        <click selector="{{WidgetSection.InsertWidget}}" stepKey="clickInsertWidget" />
-        <waitForLoadingMaskToDisappear stepKey="waitLoadingMask1" />
-        <waitForPageLoad stepKey="wait6" />
+        <actionGroup ref="AdminClickInsertWidgetActionGroup" stepKey="clickInsertWidget"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="waitLoadingMask1"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="wait6"/>
         <scrollTo selector="{{CmsNewPagePageSeoSection.header}}" stepKey="scrollToSearchEngineTab" />
         <click selector="{{CmsNewPagePageSeoSection.header}}" stepKey="clickExpandSearchEngineOptimisation"/>
         <fillField selector="{{CmsNewPagePageSeoSection.urlKey}}" userInput="{{_defaultCmsPage.identifier}}" stepKey="fillFieldUrlKey"/>

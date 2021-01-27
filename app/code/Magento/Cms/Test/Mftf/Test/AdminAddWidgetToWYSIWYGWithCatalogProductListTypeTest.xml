@@ -79,8 +79,8 @@
         <click selector="{{WidgetSection.RuleParam}}" stepKey="clickRuleParam3"/>
         <fillField selector="{{WidgetSection.RuleParamInput('3','2')}}" userInput="1" stepKey="fillMinPrice"/>
 
-        <click selector="{{WidgetSection.InsertWidget}}" stepKey="clickInsertWidget" />
-        <waitForPageLoad stepKey="wait6" />
+        <actionGroup ref="AdminClickInsertWidgetActionGroup" stepKey="clickInsertWidget"/>
+        <comment userInput="Comment is added to preserve the step key for backward compatibility" stepKey="wait6"/>
         <scrollTo selector="{{CmsNewPagePageSeoSection.header}}" stepKey="scrollToSearchEngineTab" />
         <click selector="{{CmsNewPagePageSeoSection.header}}" stepKey="clickExpandSearchEngineOptimisation"/>
         <fillField selector="{{CmsNewPagePageSeoSection.urlKey}}" userInput="{{_defaultCmsPage.identifier}}" stepKey="fillFieldUrlKey"/>
