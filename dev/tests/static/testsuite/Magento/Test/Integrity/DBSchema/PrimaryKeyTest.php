@@ -36,7 +36,7 @@ class PrimaryKeyTest extends TestCase
         $errorMessage = '';
         $failedTableCtr = 0;
         foreach ($tablesSchemaDeclaration as $tableName => $tableSchemaDeclaration) {
-            if (!isset($tableSchemaDeclaration['constraint']['PRIMARY'])) {
+            if (!$this->hasPrimaryKey($tableSchemaDeclaration)) {
                 $message = '';
                 if (!empty($tableSchemaDeclaration['modules'])) {
                     $message = "It is declared in the following modules: \n" . implode(
@@ -52,6 +52,24 @@ class PrimaryKeyTest extends TestCase
             $errorMessage .= "\n\nTotal " . $failedTableCtr . " tables failed";
             $this->fail($errorMessage);
         }
+    }
+
+    /**
+     * Check table schema and verify if the table has primary key defined.
+     *
+     * @param array $tableSchemaDeclaration
+     * @return bool
+     */
+    private function hasPrimaryKey(array $tableSchemaDeclaration): bool
+    {
+        if (isset($tableSchemaDeclaration['constraint'])) {
+            foreach ($tableSchemaDeclaration['constraint'] as $constraint) {
+                if ($constraint['type'] == 'primary') {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     /**
