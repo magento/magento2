@@ -213,9 +213,15 @@ class CategoryTest extends TestCase
 
     public function testGetDesignAttributes(): void
     {
-        $attributes = $this->_model->getDesignAttributes();
-        $this->assertContains('custom_design_from', array_keys($attributes));
-        $this->assertContains('custom_design_to', array_keys($attributes));
+        $attributeCodes = array_map(
+            function ($elem) {
+                return $elem->getAttributeCode();
+            },
+            $this->_model->getDesignAttributes()
+        );
+
+        $this->assertContains('custom_design_from', $attributeCodes);
+        $this->assertContains('custom_design_to', $attributeCodes);
     }
 
     public function testCheckId(): void

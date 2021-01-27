@@ -355,7 +355,7 @@ class ProductPageViewTest extends TestCase
             $this->assertEquals($expectedData[$currentType]['additional_data'], $actualDataItem['additional_data']);
             unset($actualDataItem['additional_data']);
             foreach ($actualDataItem as $item) {
-                $this->assertContains($item, $expectedData[$currentType]);
+                $this->assertContainsEquals($item, $expectedData[$currentType]);
             }
         }
     }

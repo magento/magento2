@@ -221,9 +221,9 @@ class ConfigImportCommandTest extends \PHPUnit\Framework\TestCase
         $website = $websiteFactory->create();
         $website->getResource()->load($website, 'test_website', 'code');
 
-        $this->assertSame(null, $store->getId());
-        $this->assertSame(null, $website->getId());
-        $this->assertSame(null, $group->getId());
+        $this->assertNull($store->getId());
+        $this->assertNull($website->getId());
+        $this->assertNull($group->getId());
     }
 
     /**
@@ -389,7 +389,7 @@ class ConfigImportCommandTest extends \PHPUnit\Framework\TestCase
         $this->appConfig->reinit();
         $commandTester->execute([], ['interactive' => false]);
 
-        $this->assertContains(
+        $this->assertStringContainsString(
             'Processing configurations data from configuration file...',
             $commandTester->getDisplay()
         );

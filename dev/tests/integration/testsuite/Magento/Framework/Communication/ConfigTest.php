@@ -58,19 +58,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     // @codingStandardsIgnoreEnd
     public function testGetTopicsNumericInvalid()
     {
-        $this->expectExceptionMessage("The XML in file \"0\" is invalid:
- Element 'topic', attribute 'schema': [facet 'pattern'] The value '55\Customer\Api\CustomerRepositoryInterface::delete' is not accepted by the pattern '[a-zA-Z]+[a-zA-Z0-9\\]+::[a-zA-Z0-9]+'.
- Line: 9
-
- Element 'topic', attribute 'schema': '55\Customer\Api\CustomerRepositoryInterface::delete' is not a valid value of the atomic type 'schemaType'.
- Line: 9
-
- Element 'handler', attribute 'type': [facet 'pattern'] The value '55\Customer\Api\CustomerRepositoryInterface' is not accepted by the pattern '[a-zA-Z]+[a-zA-Z0-9\\]+'.
- Line: 10
-
- Element 'handler', attribute 'type': '55\Customer\Api\CustomerRepositoryInterface' is not a valid value of the atomic type 'serviceTypeType'.
- Line: 10
- Verify the XML and try again.");
+        $this->expectExceptionMessage('The XML in file "0" is invalid:');
         $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
         $this->getConfigInstance(__DIR__ . '/_files/invalid_communication_numeric.xml')->getTopics();
     }
