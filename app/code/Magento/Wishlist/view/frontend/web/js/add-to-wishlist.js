@@ -144,7 +144,7 @@ define([
                 return productListWrapper.find(this.options.actionElement);
             }
 
-            return $(event.currentTarget).closest(this.options.productPageWrapper).find(this.options.actionElement);
+            return $(this.options.actionElement);
         },
 
         /**
