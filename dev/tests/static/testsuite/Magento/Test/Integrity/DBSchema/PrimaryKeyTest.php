@@ -14,21 +14,19 @@ use Magento\Framework\Setup\Declaration\Schema\Config\Converter;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Test for existance of primary key in database tables
+ * Test for finding database tables missing primary key
  */
 class PrimaryKeyTest extends TestCase
 {
-    private $blockWhitelist;
-
     /**
-     * Check existance of database tables' primary key
+     * Check missing database tables' primary key
      *
      * @throws LocalizedException
      */
     public function testMissingPrimaryKey()
     {
-        $exemptionList = $this->getExemptionlist();
-        $tablesSchemaDeclaration = $this->getDbSchemaDeclaration()['table'];
+        $exemptionList = $this->getExemptionList();
+        $tablesSchemaDeclaration = $this->getDbSchemaDeclarations()['table'];
         $exemptionList = array_intersect(array_keys($tablesSchemaDeclaration), $exemptionList);
         foreach ($exemptionList as $exemptionTableName) {
             unset($tablesSchemaDeclaration[$exemptionTableName]);
@@ -91,9 +89,9 @@ class PrimaryKeyTest extends TestCase
      * @return array
      * @throws LocalizedException
      */
-    private function getDbSchemaDeclaration(): array
+    private function getDbSchemaDeclarations(): array
     {
-        $declaration = [];
+        $declarations = [];
         foreach (Files::init()->getDbSchemaFiles() as $filePath) {
             $filePath = reset($filePath);
             preg_match('#app/code/(\w+/\w+)#', $filePath, $result);
@@ -107,15 +105,16 @@ class PrimaryKeyTest extends TestCase
                 array_push($tableDeclaration['modules'], $moduleName);
                 $moduleDeclaration = array_replace_recursive(
                     $moduleDeclaration,
-                    ['table' => [
-                        $tableName => $tableDeclaration,
-                    ]
+                    [
+                        'table' => [
+                            $tableName => $tableDeclaration,
+                        ]
                     ]
                 );
             }
-            $declaration = array_merge_recursive($declaration, $moduleDeclaration);
+            $declarations = array_merge_recursive($declarations, $moduleDeclaration);
         }
-        return $declaration;
+        return $declarations;
     }
 
     /**
@@ -123,7 +122,7 @@ class PrimaryKeyTest extends TestCase
      *
      * @return string[]
      */
-    private function getExemptionlist(): array
+    private function getExemptionList(): array
     {
         $exemptionListFiles = str_replace(
             '\\',
