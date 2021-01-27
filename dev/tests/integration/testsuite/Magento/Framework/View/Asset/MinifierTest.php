@@ -153,7 +153,7 @@ class MinifierTest extends \PHPUnit\Framework\TestCase
             function ($path) {
                 $content = file_get_contents($path);
                 $this->assertNotEmpty($content);
-                $this->assertContains('FrameworkViewMinifier/frontend', $content);
+                $this->assertStringContainsString('FrameworkViewMinifier/frontend', $content);
                 $this->assertNotEquals(
                     file_get_contents(
                         dirname(__DIR__)
@@ -196,8 +196,8 @@ class MinifierTest extends \PHPUnit\Framework\TestCase
             function ($path) {
                 $content = file_get_contents($path);
                 $this->assertNotEmpty($content);
-                $this->assertContains('Magento/backend', $content);
-                $this->assertContains('semi-minified file', $content);
+                $this->assertStringContainsString('Magento/backend', $content);
+                $this->assertStringContainsString('semi-minified file', $content);
             }
         );
     }

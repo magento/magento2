@@ -28,7 +28,7 @@ class TaxvatTest extends \PHPUnit\Framework\TestCase
         $model->loadByCode('customer', 'taxvat');
         $attributeLabel = $model->getStoreLabel();
 
-        $this->assertContains('title="' . $block->escapeHtmlAttr($attributeLabel) . '"', $block->toHtml());
+        $this->assertStringContainsString('title="' . $block->escapeHtmlAttr($attributeLabel) . '"', $block->toHtml());
         $this->assertNotContains('required', $block->toHtml());
     }
 
@@ -51,8 +51,8 @@ class TaxvatTest extends \PHPUnit\Framework\TestCase
             \Magento\Customer\Block\Widget\Taxvat::class
         );
 
-        $this->assertContains('title="' . $block->escapeHtmlAttr($attributeLabel) . '"', $block->toHtml());
-        $this->assertContains('required', $block->toHtml());
+        $this->assertStringContainsString('title="' . $block->escapeHtmlAttr($attributeLabel) . '"', $block->toHtml());
+        $this->assertStringContainsString('required', $block->toHtml());
     }
 
     protected function tearDown(): void

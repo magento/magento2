@@ -98,6 +98,6 @@ class EditTest extends AbstractController
         $block = $this->layout->createBlock(\Magento\Customer\Block\Adminhtml\Group\Edit::class, 'block');
         $buttonsHtml = $block->getButtonsHtml();
 
-        $this->assertContains('delete', $buttonsHtml);
+        $this->assertStringContainsString('delete', $buttonsHtml);
     }
 }

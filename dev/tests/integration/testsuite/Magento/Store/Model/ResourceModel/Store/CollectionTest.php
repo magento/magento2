@@ -35,7 +35,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $this->_collection->setWithoutDefaultFilter();
         $quote = $this->_getQuoteIdentifierSymbol();
 
-        $this->assertContains("{$quote}store_id{$quote} > 0", (string)$this->_collection->getSelect());
+        $this->assertStringContainsString("{$quote}store_id{$quote} > 0", (string)$this->_collection->getSelect());
     }
 
     /**
@@ -94,13 +94,13 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     public function testAddRemoveFieldToSelect()
     {
         $this->_collection->addFieldToSelect(['store_id']);
-        $this->assertContains('store_id', (string)$this->_collection->getSelect());
+        $this->assertStringContainsString('store_id', (string)$this->_collection->getSelect());
         $this->_collection->addFieldToSelect('*');
-        $this->assertContains('*', (string)$this->_collection->getSelect());
+        $this->assertStringContainsString('*', (string)$this->_collection->getSelect());
 
         $this->_collection->addFieldToSelect('test_field', 'test_alias');
-        $this->assertContains('test_field', (string)$this->_collection->getSelect());
-        $this->assertContains('test_alias', (string)$this->_collection->getSelect());
+        $this->assertStringContainsString('test_field', (string)$this->_collection->getSelect());
+        $this->assertStringContainsString('test_alias', (string)$this->_collection->getSelect());
 
         $this->_collection->removeFieldFromSelect('test_field');
         $this->_collection->addFieldToSelect('store_id');
@@ -113,8 +113,8 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     public function testAddExpressionFieldToSelect()
     {
         $this->_collection->addExpressionFieldToSelect('test_alias', 'SUM({{store_id}})', 'store_id');
-        $this->assertContains('SUM(store_id)', (string)$this->_collection->getSelect());
-        $this->assertContains('test_alias', (string)$this->_collection->getSelect());
+        $this->assertStringContainsString('SUM(store_id)', (string)$this->_collection->getSelect());
+        $this->assertStringContainsString('test_alias', (string)$this->_collection->getSelect());
     }
 
     /**
@@ -139,6 +139,6 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     public function testJoin()
     {
         $this->_collection->join(['w' => 'store_website'], 'main_table.website_id=w.website_id');
-        $this->assertContains('store_website', (string)$this->_collection->getSelect());
+        $this->assertStringContainsString('store_website', (string)$this->_collection->getSelect());
     }
 }

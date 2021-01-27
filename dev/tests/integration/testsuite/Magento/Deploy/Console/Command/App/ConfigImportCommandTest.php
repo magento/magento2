@@ -136,7 +136,7 @@ class ConfigImportCommandTest extends \PHPUnit\Framework\TestCase
         $commandTester->execute([], ['interactive' => false]);
 
         $this->assertSame(Cli::RETURN_SUCCESS, $commandTester->getStatusCode());
-        $this->assertContains('Nothing to import.', $commandTester->getDisplay());
+        $this->assertStringContainsString('Nothing to import.', $commandTester->getDisplay());
         $this->assertEmpty($this->hash->get());
     }
 
@@ -246,10 +246,7 @@ class ConfigImportCommandTest extends \PHPUnit\Framework\TestCase
         $importCommandTester = new CommandTester($importCommand);
         $importCommandTester->execute([]);
 
-        $this->assertContains(
-            'Scopes data should have at least one not admin website, group and store.',
-            $importCommandTester->getDisplay()
-        );
+        $this->assertStringContainsString('Scopes data should have at least one not admin website, group and store.', $importCommandTester->getDisplay());
         $this->assertSame(Cli::RETURN_FAILURE, $importCommandTester->getStatusCode());
     }
 
@@ -304,7 +301,7 @@ class ConfigImportCommandTest extends \PHPUnit\Framework\TestCase
         $commandTester = new CommandTester($command);
         $commandTester->execute([], ['interactive' => false]);
 
-        $this->assertContains('System config was processed', $commandTester->getDisplay());
+        $this->assertStringContainsString('System config was processed', $commandTester->getDisplay());
         $this->assertSame(Cli::RETURN_SUCCESS, $commandTester->getStatusCode());
 
         $this->writeConfig(
@@ -314,20 +311,14 @@ class ConfigImportCommandTest extends \PHPUnit\Framework\TestCase
 
         $commandTester->execute([]);
 
-        $this->assertContains(
-            'Invalid Secure Base URL. Value must be a URL or one of placeholders: {{base_url}},{{unsecure_base_url}}',
-            $commandTester->getDisplay()
-        );
+        $this->assertStringContainsString('Invalid Secure Base URL. Value must be a URL or one of placeholders: {{base_url}},{{unsecure_base_url}}', $commandTester->getDisplay());
         $this->assertSame(Cli::RETURN_FAILURE, $commandTester->getStatusCode());
 
         $this->writeConfig($this->config, $wrongCurrency);
 
         $commandTester->execute([]);
 
-        $this->assertContains(
-            'Import failed: Sorry, the default display currency you selected is not available in allowed currencies.',
-            $commandTester->getDisplay()
-        );
+        $this->assertStringContainsString('Import failed: Sorry, the default display currency you selected is not available in allowed currencies.', $commandTester->getDisplay());
         $this->assertSame(Cli::RETURN_FAILURE, $commandTester->getStatusCode());
 
         $this->writeConfig(
@@ -337,7 +328,7 @@ class ConfigImportCommandTest extends \PHPUnit\Framework\TestCase
 
         $commandTester->execute([]);
 
-        $this->assertContains('Nothing to import', $commandTester->getDisplay());
+        $this->assertStringContainsString('Nothing to import', $commandTester->getDisplay());
         $this->assertSame(Cli::RETURN_SUCCESS, $commandTester->getStatusCode());
     }
 

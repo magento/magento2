@@ -38,7 +38,7 @@ class WildcardTopicTest extends QueueTestCaseAbstract
             $this->assertNotContains($queueName, file_get_contents($this->logFilePath));
         }
         foreach ($matchingQueues as $queueName) {
-            $this->assertContains($queueName, file_get_contents($this->logFilePath));
+            $this->assertStringContainsString($queueName, file_get_contents($this->logFilePath));
         }
     }
 

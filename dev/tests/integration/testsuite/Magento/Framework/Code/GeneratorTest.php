@@ -188,6 +188,6 @@ class GeneratorTest extends TestCase
         $generatorResult = $this->_generator->generateClass($factoryClassName);
         $this->assertFalse($generatorResult);
         $pathToSystemLog = $this->logDirectory->getAbsolutePath('system.log');
-        $this->assertContains($msgPart, file_get_contents($pathToSystemLog));
+        $this->assertStringContainsString($msgPart, file_get_contents($pathToSystemLog));
     }
 }

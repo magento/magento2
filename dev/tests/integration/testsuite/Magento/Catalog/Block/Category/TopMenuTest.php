@@ -71,7 +71,7 @@ class TopMenuTest extends TestCase
     public function testTopMenuItemDisplay(): void
     {
         $output = $this->block->getHtml('level-top', 'submenu', 0);
-        $this->assertContains('Category 1', $output);
+        $this->assertStringContainsString('Category 1', $output);
     }
 
     /**

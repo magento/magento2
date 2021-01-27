@@ -69,8 +69,8 @@ class InfoTest extends \PHPUnit\Framework\TestCase
         $this->assertInternalType('array', $pdfArray);
         $this->assertCount(2, $pdfArray);
         $text = implode('', $pdfArray);
-        $this->assertContains('Bank Method Title', $text);
-        $this->assertContains('Checkmo Title Of The Method', $text);
+        $this->assertStringContainsString('Bank Method Title', $text);
+        $this->assertStringContainsString('Checkmo Title Of The Method', $text);
         $this->assertNotContains($nonExpectedHtml, $text);
     }
 }

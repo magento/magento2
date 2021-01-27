@@ -79,7 +79,7 @@ class ForgotPasswordPostTest extends AbstractController
         $this->assertRedirect($this->stringContains('customer/account/'));
         $this->assertSuccessSessionMessage($email);
         $subject = $this->transportBuilderMock->getSentMessage()->getSubject();
-        $this->assertContains('Test special\' characters', $subject);
+        $this->assertStringContainsString('Test special\' characters', $subject);
     }
 
     /**

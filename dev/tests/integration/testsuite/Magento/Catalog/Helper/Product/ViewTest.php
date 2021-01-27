@@ -90,7 +90,7 @@ class ViewTest extends \PHPUnit\Framework\TestCase
             \Magento\Framework\View\Page\Config::ELEMENT_TYPE_BODY,
             \Magento\Framework\View\Page\Config::BODY_ATTRIBUTE_CLASS
         );
-        $this->assertContains("product-{$uniqid}", $bodyClass);
+        $this->assertStringContainsString("product-{$uniqid}", $bodyClass);
         $handles = $this->page->getLayout()->getUpdate()->getHandles();
         $this->assertContains('catalog_product_view_type_simple', $handles);
     }

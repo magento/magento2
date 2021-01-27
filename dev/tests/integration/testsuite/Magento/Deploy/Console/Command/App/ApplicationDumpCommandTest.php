@@ -191,7 +191,7 @@ class ApplicationDumpCommandTest extends \PHPUnit\Framework\TestCase
         $this->validateSystemEnvSection($configEnv);
 
         $this->assertNotEmpty($this->hash->get());
-        $this->assertContains('For the section: system', $this->loadRawConfig());
+        $this->assertStringContainsString('For the section: system', $this->loadRawConfig());
     }
 
     /**

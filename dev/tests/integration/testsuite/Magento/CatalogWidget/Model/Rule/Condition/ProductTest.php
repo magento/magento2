@@ -61,7 +61,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $collectedAttributes = $this->conditionProduct->getRule()->getCollectedAttributes();
         $this->assertArrayHasKey('special_price', $collectedAttributes);
         $query = (string)$collection->getSelect();
-        $this->assertContains('special_price', $query);
+        $this->assertStringContainsString('special_price', $query);
         $this->assertEquals('at_special_price.value', $this->conditionProduct->getMappedSqlField());
     }
 

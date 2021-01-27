@@ -93,7 +93,7 @@ class FormTest extends \PHPUnit\Framework\TestCase
         $this->assertNotContains($expectedValue, $block->toHtml());
 
         $childBlock->setText($expectedValue);
-        $this->assertContains($expectedValue, $block->toHtml());
+        $this->assertStringContainsString($expectedValue, $block->toHtml());
     }
 
     /**

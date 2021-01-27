@@ -152,7 +152,7 @@ class ProductTest extends AbstractProductExportImportTestCase
         if (!empty($actualProduct->getImage())
             && !empty($expectedProduct->getImage())
         ) {
-            $this->assertContains('magento_image', $actualProduct->getImage());
+            $this->assertStringContainsString('magento_image', $actualProduct->getImage());
         }
         if (!empty($actualProduct->getSmallImage())
             && !empty($expectedProduct->getSmallImage())

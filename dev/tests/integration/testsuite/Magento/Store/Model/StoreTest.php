@@ -306,7 +306,7 @@ class StoreTest extends \PHPUnit\Framework\TestCase
             ->willReturn('http://localhost/index.php?' .SidResolverInterface::SESSION_ID_QUERY_PARAM .'=12345');
         $this->request->setParams([SidResolverInterface::SESSION_ID_QUERY_PARAM, '12345']);
         $this->request->setQueryValue(SidResolverInterface::SESSION_ID_QUERY_PARAM, '12345');
-        $this->assertContains(SidResolverInterface::SESSION_ID_QUERY_PARAM .'=12345', $this->model->getCurrentUrl());
+        $this->assertStringContainsString(SidResolverInterface::SESSION_ID_QUERY_PARAM . '=12345', $this->model->getCurrentUrl());
 
         /** @var \Magento\Store\Model\Store $secondStore */
         $secondStore = $objectManager->get(StoreRepositoryInterface::class)->get('secondstore');

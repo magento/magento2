@@ -168,7 +168,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
 
         $this->model->setId($templateId);
 
-        $this->assertContains($expectedOutput, $this->model->processTemplate());
+        $this->assertStringContainsString($expectedOutput, $this->model->processTemplate());
     }
 
     /**
@@ -269,7 +269,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
                 ->setValue($storeConfigPath, $template->getId(), ScopeInterface::SCOPE_STORE, 'fixturestore');
         }
 
-        $this->assertContains($assertContains, $this->model->getProcessedTemplate());
+        $this->assertStringContainsString($assertContains, $this->model->getProcessedTemplate());
         if ($assertNotContains) {
             $this->assertNotContains($assertNotContains, $this->model->getProcessedTemplate());
         }
@@ -480,7 +480,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
             $this->assertNotContains($unexpectedOutput, $processedTemplate);
         }
 
-        $this->assertContains($expectedOutput, $processedTemplate);
+        $this->assertStringContainsString($expectedOutput, $processedTemplate);
     }
 
     /**
@@ -811,7 +811,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
     {
         $this->mockModel();
         $this->model->setId('customer_create_account_email_template');
-        $this->assertContains('<body', $this->model->processTemplate());
+        $this->assertStringContainsString('<body', $this->model->processTemplate());
     }
 
     public function testGetSubject()

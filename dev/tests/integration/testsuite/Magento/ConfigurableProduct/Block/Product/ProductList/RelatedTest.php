@@ -48,7 +48,7 @@ class RelatedTest extends AbstractLinksTest
         $this->prepareBlock();
         $html = $this->block->toHtml();
         $this->assertNotEmpty($html);
-        $this->assertContains($relatedProduct->getName(), $html);
+        $this->assertStringContainsString($relatedProduct->getName(), $html);
         $this->assertCount(1, $this->block->getItems());
     }
 

@@ -65,7 +65,7 @@ class ProductAttributesCleanUpTest extends \PHPUnit\Framework\TestCase
         $this->tester->execute([]);
 
         // Verify that unused attribute was removed
-        $this->assertContains('Unused product attributes successfully cleaned up', $this->tester->getDisplay());
+        $this->assertStringContainsString('Unused product attributes successfully cleaned up', $this->tester->getDisplay());
         $attribute = $this->getUnusedProductAttribute();
         $this->assertFalse($attribute);
     }

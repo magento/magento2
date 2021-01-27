@@ -78,10 +78,7 @@ class EditTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetCreateOrderUrl()
     {
-        $this->assertContains(
-            'sales/order_create/start/customer_id/' . self::$customerId,
-            $this->block->getCreateOrderUrl()
-        );
+        $this->assertStringContainsString('sales/order_create/start/customer_id/' . self::$customerId, $this->block->getCreateOrderUrl());
     }
 
     /**
@@ -106,7 +103,7 @@ class EditTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetValidationUrl()
     {
-        $this->assertContains('customer/index/validate', $this->block->getValidationUrl());
+        $this->assertStringContainsString('customer/index/validate', $this->block->getValidationUrl());
     }
 
     /**
@@ -115,8 +112,8 @@ class EditTest extends \PHPUnit\Framework\TestCase
     public function testGetFormHtml()
     {
         $html = $this->block->getFormHtml();
-        $this->assertContains('<div class="entry-edit form-inline">', $html);
+        $this->assertStringContainsString('<div class="entry-edit form-inline">', $html);
         $this->assertStringMatchesFormat('%a name="customer_id" %s value="' . self::$customerId . '" %a', $html);
-        $this->assertContains('id="product_composite_configure_form"', $html);
+        $this->assertStringContainsString('id="product_composite_configure_form"', $html);
     }
 }

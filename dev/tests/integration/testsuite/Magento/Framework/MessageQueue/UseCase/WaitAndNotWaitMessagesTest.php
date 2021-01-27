@@ -74,12 +74,12 @@ class WaitAndNotWaitMessagesTest extends QueueTestCaseAbstract
         $this->waitForAsynchronousResult(count($this->messages), $this->logFilePath);
 
         foreach ($this->messages as $item) {
-            $this->assertContains($item, file_get_contents($this->logFilePath));
+            $this->assertStringContainsString($item, file_get_contents($this->logFilePath));
         }
 
         $this->publishMessage('message4');
         $this->waitForAsynchronousResult(count($this->messages) + 1, $this->logFilePath);
-        $this->assertContains('message4', file_get_contents($this->logFilePath));
+        $this->assertStringContainsString('message4', file_get_contents($this->logFilePath));
     }
 
     /**
@@ -102,7 +102,7 @@ class WaitAndNotWaitMessagesTest extends QueueTestCaseAbstract
         $this->waitForAsynchronousResult(count($this->messages), $this->logFilePath);
 
         foreach ($this->messages as $item) {
-            $this->assertContains($item, file_get_contents($this->logFilePath));
+            $this->assertStringContainsString($item, file_get_contents($this->logFilePath));
         }
 
         // Checks that consumers do not wait 4th message and die

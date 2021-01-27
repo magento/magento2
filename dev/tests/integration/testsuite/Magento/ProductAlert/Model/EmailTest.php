@@ -100,10 +100,7 @@ class EmailTest extends \PHPUnit\Framework\TestCase
         $this->_emailModel->addPriceProduct($product);
         $this->_emailModel->send();
 
-        $this->assertContains(
-            'Smith,',
-            $this->transportBuilder->getSentMessage()->getRawMessage()
-        );
+        $this->assertStringContainsString('Smith,', $this->transportBuilder->getSentMessage()->getRawMessage());
     }
 
     public function customerFunctionDataProvider()

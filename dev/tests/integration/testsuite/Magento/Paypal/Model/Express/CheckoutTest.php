@@ -270,7 +270,7 @@ class CheckoutTest extends \PHPUnit\Framework\TestCase
         $this->checkoutModel->returnFromPaypal('token');
 
         $billingAddress = $quote->getBillingAddress();
-        $this->assertContains($prefix, $billingAddress->getFirstname());
+        $this->assertStringContainsString($prefix, $billingAddress->getFirstname());
         $this->assertEquals('note', $billingAddress->getCustomerNote());
 
         $shippingAddress = $quote->getShippingAddress();
@@ -279,7 +279,7 @@ class CheckoutTest extends \PHPUnit\Framework\TestCase
         $this->assertNull($shippingAddress->getMiddlename());
         $this->assertNull($shippingAddress->getSuffix());
         $this->assertTrue($shippingAddress->getShouldIgnoreValidation());
-        $this->assertContains('exported', $shippingAddress->getFirstname());
+        $this->assertStringContainsString('exported', $shippingAddress->getFirstname());
         $paymentAdditionalInformation = $quote->getPayment()->getAdditionalInformation();
         $this->assertArrayHasKey(Checkout::PAYMENT_INFO_TRANSPORT_SHIPPING_METHOD, $paymentAdditionalInformation);
         $this->assertArrayHasKey(Checkout::PAYMENT_INFO_TRANSPORT_PAYER_ID, $paymentAdditionalInformation);

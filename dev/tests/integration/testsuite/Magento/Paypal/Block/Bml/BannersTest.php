@@ -67,8 +67,8 @@ class BannersTest extends \PHPUnit\Framework\TestCase
         if ($isEmptyHtml) {
             $this->assertEmpty($html);
         } else {
-            $this->assertContains('data-pp-pubid="' . $block->getPublisherId() . '"', $html);
-            $this->assertContains('data-pp-placementtype="' . $block->getSize() . '"', $html);
+            $this->assertStringContainsString('data-pp-pubid="' . $block->getPublisherId() . '"', $html);
+            $this->assertStringContainsString('data-pp-placementtype="' . $block->getSize() . '"', $html);
         }
     }
 

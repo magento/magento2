@@ -27,7 +27,7 @@ class CompareTest extends \PHPUnit\Framework\TestCase
     {
         /** @var $empty \Magento\Catalog\Helper\Product\Compare */
         $empty = $this->_objectManager->create(\Magento\Catalog\Helper\Product\Compare::class);
-        $this->assertContains('/catalog/product_compare/index/', $empty->getListUrl());
+        $this->assertStringContainsString('/catalog/product_compare/index/', $empty->getListUrl());
     }
 
     public function testGetAddUrl()
@@ -61,12 +61,12 @@ class CompareTest extends \PHPUnit\Framework\TestCase
     public function testGetRemoveUrl()
     {
         $url = $this->_helper->getRemoveUrl();
-        $this->assertContains('/catalog/product_compare/remove/', $url);
+        $this->assertStringContainsString('/catalog/product_compare/remove/', $url);
     }
 
     public function testGetClearListUrl()
     {
-        $this->assertContains('\/catalog\/product_compare\/clear\/', $this->_helper->getPostDataClearList());
+        $this->assertStringContainsString('\/catalog\/product_compare\/clear\/', $this->_helper->getPostDataClearList());
     }
 
     /**

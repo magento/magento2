@@ -95,15 +95,15 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             )
         );
         $exportData = $this->model->export();
-        $this->assertContains('New Product', $exportData);
+        $this->assertStringContainsString('New Product', $exportData);
 
-        $this->assertContains('Option 1 & Value 1"', $exportData);
-        $this->assertContains('Option 1 & Value 2"', $exportData);
-        $this->assertContains('Option 1 & Value 3"', $exportData);
-        $this->assertContains('Option 4 ""!@#$%^&*', $exportData);
-        $this->assertContains('test_option_code_2', $exportData);
-        $this->assertContains('max_characters=10', $exportData);
-        $this->assertContains('text_attribute=!@#$%^&*()_+1234567890-=|\\:;""\'<,>.?/', $exportData);
+        $this->assertStringContainsString('Option 1 & Value 1"', $exportData);
+        $this->assertStringContainsString('Option 1 & Value 2"', $exportData);
+        $this->assertStringContainsString('Option 1 & Value 3"', $exportData);
+        $this->assertStringContainsString('Option 4 ""!@#$%^&*', $exportData);
+        $this->assertStringContainsString('test_option_code_2', $exportData);
+        $this->assertStringContainsString('max_characters=10', $exportData);
+        $this->assertStringContainsString('text_attribute=!@#$%^&*()_+1234567890-=|\\:;""\'<,>.?/', $exportData);
         $occurrencesCount = substr_count($exportData, 'Hello "" &"" Bring the water bottle when you can!');
         $this->assertEquals(1, $occurrencesCount);
     }
@@ -122,8 +122,8 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             )
         );
         $exportData = $this->model->export();
-        $this->assertContains('simple ""1""', $exportData);
-        $this->assertContains('Category with slash\/ symbol', $exportData);
+        $this->assertStringContainsString('simple ""1""', $exportData);
+        $this->assertStringContainsString('Category with slash\/ symbol', $exportData);
     }
 
     /**
@@ -288,10 +288,10 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         );
         $exportData = $this->model->export();
 
-        $this->assertContains('""Option 2""', $exportData);
-        $this->assertContains('""Option 3""', $exportData);
-        $this->assertContains('""Option 4 """"!@#$%^&*""', $exportData);
-        $this->assertContains('text_attribute=""!@#$%^&*()_+1234567890-=|\:;""""\'<,>.?/', $exportData);
+        $this->assertStringContainsString('""Option 2""', $exportData);
+        $this->assertStringContainsString('""Option 3""', $exportData);
+        $this->assertStringContainsString('""Option 4 """"!@#$%^&*""', $exportData);
+        $this->assertStringContainsString('text_attribute=""!@#$%^&*()_+1234567890-=|\:;""""\'<,>.?/', $exportData);
     }
 
     /**
@@ -319,8 +319,8 @@ class ProductTest extends \PHPUnit\Framework\TestCase
 
         $exportData = $this->model->export();
 
-        $this->assertContains('Simple Product', $exportData);
-        $this->assertContains('Simple Product Three', $exportData);
+        $this->assertStringContainsString('Simple Product', $exportData);
+        $this->assertStringContainsString('Simple Product Three', $exportData);
         $this->assertNotContains('Simple Product Two', $exportData);
         $this->assertNotContains('Simple Product Not Visible On Storefront', $exportData);
     }
@@ -588,7 +588,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     ): void {
         $exportData = $this->doExport(['quantity_and_stock_status' => $value]);
         foreach ($productsIncluded as $productName) {
-            $this->assertContains($productName, $exportData);
+            $this->assertStringContainsString($productName, $exportData);
         }
         foreach ($productsNotIncluded as $productName) {
             $this->assertNotContains($productName, $exportData);

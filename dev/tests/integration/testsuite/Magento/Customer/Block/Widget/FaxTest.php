@@ -22,7 +22,7 @@ class FaxTest extends \PHPUnit\Framework\TestCase
             \Magento\Customer\Block\Widget\Fax::class
         );
 
-        $this->assertContains('title="Fax"', $block->toHtml());
+        $this->assertStringContainsString('title="Fax"', $block->toHtml());
         $this->assertNotContains('required', $block->toHtml());
     }
 
@@ -44,8 +44,8 @@ class FaxTest extends \PHPUnit\Framework\TestCase
             \Magento\Customer\Block\Widget\Fax::class
         );
 
-        $this->assertContains('title="Fax"', $block->toHtml());
-        $this->assertContains('required', $block->toHtml());
+        $this->assertStringContainsString('title="Fax"', $block->toHtml());
+        $this->assertStringContainsString('required', $block->toHtml());
     }
 
     protected function tearDown(): void

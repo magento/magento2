@@ -139,7 +139,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
             \Magento\Catalog\Model\Product::class
         );
         $product->setId(100);
-        $this->assertContains('catalog/product/view/id/100/', $this->_model->getUrl($product));
+        $this->assertStringContainsString('catalog/product/view/id/100/', $this->_model->getUrl($product));
     }
 
     /**

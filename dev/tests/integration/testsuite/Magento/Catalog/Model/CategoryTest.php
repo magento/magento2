@@ -363,7 +363,7 @@ class CategoryTest extends TestCase
         $this->_model->setData($data);
         $this->categoryResource->save($this->_model);
         $parentCategory = $this->categoryRepository->get(333);
-        $this->assertContains($this->_model->getId(), $parentCategory->getChildren());
+        $this->assertStringContainsString($this->_model->getId(), $parentCategory->getChildren());
     }
 
     /**

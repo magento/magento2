@@ -69,10 +69,7 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
     public function testProcess()
     {
         $this->observer->process();
-        $this->assertContains(
-            'ohn Smith,',
-            $this->transportBuilder->getSentMessage()->getRawMessage()
-        );
+        $this->assertStringContainsString('ohn Smith,', $this->transportBuilder->getSentMessage()->getRawMessage());
     }
 
     /**

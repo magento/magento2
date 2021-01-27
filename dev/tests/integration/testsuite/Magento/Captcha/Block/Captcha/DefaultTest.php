@@ -27,6 +27,6 @@ class DefaultTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetRefreshUrlWhenFrontendStore()
     {
-        $this->assertContains('captcha/refresh', $this->_block->getRefreshUrl());
+        $this->assertStringContainsString('captcha/refresh', $this->_block->getRefreshUrl());
     }
 }

@@ -27,6 +27,6 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
         $this->assertNotContains($expectedValue, (string)$block->getHeaderText());
 
         $dataObject->setName($expectedValue);
-        $this->assertContains($expectedValue, (string)$block->getHeaderText());
+        $this->assertStringContainsString($expectedValue, (string)$block->getHeaderText());
     }
 }

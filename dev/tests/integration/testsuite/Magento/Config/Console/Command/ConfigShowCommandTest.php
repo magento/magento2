@@ -125,7 +125,7 @@ class ConfigShowCommandTest extends \PHPUnit\Framework\TestCase
 
             $commandOutput = $this->commandTester->getDisplay();
             foreach ($configValue as $value) {
-                $this->assertContains($value, $commandOutput);
+                $this->assertStringContainsString($value, $commandOutput);
             }
         }
     }
