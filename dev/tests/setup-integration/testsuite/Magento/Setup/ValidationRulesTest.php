@@ -72,8 +72,7 @@ class ValidationRulesTest extends SetupTestCase
      */
     public function testFailOnIncosistentReferenceDefinition()
     {
-        $this->expectExceptionMessageMatches("/Column definition \"page_id_on\" and reference column definition \"page_id\"
- are different in tables \"dependent\" and \"test_table\"/");
+        $this->expectExceptionMessageMatches('/Column definition "page_id_on" and reference column definition "page_id" are different in tables "dependent" and "test_table"/');
         $this->expectException(\Magento\Framework\Setup\Exception::class);
         $this->cliCommad->install(
             ['Magento_TestSetupDeclarationModule8']
