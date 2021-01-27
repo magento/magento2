@@ -6,17 +6,14 @@
 
 declare(strict_types=1);
 
-namespace Magento\Framework\Jwt;
+namespace Magento\Framework\Jwt\Payload;
+
+use Magento\Framework\Jwt\PayloadInterface;
 
 /**
  * Payload with nested JWT.
  */
 interface NestedPayloadInterface extends PayloadInterface
 {
-    /**
-     * JWT Content.
-     *
-     * @return JwtInterface
-     */
-    public function getJwt(): JwtInterface;
+    public const CONTENT_TYPE = 'JWT';
 }

@@ -19,4 +19,12 @@ interface HeaderInterface
      * @return HeaderParameterInterface[]
      */
     public function getParameters(): array;
+
+    /**
+     * Find a parameter by name.
+     *
+     * @param string $name
+     * @return HeaderParameterInterface|null
+     */
+    public function getParameter(string $name): ?HeaderParameterInterface;
 }

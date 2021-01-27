@@ -15,6 +15,12 @@ namespace Magento\Framework\Jwt;
  */
 class Jwk
 {
+    public const KEY_TYPE_EC = 'EC';
+
+    public const KEY_TYPE_RSA = 'RSA';
+
+    public const KEY_TYPE_OCTET = 'oct';
+
     public const PUBLIC_KEY_USE_SIGNATURE = 'sig';
 
     public const PUBLIC_KEY_USE_ENCRYPTION = 'enc';
@@ -34,6 +40,32 @@ class Jwk
     public const KEY_OP_DERIVE_KEY = 'deriveKey';
 
     public const KEY_OP_DERIVE_BITS = 'deriveBits';
+
+    public const ALGORITHM_NONE = 'none';
+
+    public const ALGORITHM_HS256 = 'HS256';
+
+    public const ALGORITHM_HS384 = 'HS384';
+
+    public const ALGORITHM_HS512 = 'HS512';
+
+    public const ALGORITHM_RS256 = 'RS256';
+
+    public const ALGORITHM_RS384 = 'RS384';
+
+    public const ALGORITHM_RS512 = 'RS512';
+
+    public const ALGORITHM_ES256 = 'ES256';
+
+    public const ALGORITHM_ES384 = 'ES384';
+
+    public const ALGORITHM_ES512 = 'ES512';
+
+    public const ALGORITHM_PS256 = 'PS256';
+
+    public const ALGORITHM_PS384 = 'PS384';
+
+    public const ALGORITHM_PS512 = 'PS512';
 
     /**
      * @var string

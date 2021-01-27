@@ -6,7 +6,10 @@
 
 declare(strict_types=1);
 
-namespace Magento\Framework\Jwt;
+namespace Magento\Framework\Jwt\Payload;
+
+use Magento\Framework\Jwt\ClaimInterface;
+use Magento\Framework\Jwt\PayloadInterface;
 
 /**
  * Payload with claims.
