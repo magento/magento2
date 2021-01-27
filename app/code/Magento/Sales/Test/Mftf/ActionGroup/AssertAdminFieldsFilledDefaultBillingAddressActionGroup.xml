@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertAdminFieldsFilledDefaultBillingAddressActionGroup">
+        <annotations>
+            <description>Admin assert fields filled default billing address from customer</description>
+        </annotations>
+        <arguments>
+            <argument name="firstName" type="string" defaultValue="John"/>
+            <argument name="lastName" type="string" defaultValue="Doe"/>
+            <argument name="company" type="string" defaultValue="Magento"/>
+            <argument name="streetLine1" type="string" defaultValue="7700 West Parmer Lane"/>
+            <argument name="streetLine2" type="string" defaultValue="113"/>
+            <argument name="city" type="string" defaultValue="Los Angeles"/>
+            <argument name="postcode" type="string" defaultValue="90001"/>
+            <argument name="phone" type="string" defaultValue="512-345-6789"/>
+            <argument name="vatNumber" type="string" defaultValue="U1234567891"/>
+        </arguments>
+        <grabValueFrom selector="{{AdminOrderFormBillingAddressSection.FirstName}}" stepKey="getFirstName"/>
+        <assertEquals stepKey="assertFirstName">
+            <expectedResult type="string">{{firstName}}</expectedResult>
+            <actualResult type="variable">getFirstName</actualResult>
+        </assertEquals>
+        <grabValueFrom selector="{{AdminOrderFormBillingAddressSection.LastName}}" stepKey="getLastName"/>
+        <assertEquals stepKey="assertLastName">
+            <expectedResult type="string">{{lastName}}</expectedResult>
+            <actualResult type="variable">getLastName</actualResult>
+        </assertEquals>
+        <grabValueFrom selector="{{AdminOrderFormBillingAddressSection.Company}}" stepKey="getCompany"/>
+        <assertEquals stepKey="assertCompany">
+            <expectedResult type="string">{{company}}</expectedResult>
+            <actualResult type="variable">getCompany</actualResult>
+        </assertEquals>
+        <grabValueFrom selector="{{AdminOrderFormBillingAddressSection.StreetLine1}}" stepKey="getStreetLine1"/>
+        <assertEquals stepKey="assertStreetLine1">
+            <expectedResult type="string">{{streetLine1}}</expectedResult>
+            <actualResult type="variable">getStreetLine1</actualResult>
+        </assertEquals>
+        <grabValueFrom selector="{{AdminOrderFormBillingAddressSection.StreetLine2}}" stepKey="getStreetLine2"/>
+        <assertEquals stepKey="assertStreetLine2">
+            <expectedResult type="string">{{streetLine2}}</expectedResult>
+            <actualResult type="variable">getStreetLine2</actualResult>
+        </assertEquals>
+        <grabValueFrom selector="{{AdminOrderFormBillingAddressSection.City}}" stepKey="getCity"/>
+        <assertEquals stepKey="assertCity">
+            <expectedResult type="string">{{city}}</expectedResult>
+            <actualResult type="variable">getCity</actualResult>
+        </assertEquals>
+        <grabValueFrom selector="{{AdminOrderFormBillingAddressSection.PostalCode}}" stepKey="getPostcode"/>
+        <assertEquals stepKey="assertPostcode">
+            <expectedResult type="string">{{postcode}}</expectedResult>
+            <actualResult type="variable">getPostcode</actualResult>
+        </assertEquals>
+        <grabValueFrom selector="{{AdminOrderFormBillingAddressSection.Phone}}" stepKey="getPhone"/>
+        <assertEquals stepKey="assertPhone">
+            <expectedResult type="string">{{phone}}</expectedResult>
+            <actualResult type="variable">getPhone</actualResult>
+        </assertEquals>
+        <grabValueFrom selector="{{AdminOrderFormBillingAddressSection.VatNumber}}" stepKey="getVatNumber"/>
+        <assertEquals stepKey="assertVatNumber">
+            <expectedResult type="string">{{vatNumber}}</expectedResult>
+            <actualResult type="variable">getVatNumber</actualResult>
+        </assertEquals>
+    </actionGroup>
+</actionGroups>
