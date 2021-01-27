@@ -21,9 +21,11 @@ use Magento\Framework\Filesystem;
  * Example:
  * <block name="my.block" class="Magento\Framework\View\Element\Template" template="My_Module::template.phtml" >
  *      <arguments>
- *          <argument name="viewModel" xsi:type="object">My\Module\ViewModel\Custom</argument>
+ *          <argument name="view_model" xsi:type="object">My\Module\ViewModel\Custom</argument>
  *      </arguments>
  * </block>
+ *
+ * Your class object can then be accessed by doing $block->getViewModel()
  *
  * @api
  * @SuppressWarnings(PHPMD.NumberOfChildren)

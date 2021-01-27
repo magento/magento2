@@ -9,7 +9,7 @@
 ?>
 <?php
 /** @var Magento\Sales\ViewModel\CreditMemo\Create\UpdateTotalsButton $viewModel */
-$viewModel = $block->getData('viewModel');
+$viewModel = $block->getViewModel();
 /** @var Magento\Sales\ViewModel\CreditMemo\Create\ItemsToRender $itemsToRenderViewModel */
 $itemsToRenderViewModel = $block->getData('itemsToRenderViewModel');
 $_items = $itemsToRenderViewModel->getItems();

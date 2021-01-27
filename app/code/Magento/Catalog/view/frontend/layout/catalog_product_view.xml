@@ -29,9 +29,11 @@
             </arguments>
         </referenceBlock>
 
+        <!-- Argument viewModel was discouraged use view_model argument instead, viewModel will be remove in next release -->
         <referenceBlock name="breadcrumbs" template="Magento_Catalog::product/breadcrumbs.phtml">
             <arguments>
                 <argument name="viewModel" xsi:type="object">Magento\Catalog\ViewModel\Product\Breadcrumbs</argument>
+                <argument name="view_model" xsi:type="object">Magento\Catalog\ViewModel\Product\Breadcrumbs</argument>
             </arguments>
         </referenceBlock>
 
