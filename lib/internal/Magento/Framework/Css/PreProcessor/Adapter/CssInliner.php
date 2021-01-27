@@ -7,6 +7,7 @@ namespace Magento\Framework\Css\PreProcessor\Adapter;
 
 use Magento\Framework\App\State;
 use Pelago\Emogrifier\CssInliner as EmogrifierCssInliner;
+use Symfony\Component\CssSelector\Exception\ParseException;
 
 /**
  * This class will inline the css of an html to each tag to be used for applications such as a styled email.
@@ -78,16 +79,18 @@ class CssInliner
      *
      * @return string
      * @throws \BadMethodCallException
+     * @throws ParseException
      */
     public function process()
     {
         $emogrifier = EmogrifierCssInliner::fromHtml($this->html)
-            ->inlineCss($this->css)
             ->setDebug($this->appState->getMode() === State::MODE_DEVELOPER);
 
         if ($this->disableStyleBlocksParsing) {
             $emogrifier->disableStyleBlocksParsing();
         }
+
+        $emogrifier->inlineCss($this->css);
 
         return $emogrifier->render();
     }
