@@ -173,13 +173,11 @@ class LinkManagement implements ProductLinkManagementInterface
                 )
             );
         }
-        $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
         $selectionModel = $this->mapProductLinkToBundleSelectionModel(
             $selectionModel,
             $linkedProduct,
             $product,
-            (int)$linkProductModel->getId(),
-            $linkField
+            (int)$linkProductModel->getId()
         );
 
         try {
@@ -256,9 +254,9 @@ class LinkManagement implements ProductLinkManagementInterface
         Selection $selectionModel,
         LinkInterface $productLink,
         ProductInterface $parentProduct,
-        int $linkedProductId,
-        string $linkField
+        int $linkedProductId
     ): Selection {
+        $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
         $selectionModel->setProductId($linkedProductId);
         $selectionModel->setParentProductId($parentProduct->getData($linkField));
         if ($productLink->getSelectionId() !== null) {
@@ -357,8 +355,7 @@ class LinkManagement implements ProductLinkManagementInterface
             $selectionModel,
             $linkedProduct,
             $product,
-            (int)$linkProductModel->getEntityId(),
-            $linkField
+            (int)$linkProductModel->getEntityId()
         );
 
         $selectionModel->setOptionId($optionId);
